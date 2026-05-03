@@ -359,6 +359,9 @@ body.iframe-fullscreen-mode .page:not(.active){
 body.iframe-fullscreen-mode .iframe-exit{
   display:flex;
 }
+#p-unit1 > .cd{
+  display:none !important;
+}
 @media print{
   .iframe-wrap{display:none}
 }
@@ -701,18 +704,10 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
       <span class="bc-sep">›</span>
       <span class="bc-item cur">Unit 1</span>
     </nav>
-    <div class="hero">
-      <div class="hero-label">Unit 01 · External · 120 GLH</div>
-      <h1>Information Technology Systems</h1>
-      <p>Exam-style questions, practice mode, quizzes, flashcards, AI marker and a full mock paper builder aligned to the Pearson AAQ spec (Issue 5, Nov 2025).</p>
-    </div>
   </div>
-  <!-- Full-width iframe — no max-width constraint -->
+  <!-- Full-width iframe — fullscreen by default -->
   <div class="cf">
-    <div class="iframe-wrap">
-      <div class="iframe-toolbar">
-        <button class="btn btn-s" type="button" data-iframe-fullscreen>Full screen</button>
-      </div>
+    <div class="iframe-wrap full-screen">
       <iframe
         src="revision/btec/level-3/IT-AAQ/unit-1/index.html"
         title="Unit 1 – Information Technology Systems"
