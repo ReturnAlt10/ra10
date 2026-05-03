@@ -1,0 +1,416 @@
+[
+  {
+    "id": "DG01",
+    "learning_aim": "A",
+    "topic": "A1.3 Flowcharts",
+    "command_verb": "Draw",
+    "marks": 6,
+    "ao": "AO2",
+    "scenario": "Hartley Accountancy uses an in-house web portal that staff log into each morning. Staff must enter a username and password; after three failed attempts the account is locked and an alert is sent to the IT manager.",
+    "question": "Draw a flowchart to show the login process used by Hartley Accountancy's web portal.",
+    "guidance": "(6)",
+    "type": "diagram",
+    "diagram_kind": "flowchart",
+    "mark_scheme": {
+      "instruction": "Award up to six marks. Diagram must use conventional flowchart symbols and show a clear, logical flow.",
+      "points": [
+        "Start and End terminator symbols used (1)",
+        "Input box(es) for username and password (1)",
+        "Decision diamond — credentials valid? (1)",
+        "Counter/loop allowing up to 3 attempts (1)",
+        "Account locked / alert IT manager branch after 3 failed attempts (1)",
+        "Successful login leads to portal / homepage (1)"
+      ],
+      "additional_guidance": "Accept any logically equivalent diagram. Arrows must show direction of flow.",
+      "do_not_accept": "Pseudocode or written description with no symbols"
+    }
+  },
+  {
+    "id": "DG02",
+    "learning_aim": "A",
+    "topic": "A1.3 Flowcharts",
+    "command_verb": "Draw",
+    "marks": 6,
+    "ao": "AO2",
+    "scenario": "Greenfield Garden Centre has an automatic irrigation system. A soil-moisture sensor is read every 30 minutes; if moisture is below a set level the sprinklers are switched on for 5 minutes, then the sensor is read again.",
+    "question": "Draw a flowchart to show how the automatic irrigation system decides whether to water the plants.",
+    "guidance": "(6)",
+    "type": "diagram",
+    "diagram_kind": "flowchart",
+    "mark_scheme": {
+      "instruction": "Award up to six marks based on the criteria below.",
+      "points": [
+        "Start and End terminator symbols (1)",
+        "Process: read soil-moisture sensor (1)",
+        "Decision diamond: moisture below threshold? (1)",
+        "If yes — switch sprinklers on for 5 minutes (1)",
+        "If no — wait 30 minutes / loop back to reading sensor (1)",
+        "Loop back so the system continues to monitor (1)"
+      ],
+      "additional_guidance": "Accept conventional flowchart symbols (terminator, process, decision, arrows)."
+    }
+  },
+  {
+    "id": "DG03",
+    "learning_aim": "A",
+    "topic": "A1.3 Flowcharts",
+    "command_verb": "Draw",
+    "marks": 4,
+    "ao": "AO2",
+    "scenario": "A retail website shows a 'Buy now' button on each product page. When clicked, it adds the product to the customer's basket if they are signed in, or asks them to sign in or register first.",
+    "question": "Draw a flowchart to show what happens when a customer clicks the 'Buy now' button.",
+    "guidance": "(4)",
+    "type": "diagram",
+    "diagram_kind": "flowchart",
+    "mark_scheme": {
+      "instruction": "Award up to four marks.",
+      "points": [
+        "Start and End terminator symbols (1)",
+        "Decision diamond: is the customer signed in? (1)",
+        "If signed in — add product to basket (1)",
+        "If not — prompt to sign in/register, then add to basket (1)"
+      ]
+    }
+  },
+  {
+    "id": "DG04",
+    "learning_aim": "B",
+    "topic": "B2.1 Topologies",
+    "command_verb": "Draw",
+    "marks": 4,
+    "ao": "AO1",
+    "scenario": "Beechwood Primary School wants a small wired network connecting four classroom computers and one printer through a single central device.",
+    "question": "Draw a star topology network diagram for Beechwood Primary School. Label each component clearly.",
+    "guidance": "(4)",
+    "type": "diagram",
+    "diagram_kind": "network",
+    "mark_scheme": {
+      "instruction": "Award up to four marks.",
+      "points": [
+        "Central switch/hub clearly drawn and labelled (1)",
+        "Four computers each connected directly to the central device (1)",
+        "Printer connected to the central device (1)",
+        "All five devices on separate connections to the central node (no daisy-chaining) (1)"
+      ],
+      "additional_guidance": "Accept switch or hub. All devices must connect only to the central node."
+    }
+  },
+  {
+    "id": "DG05",
+    "learning_aim": "B",
+    "topic": "B2.1 Topologies",
+    "command_verb": "Draw",
+    "marks": 4,
+    "ao": "AO1",
+    "scenario": "A small office has six workstations connected on a single shared cable, with terminators at each end of the cable.",
+    "question": "Draw a bus topology network diagram for the small office. Label each component.",
+    "guidance": "(4)",
+    "type": "diagram",
+    "diagram_kind": "network",
+    "mark_scheme": {
+      "instruction": "Award up to four marks.",
+      "points": [
+        "Single backbone/shared cable drawn (1)",
+        "Six workstations connected along the backbone (1)",
+        "Terminators shown at each end of the cable (1)",
+        "All devices clearly labelled (1)"
+      ]
+    }
+  },
+  {
+    "id": "DG06",
+    "learning_aim": "B",
+    "topic": "B2.1 Topologies",
+    "command_verb": "Draw",
+    "marks": 4,
+    "ao": "AO1",
+    "scenario": "A games club has five computers connected so that each computer is linked to the next, forming a closed loop with no central device.",
+    "question": "Draw a ring topology network diagram for the games club. Label each component.",
+    "guidance": "(4)",
+    "type": "diagram",
+    "diagram_kind": "network",
+    "mark_scheme": {
+      "instruction": "Award up to four marks.",
+      "points": [
+        "Five computers shown (1)",
+        "Each computer connected only to its two neighbours (1)",
+        "Connections form a closed loop (1)",
+        "No central device shown (1)"
+      ]
+    }
+  },
+  {
+    "id": "DG07",
+    "learning_aim": "B",
+    "topic": "B2.2 Network types",
+    "command_verb": "Draw",
+    "marks": 6,
+    "ao": "AO2",
+    "scenario": "Riverford Vets has two surgeries in different towns. Each surgery has 8 reception/treatment computers, a local printer and a server. The two sites are connected via a leased line so vets can share patient records.",
+    "question": "Draw a network diagram to show how Riverford Vets' two surgeries are connected. Label all key components.",
+    "guidance": "(6)",
+    "type": "diagram",
+    "diagram_kind": "network",
+    "mark_scheme": {
+      "instruction": "Award up to six marks.",
+      "points": [
+        "Site 1: 8 computers connected through a switch (1)",
+        "Site 1: server and printer also connected to the switch (1)",
+        "Site 2: equivalent setup — 8 computers, server, printer through a switch (1)",
+        "A router shown at each site (1)",
+        "Leased line/WAN link drawn between the two routers (1)",
+        "All major components clearly labelled (1)"
+      ]
+    }
+  },
+  {
+    "id": "DG08",
+    "learning_aim": "B",
+    "topic": "B2.2 Network types",
+    "command_verb": "Draw",
+    "marks": 4,
+    "ao": "AO2",
+    "scenario": "Mira works from home and connects her laptop to her phone, smartwatch and wireless headphones using Bluetooth.",
+    "question": "Draw a personal area network (PAN) diagram for Mira's setup. Label each device and connection type.",
+    "guidance": "(4)",
+    "type": "diagram",
+    "diagram_kind": "network",
+    "mark_scheme": {
+      "instruction": "Award up to four marks.",
+      "points": [
+        "Laptop shown as the central device (1)",
+        "Phone, smartwatch and headphones each shown as separate devices (1)",
+        "Connections between laptop and each device labelled as Bluetooth (1)",
+        "Devices clearly named (1)"
+      ]
+    }
+  },
+  {
+    "id": "DG09",
+    "learning_aim": "D",
+    "topic": "D2.1 Backup",
+    "command_verb": "Draw",
+    "marks": 6,
+    "ao": "AO2",
+    "scenario": "A small online retailer runs an automated nightly backup. The script copies the database to an external drive; if the backup fails it retries once, and if it still fails it sends an email alert to the IT administrator.",
+    "question": "Draw a flowchart to show the automated nightly backup process used by the retailer.",
+    "guidance": "(6)",
+    "type": "diagram",
+    "diagram_kind": "flowchart",
+    "mark_scheme": {
+      "instruction": "Award up to six marks.",
+      "points": [
+        "Start and End terminator symbols (1)",
+        "Process: copy database to external drive (1)",
+        "Decision diamond: backup successful? (1)",
+        "If yes — End / log success (1)",
+        "If no — retry once (loop back to copy step) (1)",
+        "If second failure — send email alert to IT administrator (1)"
+      ]
+    }
+  },
+  {
+    "id": "DG10",
+    "learning_aim": "D",
+    "topic": "D2.4 Encryption",
+    "command_verb": "Draw",
+    "marks": 4,
+    "ao": "AO2",
+    "scenario": "When a customer enters card details on a shop's HTTPS checkout page, the data is encrypted on the customer's device before being sent across the internet to the shop's server, where it is decrypted and processed.",
+    "question": "Draw a diagram to show how customer card data is encrypted and transmitted to the shop's server.",
+    "guidance": "(4)",
+    "type": "diagram",
+    "diagram_kind": "system",
+    "mark_scheme": {
+      "instruction": "Award up to four marks.",
+      "points": [
+        "Customer device shown with plaintext card data → encryption step (1)",
+        "Encrypted data ('cipher text') travelling across the internet (1)",
+        "Shop server receiving the encrypted data and decrypting it (1)",
+        "Connection labelled as HTTPS / secure (1)"
+      ]
+    }
+  },
+  {
+    "id": "DG11",
+    "learning_aim": "E",
+    "topic": "E2.5 Validation",
+    "command_verb": "Draw",
+    "marks": 4,
+    "ao": "AO2",
+    "scenario": "A booking website asks customers to enter their age. The website only accepts whole numbers between 18 and 100; otherwise it shows an error message and asks the customer to re-enter.",
+    "question": "Draw a flowchart to show how the website validates the age input.",
+    "guidance": "(4)",
+    "type": "diagram",
+    "diagram_kind": "flowchart",
+    "mark_scheme": {
+      "instruction": "Award up to four marks.",
+      "points": [
+        "Start and End terminator symbols (1)",
+        "Input box for age (1)",
+        "Decision diamond: age between 18 and 100 (and a whole number)? (1)",
+        "If invalid — show error and loop back to input; if valid — accept and end (1)"
+      ]
+    }
+  },
+  {
+    "id": "DG12",
+    "learning_aim": "E",
+    "topic": "E1.1 Online services",
+    "command_verb": "Draw",
+    "marks": 6,
+    "ao": "AO2",
+    "scenario": "Jubilee Cinemas lets customers book seats online. The customer chooses a film and showing, picks seats, enters payment details, and receives an email confirmation. If a chosen seat is no longer available the system asks them to pick again.",
+    "question": "Draw a flowchart to show the online seat-booking process used by Jubilee Cinemas.",
+    "guidance": "(6)",
+    "type": "diagram",
+    "diagram_kind": "flowchart",
+    "mark_scheme": {
+      "instruction": "Award up to six marks.",
+      "points": [
+        "Start and End terminator symbols (1)",
+        "Process: customer chooses film and showing (1)",
+        "Process: customer selects seat(s) (1)",
+        "Decision diamond: seats still available? — if no, loop back to seat selection (1)",
+        "Process: customer enters payment details (1)",
+        "Process: send confirmation email and end (1)"
+      ]
+    }
+  },
+  {
+    "id": "DG13",
+    "learning_aim": "C",
+    "topic": "C1.3 Remote working",
+    "command_verb": "Draw",
+    "marks": 4,
+    "ao": "AO1",
+    "scenario": "A consultancy firm lets employees work from home using a VPN to connect their laptops to the office network and access the company file server.",
+    "question": "Draw a diagram to show how a remote employee connects to the office network using a VPN.",
+    "guidance": "(4)",
+    "type": "diagram",
+    "diagram_kind": "network",
+    "mark_scheme": {
+      "instruction": "Award up to four marks.",
+      "points": [
+        "Employee laptop shown at home (1)",
+        "Encrypted VPN tunnel drawn across the internet (1)",
+        "Office router/firewall as entry point (1)",
+        "Office file server accessible after VPN connection is established (1)"
+      ]
+    }
+  },
+  {
+    "id": "DG14",
+    "learning_aim": "A",
+    "topic": "A4 IT systems",
+    "command_verb": "Draw",
+    "marks": 6,
+    "ao": "AO2",
+    "scenario": "Highbury Stationers uses an EPOS system. When an item is scanned at the till the price is read from the products database, the stock level is reduced by one, the item appears on the receipt, and if stock falls below the reorder level a low-stock alert is sent to the manager.",
+    "question": "Draw a flowchart to show what happens when an item is scanned at the till.",
+    "guidance": "(6)",
+    "type": "diagram",
+    "diagram_kind": "flowchart",
+    "mark_scheme": {
+      "instruction": "Award up to six marks.",
+      "points": [
+        "Start and End terminator symbols (1)",
+        "Input: scan barcode (1)",
+        "Process: look up price in products database (1)",
+        "Process: reduce stock level by one (1)",
+        "Decision diamond: stock below reorder level? (1)",
+        "If yes — send alert to manager; output item on receipt and end (1)"
+      ]
+    }
+  },
+  {
+    "id": "DG15",
+    "learning_aim": "B",
+    "topic": "B1.1 Connectivity",
+    "command_verb": "Draw",
+    "marks": 4,
+    "ao": "AO1",
+    "scenario": "A family home has an internet router. Devices connect using either Ethernet cables (desktop PC, smart TV) or Wi-Fi (two laptops, three smartphones, a tablet).",
+    "question": "Draw a network diagram for the family home, showing both wired and wireless connections clearly.",
+    "guidance": "(4)",
+    "type": "diagram",
+    "diagram_kind": "network",
+    "mark_scheme": {
+      "instruction": "Award up to four marks.",
+      "points": [
+        "Router shown as central device with internet uplink (1)",
+        "Wired (Ethernet) devices connected with solid lines (1)",
+        "Wireless (Wi-Fi) devices connected with dashed/wavy lines or labelled wireless (1)",
+        "All devices clearly labelled (1)"
+      ]
+    }
+  },
+  {
+    "id": "DG16",
+    "learning_aim": "D",
+    "topic": "D1 Threats",
+    "command_verb": "Draw",
+    "marks": 6,
+    "ao": "AO2",
+    "scenario": "An office network is protected by a firewall. When an email arrives, anti-virus software scans any attachments; if a virus is found the email is quarantined and the user is notified, otherwise the email is delivered to the inbox.",
+    "question": "Draw a flowchart to show how an incoming email is handled by the office's security software.",
+    "guidance": "(6)",
+    "type": "diagram",
+    "diagram_kind": "flowchart",
+    "mark_scheme": {
+      "instruction": "Award up to six marks.",
+      "points": [
+        "Start and End terminator symbols (1)",
+        "Process: receive email (1)",
+        "Process: scan attachments with anti-virus (1)",
+        "Decision diamond: virus detected? (1)",
+        "If yes — quarantine email and notify user (1)",
+        "If no — deliver to inbox (1)"
+      ]
+    }
+  },
+  {
+    "id": "DG17",
+    "learning_aim": "E",
+    "topic": "E2 Data manipulation",
+    "command_verb": "Draw",
+    "marks": 4,
+    "ao": "AO2",
+    "scenario": "A school uses an online registration form. The form collects pupil name, date of birth and parent email. Each field is checked: the name must not be blank, the date of birth must be a valid date, and the email must contain '@'.",
+    "question": "Draw a flowchart to show how the registration form validates the three fields before saving the record.",
+    "guidance": "(4)",
+    "type": "diagram",
+    "diagram_kind": "flowchart",
+    "mark_scheme": {
+      "instruction": "Award up to four marks.",
+      "points": [
+        "Start and End terminator symbols (1)",
+        "Three input or validation steps (one per field) (1)",
+        "Decision diamond(s) checking each field is valid; invalid loops back (1)",
+        "If all valid — save record and end (1)"
+      ]
+    }
+  },
+  {
+    "id": "DG18",
+    "learning_aim": "A",
+    "topic": "A1.3 Notation",
+    "command_verb": "Draw",
+    "marks": 4,
+    "ao": "AO2",
+    "scenario": "A library self-issue kiosk asks the borrower to scan their library card, then scan each book to be issued. When the borrower presses 'Done', the system updates each book's status to 'on loan' and prints a receipt.",
+    "question": "Draw a flowchart to show the process of issuing books at the self-issue kiosk.",
+    "guidance": "(4)",
+    "type": "diagram",
+    "diagram_kind": "flowchart",
+    "mark_scheme": {
+      "instruction": "Award up to four marks.",
+      "points": [
+        "Start and End terminator symbols (1)",
+        "Input: scan library card (1)",
+        "Loop: scan each book until 'Done' is pressed (1)",
+        "Process: update books to 'on loan' and print receipt (1)"
+      ]
+    }
+  }
+]

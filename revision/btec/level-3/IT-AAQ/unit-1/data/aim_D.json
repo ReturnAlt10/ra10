@@ -1,0 +1,3042 @@
+[
+  {
+    "id": "D001",
+    "learning_aim": "D",
+    "topic": "D1.1.1 Viruses and other malware",
+    "command_verb": "State",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "Greenfield Secondary School has a network of 200 computers used by students and staff.",
+    "question": "State one type of malware that encrypts a user's files and demands payment for the decryption key.",
+    "guidance": "(1)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark for a correct identification.",
+      "points": [
+        "Ransomware (1)"
+      ],
+      "additional_guidance": "Accept any other appropriate/alternative response",
+      "do_not_accept": null
+    }
+  },
+  {
+    "id": "D002",
+    "learning_aim": "D",
+    "topic": "D1.1.1 Viruses and other malware",
+    "command_verb": "State",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "Hartley Dental Practice stores patient records on a local server.",
+    "question": "State one type of malware that secretly records a user's keystrokes to capture passwords.",
+    "guidance": "(1)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark for a correct identification.",
+      "points": [
+        "Spyware (1)",
+        "Keylogger (1)"
+      ],
+      "additional_guidance": "Accept any other appropriate/alternative response",
+      "do_not_accept": null
+    }
+  },
+  {
+    "id": "D003",
+    "learning_aim": "D",
+    "topic": "D1.1.2 Unauthorised access — hackers",
+    "command_verb": "State",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "Bramblewood Accountancy Firm holds sensitive client financial data on its servers.",
+    "question": "State one term used to describe a person who gains unauthorised access to a computer system.",
+    "guidance": "(1)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark for a correct identification.",
+      "points": [
+        "Hacker (1)"
+      ],
+      "additional_guidance": "Accept any other appropriate/alternative response",
+      "do_not_accept": null
+    }
+  },
+  {
+    "id": "D004",
+    "learning_aim": "D",
+    "topic": "D1.1.4 Social engineering",
+    "command_verb": "State",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "Westside Recruitment Agency uses email to communicate with clients and candidates.",
+    "question": "State one social engineering technique that uses fraudulent emails to trick users into revealing personal information.",
+    "guidance": "(1)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark for a correct identification.",
+      "points": [
+        "Phishing (1)"
+      ],
+      "additional_guidance": "Accept any other appropriate/alternative response",
+      "do_not_accept": null
+    }
+  },
+  {
+    "id": "D005",
+    "learning_aim": "D",
+    "topic": "D2.1.4 Passwords/MFA",
+    "command_verb": "State",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "Riverside Leisure Centre allows members to book classes through an online portal.",
+    "question": "State what MFA stands for in the context of securing user accounts.",
+    "guidance": "(1)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct expansion.",
+      "points": [
+        "Multi-factor authentication (1)"
+      ],
+      "additional_guidance": "Accept multi factor authentication (without hyphen)",
+      "do_not_accept": "Multi-function authentication"
+    }
+  },
+  {
+    "id": "D006",
+    "learning_aim": "D",
+    "topic": "D2.2 Antivirus software",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "Kestrel Print Studio has recently installed antivirus software on all its workstations.",
+    "question": "Identify one feature of antivirus software that allows it to detect previously unknown malware.",
+    "guidance": "(1)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark for a correct identification.",
+      "points": [
+        "Heuristic analysis/detection (1)",
+        "Behaviour monitoring/analysis (1)"
+      ],
+      "additional_guidance": "Accept any other appropriate/alternative response",
+      "do_not_accept": null
+    }
+  },
+  {
+    "id": "D007",
+    "learning_aim": "D",
+    "topic": "D2.3 Firewalls",
+    "command_verb": "State",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "Moorlands Veterinary Practice connects its patient management system to the internet.",
+    "question": "State one purpose of a firewall in protecting a computer network.",
+    "guidance": "(1)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark for a correct purpose.",
+      "points": [
+        "To monitor/filter incoming and outgoing network traffic (1)",
+        "To block unauthorised access to the network (1)",
+        "To prevent malicious data packets from entering the network (1)"
+      ],
+      "additional_guidance": "Accept any other appropriate/alternative response",
+      "do_not_accept": null
+    }
+  },
+  {
+    "id": "D008",
+    "learning_aim": "D",
+    "topic": "D1.2.4 Use of portable devices",
+    "command_verb": "Give",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "Foxglove Construction Company issues mobile phones and laptops to site managers.",
+    "question": "Give one internal threat to data that is associated with the use of portable devices.",
+    "guidance": "(1)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark for a correct identification.",
+      "points": [
+        "Loss or theft of the device (1)",
+        "Introducing malware via USB/removable storage (1)",
+        "Data being accessed if the device is lost (1)"
+      ],
+      "additional_guidance": "Accept any other appropriate/alternative response",
+      "do_not_accept": null
+    }
+  },
+  {
+    "id": "D009",
+    "learning_aim": "D",
+    "topic": "D2.1.5 Biometrics",
+    "command_verb": "State",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "Northgate Pharmacy restricts access to the dispensary area using a biometric system.",
+    "question": "State one example of a biometric method used to control access to a building or system.",
+    "guidance": "(1)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark for a correct example.",
+      "points": [
+        "Fingerprint scanner (1)",
+        "Facial recognition (1)",
+        "Iris/retinal scan (1)",
+        "Voice recognition (1)"
+      ],
+      "additional_guidance": "Accept any other appropriate/alternative response",
+      "do_not_accept": null
+    }
+  },
+  {
+    "id": "D010",
+    "learning_aim": "D",
+    "topic": "D1.3.1 Loss of data",
+    "command_verb": "State",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "Copperfield Florist stores customer orders and supplier details digitally.",
+    "question": "State one impact on an organisation if its customer data is permanently lost.",
+    "guidance": "(1)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark for a correct impact.",
+      "points": [
+        "Inability to fulfil/process customer orders (1)",
+        "Loss of customer contact information (1)",
+        "Loss of business revenue (1)",
+        "Disruption to business operations (1)"
+      ],
+      "additional_guidance": "Accept any other appropriate/alternative response",
+      "do_not_accept": null
+    }
+  },
+  {
+    "id": "D011",
+    "learning_aim": "D",
+    "topic": "D2.4.3 HTTPS",
+    "command_verb": "State",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "Silverstone Cycle Shop has launched an e-commerce website where customers enter payment details.",
+    "question": "State what the 'S' in HTTPS stands for.",
+    "guidance": "(1)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct answer.",
+      "points": [
+        "Secure (1)"
+      ],
+      "additional_guidance": null,
+      "do_not_accept": null
+    }
+  },
+  {
+    "id": "D012",
+    "learning_aim": "D",
+    "topic": "D1.1.1 Viruses and other malware — rootkit",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "Lakewood Publishing House discovered unusual system activity on its print servers.",
+    "question": "Identify one type of malware designed to conceal its presence by hiding deep within the operating system.",
+    "guidance": "(1)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark for a correct identification.",
+      "points": [
+        "Rootkit (1)"
+      ],
+      "additional_guidance": "Accept any other appropriate/alternative response",
+      "do_not_accept": null
+    }
+  },
+  {
+    "id": "D013",
+    "learning_aim": "D",
+    "topic": "D1.1.5 Natural disasters",
+    "command_verb": "Give",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "Harbour View Hotel stores guest booking data on an on-site server room.",
+    "question": "Give one example of a natural disaster that could destroy an organisation's IT infrastructure.",
+    "guidance": "(1)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark for a correct example.",
+      "points": [
+        "Flooding (1)",
+        "Fire (1)",
+        "Earthquake (1)",
+        "Lightning strike (1)"
+      ],
+      "additional_guidance": "Accept any other appropriate/alternative response",
+      "do_not_accept": null
+    }
+  },
+  {
+    "id": "D014",
+    "learning_aim": "D",
+    "topic": "D2.1.7 Digital certificates",
+    "command_verb": "State",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "Thornton Estate Agents uses a secure website to collect property enquiry forms.",
+    "question": "State one purpose of a digital certificate on a website.",
+    "guidance": "(1)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark for a correct purpose.",
+      "points": [
+        "To verify/authenticate the identity of the website (1)",
+        "To enable encrypted (HTTPS) communication between the server and browser (1)"
+      ],
+      "additional_guidance": "Accept any other appropriate/alternative response",
+      "do_not_accept": null
+    }
+  },
+  {
+    "id": "D015",
+    "learning_aim": "D",
+    "topic": "D2.1.3 Backup and recovery procedures",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "Birchwood Primary School backs up its pupil data every night.",
+    "question": "Identify one type of backup that only saves files that have changed since the last full backup.",
+    "guidance": "(1)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark for a correct identification.",
+      "points": [
+        "Incremental backup (1)",
+        "Differential backup (1)"
+      ],
+      "additional_guidance": "Accept either incremental or differential; both are acceptable",
+      "do_not_accept": null
+    }
+  },
+  {
+    "id": "D016",
+    "learning_aim": "D",
+    "topic": "D1.1.1 Viruses and other malware",
+    "command_verb": "Give",
+    "marks": 2,
+    "ao": "AO1",
+    "scenario": "Beacon Taxi Company uses computers in its dispatch office to manage bookings.",
+    "question": "Give two types of malware that could threaten the company's computer systems.",
+    "guidance": "(2)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark for each correct type, up to a maximum of two marks.",
+      "points": [
+        "Virus (1)",
+        "Worm (1)",
+        "Trojan (1)",
+        "Ransomware (1)",
+        "Spyware (1)",
+        "Adware (1)",
+        "Rootkit (1)",
+        "Malicious bot (1)"
+      ],
+      "additional_guidance": "Accept any other appropriate/alternative response",
+      "do_not_accept": null
+    }
+  },
+  {
+    "id": "D017",
+    "learning_aim": "D",
+    "topic": "D1.1.4 Social engineering",
+    "command_verb": "Give",
+    "marks": 2,
+    "ao": "AO1",
+    "scenario": "Stonewall Gymnasium stores member payment details and health records.",
+    "question": "Give two examples of social engineering techniques used to gain unauthorised access to data.",
+    "guidance": "(2)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark for each correct technique, up to a maximum of two marks.",
+      "points": [
+        "Phishing (1)",
+        "Pharming (1)",
+        "Shouldering/shoulder surfing (1)",
+        "Pretexting (1)",
+        "Baiting (1)"
+      ],
+      "additional_guidance": "Accept any other appropriate/alternative response",
+      "do_not_accept": null
+    }
+  },
+  {
+    "id": "D018",
+    "learning_aim": "D",
+    "topic": "D2.1.1 File permissions",
+    "command_verb": "Explain",
+    "marks": 2,
+    "ao": "AO1+AO2",
+    "scenario": "Millbrook Sixth Form College stores exam papers and student records on a shared network drive.",
+    "question": "Explain one way in which file permissions can protect the college's exam papers from being accessed by students.",
+    "guidance": "(2)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark for identification and one mark for an appropriate linked justification/expansion.",
+      "points": [
+        "File permissions can restrict access to read-only or no access for student accounts (1) so students cannot open or copy exam papers before the exam (1)",
+        "Files can be set so only staff accounts have permission to view the exam documents (1) preventing students from gaining an unfair advantage (1)"
+      ],
+      "additional_guidance": "Accept any other appropriate/alternative response",
+      "do_not_accept": null
+    }
+  },
+  {
+    "id": "D019",
+    "learning_aim": "D",
+    "topic": "D1.2.2 Accidental disclosure of data",
+    "command_verb": "Explain",
+    "marks": 2,
+    "ao": "AO1+AO2",
+    "scenario": "Clearwater Solicitors firm handles confidential client case files.",
+    "question": "Explain one way in which accidental disclosure of data could occur at the solicitors firm.",
+    "guidance": "(2)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark for identification and one mark for an appropriate linked justification/expansion.",
+      "points": [
+        "A member of staff could send an email containing client information to the wrong recipient (1) exposing confidential legal information to an unauthorised person (1)",
+        "An employee could leave a computer screen visible containing client records (1) allowing an unauthorised person to read the sensitive data (1)",
+        "Staff may discuss client cases in a public area (1) allowing others to overhear confidential information (1)"
+      ],
+      "additional_guidance": "Accept any other appropriate/alternative response",
+      "do_not_accept": null
+    }
+  },
+  {
+    "id": "D020",
+    "learning_aim": "D",
+    "topic": "D2.4.1 Encryption — stored data",
+    "command_verb": "Explain",
+    "marks": 2,
+    "ao": "AO1+AO2",
+    "scenario": "Elmwood GP Surgery stores patient medical records on its local server.",
+    "question": "Explain one benefit of encrypting patient data stored on the surgery's server.",
+    "guidance": "(2)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark for identification and one mark for an appropriate linked justification/expansion.",
+      "points": [
+        "If the server is accessed by an unauthorised person (1) the encrypted data cannot be read without the decryption key (1)",
+        "Encryption protects the confidentiality of patient data (1) ensuring it cannot be understood if intercepted or stolen (1)"
+      ],
+      "additional_guidance": "Accept any other appropriate/alternative response",
+      "do_not_accept": null
+    }
+  },
+  {
+    "id": "D021",
+    "learning_aim": "D",
+    "topic": "D1.3.2 Financial loss due to legal action",
+    "command_verb": "Explain",
+    "marks": 2,
+    "ao": "AO1+AO2",
+    "scenario": "Pennine Fitness Club suffered a data breach that exposed the personal details of 3,000 members.",
+    "question": "Explain one way in which the data breach could result in financial loss for the fitness club.",
+    "guidance": "(2)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark for identification and one mark for an appropriate linked justification/expansion.",
+      "points": [
+        "The club could face fines from the ICO (1) for failing to protect member data under data protection legislation (1)",
+        "Members could take legal action against the club (1) resulting in costly compensation payments (1)",
+        "The club may need to hire cybersecurity consultants to repair the breach (1) which incurs significant costs (1)"
+      ],
+      "additional_guidance": "Accept any other appropriate/alternative response",
+      "do_not_accept": null
+    }
+  },
+  {
+    "id": "D022",
+    "learning_aim": "D",
+    "topic": "D2.3 Firewalls",
+    "command_verb": "Explain",
+    "marks": 2,
+    "ao": "AO1+AO2",
+    "scenario": "Mapleton Library provides free public Wi-Fi to visitors and uses a network to manage its catalogue system.",
+    "question": "Explain one way in which a firewall protects the library's network from external threats.",
+    "guidance": "(2)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark for identification and one mark for an appropriate linked justification/expansion.",
+      "points": [
+        "A firewall monitors incoming and outgoing network traffic (1) and blocks packets that do not meet its security rules, preventing unauthorised access (1)",
+        "A firewall can be configured to block connections from suspicious IP addresses (1) reducing the risk of hackers accessing the library's internal network (1)"
+      ],
+      "additional_guidance": "Accept any other appropriate/alternative response",
+      "do_not_accept": null
+    }
+  },
+  {
+    "id": "D023",
+    "learning_aim": "D",
+    "topic": "D1.1.3 Accidental damage",
+    "command_verb": "Explain",
+    "marks": 2,
+    "ao": "AO1+AO2",
+    "scenario": "Sundale Nursery School uses tablets and laptops for administrative tasks and early learning activities.",
+    "question": "Explain one way accidental damage could threaten the data stored on the nursery's devices.",
+    "guidance": "(2)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark for identification and one mark for an appropriate linked justification/expansion.",
+      "points": [
+        "A tablet could be dropped and physically damaged (1) causing the storage to fail and making data permanently inaccessible (1)",
+        "Liquid spillage on a laptop (1) could damage the hard drive, resulting in loss of stored administrative records (1)"
+      ],
+      "additional_guidance": "Accept any other appropriate/alternative response",
+      "do_not_accept": null
+    }
+  },
+  {
+    "id": "D024",
+    "learning_aim": "D",
+    "topic": "D2.1.6 Physical access control",
+    "command_verb": "Explain",
+    "marks": 2,
+    "ao": "AO1+AO2",
+    "scenario": "Irongate Manufacturing Company keeps its production control servers in a dedicated server room.",
+    "question": "Explain one way physical access control could protect the server room from unauthorised access.",
+    "guidance": "(2)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark for identification and one mark for an appropriate linked justification/expansion.",
+      "points": [
+        "A keypad/electronic lock can be installed on the server room door (1) so only authorised staff who know the code can enter (1)",
+        "Swipe card access can be used (1) so only employees with a valid card can enter the server room and access equipment (1)",
+        "CCTV cameras can monitor the entrance (1) deterring unauthorised access and providing evidence if a breach occurs (1)"
+      ],
+      "additional_guidance": "Accept any other appropriate/alternative response",
+      "do_not_accept": null
+    }
+  },
+  {
+    "id": "D025",
+    "learning_aim": "D",
+    "topic": "D1.2.3 Stealing/leaking information",
+    "command_verb": "Explain",
+    "marks": 2,
+    "ao": "AO1+AO2",
+    "scenario": "Redwood Advertising Agency holds confidential client campaign data and creative briefs.",
+    "question": "Explain one reason why a disgruntled employee could pose an internal threat to the agency's data.",
+    "guidance": "(2)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark for identification and one mark for an appropriate linked justification/expansion.",
+      "points": [
+        "A disgruntled employee may deliberately steal client data (1) and leak it to a competitor, causing commercial harm to the agency (1)",
+        "An unhappy member of staff may copy confidential campaign briefs to removable media (1) intending to sell or misuse the information (1)"
+      ],
+      "additional_guidance": "Accept any other appropriate/alternative response",
+      "do_not_accept": null
+    }
+  },
+  {
+    "id": "D026",
+    "learning_aim": "D",
+    "topic": "D1.1.4 Pharming",
+    "command_verb": "Explain",
+    "marks": 2,
+    "ao": "AO1+AO2",
+    "scenario": "Highfield Credit Union provides online banking services to its members.",
+    "question": "Explain how pharming could be used to steal members' banking credentials.",
+    "guidance": "(2)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark for identification and one mark for an appropriate linked justification/expansion.",
+      "points": [
+        "Pharming redirects users to a fake website (1) even when they type the correct web address, tricking them into entering their login credentials on a fraudulent site (1)",
+        "Attackers corrupt DNS records (1) so members are unknowingly directed to a fraudulent copy of the banking site where their details are captured (1)"
+      ],
+      "additional_guidance": "Accept any other appropriate/alternative response",
+      "do_not_accept": null
+    }
+  },
+  {
+    "id": "D027",
+    "learning_aim": "D",
+    "topic": "D2.2 Antivirus software",
+    "command_verb": "Give",
+    "marks": 2,
+    "ao": "AO1",
+    "scenario": "Clarendon Theatre Company uses computers to manage ticket bookings and payroll.",
+    "question": "Give two features of antivirus software that help protect the theatre's computers.",
+    "guidance": "(2)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark for each correct feature, up to a maximum of two marks.",
+      "points": [
+        "Real-time scanning/monitoring (1)",
+        "Virus definition/signature database updates (1)",
+        "Quarantine of infected files (1)",
+        "Scheduled scans (1)",
+        "Heuristic analysis (1)",
+        "Email attachment scanning (1)"
+      ],
+      "additional_guidance": "Accept any other appropriate/alternative response",
+      "do_not_accept": null
+    }
+  },
+  {
+    "id": "D028",
+    "learning_aim": "D",
+    "topic": "D1.3.3 Loss of customers due to public image",
+    "command_verb": "Explain",
+    "marks": 2,
+    "ao": "AO1+AO2",
+    "scenario": "Oakfield Online Retailer suffered a publicised data breach affecting thousands of customer accounts.",
+    "question": "Explain one way the data breach could lead to a loss of customers for the online retailer.",
+    "guidance": "(2)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark for identification and one mark for an appropriate linked justification/expansion.",
+      "points": [
+        "Negative media coverage of the breach (1) could damage the retailer's reputation, causing existing customers to shop elsewhere (1)",
+        "Customers who lost trust in the company's ability to protect their data (1) may cancel their accounts and switch to a competitor (1)"
+      ],
+      "additional_guidance": "Accept any other appropriate/alternative response",
+      "do_not_accept": null
+    }
+  },
+  {
+    "id": "D029",
+    "learning_aim": "D",
+    "topic": "D2.1.2 Access levels",
+    "command_verb": "Give",
+    "marks": 2,
+    "ao": "AO1+AO2",
+    "scenario": "Crestwood Accountancy Practice employs senior accountants, junior accountants, and administrative staff.",
+    "question": "Give two benefits to the practice of implementing different access levels for different categories of staff.",
+    "guidance": "(2)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark for each correct benefit, up to a maximum of two marks.",
+      "points": [
+        "Limits exposure of sensitive client financial data to only those who need it (1)",
+        "Reduces the risk of accidental or deliberate data modification by unauthorised staff (1)",
+        "Helps the practice comply with data protection legislation (1)",
+        "Reduces the damage caused if a staff account is compromised (1)"
+      ],
+      "additional_guidance": "Accept any other appropriate/alternative response",
+      "do_not_accept": null
+    }
+  },
+  {
+    "id": "D030",
+    "learning_aim": "D",
+    "topic": "D1.2.1 Access to inappropriate websites",
+    "command_verb": "Explain",
+    "marks": 2,
+    "ao": "AO1+AO2",
+    "scenario": "Pennhurst Comprehensive School provides students with internet-connected computers.",
+    "question": "Explain one internal threat that could arise if students are able to access inappropriate websites on the school network.",
+    "guidance": "(2)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark for identification and one mark for an appropriate linked justification/expansion.",
+      "points": [
+        "Students may download malware from malicious websites (1) which could infect the school's entire network (1)",
+        "Accessing inappropriate sites could expose the school to reputational and legal risks (1) particularly if safeguarding policies are not enforced (1)"
+      ],
+      "additional_guidance": "Accept any other appropriate/alternative response",
+      "do_not_accept": null
+    }
+  },
+  {
+    "id": "D031",
+    "learning_aim": "D",
+    "topic": "D2.4.2 Encryption — data in transmission",
+    "command_verb": "Explain",
+    "marks": 2,
+    "ao": "AO1+AO2",
+    "scenario": "Parkview Estate Agency sends property valuations and client personal details via email.",
+    "question": "Explain one reason why encrypting data during transmission is important for the estate agency.",
+    "guidance": "(2)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark for identification and one mark for an appropriate linked justification/expansion.",
+      "points": [
+        "If emails containing client data are intercepted (1) encryption ensures the content cannot be read by the attacker (1)",
+        "Encrypting data in transit protects client personal details (1) helping the agency comply with data protection legislation (1)"
+      ],
+      "additional_guidance": "Accept any other appropriate/alternative response",
+      "do_not_accept": null
+    }
+  },
+  {
+    "id": "D032",
+    "learning_aim": "D",
+    "topic": "D2.1.3 Backup and recovery procedures",
+    "command_verb": "Explain",
+    "marks": 2,
+    "ao": "AO1+AO2",
+    "scenario": "Whitmore Veterinary Hospital stores patient treatment records on its server.",
+    "question": "Explain one benefit to the hospital of having a regular backup procedure in place.",
+    "guidance": "(2)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark for identification and one mark for an appropriate linked justification/expansion.",
+      "points": [
+        "If patient data is lost due to hardware failure or a cyber attack (1) the hospital can restore data from the backup minimising disruption to patient care (1)",
+        "Regular backups ensure business continuity (1) so the hospital can quickly recover and resume treating animals without lengthy downtime (1)"
+      ],
+      "additional_guidance": "Accept any other appropriate/alternative response",
+      "do_not_accept": null
+    }
+  },
+  {
+    "id": "D033",
+    "learning_aim": "D",
+    "topic": "D2.2 Antivirus software",
+    "command_verb": "Explain",
+    "marks": 3,
+    "ao": "AO1+AO2",
+    "scenario": "Radford Recording Studio uses a network of computers for audio production and client file management.",
+    "question": "Explain how antivirus software could protect the studio's computers from a virus infection.",
+    "guidance": "(3)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark per linked point up to a maximum of three marks.",
+      "points": [
+        "Antivirus software scans files and programs (1) comparing them against a database of known virus signatures (1) and quarantines or deletes any files identified as infected (1)",
+        "Real-time monitoring detects suspicious activity as it occurs (1) and can prevent a virus from executing (1) before it can corrupt or delete production files (1)"
+      ],
+      "additional_guidance": "Accept any other appropriate/alternative response",
+      "do_not_accept": null
+    }
+  },
+  {
+    "id": "D034",
+    "learning_aim": "D",
+    "topic": "D1.1.1 Trojan",
+    "command_verb": "Explain",
+    "marks": 3,
+    "ao": "AO1+AO2",
+    "scenario": "Foxbury Online Tutoring Service asks students to download software to join live sessions.",
+    "question": "Explain how a Trojan could be used to attack students who download software from the tutoring service's website.",
+    "guidance": "(3)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark per linked point up to a maximum of three marks.",
+      "points": [
+        "A Trojan disguises itself as legitimate software (1) so students unknowingly download and install it believing it is the tutoring application (1) allowing the attacker to gain backdoor access to the student's computer (1)",
+        "Once installed the Trojan can allow attackers to access personal data (1) such as stored passwords or files (1) without the student being aware (1)"
+      ],
+      "additional_guidance": "Accept any other appropriate/alternative response",
+      "do_not_accept": null
+    }
+  },
+  {
+    "id": "D035",
+    "learning_aim": "D",
+    "topic": "D1.1.4 Shouldering",
+    "command_verb": "Explain",
+    "marks": 3,
+    "ao": "AO1+AO2",
+    "scenario": "Marchwood Building Society has a branch where staff access customer accounts from desktop computers.",
+    "question": "Explain how shouldering could be used to gain unauthorised access to customer account information at the building society.",
+    "guidance": "(3)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark per linked point up to a maximum of three marks.",
+      "points": [
+        "Shouldering involves an attacker observing a user's screen or keyboard (1) to capture login credentials or sensitive customer data (1) which can then be used to log in to accounts without authorisation (1)",
+        "A person could stand close to a member of staff (1) and watch them type a password or PIN (1) using that information to later access customer accounts illicitly (1)"
+      ],
+      "additional_guidance": "Accept any other appropriate/alternative response",
+      "do_not_accept": null
+    }
+  },
+  {
+    "id": "D036",
+    "learning_aim": "D",
+    "topic": "D2.1.4 Passwords/MFA",
+    "command_verb": "Explain",
+    "marks": 3,
+    "ao": "AO1+AO2",
+    "scenario": "Bluebell Charity uses an online database to manage donor and volunteer personal information.",
+    "question": "Explain how multi-factor authentication (MFA) would improve the security of the charity's online database.",
+    "guidance": "(3)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark per linked point up to a maximum of three marks.",
+      "points": [
+        "MFA requires users to provide two or more forms of verification before access is granted (1) so even if a password is stolen (1) the attacker still cannot log in without the second factor (1)",
+        "The second factor could be a one-time code sent to the user's mobile phone (1) meaning an attacker who does not have access to the registered device (1) is blocked from accessing the database (1)"
+      ],
+      "additional_guidance": "Accept any other appropriate/alternative response",
+      "do_not_accept": null
+    }
+  },
+  {
+    "id": "D037",
+    "learning_aim": "D",
+    "topic": "D1.1.1 Worm",
+    "command_verb": "Explain",
+    "marks": 3,
+    "ao": "AO1+AO2",
+    "scenario": "Mountfield Logistics Company operates a large network connecting its depot and regional offices.",
+    "question": "Explain how a worm could spread across the company's network and cause damage.",
+    "guidance": "(3)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark per linked point up to a maximum of three marks.",
+      "points": [
+        "A worm self-replicates without user intervention (1) spreading automatically across the network from one device to another (1) consuming bandwidth and system resources, slowing down or crashing systems (1)",
+        "Once on the network a worm can copy itself to every connected device (1) potentially installing other malware payloads (1) causing widespread data loss or corruption across depots (1)"
+      ],
+      "additional_guidance": "Accept any other appropriate/alternative response",
+      "do_not_accept": null
+    }
+  },
+  {
+    "id": "D038",
+    "learning_aim": "D",
+    "topic": "D2.1.6 Physical access control",
+    "command_verb": "Explain",
+    "marks": 3,
+    "ao": "AO1+AO2",
+    "scenario": "Halton Museum stores digital archives of rare artefacts on servers in its basement.",
+    "question": "Explain how physical access controls could protect the museum's servers from an internal threat.",
+    "guidance": "(3)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark per linked point up to a maximum of three marks.",
+      "points": [
+        "Restricting the server room to authorised personnel using a keycard/fob system (1) prevents unauthorised staff from physically accessing the servers (1) reducing the risk of data being copied or deleted internally (1)",
+        "A visitor log and sign-in procedure can record who enters the server room (1) creating an audit trail (1) that helps identify responsibility if data is tampered with (1)"
+      ],
+      "additional_guidance": "Accept any other appropriate/alternative response",
+      "do_not_accept": null
+    }
+  },
+  {
+    "id": "D039",
+    "learning_aim": "D",
+    "topic": "D1.3.1 Loss of data",
+    "command_verb": "Explain",
+    "marks": 3,
+    "ao": "AO1+AO2",
+    "scenario": "Sandfield Hotel chain relies on an IT system to manage room reservations and guest loyalty accounts.",
+    "question": "Explain the impact that a significant loss of data could have on the hotel chain's operations.",
+    "guidance": "(3)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark per linked point up to a maximum of three marks.",
+      "points": [
+        "Loss of reservation data would mean the hotel cannot confirm or honour bookings (1) leading to guests arriving without rooms being prepared (1) and significant inconvenience and reputational damage (1)",
+        "Loss of loyalty account data would prevent accurate tracking of customer rewards (1) eroding customer trust (1) and potentially triggering legal obligations to notify affected customers (1)"
+      ],
+      "additional_guidance": "Accept any other appropriate/alternative response",
+      "do_not_accept": null
+    }
+  },
+  {
+    "id": "D040",
+    "learning_aim": "D",
+    "topic": "D2.3 Firewalls",
+    "command_verb": "Explain",
+    "marks": 3,
+    "ao": "AO1+AO2",
+    "scenario": "Croft Secondary Academy recently moved to a cloud-based student management system accessible over the internet.",
+    "question": "Explain how a firewall could be used to help protect the academy's network when accessing the cloud system.",
+    "guidance": "(3)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark per linked point up to a maximum of three marks.",
+      "points": [
+        "The firewall can be configured with rules to allow only authorised IP addresses or ports to connect to the cloud system (1) blocking traffic from unknown sources (1) reducing the risk of unauthorised users accessing student data (1)",
+        "A firewall can log all traffic attempting to access the network (1) allowing the IT team to review logs for suspicious activity (1) and act on potential intrusion attempts quickly (1)"
+      ],
+      "additional_guidance": "Accept any other appropriate/alternative response",
+      "do_not_accept": null
+    }
+  },
+  {
+    "id": "D041",
+    "learning_aim": "D",
+    "topic": "D2.1.3 Backup and recovery procedures",
+    "command_verb": "Describe",
+    "marks": 4,
+    "ao": "AO1+AO2",
+    "scenario": "Highclere Bakery keeps its customer order data, supplier invoices, and employee payroll records on a central server.",
+    "question": "Describe a suitable backup procedure that the bakery could use to protect its data.",
+    "guidance": "(4)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark per linked point up to a maximum of four marks.",
+      "points": [
+        "Full backups should be performed regularly (e.g. weekly) capturing all data on the server (1)",
+        "Incremental backups should be performed more frequently (e.g. daily) to capture any changes since the last backup (1)",
+        "Backup copies should be stored offsite or in the cloud (1) so data is not lost if the bakery premises are damaged by fire or flooding (1)",
+        "Backups should be tested by performing a test restore (1) to confirm that data can be recovered successfully (1)",
+        "A rotation schedule (e.g. grandfather-father-son) should be used (1) to maintain multiple recovery points (1)"
+      ],
+      "additional_guidance": "Accept any other appropriate/alternative response",
+      "do_not_accept": null
+    }
+  },
+  {
+    "id": "D042",
+    "learning_aim": "D",
+    "topic": "D1.1.1 Ransomware",
+    "command_verb": "Explain",
+    "marks": 4,
+    "ao": "AO1+AO2",
+    "scenario": "Linwood NHS Dental Practice stores patient records, appointment data, and X-ray images digitally.",
+    "question": "Explain two ways in which a ransomware attack could affect the dental practice.",
+    "guidance": "(4)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark for each identification and one mark for each appropriate linked expansion, up to a maximum of four marks (2 × 2).",
+      "points": [
+        "Patient records could be encrypted by the ransomware (1) making them inaccessible and preventing staff from accessing appointment information or treatment histories (1)",
+        "The practice may be unable to treat patients effectively (1) leading to appointment cancellations and loss of income (1)",
+        "The practice may be forced to pay a ransom (1) with no guarantee that the decryption key will actually restore the files (1)",
+        "X-ray images could be permanently lost (1) meaning patients require repeat imaging, exposing them to additional radiation and costing the practice money (1)"
+      ],
+      "additional_guidance": "Accept any other appropriate/alternative response",
+      "do_not_accept": null
+    }
+  },
+  {
+    "id": "D043",
+    "learning_aim": "D",
+    "topic": "D2.1.5 Biometrics",
+    "command_verb": "Explain",
+    "marks": 4,
+    "ao": "AO1+AO2",
+    "scenario": "Coldstream Bank is considering replacing PIN-based login for its mobile banking app with biometric authentication.",
+    "question": "Explain two advantages of using biometric authentication instead of a PIN for the bank's mobile app.",
+    "guidance": "(4)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark for each identification and one mark for each appropriate linked expansion, up to a maximum of four marks (2 × 2).",
+      "points": [
+        "Biometrics cannot be forgotten like a PIN (1) so customers will not be locked out of their account due to forgetting a number (1)",
+        "Biometric data such as a fingerprint is unique to each individual (1) making it much harder for an attacker to replicate compared to stealing a PIN (1)",
+        "Biometric login is faster for users (1) improving the customer experience without compromising security (1)",
+        "Even if a customer's phone is stolen (1) the attacker cannot access the banking app without the owner's biometric (1)"
+      ],
+      "additional_guidance": "Accept any other appropriate/alternative response",
+      "do_not_accept": null
+    }
+  },
+  {
+    "id": "D044",
+    "learning_aim": "D",
+    "topic": "D2.2 Antivirus software",
+    "command_verb": "Describe",
+    "marks": 4,
+    "ao": "AO1+AO2",
+    "scenario": "Rosewood Recruitment Agency uses networked computers and sends CVs and application forms as email attachments.",
+    "question": "Describe how antivirus software could protect the agency's computers from malware delivered via email attachments.",
+    "guidance": "(4)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark per linked point up to a maximum of four marks.",
+      "points": [
+        "Antivirus software can scan all incoming email attachments automatically before they are opened (1)",
+        "It compares the attachment against a database of known malware signatures (1)",
+        "If a threat is detected the software quarantines the file (1) preventing it from being executed and infecting the system (1)",
+        "The software can alert the user or IT administrator that a malicious attachment was found (1)",
+        "Regular updates to the signature database ensure new threats are detected (1)"
+      ],
+      "additional_guidance": "Accept any other appropriate/alternative response",
+      "do_not_accept": null
+    }
+  },
+  {
+    "id": "D045",
+    "learning_aim": "D",
+    "topic": "D2.1.1 File permissions / D2.1.2 Access levels",
+    "command_verb": "Explain",
+    "marks": 4,
+    "ao": "AO1+AO2",
+    "scenario": "Pineview Primary School stores pupil data, staff payroll information, and curriculum resources on its network.",
+    "question": "Explain two ways file permissions and access levels can help protect sensitive data on the school's network.",
+    "guidance": "(4)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark for each identification and one mark for each appropriate linked expansion, up to a maximum of four marks (2 × 2).",
+      "points": [
+        "File permissions can restrict pupil accounts to read-only access for curriculum files (1) preventing them from deleting or modifying shared resources (1)",
+        "Access levels can be set so only the headteacher and bursar can view payroll files (1) preventing other staff or pupils from accessing confidential salary information (1)",
+        "Administrator accounts can have full control while teacher accounts have limited permissions (1) reducing the risk of accidental or deliberate data corruption (1)"
+      ],
+      "additional_guidance": "Accept any other appropriate/alternative response",
+      "do_not_accept": null
+    }
+  },
+  {
+    "id": "D046",
+    "learning_aim": "D",
+    "topic": "D1.1.2 Unauthorised access — hackers",
+    "command_verb": "Describe",
+    "marks": 4,
+    "ao": "AO1+AO2",
+    "scenario": "Cranfield Online Sports Shop stores customer payment details and purchase histories on its servers.",
+    "question": "Describe how an attacker could attempt to gain unauthorised access to the shop's customer database.",
+    "guidance": "(4)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark per linked point up to a maximum of four marks.",
+      "points": [
+        "An attacker could use brute force techniques to guess staff login credentials (1)",
+        "They could exploit vulnerabilities in the website's software or outdated security patches (1)",
+        "An SQL injection attack could be used to manipulate database queries (1) allowing retrieval of customer records without authorisation (1)",
+        "The attacker could use phishing emails to trick staff into revealing login credentials (1)",
+        "Once inside the attacker could extract and copy the customer payment database (1)"
+      ],
+      "additional_guidance": "Accept any other appropriate/alternative response",
+      "do_not_accept": null
+    }
+  },
+  {
+    "id": "D047",
+    "learning_aim": "D",
+    "topic": "D2.4.3 HTTPS / D2.1.7 Digital certificates",
+    "command_verb": "Explain",
+    "marks": 4,
+    "ao": "AO1+AO2",
+    "scenario": "Bloomfield Flower Delivery uses a website where customers enter personal details and credit card information to place orders.",
+    "question": "Explain two ways in which the use of HTTPS and digital certificates helps protect customers when they use the website.",
+    "guidance": "(4)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark for each identification and one mark for each appropriate linked expansion, up to a maximum of four marks (2 × 2).",
+      "points": [
+        "HTTPS encrypts data sent between the customer's browser and the server (1) so payment and personal information cannot be read if intercepted by a third party (1)",
+        "A digital certificate verifies that the website belongs to Bloomfield Flower Delivery (1) assuring customers they are not on a fake/phishing site before they enter sensitive details (1)"
+      ],
+      "additional_guidance": "Accept any other appropriate/alternative response",
+      "do_not_accept": null
+    }
+  },
+  {
+    "id": "D048",
+    "learning_aim": "D",
+    "topic": "D1.2.4 Use of portable devices",
+    "command_verb": "Explain",
+    "marks": 4,
+    "ao": "AO1+AO2",
+    "scenario": "Crestwood Architectural Design Studio allows staff to use USB flash drives to transfer large project files between office and home.",
+    "question": "Explain two ways the use of USB flash drives could pose a security risk to the studio's data.",
+    "guidance": "(4)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark for each identification and one mark for each appropriate linked expansion, up to a maximum of four marks (2 × 2).",
+      "points": [
+        "A USB drive could be lost or stolen (1) allowing an unauthorised person to access confidential project designs (1)",
+        "An infected USB drive could introduce malware onto the studio's network (1) potentially corrupting or encrypting project files (1)",
+        "Staff could deliberately copy and remove confidential client data on a USB drive (1) resulting in data theft and a breach of confidentiality (1)"
+      ],
+      "additional_guidance": "Accept any other appropriate/alternative response",
+      "do_not_accept": null
+    }
+  },
+  {
+    "id": "D049",
+    "learning_aim": "D",
+    "topic": "D2.3 Firewalls",
+    "command_verb": "Describe",
+    "marks": 4,
+    "ao": "AO1+AO2",
+    "scenario": "Parklands Sports Centre has a network connecting its reception computers, gym equipment, and café payment terminals.",
+    "question": "Describe how a firewall could be configured to protect the sports centre's network.",
+    "guidance": "(4)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark per linked point up to a maximum of four marks.",
+      "points": [
+        "Rules can be set to allow only specific types of traffic (e.g. HTTP/HTTPS) and block all others (1)",
+        "Traffic from unknown or suspicious IP addresses can be blocked (1)",
+        "The firewall can be configured to block access to specific websites (1) preventing staff from accessing inappropriate or dangerous sites (1)",
+        "All network traffic can be logged and monitored (1) so the IT team can identify and investigate suspicious activity (1)",
+        "The firewall can be placed between the internet and internal network to act as a barrier against external attacks (1)"
+      ],
+      "additional_guidance": "Accept any other appropriate/alternative response",
+      "do_not_accept": null
+    }
+  },
+  {
+    "id": "D050",
+    "learning_aim": "D",
+    "topic": "D1.1.1 Adware / Spyware",
+    "command_verb": "Explain",
+    "marks": 4,
+    "ao": "AO1+AO2",
+    "scenario": "Willowmere Travel Agency uses computers to browse supplier websites and manage customer holiday bookings.",
+    "question": "Explain two ways adware and spyware could affect the travel agency's computer systems.",
+    "guidance": "(4)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark for each identification and one mark for each appropriate linked expansion, up to a maximum of four marks (2 × 2).",
+      "points": [
+        "Adware generates unwanted pop-up advertisements (1) which slow down the computers and reduce staff productivity (1)",
+        "Spyware monitors user activity and captures login credentials (1) which attackers could use to gain unauthorised access to supplier booking systems or bank accounts (1)",
+        "Spyware may collect and transmit customer booking data to a third party (1) which could result in a data breach and legal consequences for the agency (1)"
+      ],
+      "additional_guidance": "Accept any other appropriate/alternative response",
+      "do_not_accept": null
+    }
+  },
+  {
+    "id": "D051",
+    "learning_aim": "D",
+    "topic": "D1.1.5 Natural disasters",
+    "command_verb": "Explain",
+    "marks": 4,
+    "ao": "AO1+AO2",
+    "scenario": "Riverside Insurance Company keeps all its client policy records on servers located at its head office.",
+    "question": "Explain two ways natural disasters could pose a threat to the company's data.",
+    "guidance": "(4)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark for each identification and one mark for each appropriate linked expansion, up to a maximum of four marks (2 × 2).",
+      "points": [
+        "A flood could physically destroy the servers in the head office (1) causing permanent and irreversible loss of all client policy records (1)",
+        "A fire could destroy the server room and all backup media stored on site (1) meaning no recovery of data would be possible without offsite backups (1)",
+        "A power surge caused by a lightning strike (1) could damage server hardware and corrupt stored data (1)"
+      ],
+      "additional_guidance": "Accept any other appropriate/alternative response",
+      "do_not_accept": null
+    }
+  },
+  {
+    "id": "D052",
+    "learning_aim": "D",
+    "topic": "D2.1.4 Passwords",
+    "command_verb": "Describe",
+    "marks": 4,
+    "ao": "AO1+AO2",
+    "scenario": "Castleton College allows students and staff to log in to college computers using individual accounts.",
+    "question": "Describe two characteristics of a strong password policy that the college should enforce.",
+    "guidance": "(4)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark per linked point up to a maximum of four marks.",
+      "points": [
+        "Passwords should be a minimum length (e.g. at least 8–12 characters) (1) making them harder to guess or crack by brute force (1)",
+        "Passwords should contain a mix of uppercase letters, lowercase letters, numbers, and special characters (1) increasing complexity and reducing the likelihood of being guessed (1)",
+        "Passwords should expire after a set period (e.g. every 90 days) (1) so that a compromised password is only useful for a limited time (1)",
+        "Users should not be allowed to reuse recent passwords (1) preventing a compromised old password from being reintroduced (1)"
+      ],
+      "additional_guidance": "Accept any other appropriate/alternative response",
+      "do_not_accept": null
+    }
+  },
+  {
+    "id": "D053",
+    "learning_aim": "D",
+    "topic": "D1.2.3 Stealing/leaking information",
+    "command_verb": "Describe",
+    "marks": 4,
+    "ao": "AO1+AO2",
+    "scenario": "Meadowbrook Pharmaceutical Company develops new drugs and stores research data on its internal network.",
+    "question": "Describe two impacts that an employee leaking research data could have on the company.",
+    "guidance": "(4)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark per linked point up to a maximum of four marks.",
+      "points": [
+        "Confidential research data could be sold to a competitor (1) resulting in loss of competitive advantage and damage to commercial interests (1)",
+        "The company could face legal action for breach of confidentiality agreements (1) leading to financial penalties and reputational damage (1)",
+        "Years of research investment could be wasted (1) if a rival uses the stolen data to file patents before the company (1)"
+      ],
+      "additional_guidance": "Accept any other appropriate/alternative response",
+      "do_not_accept": null
+    }
+  },
+  {
+    "id": "D054",
+    "learning_aim": "D",
+    "topic": "D2.4.1 Encryption — stored data",
+    "command_verb": "Explain",
+    "marks": 4,
+    "ao": "AO1+AO2",
+    "scenario": "Brightwater Counselling Service stores client session notes and personal histories on encrypted laptops used by counsellors.",
+    "question": "Explain two reasons why encrypting data stored on the counsellors' laptops is particularly important for this organisation.",
+    "guidance": "(4)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark for each identification and one mark for each appropriate linked expansion, up to a maximum of four marks (2 × 2).",
+      "points": [
+        "Counselling notes contain highly sensitive personal information (1) so if a laptop is stolen encryption ensures the data cannot be accessed without the decryption key (1)",
+        "The service has a legal obligation under data protection legislation to protect client data (1) and encryption is a recognised technical safeguard that helps demonstrate compliance (1)",
+        "Counsellors carry laptops in public places or between sites (1) increasing the risk of theft or loss, making encryption essential to protect client confidentiality (1)"
+      ],
+      "additional_guidance": "Accept any other appropriate/alternative response",
+      "do_not_accept": null
+    }
+  },
+  {
+    "id": "D055",
+    "learning_aim": "D",
+    "topic": "D1.1.1 Malicious bots",
+    "command_verb": "Explain",
+    "marks": 4,
+    "ao": "AO1+AO2",
+    "scenario": "Trentside Online Ticket Agency sells concert and event tickets through its website.",
+    "question": "Explain two ways malicious bots could disrupt the operations of the ticket agency.",
+    "guidance": "(4)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark for each identification and one mark for each appropriate linked expansion, up to a maximum of four marks (2 × 2).",
+      "points": [
+        "Bots can be used to automatically purchase large quantities of tickets the moment they go on sale (1) preventing genuine customers from buying them and damaging the agency's reputation (1)",
+        "Bots can perform credential stuffing attacks (1) using stolen username/password combinations to attempt to log into customer accounts and steal stored payment details (1)",
+        "A botnet can launch a DDoS attack against the website (1) overwhelming the server with requests and making the site unavailable to legitimate customers (1)"
+      ],
+      "additional_guidance": "Accept any other appropriate/alternative response",
+      "do_not_accept": null
+    }
+  },
+  {
+    "id": "D056",
+    "learning_aim": "D",
+    "topic": "D2.1.7 Digital certificates",
+    "command_verb": "Describe",
+    "marks": 4,
+    "ao": "AO1+AO2",
+    "scenario": "Mountview Online Pharmacy allows customers to order prescription medication through its website.",
+    "question": "Describe how digital certificates work to help customers trust the pharmacy's website.",
+    "guidance": "(4)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark per linked point up to a maximum of four marks.",
+      "points": [
+        "A digital certificate is issued by a trusted Certificate Authority (CA) (1)",
+        "The certificate contains the pharmacy's verified identity and public key (1)",
+        "When a customer's browser connects to the site it checks the certificate is valid and from a trusted CA (1)",
+        "If valid the browser displays a padlock icon and HTTPS, assuring the customer the site is genuine (1)",
+        "The certificate enables an encrypted connection to be established so data cannot be intercepted (1)"
+      ],
+      "additional_guidance": "Accept any other appropriate/alternative response",
+      "do_not_accept": null
+    }
+  },
+  {
+    "id": "D057",
+    "learning_aim": "D",
+    "topic": "D1.3.2 Financial loss due to legal action",
+    "command_verb": "Describe",
+    "marks": 4,
+    "ao": "AO1+AO2",
+    "scenario": "Sunnyside Children's Nursery accidentally exposed the personal details of families in a mass email by using CC instead of BCC.",
+    "question": "Describe two ways this data breach could result in financial loss for the nursery.",
+    "guidance": "(4)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark per linked point up to a maximum of four marks.",
+      "points": [
+        "The Information Commissioner's Office (ICO) could investigate and issue a fine (1) for the nursery's failure to handle personal data in compliance with GDPR (1)",
+        "Affected families could pursue compensation claims against the nursery (1) resulting in legal costs even if the nursery defends the case successfully (1)",
+        "The nursery may need to hire a legal team and data protection consultant to manage the breach (1) incurring significant costs not budgeted for (1)"
+      ],
+      "additional_guidance": "Accept any other appropriate/alternative response",
+      "do_not_accept": null
+    }
+  },
+  {
+    "id": "D058",
+    "learning_aim": "D",
+    "topic": "D2.2 Antivirus / D2.3 Firewalls",
+    "command_verb": "Explain",
+    "marks": 4,
+    "ao": "AO1+AO2",
+    "scenario": "Greenway Garden Centre processes online orders and stores customer account data.",
+    "question": "Explain the difference between the protection provided by antivirus software and that provided by a firewall.",
+    "guidance": "(4)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark per linked point up to a maximum of four marks.",
+      "points": [
+        "Antivirus software detects and removes malware that has already entered or is attempting to execute on a device (1) whereas a firewall monitors and controls network traffic to prevent unauthorised connections (1)",
+        "Antivirus software focuses on scanning files and programs for malicious code (1) while a firewall acts as a barrier between the internal network and external threats by filtering data packets (1)",
+        "Antivirus software cannot block network intrusion attempts (1) whereas a firewall cannot remove malware already present on a device (1)"
+      ],
+      "additional_guidance": "Accept any other appropriate/alternative response",
+      "do_not_accept": null
+    }
+  },
+  {
+    "id": "D059",
+    "learning_aim": "D",
+    "topic": "D1.1.3 Accidental damage",
+    "command_verb": "Explain",
+    "marks": 4,
+    "ao": "AO1+AO2",
+    "scenario": "Ashton Photography Studio stores thousands of client photographs on external hard drives and a local server.",
+    "question": "Explain two ways accidental damage could result in the loss of the studio's data.",
+    "guidance": "(4)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark for each identification and one mark for each appropriate linked expansion, up to a maximum of four marks (2 × 2).",
+      "points": [
+        "An external hard drive could be dropped and the read/write heads damaged (1) making all stored photographs inaccessible or permanently lost (1)",
+        "A power cut or power surge could corrupt data on the server (1) causing files to become unreadable and unrecoverable without a backup (1)",
+        "An employee could accidentally delete a large folder of client images (1) which may be unrecoverable if no backup exists (1)"
+      ],
+      "additional_guidance": "Accept any other appropriate/alternative response",
+      "do_not_accept": null
+    }
+  },
+  {
+    "id": "D060",
+    "learning_aim": "D",
+    "topic": "D1.2.1 Accessing inappropriate websites",
+    "command_verb": "Explain",
+    "marks": 4,
+    "ao": "AO1+AO2",
+    "scenario": "Ferndale Manufacturing uses computers connected to the internet on its factory floor.",
+    "question": "Explain two reasons why staff accessing inappropriate websites is considered an internal threat to the company's IT systems.",
+    "guidance": "(4)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark for each identification and one mark for each appropriate linked expansion, up to a maximum of four marks (2 × 2).",
+      "points": [
+        "Employees may unknowingly download malware from malicious websites (1) infecting the internal network and compromising production control systems (1)",
+        "Drive-by downloads on inappropriate sites can install spyware (1) which may capture login credentials for the company's systems (1)",
+        "Accessing streaming or file-sharing sites consumes bandwidth (1) slowing down the factory network and reducing productivity (1)"
+      ],
+      "additional_guidance": "Accept any other appropriate/alternative response",
+      "do_not_accept": null
+    }
+  },
+  {
+    "id": "D061",
+    "learning_aim": "D",
+    "topic": "D2.1.4 Passwords/MFA",
+    "command_verb": "Describe",
+    "marks": 4,
+    "ao": "AO1+AO2",
+    "scenario": "Thornbury Online Banking App is used by over 50,000 customers to manage their accounts.",
+    "question": "Describe how multi-factor authentication could be implemented to protect customer accounts on the banking app.",
+    "guidance": "(4)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark per linked point up to a maximum of four marks.",
+      "points": [
+        "The customer first enters their username and password (1)",
+        "A second factor is then required, such as a one-time passcode sent to the customer's registered mobile phone by SMS (1)",
+        "The customer enters the OTP into the app within a time limit (1)",
+        "Access is only granted when both the password and the second factor have been successfully verified (1)",
+        "If the OTP is not entered correctly the login attempt is blocked (1)"
+      ],
+      "additional_guidance": "Accept any other appropriate/alternative response",
+      "do_not_accept": null
+    }
+  },
+  {
+    "id": "D062",
+    "learning_aim": "D",
+    "topic": "D1.1.2 Unauthorised access",
+    "command_verb": "Describe",
+    "marks": 4,
+    "ao": "AO1+AO2",
+    "scenario": "Langley Law Firm stores legal case files and client communications on a password-protected server.",
+    "question": "Describe two potential impacts on the law firm if hackers gained unauthorised access to its server.",
+    "guidance": "(4)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark per linked point up to a maximum of four marks.",
+      "points": [
+        "Confidential client case files could be stolen (1) and used by opposing parties or sold to competitors, breaching client confidentiality (1)",
+        "The firm could face legal proceedings from clients (1) for failing to protect privileged communications and sensitive information (1)",
+        "The firm's reputation could be severely damaged (1) resulting in loss of clients and difficulty attracting new business (1)"
+      ],
+      "additional_guidance": "Accept any other appropriate/alternative response",
+      "do_not_accept": null
+    }
+  },
+  {
+    "id": "D063",
+    "learning_aim": "D",
+    "topic": "D2.3 Firewalls",
+    "command_verb": "Discuss",
+    "marks": 6,
+    "ao": "AO2+AO3a",
+    "scenario": "Alderman Secondary School has recently connected all its classrooms to the internet. The IT manager is considering installing a software firewall on every device as well as a hardware firewall at the network perimeter.",
+    "question": "Discuss the implications of installing both software and hardware firewalls to protect the school's network.",
+    "guidance": "(6)",
+    "type": "extended_levels",
+    "mark_scheme": {
+      "indicative_content": [
+        "Hardware firewall — placed at network perimeter, filters all traffic entering/leaving the school network",
+        "Software firewall — installed on individual devices, provides additional layer of protection for each machine",
+        "Defence in depth — using both types provides layered security, reducing overall risk",
+        "Cost implications — hardware firewall has upfront cost; software firewalls may require licensing fees per device",
+        "Management complexity — both types require configuration and ongoing maintenance; IT staff time needed",
+        "Performance — software firewalls may slow down individual devices, especially older ones",
+        "Hardware firewall cannot protect against threats originating inside the network; software firewall on each device provides additional internal protection",
+        "Regular updates needed for both to protect against new threats",
+        "Both firewalls can be configured with rules to block specific websites — supporting safeguarding duties",
+        "False positives — legitimate traffic may be blocked, disrupting teaching"
+      ],
+      "level_descriptors": [
+        {
+          "level": 0,
+          "marks": "0",
+          "descriptor": "No rewardable material."
+        },
+        {
+          "level": 1,
+          "marks": "1–2",
+          "descriptor": "Demonstrates basic application of knowledge and understanding that is partially relevant to the context. May consider only one type of firewall or one implication. (AO2) Basic analysis with limited development of points. (AO3a)"
+        },
+        {
+          "level": 2,
+          "marks": "3–4",
+          "descriptor": "Demonstrates good application of knowledge to the school context. Considers both hardware and software firewalls and at least two implications such as cost and security benefits. (AO2) Good analysis with some development, showing how the firewalls interrelate. (AO3a)"
+        },
+        {
+          "level": 3,
+          "marks": "5–6",
+          "descriptor": "Demonstrates comprehensive application to the school context. Discusses multiple implications including cost, management, security layers, and performance. (AO2) Thorough analysis showing how the use of both types of firewall addresses specific threats faced by the school. (AO3a)"
+        }
+      ]
+    }
+  },
+  {
+    "id": "D064",
+    "learning_aim": "D",
+    "topic": "D1.1.1 Ransomware / D1.3 Impact",
+    "command_verb": "Discuss",
+    "marks": 6,
+    "ao": "AO2+AO3a",
+    "scenario": "Hazelmere NHS Community Trust stores patient medical records, appointment systems, and prescriptions digitally. A neighbouring trust recently suffered a ransomware attack which brought its systems down for two weeks.",
+    "question": "Discuss the implications of a ransomware attack on Hazelmere NHS Community Trust.",
+    "guidance": "(6)",
+    "type": "extended_levels",
+    "mark_scheme": {
+      "indicative_content": [
+        "Patient records encrypted — staff unable to access treatment histories, medication lists, or appointment data",
+        "Patient safety risk — incorrect or delayed treatment if staff cannot access medical records",
+        "Appointment systems unavailable — appointments cancelled, patients unable to receive care",
+        "Prescription systems down — patients cannot receive medication, potentially life-threatening",
+        "Financial cost — ransom demand itself; cost of recovering systems; cost of temporary paper-based working",
+        "Reputational damage — public trust in the NHS eroded if breach is reported in media",
+        "Data loss — if ransom is not paid and no backup exists, patient data may be permanently lost",
+        "Legal consequences — potential investigation by ICO for failure to secure patient data",
+        "Staff disruption — weeks of working without digital systems, impacting productivity",
+        "Prevention measures needed: regular backups offsite, staff training, patched systems"
+      ],
+      "level_descriptors": [
+        {
+          "level": 0,
+          "marks": "0",
+          "descriptor": "No rewardable material."
+        },
+        {
+          "level": 1,
+          "marks": "1–2",
+          "descriptor": "Basic application to the NHS context with limited or one-sided analysis. May simply state that data would be lost. (AO2+AO3a)"
+        },
+        {
+          "level": 2,
+          "marks": "3–4",
+          "descriptor": "Good application to NHS context. Considers at least two distinct implications such as patient safety and financial costs. Some analysis of how these interrelate. (AO2+AO3a)"
+        },
+        {
+          "level": 3,
+          "marks": "5–6",
+          "descriptor": "Comprehensive application. Discusses multiple implications including patient safety, operational disruption, financial loss, legal consequences, and reputational damage in the specific context of the NHS trust. Thorough analysis showing how these issues compound each other. (AO2+AO3a)"
+        }
+      ]
+    }
+  },
+  {
+    "id": "D065",
+    "learning_aim": "D",
+    "topic": "D2.1.3 Backup and recovery procedures",
+    "command_verb": "Discuss",
+    "marks": 6,
+    "ao": "AO2+AO3a",
+    "scenario": "Goldcrest Accountancy Firm is reviewing its data protection procedures. Currently all client data is stored on a local server with a weekly full backup taken to an external drive kept in the same building.",
+    "question": "Discuss the implications of the current backup strategy and whether it is sufficient to protect the firm's data.",
+    "guidance": "(6)",
+    "type": "extended_levels",
+    "mark_scheme": {
+      "indicative_content": [
+        "Weekly full backup may not be frequent enough — up to a week of client data could be lost if a failure occurs mid-week",
+        "Backup stored in same building — if fire, flood, or theft occurs the backup is also lost",
+        "No offsite or cloud storage — single point of failure; disaster recovery would be impossible",
+        "Incremental/differential backups not used — changes between weekly backups are not captured",
+        "Improvements suggested: daily incremental backups; offsite or cloud backup; test restores performed regularly",
+        "Financial risk — loss of client financial data could lead to legal action from clients",
+        "Recovery time — with only a weekly backup recovery could take a long time, causing client disruption",
+        "Data protection legislation compliance — GDPR requires appropriate technical measures to protect data",
+        "Cost of improvement — cloud backup solutions have recurring costs",
+        "Grandfather-father-son rotation would ensure multiple recovery points"
+      ],
+      "level_descriptors": [
+        {
+          "level": 0,
+          "marks": "0",
+          "descriptor": "No rewardable material."
+        },
+        {
+          "level": 1,
+          "marks": "1–2",
+          "descriptor": "Basic understanding of the issue; may simply state the backup could fail. Limited application to the accountancy context. (AO2+AO3a)"
+        },
+        {
+          "level": 2,
+          "marks": "3–4",
+          "descriptor": "Good analysis identifying at least two weaknesses such as frequency and location. Some application to the specific risks for an accountancy firm. (AO2+AO3a)"
+        },
+        {
+          "level": 3,
+          "marks": "5–6",
+          "descriptor": "Comprehensive discussion of weaknesses in the current strategy. Thoroughly analyses implications including data loss risk, legal exposure, and recovery limitations in the accountancy context, and considers suitable improvements. (AO2+AO3a)"
+        }
+      ]
+    }
+  },
+  {
+    "id": "D066",
+    "learning_aim": "D",
+    "topic": "D1.1.4 Social engineering — phishing",
+    "command_verb": "Discuss",
+    "marks": 6,
+    "ao": "AO2+AO3a",
+    "scenario": "Hawthorn Catering Company employs 80 staff and regularly communicates with food suppliers and large corporate clients via email.",
+    "question": "Discuss the implications of phishing attacks for the catering company.",
+    "guidance": "(6)",
+    "type": "extended_levels",
+    "mark_scheme": {
+      "indicative_content": [
+        "Staff may receive convincing fake emails appearing to be from suppliers or clients",
+        "Clicking malicious links could install malware or ransomware on company computers",
+        "Staff tricked into revealing login credentials could allow hackers into company accounts",
+        "Financial fraud — staff could be tricked into paying fraudulent invoices (CEO fraud)",
+        "Loss of supplier or client contact data if accounts are compromised",
+        "Reputational damage — if a phishing email is forwarded using the company email, clients could be deceived",
+        "Financial loss — fraudulent bank transfers may be irreversible",
+        "Staff training needed to recognise phishing emails",
+        "Email filtering and spam detection software could reduce phishing emails reaching staff",
+        "Regular security awareness training reduces risk of staff falling victim"
+      ],
+      "level_descriptors": [
+        {
+          "level": 0,
+          "marks": "0",
+          "descriptor": "No rewardable material."
+        },
+        {
+          "level": 1,
+          "marks": "1–2",
+          "descriptor": "Basic description of phishing with limited application to the catering company. (AO2+AO3a)"
+        },
+        {
+          "level": 2,
+          "marks": "3–4",
+          "descriptor": "Good discussion of at least two implications such as financial fraud and data loss, applied to the business context. (AO2+AO3a)"
+        },
+        {
+          "level": 3,
+          "marks": "5–6",
+          "descriptor": "Comprehensive discussion of multiple implications including financial loss, reputational damage, and data compromise, thoroughly applied to the catering company context with analysis of how different staff roles create different risks. (AO2+AO3a)"
+        }
+      ]
+    }
+  },
+  {
+    "id": "D067",
+    "learning_aim": "D",
+    "topic": "D2.4 Encryption",
+    "command_verb": "Discuss",
+    "marks": 6,
+    "ao": "AO2+AO3a",
+    "scenario": "Salford Sports Academy stores athlete performance data, medical assessments, and coach notes in a cloud-based system accessed by coaches on mobile devices.",
+    "question": "Discuss the implications of using encryption to protect the academy's data both at rest and during transmission.",
+    "guidance": "(6)",
+    "type": "extended_levels",
+    "mark_scheme": {
+      "indicative_content": [
+        "Encryption at rest protects stored athlete medical data if the cloud server is breached",
+        "Encryption in transmission (e.g. HTTPS/TLS) protects data sent between coaches' mobile devices and the cloud",
+        "Mobile devices used by coaches are a risk — if a device is lost, encrypted data cannot be read",
+        "Performance and medical data is sensitive — athletes have a right to privacy under GDPR",
+        "Encryption ensures compliance with data protection legislation",
+        "Key management — if encryption keys are lost, legitimate users also cannot access the data",
+        "Performance overhead — encryption and decryption takes processing time, which may slightly slow mobile access",
+        "Coaches in poor signal areas may experience added latency with encrypted transmissions",
+        "Cost of implementing robust encryption software/certificates",
+        "Encryption does not prevent authorised users from misusing data — other controls also needed"
+      ],
+      "level_descriptors": [
+        {
+          "level": 0,
+          "marks": "0",
+          "descriptor": "No rewardable material."
+        },
+        {
+          "level": 1,
+          "marks": "1–2",
+          "descriptor": "Basic understanding of encryption with limited application to the academy context. May only consider one type of encryption. (AO2+AO3a)"
+        },
+        {
+          "level": 2,
+          "marks": "3–4",
+          "descriptor": "Good discussion of both at-rest and in-transit encryption with application to the academy. Considers at least two implications. (AO2+AO3a)"
+        },
+        {
+          "level": 3,
+          "marks": "5–6",
+          "descriptor": "Comprehensive analysis of encryption implications including security benefits, key management risks, performance, and legal compliance. Thoroughly applied to the context of mobile device use by coaches at the sports academy. (AO2+AO3a)"
+        }
+      ]
+    }
+  },
+  {
+    "id": "D068",
+    "learning_aim": "D",
+    "topic": "D1.2 Internal threats",
+    "command_verb": "Discuss",
+    "marks": 6,
+    "ao": "AO2+AO3a",
+    "scenario": "Elmbridge Charity manages a database of over 10,000 donor records, including names, addresses, and payment details. It employs a mix of paid staff and volunteers who all have access to the database.",
+    "question": "Discuss the internal threats to the charity's donor database and the implications if these threats were realised.",
+    "guidance": "(6)",
+    "type": "extended_levels",
+    "mark_scheme": {
+      "indicative_content": [
+        "Volunteers may not have received security training — risk of accidental disclosure",
+        "Accidental sending of donor data to wrong recipients via email",
+        "A volunteer or member of staff could steal donor details for personal gain or fraud",
+        "Portable devices used by remote workers could be lost, containing donor data",
+        "Staff accessing inappropriate websites could introduce malware to the database system",
+        "Impact: loss of donor trust and donations if a breach occurs",
+        "Legal action from donors under GDPR if data is mishandled",
+        "Financial penalties from ICO for data breach",
+        "Reputational damage — charities depend on public trust, which would be severely damaged",
+        "Mitigation: role-based access levels limiting who can see payment details; staff/volunteer training; portable device policies"
+      ],
+      "level_descriptors": [
+        {
+          "level": 0,
+          "marks": "0",
+          "descriptor": "No rewardable material."
+        },
+        {
+          "level": 1,
+          "marks": "1–2",
+          "descriptor": "Basic understanding of internal threats with limited application to the charity context. (AO2+AO3a)"
+        },
+        {
+          "level": 2,
+          "marks": "3–4",
+          "descriptor": "Good discussion of at least two distinct internal threats such as accidental disclosure and data theft, applied to the charity context. Some analysis of implications. (AO2+AO3a)"
+        },
+        {
+          "level": 3,
+          "marks": "5–6",
+          "descriptor": "Comprehensive discussion of multiple internal threat types including volunteer-specific risks, portable device risks, and accidental disclosure. Thoroughly analyses implications including legal, financial, and reputational. (AO2+AO3a)"
+        }
+      ]
+    }
+  },
+  {
+    "id": "D069",
+    "learning_aim": "D",
+    "topic": "D2.1.5 Biometrics",
+    "command_verb": "Discuss",
+    "marks": 6,
+    "ao": "AO2+AO3a",
+    "scenario": "Northgate Pharmaceuticals is considering replacing staff ID card access to its research laboratories with a fingerprint biometric entry system.",
+    "question": "Discuss the implications of introducing a biometric access control system for the pharmaceutical company's research laboratories.",
+    "guidance": "(6)",
+    "type": "extended_levels",
+    "mark_scheme": {
+      "indicative_content": [
+        "Enhanced security — fingerprints cannot be cloned as easily as an ID card or shared with others",
+        "Cannot be lost or forgotten like an ID card or PIN",
+        "Unique to each individual — provides stronger guarantee of identity",
+        "Higher upfront cost compared to ID card system",
+        "Concerns about storing biometric data — GDPR classifies biometrics as special category data",
+        "System failure/malfunction — if the scanner fails, staff may be unable to access critical labs",
+        "Enrolment needed — all staff must register their fingerprints; time-consuming process",
+        "Some staff may object on privacy grounds to having biometric data collected by the employer",
+        "Maintenance of the system over time",
+        "False reject rate — some staff may regularly fail authentication, causing frustration"
+      ],
+      "level_descriptors": [
+        {
+          "level": 0,
+          "marks": "0",
+          "descriptor": "No rewardable material."
+        },
+        {
+          "level": 1,
+          "marks": "1–2",
+          "descriptor": "Basic application with limited consideration of implications. May only consider security benefits. (AO2+AO3a)"
+        },
+        {
+          "level": 2,
+          "marks": "3–4",
+          "descriptor": "Good discussion of both benefits and drawbacks such as security versus cost and privacy concerns, applied to the laboratory context. (AO2+AO3a)"
+        },
+        {
+          "level": 3,
+          "marks": "5–6",
+          "descriptor": "Comprehensive discussion of implications including enhanced security, GDPR considerations for biometric data, system failure risks, staff concerns, and cost, thoroughly applied to the research laboratory setting. (AO2+AO3a)"
+        }
+      ]
+    }
+  },
+  {
+    "id": "D070",
+    "learning_aim": "D",
+    "topic": "D1.3 Impact of threats",
+    "command_verb": "Discuss",
+    "marks": 6,
+    "ao": "AO2+AO3a",
+    "scenario": "Pennfield Online Dating Website suffered a high-profile data breach in which the personal details, photos, and private messages of 200,000 users were leaked online.",
+    "question": "Discuss the impact of the data breach on Pennfield and its users.",
+    "guidance": "(6)",
+    "type": "extended_levels",
+    "mark_scheme": {
+      "indicative_content": [
+        "Users' personal information, photos, and private messages made publicly available — extreme privacy violation",
+        "Users at risk of identity theft using leaked personal data",
+        "Users could face personal distress, harassment, or blackmail based on exposed private messages",
+        "Reputational damage to Pennfield — users lose trust in the platform",
+        "Loss of users — subscription cancellations, no new registrations",
+        "Financial loss — loss of revenue from cancelled subscriptions",
+        "Legal action — ICO investigation and potential fines for GDPR breach",
+        "Compensation claims from affected users",
+        "Pennfield may need to invest heavily in security improvements",
+        "Media coverage amplifies reputational damage"
+      ],
+      "level_descriptors": [
+        {
+          "level": 0,
+          "marks": "0",
+          "descriptor": "No rewardable material."
+        },
+        {
+          "level": 1,
+          "marks": "1–2",
+          "descriptor": "Basic discussion of impacts with limited application to the online dating context. (AO2+AO3a)"
+        },
+        {
+          "level": 2,
+          "marks": "3–4",
+          "descriptor": "Good discussion of impacts on both the company and its users, with some analysis of how these are interrelated. (AO2+AO3a)"
+        },
+        {
+          "level": 3,
+          "marks": "5–6",
+          "descriptor": "Comprehensive discussion of financial, legal, reputational, and personal impacts. Thorough analysis of why this context is particularly sensitive for users and how this amplifies the consequences for the company. (AO2+AO3a)"
+        }
+      ]
+    }
+  },
+  {
+    "id": "D071",
+    "learning_aim": "D",
+    "topic": "D2.1.1 File permissions / D2.1.2 Access levels",
+    "command_verb": "Discuss",
+    "marks": 6,
+    "ao": "AO2+AO3a",
+    "scenario": "Cliffside Architectural Practice has a network shared drive containing project drawings, client contracts, financial records, and general company documents. All staff currently have full access to all folders.",
+    "question": "Discuss the implications of introducing a structured file permissions and access levels system across the practice's network drive.",
+    "guidance": "(6)",
+    "type": "extended_levels",
+    "mark_scheme": {
+      "indicative_content": [
+        "Currently all staff can access all data — risk of accidental deletion or modification of critical files",
+        "Financial records accessible to all — potential for accidental or deliberate disclosure",
+        "Introducing role-based access reduces risk of data being accessed by those without a need",
+        "Architects' access to project drawings but not financial records reduces exposure",
+        "Admin staff may need access to contracts but not technical drawings",
+        "Productivity impact — staff may be slowed down if they cannot access files they legitimately need",
+        "Configuration takes time and IT resources to set up correctly",
+        "Reduces impact of a compromised account — attacker can only access what that account is permitted to see",
+        "Helps with GDPR compliance — personal data in client contracts restricted to relevant staff",
+        "Audit trail — file permission logs help identify who accessed or modified sensitive files"
+      ],
+      "level_descriptors": [
+        {
+          "level": 0,
+          "marks": "0",
+          "descriptor": "No rewardable material."
+        },
+        {
+          "level": 1,
+          "marks": "1–2",
+          "descriptor": "Basic understanding of file permissions with limited application to the practice context. (AO2+AO3a)"
+        },
+        {
+          "level": 2,
+          "marks": "3–4",
+          "descriptor": "Good discussion of at least two implications such as improved security and productivity impact. Applied to the architectural practice context. (AO2+AO3a)"
+        },
+        {
+          "level": 3,
+          "marks": "5–6",
+          "descriptor": "Comprehensive discussion of security benefits, GDPR compliance, potential productivity issues, and implementation challenges, thoroughly applied to the specific context of different staff roles in the practice. (AO2+AO3a)"
+        }
+      ]
+    }
+  },
+  {
+    "id": "D072",
+    "learning_aim": "D",
+    "topic": "D1.1.1 Malware — adware/spyware",
+    "command_verb": "Discuss",
+    "marks": 6,
+    "ao": "AO2+AO3a",
+    "scenario": "Castlewood Travel Agency uses networked computers to book holidays and process customer payment details. A member of staff recently clicked on a pop-up advertisement, and IT staff suspect spyware has been installed.",
+    "question": "Discuss the implications for the travel agency of the suspected spyware infection.",
+    "guidance": "(6)",
+    "type": "extended_levels",
+    "mark_scheme": {
+      "indicative_content": [
+        "Spyware can capture login credentials — attackers may gain access to booking and payment systems",
+        "Customer payment data could be intercepted and stolen — financial fraud against customers",
+        "GDPR breach — customer personal and financial data is special category data",
+        "Financial loss — fines from ICO, compensation to affected customers",
+        "Reputational damage — customers will stop using the agency if their payment details are stolen",
+        "Business disruption — infected machines may need to be isolated and rebuilt",
+        "Loss of productivity while systems are cleaned and restored",
+        "Staff training required to prevent future incidents (e.g. not clicking pop-ups)",
+        "Pop-up blocking and web filtering software should be installed",
+        "Legal obligation to notify affected customers and ICO if data breach confirmed"
+      ],
+      "level_descriptors": [
+        {
+          "level": 0,
+          "marks": "0",
+          "descriptor": "No rewardable material."
+        },
+        {
+          "level": 1,
+          "marks": "1–2",
+          "descriptor": "Basic discussion of spyware threats with limited application to the travel agency. (AO2+AO3a)"
+        },
+        {
+          "level": 2,
+          "marks": "3–4",
+          "descriptor": "Good discussion of at least two implications such as customer data theft and financial penalties. Applied to the agency context. (AO2+AO3a)"
+        },
+        {
+          "level": 3,
+          "marks": "5–6",
+          "descriptor": "Comprehensive discussion of security, legal, financial, and reputational implications thoroughly applied to the travel agency context, with analysis of why the nature of the business makes this incident particularly serious. (AO2+AO3a)"
+        }
+      ]
+    }
+  },
+  {
+    "id": "D073",
+    "learning_aim": "D",
+    "topic": "D2.1.3 Backup and recovery",
+    "command_verb": "Discuss",
+    "marks": 6,
+    "ao": "AO2+AO3a",
+    "scenario": "Brookside Sports Shop sells equipment in store and online. All sales records, stock data, and customer accounts are stored on a local server with no current offsite backup.",
+    "question": "Discuss the implications for the sports shop of having no offsite backup strategy.",
+    "guidance": "(6)",
+    "type": "extended_levels",
+    "mark_scheme": {
+      "indicative_content": [
+        "A fire or flood at the premises would destroy both the server and any on-site backup — complete data loss",
+        "Online sales could not continue if customer account and order data is lost",
+        "Stock data loss would make it impossible to manage inventory",
+        "Customer payment details could be permanently lost — legal obligation to report under GDPR",
+        "Reputational damage — customers may not trust the business to safeguard their data",
+        "Financial loss — cost of recreating records manually, lost sales during downtime",
+        "A ransomware attack on the local server would also destroy on-site backup if it is connected",
+        "Cloud or offsite backup would mitigate these risks",
+        "Recovery time objective — without offsite backup, recovery could take weeks",
+        "Business continuity planning should include offsite backup as a key element"
+      ],
+      "level_descriptors": [
+        {
+          "level": 0,
+          "marks": "0",
+          "descriptor": "No rewardable material."
+        },
+        {
+          "level": 1,
+          "marks": "1–2",
+          "descriptor": "Basic understanding of the risk of no offsite backup. Limited application to the sports shop. (AO2+AO3a)"
+        },
+        {
+          "level": 2,
+          "marks": "3–4",
+          "descriptor": "Good analysis of at least two implications including data loss and business disruption. Applied to the shop context. (AO2+AO3a)"
+        },
+        {
+          "level": 3,
+          "marks": "5–6",
+          "descriptor": "Comprehensive discussion of multiple implications including natural disaster risk, ransomware vulnerability, legal obligations, financial and reputational damage, all applied to the sports shop's specific situation. (AO2+AO3a)"
+        }
+      ]
+    }
+  },
+  {
+    "id": "D074",
+    "learning_aim": "D",
+    "topic": "D2.1.4 MFA / D2.2 Antivirus / D2.3 Firewalls",
+    "command_verb": "Discuss",
+    "marks": 6,
+    "ao": "AO2+AO3a",
+    "scenario": "Redwood Charity Shop has just set up its first website allowing customers to donate online. The IT volunteer who set it up is concerned about security.",
+    "question": "Discuss the security measures the charity should put in place to protect the website and donor data.",
+    "guidance": "(6)",
+    "type": "extended_levels",
+    "mark_scheme": {
+      "indicative_content": [
+        "HTTPS/SSL certificate — encrypts data in transit between donor's browser and the server",
+        "Digital certificate — verifies site identity to donors",
+        "Firewall — blocks unauthorised access to the web server",
+        "Antivirus — protects the admin computer used to manage the site",
+        "Strong passwords and MFA for website admin accounts",
+        "Regular software updates and patching to address vulnerabilities",
+        "PCI DSS compliance for payment processing — may need a third-party payment provider",
+        "Access levels — limit who can access donor records",
+        "Regular backups of donor data",
+        "Privacy policy and GDPR compliance needed"
+      ],
+      "level_descriptors": [
+        {
+          "level": 0,
+          "marks": "0",
+          "descriptor": "No rewardable material."
+        },
+        {
+          "level": 1,
+          "marks": "1–2",
+          "descriptor": "Basic suggestion of one or two security measures with limited application to the charity context. (AO2+AO3a)"
+        },
+        {
+          "level": 2,
+          "marks": "3–4",
+          "descriptor": "Good discussion of at least three security measures with consideration of why they are relevant for an online donation website. (AO2+AO3a)"
+        },
+        {
+          "level": 3,
+          "marks": "5–6",
+          "descriptor": "Comprehensive discussion of multiple layers of security including encryption, firewalls, authentication, and compliance. Thorough analysis of why each measure is important for protecting donor data in this context. (AO2+AO3a)"
+        }
+      ]
+    }
+  },
+  {
+    "id": "D075",
+    "learning_aim": "D",
+    "topic": "D1.1.2 Unauthorised access / D2 Protecting data",
+    "command_verb": "Discuss",
+    "marks": 6,
+    "ao": "AO2+AO3a",
+    "scenario": "Kingfisher Private Hospital stores patient medical records, private health insurance details, and surgical records on its IT systems.",
+    "question": "Discuss the implications for the hospital if it experienced a successful hacking attack on its IT systems.",
+    "guidance": "(6)",
+    "type": "extended_levels",
+    "mark_scheme": {
+      "indicative_content": [
+        "Patient medical records could be stolen — highly sensitive personal data",
+        "Insurance details could be used for identity theft or insurance fraud",
+        "Surgical records could be altered, potentially endangering patient safety",
+        "Systems could be taken offline, preventing booking or accessing patient history during treatment",
+        "Legal consequences — ICO investigation and fines for GDPR breach",
+        "CQC (Care Quality Commission) may investigate patient safety concerns",
+        "Reputational damage — patients may seek alternative private hospitals",
+        "Financial cost — investigation, recovery, legal fees, compensation",
+        "Loss of patient trust — critical for a private hospital",
+        "Need for comprehensive security measures: encryption, MFA, firewalls, staff training"
+      ],
+      "level_descriptors": [
+        {
+          "level": 0,
+          "marks": "0",
+          "descriptor": "No rewardable material."
+        },
+        {
+          "level": 1,
+          "marks": "1–2",
+          "descriptor": "Basic understanding of hacking implications with limited application to a private hospital. (AO2+AO3a)"
+        },
+        {
+          "level": 2,
+          "marks": "3–4",
+          "descriptor": "Good discussion of at least two serious implications such as patient safety and legal consequences. Reasonably well applied to the hospital context. (AO2+AO3a)"
+        },
+        {
+          "level": 3,
+          "marks": "5–6",
+          "descriptor": "Comprehensive discussion of patient safety, data privacy, legal, financial, and reputational implications thoroughly applied to the sensitive private hospital context, with analysis of how the nature of the data amplifies the consequences. (AO2+AO3a)"
+        }
+      ]
+    }
+  },
+  {
+    "id": "D076",
+    "learning_aim": "D",
+    "topic": "D1.1.1 Viruses — external threats",
+    "command_verb": "Discuss",
+    "marks": 8,
+    "ao": "AO2+AO3a",
+    "scenario": "Northfield Academy is a large sixth-form college with 1,200 students and 150 staff. All students and staff use the college network to access learning materials, submit assignments, and communicate. The IT department has reported increasing numbers of malware detections on student devices.",
+    "question": "Discuss the external threats to the college's network and data, and the implications for the college if these threats were not managed.",
+    "guidance": "(8)",
+    "type": "extended_levels",
+    "mark_scheme": {
+      "indicative_content": [
+        "Viruses — spread through infected files shared between students; could corrupt assignment data",
+        "Worms — self-replicating, could spread rapidly across the large student network",
+        "Ransomware — could encrypt the college's assignment submission system; all student work lost",
+        "Hackers — could attempt to access student records, exam papers, or staff payroll",
+        "Social engineering/phishing — students or staff tricked into giving away credentials",
+        "Adware/spyware — installed on student devices, capturing login details",
+        "DDoS attacks — could bring down the VLE or college website",
+        "Natural disasters — flood or fire at the server room could destroy all data",
+        "Implications: loss of student assessment data; inability to access learning materials",
+        "Financial loss — cost of recovery, potential fines if student personal data is breached",
+        "Reputational damage — parents and students lose confidence in the college",
+        "Legal consequences — breach of student data privacy under GDPR",
+        "UCAS and exam data could be lost at critical times in the academic year",
+        "Operational disruption — college cannot function effectively without its network"
+      ],
+      "level_descriptors": [
+        {
+          "level": 0,
+          "marks": "0",
+          "descriptor": "No rewardable material."
+        },
+        {
+          "level": 1,
+          "marks": "1–3",
+          "descriptor": "Demonstrates basic application of knowledge of external threats, partially relevant to the college context. May consider only one or two threats with limited analysis of implications. (AO2+AO3a)"
+        },
+        {
+          "level": 2,
+          "marks": "4–6",
+          "descriptor": "Demonstrates good application to the college context. Considers multiple types of external threat and analyses at least two significant implications such as loss of student data and reputational damage. Good analysis of how the scale of the college increases the risk. (AO2+AO3a)"
+        },
+        {
+          "level": 3,
+          "marks": "7–8",
+          "descriptor": "Demonstrates comprehensive application to the college context. Discusses a range of external threats including malware types, hacking, social engineering, and natural disasters, with thorough analysis of the operational, legal, financial, and reputational implications. Considers how the specific features of a college (student devices, shared network, sensitive exam data) make it particularly vulnerable. (AO2+AO3a)"
+        }
+      ]
+    }
+  },
+  {
+    "id": "D077",
+    "learning_aim": "D",
+    "topic": "D2.2 Antivirus / D2.3 Firewalls / D2.1 Techniques",
+    "command_verb": "Discuss",
+    "marks": 8,
+    "ao": "AO2+AO3a",
+    "scenario": "Deepdale Children's Home is a residential care facility for young people. It stores highly sensitive records including personal histories, medical information, and social worker case notes on its IT systems. The manager has been told the current security measures are outdated.",
+    "question": "Discuss the range of measures the children's home should implement to protect its data and the implications of doing so.",
+    "guidance": "(8)",
+    "type": "extended_levels",
+    "mark_scheme": {
+      "indicative_content": [
+        "Up-to-date antivirus — regularly updated signature database to protect against new malware threats",
+        "Firewall — hardware and software to monitor and control network traffic",
+        "File permissions and access levels — restrict sensitive case notes to social workers only; medical records to health staff only",
+        "Strong password policy and MFA — prevent unauthorised account access",
+        "Biometrics or physical access control — restrict access to server room",
+        "Encryption of stored data — in case of physical theft of devices",
+        "Regular backups, stored offsite — protect against data loss from ransomware or disaster",
+        "Digital certificates — if any external communication systems are used",
+        "Staff training on social engineering and phishing",
+        "Implications: upfront and ongoing cost of implementing measures",
+        "Training time required for staff",
+        "GDPR compliance strengthened, reducing risk of ICO fines",
+        "Reduced risk to young people's safety and privacy",
+        "Complex systems may require IT specialist to manage and maintain",
+        "Multi-layered approach provides strongest protection"
+      ],
+      "level_descriptors": [
+        {
+          "level": 0,
+          "marks": "0",
+          "descriptor": "No rewardable material."
+        },
+        {
+          "level": 1,
+          "marks": "1–3",
+          "descriptor": "Basic application. Identifies one or two protective measures with limited consideration of implications. Limited application to the care home context. (AO2+AO3a)"
+        },
+        {
+          "level": 2,
+          "marks": "4–6",
+          "descriptor": "Good application to the children's home context. Discusses at least four measures and considers at least two implications such as cost and improved GDPR compliance. Good analysis of why the sensitivity of the data makes robust protection essential. (AO2+AO3a)"
+        },
+        {
+          "level": 3,
+          "marks": "7–8",
+          "descriptor": "Comprehensive discussion of a full range of technical and physical measures and their implications. Thoroughly applies the analysis to the children's home context, recognising the heightened duty of care for vulnerable young people's data and the legal, financial, and ethical implications of robust or inadequate security. (AO2+AO3a)"
+        }
+      ]
+    }
+  },
+  {
+    "id": "D078",
+    "learning_aim": "D",
+    "topic": "D1.1.4 Social engineering / D1.3 Impact",
+    "command_verb": "Discuss",
+    "marks": 8,
+    "ao": "AO2+AO3a",
+    "scenario": "Harford Building Society processes thousands of mortgage applications and savings account transactions each day. Staff use email and telephone to communicate with customers and third parties such as solicitors and surveyors.",
+    "question": "Discuss how social engineering techniques could threaten the building society's data and the potential impact if an attack was successful.",
+    "guidance": "(8)",
+    "type": "extended_levels",
+    "mark_scheme": {
+      "indicative_content": [
+        "Phishing emails — staff tricked into clicking links or revealing login credentials",
+        "Vishing (phone-based social engineering) — attacker poses as a customer or solicitor to extract account information",
+        "Pharming — redirects online banking users to fake sites",
+        "Shouldering — attacker observes a staff member entering customer account details",
+        "Pretexting — attacker creates false scenario to manipulate staff into revealing data",
+        "Impact: financial fraud — unauthorised mortgage application or fund transfer",
+        "Customer account details stolen — used for identity theft",
+        "Legal consequences — PRA/FCA regulatory action in addition to ICO fines",
+        "Compensation payable to affected customers",
+        "Reputational damage — loss of customers who move to other banks",
+        "Staff morale impact if an employee is identified as the victim",
+        "Staff training as key mitigation; call-back verification procedures; multi-factor authentication"
+      ],
+      "level_descriptors": [
+        {
+          "level": 0,
+          "marks": "0",
+          "descriptor": "No rewardable material."
+        },
+        {
+          "level": 1,
+          "marks": "1–3",
+          "descriptor": "Basic understanding of social engineering with limited application to a financial institution. Considers one or two techniques with limited analysis. (AO2+AO3a)"
+        },
+        {
+          "level": 2,
+          "marks": "4–6",
+          "descriptor": "Good application to the building society context. Discusses at least three social engineering techniques and analyses at least two significant impacts including financial fraud and regulatory consequences. (AO2+AO3a)"
+        },
+        {
+          "level": 3,
+          "marks": "7–8",
+          "descriptor": "Comprehensive discussion of multiple social engineering techniques applied to the specific communication methods used by the building society. Thoroughly analyses the financial, legal, regulatory, reputational, and operational impacts, considering the particular sensitivity of mortgage and savings account data. (AO2+AO3a)"
+        }
+      ]
+    }
+  },
+  {
+    "id": "D079",
+    "learning_aim": "D",
+    "topic": "D2.1.3 Backup and recovery / D2.4 Encryption",
+    "command_verb": "Discuss",
+    "marks": 8,
+    "ao": "AO2+AO3a",
+    "scenario": "Clearwater Law Firm has recently moved its entire case file database to a cloud storage service. Partners and solicitors access case files remotely from home offices and court.",
+    "question": "Discuss the data protection implications of the law firm moving its case files to cloud storage and accessing them remotely.",
+    "guidance": "(8)",
+    "type": "extended_levels",
+    "mark_scheme": {
+      "indicative_content": [
+        "Cloud provider holds the data — must trust provider's security practices and certifications",
+        "Data in transit between remote workers and cloud must be encrypted (HTTPS/VPN/TLS)",
+        "Remote access from home — potential use of insecure home Wi-Fi networks",
+        "Devices used remotely may not have up-to-date security software",
+        "Cloud provider stores backups — reduced risk of total data loss compared to on-premise server",
+        "Need to verify cloud provider offers regular, tested backups",
+        "Data residency — must confirm data is stored within the UK/EEA to comply with GDPR",
+        "Access control — who has permission to view which case files in the cloud",
+        "Risk of cloud provider being breached — shared cloud environment risks",
+        "Encryption of stored data in the cloud — should be required as a contractual obligation",
+        "MFA for all remote access — essential to protect login credentials of solicitors",
+        "Audit logs — cloud systems can log all access events",
+        "Legal professional privilege — additional sensitivity of case files beyond standard GDPR obligations"
+      ],
+      "level_descriptors": [
+        {
+          "level": 0,
+          "marks": "0",
+          "descriptor": "No rewardable material."
+        },
+        {
+          "level": 1,
+          "marks": "1–3",
+          "descriptor": "Basic application. Identifies one or two data protection concerns with limited analysis. Limited application to the legal context. (AO2+AO3a)"
+        },
+        {
+          "level": 2,
+          "marks": "4–6",
+          "descriptor": "Good application to the law firm context. Discusses at least four data protection implications including encryption, access control, backup, and remote access risks. Good analysis of interrelationships. (AO2+AO3a)"
+        },
+        {
+          "level": 3,
+          "marks": "7–8",
+          "descriptor": "Comprehensive discussion of the full range of data protection implications of cloud storage and remote access. Thoroughly applied to the legal sector context, recognising legal professional privilege, GDPR, data residency, and operational security requirements. (AO2+AO3a)"
+        }
+      ]
+    }
+  },
+  {
+    "id": "D080",
+    "learning_aim": "D",
+    "topic": "D1 Threats / D2 Protecting data",
+    "command_verb": "Discuss",
+    "marks": 8,
+    "ao": "AO2+AO3a",
+    "scenario": "Goldstone Museum of Natural History recently migrated its entire collection database — containing digitised records of over 500,000 artefacts, visitor data, and financial records — to a new online system. Staff access it from museum workstations and remotely.",
+    "question": "Discuss the threats to the museum's data since moving to the online system and the measures it should take to protect it.",
+    "guidance": "(8)",
+    "type": "extended_levels",
+    "mark_scheme": {
+      "indicative_content": [
+        "External threats: hackers targeting the valuable collection database; ransomware encrypting irreplaceable digitised records",
+        "DDoS attacks taking the online system offline, preventing public access and staff use",
+        "Phishing targeting staff with admin access credentials",
+        "Internal threats: staff accessing data from personal devices or insecure home networks",
+        "Accidental deletion or modification of artefact records",
+        "Portable devices used on site — risk of data being copied",
+        "Natural disaster destroying the on-site infrastructure",
+        "Protective measures: firewalls and intrusion detection on the online system",
+        "Encryption of all stored collection data and data in transit",
+        "MFA for all staff accounts, especially those with admin rights",
+        "Role-based access levels — curators access collection records; finance staff access financial records only",
+        "Regular tested backups to offsite or secondary cloud location",
+        "Staff cybersecurity training particularly on phishing",
+        "Physical access control for server rooms",
+        "Digital certificates for the online platform"
+      ],
+      "level_descriptors": [
+        {
+          "level": 0,
+          "marks": "0",
+          "descriptor": "No rewardable material."
+        },
+        {
+          "level": 1,
+          "marks": "1–3",
+          "descriptor": "Basic understanding of threats and measures with limited application to the museum context. May only consider one category of threat. (AO2+AO3a)"
+        },
+        {
+          "level": 2,
+          "marks": "4–6",
+          "descriptor": "Good application to the museum context. Discusses a range of both external and internal threats and at least four protective measures. Analyses how the move to an online system has changed the risk profile. (AO2+AO3a)"
+        },
+        {
+          "level": 3,
+          "marks": "7–8",
+          "descriptor": "Comprehensive discussion of external and internal threats and a full range of technical and procedural protective measures thoroughly applied to the context of the museum's unique online digitised collection. Thorough analysis of how the irreplaceable nature of the collection data makes effective protection particularly critical. (AO2+AO3a)"
+        }
+      ]
+    }
+  },
+  {
+    "id": "D081",
+    "learning_aim": "D",
+    "topic": "D2.1 Techniques — biometrics / MFA",
+    "command_verb": "Discuss",
+    "marks": 8,
+    "ao": "AO2+AO3a",
+    "scenario": "Hartfield Private Hospital is reviewing its patient data access procedures. Currently, all clinical staff log in to the patient management system with a shared departmental username and password. The data protection officer has raised serious concerns.",
+    "question": "Discuss the problems with the current login system and the implications of moving to individual accounts with multi-factor authentication and biometrics.",
+    "guidance": "(8)",
+    "type": "extended_levels",
+    "mark_scheme": {
+      "indicative_content": [
+        "Shared password — no individual accountability; anyone with the password can access all patient records",
+        "Shared password easily compromised — if one person shares it, security is lost for the whole department",
+        "Cannot audit who accessed which records — GDPR and CQC compliance risk",
+        "Individual accounts allow audit trails — each access event is logged to a specific user",
+        "MFA adds a second layer — even if a password is stolen, access is blocked without the second factor",
+        "Biometrics (fingerprint/facial recognition) — cannot be shared like a password; quicker to use in clinical settings",
+        "Implementation cost — hardware for biometrics; software licences for MFA",
+        "Staff training needed on the new system",
+        "Some clinical staff may resist change, particularly if biometric enrolment is required",
+        "System failure risk — if biometric scanner fails in an emergency, staff need a fallback method",
+        "Improved GDPR compliance and reduced risk of ICO investigation",
+        "Patient trust improved — data better protected",
+        "Performance — biometric login faster than typing passwords, which matters in busy clinical settings"
+      ],
+      "level_descriptors": [
+        {
+          "level": 0,
+          "marks": "0",
+          "descriptor": "No rewardable material."
+        },
+        {
+          "level": 1,
+          "marks": "1–3",
+          "descriptor": "Basic understanding of the problems with a shared password. Limited application to the hospital context. (AO2+AO3a)"
+        },
+        {
+          "level": 2,
+          "marks": "4–6",
+          "descriptor": "Good application to the hospital. Analyses the problems with shared passwords and at least three implications of the proposed changes including compliance, cost, and usability. (AO2+AO3a)"
+        },
+        {
+          "level": 3,
+          "marks": "7–8",
+          "descriptor": "Comprehensive analysis of shared login vulnerabilities and thorough discussion of all implications of moving to individual MFA and biometric accounts, including compliance, clinical workflow, implementation challenges, and patient trust. Thoroughly applied to the hospital context. (AO2+AO3a)"
+        }
+      ]
+    }
+  },
+  {
+    "id": "D082",
+    "learning_aim": "D",
+    "topic": "D1.1.5 Natural disasters / D2.1.3 Backup and recovery",
+    "command_verb": "Discuss",
+    "marks": 8,
+    "ao": "AO2+AO3a",
+    "scenario": "Riverbend Council stores electoral registers, planning applications, social services records, and financial data on servers in its civic centre, which is located in a flood-risk area. The council's IT manager has been asked to present a business continuity plan.",
+    "question": "Discuss the risks to the council's data from natural disasters and the measures it should include in its business continuity plan.",
+    "guidance": "(8)",
+    "type": "extended_levels",
+    "mark_scheme": {
+      "indicative_content": [
+        "Flood risk — server room is in a flood-risk area; flooding could destroy all servers and backups stored on site",
+        "Fire risk — fire in the civic centre could destroy IT infrastructure",
+        "Power outages caused by severe weather — corrupts running processes and potentially stored data",
+        "Earthquake or structural damage — less common in UK but relevant for business continuity",
+        "Regular full and incremental backups to offsite/cloud location",
+        "Real-time replication to a secondary data centre — ensures near-zero data loss",
+        "Raising server equipment above potential flood level or moving to upper floors",
+        "UPS (uninterruptible power supply) to protect against power failures",
+        "Tested disaster recovery procedures — regular test restores to confirm backups work",
+        "Recovery Time Objective (RTO) and Recovery Point Objective (RPO) defined",
+        "Electoral data is legally required — loss would have serious democratic consequences",
+        "Social services data — loss could endanger vulnerable individuals",
+        "Communication plan for staff and public if systems are unavailable"
+      ],
+      "level_descriptors": [
+        {
+          "level": 0,
+          "marks": "0",
+          "descriptor": "No rewardable material."
+        },
+        {
+          "level": 1,
+          "marks": "1–3",
+          "descriptor": "Basic understanding of natural disaster risks with limited application to the council context. (AO2+AO3a)"
+        },
+        {
+          "level": 2,
+          "marks": "4–6",
+          "descriptor": "Good application to the council context. Discusses at least three specific natural disaster risks and four business continuity measures. Analyses the particular impact of data loss on specific council functions. (AO2+AO3a)"
+        },
+        {
+          "level": 3,
+          "marks": "7–8",
+          "descriptor": "Comprehensive discussion of natural disaster risks, including the specific flood risk for this location, and a thorough analysis of a full range of business continuity measures. Applies the analysis to the specific legal and public service obligations of a council, considering the consequences of losing electoral, social services, or financial data. (AO2+AO3a)"
+        }
+      ]
+    }
+  },
+  {
+    "id": "D083",
+    "learning_aim": "D",
+    "topic": "D1 External and internal threats",
+    "command_verb": "Discuss",
+    "marks": 8,
+    "ao": "AO2+AO3a",
+    "scenario": "Coppergate Hotel Group operates ten hotels across the UK. Guests pay using a mobile app or the hotel's website. The group recently announced it would allow staff to work from home one day per week using their personal laptops.",
+    "question": "Discuss the security threats that the hotel group faces following its decision to allow remote working from personal laptops.",
+    "guidance": "(8)",
+    "type": "extended_levels",
+    "mark_scheme": {
+      "indicative_content": [
+        "Personal laptops may not have up-to-date antivirus software installed",
+        "Home Wi-Fi routers may not be securely configured — risk of interception",
+        "Personal devices may have malware already installed — risk to corporate systems when connected via VPN",
+        "Family members using the same personal laptop could inadvertently access hotel systems",
+        "Accidental disclosure — staff may print or save guest data locally on their personal device",
+        "Data loss if personal laptop is lost or stolen — guest payment data may not be encrypted",
+        "Phishing emails received on personal accounts more likely to be clicked on personal devices",
+        "BYOD policy needed — outlining acceptable use of personal devices for work",
+        "VPN should be required for all remote access to protect data in transit",
+        "MFA required to prevent unauthorised remote login",
+        "Device management software to ensure personal laptops meet security standards",
+        "Training staff on secure remote working practices",
+        "GDPR implications — guest payment data transferred to personal devices is a potential data breach"
+      ],
+      "level_descriptors": [
+        {
+          "level": 0,
+          "marks": "0",
+          "descriptor": "No rewardable material."
+        },
+        {
+          "level": 1,
+          "marks": "1–3",
+          "descriptor": "Basic understanding of remote working risks. Limited application to the hotel context. May only consider one or two threats. (AO2+AO3a)"
+        },
+        {
+          "level": 2,
+          "marks": "4–6",
+          "descriptor": "Good application to the hotel group. Discusses at least four threats arising from personal laptop use, including device security, home network risks, and GDPR concerns. Good analysis of how these interact. (AO2+AO3a)"
+        },
+        {
+          "level": 3,
+          "marks": "7–8",
+          "descriptor": "Comprehensive discussion of a full range of security threats introduced by remote working on personal devices. Thoroughly applied to the hotel group context, including the sensitivity of guest payment data, GDPR obligations, and the challenge of managing security across ten sites and home workers simultaneously. (AO2+AO3a)"
+        }
+      ]
+    }
+  },
+  {
+    "id": "D084",
+    "learning_aim": "D",
+    "topic": "D2 Protecting data — full range",
+    "command_verb": "Discuss",
+    "marks": 8,
+    "ao": "AO2+AO3a",
+    "scenario": "Briarwood Accountancy Firm has recently expanded from 10 to 60 members of staff. It holds client financial records, HMRC submissions, payroll data, and bank account details on its network. The firm has grown rapidly and its IT security has not kept pace.",
+    "question": "Discuss the data protection measures the accountancy firm should prioritise as it scales up its operations.",
+    "guidance": "(8)",
+    "type": "extended_levels",
+    "mark_scheme": {
+      "indicative_content": [
+        "Role-based access levels — accountants see client files; payroll staff see payroll only; directors see all",
+        "Strong passwords and MFA for all staff — particularly important for client portal access",
+        "Antivirus on all workstations and email scanning — protect against malware in attachments",
+        "Hardware firewall protecting the network perimeter",
+        "Encryption of all client financial data at rest and in transit",
+        "Regular offsite or cloud backups of all financial records — with tested restore procedures",
+        "Physical access control for the server room",
+        "Digital certificates for client-facing portal/website",
+        "Staff training — 50 new staff may be unaware of security policies",
+        "Acceptable use policy needed for internet and email",
+        "GDPR compliance review — personal data in client records must be properly managed",
+        "Audit logs — track who accessed which client files",
+        "Patch management — ensure all software is up to date"
+      ],
+      "level_descriptors": [
+        {
+          "level": 0,
+          "marks": "0",
+          "descriptor": "No rewardable material."
+        },
+        {
+          "level": 1,
+          "marks": "1–3",
+          "descriptor": "Basic identification of one or two security measures with limited analysis. Limited application to the accountancy firm context. (AO2+AO3a)"
+        },
+        {
+          "level": 2,
+          "marks": "4–6",
+          "descriptor": "Good discussion of at least four prioritised security measures with consideration of how rapid growth creates specific vulnerabilities. Applied to the accountancy context. (AO2+AO3a)"
+        },
+        {
+          "level": 3,
+          "marks": "7–8",
+          "descriptor": "Comprehensive analysis of a full range of technical, procedural, and physical measures, with well-reasoned prioritisation based on the specific risks faced by a rapidly growing accountancy firm handling highly sensitive financial data. Includes training, compliance, and audit considerations. (AO2+AO3a)"
+        }
+      ]
+    }
+  },
+  {
+    "id": "D085",
+    "learning_aim": "D",
+    "topic": "D1.1 External threats — broad",
+    "command_verb": "Discuss",
+    "marks": 8,
+    "ao": "AO2+AO3a",
+    "scenario": "Brightside Online Supermarket processes over 10,000 orders per day, storing customer personal details, payment card information, and purchase history on its servers.",
+    "question": "Discuss the external threats to the supermarket's data and the potential impact on the business if these threats were successfully exploited.",
+    "guidance": "(8)",
+    "type": "extended_levels",
+    "mark_scheme": {
+      "indicative_content": [
+        "Hacking — attackers targeting the customer database to steal payment card details",
+        "Ransomware — encrypting order processing systems, halting all deliveries",
+        "Phishing targeting staff to gain credentials to customer database",
+        "DDoS attack — taking the website offline, preventing customers from placing orders",
+        "Pharming — redirecting customers to a fake checkout page to steal payment details",
+        "Malicious bots — scraping prices, conducting credential stuffing attacks on customer accounts",
+        "Impact: financial loss — compensation to customers whose payment details are stolen",
+        "Regulatory fines from ICO for GDPR breach; PCI DSS fines for failing to protect payment data",
+        "Reputational damage — customers choose competitor supermarkets",
+        "Operational disruption — if order system is taken offline, deliveries are missed",
+        "Long-term loss of customer trust — difficulty rebuilding brand reputation"
+      ],
+      "level_descriptors": [
+        {
+          "level": 0,
+          "marks": "0",
+          "descriptor": "No rewardable material."
+        },
+        {
+          "level": 1,
+          "marks": "1–3",
+          "descriptor": "Basic description of one or two external threats. Limited analysis of impact on the supermarket. (AO2+AO3a)"
+        },
+        {
+          "level": 2,
+          "marks": "4–6",
+          "descriptor": "Good application to the online supermarket. Discusses at least four types of external threat and analyses at least three significant business impacts. (AO2+AO3a)"
+        },
+        {
+          "level": 3,
+          "marks": "7–8",
+          "descriptor": "Comprehensive application. Discusses a full range of external threats relevant to a high-volume e-commerce business and thoroughly analyses the financial, legal, reputational, and operational impacts, considering the scale of the operation and the sensitivity of the data held. (AO2+AO3a)"
+        }
+      ]
+    }
+  },
+  {
+    "id": "D086",
+    "learning_aim": "D",
+    "topic": "D1 Threats / D2 Protecting data — Evaluate",
+    "command_verb": "Evaluate",
+    "marks": 9,
+    "ao": "AO2+AO3a+AO3b",
+    "scenario": "Lakeland Housing Association manages social housing for 8,000 tenants. Tenant personal details, benefit assessments, maintenance records, and rent payment histories are stored on its IT systems. Following a recent malware incident, the board has asked the IT manager to recommend improvements to the organisation's data security.\n\nYou should consider:\n• The threats facing the housing association\n• The measures available to protect its data\n• Which measures provide the greatest benefit.",
+    "question": "Evaluate the data security measures the housing association should implement following the malware incident.",
+    "guidance": "(9)",
+    "type": "extended_levels",
+    "mark_scheme": {
+      "indicative_content": [
+        "Threats: malware (ransomware/spyware), hackers targeting tenant financial data, phishing targeting staff, internal threats — accidental disclosure, misuse of portable devices, natural disasters",
+        "Measures: up-to-date antivirus with real-time scanning — directly addresses malware incident",
+        "Hardware and software firewalls — prevent future external intrusion",
+        "Staff training — significant proportion of attacks start with human error; high impact, relatively low cost",
+        "MFA for all staff accounts — second layer prevents access even if credentials stolen",
+        "File permissions and access levels — limit damage from any single compromised account",
+        "Regular tested offsite backups — enables recovery if ransomware strikes again",
+        "Encryption of stored tenant data and data in transit",
+        "Physical access control for server room",
+        "Evaluation — antivirus and firewall updates most urgent given recent malware incident",
+        "Staff training is high value/low cost and addresses the human vulnerability",
+        "Offsite backup is critical to ensure recovery from future attacks",
+        "Encryption and access control protect the most sensitive tenant data",
+        "Cost constraints for a housing association — prioritisation needed",
+        "Conclusion: layered approach combining technical measures with staff training provides strongest protection; single measures alone are insufficient"
+      ],
+      "level_descriptors": [
+        {
+          "level": 0,
+          "marks": "0",
+          "descriptor": "No rewardable material."
+        },
+        {
+          "level": 1,
+          "marks": "1–3",
+          "descriptor": "Demonstrates basic application of knowledge of threats and measures, partially relevant to the housing association context. Basic analysis with limited evaluation of which measures are most beneficial. (AO2+AO3a+AO3b)"
+        },
+        {
+          "level": 2,
+          "marks": "4–6",
+          "descriptor": "Demonstrates good application to the housing association context. Analyses multiple threats and discusses at least five protective measures. Good evaluation of relative benefits and costs of measures, with some reasoned conclusion. (AO2+AO3a+AO3b)"
+        },
+        {
+          "level": 3,
+          "marks": "7–9",
+          "descriptor": "Demonstrates comprehensive application to the housing association context. Thorough analysis of a wide range of threats and a full set of protective measures. Thorough evaluation comparing the effectiveness and cost of different measures, with a well-supported conclusion identifying which measures provide the greatest benefit given the specific context and recent malware incident. (AO2+AO3a+AO3b)"
+        }
+      ]
+    }
+  },
+  {
+    "id": "D087",
+    "learning_aim": "D",
+    "topic": "D1.1.4 Social engineering / D2 Protection — Evaluate",
+    "command_verb": "Evaluate",
+    "marks": 9,
+    "ao": "AO2+AO3a+AO3b",
+    "scenario": "Fairview Letting Agency uses email extensively to communicate with landlords, tenants, and legal teams. It stores tenant personal data, tenancy agreements, and bank details on its servers. The agency suffered a successful phishing attack last year where a staff member transferred £15,000 to a fraudulent account.\n\nYou should consider:\n• The social engineering threats facing the agency\n• The measures available to prevent social engineering attacks\n• The benefits and limitations of these measures.",
+    "question": "Evaluate how effectively the letting agency can protect itself from social engineering attacks.",
+    "guidance": "(9)",
+    "type": "extended_levels",
+    "mark_scheme": {
+      "indicative_content": [
+        "Threats: phishing emails (as experienced), pharming, shouldering, vishing — all exploit human psychology",
+        "CEO fraud/business email compromise particularly relevant given financial loss",
+        "Measures: staff training and awareness programmes — most effective long-term defence against social engineering",
+        "Email filtering and spam detection — reduce volume of phishing emails reaching staff",
+        "MFA — even if credentials are stolen via phishing, second factor blocks access",
+        "Call-back verification procedures for financial transfers — would have prevented the £15,000 loss",
+        "Strict financial authorisation procedures — dual authorisation for large transfers",
+        "Email authentication technologies (SPF/DKIM) to detect spoofed sender addresses",
+        "Digital certificates verifying email identity",
+        "Evaluation — technical measures alone are insufficient; human judgement remains a weakness",
+        "Staff training reduces risk but cannot eliminate it entirely — people make mistakes under pressure",
+        "Call-back verification and dual authorisation directly address the specific attack experienced",
+        "Limitations: sophisticated phishing campaigns can deceive well-trained staff",
+        "Pharming is technically complex to defend against without robust DNS security",
+        "Conclusion: combination of technical measures and procedural controls (especially verification of financial requests) provides strongest protection; no single measure is fully effective"
+      ],
+      "level_descriptors": [
+        {
+          "level": 0,
+          "marks": "0",
+          "descriptor": "No rewardable material."
+        },
+        {
+          "level": 1,
+          "marks": "1–3",
+          "descriptor": "Basic application to the letting agency context. Identifies one or two social engineering threats and one or two measures. Limited evaluation with no supported conclusion. (AO2+AO3a+AO3b)"
+        },
+        {
+          "level": 2,
+          "marks": "4–6",
+          "descriptor": "Good application to the context. Analyses multiple social engineering techniques and discusses at least four protective measures. Good evaluation of benefits and limitations, with some reasoned conclusion referencing the previous phishing incident. (AO2+AO3a+AO3b)"
+        },
+        {
+          "level": 3,
+          "marks": "7–9",
+          "descriptor": "Comprehensive application. Thorough analysis of multiple social engineering threats relevant to the agency's email-heavy, high-value financial environment. Thorough evaluation of the effectiveness and limitations of both technical and procedural measures, with a well-supported conclusion that directly addresses the question of how effectively the agency can protect itself. (AO2+AO3a+AO3b)"
+        }
+      ]
+    }
+  },
+  {
+    "id": "D088",
+    "learning_aim": "D",
+    "topic": "D2.1.3 Backup / D2.4 Encryption — Evaluate",
+    "command_verb": "Evaluate",
+    "marks": 9,
+    "ao": "AO2+AO3a+AO3b",
+    "scenario": "Fernwood Private School stores pupil records, exam results, medical information, and CCTV footage on an on-site server. Following concerns raised by a data protection audit, the school is considering moving all its data to a cloud storage service with built-in backup and encryption.\n\nYou should consider:\n• The benefits of cloud storage with backup and encryption\n• The risks and drawbacks of this approach\n• Whether the school should proceed.",
+    "question": "Evaluate whether the private school should move its data to a cloud storage service with built-in backup and encryption.",
+    "guidance": "(9)",
+    "type": "extended_levels",
+    "mark_scheme": {
+      "indicative_content": [
+        "Benefits: built-in encryption protects data at rest and in transit without additional cost",
+        "Offsite backups automatically made — protects against on-site disaster such as fire",
+        "Removes need for on-site server hardware maintenance and management",
+        "Accessibility — staff can access records securely from any location",
+        "Scalable storage — as pupil numbers grow, storage can be increased easily",
+        "Reputable cloud providers have high security standards and certifications",
+        "Risks: data held by a third party — school must trust the provider's security",
+        "Data residency — must confirm data is stored within EEA/UK for GDPR compliance",
+        "Internet dependency — if connection is lost, data is inaccessible",
+        "CCTV footage — large volume of data; may be costly to store in the cloud",
+        "Medical and pupil data is particularly sensitive — cloud provider must sign a data processing agreement",
+        "Provider going out of business — risk of data being inaccessible",
+        "Cost — cloud subscriptions are ongoing and may exceed on-site storage costs over time",
+        "Evaluation: benefits of automatic backup and encryption outweigh risks for most data",
+        "CCTV footage may be more cost-effective stored on-site",
+        "Conclusion: a hybrid approach may be optimal — sensitive records in the cloud with encryption, CCTV on-site"
+      ],
+      "level_descriptors": [
+        {
+          "level": 0,
+          "marks": "0",
+          "descriptor": "No rewardable material."
+        },
+        {
+          "level": 1,
+          "marks": "1–3",
+          "descriptor": "Basic application. Identifies one or two benefits or risks with limited evaluation. Limited application to the school context. (AO2+AO3a+AO3b)"
+        },
+        {
+          "level": 2,
+          "marks": "4–6",
+          "descriptor": "Good application to the school. Analyses multiple benefits and risks of cloud migration including backup, encryption, data residency, and cost. Good evaluation with some reasoned conclusion. (AO2+AO3a+AO3b)"
+        },
+        {
+          "level": 3,
+          "marks": "7–9",
+          "descriptor": "Comprehensive application to the school context. Thorough analysis of benefits of built-in encryption and backup weighed against risks of third-party data storage, GDPR compliance, and ongoing cost. Well-supported conclusion that addresses the specific nature of the school's data — including sensitive medical and CCTV records — and recommends a justified course of action. (AO2+AO3a+AO3b)"
+        }
+      ]
+    }
+  },
+  {
+    "id": "D089",
+    "learning_aim": "D",
+    "topic": "D1 Threats / D2 Protecting data — Evaluate",
+    "command_verb": "Evaluate",
+    "marks": 9,
+    "ao": "AO2+AO3a+AO3b",
+    "scenario": "Bellview Online Gaming Company operates a multiplayer gaming platform used by over 200,000 registered users worldwide. Users create accounts with usernames, email addresses, and stored payment details. The platform has been targeted by hackers twice in the past year.\n\nYou should consider:\n• The threats facing the gaming platform\n• The data protection measures available\n• How effective these measures would be.",
+    "question": "Evaluate the effectiveness of the data protection measures the gaming company should put in place to protect user accounts and payment data.",
+    "guidance": "(9)",
+    "type": "extended_levels",
+    "mark_scheme": {
+      "indicative_content": [
+        "Threats: repeated hacking attempts; credential stuffing using stolen credentials from other breaches; phishing targeting users; DDoS attacks; malicious bots; SQL injection targeting the user database",
+        "Measures: MFA for all user accounts — significant reduction in account takeover risk even if passwords are stolen",
+        "Password hashing and salting — if database is breached, stored passwords cannot be read",
+        "HTTPS and TLS encryption for all data in transit including payment",
+        "Regular penetration testing to identify vulnerabilities before attackers",
+        "Firewall and intrusion detection/prevention systems",
+        "Rate limiting and CAPTCHA to prevent bot attacks",
+        "PCI DSS compliance for payment storage/processing",
+        "Encryption of stored payment card data",
+        "Security patch management — keeping platform software up to date",
+        "Evaluation: MFA is one of the most effective measures against credential-based attacks; highly recommended",
+        "Password hashing is essential — plain text storage is negligent",
+        "Regular penetration testing identifies specific vulnerabilities relevant to this platform",
+        "Limitations: no measure is perfect; determined attackers may find zero-day vulnerabilities",
+        "User behaviour remains a risk — users with weak passwords or reused credentials",
+        "Conclusion: layered security approach essential for a platform of this scale; MFA, encryption, and regular pen testing should be highest priorities given the repeated attacks"
+      ],
+      "level_descriptors": [
+        {
+          "level": 0,
+          "marks": "0",
+          "descriptor": "No rewardable material."
+        },
+        {
+          "level": 1,
+          "marks": "1–3",
+          "descriptor": "Basic application to the gaming platform. Identifies one or two threats and measures. Limited evaluation of effectiveness with no supported conclusion. (AO2+AO3a+AO3b)"
+        },
+        {
+          "level": 2,
+          "marks": "4–6",
+          "descriptor": "Good application to the gaming context. Discusses multiple threats specific to the platform and at least four protective measures. Evaluates relative effectiveness with some reasoned conclusion. (AO2+AO3a+AO3b)"
+        },
+        {
+          "level": 3,
+          "marks": "7–9",
+          "descriptor": "Comprehensive application to the gaming platform. Thorough analysis of a range of threats including credential attacks, hacking, and bot activity, and a full evaluation of the effectiveness of multiple protective measures including MFA, encryption, pen testing, and compliance. Well-supported conclusion prioritising measures based on the specific context of repeated attacks and scale of the platform. (AO2+AO3a+AO3b)"
+        }
+      ]
+    }
+  },
+  {
+    "id": "D090",
+    "learning_aim": "D",
+    "topic": "D1 Threats / D2 Protecting data — Evaluate (12 mark)",
+    "command_verb": "Evaluate",
+    "marks": 12,
+    "ao": "AO2+AO3a+AO3b",
+    "scenario": "Greenfield NHS Trust is a large healthcare organisation serving 500,000 patients. It holds electronic patient records (EPR), appointment data, medical imaging, prescriptions, and staff HR records on its IT systems. Following a government review, the Trust has been told it must achieve Cyber Essentials Plus certification. The IT director must present a full data security improvement plan to the board.\n\nYou should consider:\n• The external and internal threats to the Trust's data\n• The full range of data protection measures available\n• The benefits and limitations of each measure\n• Which measures should be prioritised and why.",
+    "question": "Evaluate the data security measures Greenfield NHS Trust should implement to protect patient and staff data, and justify your recommendations.",
+    "guidance": "(12)",
+    "type": "extended_levels",
+    "mark_scheme": {
+      "indicative_content": [
+        "External threats: ransomware (NHS has been heavily targeted — WannaCry precedent); hackers targeting EPR and medical imaging; phishing targeting clinical and admin staff; DDoS attacks on booking systems; natural disasters",
+        "Internal threats: accidental disclosure by staff emailing patient data; use of USB drives by clinical staff; staff accessing inappropriate websites introducing malware; deliberate data theft or leaking of patient records",
+        "Measures and evaluation:",
+        "Antivirus with real-time scanning and regular updates — essential first line of defence; signature updates needed continuously; heuristic detection for new ransomware variants",
+        "Hardware and software firewalls — control network traffic; can segment network so clinical and admin systems are isolated",
+        "MFA for all staff accounts — critical after repeated NHS ransomware incidents; reduces impact of stolen credentials from phishing",
+        "File permissions and access levels — clinical staff access EPR only; HR staff access HR records; imaging staff access DICOM systems; limits blast radius of any breach",
+        "Encryption of stored patient data and data in transit — HTTPS/TLS for all external communications; full disk encryption on mobile devices used by district nurses",
+        "Regular offsite/cloud backups with tested restore procedures — enables rapid recovery from ransomware without paying ransom",
+        "Physical access control — server rooms secured with biometric or keycard access; CCTV",
+        "Staff training and awareness — large organisation with many entry points; training on phishing, password hygiene, and data handling reduces human risk",
+        "Digital certificates for all patient-facing portals",
+        "Patch management — known vulnerabilities are exploited; WannaCry exploited unpatched Windows systems",
+        "Portable device policy — restrict or encrypt USB drives; ban of unapproved devices",
+        "Penetration testing — identifies vulnerabilities before attackers",
+        "Prioritisation: patch management and antivirus updates most urgent given ransomware history; MFA should be rolled out across all systems; regular tested backups essential for recovery capability; staff training high-value and relatively low-cost",
+        "Limitations: cost — NHS budget constraints mean not all measures can be implemented simultaneously; patient care cannot be disrupted during rollout; legacy medical equipment may not support modern encryption or patching; staff resistance to change",
+        "Benefits: Cyber Essentials Plus certification required; legal obligations under GDPR and common law duty of confidentiality; patient safety and trust; avoidance of financial and operational disruption caused by ransomware",
+        "Conclusion: layered defence-in-depth approach combining technical, procedural, and physical measures is the only effective strategy for an organisation of this scale; immediate priorities are patching, antivirus, MFA, and tested backups; longer-term priorities include full encryption, staff training programme, and physical access controls"
+      ],
+      "level_descriptors": [
+        {
+          "level": 0,
+          "marks": "0",
+          "descriptor": "No rewardable material."
+        },
+        {
+          "level": 1,
+          "marks": "1–4",
+          "descriptor": "Demonstrates basic application of knowledge of threats and/or measures, partially relevant to the NHS context. Basic or one-sided analysis. Limited evaluation with minimal or unsupported conclusions. (AO2+AO3a+AO3b)"
+        },
+        {
+          "level": 2,
+          "marks": "5–8",
+          "descriptor": "Demonstrates good application to the NHS Trust context. Considers both external and internal threats. Discusses a range of protective measures (at least six) with good analysis of their benefits and limitations. Good evaluation with a reasoned conclusion that prioritises some measures over others. (AO2+AO3a+AO3b)"
+        },
+        {
+          "level": 3,
+          "marks": "9–12",
+          "descriptor": "Demonstrates comprehensive application to the NHS Trust context. Thorough analysis of a wide range of external and internal threats specific to a large healthcare organisation. Comprehensive evaluation of the full range of protective measures, including their limitations (cost, legacy systems, staff resistance), with a thoroughly supported and justified conclusion that prioritises measures based on the specific risks, legal obligations, and operational requirements of the Trust. (AO2+AO3a+AO3b)"
+        }
+      ]
+    }
+  },
+  {
+    "id": "D091",
+    "learning_aim": "D",
+    "topic": "D1.1.1 Viruses and other malware",
+    "command_verb": "Discuss",
+    "marks": 6,
+    "ao": "AO2+AO3a",
+    "scenario": "Blackstone Courier Company uses a fleet management system to track deliveries in real time. A member of staff recently opened an email attachment from an unknown sender, and IT staff suspect a virus has been installed on the network.",
+    "question": "Discuss the implications of a virus infection for the courier company operations and data.",
+    "guidance": "(6)",
+    "type": "extended_levels",
+    "mark_scheme": {
+      "indicative_content": [
+        "Fleet management system could be corrupted — dispatchers unable to track vehicles in real time",
+        "Order data could be encrypted or deleted — unable to confirm or manage deliveries",
+        "Virus could spread across the network to all workstations",
+        "Infected systems may need to be taken offline — operational downtime",
+        "Customer contact data could be lost — unable to notify customers of delivery changes",
+        "Financial implications — cost of recovery, lost deliveries, potential claims from clients",
+        "Reputational damage — missed deliveries leading to loss of contracts",
+        "Legal risk if client data is compromised — GDPR obligations",
+        "Need to scan and clean all systems before returning to service",
+        "Prevention: antivirus email scanning, staff training not to open unknown attachments"
+      ],
+      "level_descriptors": [
+        {
+          "level": 0,
+          "marks": "0",
+          "descriptor": "No rewardable material."
+        },
+        {
+          "level": 1,
+          "marks": "1-2",
+          "descriptor": "Basic application of knowledge of virus infection with limited application to the courier context. May consider only one implication. (AO2+AO3a)"
+        },
+        {
+          "level": 2,
+          "marks": "3-4",
+          "descriptor": "Good application to the courier context. Considers at least two implications such as operational disruption and financial loss. Some analysis of how they interrelate. (AO2+AO3a)"
+        },
+        {
+          "level": 3,
+          "marks": "5-6",
+          "descriptor": "Comprehensive application to the courier context. Discusses multiple implications including operational, financial, reputational, and legal, with thorough analysis of why the fleet management system dependency makes a virus particularly damaging for this type of business. (AO2+AO3a)"
+        }
+      ]
+    }
+  },
+  {
+    "id": "D092",
+    "learning_aim": "D",
+    "topic": "D2.2 Antivirus software",
+    "command_verb": "Discuss",
+    "marks": 6,
+    "ao": "AO2+AO3a",
+    "scenario": "Hollybrook Secondary School has 800 student computers connected to the internet for research and coursework. The IT technician is reviewing the school security software and is considering implementing antivirus software across the entire network.",
+    "question": "Discuss the implications for the school of implementing antivirus software across all 800 student computers.",
+    "guidance": "(6)",
+    "type": "extended_levels",
+    "mark_scheme": {
+      "indicative_content": [
+        "Antivirus protects against malware downloaded from websites during student research",
+        "Real-time scanning detects threats before they can spread across the school network",
+        "Reduces risk of student coursework files being corrupted by viruses",
+        "Scheduled scans keep devices clean but may slow performance during lesson time",
+        "Cost implications — 800-device licence is significant for a school budget",
+        "Regular updates required — outdated signatures leave systems vulnerable",
+        "IT technician workload increases to manage 800 devices",
+        "Antivirus alone is not sufficient — firewalls and web filtering also needed",
+        "Quarantine of infected files protects the network but may cause frustration if student work is quarantined",
+        "Improved protection means fewer disruptions to lessons from malware incidents"
+      ],
+      "level_descriptors": [
+        {
+          "level": 0,
+          "marks": "0",
+          "descriptor": "No rewardable material."
+        },
+        {
+          "level": 1,
+          "marks": "1-2",
+          "descriptor": "Basic application of knowledge of antivirus software with limited consideration of implications for the school. (AO2+AO3a)"
+        },
+        {
+          "level": 2,
+          "marks": "3-4",
+          "descriptor": "Good application to the school context. Considers at least three implications such as security benefits, cost, and performance. Some analysis of how these affect the school operations. (AO2+AO3a)"
+        },
+        {
+          "level": 3,
+          "marks": "5-6",
+          "descriptor": "Comprehensive application to the school context. Discusses multiple implications including security benefits, cost, management overhead, performance impact, and the limitations of antivirus as a standalone measure. Thorough analysis applied to the specific context of 800 student machines. (AO2+AO3a)"
+        }
+      ]
+    }
+  },
+  {
+    "id": "D093",
+    "learning_aim": "D",
+    "topic": "D1.2.2 Accidental disclosure / D1.3 Impact",
+    "command_verb": "Give",
+    "marks": 2,
+    "ao": "AO1",
+    "scenario": "Sunnymere Care Home stores resident medical records, next-of-kin contact details, and financial information for fee management.",
+    "question": "Give two ways in which accidental disclosure of resident data could occur at the care home.",
+    "guidance": "(2)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark for each correct way, up to a maximum of two marks.",
+      "points": [
+        "Sending an email containing resident medical details to the wrong recipient (1)",
+        "Leaving a computer screen visible in a public area showing resident records (1)",
+        "Printing a resident record and leaving it unattended where others can read it (1)",
+        "Verbally discussing resident information in a public area where others can overhear (1)"
+      ],
+      "additional_guidance": "Accept any other appropriate/alternative response",
+      "do_not_accept": null
+    }
+  },
+  {
+    "id": "D094",
+    "learning_aim": "D",
+    "topic": "D2.4.3 HTTPS",
+    "command_verb": "Explain",
+    "marks": 4,
+    "ao": "AO1+AO2",
+    "scenario": "Granville Online Bookshop collects customer names, addresses, and payment card details through its checkout process.",
+    "question": "Explain two ways in which HTTPS protects customers when they shop on the bookshop's website.",
+    "guidance": "(4)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark for each identification and one mark for each appropriate linked expansion, up to a maximum of four marks (2 × 2).",
+      "points": [
+        "HTTPS encrypts all data sent between the customer's browser and the web server (1) so if data is intercepted by a third party it cannot be read (1)",
+        "HTTPS uses a digital certificate to verify the website's identity (1) assuring customers that they are communicating with the genuine Granville Online Bookshop website rather than a fake site (1)"
+      ],
+      "additional_guidance": "Accept any other appropriate/alternative response",
+      "do_not_accept": null
+    }
+  },
+  {
+    "id": "D095",
+    "learning_aim": "D",
+    "topic": "D1.1.1 Malicious bots",
+    "command_verb": "Explain",
+    "marks": 3,
+    "ao": "AO1+AO2",
+    "scenario": "Barrowfield Online Banking Service is accessed by over 100,000 customers using their usernames and passwords.",
+    "question": "Explain how malicious bots could be used to attack customer accounts at the online banking service.",
+    "guidance": "(3)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark per linked point up to a maximum of three marks.",
+      "points": [
+        "Bots can be programmed to carry out credential stuffing attacks (1) automatically trying thousands of stolen username and password combinations (1) to gain access to customer banking accounts (1)",
+        "Bots can be used to launch brute force attacks (1) systematically trying every possible password combination (1) until they successfully break into an account (1)"
+      ],
+      "additional_guidance": "Accept any other appropriate/alternative response",
+      "do_not_accept": null
+    }
+  },
+  {
+    "id": "D096",
+    "learning_aim": "D",
+    "topic": "D2.1.3 Backup and recovery procedures",
+    "command_verb": "Describe",
+    "marks": 4,
+    "ao": "AO1+AO2",
+    "scenario": "Clifton Museum of Science stores digital records of exhibits, visitor booking data, and staff payroll on a server.",
+    "question": "Describe how a disaster recovery procedure could help the museum restore its data following a server failure.",
+    "guidance": "(4)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark per linked point up to a maximum of four marks.",
+      "points": [
+        "The museum would identify the most recent backup that was completed before the failure occurred (1)",
+        "A test restore would confirm the backup is uncorrupted and complete (1)",
+        "The backup data would be restored to a replacement server or repaired server (1)",
+        "The recovery process would be checked to ensure all data is present and the system is functioning correctly (1)",
+        "A Recovery Time Objective (RTO) would define how quickly systems must be restored (1)",
+        "Staff would be informed of the data restoration status so they can resume normal operations (1)"
+      ],
+      "additional_guidance": "Accept any other appropriate/alternative response",
+      "do_not_accept": null
+    }
+  },
+  {
+    "id": "D097",
+    "learning_aim": "D",
+    "topic": "D1.1.2 Unauthorised access",
+    "command_verb": "Explain",
+    "marks": 3,
+    "ao": "AO1+AO2",
+    "scenario": "Hilltop Printing Company uses a network-connected design server where clients upload their artwork remotely.",
+    "question": "Explain how weak passwords on staff accounts could increase the risk of unauthorised access to the company's design server.",
+    "guidance": "(3)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark per linked point up to a maximum of three marks.",
+      "points": [
+        "Weak passwords such as names or simple sequences can be easily guessed by an attacker (1) using brute force or dictionary attack techniques (1) gaining unauthorised access to the server and all client artwork stored on it (1)",
+        "If staff use the same weak password across multiple accounts and one is compromised (1) the attacker can use it to log into the design server (1) and steal or modify confidential client files (1)"
+      ],
+      "additional_guidance": "Accept any other appropriate/alternative response",
+      "do_not_accept": null
+    }
+  },
+  {
+    "id": "D098",
+    "learning_aim": "D",
+    "topic": "D2.1.6 Physical access control",
+    "command_verb": "Describe",
+    "marks": 4,
+    "ao": "AO1+AO2",
+    "scenario": "Coldstream Research Laboratory develops medical equipment and stores research data and intellectual property on its servers.",
+    "question": "Describe two physical access control measures the laboratory could use to protect its server room.",
+    "guidance": "(4)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark per linked point up to a maximum of four marks.",
+      "points": [
+        "A biometric scanner such as a fingerprint reader can be installed at the server room door (1) ensuring only registered authorised personnel can enter (1)",
+        "Security CCTV cameras can monitor the entrance and interior of the server room (1) creating a deterrent and providing evidence if an unauthorised access attempt occurs (1)",
+        "A keycard/swipe card access system can be used (1) so only staff with an authorised card can enter and access is logged automatically (1)",
+        "A visitor sign-in register and escorted entry policy (1) ensures unauthorised individuals cannot access the server room alone (1)"
+      ],
+      "additional_guidance": "Accept any other appropriate/alternative response",
+      "do_not_accept": null
+    }
+  },
+  {
+    "id": "D099",
+    "learning_aim": "D",
+    "topic": "D1.3.3 Loss of customers / public image",
+    "command_verb": "Give",
+    "marks": 2,
+    "ao": "AO1",
+    "scenario": "Cloudpath Cloud Accounting Software is used by 5,000 small businesses to manage their finances. It recently suffered a data breach that was reported in the national press.",
+    "question": "Give two reasons why the data breach could lead to a loss of customers for Cloudpath.",
+    "guidance": "(2)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark for each correct reason, up to a maximum of two marks.",
+      "points": [
+        "Negative press coverage damages the company reputation (1)",
+        "Customers lose trust in Cloudpath ability to keep their financial data secure (1)",
+        "Customers switch to a competitor accounting software provider (1)",
+        "Potential new customers choose a rival product instead (1)"
+      ],
+      "additional_guidance": "Accept any other appropriate/alternative response",
+      "do_not_accept": null
+    }
+  },
+  {
+    "id": "D100",
+    "learning_aim": "D",
+    "topic": "D1.2.2 Accidental disclosure / D1.3 Impact",
+    "command_verb": "Explain",
+    "marks": 2,
+    "ao": "AO1+AO2",
+    "scenario": "Westgate University recently discovered that a member of staff had accidentally emailed confidential research data to an external contact outside the organisation.",
+    "question": "Explain one impact this accidental disclosure of data could have on the university.",
+    "guidance": "(2)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark for identification and one mark for an appropriate linked justification/expansion.",
+      "points": [
+        "The university could face an investigation by the ICO (1) for failing to prevent the accidental disclosure of confidential research data (1)",
+        "The research data could be used by competitors (1) damaging the university commercial interests and reputation for research excellence (1)",
+        "The university may be required to notify affected parties under GDPR (1) causing reputational damage and loss of trust from research partners (1)"
+      ],
+      "additional_guidance": "Accept any other appropriate/alternative response",
+      "do_not_accept": null
+    }
+  }
+]

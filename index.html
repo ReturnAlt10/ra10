@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RA10 — Everything in One Place</title>
+<link rel="icon" href="logo.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&display=swap" rel="stylesheet">
+<style>
+/* =====================================================
+   DESIGN TOKENS
+===================================================== */
+:root,[data-theme="light"]{
+  --color-bg:#f7f6f2; --color-surface:#f9f8f5; --color-surface-2:#fbfbf9;
+  --color-surface-offset:#f3f0ec; --color-surface-offset-2:#edeae5;
+  --color-surface-dynamic:#e6e4df; --color-divider:#dcd9d5; --color-border:#d4d1ca;
+  --color-text:#28251d; --color-text-muted:#7a7974; --color-text-faint:#bab9b4;
+  --color-text-inverse:#f9f8f4;
+  --color-primary:#d20000; --color-primary-hover:#a70000; --color-primary-active:#7a0000;
+  --color-primary-highlight:#f4d4d4;
+  --color-success:#437a22; --color-success-highlight:#d4dfcc;
+  --color-warning:#964219; --color-warning-highlight:#ddcfc6;
+  --radius-sm:.375rem; --radius-md:.5rem; --radius-lg:.75rem;
+  --radius-xl:1rem; --radius-full:9999px;
+  --shadow-sm:0 1px 2px oklch(0.2 0.01 80/.06);
+  --shadow-md:0 4px 12px oklch(0.2 0.01 80/.08);
+  --shadow-lg:0 12px 32px oklch(0.2 0.01 80/.12);
+  --t:180ms cubic-bezier(.16,1,.3,1);
+  --sp1:.25rem;--sp2:.5rem;--sp3:.75rem;--sp4:1rem;--sp5:1.25rem;
+  --sp6:1.5rem;--sp8:2rem;--sp10:2.5rem;--sp12:3rem;--sp16:4rem;--sp20:5rem;
+  --tx-xs:clamp(.75rem,.7rem + .25vw,.875rem);
+  --tx-sm:clamp(.875rem,.8rem + .35vw,1rem);
+  --tx-base:clamp(1rem,.95rem + .25vw,1.125rem);
+  --tx-lg:clamp(1.125rem,1rem + .75vw,1.5rem);
+  --tx-xl:clamp(1.5rem,1.2rem + 1.25vw,2.25rem);
+  --tx-2xl:clamp(2rem,1.2rem + 2.5vw,3.5rem);
+  --font-d:'Instrument Serif',Georgia,serif;
+  --font-b:'DM Sans','Helvetica Neue',sans-serif;
+  --w-narrow:640px;--w-default:960px;--w-wide:1200px;
+}
+[data-theme="dark"]{
+  --color-bg:#171614;--color-surface:#1c1b19;--color-surface-2:#201f1d;
+  --color-surface-offset:#1d1c1a;--color-surface-offset-2:#22211f;
+  --color-surface-dynamic:#2d2c2a;--color-divider:#262523;--color-border:#393836;
+  --color-text:#cdccca;--color-text-muted:#797876;--color-text-faint:#5a5957;
+  --color-text-inverse:#2b2a28;
+  --color-primary:#d20000;--color-primary-hover:#a70000;--color-primary-active:#7a0000;
+  --color-primary-highlight:#3d1111;
+  --color-success:#6daa45;--color-success-highlight:#3a4435;
+  --color-warning:#bb653b;--color-warning-highlight:#564942;
+  --shadow-sm:0 1px 2px oklch(0 0 0/.2);
+  --shadow-md:0 4px 12px oklch(0 0 0/.3);
+  --shadow-lg:0 12px 32px oklch(0 0 0/.4);
+}
+
+/* =====================================================
+   BASE
+===================================================== */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-font-smoothing:antialiased;scroll-behavior:smooth;scroll-padding-top:var(--sp16)}
+body{min-height:100dvh;line-height:1.6;font-family:var(--font-b);font-size:var(--tx-base);
+  color:var(--color-text);background:var(--color-bg);
+  transition:background var(--t),color var(--t)}
+img,svg{display:block;max-width:100%;height:auto}
+h1,h2,h3,h4,h5,h6{text-wrap:balance;line-height:1.15;font-family:var(--font-d)}
+p,li{text-wrap:pretty;max-width:72ch}
+button{cursor:pointer;background:none;border:none;font:inherit;color:inherit}
+input,select,textarea{font:inherit;color:inherit}
+::selection{background:oklch(from var(--color-primary) l c h/.25);color:var(--color-text)}
+:focus-visible{outline:2px solid var(--color-primary);outline-offset:3px;border-radius:var(--radius-sm)}
+a,button,[role="button"],input,select,textarea{
+  transition:color var(--t),background var(--t),border-color var(--t),box-shadow var(--t)}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{
+  animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+/* =====================================================
+   NAVBAR
+===================================================== */
+.nav{
+  position:sticky;top:0;z-index:100;
+  background:oklch(from var(--color-surface) l c h/.95);
+  backdrop-filter:blur(14px);
+  border-bottom:1px solid oklch(from var(--color-text) l c h/.08);
+}
+.nav-inner{
+  max-width:var(--w-wide);margin-inline:auto;
+  padding-inline:var(--sp6);
+  display:flex;align-items:center;gap:var(--sp6);height:56px;
+}
+.nav-logo{display:flex;align-items:center;gap:var(--sp2);text-decoration:none;color:var(--color-text);flex-shrink:0}
+.nav-logo img{display:block;width:28px;height:28px;object-fit:cover;object-position:center;border-radius:var(--radius-md)}
+.nav-logo-text{font-family:var(--font-d);font-size:var(--tx-lg);font-weight:400;letter-spacing:-.01em}
+.nav-links{display:flex;align-items:center;gap:var(--sp1);margin-left:var(--sp2)}
+.nav-link{
+  font-size:var(--tx-sm);color:var(--color-text-muted);
+  padding:var(--sp1) var(--sp3);border-radius:var(--radius-md);font-weight:500;
+}
+.nav-link:hover{color:var(--color-text);background:oklch(from var(--color-text) l c h/.06)}
+.nav-link.active{color:var(--color-primary);background:var(--color-primary-highlight)}
+.nav-actions{margin-left:auto;display:flex;align-items:center;gap:var(--sp2)}
+.theme-toggle{
+  width:36px;height:36px;display:flex;align-items:center;justify-content:center;
+  border-radius:var(--radius-md);color:var(--color-text-muted);
+}
+.theme-toggle:hover{background:oklch(from var(--color-text) l c h/.06);color:var(--color-text)}
+
+/* =====================================================
+   LAYOUT
+===================================================== */
+.page{display:none;min-height:calc(100dvh - 56px)}
+.page.active{display:block}
+.c{max-width:var(--w-wide);margin-inline:auto;padding-inline:var(--sp6)}
+.cd{max-width:var(--w-default);margin-inline:auto;padding-inline:var(--sp6)}
+/* full-bleed iframe wrapper — no max-width, just side padding */
+.cf{margin-inline:auto;padding-inline:var(--sp6)}
+
+/* =====================================================
+   BREADCRUMB
+===================================================== */
+.bc{display:flex;align-items:center;gap:var(--sp2);flex-wrap:wrap;padding-block:var(--sp6) var(--sp2)}
+.bc-item{font-size:var(--tx-xs);color:var(--color-text-muted);text-decoration:none}
+.bc-item:hover{color:var(--color-primary)}
+.bc-sep{font-size:var(--tx-xs);color:var(--color-text-faint)}
+.bc-item.cur{color:var(--color-text);font-weight:500;pointer-events:none}
+
+/* =====================================================
+   PAGE HERO
+===================================================== */
+.hero{padding-block:var(--sp16) var(--sp12);border-bottom:1px solid oklch(from var(--color-text) l c h/.07)}
+.hero-label{font-size:var(--tx-xs);font-family:var(--font-b);font-weight:600;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--color-primary);margin-bottom:var(--sp3)}
+.hero h1{font-size:var(--tx-2xl);font-weight:400;color:var(--color-text);
+  margin-bottom:var(--sp4);line-height:1.1}
+.hero p{font-size:var(--tx-base);color:var(--color-text-muted);max-width:56ch;line-height:1.7}
+
+/* =====================================================
+   SECTION
+===================================================== */
+.sec{padding-block:var(--sp12)}
+.sec-label{font-size:var(--tx-xs);font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--color-text-muted);margin-bottom:var(--sp3)}
+.sec-title{font-size:var(--tx-xl);font-weight:400;color:var(--color-text);
+  margin-bottom:var(--sp3);line-height:1.2}
+
+/* =====================================================
+   GRID
+===================================================== */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(300px,100%),1fr));
+  gap:var(--sp6);padding-block:var(--sp10)}
+.grid-2{grid-template-columns:repeat(auto-fill,minmax(min(420px,100%),1fr))}
+
+/* =====================================================
+   CARD
+===================================================== */
+.card{
+  background:var(--color-surface);
+  border:1px solid oklch(from var(--color-text) l c h/.08);
+  border-radius:var(--radius-xl);padding:var(--sp6);
+  display:flex;flex-direction:column;gap:var(--sp3);
+  box-shadow:var(--shadow-sm);
+  transition:box-shadow var(--t),transform var(--t);
+}
+.card.click{cursor:pointer}
+.card.click:hover{box-shadow:var(--shadow-md);transform:translateY(-1px)}
+.card.off{opacity:.52;pointer-events:none}
+.card-tag{display:inline-flex;align-items:center;gap:var(--sp1);font-size:var(--tx-xs);
+  font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--color-text-muted);
+  margin-bottom:var(--sp1)}
+.card h3{font-size:var(--tx-lg);font-weight:400;color:var(--color-text);line-height:1.25}
+.card p{font-size:var(--tx-sm);color:var(--color-text-muted);line-height:1.65;flex:1}
+.card-ft{display:flex;align-items:center;justify-content:space-between;margin-top:var(--sp2)}
+.pill{font-size:var(--tx-xs);font-weight:600;letter-spacing:.05em;text-transform:uppercase;
+  padding:var(--sp1) var(--sp3);border-radius:var(--radius-full)}
+.pill-live{background:var(--color-primary-highlight);color:var(--color-primary)}
+.pill-ok{background:var(--color-success-highlight);color:var(--color-success)}
+.pill-soon{background:var(--color-surface-offset-2);color:var(--color-text-faint)}
+
+/* =====================================================
+   BUTTONS
+===================================================== */
+.btn{display:inline-flex;align-items:center;gap:var(--sp2);font-size:var(--tx-sm);
+  font-weight:500;padding:var(--sp2) var(--sp4);border-radius:var(--radius-md);
+  white-space:nowrap;border:none;cursor:pointer;text-decoration:none}
+.btn-p{background:var(--color-primary);color:var(--color-text-inverse)}
+.btn-p:hover{background:var(--color-primary-hover)}
+.btn-p:active{background:var(--color-primary-active)}
+.btn-s{background:transparent;color:var(--color-primary);border:1px solid var(--color-primary)}
+.btn-s:hover{background:var(--color-primary-highlight)}
+.btn-g{background:transparent;color:var(--color-text-muted)}
+.btn-g:hover{background:oklch(from var(--color-text) l c h/.06);color:var(--color-text)}
+.btn-lg{padding:var(--sp3) var(--sp6);font-size:var(--tx-base)}
+
+/* =====================================================
+   FEATURE LIST
+===================================================== */
+.feat{list-style:none;display:flex;flex-direction:column;gap:var(--sp2);margin-block:var(--sp2)}
+.feat li{display:flex;align-items:center;gap:var(--sp2);font-size:var(--tx-sm);color:var(--color-text-muted)}
+.feat li::before{content:'';display:block;width:6px;height:6px;border-radius:50%;
+  background:var(--color-primary);flex-shrink:0}
+
+/* =====================================================
+   HOME HERO
+===================================================== */
+.home-hero{
+  padding-block:clamp(var(--sp16),8vw,var(--sp20)) clamp(var(--sp12),5vw,var(--sp16));
+  border-bottom:1px solid oklch(from var(--color-text) l c h/.07);
+}
+.home-eyebrow{display:flex;align-items:center;gap:var(--sp2);font-size:var(--tx-xs);
+  font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--color-primary);margin-bottom:var(--sp5)}
+.home-dot{width:6px;height:6px;border-radius:50%;background:var(--color-primary)}
+.home-hero h1{font-size:var(--tx-2xl);font-weight:400;line-height:1.05;
+  letter-spacing:-.02em;margin-bottom:var(--sp5);max-width:14ch}
+.home-hero h1 em{font-style:italic;color:var(--color-primary)}
+.home-hero>p{font-size:var(--tx-base);color:var(--color-text-muted);
+  max-width:48ch;line-height:1.75;margin-bottom:var(--sp8)}
+.ctas{display:flex;flex-wrap:wrap;gap:var(--sp3)}
+
+/* =====================================================
+   COMING STRIP
+===================================================== */
+.coming-strip{
+  background:var(--color-surface);
+  border:1px solid oklch(from var(--color-text) l c h/.08);
+  border-radius:var(--radius-xl);
+  padding:var(--sp5) var(--sp8);
+  margin-bottom:var(--sp16);
+  display:flex;align-items:center;gap:var(--sp4);flex-wrap:wrap;
+}
+.strip-label{font-size:var(--tx-xs);font-weight:600;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--color-text-faint);white-space:nowrap}
+.chips{display:flex;gap:var(--sp2);flex-wrap:wrap}
+.chip{font-size:var(--tx-xs);padding:var(--sp1) var(--sp3);
+  background:var(--color-surface-offset-2);color:var(--color-text-muted);
+  border-radius:var(--radius-full);border:1px solid oklch(from var(--color-text) l c h/.08)}
+
+/* =====================================================
+   UNIT GRID
+===================================================== */
+.unit-grid{display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(min(260px,100%),1fr));
+  gap:var(--sp5);padding-block:var(--sp10)}
+.unit-card{
+  background:var(--color-surface);
+  border:1px solid oklch(from var(--color-text) l c h/.08);
+  border-radius:var(--radius-xl);padding:var(--sp5);
+  display:flex;flex-direction:column;gap:var(--sp3);box-shadow:var(--shadow-sm);
+}
+.unit-card.click{cursor:pointer;transition:box-shadow var(--t),transform var(--t)}
+.unit-card.click:hover{box-shadow:var(--shadow-md);transform:translateY(-2px)}
+.unit-card.off{opacity:.5}
+.unit-num{font-size:var(--tx-xs);font-weight:600;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--color-text-faint)}
+.unit-title{font-family:var(--font-d);font-size:var(--tx-lg);font-weight:400;
+  color:var(--color-text);line-height:1.2}
+.unit-desc{font-size:var(--tx-sm);color:var(--color-text-muted);line-height:1.6;flex:1}
+.unit-ft{display:flex;align-items:center;justify-content:space-between;margin-top:var(--sp2)}
+.badge{font-size:var(--tx-xs);font-weight:600;letter-spacing:.05em;text-transform:uppercase;
+  padding:var(--sp1) var(--sp2);border-radius:var(--radius-sm)}
+.badge-ext{background:var(--color-warning-highlight);color:var(--color-warning)}
+.badge-int{background:var(--color-surface-offset-2);color:var(--color-text-muted)}
+
+/* =====================================================
+   COURSE META
+===================================================== */
+.meta-tags{display:flex;gap:var(--sp3);flex-wrap:wrap;margin-top:var(--sp4)}
+.meta-tag{font-size:var(--tx-xs);font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+  padding:var(--sp1) var(--sp3);border-radius:var(--radius-full);
+  background:var(--color-surface-offset-2);color:var(--color-text-muted);
+  border:1px solid oklch(from var(--color-text) l c h/.08)}
+
+/* =====================================================
+   STEPS
+===================================================== */
+.steps{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(240px,100%),1fr));
+  gap:var(--sp5);margin-block:var(--sp8)}
+.step{
+  background:var(--color-surface);
+  border:1px solid oklch(from var(--color-text) l c h/.08);
+  border-radius:var(--radius-xl);padding:var(--sp5);
+}
+.step-n{font-size:var(--tx-xl);font-family:var(--font-d);color:var(--color-primary);
+  margin-bottom:var(--sp3);opacity:.6}
+.step h4{font-family:var(--font-d);font-size:var(--tx-lg);font-weight:400;margin-bottom:var(--sp2)}
+.step p{font-size:var(--tx-sm);color:var(--color-text-muted);line-height:1.65;max-width:100%}
+
+/* =====================================================
+   IFRAME WRAPPER
+   Full width on desktop, sensible on mobile
+===================================================== */
+.iframe-wrap{
+  position:relative;
+  margin-block:var(--sp8);
+  /* stretch to container edge then pull 24px in from viewport on very wide screens */
+}
+.iframe-toolbar{
+  display:flex;
+  justify-content:flex-end;
+  margin-bottom:var(--sp3);
+}
+.iframe-wrap.full-screen .iframe-toolbar{
+  display:none;
+}
+.iframe-wrap iframe{
+  width:100%;
+  /* tall enough to feel like a real app on every screen */
+  height:clamp(600px, 90vh, 1100px);
+  border:1px solid oklch(from var(--color-text) l c h/.08);
+  border-radius:var(--radius-xl);
+  background:var(--color-surface);
+  box-shadow:var(--shadow-lg);
+  display:block;
+}
+@media(max-width:640px){
+  .iframe-wrap iframe{
+    height:85dvh;
+    min-height:480px;
+    border-radius:var(--radius-lg);
+  }
+}
+.iframe-wrap.full-screen{
+  position:fixed;
+  top:56px;
+  left:0;
+  right:0;
+  z-index:9998;
+  width:100vw;
+  height:calc(100vh - 56px);
+  max-width:none;
+  margin:0;
+  padding:1.25rem;
+  background:var(--color-bg);
+}
+.iframe-wrap.full-screen iframe{
+  height:100%;
+  border-radius:var(--radius-xl);
+}
+body.iframe-fullscreen-mode{
+  overflow:hidden;
+}
+body.iframe-fullscreen-mode .nav{
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  z-index:10001;
+}
+body.iframe-fullscreen-mode .page.active > *:not(.cf){
+  display:none !important;
+}
+body.iframe-fullscreen-mode .page:not(.active){
+  display:none !important;
+}
+.iframe-exit{
+  display:none;
+}
+body.iframe-fullscreen-mode .iframe-exit{
+  display:flex;
+}
+@media print{
+  .iframe-wrap{display:none}
+}
+
+/* =====================================================
+   FOOTER
+===================================================== */
+footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-block:var(--sp8);margin-top:var(--sp16)}
+.footer-inner{max-width:var(--w-wide);margin-inline:auto;padding-inline:var(--sp6);
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--sp4)}
+.footer-brand{font-family:var(--font-d);font-size:var(--tx-base);color:var(--color-text-muted)}
+.footer-copy{font-size:var(--tx-xs);color:var(--color-text-faint)}
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+@media(max-width:640px){
+  .nav-links{display:none}
+  .c,.cd,.cf{padding-inline:var(--sp4)}
+  .nav-inner{padding-inline:var(--sp4)}
+  .home-hero h1{font-size:clamp(2rem,10vw,3.5rem)}
+  .hero h1{font-size:clamp(1.6rem,7vw,2.5rem)}
+  .grid-2{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     NAVBAR
+============================================================ -->
+<nav class="nav" role="navigation" aria-label="Main navigation">
+  <div class="nav-inner">
+    <a href="#/" class="nav-logo" onclick="go('/')">
+      <img src="logo.png" alt="RA10" width="28" height="28">
+      <span class="nav-logo-text">RA10</span>
+    </a>
+    <div class="nav-links">
+      <button class="nav-link" data-nav="revision" onclick="go('/revision')">Revision</button>
+      <button class="nav-link" data-nav="tools"    onclick="go('/tools')">Tools</button>
+    </div>
+    <div class="nav-actions">
+      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+      <button class="btn btn-s iframe-exit" type="button" onclick="exitIframeFullscreen()">Exit full screen</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ============================================================
+     HOME  /
+============================================================ -->
+<div class="page active" id="p-home">
+  <div class="c">
+    <div class="home-hero">
+      <div class="home-eyebrow"><span class="home-dot"></span>RA10 · Digital Platform</div>
+      <h1>Everything you need, <em>in one place</em></h1>
+      <p>Revision tools, utilities and apps — all built around what you actually use. Start with BTEC Level 3 IT revision or the WhatsApp Chat Exporter.</p>
+      <div class="ctas">
+        <button class="btn btn-p btn-lg" onclick="go('/revision')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+          Go to Revision
+        </button>
+        <button class="btn btn-s btn-lg" onclick="go('/tools')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+          Go to Tools
+        </button>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-label">Featured Apps</div>
+      <h2 class="sec-title">What's live right now</h2>
+      <div class="grid grid-2">
+        <div class="card click" onclick="go('/revision/btec/level-3/IT-AAQ/unit-1')">
+          <div class="card-tag">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+            Revision · BTEC Level 3 IT
+          </div>
+          <h3>Unit 1 – Information Technology Systems</h3>
+          <p>Exam-style questions across all six learning aims (A–F), flashcards, quizzes, AI marker and a mock paper builder that mirrors a real AAQ paper.</p>
+          <ul class="feat">
+            <li>600+ spec-aligned questions with full mark schemes</li>
+            <li>Mock paper builder with Pearson-style formatting</li>
+            <li>Spec coverage explorer (A1.1 → F2.1 hierarchy)</li>
+          </ul>
+          <div class="card-ft">
+            <span class="pill pill-live">Live</span>
+            <button class="btn btn-p" onclick="event.stopPropagation();go('/revision/btec/level-3/IT-AAQ/unit-1')">Open tool →</button>
+          </div>
+        </div>
+        <div class="card click" onclick="go('/tools/whatsapp-exporter')">
+          <div class="card-tag">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            Tool · Chat Utilities
+          </div>
+          <h3>WhatsApp Chat Exporter</h3>
+          <p>Turn WhatsApp exports into clean, printable HTML tables or formatted chat layouts. Filter by date, search, then print or save as PDF.</p>
+          <ul class="feat">
+            <li>Chat view and table view modes</li>
+            <li>Date range filtering and keyword search</li>
+            <li>Print and PDF download — nothing leaves your browser</li>
+          </ul>
+          <div class="card-ft">
+            <span class="pill pill-live">Live</span>
+            <button class="btn btn-p" onclick="event.stopPropagation();go('/tools/whatsapp-exporter')">Open tool →</button>
+          </div>
+        </div>
+      </div>
+      <div class="coming-strip">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        <span class="strip-label">Coming soon</span>
+        <div class="chips">
+          <span class="chip">Unit 2 Revision</span>
+          <span class="chip">Unit 3 Revision</span>
+          <span class="chip">Unit 4 Revision</span>
+          <span class="chip">PDF Combiner</span>
+          <span class="chip">File Converter</span>
+          <span class="chip">More tools…</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     REVISION HUB  /revision
+============================================================ -->
+<div class="page" id="p-revision">
+  <div class="cd">
+    <nav class="bc">
+      <button class="bc-item" onclick="go('/')">Home</button>
+      <span class="bc-sep">›</span>
+      <span class="bc-item cur">Revision</span>
+    </nav>
+    <div class="hero">
+      <div class="hero-label">Revision Hub</div>
+      <h1>Revision</h1>
+      <p>All your course revision tools in one place. Pick a qualification below to get started.</p>
+    </div>
+    <div class="sec">
+      <div class="sec-label">Qualifications</div>
+      <div class="grid">
+        <div class="card click" onclick="go('/revision/btec')">
+          <div class="card-tag">BTEC</div>
+          <h3>BTEC Qualifications</h3>
+          <p>Applied general qualifications by Pearson. Revision tools aligned to AAQ specifications.</p>
+          <div class="card-ft">
+            <span class="pill pill-ok">1 course available</span>
+            <button class="btn btn-g" onclick="event.stopPropagation();go('/revision/btec')">Browse →</button>
+          </div>
+        </div>
+        <div class="card off">
+          <div class="card-tag">A-Level</div>
+          <h3>A-Level Qualifications</h3>
+          <p>AQA, Edexcel and OCR A-Level revision tools. Coming soon.</p>
+          <div class="card-ft"><span class="pill pill-soon">Coming soon</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     BTEC HUB  /revision/btec
+============================================================ -->
+<div class="page" id="p-btec">
+  <div class="cd">
+    <nav class="bc">
+      <button class="bc-item" onclick="go('/')">Home</button>
+      <span class="bc-sep">›</span>
+      <button class="bc-item" onclick="go('/revision')">Revision</button>
+      <span class="bc-sep">›</span>
+      <span class="bc-item cur">BTEC</span>
+    </nav>
+    <div class="hero">
+      <div class="hero-label">BTEC</div>
+      <h1>BTEC Qualifications</h1>
+      <p>Pearson BTEC revision tools, aligned to the latest AAQ specifications.</p>
+    </div>
+    <div class="sec">
+      <div class="sec-label">Levels</div>
+      <div class="grid">
+        <div class="card click" onclick="go('/revision/btec/level-3')">
+          <div class="card-tag">Level 3</div>
+          <h3>BTEC Level 3 (AAQ)</h3>
+          <p>Applied qualifications for Sixth Form and college. IT available now.</p>
+          <div class="card-ft">
+            <span class="pill pill-ok">Available</span>
+            <button class="btn btn-g" onclick="event.stopPropagation();go('/revision/btec/level-3')">Browse →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     BTEC LEVEL 3  /revision/btec/level-3
+============================================================ -->
+<div class="page" id="p-btec-l3">
+  <div class="cd">
+    <nav class="bc">
+      <button class="bc-item" onclick="go('/')">Home</button>
+      <span class="bc-sep">›</span>
+      <button class="bc-item" onclick="go('/revision')">Revision</button>
+      <span class="bc-sep">›</span>
+      <button class="bc-item" onclick="go('/revision/btec')">BTEC</button>
+      <span class="bc-sep">›</span>
+      <span class="bc-item cur">Level 3</span>
+    </nav>
+    <div class="hero">
+      <div class="hero-label">BTEC Level 3</div>
+      <h1>BTEC Level 3 (AAQ)</h1>
+      <p>Pearson BTEC Level 3 Applied General Qualifications — AAQ spec revision tools.</p>
+    </div>
+    <div class="sec">
+      <div class="sec-label">Subjects</div>
+      <div class="grid">
+        <div class="card click" onclick="go('/revision/btec/level-3/IT-AAQ')">
+          <div class="card-tag">IT</div>
+          <h3>Information Technology</h3>
+          <p>Unit 1 revision live now. Units 2–4 coming soon.</p>
+          <div class="card-ft">
+            <span class="pill pill-ok">Unit 1 live</span>
+            <button class="btn btn-g" onclick="event.stopPropagation();go('/revision/btec/level-3/IT-AAQ')">Open →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     IT AAQ COURSE  /revision/btec/level-3/IT-AAQ
+============================================================ -->
+<div class="page" id="p-it-aaq">
+  <div class="cd">
+    <nav class="bc">
+      <button class="bc-item" onclick="go('/')">Home</button>
+      <span class="bc-sep">›</span>
+      <button class="bc-item" onclick="go('/revision')">Revision</button>
+      <span class="bc-sep">›</span>
+      <button class="bc-item" onclick="go('/revision/btec')">BTEC</button>
+      <span class="bc-sep">›</span>
+      <button class="bc-item" onclick="go('/revision/btec/level-3')">Level 3</button>
+      <span class="bc-sep">›</span>
+      <span class="bc-item cur">IT (AAQ)</span>
+    </nav>
+    <div class="hero">
+      <div class="hero-label">BTEC Level 3 · IT AAQ</div>
+      <h1>Information Technology</h1>
+      <p>Course revision hub for the BTEC Level 3 IT Extended Certificate (AAQ). Select a unit below to start revising.</p>
+      <div class="meta-tags">
+        <span class="meta-tag">Pearson AAQ</span>
+        <span class="meta-tag">Issue 5 · Nov 2025</span>
+        <span class="meta-tag">4 Units · 360 GLH</span>
+        <span class="meta-tag">Extended Certificate</span>
+      </div>
+    </div>
+    <div class="sec">
+      <div class="sec-label">Units</div>
+      <div class="unit-grid">
+
+        <!-- Unit 1 LIVE -->
+        <div class="unit-card click" onclick="go('/revision/btec/level-3/IT-AAQ/unit-1')">
+          <div class="unit-num">Unit 01 · 120 GLH</div>
+          <div class="unit-title">Information Technology Systems</div>
+          <div class="unit-desc">Exam questions, flashcards, quizzes, AI marker and mock paper builder. Covers Learning Aims A–F with full spec alignment.</div>
+          <div class="unit-ft">
+            <div style="display:flex;gap:var(--sp2);align-items:center">
+              <span class="badge badge-ext">External</span>
+              <span class="pill pill-live">Live</span>
+            </div>
+            <button class="btn btn-p" onclick="event.stopPropagation();go('/revision/btec/level-3/IT-AAQ/unit-1')">Open →</button>
+          </div>
+        </div>
+
+        <!-- Unit 2 -->
+        <div class="unit-card off">
+          <div class="unit-num">Unit 02 · 120 GLH</div>
+          <div class="unit-title">Cyber Security and Incident Management</div>
+          <div class="unit-desc">Cyber threats, system vulnerabilities, protection methods and forensic incident response. Revision coming soon.</div>
+          <div class="unit-ft">
+            <div style="display:flex;gap:var(--sp2);align-items:center">
+              <span class="badge badge-ext">External</span>
+              <span class="pill pill-soon">Coming soon</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Unit 3 -->
+        <div class="unit-card off">
+          <div class="unit-num">Unit 03 · 60 GLH</div>
+          <div class="unit-title">Website Development</div>
+          <div class="unit-desc">Principles, design, development and testing of websites using HTML, CSS and JavaScript to meet a client brief. Revision coming soon.</div>
+          <div class="unit-ft">
+            <div style="display:flex;gap:var(--sp2);align-items:center">
+              <span class="badge badge-int">Internal</span>
+              <span class="pill pill-soon">Coming soon</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Unit 4 -->
+        <div class="unit-card off">
+          <div class="unit-num">Unit 04 · 60 GLH</div>
+          <div class="unit-title">Relational Database Development</div>
+          <div class="unit-desc">Database design, normalisation, SQL and DBMS tools to design and develop a relational database solution. Revision coming soon.</div>
+          <div class="unit-ft">
+            <div style="display:flex;gap:var(--sp2);align-items:center">
+              <span class="badge badge-int">Internal</span>
+              <span class="pill pill-soon">Coming soon</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     UNIT 1  /revision/btec/level-3/IT-AAQ/unit-1
+     iframe src must match your folder: ra10/revision/btec/level-3/IT-AAQ/unit-1/index.html
+============================================================ -->
+<div class="page" id="p-unit1">
+  <div class="cd">
+    <nav class="bc">
+      <button class="bc-item" onclick="go('/')">Home</button>
+      <span class="bc-sep">›</span>
+      <button class="bc-item" onclick="go('/revision')">Revision</button>
+      <span class="bc-sep">›</span>
+      <button class="bc-item" onclick="go('/revision/btec')">BTEC</button>
+      <span class="bc-sep">›</span>
+      <button class="bc-item" onclick="go('/revision/btec/level-3')">Level 3</button>
+      <span class="bc-sep">›</span>
+      <button class="bc-item" onclick="go('/revision/btec/level-3/IT-AAQ')">IT (AAQ)</button>
+      <span class="bc-sep">›</span>
+      <span class="bc-item cur">Unit 1</span>
+    </nav>
+    <div class="hero">
+      <div class="hero-label">Unit 01 · External · 120 GLH</div>
+      <h1>Information Technology Systems</h1>
+      <p>Exam-style questions, practice mode, quizzes, flashcards, AI marker and a full mock paper builder aligned to the Pearson AAQ spec (Issue 5, Nov 2025).</p>
+    </div>
+  </div>
+  <!-- Full-width iframe — no max-width constraint -->
+  <div class="cf">
+    <div class="iframe-wrap">
+      <div class="iframe-toolbar">
+        <button class="btn btn-s" type="button" data-iframe-fullscreen>Full screen</button>
+      </div>
+      <iframe
+        src="revision/btec/level-3/IT-AAQ/unit-1/index.html"
+        title="Unit 1 – Information Technology Systems"
+        loading="lazy"
+        allowfullscreen
+      ></iframe>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     TOOLS HUB  /tools
+============================================================ -->
+<div class="page" id="p-tools">
+  <div class="cd">
+    <nav class="bc">
+      <button class="bc-item" onclick="go('/')">Home</button>
+      <span class="bc-sep">›</span>
+      <span class="bc-item cur">Tools</span>
+    </nav>
+    <div class="hero">
+      <div class="hero-label">Tools Hub</div>
+      <h1>Tools</h1>
+      <p>Utilities that make everyday tasks easier — chat exports, converters and more.</p>
+    </div>
+    <div class="sec">
+      <div class="sec-label">Available tools</div>
+      <div class="grid grid-2">
+        <div class="card click" onclick="go('/tools/whatsapp-exporter')">
+          <div class="card-tag">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            Chat Tools
+          </div>
+          <h3>WhatsApp Chat Exporter</h3>
+          <p>Upload a WhatsApp <code style="background:var(--color-surface-offset);padding:1px 4px;border-radius:3px">.txt</code> export and convert it into a clean, printable layout — chat view or structured table. Filter by date and export as PDF.</p>
+          <ul class="feat">
+            <li>Chat view and table view</li>
+            <li>Date range filtering and keyword search</li>
+            <li>Print and PDF download</li>
+          </ul>
+          <div class="card-ft">
+            <span class="pill pill-live">Live</span>
+            <button class="btn btn-p" onclick="event.stopPropagation();go('/tools/whatsapp-exporter')">Open tool →</button>
+          </div>
+        </div>
+        <div class="card off">
+          <div class="card-tag">File Tools</div>
+          <h3>PDF Combiner</h3>
+          <p>Merge multiple PDF files into one document. Coming soon.</p>
+          <div class="card-ft"><span class="pill pill-soon">Coming soon</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     WHATSAPP EXPORTER  /tools/whatsapp-exporter
+     iframe src: ra10/tools/whatsapp-exporter/index.html
+============================================================ -->
+<div class="page" id="p-whatsapp">
+  <div class="cd">
+    <nav class="bc">
+      <button class="bc-item" onclick="go('/')">Home</button>
+      <span class="bc-sep">›</span>
+      <button class="bc-item" onclick="go('/tools')">Tools</button>
+      <span class="bc-sep">›</span>
+      <span class="bc-item cur">WhatsApp Exporter</span>
+    </nav>
+    <div class="hero">
+      <div class="hero-label">Tool · Chat Utilities</div>
+      <h1>WhatsApp Chat Exporter</h1>
+      <p>Turn your WhatsApp chat exports into clean, printable chat views or structured tables. Works entirely in your browser — nothing is uploaded or stored.</p>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-n">01</div>
+        <h4>Export from WhatsApp</h4>
+        <p><strong>iOS:</strong> Open chat → tap name → scroll down → Export Chat → Without Media.<br><br><strong>Android:</strong> Open chat → ⋮ → More → Export Chat → Without Media.</p>
+      </div>
+      <div class="step">
+        <div class="step-n">02</div>
+        <h4>Upload the file</h4>
+        <p>Drag the <code>.txt</code> file into the tool below, or click Browse. The file is processed entirely in your browser.</p>
+      </div>
+      <div class="step">
+        <div class="step-n">03</div>
+        <h4>Export your way</h4>
+        <p>Switch between Chat and Table view, filter by date or search messages, then hit Print or Download PDF.</p>
+      </div>
+    </div>
+  </div>
+  <!-- Full-width iframe -->
+  <div class="cf">
+    <div class="iframe-wrap">
+      <div class="iframe-toolbar">
+        <button class="btn btn-s" type="button" data-iframe-fullscreen>Full screen</button>
+      </div>
+      <iframe
+        src="tools/whatsapp-exporter/index.html"
+        title="WhatsApp Chat Exporter"
+        loading="lazy"
+        allowfullscreen
+      ></iframe>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     FOOTER
+============================================================ -->
+<footer>
+  <div class="footer-inner">
+    <span class="footer-brand">RA10</span>
+    <span class="footer-copy">Built for revision, tools and more.</span>
+  </div>
+</footer>
+
+<!-- ============================================================
+     SCRIPTS
+============================================================ -->
+<script>
+/* ---------- THEME (light default) ---------- */
+(function(){
+  const btn = document.getElementById('theme-toggle');
+  const root = document.documentElement;
+  root.setAttribute('data-theme','light');
+  icon('light');
+  btn.addEventListener('click',()=>{
+    const next = root.getAttribute('data-theme')==='dark'?'light':'dark';
+    root.setAttribute('data-theme',next);
+    icon(next);
+    btn.setAttribute('aria-label', next==='dark'?'Switch to light mode':'Switch to dark mode');
+  });
+  function icon(t){
+    btn.innerHTML = t==='dark'
+      ? '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>'
+      : '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+  }
+})();
+
+/* ---------- ROUTER ---------- */
+const ROUTES = {
+  '/':                                    'p-home',
+  '/revision':                            'p-revision',
+  '/revision/btec':                       'p-btec',
+  '/revision/btec/level-3':              'p-btec-l3',
+  '/revision/btec/level-3/IT-AAQ':       'p-it-aaq',
+  '/revision/btec/level-3/IT-AAQ/unit-1':'p-unit1',
+  '/tools':                               'p-tools',
+  '/tools/whatsapp-exporter':            'p-whatsapp',
+};
+const NAV_MAP = {'/revision':'revision','/tools':'tools'};
+
+function go(path){
+  document.querySelectorAll('.iframe-wrap.full-screen').forEach(w=>w.classList.remove('full-screen'));
+  document.body.classList.remove('iframe-fullscreen-mode');
+  location.hash = path;
+}
+
+(function(){
+  document.querySelectorAll('[data-iframe-fullscreen]').forEach(button=>{
+    const wrapper = button.closest('.iframe-wrap');
+    if(!wrapper) return;
+    button.addEventListener('click',()=>{
+      wrapper.classList.add('full-screen');
+      document.body.classList.add('iframe-fullscreen-mode');
+    });
+  });
+})();
+
+function exitIframeFullscreen(){
+  document.querySelectorAll('.iframe-wrap.full-screen').forEach(w=>w.classList.remove('full-screen'));
+  document.body.classList.remove('iframe-fullscreen-mode');
+}
+
+function route(){
+  const path = location.hash.replace('#','') || '/';
+  const id   = ROUTES[path] || 'p-home';
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  const el = document.getElementById(id);
+  if(el){ el.classList.add('active'); window.scrollTo(0,0); }
+  document.querySelectorAll('.nav-link').forEach(l=>l.classList.remove('active'));
+  for(const [prefix,key] of Object.entries(NAV_MAP)){
+    if(path.startsWith(prefix)){
+      const nl = document.querySelector(`[data-nav="${key}"]`);
+      if(nl) nl.classList.add('active');
+      break;
+    }
+  }
+}
+
+window.addEventListener('hashchange', route);
+route();
+</script>
+</body>
+</html>

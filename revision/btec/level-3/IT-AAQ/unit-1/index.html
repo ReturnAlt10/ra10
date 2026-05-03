@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BTEC IT Unit 1 — Question Bank & Mock Paper Builder</title>
+<link rel="preconnect" href="https://api.fontshare.com">
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@500,700,900,400&f[]=jetbrains-mono@500&display=swap">
+<link rel="stylesheet" href="css/style.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%2300594E'/%3E%3Ctext x='16' y='22' text-anchor='middle' font-family='sans-serif' font-weight='900' font-size='18' fill='%23E8F1EE'%3EU1%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true">
+      <rect width="32" height="32" rx="6" fill="var(--accent)"/>
+      <text x="16" y="22" text-anchor="middle" font-family="Satoshi, sans-serif" font-weight="900" font-size="14" fill="white">U1</text>
+    </svg>
+    <div>
+      <h1>BTEC IT Unit 1</h1>
+      <p>Question Bank &amp; Mock Paper Builder · AAQ 2025 Spec</p>
+    </div>
+  </div>
+  <nav class="tabs">
+    <button class="tab active" data-tab="dashboard">Dashboard</button>
+    <button class="tab" data-tab="browse">Browse Questions</button>
+    <button class="tab" data-tab="mock">Mock Paper</button>
+    <button class="tab" data-tab="practice">Practice Mode</button>
+    <button class="tab" data-tab="quiz">Quiz</button>
+    <button class="tab" data-tab="flash">Flashcards</button>
+    <button class="tab" data-tab="spec">Spec Coverage</button>
+  </nav>
+</header>
+
+<main id="app">
+
+  <!-- DASHBOARD -->
+  <section id="view-dashboard" class="view active">
+    <div class="hero">
+      <div>
+        <p class="eyebrow">Pearson Level 3 Alternative Academic Qualification</p>
+        <h2>Unit 1 with 600+ Exam Style Questions</h2>
+        <p class="lede">100 exam-style questions per learning aim, written in the same format as the new AAQ 2025 specification (Issue 5, Nov 2025).</p>
+      </div>
+      <div class="stats" id="dashboard-stats"></div>
+    </div>
+
+    <div class="section-block">
+      <div class="section-block-head">
+        <span class="sb-eyebrow">01 · Sit a paper</span>
+        <h3>Exam-style practice</h3>
+        <p>Work through full exam questions, write timed answers, or print a paper to attempt by hand.</p>
+      </div>
+      <div class="grid-3">
+        <article class="card primary-card">
+          <span class="card-tag">Recommended</span>
+          <h3>Build a mock paper</h3>
+          <p>Randomised 90-, 45- or 30-mark paper with Pearson-style answer lines, candidate header, and one-click print.</p>
+          <button class="btn primary" data-goto="mock">Build mock paper</button>
+        </article>
+        <article class="card">
+          <h3>Practice by topic</h3>
+          <p>Single questions filtered by aim, command verb, or marks. Self-mark or get auto-marked feedback.</p>
+          <button class="btn" data-goto="practice">Start practising</button>
+        </article>
+        <article class="card">
+          <h3>Browse all questions</h3>
+          <p>Read every question and full mark scheme. Search and filter all 600 items.</p>
+          <button class="btn" data-goto="browse">Browse questions</button>
+        </article>
+      </div>
+    </div>
+
+    <div class="section-block">
+      <div class="section-block-head">
+        <span class="sb-eyebrow">02 · Quick revision</span>
+        <h3>Memorise key facts</h3>
+        <p>Short, focused activities for definitions, acronyms, and recall — ideal between exam-style sessions.</p>
+      </div>
+      <div class="grid-2">
+        <article class="card">
+          <h3>Quick-fire quiz</h3>
+          <p>120 multiple-choice and true/false questions with explanations and per-aim scoring.</p>
+          <button class="btn" data-goto="quiz">Start quiz</button>
+        </article>
+        <article class="card">
+          <h3>Flashcards</h3>
+          <p>150 flippable cards covering definitions, acronyms, examples, and legislation. Track known vs still-learning.</p>
+          <button class="btn" data-goto="flash">Open flashcards</button>
+        </article>
+      </div>
+    </div>
+
+    <div class="section-block">
+      <div class="section-block-head">
+        <span class="sb-eyebrow">03 · Specification</span>
+        <h3>Coverage by Learning Aim</h3>
+        <p>Every Aim and sub-topic in the AAQ 2025 spec, with question counts. Click any card to browse questions for that aim.</p>
+        <p><a href="https://qualifications.pearson.com/content/dam/pdf/btec-aaqs/information-technology/2025/specification-and-sample-assessments/btec-level-3-national-ext-cert-in-it-aaq-spec.pdf" target="_blank" rel="noopener noreferrer">Open the official AAQ 2025 specification PDF</a></p>
+      </div>
+      <div class="aim-grid" id="aim-grid"></div>
+      <div style="text-align:center;margin-top:18px;">
+        <button class="btn" data-goto="spec">View full spec breakdown</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- BROWSE -->
+  <section id="view-browse" class="view">
+    <header class="section-head">
+      <h2>Browse questions</h2>
+      <p>Search and filter all 600 questions. Click a question to expand the mark scheme.</p>
+    </header>
+    <div class="filters">
+      <input type="search" id="search" placeholder="Search question, scenario or topic...">
+      <select id="filter-aim"><option value="">All learning aims</option></select>
+      <select id="filter-marks"><option value="">All marks</option></select>
+      <select id="filter-verb"><option value="">All command verbs</option></select>
+      <button id="btn-clear" class="btn ghost">Clear</button>
+      <span id="result-count" class="muted"></span>
+    </div>
+    <div id="question-list" class="qlist"></div>
+  </section>
+
+  <!-- MOCK PAPER -->
+  <section id="view-mock" class="view">
+    <header class="section-head">
+      <h2>Mock paper builder</h2>
+      <p>Generate a random mock paper using real exam structure. Add a candidate header, choose how many answer lines to print, then attempt the paper or hand it to a teacher.</p>
+    </header>
+    <div class="mock-controls">
+      <div class="mock-row">
+        <div class="control">
+          <label>Total marks</label>
+          <select id="mock-total"><option value="90" selected>90 (full paper)</option><option value="45">45 (half paper)</option><option value="30">30 (quick test)</option></select>
+        </div>
+        <div class="control">
+          <label>Focus aims</label>
+          <div id="mock-aims" class="chip-row"></div>
+        </div>
+        <div class="control">
+          <label>Seed (optional)</label>
+          <input type="text" id="mock-seed" placeholder="e.g. mock-1">
+        </div>
+      </div>
+      <div class="mock-row">
+        <div class="control wide">
+          <label>Question styles <span class="label-hint">(tap to toggle — at least one must stay on)</span></label>
+          <div id="mock-styles" class="chip-row"></div>
+        </div>
+      </div>
+      <details class="mock-options" open>
+        <summary>Paper header &amp; print options</summary>
+        <div class="mock-row">
+          <div class="control checkbox">
+            <label><input type="checkbox" id="opt-header-name" checked> Name line</label>
+          </div>
+          <div class="control checkbox">
+            <label><input type="checkbox" id="opt-header-class"> Class line</label>
+          </div>
+          <div class="control checkbox">
+            <label><input type="checkbox" id="opt-header-date" checked> Date line</label>
+          </div>
+          <div class="control checkbox">
+            <label><input type="checkbox" id="opt-header-centre"> Centre / candidate number</label>
+          </div>
+          <div class="control checkbox">
+            <label><input type="checkbox" id="opt-header-teacher"> Teacher line</label>
+          </div>
+        </div>
+        <div class="mock-row">
+          <div class="control">
+            <label>Custom header text (optional)</label>
+            <input type="text" id="opt-header-custom" placeholder="e.g. Year 13 Mock 2 — Wycombe High School">
+          </div>
+          <div class="control">
+            <label>Answer lines</label>
+            <select id="opt-line-density">
+              <option value="normal" selected>Normal (Pearson-style)</option>
+              <option value="extra">Extra (more space)</option>
+              <option value="compact">Compact (less paper)</option>
+              <option value="none">None</option>
+            </select>
+          </div>
+        </div>
+      </details>
+      <div class="mock-actions">
+        <button id="btn-generate" class="btn primary big">Generate mock paper</button>
+        <button id="btn-toggle-ms" class="btn ghost">Show mark scheme</button>
+        <button id="btn-print" class="btn">Print question paper</button>
+        <button id="btn-print-ms" class="btn">Print mark scheme only</button>
+      </div>
+    </div>
+    <div id="mock-paper" class="paper"></div>
+  </section>
+
+  <!-- PRACTICE -->
+  <section id="view-practice" class="view">
+    <header class="section-head">
+      <h2>Practice mode</h2>
+      <p>Work through questions one at a time, write your answer, then reveal the mark scheme to self-mark.</p>
+    </header>
+    <div class="practice-controls">
+      <select id="practice-aim"><option value="">All aims</option></select>
+      <select id="practice-marks"><option value="">All marks</option></select>
+      <button id="btn-practice-start" class="btn primary">Start session</button>
+      <span id="practice-progress" class="muted"></span>
+    </div>
+    <div id="practice-card"></div>
+  </section>
+
+  <!-- QUIZ -->
+  <section id="view-quiz" class="view">
+    <header class="section-head">
+      <h2>Quick-fire quiz</h2>
+      <p>Multiple-choice and true/false questions to test recall of facts, definitions, and terminology across the spec.</p>
+    </header>
+    <div class="quiz-controls">
+      <select id="quiz-aim"><option value="">All aims</option></select>
+      <select id="quiz-length">
+        <option value="10">10 questions</option>
+        <option value="20" selected>20 questions</option>
+        <option value="40">40 questions</option>
+        <option value="all">All questions</option>
+      </select>
+      <button id="btn-quiz-start" class="btn primary">Start quiz</button>
+      <span id="quiz-progress" class="muted"></span>
+    </div>
+    <div id="quiz-card"></div>
+    <div id="quiz-results" style="display:none;"></div>
+  </section>
+
+  <!-- FLASHCARDS -->
+  <section id="view-flash" class="view">
+    <header class="section-head">
+      <h2>Flashcards</h2>
+      <p>Tap or click any card to flip. Mark cards as known or still learning to track progress.</p>
+    </header>
+    <div class="flash-controls">
+      <select id="flash-aim"><option value="">All aims</option></select>
+      <button id="btn-flash-start" class="btn primary">Start session</button>
+      <button id="btn-flash-shuffle" class="btn">Shuffle</button>
+      <button id="btn-flash-reset" class="btn ghost">Reset progress</button>
+      <span id="flash-progress" class="muted"></span>
+    </div>
+    <div id="flash-stage"></div>
+  </section>
+
+  <!-- SPEC -->
+  <section id="view-spec" class="view">
+    <header class="section-head">
+      <h2>AAQ 2025 specification</h2>
+      <p>The full Unit 1 spec mapped to the question bank. Click any aim card to jump to its questions.</p>
+      <button class="btn" onclick="window.open('https://qualifications.pearson.com/content/dam/pdf/btec-aaqs/information-technology/2025/specification-and-sample-assessments/btec-level-3-national-ext-cert-in-it-aaq-spec.pdf', '_blank')">Open Official Spec PDF</button>
+    </header>
+    <div id="spec-jump" class="spec-jump"></div>
+    <div id="spec-content"></div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <p>BTEC Level 3 IT Unit 1 (Information Technology Systems) — Pearson AAQ 2025 (Issue 5, Nov 2025). This is a study tool — not an official Pearson product.</p>
+  <p>2026 RA10 (www.ra10.co.uk)</p>
+</footer>
+
+<script src="js/data-loader.js"></script>
+<script src="js/spec.js"></script>
+<script src="js/app.js"></script>
+
+<script data-pplx-inline-edit>
+(function () {
+  if (window === window.top) return;
+
+  const allowedParentOrigins = ["https://www.perplexity.ai","https://perplexity.ai","https://testing.perplexity.ai","https://staging.perplexity.ai","https://*.preview.i.perplexity.ai","http://localhost:3000","http://127.0.0.1:3000","http://localhost:5173","http://127.0.0.1:5173"];
+  const MAX_FONT_BYTES = 500 * 1024;
+  const MAX_TOTAL_FONT_BYTES = 2 * 1024 * 1024;
+  let scrollForwarding = false;
+  let scrollRaf = 0;
+  let trustedTopOrigin = null;
+
+  // Allow entries like "https://*.preview.i.perplexity.ai" — the wildcard
+  // matches a single DNS label (no dots), so "https://*.foo" cannot stretch
+  // across multiple labels.
+  function matchesAllowedOrigin(origin) {
+    if (!origin) return false;
+    for (const entry of allowedParentOrigins) {
+      if (!entry.includes("*")) {
+        if (entry === origin) return true;
+        continue;
+      }
+      const pattern = new RegExp(
+        "^" +
+          entry.replace(/[.+?^${}()|[\]\\]/g, "\\$&").replace(/\*/g, "[^.]+") +
+          "$",
+      );
+      if (pattern.test(origin)) return true;
+    }
+    return false;
+  }
+
+  // Trust decision: when the sender is same-origin-visible (event.origin is a
+  // real origin like https://www.perplexity.ai) we trust event.origin directly.
+  // When event.origin is "null" (opaque broker srcdoc), we fall back to the
+  // broker's stamped `parentOrigin` to identify the top window. The fallback
+  // is claim-only — we rely on the browser's native `targetOrigin` enforcement
+  // on the response path (see postToTrustedTop) to ensure replies can't be
+  // delivered to anyone but the actual top window of that claimed origin.
+  function getTrustedParentOrigin(event) {
+    const forwardedParentOrigin =
+      typeof event.data.parentOrigin === "string" ? event.data.parentOrigin : null;
+    const parentOrigin = event.origin === "null" ? forwardedParentOrigin : event.origin;
+    return matchesAllowedOrigin(parentOrigin) ? parentOrigin : null;
+  }
+
+  // All responses go to window.top with targetOrigin = the allowlisted origin.
+  // An attacker that iframes us inside their own null-origin broker can claim
+  // any parentOrigin they like, but the browser will drop the reply whenever
+  // the real top's origin doesn't match — so the screenshot never leaves.
+  function postToTrustedTop(message) {
+    if (!trustedTopOrigin) return;
+    try {
+      window.top.postMessage(message, trustedTopOrigin);
+    } catch (_error) {}
+  }
+
+  function inlineAll(original, clone) {
+    if (original.nodeType !== 1 || clone.nodeType !== 1) return;
+
+    try {
+      const computedStyle = getComputedStyle(original);
+      // cssText on a computed style is the serialized declaration in modern
+      // Chromium/Safari — a single read beats enumerating ~400 longhand
+      // properties. Firefox returns "" here, so we fall back on empty.
+      const serialized = computedStyle.cssText;
+      if (serialized) {
+        clone.style.cssText = serialized;
+      } else {
+        const parts = new Array(computedStyle.length);
+        for (let index = 0; index < computedStyle.length; index += 1) {
+          const property = computedStyle[index];
+          parts[index] = `${property}:${computedStyle.getPropertyValue(property)};`;
+        }
+        clone.style.cssText = parts.join("");
+      }
+    } catch (_error) {}
+
+    const originalChildren = original.children;
+    const clonedChildren = clone.children;
+    for (
+      let index = 0;
+      index < originalChildren.length && index < clonedChildren.length;
+      index += 1
+    ) {
+      inlineAll(originalChildren[index], clonedChildren[index]);
+    }
+  }
+
+  function extractFontUrl(srcValue) {
+    const matches = [
+      ...srcValue.matchAll(
+        /url\(["']?([^"')]+)["']?\)(?:\s*format\(["']?([^"')]+)["']?\))?/gi,
+      ),
+    ];
+    if (matches.length === 0) return null;
+    const woff2 = matches.find((m) => m[2] && m[2].toLowerCase().includes("woff2"));
+    if (woff2) return woff2[1];
+    const woff = matches.find((m) => m[2] && m[2].toLowerCase().includes("woff"));
+    if (woff) return woff[1];
+    return matches[0][1];
+  }
+
+  // Cache resolved font URL -> data URI across captures. Fonts on a page
+  // essentially never change, and a batch run emits multiple captures back to
+  // back — without this we'd refetch + re-base64 every time.
+  const fontDataUriCache = new Map();
+  const SRC_DECLARATION_RE = /src\s*:\s*[^;}]+/i;
+
+  async function fetchAsDataUri(url) {
+    if (fontDataUriCache.has(url)) return fontDataUriCache.get(url);
+    let dataUri = null;
+    try {
+      const response = await fetch(url, { mode: "cors", credentials: "omit" });
+      if (response.ok) {
+        const blob = await response.blob();
+        if (blob.size <= MAX_FONT_BYTES) {
+          dataUri = await new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onloadend = () =>
+              resolve(typeof reader.result === "string" ? reader.result : null);
+            reader.onerror = () => resolve(null);
+            reader.readAsDataURL(blob);
+          });
+        }
+      }
+    } catch (_error) {
+      dataUri = null;
+    }
+    fontDataUriCache.set(url, dataUri);
+    return dataUri;
+  }
+
+  function collectFontFaceRuleTexts() {
+    const rules = [];
+    for (const sheet of document.styleSheets) {
+      let cssRules;
+      try {
+        cssRules = sheet.cssRules;
+      } catch (_error) {
+        continue;
+      }
+      if (!cssRules) continue;
+      for (const rule of cssRules) {
+        const cssText = rule.cssText || "";
+        if (cssText.startsWith("@font-face")) rules.push(cssText);
+      }
+    }
+    return rules;
+  }
+
+  async function buildInlinedFontCss() {
+    const ruleTexts = collectFontFaceRuleTexts();
+    if (ruleTexts.length === 0) return null;
+
+    const resolved = ruleTexts.map((cssText) => {
+      if (!SRC_DECLARATION_RE.test(cssText)) return null;
+      const srcMatch = cssText.match(/src\s*:\s*([^;}]+)[;}]/i);
+      if (!srcMatch) return null;
+      const url = extractFontUrl(srcMatch[1]);
+      if (!url) return null;
+      try {
+        return { cssText, url: new URL(url, document.baseURI).href };
+      } catch (_error) {
+        return null;
+      }
+    });
+
+    const dataUris = await Promise.all(
+      resolved.map((entry) => (entry ? fetchAsDataUri(entry.url) : Promise.resolve(null))),
+    );
+
+    const inlined = [];
+    let totalBytes = 0;
+    for (let index = 0; index < resolved.length; index += 1) {
+      const entry = resolved[index];
+      const dataUri = dataUris[index];
+      if (!entry || !dataUri) continue;
+      const approxBytes = dataUri.length * 0.75;
+      if (totalBytes + approxBytes > MAX_TOTAL_FONT_BYTES) break;
+      totalBytes += approxBytes;
+      inlined.push(entry.cssText.replace(SRC_DECLARATION_RE, `src: url("${dataUri}")`));
+    }
+    return inlined.length > 0 ? inlined.join("\n") : null;
+  }
+
+  function stripExternal(clone) {
+    const images = clone.querySelectorAll("img");
+    for (let index = 0; index < images.length; index += 1) {
+      const src = images[index].getAttribute("src");
+      if (src && !src.startsWith("data:")) images[index].removeAttribute("src");
+    }
+
+    const elements = clone.querySelectorAll("*");
+    for (let index = 0; index < elements.length; index += 1) {
+      const style = elements[index].style.cssText;
+      if (style && style.includes("url(")) {
+        elements[index].style.cssText = style.replace(
+          /url\(["']?(?!data:)[^)"']*["']?\)/gi,
+          "none",
+        );
+      }
+    }
+  }
+
+  function emitScroll() {
+    scrollRaf = 0;
+    if (!scrollForwarding) return;
+    postToTrustedTop({
+      type: "INLINE_EDIT_SCROLL",
+      scrollX: window.scrollX,
+      scrollY: window.scrollY,
+    });
+  }
+
+  window.addEventListener(
+    "scroll",
+    function () {
+      if (!scrollForwarding || scrollRaf) return;
+      scrollRaf = requestAnimationFrame(emitScroll);
+    },
+    { passive: true, capture: true },
+  );
+
+  async function handleCaptureRequest(event) {
+    const requestId = event.data.requestId;
+    const scrollX = window.scrollX;
+    const scrollY = window.scrollY;
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+
+    function postResult(dataUrl) {
+      postToTrustedTop({
+        type: "INLINE_EDIT_SCREENSHOT_RESULT",
+        requestId,
+        dataUrl,
+        scrollX,
+        scrollY,
+      });
+    }
+
+    try {
+      // Wait for any pending web fonts to resolve so both inline metrics and
+      // the @font-face inlining below see the same loaded faces.
+      if (document.fonts && document.fonts.ready) {
+        try {
+          await document.fonts.ready;
+        } catch (_error) {}
+      }
+
+      const clone = document.documentElement.cloneNode(true);
+      inlineAll(document.documentElement, clone);
+
+      const removedNodes = clone.querySelectorAll("script,link[rel=\"stylesheet\"],style");
+      for (let index = 0; index < removedNodes.length; index += 1) {
+        removedNodes[index].remove();
+      }
+
+      stripExternal(clone);
+
+      // Re-embed web fonts as data-URI @font-face rules so the SVG rasterizer
+      // can resolve them — external font URLs aren't fetched during
+      // foreignObject rendering, which would otherwise force a fallback face
+      // and change text metrics.
+      const inlinedFontCss = await buildInlinedFontCss();
+      if (inlinedFontCss) {
+        const styleEl = document.createElement("style");
+        styleEl.textContent = inlinedFontCss;
+        const head = clone.querySelector("head");
+        if (head) head.appendChild(styleEl);
+        else clone.insertBefore(styleEl, clone.firstChild);
+      }
+
+      const html = new XMLSerializer().serializeToString(clone);
+      const svg =
+        `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}">` +
+        '<foreignObject width="100%" height="100%">' +
+        `<div xmlns="http://www.w3.org/1999/xhtml" style="width:${width}px;height:${height}px;overflow:hidden">` +
+        `<div style="transform:translate(-${scrollX}px,-${scrollY}px);transform-origin:top left">` +
+        html +
+        "</div></div></foreignObject></svg>";
+      const svgUrl = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+      const image = new Image();
+      image.onload = function () {
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        canvas.getContext("2d").drawImage(image, 0, 0);
+        postResult(canvas.toDataURL("image/png"));
+      };
+      image.onerror = function () {
+        postResult(null);
+      };
+      image.src = svgUrl;
+    } catch (_error) {
+      postResult(null);
+    }
+  }
+
+  window.addEventListener("message", function (event) {
+    if (!event.data) return;
+    // Only accept messages from the direct parent frame. Blocks sibling /
+    // unrelated-window postMessage senders that could otherwise reach us.
+    if (event.source !== window.parent) return;
+
+    const trustedParentOrigin = getTrustedParentOrigin(event);
+    if (!trustedParentOrigin) return;
+    trustedTopOrigin = trustedParentOrigin;
+
+    if (event.data.type === "INLINE_EDIT_SCROLL_START") {
+      scrollForwarding = true;
+      emitScroll();
+      return;
+    }
+
+    if (event.data.type === "INLINE_EDIT_SCROLL_STOP") {
+      scrollForwarding = false;
+      if (scrollRaf) cancelAnimationFrame(scrollRaf);
+      scrollRaf = 0;
+      return;
+    }
+
+    if (event.data.type !== "INLINE_EDIT_CAPTURE_REQUEST") return;
+
+    handleCaptureRequest(event);
+  });
+})();
+
+
+</script></body>
+</html>

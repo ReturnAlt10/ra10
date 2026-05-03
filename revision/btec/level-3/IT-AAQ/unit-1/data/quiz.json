@@ -1,0 +1,1768 @@
+[
+  {
+    "id": "Q001",
+    "learning_aim": "A",
+    "topic": "A1.1.4 Servers",
+    "type": "mcq",
+    "question": "Which type of server stores and manages files so users on a network can access them centrally?",
+    "choices": [
+      "Web server",
+      "Application server",
+      "File server",
+      "Database server"
+    ],
+    "correct_index": 2,
+    "explanation": "A file server provides centralised storage that allows network users to store, retrieve and share files. A web server hosts websites; an application server runs programs for clients; a database server manages structured data."
+  },
+  {
+    "id": "Q002",
+    "learning_aim": "A",
+    "topic": "A1.1.4 Servers",
+    "type": "mcq",
+    "question": "A company hosts its public website on a server that responds to HTTP requests. What type of server is this?",
+    "choices": [
+      "File server",
+      "Application server",
+      "Web server",
+      "Print server"
+    ],
+    "correct_index": 2,
+    "explanation": "A web server handles HTTP/HTTPS requests and delivers web pages to clients' browsers. File servers store files; application servers run back-end software; print servers manage print queues."
+  },
+  {
+    "id": "Q003",
+    "learning_aim": "A",
+    "topic": "A1.1.1 Personal computers",
+    "type": "mcq",
+    "question": "Which feature most distinguishes a personal computer (PC) from a mobile device?",
+    "choices": [
+      "Uses a battery as its primary power source",
+      "Typically fixed or desk-based with upgradeable components",
+      "Runs a mobile operating system",
+      "Uses touchscreen as the primary input method"
+    ],
+    "correct_index": 1,
+    "explanation": "PCs are generally desk-based or tower systems with user-upgradeable components such as RAM and graphics cards. Mobile devices are designed for portability, use batteries, and often have fixed components."
+  },
+  {
+    "id": "Q004",
+    "learning_aim": "A",
+    "topic": "A1.1.9 Embedded systems / IoT",
+    "type": "mcq",
+    "question": "A smart thermostat that connects to the internet and adjusts home heating automatically is an example of which technology?",
+    "choices": [
+      "Multifunctional device",
+      "Internet of Things (IoT)",
+      "Virtual reality",
+      "Navigation system"
+    ],
+    "correct_index": 1,
+    "explanation": "IoT devices are physical objects embedded with sensors and internet connectivity that allow them to collect and exchange data. A smart thermostat fits this definition as it uses sensors and internet connectivity to automate heating."
+  },
+  {
+    "id": "Q005",
+    "learning_aim": "A",
+    "topic": "A1.2 Uses of digital devices",
+    "type": "mcq",
+    "question": "In a manufacturing context, which use of digital devices involves machines performing repetitive physical tasks without direct human control?",
+    "choices": [
+      "Data logging",
+      "Automation and robotics",
+      "Creative tasks",
+      "General office tasks"
+    ],
+    "correct_index": 1,
+    "explanation": "Automation and robotics use embedded systems and digital control to carry out repetitive or precise physical tasks in manufacturing with minimal human intervention. Data logging records sensor measurements; creative tasks involve design software."
+  },
+  {
+    "id": "Q006",
+    "learning_aim": "A",
+    "topic": "A2.2 Assistive technologies",
+    "type": "mcq",
+    "question": "Which assistive technology converts on-screen text into spoken audio to support visually impaired users?",
+    "choices": [
+      "Braille display",
+      "Screen magnifier",
+      "Text-to-speech software",
+      "Eye-tracking software"
+    ],
+    "correct_index": 2,
+    "explanation": "Text-to-speech software reads displayed text aloud, enabling visually impaired users to access content audibly. A braille display converts text to tactile braille; a screen magnifier enlarges content; eye-tracking enables cursor control via eye movement."
+  },
+  {
+    "id": "Q007",
+    "learning_aim": "A",
+    "topic": "A2.3 Storage media",
+    "type": "mcq",
+    "question": "A student needs portable storage that is fast, durable, and has no moving parts. Which storage medium is most suitable?",
+    "choices": [
+      "Hard disk drive (HDD)",
+      "Optical disc",
+      "Solid state drive (SSD)",
+      "Magnetic tape"
+    ],
+    "correct_index": 2,
+    "explanation": "SSDs use flash memory with no moving parts, making them faster and more durable than HDDs for portable use. HDDs use spinning platters; optical discs are slow; magnetic tape is sequential-access and not portable in this context."
+  },
+  {
+    "id": "Q008",
+    "learning_aim": "A",
+    "topic": "A2.1 Peripheral devices",
+    "type": "true_false",
+    "question": "A printer is classified as an input peripheral device.",
+    "choices": [
+      "True",
+      "False"
+    ],
+    "correct_index": 1,
+    "explanation": "A printer is an output peripheral device — it receives processed data from the computer and produces physical output. Input devices, such as keyboards and mice, send data into the computer."
+  },
+  {
+    "id": "Q009",
+    "learning_aim": "A",
+    "topic": "A3.1 Operating system types",
+    "type": "mcq",
+    "question": "Which type of operating system processes large volumes of jobs without user interaction, typically overnight?",
+    "choices": [
+      "Real-time OS",
+      "Batch OS",
+      "Network OS",
+      "Mobile OS"
+    ],
+    "correct_index": 1,
+    "explanation": "A batch operating system collects jobs into groups (batches) and processes them without user interaction, often scheduled during off-peak hours. A real-time OS responds instantly to inputs; a network OS manages network resources."
+  },
+  {
+    "id": "Q010",
+    "learning_aim": "A",
+    "topic": "A3.2 Role of the OS",
+    "type": "mcq",
+    "question": "Which OS function moves data between RAM and a hard disk to simulate additional memory when RAM is full?",
+    "choices": [
+      "Context switching",
+      "Virtual memory (swapping/paging)",
+      "Process scheduling",
+      "Device driver management"
+    ],
+    "correct_index": 1,
+    "explanation": "Virtual memory uses swapping and paging to move data between RAM and disk storage, effectively extending available memory. Context switching manages CPU time between processes; process scheduling determines execution order."
+  },
+  {
+    "id": "Q011",
+    "learning_aim": "A",
+    "topic": "A3.3 Types of software",
+    "type": "mcq",
+    "question": "Which type of software is designed to maintain, optimise, or protect a computer system rather than to perform end-user tasks?",
+    "choices": [
+      "Application software",
+      "Utility software",
+      "Open-source software",
+      "Firmware"
+    ],
+    "correct_index": 1,
+    "explanation": "Utility software performs system maintenance tasks such as disk cleanup, antivirus scanning, and file compression. Application software is used for end-user tasks like word processing; firmware is embedded code controlling hardware."
+  },
+  {
+    "id": "Q012",
+    "learning_aim": "A",
+    "topic": "A3.5 User interfaces",
+    "type": "mcq",
+    "question": "Which type of user interface requires the user to type text-based commands to interact with the operating system?",
+    "choices": [
+      "Graphical user interface (GUI)",
+      "Menu-driven interface",
+      "Command line interface (CLI)",
+      "Touchscreen GUI"
+    ],
+    "correct_index": 2,
+    "explanation": "A command line interface (CLI) requires users to type precise text commands. GUIs use icons and windows; menu-driven interfaces present lists of options; touchscreen GUIs use touch gestures."
+  },
+  {
+    "id": "Q013",
+    "learning_aim": "A",
+    "topic": "A3.6 Open source vs proprietary software",
+    "type": "mcq",
+    "question": "Which statement correctly describes open-source software?",
+    "choices": [
+      "The source code is hidden and users cannot modify it",
+      "It always requires a paid licence to use",
+      "The source code is publicly available and can be modified by users",
+      "It can only be used on a single computer"
+    ],
+    "correct_index": 2,
+    "explanation": "Open-source software makes its source code publicly available, allowing users to view, modify, and distribute it. Proprietary software keeps its source code closed and typically requires a paid licence."
+  },
+  {
+    "id": "Q014",
+    "learning_aim": "A",
+    "topic": "A3.7 File types",
+    "type": "mcq",
+    "question": "Which file format is commonly used for lossless audio and preserves the original uncompressed recording quality?",
+    "choices": [
+      "MP3",
+      "WAV",
+      "AAC",
+      "OGG"
+    ],
+    "correct_index": 1,
+    "explanation": "WAV (Waveform Audio File Format) stores uncompressed audio data, preserving full quality. MP3, AAC and OGG use lossy compression to reduce file size at the cost of some audio quality."
+  },
+  {
+    "id": "Q015",
+    "learning_aim": "A",
+    "topic": "A4.1 Factors affecting choice of IT system",
+    "type": "mcq",
+    "question": "A business is evaluating a new software system. Which factor refers to the time needed to move existing data and users from the old system to the new one?",
+    "choices": [
+      "Productivity",
+      "Compatibility",
+      "Migration to new systems",
+      "Security"
+    ],
+    "correct_index": 2,
+    "explanation": "Migration involves transferring data, processes and users from an old system to a new one, including timescales and downtime planning. Compatibility refers to whether systems work together; productivity refers to output efficiency."
+  },
+  {
+    "id": "Q016",
+    "learning_aim": "A",
+    "topic": "A4.2 IT systems in organisations",
+    "type": "true_false",
+    "question": "A data logging system automatically records measurements from sensors at regular intervals without human intervention.",
+    "choices": [
+      "True",
+      "False"
+    ],
+    "correct_index": 0,
+    "explanation": "Data logging systems use sensors to capture data (such as temperature or pressure) at set intervals automatically. This eliminates human error and allows continuous recording even when staff are absent."
+  },
+  {
+    "id": "Q017",
+    "learning_aim": "A",
+    "topic": "A4.3 Impact of IT systems",
+    "type": "mcq",
+    "question": "When a business introduces a new IT system, which cost consideration relates to the time employees spend learning to use it?",
+    "choices": [
+      "User support costs",
+      "Staff training needs",
+      "Implementation downtime",
+      "Licensing cost"
+    ],
+    "correct_index": 1,
+    "explanation": "Staff training needs (both initial and ongoing) are a key cost consideration when implementing new IT systems. User support is ongoing help post-deployment; downtime refers to service unavailability during changeover."
+  },
+  {
+    "id": "Q018",
+    "learning_aim": "A",
+    "topic": "A5.1 Emerging technologies and AI",
+    "type": "mcq",
+    "question": "Which emerging technology overlays digital information onto a user's real-world view through a device such as a headset or smartphone?",
+    "choices": [
+      "Virtual reality (VR)",
+      "Artificial intelligence (AI)",
+      "Augmented reality (AR)",
+      "Internet of Things (IoT)"
+    ],
+    "correct_index": 2,
+    "explanation": "Augmented reality (AR) blends digital content with the real world, visible through a camera or headset. Virtual reality creates a fully immersive digital environment; AI refers to machine learning and intelligent decision-making; IoT connects physical objects to the internet."
+  },
+  {
+    "id": "Q019",
+    "learning_aim": "A",
+    "topic": "A1.3 Notation",
+    "type": "mcq",
+    "question": "In a flowchart, which symbol is used to represent a decision point with two or more possible outcomes?",
+    "choices": [
+      "Rectangle",
+      "Oval/rounded rectangle",
+      "Diamond",
+      "Parallelogram"
+    ],
+    "correct_index": 2,
+    "explanation": "A diamond shape represents a decision point in a flowchart, with branches for different outcomes (e.g. Yes/No). Rectangles represent processes; ovals indicate start/end; parallelograms represent input or output."
+  },
+  {
+    "id": "Q020",
+    "learning_aim": "A",
+    "topic": "A5.2 AI implications for personal use",
+    "type": "true_false",
+    "question": "Artificial intelligence can be used to provide personalised product recommendations to individual users on e-commerce websites.",
+    "choices": [
+      "True",
+      "False"
+    ],
+    "correct_index": 0,
+    "explanation": "AI analyses user behaviour and purchase history to generate personalised recommendations, improving the user experience and increasing sales for retailers. This is a common personal use implication of AI."
+  },
+  {
+    "id": "Q021",
+    "learning_aim": "B",
+    "topic": "B1.1.1 Bluetooth connectivity",
+    "type": "mcq",
+    "question": "Which wireless connectivity technology is designed for short-range communication between devices such as headphones and smartphones?",
+    "choices": [
+      "Wi-Fi",
+      "Ethernet",
+      "Bluetooth",
+      "Satellite"
+    ],
+    "correct_index": 2,
+    "explanation": "Bluetooth is a short-range wireless technology (typically up to 10 metres) used to connect devices like headphones, keyboards and phones. Wi-Fi covers larger areas; Ethernet is wired; satellite is for long-distance communication."
+  },
+  {
+    "id": "Q022",
+    "learning_aim": "B",
+    "topic": "B1.1.3 Wi-Fi",
+    "type": "mcq",
+    "question": "What is the main advantage of Wi-Fi over Ethernet for end-user devices in an office?",
+    "choices": [
+      "Wi-Fi provides faster data transfer speeds",
+      "Wi-Fi allows devices to connect without physical cables",
+      "Wi-Fi is more secure than Ethernet by default",
+      "Wi-Fi supports longer transmission distances than Ethernet"
+    ],
+    "correct_index": 1,
+    "explanation": "Wi-Fi enables wireless connectivity, removing the need for physical cables and giving users mobility within the coverage area. Ethernet is typically faster and more secure than Wi-Fi; Wi-Fi range is limited by walls and interference."
+  },
+  {
+    "id": "Q023",
+    "learning_aim": "B",
+    "topic": "B1.1.2 USB connectivity",
+    "type": "mcq",
+    "question": "Which wired connection standard is most commonly used to connect peripheral devices such as keyboards, mice and external storage to a computer?",
+    "choices": [
+      "Ethernet (RJ45)",
+      "USB",
+      "HDMI",
+      "Thunderbolt"
+    ],
+    "correct_index": 1,
+    "explanation": "USB (Universal Serial Bus) is the most widely used wired standard for connecting peripherals and external storage. Ethernet connects devices to networks; HDMI transmits audio/video; Thunderbolt is a high-speed interface used mainly with Apple devices."
+  },
+  {
+    "id": "Q024",
+    "learning_aim": "B",
+    "topic": "B1.1.4 Ethernet",
+    "type": "true_false",
+    "question": "Ethernet connections generally provide more reliable and faster data transfer than Wi-Fi connections.",
+    "choices": [
+      "True",
+      "False"
+    ],
+    "correct_index": 0,
+    "explanation": "Ethernet uses a physical cable that is not subject to interference or signal degradation from walls or other devices, resulting in more reliable and typically faster connections than Wi-Fi."
+  },
+  {
+    "id": "Q025",
+    "learning_aim": "B",
+    "topic": "B2.1.1 Star topology",
+    "type": "mcq",
+    "question": "In a star network topology, all devices connect to a central device. What is this central device typically called?",
+    "choices": [
+      "Router",
+      "Switch or hub",
+      "Modem",
+      "Repeater"
+    ],
+    "correct_index": 1,
+    "explanation": "In a star topology, all devices connect to a central switch or hub. If one cable fails, only that device is affected; the rest of the network continues to function. A router connects networks; a modem modulates signals."
+  },
+  {
+    "id": "Q026",
+    "learning_aim": "B",
+    "topic": "B2.1.2 Ring topology",
+    "type": "mcq",
+    "question": "Which network topology connects each device to exactly two others, forming a closed loop for data to travel around?",
+    "choices": [
+      "Star",
+      "Bus",
+      "Ring",
+      "Mesh"
+    ],
+    "correct_index": 2,
+    "explanation": "A ring topology connects each device to two neighbours forming a loop. Data travels in one direction around the ring. If one device fails, it can disrupt the entire network."
+  },
+  {
+    "id": "Q027",
+    "learning_aim": "B",
+    "topic": "B2.2.2 LAN",
+    "type": "mcq",
+    "question": "A network connecting computers within a single school building is best described as which type of network?",
+    "choices": [
+      "WAN",
+      "MAN",
+      "LAN",
+      "PAN"
+    ],
+    "correct_index": 2,
+    "explanation": "A Local Area Network (LAN) covers a small geographic area such as a school building or office. A WAN spans large distances; a MAN covers a city; a PAN covers a very short range around a person."
+  },
+  {
+    "id": "Q028",
+    "learning_aim": "B",
+    "topic": "B2.2.1 PAN",
+    "type": "mcq",
+    "question": "A user connects their smartphone, smartwatch and wireless earbuds together. What type of network is this?",
+    "choices": [
+      "LAN",
+      "WAN",
+      "PAN",
+      "VPN"
+    ],
+    "correct_index": 2,
+    "explanation": "A Personal Area Network (PAN) is a very short-range network centred on an individual, connecting personal devices such as phones, wearables and earbuds, typically using Bluetooth."
+  },
+  {
+    "id": "Q029",
+    "learning_aim": "B",
+    "topic": "B2.2.3 WAN",
+    "type": "true_false",
+    "question": "The internet is the largest example of a Wide Area Network (WAN).",
+    "choices": [
+      "True",
+      "False"
+    ],
+    "correct_index": 0,
+    "explanation": "A WAN spans large geographic areas and connects multiple LANs. The internet is the largest WAN, connecting networks and devices across the entire globe using a range of transmission technologies."
+  },
+  {
+    "id": "Q030",
+    "learning_aim": "B",
+    "topic": "B2.2.4 VPN",
+    "type": "mcq",
+    "question": "What is the primary purpose of a Virtual Private Network (VPN)?",
+    "choices": [
+      "To increase the wireless range of a network",
+      "To create a secure, encrypted tunnel over a public network",
+      "To speed up data transfer between devices",
+      "To assign IP addresses to devices automatically"
+    ],
+    "correct_index": 1,
+    "explanation": "A VPN creates an encrypted tunnel over a public network (e.g. the internet), allowing users to securely access private network resources remotely. It protects data from interception and masks the user's IP address."
+  },
+  {
+    "id": "Q031",
+    "learning_aim": "B",
+    "topic": "B3.1.1 Email protocols",
+    "type": "mcq",
+    "question": "Which email protocol is used to send email messages from a client to a mail server?",
+    "choices": [
+      "POP3",
+      "IMAP",
+      "SMTP",
+      "FTP"
+    ],
+    "correct_index": 2,
+    "explanation": "SMTP (Simple Mail Transfer Protocol) is used to send emails from a client to a mail server and between mail servers. POP3 and IMAP are used to retrieve emails from a server; FTP is used for file transfer."
+  },
+  {
+    "id": "Q032",
+    "learning_aim": "B",
+    "topic": "B3.1.1 Email protocols",
+    "type": "mcq",
+    "question": "Which email retrieval protocol allows emails to be stored on the server and accessed from multiple devices, keeping messages synchronised?",
+    "choices": [
+      "SMTP",
+      "POP3",
+      "IMAP",
+      "HTTPS"
+    ],
+    "correct_index": 2,
+    "explanation": "IMAP (Internet Message Access Protocol) keeps emails on the server and synchronises them across all devices. POP3 downloads emails to one device and typically deletes them from the server; SMTP is for sending email."
+  },
+  {
+    "id": "Q033",
+    "learning_aim": "B",
+    "topic": "B3.1.3 Web protocols HTTP/HTTPS",
+    "type": "mcq",
+    "question": "What does the 'S' in HTTPS indicate about the connection to a website?",
+    "choices": [
+      "The site uses a faster streaming protocol",
+      "The connection is encrypted using SSL/TLS",
+      "The server is located in a secure data centre",
+      "The site requires a subscription to access"
+    ],
+    "correct_index": 1,
+    "explanation": "HTTPS (HyperText Transfer Protocol Secure) uses SSL/TLS encryption to protect data transmitted between a browser and a web server. Without the 'S', data is sent in plain text and could be intercepted."
+  },
+  {
+    "id": "Q034",
+    "learning_aim": "B",
+    "topic": "B3.3 Bandwidth and latency",
+    "type": "mcq",
+    "question": "Which term describes the time delay between sending a data packet and it being received at its destination?",
+    "choices": [
+      "Bandwidth",
+      "Throughput",
+      "Latency",
+      "Jitter"
+    ],
+    "correct_index": 2,
+    "explanation": "Latency is the delay in data transmission, measured in milliseconds. High latency causes noticeable lag in real-time applications such as video calls and online gaming. Bandwidth refers to the maximum data transfer capacity of a connection."
+  },
+  {
+    "id": "Q035",
+    "learning_aim": "B",
+    "topic": "B3.3 Bandwidth",
+    "type": "mcq",
+    "question": "Bandwidth in a network context refers to which of the following?",
+    "choices": [
+      "The physical width of a network cable",
+      "The maximum amount of data that can be transmitted per second",
+      "The number of devices connected to a network",
+      "The distance data can travel without signal loss"
+    ],
+    "correct_index": 1,
+    "explanation": "Bandwidth measures the maximum data transfer capacity of a network connection, usually in megabits per second (Mbps). It does not refer to physical dimensions or device count."
+  },
+  {
+    "id": "Q036",
+    "learning_aim": "B",
+    "topic": "B3.5 Compression types",
+    "type": "mcq",
+    "question": "Which type of compression permanently removes some data to reduce file size, making the process irreversible?",
+    "choices": [
+      "Lossless compression",
+      "Lossless encoding",
+      "Lossy compression",
+      "Run-length encoding"
+    ],
+    "correct_index": 2,
+    "explanation": "Lossy compression permanently discards some data, resulting in reduced file size at the cost of quality. Lossless compression reduces file size without losing any data, allowing perfect reconstruction of the original."
+  },
+  {
+    "id": "Q037",
+    "learning_aim": "B",
+    "topic": "B3.5 Compression types",
+    "type": "mcq",
+    "question": "Which image file format uses lossless compression, preserving all original image data?",
+    "choices": [
+      "JPEG",
+      "MP4",
+      "PNG",
+      "MP3"
+    ],
+    "correct_index": 2,
+    "explanation": "PNG uses lossless compression — the original image data can be perfectly reconstructed. JPEG uses lossy compression, discarding some colour data; MP4 and MP3 are video and audio formats respectively."
+  },
+  {
+    "id": "Q038",
+    "learning_aim": "B",
+    "topic": "B3.6 Codecs",
+    "type": "mcq",
+    "question": "What is the function of a codec in digital audio and video transmission?",
+    "choices": [
+      "To increase network bandwidth",
+      "To assign IP addresses to devices",
+      "To encode and decode digital media for storage or transmission",
+      "To scan files for malware"
+    ],
+    "correct_index": 2,
+    "explanation": "A codec (coder-decoder) compresses (encodes) audio or video data for efficient storage and transmission, and decompresses (decodes) it for playback. Without codecs, uncompressed media files would be very large."
+  },
+  {
+    "id": "Q039",
+    "learning_aim": "B",
+    "topic": "B2.1.3 Bus topology",
+    "type": "mcq",
+    "question": "In a bus network topology, what happens if the main cable (backbone) fails?",
+    "choices": [
+      "Only the device at the end of the cable is affected",
+      "The entire network stops functioning",
+      "Data is automatically rerouted through another path",
+      "Only the central switch is affected"
+    ],
+    "correct_index": 1,
+    "explanation": "In a bus topology, all devices share a single backbone cable. If this cable fails or is damaged, the entire network stops working, making it a significant weakness compared to a star topology."
+  },
+  {
+    "id": "Q040",
+    "learning_aim": "B",
+    "topic": "B3.4 File formats for transmission",
+    "type": "true_false",
+    "question": "JPEG is a lossy image format, meaning some image quality is lost when the file is compressed and saved.",
+    "choices": [
+      "True",
+      "False"
+    ],
+    "correct_index": 0,
+    "explanation": "JPEG uses lossy compression, permanently removing some colour and detail data to reduce file size. This is why repeatedly saving a JPEG can degrade image quality progressively."
+  },
+  {
+    "id": "Q041",
+    "learning_aim": "C",
+    "topic": "C1.1.2 Public cloud",
+    "type": "mcq",
+    "question": "Which cloud deployment model makes services available to any organisation or individual over the internet, managed by a third-party provider?",
+    "choices": [
+      "Private cloud",
+      "Hybrid cloud",
+      "Public cloud",
+      "Community cloud"
+    ],
+    "correct_index": 2,
+    "explanation": "A public cloud is owned and operated by a third-party provider (e.g. AWS, Microsoft Azure) and offers services to anyone over the internet. A private cloud is dedicated to one organisation; hybrid cloud combines both models."
+  },
+  {
+    "id": "Q042",
+    "learning_aim": "C",
+    "topic": "C1.1.1 Private cloud",
+    "type": "mcq",
+    "question": "A bank operates its own cloud infrastructure used exclusively by its employees and departments. This is an example of which cloud model?",
+    "choices": [
+      "Public cloud",
+      "Hybrid cloud",
+      "Private cloud",
+      "SaaS"
+    ],
+    "correct_index": 2,
+    "explanation": "A private cloud is dedicated infrastructure used by a single organisation, offering greater control and security. Banks and government bodies often use private clouds to protect sensitive data."
+  },
+  {
+    "id": "Q043",
+    "learning_aim": "C",
+    "topic": "C1.1.3 Hybrid cloud",
+    "type": "true_false",
+    "question": "A hybrid cloud combines elements of both private and public cloud models, allowing data and applications to be shared between them.",
+    "choices": [
+      "True",
+      "False"
+    ],
+    "correct_index": 0,
+    "explanation": "A hybrid cloud integrates private and public cloud environments, allowing organisations to keep sensitive data on a private cloud while using the scalability of the public cloud for other workloads."
+  },
+  {
+    "id": "Q044",
+    "learning_aim": "C",
+    "topic": "C1.1.5 SaaS",
+    "type": "mcq",
+    "question": "A user accesses a word processor through their web browser without installing any software locally. Which cloud service model does this represent?",
+    "choices": [
+      "IaaS",
+      "PaaS",
+      "SaaS",
+      "DaaS"
+    ],
+    "correct_index": 2,
+    "explanation": "Software as a Service (SaaS) delivers complete applications over the internet without local installation (e.g. Google Docs, Microsoft 365). IaaS provides virtualised infrastructure; PaaS provides a development platform."
+  },
+  {
+    "id": "Q045",
+    "learning_aim": "C",
+    "topic": "C1.1.4 IaaS",
+    "type": "mcq",
+    "question": "Which cloud service model provides virtualised computing resources such as servers, storage and networking over the internet, giving the customer maximum control?",
+    "choices": [
+      "SaaS",
+      "PaaS",
+      "IaaS",
+      "BaaS"
+    ],
+    "correct_index": 2,
+    "explanation": "Infrastructure as a Service (IaaS) provides virtualised hardware resources. The customer manages the operating system and applications. Examples include Amazon EC2 and Microsoft Azure VMs."
+  },
+  {
+    "id": "Q046",
+    "learning_aim": "C",
+    "topic": "C1.1.6 PaaS",
+    "type": "mcq",
+    "question": "A software development company uses a cloud service that provides development tools, databases and middleware, allowing them to build and deploy applications without managing the underlying infrastructure. This is which service model?",
+    "choices": [
+      "SaaS",
+      "PaaS",
+      "IaaS",
+      "FaaS"
+    ],
+    "correct_index": 1,
+    "explanation": "Platform as a Service (PaaS) provides a managed platform with development tools and infrastructure so developers can build applications without worrying about server management. Examples include Google App Engine and Heroku."
+  },
+  {
+    "id": "Q047",
+    "learning_aim": "C",
+    "topic": "C1.3 Remote working systems",
+    "type": "mcq",
+    "question": "Which technology allows an employee to connect to their office computer from home and control it as if they were physically present?",
+    "choices": [
+      "VPN",
+      "Remote desktop technology",
+      "FTP",
+      "IMAP"
+    ],
+    "correct_index": 1,
+    "explanation": "Remote desktop technology (e.g. Microsoft Remote Desktop, TeamViewer) allows users to access and control a remote computer over the internet. A VPN creates a secure tunnel but does not itself provide desktop control."
+  },
+  {
+    "id": "Q048",
+    "learning_aim": "C",
+    "topic": "C1.4 Factors for online systems",
+    "type": "mcq",
+    "question": "Which factor refers to an online system's ability to handle increasing numbers of users or data volumes without performance degradation?",
+    "choices": [
+      "Compatibility",
+      "Connectivity",
+      "Scalability",
+      "Availability"
+    ],
+    "correct_index": 2,
+    "explanation": "Scalability is the ability of a system to grow and accommodate increased demand, such as more users or data, without loss of performance. This is a key factor when selecting cloud services."
+  },
+  {
+    "id": "Q049",
+    "learning_aim": "C",
+    "topic": "C1.2 Cloud computing implications",
+    "type": "mcq",
+    "question": "Which is a key disadvantage of using public cloud services for storing sensitive business data?",
+    "choices": [
+      "Higher upfront infrastructure costs",
+      "Reduced accessibility for remote workers",
+      "Less control over where data is physically stored and who manages it",
+      "Limited scalability compared to on-premise systems"
+    ],
+    "correct_index": 2,
+    "explanation": "With public cloud, data is stored on third-party infrastructure, meaning the organisation has less control over data location and access policies. This raises data sovereignty and security concerns, especially for regulated industries."
+  },
+  {
+    "id": "Q050",
+    "learning_aim": "C",
+    "topic": "C2.1.3 Wiki",
+    "type": "mcq",
+    "question": "Which type of online community platform allows multiple users to collaboratively create, edit, and maintain content, such as Wikipedia?",
+    "choices": [
+      "Blog",
+      "Forum",
+      "Wiki",
+      "Podcast"
+    ],
+    "correct_index": 2,
+    "explanation": "A wiki is a collaborative website where multiple users can create and edit content. Wikipedia is the most well-known example. A blog is typically authored by one person; a forum is for discussion threads; a podcast is audio-based."
+  },
+  {
+    "id": "Q051",
+    "learning_aim": "C",
+    "topic": "C2.1.7 Forums",
+    "type": "mcq",
+    "question": "An online forum is best described as which type of online community?",
+    "choices": [
+      "A platform for sharing short video clips",
+      "A discussion board where users post messages and reply in threads",
+      "A live video streaming service",
+      "A cloud document collaboration tool"
+    ],
+    "correct_index": 1,
+    "explanation": "An online forum is a discussion board where users post messages organised in threads on specific topics, and others can reply. Forums support asynchronous communication between community members."
+  },
+  {
+    "id": "Q052",
+    "learning_aim": "C",
+    "topic": "C2.1.2 Blog/vlog",
+    "type": "mcq",
+    "question": "What distinguishes a vlog from a blog?",
+    "choices": [
+      "A vlog uses written text while a blog uses images",
+      "A vlog is private whereas a blog is public",
+      "A vlog uses video content whereas a blog primarily uses written text",
+      "A vlog requires a paid subscription to access"
+    ],
+    "correct_index": 2,
+    "explanation": "A vlog (video blog) uses video as the primary content medium, while a blog primarily uses written text and images. Both are typically published online and often maintained by individuals."
+  },
+  {
+    "id": "Q053",
+    "learning_aim": "C",
+    "topic": "C2.1.5 Instant messaging",
+    "type": "true_false",
+    "question": "Instant messaging (IM) allows real-time text-based communication between users over the internet.",
+    "choices": [
+      "True",
+      "False"
+    ],
+    "correct_index": 0,
+    "explanation": "Instant messaging enables synchronous, real-time text communication between individuals or groups over the internet. Examples include WhatsApp, Microsoft Teams chat and iMessage."
+  },
+  {
+    "id": "Q054",
+    "learning_aim": "C",
+    "topic": "C2.2 Considerations for online communities",
+    "type": "mcq",
+    "question": "A company considering using a social media platform for customer engagement must evaluate which consideration relating to data held about its users?",
+    "choices": [
+      "Scalability",
+      "Privacy",
+      "Virtual memory",
+      "File compression"
+    ],
+    "correct_index": 1,
+    "explanation": "Privacy is a key consideration when using social media platforms, as large amounts of personal data about customers may be collected and potentially shared with third parties, raising GDPR compliance issues."
+  },
+  {
+    "id": "Q055",
+    "learning_aim": "C",
+    "topic": "C2.1.1 Social media",
+    "type": "mcq",
+    "question": "Which of the following is an implication for an organisation of using social media for marketing?",
+    "choices": [
+      "It eliminates all cybersecurity risks",
+      "It allows direct communication with large audiences at low cost",
+      "It removes the need for data protection compliance",
+      "It guarantees increased sales revenue"
+    ],
+    "correct_index": 1,
+    "explanation": "Social media allows organisations to reach and communicate with large audiences directly and cheaply. However, it does not eliminate security risks, guarantee sales, or remove legal compliance obligations."
+  },
+  {
+    "id": "Q056",
+    "learning_aim": "C",
+    "topic": "C2.1.6 Podcasts",
+    "type": "mcq",
+    "question": "Which online community communication type consists of audio episodes that users can download or stream and listen to at any time?",
+    "choices": [
+      "Chatroom",
+      "Vlog",
+      "Podcast",
+      "Wiki"
+    ],
+    "correct_index": 2,
+    "explanation": "A podcast is a series of digital audio episodes available for download or streaming. Listeners can access episodes on demand. Chatrooms are real-time text communication; vlogs are video-based; wikis are collaborative text content."
+  },
+  {
+    "id": "Q057",
+    "learning_aim": "C",
+    "topic": "C2.2.10 Working practices and company policies",
+    "type": "mcq",
+    "question": "Which organisational document defines rules for how employees may use company IT systems and online services appropriately?",
+    "choices": [
+      "Data Protection Act 2018",
+      "Acceptable use policy (AUP)",
+      "Service level agreement (SLA)",
+      "Non-disclosure agreement (NDA)"
+    ],
+    "correct_index": 1,
+    "explanation": "An acceptable use policy (AUP) sets out the rules governing employee use of company IT resources and online services. It is a company policy, not a legal statute like the Data Protection Act."
+  },
+  {
+    "id": "Q058",
+    "learning_aim": "C",
+    "topic": "C2.2.6 Downtime",
+    "type": "mcq",
+    "question": "What is meant by 'downtime' in the context of online systems and communities?",
+    "choices": [
+      "The time taken to upload large files",
+      "The period when a system is unavailable due to maintenance or failure",
+      "The latency experienced during peak usage",
+      "The time required to train staff on a new system"
+    ],
+    "correct_index": 1,
+    "explanation": "Downtime refers to periods when an IT system or online service is unavailable, whether due to planned maintenance or unexpected failure. It can disrupt productivity and damage customer relationships."
+  },
+  {
+    "id": "Q059",
+    "learning_aim": "C",
+    "topic": "C1.3.1 VPNs for remote working",
+    "type": "mcq",
+    "question": "How does a VPN support remote workers accessing company systems over a public internet connection?",
+    "choices": [
+      "It provides a faster broadband connection for home workers",
+      "It creates an encrypted tunnel ensuring data transmitted is secure",
+      "It blocks all incoming traffic to the company's servers",
+      "It allows the company to monitor employee personal devices"
+    ],
+    "correct_index": 1,
+    "explanation": "A VPN encrypts data sent between the remote worker's device and the company's network, protecting it from interception on unsecured public networks. It does not inherently increase speed or monitor personal devices."
+  },
+  {
+    "id": "Q060",
+    "learning_aim": "C",
+    "topic": "C2.1.4 Chatrooms",
+    "type": "true_false",
+    "question": "Chatrooms support synchronous (real-time) communication, meaning all participants must be online at the same time to exchange messages.",
+    "choices": [
+      "True",
+      "False"
+    ],
+    "correct_index": 0,
+    "explanation": "Chatrooms are synchronous communication tools — participants must be online simultaneously to communicate in real time. This contrasts with asynchronous tools like forums, where messages can be read and replied to at any time."
+  },
+  {
+    "id": "Q061",
+    "learning_aim": "D",
+    "topic": "D1.1.1 Malware – viruses",
+    "type": "mcq",
+    "question": "Which type of malware attaches itself to a legitimate program and spreads to other files or systems when that program is executed?",
+    "choices": [
+      "Worm",
+      "Virus",
+      "Trojan",
+      "Ransomware"
+    ],
+    "correct_index": 1,
+    "explanation": "A virus attaches to a host program or file and replicates when executed, spreading to other files and systems. A worm spreads independently without a host; a trojan disguises itself as legitimate software; ransomware encrypts data for extortion."
+  },
+  {
+    "id": "Q062",
+    "learning_aim": "D",
+    "topic": "D1.1.1 Malware – worms",
+    "type": "mcq",
+    "question": "Which type of malware can self-replicate and spread across a network without needing to attach to a host file?",
+    "choices": [
+      "Virus",
+      "Spyware",
+      "Worm",
+      "Adware"
+    ],
+    "correct_index": 2,
+    "explanation": "A worm is self-contained malware that replicates and spreads across networks automatically without needing a host file. Unlike a virus, it does not need to be triggered by a user opening an infected file."
+  },
+  {
+    "id": "Q063",
+    "learning_aim": "D",
+    "topic": "D1.1.1 Malware – ransomware",
+    "type": "mcq",
+    "question": "A company's files are encrypted by malware and a message demands payment to restore access. Which type of malware is this?",
+    "choices": [
+      "Spyware",
+      "Adware",
+      "Keylogger",
+      "Ransomware"
+    ],
+    "correct_index": 3,
+    "explanation": "Ransomware encrypts a victim's files and demands a ransom (often in cryptocurrency) in exchange for the decryption key. It is one of the most damaging forms of malware for organisations."
+  },
+  {
+    "id": "Q064",
+    "learning_aim": "D",
+    "topic": "D1.1.1 Malware – trojans",
+    "type": "mcq",
+    "question": "Which type of malware disguises itself as legitimate software but performs malicious actions when installed?",
+    "choices": [
+      "Worm",
+      "Virus",
+      "Trojan",
+      "Spyware"
+    ],
+    "correct_index": 2,
+    "explanation": "A Trojan (Trojan horse) appears to be a genuine program but contains hidden malicious code. Unlike viruses or worms, Trojans do not self-replicate; they rely on users being deceived into installing them."
+  },
+  {
+    "id": "Q065",
+    "learning_aim": "D",
+    "topic": "D1.1.4 Social engineering / phishing",
+    "type": "mcq",
+    "question": "An employee receives an email appearing to be from their bank asking them to click a link and enter their login credentials. What type of attack is this?",
+    "choices": [
+      "Brute force attack",
+      "Phishing",
+      "Denial of service (DoS)",
+      "SQL injection"
+    ],
+    "correct_index": 1,
+    "explanation": "Phishing is a social engineering attack that uses fraudulent emails or websites to trick users into revealing sensitive information such as passwords or financial details. It relies on deception rather than technical exploitation."
+  },
+  {
+    "id": "Q066",
+    "learning_aim": "D",
+    "topic": "D1.1.1 Malware – keylogger",
+    "type": "mcq",
+    "question": "Which type of malware secretly records keystrokes to capture passwords and other sensitive information?",
+    "choices": [
+      "Adware",
+      "Spyware",
+      "Keylogger",
+      "Ransomware"
+    ],
+    "correct_index": 2,
+    "explanation": "A keylogger records every key pressed on a keyboard, allowing attackers to capture passwords, credit card numbers and other confidential data without the user's knowledge."
+  },
+  {
+    "id": "Q067",
+    "learning_aim": "D",
+    "topic": "D1.2 Internal threats",
+    "type": "true_false",
+    "question": "Using an unencrypted USB flash drive to transfer work files is an example of an internal threat to data security.",
+    "choices": [
+      "True",
+      "False"
+    ],
+    "correct_index": 0,
+    "explanation": "Using portable devices such as unencrypted USB drives is an internal threat (D1.2.4), as data can be lost, stolen or infected with malware when files are transferred outside of secure systems."
+  },
+  {
+    "id": "Q068",
+    "learning_aim": "D",
+    "topic": "D1.3 Impact of threats",
+    "type": "mcq",
+    "question": "Which impact on an organisation results directly from a data breach that exposes customers' personal information to the public?",
+    "choices": [
+      "Increased bandwidth usage",
+      "Loss of customers due to damaged public image",
+      "Improved system performance",
+      "Reduced staff training needs"
+    ],
+    "correct_index": 1,
+    "explanation": "A data breach that becomes public knowledge can severely damage an organisation's reputation, causing customers to lose trust and take their business elsewhere. This is identified in D1.3.3 of the spec."
+  },
+  {
+    "id": "Q069",
+    "learning_aim": "D",
+    "topic": "D2.1.3 Backup and recovery",
+    "type": "mcq",
+    "question": "Which backup method copies all data every time it runs, regardless of whether the data has changed since the last backup?",
+    "choices": [
+      "Incremental backup",
+      "Differential backup",
+      "Full backup",
+      "Mirror backup"
+    ],
+    "correct_index": 2,
+    "explanation": "A full backup copies all selected data each time it runs, making restoration simple but requiring the most storage space and time. Incremental backups only copy data changed since the last backup; differential backups copy data changed since the last full backup."
+  },
+  {
+    "id": "Q070",
+    "learning_aim": "D",
+    "topic": "D2.1.3 Backup and recovery",
+    "type": "mcq",
+    "question": "An incremental backup strategy only backs up data that has changed since which previous backup?",
+    "choices": [
+      "The original installation of the operating system",
+      "The most recent backup of any type",
+      "The last full backup only",
+      "A backup performed exactly one week ago"
+    ],
+    "correct_index": 1,
+    "explanation": "An incremental backup copies only the data that has changed since the most recent backup (full or incremental). This minimises storage space and backup time, but restoration requires the last full backup plus all subsequent incrementals."
+  },
+  {
+    "id": "Q071",
+    "learning_aim": "D",
+    "topic": "D2.1.4 Multi-factor authentication",
+    "type": "mcq",
+    "question": "Multi-factor authentication (MFA) requires a user to provide evidence from how many different authentication categories?",
+    "choices": [
+      "One",
+      "Two or more",
+      "Exactly three",
+      "Four"
+    ],
+    "correct_index": 1,
+    "explanation": "MFA requires two or more forms of verification from different categories: something you know (password), something you have (token or phone), and something you are (biometric). Using two or more makes accounts significantly harder to compromise."
+  },
+  {
+    "id": "Q072",
+    "learning_aim": "D",
+    "topic": "D2.1.5 Biometrics",
+    "type": "mcq",
+    "question": "Which of the following is an example of biometric authentication?",
+    "choices": [
+      "Entering a six-digit PIN",
+      "Using a smartcard to unlock a door",
+      "Scanning a fingerprint to unlock a smartphone",
+      "Answering a security question"
+    ],
+    "correct_index": 2,
+    "explanation": "Biometric authentication uses unique physical characteristics such as fingerprints, facial features or iris patterns. A PIN is 'something you know'; a smartcard is 'something you have'; a security question is knowledge-based."
+  },
+  {
+    "id": "Q073",
+    "learning_aim": "D",
+    "topic": "D2.2 Antivirus software",
+    "type": "mcq",
+    "question": "How does antivirus software primarily detect known malware on a system?",
+    "choices": [
+      "By monitoring network bandwidth usage",
+      "By comparing files against a database of known malware signatures",
+      "By blocking all incoming email attachments",
+      "By encrypting all stored data automatically"
+    ],
+    "correct_index": 1,
+    "explanation": "Antivirus software scans files and compares them against a database of known malware signatures (patterns). If a match is found, the software quarantines or deletes the threat. Regular updates to the signature database are essential."
+  },
+  {
+    "id": "Q074",
+    "learning_aim": "D",
+    "topic": "D2.3 Firewalls",
+    "type": "mcq",
+    "question": "What is the primary function of a firewall in protecting a network?",
+    "choices": [
+      "Encrypting all data stored on servers",
+      "Monitoring and controlling incoming and outgoing network traffic based on rules",
+      "Removing viruses from infected files",
+      "Backing up data to an offsite location automatically"
+    ],
+    "correct_index": 1,
+    "explanation": "A firewall monitors and filters network traffic based on predefined security rules, blocking unauthorised access while permitting legitimate communication. It acts as a barrier between a trusted internal network and untrusted external networks."
+  },
+  {
+    "id": "Q075",
+    "learning_aim": "D",
+    "topic": "D2.4 Encryption",
+    "type": "mcq",
+    "question": "What does encryption do to data to protect it during transmission?",
+    "choices": [
+      "Deletes duplicate copies of the data",
+      "Converts data into an unreadable format that can only be decoded with a key",
+      "Compresses data to reduce file size",
+      "Backs the data up to a remote server automatically"
+    ],
+    "correct_index": 1,
+    "explanation": "Encryption transforms data into ciphertext using an algorithm and key, making it unreadable to anyone who intercepts it without the decryption key. It is essential for protecting sensitive data in transit and at rest."
+  },
+  {
+    "id": "Q076",
+    "learning_aim": "D",
+    "topic": "D2.1.7 Digital certificates",
+    "type": "mcq",
+    "question": "What is the purpose of a digital certificate on a secure website?",
+    "choices": [
+      "To compress the website's files for faster loading",
+      "To verify the identity of the website and enable encrypted HTTPS communication",
+      "To prevent users from downloading content from the site",
+      "To store the user's login credentials securely"
+    ],
+    "correct_index": 1,
+    "explanation": "A digital certificate is issued by a Certificate Authority (CA) and verifies that a website is genuine, enabling SSL/TLS encryption for HTTPS connections. It assures users they are communicating with the authentic site."
+  },
+  {
+    "id": "Q077",
+    "learning_aim": "D",
+    "topic": "D2.1.1 File permissions",
+    "type": "mcq",
+    "question": "File permissions on a network allow an administrator to do which of the following?",
+    "choices": [
+      "Encrypt files automatically when they are created",
+      "Control which users can read, write, or execute specific files",
+      "Back up files to an offsite server",
+      "Scan files for malware before they are opened"
+    ],
+    "correct_index": 1,
+    "explanation": "File permissions define what actions (read, write, execute) each user or group can perform on specific files or folders. This access control limits exposure of sensitive data to authorised users only."
+  },
+  {
+    "id": "Q078",
+    "learning_aim": "D",
+    "topic": "D1.1.1 Malware – spyware/adware",
+    "type": "mcq",
+    "question": "Which type of malware monitors user activity and collects information such as browsing habits without the user's consent?",
+    "choices": [
+      "Ransomware",
+      "Adware",
+      "Spyware",
+      "Worm"
+    ],
+    "correct_index": 2,
+    "explanation": "Spyware secretly monitors and records user activity and personal data, transmitting it to a third party. Adware displays unwanted advertisements; ransomware encrypts data; worms spread across networks."
+  },
+  {
+    "id": "Q079",
+    "learning_aim": "D",
+    "topic": "D2.1.6 Physical access control",
+    "type": "true_false",
+    "question": "Physical access controls such as locked server rooms and security badges are a method of protecting data from unauthorised access.",
+    "choices": [
+      "True",
+      "False"
+    ],
+    "correct_index": 0,
+    "explanation": "Physical access controls restrict who can physically enter server rooms or access hardware, preventing unauthorised individuals from stealing or tampering with equipment and the data it holds."
+  },
+  {
+    "id": "Q080",
+    "learning_aim": "D",
+    "topic": "D2.4.3 HTTPS encryption",
+    "type": "mcq",
+    "question": "Which protocol uses encryption to protect data transmitted between a user's browser and a web server?",
+    "choices": [
+      "HTTP",
+      "FTP",
+      "HTTPS",
+      "SMTP"
+    ],
+    "correct_index": 2,
+    "explanation": "HTTPS (HyperText Transfer Protocol Secure) uses SSL/TLS encryption to protect data in transit between browser and server. Plain HTTP sends data unencrypted; FTP is for file transfer; SMTP is for sending email."
+  },
+  {
+    "id": "Q081",
+    "learning_aim": "E",
+    "topic": "E1.1.2 Financial services online",
+    "type": "mcq",
+    "question": "Which feature of online banking allows customers to view their account balance and transaction history at any time?",
+    "choices": [
+      "Targeted marketing",
+      "24/7 account access",
+      "Physical branch visit",
+      "Telephone banking only"
+    ],
+    "correct_index": 1,
+    "explanation": "Online banking provides 24/7 access to account information, fund transfers and statements from any internet-connected device. This is a key advantage over traditional branch-based banking."
+  },
+  {
+    "id": "Q082",
+    "learning_aim": "E",
+    "topic": "E1.1.1 Retail online services",
+    "type": "mcq",
+    "question": "Which term describes the purchase of goods or services via the internet?",
+    "choices": [
+      "E-learning",
+      "E-commerce",
+      "E-banking",
+      "E-governance"
+    ],
+    "correct_index": 1,
+    "explanation": "E-commerce refers to buying and selling goods and services over the internet. E-learning relates to online education; e-banking is online financial services; e-governance relates to public services."
+  },
+  {
+    "id": "Q083",
+    "learning_aim": "E",
+    "topic": "E1.2.1 Transactional data",
+    "type": "mcq",
+    "question": "What is transactional data in the context of online retail?",
+    "choices": [
+      "Data about server hardware configurations",
+      "Records of individual purchases, returns and payment events",
+      "The source code used to build the website",
+      "Staff payroll information"
+    ],
+    "correct_index": 1,
+    "explanation": "Transactional data captures the details of individual business events such as purchases, returns and payments. Retailers analyse transactional data to understand buying patterns and manage stock."
+  },
+  {
+    "id": "Q084",
+    "learning_aim": "E",
+    "topic": "E1.2.2 Targeted marketing",
+    "type": "mcq",
+    "question": "An online retailer uses a customer's previous purchase history to display relevant product suggestions. What is this practice called?",
+    "choices": [
+      "Social engineering",
+      "Targeted marketing",
+      "Data validation",
+      "Digital certification"
+    ],
+    "correct_index": 1,
+    "explanation": "Targeted marketing uses data about individuals' behaviour, preferences and demographics to deliver personalised advertisements and product recommendations. It increases conversion rates but raises privacy considerations."
+  },
+  {
+    "id": "Q085",
+    "learning_aim": "E",
+    "topic": "E1.1.3 Education and training online",
+    "type": "true_false",
+    "question": "Online education platforms allow learners to access course materials and complete assessments at a time and place of their choosing.",
+    "choices": [
+      "True",
+      "False"
+    ],
+    "correct_index": 0,
+    "explanation": "Online learning provides flexibility, enabling students to study asynchronously from any location with internet access. This is a key advantage of e-learning platforms such as Moodle or Coursera."
+  },
+  {
+    "id": "Q086",
+    "learning_aim": "E",
+    "topic": "E1.1.6 Booking systems",
+    "type": "mcq",
+    "question": "An airline website allows customers to search for flights, select seats and pay online in real time. Which type of online service is this?",
+    "choices": [
+      "Financial services",
+      "Booking system",
+      "News and information",
+      "Collaborative working tool"
+    ],
+    "correct_index": 1,
+    "explanation": "Online booking systems allow customers to reserve services in real time, checking live availability and completing payment. Airlines, hotels and cinemas commonly use such systems."
+  },
+  {
+    "id": "Q087",
+    "learning_aim": "E",
+    "topic": "E1.2.3 Collaborative working",
+    "type": "mcq",
+    "question": "Which IT feature enables team members in different locations to simultaneously edit the same document online?",
+    "choices": [
+      "Batch processing",
+      "Real-time collaborative editing (e.g. cloud-based word processing)",
+      "Local file permissions",
+      "Offline storage synchronisation"
+    ],
+    "correct_index": 1,
+    "explanation": "Cloud-based collaborative tools such as Google Docs or Microsoft 365 allow multiple users to edit the same document simultaneously in real time, regardless of location. This supports flexible and distributed working."
+  },
+  {
+    "id": "Q088",
+    "learning_aim": "E",
+    "topic": "E1.1.5 Entertainment and leisure",
+    "type": "mcq",
+    "question": "Which business model allows users to pay a regular fee to stream an unlimited amount of music or video content?",
+    "choices": [
+      "Pay-per-view",
+      "Subscription-based streaming",
+      "One-time licence purchase",
+      "Freemium with adverts"
+    ],
+    "correct_index": 1,
+    "explanation": "Subscription-based streaming (e.g. Netflix, Spotify) charges a recurring fee for unlimited access to content. This is distinct from pay-per-view (single title), one-time licence or freemium (free with advertising) models."
+  },
+  {
+    "id": "Q089",
+    "learning_aim": "E",
+    "topic": "E2.1 Sources of data",
+    "type": "mcq",
+    "question": "A researcher conducts their own survey to gather opinions from participants. What type of data source is this?",
+    "choices": [
+      "Secondary data",
+      "Primary data",
+      "Transactional data",
+      "Open data"
+    ],
+    "correct_index": 1,
+    "explanation": "Primary data is collected first-hand by the researcher for a specific purpose, such as through surveys, interviews or experiments. Secondary data is data that already exists, collected by someone else."
+  },
+  {
+    "id": "Q090",
+    "learning_aim": "E",
+    "topic": "E2.1 Sources of data",
+    "type": "mcq",
+    "question": "A student uses government census statistics published online for their geography project. What type of data source is this?",
+    "choices": [
+      "Primary data",
+      "Secondary data",
+      "Raw data",
+      "Analogue data"
+    ],
+    "correct_index": 1,
+    "explanation": "Secondary data is data already collected and published by another party. Government statistics, academic papers and market reports are all examples of secondary data sources."
+  },
+  {
+    "id": "Q091",
+    "learning_aim": "E",
+    "topic": "E2.5.2 Validation",
+    "type": "mcq",
+    "question": "A form rejects a date of birth entered as '31/02/2000' because February cannot have 31 days. What type of data accuracy measure is this?",
+    "choices": [
+      "Verification",
+      "Validation",
+      "Authentication",
+      "Encryption"
+    ],
+    "correct_index": 1,
+    "explanation": "Validation checks that data entered meets specified rules (e.g. range checks, format checks) before it is accepted by the system. This example uses a range check to catch an impossible date. Verification checks that data has been entered correctly by the user."
+  },
+  {
+    "id": "Q092",
+    "learning_aim": "E",
+    "topic": "E2.5.1 Verification",
+    "type": "mcq",
+    "question": "A user is asked to type their email address twice when registering, and both entries are compared to ensure they match. What data accuracy method is this?",
+    "choices": [
+      "Validation",
+      "Verification",
+      "Encryption",
+      "Authentication"
+    ],
+    "correct_index": 1,
+    "explanation": "Verification ensures data has been entered correctly. The double-entry method asks users to type data twice and compares both inputs, detecting typing errors. Validation checks rules about what data is acceptable."
+  },
+  {
+    "id": "Q093",
+    "learning_aim": "E",
+    "topic": "E2.5 Data accuracy methods",
+    "type": "true_false",
+    "question": "Validation can confirm that data entered into a system is factually correct and true.",
+    "choices": [
+      "True",
+      "False"
+    ],
+    "correct_index": 1,
+    "explanation": "Validation checks that data meets defined format and range rules, but it cannot confirm whether the data is factually correct. For example, an age of 150 might pass a range check if the rules are too broad, yet be factually impossible."
+  },
+  {
+    "id": "Q094",
+    "learning_aim": "E",
+    "topic": "E2.3 Data collection methods",
+    "type": "mcq",
+    "question": "Which data collection method involves a researcher having an in-depth, structured or unstructured conversation with one participant at a time?",
+    "choices": [
+      "Survey",
+      "Focus group",
+      "Questionnaire",
+      "Interview"
+    ],
+    "correct_index": 3,
+    "explanation": "An interview involves a researcher engaging directly with an individual participant, allowing for detailed responses and follow-up questions. A focus group involves several participants; a survey and questionnaire are typically self-completed by respondents."
+  },
+  {
+    "id": "Q095",
+    "learning_aim": "E",
+    "topic": "E2.6 User interface characteristics",
+    "type": "mcq",
+    "question": "A data entry form uses drop-down menus and auto-fill to minimise typing. Which user interface design characteristic does this primarily address?",
+    "choices": [
+      "Performance",
+      "Compatibility",
+      "Error reduction",
+      "Scalability"
+    ],
+    "correct_index": 2,
+    "explanation": "Drop-down menus and auto-fill reduce free-text entry, minimising typing errors and ensuring consistent data input. This directly addresses error reduction as a UI design characteristic for data collection systems."
+  },
+  {
+    "id": "Q096",
+    "learning_aim": "E",
+    "topic": "E2.6.2 Accessibility in UI design",
+    "type": "mcq",
+    "question": "Which UI design feature ensures that a data collection system can be used effectively by people with visual impairments?",
+    "choices": [
+      "Using only small fonts to fit more content on screen",
+      "Ensuring compatibility with screen readers and providing sufficient colour contrast",
+      "Requiring users to complete forms within a 30-second time limit",
+      "Hiding navigation menus to simplify the interface"
+    ],
+    "correct_index": 1,
+    "explanation": "Accessibility features such as screen reader compatibility, sufficient colour contrast and resizable text ensure users with visual impairments can use the system effectively, meeting legal requirements under the Equality Act 2010."
+  },
+  {
+    "id": "Q097",
+    "learning_aim": "E",
+    "topic": "E2.2 Reliability of information",
+    "type": "mcq",
+    "question": "Which of the following best helps ensure the reliability of online information sources?",
+    "choices": [
+      "Selecting the first result returned by a search engine",
+      "Checking the author's credentials, publication date and cross-referencing with other sources",
+      "Only using information from social media",
+      "Accepting information that agrees with existing beliefs"
+    ],
+    "correct_index": 1,
+    "explanation": "Reliability is ensured by evaluating the authority of the source (author credentials, publisher), checking currency (publication date) and triangulating information against multiple independent sources."
+  },
+  {
+    "id": "Q098",
+    "learning_aim": "E",
+    "topic": "E1.2.4 Remote working",
+    "type": "mcq",
+    "question": "Which is a potential disadvantage of remote working for organisations?",
+    "choices": [
+      "Reduced need for office space",
+      "Employees can work flexible hours",
+      "Increased difficulty in supervising staff and maintaining data security",
+      "Lower travel expenses for employees"
+    ],
+    "correct_index": 2,
+    "explanation": "Remote working can make it harder for managers to supervise employees directly and can increase data security risks if staff use personal devices or unsecured home networks. Reduced office space and travel costs are advantages."
+  },
+  {
+    "id": "Q099",
+    "learning_aim": "E",
+    "topic": "E2.3 Focus groups",
+    "type": "mcq",
+    "question": "What distinguishes a focus group from a questionnaire as a data collection method?",
+    "choices": [
+      "Focus groups are cheaper to run than questionnaires",
+      "Focus groups allow a moderator to explore group opinions through facilitated discussion",
+      "Focus groups can collect data from thousands of people simultaneously",
+      "Focus groups always use multiple-choice questions"
+    ],
+    "correct_index": 1,
+    "explanation": "A focus group brings together a small group of participants for moderated discussion, allowing exploration of attitudes and opinions in depth. Questionnaires can reach larger numbers but offer less opportunity for nuanced discussion."
+  },
+  {
+    "id": "Q100",
+    "learning_aim": "E",
+    "topic": "E1.1.4 News and information online",
+    "type": "true_false",
+    "question": "Online news services allow organisations to update stories in real time, which is an advantage over printed newspapers.",
+    "choices": [
+      "True",
+      "False"
+    ],
+    "correct_index": 0,
+    "explanation": "Online news platforms can publish and update stories instantly, providing real-time information. Printed newspapers have a fixed print run and cannot be updated after publication, making them less current."
+  },
+  {
+    "id": "Q101",
+    "learning_aim": "F",
+    "topic": "F1.1.6 Acceptable use policies",
+    "type": "mcq",
+    "question": "What is the purpose of an acceptable use policy (AUP) in an organisation?",
+    "choices": [
+      "To provide legal protection against copyright infringement claims",
+      "To set rules governing how employees may use IT systems and online resources",
+      "To outline the organisation's data backup procedures",
+      "To describe the technical specification of the company's IT hardware"
+    ],
+    "correct_index": 1,
+    "explanation": "An AUP defines the rules for appropriate use of an organisation's IT systems, covering activities such as internet browsing, email use and social media. It helps protect the organisation legally and manages employee behaviour."
+  },
+  {
+    "id": "Q102",
+    "learning_aim": "F",
+    "topic": "F1.1.3 Unequal access to IT",
+    "type": "mcq",
+    "question": "The 'digital divide' refers to which ethical concern in information technology?",
+    "choices": [
+      "The difference in processing speed between old and new computers",
+      "Unequal access to technology and the internet between different groups of people",
+      "The gap in file size between compressed and uncompressed data",
+      "Differences in screen resolution between devices"
+    ],
+    "correct_index": 1,
+    "explanation": "The digital divide describes the inequality between those who have access to modern IT and the internet and those who do not, due to factors such as income, geography or disability. It is an ethical issue because it can limit opportunities and social inclusion."
+  },
+  {
+    "id": "Q103",
+    "learning_aim": "F",
+    "topic": "F1.1.2 Environmental impact",
+    "type": "mcq",
+    "question": "Which environmental concern is associated with the disposal of old computers and electronic devices?",
+    "choices": [
+      "Increased cloud computing costs",
+      "E-waste containing toxic materials such as lead and mercury",
+      "Reduced internet bandwidth availability",
+      "Higher software licensing fees"
+    ],
+    "correct_index": 1,
+    "explanation": "Electronic waste (e-waste) from discarded devices can contain hazardous materials including lead, mercury and cadmium that may contaminate soil and water. Responsible recycling and disposal of IT equipment is an ethical responsibility."
+  },
+  {
+    "id": "Q104",
+    "learning_aim": "F",
+    "topic": "F1.1.1 Privacy",
+    "type": "mcq",
+    "question": "Which ethical issue arises when organisations collect and store large amounts of personal data about individuals without their knowledge?",
+    "choices": [
+      "Copyright infringement",
+      "Privacy violation",
+      "Netiquette breach",
+      "Denial of service"
+    ],
+    "correct_index": 1,
+    "explanation": "Privacy is a fundamental ethical issue in IT — individuals have a right to control information about themselves. Collecting data without informed consent is both an ethical concern and potentially illegal under the UK GDPR."
+  },
+  {
+    "id": "Q105",
+    "learning_aim": "F",
+    "topic": "F1.1.5 Online behaviour and netiquette",
+    "type": "mcq",
+    "question": "Netiquette refers to which of the following in an online context?",
+    "choices": [
+      "A type of network security protocol",
+      "Acceptable and respectful standards of behaviour in online communication",
+      "Software that filters inappropriate content",
+      "The process of encrypting online messages"
+    ],
+    "correct_index": 1,
+    "explanation": "Netiquette (network etiquette) refers to the informal code of polite and respectful behaviour expected in online environments such as email, forums and social media. It includes avoiding offensive language, not spamming and respecting others' privacy."
+  },
+  {
+    "id": "Q106",
+    "learning_aim": "F",
+    "topic": "F2.1.5 Data protection legislation",
+    "type": "mcq",
+    "question": "The Data Protection Act 2018 (incorporating UK GDPR) requires organisations to process personal data in which way?",
+    "choices": [
+      "As quickly as possible to improve efficiency",
+      "Lawfully, fairly and transparently with a clear legal basis",
+      "Only if the data is stored on secure cloud servers",
+      "Without informing the individuals concerned"
+    ],
+    "correct_index": 1,
+    "explanation": "The DPA 2018 / UK GDPR requires personal data to be processed lawfully, fairly and transparently, with a clear legal basis. It also requires data to be kept secure, accurate and not retained longer than necessary."
+  },
+  {
+    "id": "Q107",
+    "learning_aim": "F",
+    "topic": "F2.1.5 Data protection legislation",
+    "type": "mcq",
+    "question": "Under the UK GDPR, which right allows an individual to request that an organisation deletes their personal data?",
+    "choices": [
+      "Right to data portability",
+      "Right to be informed",
+      "Right to erasure ('right to be forgotten')",
+      "Right to object"
+    ],
+    "correct_index": 2,
+    "explanation": "The right to erasure (also known as the 'right to be forgotten') allows individuals to request deletion of their personal data in certain circumstances, such as when the data is no longer needed for its original purpose."
+  },
+  {
+    "id": "Q108",
+    "learning_aim": "F",
+    "topic": "F2.1.1 Computer misuse legislation",
+    "type": "mcq",
+    "question": "The Computer Misuse Act 1990 created three main offences. Which of the following is one of them?",
+    "choices": [
+      "Sharing copyrighted software without permission",
+      "Unauthorised access to computer material",
+      "Failing to dispose of e-waste correctly",
+      "Collecting personal data without consent"
+    ],
+    "correct_index": 1,
+    "explanation": "The Computer Misuse Act 1990 created three offences: unauthorised access to computer material; unauthorised access with intent to commit further offences; and unauthorised modification of computer material. Copyright issues are covered by separate legislation."
+  },
+  {
+    "id": "Q109",
+    "learning_aim": "F",
+    "topic": "F2.1.1 Computer misuse legislation",
+    "type": "true_false",
+    "question": "Under the Computer Misuse Act 1990, installing malware on another person's computer without permission is a criminal offence.",
+    "choices": [
+      "True",
+      "False"
+    ],
+    "correct_index": 0,
+    "explanation": "Installing malware constitutes unauthorised modification of computer material, which is the third offence under the Computer Misuse Act 1990 and carries a maximum penalty of ten years' imprisonment."
+  },
+  {
+    "id": "Q110",
+    "learning_aim": "F",
+    "topic": "F2.1.2 Copyright legislation",
+    "type": "mcq",
+    "question": "The Copyright, Designs and Patents Act 1988 protects which type of creative work from unauthorised copying?",
+    "choices": [
+      "Only physical products and inventions",
+      "Personal data held by organisations",
+      "Original literary, artistic, musical and software works",
+      "Only government-produced publications"
+    ],
+    "correct_index": 2,
+    "explanation": "The CDPA 1988 gives creators of original works (including software, music, books and images) the exclusive rights to copy, distribute and adapt their work. Unauthorised copying or distribution without a licence is an infringement."
+  },
+  {
+    "id": "Q111",
+    "learning_aim": "F",
+    "topic": "F2.1.3 Copyright regulations – computer programs",
+    "type": "mcq",
+    "question": "Downloading a commercial software application from a torrent site without purchasing a licence is an infringement of which law?",
+    "choices": [
+      "Data Protection Act 2018",
+      "Computer Misuse Act 1990",
+      "Copyright, Designs and Patents Act 1988",
+      "Freedom of Information Act 2000"
+    ],
+    "correct_index": 2,
+    "explanation": "Distributing or downloading software without a valid licence infringes the Copyright, Designs and Patents Act 1988, which covers computer programs as a form of literary work. The Computer Misuse Act covers unauthorised access, not copyright."
+  },
+  {
+    "id": "Q112",
+    "learning_aim": "F",
+    "topic": "F2.1.4 Health and safety regulations",
+    "type": "mcq",
+    "question": "The Health and Safety (Display Screen Equipment) Regulations 1992 require employers to do which of the following?",
+    "choices": [
+      "Provide employees with unlimited internet access",
+      "Assess and minimise risks to workers who regularly use computer screens",
+      "Ensure all software is licensed under open-source terms",
+      "Provide encryption for all data stored on company devices"
+    ],
+    "correct_index": 1,
+    "explanation": "The DSE Regulations 1992 require employers to assess workstations used by regular screen users, provide breaks, offer eye tests and ensure workstations are ergonomically suitable to prevent health issues such as repetitive strain injury (RSI)."
+  },
+  {
+    "id": "Q113",
+    "learning_aim": "F",
+    "topic": "F1.1.4 Access to assistive technology",
+    "type": "mcq",
+    "question": "Why is access to assistive technology considered an ethical issue in IT?",
+    "choices": [
+      "Assistive technology is always more expensive than standard hardware",
+      "Not everyone who needs it can afford or access it, creating inequality",
+      "Assistive technology reduces system performance significantly",
+      "It is only relevant in healthcare settings"
+    ],
+    "correct_index": 1,
+    "explanation": "Access to assistive technology is an ethical issue because those with disabilities may be excluded from fully participating in digital life if they cannot afford or obtain devices like screen readers or adaptive keyboards, deepening inequality."
+  },
+  {
+    "id": "Q114",
+    "learning_aim": "F",
+    "topic": "F2.1.5 Data protection legislation",
+    "type": "true_false",
+    "question": "The Data Protection Act 2018 applies only to data stored digitally and does not cover paper-based personal records.",
+    "choices": [
+      "True",
+      "False"
+    ],
+    "correct_index": 1,
+    "explanation": "The DPA 2018 can apply to personal data in both digital and structured manual (paper) filing systems, not exclusively digital records. Organisations must protect all forms of personal data appropriately."
+  },
+  {
+    "id": "Q115",
+    "learning_aim": "F",
+    "topic": "F2.1.1 Computer Misuse Act 1990",
+    "type": "mcq",
+    "question": "Which offence under the Computer Misuse Act 1990 applies to a hacker who accesses a system without authorisation in order to commit fraud?",
+    "choices": [
+      "Offence 1: unauthorised access to computer material",
+      "Offence 2: unauthorised access with intent to commit or facilitate further offences",
+      "Offence 3: unauthorised modification of computer material",
+      "Offence 4: making, supplying or obtaining articles for use in computer misuse"
+    ],
+    "correct_index": 1,
+    "explanation": "Offence 2 of the Computer Misuse Act 1990 applies when a person gains unauthorised access with the intention of committing a further offence such as fraud or blackmail. It carries a more severe penalty than basic unauthorised access alone."
+  },
+  {
+    "id": "Q116",
+    "learning_aim": "F",
+    "topic": "F2.1.2 Copyright legislation",
+    "type": "mcq",
+    "question": "How long does copyright protection typically last for a literary or artistic work after the death of its creator under UK law?",
+    "choices": [
+      "10 years",
+      "25 years",
+      "50 years",
+      "70 years"
+    ],
+    "correct_index": 3,
+    "explanation": "Under the CDPA 1988, copyright for most literary, dramatic, musical and artistic works lasts for 70 years after the death of the creator, after which the work enters the public domain."
+  },
+  {
+    "id": "Q117",
+    "learning_aim": "F",
+    "topic": "F1.1.2 Environmental impact of IT",
+    "type": "mcq",
+    "question": "Which of the following is a direct environmental impact of large data centres that host cloud services?",
+    "choices": [
+      "Reduced need for physical storage media",
+      "High energy consumption contributing to carbon emissions",
+      "Elimination of e-waste from personal devices",
+      "Decreased demand for rare earth minerals"
+    ],
+    "correct_index": 1,
+    "explanation": "Data centres consume vast amounts of electricity to power servers and cooling systems, contributing significantly to carbon emissions. This is a major ethical and environmental consideration in cloud computing."
+  },
+  {
+    "id": "Q118",
+    "learning_aim": "F",
+    "topic": "F2.1.5 UK GDPR principles",
+    "type": "mcq",
+    "question": "Which principle of the UK GDPR states that personal data should only be kept for as long as is necessary for its original purpose?",
+    "choices": [
+      "Data minimisation",
+      "Storage limitation",
+      "Purpose limitation",
+      "Integrity and confidentiality"
+    ],
+    "correct_index": 1,
+    "explanation": "The storage limitation principle requires that personal data is not kept in a form that identifies individuals for longer than necessary. Data minimisation concerns collecting only what is needed; purpose limitation restricts use to the stated purpose."
+  },
+  {
+    "id": "Q119",
+    "learning_aim": "F",
+    "topic": "F2.1.4 Health and safety regulations",
+    "type": "true_false",
+    "question": "Under the Health and Safety (Display Screen Equipment) Regulations 1992, employers must offer eye tests to employees who regularly use display screen equipment.",
+    "choices": [
+      "True",
+      "False"
+    ],
+    "correct_index": 0,
+    "explanation": "The DSE Regulations 1992 require employers to offer and pay for eye tests for regular DSE users, and to contribute towards the cost of corrective spectacles if they are specifically required for DSE work."
+  },
+  {
+    "id": "Q120",
+    "learning_aim": "F",
+    "topic": "F1.1.5 Netiquette and online behaviour",
+    "type": "mcq",
+    "question": "Which of the following is an example of poor netiquette in a professional email?",
+    "choices": [
+      "Using a clear subject line that summarises the email content",
+      "Writing the entire message in capital letters",
+      "Signing off with your name and job title",
+      "Responding within a reasonable timeframe"
+    ],
+    "correct_index": 1,
+    "explanation": "Writing in all capital letters is widely considered shouting in online communication and is poor netiquette, especially in professional contexts. Clear subject lines, signatures and timely responses are all examples of good netiquette."
+  }
+]
