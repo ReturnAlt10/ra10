@@ -657,33 +657,62 @@ async function addMember() {
   if (!email) { showToast('Enter an email address.'); return; }
 
   const hasSchool = await ensureSchoolContext();
-  if (!hasSchool) { showToast('Could not load your school. Please refresh and try again.'); return; }
+  if (!hasSchool) { showToast('Could not load your school. Please refresh.'); return; }
 
-  // Check if this email is already a member
-  const existing = state.members.find(m => m.email === email && String(m.status).toLowerCase() !== 'removed');
+  const existing = state.members.find(m =>
+    m.email === email && String(m.status).toLowerCase() !== 'removed'
+  );
   if (existing) { showToast('This person is already a member.'); return; }
 
-  const payload = {
-    school_id: state.schoolId,
-    email,
-    role,
-    subjects,
-    status: 'invited'
-  };
+  // Step 1: Insert into school_members
+  const { error: insertError } = await state.supabase
+    .from('school_members')
+    .insert({
+      school_id: state.schoolId,
+      email,
+      role,
+      subjects,
+      status: 'invited'
+    });
 
-  const { error: insertError } = await state.supabase.from('school_members').insert(payload);
   if (insertError) {
-    console.error('Insert member failed', insertError);
+    console.error('Insert failed', insertError);
     showToast('Could not add member: ' + (insertError.message || 'unknown error'));
     return;
   }
 
-  if (role === 'teacher') {
-    await state.supabase.from('profiles').update({ credits: 600 }).eq('email', email);
+  // Step 2: Send invite email via Supabase Auth REST API using service role
+  try {
+    const inviteRes = await fetch(
+      'https://tcrrgsylxbyyrmnouihl.supabase.co/auth/v1/invite',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': SUPABASE_KEY,
+          'Authorization': 'Bearer ' + (state.session?.access_token || SUPABASE_KEY)
+        },
+        body: JSON.stringify({
+          email,
+          data: {
+            role,
+            school_id: state.schoolId,
+            school_name: state.schoolName
+          },
+          redirect_to: 'https://ra10.co.uk/#/account'
+        })
+      }
+    );
+    if (!inviteRes.ok) {
+      const errBody = await inviteRes.text();
+      console.warn('Invite email failed (non-fatal):', errBody);
+    }
+  } catch(inviteErr) {
+    console.warn('Invite fetch error (non-fatal):', inviteErr);
   }
 
   closeAddModal();
-  showToast('Member added successfully.');
+  showToast('Member added — invite email sent to ' + email);
   await loadMembers();
 }
 
@@ -750,22 +779,22 @@ async function initAccess() {
   await prepareSupabase();
 
   const userId = state.session?.user?.id;
+  if (!userId) { show('denied'); return; }
 
-  // Step 1: try to get school_id from the fresh profile row in the database
-  if (userId) {
-    const { data: freshProfile } = await state.supabase
-      .from('profiles')
-      .select('school_id, school_name')
-      .eq('id', userId)
-      .single();
-    if (freshProfile?.school_id) {
-      state.schoolId = freshProfile.school_id;
-      state.schoolName = freshProfile.school_name || 'RA10 School';
-    }
+  // Step 1: get school_id from this user's profile row
+  const { data: freshProfile } = await state.supabase
+    .from('profiles')
+    .select('school_id, school_name')
+    .eq('id', userId)
+    .single();
+
+  if (freshProfile?.school_id) {
+    state.schoolId = freshProfile.school_id;
+    state.schoolName = freshProfile.school_name || 'Your School';
   }
 
-  // Step 2: if still no school_id, look for an existing school owned by this user
-  if (!state.schoolId && userId) {
+  // Step 2: if no school_id on profile, look for a school owned by this user
+  if (!state.schoolId) {
     const { data: schoolRow } = await state.supabase
       .from('schools')
       .select('id, name')
@@ -774,8 +803,8 @@ async function initAccess() {
       .single();
     if (schoolRow?.id) {
       state.schoolId = schoolRow.id;
-      state.schoolName = schoolRow.name || 'RA10 School';
-      // Save it back to profile so Step 1 works next time
+      state.schoolName = schoolRow.name || 'Your School';
+      // Save back to profile
       await state.supabase
         .from('profiles')
         .update({ school_id: schoolRow.id, school_name: schoolRow.name })
@@ -783,9 +812,9 @@ async function initAccess() {
     }
   }
 
-  // Step 3: if still no school, auto-create one for this user
-  if (!state.schoolId && userId) {
-    const newName = 'RA10 School';
+  // Step 3: auto-create a school for this user if none exists
+  if (!state.schoolId) {
+    const newName = (state.profile?.display_name || email.split('@')[0]) + "'s School";
     const { data: created } = await state.supabase
       .from('schools')
       .insert({ owner_id: userId, name: newName })
@@ -794,12 +823,18 @@ async function initAccess() {
     if (created?.id) {
       state.schoolId = created.id;
       state.schoolName = created.name;
-      // Save it back to profile
       await state.supabase
         .from('profiles')
         .update({ school_id: created.id, school_name: created.name })
         .eq('id', userId);
     }
+  }
+
+  if (!state.schoolId) {
+    show('denied');
+    document.getElementById('gate-denied').querySelector('p').textContent =
+      'Could not load or create your school. Please contact support.';
+    return;
   }
 
   el.schoolName.textContent = state.schoolName;

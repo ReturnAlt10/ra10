@@ -459,7 +459,7 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
           <div class="dropdown-header" id="dropdown-email"></div>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" onclick="go('/account')">My Account</a>
-          <a class="dropdown-item" id="dropdown-edu-admin" href="edu-admin/index.html" style="display:none">EDU Admin</a>
+          <a class="dropdown-item" id="dropdown-edu-admin" href="/admin/index.html" style="display:none">EDU Admin</a>
           <a class="dropdown-item" onclick="go('/upgrade')">⚡ Upgrade</a>
           <div class="dropdown-divider"></div>
           <button class="dropdown-item danger" id="nav-signout-btn">Sign out</button>
@@ -1150,9 +1150,10 @@ route();
         const eduAdminLink = document.getElementById('dropdown-edu-admin');
         if (eduAdminLink) {
           const t = RA10.getTier();
-          const email = (profile && profile.email) ? profile.email.toLowerCase() : '';
+          const ownerEmail = 'mistry.hashim@icloud.com';
+          const userEmail = (profile && profile.email) ? profile.email.toLowerCase() : '';
           eduAdminLink.style.display =
-            (t === 'school_admin' || email === 'mistry.hashim@icloud.com') ? '' : 'none';
+            (t === 'school_admin' || userEmail === ownerEmail) ? '' : 'none';
         }
         const accountTier = RA10.getTier();
         document.querySelectorAll('.card[data-tier]').forEach(card => {

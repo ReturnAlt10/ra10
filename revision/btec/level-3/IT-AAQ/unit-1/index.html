@@ -625,23 +625,36 @@
 
 </script>
 <script>
-document.addEventListener('DOMContentLoaded', async () => {
-  if (window.RA10) {
+document.addEventListener('DOMContentLoaded', function() {
+  function waitForRA10(cb, tries) {
+    tries = tries || 0;
+    if (window.RA10 && typeof RA10.init === 'function') {
+      cb();
+    } else if (tries < 50) {
+      setTimeout(function() { waitForRA10(cb, tries + 1); }, 100);
+    }
+  }
+
+  waitForRA10(async function() {
     await RA10.init();
-    function _updateCostLabels() {
-      const hide = !window.RA10 || RA10.isPaid() || RA10.isOwner();
+
+    function updateCostLabels() {
+      const hide = RA10.isPaid() || RA10.isOwner();
       document.querySelectorAll('.ra10-cost-label').forEach(el => {
         el.style.display = hide ? 'none' : '';
       });
     }
-    _updateCostLabels();
-    RA10.on('authchange', _updateCostLabels);
-    RA10.renderCreditChip('unit1-credit-chip');
-    RA10.on('creditschange', () => RA10.renderCreditChip('unit1-credit-chip'));
-    RA10.on('authchange', () => {
+
+    updateCostLabels();
+    RA10.on('authchange', updateCostLabels);
+    RA10.on('authchange', function() {
       RA10.renderCreditChip('unit1-credit-chip');
     });
-  }
+    RA10.on('creditschange', function() {
+      RA10.renderCreditChip('unit1-credit-chip');
+    });
+    RA10.renderCreditChip('unit1-credit-chip');
+  });
 });
 
 // Credit gate helper — returns true if action is allowed, false if blocked
@@ -652,7 +665,7 @@ async function ra10Gate(action) {
     if (RA10.isPaid()) return true;
     if (!RA10.isLoggedIn()) {
       const result = RA10.guestGate(action, 3, RA10.showPaywall);
-      _updateGuestChip();
+      if (window.RA10) RA10.renderCreditChip('unit1-credit-chip');
       return result === true;
     }
     const result = await RA10.gate(action, RA10.showPaywall);

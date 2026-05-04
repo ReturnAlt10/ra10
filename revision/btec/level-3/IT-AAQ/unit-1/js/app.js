@@ -316,7 +316,7 @@ function styleOfQuestion(q) {
 }
 
 async function generateMock(total, seed, aims, styles) {
-  if (!await ra10Gate('mock_paper_gen', 999)) return;
+  if (!await ra10Gate('mock_paper_gen')) return;
   const rng = makeRng(seed);
   styles = styles && styles.length ? styles : ['pearson'];
   const pool = QUESTIONS.filter(q => aims.includes(q.learning_aim));
@@ -580,7 +580,7 @@ function renderPracticeControls() {
 }
 
 async function startPractice() {
-  if (!await ra10Gate('practice_question', 999)) return;
+  if (!await ra10Gate('practice_question')) return;
   const aim = $('#practice-aim').value;
   const marks = $('#practice-marks').value;
   let pool = QUESTIONS.slice();
@@ -653,7 +653,7 @@ function renderPracticeCard() {
     btnReveal.textContent = msBox.style.display === 'none' ? 'Reveal mark scheme' : 'Hide mark scheme';
   });
   btnAutoMark.addEventListener('click', async () => {
-    if (!(await ra10Gate('ai_mark', 0))) return;
+    if (!(await ra10Gate('ai_mark'))) return;
     if (q.type === 'diagram') {
       automarkHost.innerHTML = '';
       automarkHost.appendChild(buildSelfMarkUI(q));
@@ -1120,7 +1120,7 @@ function renderQuizControls() {
 }
 
 async function startQuiz() {
-  if (!await ra10Gate('quiz_question', 999)) return;
+  if (!await ra10Gate('quiz_question')) return;
   if (!QUIZ || !QUIZ.length) { alert('Quiz data not available.'); return; }
   const aim = $('#quiz-aim').value;
   const lenVal = $('#quiz-length').value;
