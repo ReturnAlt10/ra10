@@ -1,16 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script>
+(function(){
+  var s = document.createElement('script');
+  var isLocal = location.hostname === '127.0.0.1' || location.hostname === 'localhost';
+  s.src = isLocal ? 'http://127.0.0.1:5500/ra10-sdk.js' : 'https://ra10.co.uk/ra10-sdk.js';
+  document.head.insertBefore(s, document.head.firstChild);
+})();
+</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>BTEC IT Unit 1 — Question Bank & Mock Paper Builder</title>
 <link rel="preconnect" href="https://api.fontshare.com">
 <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@500,700,900,400&f[]=jetbrains-mono@500&display=swap">
 <link rel="stylesheet" href="css/style.css">
+<style>
+.ra10-cost-label {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.75);
+  background: rgba(0,0,0,0.15);
+  padding: 1px 6px;
+  border-radius: 999px;
+  margin-left: 6px;
+  vertical-align: middle;
+  letter-spacing: 0.03em;
+}
+
+.ra10-cost-label.free-label {
+  color: rgba(255,255,255,0.6);
+  background: rgba(255,255,255,0.12);
+}
+</style>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%2300594E'/%3E%3Ctext x='16' y='22' text-anchor='middle' font-family='sans-serif' font-weight='900' font-size='18' fill='%23E8F1EE'%3EU1%3C/text%3E%3C/svg%3E">
 </head>
 <body>
-
 <header class="topbar">
   <div class="brand">
     <svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true">
@@ -31,6 +57,7 @@
     <button class="tab" data-tab="flash">Flashcards</button>
     <button class="tab" data-tab="spec">Spec Coverage</button>
   </nav>
+  <div id="unit1-credit-chip" style="margin-left:auto;display:flex;align-items:center;"></div>
 </header>
 
 <main id="app">
@@ -57,12 +84,12 @@
           <span class="card-tag">Recommended</span>
           <h3>Build a mock paper</h3>
           <p>Randomised 90-, 45- or 30-mark paper with Pearson-style answer lines, candidate header, and one-click print.</p>
-          <button class="btn primary" data-goto="mock">Build mock paper</button>
+          <button class="btn primary" data-goto="mock">Build mock paper<span class="ra10-cost-label">5 credits</span></button>
         </article>
         <article class="card">
           <h3>Practice by topic</h3>
           <p>Single questions filtered by aim, command verb, or marks. Self-mark or get auto-marked feedback.</p>
-          <button class="btn" data-goto="practice">Start practising</button>
+          <button class="btn" data-goto="practice">Start practising<span class="ra10-cost-label">1 credit per question</span></button>
         </article>
         <article class="card">
           <h3>Browse all questions</h3>
@@ -82,7 +109,7 @@
         <article class="card">
           <h3>Quick-fire quiz</h3>
           <p>120 multiple-choice and true/false questions with explanations and per-aim scoring.</p>
-          <button class="btn" data-goto="quiz">Start quiz</button>
+          <button class="btn" data-goto="quiz">Start quiz<span class="ra10-cost-label">1 credit per question</span></button>
         </article>
         <article class="card">
           <h3>Flashcards</h3>
@@ -186,7 +213,7 @@
         </div>
       </details>
       <div class="mock-actions">
-        <button id="btn-generate" class="btn primary big">Generate mock paper</button>
+        <button id="btn-generate" class="btn primary big">Generate mock paper<span class="ra10-cost-label">5 credits</span></button>
         <button id="btn-toggle-ms" class="btn ghost">Show mark scheme</button>
         <button id="btn-print" class="btn">Print question paper</button>
         <button id="btn-print-ms" class="btn">Print mark scheme only</button>
@@ -204,7 +231,7 @@
     <div class="practice-controls">
       <select id="practice-aim"><option value="">All aims</option></select>
       <select id="practice-marks"><option value="">All marks</option></select>
-      <button id="btn-practice-start" class="btn primary">Start session</button>
+      <button id="btn-practice-start" class="btn primary">Start session<span class="ra10-cost-label">1 credit per question</span></button>
       <span id="practice-progress" class="muted"></span>
     </div>
     <div id="practice-card"></div>
@@ -224,7 +251,7 @@
         <option value="40">40 questions</option>
         <option value="all">All questions</option>
       </select>
-      <button id="btn-quiz-start" class="btn primary">Start quiz</button>
+      <button id="btn-quiz-start" class="btn primary">Start quiz<span class="ra10-cost-label">1 credit per question</span></button>
       <span id="quiz-progress" class="muted"></span>
     </div>
     <div id="quiz-card"></div>
@@ -239,7 +266,7 @@
     </header>
     <div class="flash-controls">
       <select id="flash-aim"><option value="">All aims</option></select>
-      <button id="btn-flash-start" class="btn primary">Start session</button>
+      <button id="btn-flash-start" class="btn primary">Start session<span class="ra10-cost-label free-label">Free</span></button>
       <button id="btn-flash-shuffle" class="btn">Shuffle</button>
       <button id="btn-flash-reset" class="btn ghost">Reset progress</button>
       <span id="flash-progress" class="muted"></span>
@@ -596,6 +623,50 @@
   });
 })();
 
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+  if (window.RA10) {
+    await RA10.init();
+    function _updateCostLabels() {
+      const hide = !window.RA10 || RA10.isPaid() || RA10.isOwner();
+      document.querySelectorAll('.ra10-cost-label').forEach(el => {
+        el.style.display = hide ? 'none' : '';
+      });
+    }
+    _updateCostLabels();
+    RA10.on('authchange', _updateCostLabels);
+    RA10.renderCreditChip('unit1-credit-chip');
+    RA10.on('creditschange', () => RA10.renderCreditChip('unit1-credit-chip'));
+    RA10.on('authchange', () => {
+      RA10.renderCreditChip('unit1-credit-chip');
+    });
+  }
+});
 
+// Credit gate helper — returns true if action is allowed, false if blocked
+async function ra10Gate(action) {
+  try {
+    if (!window.RA10) return true;
+    if (RA10.isOwner()) return true;
+    if (RA10.isPaid()) return true;
+    if (!RA10.isLoggedIn()) {
+      const result = RA10.guestGate(action, 3, RA10.showPaywall);
+      _updateGuestChip();
+      return result === true;
+    }
+    const result = await RA10.gate(action, RA10.showPaywall);
+    return result;
+  } catch(e) {
+    console.warn('ra10Gate error', e);
+    return true;
+  }
+}
+
+function _updateGuestChip() {
+  if (window.RA10) {
+    RA10.renderCreditChip('unit1-credit-chip');
+  }
+}
 </script></body>
 </html>

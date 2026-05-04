@@ -682,34 +682,8 @@ async function addMember() {
     await state.supabase.from('profiles').update({ credits: 600 }).eq('email', email);
   }
 
-  // Send invite email via Edge Function
-  try {
-    const token = state.session?.access_token;
-    const fnUrl = 'https://tcrrgsylxbyyrmnouihl.supabase.co/functions/v1/send-invite';
-    const fnRes = await fetch(fnUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + token,
-        'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRjcnJnc3lseGJ5eXJtbm91aWhsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4ODUyMTEsImV4cCI6MjA5MzQ2MTIxMX0.eOp6ma-mfgh8F20nM7E2OaBW28LlZlwuEEWr6k2zDWw'
-      },
-      body: JSON.stringify({
-        email,
-        role,
-        schoolName: state.schoolName,
-        schoolId: state.schoolId
-      })
-    });
-    if (!fnRes.ok) {
-      const errText = await fnRes.text();
-      console.warn('Invite email failed (non-fatal):', errText);
-    }
-  } catch (fetchErr) {
-    console.warn('Invite email fetch error (non-fatal):', fetchErr);
-  }
-
   closeAddModal();
-  showToast('Member invited — they will receive an email shortly.');
+  showToast('Member added successfully.');
   await loadMembers();
 }
 
