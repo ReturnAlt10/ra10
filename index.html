@@ -429,6 +429,7 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
 }
 </style>
 <script src="../../../../ra10-sdk.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 </head>
 <body>
 
@@ -461,6 +462,8 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
           <a class="dropdown-item" onclick="go('/account')">My Account</a>
           <a class="dropdown-item" id="dropdown-edu-admin" href="/admin/index.html" style="display:none">EDU Admin</a>
           <a class="dropdown-item" onclick="go('/upgrade')">⚡ Upgrade</a>
+          <div class="dropdown-divider"></div>
+          <button class="dropdown-item" id="dropdown-reset-pw">Reset password</button>
           <div class="dropdown-divider"></div>
           <button class="dropdown-item danger" id="nav-signout-btn">Sign out</button>
         </div>
@@ -1116,6 +1119,18 @@ route();
 
   document.addEventListener('DOMContentLoaded', async () => {
     await RA10.init();
+
+    // Handle Supabase email callback (invite or password reset)
+    const hashParams = new URLSearchParams(window.location.hash.slice(1));
+    const cbToken = hashParams.get('access_token');
+    const cbType = hashParams.get('type');
+    if (cbToken && (cbType === 'invite' || cbType === 'recovery')) {
+      history.replaceState(null, '', window.location.pathname);
+      setTimeout(() => {
+        document.getElementById('set-password-overlay').classList.add('open');
+      }, 400);
+    }
+
     _updateNavAuth();
 
     RA10.on('authchange', () => { _updateNavAuth(); });
@@ -1230,6 +1245,50 @@ route();
       else { suc.textContent = 'Reset link sent — check your email.'; suc.classList.add('show'); }
     });
 
+    document.getElementById('setpw-btn').addEventListener('click', async () => {
+      const btn = document.getElementById('setpw-btn');
+      const err = document.getElementById('setpw-error');
+      const pw = document.getElementById('setpw-input').value;
+      const cf = document.getElementById('setpw-confirm').value;
+      err.classList.remove('show');
+      if (pw.length < 8) {
+        err.textContent = 'Password must be at least 8 characters.';
+        err.classList.add('show'); return;
+      }
+      if (pw !== cf) {
+        err.textContent = 'Passwords do not match.';
+        err.classList.add('show'); return;
+      }
+      btn.disabled = true;
+      btn.textContent = 'Saving...';
+      try {
+        const { error } = await RA10.getSession()?._supabase?.auth.updateUser({ password: pw })
+          || await (async () => {
+            const sb = window.supabase.createClient(
+              'https://tcrrgsylxbyyrmnouihl.supabase.co',
+              'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRjcnJnc3lseGJ5eXJtbm91aWhsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4ODUyMTEsImV4cCI6MjA5MzQ2MTIxMX0.eOp6ma-mfgh8F20nM7E2OaBW28LlZlwuEEWr6k2zDWw'
+            );
+            return sb.auth.updateUser({ password: pw });
+          })();
+        if (error) {
+          err.textContent = error.message;
+          err.classList.add('show');
+          btn.disabled = false;
+          btn.textContent = 'Set password';
+        } else {
+          document.getElementById('set-password-overlay').classList.remove('open');
+          await RA10.init();
+          _updateNavAuth();
+          go('account');
+        }
+      } catch(e) {
+        err.textContent = 'Something went wrong. Please try again.';
+        err.classList.add('show');
+        btn.disabled = false;
+        btn.textContent = 'Set password';
+      }
+    });
+
     document.getElementById('nav-user-btn').addEventListener('click', e => {
       e.stopPropagation();
       document.getElementById('nav-user-wrap').classList.toggle('open');
@@ -1238,6 +1297,18 @@ route();
 
     document.getElementById('nav-signout-btn').addEventListener('click', async () => {
       await RA10.signOut(); go('/');
+    });
+
+    document.getElementById('dropdown-reset-pw')?.addEventListener('click', async () => {
+      document.getElementById('nav-user-wrap')?.classList.remove('open');
+      const profile = RA10.getProfile();
+      if (!profile?.email) return;
+      const result = await RA10.resetPassword(profile.email);
+      if (!result?.error) {
+        alert('Password reset email sent to ' + profile.email + '. Check your inbox.');
+      } else {
+        alert('Could not send reset email: ' + result.error.message);
+      }
     });
 
     document.getElementById('btn-buy-basic')?.addEventListener('click', () => {
@@ -1308,6 +1379,34 @@ route();
       <button class="auth-submit-btn" id="forgot-btn">Send reset link</button>
       <p class="auth-foot"><a id="back-to-signin">← Back to sign in</a></p>
     </div>
+  </div>
+</div>
+<div class="auth-overlay" id="set-password-overlay">
+  <div class="auth-modal">
+    <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:1.5rem">
+      <div style="width:32px;height:32px;background:var(--color-primary);
+        border-radius:var(--radius-md);display:flex;align-items:center;
+        justify-content:center;color:#fff;font-family:var(--font-d);
+        font-weight:700">R</div>
+      <span style="font-family:var(--font-d);font-size:var(--tx-lg)">RA10</span>
+    </div>
+    <h2 style="font-family:var(--font-d);font-size:var(--tx-xl);
+      font-weight:400;margin-bottom:var(--sp2)">Set your password</h2>
+    <p style="color:var(--color-text-muted);font-size:var(--tx-sm);
+      margin-bottom:var(--sp6)">Choose a password to complete your 
+      account setup.</p>
+    <div class="auth-error" id="setpw-error"></div>
+    <div class="auth-field">
+      <label class="auth-label">New password</label>
+      <input class="auth-input" type="password" id="setpw-input"
+        placeholder="Min. 8 characters" autocomplete="new-password">
+    </div>
+    <div class="auth-field">
+      <label class="auth-label">Confirm password</label>
+      <input class="auth-input" type="password" id="setpw-confirm"
+        placeholder="Repeat password" autocomplete="new-password">
+    </div>
+    <button class="auth-submit-btn" id="setpw-btn">Set password</button>
   </div>
 </div>
 </body>

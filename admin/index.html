@@ -16,22 +16,22 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="invite.js"></script>
 <style>
+/* ── Design tokens ─────────────────────────────── */
 :root,[data-theme="light"]{
-  --color-bg:#f7f6f2; --color-surface:#f9f8f5; --color-surface-2:#fbfbf9;
-  --color-surface-offset:#f3f0ec; --color-surface-offset-2:#edeae5;
-  --color-surface-dynamic:#e6e4df; --color-divider:#dcd9d5; --color-border:#d4d1ca;
-  --color-text:#28251d; --color-text-muted:#7a7974; --color-text-faint:#bab9b4;
-  --color-text-inverse:#f9f8f4;
-  --color-primary:#d20000; --color-primary-hover:#a70000; --color-primary-active:#7a0000;
-  --color-primary-highlight:#f4d4d4;
-  --color-success:#437a22; --color-success-highlight:#d4dfcc;
-  --color-warning:#964219; --color-warning-highlight:#ddcfc6;
-  --radius-sm:.375rem; --radius-md:.5rem; --radius-lg:.75rem;
-  --radius-xl:1rem; --radius-full:9999px;
-  --shadow-sm:0 1px 2px rgba(28,25,20,.06);
-  --shadow-md:0 4px 12px rgba(28,25,20,.08);
-  --shadow-lg:0 12px 32px rgba(28,25,20,.12);
+  --bg:#f7f6f2;--surface:#f9f8f5;--surface-2:#fbfbf9;
+  --surface-off:#f3f0ec;--surface-off2:#edeae5;
+  --surface-dyn:#e6e4df;--divider:#dcd9d5;--border:#d4d1ca;
+  --ink:#28251d;--ink-2:#7a7974;--ink-3:#bab9b4;--ink-inv:#f9f8f4;
+  --red:#d20000;--red-h:#a70000;--red-a:#7a0000;--red-hi:#f4d4d4;
+  --green:#437a22;--green-hi:#d4dfcc;
+  --amber:#964219;--amber-hi:#ddcfc6;
+  --r-sm:.375rem;--r-md:.5rem;--r-lg:.75rem;--r-xl:1rem;--r-full:9999px;
+  --sh-sm:0 1px 2px rgba(28,25,20,.06);
+  --sh-md:0 4px 12px rgba(28,25,20,.08);
+  --sh-lg:0 12px 32px rgba(28,25,20,.12);
   --t:180ms cubic-bezier(.16,1,.3,1);
   --sp1:.25rem;--sp2:.5rem;--sp3:.75rem;--sp4:1rem;--sp5:1.25rem;
   --sp6:1.5rem;--sp8:2rem;--sp10:2.5rem;--sp12:3rem;--sp16:4rem;
@@ -40,35 +40,32 @@
   --tx-base:clamp(1rem,.95rem + .25vw,1.125rem);
   --tx-lg:clamp(1.125rem,1rem + .75vw,1.5rem);
   --tx-xl:clamp(1.5rem,1.2rem + 1.25vw,2.25rem);
-  --font-d:'Instrument Serif',Georgia,serif;
-  --font-b:'DM Sans','Helvetica Neue',sans-serif;
-  --w-wide:1200px;
+  --fd:'Instrument Serif',Georgia,serif;
+  --fb:'DM Sans','Helvetica Neue',sans-serif;
+  --w:1200px;
 }
 [data-theme="dark"]{
-  --color-bg:#171614;--color-surface:#1c1b19;--color-surface-2:#201f1d;
-  --color-surface-offset:#1d1c1a;--color-surface-offset-2:#22211f;
-  --color-surface-dynamic:#2d2c2a;--color-divider:#262523;--color-border:#393836;
-  --color-text:#cdccca;--color-text-muted:#999792;--color-text-faint:#6a6864;
-  --color-text-inverse:#2b2a28;
-  --color-primary:#d20000;--color-primary-hover:#a70000;--color-primary-active:#7a0000;
-  --color-primary-highlight:#3d1111;
-  --color-success:#6daa45;--color-success-highlight:#3a4435;
-  --color-warning:#bb653b;--color-warning-highlight:#564942;
-  --shadow-sm:0 1px 2px rgba(0,0,0,.2);
-  --shadow-md:0 4px 12px rgba(0,0,0,.3);
-  --shadow-lg:0 12px 32px rgba(0,0,0,.4);
+  --bg:#171614;--surface:#1c1b19;--surface-2:#201f1d;
+  --surface-off:#1d1c1a;--surface-off2:#22211f;
+  --surface-dyn:#2d2c2a;--divider:#262523;--border:#393836;
+  --ink:#cdccca;--ink-2:#999792;--ink-3:#6a6864;--ink-inv:#2b2a28;
+  --red:#d20000;--red-h:#a70000;--red-a:#7a0000;--red-hi:#3d1111;
+  --green:#6daa45;--green-hi:#3a4435;
+  --amber:#bb653b;--amber-hi:#564942;
+  --sh-sm:0 1px 2px rgba(0,0,0,.2);
+  --sh-md:0 4px 12px rgba(0,0,0,.3);
+  --sh-lg:0 12px 32px rgba(0,0,0,.4);
 }
+/* ── Reset ─────────────────────────────────────── */
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{min-height:100%}
-body{
-  font-family:var(--font-b);
-  color:var(--color-text);
-  background:var(--color-bg);
-  line-height:1.6;
-}
-button,input,select{font:inherit;color:inherit}
+body{font-family:var(--fb);color:var(--ink);background:var(--bg);line-height:1.6}
+button,input,select,textarea{font:inherit;color:inherit}
 button{cursor:pointer;background:none;border:none}
 a{text-decoration:none;color:inherit}
+.hidden{display:none !important}
+.muted{color:var(--ink-2)}
+/* ── Nav ───────────────────────────────────────── */
 .nav{
   position:sticky;top:0;z-index:10000;
   background:rgba(249,248,245,.95);
@@ -77,832 +74,845 @@ a{text-decoration:none;color:inherit}
 }
 [data-theme="dark"] .nav{background:rgba(28,27,25,.95)}
 .nav-inner{
-  max-width:var(--w-wide);margin:0 auto;
-  padding:0 var(--sp6);
-  height:56px;
-  display:flex;align-items:center;gap:var(--sp4);
+  max-width:var(--w);margin:0 auto;padding:0 var(--sp6);height:56px;
+  display:flex;align-items:center;gap:var(--sp3);
 }
-.nav-logo{display:flex;align-items:center;gap:var(--sp2);min-width:0}
-.nav-logo img{width:28px;height:28px;border-radius:var(--radius-md)}
-.nav-brand{font-family:var(--font-d);font-size:var(--tx-lg);line-height:1}
-.nav-label{
-  font-size:var(--tx-xs);
-  color:var(--color-text-muted);
-  text-transform:uppercase;
-  letter-spacing:.08em;
-  font-weight:700;
+.nav-logo{display:flex;align-items:center;gap:var(--sp2);min-width:0;flex-shrink:0}
+.nav-logo img{width:28px;height:28px;border-radius:var(--r-md)}
+.nav-brand{font-family:var(--fd);font-size:var(--tx-lg);line-height:1}
+.nav-badge{font-size:var(--tx-xs);color:var(--ink-2);text-transform:uppercase;letter-spacing:.08em;font-weight:700}
+.nav-school-wrap{
+  margin-left:auto;display:flex;align-items:center;gap:var(--sp2);
+  min-width:0;max-width:260px;
 }
-.nav-school{
-  margin-left:auto;
-  font-size:var(--tx-sm);
-  color:var(--color-text-muted);
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  max-width:280px;
+.school-display{
+  font-size:var(--tx-sm);color:var(--ink-2);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  cursor:pointer;border-bottom:1px dashed var(--border);padding-bottom:1px;
 }
-.nav-actions{display:flex;align-items:center;gap:var(--sp2)}
-.theme-toggle{
-  width:36px;height:36px;border-radius:var(--radius-md);
+.school-display:hover{color:var(--ink);border-color:var(--ink-2)}
+.school-input{
+  font-size:var(--tx-sm);border:1px solid var(--border);
+  background:var(--surface-off);border-radius:var(--r-sm);
+  padding:.2rem var(--sp2);width:180px;
+}
+.nav-actions{display:flex;align-items:center;gap:var(--sp2);flex-shrink:0}
+.icon-btn{
+  width:36px;height:36px;border-radius:var(--r-md);
   display:flex;align-items:center;justify-content:center;
-  color:var(--color-text-muted);
+  color:var(--ink-2);transition:background var(--t),color var(--t);
 }
-.theme-toggle:hover{background:rgba(40,37,29,.08);color:var(--color-text)}
+.icon-btn:hover{background:rgba(40,37,29,.08);color:var(--ink)}
+/* ── Buttons ───────────────────────────────────── */
 .btn{
   display:inline-flex;align-items:center;justify-content:center;gap:var(--sp2);
-  border-radius:var(--radius-md);
-  padding:var(--sp2) var(--sp4);
-  font-size:var(--tx-sm);
-  font-weight:600;
-  border:1px solid transparent;
+  border-radius:var(--r-md);padding:var(--sp2) var(--sp4);
+  font-size:var(--tx-sm);font-weight:600;border:1px solid transparent;
+  transition:background var(--t),color var(--t),border-color var(--t);cursor:pointer;
 }
-.btn-p{background:var(--color-primary);color:var(--color-text-inverse)}
-.btn-p:hover{background:var(--color-primary-hover)}
-.btn-s{background:transparent;color:var(--color-primary);border-color:var(--color-primary)}
-.btn-s:hover{background:var(--color-primary-highlight)}
-.btn-g{background:transparent;color:var(--color-text-muted)}
-.btn-g:hover{background:rgba(40,37,29,.08);color:var(--color-text)}
-.page{
-  max-width:var(--w-wide);
-  margin:0 auto;
-  padding:var(--sp8) var(--sp6) var(--sp16);
-}
-.hidden{display:none !important}
-.card{
-  background:var(--color-surface);
-  border:1px solid rgba(40,37,29,.08);
-  border-radius:var(--radius-xl);
-  box-shadow:var(--shadow-sm);
-  padding:var(--sp6);
-}
-.card + .card{margin-top:var(--sp5)}
-.hero-gate{
+.btn-p{background:var(--red);color:var(--ink-inv)}
+.btn-p:hover{background:var(--red-h)}
+.btn-s{background:transparent;color:var(--red);border-color:var(--red)}
+.btn-s:hover{background:var(--red-hi)}
+.btn-g{background:transparent;color:var(--ink-2)}
+.btn-g:hover{background:rgba(40,37,29,.08);color:var(--ink)}
+.btn-danger{background:var(--red);color:var(--ink-inv)}
+.btn-danger:hover{background:var(--red-h)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+/* ── Gates ─────────────────────────────────────── */
+.gate{
   min-height:calc(100vh - 56px);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:var(--sp6);
+  display:flex;align-items:center;justify-content:center;padding:var(--sp6);
 }
-.hero-gate .card{max-width:560px;text-align:center}
-.hero-gate h1{font-family:var(--font-d);font-size:var(--tx-xl);font-weight:400;line-height:1.2;margin-bottom:var(--sp3)}
-.hero-gate p{color:var(--color-text-muted);margin-bottom:var(--sp6)}
-.stats{
-  display:grid;
-  grid-template-columns:repeat(4,minmax(0,1fr));
-  gap:var(--sp4);
+.gate-card{
+  max-width:520px;width:100%;text-align:center;
+  background:var(--surface);border:1px solid rgba(40,37,29,.08);
+  border-radius:var(--r-xl);box-shadow:var(--sh-md);padding:var(--sp10) var(--sp8);
 }
-.stat{
-  background:var(--color-surface);
-  border:1px solid var(--color-border);
-  border-radius:var(--radius-lg);
-  padding:var(--sp4);
+.gate-card h1{font-family:var(--fd);font-size:var(--tx-xl);font-weight:400;line-height:1.2;margin-bottom:var(--sp3)}
+.gate-card p{color:var(--ink-2);margin-bottom:var(--sp6)}
+.spinner{
+  width:40px;height:40px;border:3px solid var(--border);
+  border-top-color:var(--red);border-radius:50%;
+  animation:spin .8s linear infinite;margin:0 auto var(--sp6);
 }
-.stat-label{font-size:var(--tx-xs);color:var(--color-text-muted);text-transform:uppercase;letter-spacing:.08em;font-weight:700}
-.stat-value{font-family:var(--font-d);font-size:var(--tx-xl);line-height:1.1;margin-top:var(--sp1)}
-.tabs{
-  display:flex;
-  flex-wrap:wrap;
-  gap:var(--sp2);
-  margin:var(--sp6) 0;
-}
+@keyframes spin{to{transform:rotate(360deg)}}
+/* ── Page ──────────────────────────────────────── */
+.page{max-width:var(--w);margin:0 auto;padding:var(--sp8) var(--sp6) var(--sp16)}
+/* ── Stats ─────────────────────────────────────── */
+.stats-bar{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--sp4);margin-bottom:var(--sp6)}
+.stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:var(--sp4) var(--sp5)}
+.stat-label{font-size:var(--tx-xs);color:var(--ink-2);text-transform:uppercase;letter-spacing:.08em;font-weight:700}
+.stat-value{font-family:var(--fd);font-size:var(--tx-xl);line-height:1.1;margin-top:var(--sp1)}
+/* ── Tabs ──────────────────────────────────────── */
+.tabs{display:flex;flex-wrap:wrap;gap:var(--sp2);margin-bottom:var(--sp6)}
 .tab-btn{
-  border:1px solid var(--color-border);
-  border-radius:var(--radius-full);
-  padding:var(--sp2) var(--sp4);
-  font-size:var(--tx-sm);
-  font-weight:700;
-  color:var(--color-text-muted);
-  background:var(--color-surface);
+  border:1px solid var(--border);border-radius:var(--r-full);
+  padding:var(--sp2) var(--sp4);font-size:var(--tx-sm);font-weight:700;
+  color:var(--ink-2);background:var(--surface);transition:all var(--t);
 }
-.tab-btn.active{border-color:var(--color-primary);color:var(--color-primary);background:var(--color-primary-highlight)}
+.tab-btn.active{border-color:var(--red);color:var(--red);background:var(--red-hi)}
+/* ── Card ──────────────────────────────────────── */
+.card{
+  background:var(--surface);border:1px solid rgba(40,37,29,.08);
+  border-radius:var(--r-xl);box-shadow:var(--sh-sm);padding:var(--sp6);
+}
+.card+.card{margin-top:var(--sp5)}
 .section-head{
-  display:flex;align-items:center;justify-content:space-between;gap:var(--sp3);margin-bottom:var(--sp4);flex-wrap:wrap;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:var(--sp3);margin-bottom:var(--sp5);flex-wrap:wrap;
 }
-.section-head h2{font-family:var(--font-d);font-size:var(--tx-lg);font-weight:400}
-.table-wrap{overflow:auto;border:1px solid var(--color-border);border-radius:var(--radius-lg)}
-table{width:100%;border-collapse:collapse;min-width:720px;background:var(--color-surface)}
-th,td{padding:var(--sp3) var(--sp4);text-align:left;border-bottom:1px solid var(--color-divider);font-size:var(--tx-sm)}
-th{font-size:var(--tx-xs);text-transform:uppercase;letter-spacing:.08em;color:var(--color-text-muted);font-weight:700;background:var(--color-surface-offset)}
+.section-head h2{font-family:var(--fd);font-size:var(--tx-lg);font-weight:400}
+/* ── Table ─────────────────────────────────────── */
+.table-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:var(--r-lg)}
+table{width:100%;border-collapse:collapse;min-width:660px;background:var(--surface)}
+th,td{padding:var(--sp3) var(--sp4);text-align:left;border-bottom:1px solid var(--divider);font-size:var(--tx-sm)}
+tr:last-child td{border-bottom:none}
+th{font-size:var(--tx-xs);text-transform:uppercase;letter-spacing:.08em;color:var(--ink-2);font-weight:700;background:var(--surface-off)}
+.empty-row td{color:var(--ink-2);padding:var(--sp8);text-align:center}
+/* ── Badges ────────────────────────────────────── */
 .badge{
   display:inline-flex;align-items:center;justify-content:center;
-  border-radius:var(--radius-full);
-  padding:.15rem .5rem;
-  font-size:.68rem;
-  font-weight:700;
-  text-transform:uppercase;
-  letter-spacing:.06em;
+  border-radius:var(--r-full);padding:.15rem .55rem;
+  font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;
 }
-.badge.active{background:var(--color-success-highlight);color:var(--color-success)}
-.badge.invited{background:var(--color-warning-highlight);color:var(--color-warning)}
-.badge.removed{background:var(--color-primary-highlight);color:var(--color-primary)}
-.chips{display:flex;gap:var(--sp2);flex-wrap:wrap}
+.badge-active{background:var(--green-hi);color:var(--green)}
+.badge-invited{background:var(--amber-hi);color:var(--amber)}
+.badge-removed{background:var(--red-hi);color:var(--red)}
+.badge-live{background:var(--green-hi);color:var(--green)}
+.badge-soon{background:var(--surface-off2);color:var(--ink-2)}
+/* ── Chips ─────────────────────────────────────── */
+.chips{display:flex;gap:var(--sp1);flex-wrap:wrap}
 .chip{
-  display:inline-flex;align-items:center;
-  border-radius:var(--radius-full);
-  padding:.12rem .5rem;
-  font-size:.72rem;
-  background:var(--color-surface-offset-2);
-  color:var(--color-text-muted);
-  border:1px solid var(--color-border);
+  display:inline-flex;align-items:center;border-radius:var(--r-full);
+  padding:.1rem .45rem;font-size:.72rem;
+  background:var(--surface-off2);color:var(--ink-2);border:1px solid var(--border);
 }
-.actions{display:flex;gap:var(--sp2);flex-wrap:wrap}
+/* ── Subjects grid ─────────────────────────────── */
+.subjects-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(280px,100%),1fr));gap:var(--sp4)}
+.subject-card h4{font-family:var(--fd);font-size:var(--tx-lg);font-weight:400;margin-bottom:var(--sp2)}
+.subject-meta{display:flex;gap:var(--sp2);flex-wrap:wrap;margin-top:var(--sp4)}
+/* ── Settings ──────────────────────────────────── */
+.settings-sec{margin-bottom:var(--sp8)}
+.settings-sec h3{font-family:var(--fd);font-size:var(--tx-lg);font-weight:400;margin-bottom:var(--sp4)}
+.field{margin-bottom:var(--sp4)}
+.field-label{display:block;font-size:var(--tx-xs);font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2);margin-bottom:var(--sp2)}
+.field-input{
+  width:100%;padding:var(--sp3) var(--sp4);
+  border:1px solid var(--border);background:var(--surface-off);
+  border-radius:var(--r-md);font-size:var(--tx-sm);
+}
+.field-input:focus{outline:2px solid var(--red);outline-offset:1px;border-color:var(--red)}
+.danger-zone{border:1px solid var(--red-hi);border-radius:var(--r-lg);padding:var(--sp5);margin-top:var(--sp4)}
+.danger-zone h4{color:var(--red);font-weight:700;font-size:var(--tx-sm);margin-bottom:var(--sp2)}
+.danger-zone p{font-size:var(--tx-sm);color:var(--ink-2);margin-bottom:var(--sp4)}
+/* ── Modal ─────────────────────────────────────── */
 .modal-overlay{
-  position:fixed;inset:0;z-index:10001;
-  background:rgba(0,0,0,.55);
-  display:flex;align-items:center;justify-content:center;
-  padding:var(--sp4);
+  position:fixed;inset:0;z-index:10001;background:rgba(0,0,0,.5);
+  display:flex;align-items:center;justify-content:center;padding:var(--sp4);
 }
 .modal{
-  width:min(560px,100%);
-  background:var(--color-surface);
-  border-radius:var(--radius-xl);
-  box-shadow:var(--shadow-lg);
-  border:1px solid var(--color-border);
-  padding:var(--sp6);
+  width:min(540px,100%);background:var(--surface);border-radius:var(--r-xl);
+  box-shadow:var(--sh-lg);border:1px solid var(--border);padding:var(--sp6);
 }
-.modal h3{font-family:var(--font-d);font-size:var(--tx-lg);font-weight:400;margin-bottom:var(--sp3)}
-.field{margin-bottom:var(--sp4)}
-.label{display:block;font-size:var(--tx-xs);font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--color-text-muted);margin-bottom:var(--sp2)}
-.input{
-  width:100%;
-  padding:var(--sp3) var(--sp4);
-  border:1px solid var(--color-border);
-  background:var(--color-surface-offset);
-  border-radius:var(--radius-md);
-}
-.subject-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--sp2)}
-.checkbox{
+.modal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp5)}
+.modal-head h3{font-family:var(--fd);font-size:var(--tx-lg);font-weight:400}
+.modal-close{width:32px;height:32px;border-radius:var(--r-md);display:flex;align-items:center;justify-content:center;color:var(--ink-2)}
+.modal-close:hover{background:var(--surface-off);color:var(--ink)}
+.modal-actions{display:flex;gap:var(--sp2);margin-top:var(--sp5);flex-wrap:wrap}
+/* ── Subject checkboxes ────────────────────────── */
+.subject-checks{display:grid;grid-template-columns:1fr 1fr;gap:var(--sp2)}
+.check-row{
   display:flex;align-items:center;gap:var(--sp2);
-  padding:var(--sp2) var(--sp3);
-  border:1px solid var(--color-border);
-  border-radius:var(--radius-md);
-  background:var(--color-surface-offset);
+  padding:var(--sp2) var(--sp3);border:1px solid var(--border);
+  border-radius:var(--r-md);background:var(--surface-off);
+  font-size:var(--tx-sm);cursor:pointer;
 }
-.checkbox.disabled{
-  opacity:.6;
-  cursor:not-allowed;
+.check-row.disabled{opacity:.6;cursor:not-allowed}
+.check-row input[type="checkbox"]{accent-color:var(--red);flex-shrink:0}
+.soon-pill{
+  margin-left:auto;flex-shrink:0;font-size:.62rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:.05em;
+  background:var(--surface-off2);color:var(--ink-2);
+  border-radius:var(--r-full);padding:.1rem .4rem;
 }
-.soon-badge{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  border-radius:var(--radius-full);
-  padding:.12rem .45rem;
-  font-size:.62rem;
-  font-weight:700;
-  text-transform:uppercase;
-  letter-spacing:.05em;
-  background:var(--color-surface-offset-2);
-  color:var(--color-text-muted);
-  margin-left:auto;
-}
+/* ── Toast ─────────────────────────────────────── */
 .toast{
-  position:fixed;
-  right:var(--sp4);
-  bottom:var(--sp4);
-  z-index:10003;
-  background:var(--color-surface);
-  border:1px solid var(--color-border);
-  box-shadow:var(--shadow-md);
-  border-radius:var(--radius-lg);
-  padding:var(--sp3) var(--sp4);
-  font-size:var(--tx-sm);
+  position:fixed;bottom:var(--sp5);right:var(--sp5);z-index:10010;
+  background:var(--surface);border:1px solid var(--border);box-shadow:var(--sh-md);
+  border-radius:var(--r-lg);padding:var(--sp3) var(--sp5);
+  font-size:var(--tx-sm);max-width:440px;line-height:1.5;
+  animation:slideUp .22s ease;
 }
-.subject-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(260px,100%),1fr));gap:var(--sp4)}
-.subject-card h4{font-family:var(--font-d);font-size:var(--tx-lg);font-weight:400;margin-bottom:var(--sp2)}
-.subject-meta{display:flex;gap:var(--sp2);flex-wrap:wrap;margin-top:var(--sp3)}
-.muted{color:var(--color-text-muted)}
-@media (max-width: 900px){
-  .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .nav-school{display:none}
+@keyframes slideUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+/* ── Responsive ────────────────────────────────── */
+@media(max-width:900px){
+  .stats-bar{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .nav-school-wrap{max-width:160px}
 }
-@media (max-width: 640px){
+@media(max-width:640px){
+  .stats-bar{grid-template-columns:1fr}
   .page{padding:var(--sp6) var(--sp4) var(--sp12)}
-  .stats{grid-template-columns:1fr}
-  .subject-grid{grid-template-columns:1fr}
   .nav-inner{padding:0 var(--sp4)}
-  .nav-label{display:none}
+  .nav-badge{display:none}
+  .subject-checks{grid-template-columns:1fr}
 }
 </style>
 </head>
 <body>
+
+<!-- ── Nav ──────────────────────────────────────── -->
 <nav class="nav hidden" id="top-nav">
   <div class="nav-inner">
     <a class="nav-logo" href="#">
       <img src="../logo.png" alt="RA10" width="28" height="28">
       <span class="nav-brand">RA10</span>
-      <span class="nav-label">EDU Admin</span>
+      <span class="nav-badge">EDU Admin</span>
     </a>
-    <span class="nav-school" id="school-name">School</span>
+    <div class="nav-school-wrap">
+      <span class="school-display" id="school-display" title="Click to rename school"></span>
+      <input class="school-input hidden" id="school-input" type="text" maxlength="80" aria-label="School name">
+    </div>
     <div class="nav-actions">
-      <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+      <button class="icon-btn" id="theme-toggle" aria-label="Toggle theme">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
       </button>
-      <button id="btn-signout" class="btn btn-s">Sign out</button>
+      <button class="btn btn-s" id="btn-signout">Sign out</button>
     </div>
   </div>
 </nav>
 
-<section id="gate-loading" class="hero-gate">
-  <div class="card">
+<!-- ── Gates ────────────────────────────────────── -->
+<section class="gate" id="gate-loading">
+  <div class="gate-card">
+    <div class="spinner"></div>
     <h1>Loading EDU Admin</h1>
-    <p>Preparing your admin workspace...</p>
+    <p>Setting up your admin workspace&hellip;</p>
   </div>
 </section>
 
-<section id="gate-signin" class="hero-gate hidden">
-  <div class="card">
-    <h1>Sign in to access the admin panel</h1>
-    <p>You need an RA10 account to continue.</p>
-    <button id="btn-gate-signin" class="btn btn-p">Sign in</button>
+<section class="gate hidden" id="gate-signin">
+  <div class="gate-card">
+    <h1>Sign in to continue</h1>
+    <p>You need an RA10 account to access EDU Admin.</p>
+    <button class="btn btn-p" id="btn-gate-signin">Sign in</button>
   </div>
 </section>
 
-<section id="gate-denied" class="hero-gate hidden">
-  <div class="card">
-    <h1>You don't have admin access</h1>
-    <p>Your account is signed in, but your tier does not include EDU Admin permissions.</p>
+<section class="gate hidden" id="gate-denied">
+  <div class="gate-card">
+    <h1>Access denied</h1>
+    <p id="denied-msg">Your account does not have EDU Admin permissions.</p>
   </div>
 </section>
 
-<main id="admin-app" class="page hidden">
-  <div class="stats card" id="stats-bar">
+<!-- ── App ──────────────────────────────────────── -->
+<main class="page hidden" id="admin-app">
+
+  <div class="stats-bar">
     <div class="stat">
-      <div class="stat-label">Total students</div>
+      <div class="stat-label">Total Students</div>
       <div class="stat-value" id="stat-students">0</div>
     </div>
     <div class="stat">
-      <div class="stat-label">Total teachers</div>
+      <div class="stat-label">Total Teachers</div>
       <div class="stat-value" id="stat-teachers">0</div>
     </div>
     <div class="stat">
-      <div class="stat-label">Active members</div>
+      <div class="stat-label">Active Members</div>
       <div class="stat-value" id="stat-active">0</div>
     </div>
     <div class="stat">
-      <div class="stat-label">Invited pending</div>
+      <div class="stat-label">Invited Pending</div>
       <div class="stat-value" id="stat-invited">0</div>
     </div>
   </div>
 
-  <div class="tabs" role="tablist" aria-label="Admin sections">
-    <button class="tab-btn active" data-tab="students" role="tab" aria-selected="true">Students</button>
-    <button class="tab-btn" data-tab="teachers" role="tab" aria-selected="false">Teachers</button>
-    <button class="tab-btn" data-tab="subjects" role="tab" aria-selected="false">Subjects</button>
+  <div class="tabs" role="tablist">
+    <button class="tab-btn active" data-tab="students" role="tab">Students</button>
+    <button class="tab-btn" data-tab="teachers" role="tab">Teachers</button>
+    <button class="tab-btn" data-tab="subjects" role="tab">Subjects</button>
+    <button class="tab-btn" data-tab="settings" role="tab">Settings</button>
   </div>
 
-  <section class="card" id="tab-students">
-    <div class="section-head">
-      <h2>Students</h2>
-      <button class="btn btn-p" id="btn-add-student">Add Student</button>
+  <!-- Students -->
+  <div id="tab-students">
+    <div class="card">
+      <div class="section-head">
+        <h2>Students</h2>
+        <button class="btn btn-p" id="btn-add-student">Add Student</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Email</th><th>Status</th><th>Subjects</th><th>Actions</th></tr></thead>
+          <tbody id="students-body"></tbody>
+        </table>
+      </div>
     </div>
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>Email</th>
-            <th>Status</th>
-            <th>Subjects</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody id="students-body"></tbody>
-      </table>
-    </div>
-  </section>
+  </div>
 
-  <section class="card hidden" id="tab-teachers">
-    <div class="section-head">
-      <h2>Teachers</h2>
-      <button class="btn btn-p" id="btn-add-teacher">Add Teacher</button>
+  <!-- Teachers -->
+  <div id="tab-teachers" class="hidden">
+    <div class="card">
+      <div class="section-head">
+        <h2>Teachers</h2>
+        <button class="btn btn-p" id="btn-add-teacher">Add Teacher</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Email</th><th>Status</th><th>Subjects</th><th>Actions</th></tr></thead>
+          <tbody id="teachers-body"></tbody>
+        </table>
+      </div>
     </div>
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>Email</th>
-            <th>Status</th>
-            <th>Subjects</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody id="teachers-body"></tbody>
-      </table>
-    </div>
-  </section>
+  </div>
 
-  <section class="card hidden" id="tab-subjects">
-    <div class="section-head">
-      <h2>Subjects</h2>
-      <span class="muted">Enrollment and availability</span>
+  <!-- Subjects -->
+  <div id="tab-subjects" class="hidden">
+    <div class="card">
+      <div class="section-head">
+        <h2>Subjects</h2>
+        <span class="muted" style="font-size:var(--tx-sm)">Enrolment &amp; availability</span>
+      </div>
+      <div class="subjects-grid" id="subjects-grid"></div>
     </div>
-    <div class="subject-list" id="subjects-list"></div>
-  </section>
+  </div>
+
+  <!-- Settings -->
+  <div id="tab-settings" class="hidden">
+    <div class="card">
+      <div class="settings-sec">
+        <h3>School settings</h3>
+        <div class="field">
+          <label class="field-label" for="settings-school-name">School name</label>
+          <input class="field-input" id="settings-school-name" type="text" maxlength="80">
+        </div>
+        <button class="btn btn-p" id="btn-save-school">Save school name</button>
+      </div>
+      <div class="settings-sec">
+        <h3>Danger zone</h3>
+        <div class="danger-zone">
+          <h4>Remove all members</h4>
+          <p>Sets every student and teacher in your school to status "removed" and reverts their RA10 accounts to free tier. This cannot be undone.</p>
+          <button class="btn btn-danger" id="btn-remove-all">Remove all members</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </main>
 
-<div id="member-modal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="member-modal-title">
+<!-- ── Add member modal ──────────────────────────── -->
+<div class="modal-overlay hidden" id="member-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
   <div class="modal">
-    <h3 id="member-modal-title">Add member</h3>
-    <div class="field">
-      <label class="label" for="member-email">Email</label>
-      <input id="member-email" class="input" type="email" placeholder="name@school.edu">
+    <div class="modal-head">
+      <h3 id="modal-title">Add Student</h3>
+      <button class="modal-close" id="btn-modal-close" aria-label="Close">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
     </div>
     <div class="field">
-      <span class="label">Subjects</span>
-      <div class="subject-grid" id="subject-checkboxes"></div>
+      <label class="field-label" for="member-email">Email address</label>
+      <input class="field-input" id="member-email" type="email" placeholder="name@school.edu" autocomplete="off">
     </div>
-    <div class="actions">
-      <button id="btn-member-save" class="btn btn-p">Add</button>
-      <button id="btn-member-cancel" class="btn btn-g">Cancel</button>
+    <div class="field">
+      <span class="field-label">Subjects</span>
+      <div class="subject-checks" id="subject-checks"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-p" id="btn-member-save">Add</button>
+      <button class="btn btn-g" id="btn-member-cancel">Cancel</button>
     </div>
   </div>
 </div>
 
-<div id="toast" class="toast hidden"></div>
+<!-- ── Toast ─────────────────────────────────────── -->
+<div id="toast-host"></div>
 
 <script>
-const SUPABASE_URL = 'https://tcrrgsylxbyyrmnouihl.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRjcnJnc3lseGJ5eXJtbm91aWhsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4ODUyMTEsImV4cCI6MjA5MzQ2MTIxMX0.eOp6ma-mfgh8F20nM7E2OaBW28LlZlwuEEWr6k2zDWw';
-const SUPABASE_SR = [
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9',
-  '.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRjcnJnc3lseGJ5eXJtbm91aWhsIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3Nzg4NTIxMSwiZXhwIjoyMDkzNDYxMjExfQ',
-  '.pz8yuNEfjC1PouG0K0RW4pf7vyLvQQSh_5blgJMB-3s'
-].join('');
-const OWNER_EMAIL = 'mistry.hashim@icloud.com';
-const SUBJECTS = [
-  { key: 'IT_AAQ', name: 'IT AAQ', label: 'IT AAQ (BTEC Level 3)', live: true, selectable: true, defaultChecked: true },
-  { key: 'BUSINESS_L3', name: 'Business Level 3', label: 'Business Level 3 (BTEC)', live: false, selectable: false, defaultChecked: false }
+/* ═══════════════════════════════════════════════
+   CONFIG
+═══════════════════════════════════════════════ */
+var SUPABASE_URL = 'https://tcrrgsylxbyyrmnouihl.supabase.co';
+var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRjcnJnc3lseGJ5eXJtbm91aWhsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4ODUyMTEsImV4cCI6MjA5MzQ2MTIxMX0.eOp6ma-mfgh8F20nM7E2OaBW28LlZlwuEEWr6k2zDWw';
+var OWNER_EMAIL = 'mistry.hashim@icloud.com';
+
+var SUBJECTS = [
+  { key: 'IT_AAQ',      name: 'IT AAQ',           label: 'IT AAQ (BTEC Level 3)',    live: true,  selectable: true  },
+  { key: 'BUSINESS_L3', name: 'Business Level 3', label: 'Business Level 3 (BTEC)', live: false, selectable: false }
 ];
 
-const state = {
-  supabase: null,
-  profile: null,
+/* ═══════════════════════════════════════════════
+   STATE
+═══════════════════════════════════════════════ */
+var state = {
+  sb: null,
   session: null,
+  profile: null,
   schoolId: null,
   schoolName: 'Your School',
-  roleForModal: 'student',
   members: [],
-  activeTab: 'students'
+  activeTab: 'students',
+  modalRole: 'student'
 };
 
-const el = {
-  gateLoading: document.getElementById('gate-loading'),
-  gateSignin: document.getElementById('gate-signin'),
-  gateDenied: document.getElementById('gate-denied'),
-  app: document.getElementById('admin-app'),
-  nav: document.getElementById('top-nav'),
-  schoolName: document.getElementById('school-name'),
-  studentsBody: document.getElementById('students-body'),
-  teachersBody: document.getElementById('teachers-body'),
-  subjectsList: document.getElementById('subjects-list'),
-  modal: document.getElementById('member-modal'),
-  modalTitle: document.getElementById('member-modal-title'),
-  memberEmail: document.getElementById('member-email'),
-  subjectCheckboxes: document.getElementById('subject-checkboxes'),
-  toast: document.getElementById('toast'),
-  statStudents: document.getElementById('stat-students'),
-  statTeachers: document.getElementById('stat-teachers'),
-  statActive: document.getElementById('stat-active'),
-  statInvited: document.getElementById('stat-invited')
+/* ═══════════════════════════════════════════════
+   DOM
+═══════════════════════════════════════════════ */
+var dom = {
+  nav:           document.getElementById('top-nav'),
+  gateLoading:   document.getElementById('gate-loading'),
+  gateSignin:    document.getElementById('gate-signin'),
+  gateDenied:    document.getElementById('gate-denied'),
+  deniedMsg:     document.getElementById('denied-msg'),
+  app:           document.getElementById('admin-app'),
+  schoolDisplay: document.getElementById('school-display'),
+  schoolInput:   document.getElementById('school-input'),
+  statStudents:  document.getElementById('stat-students'),
+  statTeachers:  document.getElementById('stat-teachers'),
+  statActive:    document.getElementById('stat-active'),
+  statInvited:   document.getElementById('stat-invited'),
+  studentsBody:  document.getElementById('students-body'),
+  teachersBody:  document.getElementById('teachers-body'),
+  subjectsGrid:  document.getElementById('subjects-grid'),
+  settingsName:  document.getElementById('settings-school-name'),
+  modal:         document.getElementById('member-modal'),
+  modalTitle:    document.getElementById('modal-title'),
+  memberEmail:   document.getElementById('member-email'),
+  subjectChecks: document.getElementById('subject-checks'),
+  toastHost:     document.getElementById('toast-host')
 };
 
-function show(view) {
-  [el.gateLoading, el.gateSignin, el.gateDenied, el.app].forEach((node) => node.classList.add('hidden'));
-  if (view === 'loading') el.gateLoading.classList.remove('hidden');
-  if (view === 'signin') el.gateSignin.classList.remove('hidden');
-  if (view === 'denied') el.gateDenied.classList.remove('hidden');
-  if (view === 'app') el.app.classList.remove('hidden');
+/* ═══════════════════════════════════════════════
+   UTILITIES
+═══════════════════════════════════════════════ */
+function esc(s) {
+  return String(s == null ? '' : s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#039;');
 }
 
-function showToast(message, ms) {
-  el.toast.textContent = message;
-  el.toast.classList.remove('hidden');
-  const duration = typeof ms === 'number' ? ms : 2800;
-  window.setTimeout(() => el.toast.classList.add('hidden'), duration);
+function normSubjects(v) {
+  if (!Array.isArray(v)) return [];
+  return v.map(function(s) { return String(s); }).filter(Boolean);
 }
 
-function baseUrl() {
-  return (location.hostname === '127.0.0.1' || location.hostname === 'localhost') ? location.origin : 'https://ra10.co.uk';
+function showGate(name) {
+  [dom.gateLoading, dom.gateSignin, dom.gateDenied, dom.app, dom.nav].forEach(function(n) {
+    n.classList.add('hidden');
+  });
+  if (name === 'loading') dom.gateLoading.classList.remove('hidden');
+  if (name === 'signin')  dom.gateSignin.classList.remove('hidden');
+  if (name === 'denied')  dom.gateDenied.classList.remove('hidden');
+  if (name === 'app')     { dom.app.classList.remove('hidden'); dom.nav.classList.remove('hidden'); }
 }
 
-function escapeHtml(input) {
-  return String(input || '')
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
-}
-
-function normalizeSubjects(subjects) {
-  if (!Array.isArray(subjects)) return [];
-  return subjects.map((s) => String(s)).filter(Boolean);
+var _toastTimer = null;
+function toast(msg, ms) {
+  if (_toastTimer) clearTimeout(_toastTimer);
+  dom.toastHost.innerHTML = '';
+  var t = document.createElement('div');
+  t.className = 'toast';
+  t.textContent = msg;
+  dom.toastHost.appendChild(t);
+  _toastTimer = setTimeout(function() { t.remove(); }, typeof ms === 'number' ? ms : 4000);
 }
 
 function statusBadge(status) {
-  const s = String(status || '').toLowerCase();
-  const safe = (s === 'active' || s === 'invited' || s === 'removed') ? s : 'invited';
-  return '<span class="badge ' + safe + '">' + safe + '</span>';
+  var s = String(status || '').toLowerCase();
+  var cls = s === 'active' ? 'badge-active' : s === 'removed' ? 'badge-removed' : 'badge-invited';
+  var label = s === 'active' ? 'active' : s === 'removed' ? 'removed' : 'invited';
+  return '<span class="badge ' + cls + '">' + label + '</span>';
 }
 
-function subjectsChips(subjects) {
-  const list = normalizeSubjects(subjects);
-  if (!list.length) return '<span class="muted">None</span>';
-  return '<div class="chips">' + list.map((s) => '<span class="chip">' + escapeHtml(s) + '</span>').join('') + '</div>';
+function subjectChips(subjects) {
+  var list = normSubjects(subjects);
+  if (!list.length) return '<span class="muted" style="font-size:var(--tx-sm)">None</span>';
+  return '<div class="chips">' + list.map(function(s) { return '<span class="chip">' + esc(s) + '</span>'; }).join('') + '</div>';
 }
 
-function setTheme(theme) {
-  document.documentElement.setAttribute('data-theme', theme);
+/* ═══════════════════════════════════════════════
+   THEME
+═══════════════════════════════════════════════ */
+(function() {
+  var saved = localStorage.getItem('ra10-admin-theme');
+  var pref = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  document.documentElement.setAttribute('data-theme', pref);
+  document.getElementById('theme-toggle').addEventListener('click', function() {
+    var next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('ra10-admin-theme', next);
+  });
+})();
+
+/* ═══════════════════════════════════════════════
+   SCHOOL NAME INLINE EDIT
+═══════════════════════════════════════════════ */
+function setSchoolName(name) {
+  state.schoolName = name || 'Your School';
+  dom.schoolDisplay.textContent = state.schoolName;
+  dom.settingsName.value = state.schoolName;
 }
 
-function initThemeToggle() {
-  const toggle = document.getElementById('theme-toggle');
-  let theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-  setTheme(theme);
-  toggle.addEventListener('click', () => {
-    theme = theme === 'dark' ? 'light' : 'dark';
-    setTheme(theme);
+function startSchoolEdit() {
+  dom.schoolInput.value = state.schoolName;
+  dom.schoolDisplay.classList.add('hidden');
+  dom.schoolInput.classList.remove('hidden');
+  dom.schoolInput.focus();
+  dom.schoolInput.select();
+}
+
+async function commitSchoolEdit() {
+  dom.schoolDisplay.classList.remove('hidden');
+  dom.schoolInput.classList.add('hidden');
+  var newName = dom.schoolInput.value.trim();
+  if (!newName || newName === state.schoolName) return;
+  await saveSchoolName(newName);
+}
+
+async function saveSchoolName(newName) {
+  if (!newName || !state.schoolId) return;
+  setSchoolName(newName);
+  var userId = state.session && state.session.user ? state.session.user.id : null;
+  var updates = [
+    state.sb.from('schools').update({ name: newName }).eq('id', state.schoolId)
+  ];
+  if (userId) {
+    updates.push(state.sb.from('profiles').update({ school_name: newName }).eq('id', userId));
+  }
+  await Promise.all(updates);
+  toast('School name saved.');
+}
+
+dom.schoolDisplay.addEventListener('click', startSchoolEdit);
+dom.schoolInput.addEventListener('blur', commitSchoolEdit);
+dom.schoolInput.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') { dom.schoolInput.blur(); }
+  if (e.key === 'Escape') { dom.schoolInput.value = state.schoolName; dom.schoolInput.blur(); }
+});
+
+/* ═══════════════════════════════════════════════
+   TABS
+═══════════════════════════════════════════════ */
+var TAB_IDS = ['students', 'teachers', 'subjects', 'settings'];
+
+function setTab(tab) {
+  state.activeTab = tab;
+  document.querySelectorAll('.tab-btn').forEach(function(b) {
+    var active = b.dataset.tab === tab;
+    b.classList.toggle('active', active);
+    b.setAttribute('aria-selected', active ? 'true' : 'false');
+  });
+  TAB_IDS.forEach(function(id) {
+    document.getElementById('tab-' + id).classList.toggle('hidden', id !== tab);
   });
 }
 
-function extractSchoolContext(profile) {
-  if (!profile || typeof profile !== 'object') {
-    return { schoolId: null, schoolName: null };
-  }
-  const schoolId = profile.school_id || profile.edu_school_id || profile.schoolId || null;
-  const schoolName = profile.school_name || profile.edu_school_name || profile.schoolName || null;
-  return { schoolId, schoolName };
-}
+document.querySelectorAll('.tab-btn').forEach(function(b) {
+  b.addEventListener('click', function() { setTab(b.dataset.tab); });
+});
 
-async function ensureSchoolContext() {
-  if (state.schoolId) return true;
-  const latestProfile = window.RA10 && typeof RA10.getProfile === 'function' ? RA10.getProfile() : null;
-  if (latestProfile) {
-    state.profile = latestProfile;
-    const ctx = extractSchoolContext(latestProfile);
-    if (ctx.schoolId) state.schoolId = ctx.schoolId;
-    if (ctx.schoolName) state.schoolName = ctx.schoolName;
-    if (ctx.schoolName) el.schoolName.textContent = ctx.schoolName;
-  }
-  return !!state.schoolId;
-}
-
-async function openAddModal(role) {
-  const hasSchool = await ensureSchoolContext();
-  if (!hasSchool) {
-    showToast('Could not load your school. Please refresh and try again.');
-    return;
-  }
-  state.roleForModal = role;
-  el.modalTitle.textContent = role === 'teacher' ? 'Add Teacher' : 'Add Student';
-  el.memberEmail.value = '';
-  el.subjectCheckboxes.innerHTML = '';
-  SUBJECTS.forEach((subject, idx) => {
-    const id = 'subject-' + idx;
-    const row = document.createElement('label');
-    row.className = 'checkbox' + (subject.selectable ? '' : ' disabled');
-    row.innerHTML = '<input type="checkbox" id="' + id + '" value="' + escapeHtml(subject.name) + '"' + (subject.defaultChecked ? ' checked' : '') + (subject.selectable ? '' : ' disabled') + '> ' + escapeHtml(subject.label) + (subject.selectable ? '' : '<span class="soon-badge">Coming Soon</span>');
-    el.subjectCheckboxes.appendChild(row);
-  });
-  el.modal.classList.remove('hidden');
-}
-
-function closeAddModal() {
-  el.modal.classList.add('hidden');
-}
-
-function selectedSubjects() {
-  return Array.from(el.subjectCheckboxes.querySelectorAll('input[type="checkbox"]:checked')).map((cb) => cb.value);
-}
-
+/* ═══════════════════════════════════════════════
+   RENDER
+═══════════════════════════════════════════════ */
 function renderStats() {
-  const activeMembers = state.members.filter((m) => String(m.status).toLowerCase() === 'active').length;
-  const invited = state.members.filter((m) => String(m.status).toLowerCase() === 'invited').length;
-  const students = state.members.filter((m) => m.role === 'student' && String(m.status).toLowerCase() !== 'removed').length;
-  const teachers = state.members.filter((m) => m.role === 'teacher' && String(m.status).toLowerCase() !== 'removed').length;
-  el.statStudents.textContent = String(students);
-  el.statTeachers.textContent = String(teachers);
-  el.statActive.textContent = String(activeMembers);
-  el.statInvited.textContent = String(invited);
+  var m = state.members;
+  dom.statStudents.textContent = m.filter(function(x) { return x.role === 'student'; }).length;
+  dom.statTeachers.textContent = m.filter(function(x) { return x.role === 'teacher'; }).length;
+  dom.statActive.textContent   = m.filter(function(x) { return String(x.status).toLowerCase() === 'active'; }).length;
+  dom.statInvited.textContent  = m.filter(function(x) { return String(x.status).toLowerCase() === 'invited'; }).length;
 }
 
-function renderMembersTable(role) {
-  const target = role === 'teacher' ? el.teachersBody : el.studentsBody;
-  const rows = state.members.filter((m) => m.role === role);
+function renderTable(role) {
+  var tbody = role === 'teacher' ? dom.teachersBody : dom.studentsBody;
+  var rows = state.members.filter(function(m) { return m.role === role; });
   if (!rows.length) {
-    target.innerHTML = '<tr><td colspan="4" class="muted">No ' + role + ' members yet.</td></tr>';
+    tbody.innerHTML = '<tr class="empty-row"><td colspan="4">No ' + role + 's yet.</td></tr>';
     return;
   }
-
-  target.innerHTML = rows.map((m) => {
-    const id = escapeHtml(m.id);
+  tbody.innerHTML = rows.map(function(m) {
+    var safeId = esc(String(m.id));
     return '<tr>' +
-      '<td>' + escapeHtml(m.email) + '</td>' +
+      '<td>' + esc(m.email) + '</td>' +
       '<td>' + statusBadge(m.status) + '</td>' +
-      '<td>' + subjectsChips(m.subjects) + '</td>' +
-      '<td><div class="actions"><button class="btn btn-g" data-remove-id="' + id + '">Remove</button></div></td>' +
+      '<td>' + subjectChips(m.subjects) + '</td>' +
+      '<td><button class="btn btn-g" style="font-size:var(--tx-xs)" data-remove="' + safeId + '">Remove</button></td>' +
       '</tr>';
   }).join('');
 }
 
 function renderSubjects() {
-  const activeOrInvited = state.members.filter((m) => String(m.status).toLowerCase() !== 'removed');
-
-  el.subjectsList.innerHTML = SUBJECTS.map((subject) => {
-    const teachers = activeOrInvited.filter((m) => m.role === 'teacher' && normalizeSubjects(m.subjects).includes(subject.name)).length;
-    const students = activeOrInvited.filter((m) => m.role === 'student' && normalizeSubjects(m.subjects).includes(subject.name)).length;
-    const badge = subject.live
-      ? '<span class="badge active">Live</span>'
-      : '<span class="badge invited">Coming soon</span>';
-    return '<div class="card subject-card">' +
-      '<h4>' + escapeHtml(subject.label) + '</h4>' +
-      '<div class="subject-meta">' + badge +
-      '<span class="chip">Students: ' + students + '</span>' +
-      '<span class="chip">Teachers: ' + teachers + '</span>' +
-      '</div>' +
-      '</div>';
+  dom.subjectsGrid.innerHTML = SUBJECTS.map(function(sub) {
+    var studs = state.members.filter(function(m) { return m.role === 'student' && normSubjects(m.subjects).includes(sub.name); }).length;
+    var tchs  = state.members.filter(function(m) { return m.role === 'teacher' && normSubjects(m.subjects).includes(sub.name); }).length;
+    var badge = sub.live
+      ? '<span class="badge badge-live">Live</span>'
+      : '<span class="badge badge-soon">Coming soon</span>';
+    return '<div class="card subject-card"><h4>' + esc(sub.label) + '</h4>' + badge +
+      '<div class="subject-meta"><span class="chip">Students: ' + studs + '</span><span class="chip">Teachers: ' + tchs + '</span></div></div>';
   }).join('');
 }
 
 function renderAll() {
   renderStats();
-  renderMembersTable('student');
-  renderMembersTable('teacher');
+  renderTable('student');
+  renderTable('teacher');
   renderSubjects();
 }
 
+/* ═══════════════════════════════════════════════
+   LOAD MEMBERS
+═══════════════════════════════════════════════ */
 async function loadMembers() {
-  if (!state.schoolId) {
-    state.members = [];
-    renderAll();
-    return;
-  }
-  const { data, error } = await state.supabase
+  if (!state.schoolId) { state.members = []; renderAll(); return; }
+  var res = await state.sb
     .from('school_members')
     .select('id, school_id, email, role, subjects, status')
     .eq('school_id', state.schoolId)
     .in('role', ['student', 'teacher'])
     .neq('status', 'removed')
     .order('email', { ascending: true });
-
-  if (error) {
-    console.warn('Failed to load members', error);
-    showToast('Failed to load members.');
-    return;
-  }
-  state.members = Array.isArray(data) ? data : [];
+  if (res.error) { console.warn('loadMembers:', res.error); toast('Failed to load members.'); return; }
+  state.members = Array.isArray(res.data) ? res.data : [];
   renderAll();
 }
 
+/* ═══════════════════════════════════════════════
+   ADD MEMBER MODAL
+═══════════════════════════════════════════════ */
+function openModal(role) {
+  state.modalRole = role;
+  dom.modalTitle.textContent = role === 'teacher' ? 'Add Teacher' : 'Add Student';
+  dom.memberEmail.value = '';
+  dom.subjectChecks.innerHTML = '';
+  SUBJECTS.forEach(function(sub, i) {
+    var id = 'sc-' + i;
+    var row = document.createElement('label');
+    row.className = 'check-row' + (sub.selectable ? '' : ' disabled');
+    row.htmlFor = id;
+    row.innerHTML =
+      '<input type="checkbox" id="' + id + '" value="' + esc(sub.name) + '"' +
+      (sub.selectable ? ' checked' : ' disabled') + '> ' +
+      esc(sub.label) +
+      (sub.selectable ? '' : '<span class="soon-pill">Coming Soon</span>');
+    dom.subjectChecks.appendChild(row);
+  });
+  dom.modal.classList.remove('hidden');
+  setTimeout(function() { dom.memberEmail.focus(); }, 50);
+}
+
+function closeModal() {
+  dom.modal.classList.add('hidden');
+}
+
+function selectedSubjects() {
+  return Array.from(dom.subjectChecks.querySelectorAll('input[type="checkbox"]:checked')).map(function(cb) { return cb.value; });
+}
+
 async function addMember() {
-  const email = el.memberEmail.value.trim().toLowerCase();
-  const role = state.roleForModal;
-  const subjects = selectedSubjects();
+  var email = dom.memberEmail.value.trim().toLowerCase();
+  var role = state.modalRole;
+  var subjects = selectedSubjects();
 
-  if (!email) { showToast('Enter an email address.'); return; }
+  if (!email) { toast('Enter an email address.'); return; }
+  if (!state.schoolId) { toast('School not loaded. Please refresh.'); return; }
 
-  const hasSchool = await ensureSchoolContext();
-  if (!hasSchool) { showToast('Could not load your school. Please refresh.'); return; }
+  var dup = state.members.find(function(m) { return m.email === email && String(m.status).toLowerCase() !== 'removed'; });
+  if (dup) { toast('This person is already a member.'); return; }
 
-  const existing = state.members.find(m =>
-    m.email === email && String(m.status).toLowerCase() !== 'removed'
+  var btn = document.getElementById('btn-member-save');
+  btn.disabled = true;
+
+  var res = await state.sb.from('school_members').insert({
+    school_id: state.schoolId,
+    email: email,
+    role: role,
+    subjects: subjects,
+    status: 'invited'
+  });
+
+  btn.disabled = false;
+
+  if (res.error) {
+    console.error('addMember insert:', res.error);
+    toast('Could not add member: ' + (res.error.message || 'unknown error'));
+    return;
+  }
+
+  const invited = await window.RA10_INVITE(
+    email,
+    role,
+    state.schoolId,
+    state.schoolName
   );
-  if (existing) { showToast('This person is already a member.'); return; }
-
-  // Step 1: Insert into school_members
-  const { error: insertError } = await state.supabase
-    .from('school_members')
-    .insert({
-      school_id: state.schoolId,
-      email,
-      role,
-      subjects,
-      status: 'invited'
-    });
-
-  if (insertError) {
-    console.error('Insert failed', insertError);
-    showToast('Could not add member: ' + (insertError.message || 'unknown error'));
-    return;
+  if (invited) {
+    toast('Member added \u2014 invite email sent to ' + email);
+  } else {
+    toast('Member added. Invite email could not be sent \u2014 try again shortly.');
   }
-
-  // Step 2: Send invite via Auth API
-  try {
-    const inviteRes = await fetch(
-      'https://tcrrgsylxbyyrmnouihl.supabase.co/auth/v1/invite',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'apikey': SUPABASE_SR,
-          'Authorization': 'Bearer ' + SUPABASE_SR
-        },
-        body: JSON.stringify({
-          email,
-          data: {
-            role,
-            school_id: state.schoolId,
-            school_name: state.schoolName
-          },
-          redirect_to: 'https://ra10.co.uk/#/account'
-        })
-      }
-    );
-    if (!inviteRes.ok) {
-      const errText = await inviteRes.text();
-      console.warn('Invite failed (non-fatal):', errText);
-    }
-  } catch(err) {
-    console.warn('Invite error (non-fatal):', err);
-  }
-
-  closeAddModal();
-  showToast('Member added — invite email sent to ' + email);
+  closeModal();
   await loadMembers();
 }
 
+/* ═══════════════════════════════════════════════
+   REMOVE MEMBER
+═══════════════════════════════════════════════ */
 async function removeMember(memberId) {
-  const member = state.members.find((m) => String(m.id) === String(memberId));
-  if (!member) return;
+  var m = state.members.find(function(x) { return String(x.id) === String(memberId); });
+  if (!m) return;
+  if (!confirm('Remove ' + m.email + '? Their account will be reverted to free tier.')) return;
 
-  const { error } = await state.supabase
-    .from('school_members')
-    .update({ status: 'removed' })
-    .eq('id', member.id);
+  var res = await state.sb.from('school_members').update({ status: 'removed' }).eq('id', m.id);
+  if (res.error) { toast('Could not remove member.'); return; }
 
-  if (error) {
-    console.warn('Remove member failed', error);
-    showToast('Could not remove member.');
-    return;
-  }
-
-  await state.supabase
-    .from('profiles')
-    .update({ tier: 'free', credits: 0 })
-    .eq('email', member.email);
-
-  showToast('Member removed.');
+  await state.sb.from('profiles').update({ tier: 'free', credits: 0 }).eq('email', m.email);
+  toast(m.email + ' removed.');
   await loadMembers();
 }
 
-function setTab(tab) {
-  state.activeTab = tab;
-  document.querySelectorAll('.tab-btn').forEach((b) => {
-    const active = b.getAttribute('data-tab') === tab;
-    b.classList.toggle('active', active);
-    b.setAttribute('aria-selected', active ? 'true' : 'false');
-  });
-  document.getElementById('tab-students').classList.toggle('hidden', tab !== 'students');
-  document.getElementById('tab-teachers').classList.toggle('hidden', tab !== 'teachers');
-  document.getElementById('tab-subjects').classList.toggle('hidden', tab !== 'subjects');
-}
+/* ═══════════════════════════════════════════════
+   SETTINGS
+═══════════════════════════════════════════════ */
+document.getElementById('btn-save-school').addEventListener('click', async function() {
+  var newName = dom.settingsName.value.trim();
+  if (!newName) { toast('Enter a school name.'); return; }
+  await saveSchoolName(newName);
+});
 
-async function prepareSupabase() {
-  const token = state.session && state.session.access_token ? state.session.access_token : null;
-  state.supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
-    global: {
-      headers: token ? { Authorization: 'Bearer ' + token } : {}
-    }
-  });
-}
+document.getElementById('btn-remove-all').addEventListener('click', async function() {
+  if (!state.schoolId) return;
+  if (!confirm('Remove ALL members? This will revert every student and teacher to free tier. This cannot be undone.')) return;
+  if (!state.members.length) { toast('No members to remove.'); return; }
 
+  var ids = state.members.map(function(m) { return m.id; });
+  var emails = state.members.map(function(m) { return m.email; });
+
+  await state.sb.from('school_members').update({ status: 'removed' }).in('id', ids);
+  if (emails.length) {
+    await state.sb.from('profiles').update({ tier: 'free', credits: 0 }).in('email', emails);
+  }
+  toast('All members removed.');
+  await loadMembers();
+});
+
+/* ═══════════════════════════════════════════════
+   EVENT DELEGATION
+═══════════════════════════════════════════════ */
+[dom.studentsBody, dom.teachersBody].forEach(function(tbody) {
+  tbody.addEventListener('click', async function(e) {
+    var btn = e.target.closest('[data-remove]');
+    if (btn) await removeMember(btn.dataset.remove);
+  });
+});
+
+document.getElementById('btn-add-student').addEventListener('click', function() { openModal('student'); });
+document.getElementById('btn-add-teacher').addEventListener('click', function() { openModal('teacher'); });
+document.getElementById('btn-member-save').addEventListener('click', addMember);
+document.getElementById('btn-member-cancel').addEventListener('click', closeModal);
+document.getElementById('btn-modal-close').addEventListener('click', closeModal);
+dom.modal.addEventListener('click', function(e) { if (e.target === dom.modal) closeModal(); });
+dom.memberEmail.addEventListener('keydown', function(e) { if (e.key === 'Enter') addMember(); });
+
+/* ═══════════════════════════════════════════════
+   SIGN OUT / SIGN IN
+═══════════════════════════════════════════════ */
+var BASE_URL = (location.hostname === '127.0.0.1' || location.hostname === 'localhost')
+  ? location.origin : 'https://ra10.co.uk';
+
+document.getElementById('btn-gate-signin').addEventListener('click', function() {
+  location.href = BASE_URL + '/#/auth';
+});
+document.getElementById('btn-signout').addEventListener('click', async function() {
+  if (window.RA10 && RA10.signOut) await RA10.signOut();
+  location.href = BASE_URL + '/#/auth';
+});
+
+/* ═══════════════════════════════════════════════
+   INIT ACCESS
+═══════════════════════════════════════════════ */
 async function initAccess() {
-  show('loading');
-  try { await RA10.init(); } catch(e) { console.warn('RA10 init failed', e); }
+  showGate('loading');
 
-  if (!window.RA10 || !RA10.isLoggedIn()) { show('signin'); return; }
+  try { await RA10.init(); } catch(e) { console.warn('RA10.init:', e); }
+
+  if (!window.RA10 || !RA10.isLoggedIn()) { showGate('signin'); return; }
 
   state.profile = RA10.getProfile() || null;
   state.session = RA10.getSession ? RA10.getSession() : null;
-  const tier = RA10.getTier ? RA10.getTier() : 'free';
-  const email = (state.profile?.email || '').toLowerCase();
-  const isOwner = email === OWNER_EMAIL;
-  const hasAccess = tier === 'school_admin' || isOwner;
 
-  if (!hasAccess) { show('denied'); return; }
+  var tier    = RA10.getTier ? RA10.getTier() : 'free';
+  var email   = ((state.profile && state.profile.email) || '').toLowerCase();
+  var isOwner = email === OWNER_EMAIL;
 
-  await prepareSupabase();
+  if (tier !== 'school_admin' && !isOwner) { showGate('denied'); return; }
 
-  const userId = state.session?.user?.id;
-  if (!userId) { show('denied'); return; }
+  var token = state.session && state.session.access_token ? state.session.access_token : null;
+  state.sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
+    global: { headers: token ? { Authorization: 'Bearer ' + token } : {} }
+  });
 
-  // Step 1: get school_id from this user's profile row
-  const { data: freshProfile } = await state.supabase
-    .from('profiles')
-    .select('school_id, school_name')
-    .eq('id', userId)
-    .single();
-
-  if (freshProfile?.school_id) {
-    state.schoolId = freshProfile.school_id;
-    state.schoolName = freshProfile.school_name || 'Your School';
-  }
-
-  // Step 2: if no school_id on profile, look for a school owned by this user
-  if (!state.schoolId) {
-    const { data: schoolRow } = await state.supabase
-      .from('schools')
-      .select('id, name')
-      .eq('owner_id', userId)
-      .limit(1)
-      .single();
-    if (schoolRow?.id) {
-      state.schoolId = schoolRow.id;
-      state.schoolName = schoolRow.name || 'Your School';
-      // Save back to profile
-      await state.supabase
-        .from('profiles')
-        .update({ school_id: schoolRow.id, school_name: schoolRow.name })
-        .eq('id', userId);
-    }
-  }
-
-  // Step 3: auto-create a school for this user if none exists
-  if (!state.schoolId) {
-    const newName = (state.profile?.display_name || email.split('@')[0]) + "'s School";
-    const { data: created } = await state.supabase
-      .from('schools')
-      .insert({ owner_id: userId, name: newName })
-      .select('id, name')
-      .single();
-    if (created?.id) {
-      state.schoolId = created.id;
-      state.schoolName = created.name;
-      await state.supabase
-        .from('profiles')
-        .update({ school_id: created.id, school_name: created.name })
-        .eq('id', userId);
-    }
-  }
-
-  if (!state.schoolId) {
-    show('denied');
-    document.getElementById('gate-denied').querySelector('p').textContent =
-      'Could not load or create your school. Please contact support.';
+  var userId = state.session && state.session.user ? state.session.user.id : null;
+  if (!userId) {
+    dom.deniedMsg.textContent = 'Could not read your user ID. Please sign in again.';
+    showGate('denied');
     return;
   }
 
-  el.schoolName.textContent = state.schoolName;
-  el.nav.classList.remove('hidden');
-  show('app');
+  /* 1. profile row */
+  var profRes = await state.sb.from('profiles').select('school_id, school_name').eq('id', userId).single();
+  if (profRes.data && profRes.data.school_id) {
+    state.schoolId   = profRes.data.school_id;
+    state.schoolName = profRes.data.school_name || 'Your School';
+  }
+
+  /* 2. schools table */
+  if (!state.schoolId) {
+    var schRes = await state.sb.from('schools').select('id, name').eq('owner_id', userId).limit(1).single();
+    if (schRes.data && schRes.data.id) {
+      state.schoolId   = schRes.data.id;
+      state.schoolName = schRes.data.name || 'Your School';
+      await state.sb.from('profiles').update({ school_id: schRes.data.id, school_name: schRes.data.name }).eq('id', userId);
+    }
+  }
+
+  /* 3. auto-create */
+  if (!state.schoolId) {
+    var newName = ((state.profile && state.profile.display_name) || email.split('@')[0]) + "'s School";
+    var createRes = await state.sb.from('schools').insert({ owner_id: userId, name: newName }).select('id, name').single();
+    if (createRes.data && createRes.data.id) {
+      state.schoolId   = createRes.data.id;
+      state.schoolName = createRes.data.name;
+      await state.sb.from('profiles').update({ school_id: createRes.data.id, school_name: createRes.data.name }).eq('id', userId);
+    }
+  }
+
+  if (!state.schoolId) {
+    dom.deniedMsg.textContent = 'Could not load or create your school. Please contact support.';
+    showGate('denied');
+    return;
+  }
+
+  setSchoolName(state.schoolName);
+  setTab('students');
+  showGate('app');
   await loadMembers();
 }
 
-function bindEvents() {
-  document.getElementById('btn-gate-signin').addEventListener('click', () => {
-    location.href = baseUrl() + '/#/auth';
-  });
-
-  document.getElementById('btn-signout').addEventListener('click', async () => {
-    if (window.RA10 && RA10.signOut) await RA10.signOut();
-    location.href = baseUrl() + '/#/auth';
-  });
-
-  document.querySelectorAll('.tab-btn').forEach((btn) => {
-    btn.addEventListener('click', () => setTab(btn.getAttribute('data-tab')));
-  });
-
-  document.getElementById('btn-add-student').addEventListener('click', async () => openAddModal('student'));
-  document.getElementById('btn-add-teacher').addEventListener('click', async () => openAddModal('teacher'));
-
-  document.getElementById('btn-member-save').addEventListener('click', addMember);
-  document.getElementById('btn-member-cancel').addEventListener('click', closeAddModal);
-
-  el.modal.addEventListener('click', (e) => {
-    if (e.target === el.modal) closeAddModal();
-  });
-
-  el.studentsBody.addEventListener('click', async (e) => {
-    const button = e.target.closest('[data-remove-id]');
-    if (!button) return;
-    await removeMember(button.getAttribute('data-remove-id'));
-  });
-
-  el.teachersBody.addEventListener('click', async (e) => {
-    const button = e.target.closest('[data-remove-id]');
-    if (!button) return;
-    await removeMember(button.getAttribute('data-remove-id'));
-  });
-}
-
-function waitForRA10(callback, attempts) {
-  var tries = attempts || 0;
+/* ═══════════════════════════════════════════════
+   BOOT — wait for RA10 SDK
+═══════════════════════════════════════════════ */
+function waitForRA10(cb, tries) {
+  tries = tries || 0;
   if (window.RA10 && typeof RA10.init === 'function') {
-    callback();
+    cb();
   } else if (tries < 50) {
-    setTimeout(function() { waitForRA10(callback, tries + 1); }, 100);
+    setTimeout(function() { waitForRA10(cb, tries + 1); }, 100);
   } else {
-    // SDK never loaded — show signin gate
-    show('signin');
+    showGate('signin');
   }
 }
 
-waitForRA10(function() {
-  initThemeToggle();
-  bindEvents();
-  setTab('students');
-  initAccess();
-});
+waitForRA10(initAccess);
 </script>
 </body>
 </html>
