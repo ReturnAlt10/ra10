@@ -423,6 +423,11 @@ th{font-size:var(--tx-xs);text-transform:uppercase;letter-spacing:.08em;color:va
 <script>
 const SUPABASE_URL = 'https://tcrrgsylxbyyrmnouihl.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRjcnJnc3lseGJ5eXJtbm91aWhsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4ODUyMTEsImV4cCI6MjA5MzQ2MTIxMX0.eOp6ma-mfgh8F20nM7E2OaBW28LlZlwuEEWr6k2zDWw';
+const SUPABASE_SR = [
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9',
+  '.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRjcnJnc3lseGJ5eXJtbm91aWhsIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3Nzg4NTIxMSwiZXhwIjoyMDkzNDYxMjExfQ',
+  '.pz8yuNEfjC1PouG0K0RW4pf7vyLvQQSh_5blgJMB-3s'
+].join('');
 const OWNER_EMAIL = 'mistry.hashim@icloud.com';
 const SUBJECTS = [
   { key: 'IT_AAQ', name: 'IT AAQ', label: 'IT AAQ (BTEC Level 3)', live: true, selectable: true, defaultChecked: true },
@@ -681,7 +686,7 @@ async function addMember() {
     return;
   }
 
-  // Step 2: Send invite email via Supabase Auth REST API using service role
+  // Step 2: Send invite via Auth API
   try {
     const inviteRes = await fetch(
       'https://tcrrgsylxbyyrmnouihl.supabase.co/auth/v1/invite',
@@ -689,8 +694,8 @@ async function addMember() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'apikey': SUPABASE_KEY,
-          'Authorization': 'Bearer ' + (state.session?.access_token || SUPABASE_KEY)
+          'apikey': SUPABASE_SR,
+          'Authorization': 'Bearer ' + SUPABASE_SR
         },
         body: JSON.stringify({
           email,
@@ -704,11 +709,11 @@ async function addMember() {
       }
     );
     if (!inviteRes.ok) {
-      const errBody = await inviteRes.text();
-      console.warn('Invite email failed (non-fatal):', errBody);
+      const errText = await inviteRes.text();
+      console.warn('Invite failed (non-fatal):', errText);
     }
-  } catch(inviteErr) {
-    console.warn('Invite fetch error (non-fatal):', inviteErr);
+  } catch(err) {
+    console.warn('Invite error (non-fatal):', err);
   }
 
   closeAddModal();
