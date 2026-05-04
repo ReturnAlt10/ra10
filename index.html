@@ -79,7 +79,7 @@ a,button,[role="button"],input,select,textarea{
    NAVBAR
 ===================================================== */
 .nav{
-  position:sticky;top:0;z-index:100;
+  position:sticky;top:0;z-index:10000;
   background:oklch(from var(--color-surface) l c h/.95);
   backdrop-filter:blur(14px);
   border-bottom:1px solid oklch(from var(--color-text) l c h/.08);
@@ -105,6 +105,46 @@ a,button,[role="button"],input,select,textarea{
   border-radius:var(--radius-md);color:var(--color-text-muted);
 }
 .theme-toggle:hover{background:oklch(from var(--color-text) l c h/.06);color:var(--color-text)}
+
+.nav-auth-btn{display:inline-flex;align-items:center;gap:var(--sp2);padding:calc(var(--sp1) + 2px) var(--sp3);border-radius:var(--radius-md);background:var(--color-primary);color:var(--color-text-inverse);font-size:var(--tx-sm);font-weight:600;border:none}
+.nav-auth-btn:hover{background:var(--color-primary-hover)}
+.nav-user-btn{display:flex;align-items:center;gap:var(--sp2);background:transparent;color:var(--color-text);border-radius:var(--radius-md);padding:var(--sp2);}
+.nav-user-btn:hover{background:oklch(from var(--color-text) l c h/.06)}
+.nav-avatar{width:28px;height:28px;border-radius:9999px;background:var(--color-primary);color:#fff;display:flex;align-items:center;justify-content:center;font-size:0.85rem;font-weight:700;flex-shrink:0}
+.nav-tier-badge{display:inline-flex;align-items:center;justify-content:center;padding:0 var(--sp2);font-size:var(--tx-xs);font-weight:700;text-transform:uppercase;border-radius:9999px;background:var(--color-primary-highlight);color:var(--color-primary)}
+.nav-tier-badge.owner{background:#f5e1a9;color:#7a5200}
+.nav-tier-badge.ultra{background:#f2e5ff;color:#6a2fb8}
+.nav-tier-badge.all_subjects{background:#dcfce7;color:#166534}
+.nav-credit-chip{display:inline-flex;align-items:center;gap:var(--sp2);padding:calc(var(--sp1) + 1px) var(--sp3);border-radius:9999px;background:var(--color-surface-offset);border:1px solid var(--color-border);font-size:var(--tx-xs);color:var(--color-text)}
+.nav-user-wrap{position:relative}
+.nav-user-dropdown{position:absolute;top:calc(100% + 8px);right:0;background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-xl);box-shadow:var(--shadow-lg);min-width:220px;padding:var(--sp4);z-index:10002;display:none}
+.nav-user-wrap.open .nav-user-dropdown{display:block}
+.dropdown-item{width:100%;display:flex;align-items:center;gap:var(--sp3);padding:var(--sp3) var(--sp4);border-radius:var(--radius-md);font-size:var(--tx-sm);color:var(--color-text);text-align:left;cursor:pointer;background:transparent;text-decoration:none;border:none}
+.dropdown-item:hover{background:oklch(from var(--color-text) l c h/.06)}
+.dropdown-item.danger{color:var(--color-primary)}
+.dropdown-divider{height:1px;background:var(--color-divider);margin:var(--sp3) 0}
+.auth-overlay{position:fixed;inset:0;z-index:10001;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;padding:var(--sp4);opacity:0;pointer-events:none;transition:opacity var(--t)}
+.auth-overlay.open{opacity:1;pointer-events:all}
+.auth-modal{background:var(--color-surface);border-radius:var(--radius-xl);box-shadow:var(--shadow-lg);max-width:420px;width:100%;padding:var(--sp8);position:relative}
+.auth-close{position:absolute;top:var(--sp4);right:var(--sp4);width:32px;height:32px;border-radius:var(--radius-md);background:transparent;color:var(--color-text-muted);font-size:1rem;display:flex;align-items:center;justify-content:center;cursor:pointer;border:none}
+.auth-tabs{display:flex;gap:var(--sp1);background:var(--color-surface-offset);border-radius:var(--radius-md);padding:3px;margin-bottom:var(--sp6)}
+.auth-tab{flex:1;padding:var(--sp3);border-radius:var(--radius-md);font-size:var(--tx-sm);font-weight:500;color:var(--color-text-muted);background:transparent;cursor:pointer;text-align:center}
+.auth-tab.active{background:var(--color-surface);color:var(--color-text);box-shadow:var(--shadow-sm)}
+.auth-panel{display:none}
+.auth-panel.active{display:block}
+.auth-field{margin-bottom:var(--sp4)}
+.auth-label{display:block;font-size:var(--tx-xs);font-weight:600;color:var(--color-text-muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:var(--sp2)}
+.auth-input{width:100%;padding:var(--sp3) var(--sp4);background:var(--color-surface-offset);border:1px solid var(--color-border);border-radius:var(--radius-md);font-size:var(--tx-sm);color:var(--color-text)}
+.auth-input:focus{outline:none;border-color:var(--color-primary);box-shadow:0 0 0 4px rgba(210,0,0,.12)}
+.auth-submit-btn{width:100%;padding:var(--sp3);background:var(--color-primary);color:var(--color-text-inverse);border-radius:var(--radius-md);font-weight:600;font-size:var(--tx-sm)}
+.auth-submit-btn:hover{background:var(--color-primary-hover)}
+.auth-submit-btn:disabled{opacity:.5;cursor:not-allowed}
+.auth-error,.auth-success{font-size:var(--tx-xs);padding:var(--sp2) var(--sp3);border-radius:var(--radius-md);margin-bottom:var(--sp4);display:none}
+.auth-error{color:var(--color-primary);background:var(--color-primary-highlight)}
+.auth-success{color:var(--color-success);background:var(--color-success-highlight)}
+.auth-error.show,.auth-success.show{display:block}
+.auth-foot{font-size:var(--tx-xs);color:var(--color-text-muted);text-align:center;margin-top:var(--sp4)}
+.site-ad-wrap{max-width:var(--w-wide);margin-inline:auto;padding-inline:var(--sp6);padding-top:var(--sp4)}
 
 /* =====================================================
    LAYOUT
@@ -164,6 +204,7 @@ a,button,[role="button"],input,select,textarea{
 }
 .card.click{cursor:pointer}
 .card.click:hover{box-shadow:var(--shadow-md);transform:translateY(-1px)}
+.card.current-plan{border-color:var(--color-primary);box-shadow:0 8px 24px rgba(210,0,0,.12)}
 .card.off{opacity:.52;pointer-events:none}
 .card-tag{display:inline-flex;align-items:center;gap:var(--sp1);font-size:var(--tx-xs);
   font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--color-text-muted);
@@ -345,7 +386,7 @@ body.iframe-fullscreen-mode .nav{
   top:0;
   left:0;
   right:0;
-  z-index:10001;
+  z-index:10000;
 }
 body.iframe-fullscreen-mode .page.active > *:not(.cf){
   display:none !important;
@@ -387,6 +428,7 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
   .grid-2{grid-template-columns:1fr}
 }
 </style>
+<script src="../../../../ra10-sdk.js"></script>
 </head>
 <body>
 
@@ -404,6 +446,24 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
       <button class="nav-link" data-nav="tools"    onclick="go('/tools')">Tools</button>
     </div>
     <div class="nav-actions">
+      <div id="nav-credit-chip" class="nav-credit-chip" style="display:none"></div>
+      <a id="nav-upgrade-btn" onclick="go('/upgrade')" style="display:none;font-size:var(--tx-xs);font-weight:700;padding:.2rem .75rem;border-radius:var(--radius-full);background:#f1c40f;color:#2b1700;cursor:pointer;text-decoration:none;white-space:nowrap;">Upgrade</a>
+      <button id="nav-auth-btn" class="nav-auth-btn">Sign in</button>
+      <div class="nav-user-wrap" id="nav-user-wrap" style="display:none">
+        <button class="nav-user-btn" id="nav-user-btn">
+          <div class="nav-avatar" id="nav-avatar-initials">?</div>
+          <span id="nav-display-name"></span>
+          <span id="nav-tier-badge" class="nav-tier-badge"></span>
+        </button>
+        <div class="nav-user-dropdown" id="nav-user-dropdown">
+          <div class="dropdown-header" id="dropdown-email"></div>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" onclick="go('/account')">My Account</a>
+          <a class="dropdown-item" onclick="go('/upgrade')">⚡ Upgrade</a>
+          <div class="dropdown-divider"></div>
+          <button class="dropdown-item danger" id="nav-signout-btn">Sign out</button>
+        </div>
+      </div>
       <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
       </button>
@@ -764,6 +824,153 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
   </div>
 </div>
 
+<!-- AUTH REDIRECT PAGE -->
+<div class="page" id="p-auth">
+  <div class="c">
+    <div class="hero">
+      <div class="hero-label">Authentication</div>
+      <h1>Redirecting to sign in…</h1>
+      <p>Please wait while we open the sign in experience.</p>
+    </div>
+  </div>
+</div>
+
+<!-- UPGRADE PAGE -->
+<div class="page" id="p-upgrade">
+<div class="c">
+  <div class="bc">
+    <a class="bc-item" onclick="go('/')">Home</a>
+    <span class="bc-sep">›</span>
+    <span class="bc-item cur">Upgrade</span>
+  </div>
+
+  <div style="padding-block:var(--sp12) var(--sp8);text-align:center;max-width:600px;margin-inline:auto;">
+    <div style="font-size:var(--tx-xs);font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--color-primary);margin-bottom:var(--sp3);">RA10 Plans</div>
+    <h1 style="font-size:var(--tx-2xl);font-weight:400;margin-bottom:var(--sp4);line-height:1.1;">Simple, honest pricing</h1>
+    <p style="color:var(--color-text-muted);font-size:var(--tx-base);line-height:1.7;">Start free. Upgrade when you need more. No hidden fees.</p>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(260px,100%),1fr));gap:var(--sp5);padding-bottom:var(--sp16);" id="upgrade-cards">
+
+    <!-- FREE -->
+    <div class="card" id="plan-free">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp2);">
+        <span style="font-size:var(--tx-xs);font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--color-text-faint);">Free</span>
+        <span id="badge-free" style="display:none;font-size:.65rem;font-weight:700;padding:.15rem .5rem;border-radius:var(--radius-full);background:var(--color-surface-offset-2);color:var(--color-text-muted);">Current plan</span>
+      </div>
+      <div style="font-size:var(--tx-2xl);font-weight:400;font-family:var(--font-d);margin-bottom:var(--sp1);">£0</div>
+      <div style="font-size:var(--tx-xs);color:var(--color-text-muted);margin-bottom:var(--sp5);">Forever free</div>
+      <ul class="feat" style="margin-bottom:var(--sp6);">
+        <li>10 credits per month</li>
+        <li>All subjects (credit-gated)</li>
+        <li>Ads shown</li>
+      </ul>
+      <button class="btn btn-g" style="width:100%;justify-content:center;" disabled>Current plan</button>
+    </div>
+
+    <!-- BASIC -->
+    <div class="card" id="plan-basic">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp2);">
+        <span style="font-size:var(--tx-xs);font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--color-text-muted);">Basic</span>
+        <span id="badge-basic" style="display:none;font-size:.65rem;font-weight:700;padding:.15rem .5rem;border-radius:var(--radius-full);background:var(--color-primary-highlight);color:var(--color-primary);">Current plan</span>
+      </div>
+      <div style="font-size:var(--tx-2xl);font-weight:400;font-family:var(--font-d);margin-bottom:var(--sp1);">£5</div>
+      <div style="font-size:var(--tx-xs);color:var(--color-text-muted);margin-bottom:var(--sp5);">One-time per subject</div>
+      <ul class="feat" style="margin-bottom:var(--sp6);">
+        <li>300 credits — never expires</li>
+        <li>One subject unlocked (e.g. IT)</li>
+        <li>No ads</li>
+      </ul>
+      <button class="btn btn-s" id="btn-buy-basic" style="width:100%;justify-content:center;">Buy Basic — IT</button>
+    </div>
+
+    <!-- PRO -->
+    <div class="card" id="plan-pro" style="border-color:var(--color-primary);position:relative;overflow:hidden;">
+      <div style="position:absolute;top:0;right:0;background:var(--color-primary);color:#fff;font-size:.65rem;font-weight:700;padding:.25rem .75rem;border-radius:0 var(--radius-xl) 0 var(--radius-md);letter-spacing:.06em;text-transform:uppercase;">Popular</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp2);">
+        <span style="font-size:var(--tx-xs);font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--color-primary);">Pro</span>
+        <span id="badge-pro" style="display:none;font-size:.65rem;font-weight:700;padding:.15rem .5rem;border-radius:var(--radius-full);background:var(--color-primary-highlight);color:var(--color-primary);">Current plan</span>
+      </div>
+      <div style="font-size:var(--tx-2xl);font-weight:400;font-family:var(--font-d);margin-bottom:var(--sp1);">£20</div>
+      <div style="font-size:var(--tx-xs);color:var(--color-text-muted);margin-bottom:var(--sp5);">per year</div>
+      <ul class="feat" style="margin-bottom:var(--sp6);">
+        <li>1,000 credits per month</li>
+        <li>All subjects unlocked</li>
+        <li>No ads</li>
+      </ul>
+      <button class="btn btn-p" id="btn-buy-pro" style="width:100%;justify-content:center;">Buy Pro</button>
+    </div>
+
+    <!-- ULTRA -->
+    <div class="card" id="plan-ultra">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp2);">
+        <span style="font-size:var(--tx-xs);font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#7c3aed;">Ultra</span>
+        <span id="badge-ultra" style="display:none;font-size:.65rem;font-weight:700;padding:.15rem .5rem;border-radius:var(--radius-full);background:#ede9fe;color:#7c3aed;">Current plan</span>
+      </div>
+      <div style="font-size:var(--tx-2xl);font-weight:400;font-family:var(--font-d);margin-bottom:var(--sp1);">£30</div>
+      <div style="font-size:var(--tx-xs);color:var(--color-text-muted);margin-bottom:var(--sp5);">per year</div>
+      <ul class="feat" style="margin-bottom:var(--sp6);">
+        <li>Unlimited credits</li>
+        <li>All subjects + all tools</li>
+        <li>No ads</li>
+        <li>Priority access to new features</li>
+      </ul>
+      <button class="btn btn-s" id="btn-buy-ultra" style="width:100%;justify-content:center;border-color:#7c3aed;color:#7c3aed;">Buy Ultra</button>
+    </div>
+
+    <!-- EDU ADMIN -->
+    <div class="card" id="plan-edu">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp2);">
+        <span style="font-size:var(--tx-xs);font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--color-success);">EDU Admin</span>
+        <span id="badge-edu" style="display:none;font-size:.65rem;font-weight:700;padding:.15rem .5rem;border-radius:var(--radius-full);background:var(--color-success-highlight);color:var(--color-success);">Current plan</span>
+      </div>
+      <p>For schools. One subscription covers your entire institution — unlimited teachers and students, all with monthly credits and no ads.</p>
+      <div style="font-size:var(--tx-2xl);font-weight:400;font-family:var(--font-d);margin-bottom:var(--sp1);">£100</div>
+      <div style="font-size:var(--tx-xs);color:var(--color-text-muted);margin-bottom:var(--sp5);">per year · per school</div>
+      <ul class="feat" style="margin-bottom:var(--sp6);">
+        <li>Unlimited teachers and students</li>
+        <li>Students get 300 credits/month each</li>
+        <li>Teachers get 600 credits/month each</li>
+        <li>Admin portal to manage all users</li>
+        <li>All subjects unlocked for everyone</li>
+        <li>No ads for anyone</li>
+      </ul>
+      <button class="btn btn-s" id="btn-buy-edu" style="width:100%;justify-content:center;border-color:var(--color-success);color:var(--color-success);">Buy EDU Admin</button>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<!-- ACCOUNT PAGE -->
+<div class="page" id="p-account">
+  <div class="c">
+    <nav class="bc">
+      <button class="bc-item" onclick="go('/')">Home</button>
+      <span class="bc-sep">›</span>
+      <span class="bc-item cur">Account</span>
+    </nav>
+    <div class="hero">
+      <div class="hero-label">Account</div>
+      <h1>Account details</h1>
+      <p>Manage your subscription, credits and access.</p>
+    </div>
+    <div class="grid">
+      <div class="card">
+        <div class="card-tag">Profile</div>
+        <h3 id="account-display-name">Your name</h3>
+        <p id="account-email">your@email.com</p>
+        <div class="card-ft"><span class="pill" id="account-tier-badge">Tier</span><span class="pill" id="account-credits">Credits remaining</span></div>
+        <p>Next reset: <strong id="account-reset-date">—</strong></p>
+        <div class="card-ft" style="flex-wrap:wrap;gap:var(--sp3)">
+          <a class="btn btn-s" href="https://billing.stripe.com/p/login/placeholder" target="_blank">Manage subscription</a>
+          <button class="btn btn-p" id="btn-account-signout">Sign out</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- ============================================================
      WHATSAPP EXPORTER  /tools/whatsapp-exporter
      iframe src: ra10/tools/whatsapp-exporter/index.html
@@ -859,6 +1066,9 @@ const ROUTES = {
   '/revision/btec/level-3/IT-AAQ/unit-1':'p-unit1',
   '/tools':                               'p-tools',
   '/tools/whatsapp-exporter':            'p-whatsapp',
+  '/auth':                                'p-auth',
+  '/upgrade':                             'p-upgrade',
+  '/account':                             'p-account',
 };
 const NAV_MAP = {'/revision':'revision','/tools':'tools'};
 
@@ -902,6 +1112,194 @@ function route(){
 
 window.addEventListener('hashchange', route);
 route();
+
+  document.addEventListener('DOMContentLoaded', async () => {
+    await RA10.init();
+    _updateNavAuth();
+
+    RA10.on('authchange', () => { _updateNavAuth(); });
+    RA10.on('creditschange', _updateNavAuth);
+
+    function _updateNavAuth() {
+      const loggedIn = RA10.isLoggedIn();
+      const profile = RA10.getProfile();
+      document.getElementById('nav-auth-btn').style.display = loggedIn ? 'none' : '';
+      document.getElementById('nav-user-wrap').style.display = loggedIn ? '' : 'none';
+      if (!loggedIn || RA10.getTier() === 'free') document.getElementById('nav-upgrade-btn').style.display = '';
+      else document.getElementById('nav-upgrade-btn').style.display = 'none';
+      document.getElementById('nav-credit-chip').style.display = loggedIn ? '' : 'none';
+      if (loggedIn && profile) {
+        const initials = (profile.display_name || profile.email || '?').slice(0,2).toUpperCase();
+        document.getElementById('nav-avatar-initials').textContent = initials;
+        document.getElementById('nav-display-name').textContent = profile.display_name || profile.email;
+        document.getElementById('dropdown-email').textContent = profile.email;
+        const badge = document.getElementById('nav-tier-badge');
+        badge.textContent = RA10.getTierInfo().label;
+        badge.className = 'nav-tier-badge ' + RA10.getTier();
+        const tierMap = { free:'free', subject:'basic', all_subjects:'pro', ultra:'ultra', school_admin:'edu', school_student:'edu', owner:'ultra' };
+        const currentPlan = tierMap[RA10.getTier()] || 'free';
+        ['free','basic','pro','ultra','edu'].forEach(p => {
+          const badge = document.getElementById('badge-' + p);
+          const card = document.getElementById('plan-' + p);
+          if (badge) badge.style.display = p === currentPlan ? '' : 'none';
+          if (card) card.style.outline = p === currentPlan ? '2px solid var(--color-primary)' : '';
+        });
+        const credits = RA10.getCredits();
+        document.getElementById('nav-credit-chip').textContent = (credits === Infinity ? '∞' : credits) + ' credits';
+        const accountTier = RA10.getTier();
+        document.querySelectorAll('.card[data-tier]').forEach(card => {
+          card.classList.toggle('current-plan', card.dataset.tier === accountTier);
+        });
+        document.getElementById('account-display-name').textContent = profile.display_name || profile.email;
+        document.getElementById('account-email').textContent = profile.email;
+        document.getElementById('account-tier-badge').textContent = RA10.getTierInfo().label;
+        document.getElementById('account-credits').textContent = (credits === Infinity ? 'Unlimited' : credits + ' credits');
+        const resetDate = profile.credits_reset_at ? new Date(profile.credits_reset_at).toLocaleDateString() : 'N/A';
+        document.getElementById('account-reset-date').textContent = resetDate;
+      }
+    }
+
+    function openAuthModal(tab) {
+      document.getElementById('auth-overlay').classList.add('open');
+      if(tab) switchAuthTab(tab);
+    }
+    function closeAuthModal() { document.getElementById('auth-overlay').classList.remove('open'); }
+    function switchAuthTab(tab) {
+      ['signin','signup','forgot'].forEach(t => {
+        document.getElementById('tab-' + t)?.classList.toggle('active', t === tab);
+        document.getElementById('panel-' + t)?.classList.toggle('active', t === tab);
+      });
+    }
+
+    document.getElementById('nav-auth-btn').addEventListener('click', () => openAuthModal('signin'));
+    document.getElementById('auth-close').addEventListener('click', closeAuthModal);
+    document.getElementById('auth-overlay').addEventListener('click', e => { if (e.target === document.getElementById('auth-overlay')) closeAuthModal(); });
+    document.getElementById('tab-signin').addEventListener('click', () => switchAuthTab('signin'));
+    document.getElementById('tab-signup').addEventListener('click', () => switchAuthTab('signup'));
+    document.getElementById('forgot-link').addEventListener('click', () => switchAuthTab('forgot'));
+    document.getElementById('back-to-signin').addEventListener('click', () => switchAuthTab('signin'));
+
+    document.getElementById('signin-btn').addEventListener('click', async () => {
+      const btn = document.getElementById('signin-btn');
+      const err = document.getElementById('signin-error');
+      err.classList.remove('show');
+      btn.disabled = true; btn.textContent = 'Signing in…';
+      const { error } = await RA10.signIn(
+        document.getElementById('signin-email').value,
+        document.getElementById('signin-password').value
+      );
+      btn.disabled = false; btn.textContent = 'Sign in';
+      if (error) { err.textContent = error.message; err.classList.add('show'); }
+      else { closeAuthModal(); }
+    });
+
+    document.getElementById('signup-btn').addEventListener('click', async () => {
+      const btn = document.getElementById('signup-btn');
+      const err = document.getElementById('signup-error');
+      const suc = document.getElementById('signup-success');
+      err.classList.remove('show'); suc.classList.remove('show');
+      btn.disabled = true; btn.textContent = 'Creating account…';
+      const { error } = await RA10.signUp(
+        document.getElementById('signup-email').value,
+        document.getElementById('signup-password').value,
+        document.getElementById('signup-name').value
+      );
+      btn.disabled = false; btn.textContent = 'Create free account';
+      if (error) { err.textContent = error.message; err.classList.add('show'); }
+      else { suc.textContent = 'Check your email to confirm your account, then sign in.'; suc.classList.add('show'); }
+    });
+
+    document.getElementById('forgot-btn').addEventListener('click', async () => {
+      const btn = document.getElementById('forgot-btn');
+      const err = document.getElementById('forgot-error');
+      const suc = document.getElementById('forgot-success');
+      err.classList.remove('show'); suc.classList.remove('show');
+      btn.disabled = true; btn.textContent = 'Sending…';
+      const { error } = await RA10.resetPassword(document.getElementById('forgot-email').value);
+      btn.disabled = false; btn.textContent = 'Send reset link';
+      if (error) { err.textContent = error.message; err.classList.add('show'); }
+      else { suc.textContent = 'Reset link sent — check your email.'; suc.classList.add('show'); }
+    });
+
+    document.getElementById('nav-user-btn').addEventListener('click', e => {
+      e.stopPropagation();
+      document.getElementById('nav-user-wrap').classList.toggle('open');
+    });
+    document.addEventListener('click', () => document.getElementById('nav-user-wrap')?.classList.remove('open'));
+
+    document.getElementById('nav-signout-btn').addEventListener('click', async () => {
+      await RA10.signOut(); go('/');
+    });
+
+    document.getElementById('btn-buy-basic')?.addEventListener('click', () => {
+      if (!RA10.isLoggedIn()) { document.getElementById('auth-overlay').classList.add('open'); return; }
+      alert('Payment system coming soon at ra10.co.uk');
+    });
+    document.getElementById('btn-buy-pro')?.addEventListener('click', () => {
+      if (!RA10.isLoggedIn()) { document.getElementById('auth-overlay').classList.add('open'); return; }
+      alert('Payment system coming soon at ra10.co.uk');
+    });
+    document.getElementById('btn-buy-ultra')?.addEventListener('click', () => {
+      if (!RA10.isLoggedIn()) { document.getElementById('auth-overlay').classList.add('open'); return; }
+      alert('Payment system coming soon at ra10.co.uk');
+    });
+    document.getElementById('btn-buy-edu')?.addEventListener('click', () => {
+      if (!RA10.isLoggedIn()) { document.getElementById('auth-overlay').classList.add('open'); return; }
+      alert('Payment system coming soon at ra10.co.uk');
+    });
+
+    document.getElementById('btn-account-signout')?.addEventListener('click', async () => {
+      await RA10.signOut(); go('/');
+    });
+
+    window.addEventListener('message', function(e) {
+      if (e.data && e.data.type === 'RA10_OPEN_AUTH') {
+        document.getElementById('auth-overlay')?.classList.add('open');
+      }
+    });
+
+    if (location.hash === '#/auth') {
+      go('/');
+      setTimeout(() => openAuthModal('signin'), 100);
+    }
+  });
 </script>
+<div class="auth-overlay" id="auth-overlay">
+  <div class="auth-modal">
+    <button class="auth-close" id="auth-close">✕</button>
+    <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:1.5rem;">
+      <div style="width:32px;height:32px;background:var(--color-primary);border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;color:#fff;font-family:var(--font-d);font-weight:700;">R</div>
+      <span style="font-family:var(--font-d);font-size:var(--tx-lg);">RA10</span>
+    </div>
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tab-signin">Sign in</button>
+      <button class="auth-tab" id="tab-signup">Create account</button>
+    </div>
+    <div class="auth-panel active" id="panel-signin">
+      <div class="auth-error" id="signin-error"></div>
+      <div class="auth-field"><label class="auth-label">Email</label><input class="auth-input" type="email" id="signin-email" placeholder="you@example.com" autocomplete="email"></div>
+      <div class="auth-field"><label class="auth-label">Password</label><input class="auth-input" type="password" id="signin-password" placeholder="••••••••" autocomplete="current-password"></div>
+      <button class="auth-submit-btn" id="signin-btn">Sign in</button>
+      <p class="auth-foot"><a id="forgot-link">Forgot password?</a></p>
+    </div>
+    <div class="auth-panel" id="panel-signup">
+      <div class="auth-error" id="signup-error"></div>
+      <div class="auth-success" id="signup-success"></div>
+      <div class="auth-field"><label class="auth-label">Display name</label><input class="auth-input" type="text" id="signup-name" placeholder="Your name" autocomplete="name"></div>
+      <div class="auth-field"><label class="auth-label">Email</label><input class="auth-input" type="email" id="signup-email" placeholder="you@example.com" autocomplete="email"></div>
+      <div class="auth-field"><label class="auth-label">Password</label><input class="auth-input" type="password" id="signup-password" placeholder="Min. 8 characters" autocomplete="new-password"></div>
+      <button class="auth-submit-btn" id="signup-btn">Create free account</button>
+      <p class="auth-foot">Free forever · No card required</p>
+    </div>
+    <div class="auth-panel" id="panel-forgot">
+      <div class="auth-error" id="forgot-error"></div>
+      <div class="auth-success" id="forgot-success"></div>
+      <p style="font-size:var(--tx-sm);color:var(--color-text-muted);margin-bottom:1rem;">Enter your email and we'll send a reset link.</p>
+      <div class="auth-field"><label class="auth-label">Email</label><input class="auth-input" type="email" id="forgot-email" placeholder="you@example.com"></div>
+      <button class="auth-submit-btn" id="forgot-btn">Send reset link</button>
+      <p class="auth-foot"><a id="back-to-signin">← Back to sign in</a></p>
+    </div>
+  </div>
+</div>
 </body>
 </html>
