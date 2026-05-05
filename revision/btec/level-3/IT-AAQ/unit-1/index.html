@@ -12,6 +12,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>BTEC IT Unit 1 — Question Bank & Mock Paper Builder</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <link rel="preconnect" href="https://api.fontshare.com">
 <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@500,700,900,400&f[]=jetbrains-mono@500&display=swap">
 <link rel="stylesheet" href="css/style.css">
@@ -32,6 +33,103 @@
 .ra10-cost-label.free-label {
   color: rgba(255,255,255,0.6);
   background: rgba(255,255,255,0.12);
+}
+
+.diagram-tool-wrap {
+  margin-top: 16px;
+  border: 1px solid var(--line-2);
+  border-radius: var(--r-md);
+  background: var(--bg);
+  padding: 12px;
+}
+
+.diagram-mode-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.diagram-pane {
+  display: none;
+}
+
+.diagram-pane.diagram-pane-active {
+  display: block;
+}
+
+.diagram-builder-layout {
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr);
+  gap: 12px;
+}
+
+.diagram-builder-panel {
+  background: #ffffff;
+  border: 1px solid var(--line-2);
+  border-radius: var(--r-sm);
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.diagram-panel-title {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-2);
+}
+
+.diagram-tool-buttons {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 6px;
+}
+
+.diagram-color-input,
+.diagram-builder-panel .field-input {
+  width: 100%;
+  border: 1px solid var(--line-2);
+  border-radius: var(--r-sm);
+  padding: 8px;
+  font-family: inherit;
+  font-size: 14px;
+  background: #fff;
+}
+
+.diagram-builder-canvas-wrap {
+  border: 1px solid var(--line-2);
+  border-radius: var(--r-sm);
+  background: #ffffff;
+  overflow: auto;
+  position: relative;
+  min-height: 500px;
+}
+
+.diagram-builder-canvas {
+  display: block;
+  min-width: 800px;
+  min-height: 500px;
+  width: 1000px;
+  height: 560px;
+  cursor: crosshair;
+}
+
+.diagram-inline-editor {
+  position: absolute;
+  z-index: 2;
+  border: 1px solid var(--line-2);
+  border-radius: 6px;
+  padding: 4px 6px;
+  font-size: 14px;
+  font-family: inherit;
+}
+
+@media (max-width: 900px) {
+  .diagram-builder-layout {
+    grid-template-columns: 1fr;
+  }
 }
 </style>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%2300594E'/%3E%3Ctext x='16' y='22' text-anchor='middle' font-family='sans-serif' font-weight='900' font-size='18' fill='%23E8F1EE'%3EU1%3C/text%3E%3C/svg%3E">
@@ -54,6 +152,7 @@
     <button class="tab" data-tab="mock">Mock Paper</button>
     <button class="tab" data-tab="practice">Practice Mode</button>
     <button class="tab" data-tab="quiz">Quiz</button>
+    <button class="tab" data-tab="progress">Progress</button>
     <button class="tab" data-tab="flash">Flashcards</button>
     <button class="tab" data-tab="spec">Spec Coverage</button>
   </nav>
@@ -256,6 +355,22 @@
     </div>
     <div id="quiz-card"></div>
     <div id="quiz-results" style="display:none;"></div>
+  </section>
+
+  <section id="view-progress" class="view">
+    <header class="section-head">
+      <h2>Your Progress</h2>
+      <p>Track your revision sessions over the last 30 days.</p>
+    </header>
+    <div id="progress-gate" style="display:none;text-align:center;padding:40px;">
+      <p style="margin-bottom:16px;color:#666;">Sign in to save and view your progress.</p>
+      <button class="btn primary" id="btn-progress-signin">Sign in</button>
+    </div>
+    <div id="progress-content" style="display:none;">
+      <div id="progress-stats" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:16px;margin-bottom:24px;"></div>
+      <div id="weak-aims-section" style="margin-bottom:24px;"></div>
+      <div id="sessions-list"></div>
+    </div>
   </section>
 
   <!-- FLASHCARDS -->

@@ -960,3 +960,43 @@ main {
   .mc-options .mc-tick { border-color: #000; }
   .mc-options .mc-letter { color: #000; }
 }
+
+@media (max-width: 768px) {
+  .topbar { flex-wrap: wrap; gap: 8px; padding: 10px 12px; height: auto; }
+  .topbar .tabs { flex-wrap: wrap; gap: 4px; order: 3; width: 100%; }
+  .tab { font-size: 0.78rem; padding: 6px 10px; }
+  .brand h1 { font-size: 1rem; }
+  .brand p { display: none; }
+  .mock-controls { padding: 12px; }
+  .mock-row { flex-direction: column; gap: 12px; }
+  .control { width: 100%; }
+  .control label { font-size: 0.8rem; }
+  .control select, .control input[type="text"] { width: 100%; font-size: 0.9rem; }
+  .chip-row { gap: 6px; flex-wrap: wrap; }
+  .chip { font-size: 0.72rem; padding: 4px 10px; }
+  .mock-actions { flex-direction: column; gap: 8px; }
+  .mock-actions button { width: 100%; justify-content: center; }
+  .paper-section { padding: 12px; }
+  .paper-header h3 { font-size: 1rem; }
+  .answer-line { margin-bottom: 28px; }
+  .practice-controls, .quiz-controls, .flash-controls { flex-direction: column; gap: 8px; }
+  .practice-controls select, .quiz-controls select, .flash-controls select { width: 100%; }
+  .filters { flex-direction: column; gap: 8px; }
+  .filters input, .filters select { width: 100%; }
+  .section-head { padding: 16px 12px 8px; }
+  .section-head h2 { font-size: 1.1rem; }
+  .flash-card { min-height: 200px; }
+  .face-content { font-size: 0.9rem; }
+  .automark-box { padding: 12px; }
+  .aim-grid { grid-template-columns: repeat(2, 1fr); }
+  .grid-3, .grid-2 { grid-template-columns: 1fr; }
+  .diagram-tool-wrap { overflow-x: auto; }
+  .diagram-canvas { min-width: 600px; }
+  .practice-actions { flex-wrap: wrap; gap: 6px; }
+  .practice-actions button { flex: 1; min-width: 120px; }
+}
+
+@media (max-width: 480px) {
+  .aim-grid { grid-template-columns: 1fr; }
+  .flash-actions { flex-wrap: wrap; justify-content: center; }
+}

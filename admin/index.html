@@ -843,8 +843,16 @@ async function initAccess() {
   var tier    = RA10.getTier ? RA10.getTier() : 'free';
   var email   = ((state.profile && state.profile.email) || '').toLowerCase();
   var isOwner = email === OWNER_EMAIL;
-
-  if (tier !== 'school_admin' && !isOwner) { showGate('denied'); return; }
+  const hasAccess = tier === 'school_admin' || isOwner;
+  
+  if (!hasAccess) {
+    showGate('denied');
+    document.getElementById('gate-denied').querySelector('h1').textContent = 
+      'Access restricted';
+    document.getElementById('gate-denied').querySelector('p').textContent = 
+      'The EDU Admin portal is only available to school administrator accounts.';
+    return;
+  }
 
   var token = state.session && state.session.access_token ? state.session.access_token : null;
   state.sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {

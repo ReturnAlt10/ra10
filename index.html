@@ -427,6 +427,37 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
   .hero h1{font-size:clamp(1.6rem,7vw,2.5rem)}
   .grid-2{grid-template-columns:1fr}
 }
+
+@media (max-width: 768px) {
+  .nav-inner { padding: 0 var(--sp4); gap: var(--sp3); }
+  .nav-links { display: none; }
+  .nav-credit-chip { display: none !important; }
+  .home-hero h1 { font-size: clamp(1.8rem, 8vw, 3rem); }
+  .hero h1 { font-size: clamp(1.4rem, 6vw, 2.2rem); }
+  .grid, .grid-2 { grid-template-columns: 1fr; }
+  .stats { grid-template-columns: repeat(2, 1fr); }
+  .steps { grid-template-columns: 1fr; }
+  .unit-grid { grid-template-columns: 1fr; }
+  .coming-strip { flex-direction: column; gap: var(--sp3); }
+  .c, .cd, .cf { padding-inline: var(--sp4); }
+  .ctas { flex-direction: column; }
+  .ctas .btn { width: 100%; justify-content: center; }
+  .iframe-wrap iframe {
+    height: 85dvh;
+    min-height: 500px;
+    border-radius: var(--radius-lg);
+  }
+  .card { padding: var(--sp4); }
+  .auth-modal { padding: var(--sp5); }
+  .nav-user-dropdown { min-width: 180px; }
+  .footer-inner { flex-direction: column; gap: var(--sp3); text-align: center; }
+}
+
+@media (max-width: 480px) {
+  .stats { grid-template-columns: 1fr; }
+  .nav-avatar { width: 24px; height: 24px; font-size: 0.75rem; }
+  .btn-lg { padding: var(--sp3) var(--sp4); font-size: var(--tx-sm); }
+}
 </style>
 <script src="../../../../ra10-sdk.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
@@ -481,6 +512,10 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
 ============================================================ -->
 <div class="page active" id="p-home">
   <div class="c">
+    <div id="exam-banner" style="background:linear-gradient(135deg,#d20000,#a70000);color:#fff;text-align:center;padding:var(--sp3) var(--sp6);font-size:var(--tx-sm);font-weight:600;position:relative;">
+      🎓 Exam Season 2026 — Sign up now and get 50 free credits until 1st August!
+      <button onclick="this.parentElement.style.display='none';localStorage.setItem('ra10_banner_hidden','1')" style="position:absolute;right:var(--sp4);top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.2);border:none;color:#fff;cursor:pointer;border-radius:var(--radius-md);padding:2px 10px;font-size:var(--tx-xs)">✕</button>
+    </div>
     <div class="home-hero">
       <div class="home-eyebrow"><span class="home-dot"></span>RA10 · Digital Platform</div>
       <h1>Everything you need, <em>in one place</em></h1>
@@ -1161,14 +1196,13 @@ route();
           if (card) card.style.outline = p === currentPlan ? '2px solid var(--color-primary)' : '';
         });
         const credits = RA10.getCredits();
-        document.getElementById('nav-credit-chip').textContent = (credits === Infinity ? '∞' : credits) + ' credits';
-        const eduAdminLink = document.getElementById('dropdown-edu-admin');
-        if (eduAdminLink) {
+        document.getElementById('nav-credit-chip').textContent = credits === Infinity ? '∞ credits' : credits + ' credits';
+        const eduLink = document.getElementById('dropdown-edu-admin');
+        if (eduLink) {
           const t = RA10.getTier();
-          const ownerEmail = 'mistry.hashim@icloud.com';
-          const userEmail = (profile && profile.email) ? profile.email.toLowerCase() : '';
-          eduAdminLink.style.display =
-            (t === 'school_admin' || userEmail === ownerEmail) ? '' : 'none';
+          const em = (profile?.email || '').toLowerCase();
+          const show = t === 'school_admin' || em === 'mistry.hashim@icloud.com';
+          eduLink.style.display = show ? '' : 'none';
         }
         const accountTier = RA10.getTier();
         document.querySelectorAll('.card[data-tier]').forEach(card => {
@@ -1177,11 +1211,70 @@ route();
         document.getElementById('account-display-name').textContent = profile.display_name || profile.email;
         document.getElementById('account-email').textContent = profile.email;
         document.getElementById('account-tier-badge').textContent = RA10.getTierInfo().label;
-        document.getElementById('account-credits').textContent = (credits === Infinity ? 'Unlimited' : credits + ' credits');
+        document.getElementById('account-credits').textContent = credits === Infinity ? 'Unlimited credits' : credits + ' credits';
         const resetDate = profile.credits_reset_at ? new Date(profile.credits_reset_at).toLocaleDateString() : 'N/A';
         document.getElementById('account-reset-date').textContent = resetDate;
       }
     }
+
+    async function checkProfileCompletion() {
+      if (!RA10.isLoggedIn()) return;
+      const profile = RA10.getProfile();
+      const name = (profile?.display_name || profile?.full_name || '').trim();
+      if (!name) {
+        setTimeout(() => {
+          document.getElementById('profile-setup-overlay').classList.add('open');
+        }, 800);
+      }
+    }
+
+    document.getElementById('profile-setup-btn').addEventListener('click', async () => {
+      const btn = document.getElementById('profile-setup-btn');
+      const err = document.getElementById('profile-setup-error');
+      const name = document.getElementById('profile-setup-name').value.trim();
+      err.classList.remove('show');
+      if (!name) { err.textContent = 'Please enter your name.'; err.classList.add('show'); return; }
+      btn.disabled = true; btn.textContent = 'Saving...';
+      try {
+        const sb = window.supabase.createClient('https://tcrrgsylxbyyrmnouihl.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRjcnJnc3lseGJ5eXJtbm91aWhsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4ODUyMTEsImV4cCI6MjA5MzQ2MTIxMX0.eOp6ma-mfgh8F20nM7E2OaBW28LlZlwuEEWr6k2zDWw');
+        const session = RA10.getSession();
+        await sb.from('profiles').update({ full_name: name }).eq('id', session.user.id);
+        const p = RA10.getProfile();
+        if (!p?.credits || p.credits === 0) {
+          await sb.from('profiles').update({ credits: 10, credits_reset_at: new Date().toISOString() }).eq('id', session.user.id);
+        }
+        document.getElementById('profile-setup-overlay').classList.remove('open');
+        await RA10.init();
+        _updateNavAuth();
+      } catch(e) {
+        err.textContent = 'Could not save. Please try again.';
+        err.classList.add('show');
+        btn.disabled = false; btn.textContent = 'Save and continue';
+      }
+    });
+
+    function checkExamSeasonToast() {
+      if (!RA10.isLoggedIn()) return;
+      if (localStorage.getItem('ra10_exam_toast_seen')) return;
+      if (sessionStorage.getItem('ra10_exam_toast_shown')) return;
+      const session = RA10.getSession();
+      if (!session?.user) return;
+      const created = new Date(session.user.created_at);
+      if (created >= new Date('2026-05-01') && created < new Date('2026-08-01')) {
+        sessionStorage.setItem('ra10_exam_toast_shown', '1');
+        setTimeout(() => { document.getElementById('exam-credits-toast').style.display = 'block'; }, 2000);
+      }
+    }
+
+    if (localStorage.getItem('ra10_banner_hidden')) {
+      const b = document.getElementById('exam-banner');
+      if (b) b.style.display = 'none';
+    }
+
+    RA10.on('authchange', checkProfileCompletion);
+    RA10.on('authchange', checkExamSeasonToast);
+    checkProfileCompletion();
+    checkExamSeasonToast();
 
     function openAuthModal(tab) {
       document.getElementById('auth-overlay').classList.add('open');
@@ -1311,22 +1404,28 @@ route();
       }
     });
 
-    document.getElementById('btn-buy-basic')?.addEventListener('click', () => {
-      if (!RA10.isLoggedIn()) { document.getElementById('auth-overlay').classList.add('open'); return; }
-      alert('Payment system coming soon at ra10.co.uk');
-    });
-    document.getElementById('btn-buy-pro')?.addEventListener('click', () => {
-      if (!RA10.isLoggedIn()) { document.getElementById('auth-overlay').classList.add('open'); return; }
-      alert('Payment system coming soon at ra10.co.uk');
-    });
-    document.getElementById('btn-buy-ultra')?.addEventListener('click', () => {
-      if (!RA10.isLoggedIn()) { document.getElementById('auth-overlay').classList.add('open'); return; }
-      alert('Payment system coming soon at ra10.co.uk');
-    });
-    document.getElementById('btn-buy-edu')?.addEventListener('click', () => {
-      if (!RA10.isLoggedIn()) { document.getElementById('auth-overlay').classList.add('open'); return; }
-      alert('Payment system coming soon at ra10.co.uk');
-    });
+    const LS_LINKS = {
+      basic: 'https://ra10.lemonsqueezy.com/buy/1612349',
+      pro:   'https://ra10.lemonsqueezy.com/buy/1612384',
+      ultra: 'https://ra10.lemonsqueezy.com/buy/1612385',
+      edu:   'https://ra10.lemonsqueezy.com/buy/1612389',
+    };
+
+    function lsBuy(plan) {
+      if (!RA10.isLoggedIn()) {
+        document.getElementById('auth-overlay').classList.add('open');
+        return;
+      }
+      const profile = RA10.getProfile();
+      const email = profile?.email || '';
+      const url = LS_LINKS[plan] + '?checkout[email]=' + encodeURIComponent(email);
+      window.open(url, '_blank');
+    }
+
+    document.getElementById('btn-buy-basic')?.addEventListener('click', () => lsBuy('basic'));
+    document.getElementById('btn-buy-pro')?.addEventListener('click', () => lsBuy('pro'));
+    document.getElementById('btn-buy-ultra')?.addEventListener('click', () => lsBuy('ultra'));
+    document.getElementById('btn-buy-edu')?.addEventListener('click', () => lsBuy('edu'));
 
     document.getElementById('btn-account-signout')?.addEventListener('click', async () => {
       await RA10.signOut(); go('/');
@@ -1407,6 +1506,32 @@ route();
         placeholder="Repeat password" autocomplete="new-password">
     </div>
     <button class="auth-submit-btn" id="setpw-btn">Set password</button>
+  </div>
+</div>
+<div class="auth-overlay" id="profile-setup-overlay">
+  <div class="auth-modal">
+    <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:1.5rem">
+      <div style="width:32px;height:32px;background:var(--color-primary);border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;color:#fff;font-family:var(--font-d);font-weight:700">R</div>
+      <span style="font-family:var(--font-d);font-size:var(--tx-lg)">RA10</span>
+    </div>
+    <h2 style="font-family:var(--font-d);font-size:var(--tx-xl);font-weight:400;margin-bottom:var(--sp2)">Welcome to RA10</h2>
+    <p style="color:var(--color-text-muted);font-size:var(--tx-sm);margin-bottom:var(--sp6)">Just one thing before you start — what should we call you?</p>
+    <div class="auth-error" id="profile-setup-error"></div>
+    <div class="auth-field">
+      <label class="auth-label">Your name</label>
+      <input class="auth-input" type="text" id="profile-setup-name" placeholder="e.g. Alex Smith" autocomplete="name">
+    </div>
+    <button class="auth-submit-btn" id="profile-setup-btn">Save and continue</button>
+  </div>
+</div>
+
+<div id="exam-credits-toast" style="display:none;position:fixed;bottom:var(--sp6);left:50%;transform:translateX(-50%);z-index:10005;background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-xl);box-shadow:var(--shadow-lg);padding:var(--sp5) var(--sp6);max-width:480px;width:calc(100% - 2rem);text-align:center;">
+  <div style="font-size:1.5rem;margin-bottom:var(--sp2)">🎓</div>
+  <p style="font-weight:700;margin-bottom:var(--sp2);font-size:var(--tx-base)">You have got 50 free exam season credits!</p>
+  <p style="color:var(--color-text-muted);font-size:var(--tx-sm);margin-bottom:var(--sp4)">We have added 50 bonus credits to your account as a welcome gift during exam season. Good luck with your revision!</p>
+  <div style="display:flex;gap:var(--sp3);justify-content:center;flex-wrap:wrap">
+    <button class="btn btn-p" onclick="document.getElementById('exam-credits-toast').style.display='none'">Thanks!</button>
+    <button class="btn btn-g" onclick="localStorage.setItem('ra10_exam_toast_seen','1');document.getElementById('exam-credits-toast').style.display='none'">Do not show again</button>
   </div>
 </div>
 </body>

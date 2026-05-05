@@ -210,16 +210,17 @@
       return data;
     }
 
-    const defaultTier = 'free';
     const createdAt = new Date().toISOString();
+    const emailPrefix = String(user.email || '').split('@')[0] || '';
+    const displayName = user.user_metadata?.display_name || user.user_metadata?.full_name || emailPrefix;
     const profilePayload = {
       id: user.id,
       email: user.email || '',
-      display_name: user.user_metadata?.full_name || user.user_metadata?.display_name || '',
-      tier: defaultTier,
+      display_name: displayName || '',
+      tier: 'free',
       credits: 10,
       credits_reset_at: createdAt,
-      stripe_customer_id: null,
+      unlimited_credits: false,
       unlocked_subjects: [],
     };
     const insert = await client.from('profiles').insert(profilePayload).select().single();
@@ -388,7 +389,9 @@
   }
 
   function isOwner() {
-    return _normalizeTier(_profile?.tier) === 'owner' || _profile?.email === OWNER_EMAIL;
+    return _normalizeTier(_profile?.tier) === 'owner'
+      || _profile?.email === OWNER_EMAIL
+      || _profile?.unlimited_credits === true;
   }
 
   function isPaid() {
@@ -413,7 +416,7 @@
     if (!_profile) {
       return 0;
     }
-    if (UNLIMITED_TIERS.has(_normalizeTier(_profile.tier))) {
+    if (_profile.unlimited_credits) {
       return Infinity;
     }
     return Number.isFinite(_profile.credits) ? _profile.credits : 0;

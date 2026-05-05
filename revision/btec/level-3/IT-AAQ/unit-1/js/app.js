@@ -32,12 +32,40 @@ function makeRng(seed) {
 function hashStr(str) { let h = 2166136261; for (let i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 16777619); } return h | 0; }
 function shuffle(arr, rng) { arr = arr.slice(); for (let i = arr.length - 1; i > 0; i--) { const j = Math.floor((rng ? rng() : Math.random()) * (i + 1)); [arr[i], arr[j]] = [arr[j], arr[i]]; } return arr; }
 
+const SB_URL = 'https://tcrrgsylxbyyrmnouihl.supabase.co';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRjcnJnc3lseGJ5eXJtbm91aWhsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4ODUyMTEsImV4cCI6MjA5MzQ2MTIxMX0.eOp6ma-mfgh8F20nM7E2OaBW28LlZlwuEEWr6k2zDWw';
+
+async function saveSession(sessionType, data) {
+  if (!window.RA10 || !RA10.isLoggedIn()) return;
+  const session = RA10.getSession();
+  if (!session?.user?.id) return;
+  try {
+    const sb = window.supabase
+      ? window.supabase.createClient(SB_URL, SB_KEY)
+      : null;
+    if (!sb) return;
+    await sb.from('revision_sessions').insert({
+      user_id: session.user.id,
+      session_type: sessionType,
+      learning_aims: data.aims || [],
+      questions_total: data.total || 0,
+      questions_correct: data.correct || 0,
+      marks_earned: data.marksEarned || 0,
+      marks_total: data.marksTotal || 0,
+      aim_breakdown: data.aimBreakdown || {}
+    });
+  } catch(e) {
+    console.warn('Could not save session', e);
+  }
+}
+
 // ---------- Tabs ----------
 $$('.tab').forEach(t => t.addEventListener('click', () => switchTab(t.dataset.tab)));
 $$('[data-goto]').forEach(b => b.addEventListener('click', () => switchTab(b.dataset.goto)));
 function switchTab(name) {
   $$('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === name));
   $$('.view').forEach(v => v.classList.toggle('active', v.id === 'view-' + name));
+  if (name === 'progress') renderProgress();
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
@@ -586,10 +614,30 @@ async function startPractice() {
   let pool = QUESTIONS.slice();
   if (aim) pool = pool.filter(q => q.learning_aim === aim);
   if (marks) pool = pool.filter(q => String(q.marks) === marks);
+  window._practiceSession = {
+    aims: aim ? [aim] : ['A','B','C','D','E','F'],
+    total: 0, correct: 0, aimBreakdown: {}
+  };
   if (!pool.length) { alert('No questions match those filters.'); return; }
   practiceQueue = shuffle(pool);
   practiceIdx = 0;
   renderPracticeCard();
+}
+
+function updatePracticeSessionFromUi(q, automarkHost) {
+  if (window._practiceSession) {
+    const ps = window._practiceSession;
+    ps.total++;
+    const aim = q.learning_aim || q.learningaim;
+    ps.aimBreakdown[aim] = ps.aimBreakdown[aim] || { correct: 0, total: 0 };
+    ps.aimBreakdown[aim].total++;
+    const scoreNum = parseInt(automarkHost.querySelector('.value')?.textContent || '0', 10);
+    if (scoreNum >= Math.ceil(q.marks / 2)) {
+      ps.correct++;
+      ps.aimBreakdown[aim].correct++;
+    }
+    saveSession('practice', { ...ps, aims: Object.keys(ps.aimBreakdown) });
+  }
 }
 
 function renderPracticeCard() {
@@ -612,12 +660,10 @@ function renderPracticeCard() {
   // Diagram questions get a sketch canvas; MC gets clickable A–D options;
   // everything else gets a textarea.
   let ta = null;
-  let canvas = null;
   let mcChoice = { value: null };
   if (q.type === 'diagram') {
-    const sketch = buildSketchPad(q);
-    canvas = sketch.canvas;
-    card.appendChild(sketch.wrap);
+    const diagramTool = buildDiagramTool(q);
+    card.appendChild(diagramTool.wrap);
   } else if (q.type === 'multiple_choice') {
     card.appendChild(buildMcOptions(q, mcChoice));
   } else {
@@ -664,6 +710,7 @@ function renderPracticeCard() {
       if (!mcChoice.value) { alert('Pick an answer (A–D) first.'); return; }
       automarkHost.innerHTML = '';
       automarkHost.appendChild(buildMcResultUI(q, mcChoice.value));
+      updatePracticeSessionFromUi(q, automarkHost);
       automarkHost.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       return;
     }
@@ -671,6 +718,7 @@ function renderPracticeCard() {
     if (!answer) { alert('Write an answer first, then I can mark it.'); return; }
     automarkHost.innerHTML = '';
     automarkHost.appendChild(buildAutoMarkUI(q, answer));
+    updatePracticeSessionFromUi(q, automarkHost);
     automarkHost.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   });
   btnNext.addEventListener('click', () => { practiceIdx++; renderPracticeCard(); });
@@ -679,89 +727,505 @@ function renderPracticeCard() {
   wrap.appendChild(card);
 }
 
-// ---------- Sketch pad (diagram questions) ----------
-function buildSketchPad(q) {
-  const wrap = el('div', { class: 'sketch-wrap' });
-  const toolbar = el('div', { class: 'sketch-toolbar' });
-  const canvas = el('canvas', { class: 'sketch-canvas', width: '900', height: '480' });
-  const hint = el('span', { class: 'sketch-hint muted' }, 'Click and drag to draw your ' + (q.diagram_kind || 'diagram') + ' — or sketch on paper, then come back to self-mark.');
+// ---------- Diagram tool (draw + builder modes) ----------
+function buildDiagramTool(q) {
+  const wrap = el('div', { class: 'diagram-tool-wrap' });
+  const tabs = el('div', { class: 'diagram-mode-tabs' });
+  const drawTab = el('button', { class: 'btn primary', type: 'button' }, 'Draw');
+  const buildTab = el('button', { class: 'btn', type: 'button' }, 'Build');
+  tabs.appendChild(drawTab);
+  tabs.appendChild(buildTab);
 
-  const ctx2d = canvas.getContext('2d');
-  // Hi-DPI scaling for crisp lines
-  function fitCanvas() {
+  const drawPane = el('div', { class: 'diagram-pane diagram-pane-active' });
+  const drawToolbar = el('div', { class: 'sketch-toolbar' });
+  const drawCanvas = el('canvas', { class: 'sketch-canvas', width: '900', height: '500' });
+  const drawHint = el('span', { class: 'sketch-hint muted' }, 'Draw freehand, or switch to Build mode to place shapes and connectors.');
+  const drawCtx = drawCanvas.getContext('2d');
+
+  function fitDrawCanvas() {
     const ratio = window.devicePixelRatio || 1;
-    const cssW = canvas.clientWidth || 900;
-    const cssH = 480;
-    canvas.width = cssW * ratio;
-    canvas.height = cssH * ratio;
-    canvas.style.height = cssH + 'px';
-    ctx2d.setTransform(ratio, 0, 0, ratio, 0, 0);
-    ctx2d.fillStyle = '#ffffff';
-    ctx2d.fillRect(0, 0, cssW, cssH);
-    ctx2d.lineCap = 'round';
-    ctx2d.lineJoin = 'round';
+    const cssW = drawCanvas.clientWidth || 900;
+    const cssH = 500;
+    drawCanvas.width = cssW * ratio;
+    drawCanvas.height = cssH * ratio;
+    drawCanvas.style.height = cssH + 'px';
+    drawCtx.setTransform(ratio, 0, 0, ratio, 0, 0);
+    drawCtx.fillStyle = '#ffffff';
+    drawCtx.fillRect(0, 0, cssW, cssH);
+    drawCtx.lineCap = 'round';
+    drawCtx.lineJoin = 'round';
   }
-  setTimeout(fitCanvas, 0);
+  setTimeout(fitDrawCanvas, 0);
 
-  let drawing = false; let last = null;
-  let strokeColor = '#14201E'; let strokeWidth = 2;
+  let drawing = false;
+  let last = null;
+  let strokeColor = '#14201E';
+  let strokeWidth = 2;
 
-  function pos(e) {
-    const r = canvas.getBoundingClientRect();
+  function drawPos(e) {
+    const r = drawCanvas.getBoundingClientRect();
     const t = e.touches && e.touches[0];
     const x = (t ? t.clientX : e.clientX) - r.left;
     const y = (t ? t.clientY : e.clientY) - r.top;
     return { x, y };
   }
-  function down(e) { e.preventDefault(); drawing = true; last = pos(e); }
-  function move(e) {
+
+  function drawDown(e) { e.preventDefault(); drawing = true; last = drawPos(e); }
+  function drawMove(e) {
     if (!drawing) return;
     e.preventDefault();
-    const p = pos(e);
-    ctx2d.strokeStyle = strokeColor;
-    ctx2d.lineWidth = strokeWidth;
-    ctx2d.beginPath();
-    ctx2d.moveTo(last.x, last.y);
-    ctx2d.lineTo(p.x, p.y);
-    ctx2d.stroke();
+    const p = drawPos(e);
+    drawCtx.strokeStyle = strokeColor;
+    drawCtx.lineWidth = strokeWidth;
+    drawCtx.beginPath();
+    drawCtx.moveTo(last.x, last.y);
+    drawCtx.lineTo(p.x, p.y);
+    drawCtx.stroke();
     last = p;
   }
-  function up() { drawing = false; last = null; }
-  canvas.addEventListener('mousedown', down);
-  canvas.addEventListener('mousemove', move);
-  window.addEventListener('mouseup', up);
-  canvas.addEventListener('touchstart', down, { passive: false });
-  canvas.addEventListener('touchmove', move, { passive: false });
-  canvas.addEventListener('touchend', up);
+  function drawUp() { drawing = false; last = null; }
 
-  // Toolbar: pen / eraser / clear / save
-  function makeBtn(label, onClick, cls) {
-    const b = el('button', { class: 'btn ' + (cls || '') }, label);
+  drawCanvas.addEventListener('mousedown', drawDown);
+  drawCanvas.addEventListener('mousemove', drawMove);
+  window.addEventListener('mouseup', drawUp);
+  drawCanvas.addEventListener('touchstart', drawDown, { passive: false });
+  drawCanvas.addEventListener('touchmove', drawMove, { passive: false });
+  drawCanvas.addEventListener('touchend', drawUp);
+
+  function drawBtn(label, onClick, cls) {
+    const b = el('button', { class: 'btn ' + (cls || ''), type: 'button' }, label);
     b.addEventListener('click', onClick);
     return b;
   }
-  const penBtn = makeBtn('Pen', () => { strokeColor = '#14201E'; strokeWidth = 2; setActive(penBtn); }, 'primary');
-  const eraseBtn = makeBtn('Eraser', () => { strokeColor = '#ffffff'; strokeWidth = 16; setActive(eraseBtn); });
-  const clearBtn = makeBtn('Clear', () => { fitCanvas(); }, 'ghost');
-  const saveBtn  = makeBtn('Download as PNG', () => {
+
+  const penBtn = drawBtn('Pen', () => { strokeColor = '#14201E'; strokeWidth = 2; setDrawActive(penBtn); }, 'primary');
+  const eraseBtn = drawBtn('Eraser', () => { strokeColor = '#ffffff'; strokeWidth = 16; setDrawActive(eraseBtn); });
+  const clearDrawBtn = drawBtn('Clear', () => fitDrawCanvas(), 'ghost');
+  const saveDrawBtn = drawBtn('Download as PNG', () => {
     const link = document.createElement('a');
-    link.download = 'diagram-' + (q.id || 'sketch') + '.png';
-    link.href = canvas.toDataURL('image/png');
+    link.download = 'diagram-draw-' + (q.id || 'sketch') + '.png';
+    link.href = drawCanvas.toDataURL('image/png');
     link.click();
   }, 'ghost');
-  function setActive(active) {
+
+  function setDrawActive(active) {
     [penBtn, eraseBtn].forEach(b => b.classList.remove('primary'));
     active.classList.add('primary');
   }
-  toolbar.appendChild(penBtn);
-  toolbar.appendChild(eraseBtn);
-  toolbar.appendChild(clearBtn);
-  toolbar.appendChild(saveBtn);
 
-  wrap.appendChild(toolbar);
-  wrap.appendChild(canvas);
-  wrap.appendChild(hint);
-  return { wrap, canvas };
+  drawToolbar.appendChild(penBtn);
+  drawToolbar.appendChild(eraseBtn);
+  drawToolbar.appendChild(clearDrawBtn);
+  drawToolbar.appendChild(saveDrawBtn);
+  drawPane.appendChild(drawToolbar);
+  drawPane.appendChild(drawCanvas);
+  drawPane.appendChild(drawHint);
+
+  const buildPane = el('div', { class: 'diagram-pane' });
+  const buildLayout = el('div', { class: 'diagram-builder-layout' });
+  const panel = el('div', { class: 'diagram-builder-panel' });
+  const canvasWrap = el('div', { class: 'diagram-builder-canvas-wrap' });
+  const buildCanvas = el('canvas', { class: 'diagram-builder-canvas', width: '1000', height: '560' });
+  const buildCtx = buildCanvas.getContext('2d');
+
+  const toolGroup = el('div', { class: 'diagram-tool-buttons' });
+  const textInput = el('input', { type: 'text', class: 'field-input', placeholder: 'Shape text (optional)' });
+  const colorInput = el('input', { type: 'color', value: '#ffffff', class: 'diagram-color-input' });
+  const deleteBtn = el('button', { class: 'btn', type: 'button' }, 'Delete selected');
+  const clearAllBtn = el('button', { class: 'btn ghost', type: 'button' }, 'Clear all');
+  const saveBuildBtn = el('button', { class: 'btn', type: 'button' }, 'Download as PNG');
+
+  const tools = [
+    { key: 'rect', label: '[ ] Rectangle' },
+    { key: 'diamond', label: '<> Diamond' },
+    { key: 'oval', label: '( ) Start/End' },
+    { key: 'parallelogram', label: '/_/ Input/Output' },
+    { key: 'connector', label: '--> Connector' },
+  ];
+
+  let activeTool = 'rect';
+  const shapes = [];
+  const connectors = [];
+  const grid = 20;
+  let selectedShape = -1;
+  let resizeHandle = null;
+  let dragging = false;
+  let dragDX = 0;
+  let dragDY = 0;
+  let connectFrom = -1;
+  let textEditor = null;
+
+  function snap(n) {
+    return Math.round(n / grid) * grid;
+  }
+
+  function setTool(key) {
+    activeTool = key;
+    connectFrom = -1;
+    Array.from(toolGroup.querySelectorAll('button')).forEach((b) => {
+      b.classList.toggle('primary', b.dataset.tool === key);
+    });
+  }
+
+  function makeToolButton(t) {
+    const b = el('button', { class: 'btn', type: 'button', 'data-tool': t.key }, t.label);
+    b.addEventListener('click', () => setTool(t.key));
+    return b;
+  }
+
+  tools.forEach((t) => toolGroup.appendChild(makeToolButton(t)));
+  setTool('rect');
+
+  function drawGrid() {
+    buildCtx.strokeStyle = '#edf0ea';
+    buildCtx.lineWidth = 1;
+    for (let x = 0; x <= buildCanvas.width; x += grid) {
+      buildCtx.beginPath();
+      buildCtx.moveTo(x + 0.5, 0);
+      buildCtx.lineTo(x + 0.5, buildCanvas.height);
+      buildCtx.stroke();
+    }
+    for (let y = 0; y <= buildCanvas.height; y += grid) {
+      buildCtx.beginPath();
+      buildCtx.moveTo(0, y + 0.5);
+      buildCtx.lineTo(buildCanvas.width, y + 0.5);
+      buildCtx.stroke();
+    }
+  }
+
+  function centerOf(shape) {
+    return { x: shape.x + shape.w / 2, y: shape.y + shape.h / 2 };
+  }
+
+  function roundedRectPath(ctx, x, y, w, h, r) {
+    const rr = Math.min(r, w / 2, h / 2);
+    ctx.beginPath();
+    ctx.moveTo(x + rr, y);
+    ctx.lineTo(x + w - rr, y);
+    ctx.quadraticCurveTo(x + w, y, x + w, y + rr);
+    ctx.lineTo(x + w, y + h - rr);
+    ctx.quadraticCurveTo(x + w, y + h, x + w - rr, y + h);
+    ctx.lineTo(x + rr, y + h);
+    ctx.quadraticCurveTo(x, y + h, x, y + h - rr);
+    ctx.lineTo(x, y + rr);
+    ctx.quadraticCurveTo(x, y, x + rr, y);
+    ctx.closePath();
+  }
+
+  function drawShape(s, idx) {
+    buildCtx.save();
+    buildCtx.fillStyle = s.fill || '#ffffff';
+    buildCtx.strokeStyle = '#14201E';
+    buildCtx.lineWidth = 2;
+
+    if (s.type === 'rect') {
+      buildCtx.beginPath();
+      buildCtx.rect(s.x, s.y, s.w, s.h);
+      buildCtx.fill();
+      buildCtx.stroke();
+    } else if (s.type === 'diamond') {
+      buildCtx.beginPath();
+      buildCtx.moveTo(s.x + s.w / 2, s.y);
+      buildCtx.lineTo(s.x + s.w, s.y + s.h / 2);
+      buildCtx.lineTo(s.x + s.w / 2, s.y + s.h);
+      buildCtx.lineTo(s.x, s.y + s.h / 2);
+      buildCtx.closePath();
+      buildCtx.fill();
+      buildCtx.stroke();
+    } else if (s.type === 'oval') {
+      roundedRectPath(buildCtx, s.x, s.y, s.w, s.h, Math.min(30, s.h / 2));
+      buildCtx.fill();
+      buildCtx.stroke();
+    } else if (s.type === 'parallelogram') {
+      const skew = Math.max(18, Math.round(s.w * 0.15));
+      buildCtx.beginPath();
+      buildCtx.moveTo(s.x + skew, s.y);
+      buildCtx.lineTo(s.x + s.w, s.y);
+      buildCtx.lineTo(s.x + s.w - skew, s.y + s.h);
+      buildCtx.lineTo(s.x, s.y + s.h);
+      buildCtx.closePath();
+      buildCtx.fill();
+      buildCtx.stroke();
+    }
+
+    buildCtx.fillStyle = '#14201E';
+    buildCtx.textAlign = 'center';
+    buildCtx.textBaseline = 'middle';
+    buildCtx.font = '14px Satoshi, sans-serif';
+    const txt = String(s.text || '').slice(0, 70);
+    buildCtx.fillText(txt, s.x + s.w / 2, s.y + s.h / 2, s.w - 16);
+
+    if (idx === selectedShape) {
+      buildCtx.strokeStyle = '#00594E';
+      buildCtx.setLineDash([5, 4]);
+      buildCtx.strokeRect(s.x - 4, s.y - 4, s.w + 8, s.h + 8);
+      buildCtx.setLineDash([]);
+      const handles = getHandles(s);
+      buildCtx.fillStyle = '#00594E';
+      handles.forEach((h) => buildCtx.fillRect(h.x - 4, h.y - 4, 8, 8));
+    }
+
+    buildCtx.restore();
+  }
+
+  function drawConnectors() {
+    buildCtx.save();
+    buildCtx.strokeStyle = '#14201E';
+    buildCtx.fillStyle = '#14201E';
+    buildCtx.lineWidth = 2;
+    connectors.forEach((c) => {
+      const from = shapes[c.from];
+      const to = shapes[c.to];
+      if (!from || !to) return;
+      const a = centerOf(from);
+      const b = centerOf(to);
+      buildCtx.beginPath();
+      buildCtx.moveTo(a.x, a.y);
+      buildCtx.lineTo(b.x, b.y);
+      buildCtx.stroke();
+
+      const angle = Math.atan2(b.y - a.y, b.x - a.x);
+      const arrowLen = 10;
+      buildCtx.beginPath();
+      buildCtx.moveTo(b.x, b.y);
+      buildCtx.lineTo(b.x - arrowLen * Math.cos(angle - Math.PI / 6), b.y - arrowLen * Math.sin(angle - Math.PI / 6));
+      buildCtx.lineTo(b.x - arrowLen * Math.cos(angle + Math.PI / 6), b.y - arrowLen * Math.sin(angle + Math.PI / 6));
+      buildCtx.closePath();
+      buildCtx.fill();
+    });
+    buildCtx.restore();
+  }
+
+  function renderBuilder() {
+    buildCtx.clearRect(0, 0, buildCanvas.width, buildCanvas.height);
+    drawGrid();
+    drawConnectors();
+    shapes.forEach((s, idx) => drawShape(s, idx));
+  }
+
+  function addShape(type, x, y) {
+    const defaults = { x: snap(x), y: snap(y), w: 180, h: 90, text: textInput.value.trim(), fill: colorInput.value };
+    if (type === 'diamond') {
+      defaults.w = 180;
+      defaults.h = 110;
+    }
+    if (type === 'oval') {
+      defaults.w = 190;
+      defaults.h = 80;
+    }
+    if (type === 'parallelogram') {
+      defaults.w = 200;
+      defaults.h = 90;
+    }
+    shapes.push({ type, x: defaults.x, y: defaults.y, w: defaults.w, h: defaults.h, text: defaults.text, fill: defaults.fill });
+    selectedShape = shapes.length - 1;
+    renderBuilder();
+  }
+
+  function canvasPos(e) {
+    const r = buildCanvas.getBoundingClientRect();
+    return { x: e.clientX - r.left, y: e.clientY - r.top };
+  }
+
+  function hitShape(x, y) {
+    for (let i = shapes.length - 1; i >= 0; i--) {
+      const s = shapes[i];
+      if (x >= s.x && x <= s.x + s.w && y >= s.y && y <= s.y + s.h) return i;
+    }
+    return -1;
+  }
+
+  function getHandles(s) {
+    return [
+      { key: 'nw', x: s.x, y: s.y },
+      { key: 'ne', x: s.x + s.w, y: s.y },
+      { key: 'sw', x: s.x, y: s.y + s.h },
+      { key: 'se', x: s.x + s.w, y: s.y + s.h },
+    ];
+  }
+
+  function hitHandle(s, x, y) {
+    const hs = getHandles(s);
+    for (let i = 0; i < hs.length; i++) {
+      const h = hs[i];
+      if (Math.abs(x - h.x) <= 7 && Math.abs(y - h.y) <= 7) return h.key;
+    }
+    return null;
+  }
+
+  function startTextEdit(idx) {
+    if (idx < 0 || !shapes[idx]) return;
+    if (textEditor) textEditor.remove();
+    const s = shapes[idx];
+    const input = el('input', { type: 'text', class: 'diagram-inline-editor' });
+    input.value = s.text || '';
+    input.style.left = (s.x + 8) + 'px';
+    input.style.top = (s.y + s.h / 2 - 14) + 'px';
+    input.style.width = Math.max(80, s.w - 16) + 'px';
+    canvasWrap.appendChild(input);
+    textEditor = input;
+    input.focus();
+    input.select();
+    function commit() {
+      s.text = input.value.trim();
+      input.remove();
+      textEditor = null;
+      renderBuilder();
+    }
+    input.addEventListener('keydown', (ev) => {
+      if (ev.key === 'Enter') commit();
+      if (ev.key === 'Escape') { input.remove(); textEditor = null; renderBuilder(); }
+    });
+    input.addEventListener('blur', commit);
+  }
+
+  buildCanvas.addEventListener('mousedown', (e) => {
+    const p = canvasPos(e);
+    const idx = hitShape(p.x, p.y);
+    if (idx >= 0) {
+      selectedShape = idx;
+      const s = shapes[idx];
+      const h = hitHandle(s, p.x, p.y);
+      if (h) {
+        resizeHandle = h;
+      } else if (activeTool === 'connector') {
+        if (connectFrom < 0) connectFrom = idx;
+        else if (connectFrom !== idx) {
+          connectors.push({ from: connectFrom, to: idx });
+          connectFrom = -1;
+        }
+      } else {
+        dragging = true;
+        dragDX = p.x - s.x;
+        dragDY = p.y - s.y;
+      }
+      renderBuilder();
+      return;
+    }
+
+    selectedShape = -1;
+    connectFrom = -1;
+    if (activeTool !== 'connector') {
+      addShape(activeTool, p.x, p.y);
+    } else {
+      renderBuilder();
+    }
+  });
+
+  buildCanvas.addEventListener('mousemove', (e) => {
+    if (selectedShape < 0) return;
+    const p = canvasPos(e);
+    const s = shapes[selectedShape];
+    if (!s) return;
+
+    if (dragging) {
+      s.x = snap(Math.max(0, Math.min(buildCanvas.width - s.w, p.x - dragDX)));
+      s.y = snap(Math.max(0, Math.min(buildCanvas.height - s.h, p.y - dragDY)));
+      renderBuilder();
+      return;
+    }
+
+    if (resizeHandle) {
+      const minW = 80;
+      const minH = 50;
+      if (resizeHandle.indexOf('e') >= 0) s.w = Math.max(minW, snap(p.x - s.x));
+      if (resizeHandle.indexOf('s') >= 0) s.h = Math.max(minH, snap(p.y - s.y));
+      if (resizeHandle.indexOf('w') >= 0) {
+        const right = s.x + s.w;
+        s.x = snap(Math.max(0, p.x));
+        s.w = Math.max(minW, right - s.x);
+      }
+      if (resizeHandle.indexOf('n') >= 0) {
+        const bottom = s.y + s.h;
+        s.y = snap(Math.max(0, p.y));
+        s.h = Math.max(minH, bottom - s.y);
+      }
+      renderBuilder();
+    }
+  });
+
+  window.addEventListener('mouseup', () => {
+    dragging = false;
+    resizeHandle = null;
+  });
+
+  buildCanvas.addEventListener('dblclick', (e) => {
+    const p = canvasPos(e);
+    const idx = hitShape(p.x, p.y);
+    if (idx >= 0) {
+      selectedShape = idx;
+      startTextEdit(idx);
+    }
+  });
+
+  deleteBtn.addEventListener('click', () => {
+    if (selectedShape < 0) return;
+    shapes.splice(selectedShape, 1);
+    for (let i = connectors.length - 1; i >= 0; i--) {
+      if (connectors[i].from === selectedShape || connectors[i].to === selectedShape) {
+        connectors.splice(i, 1);
+      } else {
+        if (connectors[i].from > selectedShape) connectors[i].from -= 1;
+        if (connectors[i].to > selectedShape) connectors[i].to -= 1;
+      }
+    }
+    selectedShape = -1;
+    connectFrom = -1;
+    renderBuilder();
+  });
+
+  clearAllBtn.addEventListener('click', () => {
+    shapes.length = 0;
+    connectors.length = 0;
+    selectedShape = -1;
+    connectFrom = -1;
+    if (textEditor) {
+      textEditor.remove();
+      textEditor = null;
+    }
+    renderBuilder();
+  });
+
+  saveBuildBtn.addEventListener('click', () => {
+    const link = document.createElement('a');
+    link.download = 'diagram-build-' + (q.id || 'diagram') + '.png';
+    link.href = buildCanvas.toDataURL('image/png');
+    link.click();
+  });
+
+  panel.appendChild(el('div', { class: 'diagram-panel-title' }, 'Shapes'));
+  panel.appendChild(toolGroup);
+  panel.appendChild(el('label', { class: 'field-label' }, 'Text preset'));
+  panel.appendChild(textInput);
+  panel.appendChild(el('label', { class: 'field-label' }, 'Fill color'));
+  panel.appendChild(colorInput);
+  panel.appendChild(deleteBtn);
+  panel.appendChild(clearAllBtn);
+  panel.appendChild(saveBuildBtn);
+  panel.appendChild(el('p', { class: 'muted', style: 'margin-top:10px;' }, 'Connector tool: click source shape, then target shape.'));
+
+  canvasWrap.appendChild(buildCanvas);
+  buildLayout.appendChild(panel);
+  buildLayout.appendChild(canvasWrap);
+  buildPane.appendChild(buildLayout);
+
+  function setMode(mode) {
+    const drawOn = mode === 'draw';
+    drawPane.classList.toggle('diagram-pane-active', drawOn);
+    buildPane.classList.toggle('diagram-pane-active', !drawOn);
+    drawTab.classList.toggle('primary', drawOn);
+    buildTab.classList.toggle('primary', !drawOn);
+  }
+
+  drawTab.addEventListener('click', () => setMode('draw'));
+  buildTab.addEventListener('click', () => setMode('build'));
+
+  wrap.appendChild(tabs);
+  wrap.appendChild(drawPane);
+  wrap.appendChild(buildPane);
+
+  renderBuilder();
+  return { wrap };
 }
 
 // ---------- Self-mark UI (used for diagram questions) ----------
@@ -1242,6 +1706,17 @@ function showQuizResults() {
   const total = quizState.items.length;
   const pct = Math.round(correct / total * 100);
 
+  const aimBreakdown = {};
+  Object.entries(aimStats).forEach(([aim, s]) => {
+    aimBreakdown[aim] = { correct: s.right, total: s.total };
+  });
+  saveSession('quiz', {
+    aims: Object.keys(aimStats),
+    total: total,
+    correct: correct,
+    aimBreakdown
+  });
+
   const card = el('div', { class: 'quiz-results-card' });
   card.appendChild(el('p', { class: 'eyebrow', style: 'letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-2);font-weight:700;font-size:12px;' }, 'Quiz complete'));
   card.appendChild(el('div', { class: 'score-big' }, `${correct} / ${total}`));
@@ -1276,6 +1751,198 @@ function showQuizResults() {
   card.appendChild(actions);
 
   results.appendChild(card);
+}
+
+async function renderProgress() {
+  const gate = document.getElementById('progress-gate');
+  const content = document.getElementById('progress-content');
+
+  if (!gate || !content) return;
+
+  if (!window.RA10 || !RA10.isLoggedIn()) {
+    gate.style.display = 'block';
+    content.style.display = 'none';
+    const btn = document.getElementById('btn-progress-signin');
+    if (btn) {
+      btn.onclick = () => {
+        window.top?.postMessage({ type: 'RA10_OPEN_AUTH' }, '*');
+      };
+    }
+    return;
+  }
+
+  gate.style.display = 'none';
+  content.style.display = 'block';
+
+  const session = RA10.getSession();
+  const sb = window.supabase.createClient(SB_URL, SB_KEY);
+  const since = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
+
+  const { data: sessions } = await sb
+    .from('revision_sessions')
+    .select('*')
+    .eq('user_id', session.user.id)
+    .gte('created_at', since)
+    .order('created_at', { ascending: false });
+
+  const rows = sessions || [];
+
+  const statsEl = document.getElementById('progress-stats');
+  const totalSessions = rows.length;
+  const totalQ = rows.reduce((a, r) => a + (r.questions_total || 0), 0);
+  const totalCorrect = rows.reduce((a, r) => a + (r.questions_correct || 0), 0);
+  const accuracy = totalQ ? Math.round(totalCorrect / totalQ * 100) : 0;
+  const streakDays = calcStreak(rows);
+
+  statsEl.innerHTML = [
+    ['Sessions', totalSessions],
+    ['Questions answered', totalQ],
+    ['Accuracy', accuracy + '%'],
+    ['Day streak', streakDays],
+  ].map(([label, val]) => `
+    <div style="background:#f9f8f5;border:1px solid #ddd;border-radius:12px;padding:16px;text-align:center;">
+      <div style="font-size:1.6rem;font-weight:700;font-family:serif">${val}</div>
+      <div style="font-size:0.75rem;color:#888;text-transform:uppercase;letter-spacing:.06em;margin-top:4px">${label}</div>
+    </div>
+  `).join('');
+
+  const weakEl = document.getElementById('weak-aims-section');
+  const aimTotals = {};
+  const aimCorrect = {};
+  rows.forEach(r => {
+    const bd = r.aim_breakdown || {};
+    Object.entries(bd).forEach(([aim, s]) => {
+      aimTotals[aim] = (aimTotals[aim] || 0) + (s.total || 0);
+      aimCorrect[aim] = (aimCorrect[aim] || 0) + (s.correct || 0);
+    });
+  });
+
+  const weakAims = Object.entries(aimTotals)
+    .filter(([, t]) => t >= 3)
+    .map(([aim, t]) => ({ aim, pct: Math.round((aimCorrect[aim] || 0) / t * 100) }))
+    .sort((a, b) => a.pct - b.pct)
+    .slice(0, 3);
+
+  if (weakAims.length) {
+    weakEl.innerHTML = `
+      <div style="background:#fff8f8;border:1px solid #f4d4d4;border-radius:12px;padding:20px;margin-bottom:8px;">
+        <h3 style="font-family:serif;font-weight:400;font-size:1.1rem;margin-bottom:8px">
+          📊 Areas to focus on
+        </h3>
+        <p style="font-size:0.85rem;color:#666;margin-bottom:16px">
+          Based on your last 30 days — these aims have your lowest accuracy.
+        </p>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px">
+          ${weakAims.map(w => `
+            <span style="background:#f4d4d4;color:#d20000;padding:4px 12px;
+              border-radius:999px;font-size:0.8rem;font-weight:700">
+              Aim ${w.aim} — ${w.pct}% accuracy
+            </span>
+          `).join('')}
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <button class="btn primary" id="btn-weak-quiz">
+            Start quiz on weak aims
+          </button>
+          <button class="btn" id="btn-weak-practice">
+            Practice questions on weak aims
+          </button>
+        </div>
+      </div>
+    `;
+
+    document.getElementById('btn-weak-quiz')?.addEventListener('click', () => {
+      const aimFilter = weakAims.map(w => w.aim);
+      switchTab('quiz');
+      const aimSel = document.getElementById('quiz-aim');
+      if (aimSel && aimFilter.length === 1) aimSel.value = aimFilter[0];
+      setTimeout(() => startWeakQuiz(aimFilter), 100);
+    });
+
+    document.getElementById('btn-weak-practice')?.addEventListener('click', () => {
+      const aimFilter = weakAims.map(w => w.aim);
+      switchTab('practice');
+      setTimeout(() => startWeakPractice(aimFilter), 100);
+    });
+  } else {
+    weakEl.innerHTML = `
+      <div style="background:#f9f8f5;border:1px solid #ddd;border-radius:12px;
+        padding:20px;color:#888;font-size:0.9rem;">
+        Complete at least 3 questions in any aim to see your weak areas analysis.
+      </div>
+    `;
+  }
+
+  const listEl = document.getElementById('sessions-list');
+  if (!rows.length) {
+    listEl.innerHTML = '<p style="color:#888;text-align:center;padding:32px">No sessions in the last 30 days. Start a quiz or practice session to track your progress.</p>';
+    return;
+  }
+
+  const typeLabel = { quiz: '🧠 Quiz', practice: '✍️ Practice', mock: '📄 Mock Paper', flashcard: '🃏 Flashcards' };
+  listEl.innerHTML = '<h3 style="font-family:serif;font-weight:400;font-size:1.1rem;margin-bottom:12px">Recent sessions</h3>' +
+    rows.map(r => {
+      const pct = r.questions_total ? Math.round(r.questions_correct / r.questions_total * 100) : null;
+      const date = new Date(r.created_at).toLocaleDateString('en-GB', { day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' });
+      const color = pct === null ? '#888' : pct >= 70 ? '#437a22' : pct >= 40 ? '#964219' : '#d20000';
+      return `
+        <div style="background:#fff;border:1px solid #ddd;border-radius:10px;
+          padding:14px 16px;margin-bottom:8px;display:flex;
+          align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+          <div>
+            <span style="font-weight:600;font-size:0.9rem">
+              ${typeLabel[r.session_type] || r.session_type}
+            </span>
+            <span style="font-size:0.8rem;color:#888;margin-left:8px">${date}</span>
+            ${r.learning_aims?.length ? `<span style="font-size:0.75rem;color:#aaa;margin-left:8px">Aims: ${r.learning_aims.join(', ')}</span>` : ''}
+          </div>
+          <div style="font-size:0.85rem;font-weight:700;color:${color}">
+            ${pct !== null ? pct + '% (' + r.questions_correct + '/' + r.questions_total + ')' : r.questions_total + ' questions'}
+          </div>
+        </div>
+      `;
+    }).join('');
+}
+
+function calcStreak(rows) {
+  if (!rows.length) return 0;
+  const days = new Set(rows.map(r => new Date(r.created_at).toDateString()));
+  let streak = 0;
+  const d = new Date();
+  while (days.has(d.toDateString())) {
+    streak++;
+    d.setDate(d.getDate() - 1);
+  }
+  return streak;
+}
+
+function startWeakQuiz(aims) {
+  if (!QUIZ || !QUIZ.length) return;
+  let pool = QUIZ.filter(q => aims.includes(q.learning_aim || q.learningaim));
+  if (!pool.length) pool = QUIZ.slice();
+  pool = shuffle(pool);
+  const length = Math.min(20, pool.length);
+  quizState = {
+    items: pool.slice(0, length),
+    idx: 0,
+    answers: new Array(length).fill(-1),
+    revealed: new Array(length).fill(false),
+    aimFilter: aims[0] || ''
+  };
+  document.getElementById('quiz-results').style.display = 'none';
+  renderQuizCard();
+}
+
+function startWeakPractice(aims) {
+  let pool = QUESTIONS.filter(q => aims.includes(q.learning_aim || q.learningaim));
+  if (!pool.length) pool = QUESTIONS.slice();
+  window._practiceSession = {
+    aims: aims && aims.length ? aims : ['A','B','C','D','E','F'],
+    total: 0, correct: 0, aimBreakdown: {}
+  };
+  practiceQueue = shuffle(pool);
+  practiceIdx = 0;
+  renderPracticeCard();
 }
 
 // ============================================================
