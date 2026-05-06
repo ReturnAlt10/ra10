@@ -34,28 +34,542 @@ function shuffle(arr, rng) { arr = arr.slice(); for (let i = arr.length - 1; i >
 
 const SB_URL = 'https://tcrrgsylxbyyrmnouihl.supabase.co';
 const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRjcnJnc3lseGJ5eXJtbm91aWhsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4ODUyMTEsImV4cCI6MjA5MzQ2MTIxMX0.eOp6ma-mfgh8F20nM7E2OaBW28LlZlwuEEWr6k2zDWw';
+const DAILY_TASKS_KEY = 'u1-daily-tasks-v1';
+const STREAK_DATES_KEY = 'ra10_streak_dates';
+
+function todayKey() {
+  return new Date().toISOString().slice(0, 10);
+}
+
+function counterKey(prefix, date) {
+  return prefix + '_' + (date || todayKey());
+}
+
+function getCounter(prefix, date) {
+  return Number(localStorage.getItem(counterKey(prefix, date)) || '0');
+}
+
+function setCounter(prefix, value, date) {
+  localStorage.setItem(counterKey(prefix, date), String(Math.max(0, Number(value || 0))));
+}
+
+function incrementCounter(prefix, delta, date) {
+  const next = getCounter(prefix, date) + Number(delta || 0);
+  setCounter(prefix, next, date);
+  return next;
+}
+
+function getStreakDates() {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(STREAK_DATES_KEY) || '[]');
+    return Array.isArray(parsed) ? parsed.filter(d => /^\d{4}-\d{2}-\d{2}$/.test(d)) : [];
+  } catch (_) {
+    return [];
+  }
+}
+
+function saveStreakDates(dates) {
+  const unique = Array.from(new Set((dates || []).filter(Boolean))).sort();
+  localStorage.setItem(STREAK_DATES_KEY, JSON.stringify(unique.slice(-90)));
+}
+
+function markTodayVisitForStreak() {
+  if (!window.RA10 || !RA10.isLoggedIn()) return;
+  const today = todayKey();
+  const dates = getStreakDates();
+  if (!dates.includes(today)) {
+    dates.push(today);
+    saveStreakDates(dates);
+  }
+}
+
+function calcLocalStreak() {
+  const dates = new Set(getStreakDates());
+  let streak = 0;
+  const cursor = new Date(todayKey() + 'T00:00:00');
+  while (dates.has(cursor.toISOString().slice(0, 10))) {
+    streak++;
+    cursor.setDate(cursor.getDate() - 1);
+  }
+  return streak;
+}
+
+function dayOfYear() {
+  const now = new Date();
+  const start = new Date(now.getFullYear(), 0, 0);
+  const diff = now - start;
+  return Math.floor(diff / 86400000);
+}
+
+function getDailyTasksState() {
+  const today = todayKey();
+  try {
+    const parsed = JSON.parse(localStorage.getItem(DAILY_TASKS_KEY) || '{}');
+    if (parsed.date === today && parsed.tasks) {
+      return {
+        date: today,
+        tasks: {
+          dailyQuiz: !!parsed.tasks.dailyQuiz,
+          practice5: !!parsed.tasks.practice5,
+          flashReview: !!parsed.tasks.flashReview,
+          share: !!parsed.tasks.share,
+          login: !!parsed.tasks.login
+        },
+        practiceCount: Number(parsed.practiceCount || 0)
+      };
+    }
+  } catch (e) {}
+  return {
+    date: today,
+    tasks: { dailyQuiz: false, practice5: false, flashReview: false, share: false, login: false },
+    practiceCount: 0
+  };
+}
+
+function saveDailyTasksState(state) {
+  localStorage.setItem(DAILY_TASKS_KEY, JSON.stringify(state));
+}
+
+function completeDailyTask(taskKey) {
+  const state = getDailyTasksState();
+  if (state.tasks[taskKey]) return false;
+  state.tasks[taskKey] = true;
+  saveDailyTasksState(state);
+  return true;
+}
+
+function addPracticeProgress(count) {
+  const state = getDailyTasksState();
+  const today = todayKey();
+  const nextCount = incrementCounter('ra10_practice_today', Number(count || 0), today);
+  state.practiceCount = Math.max(0, Number(nextCount || 0));
+  if (state.practiceCount >= 5 && !state.tasks.practice5) {
+    state.tasks.practice5 = true;
+    awardXP(25, '+25 XP — Practice 5 complete!');
+  }
+  saveDailyTasksState(state);
+  if (document.getElementById('view-you')?.classList.contains('active')) renderYou();
+}
+
+function markFlashReviewStarted() {
+  const changed = completeDailyTask('flashReview');
+  if (changed && document.getElementById('view-you')?.classList.contains('active')) renderYou();
+}
+
+function ensureDailyLoginBonus() {
+  if (!window.RA10 || !RA10.isLoggedIn()) return;
+  markTodayVisitForStreak();
+  const changed = completeDailyTask('login');
+  if (changed) awardXP(5, '+5 XP — Daily login bonus!');
+}
+
+function greetingByTime() {
+  const h = new Date().getHours();
+  if (h < 12) return 'Good morning';
+  if (h < 18) return 'Good afternoon';
+  return 'Good evening';
+}
+
+async function getWeakestAim() {
+  if (!window.RA10 || !RA10.isLoggedIn() || !window.supabase) return '';
+  const sb = window.supabase.createClient(SB_URL, SB_KEY);
+  const session = RA10.getSession();
+  const userId = session?.user?.id;
+  if (!userId) return '';
+  const since = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
+  const { data: rows } = await sb
+    .from('revision_sessions')
+    .select('aim_breakdown')
+    .eq('user_id', userId)
+    .gte('created_at', since);
+  const aimTotals = {};
+  const aimCorrect = {};
+  (rows || []).forEach((r) => {
+    const bd = r.aim_breakdown || {};
+    Object.entries(bd).forEach(([aim, s]) => {
+      aimTotals[aim] = (aimTotals[aim] || 0) + Number(s.total || 0);
+      aimCorrect[aim] = (aimCorrect[aim] || 0) + Number(s.correct || 0);
+    });
+  });
+  const weakest = Object.keys(aimTotals)
+    .filter((aim) => aimTotals[aim] > 0)
+    .map((aim) => ({ aim, pct: Math.round((aimCorrect[aim] || 0) / aimTotals[aim] * 100) }))
+    .sort((a, b) => a.pct - b.pct)[0];
+  return weakest?.aim || '';
+}
+
+async function startDailyQuiz() {
+  const state = getDailyTasksState();
+  if (state.tasks.dailyQuiz) return;
+  const weakestAim = await getWeakestAim();
+  switchTab('quiz');
+  const aimSel = document.getElementById('quiz-aim');
+  const lenSel = document.getElementById('quiz-length');
+  if (aimSel) aimSel.value = weakestAim || '';
+  if (lenSel) lenSel.value = '10';
+  window._isDailyQuiz = true;
+  await startQuiz();
+  if (!quizState) window._isDailyQuiz = false;
+}
+
+async function copyDailyShareLink() {
+  const text = 'Check out RA10 for BTEC IT revision: https://ra10.co.uk';
+  try {
+    await navigator.clipboard.writeText(text);
+  } catch (e) {
+    const t = document.createElement('textarea');
+    t.value = text;
+    document.body.appendChild(t);
+    t.select();
+    document.execCommand('copy');
+    t.remove();
+  }
+  if (completeDailyTask('share')) awardXP(30, '+30 XP — Thanks for sharing!');
+  if (document.getElementById('view-you')?.classList.contains('active')) renderYou();
+}
+
+async function renderYou() {
+  if (document.getElementById('view-you')?.classList.contains('active') === false) return;
+  const host = document.getElementById('daily-tasks-container');
+  if (!host) return;
+  if (!window.RA10 || !RA10.isLoggedIn()) {
+    host.innerHTML = '<div class="card"><p class="muted">Sign in to unlock your daily tasks.</p></div>';
+    return;
+  }
+
+  // Ensure sidebar cache is populated so today stats have real data
+  if (!window._sidebarCache || (Date.now() - window._sidebarCache.ts) > 60000) {
+    await refreshProgressSidebar(true);
+  }
+
+  const state = getDailyTasksState();
+  state.practiceCount = getCounter('ra10_practice_today');
+  saveDailyTasksState(state);
+  const profile = RA10.getProfile() || {};
+  const rawName = profile.full_name || profile.display_name || profile.email || 'there';
+  const firstName = String(rawName).split('@')[0].split(' ')[0];
+  const streak = calcLocalStreak();
+  const xpWeek = Number(window._sidebarCache?.profile?.xp_this_week || profile.xp_this_week || 0);
+  const xpMilestone = Math.max(100, Math.ceil((xpWeek + 1) / 100) * 100);
+  const xpPct = Math.min(100, Math.round((xpWeek / xpMilestone) * 100));
+  const todayStr = todayKey();
+  const cachedSessions = window._sidebarCache?.sessions || [];
+  const todaySessions = cachedSessions.filter(s => (s.created_at || '').startsWith(todayStr));
+  const xpToday = Number(window._sidebarCache?.profile?.xp_this_week || 0);
+  const qToday = todaySessions.reduce((a, s) => a + (Number(s.questions_total) || 0), 0);
+  const sessionsToday = todaySessions.length;
+  const practiceCount = Math.min(5, Number(state.practiceCount || 0));
+  const practicePct = Math.min(100, Math.round(practiceCount / 5 * 100));
+  const quotes = [
+    'Small steps beat perfect plans.',
+    'Every question you finish sharpens exam instincts.',
+    'Consistency today creates confidence on test day.',
+    'Revision is rent paid to future success.',
+    'Momentum is built one focused session at a time.',
+    'Hard topics become easy after enough reps.',
+    'Effort compounds faster than motivation.',
+    'You are closer than you think - keep going.',
+    'Mastery comes from retrieval, not rereading.',
+    'Train under pressure now, perform calmly later.',
+    'Accuracy first, then speed.',
+    'Show up daily and the results will follow.',
+    'Progress loves persistence.',
+    'Discipline is your revision superpower.'
+  ];
+  const quote = quotes[dayOfYear() % 14];
+
+  function taskStatus(done) {
+    return done ? '<span style="color:#177245;font-weight:700;">✓ Completed</span>' : '<span class="muted">Available</span>';
+  }
+
+  host.innerHTML = `
+    <section class="you-hero">
+      <div>
+        <h3 class="you-hero-title">${greetingByTime()}, ${escapeHTML(firstName)}!</h3>
+        <p class="you-hero-streak">🔥 <strong>${streak}</strong> day${streak === 1 ? '' : 's'} streak</p>
+      </div>
+      <div>
+        <div class="you-hero-xp-label">XP this week</div>
+        <div class="you-hero-xp-val">${xpWeek} / ${xpMilestone}</div>
+        <div class="you-hero-xp-bar"><span style="width:${xpPct}%;"></span></div>
+      </div>
+    </section>
+
+    <section class="you-tasks-grid">
+      <article class="you-task-card ${state.tasks.dailyQuiz ? 'done' : ''}">
+        <div class="you-task-head">
+          <div><strong>Daily Quiz</strong><div class="muted">Complete a 10-question quiz on your weakest aim.</div></div>
+          <span class="you-xp-pill">⚡ 40 XP</span>
+        </div>
+        <div class="you-task-foot">
+          ${taskStatus(state.tasks.dailyQuiz)}
+          ${state.tasks.dailyQuiz
+            ? '<button class="btn" id="daily-task-quiz-btn" disabled>Completed today ✓</button>'
+            : '<button class="btn primary" id="daily-task-quiz-btn">Start daily quiz</button>'}
+        </div>
+      </article>
+
+      <article class="you-task-card ${state.tasks.practice5 ? 'done' : ''}">
+        <div class="you-task-head">
+          <div><strong>Answer 5 practice questions</strong><div class="muted">Tracked from auto-marked practice answers.</div></div>
+          <span class="you-xp-pill">⚡ 25 XP</span>
+        </div>
+        <div class="you-task-progress"><span style="width:${practicePct}%;"></span></div>
+        <div class="you-task-foot">
+          ${taskStatus(state.tasks.practice5)}
+          <span class="muted">${practiceCount} / 5 answered today</span>
+        </div>
+      </article>
+
+      <article class="you-task-card ${state.tasks.flashReview ? 'done' : ''}">
+        <div class="you-task-head">
+          <div><strong>Review flashcards</strong><div class="muted">Open any flashcard session.</div></div>
+          <span class="you-xp-pill">⚡ 15 XP</span>
+        </div>
+        <div class="you-task-foot">
+          ${taskStatus(state.tasks.flashReview)}
+          ${state.tasks.flashReview ? '' : '<button class="btn primary" id="daily-task-flash-btn">Open flashcards</button>'}
+        </div>
+      </article>
+
+      <article class="you-task-card ${state.tasks.share ? 'done' : ''}">
+        <div class="you-task-head">
+          <div><strong>Share RA10</strong><div class="muted">Copy your referral-ready share text.</div></div>
+          <span class="you-xp-pill">⚡ 30 XP</span>
+        </div>
+        <div class="you-task-foot">
+          ${taskStatus(state.tasks.share)}
+          ${state.tasks.share ? '' : '<button class="btn primary" id="daily-task-share-btn">Copy share link</button>'}
+        </div>
+      </article>
+
+      <article class="you-task-card ${state.tasks.login ? 'done' : ''}">
+        <div class="you-task-head">
+          <div><strong>Log in today</strong><div class="muted">Automatic daily bonus.</div></div>
+          <span class="you-xp-pill">⚡ 5 XP</span>
+        </div>
+        <div class="you-task-foot">${taskStatus(state.tasks.login)}</div>
+      </article>
+    </section>
+
+    <section class="you-stats-mini">
+      <h4>Your stats today</h4>
+      <div class="you-stats-grid">
+        <div><span>⚡ XP this week</span><strong>${xpToday}</strong></div>
+        <div><span>🧠 Questions answered</span><strong>${qToday}</strong></div>
+        <div><span>✅ Sessions completed</span><strong>${sessionsToday}</strong></div>
+      </div>
+    </section>
+
+    <section class="you-quote">${escapeHTML(quote)}</section>
+  `;
+
+  document.getElementById('daily-task-quiz-btn')?.addEventListener('click', startDailyQuiz);
+  document.getElementById('daily-task-flash-btn')?.addEventListener('click', () => {
+    switchTab('flash');
+    startFlash();
+  });
+  document.getElementById('daily-task-share-btn')?.addEventListener('click', copyDailyShareLink);
+}
+
+async function awardXP(amount, label) {
+  if (!window.RA10 || !RA10.isLoggedIn()) return;
+  const session = RA10.getSession();
+  if (!session?.user?.id) return;
+  try {
+    const res = await fetch(SB_URL + '/rest/v1/rpc/increment_xp', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': SB_KEY,
+        'Authorization': 'Bearer ' + session.access_token
+      },
+      body: JSON.stringify({ amount })
+    });
+    if (res.ok) {
+      incrementCounter('ra10_xp_today', Number(amount || 0));
+      showXPToast(label || ('+' + amount + ' XP'));
+      await refreshProgressSidebar(true);
+    }
+  } catch(e) { console.warn('XP award failed', e); }
+}
+
+function showXPToast(msg) {
+  let t = document.getElementById('xp-toast');
+  if (!t) {
+    t = document.createElement('div');
+    t.id = 'xp-toast';
+    t.style.cssText = 'position:fixed;bottom:80px;right:24px;z-index:99999;' +
+      'background:#14201E;color:#fff;padding:10px 18px;border-radius:999px;' +
+      'font-weight:700;font-size:0.9rem;opacity:0;transition:opacity 0.3s;' +
+      'pointer-events:none;';
+    document.body.appendChild(t);
+  }
+  t.textContent = '⚡ ' + msg;
+  t.style.opacity = '1';
+  clearTimeout(t._timeout);
+  t._timeout = setTimeout(() => { t.style.opacity = '0'; }, 2500);
+}
+
+function normaliseSessionPayload(data) {
+  const safe = data || {};
+  const total = Number(safe.total || 0);
+  const correct = Number(safe.correct || 0);
+  const marksEarned = Number(safe.marksEarned || 0);
+  const marksTotal = Number(safe.marksTotal || 0);
+  const attempts = safe.attemptedIds instanceof Set
+    ? safe.attemptedIds.size
+    : Array.isArray(safe.attemptedIds) ? safe.attemptedIds.length : 0;
+  return {
+    aims: Array.isArray(safe.aims) ? safe.aims : [],
+    total: attempts || total,
+    correct,
+    marksEarned,
+    marksTotal,
+    aimBreakdown: safe.aimBreakdown || {}
+  };
+}
 
 async function saveSession(sessionType, data) {
   if (!window.RA10 || !RA10.isLoggedIn()) return;
   const session = RA10.getSession();
   if (!session?.user?.id) return;
   try {
+    const payload = normaliseSessionPayload(data);
+    if (!payload.total && sessionType !== 'flashcard') return;
     const sb = window.supabase
       ? window.supabase.createClient(SB_URL, SB_KEY)
       : null;
     if (!sb) return;
-    await sb.from('revision_sessions').insert({
+    const { error } = await sb.from('revision_sessions').insert({
       user_id: session.user.id,
       session_type: sessionType,
-      learning_aims: data.aims || [],
-      questions_total: data.total || 0,
-      questions_correct: data.correct || 0,
-      marks_earned: data.marksEarned || 0,
-      marks_total: data.marksTotal || 0,
-      aim_breakdown: data.aimBreakdown || {}
+      learning_aims: payload.aims,
+      questions_total: payload.total,
+      questions_correct: payload.correct,
+      marks_earned: payload.marksEarned,
+      marks_total: payload.marksTotal,
+      aim_breakdown: payload.aimBreakdown
     });
+    if (error) throw error;
+    incrementCounter('ra10_sessions_today', 1);
   } catch(e) {
     console.warn('Could not save session', e);
+  }
+}
+
+function ensureProgressSidebar() {
+  if (document.getElementById('u1-progress-sidebar')) return;
+  const sidebar = el('aside', { id: 'u1-progress-sidebar', class: 'u1-progress-sidebar hidden' },
+
+    el('div', { class: 'u1-sb-head' },
+      el('span', { class: 'u1-sb-chip' }, '⚡ Progress Boost'),
+      el('button', { class: 'u1-sb-close', onclick: () => sidebar.classList.remove('open') }, '✕')
+    ),
+    el('div', { id: 'u1-sb-body', class: 'u1-sb-body' },
+      el('p', { class: 'muted' }, 'Loading progress...')
+    )
+  );
+  const toggle = el('button', {
+    id: 'u1-sidebar-toggle',
+    class: 'u1-sidebar-toggle',
+    onclick: () => {
+      sidebar.classList.toggle('open');
+    }
+  }, '⚡ Progress');
+  document.body.appendChild(sidebar);
+  document.body.appendChild(toggle);
+}
+
+async function refreshProgressSidebar(force) {
+  ensureProgressSidebar();
+  const sidebar = document.getElementById('u1-progress-sidebar');
+  const toggle = document.getElementById('u1-sidebar-toggle');
+  const body = document.getElementById('u1-sb-body');
+  if (!sidebar || !toggle || !body) return;
+
+  if (!window.RA10 || !RA10.isLoggedIn() || !window.supabase) {
+    sidebar.classList.add('hidden');
+    toggle.style.display = 'none';
+    document.body.classList.remove('has-u1-sidebar');
+    return;
+  }
+
+  sidebar.classList.remove('hidden');
+  toggle.style.display = '';
+  document.body.classList.add('has-u1-sidebar');
+
+  const desktopVisible = window.matchMedia('(min-width: 1101px)').matches;
+  const mobileVisible = sidebar.classList.contains('open');
+  if (!force && !desktopVisible && !mobileVisible) return;
+
+  try {
+    let profile = null;
+    let sessions = null;
+    let leaders = null;
+    const cache = window._sidebarCache;
+    const fresh = cache && (Date.now() - cache.ts) < 60000;
+    if (fresh) {
+      profile = cache.profile;
+      sessions = cache.sessions;
+      leaders = cache.leaders;
+    } else {
+      const sb = window.supabase.createClient(SB_URL, SB_KEY);
+      const session = RA10.getSession();
+      const userId = session?.user?.id;
+      if (!userId) return;
+      const since = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
+      const result = await Promise.all([
+        sb.from('profiles').select('xp_this_week, xp_total').eq('id', userId).single(),
+        sb.from('revision_sessions').select('created_at, questions_total, session_type').eq('user_id', userId).gte('created_at', since),
+        sb.rpc('get_leaderboard_preview')
+      ]);
+      profile = result[0].data;
+      sessions = result[1].data;
+      leaders = result[2].data;
+      window._sidebarCache = { ts: Date.now(), profile, sessions, leaders };
+    }
+
+    const xpWeek = Number(profile?.xp_this_week || 0);
+    const milestone = Math.max(50, Math.ceil((xpWeek + 1) / 50) * 50);
+    const pct = Math.min(100, Math.round((xpWeek / milestone) * 100));
+    const streak = calcStreak(sessions || []);
+    const medals = ['🥇', '🥈', '🥉'];
+
+    body.innerHTML = `
+      <div class="u1-sb-kpi xp">
+        <div class="kpi-emoji">⚡</div>
+        <div>
+          <div class="kpi-label">XP this week</div>
+          <div class="kpi-value">${xpWeek}</div>
+        </div>
+      </div>
+      <div class="u1-sb-progress"><span style="width:${pct}%;"></span></div>
+      <div class="u1-sb-note">${milestone - xpWeek} XP to next milestone (${milestone})</div>
+
+      <div class="u1-sb-kpi streak">
+        <div class="kpi-emoji">🔥</div>
+        <div>
+          <div class="kpi-label">Current streak</div>
+          <div class="kpi-value">${streak} day${streak === 1 ? '' : 's'}</div>
+        </div>
+      </div>
+
+      <div class="u1-sb-mini-title">This week's top 3</div>
+      <div class="u1-sb-mini-list">
+        ${(leaders || []).length ? (leaders || []).map((u, i) => `
+          <div class="u1-sb-mini-row">
+            <span>${medals[i]} ${u.username ? '@' + u.username : (u.full_name || 'Anonymous')}</span>
+            <strong>${u.xp_this_week} XP</strong>
+          </div>
+        `).join('') : '<div class="u1-sb-empty">No XP yet this week.</div>'}
+      </div>
+
+      <button class="btn primary u1-sb-btn" id="u1-sb-view-progress">View full progress</button>
+    `;
+    document.getElementById('u1-sb-view-progress')?.addEventListener('click', () => switchTab('progress'));
+  } catch (e) {
+    body.innerHTML = '<p class="muted">Could not load progress sidebar.</p>';
   }
 }
 
@@ -66,6 +580,7 @@ function switchTab(name) {
   $$('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === name));
   $$('.view').forEach(v => v.classList.toggle('active', v.id === 'view-' + name));
   if (name === 'progress') renderProgress();
+  if (name === 'you') renderYou();
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
@@ -85,6 +600,7 @@ onDataReady(() => {
   renderQuizControls();
   renderFlashControls();
   renderSpec();
+  ensureDailyLoginBonus();
 });
 
 // ---------- Dashboard ----------
@@ -597,13 +1113,29 @@ function renderMock(mock) {
 // ---------- Practice mode ----------
 let practiceQueue = [];
 let practiceIdx = 0;
+let activePracticeCleanup = null;
 
 function renderPracticeControls() {
   const aimSel = $('#practice-aim');
-  ['A','B','C','D','E','F'].forEach(a => aimSel.appendChild(el('option', { value: a }, `Aim ${a}`)));
+  if (!aimSel.dataset.ready) {
+    ['A','B','C','D','E','F'].forEach(a => aimSel.appendChild(el('option', { value: a }, `Aim ${a}`)));
+    aimSel.dataset.ready = '1';
+  }
   const marksSel = $('#practice-marks');
-  MARKS_OPTIONS.forEach(m => marksSel.appendChild(el('option', { value: String(m) }, `${m} mark${m===1?'':'s'}`)));
-  $('#btn-practice-start').addEventListener('click', () => startPractice());
+  if (!marksSel.dataset.ready) {
+    MARKS_OPTIONS.forEach(m => marksSel.appendChild(el('option', { value: String(m) }, `${m} mark${m===1?'':'s'}`)));
+    marksSel.dataset.ready = '1';
+  }
+  if (!renderPracticeControls._bound) {
+    $('#btn-practice-start').addEventListener('click', () => startPractice());
+    renderPracticeControls._bound = true;
+  }
+  let endBtn = document.getElementById('btn-practice-end');
+  if (!endBtn) {
+    endBtn = el('button', { id: 'btn-practice-end', class: 'btn', type: 'button' }, 'End session');
+    $('#btn-practice-start').insertAdjacentElement('afterend', endBtn);
+    endBtn.addEventListener('click', endPracticeSession);
+  }
   $('#practice-card').innerHTML = '<p class="muted" style="padding:40px;text-align:center;">Pick filters and click <strong>Start session</strong>.</p>';
 }
 
@@ -614,11 +1146,15 @@ async function startPractice() {
   let pool = QUESTIONS.slice();
   if (aim) pool = pool.filter(q => q.learning_aim === aim);
   if (marks) pool = pool.filter(q => String(q.marks) === marks);
+  if (!pool.length) { alert('No questions match those filters.'); return; }
   window._practiceSession = {
     aims: aim ? [aim] : ['A','B','C','D','E','F'],
-    total: 0, correct: 0, aimBreakdown: {}
+    total: 0,
+    correct: 0,
+    aimBreakdown: {},
+    attemptedIds: new Set(),
+    scoreByQuestion: {}
   };
-  if (!pool.length) { alert('No questions match those filters.'); return; }
   practiceQueue = shuffle(pool);
   practiceIdx = 0;
   renderPracticeCard();
@@ -627,21 +1163,55 @@ async function startPractice() {
 function updatePracticeSessionFromUi(q, automarkHost) {
   if (window._practiceSession) {
     const ps = window._practiceSession;
-    ps.total++;
+    const qid = q.id || `${q.learning_aim}-${practiceIdx}`;
     const aim = q.learning_aim || q.learningaim;
     ps.aimBreakdown[aim] = ps.aimBreakdown[aim] || { correct: 0, total: 0 };
-    ps.aimBreakdown[aim].total++;
+    const alreadyAttempted = ps.attemptedIds.has(qid);
+    if (!alreadyAttempted) {
+      ps.attemptedIds.add(qid);
+      ps.total++;
+      ps.aimBreakdown[aim].total++;
+      incrementCounter('ra10_questions_today', 1);
+      addPracticeProgress(1);
+    }
     const scoreNum = parseInt(automarkHost.querySelector('.value')?.textContent || '0', 10);
-    if (scoreNum >= Math.ceil(q.marks / 2)) {
+    const wasCorrect = !!ps.scoreByQuestion[qid];
+    const nowCorrect = scoreNum >= Math.ceil(q.marks / 2);
+    if (!wasCorrect && nowCorrect) {
       ps.correct++;
       ps.aimBreakdown[aim].correct++;
+    } else if (wasCorrect && !nowCorrect) {
+      ps.correct = Math.max(0, ps.correct - 1);
+      ps.aimBreakdown[aim].correct = Math.max(0, ps.aimBreakdown[aim].correct - 1);
     }
-    saveSession('practice', { ...ps, aims: Object.keys(ps.aimBreakdown) });
+    ps.scoreByQuestion[qid] = nowCorrect;
   }
+}
+
+async function endPracticeSession() {
+  const ps = window._practiceSession;
+  if (!ps || !ps.total) {
+    alert('No practice attempts to save yet.');
+    return;
+  }
+  const practiceQ = window._practiceSession?.total || 0;
+  await saveSession('practice', {
+    aims: Object.keys(ps.aimBreakdown),
+    total: ps.total,
+    correct: ps.correct,
+    aimBreakdown: ps.aimBreakdown,
+    attemptedIds: ps.attemptedIds
+  });
+  awardXP(Math.min(practiceQ * 10, 50), '+' + Math.min(practiceQ * 10, 50) + ' XP — Practice done!');
+  window._practiceSession = null;
 }
 
 function renderPracticeCard() {
   const wrap = $('#practice-card');
+  if (typeof activePracticeCleanup === 'function') {
+    activePracticeCleanup();
+    activePracticeCleanup = null;
+  }
   wrap.innerHTML = '';
   if (!practiceQueue.length) return;
   const q = practiceQueue[practiceIdx];
@@ -664,6 +1234,7 @@ function renderPracticeCard() {
   if (q.type === 'diagram') {
     const diagramTool = buildDiagramTool(q);
     card.appendChild(diagramTool.wrap);
+    activePracticeCleanup = diagramTool.destroy;
   } else if (q.type === 'multiple_choice') {
     card.appendChild(buildMcOptions(q, mcChoice));
   } else {
@@ -729,6 +1300,8 @@ function renderPracticeCard() {
 
 // ---------- Diagram tool (draw + builder modes) ----------
 function buildDiagramTool(q) {
+  const ac = new AbortController();
+  const signal = ac.signal;
   const wrap = el('div', { class: 'diagram-tool-wrap' });
   const tabs = el('div', { class: 'diagram-mode-tabs' });
   const drawTab = el('button', { class: 'btn primary', type: 'button' }, 'Draw');
@@ -755,7 +1328,7 @@ function buildDiagramTool(q) {
     drawCtx.lineCap = 'round';
     drawCtx.lineJoin = 'round';
   }
-  setTimeout(fitDrawCanvas, 0);
+  const fitTimer = setTimeout(fitDrawCanvas, 0);
 
   let drawing = false;
   let last = null;
@@ -785,12 +1358,12 @@ function buildDiagramTool(q) {
   }
   function drawUp() { drawing = false; last = null; }
 
-  drawCanvas.addEventListener('mousedown', drawDown);
-  drawCanvas.addEventListener('mousemove', drawMove);
-  window.addEventListener('mouseup', drawUp);
-  drawCanvas.addEventListener('touchstart', drawDown, { passive: false });
-  drawCanvas.addEventListener('touchmove', drawMove, { passive: false });
-  drawCanvas.addEventListener('touchend', drawUp);
+  drawCanvas.addEventListener('mousedown', drawDown, { signal });
+  drawCanvas.addEventListener('mousemove', drawMove, { signal });
+  window.addEventListener('mouseup', drawUp, { signal });
+  drawCanvas.addEventListener('touchstart', drawDown, { passive: false, signal });
+  drawCanvas.addEventListener('touchmove', drawMove, { passive: false, signal });
+  drawCanvas.addEventListener('touchend', drawUp, { signal });
 
   function drawBtn(label, onClick, cls) {
     const b = el('button', { class: 'btn ' + (cls || ''), type: 'button' }, label);
@@ -854,6 +1427,15 @@ function buildDiagramTool(q) {
   let dragDY = 0;
   let connectFrom = -1;
   let textEditor = null;
+  let builderRaf = 0;
+
+  function scheduleBuilderRender() {
+    if (builderRaf) cancelAnimationFrame(builderRaf);
+    builderRaf = requestAnimationFrame(() => {
+      builderRaf = 0;
+      renderBuilder();
+    });
+  }
 
   function snap(n) {
     return Math.round(n / grid) * grid;
@@ -869,7 +1451,7 @@ function buildDiagramTool(q) {
 
   function makeToolButton(t) {
     const b = el('button', { class: 'btn', type: 'button', 'data-tool': t.key }, t.label);
-    b.addEventListener('click', () => setTool(t.key));
+    b.addEventListener('click', () => setTool(t.key), { signal });
     return b;
   }
 
@@ -1019,7 +1601,7 @@ function buildDiagramTool(q) {
     }
     shapes.push({ type, x: defaults.x, y: defaults.y, w: defaults.w, h: defaults.h, text: defaults.text, fill: defaults.fill });
     selectedShape = shapes.length - 1;
-    renderBuilder();
+    scheduleBuilderRender();
   }
 
   function canvasPos(e) {
@@ -1070,11 +1652,11 @@ function buildDiagramTool(q) {
       s.text = input.value.trim();
       input.remove();
       textEditor = null;
-      renderBuilder();
+      scheduleBuilderRender();
     }
     input.addEventListener('keydown', (ev) => {
       if (ev.key === 'Enter') commit();
-      if (ev.key === 'Escape') { input.remove(); textEditor = null; renderBuilder(); }
+      if (ev.key === 'Escape') { input.remove(); textEditor = null; scheduleBuilderRender(); }
     });
     input.addEventListener('blur', commit);
   }
@@ -1099,7 +1681,7 @@ function buildDiagramTool(q) {
         dragDX = p.x - s.x;
         dragDY = p.y - s.y;
       }
-      renderBuilder();
+      scheduleBuilderRender();
       return;
     }
 
@@ -1108,9 +1690,9 @@ function buildDiagramTool(q) {
     if (activeTool !== 'connector') {
       addShape(activeTool, p.x, p.y);
     } else {
-      renderBuilder();
+      scheduleBuilderRender();
     }
-  });
+  }, { signal });
 
   buildCanvas.addEventListener('mousemove', (e) => {
     if (selectedShape < 0) return;
@@ -1121,7 +1703,7 @@ function buildDiagramTool(q) {
     if (dragging) {
       s.x = snap(Math.max(0, Math.min(buildCanvas.width - s.w, p.x - dragDX)));
       s.y = snap(Math.max(0, Math.min(buildCanvas.height - s.h, p.y - dragDY)));
-      renderBuilder();
+      scheduleBuilderRender();
       return;
     }
 
@@ -1140,14 +1722,14 @@ function buildDiagramTool(q) {
         s.y = snap(Math.max(0, p.y));
         s.h = Math.max(minH, bottom - s.y);
       }
-      renderBuilder();
+      scheduleBuilderRender();
     }
-  });
+  }, { signal });
 
   window.addEventListener('mouseup', () => {
     dragging = false;
     resizeHandle = null;
-  });
+  }, { signal });
 
   buildCanvas.addEventListener('dblclick', (e) => {
     const p = canvasPos(e);
@@ -1156,7 +1738,7 @@ function buildDiagramTool(q) {
       selectedShape = idx;
       startTextEdit(idx);
     }
-  });
+  }, { signal });
 
   deleteBtn.addEventListener('click', () => {
     if (selectedShape < 0) return;
@@ -1171,8 +1753,8 @@ function buildDiagramTool(q) {
     }
     selectedShape = -1;
     connectFrom = -1;
-    renderBuilder();
-  });
+    scheduleBuilderRender();
+  }, { signal });
 
   clearAllBtn.addEventListener('click', () => {
     shapes.length = 0;
@@ -1183,15 +1765,15 @@ function buildDiagramTool(q) {
       textEditor.remove();
       textEditor = null;
     }
-    renderBuilder();
-  });
+    scheduleBuilderRender();
+  }, { signal });
 
   saveBuildBtn.addEventListener('click', () => {
     const link = document.createElement('a');
     link.download = 'diagram-build-' + (q.id || 'diagram') + '.png';
     link.href = buildCanvas.toDataURL('image/png');
     link.click();
-  });
+  }, { signal });
 
   panel.appendChild(el('div', { class: 'diagram-panel-title' }, 'Shapes'));
   panel.appendChild(toolGroup);
@@ -1217,15 +1799,23 @@ function buildDiagramTool(q) {
     buildTab.classList.toggle('primary', !drawOn);
   }
 
-  drawTab.addEventListener('click', () => setMode('draw'));
-  buildTab.addEventListener('click', () => setMode('build'));
+  drawTab.addEventListener('click', () => setMode('draw'), { signal });
+  buildTab.addEventListener('click', () => setMode('build'), { signal });
 
   wrap.appendChild(tabs);
   wrap.appendChild(drawPane);
   wrap.appendChild(buildPane);
 
-  renderBuilder();
-  return { wrap };
+  scheduleBuilderRender();
+  return {
+    wrap,
+    destroy: () => {
+      clearTimeout(fitTimer);
+      if (builderRaf) cancelAnimationFrame(builderRaf);
+      if (textEditor) textEditor.remove();
+      ac.abort();
+    }
+  };
 }
 
 // ---------- Self-mark UI (used for diagram questions) ----------
@@ -1572,9 +2162,15 @@ let quizState = null; // { items, idx, answers: number[] (selected index per q, 
 
 function renderQuizControls() {
   const aimSel = $('#quiz-aim');
-  ['A','B','C','D','E','F'].forEach(a => aimSel.appendChild(el('option', { value: a }, `Aim ${a}`)));
+  if (!aimSel.dataset.ready) {
+    ['A','B','C','D','E','F'].forEach(a => aimSel.appendChild(el('option', { value: a }, `Aim ${a}`)));
+    aimSel.dataset.ready = '1';
+  }
 
-  $('#btn-quiz-start').addEventListener('click', startQuiz);
+  if (!renderQuizControls._bound) {
+    $('#btn-quiz-start').addEventListener('click', startQuiz);
+    renderQuizControls._bound = true;
+  }
 
   if (typeof QUIZ !== 'undefined' && QUIZ.length) {
     $('#quiz-card').innerHTML = `<p class="muted" style="padding:30px;text-align:center;">${QUIZ.length} quiz questions ready. Pick filters and click <strong>Start quiz</strong>.</p>`;
@@ -1695,31 +2291,47 @@ function showQuizResults() {
   results.innerHTML = '';
 
   let correct = 0;
+  let answered = 0;
   const aimStats = {};
   quizState.items.forEach((q, i) => {
+    if (quizState.answers[i] === -1) return;
+    answered++;
     const right = quizState.answers[i] === q.correct_index;
     if (right) correct++;
     aimStats[q.learning_aim] = aimStats[q.learning_aim] || { right: 0, total: 0 };
     aimStats[q.learning_aim].total++;
     if (right) aimStats[q.learning_aim].right++;
   });
-  const total = quizState.items.length;
-  const pct = Math.round(correct / total * 100);
+  const total = answered;
+  const pct = total ? Math.round(correct / total * 100) : 0;
 
   const aimBreakdown = {};
   Object.entries(aimStats).forEach(([aim, s]) => {
     aimBreakdown[aim] = { correct: s.right, total: s.total };
   });
-  saveSession('quiz', {
-    aims: Object.keys(aimStats),
-    total: total,
-    correct: correct,
-    aimBreakdown
-  });
+  if (total > 0) {
+    saveSession('quiz', {
+      aims: Object.keys(aimStats),
+      total,
+      correct,
+      aimBreakdown
+    });
+    incrementCounter('ra10_questions_today', total);
+    awardXP(20, '+20 XP — Quiz complete!');
+    if (window._isDailyQuiz) {
+      window._isDailyQuiz = false;
+      if (completeDailyTask('dailyQuiz')) {
+        awardXP(40, '+40 XP — Daily quiz done!');
+      }
+      if (document.getElementById('view-you')?.classList.contains('active')) renderYou();
+    }
+  } else if (window._isDailyQuiz) {
+    window._isDailyQuiz = false;
+  }
 
   const card = el('div', { class: 'quiz-results-card' });
   card.appendChild(el('p', { class: 'eyebrow', style: 'letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-2);font-weight:700;font-size:12px;' }, 'Quiz complete'));
-  card.appendChild(el('div', { class: 'score-big' }, `${correct} / ${total}`));
+  card.appendChild(el('div', { class: 'score-big' }, `${correct} / ${total || quizState.items.length}`));
   card.appendChild(el('div', { class: 'score-pct' }, `${pct}%`));
   const bar = el('div', { class: 'quiz-results-bar' }, el('span', { style: `width: ${pct}%;` }));
   card.appendChild(bar);
@@ -1754,6 +2366,7 @@ function showQuizResults() {
 }
 
 async function renderProgress() {
+  if (document.getElementById('view-progress')?.classList.contains('active') === false) return;
   const gate = document.getElementById('progress-gate');
   const content = document.getElementById('progress-content');
 
@@ -1778,14 +2391,25 @@ async function renderProgress() {
   const sb = window.supabase.createClient(SB_URL, SB_KEY);
   const since = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
 
-  const { data: sessions } = await sb
-    .from('revision_sessions')
-    .select('*')
-    .eq('user_id', session.user.id)
-    .gte('created_at', since)
-    .order('created_at', { ascending: false });
+  const [{ data: sessions }, { data: profile }] = await Promise.all([
+    sb
+      .from('revision_sessions')
+      .select('*')
+      .eq('user_id', session.user.id)
+      .gte('created_at', since)
+      .order('created_at', { ascending: false }),
+    sb
+      .from('profiles')
+      .select('xp_this_week, xp_total')
+      .eq('id', session.user.id)
+      .single()
+  ]);
 
   const rows = sessions || [];
+  const xpWeek = Number(profile?.xp_this_week || 0);
+  const xpTotal = Number(profile?.xp_total || 0);
+  const xpMilestone = Math.max(50, Math.ceil((xpWeek + 1) / 50) * 50);
+  const xpPct = Math.min(100, Math.round((xpWeek / xpMilestone) * 100));
 
   const statsEl = document.getElementById('progress-stats');
   const totalSessions = rows.length;
@@ -1794,17 +2418,28 @@ async function renderProgress() {
   const accuracy = totalQ ? Math.round(totalCorrect / totalQ * 100) : 0;
   const streakDays = calcStreak(rows);
 
-  statsEl.innerHTML = [
-    ['Sessions', totalSessions],
-    ['Questions answered', totalQ],
-    ['Accuracy', accuracy + '%'],
-    ['Day streak', streakDays],
-  ].map(([label, val]) => `
-    <div style="background:#f9f8f5;border:1px solid #ddd;border-radius:12px;padding:16px;text-align:center;">
-      <div style="font-size:1.6rem;font-weight:700;font-family:serif">${val}</div>
-      <div style="font-size:0.75rem;color:#888;text-transform:uppercase;letter-spacing:.06em;margin-top:4px">${label}</div>
+  statsEl.innerHTML = `
+    <div class="prog-xp-hero">
+      <div class="prog-xp-eyebrow">⚡ Weekly XP</div>
+      <div class="prog-xp-number" id="prog-xp-number">${xpWeek}</div>
+      <div class="prog-xp-sub">${xpMilestone - xpWeek} XP to next milestone (${xpMilestone})</div>
+      <div class="prog-xp-bar"><span style="width:${xpPct}%"></span></div>
+      <div class="prog-xp-foot">Total lifetime XP: <strong>${xpTotal}</strong></div>
     </div>
-  `).join('');
+    <div class="prog-mini-grid">
+      ${[
+        ['Sessions', totalSessions],
+        ['Questions answered', totalQ],
+        ['Accuracy', accuracy + '%'],
+        ['🔥 Streak', streakDays + ' days'],
+      ].map(([label, val]) => `
+        <div class="prog-mini-card">
+          <div class="v">${val}</div>
+          <div class="k">${label}</div>
+        </div>
+      `).join('')}
+    </div>
+  `;
 
   const weakEl = document.getElementById('weak-aims-section');
   const aimTotals = {};
@@ -1823,31 +2458,36 @@ async function renderProgress() {
     .sort((a, b) => a.pct - b.pct)
     .slice(0, 3);
 
+  const aimBars = Object.keys(aimTotals).sort().map((aim) => {
+    const total = aimTotals[aim] || 0;
+    const pct = total ? Math.round((aimCorrect[aim] || 0) / total * 100) : 0;
+    const cls = pct >= 70 ? 'good' : pct >= 40 ? 'mid' : 'bad';
+    return `
+      <div class="prog-aim-row">
+        <div class="meta"><span>Aim ${aim}</span><strong>${pct}%</strong></div>
+        <div class="bar ${cls}"><span style="width:${pct}%"></span></div>
+      </div>
+    `;
+  }).join('');
+
   if (weakAims.length) {
     weakEl.innerHTML = `
-      <div style="background:#fff8f8;border:1px solid #f4d4d4;border-radius:12px;padding:20px;margin-bottom:8px;">
-        <h3 style="font-family:serif;font-weight:400;font-size:1.1rem;margin-bottom:8px">
-          📊 Areas to focus on
-        </h3>
-        <p style="font-size:0.85rem;color:#666;margin-bottom:16px">
-          Based on your last 30 days — these aims have your lowest accuracy.
-        </p>
-        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px">
+      <div class="prog-aim-accuracy">
+        <h3>Aim accuracy overview</h3>
+        ${aimBars || '<p class="muted">No aim data yet.</p>'}
+      </div>
+      <div class="prog-weak-wrap">
+        <h3>🚨 Weak aims</h3>
+        <p>These need work based on your latest sessions.</p>
+        <div class="prog-weak-cards">
           ${weakAims.map(w => `
-            <span style="background:#f4d4d4;color:#d20000;padding:4px 12px;
-              border-radius:999px;font-size:0.8rem;font-weight:700">
-              Aim ${w.aim} — ${w.pct}% accuracy
-            </span>
+            <div class="prog-weak-card">
+              <span class="aim">Aim ${w.aim}</span>
+              <span class="pct">${w.pct}%</span>
+            </div>
           `).join('')}
         </div>
-        <div style="display:flex;gap:10px;flex-wrap:wrap;">
-          <button class="btn primary" id="btn-weak-quiz">
-            Start quiz on weak aims
-          </button>
-          <button class="btn" id="btn-weak-practice">
-            Practice questions on weak aims
-          </button>
-        </div>
+        <button class="btn primary" id="btn-weak-quiz">Challenge me</button>
       </div>
     `;
 
@@ -1858,45 +2498,40 @@ async function renderProgress() {
       if (aimSel && aimFilter.length === 1) aimSel.value = aimFilter[0];
       setTimeout(() => startWeakQuiz(aimFilter), 100);
     });
-
-    document.getElementById('btn-weak-practice')?.addEventListener('click', () => {
-      const aimFilter = weakAims.map(w => w.aim);
-      switchTab('practice');
-      setTimeout(() => startWeakPractice(aimFilter), 100);
-    });
   } else {
     weakEl.innerHTML = `
-      <div style="background:#f9f8f5;border:1px solid #ddd;border-radius:12px;
-        padding:20px;color:#888;font-size:0.9rem;">
-        Complete at least 3 questions in any aim to see your weak areas analysis.
+      <div class="prog-aim-accuracy">
+        <h3>Aim accuracy overview</h3>
+        ${aimBars || '<p class="muted">Complete sessions to build your aim accuracy graph.</p>'}
+      </div>
+      <div class="prog-empty">
+        Complete at least 3 questions in any aim to unlock weak-aim challenges.
       </div>
     `;
   }
 
   const listEl = document.getElementById('sessions-list');
   if (!rows.length) {
-    listEl.innerHTML = '<p style="color:#888;text-align:center;padding:32px">No sessions in the last 30 days. Start a quiz or practice session to track your progress.</p>';
+    listEl.innerHTML = '<p class="prog-empty">No sessions in the last 30 days. Start a quiz or practice session to track your progress.</p>';
     return;
   }
 
   const typeLabel = { quiz: '🧠 Quiz', practice: '✍️ Practice', mock: '📄 Mock Paper', flashcard: '🃏 Flashcards' };
-  listEl.innerHTML = '<h3 style="font-family:serif;font-weight:400;font-size:1.1rem;margin-bottom:12px">Recent sessions</h3>' +
+  listEl.innerHTML = '<h3 class="prog-history-title">Recent sessions</h3>' +
     rows.map(r => {
       const pct = r.questions_total ? Math.round(r.questions_correct / r.questions_total * 100) : null;
       const date = new Date(r.created_at).toLocaleDateString('en-GB', { day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' });
-      const color = pct === null ? '#888' : pct >= 70 ? '#437a22' : pct >= 40 ? '#964219' : '#d20000';
+      const cls = pct === null ? 'mid' : pct >= 70 ? 'good' : pct >= 40 ? 'mid' : 'bad';
       return `
-        <div style="background:#fff;border:1px solid #ddd;border-radius:10px;
-          padding:14px 16px;margin-bottom:8px;display:flex;
-          align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+        <div class="prog-session-card ${cls}">
           <div>
-            <span style="font-weight:600;font-size:0.9rem">
+            <span class="t">
               ${typeLabel[r.session_type] || r.session_type}
             </span>
-            <span style="font-size:0.8rem;color:#888;margin-left:8px">${date}</span>
-            ${r.learning_aims?.length ? `<span style="font-size:0.75rem;color:#aaa;margin-left:8px">Aims: ${r.learning_aims.join(', ')}</span>` : ''}
+            <span class="d">${date}</span>
+            ${r.learning_aims?.length ? `<span class="a">Aims: ${r.learning_aims.join(', ')}</span>` : ''}
           </div>
-          <div style="font-size:0.85rem;font-weight:700;color:${color}">
+          <div class="s">
             ${pct !== null ? pct + '% (' + r.questions_correct + '/' + r.questions_total + ')' : r.questions_total + ' questions'}
           </div>
         </div>
@@ -1938,7 +2573,11 @@ function startWeakPractice(aims) {
   if (!pool.length) pool = QUESTIONS.slice();
   window._practiceSession = {
     aims: aims && aims.length ? aims : ['A','B','C','D','E','F'],
-    total: 0, correct: 0, aimBreakdown: {}
+    total: 0,
+    correct: 0,
+    aimBreakdown: {},
+    attemptedIds: new Set(),
+    scoreByQuestion: {}
   };
   practiceQueue = shuffle(pool);
   practiceIdx = 0;
@@ -1973,20 +2612,32 @@ function saveFlashProgress(p) {
 
 function renderFlashControls() {
   const aimSel = $('#flash-aim');
-  ['A','B','C','D','E','F'].forEach(a => aimSel.appendChild(el('option', { value: a }, `Aim ${a}`)));
+  if (!aimSel.dataset.ready) {
+    ['A','B','C','D','E','F'].forEach(a => aimSel.appendChild(el('option', { value: a }, `Aim ${a}`)));
+    aimSel.dataset.ready = '1';
+  }
 
-  $('#btn-flash-start').addEventListener('click', startFlash);
-  $('#btn-flash-shuffle').addEventListener('click', () => {
-    if (!flashState) return;
-    flashState.deck = shuffle(flashState.deck);
-    flashState.idx = 0;
-    renderFlashCard();
-  });
-  $('#btn-flash-reset').addEventListener('click', () => {
-    if (!confirm('Reset all flashcard progress (known / still-learning marks)?')) return;
-    saveFlashProgress({ known: [], learning: [] });
-    if (flashState) { flashState.knownIds = new Set(); flashState.learningIds = new Set(); renderFlashCard(); }
-  });
+  if (!renderFlashControls._bound) {
+    $('#btn-flash-start').addEventListener('click', startFlash);
+    $('#btn-flash-shuffle').addEventListener('click', () => {
+      if (!flashState) return;
+      flashState.deck = shuffle(flashState.deck);
+      flashState.idx = 0;
+      renderFlashCard();
+    });
+    $('#btn-flash-reset').addEventListener('click', () => {
+      if (!confirm('Reset all flashcard progress (known / still-learning marks)?')) return;
+      saveFlashProgress({ known: [], learning: [] });
+      if (flashState) { flashState.knownIds = new Set(); flashState.learningIds = new Set(); renderFlashCard(); }
+    });
+    renderFlashControls._bound = true;
+  }
+  let endBtn = document.getElementById('btn-flash-end');
+  if (!endBtn) {
+    endBtn = el('button', { id: 'btn-flash-end', class: 'btn', type: 'button' }, 'End session');
+    $('#btn-flash-start').insertAdjacentElement('afterend', endBtn);
+    endBtn.addEventListener('click', endFlashSession);
+  }
 
   if (typeof FLASHCARDS !== 'undefined' && FLASHCARDS.length) {
     $('#flash-stage').innerHTML = `<p class="muted" style="padding:30px;text-align:center;">${FLASHCARDS.length} cards ready across all aims. Click <strong>Start session</strong> to begin.</p>`;
@@ -2010,6 +2661,15 @@ function startFlash() {
     learningIds: new Set(stored.learning),
     aimFilter: aim
   };
+  window._flashSession = {
+    aims: aim ? [aim] : ['A','B','C','D','E','F'],
+    total: 0,
+    correct: 0,
+    aimBreakdown: {},
+    attemptedIds: new Set(),
+    knownIds: new Set()
+  };
+  markFlashReviewStarted();
   renderFlashCard();
 }
 
@@ -2063,12 +2723,46 @@ function renderFlashCard() {
   learnBtn.addEventListener('click', () => {
     if (isLearning) flashState.learningIds.delete(c.id);
     else { flashState.learningIds.add(c.id); flashState.knownIds.delete(c.id); }
+    if (window._flashSession) {
+      const fs = window._flashSession;
+      if (!fs.attemptedIds.has(c.id)) {
+        fs.attemptedIds.add(c.id);
+        fs.total++;
+      }
+      const aim = c.learning_aim || c.learningaim;
+      fs.aimBreakdown[aim] = fs.aimBreakdown[aim] || { correct: 0, total: 0 };
+      fs.aimBreakdown[aim].total = Math.max(fs.aimBreakdown[aim].total, flashState.deck.filter(x => (x.learning_aim || x.learningaim) === aim && fs.attemptedIds.has(x.id)).length);
+      if (fs.knownIds.has(c.id)) {
+        fs.knownIds.delete(c.id);
+        fs.correct = Math.max(0, fs.correct - 1);
+        fs.aimBreakdown[aim].correct = Math.max(0, fs.aimBreakdown[aim].correct - 1);
+      }
+    }
     saveFlashProgress({ known: [...flashState.knownIds], learning: [...flashState.learningIds] });
     renderFlashCard();
   });
   knownBtn.addEventListener('click', () => {
     if (isKnown) flashState.knownIds.delete(c.id);
     else { flashState.knownIds.add(c.id); flashState.learningIds.delete(c.id); }
+    if (window._flashSession) {
+      const fs = window._flashSession;
+      if (!fs.attemptedIds.has(c.id)) {
+        fs.attemptedIds.add(c.id);
+        fs.total++;
+      }
+      const aim = c.learning_aim || c.learningaim;
+      fs.aimBreakdown[aim] = fs.aimBreakdown[aim] || { correct: 0, total: 0 };
+      fs.aimBreakdown[aim].total = Math.max(fs.aimBreakdown[aim].total, flashState.deck.filter(x => (x.learning_aim || x.learningaim) === aim && fs.attemptedIds.has(x.id)).length);
+      if (isKnown) {
+        fs.knownIds.delete(c.id);
+        fs.correct = Math.max(0, fs.correct - 1);
+        fs.aimBreakdown[aim].correct = Math.max(0, fs.aimBreakdown[aim].correct - 1);
+      } else {
+        fs.knownIds.add(c.id);
+        fs.correct++;
+        fs.aimBreakdown[aim].correct++;
+      }
+    }
     saveFlashProgress({ known: [...flashState.knownIds], learning: [...flashState.learningIds] });
     advanceFlash();
   });
@@ -2076,6 +2770,23 @@ function renderFlashCard() {
   nextBtn.addEventListener('click', advanceFlash);
   actions.appendChild(prevBtn); actions.appendChild(learnBtn); actions.appendChild(knownBtn); actions.appendChild(nextBtn);
   stage.appendChild(actions);
+}
+
+async function endFlashSession() {
+  const fs = window._flashSession;
+  if (!fs || !fs.total) {
+    alert('No flashcard activity to save yet.');
+    return;
+  }
+  await saveSession('flashcard', {
+    aims: Object.keys(fs.aimBreakdown),
+    total: fs.total,
+    correct: fs.correct,
+    aimBreakdown: fs.aimBreakdown,
+    attemptedIds: fs.attemptedIds
+  });
+  awardXP(5, '+5 XP — Flashcards done!');
+  window._flashSession = null;
 }
 
 function advanceFlash() {

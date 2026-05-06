@@ -5,6 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>RA10 — Everything in One Place</title>
 <link rel="icon" href="logo.png" type="image/png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#d20000">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="RA10">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&display=swap" rel="stylesheet">
@@ -400,8 +406,37 @@ body.iframe-fullscreen-mode .page:not(.active){
 body.iframe-fullscreen-mode .iframe-exit{
   display:flex;
 }
-#p-unit1 > .cd{
-  display:none !important;
+/* page-iframe pages: breadcrumb bar + full-height iframe, no outer scrollbar */
+body.iframe-fullscreen-mode .page-iframe.active > .cd{
+  display:block !important;
+  position:fixed;
+  top:56px;left:0;right:0;
+  z-index:9999;
+  background:var(--color-surface);
+  border-bottom:1px solid oklch(from var(--color-text) l c h/.08);
+  padding:4px var(--sp4);
+}
+body.iframe-fullscreen-mode .page-iframe.active > .cd .bc{
+  margin:0;
+  padding-block:0;
+}
+body.iframe-fullscreen-mode .page-iframe.active > .cf{
+  display:block !important;
+  position:fixed;
+  top:calc(56px + 29px);left:0;right:0;bottom:0;
+  z-index:9998;
+  padding:0;
+  overflow:hidden;
+}
+body.iframe-fullscreen-mode .page-iframe.active .iframe-wrap{
+  position:static;
+  height:100%;margin:0;padding:0;
+}
+body.iframe-fullscreen-mode .page-iframe.active .iframe-wrap iframe{
+  height:100%;border-radius:0;border:none;box-shadow:none;
+}
+body:has(.page-iframe.active) .iframe-exit{
+  display:none;
 }
 @media print{
   .iframe-wrap{display:none}
@@ -474,8 +509,82 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
       <span class="nav-logo-text">RA10</span>
     </a>
     <div class="nav-links">
-      <button class="nav-link" data-nav="revision" onclick="go('/revision')">Revision</button>
+      <div style="position:relative;display:inline-flex;" id="nav-rev-wrap">
+        <button class="nav-link" data-nav="revision" onclick="go('/revision')"
+          onmouseenter="showRevPreview()" onmouseleave="hideRevPreview()">Revision</button>
+        <div id="rev-preview" style="display:none;position:absolute;
+          top:calc(100% + 8px);left:50%;transform:translateX(-50%);
+          background:var(--color-surface);border:1px solid var(--color-border);
+          border-radius:var(--radius-xl);box-shadow:var(--shadow-lg);
+          padding:var(--sp4);min-width:260px;z-index:10003;"
+          onmouseenter="clearTimeout(window._revHideTimeout)"
+          onmouseleave="hideRevPreview()">
+          <div style="font-size:var(--tx-xs);font-weight:700;letter-spacing:.08em;
+            text-transform:uppercase;color:var(--color-text-muted);
+            margin-bottom:var(--sp3)">BTEC Level 3</div>
+          <a style="display:flex;align-items:center;justify-content:space-between;
+            padding:8px 10px;border-radius:var(--radius-md);cursor:pointer;
+            color:var(--color-text);text-decoration:none;font-size:var(--tx-sm);"
+            onmouseenter="this.style.background='oklch(from var(--color-text) l c h/.06)'"
+            onmouseleave="this.style.background=''"
+            onclick="go('/revision/btec/level-3/IT-AAQ');hideRevPreview()">
+            <span>
+              <span style="font-weight:600">Information Technology</span>
+              <span style="display:block;font-size:var(--tx-xs);color:var(--color-text-muted)">AAQ · Unit 1 live</span>
+            </span>
+            <span style="font-size:0.65rem;font-weight:700;text-transform:uppercase;
+              letter-spacing:.06em;padding:2px 7px;border-radius:999px;
+              background:var(--color-primary-highlight);color:var(--color-primary)">Live</span>
+          </a>
+          <a style="display:flex;align-items:center;justify-content:space-between;
+            padding:8px 10px;border-radius:var(--radius-md);cursor:pointer;
+            color:var(--color-text);text-decoration:none;font-size:var(--tx-sm);"
+            onmouseenter="this.style.background='oklch(from var(--color-text) l c h/.06)'"
+            onmouseleave="this.style.background=''"
+            onclick="go('/revision/btec/level-3/business');hideRevPreview()">
+            <span>
+              <span style="font-weight:600">Business</span>
+              <span style="display:block;font-size:var(--tx-xs);color:var(--color-text-muted)">Unit 3 live</span>
+            </span>
+            <span style="font-size:0.65rem;font-weight:700;text-transform:uppercase;
+              letter-spacing:.06em;padding:2px 7px;border-radius:999px;
+              background:var(--color-primary-highlight);color:var(--color-primary)">Live</span>
+          </a>
+          <div style="margin-top:var(--sp3);padding-top:var(--sp3);
+            border-top:1px solid var(--color-divider);text-align:center;">
+            <button class="btn btn-g" style="width:100%;font-size:var(--tx-xs);"
+              onclick="go('/revision');hideRevPreview()">Browse all →</button>
+          </div>
+        </div>
+      </div>
       <button class="nav-link" data-nav="tools"    onclick="go('/tools')">Tools</button>
+      <div style="position:relative;display:inline-flex;" id="nav-lb-wrap">
+        <button class="nav-link" data-nav="leaderboard" onclick="go('leaderboard')"
+          onmouseenter="showLbPreview()" onmouseleave="hideLbPreview()">
+          🏆 Leaderboard
+        </button>
+        <div id="lb-preview" style="display:none;position:absolute;
+          top:calc(100% + 8px);left:50%;transform:translateX(-50%);
+          background:var(--color-surface);border:1px solid var(--color-border);
+          border-radius:var(--radius-xl);box-shadow:var(--shadow-lg);
+          padding:var(--sp4);min-width:240px;z-index:10003;"
+          onmouseenter="clearTimeout(window._lbHideTimeout)"
+          onmouseleave="hideLbPreview()">
+          <div style="font-size:var(--tx-xs);font-weight:700;letter-spacing:.08em;
+            text-transform:uppercase;color:var(--color-text-muted);
+            margin-bottom:var(--sp3)">This week's top 3</div>
+          <div id="lb-preview-list">
+            <div style="color:var(--color-text-faint);font-size:var(--tx-sm)">
+              Loading...
+            </div>
+          </div>
+          <div style="margin-top:var(--sp3);padding-top:var(--sp3);
+            border-top:1px solid var(--color-divider);text-align:center;">
+            <button class="btn btn-p" style="width:100%;font-size:var(--tx-xs);"
+              onclick="go('leaderboard')">View full leaderboard</button>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="nav-actions">
       <div id="nav-credit-chip" class="nav-credit-chip" style="display:none"></div>
@@ -506,6 +615,30 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
     </div>
   </div>
 </nav>
+
+<!-- ============================================================
+     MOBILE ADD-TO-HOMESCREEN BANNER
+============================================================ -->
+<div id="a2hs-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;
+  z-index:20000;background:var(--color-surface);
+  border-top:1px solid var(--color-border);
+  box-shadow:0 -4px 24px oklch(0 0 0/.12);
+  padding:var(--sp4) var(--sp6);
+  align-items:center;gap:var(--sp4);" hidden>
+  <img src="logo.png" alt="RA10" width="40" height="40"
+    style="border-radius:var(--radius-lg);flex-shrink:0;">
+  <div style="flex:1;min-width:0;">
+    <div style="font-weight:700;font-size:var(--tx-sm)">Add RA10 to your home screen</div>
+    <div id="a2hs-instruction" style="font-size:var(--tx-xs);color:var(--color-text-muted);margin-top:2px">
+      Install the app for quick access
+    </div>
+  </div>
+  <div style="display:flex;gap:var(--sp2);flex-shrink:0;">
+    <button id="a2hs-install" class="btn btn-p" style="font-size:var(--tx-xs);padding:6px 14px;">Install</button>
+    <button onclick="dismissA2HS()" style="background:none;border:none;cursor:pointer;
+      color:var(--color-text-muted);padding:6px;font-size:1.1rem;" aria-label="Dismiss">✕</button>
+  </div>
+</div>
 
 <!-- ============================================================
      HOME  /
@@ -577,6 +710,7 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
         <div class="chips">
           <span class="chip">Unit 2 Revision</span>
           <span class="chip">Unit 3 Revision</span>
+          <span class="chip">Business Unit 1 &amp; 2</span>
           <span class="chip">Unit 4 Revision</span>
           <span class="chip">PDF Combiner</span>
           <span class="chip">File Converter</span>
@@ -647,8 +781,8 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
       <div class="grid">
         <div class="card click" onclick="go('/revision/btec/level-3')">
           <div class="card-tag">Level 3</div>
-          <h3>BTEC Level 3 (AAQ)</h3>
-          <p>Applied qualifications for Sixth Form and college. IT available now.</p>
+          <h3>BTEC Level 3</h3>
+          <p>Applied qualifications for Sixth Form and college. IT AAQ and Business available now.</p>
           <div class="card-ft">
             <span class="pill pill-ok">Available</span>
             <button class="btn btn-g" onclick="event.stopPropagation();go('/revision/btec/level-3')">Browse →</button>
@@ -675,7 +809,7 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
     </nav>
     <div class="hero">
       <div class="hero-label">BTEC Level 3</div>
-      <h1>BTEC Level 3 (AAQ)</h1>
+      <h1>BTEC Level 3</h1>
       <p>Pearson BTEC Level 3 Applied General Qualifications — AAQ spec revision tools.</p>
     </div>
     <div class="sec">
@@ -683,11 +817,20 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
       <div class="grid">
         <div class="card click" onclick="go('/revision/btec/level-3/IT-AAQ')">
           <div class="card-tag">IT</div>
-          <h3>Information Technology</h3>
+          <h3>Information Technology (AAQ)</h3>
           <p>Unit 1 revision live now. Units 2–4 coming soon.</p>
           <div class="card-ft">
             <span class="pill pill-ok">Unit 1 live</span>
             <button class="btn btn-g" onclick="event.stopPropagation();go('/revision/btec/level-3/IT-AAQ')">Open →</button>
+          </div>
+        </div>
+        <div class="card click" onclick="go('/revision/btec/level-3/business')">
+          <div class="card-tag">Business</div>
+          <h3>Business</h3>
+          <p>Unit 3 Personal and Business Finance revision. Cash flow, break-even, ratios, financial statements and more.</p>
+          <div class="card-ft">
+            <span class="pill pill-ok">Unit 3 live</span>
+            <button class="btn btn-g" onclick="event.stopPropagation();go('/revision/btec/level-3/business')">Open</button>
           </div>
         </div>
       </div>
@@ -713,7 +856,7 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
     </nav>
     <div class="hero">
       <div class="hero-label">BTEC Level 3 · IT AAQ</div>
-      <h1>Information Technology</h1>
+      <h1>Information Technology (AAQ)</h1>
       <p>Course revision hub for the BTEC Level 3 IT Extended Certificate (AAQ). Select a unit below to start revising.</p>
       <div class="meta-tags">
         <span class="meta-tag">Pearson AAQ</span>
@@ -788,7 +931,7 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
      UNIT 1  /revision/btec/level-3/IT-AAQ/unit-1
      iframe src must match your folder: ra10/revision/btec/level-3/IT-AAQ/unit-1/index.html
 ============================================================ -->
-<div class="page" id="p-unit1">
+<div class="page page-iframe" id="p-unit1">
   <div class="cd">
     <nav class="bc">
       <button class="bc-item" onclick="go('/')">Home</button>
@@ -806,7 +949,7 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
   </div>
   <!-- Full-width iframe — fullscreen by default -->
   <div class="cf">
-    <div class="iframe-wrap full-screen">
+    <div class="iframe-wrap">
       <iframe
         src="revision/btec/level-3/IT-AAQ/unit-1/index.html"
         title="Unit 1 – Information Technology Systems"
@@ -999,12 +1142,50 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
         <div class="card-tag">Profile</div>
         <h3 id="account-display-name">Your name</h3>
         <p id="account-email">your@email.com</p>
+        <p id="account-username" style="margin-top:calc(var(--sp2) * -1);color:var(--color-text-muted);">No username set</p>
+        <div style="margin-top:var(--sp5);padding:var(--sp4);border:1px solid var(--color-border);border-radius:var(--radius-lg);background:var(--color-bg-soft);">
+          <h4 style="margin:0 0 var(--sp3) 0;font-size:var(--tx-md);">Edit profile</h4>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:var(--sp3);margin-bottom:var(--sp2);">
+            <div>
+              <div style="font-size:var(--tx-xs);color:var(--color-text-muted);text-transform:uppercase;letter-spacing:.06em;">Display name</div>
+              <div id="account-display-name-current">—</div>
+            </div>
+            <button class="btn btn-s" id="account-change-name-btn" type="button">Change</button>
+          </div>
+          <div id="account-name-edit" style="display:none;gap:var(--sp2);margin-bottom:var(--sp4);">
+            <input id="account-name-input" type="text" class="auth-input" placeholder="Enter display name" style="max-width:360px;">
+            <button class="btn btn-p" id="account-save-name-btn" type="button">Save</button>
+            <div class="auth-error" id="account-name-error" style="margin-top:var(--sp2);"></div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:var(--sp3);margin-bottom:var(--sp2);">
+            <div>
+              <div style="font-size:var(--tx-xs);color:var(--color-text-muted);text-transform:uppercase;letter-spacing:.06em;">Username</div>
+              <div id="account-username-current">No username set</div>
+            </div>
+            <button class="btn btn-s" id="account-change-username-btn" type="button">Change</button>
+          </div>
+          <div id="account-username-edit" style="display:none;gap:var(--sp2);">
+            <div style="display:flex;align-items:center;gap:var(--sp2);max-width:360px;">
+              <span style="font-weight:700;color:var(--color-text-muted);">@</span>
+              <input id="account-username-input" type="text" class="auth-input" placeholder="username" style="flex:1;">
+              <button class="btn btn-p" id="account-save-username-btn" type="button">Save</button>
+            </div>
+            <div class="auth-error" id="account-username-error" style="margin-top:var(--sp2);"></div>
+          </div>
+        </div>
         <div class="card-ft"><span class="pill" id="account-tier-badge">Tier</span><span class="pill" id="account-credits">Credits remaining</span></div>
         <p>Next reset: <strong id="account-reset-date">—</strong></p>
         <div class="card-ft" style="flex-wrap:wrap;gap:var(--sp3)">
           <a class="btn btn-s" href="https://billing.stripe.com/p/login/placeholder" target="_blank">Manage subscription</a>
           <button class="btn btn-p" id="btn-account-signout">Sign out</button>
         </div>
+      </div>
+      <div class="card" style="border-color:var(--color-error-soft);">
+        <div class="card-tag" style="background:var(--color-error-soft);color:var(--color-error);">Danger zone</div>
+        <h3 style="margin-bottom:var(--sp2);">Delete account</h3>
+        <p style="margin-bottom:var(--sp4);">Request account deletion and sign out from this device.</p>
+        <button class="btn btn-p" id="btn-account-delete" type="button" style="background:var(--color-error);border-color:var(--color-error);">Delete my account</button>
+        <div id="account-delete-message" style="display:none;margin-top:var(--sp3);color:var(--color-success);font-weight:700;"></div>
       </div>
     </div>
   </div>
@@ -1063,8 +1244,128 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
 </div>
 
 <!-- ============================================================
+     LEADERBOARD  /leaderboard
+============================================================ -->
+<div class="page" id="p-leaderboard">
+  <div class="c">
+    <nav class="bc">
+      <button class="bc-item" onclick="go('')">Home</button>
+      <span class="bc-sep">›</span>
+      <span class="bc-item cur">Leaderboard</span>
+    </nav>
+    <div class="hero">
+      <div class="hero-label">Weekly XP Leaderboard</div>
+      <h1>Who's revising the most?</h1>
+      <p>XP resets every Sunday at midnight. Top scorer this week 
+      wins 10 bonus credits!</p>
+    </div>
+    <div id="lb-page-content" style="max-width:680px;margin:0 auto;
+      padding-bottom:var(--sp16);">
+      <div id="lb-loading" style="text-align:center;padding:40px;
+        color:var(--color-text-muted)">Loading leaderboard...</div>
+      <div id="lb-table" style="display:none;"></div>
+      <div id="lb-my-rank" style="margin-top:var(--sp6);"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
      FOOTER
 ============================================================ -->
+<!-- ============================================================
+     BTEC LEVEL 3 BUSINESS HUB  /revision/btec/level-3/business
+============================================================ -->
+<div class="page" id="p-btec-business-l3">
+  <div class="cd">
+    <nav class="bc">
+      <button class="bc-item" onclick="go('')">Home</button>
+      <span class="bc-sep">›</span>
+      <button class="bc-item" onclick="go('/revision')">Revision</button>
+      <span class="bc-sep">›</span>
+      <button class="bc-item" onclick="go('/revision/btec')">BTEC</button>
+      <span class="bc-sep">›</span>
+      <button class="bc-item" onclick="go('/revision/btec/level-3')">Level 3</button>
+      <span class="bc-sep">›</span>
+      <span class="bc-item cur">Business</span>
+    </nav>
+    <div class="hero">
+      <div class="hero-label">BTEC Level 3 Business</div>
+      <h1>Business</h1>
+      <p>Pearson BTEC Level 3 National Business revision tools.</p>
+    </div>
+    <div class="sec">
+      <div class="sec-label">Units</div>
+      <div class="unit-grid">
+        <div class="unit-card click" onclick="go('/revision/btec/level-3/business/unit-3')">
+          <div class="unit-num">Unit 03 · 120 GLH</div>
+          <div class="unit-title">Personal and Business Finance</div>
+          <div class="unit-desc">Cash flow forecasts, break-even analysis, ratio analysis, financial statements, sources of finance and personal finance. External exam.</div>
+          <div class="unit-ft">
+            <div style="display:flex;gap:var(--sp2);align-items:center">
+              <span class="badge badge-ext">External</span>
+              <span class="pill pill-live">Live</span>
+            </div>
+            <button class="btn btn-p" onclick="event.stopPropagation();go('/revision/btec/level-3/business/unit-3')">Open</button>
+          </div>
+        </div>
+        <div class="unit-card off">
+          <div class="unit-num">Unit 01 · 90 GLH</div>
+          <div class="unit-title">Exploring Business</div>
+          <div class="unit-desc">Business features, stakeholders, organisational structure, business environments and innovation. Revision coming soon.</div>
+          <div class="unit-ft">
+            <div style="display:flex;gap:var(--sp2);align-items:center">
+              <span class="badge badge-int">Internal</span>
+              <span class="pill pill-soon">Coming soon</span>
+            </div>
+          </div>
+        </div>
+        <div class="unit-card off">
+          <div class="unit-num">Unit 02 · 90 GLH</div>
+          <div class="unit-title">Developing a Marketing Campaign</div>
+          <div class="unit-desc">Marketing principles, market research, campaign planning and development. Revision coming soon.</div>
+          <div class="unit-ft">
+            <div style="display:flex;gap:var(--sp2);align-items:center">
+              <span class="badge badge-ext">External</span>
+              <span class="pill pill-soon">Coming soon</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     BUSINESS UNIT 3  /revision/btec/level-3/business/unit-3
+============================================================ -->
+<div class="page page-iframe" id="p-bus-u3">
+  <div class="cd">
+    <nav class="bc">
+      <button class="bc-item" onclick="go('')">Home</button>
+      <span class="bc-sep">›</span>
+      <button class="bc-item" onclick="go('/revision')">Revision</button>
+      <span class="bc-sep">›</span>
+      <button class="bc-item" onclick="go('/revision/btec')">BTEC</button>
+      <span class="bc-sep">›</span>
+      <button class="bc-item" onclick="go('/revision/btec/level-3')">Level 3</button>
+      <span class="bc-sep">›</span>
+      <button class="bc-item" onclick="go('/revision/btec/level-3/business')">Business</button>
+      <span class="bc-sep">›</span>
+      <span class="bc-item cur">Unit 3</span>
+    </nav>
+  </div>
+  <div class="cf">
+    <div class="iframe-wrap">
+      <iframe
+        src="revision/btec/level-3/business/unit-3/index.html"
+        title="Unit 3 Personal and Business Finance"
+        loading="lazy"
+        allowfullscreen>
+      </iframe>
+    </div>
+  </div>
+</div>
+
 <footer>
   <div class="footer-inner">
     <span class="footer-brand">RA10</span>
@@ -1098,9 +1399,14 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
 /* ---------- ROUTER ---------- */
 const ROUTES = {
   '/':                                    'p-home',
+  '':                                     'p-home',
+  'leaderboard':                          'p-leaderboard',
+  '/leaderboard':                         'p-leaderboard',
   '/revision':                            'p-revision',
   '/revision/btec':                       'p-btec',
   '/revision/btec/level-3':              'p-btec-l3',
+  '/revision/btec/level-3/business':     'p-btec-business-l3',
+  '/revision/btec/level-3/business/unit-3': 'p-bus-u3',
   '/revision/btec/level-3/IT-AAQ':       'p-it-aaq',
   '/revision/btec/level-3/IT-AAQ/unit-1':'p-unit1',
   '/tools':                               'p-tools',
@@ -1109,7 +1415,185 @@ const ROUTES = {
   '/upgrade':                             'p-upgrade',
   '/account':                             'p-account',
 };
-const NAV_MAP = {'/revision':'revision','/tools':'tools'};
+const NAV_MAP = {'leaderboard':'leaderboard','/revision':'revision','/tools':'tools'};
+
+let _lbHideTimeout = null;
+window._lbHideTimeout = null;
+
+function showLbPreview() {
+  clearTimeout(window._lbHideTimeout);
+  const preview = document.getElementById('lb-preview');
+  if (preview) preview.style.display = 'block';
+  loadLbPreview();
+}
+
+function hideLbPreview() {
+  window._lbHideTimeout = setTimeout(() => {
+    const el = document.getElementById('lb-preview');
+    if (el) el.style.display = 'none';
+  }, 300);
+}
+
+let _revHideTimeout = null;
+window._revHideTimeout = null;
+
+function showRevPreview() {
+  clearTimeout(window._revHideTimeout);
+  const preview = document.getElementById('rev-preview');
+  if (preview) preview.style.display = 'block';
+}
+
+function hideRevPreview() {
+  window._revHideTimeout = setTimeout(() => {
+    const el = document.getElementById('rev-preview');
+    if (el) el.style.display = 'none';
+  }, 300);
+}
+
+async function loadLbPreview() {
+  const listEl = document.getElementById('lb-preview-list');
+  if (!listEl || !window.supabase) return;
+  try {
+    const sb = window.supabase.createClient(
+      'https://tcrrgsylxbyyrmnouihl.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRjcnJnc3lseGJ5eXJtbm91aWhsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4ODUyMTEsImV4cCI6MjA5MzQ2MTIxMX0.eOp6ma-mfgh8F20nM7E2OaBW28LlZlwuEEWr6k2zDWw'
+    );
+    const { data } = await sb.rpc('get_leaderboard_preview');
+    const medals = ['🥇','🥈','🥉'];
+    if (!data?.length) {
+      listEl.innerHTML = '<div style="color:var(--color-text-faint);font-size:var(--tx-sm)">No XP earned yet this week!</div>';
+      return;
+    }
+    listEl.innerHTML = data.map((u, i) => `
+      <div style="display:flex;align-items:center;justify-content:space-between;
+        padding:4px 0;font-size:var(--tx-sm);">
+        <span>${medals[i]} ${u.username ? '@'+u.username : (u.full_name || 'Anonymous')}</span>
+        <span style="font-weight:700;color:var(--color-primary)">${u.xp_this_week} XP</span>
+      </div>
+    `).join('');
+  } catch(e) {
+    listEl.innerHTML = '<div style="color:var(--color-text-faint);font-size:var(--tx-sm)">Could not load.</div>';
+  }
+}
+
+async function renderLeaderboard() {
+  const tableEl = document.getElementById('lb-table');
+  const loadingEl = document.getElementById('lb-loading');
+  const myRankEl = document.getElementById('lb-my-rank');
+  if (!tableEl || !window.supabase) return;
+  try {
+    const sb = window.supabase.createClient(
+      'https://tcrrgsylxbyyrmnouihl.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRjcnJnc3lseGJ5eXJtbm91aWhsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4ODUyMTEsImV4cCI6MjA5MzQ2MTIxMX0.eOp6ma-mfgh8F20nM7E2OaBW28LlZlwuEEWr6k2zDWw'
+    );
+    const { data } = await sb.rpc('get_leaderboard', { limit_count: 50 });
+    if (loadingEl) loadingEl.style.display = 'none';
+    tableEl.style.display = 'block';
+    const medals = ['🥇','🥈','🥉'];
+    const currentId = RA10.isLoggedIn() ? RA10.getSession()?.user?.id : null;
+    if (!data?.length) {
+      tableEl.innerHTML = '<div style="text-align:center;padding:40px;color:var(--color-text-muted)">No XP earned yet this week. Be the first!</div>';
+      return;
+    }
+    tableEl.innerHTML = `
+      <div style="margin-bottom:var(--sp4);">
+        <div style="display:flex;justify-content:space-between;
+          font-size:var(--tx-xs);font-weight:700;letter-spacing:.08em;
+          text-transform:uppercase;color:var(--color-text-muted);
+          padding:8px 16px;margin-bottom:4px;">
+          <span>Player</span><span>XP This Week</span>
+        </div>
+        ${data.map((u, i) => {
+          const isMe = u.id === currentId;
+          const name = u.username ? '@'+u.username : (u.full_name || 'Anonymous');
+          return `
+            <div style="display:flex;align-items:center;
+              justify-content:space-between;padding:14px 16px;
+              border-radius:var(--radius-lg);margin-bottom:6px;
+              background:${isMe ? 'var(--color-primary-highlight)' : 'var(--color-surface)'};
+              border:1px solid ${isMe ? 'var(--color-primary)' : 'var(--color-border)'};">
+              <div style="display:flex;align-items:center;gap:12px;">
+                <span style="font-size:1.1rem;min-width:28px">
+                  ${medals[i] || (i+1)+'.'}
+                </span>
+                <div>
+                  <div style="font-size:var(--tx-sm);font-weight:${isMe?'700':'400'}">
+                    ${name}
+                    ${isMe ? '<span style="font-size:0.7rem;background:var(--color-primary);color:#fff;padding:1px 6px;border-radius:999px;margin-left:4px">You</span>' : ''}
+                  </div>
+                  <div style="font-size:var(--tx-xs);color:var(--color-text-muted)">
+                    ${u.xp_total||0} total XP
+                  </div>
+                </div>
+              </div>
+              <div style="font-size:var(--tx-base);font-weight:700;
+                color:var(--color-primary)">${u.xp_this_week} XP</div>
+            </div>
+          `;
+        }).join('')}
+      </div>
+      <div style="background:var(--color-surface-offset);
+        border-radius:var(--radius-lg);padding:var(--sp4);
+        text-align:center;font-size:var(--tx-sm);
+        color:var(--color-text-muted);">
+        🏆 Top scorer wins <strong>10 bonus credits</strong> every Sunday
+      </div>
+    `;
+    if (currentId && !data.find(u => u.id === currentId)) {
+      const { data: me } = await sb.from('profiles')
+        .select('username, full_name, xp_this_week, xp_total')
+        .eq('id', currentId).single();
+      if (me && myRankEl) {
+        myRankEl.innerHTML = `
+          <div style="background:var(--color-primary-highlight);
+            border:1px solid var(--color-primary);
+            border-radius:var(--radius-lg);padding:14px 16px;
+            display:flex;justify-content:space-between;align-items:center;">
+            <div>
+              <div style="font-size:var(--tx-sm);font-weight:700">
+                You — ${me.username ? '@'+me.username : (me.full_name||'Anonymous')}
+              </div>
+              <div style="font-size:var(--tx-xs);color:var(--color-text-muted)">
+                ${me.xp_total||0} total XP
+              </div>
+            </div>
+            <div style="font-size:var(--tx-base);font-weight:700;
+              color:var(--color-primary)">${me.xp_this_week||0} XP this week</div>
+          </div>
+        `;
+      }
+    }
+  } catch(e) {
+    if (loadingEl) loadingEl.textContent = 'Could not load leaderboard.';
+  }
+}
+
+// Weekly XP reset check
+async function checkWeeklyXpReset() {
+  if (!window.supabase || !RA10.isLoggedIn()) return;
+  try {
+    const sb = window.supabase.createClient(
+      'https://tcrrgsylxbyyrmnouihl.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRjcnJnc3lseGJ5eXJtbm91aWhsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4ODUyMTEsImV4cCI6MjA5MzQ2MTIxMX0.eOp6ma-mfgh8F20nM7E2OaBW28LlZlwuEEWr6k2zDWw'
+    );
+    const session = RA10.getSession();
+    const { data } = await sb.from('profiles')
+      .select('xp_week_reset_at')
+      .eq('id', session.user.id)
+      .single();
+    if (!data) return;
+    const daysSince = (Date.now() - new Date(data.xp_week_reset_at)) / 86400000;
+    if (daysSince >= 7) await sb.rpc('reset_weekly_xp');
+  } catch(e) { console.warn('XP reset check failed', e); }
+}
+
+// Render leaderboard when navigating to it
+window.addEventListener('hashchange', () => {
+  const routePath = location.hash.replace('#/','').replace('#','');
+  if (routePath === 'leaderboard') {
+    setTimeout(renderLeaderboard, 100);
+  }
+});
 
 function go(path){
   document.querySelectorAll('.iframe-wrap.full-screen').forEach(w=>w.classList.remove('full-screen'));
@@ -1139,6 +1623,12 @@ function route(){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   const el = document.getElementById(id);
   if(el){ el.classList.add('active'); window.scrollTo(0,0); }
+  // Auto-fullscreen for iframe pages (breadcrumb stays visible via CSS)
+  if(el && el.classList.contains('page-iframe')){
+    document.body.classList.add('iframe-fullscreen-mode');
+  } else {
+    document.body.classList.remove('iframe-fullscreen-mode');
+  }
   document.querySelectorAll('.nav-link').forEach(l=>l.classList.remove('active'));
   for(const [prefix,key] of Object.entries(NAV_MAP)){
     if(path.startsWith(prefix)){
@@ -1210,11 +1700,35 @@ route();
         });
         document.getElementById('account-display-name').textContent = profile.display_name || profile.email;
         document.getElementById('account-email').textContent = profile.email;
+        document.getElementById('account-username').textContent = RA10.getProfile()?.username ? ('@' + RA10.getProfile().username) : 'No username set';
+        document.getElementById('account-display-name-current').textContent = profile.full_name || profile.display_name || profile.email;
+        document.getElementById('account-name-input').value = profile.full_name || profile.display_name || '';
+        document.getElementById('account-username-current').textContent = profile.username ? ('@' + profile.username) : 'No username set';
+        document.getElementById('account-username-input').value = profile.username || '';
         document.getElementById('account-tier-badge').textContent = RA10.getTierInfo().label;
         document.getElementById('account-credits').textContent = credits === Infinity ? 'Unlimited credits' : credits + ' credits';
         const resetDate = profile.credits_reset_at ? new Date(profile.credits_reset_at).toLocaleDateString() : 'N/A';
         document.getElementById('account-reset-date').textContent = resetDate;
       }
+    }
+    const updateNavAuth = _updateNavAuth;
+
+    function showMiniToast(msg) {
+      let t = document.getElementById('mini-toast');
+      if (!t) {
+        t = document.createElement('div');
+        t.id = 'mini-toast';
+        t.style.cssText = 'position:fixed;right:16px;bottom:16px;z-index:10010;background:var(--color-primary);color:#fff;padding:10px 14px;border-radius:999px;font-size:var(--tx-sm);font-weight:700;box-shadow:var(--shadow-lg);opacity:0;transform:translateY(8px);transition:opacity .2s,transform .2s;';
+        document.body.appendChild(t);
+      }
+      t.textContent = msg;
+      t.style.opacity = '1';
+      t.style.transform = 'translateY(0)';
+      clearTimeout(window._miniToastTimer);
+      window._miniToastTimer = setTimeout(() => {
+        t.style.opacity = '0';
+        t.style.transform = 'translateY(8px)';
+      }, 2000);
     }
 
     async function checkProfileCompletion() {
@@ -1225,31 +1739,110 @@ route();
         setTimeout(() => {
           document.getElementById('profile-setup-overlay').classList.add('open');
         }, 800);
+        return;
+      }
+      if (!profile?.username) {
+        setTimeout(() => {
+          document.getElementById('username-setup-overlay').classList.add('open');
+        }, 1000);
       }
     }
+
+    document.getElementById('username-setup-skip')?.addEventListener('click', () => {
+      document.getElementById('username-setup-overlay').classList.remove('open');
+    });
+
+    document.getElementById('username-setup-btn')?.addEventListener('click', async () => {
+      const btn = document.getElementById('username-setup-btn');
+      const err = document.getElementById('username-setup-error');
+      const originalText = 'Save username';
+      btn.disabled = true; btn.textContent = 'Saving...';
+      const safetyTimeout = setTimeout(() => {
+        btn.disabled = false;
+        btn.textContent = originalText;
+      }, 5000);
+      try {
+        const val = document.getElementById('username-setup-input').value
+          .trim().toLowerCase().replace(/[^a-z0-9_]/g, '');
+        err.classList.remove('show');
+        if (!val || val.length < 3) {
+          err.textContent = 'Username must be at least 3 characters.';
+          err.classList.add('show');
+          return;
+        }
+        const sb = window.supabase.createClient(
+          'https://tcrrgsylxbyyrmnouihl.supabase.co',
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRjcnJnc3lseGJ5eXJtbm91aWhsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4ODUyMTEsImV4cCI6MjA5MzQ2MTIxMX0.eOp6ma-mfgh8F20nM7E2OaBW28LlZlwuEEWr6k2zDWw'
+        );
+        const session = RA10.getSession();
+        const { error } = await sb.from('profiles')
+          .update({ username: val }).eq('id', session.user.id);
+        if (error) {
+          err.textContent = error.code === '23505'
+            ? 'That username is taken. Try another.' : error.message;
+          err.classList.add('show');
+        } else {
+          clearTimeout(safetyTimeout);
+          document.getElementById('username-setup-overlay').classList.remove('open');
+          showMiniToast('Username saved');
+          btn.disabled = false;
+          btn.textContent = originalText;
+          return;
+        }
+      } catch(e) {
+        err.textContent = 'Could not save. Try again.';
+        err.classList.add('show');
+        btn.disabled = false;
+        btn.textContent = originalText;
+      } finally {
+        clearTimeout(safetyTimeout);
+        btn.disabled = false;
+        btn.textContent = originalText;
+      }
+    });
 
     document.getElementById('profile-setup-btn').addEventListener('click', async () => {
       const btn = document.getElementById('profile-setup-btn');
       const err = document.getElementById('profile-setup-error');
-      const name = document.getElementById('profile-setup-name').value.trim();
-      err.classList.remove('show');
-      if (!name) { err.textContent = 'Please enter your name.'; err.classList.add('show'); return; }
+      const originalText = 'Save and continue';
       btn.disabled = true; btn.textContent = 'Saving...';
+      const safetyTimeout = setTimeout(() => {
+        btn.disabled = false;
+        btn.textContent = originalText;
+      }, 5000);
       try {
+        const name = document.getElementById('profile-setup-name').value.trim();
+        err.classList.remove('show');
+        if (!name) {
+          err.textContent = 'Please enter your name.';
+          err.classList.add('show');
+          return;
+        }
         const sb = window.supabase.createClient('https://tcrrgsylxbyyrmnouihl.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRjcnJnc3lseGJ5eXJtbm91aWhsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4ODUyMTEsImV4cCI6MjA5MzQ2MTIxMX0.eOp6ma-mfgh8F20nM7E2OaBW28LlZlwuEEWr6k2zDWw');
         const session = RA10.getSession();
-        await sb.from('profiles').update({ full_name: name }).eq('id', session.user.id);
+        const { error: nameError } = await sb.from('profiles').update({ full_name: name }).eq('id', session.user.id);
+        if (nameError) throw nameError;
         const p = RA10.getProfile();
         if (!p?.credits || p.credits === 0) {
-          await sb.from('profiles').update({ credits: 10, credits_reset_at: new Date().toISOString() }).eq('id', session.user.id);
+          const { error: creditsError } = await sb.from('profiles').update({ credits: 10, credits_reset_at: new Date().toISOString() }).eq('id', session.user.id);
+          if (creditsError) throw creditsError;
         }
+        clearTimeout(safetyTimeout);
         document.getElementById('profile-setup-overlay').classList.remove('open');
-        await RA10.init();
-        _updateNavAuth();
+        btn.disabled = false;
+        btn.textContent = originalText;
+        RA10.init().then(() => updateNavAuth()).catch(() => {});
+        return;
       } catch(e) {
         err.textContent = 'Could not save. Please try again.';
         err.classList.add('show');
-        btn.disabled = false; btn.textContent = 'Save and continue';
+        btn.disabled = false;
+        btn.textContent = originalText;
+        setTimeout(() => {
+          document.getElementById('profile-setup-overlay').classList.remove('open');
+        }, 3000);
+      } finally {
+        clearTimeout(safetyTimeout);
       }
     });
 
@@ -1272,9 +1865,15 @@ route();
     }
 
     RA10.on('authchange', checkProfileCompletion);
+    RA10.on('authchange', checkWeeklyXpReset);
     RA10.on('authchange', checkExamSeasonToast);
     checkProfileCompletion();
+    checkWeeklyXpReset();
     checkExamSeasonToast();
+
+    if ((location.hash.replace('#/','').replace('#','')) === 'leaderboard') {
+      setTimeout(renderLeaderboard, 100);
+    }
 
     function openAuthModal(tab) {
       document.getElementById('auth-overlay').classList.add('open');
@@ -1323,7 +1922,22 @@ route();
       );
       btn.disabled = false; btn.textContent = 'Create free account';
       if (error) { err.textContent = error.message; err.classList.add('show'); }
-      else { suc.textContent = 'Check your email to confirm your account, then sign in.'; suc.classList.add('show'); }
+      else {
+        const usernameVal = document.getElementById('signup-username')
+          .value.trim().toLowerCase().replace(/[^a-z0-9_]/g, '');
+        if (usernameVal.length >= 3) {
+          try {
+            const sb = window.supabase.createClient(
+              'https://tcrrgsylxbyyrmnouihl.supabase.co',
+              'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRjcnJnc3lseGJ5eXJtbm91aWhsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4ODUyMTEsImV4cCI6MjA5MzQ2MTIxMX0.eOp6ma-mfgh8F20nM7E2OaBW28LlZlwuEEWr6k2zDWw'
+            );
+            await sb.from('profiles').update({ username: usernameVal })
+              .eq('email', document.getElementById('signup-email').value.trim());
+          } catch(e) { console.warn('username save failed', e); }
+        }
+        suc.textContent = 'Check your email to confirm your account, then sign in.';
+        suc.classList.add('show');
+      }
     });
 
     document.getElementById('forgot-btn').addEventListener('click', async () => {
@@ -1431,6 +2045,144 @@ route();
       await RA10.signOut(); go('/');
     });
 
+    document.getElementById('account-change-name-btn')?.addEventListener('click', () => {
+      document.getElementById('account-name-edit').style.display = 'block';
+      document.getElementById('account-name-error').classList.remove('show');
+      document.getElementById('account-name-input')?.focus();
+    });
+
+    document.getElementById('account-change-username-btn')?.addEventListener('click', () => {
+      document.getElementById('account-username-edit').style.display = 'block';
+      document.getElementById('account-username-error').classList.remove('show');
+      document.getElementById('account-username-input')?.focus();
+    });
+
+    document.getElementById('account-save-name-btn')?.addEventListener('click', async () => {
+      const err = document.getElementById('account-name-error');
+      const btn = document.getElementById('account-save-name-btn');
+      const val = document.getElementById('account-name-input').value.trim();
+      err.classList.remove('show');
+      if (!val) {
+        err.textContent = 'Please enter a display name.';
+        err.classList.add('show');
+        return;
+      }
+      btn.disabled = true;
+      btn.textContent = 'Saving...';
+      try {
+        const sb = window.supabase.createClient(
+          'https://tcrrgsylxbyyrmnouihl.supabase.co',
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRjcnJnc3lseGJ5eXJtbm91aWhsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4ODUyMTEsImV4cCI6MjA5MzQ2MTIxMX0.eOp6ma-mfgh8F20nM7E2OaBW28LlZlwuEEWr6k2zDWw'
+        );
+        const session = RA10.getSession();
+        const { error } = await sb.from('profiles').update({ full_name: val }).eq('id', session.user.id);
+        if (error) throw error;
+        await RA10.init();
+        _updateNavAuth();
+        document.getElementById('account-name-edit').style.display = 'none';
+        showMiniToast('Profile updated');
+      } catch (e) {
+        err.textContent = e.message || 'Could not save profile.';
+        err.classList.add('show');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Save';
+      }
+    });
+
+    document.getElementById('account-save-username-btn')?.addEventListener('click', async () => {
+      const err = document.getElementById('account-username-error');
+      const btn = document.getElementById('account-save-username-btn');
+      const raw = document.getElementById('account-username-input').value;
+      const val = raw.trim().toLowerCase().replace(/[^a-z0-9_]/g, '');
+      document.getElementById('account-username-input').value = val;
+      err.classList.remove('show');
+      if (!val || val.length < 3) {
+        err.textContent = 'Username must be at least 3 characters.';
+        err.classList.add('show');
+        return;
+      }
+      btn.disabled = true;
+      btn.textContent = 'Saving...';
+      try {
+        const sb = window.supabase.createClient(
+          'https://tcrrgsylxbyyrmnouihl.supabase.co',
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRjcnJnc3lseGJ5eXJtbm91aWhsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4ODUyMTEsImV4cCI6MjA5MzQ2MTIxMX0.eOp6ma-mfgh8F20nM7E2OaBW28LlZlwuEEWr6k2zDWw'
+        );
+        const session = RA10.getSession();
+        const { data: taken, error: checkError } = await sb.from('profiles')
+          .select('id')
+          .eq('username', val)
+          .neq('id', session.user.id)
+          .limit(1);
+        if (checkError) throw checkError;
+        if (taken && taken.length) {
+          err.textContent = 'That username is already taken.';
+          err.classList.add('show');
+          return;
+        }
+        const { error } = await sb.from('profiles').update({ username: val }).eq('id', session.user.id);
+        if (error) throw error;
+        await RA10.init();
+        _updateNavAuth();
+        document.getElementById('account-username-edit').style.display = 'none';
+        showMiniToast('Username updated');
+      } catch (e) {
+        err.textContent = e.message || 'Could not save username.';
+        err.classList.add('show');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Save';
+      }
+    });
+
+    document.getElementById('btn-account-delete')?.addEventListener('click', () => {
+      document.getElementById('account-delete-confirm-input').value = '';
+      document.getElementById('account-delete-error').classList.remove('show');
+      document.getElementById('account-delete-overlay').classList.add('open');
+    });
+
+    document.getElementById('account-delete-cancel')?.addEventListener('click', () => {
+      document.getElementById('account-delete-overlay').classList.remove('open');
+    });
+
+    document.getElementById('account-delete-overlay')?.addEventListener('click', (e) => {
+      if (e.target === document.getElementById('account-delete-overlay')) {
+        document.getElementById('account-delete-overlay').classList.remove('open');
+      }
+    });
+
+    document.getElementById('account-delete-confirm')?.addEventListener('click', async () => {
+      const input = document.getElementById('account-delete-confirm-input');
+      const err = document.getElementById('account-delete-error');
+      const msg = document.getElementById('account-delete-message');
+      const btn = document.getElementById('account-delete-confirm');
+      err.classList.remove('show');
+      if ((input.value || '').trim() !== 'DELETE') {
+        err.textContent = 'Please type DELETE to confirm.';
+        err.classList.add('show');
+        return;
+      }
+      btn.disabled = true;
+      btn.textContent = 'Processing...';
+      try {
+        const sb = window.supabase.createClient(
+          'https://tcrrgsylxbyyrmnouihl.supabase.co',
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRjcnJnc3lseGJ5eXJtbm91aWhsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4ODUyMTEsImV4cCI6MjA5MzQ2MTIxMX0.eOp6ma-mfgh8F20nM7E2OaBW28LlZlwuEEWr6k2zDWw'
+        );
+        await sb.auth.signOut();
+        document.getElementById('account-delete-overlay').classList.remove('open');
+        msg.textContent = 'Account deletion requested — contact support@ra10.co.uk to complete removal.';
+        msg.style.display = 'block';
+      } catch (e) {
+        err.textContent = 'Could not process request. Please try again.';
+        err.classList.add('show');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Confirm request';
+      }
+    });
+
     window.addEventListener('message', function(e) {
       if (e.data && e.data.type === 'RA10_OPEN_AUTH') {
         document.getElementById('auth-overlay')?.classList.add('open');
@@ -1465,6 +2217,12 @@ route();
       <div class="auth-error" id="signup-error"></div>
       <div class="auth-success" id="signup-success"></div>
       <div class="auth-field"><label class="auth-label">Display name</label><input class="auth-input" type="text" id="signup-name" placeholder="Your name" autocomplete="name"></div>
+      <div class="auth-field">
+        <label class="auth-label">Username</label>
+        <input class="auth-input" type="text" id="signup-username"
+          placeholder="@yourname - letters, numbers, underscores only"
+          autocomplete="off" maxlength="30">
+      </div>
       <div class="auth-field"><label class="auth-label">Email</label><input class="auth-input" type="email" id="signup-email" placeholder="you@example.com" autocomplete="email"></div>
       <div class="auth-field"><label class="auth-label">Password</label><input class="auth-input" type="password" id="signup-password" placeholder="Min. 8 characters" autocomplete="new-password"></div>
       <button class="auth-submit-btn" id="signup-btn">Create free account</button>
@@ -1525,6 +2283,51 @@ route();
   </div>
 </div>
 
+<div class="auth-overlay" id="username-setup-overlay">
+  <div class="auth-modal">
+    <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:1.5rem">
+      <div style="width:32px;height:32px;background:var(--color-primary);
+        border-radius:var(--radius-md);display:flex;align-items:center;
+        justify-content:center;color:#fff;font-family:var(--font-d);
+        font-weight:700">R</div>
+      <span style="font-family:var(--font-d);font-size:var(--tx-lg)">RA10</span>
+    </div>
+    <h2 style="font-family:var(--font-d);font-size:var(--tx-xl);
+      font-weight:400;margin-bottom:var(--sp2)">Choose your username</h2>
+    <p style="color:var(--color-text-muted);font-size:var(--tx-sm);
+      margin-bottom:var(--sp6)">Pick a unique @username for the leaderboard.
+      Letters, numbers and underscores only.</p>
+    <div class="auth-error" id="username-setup-error"></div>
+    <div class="auth-field">
+      <label class="auth-label">Username</label>
+      <input class="auth-input" type="text" id="username-setup-input"
+        placeholder="e.g. alex_smith" maxlength="30" autocomplete="off">
+    </div>
+    <div style="display:flex;gap:var(--sp3);">
+      <button class="auth-submit-btn" id="username-setup-btn">Save username</button>
+      <button id="username-setup-skip" style="padding:var(--sp3) var(--sp4);
+        border-radius:var(--radius-md);background:transparent;
+        color:var(--color-text-muted);border:1px solid var(--color-border);
+        cursor:pointer;font-size:var(--tx-sm);">Skip for now</button>
+    </div>
+  </div>
+</div>
+
+<div class="auth-overlay" id="account-delete-overlay">
+  <div class="auth-modal" style="max-width:460px">
+    <h2 style="font-family:var(--font-d);font-size:var(--tx-xl);font-weight:400;margin-bottom:var(--sp2)">Confirm deletion request</h2>
+    <p style="color:var(--color-text-muted);font-size:var(--tx-sm);margin-bottom:var(--sp3)">Type <strong>DELETE</strong> to confirm account deletion request.</p>
+    <div class="auth-error" id="account-delete-error"></div>
+    <div class="auth-field" style="margin-bottom:var(--sp4)">
+      <input class="auth-input" type="text" id="account-delete-confirm-input" placeholder="Type DELETE" autocomplete="off">
+    </div>
+    <div style="display:flex;gap:var(--sp3);justify-content:flex-end;">
+      <button id="account-delete-cancel" style="padding:var(--sp3) var(--sp4);border-radius:var(--radius-md);background:transparent;color:var(--color-text-muted);border:1px solid var(--color-border);cursor:pointer;font-size:var(--tx-sm);">Cancel</button>
+      <button class="auth-submit-btn" id="account-delete-confirm" style="background:var(--color-error);">Confirm request</button>
+    </div>
+  </div>
+</div>
+
 <div id="exam-credits-toast" style="display:none;position:fixed;bottom:var(--sp6);left:50%;transform:translateX(-50%);z-index:10005;background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-xl);box-shadow:var(--shadow-lg);padding:var(--sp5) var(--sp6);max-width:480px;width:calc(100% - 2rem);text-align:center;">
   <div style="font-size:1.5rem;margin-bottom:var(--sp2)">🎓</div>
   <p style="font-weight:700;margin-bottom:var(--sp2);font-size:var(--tx-base)">You have got 50 free exam season credits!</p>
@@ -1534,5 +2337,74 @@ route();
     <button class="btn btn-g" onclick="localStorage.setItem('ra10_exam_toast_seen','1');document.getElementById('exam-credits-toast').style.display='none'">Do not show again</button>
   </div>
 </div>
+
+<!-- PWA: Service Worker + Add-to-Homescreen -->
+<script>
+// Service worker registration
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('sw.js').catch(function() {});
+  });
+}
+
+// Add-to-homescreen banner logic
+(function() {
+  const DISMISSED_KEY = 'ra10_a2hs_dismissed';
+  const banner = document.getElementById('a2hs-banner');
+  const installBtn = document.getElementById('a2hs-install');
+  const instruction = document.getElementById('a2hs-instruction');
+  if (!banner) return;
+
+  // Don't show if already dismissed or if already in standalone mode
+  if (localStorage.getItem(DISMISSED_KEY)) return;
+  if (window.matchMedia('(display-mode: standalone)').matches) return;
+  if (window.navigator.standalone) return; // iOS standalone
+
+  const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+  if (!isMobile) return;
+
+  const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+  const isAndroid = /Android/i.test(navigator.userAgent);
+
+  let deferredPrompt = null;
+
+  if (!isIOS) {
+    // Android / Chrome — intercept install prompt
+    window.addEventListener('beforeinstallprompt', function(e) {
+      e.preventDefault();
+      deferredPrompt = e;
+      instruction.textContent = 'Tap Install for quick access from your home screen.';
+      banner.removeAttribute('hidden');
+      banner.style.display = 'flex';
+    });
+  } else {
+    // iOS — show manual instructions
+    instruction.innerHTML = 'Tap <strong>Share</strong> &#8594; <strong>Add to Home Screen</strong> in Safari.';
+    installBtn.textContent = 'Got it';
+    installBtn.addEventListener('click', dismissA2HS);
+    setTimeout(function() {
+      banner.removeAttribute('hidden');
+      banner.style.display = 'flex';
+    }, 3000);
+  }
+
+  if (installBtn) {
+    installBtn.addEventListener('click', async function() {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        deferredPrompt = null;
+        dismissA2HS();
+      }
+    });
+  }
+})();
+
+function dismissA2HS() {
+  localStorage.setItem('ra10_a2hs_dismissed', '1');
+  const b = document.getElementById('a2hs-banner');
+  if (b) { b.style.display = 'none'; b.setAttribute('hidden', ''); }
+}
+</script>
 </body>
 </html>

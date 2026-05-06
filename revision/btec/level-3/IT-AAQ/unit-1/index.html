@@ -35,6 +35,174 @@
   background: rgba(255,255,255,0.12);
 }
 
+.tabs .tab.tab-special {
+  background: #eef7f3;
+  border-color: #bcd9ce;
+  color: #0f4f41;
+}
+
+.tabs .tab.tab-special.active {
+  background: #d8efe5;
+  border-color: #5b9f89;
+  color: #0c4135;
+}
+
+.you-hero {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 18px;
+  border-radius: 18px;
+  padding: 22px;
+  margin-bottom: 16px;
+  color: #fff;
+  background: linear-gradient(130deg, #14201E 0%, #8a1a1a 58%, #d20000 100%);
+}
+
+.you-hero-title {
+  margin: 0;
+  font-size: clamp(1.35rem, 2.5vw, 2rem);
+  font-weight: 900;
+}
+
+.you-hero-streak {
+  margin: 10px 0 0 0;
+  font-size: 1.08rem;
+}
+
+.you-hero-xp-label {
+  font-size: 0.86rem;
+  opacity: 0.9;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.you-hero-xp-val {
+  font-size: 1.25rem;
+  font-weight: 800;
+  margin: 6px 0 8px;
+}
+
+.you-hero-xp-bar {
+  height: 11px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.25);
+  overflow: hidden;
+}
+
+.you-hero-xp-bar span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #f2ff7e 0%, #ffd84c 100%);
+}
+
+.you-tasks-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.you-task-card {
+  border: 1px solid var(--line-2);
+  border-radius: 14px;
+  padding: 14px;
+  background: #fff;
+}
+
+.you-task-card.done {
+  border-color: #4bbf88;
+  background: linear-gradient(145deg, #e7fff1 0%, #d6f8ea 100%);
+}
+
+.you-task-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.you-xp-pill {
+  background: linear-gradient(120deg, #ffe96b 0%, #ffbe2f 100%);
+  color: #5a3b00;
+  font-weight: 800;
+  border-radius: 999px;
+  padding: 4px 10px;
+  white-space: nowrap;
+}
+
+.you-task-foot {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.you-task-progress {
+  margin-top: 10px;
+  height: 8px;
+  border-radius: 999px;
+  background: #edf0ef;
+  overflow: hidden;
+}
+
+.you-task-progress span {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, #208e62 0%, #28c07d 100%);
+}
+
+.you-stats-mini {
+  margin-top: 14px;
+  border: 1px solid var(--line-2);
+  border-radius: 14px;
+  padding: 14px;
+  background: #fff;
+}
+
+.you-stats-mini h4 {
+  margin: 0 0 10px 0;
+}
+
+.you-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.you-stats-grid div {
+  border: 1px solid var(--line-2);
+  border-radius: 10px;
+  padding: 10px;
+  display: grid;
+  gap: 4px;
+}
+
+.you-stats-grid strong {
+  font-size: 1.15rem;
+}
+
+.you-quote {
+  margin-top: 12px;
+  border-radius: 12px;
+  padding: 12px;
+  background: #f7f9ff;
+  border-left: 4px solid #d20000;
+  color: #233;
+  font-style: italic;
+}
+
+@media (max-width: 880px) {
+  .you-hero {
+    grid-template-columns: 1fr;
+  }
+
+  .you-tasks-grid,
+  .you-stats-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .diagram-tool-wrap {
   margin-top: 16px;
   border: 1px solid var(--line-2);
@@ -152,9 +320,10 @@
     <button class="tab" data-tab="mock">Mock Paper</button>
     <button class="tab" data-tab="practice">Practice Mode</button>
     <button class="tab" data-tab="quiz">Quiz</button>
-    <button class="tab" data-tab="progress">Progress</button>
     <button class="tab" data-tab="flash">Flashcards</button>
     <button class="tab" data-tab="spec">Spec Coverage</button>
+    <button class="tab tab-special" data-tab="progress">Progress</button>
+    <button class="tab tab-special" data-tab="you">You</button>
   </nav>
   <div id="unit1-credit-chip" style="margin-left:auto;display:flex;align-items:center;"></div>
 </header>
@@ -371,6 +540,14 @@
       <div id="weak-aims-section" style="margin-bottom:24px;"></div>
       <div id="sessions-list"></div>
     </div>
+  </section>
+
+  <section id="view-you" class="view">
+    <header class="section-head">
+      <h2>You</h2>
+      <p>Daily focus tasks tailored to your revision momentum.</p>
+    </header>
+    <div id="daily-tasks-container"></div>
   </section>
 
   <!-- FLASHCARDS -->
@@ -796,5 +973,13 @@ function _updateGuestChip() {
     RA10.renderCreditChip('unit1-credit-chip');
   }
 }
+
+// Clear sidebar cache when this iframe becomes visible so XP syncs across units
+document.addEventListener('visibilitychange', function() {
+  if (document.visibilityState === 'visible') {
+    window._sidebarCache = null;
+    if (typeof refreshProgressSidebar === 'function') refreshProgressSidebar(true);
+  }
+});
 </script></body>
 </html>

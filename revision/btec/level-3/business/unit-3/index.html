@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>
+(function(){
+  var s = document.createElement('script');
+  var isLocal = location.hostname === '127.0.0.1' || location.hostname === 'localhost';
+  s.src = isLocal ? 'http://127.0.0.1:5500/ra10-sdk.js' : 'https://ra10.co.uk/ra10-sdk.js';
+  document.head.insertBefore(s, document.head.firstChild);
+})();
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BTEC Business Unit 3 — Personal and Business Finance</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<link rel="preconnect" href="https://api.fontshare.com">
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@500,700,900,400&f[]=jetbrains-mono@500&display=swap">
+<link rel="stylesheet" href="css/style.css">
+<style>
+.ra10-cost-label {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.75);
+  background: rgba(0,0,0,0.15);
+  padding: 1px 6px;
+  border-radius: 999px;
+  margin-left: 6px;
+  vertical-align: middle;
+  letter-spacing: 0.03em;
+}
+
+.ra10-cost-label.free-label {
+  color: rgba(255,255,255,0.6);
+  background: rgba(255,255,255,0.12);
+}
+
+.tabs .tab.tab-special {
+  background: #eef2fb;
+  border: 1px solid #b8cef5;
+  color: #0d3591;
+}
+
+.tabs .tab.tab-special.active {
+  background: #d4e4fc;
+  border-color: #3b6fd4;
+  color: #0a2a7a;
+}
+
+.you-hero {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 18px;
+  border-radius: 18px;
+  padding: 22px;
+  margin-bottom: 16px;
+  color: #fff;
+  background: linear-gradient(130deg, #0d1b3e 0%, #1a3a8f 58%, #1a56db 100%);
+}
+
+.you-hero-title {
+  margin: 0;
+  font-size: clamp(1.35rem, 2.5vw, 2rem);
+  font-weight: 900;
+}
+
+.you-hero-streak {
+  margin: 10px 0 0 0;
+  font-size: 1.08rem;
+}
+
+.you-hero-xp-label {
+  font-size: 0.86rem;
+  opacity: 0.9;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.you-hero-xp-val {
+  font-size: 1.25rem;
+  font-weight: 800;
+  margin: 6px 0 8px;
+}
+
+.you-hero-xp-bar {
+  height: 11px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.25);
+  overflow: hidden;
+}
+
+.you-hero-xp-bar span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #f2ff7e 0%, #ffd84c 100%);
+}
+
+.you-tasks-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.you-task-card {
+  border: 1px solid var(--line-2);
+  border-radius: 14px;
+  padding: 14px;
+  background: #fff;
+}
+
+.you-task-card.done {
+  border-color: #4bbf88;
+  background: linear-gradient(145deg, #e7fff1 0%, #d6f8ea 100%);
+}
+
+.you-task-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.you-xp-pill {
+  background: linear-gradient(120deg, #ffe96b 0%, #ffbe2f 100%);
+  color: #5a3b00;
+  font-weight: 800;
+  border-radius: 999px;
+  padding: 4px 10px;
+  white-space: nowrap;
+}
+
+.you-task-foot {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.you-task-progress {
+  margin-top: 10px;
+  height: 8px;
+  border-radius: 999px;
+  background: #edf0ef;
+  overflow: hidden;
+}
+
+.you-task-progress span {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, #1a3a8f 0%, #1a56db 100%);
+}
+
+.you-stats-mini {
+  margin-top: 14px;
+  border: 1px solid var(--line-2);
+  border-radius: 14px;
+  padding: 14px;
+  background: #fff;
+}
+
+.you-stats-mini h4 {
+  margin: 0 0 10px 0;
+}
+
+.you-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.you-stats-grid div {
+  border: 1px solid var(--line-2);
+  border-radius: 10px;
+  padding: 10px;
+  display: grid;
+  gap: 4px;
+}
+
+.you-stats-grid strong {
+  font-size: 1.15rem;
+}
+
+.you-quote {
+  margin-top: 12px;
+  border-radius: 12px;
+  padding: 12px;
+  background: #f0f5ff;
+  border-left: 4px solid #1a56db;
+  color: #233;
+  font-style: italic;
+}
+
+@media (max-width: 880px) {
+  .you-hero {
+    grid-template-columns: 1fr;
+  }
+
+  .you-tasks-grid,
+  .you-stats-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Practice-mode workings box */
+.workings-box {
+  width: 100%;
+  min-height: 100px;
+  padding: 10px 12px;
+  border-radius: var(--r-sm);
+  border: 1px dashed #b8cef5;
+  background: #f5f8ff;
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1.55;
+  resize: vertical;
+  margin-bottom: 4px;
+  display: block;
+}
+</style>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%231a56db'/%3E%3Ctext x='16' y='22' text-anchor='middle' font-family='sans-serif' font-weight='900' font-size='18' fill='%23e8efff'%3EU3%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true">
+      <rect width="32" height="32" rx="6" fill="#1a56db"/>
+      <text x="16" y="22" text-anchor="middle" font-family="Satoshi, sans-serif" font-weight="900" font-size="14" fill="white">U3</text>
+    </svg>
+    <div>
+      <h1>BTEC Business Unit 3</h1>
+      <p>Personal and Business Finance · Pearson Level 3</p>
+    </div>
+  </div>
+  <nav class="tabs">
+    <button class="tab active" data-tab="dashboard">Dashboard</button>
+    <button class="tab" data-tab="browse">Browse Questions</button>
+    <button class="tab" data-tab="mock">Mock Paper</button>
+    <button class="tab" data-tab="practice">Practice Mode</button>
+    <button class="tab" data-tab="quiz">Quiz</button>
+    <button class="tab" data-tab="flash">Flashcards</button>
+    <button class="tab tab-special" data-tab="progress">Progress</button>
+    <button class="tab tab-special" data-tab="you">You</button>
+  </nav>
+  <div id="unit3-bus-credit-chip" style="margin-left:auto;display:flex;align-items:center;"></div>
+</header>
+
+<main id="app">
+
+  <!-- DASHBOARD -->
+  <section id="view-dashboard" class="view active">
+    <div class="hero">
+      <div>
+        <p class="eyebrow">Pearson BTEC Level 3 National — Personal and Business Finance</p>
+        <h2>Unit 3 with 200+ Exam Style Questions</h2>
+        <p class="lede">Exam-style questions across all six learning aims (A–F), written to match the Pearson mark scheme format — including extended-response, short-answer, and calculation questions.</p>
+      </div>
+      <div class="stats" id="dashboard-stats"></div>
+    </div>
+
+    <div class="section-block">
+      <div class="section-block-head">
+        <span class="sb-eyebrow">01 · Sit a paper</span>
+        <h3>Exam-style practice</h3>
+        <p>Work through full exam questions, write timed answers, or print a paper to attempt by hand.</p>
+      </div>
+      <div class="grid-3">
+        <article class="card primary-card">
+          <span class="card-tag">Recommended</span>
+          <h3>Build a mock paper</h3>
+          <p>Randomised paper with Pearson-style answer lines, candidate header, and one-click print.</p>
+          <button class="btn primary" data-goto="mock">Build mock paper<span class="ra10-cost-label">5 credits</span></button>
+        </article>
+        <article class="card">
+          <h3>Practice by topic</h3>
+          <p>Single questions filtered by aim or marks. Auto-mark feedback with keyword matching.</p>
+          <button class="btn" data-goto="practice">Start practising<span class="ra10-cost-label">1 credit per question</span></button>
+        </article>
+        <article class="card">
+          <h3>Browse all questions</h3>
+          <p>Read every question and full mark scheme. Search and filter all items.</p>
+          <button class="btn" data-goto="browse">Browse questions</button>
+        </article>
+      </div>
+    </div>
+
+    <div class="section-block">
+      <div class="section-block-head">
+        <span class="sb-eyebrow">02 · Quick revision</span>
+        <h3>Memorise key facts</h3>
+        <p>Short, focused activities for definitions, concepts, and recall — ideal between exam-style sessions.</p>
+      </div>
+      <div class="grid-2">
+        <article class="card">
+          <h3>Quick-fire quiz</h3>
+          <p>Multiple-choice questions with explanations and per-aim scoring across all topics.</p>
+          <button class="btn" data-goto="quiz">Start quiz<span class="ra10-cost-label">1 credit per question</span></button>
+        </article>
+        <article class="card">
+          <h3>Flashcards</h3>
+          <p>60 flippable cards covering key terms, definitions, and finance concepts. Track known vs still-learning.</p>
+          <button class="btn" data-goto="flash">Open flashcards</button>
+        </article>
+      </div>
+    </div>
+
+    <div class="section-block">
+      <div class="section-block-head">
+        <span class="sb-eyebrow">03 · Specification overview</span>
+        <h3>Coverage by Learning Aim</h3>
+        <p>All six aims covered — from personal finance and regulation to financial statements and ratio analysis. Click any card to browse questions for that aim.</p>
+      </div>
+      <div class="aim-grid" id="aim-grid"></div>
+    </div>
+  </section>
+
+  <!-- BROWSE -->
+  <section id="view-browse" class="view">
+    <header class="section-head">
+      <h2>Browse questions</h2>
+      <p>Search and filter all questions. Click a question to expand the mark scheme.</p>
+    </header>
+    <div class="filters">
+      <input type="search" id="search" placeholder="Search question, scenario or topic...">
+      <select id="filter-aim"><option value="">All learning aims</option></select>
+      <select id="filter-marks"><option value="">All marks</option></select>
+      <select id="filter-verb"><option value="">All command verbs</option></select>
+      <button id="btn-clear" class="btn ghost">Clear</button>
+      <span id="result-count" class="muted"></span>
+    </div>
+    <div id="question-list" class="qlist"></div>
+  </section>
+
+  <!-- MOCK PAPER -->
+  <section id="view-mock" class="view">
+    <header class="section-head">
+      <h2>Mock paper builder</h2>
+      <p>Generate a random mock paper using real exam structure. Add a candidate header, choose how many answer lines to print, then attempt the paper or hand it to a teacher.</p>
+    </header>
+    <div class="mock-controls">
+      <div class="mock-row">
+        <div class="control">
+          <label>Total marks</label>
+          <select id="mock-total"><option value="90" selected>90 (full paper)</option><option value="45">45 (half paper)</option><option value="30">30 (quick test)</option></select>
+        </div>
+        <div class="control">
+          <label>Focus aims</label>
+          <div id="mock-aims" class="chip-row"></div>
+        </div>
+        <div class="control">
+          <label>Seed (optional)</label>
+          <input type="text" id="mock-seed" placeholder="e.g. mock-1">
+        </div>
+      </div>
+      <div class="mock-row">
+        <div class="control wide">
+          <label>Question styles <span class="label-hint">(tap to toggle — at least one must stay on)</span></label>
+          <div id="mock-styles" class="chip-row"></div>
+        </div>
+      </div>
+      <details class="mock-options" open>
+        <summary>Paper header &amp; print options</summary>
+        <div class="mock-row">
+          <div class="control checkbox">
+            <label><input type="checkbox" id="opt-header-name" checked> Name line</label>
+          </div>
+          <div class="control checkbox">
+            <label><input type="checkbox" id="opt-header-class"> Class line</label>
+          </div>
+          <div class="control checkbox">
+            <label><input type="checkbox" id="opt-header-date" checked> Date line</label>
+          </div>
+          <div class="control checkbox">
+            <label><input type="checkbox" id="opt-header-centre"> Centre / candidate number</label>
+          </div>
+          <div class="control checkbox">
+            <label><input type="checkbox" id="opt-header-teacher"> Teacher line</label>
+          </div>
+        </div>
+        <div class="mock-row">
+          <div class="control">
+            <label>Custom header text (optional)</label>
+            <input type="text" id="opt-header-custom" placeholder="e.g. Year 13 Mock 2 — Wycombe High School">
+          </div>
+          <div class="control">
+            <label>Answer lines</label>
+            <select id="opt-line-density">
+              <option value="normal" selected>Normal (Pearson-style)</option>
+              <option value="extra">Extra (more space)</option>
+              <option value="compact">Compact (less paper)</option>
+              <option value="none">None</option>
+            </select>
+          </div>
+        </div>
+      </details>
+      <div class="mock-actions">
+        <button id="btn-generate" class="btn primary big">Generate mock paper<span class="ra10-cost-label">5 credits</span></button>
+        <button id="btn-toggle-ms" class="btn ghost">Show mark scheme</button>
+        <button id="btn-print" class="btn">Print question paper</button>
+        <button id="btn-print-ms" class="btn">Print mark scheme only</button>
+      </div>
+    </div>
+    <div id="mock-paper" class="paper"></div>
+  </section>
+
+  <!-- PRACTICE -->
+  <section id="view-practice" class="view">
+    <header class="section-head">
+      <h2>Practice mode</h2>
+      <p>Work through questions one at a time, write your answer, then reveal the mark scheme to self-mark — or use auto-mark for keyword feedback.</p>
+    </header>
+    <div class="practice-controls">
+      <select id="practice-aim"><option value="">All aims</option></select>
+      <select id="practice-marks"><option value="">All marks</option></select>
+      <button id="btn-practice-start" class="btn primary">Start session<span class="ra10-cost-label">1 credit per question</span></button>
+      <span id="practice-progress" class="muted"></span>
+    </div>
+    <div id="practice-card"></div>
+  </section>
+
+  <!-- QUIZ -->
+  <section id="view-quiz" class="view">
+    <header class="section-head">
+      <h2>Quick-fire quiz</h2>
+      <p>Multiple-choice questions to test recall of facts, definitions, and finance concepts across the spec.</p>
+    </header>
+    <div class="quiz-controls">
+      <select id="quiz-aim"><option value="">All aims</option></select>
+      <select id="quiz-length">
+        <option value="10">10 questions</option>
+        <option value="20" selected>20 questions</option>
+        <option value="40">40 questions</option>
+        <option value="all">All questions</option>
+      </select>
+      <button id="btn-quiz-start" class="btn primary">Start quiz<span class="ra10-cost-label">1 credit per question</span></button>
+      <span id="quiz-progress" class="muted"></span>
+    </div>
+    <div id="quiz-card"></div>
+    <div id="quiz-results" style="display:none;"></div>
+  </section>
+
+  <!-- PROGRESS -->
+  <section id="view-progress" class="view">
+    <header class="section-head">
+      <h2>Your Progress</h2>
+      <p>Track your revision sessions over the last 30 days.</p>
+    </header>
+    <div id="progress-gate" style="display:none;text-align:center;padding:40px;">
+      <p style="margin-bottom:16px;color:#666;">Sign in to save and view your progress.</p>
+      <button class="btn primary" id="btn-progress-signin">Sign in</button>
+    </div>
+    <div id="progress-content" style="display:none;">
+      <div id="progress-stats" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:16px;margin-bottom:24px;"></div>
+      <div id="weak-aims-section" style="margin-bottom:24px;"></div>
+      <div id="sessions-list"></div>
+    </div>
+  </section>
+
+  <!-- YOU -->
+  <section id="view-you" class="view">
+    <header class="section-head">
+      <h2>You</h2>
+      <p>Daily focus tasks tailored to your revision momentum.</p>
+    </header>
+    <div id="daily-tasks-container"></div>
+  </section>
+
+  <!-- FLASHCARDS -->
+  <section id="view-flash" class="view">
+    <header class="section-head">
+      <h2>Flashcards</h2>
+      <p>Tap or click any card to flip. Mark cards as known or still learning to track progress.</p>
+    </header>
+    <div class="flash-controls">
+      <select id="flash-aim"><option value="">All aims</option></select>
+      <button id="btn-flash-start" class="btn primary">Start session<span class="ra10-cost-label free-label">Free</span></button>
+      <button id="btn-flash-shuffle" class="btn">Shuffle</button>
+      <button id="btn-flash-reset" class="btn ghost">Reset progress</button>
+      <span id="flash-progress" class="muted"></span>
+    </div>
+    <div id="flash-stage"></div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <p>BTEC Level 3 Business Unit 3 (Personal and Business Finance) — Pearson. This is a study tool — not an official Pearson product.</p>
+  <p>2026 RA10 (www.ra10.co.uk)</p>
+</footer>
+
+<script src="js/data-loader.js"></script>
+<script src="js/app.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  function waitForRA10(cb, tries) {
+    tries = tries || 0;
+    if (window.RA10 && typeof RA10.init === 'function') {
+      cb();
+    } else if (tries < 50) {
+      setTimeout(function() { waitForRA10(cb, tries + 1); }, 100);
+    }
+  }
+
+  waitForRA10(async function() {
+    await RA10.init();
+
+    function updateCostLabels() {
+      const hide = RA10.isPaid() || RA10.isOwner();
+      document.querySelectorAll('.ra10-cost-label').forEach(el => {
+        el.style.display = hide ? 'none' : '';
+      });
+    }
+
+    updateCostLabels();
+    RA10.on('authchange', updateCostLabels);
+    RA10.on('authchange', function() {
+      RA10.renderCreditChip('unit3-bus-credit-chip');
+    });
+    RA10.on('creditschange', function() {
+      RA10.renderCreditChip('unit3-bus-credit-chip');
+    });
+    RA10.renderCreditChip('unit3-bus-credit-chip');
+  });
+});
+
+// Credit gate helper — returns true if action is allowed, false if blocked
+async function ra10Gate(action) {
+  try {
+    if (!window.RA10) return true;
+    if (RA10.isOwner()) return true;
+    if (RA10.isPaid()) return true;
+    if (!RA10.isLoggedIn()) {
+      const result = RA10.guestGate(action, 3, RA10.showPaywall);
+      if (window.RA10) RA10.renderCreditChip('unit3-bus-credit-chip');
+      return result === true;
+    }
+    const result = await RA10.gate(action, RA10.showPaywall);
+    return result;
+  } catch(e) {
+    console.warn('ra10Gate error', e);
+    return true;
+  }
+}
+
+function _updateGuestChip() {
+  if (window.RA10) {
+    RA10.renderCreditChip('unit3-bus-credit-chip');
+  }
+}
+
+// Clear sidebar cache when this iframe becomes visible so XP syncs across units
+document.addEventListener('visibilitychange', function() {
+  if (document.visibilityState === 'visible') {
+    window._sidebarCache = null;
+    if (typeof refreshProgressSidebar === 'function') refreshProgressSidebar(true);
+  }
+});
+</script>
+</body>
+</html>
