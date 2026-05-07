@@ -1689,11 +1689,15 @@ main {
 }
 
 @media (max-width: 768px) {
-  .guide-shell { flex-direction: column; }
+  .guide-shell {
+    flex-direction: column;
+    width: 100%;
+    overflow-x: hidden;
+  }
   .guide-gallery { grid-template-columns: 1fr; }
   .guide-gallery-card { min-height: 156px; padding: 14px; }
-  .guide-gallery-title { font-size: 0.94rem; }
-  .guide-gallery-copy { font-size: 0.75rem; }
+  .guide-gallery-title { font-size: 0.98rem; }
+  .guide-gallery-copy { font-size: 0.79rem; }
   .guide-sidebar {
     width: 100%; min-width: 0; height: auto;
     position: relative; border-right: none; border-bottom: 1px solid var(--line);
@@ -1703,7 +1707,11 @@ main {
   .guide-sidebar.sb-open .guide-toc-scroll {
     display: block; max-height: 220px; overflow-y: auto;
   }
-  .guide-main { padding: 0 14px 48px; }
+  .guide-main {
+    width: 100%;
+    padding: 0 12px 40px;
+    overflow-x: hidden;
+  }
   .guide-topbar {
     position: static;
     flex-wrap: wrap;
@@ -1722,14 +1730,39 @@ main {
     justify-content: center;
     padding: 8px 10px;
   }
-  .guide-aim-hd { gap: 10px; margin-bottom: 12px; padding-bottom: 10px; }
+  .guide-aim-hd {
+    gap: 10px;
+    margin-bottom: 12px;
+    padding-bottom: 10px;
+    flex-wrap: wrap;
+  }
   .guide-aim-badge { width: 36px; height: 36px; font-size: 1rem; }
-  .guide-aim-title { font-size: 0.98rem; }
-  .guide-aim-subtitle { font-size: 0.76rem; }
-  .guide-topic-hd { padding: 10px 11px; gap: 8px; }
-  .guide-topic-name { font-size: 0.84rem; }
-  .guide-topic-body { padding: 12px 12px; font-size: 0.83rem; line-height: 1.58; }
-  .g-table { font-size: 0.75rem; }
+  .guide-aim-title { font-size: 1rem; }
+  .guide-aim-subtitle { font-size: 0.8rem; }
+  .guide-topic-hd {
+    padding: 10px 11px;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+  .guide-topic-code { font-size: 0.72rem; padding: 3px 7px; }
+  .guide-topic-name { font-size: 0.9rem; min-width: 0; }
+  .guide-topic-chevron { margin-left: auto; }
+  .guide-topic-body {
+    padding: 12px 12px;
+    font-size: 0.87rem;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+  }
+  .guide-topic-body > * { max-width: 100%; }
+  .guide-diagram { overflow-x: auto; }
+  .g-table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    font-size: 0.78rem;
+  }
   .g-table th, .g-table td { padding: 5px 6px; }
 }
 

@@ -259,12 +259,12 @@ async function renderYou() {
   const profile = RA10.getProfile() || {};
   const rawName = profile.full_name || profile.display_name || profile.email || 'there';
   const firstName = String(rawName).split('@')[0].split(' ')[0];
-  const streak = calcLocalStreak();
+  const cachedSessions = window._sidebarCache?.sessions || [];
+  const streak = calcStreak(cachedSessions);
   const xpWeek = Number(window._sidebarCache?.profile?.xp_this_week || profile.xp_this_week || 0);
   const xpMilestone = Math.max(100, Math.ceil((xpWeek + 1) / 100) * 100);
   const xpPct = Math.min(100, Math.round((xpWeek / xpMilestone) * 100));
   const todayStr = todayKey();
-  const cachedSessions = window._sidebarCache?.sessions || [];
   const todaySessions = cachedSessions.filter(s => (s.created_at || '').startsWith(todayStr));
   const xpToday = Number(window._sidebarCache?.profile?.xp_this_week || 0);
   const qToday = todaySessions.reduce((a, s) => a + (Number(s.questions_total) || 0), 0);
@@ -2725,11 +2725,18 @@ async function renderProgress() {
 }
 
 function calcStreak(rows) {
-  if (!rows.length) return 0;
-  const days = new Set(rows.map(r => new Date(r.created_at).toDateString()));
+  const days = new Set(getStreakDates());
+  (rows || []).forEach((row) => {
+    const createdAt = row?.created_at;
+    if (!createdAt) return;
+    const parsed = new Date(createdAt);
+    if (!Number.isNaN(parsed.getTime())) {
+      days.add(parsed.toISOString().slice(0, 10));
+    }
+  });
   let streak = 0;
-  const d = new Date();
-  while (days.has(d.toDateString())) {
+  const d = new Date(todayKey() + 'T00:00:00');
+  while (days.has(d.toISOString().slice(0, 10))) {
     streak++;
     d.setDate(d.getDate() - 1);
   }
