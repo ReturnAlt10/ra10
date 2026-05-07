@@ -288,7 +288,7 @@
     const viewChatBtn = document.getElementById('viewChatBtn');
     const viewTableBtn = document.getElementById('viewTableBtn');
 
-    let activeTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    let activeTheme = 'light';
     document.documentElement.setAttribute('data-theme', activeTheme);
     themeToggle.textContent = activeTheme === 'dark' ? 'Light mode' : 'Dark mode';
     themeToggle.addEventListener('click', () => {

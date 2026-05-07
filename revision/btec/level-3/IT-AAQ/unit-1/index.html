@@ -8,7 +8,7 @@
     document.documentElement.setAttribute('data-theme', theme === 'dark' ? 'dark' : 'light');
   }
   var saved = localStorage.getItem(THEME_KEY);
-  applyTheme(saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
+  applyTheme(saved || 'light');
   window.addEventListener('message', function(event) {
     if (event.source !== window.parent || !event.data || event.data.type !== 'RA10_THEME') return;
     applyTheme(event.data.theme);
@@ -35,7 +35,7 @@
 });</script>
 <link rel="preconnect" href="https://api.fontshare.com">
 <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@500,700,900,400&f[]=jetbrains-mono@500&display=swap">
-<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/style.css?v=20260507c">
 <style>
 .ra10-cost-label {
   display: inline-block;
@@ -212,6 +212,42 @@
   font-style: italic;
 }
 
+[data-theme="dark"] .you-task-card,
+[data-theme="dark"] .you-stats-mini,
+[data-theme="dark"] .you-quote,
+[data-theme="dark"] .you-stats-grid div {
+  background: var(--surface) !important;
+  color: var(--ink) !important;
+  border-color: var(--line) !important;
+}
+
+[data-theme="dark"] .you-task-card.done {
+  background: color-mix(in oklab, var(--accent-2) 36%, var(--surface)) !important;
+  border-color: var(--accent) !important;
+}
+
+[data-theme="dark"] .you-task-progress {
+  background: var(--line) !important;
+}
+
+[data-theme="dark"] select,
+[data-theme="dark"] option,
+[data-theme="dark"] input,
+[data-theme="dark"] textarea {
+  background: var(--surface) !important;
+  color: var(--ink) !important;
+}
+
+[data-theme="dark"] .diagram-builder-panel,
+[data-theme="dark"] .diagram-color-input,
+[data-theme="dark"] .diagram-builder-panel .field-input,
+[data-theme="dark"] .diagram-builder-canvas-wrap,
+[data-theme="dark"] .diagram-inline-editor {
+  background: var(--surface) !important;
+  color: var(--ink) !important;
+  border-color: var(--line) !important;
+}
+
 @media (max-width: 880px) {
   .you-hero {
     grid-template-columns: 1fr;
@@ -326,12 +362,8 @@
 <header class="topbar">
   <nav class="tabs">
     <button class="tab active" data-tab="dashboard">Dashboard</button>
-    <button class="tab" data-tab="browse">Browse Questions</button>
-    <button class="tab" data-tab="mock">Mock Paper</button>
-    <button class="tab" data-tab="practice">Practice Mode</button>
-    <button class="tab" data-tab="quiz">Quiz</button>
-    <button class="tab" data-tab="flash">Flashcards</button>
-    <button class="tab" data-tab="spec">Spec Coverage</button>
+    <button class="tab" data-tab="questions">Questions</button>
+    <button class="tab" data-tab="revise">Revise</button>
     <button class="tab tab-special" data-tab="progress">Progress</button>
     <button class="tab tab-special" data-tab="you">You</button>
   </nav>
@@ -409,6 +441,58 @@
         <button class="btn" data-goto="spec">View full spec breakdown</button>
       </div>
     </div>
+  </section>
+
+  <section id="view-questions" class="view">
+    <header class="section-head">
+      <h2>Questions</h2>
+      <p>Choose how you want to practise exam questions.</p>
+    </header>
+    <div class="grid-3">
+      <article class="card">
+        <h3>Mock paper</h3>
+        <p>Build a full exam-style paper with answer lines and print options.</p>
+        <button class="btn primary" data-goto="mock">Open mock paper</button>
+      </article>
+      <article class="card">
+        <h3>Practice mode</h3>
+        <p>Answer one question at a time with auto-mark and mark scheme support.</p>
+        <button class="btn" data-goto="practice">Open practice mode</button>
+      </article>
+      <article class="card">
+        <h3>Browse questions</h3>
+        <p>Search and filter all questions and open the full mark schemes.</p>
+        <button class="btn" data-goto="browse">Open question browser</button>
+      </article>
+    </div>
+  </section>
+
+  <section id="view-revise" class="view">
+    <header class="section-head">
+      <h2>Revise</h2>
+      <p>Quick revision tools for recall and topic understanding.</p>
+    </header>
+    <div class="grid-3">
+      <article class="card">
+        <h3>Flashcards</h3>
+        <p>Rapid term and concept recall with tracked known/still-learning cards.</p>
+        <button class="btn" data-goto="flash">Open flashcards</button>
+      </article>
+      <article class="card">
+        <h3>Quiz</h3>
+        <p>Multiple-choice and true/false checks with instant explanations.</p>
+        <button class="btn" data-goto="quiz">Open quiz</button>
+      </article>
+      <article class="card">
+        <h3>Revision guide</h3>
+        <p>Topic-by-topic guide from the unit specification with quick jump links.</p>
+        <button class="btn" data-goto="guide">Open revision guide</button>
+      </article>
+    </div>
+  </section>
+
+  <section id="view-guide" class="view">
+    <div id="guide-comprehensive"></div>
   </section>
 
   <!-- BROWSE -->
@@ -596,6 +680,7 @@
 
 <script src="js/data-loader.js"></script>
 <script src="js/spec.js"></script>
+<script src="js/guide.js"></script>
 <script src="js/app.js"></script>
 
 <script data-pplx-inline-edit>

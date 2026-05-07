@@ -122,6 +122,7 @@ a,button,[role="button"],input,select,textarea{
 .nav-tier-badge.ultra{background:#f2e5ff;color:#6a2fb8}
 .nav-tier-badge.all_subjects{background:#dcfce7;color:#166534}
 .nav-credit-chip{display:inline-flex;align-items:center;gap:var(--sp2);padding:calc(var(--sp1) + 1px) var(--sp3);border-radius:9999px;background:var(--color-surface-offset);border:1px solid var(--color-border);font-size:var(--tx-xs);color:var(--color-text)}
+.mobile-credit-chip{display:none;align-items:center;gap:var(--sp2);padding:calc(var(--sp1) + 1px) var(--sp3);border-radius:9999px;background:var(--color-surface-offset);border:1px solid var(--color-border);font-size:var(--tx-xs);color:var(--color-text);margin-left:auto;white-space:nowrap}
 .nav-user-wrap{position:relative}
 .nav-user-dropdown{position:absolute;top:calc(100% + 8px);right:0;background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-xl);box-shadow:var(--shadow-lg);min-width:220px;padding:var(--sp4);z-index:10002;display:none}
 .nav-user-wrap.open .nav-user-dropdown{display:block}
@@ -130,6 +131,7 @@ a,button,[role="button"],input,select,textarea{
 .dropdown-item.danger{color:var(--color-primary)}
 .dropdown-divider{height:1px;background:var(--color-divider);margin:var(--sp3) 0}
 .mobile-bottom-nav{display:none}
+.mobile-top-nav{display:none}
 .mobile-subject-sheet{display:none}
 .mobile-sheet-backdrop{display:none}
 .auth-overlay{position:fixed;inset:0;z-index:10001;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;padding:var(--sp4);opacity:0;pointer-events:none;transition:opacity var(--t)}
@@ -471,7 +473,11 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
   .nav-inner { padding: 0 var(--sp4); gap: var(--sp3); }
   .nav-links { display: none; }
   .nav-credit-chip { display: none !important; }
-  body { padding-bottom: calc(84px + env(safe-area-inset-bottom, 0px)); }
+  .mobile-credit-chip { display: inline-flex !important; }
+  body {
+    padding-top: calc(58px + env(safe-area-inset-top, 0px));
+    padding-bottom: calc(84px + env(safe-area-inset-bottom, 0px));
+  }
   .home-hero h1 { font-size: clamp(1.8rem, 8vw, 3rem); }
   .hero h1 { font-size: clamp(1.4rem, 6vw, 2.2rem); }
   .grid, .grid-2 { grid-template-columns: 1fr; }
@@ -491,14 +497,32 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
   .auth-modal { padding: var(--sp5); }
   .nav-user-dropdown { min-width: 180px; }
   .footer-inner { flex-direction: column; gap: var(--sp3); text-align: center; }
+  .mobile-top-nav{
+    position:fixed;
+    top:0;
+    left:0;
+    right:0;
+    z-index:10023;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    height:calc(52px + env(safe-area-inset-top, 0px));
+    padding:env(safe-area-inset-top, 0px) var(--sp4) 0 var(--sp4);
+    background:oklch(from var(--color-surface) l c h/.98);
+    border-bottom:1px solid oklch(from var(--color-text) l c h/.08);
+    backdrop-filter:blur(16px);
+  }
+  .mobile-top-nav img{width:26px;height:26px;border-radius:8px;}
+  .mobile-top-nav .brand{font-family:var(--font-d);font-size:var(--tx-lg);line-height:1;color:var(--color-text);}
+
   .mobile-bottom-nav{
     position:fixed;
     left:0;
     right:0;
     bottom:0;
     z-index:10020;
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
+    display:flex;
+    flex-wrap:nowrap;
     gap:var(--sp2);
     padding:var(--sp3) var(--sp4) calc(var(--sp3) + env(safe-area-inset-bottom, 0px));
     background:oklch(from var(--color-surface) l c h/.98);
@@ -511,6 +535,8 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
     flex-direction:column;
     align-items:center;
     justify-content:center;
+    flex:1 1 0;
+    min-width:0;
     gap:4px;
     min-height:56px;
     padding:var(--sp2);
@@ -585,12 +611,144 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
   body.mobile-sheet-open .mobile-sheet-backdrop,
   body.mobile-sheet-open .mobile-subject-sheet{display:block}
   body.iframe-fullscreen-mode .page-iframe.active > .cd{
-    top:0;
+    top:calc(52px + env(safe-area-inset-top, 0px));
+    z-index:10022;
   }
   body.iframe-fullscreen-mode .page-iframe.active > .cf{
-    top:29px;
+    top:calc(52px + env(safe-area-inset-top, 0px) + 29px);
     bottom:calc(84px + env(safe-area-inset-bottom, 0px));
   }
+  #exam-banner{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:12px 44px 12px 14px !important;
+    min-height:56px;
+  }
+  #exam-banner button{right:8px !important;}
+}
+
+.lb-countdown-pill{
+  display:grid;
+  gap:8px;
+  justify-items:center;
+  align-items:center;
+  padding:12px 16px;
+  border-radius:16px;
+  color:#fff;
+  border:1px solid rgba(255,255,255,.24);
+  background:
+    linear-gradient(140deg, rgba(255,255,255,.14), rgba(255,255,255,.03)),
+    linear-gradient(115deg,#8f0e1b,#b91c1c 55%,#ea580c);
+  box-shadow:
+    0 10px 24px rgba(193,18,31,.28),
+    inset 0 1px 0 rgba(255,255,255,.35);
+  animation:lbPulse 1.8s ease-out infinite;
+  font-family: 'JetBrains Mono', 'SF Mono', Menlo, monospace;
+  text-shadow:0 1px 1px rgba(0,0,0,.26);
+}
+
+#lb-countdown-inline{
+  margin-left:auto !important;
+  margin-right:auto !important;
+  width:min(100%, 560px) !important;
+  padding:18px 24px;
+}
+
+#lb-countdown-inline .lb-digit{
+  font-size:clamp(1.55rem, 4.4vw, 2.85rem);
+}
+
+#lb-countdown-inline .lb-time-unit{
+  font-size:.72rem;
+}
+
+.lb-count-label{
+  font-size:var(--tx-xs);
+  font-weight:800;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  opacity:.96;
+}
+
+.lb-count-grid{
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+.lb-time-block{
+  display:grid;
+  gap:6px;
+  justify-items:center;
+}
+
+.lb-digits{
+  display:flex;
+  align-items:center;
+  gap:3px;
+}
+
+.lb-digit{
+  width:.72em;
+  height:1em;
+  overflow:hidden;
+  display:inline-flex;
+  border-radius:8px;
+  background:rgba(0,0,0,.2);
+  border:1px solid rgba(255,255,255,.2);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.14);
+  font-size:clamp(1.2rem, 2.3vw, 1.95rem);
+  line-height:1;
+  font-weight:900;
+}
+
+.lb-digit-stack{
+  display:block;
+  width:100%;
+  transition:transform .45s cubic-bezier(.2,.8,.2,1);
+  will-change:transform;
+}
+
+.lb-digit-stack span{
+  display:block;
+  height:1em;
+  line-height:1;
+  text-align:center;
+}
+
+.lb-time-unit{
+  font-size:.62rem;
+  font-weight:800;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  opacity:.95;
+}
+
+.lb-visually-hidden{
+  position:absolute;
+  width:1px;
+  height:1px;
+  padding:0;
+  margin:-1px;
+  overflow:hidden;
+  clip:rect(0,0,0,0);
+  white-space:nowrap;
+  border:0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lb-countdown-pill { animation:none; }
+  .lb-digit-stack { transition:none; }
+}
+
+@keyframes lbPulse {
+  0% { box-shadow:0 0 0 0 rgba(210,0,0,.28); transform:translateY(0); }
+  70% { box-shadow:0 0 0 10px rgba(210,0,0,0); transform:translateY(-1px); }
+  100% { box-shadow:0 0 0 0 rgba(210,0,0,0); transform:translateY(0); }
 }
 
 @media (max-width: 480px) {
@@ -692,6 +850,7 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
           <div style="font-size:var(--tx-xs);font-weight:700;letter-spacing:.08em;
             text-transform:uppercase;color:var(--color-text-muted);
             margin-bottom:var(--sp3)">This week's top 3</div>
+          <div id="lb-preview-countdown" class="lb-countdown-pill" style="margin-bottom:var(--sp3);width:100%;">Resets in --:--:--</div>
           <div id="lb-preview-list">
             <div style="color:var(--color-text-faint);font-size:var(--tx-sm)">
               Loading...
@@ -770,18 +929,28 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
   </div>
 </div>
 
+<div class="mobile-top-nav" aria-label="Mobile header">
+  <img src="logo.png" alt="RA10 logo" width="26" height="26">
+  <span class="brand">RA10</span>
+  <div id="mobile-credit-chip" class="mobile-credit-chip" style="display:none"></div>
+</div>
+
 <nav class="mobile-bottom-nav" aria-label="Mobile app navigation">
   <button class="mobile-nav-btn" type="button" data-mobile-nav="home" onclick="go('/')">
     <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M3 10.5 12 3l9 7.5"></path><path d="M5 9.5V21h14V9.5"></path></svg>
     <span>Home</span>
   </button>
-  <button class="mobile-nav-btn" type="button" id="mobile-profile-btn" data-mobile-nav="profile">
-    <div class="mobile-nav-avatar" id="mobile-nav-avatar">?</div>
-    <span id="mobile-profile-label">Profile</span>
-  </button>
   <button class="mobile-nav-btn" type="button" id="mobile-subjects-btn" data-mobile-nav="subjects" aria-expanded="false">
     <span aria-hidden="true">^</span>
     <span>Subjects</span>
+  </button>
+  <button class="mobile-nav-btn" type="button" data-mobile-nav="leaderboard" onclick="go('leaderboard')">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M8 21h8"></path><path d="M12 17v4"></path><path d="M7 4h10v3a5 5 0 0 1-10 0z"></path></svg>
+    <span>Leaders</span>
+  </button>
+  <button class="mobile-nav-btn" type="button" id="mobile-profile-btn" data-mobile-nav="profile">
+    <div class="mobile-nav-avatar" id="mobile-nav-avatar">?</div>
+    <span id="mobile-profile-label">Profile</span>
   </button>
 </nav>
 
@@ -1434,8 +1603,8 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
     <div class="hero">
       <div class="hero-label">Weekly XP Leaderboard</div>
       <h1>Who's revising the most?</h1>
-      <p>XP resets every Sunday at midnight. Top scorer this week 
-      wins 10 bonus credits!</p>
+      <p>XP resets every Sunday at midnight. Top scorer this week wins 10 bonus credits!</p>
+      <div id="lb-countdown-inline" class="lb-countdown-pill" style="margin-top:var(--sp4);">Resets in --:--:--</div>
     </div>
     <div id="lb-page-content" style="max-width:680px;margin:0 auto;
       padding-bottom:var(--sp16);">
@@ -1648,7 +1817,7 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
     if (persist) localStorage.setItem(THEME_KEY, next);
     syncIframeThemes();
   }
-  const initial = localStorage.getItem(THEME_KEY) || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  const initial = localStorage.getItem(THEME_KEY) || 'light';
   applyTheme(initial, false);
   btn.addEventListener('click',()=>{
     applyTheme(root.getAttribute('data-theme')==='dark' ? 'light' : 'dark', true);
@@ -1703,6 +1872,105 @@ function hideLbPreview() {
     const el = document.getElementById('lb-preview');
     if (el) el.style.display = 'none';
   }, 300);
+}
+
+function formatDuration(ms) {
+  const total = Math.max(0, Math.floor(ms / 1000));
+  const d = Math.floor(total / 86400);
+  const h = Math.floor((total % 86400) / 3600);
+  const m = Math.floor((total % 3600) / 60);
+  const s = total % 60;
+  return (d > 0 ? d + 'd ' : '')
+    + String(h).padStart(2, '0') + 'h '
+    + String(m).padStart(2, '0') + 'm '
+    + String(s).padStart(2, '0') + 's';
+}
+
+const _lbDigitStackHtml = '<span class="lb-digit-stack"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></span>';
+
+function buildCountdownPill(el) {
+  if (!el || el.dataset.countdownBuilt === '1') return;
+  el.dataset.countdownBuilt = '1';
+  el.innerHTML = `
+    <span class="lb-count-label">Reset in</span>
+    <span class="lb-count-grid" aria-hidden="true">
+      <span class="lb-time-block">
+        <span class="lb-digits">
+          <span class="lb-digit" data-slot="d1">${_lbDigitStackHtml}</span>
+          <span class="lb-digit" data-slot="d2">${_lbDigitStackHtml}</span>
+        </span>
+        <span class="lb-time-unit">Days</span>
+      </span>
+      <span class="lb-time-block">
+        <span class="lb-digits">
+          <span class="lb-digit" data-slot="h1">${_lbDigitStackHtml}</span>
+          <span class="lb-digit" data-slot="h2">${_lbDigitStackHtml}</span>
+        </span>
+        <span class="lb-time-unit">Hours</span>
+      </span>
+      <span class="lb-time-block">
+        <span class="lb-digits">
+          <span class="lb-digit" data-slot="m1">${_lbDigitStackHtml}</span>
+          <span class="lb-digit" data-slot="m2">${_lbDigitStackHtml}</span>
+        </span>
+        <span class="lb-time-unit">Mins</span>
+      </span>
+      <span class="lb-time-block">
+        <span class="lb-digits">
+          <span class="lb-digit" data-slot="s1">${_lbDigitStackHtml}</span>
+          <span class="lb-digit" data-slot="s2">${_lbDigitStackHtml}</span>
+        </span>
+        <span class="lb-time-unit">Secs</span>
+      </span>
+    </span>
+    <span class="lb-visually-hidden" data-slot="aria"></span>
+  `;
+}
+
+function updateCountdownDigits(el, days, hours, mins, secs) {
+  const safeDays = Math.max(0, Math.min(99, days));
+  const values = {
+    d1: Math.floor(safeDays / 10),
+    d2: safeDays % 10,
+    h1: Math.floor(hours / 10),
+    h2: hours % 10,
+    m1: Math.floor(mins / 10),
+    m2: mins % 10,
+    s1: Math.floor(secs / 10),
+    s2: secs % 10,
+  };
+  Object.entries(values).forEach(([slot, digit]) => {
+    const stack = el.querySelector(`[data-slot="${slot}"] .lb-digit-stack`);
+    if (stack) stack.style.transform = `translateY(-${digit}em)`;
+  });
+  const text = `Reset in ${safeDays}d ${String(hours).padStart(2, '0')}h ${String(mins).padStart(2, '0')}m ${String(secs).padStart(2, '0')}s`;
+  el.setAttribute('aria-label', text);
+  const ariaEl = el.querySelector('[data-slot="aria"]');
+  if (ariaEl) ariaEl.textContent = text;
+}
+
+function nextSundayResetDate() {
+  const now = new Date();
+  const next = new Date(now);
+  const daysUntilSunday = (7 - now.getDay()) % 7 || 7;
+  next.setDate(now.getDate() + daysUntilSunday);
+  next.setHours(0, 0, 0, 0);
+  return next;
+}
+
+function updateLeaderboardCountdown() {
+  const target = nextSundayResetDate().getTime();
+  const total = Math.max(0, Math.floor((target - Date.now()) / 1000));
+  const days = Math.floor(total / 86400);
+  const hours = Math.floor((total % 86400) / 3600);
+  const mins = Math.floor((total % 3600) / 60);
+  const secs = total % 60;
+  ['lb-preview-countdown', 'lb-countdown-inline'].forEach((id) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    buildCountdownPill(el);
+    updateCountdownDigits(el, days, hours, mins, secs);
+  });
 }
 
 let _revHideTimeout = null;
@@ -1821,11 +2089,11 @@ async function renderLeaderboard() {
       </div>
       <div style="background:var(--color-surface-offset);
         border-radius:var(--radius-lg);padding:var(--sp4);
-        text-align:center;font-size:var(--tx-sm);
-        color:var(--color-text-muted);">
-        🏆 Top scorer wins <strong>10 bonus credits</strong> every Sunday
+        text-align:center;font-size:var(--tx-sm);color:var(--color-text-muted);">
+        <div>🏆 Top scorer wins <strong>10 bonus credits</strong> every Sunday</div>
       </div>
     `;
+    updateLeaderboardCountdown();
     if (currentId && !data.find(u => u.id === currentId)) {
       const { data: me } = await sb.from('profiles')
         .select('username, full_name, xp_this_week, xp_total')
@@ -1927,6 +2195,7 @@ function route(){
     }
   }
   const mobileKey = path === '/' || path === '' ? 'home'
+    : path.startsWith('leaderboard') ? 'leaderboard'
     : path.startsWith('/account') ? 'profile'
     : path.startsWith('/revision/btec/level-3/') ? 'subjects'
     : '';
@@ -1940,6 +2209,9 @@ window.addEventListener('hashchange', route);
 route();
 
   document.addEventListener('DOMContentLoaded', async () => {
+    updateLeaderboardCountdown();
+    setInterval(updateLeaderboardCountdown, 1000);
+
     await RA10.init();
 
     // Handle Supabase email callback (invite or password reset)
@@ -1966,6 +2238,8 @@ route();
       if (!loggedIn || RA10.getTier() === 'free') document.getElementById('nav-upgrade-btn').style.display = '';
       else document.getElementById('nav-upgrade-btn').style.display = 'none';
       document.getElementById('nav-credit-chip').style.display = loggedIn ? '' : 'none';
+      const mobileCreditChip = document.getElementById('mobile-credit-chip');
+      if (mobileCreditChip) mobileCreditChip.style.display = loggedIn ? '' : 'none';
       const mobileProfileLabel = document.getElementById('mobile-profile-label');
       const mobileNavAvatar = document.getElementById('mobile-nav-avatar');
       if (mobileProfileLabel) mobileProfileLabel.textContent = loggedIn ? 'Profile' : 'Sign in';
@@ -1987,7 +2261,9 @@ route();
           if (card) card.style.outline = p === currentPlan ? '2px solid var(--color-primary)' : '';
         });
         const credits = RA10.getCredits();
-        document.getElementById('nav-credit-chip').textContent = credits === Infinity ? '∞ credits' : credits + ' credits';
+        const creditsText = credits === Infinity ? '∞ credits' : credits + ' credits';
+        document.getElementById('nav-credit-chip').textContent = creditsText;
+        if (mobileCreditChip) mobileCreditChip.textContent = creditsText;
         const eduLink = document.getElementById('dropdown-edu-admin');
         if (eduLink) {
           const t = RA10.getTier();
@@ -2034,27 +2310,65 @@ route();
       }, 2000);
     }
 
+    const PROFILE_SETUP_DISMISSED_KEY = 'ra10_profile_setup_dismissed';
+    const USERNAME_SETUP_DISMISSED_KEY = 'ra10_username_setup_dismissed';
+    let profileSetupTimer = 0;
+    let usernameSetupTimer = 0;
+
+    function clearProfileSetupDismissal() {
+      sessionStorage.removeItem(PROFILE_SETUP_DISMISSED_KEY);
+      localStorage.removeItem(PROFILE_SETUP_DISMISSED_KEY);
+    }
+
+    function openProfileSetupOverlayLater() {
+      clearTimeout(profileSetupTimer);
+      profileSetupTimer = setTimeout(() => {
+        if (!RA10.isLoggedIn()) return;
+        const latestProfile = RA10.getProfile();
+        const latestName = (latestProfile?.display_name || latestProfile?.full_name || '').trim();
+        if (latestName) return;
+        if (localStorage.getItem(PROFILE_SETUP_DISMISSED_KEY) === '1') return;
+        if (sessionStorage.getItem(PROFILE_SETUP_DISMISSED_KEY) === '1') return;
+        document.getElementById('profile-setup-overlay')?.classList.add('open');
+      }, 800);
+    }
+
+    function openUsernameSetupOverlayLater() {
+      clearTimeout(usernameSetupTimer);
+      usernameSetupTimer = setTimeout(() => {
+        if (!RA10.isLoggedIn()) return;
+        const latestProfile = RA10.getProfile();
+        if (latestProfile?.username) return;
+        if (localStorage.getItem(USERNAME_SETUP_DISMISSED_KEY) === '1') return;
+        document.getElementById('username-setup-overlay')?.classList.add('open');
+      }, 1000);
+    }
+
     async function checkProfileCompletion() {
       if (!RA10.isLoggedIn()) return;
       const profile = RA10.getProfile();
       const name = (profile?.display_name || profile?.full_name || '').trim();
       if (!name) {
-        if (sessionStorage.getItem('ra10_profile_setup_dismissed') === '1') return;
-        setTimeout(() => {
-          document.getElementById('profile-setup-overlay').classList.add('open');
-        }, 800);
+        if (localStorage.getItem(PROFILE_SETUP_DISMISSED_KEY) === '1') return;
+        if (sessionStorage.getItem(PROFILE_SETUP_DISMISSED_KEY) === '1') return;
+        openProfileSetupOverlayLater();
         return;
       }
-      sessionStorage.removeItem('ra10_profile_setup_dismissed');
+      clearProfileSetupDismissal();
+      clearTimeout(profileSetupTimer);
       if (!profile?.username) {
-        setTimeout(() => {
-          document.getElementById('username-setup-overlay').classList.add('open');
-        }, 1000);
+        if (localStorage.getItem(USERNAME_SETUP_DISMISSED_KEY) === '1') return;
+        openUsernameSetupOverlayLater();
+        return;
       }
+      localStorage.removeItem(USERNAME_SETUP_DISMISSED_KEY);
+      clearTimeout(usernameSetupTimer);
     }
 
     function closeProfileSetupOverlay() {
-      sessionStorage.setItem('ra10_profile_setup_dismissed', '1');
+      clearTimeout(profileSetupTimer);
+      sessionStorage.setItem(PROFILE_SETUP_DISMISSED_KEY, '1');
+      localStorage.setItem(PROFILE_SETUP_DISMISSED_KEY, '1');
       document.getElementById('profile-setup-overlay')?.classList.remove('open');
     }
 
@@ -2064,6 +2378,8 @@ route();
     });
 
     document.getElementById('username-setup-skip')?.addEventListener('click', () => {
+      clearTimeout(usernameSetupTimer);
+      localStorage.setItem(USERNAME_SETUP_DISMISSED_KEY, '1');
       document.getElementById('username-setup-overlay').classList.remove('open');
     });
 
@@ -2100,6 +2416,7 @@ route();
           clearTimeout(safetyTimeout);
           await RA10.init();
           _updateNavAuth();
+          localStorage.removeItem(USERNAME_SETUP_DISMISSED_KEY);
           document.getElementById('username-setup-overlay').classList.remove('open');
           checkProfileCompletion();
           showMiniToast('Username saved');
@@ -2148,7 +2465,7 @@ route();
         clearTimeout(safetyTimeout);
         await RA10.init();
         _updateNavAuth();
-        sessionStorage.removeItem('ra10_profile_setup_dismissed');
+        clearProfileSetupDismissal();
         document.getElementById('profile-setup-overlay').classList.remove('open');
         checkProfileCompletion();
         btn.disabled = false;
@@ -2663,7 +2980,7 @@ route();
   </div>
 </div>
 
-<div id="exam-credits-toast" style="display:none;position:fixed;bottom:var(--sp6);left:50%;transform:translateX(-50%);z-index:10005;background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-xl);box-shadow:var(--shadow-lg);padding:var(--sp5) var(--sp6);max-width:480px;width:calc(100% - 2rem);text-align:center;">
+<div id="exam-credits-toast" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:10025;background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-xl);box-shadow:var(--shadow-lg);padding:var(--sp5) var(--sp6);max-width:520px;max-height:calc(100dvh - 2rem);overflow:auto;width:calc(100% - 2rem);text-align:center;">
   <div style="font-size:1.5rem;margin-bottom:var(--sp2)">🎓</div>
   <p style="font-weight:700;margin-bottom:var(--sp2);font-size:var(--tx-base)">You have got 50 free exam season credits!</p>
   <p style="color:var(--color-text-muted);font-size:var(--tx-sm);margin-bottom:var(--sp4)">We have added 50 bonus credits to your account as a welcome gift during exam season. Good luck with your revision!</p>

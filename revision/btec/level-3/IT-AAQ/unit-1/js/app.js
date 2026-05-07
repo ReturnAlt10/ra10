@@ -604,11 +604,83 @@ async function refreshProgressSidebar(force) {
 $$('.tab').forEach(t => t.addEventListener('click', () => switchTab(t.dataset.tab)));
 $$('[data-goto]').forEach(b => b.addEventListener('click', () => switchTab(b.dataset.goto)));
 function switchTab(name) {
-  $$('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === name));
+  const parentTab = ({ mock: 'questions', practice: 'questions', browse: 'questions', quiz: 'revise', flash: 'revise', guide: 'revise', spec: 'revise' })[name] || name;
+  $$('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === parentTab));
   $$('.view').forEach(v => v.classList.toggle('active', v.id === 'view-' + name));
+  if (name === 'guide') renderRevisionGuide();
   if (name === 'progress') renderProgress();
   if (name === 'you') renderYou();
   window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+const GUIDE_STATE = { entries: null, bound: false };
+
+function normalizeGuideText(value) {
+  return String(value || '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+}
+
+function getRevisionGuideEntries() {
+  if (GUIDE_STATE.entries) return GUIDE_STATE.entries;
+  const aims = Object.keys(SPEC || {});
+  const entries = [];
+  aims.forEach((aim) => {
+    const block = SPEC[aim] || {};
+    const topics = Array.isArray(block.topics) ? block.topics : [];
+    topics.forEach((topic, idx) => {
+      const code = topic.code || `${aim}.${idx + 1}`;
+      const title = topic.name || 'Topic';
+      const searchBlob = `${aim} ${block.title || ''} ${block.short || ''} ${code} ${title}`;
+      entries.push({
+        key: `${aim}-${code}`,
+        aim,
+        aimTitle: block.title || `Learning Aim ${aim}`,
+        code,
+        title,
+        summary: `Understand ${title.toLowerCase()} and apply it to exam scenarios for Aim ${aim}.`,
+        searchText: normalizeGuideText(searchBlob)
+      });
+    });
+  });
+  GUIDE_STATE.entries = entries;
+  return entries;
+}
+
+function findGuideEntryForQuestion(q) {
+  const entries = getRevisionGuideEntries();
+  const aim = q?.learning_aim || '';
+  const topic = normalizeGuideText(q?.topic || q?.question || '');
+  const scoped = aim ? entries.filter(e => e.aim === aim) : entries;
+  if (!scoped.length) return null;
+  if (topic) {
+    const exact = scoped.find(e => topic.includes(normalizeGuideText(e.title)) || normalizeGuideText(e.title).includes(topic));
+    if (exact) return exact;
+    const partial = scoped.find(e => {
+      const t = normalizeGuideText(e.title);
+      return t.split(' ').some(word => word.length > 4 && topic.includes(word));
+    });
+    if (partial) return partial;
+  }
+  return scoped[0];
+}
+
+function openRevisionGuideForQuestion(q) {
+  const entry = findGuideEntryForQuestion(q);
+  switchTab('guide');
+  const aimLetter = entry?.aim || (q?.learning_aim || '');
+  if (aimLetter) {
+    setTimeout(() => {
+      const section = document.getElementById('guide-aim-' + aimLetter);
+      if (section) {
+        section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        section.style.outline = '2px solid var(--accent)';
+        setTimeout(() => { section.style.outline = ''; }, 1500);
+      }
+    }, 200);
+  }
+}
+
+function renderRevisionGuide() {
+  if (window.initComprehensiveGuide) { window.initComprehensiveGuide(); return; }
 }
 
 // ---------- Boot when data loaded ----------
@@ -626,6 +698,7 @@ onDataReady(() => {
   renderPracticeControls();
   renderQuizControls();
   renderFlashControls();
+  renderRevisionGuide();
   renderSpec();
   ensureDailyLoginBonus();
 });
@@ -1336,6 +1409,13 @@ function renderPracticeCard() {
     if (!answer) { alert('Write an answer first, then I can mark it.'); return; }
     automarkHost.innerHTML = '';
     automarkHost.appendChild(buildAutoMarkUI(q, answer));
+    const earned = parseInt(automarkHost.querySelector('.automark-score .value')?.textContent || '0', 10);
+    const struggleThreshold = Math.ceil((Number(q.marks) || 1) / 2);
+    if (earned < struggleThreshold) {
+      const jump = el('button', { class: 'btn ghost', type: 'button' }, 'Open Revision Guide topic');
+      jump.addEventListener('click', () => openRevisionGuideForQuestion(q));
+      automarkHost.appendChild(el('div', { style: 'margin-top:10px;' }, jump));
+    }
     updatePracticeSessionFromUi(q, automarkHost);
     automarkHost.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   });
@@ -1943,6 +2023,11 @@ function buildMcResultUI(q, picked) {
     el('strong', null, 'Correct answer: '), correct + (correctOpt ? ' — ' + correctOpt.text : '')
   ));
   if (m.explanation) box.appendChild(el('p', { class: 'automark-detail', style: 'font-style:italic;' }, m.explanation));
+    if (!isRight) {
+      const jump = el('button', { class: 'btn ghost', type: 'button' }, 'Open Revision Guide topic');
+      jump.addEventListener('click', () => openRevisionGuideForQuestion(q));
+      box.appendChild(el('div', { style: 'margin-top:10px;' }, jump));
+    }
   return box;
 }
 
@@ -2292,6 +2377,11 @@ function renderQuizCard() {
       el('strong', null, isRight ? 'Correct ✓  ' : 'Not quite. '),
       q.explanation || 'See the highlighted answer above.'
     );
+    if (!isRight) {
+      const jump = el('button', { class: 'btn ghost', type: 'button', style: 'margin-top:10px;' }, 'Open Revision Guide topic');
+      jump.addEventListener('click', () => openRevisionGuideForQuestion(q));
+      exp.appendChild(el('div', null, jump));
+    }
     card.appendChild(exp);
   }
 

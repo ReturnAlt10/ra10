@@ -536,7 +536,7 @@ function subjectChips(subjects) {
 ═══════════════════════════════════════════════ */
 (function() {
   var saved = localStorage.getItem('ra10-admin-theme');
-  var pref = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  var pref = saved || 'light';
   document.documentElement.setAttribute('data-theme', pref);
   document.getElementById('theme-toggle').addEventListener('click', function() {
     var next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
