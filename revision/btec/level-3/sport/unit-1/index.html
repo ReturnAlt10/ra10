@@ -27,12 +27,8 @@
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BTEC IT Unit 1 — Question Bank & Mock Paper Builder</title>
+<title>BTEC Sport Unit 1 — Anatomy and Physiology</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
-<script>document.addEventListener('DOMContentLoaded', function() {
-  if (window.mermaid) mermaid.initialize({ startOnLoad: false, theme: 'neutral' });
-});</script>
 <link rel="preconnect" href="https://api.fontshare.com">
 <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@500,700,900,400&f[]=jetbrains-mono@500&display=swap">
 <link rel="stylesheet" href="css/style.css">
@@ -56,15 +52,15 @@
 }
 
 .tabs .tab.tab-special {
-  background: #eef7f3;
-  border-color: #bcd9ce;
-  color: #0f4f41;
+  background: #ecfdf5;
+  border-color: #a7f3d0;
+  color: #065f46;
 }
 
 .tabs .tab.tab-special.active {
-  background: #d8efe5;
-  border-color: #5b9f89;
-  color: #0c4135;
+  background: #d1fae5;
+  border-color: #059669;
+  color: #064e3b;
 }
 
 .you-hero {
@@ -75,7 +71,7 @@
   padding: 22px;
   margin-bottom: 16px;
   color: #fff;
-  background: linear-gradient(130deg, #14201E 0%, #8a1a1a 58%, #d20000 100%);
+  background: linear-gradient(130deg, #064e3b 0%, #047857 58%, #059669 100%);
 }
 
 .you-hero-title {
@@ -207,7 +203,7 @@
   border-radius: 12px;
   padding: 12px;
   background: #f7f9ff;
-  border-left: 4px solid #d20000;
+  border-left: 4px solid #059669;
   color: #233;
   font-style: italic;
 }
@@ -320,7 +316,7 @@
   }
 }
 </style>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%2300594E'/%3E%3Ctext x='16' y='22' text-anchor='middle' font-family='sans-serif' font-weight='900' font-size='18' fill='%23E8F1EE'%3EU1%3C/text%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23059669'/%3E%3Ctext x='16' y='22' text-anchor='middle' font-family='sans-serif' font-weight='900' font-size='18' fill='%23E8F1EE'%3EU1%3C/text%3E%3C/svg%3E">
 </head>
 <body>
 <header class="topbar">
@@ -344,9 +340,9 @@
   <section id="view-dashboard" class="view active">
     <div class="hero">
       <div>
-        <p class="eyebrow">Pearson Level 3 Alternative Academic Qualification</p>
-        <h2>Unit 1 with 600+ Exam Style Questions</h2>
-        <p class="lede">100 exam-style questions per learning aim, written in the same format as the new AAQ 2025 specification (Issue 5, Nov 2025).</p>
+        <p class="eyebrow">Pearson BTEC Level 3 Sport — External Unit</p>
+        <h2>Unit 1 Anatomy and Physiology with 500+ Exam Questions</h2>
+        <p class="lede">Coverage across Learning Aims A-E: skeletal, muscular, respiratory, cardiovascular and energy systems, with named athlete scenarios in every question.</p>
       </div>
       <div class="stats" id="dashboard-stats"></div>
     </div>
@@ -361,7 +357,7 @@
         <article class="card primary-card">
           <span class="card-tag">Recommended</span>
           <h3>Build a mock paper</h3>
-          <p>Randomised 90-, 45- or 30-mark paper with Pearson-style answer lines, candidate header, and one-click print.</p>
+          <p>Randomised 80-, 40- or 30-mark paper with Pearson-style answer lines, candidate header, and one-click print.</p>
           <button class="btn primary" data-goto="mock">Build mock paper<span class="ra10-cost-label">5 credits</span></button>
         </article>
         <article class="card">
@@ -371,7 +367,7 @@
         </article>
         <article class="card">
           <h3>Browse all questions</h3>
-          <p>Read every question and full mark scheme. Search and filter all 600 items.</p>
+          <p>Read every question and full mark scheme. Search and filter 500+ sport anatomy and physiology items.</p>
           <button class="btn" data-goto="browse">Browse questions</button>
         </article>
       </div>
@@ -386,12 +382,12 @@
       <div class="grid-2">
         <article class="card">
           <h3>Quick-fire quiz</h3>
-          <p>120 multiple-choice and true/false questions with explanations and per-aim scoring.</p>
+          <p>80+ multiple-choice and true/false questions with explanations and per-section scoring.</p>
           <button class="btn" data-goto="quiz">Start quiz<span class="ra10-cost-label">1 credit per question</span></button>
         </article>
         <article class="card">
           <h3>Flashcards</h3>
-          <p>150 flippable cards covering definitions, acronyms, examples, and legislation. Track known vs still-learning.</p>
+          <p>70+ flippable cards covering anatomy, physiology, adaptations and performance links.</p>
           <button class="btn" data-goto="flash">Open flashcards</button>
         </article>
       </div>
@@ -401,8 +397,8 @@
       <div class="section-block-head">
         <span class="sb-eyebrow">03 · Specification</span>
         <h3>Coverage by Learning Aim</h3>
-        <p>Every Aim and sub-topic in the AAQ 2025 spec, with question counts. Click any card to browse questions for that aim.</p>
-        <p><a href="https://qualifications.pearson.com/content/dam/pdf/btec-aaqs/information-technology/2025/specification-and-sample-assessments/btec-level-3-national-ext-cert-in-it-aaq-spec.pdf" target="_blank" rel="noopener noreferrer">Open the official AAQ 2025 specification PDF</a></p>
+        <p>Every Section and sub-topic in BTEC Sport Unit 1, with question counts. Click any card to browse questions for that section.</p>
+        <p><a href="https://qualifications.pearson.com/" target="_blank" rel="noopener noreferrer">Open Pearson qualifications</a></p>
       </div>
       <div class="aim-grid" id="aim-grid"></div>
       <div style="text-align:center;margin-top:18px;">
@@ -415,7 +411,7 @@
   <section id="view-browse" class="view">
     <header class="section-head">
       <h2>Browse questions</h2>
-      <p>Search and filter all 600 questions. Click a question to expand the mark scheme.</p>
+      <p>Search and filter all 500+ questions. Click a question to expand the mark scheme.</p>
     </header>
     <div class="filters">
       <input type="search" id="search" placeholder="Search question, scenario or topic...">
@@ -438,7 +434,7 @@
       <div class="mock-row">
         <div class="control">
           <label>Total marks</label>
-          <select id="mock-total"><option value="90" selected>90 (full paper)</option><option value="45">45 (half paper)</option><option value="30">30 (quick test)</option></select>
+          <select id="mock-total"><option value="80" selected>80 (full paper)</option><option value="40">40 (half paper)</option><option value="30">30 (quick test)</option></select>
         </div>
         <div class="control">
           <label>Focus aims</label>
@@ -579,9 +575,9 @@
   <!-- SPEC -->
   <section id="view-spec" class="view">
     <header class="section-head">
-      <h2>AAQ 2025 specification</h2>
-      <p>The full Unit 1 spec mapped to the question bank. Click any aim card to jump to its questions.</p>
-      <button class="btn" onclick="window.open('https://qualifications.pearson.com/content/dam/pdf/btec-aaqs/information-technology/2025/specification-and-sample-assessments/btec-level-3-national-ext-cert-in-it-aaq-spec.pdf', '_blank')">Open Official Spec PDF</button>
+      <h2>Sport Unit 1 specification</h2>
+      <p>The full anatomy and physiology content mapped to the question bank. Click any section card to jump to its questions.</p>
+      <button class="btn" onclick="window.open('https://qualifications.pearson.com/', '_blank')">Open Pearson qualifications</button>
     </header>
     <div id="spec-jump" class="spec-jump"></div>
     <div id="spec-content"></div>
@@ -590,12 +586,11 @@
 </main>
 
 <footer class="footer">
-  <p>BTEC Level 3 IT Unit 1 (Information Technology Systems) — Pearson AAQ 2025 (Issue 5, Nov 2025). This is a study tool — not an official Pearson product.</p>
+  <p>BTEC Level 3 Sport Unit 1 (Anatomy and Physiology) — Pearson. This is a study tool — not an official Pearson product.</p>
   <p>2026 RA10 (www.ra10.co.uk)</p>
 </footer>
 
 <script src="js/data-loader.js"></script>
-<script src="js/spec.js"></script>
 <script src="js/app.js"></script>
 
 <script data-pplx-inline-edit>

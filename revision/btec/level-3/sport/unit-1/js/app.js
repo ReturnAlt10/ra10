@@ -1,4 +1,4 @@
-// BTEC IT Unit 1 — Question Bank App
+// BTEC Sport Unit 1 — Question Bank App
 (function() {
 'use strict';
 
@@ -36,7 +36,16 @@ const SB_URL = 'https://tcrrgsylxbyyrmnouihl.supabase.co';
 const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRjcnJnc3lseGJ5eXJtbm91aWhsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4ODUyMTEsImV4cCI6MjA5MzQ2MTIxMX0.eOp6ma-mfgh8F20nM7E2OaBW28LlZlwuEEWr6k2zDWw';
 const DAILY_TASKS_KEY = 'u1-daily-tasks-v1';
 const STREAK_DATES_KEY = 'ra10_streak_dates';
-const SESSION_TYPES = ['quiz', 'practice', 'mock', 'flashcard'];
+const SESSION_TYPES = ['quiz_sport_u1', 'practice_sport_u1', 'mock_sport_u1', 'flashcard_sport_u1'];
+const LEARNING_AIMS = Array.isArray(window.LEARNING_AIMS) && window.LEARNING_AIMS.length
+  ? window.LEARNING_AIMS.slice()
+  : ['A', 'B', 'C', 'D', 'E'];
+const MARKS_OPTIONS = [1, 2, 3, 4, 6, 8];
+const COMMAND_VERBS = ['Identify', 'Name', 'Label', 'State', 'Give', 'Define', 'Describe', 'Explain', 'Analyse', 'Discuss', 'Evaluate', 'Calculate'];
+
+function mockTimeAllowedMinutes(totalMarks) {
+  return Math.round(totalMarks * 9 / 8);
+}
 
 function todayKey() {
   return new Date().toISOString().slice(0, 10);
@@ -215,7 +224,7 @@ async function startDailyQuiz() {
 }
 
 async function copyDailyShareLink() {
-  const text = 'Check out RA10 for BTEC IT revision: https://ra10.co.uk';
+  const text = 'Check out RA10 for BTEC Sport revision: https://ra10.co.uk';
   try {
     await navigator.clipboard.writeText(text);
   } catch (e) {
@@ -438,7 +447,7 @@ async function saveSession(sessionType, data) {
   if (!session?.user?.id) return;
   try {
     const payload = normaliseSessionPayload(data);
-    if (!payload.total && sessionType !== 'flashcard') return;
+    if (!payload.total && sessionType !== 'flashcard_sport_u1') return;
     const sb = window.supabase
       ? window.supabase.createClient(SB_URL, SB_KEY)
       : null;
@@ -615,8 +624,8 @@ function switchTab(name) {
 onDataReady(() => {
   if (!QUESTIONS.length) {
     document.getElementById('app').innerHTML = `<div class="loading">
-      <p>No questions loaded. The JSON files may not be present yet, or you are opening this file directly without a server.</p>
-      <p class="muted">Run <code>python3 -m http.server</code> in this folder, or deploy via the included instructions.</p>
+      <p>No questions loaded. The Sport question bank failed to initialise.</p>
+      <p class="muted">Check the generated loader data and reload the page.</p>
     </div>`;
     return;
   }
@@ -649,7 +658,7 @@ function renderDashboard() {
 
   const aimGrid = $('#aim-grid');
   aimGrid.innerHTML = '';
-  ['A','B','C','D','E','F'].forEach(letter => {
+  LEARNING_AIMS.forEach(letter => {
     const count = QUESTIONS.filter(q => q.learning_aim === letter).length;
     const data = SPEC[letter];
     const card = el('div', { class: 'aim-card', onclick: () => { $('#filter-aim').value = letter; switchTab('browse'); applyBrowseFilters(); } },
@@ -662,13 +671,66 @@ function renderDashboard() {
   });
 }
 
+function sourceSearchText(item) {
+  const s = item && item.source_material;
+  if (!s) return '';
+  const bits = [s.title || '', s.prompt || '', s.text || ''];
+  if (Array.isArray(s.labels)) bits.push(s.labels.join(' '));
+  if (Array.isArray(s.facts)) bits.push(s.facts.join(' '));
+  if (Array.isArray(s.rows)) bits.push(s.rows.map(r => (r || []).join(' ')).join(' '));
+  return bits.join(' ');
+}
+
+function diagramSvgForSection(section) {
+  if (section === 'C') {
+    return '<svg viewBox="0 0 420 180" class="source-svg" role="img" aria-label="Respiratory system diagram"><rect x="1" y="1" width="418" height="178" rx="10" fill="#f8fafc" stroke="#cbd5e1"/><line x1="210" y1="20" x2="210" y2="80" stroke="#1e3a8a" stroke-width="6"/><line x1="210" y1="78" x2="150" y2="120" stroke="#1e3a8a" stroke-width="5"/><line x1="210" y1="78" x2="270" y2="120" stroke="#1e3a8a" stroke-width="5"/><circle cx="125" cy="130" r="34" fill="#dbeafe" stroke="#1d4ed8"/><circle cx="295" cy="130" r="34" fill="#dbeafe" stroke="#1d4ed8"/><path d="M70 162 Q210 132 350 162" fill="none" stroke="#0f172a" stroke-width="3"/><text x="220" y="18" font-size="11">Trachea</text><text x="91" y="132" font-size="11">Left lung</text><text x="264" y="132" font-size="11">Right lung</text><text x="182" y="174" font-size="11">Diaphragm</text></svg>';
+  }
+  if (section === 'D') {
+    return '<svg viewBox="0 0 420 180" class="source-svg" role="img" aria-label="Cardiovascular diagram"><rect x="1" y="1" width="418" height="178" rx="10" fill="#f8fafc" stroke="#cbd5e1"/><rect x="155" y="44" width="110" height="90" rx="10" fill="#fee2e2" stroke="#b91c1c"/><line x1="210" y1="44" x2="210" y2="134" stroke="#7f1d1d"/><line x1="85" y1="70" x2="155" y2="70" stroke="#1d4ed8" stroke-width="4"/><line x1="265" y1="106" x2="335" y2="106" stroke="#dc2626" stroke-width="4"/><text x="62" y="68" font-size="11">Vena cava</text><text x="338" y="110" font-size="11">Aorta</text><text x="174" y="38" font-size="11">Heart chambers</text></svg>';
+  }
+  return '<svg viewBox="0 0 420 180" class="source-svg" role="img" aria-label="Section diagram"><rect x="1" y="1" width="418" height="178" rx="10" fill="#f8fafc" stroke="#cbd5e1"/><rect x="24" y="26" width="120" height="42" rx="8" fill="#dbeafe" stroke="#1d4ed8"/><rect x="150" y="26" width="120" height="42" rx="8" fill="#dcfce7" stroke="#16a34a"/><rect x="276" y="26" width="120" height="42" rx="8" fill="#fef9c3" stroke="#ca8a04"/><line x1="84" y1="70" x2="84" y2="130" stroke="#334155"/><line x1="210" y1="70" x2="210" y2="130" stroke="#334155"/><line x1="336" y1="70" x2="336" y2="130" stroke="#334155"/><rect x="44" y="130" width="80" height="26" rx="6" fill="#e2e8f0" stroke="#64748b"/><rect x="170" y="130" width="80" height="26" rx="6" fill="#e2e8f0" stroke="#64748b"/><rect x="296" y="130" width="80" height="26" rx="6" fill="#e2e8f0" stroke="#64748b"/></svg>';
+}
+
+function renderSourceMaterial(item) {
+  const s = item && item.source_material;
+  if (!s) return null;
+  const box = el('div', { class: 'source-material source-' + (s.type || 'case_study') });
+  box.appendChild(el('div', { class: 'source-head' }, s.title || 'Source material'));
+  if (s.prompt) box.appendChild(el('p', { class: 'source-text' }, s.prompt));
+  if (s.type === 'diagram') {
+    box.appendChild(el('div', { class: 'source-figure', html: diagramSvgForSection(s.section) }));
+    if (Array.isArray(s.labels) && s.labels.length) {
+      const ul = el('ul', { class: 'source-list' });
+      s.labels.forEach((x) => ul.appendChild(el('li', null, x)));
+      box.appendChild(ul);
+    }
+    return box;
+  }
+  if (s.type === 'data_table' && Array.isArray(s.headers) && Array.isArray(s.rows)) {
+    const table = el('table', { class: 'source-table' });
+    table.appendChild(el('tr', null, ...s.headers.map((h) => el('th', null, h))));
+    s.rows.forEach((r) => {
+      table.appendChild(el('tr', null, ...(r || []).map((c) => el('td', null, c))));
+    });
+    box.appendChild(table);
+    return box;
+  }
+  if (s.text) box.appendChild(el('p', { class: 'source-text' }, s.text));
+  if (Array.isArray(s.facts) && s.facts.length) {
+    const ul = el('ul', { class: 'source-list' });
+    s.facts.forEach((x) => ul.appendChild(el('li', null, x)));
+    box.appendChild(ul);
+  }
+  return box;
+}
+
 // ---------- Browse ----------
 let openedRow = null;
 
 function renderBrowse() {
   // Populate filter dropdowns
   const aimSel = $('#filter-aim');
-  ['A','B','C','D','E','F'].forEach(a => {
+  LEARNING_AIMS.forEach(a => {
     const opt = el('option', {value: a}, `Aim ${a}: ${SPEC[a].short.split(',')[0]}`);
     aimSel.appendChild(opt);
   });
@@ -701,7 +763,7 @@ function applyBrowseFilters() {
   if (verb) list = list.filter(x => (x.command_verb || '').toLowerCase() === verb.toLowerCase());
   if (q) {
     list = list.filter(x => {
-      const blob = (x.scenario || '') + ' ' + (x.question || '') + ' ' + (x.topic || '') + ' ' + (x.id || '');
+      const blob = (x.scenario || '') + ' ' + (x.question || '') + ' ' + (x.topic || '') + ' ' + (x.id || '') + ' ' + sourceSearchText(x);
       return blob.toLowerCase().includes(q);
     });
   }
@@ -732,6 +794,8 @@ function renderQuestionRow(q) {
 
   const body = el('div', { class: 'qrow-body' });
   if (q.scenario) body.appendChild(el('p', { class: 'scenario' }, q.scenario));
+  const source = renderSourceMaterial(q);
+  if (source) body.appendChild(source);
   body.appendChild(el('p', { class: 'question-text' },
     q.question,
     el('span', { class: 'marks-bracket' }, ` (${q.marks})`)
@@ -749,10 +813,7 @@ function renderQuestionRow(q) {
   return row;
 }
 
-let _mermaidRenderCount = 0;
-
-function renderMarkScheme(q, opts) {
-  opts = opts || {};
+function renderMarkScheme(q) {
   const m = q.mark_scheme || {};
   const wrap = el('div', { class: 'markscheme' });
   wrap.appendChild(el('h5', null, 'Mark Scheme'));
@@ -794,23 +855,6 @@ function renderMarkScheme(q, opts) {
   }
   if (m.additional_guidance) wrap.appendChild(el('p', { class: 'additional' }, m.additional_guidance));
   if (m.do_not_accept) wrap.appendChild(el('p', { class: 'donotaccept' }, 'Do not accept: ' + m.do_not_accept));
-
-  const isDiagramQ = q.type === 'diagram' || String(q.command_verb || '').toLowerCase() === 'draw';
-  if (isDiagramQ && q.mermaid) {
-    const diagramWrap = el('div', { class: 'ms-diagram' });
-    diagramWrap.appendChild(el('p', { class: 'instruction' }, 'Model answer:'));
-    const svgDiv = el('div', { class: 'ms-diagram-svg' });
-    diagramWrap.appendChild(svgDiv);
-    wrap.appendChild(diagramWrap);
-    const mermaidId = 'mermaid-ms-' + (q.id || '') + '-' + (++_mermaidRenderCount);
-    requestAnimationFrame(() => {
-      if (!window.mermaid) { svgDiv.textContent = 'Diagram unavailable.'; return; }
-      window.mermaid.render(mermaidId, q.mermaid)
-        .then(({ svg }) => { svgDiv.innerHTML = svg; })
-        .catch(() => { svgDiv.style.display = 'none'; });
-    });
-  }
-
   return wrap;
 }
 
@@ -821,8 +865,8 @@ let mockShowMs = false;
 function renderMockControls() {
   const aimsRow = $('#mock-aims');
   aimsRow.innerHTML = '';
-  const selected = new Set(['A','B','C','D','E','F']);
-  ['A','B','C','D','E','F'].forEach(a => {
+  const selected = new Set(LEARNING_AIMS);
+  LEARNING_AIMS.forEach(a => {
     const chip = el('div', { class: 'chip on' }, a);
     chip.addEventListener('click', () => {
       if (selected.has(a) && selected.size > 1) { selected.delete(a); chip.classList.remove('on'); }
@@ -840,7 +884,6 @@ function renderMockControls() {
       { key: 'pearson',  label: 'Pearson-style (mixed)', hint: 'A balanced paper mirroring real Pearson distribution' },
       { key: 'short',    label: 'Short questions',       hint: '1–4 mark items (Identify, State, Give, Describe)' },
       { key: 'long',     label: 'Long questions',        hint: '6–12 mark extended-response items (Explain, Discuss, Evaluate)' },
-      { key: 'diagram',  label: 'Diagrams / flowcharts', hint: 'Draw a flowchart, network topology or system diagram' },
       { key: 'mc',       label: 'Multiple choice',       hint: '1-mark MCQs with A–D options' }
     ];
     const selStyles = new Set(['pearson']);
@@ -923,7 +966,7 @@ async function generateMock(total, seed, aims, styles) {
     const stylePool = {};
     pool.forEach(q => {
       const s = styleOfQuestion(q);
-      if (wanted.has(s) || allowAny) (stylePool[s] = stylePool[s] || []).push(q);
+      if (s !== 'diagram' && (wanted.has(s) || allowAny)) (stylePool[s] = stylePool[s] || []).push(q);
     });
     Object.keys(stylePool).forEach(k => stylePool[k] = shuffle(stylePool[k], rng));
 
@@ -955,39 +998,44 @@ async function generateMock(total, seed, aims, styles) {
     }
     // Final top-up with 1–2 mark fillers from any allowed style if still short.
     if (acc < total) {
-      const fillers = pool.filter(q => !used.has(q.id) && q.marks <= (total - acc) && (allowAny || wanted.has(styleOfQuestion(q))))
+      const fillers = pool.filter(q => {
+        const s = styleOfQuestion(q);
+        return !used.has(q.id) && s !== 'diagram' && q.marks <= (total - acc) && (allowAny || wanted.has(s));
+      })
                           .sort((a, b) => b.marks - a.marks);
       for (const q of fillers) {
         if (acc >= total) break;
         if (q.marks <= total - acc) { items.push(q); used.add(q.id); acc += q.marks; }
       }
     }
-    // Ensure at least one diagram if user asked for diagrams.
-    if (wanted.has('diagram') && !items.some(q => styleOfQuestion(q) === 'diagram')) {
-      const diag = pool.filter(q => styleOfQuestion(q) === 'diagram');
-      if (diag.length) items.push(diag[Math.floor(rng() * diag.length)]);
-    }
     // Sort by mark size ascending so the paper warms up before extended items.
     items.sort((a, b) => a.marks - b.marks);
     lastMock = { items, total, seed, generatedAt: new Date().toISOString() };
     renderMock(lastMock);
+    saveSession('mock_sport_u1', {
+      aims,
+      total: items.length,
+      correct: 0,
+      marksEarned: 0,
+      marksTotal: items.reduce((s, q) => s + Number(q.marks || 0), 0)
+    });
     return;
   }
 
   // ---- PEARSON-STYLE (default) ----
-  // Build a target mark template that mirrors a real 90m / 45m / 30m paper.
+  // Build a target mark template that mirrors a real 80m / 40m / 30m paper.
   let templates;
-  if (total >= 90) {
+  if (total >= 80) {
     templates = [
-      [1,1,2,2,3,4,4,6,8,9,12,12,12,8,6], // ~90 marks
-      [1,2,2,3,4,4,6,6,8,9,12,12,8,4,9],
-      [1,1,2,3,4,4,4,6,6,8,9,12,12,8,12]
+      [1,1,2,2,3,4,4,6,8,9,12,12,8,8], // 80
+      [1,2,2,3,4,4,6,6,8,9,12,12,8,3], // 80
+      [1,1,2,3,4,4,4,6,6,8,9,12,12,8]  // 80
     ];
-  } else if (total >= 45) {
+  } else if (total >= 40) {
     templates = [
-      [1,2,3,4,4,6,8,9,12], // 49
-      [1,2,2,4,4,6,8,9,12], // 48
-      [1,1,2,3,4,6,8,9,12]  // 46
+      [1,2,3,4,4,6,8,12], // 40
+      [1,2,2,4,4,6,9,12], // 40
+      [1,1,2,3,4,6,8,9,6] // 40
     ];
   } else {
     templates = [
@@ -1006,7 +1054,7 @@ async function generateMock(total, seed, aims, styles) {
     if (idx === -1) tpl.pop(); else tpl.splice(idx, 1);
   }
 
-  // Exclude diagrams + MC from the regular Pearson template — they're inserted explicitly.
+  // Exclude diagrams + MC from the regular Pearson template.
   const textPool = pool.filter(q => styleOfQuestion(q) !== 'diagram' && styleOfQuestion(q) !== 'mc');
   const byMark = {};
   textPool.forEach(q => { (byMark[q.marks] = byMark[q.marks] || []).push(q); });
@@ -1031,31 +1079,15 @@ async function generateMock(total, seed, aims, styles) {
     if (picked) items.push(picked);
   }
 
-  // Guarantee EXACTLY ONE diagram question per Pearson-style paper, swapping out
-  // the largest non-extended short-answer item that matches the diagram's marks.
-  const diagPool = shuffle(pool.filter(q => styleOfQuestion(q) === 'diagram'), rng);
-  if (diagPool.length) {
-    const diag = diagPool[0];
-    let swapIdx = -1;
-    for (let i = 0; i < items.length; i++) {
-      if (items[i].marks === diag.marks && styleOfQuestion(items[i]) !== 'diagram') { swapIdx = i; break; }
-    }
-    if (swapIdx === -1) {
-      // fallback: replace the closest-mark short-answer item
-      let best = -1, diff = 99;
-      for (let i = 0; i < items.length; i++) {
-        if (styleOfQuestion(items[i]) === 'diagram') continue;
-        const d = Math.abs(items[i].marks - diag.marks);
-        if (d < diff) { diff = d; best = i; }
-      }
-      swapIdx = best;
-    }
-    if (swapIdx >= 0) items[swapIdx] = diag;
-    used.add(diag.id);
-  }
-
   lastMock = { items, total, seed, generatedAt: new Date().toISOString() };
   renderMock(lastMock);
+  saveSession('mock_sport_u1', {
+    aims,
+    total: items.length,
+    correct: 0,
+    marksEarned: 0,
+    marksTotal: items.reduce((s, q) => s + Number(q.marks || 0), 0)
+  });
 }
 
 function renderMock(mock) {
@@ -1076,8 +1108,8 @@ function renderMock(mock) {
   const lineDensity = $('#opt-line-density') ? $('#opt-line-density').value : 'normal';
 
   wrap.appendChild(el('div', { class: 'paper-header' },
-    el('h3', null, 'BTEC Level 3 IT — Unit 1: Information Technology Systems'),
-    el('p', null, `Mock paper · ${totalMarks} marks · Time allowed: ${Math.round(totalMarks * 4 / 3)} minutes · Seed: ${mock.seed}`),
+    el('h3', null, 'BTEC Level 3 Sport — Unit 1: Anatomy and Physiology'),
+    el('p', null, `Mock paper · ${totalMarks} marks · Time allowed: ${mockTimeAllowedMinutes(totalMarks)} minutes · Seed: ${mock.seed}`),
     el('p', { class: 'paper-instructions' }, 'Answer ALL questions. Write your answers in the space provided. The marks for each question are shown in brackets.')
   ));
 
@@ -1115,6 +1147,8 @@ function renderMock(mock) {
       el('span', { class: 'marks-bracket' }, ` (${q.marks})`)
     ));
     sx.appendChild(subQ);
+    const source = renderSourceMaterial(q);
+    if (source) sx.appendChild(source);
     if (q.type === 'diagram') {
       // Full page-sized blank space for the candidate to draw the diagram
       sx.appendChild(el('div', { class: 'diagram-space', 'aria-hidden': 'true' },
@@ -1148,7 +1182,7 @@ function renderMock(mock) {
     }
     if (mockShowMs) {
       const msb = el('div', { class: 'ms-block' });
-      msb.appendChild(renderMarkScheme(q, { enableDrawing: false }));
+      msb.appendChild(renderMarkScheme(q));
       sx.appendChild(msb);
     }
     sx.appendChild(el('div', { class: 'paper-totals' }, `(Total for Question ${i + 1} = ${q.marks} mark${q.marks===1?'':'s'})`));
@@ -1165,7 +1199,7 @@ let activePracticeCleanup = null;
 function renderPracticeControls() {
   const aimSel = $('#practice-aim');
   if (!aimSel.dataset.ready) {
-    ['A','B','C','D','E','F'].forEach(a => aimSel.appendChild(el('option', { value: a }, `Aim ${a}`)));
+    LEARNING_AIMS.forEach(a => aimSel.appendChild(el('option', { value: a }, `Aim ${a}`)));
     aimSel.dataset.ready = '1';
   }
   const marksSel = $('#practice-marks');
@@ -1195,7 +1229,7 @@ async function startPractice() {
   if (marks) pool = pool.filter(q => String(q.marks) === marks);
   if (!pool.length) { alert('No questions match those filters.'); return; }
   window._practiceSession = {
-    aims: aim ? [aim] : ['A','B','C','D','E','F'],
+    aims: aim ? [aim] : LEARNING_AIMS.slice(),
     total: 0,
     correct: 0,
     aimBreakdown: {},
@@ -1242,7 +1276,7 @@ async function endPracticeSession() {
     return;
   }
   const practiceQ = window._practiceSession?.total || 0;
-  await saveSession('practice', {
+  await saveSession('practice_sport_u1', {
     aims: Object.keys(ps.aimBreakdown),
     total: ps.total,
     correct: ps.correct,
@@ -1272,6 +1306,8 @@ function renderPracticeCard() {
     el('span', { class: 'tag marks' }, `${q.marks} mark${q.marks===1?'':'s'}`)
   ));
   if (q.scenario) card.appendChild(el('div', { class: 'scenario' }, q.scenario));
+  const source = renderSourceMaterial(q);
+  if (source) card.appendChild(source);
   card.appendChild(el('p', { class: 'question' }, q.question, el('span', { class: 'marks-bracket' }, ` (${q.marks})`)));
 
   // Diagram questions get a sketch canvas; MC gets clickable A–D options;
@@ -2121,7 +2157,7 @@ function renderSpec() {
   const jump = $('#spec-jump');
   jump.innerHTML = '';
   jump.appendChild(el('span', { class: 'sj-label' }, 'Jump to aim'));
-  ['A','B','C','D','E','F'].forEach(letter => {
+  LEARNING_AIMS.forEach(letter => {
     const data = SPEC[letter];
     const a = el('a', { href: '#spec-aim-' + letter },
       el('span', { class: 'sj-letter' }, letter),
@@ -2132,7 +2168,7 @@ function renderSpec() {
 
   const wrap = $('#spec-content');
   wrap.innerHTML = '';
-  ['A','B','C','D','E','F'].forEach(letter => {
+  LEARNING_AIMS.forEach(letter => {
     const data = SPEC[letter];
     const count = QUESTIONS.filter(q => q.learning_aim === letter).length;
     const sec = el('section', { class: 'spec-aim card', id: 'spec-aim-' + letter });
@@ -2181,14 +2217,14 @@ function buildTopicTree(topics) {
   const result = [];
   const byCode = new Map();
   topics.forEach(t => {
-    if (/^[A-F]\d+$/.test(t.code)) {
+    if (/^[A-E]\d+$/.test(t.code)) {
       // top-level (e.g. A1, B2)
       const node = { code: t.code, name: t.name, children: [] };
       byCode.set(t.code, node);
       result.push(node);
     } else {
       // sub-topic (e.g. A1.1)
-      const m = t.code.match(/^([A-F]\d+)\./);
+      const m = t.code.match(/^([A-E]\d+)\./);
       const parentCode = m ? m[1] : null;
       let parent = parentCode ? byCode.get(parentCode) : null;
       if (!parent) {
@@ -2210,7 +2246,7 @@ let quizState = null; // { items, idx, answers: number[] (selected index per q, 
 function renderQuizControls() {
   const aimSel = $('#quiz-aim');
   if (!aimSel.dataset.ready) {
-    ['A','B','C','D','E','F'].forEach(a => aimSel.appendChild(el('option', { value: a }, `Aim ${a}`)));
+    LEARNING_AIMS.forEach(a => aimSel.appendChild(el('option', { value: a }, `Aim ${a}`)));
     aimSel.dataset.ready = '1';
   }
 
@@ -2262,6 +2298,8 @@ function renderQuizCard() {
     el('span', { class: 'tag marks' }, q.type === 'true_false' ? 'True / False' : 'Multiple choice')
   ));
   card.appendChild(el('p', { class: 'quiz-q' }, q.question));
+  const source = renderSourceMaterial(q);
+  if (source) card.appendChild(source);
 
   const opts = el('div', { class: 'quiz-options' });
   const letters = ['A','B','C','D','E'];
@@ -2357,7 +2395,7 @@ function showQuizResults() {
     aimBreakdown[aim] = { correct: s.right, total: s.total };
   });
   if (total > 0) {
-    saveSession('quiz', {
+    saveSession('quiz_sport_u1', {
       aims: Object.keys(aimStats),
       total,
       correct,
@@ -2384,7 +2422,7 @@ function showQuizResults() {
   card.appendChild(bar);
 
   const breakdown = el('div', { class: 'quiz-aim-breakdown' });
-  ['A','B','C','D','E','F'].forEach(a => {
+  LEARNING_AIMS.forEach(a => {
     if (!aimStats[a]) return;
     const s = aimStats[a];
     const ap = Math.round(s.right / s.total * 100);
@@ -2564,7 +2602,16 @@ async function renderProgress() {
     return;
   }
 
-  const typeLabel = { quiz: '🧠 Quiz', practice: '✍️ Practice', mock: '📄 Mock Paper', flashcard: '🃏 Flashcards' };
+  const typeLabel = {
+    quiz: '🧠 Quiz',
+    practice: '✍️ Practice',
+    mock: '📄 Mock Paper',
+    flashcard: '🃏 Flashcards',
+    quiz_sport_u1: '🧠 Quiz',
+    practice_sport_u1: '✍️ Practice',
+    mock_sport_u1: '📄 Mock Paper',
+    flashcard_sport_u1: '🃏 Flashcards'
+  };
   listEl.innerHTML = '<h3 class="prog-history-title">Recent sessions</h3>' +
     rows.map(r => {
       const pct = r.questions_total ? Math.round(r.questions_correct / r.questions_total * 100) : null;
@@ -2620,7 +2667,7 @@ function startWeakPractice(aims) {
   let pool = QUESTIONS.filter(q => aims.includes(q.learning_aim || q.learningaim));
   if (!pool.length) pool = QUESTIONS.slice();
   window._practiceSession = {
-    aims: aims && aims.length ? aims : ['A','B','C','D','E','F'],
+    aims: aims && aims.length ? aims : LEARNING_AIMS.slice(),
     total: 0,
     correct: 0,
     aimBreakdown: {},
@@ -2661,7 +2708,7 @@ function saveFlashProgress(p) {
 function renderFlashControls() {
   const aimSel = $('#flash-aim');
   if (!aimSel.dataset.ready) {
-    ['A','B','C','D','E','F'].forEach(a => aimSel.appendChild(el('option', { value: a }, `Aim ${a}`)));
+    LEARNING_AIMS.forEach(a => aimSel.appendChild(el('option', { value: a }, `Aim ${a}`)));
     aimSel.dataset.ready = '1';
   }
 
@@ -2710,7 +2757,7 @@ function startFlash() {
     aimFilter: aim
   };
   window._flashSession = {
-    aims: aim ? [aim] : ['A','B','C','D','E','F'],
+    aims: aim ? [aim] : LEARNING_AIMS.slice(),
     total: 0,
     correct: 0,
     aimBreakdown: {},
@@ -2826,7 +2873,7 @@ async function endFlashSession() {
     alert('No flashcard activity to save yet.');
     return;
   }
-  await saveSession('flashcard', {
+  await saveSession('flashcard_sport_u1', {
     aims: Object.keys(fs.aimBreakdown),
     total: fs.total,
     correct: fs.correct,
@@ -2845,3 +2892,4 @@ function advanceFlash() {
 }
 
 })();
+

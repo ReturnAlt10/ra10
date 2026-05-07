@@ -129,6 +129,9 @@ a,button,[role="button"],input,select,textarea{
 .dropdown-item:hover{background:oklch(from var(--color-text) l c h/.06)}
 .dropdown-item.danger{color:var(--color-primary)}
 .dropdown-divider{height:1px;background:var(--color-divider);margin:var(--sp3) 0}
+.mobile-bottom-nav{display:none}
+.mobile-subject-sheet{display:none}
+.mobile-sheet-backdrop{display:none}
 .auth-overlay{position:fixed;inset:0;z-index:10001;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;padding:var(--sp4);opacity:0;pointer-events:none;transition:opacity var(--t)}
 .auth-overlay.open{opacity:1;pointer-events:all}
 .auth-modal{background:var(--color-surface);border-radius:var(--radius-xl);box-shadow:var(--shadow-lg);max-width:420px;width:100%;padding:var(--sp8);position:relative}
@@ -464,9 +467,11 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
 }
 
 @media (max-width: 768px) {
+  .nav { display:none; }
   .nav-inner { padding: 0 var(--sp4); gap: var(--sp3); }
   .nav-links { display: none; }
   .nav-credit-chip { display: none !important; }
+  body { padding-bottom: calc(84px + env(safe-area-inset-bottom, 0px)); }
   .home-hero h1 { font-size: clamp(1.8rem, 8vw, 3rem); }
   .hero h1 { font-size: clamp(1.4rem, 6vw, 2.2rem); }
   .grid, .grid-2 { grid-template-columns: 1fr; }
@@ -486,6 +491,106 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
   .auth-modal { padding: var(--sp5); }
   .nav-user-dropdown { min-width: 180px; }
   .footer-inner { flex-direction: column; gap: var(--sp3); text-align: center; }
+  .mobile-bottom-nav{
+    position:fixed;
+    left:0;
+    right:0;
+    bottom:0;
+    z-index:10020;
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:var(--sp2);
+    padding:var(--sp3) var(--sp4) calc(var(--sp3) + env(safe-area-inset-bottom, 0px));
+    background:oklch(from var(--color-surface) l c h/.98);
+    backdrop-filter:blur(18px);
+    border-top:1px solid oklch(from var(--color-text) l c h/.08);
+    box-shadow:0 -12px 32px oklch(0 0 0/.08);
+  }
+  .mobile-nav-btn{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:4px;
+    min-height:56px;
+    padding:var(--sp2);
+    border-radius:var(--radius-lg);
+    color:var(--color-text-muted);
+    background:transparent;
+  }
+  .mobile-nav-btn svg{width:20px;height:20px;stroke:currentColor}
+  .mobile-nav-btn span{font-size:11px;font-weight:700;letter-spacing:.03em}
+  .mobile-nav-btn.active{
+    color:var(--color-primary);
+    background:var(--color-primary-highlight);
+  }
+  .mobile-nav-avatar{
+    width:22px;
+    height:22px;
+    border-radius:999px;
+    background:var(--color-primary);
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:11px;
+    font-weight:800;
+  }
+  .mobile-sheet-backdrop{
+    position:fixed;
+    inset:0;
+    z-index:10021;
+    background:rgba(0,0,0,.36);
+  }
+  .mobile-subject-sheet{
+    position:fixed;
+    left:0;
+    right:0;
+    bottom:0;
+    z-index:10022;
+    background:var(--color-surface);
+    border-radius:24px 24px 0 0;
+    border-top:1px solid oklch(from var(--color-text) l c h/.08);
+    box-shadow:0 -20px 48px oklch(0 0 0/.18);
+    padding:var(--sp4) var(--sp4) calc(var(--sp6) + env(safe-area-inset-bottom, 0px));
+  }
+  .mobile-sheet-handle{
+    width:44px;
+    height:5px;
+    border-radius:999px;
+    background:var(--color-border);
+    margin:0 auto var(--sp4);
+  }
+  .mobile-sheet-head{display:flex;align-items:flex-start;justify-content:space-between;gap:var(--sp3);margin-bottom:var(--sp4)}
+  .mobile-sheet-title{font-family:var(--font-d);font-size:var(--tx-lg);line-height:1.1}
+  .mobile-sheet-copy{font-size:var(--tx-sm);color:var(--color-text-muted);margin-top:4px}
+  .mobile-sheet-close{width:36px;height:36px;border-radius:999px;background:var(--color-surface-offset);color:var(--color-text-muted)}
+  .mobile-subject-list{display:grid;gap:var(--sp3)}
+  .mobile-subject-link{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:var(--sp3);
+    width:100%;
+    padding:var(--sp4);
+    border-radius:var(--radius-xl);
+    background:var(--color-surface-offset);
+    border:1px solid oklch(from var(--color-text) l c h/.06);
+    text-align:left;
+  }
+  .mobile-subject-link strong{display:block;font-size:var(--tx-sm);color:var(--color-text)}
+  .mobile-subject-link small{display:block;font-size:var(--tx-xs);color:var(--color-text-muted);margin-top:2px}
+  .mobile-subject-link em{font-style:normal;font-size:var(--tx-xs);font-weight:700;color:var(--color-primary)}
+  body.mobile-sheet-open{overflow:hidden}
+  body.mobile-sheet-open .mobile-sheet-backdrop,
+  body.mobile-sheet-open .mobile-subject-sheet{display:block}
+  body.iframe-fullscreen-mode .page-iframe.active > .cd{
+    top:0;
+  }
+  body.iframe-fullscreen-mode .page-iframe.active > .cf{
+    top:29px;
+    bottom:calc(84px + env(safe-area-inset-bottom, 0px));
+  }
 }
 
 @media (max-width: 480px) {
@@ -545,6 +650,20 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
             <span>
               <span style="font-weight:600">Business</span>
               <span style="display:block;font-size:var(--tx-xs);color:var(--color-text-muted)">Unit 3 live</span>
+            </span>
+            <span style="font-size:0.65rem;font-weight:700;text-transform:uppercase;
+              letter-spacing:.06em;padding:2px 7px;border-radius:999px;
+              background:var(--color-primary-highlight);color:var(--color-primary)">Live</span>
+          </a>
+          <a style="display:flex;align-items:center;justify-content:space-between;
+            padding:8px 10px;border-radius:var(--radius-md);cursor:pointer;
+            color:var(--color-text);text-decoration:none;font-size:var(--tx-sm);"
+            onmouseenter="this.style.background='oklch(from var(--color-text) l c h/.06)'"
+            onmouseleave="this.style.background=''"
+            onclick="go('/revision/btec/level-3/sport');hideRevPreview()">
+            <span>
+              <span style="font-weight:600">Sport</span>
+              <span style="display:block;font-size:var(--tx-xs);color:var(--color-text-muted)">Unit 1 live</span>
             </span>
             <span style="font-size:0.65rem;font-weight:700;text-transform:uppercase;
               letter-spacing:.06em;padding:2px 7px;border-radius:999px;
@@ -614,6 +733,56 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
       <button class="btn btn-s iframe-exit" type="button" onclick="exitIframeFullscreen()">Exit full screen</button>
     </div>
   </div>
+</nav>
+
+<div class="mobile-sheet-backdrop" id="mobile-sheet-backdrop"></div>
+<div class="mobile-subject-sheet" id="mobile-subject-sheet" aria-hidden="true">
+  <div class="mobile-sheet-handle"></div>
+  <div class="mobile-sheet-head">
+    <div>
+      <div class="mobile-sheet-title">Subjects</div>
+      <div class="mobile-sheet-copy">Jump straight into the live BTEC revision apps.</div>
+    </div>
+    <button class="mobile-sheet-close" id="mobile-sheet-close" aria-label="Close subjects">✕</button>
+  </div>
+  <div class="mobile-subject-list">
+    <button class="mobile-subject-link" type="button" data-mobile-subject="/revision/btec/level-3/IT-AAQ/unit-1">
+      <span>
+        <strong>Information Technology</strong>
+        <small>AAQ · Unit 1 live</small>
+      </span>
+      <em>Open</em>
+    </button>
+    <button class="mobile-subject-link" type="button" data-mobile-subject="/revision/btec/level-3/business/unit-3">
+      <span>
+        <strong>Business</strong>
+        <small>Level 3 · Unit 3 live</small>
+      </span>
+      <em>Open</em>
+    </button>
+    <button class="mobile-subject-link" type="button" data-mobile-subject="/revision/btec/level-3/sport/unit-1">
+      <span>
+        <strong>Sport</strong>
+        <small>Level 3 · Unit 1 live</small>
+      </span>
+      <em>Open</em>
+    </button>
+  </div>
+</div>
+
+<nav class="mobile-bottom-nav" aria-label="Mobile app navigation">
+  <button class="mobile-nav-btn" type="button" data-mobile-nav="home" onclick="go('/')">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M3 10.5 12 3l9 7.5"></path><path d="M5 9.5V21h14V9.5"></path></svg>
+    <span>Home</span>
+  </button>
+  <button class="mobile-nav-btn" type="button" id="mobile-profile-btn" data-mobile-nav="profile">
+    <div class="mobile-nav-avatar" id="mobile-nav-avatar">?</div>
+    <span id="mobile-profile-label">Profile</span>
+  </button>
+  <button class="mobile-nav-btn" type="button" id="mobile-subjects-btn" data-mobile-nav="subjects" aria-expanded="false">
+    <span aria-hidden="true">^</span>
+    <span>Subjects</span>
+  </button>
 </nav>
 
 <!-- ============================================================
@@ -744,7 +913,7 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
           <h3>BTEC Qualifications</h3>
           <p>Applied general qualifications by Pearson. Revision tools aligned to AAQ specifications.</p>
           <div class="card-ft">
-            <span class="pill pill-ok">1 course available</span>
+            <span class="pill pill-ok">3 subjects available</span>
             <button class="btn btn-g" onclick="event.stopPropagation();go('/revision/btec')">Browse →</button>
           </div>
         </div>
@@ -782,7 +951,7 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
         <div class="card click" onclick="go('/revision/btec/level-3')">
           <div class="card-tag">Level 3</div>
           <h3>BTEC Level 3</h3>
-          <p>Applied qualifications for Sixth Form and college. IT AAQ and Business available now.</p>
+          <p>Applied qualifications for Sixth Form and college. IT AAQ, Business and Sport available now.</p>
           <div class="card-ft">
             <span class="pill pill-ok">Available</span>
             <button class="btn btn-g" onclick="event.stopPropagation();go('/revision/btec/level-3')">Browse →</button>
@@ -831,6 +1000,15 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
           <div class="card-ft">
             <span class="pill pill-ok">Unit 3 live</span>
             <button class="btn btn-g" onclick="event.stopPropagation();go('/revision/btec/level-3/business')">Open</button>
+          </div>
+        </div>
+        <div class="card click" onclick="go('/revision/btec/level-3/sport')">
+          <div class="card-tag">Sport</div>
+          <h3>Sport</h3>
+          <p>Unit 1 Anatomy and Physiology revision with exam-style questions, mock papers, flashcards and quizzes.</p>
+          <div class="card-ft">
+            <span class="pill pill-ok">Unit 1 live</span>
+            <button class="btn btn-g" onclick="event.stopPropagation();go('/revision/btec/level-3/sport')">Open</button>
           </div>
         </div>
       </div>
@@ -1366,6 +1544,78 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
   </div>
 </div>
 
+<!-- ============================================================
+     BTEC LEVEL 3 SPORT HUB  /revision/btec/level-3/sport
+============================================================ -->
+<div class="page" id="p-btec-sport-l3">
+  <div class="cd">
+    <nav class="bc">
+      <button class="bc-item" onclick="go('')">Home</button>
+      <span class="bc-sep">›</span>
+      <button class="bc-item" onclick="go('/revision')">Revision</button>
+      <span class="bc-sep">›</span>
+      <button class="bc-item" onclick="go('/revision/btec')">BTEC</button>
+      <span class="bc-sep">›</span>
+      <button class="bc-item" onclick="go('/revision/btec/level-3')">Level 3</button>
+      <span class="bc-sep">›</span>
+      <span class="bc-item cur">Sport</span>
+    </nav>
+    <div class="hero">
+      <div class="hero-label">BTEC Level 3 Sport</div>
+      <h1>Sport</h1>
+      <p>Pearson BTEC Level 3 Sport revision tools.</p>
+    </div>
+    <div class="sec">
+      <div class="sec-label">Units</div>
+      <div class="unit-grid">
+        <div class="unit-card click" onclick="go('/revision/btec/level-3/sport/unit-1')">
+          <div class="unit-num">Unit 01 · 120 GLH</div>
+          <div class="unit-title">Anatomy and Physiology</div>
+          <div class="unit-desc">Exam-style revision for the external unit, including mock papers, quiz mode, flashcards and full mark schemes.</div>
+          <div class="unit-ft">
+            <div style="display:flex;gap:var(--sp2);align-items:center">
+              <span class="badge badge-ext">External</span>
+              <span class="pill pill-live">Live</span>
+            </div>
+            <button class="btn btn-p" onclick="event.stopPropagation();go('/revision/btec/level-3/sport/unit-1')">Open</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     SPORT UNIT 1  /revision/btec/level-3/sport/unit-1
+============================================================ -->
+<div class="page page-iframe" id="p-sport-u1">
+  <div class="cd">
+    <nav class="bc">
+      <button class="bc-item" onclick="go('')">Home</button>
+      <span class="bc-sep">›</span>
+      <button class="bc-item" onclick="go('/revision')">Revision</button>
+      <span class="bc-sep">›</span>
+      <button class="bc-item" onclick="go('/revision/btec')">BTEC</button>
+      <span class="bc-sep">›</span>
+      <button class="bc-item" onclick="go('/revision/btec/level-3')">Level 3</button>
+      <span class="bc-sep">›</span>
+      <button class="bc-item" onclick="go('/revision/btec/level-3/sport')">Sport</button>
+      <span class="bc-sep">›</span>
+      <span class="bc-item cur">Unit 1</span>
+    </nav>
+  </div>
+  <div class="cf">
+    <div class="iframe-wrap">
+      <iframe
+        src="revision/btec/level-3/sport/unit-1/index.html"
+        title="Unit 1 Anatomy and Physiology"
+        loading="lazy"
+        allowfullscreen>
+      </iframe>
+    </div>
+  </div>
+</div>
+
 <footer>
   <div class="footer-inner">
     <span class="footer-brand">RA10</span>
@@ -1377,23 +1627,42 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
      SCRIPTS
 ============================================================ -->
 <script>
-/* ---------- THEME (light default) ---------- */
+/* ---------- THEME ---------- */
 (function(){
+  const THEME_KEY = 'ra10-theme';
   const btn = document.getElementById('theme-toggle');
   const root = document.documentElement;
-  root.setAttribute('data-theme','light');
-  icon('light');
-  btn.addEventListener('click',()=>{
-    const next = root.getAttribute('data-theme')==='dark'?'light':'dark';
-    root.setAttribute('data-theme',next);
+  function syncIframeThemes(){
+    const theme = root.getAttribute('data-theme') || 'light';
+    document.querySelectorAll('iframe').forEach(frame => {
+      try {
+        if (frame.contentWindow) frame.contentWindow.postMessage({ type: 'RA10_THEME', theme }, '*');
+      } catch (_) {}
+    });
+  }
+  function applyTheme(theme, persist){
+    const next = theme === 'dark' ? 'dark' : 'light';
+    root.setAttribute('data-theme', next);
     icon(next);
-    btn.setAttribute('aria-label', next==='dark'?'Switch to light mode':'Switch to dark mode');
+    btn.setAttribute('aria-label', next === 'dark' ? 'Switch to light mode' : 'Switch to dark mode');
+    if (persist) localStorage.setItem(THEME_KEY, next);
+    syncIframeThemes();
+  }
+  const initial = localStorage.getItem(THEME_KEY) || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  applyTheme(initial, false);
+  btn.addEventListener('click',()=>{
+    applyTheme(root.getAttribute('data-theme')==='dark' ? 'light' : 'dark', true);
   });
+  window.addEventListener('storage', (event) => {
+    if (event.key === THEME_KEY && event.newValue) applyTheme(event.newValue, false);
+  });
+  document.querySelectorAll('iframe').forEach(frame => frame.addEventListener('load', syncIframeThemes));
   function icon(t){
     btn.innerHTML = t==='dark'
       ? '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>'
       : '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
   }
+  window.syncIframeThemes = syncIframeThemes;
 })();
 
 /* ---------- ROUTER ---------- */
@@ -1407,6 +1676,8 @@ const ROUTES = {
   '/revision/btec/level-3':              'p-btec-l3',
   '/revision/btec/level-3/business':     'p-btec-business-l3',
   '/revision/btec/level-3/business/unit-3': 'p-bus-u3',
+  '/revision/btec/level-3/sport':        'p-btec-sport-l3',
+  '/revision/btec/level-3/sport/unit-1': 'p-sport-u1',
   '/revision/btec/level-3/IT-AAQ':       'p-it-aaq',
   '/revision/btec/level-3/IT-AAQ/unit-1':'p-unit1',
   '/tools':                               'p-tools',
@@ -1448,6 +1719,22 @@ function hideRevPreview() {
     const el = document.getElementById('rev-preview');
     if (el) el.style.display = 'none';
   }, 300);
+}
+
+function openMobileSubjectSheet() {
+  document.body.classList.add('mobile-sheet-open');
+  const btn = document.getElementById('mobile-subjects-btn');
+  if (btn) btn.setAttribute('aria-expanded', 'true');
+  const sheet = document.getElementById('mobile-subject-sheet');
+  if (sheet) sheet.setAttribute('aria-hidden', 'false');
+}
+
+function closeMobileSubjectSheet() {
+  document.body.classList.remove('mobile-sheet-open');
+  const btn = document.getElementById('mobile-subjects-btn');
+  if (btn) btn.setAttribute('aria-expanded', 'false');
+  const sheet = document.getElementById('mobile-subject-sheet');
+  if (sheet) sheet.setAttribute('aria-hidden', 'true');
 }
 
 async function loadLbPreview() {
@@ -1598,6 +1885,7 @@ window.addEventListener('hashchange', () => {
 function go(path){
   document.querySelectorAll('.iframe-wrap.full-screen').forEach(w=>w.classList.remove('full-screen'));
   document.body.classList.remove('iframe-fullscreen-mode');
+  closeMobileSubjectSheet();
   location.hash = path;
 }
 
@@ -1630,12 +1918,21 @@ function route(){
     document.body.classList.remove('iframe-fullscreen-mode');
   }
   document.querySelectorAll('.nav-link').forEach(l=>l.classList.remove('active'));
+  document.querySelectorAll('.mobile-nav-btn').forEach(btn => btn.classList.remove('active'));
   for(const [prefix,key] of Object.entries(NAV_MAP)){
     if(path.startsWith(prefix)){
       const nl = document.querySelector(`[data-nav="${key}"]`);
       if(nl) nl.classList.add('active');
       break;
     }
+  }
+  const mobileKey = path === '/' || path === '' ? 'home'
+    : path.startsWith('/account') ? 'profile'
+    : path.startsWith('/revision/btec/level-3/') ? 'subjects'
+    : '';
+  if (mobileKey) {
+    const mobileBtn = document.querySelector(`[data-mobile-nav="${mobileKey}"]`);
+    if (mobileBtn) mobileBtn.classList.add('active');
   }
 }
 
@@ -1669,9 +1966,13 @@ route();
       if (!loggedIn || RA10.getTier() === 'free') document.getElementById('nav-upgrade-btn').style.display = '';
       else document.getElementById('nav-upgrade-btn').style.display = 'none';
       document.getElementById('nav-credit-chip').style.display = loggedIn ? '' : 'none';
+      const mobileProfileLabel = document.getElementById('mobile-profile-label');
+      const mobileNavAvatar = document.getElementById('mobile-nav-avatar');
+      if (mobileProfileLabel) mobileProfileLabel.textContent = loggedIn ? 'Profile' : 'Sign in';
       if (loggedIn && profile) {
         const initials = (profile.display_name || profile.email || '?').slice(0,2).toUpperCase();
         document.getElementById('nav-avatar-initials').textContent = initials;
+        if (mobileNavAvatar) mobileNavAvatar.textContent = initials;
         document.getElementById('nav-display-name').textContent = profile.display_name || profile.email;
         document.getElementById('dropdown-email').textContent = profile.email;
         const badge = document.getElementById('nav-tier-badge');
@@ -1709,6 +2010,8 @@ route();
         document.getElementById('account-credits').textContent = credits === Infinity ? 'Unlimited credits' : credits + ' credits';
         const resetDate = profile.credits_reset_at ? new Date(profile.credits_reset_at).toLocaleDateString() : 'N/A';
         document.getElementById('account-reset-date').textContent = resetDate;
+      } else if (mobileNavAvatar) {
+        mobileNavAvatar.textContent = '?';
       }
     }
     const updateNavAuth = _updateNavAuth;
@@ -1736,17 +2039,29 @@ route();
       const profile = RA10.getProfile();
       const name = (profile?.display_name || profile?.full_name || '').trim();
       if (!name) {
+        if (sessionStorage.getItem('ra10_profile_setup_dismissed') === '1') return;
         setTimeout(() => {
           document.getElementById('profile-setup-overlay').classList.add('open');
         }, 800);
         return;
       }
+      sessionStorage.removeItem('ra10_profile_setup_dismissed');
       if (!profile?.username) {
         setTimeout(() => {
           document.getElementById('username-setup-overlay').classList.add('open');
         }, 1000);
       }
     }
+
+    function closeProfileSetupOverlay() {
+      sessionStorage.setItem('ra10_profile_setup_dismissed', '1');
+      document.getElementById('profile-setup-overlay')?.classList.remove('open');
+    }
+
+    document.getElementById('profile-setup-close')?.addEventListener('click', closeProfileSetupOverlay);
+    document.getElementById('profile-setup-overlay')?.addEventListener('click', (e) => {
+      if (e.target === document.getElementById('profile-setup-overlay')) closeProfileSetupOverlay();
+    });
 
     document.getElementById('username-setup-skip')?.addEventListener('click', () => {
       document.getElementById('username-setup-overlay').classList.remove('open');
@@ -1783,7 +2098,10 @@ route();
           err.classList.add('show');
         } else {
           clearTimeout(safetyTimeout);
+          await RA10.init();
+          _updateNavAuth();
           document.getElementById('username-setup-overlay').classList.remove('open');
+          checkProfileCompletion();
           showMiniToast('Username saved');
           btn.disabled = false;
           btn.textContent = originalText;
@@ -1828,10 +2146,13 @@ route();
           if (creditsError) throw creditsError;
         }
         clearTimeout(safetyTimeout);
+        await RA10.init();
+        _updateNavAuth();
+        sessionStorage.removeItem('ra10_profile_setup_dismissed');
         document.getElementById('profile-setup-overlay').classList.remove('open');
+        checkProfileCompletion();
         btn.disabled = false;
         btn.textContent = originalText;
-        RA10.init().then(() => updateNavAuth()).catch(() => {});
         return;
       } catch(e) {
         err.textContent = 'Could not save. Please try again.';
@@ -1888,6 +2209,19 @@ route();
     }
 
     document.getElementById('nav-auth-btn').addEventListener('click', () => openAuthModal('signin'));
+    document.getElementById('mobile-profile-btn')?.addEventListener('click', () => {
+      if (RA10.isLoggedIn()) go('/account');
+      else openAuthModal('signin');
+    });
+    document.getElementById('mobile-subjects-btn')?.addEventListener('click', () => {
+      if (document.body.classList.contains('mobile-sheet-open')) closeMobileSubjectSheet();
+      else openMobileSubjectSheet();
+    });
+    document.getElementById('mobile-sheet-backdrop')?.addEventListener('click', closeMobileSubjectSheet);
+    document.getElementById('mobile-sheet-close')?.addEventListener('click', closeMobileSubjectSheet);
+    document.querySelectorAll('[data-mobile-subject]').forEach(button => {
+      button.addEventListener('click', () => go(button.dataset.mobileSubject));
+    });
     document.getElementById('auth-close').addEventListener('click', closeAuthModal);
     document.getElementById('auth-overlay').addEventListener('click', e => { if (e.target === document.getElementById('auth-overlay')) closeAuthModal(); });
     document.getElementById('tab-signin').addEventListener('click', () => switchAuthTab('signin'));
@@ -2268,6 +2602,7 @@ route();
 </div>
 <div class="auth-overlay" id="profile-setup-overlay">
   <div class="auth-modal">
+    <button class="auth-close" id="profile-setup-close" aria-label="Close">✕</button>
     <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:1.5rem">
       <div style="width:32px;height:32px;background:var(--color-primary);border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;color:#fff;font-family:var(--font-d);font-weight:700">R</div>
       <span style="font-family:var(--font-d);font-size:var(--tx-lg)">RA10</span>

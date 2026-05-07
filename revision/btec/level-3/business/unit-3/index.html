@@ -3,6 +3,22 @@
 <head>
 <script>
 (function(){
+  var THEME_KEY = 'ra10-theme';
+  function applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme === 'dark' ? 'dark' : 'light');
+  }
+  var saved = localStorage.getItem(THEME_KEY);
+  applyTheme(saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
+  window.addEventListener('message', function(event) {
+    if (event.source !== window.parent || !event.data || event.data.type !== 'RA10_THEME') return;
+    applyTheme(event.data.theme);
+  });
+  window.addEventListener('storage', function(event) {
+    if (event.key === THEME_KEY) applyTheme(event.newValue || 'light');
+  });
+})();
+
+(function(){
   var s = document.createElement('script');
   var isLocal = location.hostname === '127.0.0.1' || location.hostname === 'localhost';
   s.src = isLocal ? 'http://127.0.0.1:5500/ra10-sdk.js' : 'https://ra10.co.uk/ra10-sdk.js';
@@ -223,16 +239,6 @@
 </head>
 <body>
 <header class="topbar">
-  <div class="brand">
-    <svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true">
-      <rect width="32" height="32" rx="6" fill="#1a56db"/>
-      <text x="16" y="22" text-anchor="middle" font-family="Satoshi, sans-serif" font-weight="900" font-size="14" fill="white">U3</text>
-    </svg>
-    <div>
-      <h1>BTEC Business Unit 3</h1>
-      <p>Personal and Business Finance · Pearson Level 3</p>
-    </div>
-  </div>
   <nav class="tabs">
     <button class="tab active" data-tab="dashboard">Dashboard</button>
     <button class="tab" data-tab="browse">Browse Questions</button>

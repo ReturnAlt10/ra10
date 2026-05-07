@@ -50,11 +50,12 @@
   }
 
   // ---------- Config ----------
-  const SB_URL = 'https://wqjkpxpcqrtrmudgbvbt.supabase.co';
-  const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndxamtweHBjcXJ0cm11ZGdidmJ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg1Mzk2OTMsImV4cCI6MjA2NDExNTY5M30.87f4vdqrP_wXDqVm43_DL6U4RFkrSciyJA79Xpsa50Q';
+  const SB_URL = 'https://tcrrgsylxbyyrmnouihl.supabase.co';
+  const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRjcnJnc3lseGJ5eXJtbm91aWhsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4ODUyMTEsImV4cCI6MjA5MzQ2MTIxMX0.eOp6ma-mfgh8F20nM7E2OaBW28LlZlwuEEWr6k2zDWw';
   const DAILY_TASKS_KEY = 'u3-bus-daily-tasks-v1';
   const STREAK_DATES_KEY = 'ra10_streak_dates';
   const FLASH_STORE_KEY  = 'btec-bus-u3-flash-progress-v1';
+  const SESSION_TYPES = ['quiz_business_u3', 'practice_business_u3', 'mock_business_u3', 'flashcard_business_u3'];
 
   // ---------- Spec (Business Unit 3) ----------
   const SPEC = {
@@ -237,7 +238,7 @@
     try {
       const sb = window.supabase.createClient(SB_URL, SB_KEY);
       const session = RA10.getSession();
-      const { data: rows } = await sb.from('revision_sessions').select('aim_breakdown').eq('user_id', session.user.id).limit(20).order('created_at', { ascending: false });
+      const { data: rows } = await sb.from('revision_sessions').select('aim_breakdown').eq('user_id', session.user.id).in('session_type', SESSION_TYPES).limit(20).order('created_at', { ascending: false });
       const aimTotals = {};
       const aimCorrect = {};
       (rows || []).forEach(r => {
@@ -519,19 +520,35 @@
   // ---------- Progress sidebar ----------
   function ensureProgressSidebar() {
     if (document.getElementById('u1-progress-sidebar')) return;
+    let toggle = null;
     const sidebar = el('aside', { id: 'u1-progress-sidebar', class: 'u1-progress-sidebar hidden' },
       el('div', { class: 'u1-sb-head' },
         el('span', { class: 'u1-sb-chip' }, '⚡ Progress Boost'),
-        el('button', { class: 'u1-sb-close', onclick: () => sidebar.classList.remove('open') }, '✕')
+        el('button', { class: 'u1-sb-close', onclick: () => {
+          window._u1SidebarDismissed = true;
+          sidebar.classList.remove('open');
+          sidebar.classList.add('hidden');
+          document.body.classList.remove('has-u1-sidebar');
+          if (toggle) toggle.style.display = '';
+        } }, '✕')
       ),
       el('div', { id: 'u1-sb-body', class: 'u1-sb-body' },
         el('p', { class: 'muted' }, 'Loading progress...')
       )
     );
-    const toggle = el('button', {
+    toggle = el('button', {
       id: 'u1-sidebar-toggle',
       class: 'u1-sidebar-toggle',
-      onclick: () => { sidebar.classList.toggle('open'); }
+      onclick: () => {
+        window._u1SidebarDismissed = false;
+        sidebar.classList.remove('hidden');
+        document.body.classList.add('has-u1-sidebar');
+        if (window.matchMedia('(max-width: 1100px)').matches) {
+          sidebar.classList.toggle('open');
+        } else {
+          sidebar.classList.remove('open');
+        }
+      }
     }, '⚡ Progress');
     document.body.appendChild(sidebar);
     document.body.appendChild(toggle);
@@ -547,6 +564,13 @@
     if (!window.RA10 || !RA10.isLoggedIn() || !window.supabase) {
       sidebar.classList.add('hidden');
       toggle.style.display = 'none';
+      document.body.classList.remove('has-u1-sidebar');
+      return;
+    }
+
+    if (window._u1SidebarDismissed) {
+      sidebar.classList.add('hidden');
+      toggle.style.display = '';
       document.body.classList.remove('has-u1-sidebar');
       return;
     }
@@ -573,8 +597,12 @@
         const since = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
         const result = await Promise.all([
           sb.from('profiles').select('xp_this_week, xp_total').eq('id', userId).single(),
-          sb.from('revision_sessions').select('created_at, questions_total, session_type').eq('user_id', userId).gte('created_at', since),
-          sb.rpc('get_leaderboard_preview')
+          sb.from('revision_sessions').select('created_at, questions_total, session_type').eq('user_id', userId).in('session_type', SESSION_TYPES).gte('created_at', since),
+          (async () => {
+            const rpcRes = await sb.rpc('get_leaderboard_preview');
+            if (!rpcRes.error && Array.isArray(rpcRes.data)) return rpcRes;
+            return { data: [] };
+          })()
         ]);
         profile = result[0].data; sessions = result[1].data; leaders = result[2].data;
         window._sidebarCache = { ts: Date.now(), profile, sessions, leaders };
@@ -891,11 +919,15 @@
     return 'short';
   }
 
+  function isDiagramQuestion(q) {
+    return q.type === 'diagram' || q.type === 'draw' || q.command_verb === 'Draw';
+  }
+
   async function generateMock(total, seed, aims, styles) {
     if (!await ra10Gate('mock_paper_gen')) return;
     const rng = makeRng(seed);
     styles = styles && styles.length ? styles : ['pearson'];
-    const pool = QUESTIONS.filter(q => aims.includes(q.learning_aim));
+    const pool = QUESTIONS.filter(q => aims.includes(q.learning_aim) && !isDiagramQuestion(q));
     if (!pool.length) { alert('No questions available for selected aims.'); return; }
 
     if (!(styles.length === 1 && styles[0] === 'pearson')) {
@@ -1651,7 +1683,7 @@
     const since = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
 
     const [{ data: sessions }, { data: profile }] = await Promise.all([
-      sb.from('revision_sessions').select('*').eq('user_id', session.user.id).gte('created_at', since).order('created_at', { ascending: false }),
+      sb.from('revision_sessions').select('*').eq('user_id', session.user.id).in('session_type', SESSION_TYPES).gte('created_at', since).order('created_at', { ascending: false }),
       sb.from('profiles').select('xp_this_week, xp_total').eq('id', session.user.id).single()
     ]);
 

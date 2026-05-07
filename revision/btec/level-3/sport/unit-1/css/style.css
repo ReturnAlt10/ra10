@@ -1,4 +1,4 @@
-/* BTEC IT Unit 1 — Tool styles */
+/* BTEC Sport Unit 1 — Tool styles */
 :root {
   --bg: #FBFAF6;
   --surface: #FFFFFF;
@@ -7,9 +7,9 @@
   --muted: #8A9694;
   --line: #E2E5DF;
   --line-2: #D6DBD3;
-  --accent: #00594E;          /* Pearson-ish deep teal */
-  --accent-2: #B7D9C8;
-  --accent-ink: #04332D;
+  --accent: #1D4ED8;          /* Sport Unit 1 vivid blue */
+  --accent-2: #DBEAFE;
+  --accent-ink: #1E3A8A;
   --warn: #B45309;
   --warn-bg: #FEF3C7;
   --shadow-sm: 0 1px 2px rgba(20,32,30,.04), 0 4px 8px rgba(20,32,30,.04);
@@ -29,8 +29,8 @@
   --muted: #8a9b94;
   --line: #2a3732;
   --line-2: #33423c;
-  --accent-2: #103a34;
-  --accent-ink: #8ce5d6;
+  --accent-2: #1E3A8A;
+  --accent-ink: #BFDBFE;
   --warn-bg: #3a2b10;
   --shadow-sm: 0 1px 2px rgba(0,0,0,.24), 0 4px 10px rgba(0,0,0,.22);
   --shadow-md: 0 10px 28px rgba(0,0,0,.35);
@@ -218,6 +218,29 @@ main {
 .qrow-body { font-size: 15px; line-height: 1.55; }
 .qrow .scenario { color: var(--ink-2); font-size: 14px; margin-top: 6px; line-height: 1.5; font-style: italic;}
 .qrow .question-text { margin: 8px 0 0; }
+.source-material {
+  margin: 12px 0;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  background: #f8fafc;
+}
+.source-head {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 6px;
+}
+.source-text { margin: 0 0 8px; font-size: 14px; color: var(--ink-2); }
+.source-list { margin: 0; padding-left: 18px; }
+.source-list li { font-size: 13px; margin-bottom: 4px; }
+.source-figure { margin-top: 8px; }
+.source-svg { width: 100%; max-width: 560px; height: auto; display: block; }
+.source-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 8px; }
+.source-table th, .source-table td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--line); }
+.source-table th { background: #e2e8f0; }
 .qrow .question-text .marks-bracket { color: var(--ink-2); font-weight: 700; margin-left: 6px;}
 .qrow .markscheme {
   display: none;
@@ -234,24 +257,6 @@ main {
 .markscheme table.levels { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 13px;}
 .markscheme table.levels th, .markscheme table.levels td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--line); vertical-align: top;}
 .markscheme table.levels th { background: var(--bg); font-weight: 700; }
-.markscheme .ms-diagram {
-  margin-top: 14px;
-  padding-top: 12px;
-  border-top: 1px dashed var(--line-2);
-}
-.markscheme .ms-diagram-svg {
-  margin-top: 8px;
-  overflow-x: auto;
-  background: var(--surface);
-  border-radius: var(--r-sm);
-  padding: 12px;
-}
-.markscheme .ms-diagram-svg svg {
-  max-width: 100%;
-  height: auto;
-  display: block;
-  margin: 0 auto;
-}
 
 /* ---- Mock paper ---- */
 .mock-controls {
@@ -296,6 +301,7 @@ main {
   background: var(--bg); padding: 14px 18px; border-radius: var(--r-sm); margin: 14px 0 18px;
   font-size: 15px; line-height: 1.55;
 }
+.paper-section .source-material { margin-bottom: 16px; }
 .paper-question { padding-left: 22px; margin-bottom: 14px; position: relative; }
 .paper-question .qlabel { position: absolute; left: 0; font-weight: 700; }
 .paper-question .qtext { font-size: 15px; }
@@ -323,6 +329,7 @@ main {
   padding: 28px;
 }
 .practice-card .scenario { background: var(--bg); padding: 14px 18px; border-radius: var(--r-sm); margin: 16px 0; font-size: 15px;}
+.practice-card .source-material { margin-bottom: 14px; }
 .practice-card .question { font-size: 17px; font-weight: 600; line-height: 1.5; }
 .practice-card textarea {
   width: 100%; min-height: 220px;
@@ -431,6 +438,7 @@ main {
 .quiz-option.wrong { border-color: #C2331E; background: #FAE9E5; }
 .quiz-option.wrong .opt-letter { background: #C2331E; color: white; border-color: #C2331E; }
 .quiz-option.locked { cursor: default; }
+.quiz-card .source-material { margin-top: 10px; }
 .quiz-explain {
   margin-top: 18px; padding: 14px 16px;
   background: #F4FAF7; border-left: 3px solid var(--accent); border-radius: var(--r-sm);

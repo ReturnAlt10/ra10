@@ -11,6 +11,7 @@
     "guidance": "(6)",
     "type": "diagram",
     "diagram_kind": "flowchart",
+    "mermaid": "flowchart TD\n  A([Start]) --> B[/Input username and password/]\n  B --> C{Credentials valid?}\n  C -->|Yes| D[Access portal homepage]\n  D --> E([End])\n  C -->|No| F[Increment attempt counter]\n  F --> G{3 attempts made?}\n  G -->|No| B\n  G -->|Yes| H[Lock account and alert IT manager]\n  H --> E",
     "mark_scheme": {
       "instruction": "Award up to six marks. Diagram must use conventional flowchart symbols and show a clear, logical flow.",
       "points": [
@@ -37,6 +38,7 @@
     "guidance": "(6)",
     "type": "diagram",
     "diagram_kind": "flowchart",
+    "mermaid": "flowchart TD\n  A([Start]) --> B[Read soil-moisture sensor]\n  B --> C{Moisture below threshold?}\n  C -->|Yes| D[Switch sprinklers on 5 minutes]\n  D --> E[Wait 30 minutes]\n  E --> B\n  C -->|No| F[Wait 30 minutes]\n  F --> B\n  B -.-> Z([End - system stopped])",
     "mark_scheme": {
       "instruction": "Award up to six marks based on the criteria below.",
       "points": [
@@ -62,6 +64,7 @@
     "guidance": "(4)",
     "type": "diagram",
     "diagram_kind": "flowchart",
+    "mermaid": "flowchart TD\n  A([Start]) --> B{Customer signed in?}\n  B -->|Yes| C[Add product to basket]\n  C --> D([End])\n  B -->|No| E[Prompt to sign in or register]\n  E --> F[Sign in or register]\n  F --> C",
     "mark_scheme": {
       "instruction": "Award up to four marks.",
       "points": [
@@ -84,6 +87,7 @@
     "guidance": "(4)",
     "type": "diagram",
     "diagram_kind": "network",
+    "mermaid": "graph TD\n  SW[Switch / Hub] --> PC1[Computer 1]\n  SW --> PC2[Computer 2]\n  SW --> PC3[Computer 3]\n  SW --> PC4[Computer 4]\n  SW --> PR[Printer]",
     "mark_scheme": {
       "instruction": "Award up to four marks.",
       "points": [
@@ -107,6 +111,7 @@
     "guidance": "(4)",
     "type": "diagram",
     "diagram_kind": "network",
+    "mermaid": "graph LR\n  T1([Terminator]) --- PC1[Workstation 1]\n  PC1 --- PC2[Workstation 2]\n  PC2 --- PC3[Workstation 3]\n  PC3 --- PC4[Workstation 4]\n  PC4 --- PC5[Workstation 5]\n  PC5 --- PC6[Workstation 6]\n  PC6 --- T2([Terminator])",
     "mark_scheme": {
       "instruction": "Award up to four marks.",
       "points": [
@@ -129,6 +134,7 @@
     "guidance": "(4)",
     "type": "diagram",
     "diagram_kind": "network",
+    "mermaid": "graph TD\n  PC1[Computer 1] --> PC2[Computer 2]\n  PC2 --> PC3[Computer 3]\n  PC3 --> PC4[Computer 4]\n  PC4 --> PC5[Computer 5]\n  PC5 --> PC1",
     "mark_scheme": {
       "instruction": "Award up to four marks.",
       "points": [
@@ -151,6 +157,7 @@
     "guidance": "(6)",
     "type": "diagram",
     "diagram_kind": "network",
+    "mermaid": "graph LR\n  subgraph S1[Site 1]\n    C1[8 Computers] --> SW1[Switch]\n    SV1[Server] --> SW1\n    P1[Printer] --> SW1\n    SW1 --> R1[Router]\n  end\n  subgraph S2[Site 2]\n    C2[8 Computers] --> SW2[Switch]\n    SV2[Server] --> SW2\n    P2[Printer] --> SW2\n    SW2 --> R2[Router]\n  end\n  R1 ---|Leased Line / WAN| R2",
     "mark_scheme": {
       "instruction": "Award up to six marks.",
       "points": [
@@ -175,6 +182,7 @@
     "guidance": "(4)",
     "type": "diagram",
     "diagram_kind": "network",
+    "mermaid": "graph TD\n  L[Laptop] ---|Bluetooth| PH[Phone]\n  L ---|Bluetooth| SW[Smartwatch]\n  L ---|Bluetooth| HH[Wireless Headphones]",
     "mark_scheme": {
       "instruction": "Award up to four marks.",
       "points": [
@@ -197,6 +205,7 @@
     "guidance": "(6)",
     "type": "diagram",
     "diagram_kind": "flowchart",
+    "mermaid": "flowchart TD\n  A([Start]) --> B[Copy database to external drive]\n  B --> C{Backup successful?}\n  C -->|Yes| D[Log success]\n  D --> E([End])\n  C -->|No| F[Retry - copy database again]\n  F --> G{Backup successful second time?}\n  G -->|Yes| D\n  G -->|No| H[Send email alert to IT administrator]\n  H --> E",
     "mark_scheme": {
       "instruction": "Award up to six marks.",
       "points": [
@@ -221,6 +230,7 @@
     "guidance": "(4)",
     "type": "diagram",
     "diagram_kind": "system",
+    "mermaid": "graph LR\n  CD[Customer Device] --> ENC[Encrypt card data]\n  ENC -->|HTTPS - encrypted over internet| SRV[Shop Server]\n  SRV --> DEC[Decrypt and process data]",
     "mark_scheme": {
       "instruction": "Award up to four marks.",
       "points": [
@@ -243,6 +253,7 @@
     "guidance": "(4)",
     "type": "diagram",
     "diagram_kind": "flowchart",
+    "mermaid": "flowchart TD\n  A([Start]) --> B[/Input age/]\n  B --> C{Age between 18 and 100 and a whole number?}\n  C -->|No| D[Show error message]\n  D --> B\n  C -->|Yes| E[Accept age]\n  E --> F([End])",
     "mark_scheme": {
       "instruction": "Award up to four marks.",
       "points": [
@@ -265,6 +276,7 @@
     "guidance": "(6)",
     "type": "diagram",
     "diagram_kind": "flowchart",
+    "mermaid": "flowchart TD\n  A([Start]) --> B[Customer chooses film and showing]\n  B --> C[Customer selects seats]\n  C --> D{Seats still available?}\n  D -->|No| C\n  D -->|Yes| E[Customer enters payment details]\n  E --> F[Send confirmation email]\n  F --> G([End])",
     "mark_scheme": {
       "instruction": "Award up to six marks.",
       "points": [
@@ -289,6 +301,7 @@
     "guidance": "(4)",
     "type": "diagram",
     "diagram_kind": "network",
+    "mermaid": "graph LR\n  L[Employee Laptop at home] -->|Encrypted VPN tunnel over internet| FW[Office Router / Firewall]\n  FW --> FS[Office File Server]",
     "mark_scheme": {
       "instruction": "Award up to four marks.",
       "points": [
@@ -311,6 +324,7 @@
     "guidance": "(6)",
     "type": "diagram",
     "diagram_kind": "flowchart",
+    "mermaid": "flowchart TD\n  A([Start]) --> B[/Scan barcode/]\n  B --> C[Look up price in products database]\n  C --> D[Reduce stock level by one]\n  D --> E{Stock below reorder level?}\n  E -->|Yes| F[Send alert to manager]\n  F --> G[Output item on receipt]\n  E -->|No| G\n  G --> H([End])",
     "mark_scheme": {
       "instruction": "Award up to six marks.",
       "points": [
@@ -335,6 +349,7 @@
     "guidance": "(4)",
     "type": "diagram",
     "diagram_kind": "network",
+    "mermaid": "graph TD\n  R[Router - Internet uplink] -->|Ethernet| PC[Desktop PC]\n  R -->|Ethernet| TV[Smart TV]\n  R -.->|Wi-Fi| L1[Laptop 1]\n  R -.->|Wi-Fi| L2[Laptop 2]\n  R -.->|Wi-Fi| SP1[Smartphone 1]\n  R -.->|Wi-Fi| SP2[Smartphone 2]\n  R -.->|Wi-Fi| SP3[Smartphone 3]\n  R -.->|Wi-Fi| TB[Tablet]",
     "mark_scheme": {
       "instruction": "Award up to four marks.",
       "points": [
@@ -357,6 +372,7 @@
     "guidance": "(6)",
     "type": "diagram",
     "diagram_kind": "flowchart",
+    "mermaid": "flowchart TD\n  A([Start]) --> B[Receive email]\n  B --> C[Scan attachments with anti-virus]\n  C --> D{Virus detected?}\n  D -->|Yes| E[Quarantine email]\n  E --> F[Notify user]\n  F --> G([End])\n  D -->|No| H[Deliver to inbox]\n  H --> G",
     "mark_scheme": {
       "instruction": "Award up to six marks.",
       "points": [
@@ -381,6 +397,7 @@
     "guidance": "(4)",
     "type": "diagram",
     "diagram_kind": "flowchart",
+    "mermaid": "flowchart TD\n  A([Start]) --> B[/Input name, date of birth, email/]\n  B --> C{Name not blank?}\n  C -->|No| B\n  C -->|Yes| D{Date of birth valid?}\n  D -->|No| B\n  D -->|Yes| E{Email contains at symbol?}\n  E -->|No| B\n  E -->|Yes| F[Save record]\n  F --> G([End])",
     "mark_scheme": {
       "instruction": "Award up to four marks.",
       "points": [
@@ -403,6 +420,7 @@
     "guidance": "(4)",
     "type": "diagram",
     "diagram_kind": "flowchart",
+    "mermaid": "flowchart TD\n  A([Start]) --> B[/Scan library card/]\n  B --> C[/Scan book/]\n  C --> D{Done pressed?}\n  D -->|No| C\n  D -->|Yes| E[Update books to on loan]\n  E --> F[Print receipt]\n  F --> G([End])",
     "mark_scheme": {
       "instruction": "Award up to four marks.",
       "points": [
