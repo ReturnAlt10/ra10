@@ -100,6 +100,9 @@
     creditschange: [],
   };
 
+  const EXAM_SEASON_BONUS_CREDITS = 50;
+  const EXAM_SEASON_BONUS_END_UTC = Date.parse('2026-08-02T00:00:00Z');
+
   let _supabaseClient = null;
   let _session = null;
   let _profile = null;
@@ -119,6 +122,53 @@
 
   function _getCost(action) {
     return ACTION_COSTS[action] ?? 0;
+  }
+
+  function _isExamSeasonBonusActive() {
+    return Date.now() < EXAM_SEASON_BONUS_END_UTC;
+  }
+
+  function _getStoredCredits() {
+    if (!_profile || !Number.isFinite(_profile.credits)) {
+      return 0;
+    }
+    return Math.max(0, Number(_profile.credits) || 0);
+  }
+
+  function _getExamBonusUsageKey() {
+    const userId = _session?.user?.id || _profile?.id || '';
+    return userId ? ('ra10_exam_bonus_used_' + userId) : '';
+  }
+
+  function _getExamBonusUsed() {
+    const key = _getExamBonusUsageKey();
+    if (!key) {
+      return 0;
+    }
+    const raw = Number(localStorage.getItem(key) || '0');
+    if (!Number.isFinite(raw)) {
+      return 0;
+    }
+    return Math.max(0, Math.min(EXAM_SEASON_BONUS_CREDITS, Math.floor(raw)));
+  }
+
+  function _setExamBonusUsed(value) {
+    const key = _getExamBonusUsageKey();
+    if (!key) {
+      return;
+    }
+    const safe = Math.max(0, Math.min(EXAM_SEASON_BONUS_CREDITS, Math.floor(Number(value) || 0)));
+    localStorage.setItem(key, String(safe));
+  }
+
+  function _getExamBonusRemaining() {
+    if (!isLoggedIn() || !_isExamSeasonBonusActive()) {
+      return 0;
+    }
+    if (UNLIMITED_TIERS.has(_normalizeTier(_profile?.tier))) {
+      return 0;
+    }
+    return Math.max(0, EXAM_SEASON_BONUS_CREDITS - _getExamBonusUsed());
   }
 
   function _getSupabaseFactory() {
@@ -573,7 +623,7 @@
     if (_profile.unlimited_credits) {
       return Infinity;
     }
-    return Number.isFinite(_profile.credits) ? _profile.credits : 0;
+    return _getStoredCredits() + _getExamBonusRemaining();
   }
 
   function canAfford(action) {
@@ -602,12 +652,26 @@
       return true;
     }
 
-    const current = getCredits();
-    const newAmount = Math.max(0, current - cost);
+    const currentBase = _getStoredCredits();
+    const bonusRemaining = _getExamBonusRemaining();
+    if ((currentBase + bonusRemaining) < cost) {
+      return false;
+    }
+
+    const fromBonus = Math.min(cost, bonusRemaining);
+    const fromBase = cost - fromBonus;
+    const newAmount = Math.max(0, currentBase - fromBase);
+    if (fromBonus > 0) {
+      _setExamBonusUsed(_getExamBonusUsed() + fromBonus);
+    }
+
     const client = await _ensureSupabaseClient();
     const result = await client.from('profiles').update({ credits: newAmount }).eq('id', _profile.id).select().single();
     if (result.error || !result.data) {
       console.warn('RA10 spendCredits failed', result.error);
+      if (fromBonus > 0) {
+        _setExamBonusUsed(_getExamBonusUsed() - fromBonus);
+      }
       return false;
     }
     _profile = result.data;
@@ -623,7 +687,7 @@
     if (UNLIMITED_TIERS.has(getTier())) {
       return true;
     }
-    const current = getCredits();
+    const current = _getStoredCredits();
     const newAmount = current + grant;
     const client = await _ensureSupabaseClient();
     const result = await client.from('profiles').update({ credits: newAmount }).eq('id', _profile.id).select().single();
