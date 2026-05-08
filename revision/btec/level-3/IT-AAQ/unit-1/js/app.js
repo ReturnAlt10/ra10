@@ -34,7 +34,7 @@ function shuffle(arr, rng) { arr = arr.slice(); for (let i = arr.length - 1; i >
 
 const SB_URL = 'https://tcrrgsylxbyyrmnouihl.supabase.co';
 const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRjcnJnc3lseGJ5eXJtbm91aWhsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4ODUyMTEsImV4cCI6MjA5MzQ2MTIxMX0.eOp6ma-mfgh8F20nM7E2OaBW28LlZlwuEEWr6k2zDWw';
-const DAILY_TASKS_KEY = 'u1-daily-tasks-v1';
+const DAILY_TASKS_KEY = 'ra10-daily-tasks-v2';
 const STREAK_DATES_KEY = 'ra10_streak_dates';
 const SESSION_TYPES = ['quiz', 'practice', 'mock', 'flashcard'];
 
@@ -112,6 +112,8 @@ function getDailyTasksState() {
         tasks: {
           dailyQuiz: !!parsed.tasks.dailyQuiz,
           practice5: !!parsed.tasks.practice5,
+          practice10: !!parsed.tasks.practice10,
+          practice15: !!parsed.tasks.practice15,
           flashReview: !!parsed.tasks.flashReview,
           share: !!parsed.tasks.share,
           login: !!parsed.tasks.login
@@ -122,7 +124,7 @@ function getDailyTasksState() {
   } catch (e) {}
   return {
     date: today,
-    tasks: { dailyQuiz: false, practice5: false, flashReview: false, share: false, login: false },
+    tasks: { dailyQuiz: false, practice5: false, practice10: false, practice15: false, flashReview: false, share: false, login: false },
     practiceCount: 0
   };
 }
@@ -146,7 +148,15 @@ function addPracticeProgress(count) {
   state.practiceCount = Math.max(0, Number(nextCount || 0));
   if (state.practiceCount >= 5 && !state.tasks.practice5) {
     state.tasks.practice5 = true;
-    awardXP(25, '+25 XP — Practice 5 complete!');
+    awardXP(50, '+50 XP — Practice 5 complete!');
+  }
+  if (state.practiceCount >= 10 && !state.tasks.practice10) {
+    state.tasks.practice10 = true;
+    awardXP(30, '+30 XP — Practice 10 complete!');
+  }
+  if (state.practiceCount >= 15 && !state.tasks.practice15) {
+    state.tasks.practice15 = true;
+    awardXP(45, '+45 XP — Practice 15 complete!');
   }
   saveDailyTasksState(state);
   if (document.getElementById('view-you')?.classList.contains('active')) renderYou();
@@ -301,7 +311,7 @@ async function renderYou() {
       <article class="you-task-card ${state.tasks.dailyQuiz ? 'done' : ''}">
         <div class="you-task-head">
           <div><strong>Daily Quiz</strong><div class="muted">Complete a 10-question quiz on your weakest aim.</div></div>
-          <span class="you-xp-pill">⚡ 40 XP</span>
+          <span class="you-xp-pill">⚡ 25 XP</span>
         </div>
         <div class="you-task-foot">
           ${taskStatus(state.tasks.dailyQuiz)}
@@ -314,7 +324,7 @@ async function renderYou() {
       <article class="you-task-card ${state.tasks.practice5 ? 'done' : ''}">
         <div class="you-task-head">
           <div><strong>Answer 5 practice questions</strong><div class="muted">Tracked from auto-marked practice answers.</div></div>
-          <span class="you-xp-pill">⚡ 25 XP</span>
+          <span class="you-xp-pill">⚡ 50 XP</span>
         </div>
         <div class="you-task-progress"><span style="width:${practicePct}%;"></span></div>
         <div class="you-task-foot">
@@ -1390,6 +1400,10 @@ function renderPracticeCard() {
     btnReveal.textContent = msBox.style.display === 'none' ? 'Reveal mark scheme' : 'Hide mark scheme';
   });
   btnAutoMark.addEventListener('click', async () => {
+    btnAutoMark.disabled = true;
+    const _origLabel = btnAutoMark.textContent;
+    btnAutoMark.textContent = 'Marking…';
+    try {
     if (!(await ra10Gate('ai_mark'))) return;
     if (q.type === 'diagram') {
       automarkHost.innerHTML = '';
@@ -1418,6 +1432,10 @@ function renderPracticeCard() {
     }
     updatePracticeSessionFromUi(q, automarkHost);
     automarkHost.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    } finally {
+      btnAutoMark.disabled = false;
+      btnAutoMark.textContent = _origLabel;
+    }
   });
   btnNext.addEventListener('click', () => { practiceIdx++; renderPracticeCard(); });
   btnPrev.addEventListener('click', () => { practiceIdx--; renderPracticeCard(); });
@@ -2458,7 +2476,7 @@ function showQuizResults() {
     if (window._isDailyQuiz) {
       window._isDailyQuiz = false;
       if (completeDailyTask('dailyQuiz')) {
-        awardXP(40, '+40 XP — Daily quiz done!');
+        awardXP(25, '+25 XP — Daily quiz done!');
       }
       if (document.getElementById('view-you')?.classList.contains('active')) renderYou();
     }

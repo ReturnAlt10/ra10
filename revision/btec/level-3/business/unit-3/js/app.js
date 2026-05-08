@@ -52,7 +52,7 @@
   // ---------- Config ----------
   const SB_URL = 'https://tcrrgsylxbyyrmnouihl.supabase.co';
   const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRjcnJnc3lseGJ5eXJtbm91aWhsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4ODUyMTEsImV4cCI6MjA5MzQ2MTIxMX0.eOp6ma-mfgh8F20nM7E2OaBW28LlZlwuEEWr6k2zDWw';
-  const DAILY_TASKS_KEY = 'u3-bus-daily-tasks-v1';
+  const DAILY_TASKS_KEY = 'ra10-daily-tasks-v2';
   const STREAK_DATES_KEY = 'ra10_streak_dates';
   const FLASH_STORE_KEY  = 'btec-bus-u3-flash-progress-v1';
   const SESSION_TYPES = ['quiz_business_u3', 'practice_business_u3', 'mock_business_u3', 'flashcard_business_u3'];
@@ -196,10 +196,22 @@
     const today = todayKey();
     try {
       const s = JSON.parse(localStorage.getItem(DAILY_TASKS_KEY) || '{}');
-      if (s.date !== today) return { date: today, tasks: { dailyQuiz: false, practice5: false, flashReview: false, share: false, login: false }, practiceCount: 0 };
-      return s;
+      if (s.date !== today) return { date: today, tasks: { dailyQuiz: false, practice5: false, practice10: false, practice15: false, flashReview: false, share: false, login: false }, practiceCount: 0 };
+      return {
+        date: today,
+        tasks: {
+          dailyQuiz: !!s?.tasks?.dailyQuiz,
+          practice5: !!s?.tasks?.practice5,
+          practice10: !!s?.tasks?.practice10,
+          practice15: !!s?.tasks?.practice15,
+          flashReview: !!s?.tasks?.flashReview,
+          share: !!s?.tasks?.share,
+          login: !!s?.tasks?.login
+        },
+        practiceCount: Number(s.practiceCount || 0)
+      };
     } catch (e) {
-      return { date: today, tasks: { dailyQuiz: false, practice5: false, flashReview: false, share: false, login: false }, practiceCount: 0 };
+      return { date: today, tasks: { dailyQuiz: false, practice5: false, practice10: false, practice15: false, flashReview: false, share: false, login: false }, practiceCount: 0 };
     }
   }
   function saveDailyTasksState(s) { localStorage.setItem(DAILY_TASKS_KEY, JSON.stringify(s)); }
@@ -213,12 +225,19 @@
   function addPracticeProgress(n) {
     const s = getDailyTasksState();
     s.practiceCount = (Number(s.practiceCount) || 0) + n;
-    saveDailyTasksState(s);
     if (s.practiceCount >= 5 && !s.tasks.practice5) {
       s.tasks.practice5 = true;
-      saveDailyTasksState(s);
-      awardXP(25, '+25 XP — 5 practice answers done!');
+      awardXP(50, '+50 XP — 5 practice answers done!');
     }
+    if (s.practiceCount >= 10 && !s.tasks.practice10) {
+      s.tasks.practice10 = true;
+      awardXP(30, '+30 XP — 10 practice answers done!');
+    }
+    if (s.practiceCount >= 15 && !s.tasks.practice15) {
+      s.tasks.practice15 = true;
+      awardXP(45, '+45 XP — 15 practice answers done!');
+    }
+    saveDailyTasksState(s);
   }
   function markFlashReviewStarted() {
     if (completeDailyTask('flashReview')) awardXP(15, '+15 XP — Flashcard session started!');
@@ -358,7 +377,7 @@
         <article class="you-task-card ${state.tasks.dailyQuiz ? 'done' : ''}">
           <div class="you-task-head">
             <div><strong>Daily Quiz</strong><div class="muted">Complete a 10-question quiz on your weakest aim.</div></div>
-            <span class="you-xp-pill">⚡ 40 XP</span>
+            <span class="you-xp-pill">⚡ 25 XP</span>
           </div>
           <div class="you-task-foot">
             ${taskStatus(state.tasks.dailyQuiz)}
@@ -371,7 +390,7 @@
         <article class="you-task-card ${state.tasks.practice5 ? 'done' : ''}">
           <div class="you-task-head">
             <div><strong>Answer 5 practice questions</strong><div class="muted">Tracked from auto-marked practice answers.</div></div>
-            <span class="you-xp-pill">⚡ 25 XP</span>
+            <span class="you-xp-pill">⚡ 50 XP</span>
           </div>
           <div class="you-task-progress"><span style="width:${practicePct}%;"></span></div>
           <div class="you-task-foot">
@@ -1329,6 +1348,10 @@
       btnReveal.textContent = msBox.style.display === 'none' ? 'Reveal mark scheme' : 'Hide mark scheme';
     });
     btnAutoMark.addEventListener('click', async () => {
+      btnAutoMark.disabled = true;
+      const _origLabel = btnAutoMark.textContent;
+      btnAutoMark.textContent = 'Marking…';
+      try {
       if (!(await ra10Gate('ai_mark'))) return;
       if (q.type === 'multiple_choice') {
         if (!mcChoice.value) { alert('Pick an answer (A–D) first.'); return; }
@@ -1351,6 +1374,10 @@
       }
       updatePracticeSessionFromUi(q, automarkHost);
       automarkHost.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      } finally {
+        btnAutoMark.disabled = false;
+        btnAutoMark.textContent = _origLabel;
+      }
     });
     btnNext.addEventListener('click', () => { practiceIdx++; renderPracticeCard(); });
     btnPrev.addEventListener('click', () => { practiceIdx--; renderPracticeCard(); });
@@ -1706,7 +1733,7 @@
       awardXP(20, '+20 XP — Quiz complete!');
       if (window._isDailyQuiz) {
         window._isDailyQuiz = false;
-        if (completeDailyTask('dailyQuiz')) awardXP(40, '+40 XP — Daily quiz done!');
+        if (completeDailyTask('dailyQuiz')) awardXP(25, '+25 XP — Daily quiz done!');
         if (document.getElementById('view-you')?.classList.contains('active')) renderYou();
       }
     } else if (window._isDailyQuiz) {

@@ -32,6 +32,37 @@
 <link rel="preconnect" href="https://api.fontshare.com">
 <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@500,700,900,400&f[]=jetbrains-mono@500&display=swap">
 <link rel="stylesheet" href="css/style.css?v=20260507c">
+<script>
+  // Subject-credit banner updater
+  window._updateSubjectBanner = function() {
+    const banner = document.getElementById('ra10-subject-banner');
+    if (!banner || !window.RA10 || typeof window._ra10GetUnitCreditsContext !== 'function') {
+      banner.style.display = 'none';
+      return;
+    }
+    const ctx = window._ra10GetUnitCreditsContext();
+    if (!ctx || !ctx.isSubjectTier) {
+      banner.style.display = 'none';
+      return;
+    }
+    if (ctx.ownsCurrentSubject) {
+      banner.innerHTML = '<div class="line-main">Usable now on Business Unit 3: ' + ctx.usableCredits + ' credits</div><div class="line-sub">Includes your Business subject credits and universal credits.</div>';
+    } else {
+      const ownedText = ctx.ownedSubjects.length ? ctx.ownedSubjects.join(', ') : 'another subject';
+      banner.innerHTML = '<div class="line-main">Usable now on Business Unit 3: ' + ctx.usableCredits + ' credits</div><div class="line-sub">You purchased ' + ownedText + '. Only universal credits can be spent on this unit.</div>';
+    }
+    banner.style.display = '';
+  };
+  document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(function() {
+      if (window.RA10 && typeof RA10.on === 'function') {
+        RA10.on('authchange', window._updateSubjectBanner);
+        RA10.on('creditschange', window._updateSubjectBanner);
+        window._updateSubjectBanner();
+      }
+    }, 100);
+  });
+</script>
 <style>
 .ra10-cost-label {
   display: inline-block;
@@ -49,6 +80,29 @@
 .ra10-cost-label.free-label {
   color: rgba(255,255,255,0.6);
   background: rgba(255,255,255,0.12);
+}
+
+.ra10-subject-banner {
+  display: none;
+  padding: 12px 16px;
+  background: linear-gradient(90deg, var(--accent-2), var(--surface));
+  border-bottom: 1px solid var(--line);
+  color: var(--ink);
+}
+
+.ra10-subject-banner .line-main {
+  font-size: 14px;
+  font-weight: 800;
+  margin-bottom: 2px;
+}
+
+.ra10-subject-banner .line-sub {
+  font-size: 12px;
+  color: var(--ink-2);
+}
+
+[data-theme="dark"] .ra10-subject-banner {
+  background: linear-gradient(90deg, #1a2231, #1b1f26);
 }
 
 .tabs .tab.tab-special {
@@ -276,10 +330,10 @@
     <button class="tab" data-tab="questions">Questions</button>
     <button class="tab" data-tab="revise">Revise</button>
     <button class="tab tab-special" data-tab="progress">Progress</button>
-    <button class="tab tab-special" data-tab="you">You</button>
   </nav>
   <div id="unit3-bus-credit-chip" style="margin-left:auto;display:flex;align-items:center;"></div>
 </header>
+<div id="ra10-subject-banner" class="ra10-subject-banner"></div>
 
 <main id="app">
 
@@ -534,7 +588,7 @@
       <p>Track your revision sessions over the last 30 days.</p>
     </header>
     <div id="progress-gate" style="display:none;text-align:center;padding:40px;">
-      <p style="margin-bottom:16px;color:#666;">Sign in to save and view your progress.</p>
+      <p style="margin-bottom:16px;color:var(--ink-2);">Sign in to save and view your progress.</p>
       <button class="btn primary" id="btn-progress-signin">Sign in</button>
     </div>
     <div id="progress-content" style="display:none;">
@@ -542,15 +596,6 @@
       <div id="weak-aims-section" style="margin-bottom:24px;"></div>
       <div id="sessions-list"></div>
     </div>
-  </section>
-
-  <!-- YOU -->
-  <section id="view-you" class="view">
-    <header class="section-head">
-      <h2>You</h2>
-      <p>Daily focus tasks tailored to your revision momentum.</p>
-    </header>
-    <div id="daily-tasks-container"></div>
   </section>
 
   <!-- FLASHCARDS -->
@@ -580,6 +625,134 @@
 <script src="js/guide.js"></script>
 <script src="js/app.js"></script>
 <script>
+const RA10_UNIT_SUBJECT = 'Business';
+const RA10_CREDIT_CHIP_ID = 'unit3-bus-credit-chip';
+const RA10_SUBJECT_BONUS = 300;
+const RA10_ACTION_COSTS = {
+  practice_question: 1,
+  quiz_question: 1,
+  flashcard_flip: 0,
+  mock_paper_gen: 5,
+  ai_mark: 3,
+  whatsapp_export: 2,
+  whatsapp_pdf: 3,
+};
+
+function _ra10GetSubjectStateKey(profile) {
+  const id = String(profile?.id || profile?.email || 'anon');
+  return 'ra10_subject_credit_state:' + id;
+}
+
+function _ra10ReadSubjectState(profile) {
+  try {
+    const raw = localStorage.getItem(_ra10GetSubjectStateKey(profile));
+    return raw ? JSON.parse(raw) : null;
+  } catch (e) {
+    return null;
+  }
+}
+
+function _ra10WriteSubjectState(profile, state) {
+  try {
+    localStorage.setItem(_ra10GetSubjectStateKey(profile), JSON.stringify(state));
+  } catch (e) {
+    // no-op
+  }
+}
+
+function _ra10SyncSubjectState(profile, totalCredits, ownedSubjects) {
+  const ownedKey = ownedSubjects.slice().sort().join('|');
+  const expectedBaseline = Math.max(0, totalCredits - (ownedSubjects.length * RA10_SUBJECT_BONUS));
+  const saved = _ra10ReadSubjectState(profile);
+  let baselineRemaining = expectedBaseline;
+
+  if (saved && saved.ownedKey === ownedKey && Number.isFinite(saved.baselineRemaining)) {
+    baselineRemaining = saved.baselineRemaining;
+  }
+
+  const maxFromPools = baselineRemaining + (ownedSubjects.length * RA10_SUBJECT_BONUS);
+  if (totalCredits > maxFromPools) {
+    baselineRemaining += totalCredits - maxFromPools;
+  }
+
+  baselineRemaining = Math.max(0, Math.min(totalCredits, baselineRemaining));
+  const next = { ownedKey, baselineRemaining };
+  _ra10WriteSubjectState(profile, next);
+  return next;
+}
+
+function _ra10GetUnitCreditsContext() {
+  if (!window.RA10 || !RA10.isLoggedIn()) {
+    return null;
+  }
+  const profile = RA10.getProfile();
+  if (!profile) {
+    return null;
+  }
+
+  const tier = RA10.getTier();
+  const totalCredits = Number(RA10.getCredits()) || 0;
+  if (tier !== 'subject') {
+    return {
+      isSubjectTier: false,
+      ownsCurrentSubject: true,
+      usableCredits: totalCredits,
+      totalCredits,
+      ownedSubjects: [],
+      baselineRemaining: totalCredits,
+    };
+  }
+
+  const ownedSubjects = Array.isArray(profile.unlocked_subjects)
+    ? profile.unlocked_subjects.filter(Boolean)
+    : [];
+  const state = _ra10SyncSubjectState(profile, totalCredits, ownedSubjects);
+  const ownsCurrentSubject = ownedSubjects.includes(RA10_UNIT_SUBJECT);
+  const usableCredits = ownsCurrentSubject ? totalCredits : state.baselineRemaining;
+
+  return {
+    isSubjectTier: true,
+    ownsCurrentSubject,
+    usableCredits,
+    totalCredits,
+    ownedSubjects,
+    baselineRemaining: state.baselineRemaining,
+  };
+}
+
+window._ra10GetUnitCreditsContext = _ra10GetUnitCreditsContext;
+
+function _ra10RenderUnitCreditChip() {
+  if (!window.RA10) {
+    return;
+  }
+  RA10.renderCreditChip(RA10_CREDIT_CHIP_ID);
+
+  const container = document.getElementById(RA10_CREDIT_CHIP_ID);
+  if (!container) {
+    return;
+  }
+
+  const ctx = _ra10GetUnitCreditsContext();
+  if (!ctx || !ctx.isSubjectTier) {
+    return;
+  }
+
+  const chip = container.firstElementChild;
+  if (!chip) {
+    return;
+  }
+  const spans = chip.querySelectorAll('span');
+  const creditsEl = spans.length > 1 ? spans[1] : null;
+  if (creditsEl) {
+    creditsEl.textContent = ctx.usableCredits + ' usable credits';
+  }
+}
+
+function _ra10GetActionCost(action) {
+  return Number(RA10_ACTION_COSTS[action] || 0);
+}
+
 document.addEventListener('DOMContentLoaded', function() {
   function waitForRA10(cb, tries) {
     tries = tries || 0;
@@ -603,12 +776,15 @@ document.addEventListener('DOMContentLoaded', function() {
     updateCostLabels();
     RA10.on('authchange', updateCostLabels);
     RA10.on('authchange', function() {
-      RA10.renderCreditChip('unit3-bus-credit-chip');
+      _ra10RenderUnitCreditChip();
+      window._updateSubjectBanner();
     });
     RA10.on('creditschange', function() {
-      RA10.renderCreditChip('unit3-bus-credit-chip');
+      _ra10RenderUnitCreditChip();
+      window._updateSubjectBanner();
     });
-    RA10.renderCreditChip('unit3-bus-credit-chip');
+    _ra10RenderUnitCreditChip();
+    window._updateSubjectBanner();
   });
 });
 
@@ -617,13 +793,36 @@ async function ra10Gate(action) {
   try {
     if (!window.RA10) return true;
     if (RA10.isOwner()) return true;
-    if (RA10.isPaid()) return true;
     if (!RA10.isLoggedIn()) {
       const result = RA10.guestGate(action, 3, RA10.showPaywall);
-      if (window.RA10) RA10.renderCreditChip('unit3-bus-credit-chip');
+      if (window.RA10) _ra10RenderUnitCreditChip();
       return result === true;
     }
+
+    const ctx = _ra10GetUnitCreditsContext();
+    if (ctx && ctx.isSubjectTier && !ctx.ownsCurrentSubject) {
+      const cost = _ra10GetActionCost(action);
+      if (ctx.usableCredits < cost) {
+        RA10.showPaywall('credits', action);
+        return false;
+      }
+      const spent = await RA10.gate(action, RA10.showPaywall);
+      if (spent) {
+        const profile = RA10.getProfile();
+        const state = _ra10ReadSubjectState(profile);
+        if (state && Number.isFinite(state.baselineRemaining)) {
+          state.baselineRemaining = Math.max(0, state.baselineRemaining - cost);
+          _ra10WriteSubjectState(profile, state);
+        }
+        _ra10RenderUnitCreditChip();
+        window._updateSubjectBanner();
+      }
+      return spent;
+    }
+
     const result = await RA10.gate(action, RA10.showPaywall);
+    _ra10RenderUnitCreditChip();
+    window._updateSubjectBanner();
     return result;
   } catch(e) {
     console.warn('ra10Gate error', e);
@@ -633,7 +832,8 @@ async function ra10Gate(action) {
 
 function _updateGuestChip() {
   if (window.RA10) {
-    RA10.renderCreditChip('unit3-bus-credit-chip');
+    _ra10RenderUnitCreditChip();
+    window._updateSubjectBanner();
   }
 }
 

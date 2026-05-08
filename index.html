@@ -26,6 +26,7 @@
   --color-text-inverse:#f9f8f4;
   --color-primary:#d20000; --color-primary-hover:#a70000; --color-primary-active:#7a0000;
   --color-primary-highlight:#f4d4d4;
+  --color-error:#c62828; --color-error-soft:#fce8e8;
   --color-success:#437a22; --color-success-highlight:#d4dfcc;
   --color-warning:#964219; --color-warning-highlight:#ddcfc6;
   --radius-sm:.375rem; --radius-md:.5rem; --radius-lg:.75rem;
@@ -54,6 +55,7 @@
   --color-text-inverse:#2b2a28;
   --color-primary:#d20000;--color-primary-hover:#a70000;--color-primary-active:#7a0000;
   --color-primary-highlight:#3d1111;
+  --color-error:#ef5350; --color-error-soft:#3d1515;
   --color-success:#6daa45;--color-success-highlight:#3a4435;
   --color-warning:#bb653b;--color-warning-highlight:#564942;
   --shadow-sm:0 1px 2px oklch(0 0 0/.2);
@@ -251,6 +253,29 @@ a,button,[role="button"],input,select,textarea{
 .feat li{display:flex;align-items:center;gap:var(--sp2);font-size:var(--tx-sm);color:var(--color-text-muted)}
 .feat li::before{content:'';display:block;width:6px;height:6px;border-radius:50%;
   background:var(--color-primary);flex-shrink:0}
+
+.tasks-hero-panel{
+  border:1px solid var(--color-border);
+  border-radius:var(--radius-xl);
+  padding:var(--sp6);
+  background:linear-gradient(120deg,#ffe2c6 0%,#ffd6da 35%,#dbe7ff 100%);
+  box-shadow:var(--shadow-md);
+  margin-bottom:var(--sp6);
+}
+.tasks-hero-title{font-size:var(--tx-lg);font-weight:700;color:#3b1f13;margin-bottom:var(--sp2)}
+.tasks-hero-copy{font-size:var(--tx-sm);color:#5b3a2a;margin-bottom:var(--sp4)}
+.tasks-meter{height:10px;border-radius:999px;background:rgba(0,0,0,.12);overflow:hidden}
+.tasks-meter > span{display:block;height:100%;background:linear-gradient(90deg,#ff7a18,#ff4f8b,#5d7bff)}
+.tasks-kpi-row{display:flex;gap:var(--sp3);flex-wrap:wrap;margin-top:var(--sp3)}
+.tasks-kpi{padding:6px 12px;border-radius:999px;background:rgba(255,255,255,.75);font-size:var(--tx-xs);font-weight:700;color:#3b1f13}
+.tasks-card{position:relative;overflow:hidden}
+.tasks-card::before{content:'';position:absolute;inset:auto -24px -30px auto;width:120px;height:120px;border-radius:999px;background:rgba(210,0,0,.08)}
+[data-theme="dark"] .tasks-hero-panel{
+  background:linear-gradient(120deg,#3b2a1f 0%,#452739 35%,#202e4d 100%);
+}
+[data-theme="dark"] .tasks-hero-title{color:#f6dccf}
+[data-theme="dark"] .tasks-hero-copy{color:#d6c6bd}
+[data-theme="dark"] .tasks-kpi{background:rgba(255,255,255,.1);color:#f3e6e0}
 
 /* =====================================================
    HOME HERO
@@ -835,6 +860,7 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
         </div>
       </div>
       <button class="nav-link" data-nav="tools"    onclick="go('/tools')">Tools</button>
+      <button class="nav-link" data-nav="tasks"    onclick="go('/tasks')">Tasks</button>
       <div style="position:relative;display:inline-flex;" id="nav-lb-wrap">
         <button class="nav-link" data-nav="leaderboard" onclick="go('leaderboard')"
           onmouseenter="showLbPreview()" onmouseleave="hideLbPreview()">
@@ -941,8 +967,12 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
     <span>Home</span>
   </button>
   <button class="mobile-nav-btn" type="button" id="mobile-subjects-btn" data-mobile-nav="subjects" aria-expanded="false">
-    <span aria-hidden="true">^</span>
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v17.5a.5.5 0 0 1-.77.42L16 19l-3.23 1.92A.5.5 0 0 1 12 20.5V5.5A2.5 2.5 0 0 0 9.5 3H6.5A2.5 2.5 0 0 0 4 5.5V20"></path></svg>
     <span>Subjects</span>
+  </button>
+  <button class="mobile-nav-btn" type="button" data-mobile-nav="tasks" onclick="go('/tasks')">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M9 6h11"></path><path d="M9 12h11"></path><path d="M9 18h11"></path><path d="M4 6l1.5 1.5L7.5 5.5"></path><path d="M4 12l1.5 1.5L7.5 11.5"></path><path d="M4 18l1.5 1.5L7.5 17.5"></path></svg>
+    <span>Tasks</span>
   </button>
   <button class="mobile-nav-btn" type="button" data-mobile-nav="leaderboard" onclick="go('leaderboard')">
     <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M8 21h8"></path><path d="M12 17v4"></path><path d="M7 4h10v3a5 5 0 0 1-10 0z"></path></svg>
@@ -1379,10 +1409,16 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
     <p style="color:var(--color-text-muted);font-size:var(--tx-base);line-height:1.7;">Start free. Upgrade when you need more. No hidden fees.</p>
   </div>
 
-  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(260px,100%),1fr));gap:var(--sp5);padding-bottom:var(--sp16);" id="upgrade-cards">
+  <div style="display:flex;justify-content:center;gap:var(--sp2);flex-wrap:wrap;margin-bottom:var(--sp6);" id="upgrade-filter" role="tablist" aria-label="Plan categories">
+    <button class="btn btn-p" type="button" data-upgrade-group="personal" aria-selected="true">Personal subscriptions</button>
+    <button class="btn btn-g" type="button" data-upgrade-group="onetime" aria-selected="false">One-time subject payments</button>
+    <button class="btn btn-g" type="button" data-upgrade-group="education" aria-selected="false">Education</button>
+  </div>
+
+  <div style="display:flex;flex-wrap:wrap;justify-content:center;align-items:stretch;gap:var(--sp5);padding-bottom:var(--sp16);" id="upgrade-cards">
 
     <!-- FREE -->
-    <div class="card" id="plan-free">
+    <div class="card" id="plan-free" data-upgrade-card="personal" style="width:min(320px,100%);">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp2);">
         <span style="font-size:var(--tx-xs);font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--color-text-faint);">Free</span>
         <span id="badge-free" style="display:none;font-size:.65rem;font-weight:700;padding:.15rem .5rem;border-radius:var(--radius-full);background:var(--color-surface-offset-2);color:var(--color-text-muted);">Current plan</span>
@@ -1398,23 +1434,7 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
     </div>
 
     <!-- BASIC -->
-    <div class="card" id="plan-basic">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp2);">
-        <span style="font-size:var(--tx-xs);font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--color-text-muted);">Basic</span>
-        <span id="badge-basic" style="display:none;font-size:.65rem;font-weight:700;padding:.15rem .5rem;border-radius:var(--radius-full);background:var(--color-primary-highlight);color:var(--color-primary);">Current plan</span>
-      </div>
-      <div style="font-size:var(--tx-2xl);font-weight:400;font-family:var(--font-d);margin-bottom:var(--sp1);">£5</div>
-      <div style="font-size:var(--tx-xs);color:var(--color-text-muted);margin-bottom:var(--sp5);">One-time per subject</div>
-      <ul class="feat" style="margin-bottom:var(--sp6);">
-        <li>300 credits — never expires</li>
-        <li>One subject unlocked (e.g. IT)</li>
-        <li>No ads</li>
-      </ul>
-      <button class="btn btn-s" id="btn-buy-basic" style="width:100%;justify-content:center;">Buy Basic — IT</button>
-    </div>
-
-    <!-- PRO -->
-    <div class="card" id="plan-pro" style="border-color:var(--color-primary);position:relative;overflow:hidden;">
+    <div class="card" id="plan-pro" data-upgrade-card="personal" style="width:min(320px,100%);border-color:var(--color-primary);position:relative;overflow:hidden;">
       <div style="position:absolute;top:0;right:0;background:var(--color-primary);color:#fff;font-size:.65rem;font-weight:700;padding:.25rem .75rem;border-radius:0 var(--radius-xl) 0 var(--radius-md);letter-spacing:.06em;text-transform:uppercase;">Popular</div>
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp2);">
         <span style="font-size:var(--tx-xs);font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--color-primary);">Pro</span>
@@ -1430,8 +1450,7 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
       <button class="btn btn-p" id="btn-buy-pro" style="width:100%;justify-content:center;">Buy Pro</button>
     </div>
 
-    <!-- ULTRA -->
-    <div class="card" id="plan-ultra">
+    <div class="card" id="plan-ultra" data-upgrade-card="personal" style="width:min(320px,100%);">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp2);">
         <span style="font-size:var(--tx-xs);font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#7c3aed;">Ultra</span>
         <span id="badge-ultra" style="display:none;font-size:.65rem;font-weight:700;padding:.15rem .5rem;border-radius:var(--radius-full);background:#ede9fe;color:#7c3aed;">Current plan</span>
@@ -1447,8 +1466,52 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
       <button class="btn btn-s" id="btn-buy-ultra" style="width:100%;justify-content:center;border-color:#7c3aed;color:#7c3aed;">Buy Ultra</button>
     </div>
 
-    <!-- EDU ADMIN -->
-    <div class="card" id="plan-edu">
+    <div class="card" id="plan-one-time-it" data-upgrade-card="onetime" style="display:none;width:min(320px,100%);border-color:#16a34a;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp2);">
+        <span style="font-size:var(--tx-xs);font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#166534;">IT Subject</span>
+        <span id="badge-one-time-it" style="display:none;font-size:.65rem;font-weight:700;padding:.15rem .5rem;border-radius:var(--radius-full);background:#dcfce7;color:#166534;">Owned</span>
+      </div>
+      <div style="font-size:var(--tx-2xl);font-weight:400;font-family:var(--font-d);margin-bottom:var(--sp1);">£5</div>
+      <div style="font-size:var(--tx-xs);color:#166534;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:var(--sp5);">One-time payment for IT</div>
+      <ul class="feat" style="margin-bottom:var(--sp6);">
+        <li>300 credits added once</li>
+        <li>Unlock IT subject</li>
+        <li>No ads for paid account</li>
+      </ul>
+      <button class="btn btn-s" id="btn-buy-it" style="width:100%;justify-content:center;border-color:#16a34a;color:#166534;">Buy IT one-time</button>
+    </div>
+
+    <div class="card" id="plan-one-time-business" data-upgrade-card="onetime" style="display:none;width:min(320px,100%);border-color:#1d4ed8;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp2);">
+        <span style="font-size:var(--tx-xs);font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#1e3a8a;">Business Subject</span>
+        <span id="badge-one-time-business" style="display:none;font-size:.65rem;font-weight:700;padding:.15rem .5rem;border-radius:var(--radius-full);background:#dbeafe;color:#1e3a8a;">Owned</span>
+      </div>
+      <div style="font-size:var(--tx-2xl);font-weight:400;font-family:var(--font-d);margin-bottom:var(--sp1);">£5</div>
+      <div style="font-size:var(--tx-xs);color:#1e3a8a;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:var(--sp5);">One-time payment for Business</div>
+      <ul class="feat" style="margin-bottom:var(--sp6);">
+        <li>300 credits added once</li>
+        <li>Unlock Business subject</li>
+        <li>No ads for paid account</li>
+      </ul>
+      <button class="btn btn-s" id="btn-buy-business" style="width:100%;justify-content:center;border-color:#1d4ed8;color:#1e3a8a;">Buy Business one-time</button>
+    </div>
+
+    <div class="card" id="plan-one-time-sport" data-upgrade-card="onetime" style="display:none;width:min(320px,100%);border-color:#7c3aed;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp2);">
+        <span style="font-size:var(--tx-xs);font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#5b21b6;">Sport Subject</span>
+        <span id="badge-one-time-sport" style="display:none;font-size:.65rem;font-weight:700;padding:.15rem .5rem;border-radius:var(--radius-full);background:#ede9fe;color:#5b21b6;">Owned</span>
+      </div>
+      <div style="font-size:var(--tx-2xl);font-weight:400;font-family:var(--font-d);margin-bottom:var(--sp1);">£5</div>
+      <div style="font-size:var(--tx-xs);color:#5b21b6;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:var(--sp5);">One-time payment for Sport</div>
+      <ul class="feat" style="margin-bottom:var(--sp6);">
+        <li>300 credits added once</li>
+        <li>Unlock Sport subject</li>
+        <li>No ads for paid account</li>
+      </ul>
+      <button class="btn btn-s" id="btn-buy-sport" style="width:100%;justify-content:center;border-color:#7c3aed;color:#5b21b6;">Buy Sport one-time</button>
+    </div>
+
+    <div class="card" id="plan-edu" data-upgrade-card="education" style="display:none;width:min(520px,100%);">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp2);">
         <span style="font-size:var(--tx-xs);font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--color-success);">EDU Admin</span>
         <span id="badge-edu" style="display:none;font-size:.65rem;font-weight:700;padding:.15rem .5rem;border-radius:var(--radius-full);background:var(--color-success-highlight);color:var(--color-success);">Current plan</span>
@@ -1456,13 +1519,25 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
       <p>For schools. One subscription covers your entire institution — unlimited teachers and students, all with monthly credits and no ads.</p>
       <div style="font-size:var(--tx-2xl);font-weight:400;font-family:var(--font-d);margin-bottom:var(--sp1);">£100</div>
       <div style="font-size:var(--tx-xs);color:var(--color-text-muted);margin-bottom:var(--sp5);">per year · per school</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:var(--sp3);margin-bottom:var(--sp5);">
+        <div style="border:1px solid var(--color-border);border-radius:var(--radius-md);padding:var(--sp3);background:var(--color-bg-soft);">
+          <div style="font-size:var(--tx-xs);font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--color-text-muted);margin-bottom:var(--sp1);">Student account</div>
+          <div style="font-size:var(--tx-xl);font-family:var(--font-d);line-height:1;color:var(--color-success);">£0</div>
+          <div style="font-size:var(--tx-xs);color:var(--color-text-muted);margin-top:var(--sp1);">Included when school signs up</div>
+        </div>
+        <div style="border:1px solid var(--color-border);border-radius:var(--radius-md);padding:var(--sp3);background:var(--color-bg-soft);">
+          <div style="font-size:var(--tx-xs);font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--color-text-muted);margin-bottom:var(--sp1);">Teacher account</div>
+          <div style="font-size:var(--tx-xl);font-family:var(--font-d);line-height:1;color:var(--color-success);">£0</div>
+          <div style="font-size:var(--tx-xs);color:var(--color-text-muted);margin-top:var(--sp1);">Included when school signs up</div>
+        </div>
+      </div>
       <ul class="feat" style="margin-bottom:var(--sp6);">
         <li>Unlimited teachers and students</li>
         <li>Students get 300 credits/month each</li>
         <li>Teachers get 600 credits/month each</li>
         <li>Admin portal to manage all users</li>
         <li>All subjects unlocked for everyone</li>
-        <li>No ads for anyone</li>
+        <li>No ads</li>
       </ul>
       <button class="btn btn-s" id="btn-buy-edu" style="width:100%;justify-content:center;border-color:var(--color-success);color:var(--color-success);">Buy EDU Admin</button>
     </div>
@@ -1489,6 +1564,7 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
         <div class="card-tag">Profile</div>
         <h3 id="account-display-name">Your name</h3>
         <p id="account-email">your@email.com</p>
+        <p id="account-school" style="display:none;margin-top:calc(var(--sp2) * -1);color:var(--color-text-muted);"></p>
         <p id="account-username" style="margin-top:calc(var(--sp2) * -1);color:var(--color-text-muted);">No username set</p>
         <div style="margin-top:var(--sp5);padding:var(--sp4);border:1px solid var(--color-border);border-radius:var(--radius-lg);background:var(--color-bg-soft);">
           <h4 style="margin:0 0 var(--sp3) 0;font-size:var(--tx-md);">Edit profile</h4>
@@ -1521,9 +1597,10 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
           </div>
         </div>
         <div class="card-ft"><span class="pill" id="account-tier-badge">Tier</span><span class="pill" id="account-credits">Credits remaining</span></div>
-        <p>Next reset: <strong id="account-reset-date">—</strong></p>
+        <p>Subscription status: <strong id="account-sub-status">—</strong></p>
+        <p>Credits renew on: <strong id="account-reset-date">—</strong></p>
         <div class="card-ft" style="flex-wrap:wrap;gap:var(--sp3)">
-          <a class="btn btn-s" href="https://billing.stripe.com/p/login/placeholder" target="_blank">Manage subscription</a>
+          <a class="btn btn-s" href="https://app.lemonsqueezy.com/my-orders" target="_blank">Manage subscription</a>
           <button class="btn btn-p" id="btn-account-signout">Sign out</button>
         </div>
       </div>
@@ -1531,12 +1608,29 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
         <div class="card-tag" style="background:var(--color-error-soft);color:var(--color-error);">Danger zone</div>
         <h3 style="margin-bottom:var(--sp2);">Delete account</h3>
         <p style="margin-bottom:var(--sp4);">Request account deletion and sign out from this device.</p>
-        <button class="btn btn-p" id="btn-account-delete" type="button" style="background:var(--color-error);border-color:var(--color-error);">Delete my account</button>
+        <button class="btn btn-p" id="btn-account-delete" type="button" style="background:var(--color-error);border-color:var(--color-error);color:#fff;font-weight:700;">Delete my account</button>
         <div id="account-delete-message" style="display:none;margin-top:var(--sp3);color:var(--color-success);font-weight:700;"></div>
       </div>
     </div>
   </div>
 </div>
+
+  <!-- TASKS PAGE -->
+  <div class="page" id="p-tasks">
+    <div class="c">
+      <nav class="bc">
+        <button class="bc-item" onclick="go('/')">Home</button>
+        <span class="bc-sep">›</span>
+        <span class="bc-item cur">Tasks</span>
+      </nav>
+      <div class="hero">
+        <div class="hero-label">Daily Tasks</div>
+        <h1>Tasks</h1>
+        <p>These daily tasks are shared across all units, so you only complete each one once per day.</p>
+      </div>
+      <div class="sec" id="global-tasks-host"></div>
+    </div>
+  </div>
 
 <!-- ============================================================
      WHATSAPP EXPORTER  /tools/whatsapp-exporter
@@ -1851,11 +1945,12 @@ const ROUTES = {
   '/revision/btec/level-3/IT-AAQ/unit-1':'p-unit1',
   '/tools':                               'p-tools',
   '/tools/whatsapp-exporter':            'p-whatsapp',
+  '/tasks':                               'p-tasks',
   '/auth':                                'p-auth',
   '/upgrade':                             'p-upgrade',
   '/account':                             'p-account',
 };
-const NAV_MAP = {'leaderboard':'leaderboard','/revision':'revision','/tools':'tools'};
+const NAV_MAP = {'leaderboard':'leaderboard','/revision':'revision','/tools':'tools','/tasks':'tasks'};
 
 let _lbHideTimeout = null;
 window._lbHideTimeout = null;
@@ -2173,12 +2268,117 @@ function exitIframeFullscreen(){
   document.body.classList.remove('iframe-fullscreen-mode');
 }
 
+function renderGlobalTasksPage() {
+  const host = document.getElementById('global-tasks-host');
+  if (!host) return;
+  if (!window.RA10 || !RA10.isLoggedIn()) {
+    host.innerHTML = '<div class="card"><p class="muted">Sign in to view your daily tasks.</p></div>';
+    return;
+  }
+
+  const today = new Date().toISOString().slice(0, 10);
+  const stateKey = 'ra10-daily-tasks-v2';
+  const defaultTasks = {
+    dailyQuiz: false,
+    practice5: false,
+    practice10: false,
+    practice15: false,
+    flashReview: false,
+    share: false,
+    login: false
+  };
+
+  function readPracticeCountForToday() {
+    let count = 0;
+    const legacyCount = Number(localStorage.getItem('ra10_practice_today_' + today) || '0');
+    if (Number.isFinite(legacyCount) && legacyCount > 0) count = legacyCount;
+    try {
+      const stored = JSON.parse(localStorage.getItem('ra10_practice_today') || 'null');
+      if (stored && stored.date === today) {
+        const c = Number(stored.count || 0);
+        if (Number.isFinite(c) && c > count) count = c;
+      }
+    } catch (e) {}
+    return count;
+  }
+  let state = null;
+  try {
+    const raw = localStorage.getItem(stateKey);
+    state = raw ? JSON.parse(raw) : null;
+  } catch (e) {
+    state = null;
+  }
+  if (!state || state.date !== today || !state.tasks) {
+    state = {
+      date: today,
+      tasks: Object.assign({}, defaultTasks),
+      practiceCount: readPracticeCountForToday()
+    };
+  } else {
+    state = {
+      date: today,
+      tasks: Object.assign({}, defaultTasks, state.tasks || {}),
+      practiceCount: Number(state.practiceCount || 0)
+    };
+  }
+
+  state.practiceCount = Math.max(state.practiceCount, readPracticeCountForToday());
+  state.tasks.practice5 = state.tasks.practice5 || state.practiceCount >= 5;
+  state.tasks.practice10 = state.tasks.practice10 || state.practiceCount >= 10;
+  state.tasks.practice15 = state.tasks.practice15 || state.practiceCount >= 15;
+  localStorage.setItem(stateKey, JSON.stringify(state));
+
+  const practiceCount = Number(state.practiceCount || 0);
+
+  const items = [
+    { key: 'dailyQuiz', name: 'Daily Quiz', xp: 25, note: 'Complete one 10-question quiz on any unit.' },
+    { key: 'practice5', name: 'Answer 5 practice questions', xp: 50, note: String(Math.min(practiceCount, 5)) + ' / 5 completed' },
+    { key: 'practice10', name: 'Answer 10 practice questions', xp: 30, note: String(Math.min(practiceCount, 10)) + ' / 10 completed' },
+    { key: 'practice15', name: 'Answer 15 practice questions', xp: 45, note: String(Math.min(practiceCount, 15)) + ' / 15 completed' },
+    { key: 'flashReview', name: 'Review flashcards', xp: 15, note: 'Open flashcards in any unit.' },
+    { key: 'share', name: 'Share RA10', xp: 30, note: 'Use the share action once.' },
+    { key: 'login', name: 'Log in today', xp: 5, note: 'Automatic bonus once per day.' }
+  ];
+
+  const doneCount = items.filter(function(item) { return !!state.tasks[item.key]; }).length;
+  const pct = Math.round((doneCount / items.length) * 100);
+
+  host.innerHTML = ''
+    + '<div class="tasks-hero-panel">'
+    +   '<div class="tasks-hero-title">Today\'s mission: ' + doneCount + '/' + items.length + ' complete</div>'
+    +   '<div class="tasks-hero-copy">Stack XP by finishing shared tasks once per day, then jump into any subject.</div>'
+    +   '<div class="tasks-meter"><span style="width:' + pct + '%"></span></div>'
+    +   '<div class="tasks-kpi-row">'
+    +     '<span class="tasks-kpi">Progress: ' + pct + '%</span>'
+    +     '<span class="tasks-kpi">Practice today: ' + practiceCount + '</span>'
+    +     '<span class="tasks-kpi">Daily reset: midnight</span>'
+    +   '</div>'
+    + '</div>'
+    + '<div class="grid grid-2">' + items.map(function(item) {
+    const done = !!state.tasks[item.key];
+    return '<div class="card tasks-card" style="border-color:' + (done ? 'var(--color-success)' : 'var(--color-border)') + ';">'
+      + '<div class="card-tag">Task</div>'
+      + '<h3>' + item.name + '</h3>'
+      + '<p>' + item.note + '</p>'
+      + '<div class="card-ft"><span class="pill ' + (done ? 'pill-ok' : 'pill-live') + '">' + (done ? 'Completed' : 'Available') + '</span><span class="pill">⚡ ' + item.xp + ' XP</span></div>'
+      + '</div>';
+  }).join('') + '</div>'
+    + '<div style="display:flex;gap:var(--sp3);flex-wrap:wrap;margin-top:var(--sp5);">'
+    + '<button class="btn btn-p" onclick="go(\'/revision/btec/level-3/IT-AAQ/unit-1\')">Start in IT</button>'
+    + '<button class="btn btn-s" onclick="go(\'/revision/btec/level-3/business/unit-3\')">Start in Business</button>'
+    + '<button class="btn btn-s" onclick="go(\'/revision/btec/level-3/sport/unit-1\')">Start in Sport</button>'
+    + '</div>';
+}
+
 function route(){
   const path = location.hash.replace('#','') || '/';
   const id   = ROUTES[path] || 'p-home';
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   const el = document.getElementById(id);
   if(el){ el.classList.add('active'); window.scrollTo(0,0); }
+  if (id === 'p-tasks') {
+    renderGlobalTasksPage();
+  }
   // Auto-fullscreen for iframe pages (breadcrumb stays visible via CSS)
   if(el && el.classList.contains('page-iframe')){
     document.body.classList.add('iframe-fullscreen-mode');
@@ -2196,6 +2396,7 @@ function route(){
   }
   const mobileKey = path === '/' || path === '' ? 'home'
     : path.startsWith('leaderboard') ? 'leaderboard'
+    : path.startsWith('/tasks') ? 'tasks'
     : path.startsWith('/account') ? 'profile'
     : path.startsWith('/revision/btec/level-3/') ? 'subjects'
     : '';
@@ -2230,7 +2431,92 @@ route();
     RA10.on('authchange', () => { _updateNavAuth(); });
     RA10.on('creditschange', _updateNavAuth);
 
-    function _updateNavAuth() {
+    let focusRefreshInFlight = false;
+    window.addEventListener('focus', async () => {
+      if (!RA10.isLoggedIn() || focusRefreshInFlight) return;
+      focusRefreshInFlight = true;
+      try {
+        await RA10.refreshProfile();
+        _updateNavAuth();
+      } catch (e) {
+        console.warn('Profile refresh on focus failed', e);
+      } finally {
+        focusRefreshInFlight = false;
+      }
+    });
+
+    let schoolSubLookupSeq = 0;
+
+    async function getSchoolSubscriptionMeta(profile, tier) {
+      if (!window.supabase || !profile || tier !== 'school_admin') return null;
+      const session = RA10.getSession ? RA10.getSession() : null;
+      const token = session && session.access_token ? session.access_token : null;
+      if (!token) return null;
+
+      try {
+        const sb = window.supabase.createClient(
+          'https://tcrrgsylxbyyrmnouihl.supabase.co',
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRjcnJnc3lseGJ5eXJtbm91aWhsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4ODUyMTEsImV4cCI6MjA5MzQ2MTIxMX0.eOp6ma-mfgh8F20nM7E2OaBW28LlZlwuEEWr6k2zDWw',
+          { global: { headers: { Authorization: 'Bearer ' + token } } }
+        );
+
+        let schoolRes = null;
+        if (profile.school_id) {
+          schoolRes = await sb.from('schools').select('*').eq('id', profile.school_id).maybeSingle();
+        } else {
+          schoolRes = await sb.from('schools').select('*').eq('owner_id', profile.id).limit(1).maybeSingle();
+        }
+        if (schoolRes && !schoolRes.error && schoolRes.data) return schoolRes.data;
+      } catch (e) {
+        console.warn('School subscription lookup failed', e);
+      }
+      return null;
+    }
+
+    function getSchoolRenewalDate(schoolRow) {
+      if (!schoolRow) return null;
+      const candidates = [
+        schoolRow.subscription_renewal,
+        schoolRow.renews_at,
+        schoolRow.current_period_end,
+        schoolRow.current_period_ends_at,
+        schoolRow.subscription_ends_at,
+        schoolRow.subscription_end_at,
+        schoolRow.ends_at
+      ];
+      for (const raw of candidates) {
+        if (!raw) continue;
+        let val = raw;
+        if (typeof raw === 'string' && /^\d+$/.test(raw)) {
+          val = Number(raw);
+        }
+        if (typeof val === 'number' && Number.isFinite(val)) {
+          const ms = val < 1000000000000 ? val * 1000 : val;
+          const d = new Date(ms);
+          if (!Number.isNaN(d.getTime())) return d;
+          continue;
+        }
+        const d = new Date(val);
+        if (!Number.isNaN(d.getTime())) return d;
+      }
+      return null;
+    }
+
+    function isSchoolSubscriptionActive(schoolRow) {
+      const status = String((schoolRow && schoolRow.subscription_status) || '').trim().toLowerCase();
+      if (!status) return true;
+      if (status === 'active' || status === 'trialing' || status === 'trial' || status === 'paid') {
+        return true;
+      }
+      const renewalAt = getSchoolRenewalDate(schoolRow);
+      const hasFutureEndDate = renewalAt && renewalAt.getTime() > Date.now();
+      if ((status === 'cancelled' || status === 'canceled' || status === 'cancel_at_period_end') && hasFutureEndDate) {
+        return true;
+      }
+      return false;
+    }
+
+    async function _updateNavAuth() {
       const loggedIn = RA10.isLoggedIn();
       const profile = RA10.getProfile();
       document.getElementById('nav-auth-btn').style.display = loggedIn ? 'none' : '';
@@ -2252,14 +2538,42 @@ route();
         const badge = document.getElementById('nav-tier-badge');
         badge.textContent = RA10.getTierInfo().label;
         badge.className = 'nav-tier-badge ' + RA10.getTier();
-        const tierMap = { free:'free', subject:'basic', all_subjects:'pro', ultra:'ultra', school_admin:'edu', school_student:'edu', owner:'ultra' };
+        const tierMap = {
+          free:'free',
+          subject:'subject',
+          all_subjects:'pro',
+          ultra:'ultra',
+          school_admin:'edu',
+          school_teacher:'edu',
+          school_student:'edu',
+          owner:'ultra'
+        };
         const currentPlan = tierMap[RA10.getTier()] || 'free';
-        ['free','basic','pro','ultra','edu'].forEach(p => {
+        ['free','pro','ultra','edu','one-time-it','one-time-business','one-time-sport'].forEach(p => {
           const badge = document.getElementById('badge-' + p);
           const card = document.getElementById('plan-' + p);
-          if (badge) badge.style.display = p === currentPlan ? '' : 'none';
-          if (card) card.style.outline = p === currentPlan ? '2px solid var(--color-primary)' : '';
+          if (badge) badge.style.display = 'none';
+          if (card) card.style.outline = '';
         });
+        if (currentPlan === 'subject') {
+          const unlocked = Array.isArray(profile?.unlocked_subjects) ? profile.unlocked_subjects : [];
+          const owns = {
+            'one-time-it': unlocked.includes('IT'),
+            'one-time-business': unlocked.includes('Business'),
+            'one-time-sport': unlocked.includes('Sport')
+          };
+          Object.entries(owns).forEach(([key, has]) => {
+            const badge = document.getElementById('badge-' + key);
+            const card = document.getElementById('plan-' + key);
+            if (badge) badge.style.display = has ? '' : 'none';
+            if (card) card.style.outline = has ? '2px solid var(--color-primary)' : '';
+          });
+        } else {
+          const badge = document.getElementById('badge-' + currentPlan);
+          const card = document.getElementById('plan-' + currentPlan);
+          if (badge) badge.style.display = '';
+          if (card) card.style.outline = '2px solid var(--color-primary)';
+        }
         const credits = RA10.getCredits();
         const creditsText = credits === Infinity ? '∞ credits' : credits + ' credits';
         document.getElementById('nav-credit-chip').textContent = creditsText;
@@ -2277,15 +2591,92 @@ route();
         });
         document.getElementById('account-display-name').textContent = profile.display_name || profile.email;
         document.getElementById('account-email').textContent = profile.email;
+        const accountSchoolEl = document.getElementById('account-school');
+        if (accountSchoolEl) {
+          const tier = String(RA10.getTier() || '');
+          const schoolName = String((profile && profile.school_name) || '').trim();
+          const isSchoolTier = tier === 'school_student' || tier === 'school_teacher' || tier === 'school_admin';
+          if (isSchoolTier && schoolName) {
+            accountSchoolEl.textContent = 'School: ' + schoolName;
+            accountSchoolEl.style.display = '';
+          } else {
+            accountSchoolEl.textContent = '';
+            accountSchoolEl.style.display = 'none';
+          }
+        }
         document.getElementById('account-username').textContent = RA10.getProfile()?.username ? ('@' + RA10.getProfile().username) : 'No username set';
         document.getElementById('account-display-name-current').textContent = profile.full_name || profile.display_name || profile.email;
         document.getElementById('account-name-input').value = profile.full_name || profile.display_name || '';
         document.getElementById('account-username-current').textContent = profile.username ? ('@' + profile.username) : 'No username set';
         document.getElementById('account-username-input').value = profile.username || '';
+        const tier = RA10.getTier();
+        const unlockedSubjects = Array.isArray(profile.unlocked_subjects) ? profile.unlocked_subjects.filter(Boolean) : [];
         document.getElementById('account-tier-badge').textContent = RA10.getTierInfo().label;
-        document.getElementById('account-credits').textContent = credits === Infinity ? 'Unlimited credits' : credits + ' credits';
-        const resetDate = profile.credits_reset_at ? new Date(profile.credits_reset_at).toLocaleDateString() : 'N/A';
-        document.getElementById('account-reset-date').textContent = resetDate;
+        if (tier === 'subject') {
+          const subjectName = unlockedSubjects[0] || 'Subject';
+          document.getElementById('account-credits').textContent = credits === Infinity ? 'Unlimited ' + subjectName + ' credits' : credits + ' ' + subjectName + ' credits';
+        } else {
+          document.getElementById('account-credits').textContent = credits === Infinity ? 'Unlimited credits' : credits + ' credits';
+        }
+        const resetAt = profile.credits_reset_at ? new Date(profile.credits_reset_at) : null;
+        const resetDate = resetAt ? resetAt.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) : 'N/A';
+        if (tier === 'subject') {
+          document.getElementById('account-reset-date').textContent = 'No renewal (one-time credits)';
+        } else {
+          document.getElementById('account-reset-date').textContent = resetDate;
+        }
+        const subStatusEl = document.getElementById('account-sub-status');
+        if (subStatusEl) {
+          if (tier === 'free') {
+            subStatusEl.textContent = 'No active subscription';
+            subStatusEl.style.color = 'var(--color-text-muted)';
+          } else if (tier === 'subject') {
+            subStatusEl.textContent = 'One-time purchase';
+            subStatusEl.style.color = 'var(--color-primary)';
+          } else if (tier === 'ultra' || tier === 'owner') {
+            subStatusEl.textContent = 'Active';
+            subStatusEl.style.color = 'var(--color-success)';
+          } else if (resetAt && resetAt.getTime() > Date.now()) {
+            subStatusEl.textContent = 'Active';
+            subStatusEl.style.color = 'var(--color-success)';
+          } else {
+            subStatusEl.textContent = 'Expired / cancelled';
+            subStatusEl.style.color = 'var(--color-error)';
+          }
+        }
+
+        if (tier === 'school_admin') {
+          const lookupSeq = ++schoolSubLookupSeq;
+          const schoolRow = await getSchoolSubscriptionMeta(profile, tier);
+          if (lookupSeq !== schoolSubLookupSeq) return;
+
+          if (schoolRow) {
+            const active = isSchoolSubscriptionActive(schoolRow);
+            if (subStatusEl) {
+              subStatusEl.textContent = active ? 'Active' : 'Expired / cancelled';
+              subStatusEl.style.color = active ? 'var(--color-success)' : 'var(--color-error)';
+            }
+            if (!active && eduLink) {
+              eduLink.style.display = 'none';
+            }
+
+            const schoolStatus = String((schoolRow.subscription_status || '')).trim().toLowerCase();
+            const schoolRenewal = getSchoolRenewalDate(schoolRow);
+            const schoolRenewalText = schoolRenewal && !Number.isNaN(schoolRenewal.getTime())
+              ? schoolRenewal.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
+              : null;
+            const isEnding = (schoolStatus === 'cancelled' || schoolStatus === 'canceled' || schoolStatus === 'cancel_at_period_end')
+              && schoolRenewal && schoolRenewal.getTime() > Date.now();
+            if (subStatusEl && isEnding && schoolRenewalText) {
+              subStatusEl.textContent = 'Active (ending on ' + schoolRenewalText + ')';
+              subStatusEl.style.color = 'var(--color-warning)';
+            }
+            if (schoolRenewalText) {
+              document.getElementById('account-reset-date').textContent = (isEnding ? 'Ending on ' : '') + schoolRenewalText;
+            }
+          }
+        }
+        maybeShowPlanWelcome();
       } else if (mobileNavAvatar) {
         mobileNavAvatar.textContent = '?';
       }
@@ -2309,6 +2700,104 @@ route();
         t.style.transform = 'translateY(8px)';
       }, 2000);
     }
+
+    function getPlanWelcomeContent() {
+      if (!RA10.isLoggedIn()) return null;
+      const profile = RA10.getProfile();
+      if (!profile) return null;
+      const tier = RA10.getTier();
+      if (tier === 'free') return null;
+
+      const subjects = Array.isArray(profile.unlocked_subjects) ? profile.unlocked_subjects.filter(Boolean) : [];
+      const tierLabel = RA10.getTierInfo()?.label || 'Plan';
+      const credits = RA10.getCredits();
+      const creditLabel = credits === Infinity ? 'Unlimited credits' : credits + ' credits';
+      const signature = [tier, subjects.slice().sort().join('|')].join('::');
+
+      var benefits = [];
+      var title = 'Welcome to your ' + tierLabel + ' plan';
+
+      if (tier === 'subject') {
+        const subjectName = subjects[0] || 'your selected subject';
+        benefits = [
+          'One-time allocation: ' + creditLabel + ' for ' + subjectName,
+          'No monthly renewal and no expiry date on this credit pack',
+          'No ads while you use this paid plan'
+        ];
+      } else if (tier === 'all_subjects') {
+        benefits = [
+          'All subjects unlocked',
+          '1000 credits each month',
+          'No ads'
+        ];
+      } else if (tier === 'ultra' || tier === 'owner') {
+        benefits = [
+          'Unlimited credits',
+          'All subjects and tools unlocked',
+          'No ads'
+        ];
+      } else if (tier === 'school_student') {
+        benefits = [
+          '300 credits each month',
+          'No ads',
+          'School assigned subjects: ' + (subjects.length ? subjects.join(', ') : 'Set by your teacher/admin')
+        ];
+      } else if (tier === 'school_teacher') {
+        benefits = [
+          '600 credits each month',
+          'No ads',
+          'School assigned subjects: ' + (subjects.length ? subjects.join(', ') : 'Set by EDU Admin')
+        ];
+      } else if (tier === 'school_admin') {
+        benefits = [
+          '300 credits each month',
+          'Access to EDU Admin portal',
+          'No ads'
+        ];
+      } else {
+        benefits = [creditLabel, 'No ads'];
+      }
+
+      return { title, benefits, signature };
+    }
+
+    function maybeShowPlanWelcome() {
+      const content = getPlanWelcomeContent();
+      if (!content) return;
+      const profile = RA10.getProfile();
+      const userKey = profile?.id || RA10.getSession()?.user?.id || 'anon';
+      const storageKey = 'ra10_plan_welcome_seen_' + userKey;
+      if (localStorage.getItem(storageKey) === content.signature) return;
+
+      localStorage.setItem(storageKey, content.signature);
+      const overlay = document.getElementById('plan-welcome-overlay');
+      const titleEl = document.getElementById('plan-welcome-title');
+      const listEl = document.getElementById('plan-welcome-list');
+      const escHtml = function(v) {
+        return String(v == null ? '' : v)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#039;');
+      };
+      if (!overlay || !titleEl || !listEl) return;
+      titleEl.textContent = content.title;
+      listEl.innerHTML = content.benefits.map(function(item) {
+        return '<li style="margin-bottom:var(--sp2)">' + escHtml(item) + '</li>';
+      }).join('');
+      overlay.classList.add('open');
+    }
+
+    document.getElementById('plan-welcome-close')?.addEventListener('click', () => {
+      document.getElementById('plan-welcome-overlay')?.classList.remove('open');
+    });
+
+    document.getElementById('plan-welcome-overlay')?.addEventListener('click', (e) => {
+      if (e.target === document.getElementById('plan-welcome-overlay')) {
+        document.getElementById('plan-welcome-overlay').classList.remove('open');
+      }
+    });
 
     const PROFILE_SETUP_DISMISSED_KEY = 'ra10_profile_setup_dismissed';
     const USERNAME_SETUP_DISMISSED_KEY = 'ra10_username_setup_dismissed';
@@ -2560,11 +3049,41 @@ route();
       else { closeAuthModal(); }
     });
 
+    function isEmailRateLimitError(error) {
+      var msg = String((error && error.message) || '').toLowerCase();
+      return msg.includes('rate limit') || msg.includes('over_email_send_rate_limit');
+    }
+
+    function getSignupCooldownUntil() {
+      var raw = localStorage.getItem('ra10_signup_cooldown_until');
+      var n = Number(raw || 0);
+      return Number.isFinite(n) ? n : 0;
+    }
+
+    function setSignupCooldown(seconds) {
+      var until = Date.now() + (seconds * 1000);
+      localStorage.setItem('ra10_signup_cooldown_until', String(until));
+      return until;
+    }
+
+    function clearSignupCooldown() {
+      localStorage.removeItem('ra10_signup_cooldown_until');
+    }
+
     document.getElementById('signup-btn').addEventListener('click', async () => {
       const btn = document.getElementById('signup-btn');
       const err = document.getElementById('signup-error');
       const suc = document.getElementById('signup-success');
       err.classList.remove('show'); suc.classList.remove('show');
+
+      var cooldownUntil = getSignupCooldownUntil();
+      if (cooldownUntil > Date.now()) {
+        var remainingSec = Math.max(1, Math.ceil((cooldownUntil - Date.now()) / 1000));
+        suc.textContent = 'Please wait ' + remainingSec + 's before requesting another confirmation email.';
+        suc.classList.add('show');
+        return;
+      }
+
       btn.disabled = true; btn.textContent = 'Creating account…';
       const { error } = await RA10.signUp(
         document.getElementById('signup-email').value,
@@ -2572,8 +3091,18 @@ route();
         document.getElementById('signup-name').value
       );
       btn.disabled = false; btn.textContent = 'Create free account';
-      if (error) { err.textContent = error.message; err.classList.add('show'); }
+      if (error) {
+        if (isEmailRateLimitError(error)) {
+          setSignupCooldown(60);
+          suc.textContent = 'Confirmation email is already on its way. Please check inbox/spam and wait a minute before trying again.';
+          suc.classList.add('show');
+          return;
+        }
+        err.textContent = error.message;
+        err.classList.add('show');
+      }
       else {
+        clearSignupCooldown();
         const usernameVal = document.getElementById('signup-username')
           .value.trim().toLowerCase().replace(/[^a-z0-9_]/g, '');
         if (usernameVal.length >= 3) {
@@ -2670,27 +3199,106 @@ route();
     });
 
     const LS_LINKS = {
-      basic: 'https://ra10.lemonsqueezy.com/buy/1612349',
-      pro:   'https://ra10.lemonsqueezy.com/buy/1612384',
-      ultra: 'https://ra10.lemonsqueezy.com/buy/1612385',
-      edu:   'https://ra10.lemonsqueezy.com/buy/1612389',
+      it:       'https://ra10edu.lemonsqueezy.com/checkout/buy/b428f59a-2ea6-4bed-86d4-09541c3457b9',
+      business: 'https://ra10edu.lemonsqueezy.com/checkout/buy/4e639075-b1f4-4850-a7af-729fb8c5a4bb',
+      sport:    'https://ra10edu.lemonsqueezy.com/checkout/buy/877858f8-0ebd-4948-8894-8b647eeac756',
+      pro:      'https://ra10edu.lemonsqueezy.com/checkout/buy/e5ddcd2d-d806-43cc-b0b8-40017d83f80e',
+      ultra:    'https://ra10edu.lemonsqueezy.com/checkout/buy/dbb9ef1f-9a7e-4a4b-bb9e-74bf480781dd',
+      edu:      'https://ra10edu.lemonsqueezy.com/checkout/buy/8c8421fa-7b05-4bfb-930b-a4073cb78f19',
     };
 
-    function lsBuy(plan) {
+    const PURCHASES_TEMPORARILY_DISABLED = true;
+
+    function showPurchasesPausedPopup() {
+      const existing = document.getElementById('purchase-paused-overlay');
+      if (existing) {
+        existing.style.display = 'flex';
+        return;
+      }
+      const overlay = document.createElement('div');
+      overlay.id = 'purchase-paused-overlay';
+      overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1200;display:flex;align-items:center;justify-content:center;padding:16px;';
+
+      const card = document.createElement('div');
+      card.style.cssText = 'width:min(520px,100%);background:var(--color-surface,#fff);color:var(--color-text,#101218);border:1px solid var(--color-border,#d6dbe8);border-radius:18px;padding:20px;box-shadow:0 12px 40px rgba(0,0,0,.28);';
+      card.innerHTML = ''
+        + '<h3 style="margin:0 0 8px 0;font-size:1.15rem;">Purchases are temporarily unavailable</h3>'
+        + '<p style="margin:0;color:var(--color-text-muted,#5f6780);line-height:1.6;">Purchasing is currently disabled while RA10 is being approved. It should be available again soon. Please check back shortly.</p>'
+        + '<div style="margin-top:16px;display:flex;justify-content:flex-end;">'
+        + '<button id="purchase-paused-close" class="btn btn-p" style="justify-content:center;">OK</button>'
+        + '</div>';
+
+      overlay.appendChild(card);
+      document.body.appendChild(overlay);
+
+      const close = () => { overlay.style.display = 'none'; };
+      overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) close();
+      });
+      document.getElementById('purchase-paused-close')?.addEventListener('click', close);
+    }
+
+    function lsBuy(plan, subject) {
+      if (PURCHASES_TEMPORARILY_DISABLED) {
+        showPurchasesPausedPopup();
+        return;
+      }
       if (!RA10.isLoggedIn()) {
         document.getElementById('auth-overlay').classList.add('open');
         return;
       }
       const profile = RA10.getProfile();
       const email = profile?.email || '';
-      const url = LS_LINKS[plan] + '?checkout[email]=' + encodeURIComponent(email);
+      const userId = RA10.getSession()?.user?.id || '';
+      const base = LS_LINKS[plan];
+      if (!base) {
+        alert('This checkout link is not configured yet.');
+        return;
+      }
+      const params = new URLSearchParams();
+      params.set('checkout[email]', email);
+      params.set('checkout[custom][user_id]', userId);
+      params.set('checkout[custom][email]', email);
+      params.set('checkout[custom][plan]', String(plan || '').toUpperCase());
+      if (subject) {
+        params.set('checkout[custom][subject]', String(subject).toUpperCase());
+      }
+      const url = base + '?' + params.toString();
       window.open(url, '_blank');
+      // Refresh profile once when user returns from checkout tab
+      const onFocus = async () => {
+        window.removeEventListener('focus', onFocus);
+        await RA10.refreshProfile();
+        window.dispatchEvent(new Event('ra10:profilerefreshed'));
+      };
+      window.addEventListener('focus', onFocus);
     }
 
-    document.getElementById('btn-buy-basic')?.addEventListener('click', () => lsBuy('basic'));
+    document.getElementById('btn-buy-it')?.addEventListener('click', () => lsBuy('it', 'it'));
+    document.getElementById('btn-buy-business')?.addEventListener('click', () => lsBuy('business', 'business'));
+    document.getElementById('btn-buy-sport')?.addEventListener('click', () => lsBuy('sport', 'sport'));
     document.getElementById('btn-buy-pro')?.addEventListener('click', () => lsBuy('pro'));
     document.getElementById('btn-buy-ultra')?.addEventListener('click', () => lsBuy('ultra'));
     document.getElementById('btn-buy-edu')?.addEventListener('click', () => lsBuy('edu'));
+
+    function setUpgradeGroup(group) {
+      const selected = String(group || 'personal');
+      document.querySelectorAll('[data-upgrade-group]').forEach((btn) => {
+        const active = btn.getAttribute('data-upgrade-group') === selected;
+        btn.classList.toggle('btn-p', active);
+        btn.classList.toggle('btn-g', !active);
+        btn.setAttribute('aria-selected', active ? 'true' : 'false');
+      });
+      document.querySelectorAll('[data-upgrade-card]').forEach((card) => {
+        const show = card.getAttribute('data-upgrade-card') === selected;
+        card.style.display = show ? '' : 'none';
+      });
+    }
+
+    document.querySelectorAll('[data-upgrade-group]').forEach((btn) => {
+      btn.addEventListener('click', () => setUpgradeGroup(btn.getAttribute('data-upgrade-group')));
+    });
+    setUpgradeGroup('personal');
 
     document.getElementById('btn-account-signout')?.addEventListener('click', async () => {
       await RA10.signOut(); go('/');
@@ -2975,7 +3583,18 @@ route();
     </div>
     <div style="display:flex;gap:var(--sp3);justify-content:flex-end;">
       <button id="account-delete-cancel" style="padding:var(--sp3) var(--sp4);border-radius:var(--radius-md);background:transparent;color:var(--color-text-muted);border:1px solid var(--color-border);cursor:pointer;font-size:var(--tx-sm);">Cancel</button>
-      <button class="auth-submit-btn" id="account-delete-confirm" style="background:var(--color-error);">Confirm request</button>
+      <button class="auth-submit-btn" id="account-delete-confirm" style="background:var(--color-error);color:#fff;font-weight:700;">Confirm request</button>
+    </div>
+  </div>
+</div>
+
+<div class="auth-overlay" id="plan-welcome-overlay">
+  <div class="auth-modal" style="max-width:560px">
+    <h2 id="plan-welcome-title" style="font-family:var(--font-d);font-size:var(--tx-xl);font-weight:400;margin-bottom:var(--sp2)">Welcome to your plan</h2>
+    <p style="color:var(--color-text-muted);font-size:var(--tx-sm);margin-bottom:var(--sp3)">Here is what you now get on this account:</p>
+    <ul id="plan-welcome-list" style="margin:0 0 var(--sp4) 1.2rem;padding:0;color:var(--color-text)"></ul>
+    <div style="display:flex;justify-content:flex-end;gap:var(--sp3)">
+      <button class="auth-submit-btn" id="plan-welcome-close">Got it</button>
     </div>
   </div>
 </div>

@@ -166,7 +166,82 @@
 When asked to identify a suitable device for a scenario, always state <em>why</em> it is suitable by linking a feature to the need. "A tablet is suitable because its touchscreen allows intuitive interaction in the field without needing a keyboard."</div>
 
 <div class="exam-tip"><div class="tip-label">&#128161; Notation — Flowcharts and Network Diagrams</div>
-The spec requires you to understand notation used to design IT systems. <strong>Flowcharts</strong> use: Oval = start/end, Rectangle = process, Diamond = decision, Parallelogram = input/output. <strong>Network diagrams</strong> use standardised icons for routers, switches, PCs, servers and cloud resources connected by lines representing cables or wireless links.</div>`,true),
+The spec requires you to understand notation used to design IT systems.</div>
+
+<p><strong>Flowchart symbols you must know:</strong></p>
+<table class="g-table"><thead><tr><th>Symbol</th><th>Name</th><th>Used for</th><th>Example label</th></tr></thead><tbody>
+<tr><td>Oval</td><td>Terminator</td><td>Start or end of the algorithm</td><td>Start / End</td></tr>
+<tr><td>Rectangle</td><td>Process</td><td>An action or calculation step</td><td>Calculate total</td></tr>
+<tr><td>Diamond</td><td>Decision</td><td>A yes/no or true/false branch</td><td>Password correct?</td></tr>
+<tr><td>Parallelogram</td><td>Input / Output</td><td>Read input or display output</td><td>Enter username</td></tr>
+<tr><td>Arrow</td><td>Flow line</td><td>Direction of execution</td><td>Next step</td></tr>
+<tr><td>Small circle</td><td>Connector</td><td>Jump to another part of chart</td><td>A / B connector</td></tr>
+</tbody></table>
+
+<p><strong>Worked flowchart example — login check:</strong></p>
+<figure class="guide-diagram" role="img" aria-label="Flowchart showing login validation with decision branches for correct and incorrect password">
+<svg viewBox="0 0 760 420" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arrowHead" markerWidth="10" markerHeight="8" refX="8" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 Z" fill="#2563eb" />
+    </marker>
+  </defs>
+
+  <ellipse cx="380" cy="30" rx="70" ry="22" fill="#e0f2fe" stroke="#0ea5e9" stroke-width="2" />
+  <text x="380" y="35" text-anchor="middle" font-size="14" font-weight="700" fill="#0c4a6e">Start</text>
+
+  <polygon points="280,84 495,84 470,132 255,132" fill="#fef3c7" stroke="#f59e0b" stroke-width="2" />
+  <text x="375" y="113" text-anchor="middle" font-size="13" font-weight="700" fill="#78350f">Input username + password</text>
+
+  <polygon points="375,158 470,212 375,266 280,212" fill="#fce7f3" stroke="#db2777" stroke-width="2" />
+  <text x="375" y="217" text-anchor="middle" font-size="13" font-weight="700" fill="#831843">Password correct?</text>
+
+  <rect x="170" y="296" width="180" height="44" rx="8" fill="#dcfce7" stroke="#16a34a" stroke-width="2" />
+  <text x="260" y="323" text-anchor="middle" font-size="13" font-weight="700" fill="#14532d">Show dashboard</text>
+
+  <rect x="410" y="296" width="190" height="44" rx="8" fill="#fee2e2" stroke="#ef4444" stroke-width="2" />
+  <text x="505" y="323" text-anchor="middle" font-size="13" font-weight="700" fill="#7f1d1d">Show error message</text>
+
+  <ellipse cx="260" cy="386" rx="68" ry="22" fill="#e0f2fe" stroke="#0ea5e9" stroke-width="2" />
+  <text x="260" y="391" text-anchor="middle" font-size="14" font-weight="700" fill="#0c4a6e">End</text>
+
+  <polygon points="505,350 575,386 505,420 435,386" fill="#ede9fe" stroke="#7c3aed" stroke-width="2" />
+  <text x="505" y="391" text-anchor="middle" font-size="12" font-weight="700" fill="#4c1d95">Allow retry?</text>
+
+  <ellipse cx="635" cy="386" rx="58" ry="22" fill="#e0f2fe" stroke="#0ea5e9" stroke-width="2" />
+  <text x="635" y="391" text-anchor="middle" font-size="14" font-weight="700" fill="#0c4a6e">End</text>
+
+  <line x1="380" y1="52" x2="380" y2="82" stroke="#2563eb" stroke-width="2" marker-end="url(#arrowHead)" />
+  <line x1="380" y1="132" x2="380" y2="156" stroke="#2563eb" stroke-width="2" marker-end="url(#arrowHead)" />
+
+  <line x1="330" y1="237" x2="275" y2="294" stroke="#2563eb" stroke-width="2" marker-end="url(#arrowHead)" />
+  <text x="298" y="255" font-size="12" font-weight="700" fill="#1e3a8a">Yes</text>
+
+  <line x1="420" y1="237" x2="470" y2="294" stroke="#2563eb" stroke-width="2" marker-end="url(#arrowHead)" />
+  <text x="443" y="255" font-size="12" font-weight="700" fill="#1e3a8a">No</text>
+
+  <line x1="260" y1="340" x2="260" y2="362" stroke="#2563eb" stroke-width="2" marker-end="url(#arrowHead)" />
+  <line x1="505" y1="340" x2="505" y2="348" stroke="#2563eb" stroke-width="2" marker-end="url(#arrowHead)" />
+
+  <line x1="560" y1="386" x2="575" y2="386" stroke="#2563eb" stroke-width="2" marker-end="url(#arrowHead)" />
+  <text x="560" y="375" font-size="12" font-weight="700" fill="#1e3a8a">No</text>
+
+  <polyline points="462,386 130,386 130,108 250,108" fill="none" stroke="#2563eb" stroke-width="2" marker-end="url(#arrowHead)" />
+  <text x="168" y="374" font-size="12" font-weight="700" fill="#1e3a8a">Yes (retry)</text>
+</svg>
+<figcaption>Example algorithm flowchart using terminator, input/output, process, decision and flowline notation.</figcaption>
+</figure>
+
+<p><strong>How to draw flowcharts in exam answers:</strong></p>
+<ol>
+<li>Write the algorithm steps first in short bullet points.</li>
+<li>Pick the correct symbol for each step (process vs decision vs input/output).</li>
+<li>Use arrows to show one clear direction of flow from start to end.</li>
+<li>Label decision branches clearly as Yes/No (or True/False).</li>
+<li>Check that every branch eventually reaches an End symbol.</li>
+</ol>
+
+<p><strong>Network diagrams</strong> use standardised icons for routers, switches, PCs, servers and cloud resources connected by lines representing cables or wireless links.</p>`,true),
 
     topic('A2','Peripheral Devices and Storage', `
 <p>Peripherals extend what a computer can do. Storage devices vary widely in their capacity, speed, cost and portability — you must be able to compare them.</p>

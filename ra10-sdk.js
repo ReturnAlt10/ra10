@@ -24,12 +24,12 @@
       description: 'One subject unlocked, 300 one-time credits',
     },
     all_subjects: {
-      label: 'All Subjects',
+      label: 'Pro — All Subjects',
       price: '£20/year',
       credits: 1000,
       resets: 'monthly',
       ads: false,
-      description: 'All subjects, 1000 credits per month',
+      description: 'All subjects unlocked, 1000 credits per month',
     },
     ultra: {
       label: 'Ultra',
@@ -46,6 +46,14 @@
       resets: 'monthly',
       ads: false,
       description: '300 credits per month, no ads',
+    },
+    school_teacher: {
+      label: 'School Teacher',
+      price: 'Free via EDU Admin',
+      credits: 600,
+      resets: 'monthly',
+      ads: false,
+      description: '600 credits per month, no ads',
     },
     school_admin: {
       label: 'School Admin',
@@ -75,8 +83,17 @@
     whatsapp_pdf: 3,
   };
 
-  const MONTHLY_TIERS = new Set(['free', 'all_subjects', 'school_student', 'school_admin']);
+  const MONTHLY_TIERS = new Set(['free', 'all_subjects', 'school_student', 'school_teacher', 'school_admin']);
   const UNLIMITED_TIERS = new Set(['ultra', 'owner']);
+
+  const SUBJECT_LABEL_MAP = {
+    IT: 'IT',
+    'IT AAQ': 'IT',
+    BUSINESS: 'Business',
+    'BUSINESS LEVEL 3': 'Business',
+    SPORT: 'Sport',
+    'SPORT UNIT 1': 'Sport',
+  };
 
   const EVENTS = {
     authchange: [],
@@ -174,14 +191,12 @@
     if (!MONTHLY_TIERS.has(tier)) {
       return false;
     }
-
-    const lastReset = new Date(profile.credits_reset_at);
-    if (Number.isNaN(lastReset.getTime())) {
+    const renewAt = new Date(profile.credits_reset_at);
+    if (Number.isNaN(renewAt.getTime())) {
       return false;
     }
-
-    const now = new Date();
-    return lastReset.getUTCFullYear() !== now.getUTCFullYear() || lastReset.getUTCMonth() !== now.getUTCMonth();
+    // credits_reset_at is the NEXT renewal date — if it's in the past, reset is due
+    return renewAt.getTime() < Date.now();
   }
 
   function _getResetCreditAmount(tier) {
@@ -194,7 +209,143 @@
     if (tier === 'school_student' || tier === 'school_admin') {
       return 300;
     }
+    if (tier === 'school_teacher') {
+      return 600;
+    }
     return 0;
+  }
+
+  function _normalizeSubjectName(subject) {
+    const raw = String(subject || '').trim();
+    if (!raw) {
+      return '';
+    }
+    const key = raw.toUpperCase();
+    return SUBJECT_LABEL_MAP[key] || raw;
+  }
+
+  function _normalizeSubjectsList(subjects) {
+    if (!Array.isArray(subjects)) {
+      return [];
+    }
+    const unique = new Set();
+    subjects.forEach((item) => {
+      const normalized = _normalizeSubjectName(item);
+      if (normalized) {
+        unique.add(normalized);
+      }
+    });
+    return Array.from(unique);
+  }
+
+  async function _applySchoolEntitlementByEmail(profile, user) {
+    if (!profile || !user?.email) {
+      return profile;
+    }
+
+    const client = await _ensureSupabaseClient();
+    const email = String(user.email).trim().toLowerCase();
+    const memberResult = await client
+      .from('school_members')
+      .select('id, school_id, role, status, subjects')
+      .ilike('email', email)
+      .in('status', ['invited', 'active'])
+      .in('role', ['student', 'teacher'])
+      .order('id', { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    if (memberResult.error) {
+      console.warn('RA10 school entitlement lookup error', memberResult.error);
+      return profile;
+    }
+    if (!memberResult.data) {
+      const tierNow = String(profile.tier || '').toLowerCase();
+      const hadSchoolSeat = tierNow === 'school_student' || tierNow === 'school_teacher';
+      if (!hadSchoolSeat) {
+        return profile;
+      }
+
+      // Member seat has been removed: automatically revert to free account.
+      const revertResult = await client
+        .from('profiles')
+        .update({
+          tier: 'free',
+          credits: Number(TIER_INFO.free.credits || 10),
+          credits_reset_at: new Date().toISOString(),
+          school_id: null,
+          school_name: null,
+          unlocked_subjects: [],
+        })
+        .eq('id', profile.id)
+        .select('*')
+        .single();
+
+      if (revertResult.error) {
+        console.warn('RA10 school entitlement revert error', revertResult.error);
+        return profile;
+      }
+
+      return revertResult.data || profile;
+    }
+
+    const member = memberResult.data;
+    const role = String(member.role || '').toLowerCase();
+    const schoolTier = role === 'teacher' ? 'school_teacher' : 'school_student';
+    const schoolCredits = role === 'teacher' ? 600 : 300;
+    const mappedSubjects = _normalizeSubjectsList(member.subjects);
+    let schoolName = profile.school_name || null;
+    if (!schoolName && member.school_id) {
+      const schoolResult = await client
+        .from('schools')
+        .select('name')
+        .eq('id', member.school_id)
+        .maybeSingle();
+      if (!schoolResult.error && schoolResult.data && schoolResult.data.name) {
+        schoolName = schoolResult.data.name;
+      }
+    }
+
+    const needsUpdate =
+      profile.tier !== schoolTier
+      || Number(profile.credits || 0) !== schoolCredits
+      || String(profile.school_id || '') !== String(member.school_id || '')
+      || String(profile.school_name || '') !== String(schoolName || '')
+      || JSON.stringify(_normalizeSubjectsList(profile.unlocked_subjects)) !== JSON.stringify(mappedSubjects);
+
+    if (!needsUpdate) {
+      return profile;
+    }
+
+    const nextReset = new Date();
+    nextReset.setUTCMonth(nextReset.getUTCMonth() + 1);
+    const updateResult = await client
+      .from('profiles')
+      .update({
+        tier: schoolTier,
+        credits: schoolCredits,
+        credits_reset_at: nextReset.toISOString(),
+        school_id: member.school_id,
+        school_name: schoolName,
+        unlocked_subjects: mappedSubjects,
+      })
+      .eq('id', profile.id)
+      .select('*')
+      .single();
+
+    if (updateResult.error) {
+      console.warn('RA10 school entitlement apply error', updateResult.error);
+      return profile;
+    }
+
+    if (String(member.status || '').toLowerCase() !== 'active') {
+      await client
+        .from('school_members')
+        .update({ status: 'active' })
+        .eq('id', member.id);
+    }
+
+    return updateResult.data || profile;
   }
 
   async function _ensureProfileRow(user) {
@@ -210,7 +361,8 @@
       return data;
     }
 
-    const createdAt = new Date().toISOString();
+    const createdAt = new Date();
+    createdAt.setUTCMonth(createdAt.getUTCMonth() + 1);
     const emailPrefix = String(user.email || '').split('@')[0] || '';
     const displayName = user.user_metadata?.display_name || user.user_metadata?.full_name || emailPrefix;
     const profilePayload = {
@@ -219,7 +371,7 @@
       display_name: displayName || '',
       tier: 'free',
       credits: 10,
-      credits_reset_at: createdAt,
+      credits_reset_at: createdAt.toISOString(),
       unlimited_credits: false,
       unlocked_subjects: [],
     };
@@ -228,7 +380,8 @@
       console.warn('RA10 profile create error', insert.error);
       return null;
     }
-    return insert.data;
+    const withSchoolEntitlement = await _applySchoolEntitlementByEmail(insert.data, user);
+    return withSchoolEntitlement;
   }
 
   async function _loadProfileFromSession(session) {
@@ -245,7 +398,7 @@
     }
 
     if (data) {
-      _profile = data;
+      _profile = await _applySchoolEntitlementByEmail(data, user);
     } else {
       _profile = await _ensureProfileRow(user);
     }
@@ -271,8 +424,9 @@
     }
 
     const client = await _ensureSupabaseClient();
-    const now = new Date().toISOString();
-    const update = await client.from('profiles').update({ credits, credits_reset_at: now }).eq('id', _profile.id).select().single();
+    const nextReset = new Date();
+    nextReset.setUTCMonth(nextReset.getUTCMonth() + 1);
+    const update = await client.from('profiles').update({ credits, credits_reset_at: nextReset.toISOString() }).eq('id', _profile.id).select().single();
     if (!update.error && update.data) {
       _profile = update.data;
       _emit('creditschange', _profile);
@@ -633,7 +787,8 @@
     return true;
   }
 
-  async function startCheckout(priceId) {
+  async function startCheckout(input) {
+    throw new Error('Purchases are temporarily unavailable while RA10 is being approved. Please check back soon.');
     if (!isLoggedIn()) {
       throw new Error('Must be signed in to start checkout');
     }
@@ -648,11 +803,7 @@
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
-        body: JSON.stringify({ 
-        priceId,
-        successUrl: `${window.location.origin}/#/account?upgraded=1`,
-        cancelUrl: `${window.location.origin}/#/upgrade`
-        }),
+      body: JSON.stringify(typeof input === 'string' ? { plan: input } : (input || {})),
     });
     if (!response.ok) {
       const text = await response.text();
@@ -710,6 +861,7 @@
     showPaywall,
     renderCreditChip,
     startCheckout,
+    refreshProfile: _refreshProfile,
     on,
     off,
     // Expose internal config for debugging if needed.

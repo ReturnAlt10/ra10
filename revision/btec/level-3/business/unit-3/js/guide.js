@@ -155,7 +155,6 @@
 <tr><td>Standard current account</td><td>Debit card, direct debits, some overdraft; low or no fees</td><td>Most adults; everyday banking</td></tr>
 <tr><td>Packaged account</td><td>Monthly fee (£10–30) but includes insurance, breakdown cover, travel insurance</td><td>Those who use the included benefits</td></tr>
 <tr><td>Student account</td><td>Interest-free overdraft (often £1,000–3,000); student-focused perks</td><td>University students</td></tr>
-<tr><td>Graduate account</td><td>Tapering interest-free overdraft over 3 years after graduation</td><td>Recent graduates managing transition</td></tr>
 </tbody></table>`,true),
 
     topic('A2','Methods of payment', `
@@ -174,13 +173,13 @@
 This is a very common question. Key distinction: <strong>Standing order = you set a fixed amount</strong> (e.g. paying a friend back £50/month). <strong>Direct debit = payee requests the payment</strong> and the amount can vary (e.g. electricity bill, gym membership). Both are automated.</div>`,true),
 
     topic('A3','Borrowing types — advantages and disadvantages', `
-<table class="g-table"><thead><tr><th>Borrowing type</th><th>Typical APR</th><th>Secured?</th><th>Advantages</th><th>Disadvantages</th><th>Best for</th></tr></thead><tbody>
-<tr><td><strong>Bank overdraft</strong></td><td>15–40% EAR</td><td>No</td><td>Flexible; only pay interest on amount used; instant access</td><td>High interest rate; repayable on demand; easy to rely on</td><td>Short-term cash flow gap</td></tr>
-<tr><td><strong>Personal loan</strong></td><td>5–25% APR</td><td>Usually no</td><td>Fixed monthly payments; predictable; can be used for anything</td><td>Repayments continue even if income falls; interest cost</td><td>Planned medium-term purchases (car, holiday)</td></tr>
-<tr><td><strong>Hire purchase</strong></td><td>10–20% APR</td><td>Yes (item)</td><td>Spread cost of asset; you get use of item immediately</td><td>You don't own item until last payment; more expensive overall</td><td>Buying a car or appliance</td></tr>
-<tr><td><strong>Mortgage</strong></td><td>2–6% APR</td><td>Yes (property)</td><td>Enables property ownership; low interest rate</td><td>Property repossessed if payments missed; 25–35 year commitment</td><td>Buying a home</td></tr>
-<tr><td><strong>Credit card</strong></td><td>20–30% APR</td><td>No</td><td>Section 75 protection; flexible repayment; rewards/cashback</td><td>Very expensive if only minimum payment made; debt can spiral</td><td>Everyday spending; emergencies; online purchases</td></tr>
-<tr><td><strong>Payday loan</strong></td><td>1000%+ APR</td><td>No</td><td>Fast approval; no credit check needed</td><td>Extremely high cost; debt trap; short-term only</td><td>Emergency only — generally inadvisable</td></tr>
+<table class="g-table"><thead><tr><th>Borrowing type</th><th>Typical APR</th><th>Advantages</th><th>Disadvantages</th><th>Best for</th></tr></thead><tbody>
+<tr><td><strong>Bank overdraft</strong></td><td>15–40% EAR</td><td>Flexible; only pay interest on amount used; instant access</td><td>High interest rate; repayable on demand; easy to rely on</td><td>Short-term cash flow gap</td></tr>
+<tr><td><strong>Personal loan</strong></td><td>5–25% APR</td><td>Fixed monthly payments; predictable; can be used for anything</td><td>Repayments continue even if income falls; interest cost</td><td>Planned medium-term purchases (car, holiday)</td></tr>
+<tr><td><strong>Hire purchase</strong></td><td>10–20% APR</td><td>Spread cost of asset; you get use of item immediately</td><td>You don't own item until last payment; more expensive overall</td><td>Buying a car or appliance</td></tr>
+<tr><td><strong>Mortgage</strong></td><td>2–6% APR</td><td>Enables property ownership; low interest rate</td><td>Property repossessed if payments missed; 25–35 year commitment</td><td>Buying a home</td></tr>
+<tr><td><strong>Credit card</strong></td><td>20–30% APR</td><td>Section 75 protection; flexible repayment; rewards/cashback</td><td>Very expensive if only minimum payment made; debt can spiral</td><td>Everyday spending; emergencies; online purchases</td></tr>
+<tr><td><strong>Payday loan</strong></td><td>1000%+ APR</td><td>Fast approval; no credit check needed</td><td>Extremely high cost; debt trap; short-term only</td><td>Emergency only — generally inadvisable</td></tr>
 </tbody></table>
 
 <div class="def-box"><div class="def-label">Key definition</div>

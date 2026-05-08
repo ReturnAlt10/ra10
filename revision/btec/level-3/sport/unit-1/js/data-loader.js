@@ -1,4 +1,10 @@
 // BTEC Sport Unit 1 data loader
+function _dlHashStr(str) { let h = 2166136261; for (let i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
+function _dlMakeRng(seed) {
+  let s = (typeof seed === 'string') ? _dlHashStr(seed) : (seed | 0) || 1;
+  return function() { s = (s + 0x6D2B79F5) | 0; let t = Math.imul(s ^ (s >>> 15), 1 | s); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+}
+
 const LEARNING_AIMS = ['A', 'B', 'C', 'D', 'E'];
 let QUESTIONS = [];
 let QUIZ = [];
@@ -457,6 +463,20 @@ function buildQuiz() {
       const termB = SECTION_TERMS[section][(i + 2) % SECTION_TERMS[section].length];
       const termC = SECTION_TERMS[section][(i + 4) % SECTION_TERMS[section].length];
       const termD = SECTION_TERMS[section][(i + 6) % SECTION_TERMS[section].length];
+      const rawChoices = [
+        { text: 'Correct applied point: ' + termA, correct: true },
+        { text: 'Distractor 1: ' + termB, correct: false },
+        { text: 'Distractor 2: ' + termC, correct: false },
+        { text: 'Distractor 3: ' + termD, correct: false }
+      ];
+      // Shuffle choices using a deterministic seed so order is stable per question
+      const rng = _dlMakeRng('QZ-SPT-' + String(id).padStart(3, '0'));
+      const shuffled = rawChoices.slice();
+      for (let k = shuffled.length - 1; k > 0; k--) {
+        const j = Math.floor(rng() * (k + 1));
+        [shuffled[k], shuffled[j]] = [shuffled[j], shuffled[k]];
+      }
+      const correct_index = shuffled.findIndex(c => c.correct);
       out.push({
         id: 'QZ-SPT-' + String(id++).padStart(3, '0'),
         learning_aim: section,
@@ -465,13 +485,8 @@ function buildQuiz() {
         source_material: section === 'C'
           ? sectionDiagramSource(section, a)
           : caseStudySource(section, a, i),
-        choices: [
-          'Correct applied point: ' + termA,
-          'Distractor 1: ' + termB,
-          'Distractor 2: ' + termC,
-          'Distractor 3: ' + termD
-        ],
-        correct_index: 0,
+        choices: shuffled.map(c => c.text),
+        correct_index: correct_index,
         explanation: termA + ' is the best match to the named athlete and sport context in ' + learningAimLabel(section) + '.'
       });
     }

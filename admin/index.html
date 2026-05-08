@@ -236,7 +236,43 @@ th{font-size:var(--tx-xs);text-transform:uppercase;letter-spacing:.08em;color:va
   background:var(--surface-off2);color:var(--ink-2);
   border-radius:var(--r-full);padding:.1rem .4rem;
 }
-/* ── Toast ─────────────────────────────────────── */
+/* ── Group pill ───────────────────────────────── */
+.group-pill{
+  display:inline-flex;align-items:center;gap:.3em;
+  border-radius:var(--r-full);padding:.12rem .55rem;
+  font-size:.72rem;font-weight:700;background:var(--surface-dyn);color:var(--ink-2);
+  border:1px solid var(--border);
+}
+.group-pill.has-group{background:#e8f0fe;color:#1a4eb5;border-color:#b8d0f8}
+[data-theme="dark"] .group-pill.has-group{background:#1a2a4a;color:#7aadff;border-color:#2a4a8a}
+/* ── Groups tab ────────────────────────────────── */
+.groups-list{display:flex;flex-direction:column;gap:var(--sp4)}
+.group-block{border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden}
+.group-block-head{
+  display:flex;align-items:center;gap:var(--sp3);
+  padding:var(--sp3) var(--sp4);background:var(--surface-off);
+  border-bottom:1px solid var(--border);
+}
+.group-block-head h4{font-family:var(--fd);font-size:var(--tx-base);font-weight:400;flex:1}
+.group-name-input{
+  flex:1;border:none;background:transparent;font:inherit;
+  font-family:var(--fd);font-size:var(--tx-base);color:var(--ink);
+  outline:none;min-width:0;
+}
+.group-name-input:focus{border-bottom:2px solid var(--red)}
+.group-count{font-size:var(--tx-xs);color:var(--ink-2);white-space:nowrap}
+.group-members-list{padding:var(--sp3) var(--sp4);display:flex;flex-wrap:wrap;gap:var(--sp2)}
+.group-member-tag{
+  display:inline-flex;align-items:center;gap:.35em;
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r-full);padding:.25rem var(--sp3);font-size:var(--tx-sm);
+}
+.group-member-tag .role-dot{
+  width:7px;height:7px;border-radius:50%;flex-shrink:0;
+}
+.role-dot.student{background:var(--green)}
+.role-dot.teacher{background:var(--amber)}
+.group-empty{padding:var(--sp5) var(--sp4);color:var(--ink-2);font-size:var(--tx-sm);font-style:italic}
 .toast{
   position:fixed;bottom:var(--sp5);right:var(--sp5);z-index:10010;
   background:var(--surface);border:1px solid var(--border);box-shadow:var(--sh-md);
@@ -288,6 +324,7 @@ th{font-size:var(--tx-xs);text-transform:uppercase;letter-spacing:.08em;color:va
     <div class="spinner"></div>
     <h1>Loading EDU Admin</h1>
     <p>Setting up your admin workspace&hellip;</p>
+    <p id="debug-status" style="font-size:.8rem;color:#999;margin-top:.5rem;"></p>
   </div>
 </section>
 
@@ -331,6 +368,7 @@ th{font-size:var(--tx-xs);text-transform:uppercase;letter-spacing:.08em;color:va
   <div class="tabs" role="tablist">
     <button class="tab-btn active" data-tab="students" role="tab">Students</button>
     <button class="tab-btn" data-tab="teachers" role="tab">Teachers</button>
+    <button class="tab-btn" data-tab="groups" role="tab">Groups</button>
     <button class="tab-btn" data-tab="subjects" role="tab">Subjects</button>
     <button class="tab-btn" data-tab="settings" role="tab">Settings</button>
   </div>
@@ -340,11 +378,16 @@ th{font-size:var(--tx-xs);text-transform:uppercase;letter-spacing:.08em;color:va
     <div class="card">
       <div class="section-head">
         <h2>Students</h2>
-        <button class="btn btn-p" id="btn-add-student">Add Student</button>
+        <div style="display:flex;gap:var(--sp2);align-items:center;flex-wrap:wrap">
+          <select id="filter-student-group" class="field-input" style="width:auto;padding:var(--sp2) var(--sp3);font-size:var(--tx-sm)">
+            <option value="">All groups</option>
+          </select>
+          <button class="btn btn-p" id="btn-add-student">Add Student</button>
+        </div>
       </div>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>Email</th><th>Status</th><th>Subjects</th><th>Actions</th></tr></thead>
+          <thead><tr><th>Email</th><th>Status</th><th>Group</th><th>Subjects</th><th>Actions</th></tr></thead>
           <tbody id="students-body"></tbody>
         </table>
       </div>
@@ -356,14 +399,30 @@ th{font-size:var(--tx-xs);text-transform:uppercase;letter-spacing:.08em;color:va
     <div class="card">
       <div class="section-head">
         <h2>Teachers</h2>
-        <button class="btn btn-p" id="btn-add-teacher">Add Teacher</button>
+        <div style="display:flex;gap:var(--sp2);align-items:center;flex-wrap:wrap">
+          <select id="filter-teacher-group" class="field-input" style="width:auto;padding:var(--sp2) var(--sp3);font-size:var(--tx-sm)">
+            <option value="">All groups</option>
+          </select>
+          <button class="btn btn-p" id="btn-add-teacher">Add Teacher</button>
+        </div>
       </div>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>Email</th><th>Status</th><th>Subjects</th><th>Actions</th></tr></thead>
+          <thead><tr><th>Email</th><th>Status</th><th>Group</th><th>Subjects</th><th>Actions</th></tr></thead>
           <tbody id="teachers-body"></tbody>
         </table>
       </div>
+    </div>
+  </div>
+
+  <!-- Groups -->
+  <div id="tab-groups" class="hidden">
+    <div class="card">
+      <div class="section-head">
+        <h2>Groups</h2>
+        <button class="btn btn-p" id="btn-create-group">+ New Group</button>
+      </div>
+      <div id="groups-list" class="groups-list"></div>
     </div>
   </div>
 
@@ -416,6 +475,10 @@ th{font-size:var(--tx-xs);text-transform:uppercase;letter-spacing:.08em;color:va
       <input class="field-input" id="member-email" type="email" placeholder="name@school.edu" autocomplete="off">
     </div>
     <div class="field">
+      <label class="field-label" for="member-group">Group <span style="font-weight:400;text-transform:none;letter-spacing:0">(optional)</span></label>
+      <select class="field-input" id="member-group"><option value="">No group</option></select>
+    </div>
+    <div class="field">
       <span class="field-label">Subjects</span>
       <div class="subject-checks" id="subject-checks"></div>
     </div>
@@ -438,8 +501,9 @@ var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSI
 var OWNER_EMAIL = 'mistry.hashim@icloud.com';
 
 var SUBJECTS = [
-  { key: 'IT_AAQ',      name: 'IT AAQ',           label: 'IT AAQ (BTEC Level 3)',    live: true,  selectable: true  },
-  { key: 'BUSINESS_L3', name: 'Business Level 3', label: 'Business Level 3 (BTEC)', live: false, selectable: false }
+  { key: 'IT_AAQ',      name: 'IT AAQ',           label: 'IT AAQ (BTEC Level 3)',        live: true, selectable: true },
+  { key: 'BUSINESS_L3', name: 'Business Level 3', label: 'Business Level 3 (BTEC Level 3)', live: true, selectable: true },
+  { key: 'SPORT_L3',    name: 'Sport Level 3',    label: 'Sport Level 3 (BTEC Level 3)',    live: true, selectable: true }
 ];
 
 /* ═══════════════════════════════════════════════
@@ -452,6 +516,7 @@ var state = {
   schoolId: null,
   schoolName: 'Your School',
   members: [],
+  groups: [],   // array of group name strings
   activeTab: 'students',
   modalRole: 'student'
 };
@@ -459,6 +524,8 @@ var state = {
 /* ═══════════════════════════════════════════════
    DOM
 ═══════════════════════════════════════════════ */
+var TAB_IDS = ['students','teachers','groups','subjects','settings'];
+
 var dom = {
   nav:           document.getElementById('top-nav'),
   gateLoading:   document.getElementById('gate-loading'),
@@ -474,11 +541,13 @@ var dom = {
   statInvited:   document.getElementById('stat-invited'),
   studentsBody:  document.getElementById('students-body'),
   teachersBody:  document.getElementById('teachers-body'),
+  groupsList:    document.getElementById('groups-list'),
   subjectsGrid:  document.getElementById('subjects-grid'),
   settingsName:  document.getElementById('settings-school-name'),
   modal:         document.getElementById('member-modal'),
   modalTitle:    document.getElementById('modal-title'),
   memberEmail:   document.getElementById('member-email'),
+  memberGroup:   document.getElementById('member-group'),
   subjectChecks: document.getElementById('subject-checks'),
   toastHost:     document.getElementById('toast-host')
 };
@@ -529,6 +598,10 @@ function subjectChips(subjects) {
   var list = normSubjects(subjects);
   if (!list.length) return '<span class="muted" style="font-size:var(--tx-sm)">None</span>';
   return '<div class="chips">' + list.map(function(s) { return '<span class="chip">' + esc(s) + '</span>'; }).join('') + '</div>';
+}
+
+function selectableSubjectNames() {
+  return SUBJECTS.filter(function(s) { return s && s.selectable; }).map(function(s) { return s.name; });
 }
 
 /* ═══════════════════════════════════════════════
@@ -594,7 +667,7 @@ dom.schoolInput.addEventListener('keydown', function(e) {
 /* ═══════════════════════════════════════════════
    TABS
 ═══════════════════════════════════════════════ */
-var TAB_IDS = ['students', 'teachers', 'subjects', 'settings'];
+var TAB_IDS = ['students','teachers','groups','subjects','settings']; // defined above
 
 function setTab(tab) {
   state.activeTab = tab;
@@ -625,18 +698,38 @@ function renderStats() {
 
 function renderTable(role) {
   var tbody = role === 'teacher' ? dom.teachersBody : dom.studentsBody;
+  var filterEl = document.getElementById('filter-' + role + '-group');
+  var filterGroup = filterEl ? filterEl.value : '';
   var rows = state.members.filter(function(m) { return m.role === role; });
+  if (filterGroup) rows = rows.filter(function(m) { return (m.group_name || '') === filterGroup; });
   if (!rows.length) {
-    tbody.innerHTML = '<tr class="empty-row"><td colspan="4">No ' + role + 's yet.</td></tr>';
+    tbody.innerHTML = '<tr class="empty-row"><td colspan="5">No ' + role + 's' + (filterGroup ? ' in this group' : '') + '.</td></tr>';
     return;
   }
+  var groupOptions = state.groups.map(function(g) {
+    return '<option value="' + esc(g) + '">' + esc(g) + '</option>';
+  }).join('');
   tbody.innerHTML = rows.map(function(m) {
     var safeId = esc(String(m.id));
+    var gName = m.group_name || '';
+    var groupPill = gName
+      ? '<span class="group-pill has-group">' + esc(gName) + '</span>'
+      : '<span class="group-pill">No group</span>';
     return '<tr>' +
       '<td>' + esc(m.email) + '</td>' +
       '<td>' + statusBadge(m.status) + '</td>' +
+      '<td>' +
+        '<select class="field-input" style="font-size:var(--tx-xs);padding:var(--sp1) var(--sp2);width:auto" data-setgroup="' + safeId + '">' +
+          '<option value="">No group</option>' +
+          groupOptions.replace('value="' + esc(gName) + '"', 'value="' + esc(gName) + '" selected') +
+        '</select>' +
+      '</td>' +
       '<td>' + subjectChips(m.subjects) + '</td>' +
-      '<td><button class="btn btn-g" style="font-size:var(--tx-xs)" data-remove="' + safeId + '">Remove</button></td>' +
+      '<td>' +
+        '<button class="btn btn-g" style="font-size:var(--tx-xs);margin-right:var(--sp2)" data-resend="' + safeId + '">Resend invite</button>' +
+        '<button class="btn btn-g" style="font-size:var(--tx-xs);margin-right:var(--sp2)" data-editsubjects="' + safeId + '">Edit subjects</button>' +
+        '<button class="btn btn-g" style="font-size:var(--tx-xs)" data-remove="' + safeId + '">Remove</button>' +
+      '</td>' +
       '</tr>';
   }).join('');
 }
@@ -653,10 +746,52 @@ function renderSubjects() {
   }).join('');
 }
 
+function renderGroups() {
+  // update group filter dropdowns
+  ['student','teacher'].forEach(function(role) {
+    var sel = document.getElementById('filter-' + role + '-group');
+    if (!sel) return;
+    var cur = sel.value;
+    sel.innerHTML = '<option value="">All groups</option>' +
+      state.groups.map(function(g) { return '<option value="' + esc(g) + '">' + esc(g) + '</option>'; }).join('');
+    if (cur) sel.value = cur;
+  });
+  // update member-group modal select
+  if (dom.memberGroup) {
+    var curMg = dom.memberGroup.value;
+    dom.memberGroup.innerHTML = '<option value="">No group</option>' +
+      state.groups.map(function(g) { return '<option value="' + esc(g) + '">' + esc(g) + '</option>'; }).join('');
+    if (curMg) dom.memberGroup.value = curMg;
+  }
+  // render groups tab
+  if (!state.groups.length) {
+    dom.groupsList.innerHTML = '<p style="color:var(--ink-2);padding:var(--sp5) 0">No groups yet. Click &ldquo;+ New Group&rdquo; to create one.</p>';
+    return;
+  }
+  dom.groupsList.innerHTML = state.groups.map(function(g) {
+    var gMembers = state.members.filter(function(m) { return (m.group_name || '') === g; });
+    var memberTags = gMembers.length
+      ? gMembers.map(function(m) {
+          return '<span class="group-member-tag"><span class="role-dot ' + esc(m.role) + '"></span>' + esc(m.email) + '</span>';
+        }).join('')
+      : '<span class="group-empty">No members in this group yet.</span>';
+    return '<div class="group-block">' +
+      '<div class="group-block-head">' +
+        '<input class="group-name-input" data-oldname="' + esc(g) + '" value="' + esc(g) + '" aria-label="Group name">' +
+        '<span class="group-count">' + gMembers.length + ' member' + (gMembers.length === 1 ? '' : 's') + '</span>' +
+        '<button class="btn btn-g" style="font-size:var(--tx-xs)" data-rename-group="' + esc(g) + '">Rename</button>' +
+        '<button class="btn btn-g" style="font-size:var(--tx-xs);color:var(--red)" data-delete-group="' + esc(g) + '">Delete</button>' +
+      '</div>' +
+      '<div class="group-members-list">' + memberTags + '</div>' +
+    '</div>';
+  }).join('');
+}
+
 function renderAll() {
   renderStats();
   renderTable('student');
   renderTable('teacher');
+  renderGroups();
   renderSubjects();
 }
 
@@ -667,23 +802,125 @@ async function loadMembers() {
   if (!state.schoolId) { state.members = []; renderAll(); return; }
   var res = await state.sb
     .from('school_members')
-    .select('id, school_id, email, role, subjects, status')
+    .select('id, school_id, email, role, subjects, status, group_name')
     .eq('school_id', state.schoolId)
     .in('role', ['student', 'teacher'])
     .neq('status', 'removed')
     .order('email', { ascending: true });
   if (res.error) { console.warn('loadMembers:', res.error); toast('Failed to load members.'); return; }
   state.members = Array.isArray(res.data) ? res.data : [];
+  // merge saved groups from schools table with member-derived groups
+  var groupSet = new Set(Array.isArray(state.groups) ? state.groups : []);
+  state.members.forEach(function(m) { if (m.group_name) groupSet.add(m.group_name); });
+  state.groups = Array.from(groupSet).sort();
   renderAll();
 }
 
-/* ═══════════════════════════════════════════════
-   ADD MEMBER MODAL
-═══════════════════════════════════════════════ */
+async function setMemberGroup(memberId, groupName) {
+  var m = state.members.find(function(x) { return String(x.id) === String(memberId); });
+  if (!m) return;
+  var res = await state.sb.from('school_members').update({ group_name: groupName || null }).eq('id', m.id);
+  if (res.error) { toast('Could not update group.'); return; }
+  m.group_name = groupName || null;
+  // re-derive groups
+  var groupSet = new Set();
+  state.members.forEach(function(x) { if (x.group_name) groupSet.add(x.group_name); });
+  state.groups = Array.from(groupSet).sort();
+  renderAll();
+}
+
+async function editMemberSubjects(memberId) {
+  var m = state.members.find(function(x) { return String(x.id) === String(memberId); });
+  if (!m) return;
+  var allowed = selectableSubjectNames();
+  if (!allowed.length) { toast('No selectable subjects configured.'); return; }
+
+  var current = normSubjects(m.subjects);
+  var input = prompt(
+    'Enter subjects separated by commas.\nAvailable: ' + allowed.join(', ') + '\n\nCurrent: ' + (current.length ? current.join(', ') : 'None'),
+    current.join(', ')
+  );
+  if (input == null) return;
+
+  var byLower = {};
+  allowed.forEach(function(name) { byLower[String(name).toLowerCase()] = name; });
+  var picked = String(input || '').split(',').map(function(s) { return s.trim().toLowerCase(); }).filter(Boolean);
+  var unique = [];
+  picked.forEach(function(k) {
+    var canonical = byLower[k];
+    if (canonical && unique.indexOf(canonical) === -1) unique.push(canonical);
+  });
+
+  var memberUpdate = await state.sb.from('school_members').update({ subjects: unique }).eq('id', m.id);
+  if (memberUpdate.error) { toast('Could not update member subjects.'); return; }
+
+  m.subjects = unique;
+  if (String(m.status || '').toLowerCase() === 'active') {
+    await state.sb.from('profiles').update({ unlocked_subjects: unique }).ilike('email', m.email);
+  }
+
+  renderAll();
+  toast('Subjects updated for ' + m.email + '.');
+}
+
+async function saveGroups() {
+  if (!state.schoolId) return;
+  try {
+    await state.sb.from('schools').update({ groups: state.groups }).eq('id', state.schoolId);
+  } catch(e) { console.warn('saveGroups failed', e); }
+}
+
+async function createGroup() {
+  var name = prompt('Group name:');
+  if (!name || !name.trim()) return;
+  name = name.trim();
+  if (state.groups.includes(name)) { toast('A group with that name already exists.'); return; }
+  state.groups.push(name);
+  state.groups.sort();
+  await saveGroups();
+  renderAll();
+  toast('Group "' + name + '" created. Now assign members using the Group column.');
+}
+
+async function renameGroup(oldName, newName) {
+  if (!newName || !newName.trim() || newName === oldName) return;
+  newName = newName.trim();
+  if (state.groups.includes(newName)) { toast('A group with that name already exists.'); return; }
+  // update all members with this group
+  var ids = state.members.filter(function(m) { return m.group_name === oldName; }).map(function(m) { return m.id; });
+  if (ids.length) {
+    await state.sb.from('school_members').update({ group_name: newName }).in('id', ids);
+    state.members.forEach(function(m) { if (m.group_name === oldName) m.group_name = newName; });
+  }
+  var idx = state.groups.indexOf(oldName);
+  if (idx !== -1) state.groups[idx] = newName;
+  state.groups.sort();
+  await saveGroups();
+  renderAll();
+  toast('Group renamed to "' + newName + '".');
+}
+
+async function deleteGroup(groupName) {
+  if (!confirm('Delete group "' + groupName + '"? Members will be unassigned but not removed.')) return;
+  var ids = state.members.filter(function(m) { return m.group_name === groupName; }).map(function(m) { return m.id; });
+  if (ids.length) {
+    await state.sb.from('school_members').update({ group_name: null }).in('id', ids);
+    state.members.forEach(function(m) { if (m.group_name === groupName) m.group_name = null; });
+  }
+  state.groups = state.groups.filter(function(g) { return g !== groupName; });
+  await saveGroups();
+  renderAll();
+  toast('Group "' + groupName + '" deleted.');
+}
+
 function openModal(role) {
   state.modalRole = role;
   dom.modalTitle.textContent = role === 'teacher' ? 'Add Teacher' : 'Add Student';
   dom.memberEmail.value = '';
+  // populate group dropdown
+  dom.memberGroup.innerHTML = '<option value="">No group</option>' +
+    state.groups.map(function(g) { return '<option value="' + esc(g) + '">' + esc(g) + '</option>'; }).join('');
+  dom.memberGroup.value = '';
   dom.subjectChecks.innerHTML = '';
   SUBJECTS.forEach(function(sub, i) {
     var id = 'sc-' + i;
@@ -713,23 +950,74 @@ async function addMember() {
   var email = dom.memberEmail.value.trim().toLowerCase();
   var role = state.modalRole;
   var subjects = selectedSubjects();
+  var groupName = dom.memberGroup.value || null;
 
   if (!email) { toast('Enter an email address.'); return; }
   if (!state.schoolId) { toast('School not loaded. Please refresh.'); return; }
 
-  var dup = state.members.find(function(m) { return m.email === email && String(m.status).toLowerCase() !== 'removed'; });
+  var dup = state.members.find(function(m) {
+    return String(m.email || '').toLowerCase() === email && String(m.status).toLowerCase() !== 'removed';
+  });
   if (dup) { toast('This person is already a member.'); return; }
 
   var btn = document.getElementById('btn-member-save');
   btn.disabled = true;
 
-  var res = await state.sb.from('school_members').insert({
-    school_id: state.schoolId,
-    email: email,
-    role: role,
-    subjects: subjects,
-    status: 'invited'
-  });
+  // If this person existed before (any status), reactivate the latest record (no invite email).
+  var priorMember = null;
+  try {
+    var memberRes = await state.sb
+      .from('school_members')
+      .select('id, status')
+      .eq('school_id', state.schoolId)
+      .ilike('email', email)
+      .in('role', ['student', 'teacher'])
+      .order('id', { ascending: false })
+      .limit(1)
+      .maybeSingle();
+    if (!memberRes.error && memberRes.data && memberRes.data.id) {
+      priorMember = memberRes.data;
+    }
+  } catch(e) {
+    console.warn('addMember prior member lookup failed', e);
+  }
+
+  // If the person already has an RA10 account, activate school access immediately.
+  var existingProfile = null;
+  try {
+    var profRes = await state.sb
+      .from('profiles')
+      .select('id, email')
+      .ilike('email', email)
+      .limit(1)
+      .maybeSingle();
+    if (!profRes.error && profRes.data && profRes.data.id) {
+      existingProfile = profRes.data;
+    }
+  } catch(e) {
+    console.warn('addMember profile lookup failed', e);
+  }
+
+  var memberStatus = (existingProfile || priorMember) ? 'active' : 'invited';
+  var res;
+  if (priorMember && priorMember.id) {
+    res = await state.sb.from('school_members').update({
+      email: email,
+      role: role,
+      subjects: subjects,
+      status: 'active',
+      group_name: groupName
+    }).eq('id', priorMember.id);
+  } else {
+    res = await state.sb.from('school_members').insert({
+      school_id: state.schoolId,
+      email: email,
+      role: role,
+      subjects: subjects,
+      status: memberStatus,
+      group_name: groupName
+    });
+  }
 
   btn.disabled = false;
 
@@ -739,17 +1027,44 @@ async function addMember() {
     return;
   }
 
-  const invited = await window.RA10_INVITE(
-    email,
-    role,
-    state.schoolId,
-    state.schoolName
-  );
-  if (invited) {
-    toast('Member added \u2014 invite email sent to ' + email);
+  var memberTier = role === 'teacher' ? 'school_teacher' : 'school_student';
+  var memberCredits = role === 'teacher' ? 600 : 300;
+  if (existingProfile || priorMember) {
+    var nextReset = new Date();
+    nextReset.setUTCMonth(nextReset.getUTCMonth() + 1);
+    var profUpdate = await state.sb.from('profiles').update({
+      tier: memberTier,
+      credits: memberCredits,
+      credits_reset_at: nextReset.toISOString(),
+      school_id: state.schoolId,
+      school_name: state.schoolName,
+      unlocked_subjects: subjects
+    }).ilike('email', email);
+    if (profUpdate.error) {
+      console.warn('addMember profile activation failed', profUpdate.error);
+      toast('Member added. Account will activate on next login/refresh.');
+    } else {
+      toast(role === 'teacher' ? '✅ Teacher added and activated immediately.' : '✅ Student added and activated immediately.');
+    }
   } else {
-    toast('Member added. Invite email could not be sent \u2014 try again shortly.');
+    const inviteResult = await window.RA10_INVITE(
+      email,
+      role,
+      state.schoolId,
+      state.schoolName
+    );
+    if (inviteResult.ok && inviteResult.skipped) {
+      toast((role === 'teacher' ? '✅ Teacher' : '✅ Student') + ' added. They already have an account — no invite email needed.');
+    } else if (inviteResult.ok) {
+      toast(role === 'teacher' ? '✅ Teacher invited.' : '✅ Student invited.');
+    } else {
+      toast('Member added but invite email failed: ' + (inviteResult.error || 'unknown error'));
+    }
   }
+  // Remind admin to notify the member manually
+  setTimeout(function() {
+    toast('📧 Remember to let ' + email + ' know they can sign up or log in to ra10.co.uk — their ' + (role === 'teacher' ? 'teacher' : 'student') + ' account is ready.', 7000);
+  }, 2000);
   closeModal();
   await loadMembers();
 }
@@ -765,7 +1080,13 @@ async function removeMember(memberId) {
   var res = await state.sb.from('school_members').update({ status: 'removed' }).eq('id', m.id);
   if (res.error) { toast('Could not remove member.'); return; }
 
-  await state.sb.from('profiles').update({ tier: 'free', credits: 0 }).eq('email', m.email);
+  await state.sb.from('profiles').update({
+    tier: 'free',
+    credits: 10,
+    credits_reset_at: new Date().toISOString(),
+    school_id: null,
+    school_name: null
+  }).ilike('email', m.email);
   toast(m.email + ' removed.');
   await loadMembers();
 }
@@ -789,7 +1110,13 @@ document.getElementById('btn-remove-all').addEventListener('click', async functi
 
   await state.sb.from('school_members').update({ status: 'removed' }).in('id', ids);
   if (emails.length) {
-    await state.sb.from('profiles').update({ tier: 'free', credits: 0 }).in('email', emails);
+    await state.sb.from('profiles').update({
+      tier: 'free',
+      credits: 10,
+      credits_reset_at: new Date().toISOString(),
+      school_id: null,
+      school_name: null
+    }).in('email', emails.map(function(e) { return String(e || '').toLowerCase(); }));
   }
   toast('All members removed.');
   await loadMembers();
@@ -798,15 +1125,86 @@ document.getElementById('btn-remove-all').addEventListener('click', async functi
 /* ═══════════════════════════════════════════════
    EVENT DELEGATION
 ═══════════════════════════════════════════════ */
+async function resendInvite(memberId) {
+  var m = state.members.find(function(x) { return String(x.id) === String(memberId); });
+  if (!m) return;
+  toast('Sending invite to ' + m.email + '…');
+  var result = await window.RA10_INVITE(m.email, m.role, state.schoolId, state.schoolName);
+  if (result.ok && result.skipped) {
+    toast(m.email + ' already has an account — no invite email needed. Their access is already active.');
+  } else if (result.ok && result.link) {
+    // Rate-limited: generated a one-time signup link the admin can share
+    var copied = false;
+    try { await navigator.clipboard.writeText(result.link); copied = true; } catch(_) {}
+    if (copied) {
+      toast('⚠️ Invite emails are rate-limited. A one-time signup link has been copied to your clipboard — paste it into a message to ' + m.email + '.');
+    } else {
+      var userLink = prompt('Invite emails are rate-limited. Copy this link and send it to ' + m.email + ':', result.link);
+    }
+  } else if (result.ok) {
+    toast('✅ Invite resent to ' + m.email + '.');
+  } else if (result.error === 'rate_limited') {
+    toast('⚠️ Invite emails are rate-limited by Supabase. Please wait a few minutes before trying again, or ask ' + m.email + ' to use the "Forgot password" flow at ra10.co.uk to set a password.');
+  } else {
+    toast('Could not resend invite: ' + (result.error || 'unknown error'));
+  }
+}
+
 [dom.studentsBody, dom.teachersBody].forEach(function(tbody) {
   tbody.addEventListener('click', async function(e) {
+    var resendBtn = e.target.closest('[data-resend]');
+    if (resendBtn) { await resendInvite(resendBtn.dataset.resend); return; }
+    var editBtn = e.target.closest('[data-editsubjects]');
+    if (editBtn) { await editMemberSubjects(editBtn.dataset.editsubjects); return; }
     var btn = e.target.closest('[data-remove]');
     if (btn) await removeMember(btn.dataset.remove);
   });
+  tbody.addEventListener('change', async function(e) {
+    var sel = e.target.closest('[data-setgroup]');
+    if (sel) await setMemberGroup(sel.dataset.setgroup, sel.value);
+  });
 });
 
-document.getElementById('btn-add-student').addEventListener('click', function() { openModal('student'); });
-document.getElementById('btn-add-teacher').addEventListener('click', function() { openModal('teacher'); });
+document.getElementById('groups-list').addEventListener('click', async function(e) {
+  var renameBtn = e.target.closest('[data-rename-group]');
+  if (renameBtn) {
+    var block = renameBtn.closest('.group-block');
+    var input = block ? block.querySelector('.group-name-input') : null;
+    if (input) await renameGroup(renameBtn.dataset.renameGroup, input.value);
+    return;
+  }
+  var deleteBtn = e.target.closest('[data-delete-group]');
+  if (deleteBtn) { await deleteGroup(deleteBtn.dataset.deleteGroup); return; }
+});
+
+document.getElementById('btn-create-group').addEventListener('click', createGroup);
+
+document.getElementById('btn-add-student').addEventListener('click', function() {
+  if (!state.groups.length) {
+    if (confirm('No groups exist yet. It\'s recommended to create a group first so you can organise your students. Create a group now?')) {
+      setTab('groups');
+      createGroup();
+      return;
+    }
+  }
+  openModal('student');
+});
+
+document.getElementById('btn-add-teacher').addEventListener('click', function() {
+  if (!state.groups.length) {
+    if (confirm('No groups exist yet. It\'s recommended to create a group first so you can organise your teachers. Create a group now?')) {
+      setTab('groups');
+      createGroup();
+      return;
+    }
+  }
+  openModal('teacher');
+});
+
+['student','teacher'].forEach(function(role) {
+  var sel = document.getElementById('filter-' + role + '-group');
+  if (sel) sel.addEventListener('change', function() { renderTable(role); });
+});
 document.getElementById('btn-member-save').addEventListener('click', addMember);
 document.getElementById('btn-member-cancel').addEventListener('click', closeModal);
 document.getElementById('btn-modal-close').addEventListener('click', closeModal);
@@ -832,78 +1230,177 @@ document.getElementById('btn-signout').addEventListener('click', async function(
 ═══════════════════════════════════════════════ */
 async function initAccess() {
   showGate('loading');
+  var dbg = document.getElementById('debug-status');
+  function step(msg) { console.log('[EDU Admin]', msg); if(dbg) dbg.textContent = msg; }
 
-  try { await RA10.init(); } catch(e) { console.warn('RA10.init:', e); }
-
-  if (!window.RA10 || !RA10.isLoggedIn()) { showGate('signin'); return; }
-
-  state.profile = RA10.getProfile() || null;
-  state.session = RA10.getSession ? RA10.getSession() : null;
-
-  var tier    = RA10.getTier ? RA10.getTier() : 'free';
-  var email   = ((state.profile && state.profile.email) || '').toLowerCase();
-  var isOwner = email === OWNER_EMAIL;
-  const hasAccess = tier === 'school_admin' || isOwner;
-  
-  if (!hasAccess) {
-    showGate('denied');
-    document.getElementById('gate-denied').querySelector('h1').textContent = 
-      'Access restricted';
-    document.getElementById('gate-denied').querySelector('p').textContent = 
-      'The EDU Admin portal is only available to school administrator accounts.';
-    return;
-  }
-
-  var token = state.session && state.session.access_token ? state.session.access_token : null;
-  state.sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
-    global: { headers: token ? { Authorization: 'Bearer ' + token } : {} }
-  });
-
-  var userId = state.session && state.session.user ? state.session.user.id : null;
-  if (!userId) {
-    dom.deniedMsg.textContent = 'Could not read your user ID. Please sign in again.';
-    showGate('denied');
-    return;
-  }
-
-  /* 1. profile row */
-  var profRes = await state.sb.from('profiles').select('school_id, school_name').eq('id', userId).single();
-  if (profRes.data && profRes.data.school_id) {
-    state.schoolId   = profRes.data.school_id;
-    state.schoolName = profRes.data.school_name || 'Your School';
-  }
-
-  /* 2. schools table */
-  if (!state.schoolId) {
-    var schRes = await state.sb.from('schools').select('id, name').eq('owner_id', userId).limit(1).single();
-    if (schRes.data && schRes.data.id) {
-      state.schoolId   = schRes.data.id;
-      state.schoolName = schRes.data.name || 'Your School';
-      await state.sb.from('profiles').update({ school_id: schRes.data.id, school_name: schRes.data.name }).eq('id', userId);
+  function getSchoolRenewalDate(row) {
+    if (!row) return null;
+    var candidates = [
+      row.subscription_renewal,
+      row.renews_at,
+      row.current_period_end,
+      row.current_period_ends_at,
+      row.subscription_ends_at,
+      row.subscription_end_at,
+      row.ends_at
+    ];
+    for (var i = 0; i < candidates.length; i++) {
+      var raw = candidates[i];
+      if (!raw) continue;
+      var val = raw;
+      if (typeof raw === 'string' && /^\d+$/.test(raw)) {
+        val = Number(raw);
+      }
+      if (typeof val === 'number' && isFinite(val)) {
+        var ms = val < 1000000000000 ? val * 1000 : val;
+        var dn = new Date(ms);
+        if (!isNaN(dn.getTime())) return dn;
+        continue;
+      }
+      var d = new Date(val);
+      if (!isNaN(d.getTime())) return d;
     }
+    return null;
   }
 
-  /* 3. auto-create */
-  if (!state.schoolId) {
-    var newName = ((state.profile && state.profile.display_name) || email.split('@')[0]) + "'s School";
-    var createRes = await state.sb.from('schools').insert({ owner_id: userId, name: newName }).select('id, name').single();
-    if (createRes.data && createRes.data.id) {
-      state.schoolId   = createRes.data.id;
-      state.schoolName = createRes.data.name;
-      await state.sb.from('profiles').update({ school_id: createRes.data.id, school_name: createRes.data.name }).eq('id', userId);
+  function isSchoolSubscriptionActive(row) {
+    var status = String((row && row.subscription_status) || '').trim().toLowerCase();
+    if (!status) return true;
+    if (status === 'active' || status === 'trialing' || status === 'trial' || status === 'paid') {
+      return true;
     }
+    var renewalAt = getSchoolRenewalDate(row);
+    var hasFutureEndDate = renewalAt && renewalAt.getTime() > Date.now();
+    if ((status === 'cancelled' || status === 'canceled' || status === 'cancel_at_period_end') && hasFutureEndDate) {
+      return true;
+    }
+    return false;
   }
 
-  if (!state.schoolId) {
-    dom.deniedMsg.textContent = 'Could not load or create your school. Please contact support.';
+  try {
+    step('Waiting for SDK…');
+    try { await RA10.init(); } catch(e) { console.warn('RA10.init:', e); }
+
+    step('Checking login…');
+    if (!window.RA10 || !RA10.isLoggedIn()) { showGate('signin'); return; }
+
+    state.profile = RA10.getProfile() || null;
+    state.session = RA10.getSession ? RA10.getSession() : null;
+
+    var tier = RA10.getTier ? RA10.getTier() : 'free';
+    step('Tier: ' + tier);
+    console.log('[EDU Admin] tier:', tier, 'session:', state.session, 'profile:', state.profile);
+
+    if (tier !== 'school_admin') {
+      document.getElementById('gate-denied').querySelector('h1').textContent = 'Access restricted';
+      document.getElementById('gate-denied').querySelector('p').textContent =
+        'The EDU Admin portal is only available to EDU Admin accounts. Your current tier is: ' + tier;
+      showGate('denied');
+      return;
+    }
+
+    // RA10.getSession() returns the raw Supabase session
+    var rawSession = state.session;
+    var token = (rawSession && rawSession.access_token) ? rawSession.access_token : null;
+    var userId = (rawSession && rawSession.user && rawSession.user.id) ? rawSession.user.id : null;
+
+    if (!userId && state.profile) userId = state.profile.id;
+
+    if (!userId) {
+      dom.deniedMsg.textContent = 'Could not read your user ID. Please sign out and sign in again.';
+      showGate('denied');
+      return;
+    }
+
+    state.sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
+      global: { headers: token ? { Authorization: 'Bearer ' + token } : {} }
+    });
+
+    /* 1. profile row — may already have school_id */
+    try {
+      var profRes = await state.sb.from('profiles').select('school_id, school_name').eq('id', userId).single();
+      if (profRes.data && profRes.data.school_id) {
+        state.schoolId   = profRes.data.school_id;
+        state.schoolName = profRes.data.school_name || 'Your School';
+      }
+    } catch(e) { console.warn('[EDU Admin] profiles lookup failed', e); }
+
+    /* 2. schools table lookup */
+    if (!state.schoolId) {
+      try {
+        var schRes = await state.sb.from('schools').select('id, name, groups').eq('owner_id', userId).limit(1).maybeSingle();
+        if (schRes.data && schRes.data.id) {
+          state.schoolId   = schRes.data.id;
+          state.schoolName = schRes.data.name || 'Your School';
+          state.groups     = Array.isArray(schRes.data.groups) ? schRes.data.groups : [];
+          await state.sb.from('profiles').update({ school_id: schRes.data.id, school_name: schRes.data.name }).eq('id', userId);
+        }
+      } catch(e) { console.warn('[EDU Admin] schools lookup failed', e); }
+    } else {
+      // schoolId already known from profile — still load saved groups
+      try {
+        var schRes2 = await state.sb.from('schools').select('id, name, groups').eq('id', state.schoolId).maybeSingle();
+        if (schRes2.data) {
+          state.schoolName = schRes2.data.name || state.schoolName;
+          state.groups     = Array.isArray(schRes2.data.groups) ? schRes2.data.groups : [];
+        }
+      } catch(e) { console.warn('[EDU Admin] groups load failed', e); }
+    }
+
+    /* 3. auto-create school */
+    if (!state.schoolId) {
+      try {
+        var adminEmail = (state.profile && state.profile.email) || '';
+        var newName = (adminEmail.split('@')[0] || 'My') + "'s School";
+        var createRes = await state.sb.from('schools').insert({ owner_id: userId, name: newName }).select('id, name').single();
+        if (createRes.data && createRes.data.id) {
+          state.schoolId   = createRes.data.id;
+          state.schoolName = createRes.data.name;
+          await state.sb.from('profiles').update({ school_id: createRes.data.id, school_name: createRes.data.name }).eq('id', userId);
+        }
+      } catch(e) { console.warn('[EDU Admin] school create failed', e); }
+    }
+
+    /* 4. fallback — use userId as schoolId so members still work */
+    if (!state.schoolId) {
+      console.warn('[EDU Admin] No school found/created — using userId as fallback schoolId');
+      state.schoolId = userId;
+    }
+
+    // Enforce school subscription status. If billing trigger/webhook marks it expired,
+    // the admin portal must close even if profile tier is still school_admin.
+    try {
+      var schoolSubRes = await state.sb.from('schools').select('*').eq('id', state.schoolId).maybeSingle();
+      if (schoolSubRes.data) {
+        var schoolActive = isSchoolSubscriptionActive(schoolSubRes.data);
+        if (!schoolActive) {
+          var subStatus = String(schoolSubRes.data.subscription_status || 'expired').toLowerCase();
+          var renewAt = getSchoolRenewalDate(schoolSubRes.data);
+          var renewText = (renewAt && !Number.isNaN(renewAt.getTime()))
+            ? renewAt.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
+            : null;
+          document.getElementById('gate-denied').querySelector('h1').textContent = 'Subscription inactive';
+          document.getElementById('gate-denied').querySelector('p').textContent = renewText
+            ? ('Your school subscription is ' + subStatus + ' (renewal: ' + renewText + '). Renew the EDU plan to regain access.')
+            : ('Your school subscription is ' + subStatus + '. Renew the EDU plan to regain access.');
+          showGate('denied');
+          return;
+        }
+      }
+    } catch(e) {
+      console.warn('[EDU Admin] school subscription check failed', e);
+    }
+
+    setSchoolName(state.schoolName);
+    setTab('students');
+    showGate('app');
+    await loadMembers();
+
+  } catch(err) {
+    console.error('[EDU Admin] initAccess crash:', err);
+    dom.deniedMsg.textContent = 'Something went wrong loading the admin portal. Check the browser console for details.';
     showGate('denied');
-    return;
   }
-
-  setSchoolName(state.schoolName);
-  setTab('students');
-  showGate('app');
-  await loadMembers();
 }
 
 /* ═══════════════════════════════════════════════

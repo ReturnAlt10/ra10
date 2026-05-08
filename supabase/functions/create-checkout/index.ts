@@ -1,11 +1,13 @@
-import Stripe from "https://esm.sh/stripe@14?target=deno";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-// Hardcoded price IDs
-const STRIPE_PRICE_BASIC_IT = "price_1TTNRZLA7pznmZIOCkXXIVVH";
-const STRIPE_PRICE_PRO = "price_1TTNSPLA7pznmZIOjn1EcfIH";
-const STRIPE_PRICE_ULTRA = "price_1TTNT4LA7pznmZIOTMlq0l7C";
-const STRIPE_PRICE_EDU_ADMIN = "price_1TTNU7LA7pznmZIOB4Ess5R1";
+const LS_CHECKOUTS = {
+  IT:       "https://ra10edu.lemonsqueezy.com/checkout/buy/b428f59a-2ea6-4bed-86d4-09541c3457b9",
+  BUSINESS: "https://ra10edu.lemonsqueezy.com/checkout/buy/4e639075-b1f4-4850-a7af-729fb8c5a4bb",
+  SPORT:    "https://ra10edu.lemonsqueezy.com/checkout/buy/877858f8-0ebd-4948-8894-8b647eeac756",
+  PRO:      "https://ra10edu.lemonsqueezy.com/checkout/buy/e5ddcd2d-d806-43cc-b0b8-40017d83f80e",
+  ULTRA:    "https://ra10edu.lemonsqueezy.com/checkout/buy/dbb9ef1f-9a7e-4a4b-bb9e-74bf480781dd",
+  EDU:      "https://ra10edu.lemonsqueezy.com/checkout/buy/8c8421fa-7b05-4bfb-930b-a4073cb78f19",
+};
 
 // CORS allowed origins
 const ALLOWED_ORIGINS = [
@@ -48,13 +50,13 @@ export default Deno.serve(async (req: Request) => {
       );
     }
 
-    // Parse request body
     const body = await req.json();
-    const { priceId } = body;
+    const plan = String(body?.plan || "").toUpperCase();
+    const subject = String(body?.subject || "").toUpperCase();
 
-    if (!priceId) {
+    if (!plan && !subject) {
       return new Response(
-        JSON.stringify({ error: "priceId is required" }),
+        JSON.stringify({ error: "plan or subject is required" }),
         {
           status: 400,
           headers: corsHeaders,
@@ -62,7 +64,6 @@ export default Deno.serve(async (req: Request) => {
       );
     }
 
-    // Get JWT from Authorization header
     const authHeader = req.headers.get("authorization");
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return new Response(
@@ -74,7 +75,7 @@ export default Deno.serve(async (req: Request) => {
       );
     }
 
-    const jwt = authHeader.slice(7); // Remove "Bearer " prefix
+    const jwt = authHeader.slice(7);
 
     // Initialize Supabase client
     const supabaseUrl = Deno.env.get("SUPABASE_URL");
@@ -92,7 +93,6 @@ export default Deno.serve(async (req: Request) => {
 
     const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
-    // Verify JWT and get user
     const { data: userData, error: userError } = await supabase.auth.getUser(
       jwt
     );
@@ -108,88 +108,32 @@ export default Deno.serve(async (req: Request) => {
     }
 
     const user = userData.user;
+    let checkoutBase = "";
+    if (subject === "IT") checkoutBase = LS_CHECKOUTS.IT;
+    if (subject === "BUSINESS") checkoutBase = LS_CHECKOUTS.BUSINESS;
+    if (subject === "SPORT") checkoutBase = LS_CHECKOUTS.SPORT;
+    if (plan === "PRO") checkoutBase = LS_CHECKOUTS.PRO;
+    if (plan === "ULTRA") checkoutBase = LS_CHECKOUTS.ULTRA;
+    if (plan === "EDU") checkoutBase = LS_CHECKOUTS.EDU;
 
-    // Get user's profile
-    const { data: profile, error: profileError } = await supabase
-      .from("profiles")
-      .select("stripe_customer_id")
-      .eq("id", user.id)
-      .single();
-
-    if (profileError) {
+    if (!checkoutBase) {
       return new Response(
-        JSON.stringify({ error: "Failed to fetch user profile" }),
+        JSON.stringify({ error: "Checkout URL is not configured for this plan/subject" }),
         {
-          status: 500,
+          status: 400,
           headers: corsHeaders,
         }
       );
     }
 
-    // Initialize Stripe
-    const stripeSecretKey = Deno.env.get("STRIPE_SECRET_KEY");
-    if (!stripeSecretKey) {
-      return new Response(
-        JSON.stringify({ error: "Missing Stripe configuration" }),
-        {
-          status: 500,
-          headers: corsHeaders,
-        }
-      );
-    }
+    const url = new URL(checkoutBase);
+    url.searchParams.set("checkout[email]", String(user.email || ""));
+    url.searchParams.set("checkout[custom][user_id]", String(user.id || ""));
+    url.searchParams.set("checkout[custom][email]", String(user.email || ""));
+    if (plan) url.searchParams.set("checkout[custom][plan]", plan);
+    if (subject) url.searchParams.set("checkout[custom][subject]", subject);
 
-    const stripe = new Stripe(stripeSecretKey);
-
-    let stripeCustomerId = profile?.stripe_customer_id;
-
-    // Create Stripe customer if it doesn't exist
-    if (!stripeCustomerId) {
-      const customer = await stripe.customers.create({
-        email: user.email,
-        metadata: {
-          user_id: user.id,
-        },
-      });
-
-      stripeCustomerId = customer.id;
-
-      // Update user profile with stripe_customer_id
-      const { error: updateError } = await supabase
-        .from("profiles")
-        .update({ stripe_customer_id: stripeCustomerId })
-        .eq("id", user.id);
-
-      if (updateError) {
-        console.error(
-          "Failed to update profile with stripe_customer_id:",
-          updateError
-        );
-      }
-    }
-
-    // Determine checkout mode
-    const mode =
-      priceId === STRIPE_PRICE_BASIC_IT ? "payment" : "subscription";
-
-    // Create Stripe Checkout session
-    const session = await stripe.checkout.sessions.create({
-      mode: mode as "payment" | "subscription",
-      line_items: [
-        {
-          price: priceId,
-          quantity: 1,
-        },
-      ],
-      customer: stripeCustomerId,
-      success_url: "https://ra10.co.uk/#/account?upgraded=1",
-      cancel_url: "https://ra10.co.uk/#/upgrade",
-      metadata: {
-        user_id: user.id,
-        price_id: priceId,
-      },
-    });
-
-    return new Response(JSON.stringify({ url: session.url }), {
+    return new Response(JSON.stringify({ url: url.toString() }), {
       status: 200,
       headers: corsHeaders,
     });
