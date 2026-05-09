@@ -125,6 +125,18 @@ a,button,[role="button"],input,select,textarea{
 .nav-tier-badge.all_subjects{background:#dcfce7;color:#166534}
 .nav-credit-chip{display:inline-flex;align-items:center;gap:var(--sp2);padding:calc(var(--sp1) + 1px) var(--sp3);border-radius:9999px;background:var(--color-surface-offset);border:1px solid var(--color-border);font-size:var(--tx-xs);color:var(--color-text)}
 .mobile-credit-chip{display:none;align-items:center;gap:var(--sp2);padding:calc(var(--sp1) + 1px) var(--sp3);border-radius:9999px;background:var(--color-surface-offset);border:1px solid var(--color-border);font-size:var(--tx-xs);color:var(--color-text);margin-left:auto;white-space:nowrap}
+.mobile-theme-toggle{margin-left:var(--sp2)}
+
+.account-credit-log{margin-top:var(--sp4);padding:var(--sp3);border:1px solid var(--color-border);border-radius:var(--radius-md);background:var(--color-bg-soft)}
+.account-credit-log h4{margin:0 0 var(--sp2) 0;font-size:var(--tx-sm);letter-spacing:.03em}
+.credit-log-list{display:grid;gap:var(--sp2)}
+.credit-log-item{display:flex;align-items:flex-start;justify-content:space-between;gap:var(--sp3);padding:var(--sp2);border-radius:var(--radius-sm);background:var(--color-surface)}
+.credit-log-main{min-width:0}
+.credit-log-note{font-size:var(--tx-xs);color:var(--color-text-muted);white-space:normal;word-break:break-word}
+.credit-log-time{font-size:var(--tx-xs);color:var(--color-text-faint)}
+.credit-log-amt{font-size:var(--tx-sm);font-weight:700;white-space:nowrap}
+.credit-log-amt.gain{color:var(--color-success)}
+.credit-log-amt.spend{color:var(--color-error)}
 .nav-user-wrap{position:relative}
 .nav-user-dropdown{position:absolute;top:calc(100% + 8px);right:0;background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-xl);box-shadow:var(--shadow-lg);min-width:220px;padding:var(--sp4);z-index:10002;display:none}
 .nav-user-wrap.open .nav-user-dropdown{display:block}
@@ -281,19 +293,336 @@ a,button,[role="button"],input,select,textarea{
    HOME HERO
 ===================================================== */
 .home-hero{
-  padding-block:clamp(var(--sp16),8vw,var(--sp20)) clamp(var(--sp12),5vw,var(--sp16));
-  border-bottom:1px solid oklch(from var(--color-text) l c h/.07);
+  position:relative;
+  padding-block:clamp(var(--sp16),8vw,var(--sp20)) clamp(var(--sp10),4vw,var(--sp12));
 }
+.home-hero-panel{
+  position:relative;
+  overflow:hidden;
+  border:1px solid oklch(from var(--color-text) l c h/.08);
+  border-radius:var(--radius-xl);
+  padding:clamp(var(--sp6),4vw,var(--sp10));
+  background:
+    radial-gradient(120% 100% at 5% 0%, rgba(210,0,0,.10) 0%, rgba(210,0,0,0) 45%),
+    radial-gradient(120% 100% at 100% 0%, rgba(65,110,255,.14) 0%, rgba(65,110,255,0) 55%),
+    linear-gradient(140deg, var(--color-surface) 0%, var(--color-surface-2) 100%);
+  box-shadow:var(--shadow-md);
+}
+.home-hero-panel::before,
+.home-hero-panel::after{
+  content:'';
+  position:absolute;
+  border-radius:999px;
+  filter:blur(2px);
+  pointer-events:none;
+}
+.home-hero-panel::before{width:220px;height:220px;right:-90px;top:-110px;background:rgba(210,0,0,.08)}
+.home-hero-panel::after{width:180px;height:180px;left:-70px;bottom:-90px;background:rgba(82,123,255,.10)}
 .home-eyebrow{display:flex;align-items:center;gap:var(--sp2);font-size:var(--tx-xs);
-  font-weight:600;letter-spacing:.08em;text-transform:uppercase;
-  color:var(--color-primary);margin-bottom:var(--sp5)}
+  font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--color-primary);margin-bottom:var(--sp4)}
 .home-dot{width:6px;height:6px;border-radius:50%;background:var(--color-primary)}
-.home-hero h1{font-size:var(--tx-2xl);font-weight:400;line-height:1.05;
-  letter-spacing:-.02em;margin-bottom:var(--sp5);max-width:14ch}
+.home-hero h1{font-size:var(--tx-2xl);font-weight:400;line-height:1.04;
+  letter-spacing:-.02em;margin-bottom:var(--sp4);max-width:16ch}
 .home-hero h1 em{font-style:italic;color:var(--color-primary)}
 .home-hero>p{font-size:var(--tx-base);color:var(--color-text-muted);
-  max-width:48ch;line-height:1.75;margin-bottom:var(--sp8)}
+  max-width:56ch;line-height:1.75;margin-bottom:var(--sp6)}
 .ctas{display:flex;flex-wrap:wrap;gap:var(--sp3)}
+.home-stat-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--sp3);margin-top:var(--sp6)}
+.home-stat{
+  background:var(--color-surface-offset);
+  border:1px solid oklch(from var(--color-text) l c h/.08);
+  border-radius:var(--radius-lg);
+  padding:var(--sp3) var(--sp4);
+}
+.home-stat strong{display:block;font-size:var(--tx-sm);color:var(--color-text);line-height:1.3}
+.home-stat span{display:block;font-size:var(--tx-xs);color:var(--color-text-muted);text-transform:uppercase;letter-spacing:.06em}
+
+.home-subjects{margin-top:var(--sp8);display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--sp4)}
+.home-subject-card{
+  border:1px solid oklch(from var(--color-text) l c h/.08);
+  border-radius:var(--radius-xl);
+  padding:var(--sp5);
+  background:var(--color-surface);
+  box-shadow:var(--shadow-sm);
+  cursor:pointer;
+  transition:transform var(--t), box-shadow var(--t), border-color var(--t);
+}
+.home-subject-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-md)}
+.home-subject-card h3{font-size:var(--tx-lg);font-weight:400;line-height:1.2}
+.home-subject-card p{margin-top:var(--sp2);font-size:var(--tx-sm);color:var(--color-text-muted)}
+.home-subject-chip{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:999px;font-size:var(--tx-xs);font-weight:700;letter-spacing:.05em;text-transform:uppercase;margin-bottom:var(--sp3)}
+.home-subject-card.it{border-color:rgba(22,163,74,.25)}
+.home-subject-card.it .home-subject-chip{background:rgba(22,163,74,.15);color:#166534}
+.home-subject-card.business{border-color:rgba(30,58,138,.25)}
+.home-subject-card.business .home-subject-chip{background:rgba(30,58,138,.14);color:#1e3a8a}
+.home-subject-card.sport{border-color:rgba(124,58,237,.25)}
+.home-subject-card.sport .home-subject-chip{background:rgba(124,58,237,.14);color:#6d28d9}
+
+.home-feature-grid{display:grid;grid-template-columns:2fr 1fr;gap:var(--sp4);margin-top:var(--sp8)}
+.home-feature-stack{display:grid;grid-template-columns:1fr 1fr;gap:var(--sp4)}
+.home-feature-card{
+  border:1px solid oklch(from var(--color-text) l c h/.08);
+  border-radius:var(--radius-xl);
+  padding:var(--sp5);
+  background:var(--color-surface);
+}
+.home-feature-card h4{font-family:var(--font-d);font-size:var(--tx-lg);font-weight:400;margin-bottom:var(--sp2)}
+.home-feature-card p{font-size:var(--tx-sm);color:var(--color-text-muted)}
+.home-feature-card ul{margin-top:var(--sp3);padding-left:1rem;color:var(--color-text-muted);font-size:var(--tx-sm)}
+.home-feature-card li{margin-bottom:var(--sp1)}
+.home-feature-card.primary{
+  background:linear-gradient(145deg,#ffe9ee 0%, #f8f6ff 45%, #edf5ff 100%);
+}
+[data-theme="dark"] .home-feature-card.primary{
+  background:linear-gradient(145deg,#332126 0%, #272033 45%, #1f2a3b 100%);
+}
+
+.home-price-showdown{
+  margin-top:var(--sp8);
+  position:relative;
+  overflow:hidden;
+  border:1px solid oklch(from var(--color-text) l c h/.08);
+  border-radius:calc(var(--radius-xl) + 4px);
+  padding:clamp(var(--sp4),3vw,var(--sp6));
+  background:
+    radial-gradient(120% 90% at -5% -10%, rgba(22,163,74,.12) 0%, rgba(22,163,74,0) 42%),
+    radial-gradient(120% 90% at 108% 0%, rgba(225,29,72,.10) 0%, rgba(225,29,72,0) 45%),
+    linear-gradient(160deg, var(--color-surface) 0%, var(--color-surface-2) 100%);
+}
+.home-price-showdown::before,
+.home-price-showdown::after{
+  content:'';
+  position:absolute;
+  border-radius:999px;
+  pointer-events:none;
+}
+.home-price-showdown::before{width:240px;height:240px;left:-90px;bottom:-120px;background:rgba(34,197,94,.10)}
+.home-price-showdown::after{width:220px;height:220px;right:-80px;top:-110px;background:rgba(249,115,22,.08)}
+.home-price-head{display:flex;justify-content:space-between;align-items:end;gap:var(--sp3);flex-wrap:wrap;margin-bottom:var(--sp4)}
+.home-price-head h3{font-family:var(--font-d);font-size:clamp(1.4rem,3.4vw,2rem);font-weight:400;line-height:1.1}
+.home-price-head p{font-size:var(--tx-sm);color:var(--color-text-muted);max-width:56ch}
+.home-price-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--sp4)}
+.home-price-card{
+  position:relative;
+  overflow:hidden;
+  border:1px solid oklch(from var(--color-text) l c h/.08);
+  border-radius:var(--radius-xl);
+  padding:var(--sp5);
+  background:var(--color-surface);
+  box-shadow:var(--shadow-sm);
+  transition:transform var(--t),box-shadow var(--t),border-color var(--t);
+  animation:priceRise .6s ease both;
+}
+.home-price-card:hover{
+  transform:translateY(-3px);
+  box-shadow:var(--shadow-md);
+}
+.home-price-card.ra10{
+  background:linear-gradient(145deg,#e6fff2 0%,#f1fbff 48%,#eef5ff 100%);
+  border-color:rgba(22,163,74,.4);
+}
+[data-theme="dark"] .home-price-card.ra10{
+  background:linear-gradient(145deg,#1f2f3c 0%,#1f2f26 100%);
+}
+.home-price-card.ra10::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:linear-gradient(115deg,transparent 0%,rgba(255,255,255,.35) 45%,transparent 65%);
+  transform:translateX(-130%);
+  animation:priceShine 2.8s ease-in-out infinite;
+  pointer-events:none;
+}
+.home-price-card h5{font-size:var(--tx-lg);font-weight:400;margin-bottom:var(--sp2)}
+.home-price-big{font-family:var(--font-d);font-size:clamp(1.8rem,4vw,2.4rem);line-height:1;margin-bottom:var(--sp2)}
+.home-price-meta{font-size:var(--tx-xs);color:var(--color-text-muted);text-transform:uppercase;letter-spacing:.06em}
+.home-price-note{margin-top:var(--sp3);font-size:var(--tx-sm);color:var(--color-text-muted);line-height:1.6}
+.home-price-foot{margin-top:var(--sp3);font-size:var(--tx-xs);color:var(--color-text-faint)}
+.price-save-pill{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:999px;font-size:var(--tx-xs);font-weight:700;letter-spacing:.05em;text-transform:uppercase;margin-bottom:var(--sp3);background:linear-gradient(90deg,#bbf7d0,#dcfce7);color:#166534;border:1px solid rgba(22,163,74,.35)}
+[data-theme="dark"] .price-save-pill{background:linear-gradient(90deg,#1f5138,#183225);color:#7ee7a0;border-color:rgba(126,231,160,.35)}
+
+.price-visual{
+  margin-top:var(--sp4);
+  position:relative;
+  overflow:hidden;
+  border:1px solid oklch(from var(--color-text) l c h/.08);
+  border-radius:var(--radius-xl);
+  background:linear-gradient(145deg,var(--color-surface) 0%,var(--color-surface-2) 100%);
+  padding:var(--sp5);
+}
+.price-visual-head{display:flex;justify-content:space-between;align-items:center;gap:var(--sp2);margin-bottom:var(--sp3)}
+.price-visual-head strong{font-size:var(--tx-sm)}
+.price-visual-head span{font-size:var(--tx-xs);color:var(--color-text-muted);text-transform:uppercase;letter-spacing:.06em}
+.price-toggle-row{display:flex;flex-wrap:wrap;gap:var(--sp2);margin-bottom:var(--sp3)}
+.price-toggle{
+  border:1px solid oklch(from var(--color-text) l c h/.12);
+  background:var(--color-surface);
+  color:var(--color-text-muted);
+  border-radius:999px;
+  padding:5px 10px;
+  font-size:var(--tx-xs);
+  font-weight:700;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+  cursor:pointer;
+  transition:all var(--t);
+}
+.price-toggle:hover{transform:translateY(-1px);border-color:var(--color-primary)}
+.price-toggle.is-active{
+  color:#0b2c1c;
+  border-color:rgba(22,163,74,.42);
+  background:linear-gradient(90deg,#bbf7d0,#dcfce7);
+}
+[data-theme="dark"] .price-toggle.is-active{
+  color:#d1fae5;
+  border-color:rgba(126,231,160,.45);
+  background:linear-gradient(90deg,#1f5138,#183225);
+}
+.price-bar-row{display:grid;grid-template-columns:84px 1fr 64px;gap:var(--sp3);align-items:center;margin-bottom:var(--sp2)}
+.price-bar-row:last-child{margin-bottom:0}
+.price-bar-label{font-size:var(--tx-xs);font-weight:700;color:var(--color-text-muted)}
+.price-bar-track{height:11px;border-radius:999px;background:var(--color-surface-offset-2);overflow:hidden;border:1px solid oklch(from var(--color-text) l c h/.09);position:relative}
+.price-bar-track::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,.35) 50%,transparent 100%);
+  transform:translateX(-120%);
+  animation:trackSweep 3s linear infinite;
+}
+.price-bar{height:100%;transform-origin:left center;background-size:220% 100%;animation:barGrow .9s cubic-bezier(.2,.8,.2,1) both,barGradientMove 2.8s linear infinite}
+.price-bar.ra10{background-image:linear-gradient(90deg,#16a34a,#4ade80,#16a34a)}
+.price-bar.seneca{background-image:linear-gradient(90deg,#e11d48,#fb923c,#e11d48)}
+.price-bar.sme-low{background-image:linear-gradient(90deg,#f59e0b,#fdba74,#f59e0b)}
+.price-bar-value{font-size:var(--tx-xs);font-weight:700;text-align:right;color:var(--color-text)}
+
+.home-school-box{
+  position:relative;
+  overflow:hidden;
+  margin-top:var(--sp4);
+  border:1px solid rgba(13,148,136,.32);
+  border-radius:var(--radius-xl);
+  padding:var(--sp5);
+  background:
+    radial-gradient(140% 100% at 0% 0%, rgba(20,184,166,.16) 0%, rgba(20,184,166,0) 45%),
+    radial-gradient(120% 100% at 100% 100%, rgba(37,99,235,.12) 0%, rgba(37,99,235,0) 50%),
+    linear-gradient(145deg,#ecfeff 0%, #eff6ff 100%);
+  box-shadow:var(--shadow-sm);
+}
+[data-theme="dark"] .home-school-box{
+  background:
+    radial-gradient(140% 100% at 0% 0%, rgba(45,212,191,.22) 0%, rgba(45,212,191,0) 45%),
+    radial-gradient(120% 100% at 100% 100%, rgba(96,165,250,.18) 0%, rgba(96,165,250,0) 50%),
+    linear-gradient(145deg,#143340 0%, #1c2f49 100%);
+}
+.home-school-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:5px 10px;
+  border-radius:999px;
+  font-size:var(--tx-xs);
+  font-weight:700;
+  letter-spacing:.05em;
+  text-transform:uppercase;
+  background:#ccfbf1;
+  color:#0f766e;
+  margin-bottom:var(--sp3);
+}
+.home-school-box h4{font-family:var(--font-d);font-size:clamp(1.25rem,3vw,1.7rem);font-weight:400;line-height:1.15;margin-bottom:var(--sp2)}
+.home-school-box p{font-size:var(--tx-sm);color:var(--color-text-muted);line-height:1.6;margin-bottom:var(--sp3);max-width:74ch}
+.home-school-points{display:grid;grid-template-columns:1fr;gap:var(--sp3);margin-bottom:var(--sp3)}
+.home-school-widget{
+  border:1px solid rgba(15,118,110,.22);
+  border-radius:var(--radius-lg);
+  padding:var(--sp3);
+  background:rgba(255,255,255,.66);
+}
+.home-school-widget.student{border-color:rgba(2,132,199,.3);background:linear-gradient(145deg,#ecfeff 0%,#eff6ff 100%)}
+.home-school-widget.teacher{border-color:rgba(124,58,237,.3);background:linear-gradient(145deg,#f5f3ff 0%,#eef2ff 100%)}
+.home-school-widget h5{font-size:var(--tx-sm);font-weight:700;margin-bottom:var(--sp2)}
+.home-school-widget .price{font-family:var(--font-d);font-size:clamp(1.2rem,2.8vw,1.6rem);line-height:1;margin-bottom:var(--sp2)}
+.home-school-widget ul{margin:0;padding-left:1rem;color:var(--color-text-muted);font-size:var(--tx-xs)}
+.home-school-widget li{margin-bottom:2px}
+[data-theme="dark"] .home-school-widget{background:rgba(13,148,136,.18);border-color:rgba(153,246,228,.3)}
+[data-theme="dark"] .home-school-widget.student{background:linear-gradient(145deg,#173447 0%,#1d3552 100%)}
+[data-theme="dark"] .home-school-widget.teacher{background:linear-gradient(145deg,#2a2143 0%,#222e4a 100%)}
+
+@keyframes priceRise{
+  from{opacity:0;transform:translateY(12px)}
+  to{opacity:1;transform:translateY(0)}
+}
+@keyframes priceShine{
+  0%,60%{transform:translateX(-130%)}
+  100%{transform:translateX(130%)}
+}
+@keyframes barGrow{
+  from{transform:scaleX(0)}
+  to{transform:scaleX(1)}
+}
+@keyframes barGradientMove{
+  from{background-position:0% 50%}
+  to{background-position:100% 50%}
+}
+@keyframes trackSweep{
+  from{transform:translateX(-120%)}
+  to{transform:translateX(120%)}
+}
+
+.price-compare-hero{
+  margin-inline:auto;
+  width:min(980px,100%);
+  margin-bottom:var(--sp6);
+  border:1px solid oklch(from var(--color-text) l c h/.08);
+  border-radius:var(--radius-xl);
+  background:
+    radial-gradient(120% 120% at 0% 0%, rgba(22,163,74,.10) 0%, rgba(22,163,74,0) 45%),
+    radial-gradient(120% 120% at 100% 0%, rgba(225,29,72,.08) 0%, rgba(225,29,72,0) 45%),
+    var(--color-surface);
+  padding:var(--sp5);
+}
+.price-compare-hero h3{font-family:var(--font-d);font-size:clamp(1.2rem,3vw,1.8rem);font-weight:400;margin-bottom:var(--sp2)}
+.price-compare-hero p{font-size:var(--tx-sm);color:var(--color-text-muted);line-height:1.6}
+.price-compare-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--sp3);margin-top:var(--sp4)}
+.price-compare-cell{border:1px solid oklch(from var(--color-text) l c h/.08);border-radius:var(--radius-lg);padding:var(--sp3);background:var(--color-surface-offset)}
+.price-compare-cell strong{display:block;font-size:var(--tx-sm);margin-bottom:4px}
+.price-compare-cell span{font-size:var(--tx-xs);color:var(--color-text-muted)}
+
+.upgrade-compare-wrap{
+  margin-inline:auto;
+  width:min(1040px,100%);
+  margin-bottom:var(--sp6);
+  border:1px solid oklch(from var(--color-text) l c h/.08);
+  border-radius:var(--radius-xl);
+  background:
+    radial-gradient(120% 120% at 0% 100%, rgba(2,132,199,.10) 0%, rgba(2,132,199,0) 45%),
+    radial-gradient(120% 120% at 100% 0%, rgba(124,58,237,.10) 0%, rgba(124,58,237,0) 45%),
+    var(--color-surface);
+  padding:var(--sp5);
+}
+.upgrade-compare-head{display:flex;justify-content:space-between;gap:var(--sp3);align-items:end;flex-wrap:wrap;margin-bottom:var(--sp3)}
+.upgrade-compare-head h3{font-family:var(--font-d);font-size:clamp(1.2rem,3vw,1.8rem);font-weight:400}
+.upgrade-compare-head p{font-size:var(--tx-sm);color:var(--color-text-muted);max-width:56ch}
+.upgrade-compare-scroll{overflow:auto;border-radius:var(--radius-lg);border:1px solid oklch(from var(--color-text) l c h/.08)}
+.upgrade-compare-table{width:100%;min-width:760px;border-collapse:separate;border-spacing:0;background:var(--color-surface)}
+.upgrade-compare-table th,
+.upgrade-compare-table td{padding:12px 14px;border-bottom:1px solid oklch(from var(--color-text) l c h/.08);font-size:var(--tx-sm);text-align:left}
+.upgrade-compare-table thead th{font-size:var(--tx-xs);letter-spacing:.06em;text-transform:uppercase;color:var(--color-text-muted);background:var(--color-surface-offset)}
+.upgrade-compare-table thead th:first-child{border-top-left-radius:var(--radius-md)}
+.upgrade-compare-table thead th:last-child{border-top-right-radius:var(--radius-md)}
+.upgrade-compare-table tbody tr:last-child td{border-bottom:none}
+.upgrade-compare-table td:nth-child(2){background:rgba(209,250,229,.36)}
+.upgrade-compare-table td:nth-child(3){background:rgba(219,234,254,.34)}
+.upgrade-compare-table td:nth-child(4){background:rgba(237,233,254,.34)}
+.upgrade-compare-table td:first-child{font-weight:700;color:var(--color-text)}
+.upgrade-yes{font-weight:700;color:#166534}
+.upgrade-no{font-weight:700;color:#b91c1c}
+[data-theme="dark"] .upgrade-compare-table td:nth-child(2){background:rgba(22,163,74,.14)}
+[data-theme="dark"] .upgrade-compare-table td:nth-child(3){background:rgba(37,99,235,.16)}
+[data-theme="dark"] .upgrade-compare-table td:nth-child(4){background:rgba(124,58,237,.18)}
+[data-theme="dark"] .upgrade-yes{color:#86efac}
+[data-theme="dark"] .upgrade-no{color:#fca5a5}
 
 /* =====================================================
    COMING STRIP
@@ -489,6 +818,14 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
   .c,.cd,.cf{padding-inline:var(--sp4)}
   .nav-inner{padding-inline:var(--sp4)}
   .home-hero h1{font-size:clamp(2rem,10vw,3.5rem)}
+  .home-stat-row{grid-template-columns:1fr}
+  .home-subjects{grid-template-columns:1fr}
+  .home-feature-grid{grid-template-columns:1fr}
+  .home-feature-stack{grid-template-columns:1fr}
+  .home-price-grid{grid-template-columns:1fr}
+  .price-bar-row{grid-template-columns:72px 1fr 54px}
+  .price-compare-grid{grid-template-columns:1fr}
+  .upgrade-compare-head{align-items:flex-start}
   .hero h1{font-size:clamp(1.6rem,7vw,2.5rem)}
   .grid-2{grid-template-columns:1fr}
 }
@@ -505,6 +842,12 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
   }
   .home-hero h1 { font-size: clamp(1.8rem, 8vw, 3rem); }
   .hero h1 { font-size: clamp(1.4rem, 6vw, 2.2rem); }
+  .home-stat-row { grid-template-columns: 1fr; }
+  .home-subjects { grid-template-columns: 1fr; }
+  .home-feature-grid, .home-feature-stack { grid-template-columns: 1fr; }
+  .home-price-grid { grid-template-columns: 1fr; }
+  .price-compare-grid { grid-template-columns: 1fr; }
+  .price-bar-row { grid-template-columns: 68px 1fr 54px; }
   .grid, .grid-2 { grid-template-columns: 1fr; }
   .stats { grid-template-columns: repeat(2, 1fr); }
   .steps { grid-template-columns: 1fr; }
@@ -782,7 +1125,15 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
   .btn-lg { padding: var(--sp3) var(--sp4); font-size: var(--tx-sm); }
 }
 </style>
-<script src="../../../../ra10-sdk.js"></script>
+<script>
+(function(){
+  var s = document.createElement('script');
+  var isFile = location.protocol === 'file:';
+  var isLocalHost = location.hostname === '127.0.0.1' || location.hostname === 'localhost';
+  s.src = isFile ? 'file:///C:/Users/mistr/Downloads/ra10/ra10-sdk.js' : (isLocalHost ? 'http://127.0.0.1:5500/ra10-sdk.js' : 'https://ra10.co.uk/ra10-sdk.js');
+  document.head.insertBefore(s, document.head.firstChild);
+})();
+</script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 </head>
 <body>
@@ -959,6 +1310,7 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
   <img src="logo.png" alt="RA10 logo" width="26" height="26">
   <span class="brand">RA10</span>
   <div id="mobile-credit-chip" class="mobile-credit-chip" style="display:none"></div>
+  <button class="theme-toggle mobile-theme-toggle" id="mobile-theme-toggle" aria-label="Toggle dark mode"></button>
 </div>
 
 <nav class="mobile-bottom-nav" aria-label="Mobile app navigation">
@@ -1018,71 +1370,172 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
       <button onclick="this.parentElement.style.display='none';localStorage.setItem('ra10_banner_hidden','1')" style="position:absolute;right:var(--sp4);top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.2);border:none;color:#fff;cursor:pointer;border-radius:var(--radius-md);padding:2px 10px;font-size:var(--tx-xs)">✕</button>
     </div>
     <div class="home-hero">
-      <div class="home-eyebrow"><span class="home-dot"></span>RA10 · Digital Platform</div>
-      <h1>Everything you need, <em>in one place</em></h1>
-      <p>Revision tools, utilities and apps — all built around what you actually use. Start with BTEC Level 3 IT revision or the WhatsApp Chat Exporter.</p>
-      <div class="ctas">
-        <button class="btn btn-p btn-lg" onclick="go('/revision')">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-          Go to Revision
-        </button>
-        <button class="btn btn-s btn-lg" onclick="go('/tools')">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
-          Go to Tools
-        </button>
+      <div class="home-hero-panel">
+        <div class="home-eyebrow"><span class="home-dot"></span>RA10 · Learn Faster, Score Higher</div>
+        <h1>Turn revision into your <em>winning streak</em>.</h1>
+        <p>Build momentum with live BTEC subjects, instant AI feedback, rapid-fire quizzes, and leaderboard battles. This is revision in main-character mode.</p>
+        <div class="ctas">
+          <button class="btn btn-p btn-lg" onclick="go('/revision/btec/level-3')">
+            Start Revising
+          </button>
+          <button class="btn btn-s btn-lg" onclick="go('leaderboard')">
+            View Leaderboard
+          </button>
+          <button class="btn btn-g btn-lg" onclick="go('/tools')">
+            Explore Tools
+          </button>
+        </div>
+        <div class="home-stat-row">
+          <div class="home-stat"><strong>3 live subjects</strong><span>IT, Business, Sport</span></div>
+          <div class="home-stat"><strong>AI Mark + Mock Papers</strong><span>Exam-ready practice</span></div>
+          <div class="home-stat"><strong>Weekly XP race</strong><span>10 credit bonus prize</span></div>
+        </div>
       </div>
     </div>
 
     <div class="sec">
-      <div class="sec-label">Featured Apps</div>
-      <h2 class="sec-title">What's live right now</h2>
-      <div class="grid grid-2">
-        <div class="card click" onclick="go('/revision/btec/level-3/IT-AAQ/unit-1')">
-          <div class="card-tag">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-            Revision · BTEC Level 3 IT
-          </div>
-          <h3>Unit 1 – Information Technology Systems</h3>
-          <p>Exam-style questions across all six learning aims (A–F), flashcards, quizzes, AI marker and a mock paper builder that mirrors a real AAQ paper.</p>
-          <ul class="feat">
-            <li>600+ spec-aligned questions with full mark schemes</li>
-            <li>Mock paper builder with Pearson-style formatting</li>
-            <li>Spec coverage explorer (A1.1 → F2.1 hierarchy)</li>
-          </ul>
-          <div class="card-ft">
-            <span class="pill pill-live">Live</span>
-            <button class="btn btn-p" onclick="event.stopPropagation();go('/revision/btec/level-3/IT-AAQ/unit-1')">Open tool →</button>
-          </div>
+      <div class="sec-label">Subjects</div>
+      <h2 class="sec-title">Pick your lane and jump in</h2>
+      <div class="home-subjects">
+        <div class="home-subject-card it" onclick="go('/revision/btec/level-3/IT-AAQ/unit-1')">
+          <span class="home-subject-chip">IT AAQ · Live · Early Pioneer</span>
+          <h3>Information Technology</h3>
+          <p>One of the first platforms building a full IT AAQ revision guide and revision course, with spec explorer, flashcards, quizzes, AI mark scheme checks and mock paper generation.</p>
+          <div class="card-ft"><button class="btn btn-p" onclick="event.stopPropagation();go('/revision/btec/level-3/IT-AAQ/unit-1')">Open IT</button></div>
         </div>
-        <div class="card click" onclick="go('/tools/whatsapp-exporter')">
-          <div class="card-tag">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-            Tool · Chat Utilities
-          </div>
-          <h3>WhatsApp Chat Exporter</h3>
-          <p>Turn WhatsApp exports into clean, printable HTML tables or formatted chat layouts. Filter by date, search, then print or save as PDF.</p>
-          <ul class="feat">
-            <li>Chat view and table view modes</li>
-            <li>Date range filtering and keyword search</li>
-            <li>Print and PDF download — nothing leaves your browser</li>
+        <div class="home-subject-card business" onclick="go('/revision/btec/level-3/business/unit-3')">
+          <span class="home-subject-chip">Business · Live</span>
+          <h3>Personal and Business Finance</h3>
+          <p>Ratios, cash flow, break-even and exam-style tasks with guided revision for Unit 3.</p>
+          <div class="card-ft"><button class="btn btn-p" onclick="event.stopPropagation();go('/revision/btec/level-3/business/unit-3')">Open Business</button></div>
+        </div>
+        <div class="home-subject-card sport" onclick="go('/revision/btec/level-3/sport/unit-1')">
+          <span class="home-subject-chip">Sport · Live</span>
+          <h3>Anatomy and Physiology</h3>
+          <p>Unit 1 practice with flashcards, quizzes and mock-paper style prep focused on exam success.</p>
+          <div class="card-ft"><button class="btn btn-p" onclick="event.stopPropagation();go('/revision/btec/level-3/sport/unit-1')">Open Sport</button></div>
+        </div>
+      </div>
+
+      <div class="home-feature-grid">
+        <div class="home-feature-card primary">
+          <h4>Fun Features Students Actually Use</h4>
+          <p>RA10 is built for momentum. Quick wins, streaks, and powerful tools make revision feel like a game loop you want to keep playing.</p>
+          <ul>
+            <li>Daily tasks and XP tracking across units</li>
+            <li>Weekly leaderboard with a 10-credit top spot bonus</li>
+            <li>AI marker feedback on longer responses</li>
+            <li>Mock paper builders for realistic timed practice</li>
           </ul>
-          <div class="card-ft">
-            <span class="pill pill-live">Live</span>
-            <button class="btn btn-p" onclick="event.stopPropagation();go('/tools/whatsapp-exporter')">Open tool →</button>
+        </div>
+        <div class="home-feature-stack">
+          <div class="home-feature-card">
+            <h4>Smart Revision</h4>
+            <p>Spec-aligned question banks and flashcards designed to target exactly what examiners look for.</p>
+          </div>
+          <div class="home-feature-card">
+            <h4>Tools Hub</h4>
+            <p>Practical utilities like WhatsApp Chat Exporter so the platform is useful beyond revision too.</p>
           </div>
         </div>
       </div>
+
+      <div class="home-price-showdown">
+        <div class="home-price-head">
+          <h3>Incredibly cheap subscriptions. No joke.</h3>
+          <p>RA10 keeps prices tiny: Pro is £20/year and Ultra is £30/year. With Seneca around £8/month and Save My Exams around £48/year, RA10 is significantly cheaper while also offering BTEC subjects they do not focus on. Students can also get RA10 free when their school signs up.</p>
+        </div>
+        <div class="home-price-grid">
+          <div class="home-price-card ra10">
+            <div class="price-save-pill">Up to 86% cheaper</div>
+            <h5>RA10 Pro</h5>
+            <div class="home-price-big">£1.67/mo</div>
+            <div class="home-price-meta">Equivalent of £20 per year</div>
+            <div class="home-price-note">1,000 monthly credits, all subjects unlocked, no ads, BTEC-first content.</div>
+          </div>
+          <div class="home-price-card ra10">
+            <div class="price-save-pill">Still massively cheaper</div>
+            <h5>RA10 Ultra</h5>
+            <div class="home-price-big">£2.50/mo</div>
+            <div class="home-price-meta">Equivalent of £30 per year</div>
+            <div class="home-price-note">Unlimited credits, all subjects and tools, priority access to brand-new features.</div>
+          </div>
+          <div class="home-price-card">
+            <h5>Other revision sites</h5>
+            <div class="home-price-big">Usually higher</div>
+            <div class="home-price-meta">Seneca Premium / Save My Exams</div>
+            <div class="home-price-note">Typical pricing is about £8/month for Seneca and around £48/year for Save My Exams.</div>
+          </div>
+        </div>
+        <div class="price-visual" id="home-price-visual" aria-label="Annual price comparison">
+          <div class="price-visual-head">
+            <strong>Annual cost snapshot</strong>
+            <span data-snapshot-label>Lower is better</span>
+          </div>
+          <div class="price-toggle-row" role="tablist" aria-label="Annual cost snapshot filters">
+            <button class="price-toggle is-active" type="button" data-snapshot-view="all" onclick="setPriceSnapshotView('all', this)">All</button>
+            <button class="price-toggle" type="button" data-snapshot-view="seneca" onclick="setPriceSnapshotView('seneca', this)">RA10 vs Seneca</button>
+            <button class="price-toggle" type="button" data-snapshot-view="sme-low" onclick="setPriceSnapshotView('sme-low', this)">RA10 vs Save My Exams</button>
+          </div>
+          <div class="price-bar-row" data-snapshot-key="ra10-pro">
+            <span class="price-bar-label">RA10 Pro</span>
+            <div class="price-bar-track"><div class="price-bar ra10" style="width:14%;"></div></div>
+            <span class="price-bar-value">£20</span>
+          </div>
+          <div class="price-bar-row" data-snapshot-key="ra10-ultra">
+            <span class="price-bar-label">RA10 Ultra</span>
+            <div class="price-bar-track"><div class="price-bar ra10" style="width:21%;"></div></div>
+            <span class="price-bar-value">£30</span>
+          </div>
+          <div class="price-bar-row" data-snapshot-key="sme-low">
+            <span class="price-bar-label">Save My Exams</span>
+            <div class="price-bar-track"><div class="price-bar sme-low" style="width:33%;"></div></div>
+            <span class="price-bar-value">£48</span>
+          </div>
+          <div class="price-bar-row" data-snapshot-key="seneca">
+            <span class="price-bar-label">Seneca</span>
+            <div class="price-bar-track"><div class="price-bar seneca" style="width:67%;"></div></div>
+            <span class="price-bar-value">£96</span>
+          </div>
+        </div>
+        <div class="home-school-box">
+          <div class="home-school-badge">School Student + Teacher Accounts</div>
+          <h4>Students and teachers both pay <strong>£0</strong> when their school joins RA10.</h4>
+          <p>If a school signs up for EDU Admin (£100 per year per school), both student and teacher accounts are included free with monthly credits and no ads.</p>
+          <div class="home-school-points">
+            <div class="home-school-widget student">
+              <h5>Student accounts</h5>
+              <div class="price">£0</div>
+              <ul>
+                <li>300 credits per month each</li>
+                <li>All subjects unlocked</li>
+                <li>No ads</li>
+              </ul>
+            </div>
+            <div class="home-school-widget teacher">
+              <h5>Teacher accounts</h5>
+              <div class="price">£0</div>
+              <ul>
+                <li>600 credits per month each</li>
+                <li>All subjects unlocked</li>
+                <li>No ads</li>
+              </ul>
+            </div>
+          </div>
+          <button class="btn btn-s" onclick="go('/upgrade')">View School Plan</button>
+        </div>
+        <div class="home-price-foot">We are constantly adding more subjects, more units, and more features every update. Price comparison is directional and can change over time, so always check latest prices on each platform.</div>
+      </div>
+
       <div class="coming-strip">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
         <span class="strip-label">Coming soon</span>
         <div class="chips">
-          <span class="chip">Unit 2 Revision</span>
-          <span class="chip">Unit 3 Revision</span>
+          <span class="chip">IT Unit 2, 3, 4</span>
           <span class="chip">Business Unit 1 &amp; 2</span>
-          <span class="chip">Unit 4 Revision</span>
-          <span class="chip">PDF Combiner</span>
-          <span class="chip">File Converter</span>
-          <span class="chip">More tools…</span>
+          <span class="chip">More Sport content</span>
+          <span class="chip">PDF tools</span>
+          <span class="chip">More app utilities</span>
         </div>
       </div>
     </div>
@@ -1409,6 +1862,76 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
     <p style="color:var(--color-text-muted);font-size:var(--tx-base);line-height:1.7;">Start free. Upgrade when you need more. No hidden fees.</p>
   </div>
 
+  <div class="price-compare-hero">
+    <h3>See the difference instantly: RA10 is built to stay affordable.</h3>
+    <p>RA10 Pro is £20/year and Ultra is £30/year. Against common monthly pricing from other revision sites, that is a huge saving while we keep expanding BTEC-first subjects, units and features.</p>
+    <div class="price-compare-grid">
+      <div class="price-compare-cell">
+        <strong>RA10 Pro: £20/year</strong>
+        <span>About 79% cheaper than £8/month plans.</span>
+      </div>
+      <div class="price-compare-cell">
+        <strong>RA10 vs Save My Exams: £48/year</strong>
+        <span>RA10 Pro is roughly 58% cheaper.</span>
+      </div>
+      <div class="price-compare-cell">
+        <strong>Students can be £0 with school signup</strong>
+        <span>If your school buys EDU Admin, student accounts are included free.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="upgrade-compare-wrap">
+    <div class="upgrade-compare-head">
+      <h3>RA10 plan comparison</h3>
+      <p>Compare Free, Pro and Ultra side-by-side to choose the best fit for your revision style.</p>
+    </div>
+    <div class="upgrade-compare-scroll">
+      <table class="upgrade-compare-table" aria-label="RA10 plans comparison">
+        <thead>
+          <tr>
+            <th>Feature</th>
+            <th>Free</th>
+            <th>Pro</th>
+            <th>Ultra</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Price</td>
+            <td>£0</td>
+            <td>£20/year</td>
+            <td>£30/year</td>
+          </tr>
+          <tr>
+            <td>Monthly credits</td>
+            <td>10</td>
+            <td>1,000</td>
+            <td>Unlimited</td>
+          </tr>
+          <tr>
+            <td>Subjects unlocked</td>
+            <td>Credit-gated</td>
+            <td>All subjects</td>
+            <td>All subjects + tools</td>
+          </tr>
+          <tr>
+            <td>Ads</td>
+            <td class="upgrade-no">Shown</td>
+            <td class="upgrade-yes">No ads</td>
+            <td class="upgrade-yes">No ads</td>
+          </tr>
+          <tr>
+            <td>Priority access to new features</td>
+            <td class="upgrade-no">No</td>
+            <td class="upgrade-no">No</td>
+            <td class="upgrade-yes">Yes</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
   <div style="display:flex;justify-content:center;gap:var(--sp2);flex-wrap:wrap;margin-bottom:var(--sp6);" id="upgrade-filter" role="tablist" aria-label="Plan categories">
     <button class="btn btn-p" type="button" data-upgrade-group="personal" aria-selected="true">Personal subscriptions</button>
     <button class="btn btn-g" type="button" data-upgrade-group="onetime" aria-selected="false">One-time subject payments</button>
@@ -1599,6 +2122,12 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
         <div class="card-ft"><span class="pill" id="account-tier-badge">Tier</span><span class="pill" id="account-credits">Credits remaining</span></div>
         <p>Subscription status: <strong id="account-sub-status">—</strong></p>
         <p>Credits renew on: <strong id="account-reset-date">—</strong></p>
+        <div class="account-credit-log">
+          <h4>Credit activity</h4>
+          <div id="account-credit-log" class="credit-log-list">
+            <div class="credit-log-note">No recent credit activity yet.</div>
+          </div>
+        </div>
         <div class="card-ft" style="flex-wrap:wrap;gap:var(--sp3)">
           <a class="btn btn-s" href="https://app.lemonsqueezy.com/my-orders" target="_blank">Manage subscription</a>
           <button class="btn btn-p" id="btn-account-signout">Sign out</button>
@@ -1894,6 +2423,8 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
 (function(){
   const THEME_KEY = 'ra10-theme';
   const btn = document.getElementById('theme-toggle');
+  const mobileBtn = document.getElementById('mobile-theme-toggle');
+  const themeButtons = [btn, mobileBtn].filter(Boolean);
   const root = document.documentElement;
   function syncIframeThemes(){
     const theme = root.getAttribute('data-theme') || 'light';
@@ -1907,23 +2438,26 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
     const next = theme === 'dark' ? 'dark' : 'light';
     root.setAttribute('data-theme', next);
     icon(next);
-    btn.setAttribute('aria-label', next === 'dark' ? 'Switch to light mode' : 'Switch to dark mode');
+    themeButtons.forEach((button) => {
+      button.setAttribute('aria-label', next === 'dark' ? 'Switch to light mode' : 'Switch to dark mode');
+    });
     if (persist) localStorage.setItem(THEME_KEY, next);
     syncIframeThemes();
   }
   const initial = localStorage.getItem(THEME_KEY) || 'light';
   applyTheme(initial, false);
-  btn.addEventListener('click',()=>{
-    applyTheme(root.getAttribute('data-theme')==='dark' ? 'light' : 'dark', true);
-  });
+  themeButtons.forEach((button) => button.addEventListener('click',()=>{
+    applyTheme(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark', true);
+  }));
   window.addEventListener('storage', (event) => {
     if (event.key === THEME_KEY && event.newValue) applyTheme(event.newValue, false);
   });
   document.querySelectorAll('iframe').forEach(frame => frame.addEventListener('load', syncIframeThemes));
   function icon(t){
-    btn.innerHTML = t==='dark'
+    const markup = t==='dark'
       ? '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>'
       : '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+    themeButtons.forEach((button) => { button.innerHTML = markup; });
   }
   window.syncIframeThemes = syncIframeThemes;
 })();
@@ -2268,6 +2802,71 @@ function exitIframeFullscreen(){
   document.body.classList.remove('iframe-fullscreen-mode');
 }
 
+const DAILY_TASK_XP_SYNC_KEY = 'ra10-daily-task-xp-sync-v1';
+
+function readDailyTaskXpSyncState(today) {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(DAILY_TASK_XP_SYNC_KEY) || '{}');
+    if (parsed && parsed.date === today && parsed.awarded) {
+      return { date: today, awarded: Object.assign({}, parsed.awarded) };
+    }
+  } catch (e) {}
+  return { date: today, awarded: {} };
+}
+
+function writeDailyTaskXpSyncState(state) {
+  localStorage.setItem(DAILY_TASK_XP_SYNC_KEY, JSON.stringify(state));
+}
+
+async function awardTaskXpToProfile(amount) {
+  if (!window.RA10 || !RA10.isLoggedIn()) return false;
+  const session = RA10.getSession ? RA10.getSession() : null;
+  if (!session || !session.access_token) return false;
+
+  try {
+    const res = await fetch('https://tcrrgsylxbyyrmnouihl.supabase.co/rest/v1/rpc/increment_xp', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRjcnJnc3lseGJ5eXJtbm91aWhsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4ODUyMTEsImV4cCI6MjA5MzQ2MTIxMX0.eOp6ma-mfgh8F20nM7E2OaBW28LlZlwuEEWr6k2zDWw',
+        'Authorization': 'Bearer ' + session.access_token
+      },
+      body: JSON.stringify({ amount: Number(amount || 0) })
+    });
+    return !!res.ok;
+  } catch (e) {
+    console.warn('Daily task XP sync failed', e);
+    return false;
+  }
+}
+
+async function syncDailyTaskXpToLeaderboard(state) {
+  if (!state || !state.date || !state.tasks) return;
+  const today = state.date;
+  const syncState = readDailyTaskXpSyncState(today);
+  const taskXp = { login: 5 };
+  let changed = false;
+
+  for (const [taskKey, xp] of Object.entries(taskXp)) {
+    if (!state.tasks[taskKey] || syncState.awarded[taskKey]) continue;
+    const ok = await awardTaskXpToProfile(xp);
+    if (ok) {
+      syncState.awarded[taskKey] = true;
+      changed = true;
+    }
+  }
+
+  if (!changed) return;
+  writeDailyTaskXpSyncState(syncState);
+  if (window.RA10 && typeof RA10.refreshProfile === 'function') {
+    try { await RA10.refreshProfile(); } catch (e) {}
+  }
+  const routePath = location.hash.replace('#/','').replace('#','');
+  if (routePath === 'leaderboard') {
+    setTimeout(renderLeaderboard, 60);
+  }
+}
+
 function renderGlobalTasksPage() {
   const host = document.getElementById('global-tasks-host');
   if (!host) return;
@@ -2326,7 +2925,14 @@ function renderGlobalTasksPage() {
   state.tasks.practice5 = state.tasks.practice5 || state.practiceCount >= 5;
   state.tasks.practice10 = state.tasks.practice10 || state.practiceCount >= 10;
   state.tasks.practice15 = state.tasks.practice15 || state.practiceCount >= 15;
+  const loginJustCompleted = !state.tasks.login;
+  state.tasks.login = true;
   localStorage.setItem(stateKey, JSON.stringify(state));
+
+  // Ensure global daily login XP is synced to profile/leaderboard once per day.
+  if (loginJustCompleted) {
+    syncDailyTaskXpToLeaderboard(state);
+  }
 
   const practiceCount = Number(state.practiceCount || 0);
 
@@ -2406,10 +3012,40 @@ function route(){
   }
 }
 
+function setPriceSnapshotView(mode, trigger) {
+  const root = document.getElementById('home-price-visual');
+  if (!root) return;
+
+  const labelMap = {
+    all: 'Lower is better',
+    seneca: 'Showing RA10 vs Seneca',
+    'sme-low': 'Showing RA10 vs Save My Exams',
+  };
+
+  root.querySelectorAll('[data-snapshot-view]').forEach(function(btn) {
+    const active = btn.getAttribute('data-snapshot-view') === mode;
+    btn.classList.toggle('is-active', active);
+    btn.setAttribute('aria-selected', active ? 'true' : 'false');
+  });
+
+  root.querySelectorAll('.price-bar-row[data-snapshot-key]').forEach(function(row) {
+    const key = row.getAttribute('data-snapshot-key');
+    const isRa10 = key === 'ra10-pro' || key === 'ra10-ultra';
+    const show = isRa10 || mode === 'all' || key === mode;
+    row.style.display = show ? '' : 'none';
+  });
+
+  const label = root.querySelector('[data-snapshot-label]');
+  if (label) label.textContent = labelMap[mode] || labelMap.all;
+
+  if (trigger && typeof trigger.blur === 'function') trigger.blur();
+}
+
 window.addEventListener('hashchange', route);
 route();
 
   document.addEventListener('DOMContentLoaded', async () => {
+    setPriceSnapshotView('all');
     updateLeaderboardCountdown();
     setInterval(updateLeaderboardCountdown, 1000);
 
@@ -2516,6 +3152,66 @@ route();
       return false;
     }
 
+    function renderAccountCreditLog() {
+      const host = document.getElementById('account-credit-log');
+      if (!host) return;
+      if (!window.RA10 || typeof RA10.getCreditActivity !== 'function' || !RA10.isLoggedIn()) {
+        host.innerHTML = '<div class="credit-log-note">Sign in to view your credit history.</div>';
+        return;
+      }
+      const entries = RA10.getCreditActivity(50) || [];
+      if (!entries.length) {
+        host.innerHTML = '<div class="credit-log-note">No recent credit activity yet.</div>';
+        return;
+      }
+      const creditBreakdown = (typeof RA10.getCreditBreakdown === 'function') ? RA10.getCreditBreakdown() : null;
+      const currentTotal = creditBreakdown && Number.isFinite(creditBreakdown.totalCredits)
+        ? Number(creditBreakdown.totalCredits)
+        : NaN;
+      let runningDeltaFromCurrent = 0;
+      host.innerHTML = entries.map((entry) => {
+        const amount = Number(entry.amount || 0);
+        const cls = amount < 0 ? 'spend' : 'gain';
+        const sign = amount > 0 ? '+' : '';
+        const dt = new Date(Number(entry.ts || Date.now()));
+        const timeText = Number.isNaN(dt.getTime()) ? 'Just now' : dt.toLocaleString('en-GB', {
+          day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit'
+        });
+        // Show source and note clearly
+        let sourceLabel = '';
+        if (entry.source === 'exam_season_bonus') sourceLabel = 'Exam season bonus';
+        else if (entry.source === 'stored_credits') sourceLabel = 'Account credits';
+        else if (entry.source === 'credit_award') sourceLabel = 'Awarded';
+        else if (entry.source === 'plan_credits') sourceLabel = 'Plan credits';
+        else if (entry.source === 'plan_renewal') sourceLabel = 'Plan renewal';
+        else if (entry.source === 'subject_purchase') sourceLabel = 'Subject purchase';
+        else if (entry.source) sourceLabel = entry.source.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+        const actionText = entry.action ? (' (' + String(entry.action) + ')') : '';
+        const note = (sourceLabel ? `<strong>${sourceLabel}</strong>: ` : '') + String(entry.note || actionText);
+        // Show running balance after this entry
+        let balanceText = '';
+        const canReconstruct = Number.isFinite(currentTotal);
+        const reconstructedAfter = canReconstruct ? (currentTotal - runningDeltaFromCurrent) : NaN;
+        const fallbackAfter = Number(entry.balanceAfter);
+        const displayAfter = Number.isFinite(reconstructedAfter)
+          ? reconstructedAfter
+          : (Number.isFinite(fallbackAfter) ? fallbackAfter : NaN);
+        if (Number.isFinite(displayAfter)) {
+          balanceText = `<span class="credit-log-balance">Balance after: <strong>${Math.max(0, Math.floor(displayAfter))}</strong></span>`;
+        }
+        runningDeltaFromCurrent += amount;
+        return ''
+          + '<div class="credit-log-item">'
+          +   '<div class="credit-log-main">'
+          +     '<div class="credit-log-note">' + note + '</div>'
+          +     '<div class="credit-log-time">' + timeText + '</div>'
+          +     (balanceText ? '<div class="credit-log-balance-row">' + balanceText + '</div>' : '')
+          +   '</div>'
+          +   '<div class="credit-log-amt ' + cls + '">' + sign + amount + '</div>'
+          + '</div>';
+      }).join('');
+    }
+
     async function _updateNavAuth() {
       const loggedIn = RA10.isLoggedIn();
       const profile = RA10.getProfile();
@@ -2575,6 +3271,11 @@ route();
           if (card) card.style.outline = '2px solid var(--color-primary)';
         }
         const credits = RA10.getCredits();
+        const creditBreakdown = (typeof RA10.getCreditBreakdown === 'function') ? RA10.getCreditBreakdown() : null;
+        const storedCredits = creditBreakdown && Number.isFinite(creditBreakdown.storedCredits)
+          ? Number(creditBreakdown.storedCredits)
+          : (Number.isFinite(credits) ? Number(credits) : 0);
+        const examBonusRemaining = creditBreakdown ? Number(creditBreakdown.examBonusRemaining || 0) : 0;
         const creditsText = credits === Infinity ? '∞ credits' : credits + ' credits';
         document.getElementById('nav-credit-chip').textContent = creditsText;
         if (mobileCreditChip) mobileCreditChip.textContent = creditsText;
@@ -2606,15 +3307,35 @@ route();
         }
         document.getElementById('account-username').textContent = RA10.getProfile()?.username ? ('@' + RA10.getProfile().username) : 'No username set';
         document.getElementById('account-display-name-current').textContent = profile.full_name || profile.display_name || profile.email;
-        document.getElementById('account-name-input').value = profile.full_name || profile.display_name || '';
+        const accountNameInput = document.getElementById('account-name-input');
+        const accountUsernameInput = document.getElementById('account-username-input');
         document.getElementById('account-username-current').textContent = profile.username ? ('@' + profile.username) : 'No username set';
-        document.getElementById('account-username-input').value = profile.username || '';
+        if (accountNameInput) {
+          const isNameEditing = document.activeElement === accountNameInput;
+          if (!isNameEditing) {
+            accountNameInput.value = profile.full_name || profile.display_name || '';
+          }
+        }
+        if (accountUsernameInput) {
+          const isUsernameEditing = document.activeElement === accountUsernameInput;
+          if (!isUsernameEditing) {
+            accountUsernameInput.value = profile.username || '';
+          }
+        }
         const tier = RA10.getTier();
         const unlockedSubjects = Array.isArray(profile.unlocked_subjects) ? profile.unlocked_subjects.filter(Boolean) : [];
         document.getElementById('account-tier-badge').textContent = RA10.getTierInfo().label;
         if (tier === 'subject') {
-          const subjectName = unlockedSubjects[0] || 'Subject';
-          document.getElementById('account-credits').textContent = credits === Infinity ? 'Unlimited ' + subjectName + ' credits' : credits + ' ' + subjectName + ' credits';
+          const subjectPoolTotal = Math.max(0, unlockedSubjects.length * 300);
+          const subjectCreditsAvailable = Math.max(0, Math.min(subjectPoolTotal, storedCredits));
+          const universalStored = Math.max(0, storedCredits - subjectPoolTotal);
+          const universalCredits = Math.max(0, universalStored + examBonusRemaining);
+          if (unlockedSubjects.length === 1) {
+            const subjectName = unlockedSubjects[0] || 'Subject';
+            document.getElementById('account-credits').textContent = subjectCreditsAvailable + ' ' + subjectName + ' subject credits + ' + universalCredits + ' universal credits';
+          } else {
+            document.getElementById('account-credits').textContent = subjectCreditsAvailable + ' subject credits + ' + universalCredits + ' universal credits';
+          }
         } else {
           document.getElementById('account-credits').textContent = credits === Infinity ? 'Unlimited credits' : credits + ' credits';
         }
@@ -2676,9 +3397,11 @@ route();
             }
           }
         }
+        renderAccountCreditLog();
         maybeShowPlanWelcome();
       } else if (mobileNavAvatar) {
         mobileNavAvatar.textContent = '?';
+        renderAccountCreditLog();
       }
     }
     const updateNavAuth = _updateNavAuth;
@@ -2801,8 +3524,161 @@ route();
 
     const PROFILE_SETUP_DISMISSED_KEY = 'ra10_profile_setup_dismissed';
     const USERNAME_SETUP_DISMISSED_KEY = 'ra10_username_setup_dismissed';
+    const USERNAME_NOTICE_PENDING_PREFIX = 'ra10_username_notice_pending_';
+    const USERNAME_LAST_VALUE_PREFIX = 'ra10_username_last_seen_';
     let profileSetupTimer = 0;
     let usernameSetupTimer = 0;
+    let usernamePolicySyncInFlight = false;
+
+    const BLOCKED_ROOTS = ['nigg', 'fagg'];
+    const BLOCKED_TERMS = ['kike', 'cunt', 'whore', 'slut', 'retard', 'rapist', 'hitler', 'nazi', 'terrorist'];
+
+    function normalizeForModeration(raw) {
+      return String(raw || '').toLowerCase();
+    }
+
+    function getModerationTokens(raw) {
+      return normalizeForModeration(raw)
+        .replace(/[^a-z0-9_\s]/g, ' ')
+        .split(/[^a-z0-9]+/)
+        .filter(Boolean);
+    }
+
+    function hasBlockedContent(raw) {
+      const tokens = getModerationTokens(raw);
+      if (!tokens.length) return false;
+      if (tokens.some(function(t) { return BLOCKED_TERMS.includes(t); })) return true;
+      return tokens.some(function(t) {
+        return BLOCKED_ROOTS.some(function(root) { return t.includes(root); });
+      });
+    }
+
+    function normalizeUsername(raw) {
+      return String(raw || '').trim().toLowerCase().replace(/[^a-z0-9_]/g, '');
+    }
+
+    function validateUsername(raw) {
+      const username = normalizeUsername(raw);
+      if (!username || username.length < 3) {
+        return { ok: false, username, error: 'Username must be at least 3 characters.' };
+      }
+      if (username.length > 24) {
+        return { ok: false, username, error: 'Username must be 24 characters or fewer.' };
+      }
+      if (username.startsWith('_') || username.endsWith('_')) {
+        return { ok: false, username, error: 'Username cannot start or end with an underscore.' };
+      }
+      const usernameTokens = username.split(/[_0-9]+/).filter(Boolean);
+      if (usernameTokens.some(function(t) { return BLOCKED_TERMS.includes(t); })) {
+        return { ok: false, username, error: 'That username is not allowed. Please choose another.' };
+      }
+      if (usernameTokens.some(function(t) {
+        return BLOCKED_ROOTS.some(function(root) { return t.includes(root); });
+      })) {
+        return { ok: false, username, error: 'That username is not allowed. Please choose another.' };
+      }
+      return { ok: true, username, error: '' };
+    }
+
+    function validateDisplayName(raw) {
+      const name = String(raw || '').trim();
+      if (!name) {
+        return { ok: false, value: name, error: 'Please enter your name.' };
+      }
+      if (name.length > 60) {
+        return { ok: false, value: name, error: 'Display name must be 60 characters or fewer.' };
+      }
+      if (hasBlockedContent(name)) {
+        return { ok: false, value: name, error: 'That display name is not allowed. Please choose another.' };
+      }
+      return { ok: true, value: name, error: '' };
+    }
+
+    function isDefaultResetUsername(raw) {
+      return /^user_[0-9a-f]{8}$/i.test(String(raw || ''));
+    }
+
+    function getUsernameNoticeKeys() {
+      const userId = RA10.getSession()?.user?.id || RA10.getProfile()?.id || '';
+      if (!userId) {
+        return null;
+      }
+      return {
+        pendingKey: USERNAME_NOTICE_PENDING_PREFIX + userId,
+        lastSeenKey: USERNAME_LAST_VALUE_PREFIX + userId,
+      };
+    }
+
+    function maybeNotifyUsernameReset(profile) {
+      if (!profile) {
+        return;
+      }
+      const keys = getUsernameNoticeKeys();
+      if (!keys) {
+        return;
+      }
+      const current = String(profile.username || '');
+      const previous = String(localStorage.getItem(keys.lastSeenKey) || '');
+      const pending = localStorage.getItem(keys.pendingKey) === '1';
+
+      const currentIsDefault = isDefaultResetUsername(current);
+      const previousIsDefault = isDefaultResetUsername(previous);
+      const transitionedToDefault = currentIsDefault && !previousIsDefault;
+      const transitionedToEmpty = !current && !!previous;
+
+      if (pending || transitionedToDefault || transitionedToEmpty) {
+        showMiniToast('Your username was reset for safety. You can change it in Profile settings.');
+        localStorage.removeItem(USERNAME_SETUP_DISMISSED_KEY);
+        openUsernameSetupOverlayLater();
+      }
+
+      if (current && !currentIsDefault) {
+        localStorage.removeItem(keys.pendingKey);
+      } else if (pending) {
+        localStorage.removeItem(keys.pendingKey);
+      }
+
+      localStorage.setItem(keys.lastSeenKey, current);
+    }
+
+    async function enforceUsernamePolicyForCurrentUser() {
+      if (usernamePolicySyncInFlight || !RA10.isLoggedIn()) {
+        return;
+      }
+      const profile = RA10.getProfile();
+      const current = String(profile?.username || '');
+      if (!current) {
+        return;
+      }
+      const policy = validateUsername(current);
+      if (policy.ok && policy.username === current.toLowerCase()) {
+        return;
+      }
+
+      usernamePolicySyncInFlight = true;
+      try {
+        const sb = window.supabase.createClient(
+          'https://tcrrgsylxbyyrmnouihl.supabase.co',
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRjcnJnc3lseGJ5eXJtbm91aWhsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4ODUyMTEsImV4cCI6MjA5MzQ2MTIxMX0.eOp6ma-mfgh8F20nM7E2OaBW28LlZlwuEEWr6k2zDWw'
+        );
+        const session = RA10.getSession();
+        if (!session?.user?.id) {
+          return;
+        }
+        const { error } = await sb.from('profiles').update({ username: null }).eq('id', session.user.id);
+        if (!error) {
+          localStorage.setItem(USERNAME_NOTICE_PENDING_PREFIX + session.user.id, '1');
+          await RA10.init();
+          _updateNavAuth();
+          localStorage.removeItem(USERNAME_SETUP_DISMISSED_KEY);
+          maybeNotifyUsernameReset(RA10.getProfile());
+        }
+      } catch (e) {
+        console.warn('username policy enforcement failed', e);
+      } finally {
+        usernamePolicySyncInFlight = false;
+      }
+    }
 
     function clearProfileSetupDismissal() {
       sessionStorage.removeItem(PROFILE_SETUP_DISMISSED_KEY);
@@ -2835,7 +3711,9 @@ route();
 
     async function checkProfileCompletion() {
       if (!RA10.isLoggedIn()) return;
+      await enforceUsernamePolicyForCurrentUser();
       const profile = RA10.getProfile();
+      maybeNotifyUsernameReset(profile);
       const name = (profile?.display_name || profile?.full_name || '').trim();
       if (!name) {
         if (localStorage.getItem(PROFILE_SETUP_DISMISSED_KEY) === '1') return;
@@ -2882,11 +3760,12 @@ route();
         btn.textContent = originalText;
       }, 5000);
       try {
-        const val = document.getElementById('username-setup-input').value
-          .trim().toLowerCase().replace(/[^a-z0-9_]/g, '');
+        const policy = validateUsername(document.getElementById('username-setup-input').value);
+        const val = policy.username;
+        document.getElementById('username-setup-input').value = val;
         err.classList.remove('show');
-        if (!val || val.length < 3) {
-          err.textContent = 'Username must be at least 3 characters.';
+        if (!policy.ok) {
+          err.textContent = policy.error;
           err.classList.add('show');
           return;
         }
@@ -2895,13 +3774,32 @@ route();
           'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRjcnJnc3lseGJ5eXJtbm91aWhsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4ODUyMTEsImV4cCI6MjA5MzQ2MTIxMX0.eOp6ma-mfgh8F20nM7E2OaBW28LlZlwuEEWr6k2zDWw'
         );
         const session = RA10.getSession();
-        const { error } = await sb.from('profiles')
-          .update({ username: val }).eq('id', session.user.id);
+        const currentUserId = session?.user?.id || RA10.getProfile()?.id || '';
+        if (!currentUserId) {
+          throw new Error('You are not signed in. Please refresh and try again.');
+        }
+        const { data: updatedRows, error } = await sb.from('profiles')
+          .update({ username: val })
+          .eq('id', currentUserId)
+          .select('username')
+          .limit(1);
         if (error) {
           err.textContent = error.code === '23505'
             ? 'That username is taken. Try another.' : error.message;
           err.classList.add('show');
+        } else if (!updatedRows || !updatedRows.length || String(updatedRows[0].username || '') !== val) {
+          err.textContent = 'That username is not allowed by safety rules. Please choose another.';
+          err.classList.add('show');
         } else {
+          const { data: persistedRow, error: persistedError } = await sb.from('profiles')
+            .select('username')
+            .eq('id', currentUserId)
+            .single();
+          if (persistedError || String(persistedRow?.username || '') !== val) {
+            err.textContent = 'Your username was not saved because a database policy changed it. Please try a different clean username.';
+            err.classList.add('show');
+            return;
+          }
           clearTimeout(safetyTimeout);
           await RA10.init();
           _updateNavAuth();
@@ -2935,10 +3833,11 @@ route();
         btn.textContent = originalText;
       }, 5000);
       try {
-        const name = document.getElementById('profile-setup-name').value.trim();
+        const namePolicy = validateDisplayName(document.getElementById('profile-setup-name').value);
+        const name = namePolicy.value;
         err.classList.remove('show');
-        if (!name) {
-          err.textContent = 'Please enter your name.';
+        if (!namePolicy.ok) {
+          err.textContent = namePolicy.error;
           err.classList.add('show');
           return;
         }
@@ -3049,6 +3948,17 @@ route();
       else { closeAuthModal(); }
     });
 
+    ['signin-email', 'signin-password'].forEach((id) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.addEventListener('keydown', (e) => {
+        if (e.key !== 'Enter') return;
+        e.preventDefault();
+        const btn = document.getElementById('signin-btn');
+        if (btn && !btn.disabled) btn.click();
+      });
+    });
+
     function isEmailRateLimitError(error) {
       var msg = String((error && error.message) || '').toLowerCase();
       return msg.includes('rate limit') || msg.includes('over_email_send_rate_limit');
@@ -3076,6 +3986,21 @@ route();
       const suc = document.getElementById('signup-success');
       err.classList.remove('show'); suc.classList.remove('show');
 
+      const signupNamePolicy = validateDisplayName(document.getElementById('signup-name').value);
+      if (!signupNamePolicy.ok) {
+        err.textContent = signupNamePolicy.error;
+        err.classList.add('show');
+        return;
+      }
+
+      const signupUsernamePolicy = validateUsername(document.getElementById('signup-username').value || '');
+      const hasSignupUsername = String(document.getElementById('signup-username').value || '').trim().length > 0;
+      if (hasSignupUsername && !signupUsernamePolicy.ok) {
+        err.textContent = signupUsernamePolicy.error;
+        err.classList.add('show');
+        return;
+      }
+
       var cooldownUntil = getSignupCooldownUntil();
       if (cooldownUntil > Date.now()) {
         var remainingSec = Math.max(1, Math.ceil((cooldownUntil - Date.now()) / 1000));
@@ -3088,7 +4013,7 @@ route();
       const { error } = await RA10.signUp(
         document.getElementById('signup-email').value,
         document.getElementById('signup-password').value,
-        document.getElementById('signup-name').value
+        signupNamePolicy.value
       );
       btn.disabled = false; btn.textContent = 'Create free account';
       if (error) {
@@ -3103,17 +4028,20 @@ route();
       }
       else {
         clearSignupCooldown();
-        const usernameVal = document.getElementById('signup-username')
-          .value.trim().toLowerCase().replace(/[^a-z0-9_]/g, '');
-        if (usernameVal.length >= 3) {
+        const usernamePolicy = validateUsername(document.getElementById('signup-username').value);
+        document.getElementById('signup-username').value = usernamePolicy.username;
+        if (usernamePolicy.ok) {
           try {
             const sb = window.supabase.createClient(
               'https://tcrrgsylxbyyrmnouihl.supabase.co',
               'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRjcnJnc3lseGJ5eXJtbm91aWhsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4ODUyMTEsImV4cCI6MjA5MzQ2MTIxMX0.eOp6ma-mfgh8F20nM7E2OaBW28LlZlwuEEWr6k2zDWw'
             );
-            await sb.from('profiles').update({ username: usernameVal })
+            await sb.from('profiles').update({ username: usernamePolicy.username })
               .eq('email', document.getElementById('signup-email').value.trim());
           } catch(e) { console.warn('username save failed', e); }
+        } else if (document.getElementById('signup-username').value.trim()) {
+          err.textContent = usernamePolicy.error;
+          err.classList.add('show');
         }
         suc.textContent = 'Check your email to confirm your account, then sign in.';
         suc.classList.add('show');
@@ -3222,8 +4150,8 @@ route();
       const card = document.createElement('div');
       card.style.cssText = 'width:min(520px,100%);background:var(--color-surface,#fff);color:var(--color-text,#101218);border:1px solid var(--color-border,#d6dbe8);border-radius:18px;padding:20px;box-shadow:0 12px 40px rgba(0,0,0,.28);';
       card.innerHTML = ''
-        + '<h3 style="margin:0 0 8px 0;font-size:1.15rem;">Purchases are temporarily unavailable</h3>'
-        + '<p style="margin:0;color:var(--color-text-muted,#5f6780);line-height:1.6;">Purchasing is currently disabled while RA10 is being approved. It should be available again soon. Please check back shortly.</p>'
+        + '<h3 style="margin:0 0 8px 0;font-size:1.15rem;">Payments are not ready yet</h3>'
+        + '<p style="margin:0;color:var(--color-text-muted,#5f6780);line-height:1.6;">Payments are not ready yet and will be available soon (by Monday hopefully).</p>'
         + '<div style="margin-top:16px;display:flex;justify-content:flex-end;">'
         + '<button id="purchase-paused-close" class="btn btn-p" style="justify-content:center;">OK</button>'
         + '</div>';
@@ -3319,10 +4247,11 @@ route();
     document.getElementById('account-save-name-btn')?.addEventListener('click', async () => {
       const err = document.getElementById('account-name-error');
       const btn = document.getElementById('account-save-name-btn');
-      const val = document.getElementById('account-name-input').value.trim();
+      const namePolicy = validateDisplayName(document.getElementById('account-name-input').value);
+      const val = namePolicy.value;
       err.classList.remove('show');
-      if (!val) {
-        err.textContent = 'Please enter a display name.';
+      if (!namePolicy.ok) {
+        err.textContent = namePolicy.error;
         err.classList.add('show');
         return;
       }
@@ -3352,12 +4281,12 @@ route();
     document.getElementById('account-save-username-btn')?.addEventListener('click', async () => {
       const err = document.getElementById('account-username-error');
       const btn = document.getElementById('account-save-username-btn');
-      const raw = document.getElementById('account-username-input').value;
-      const val = raw.trim().toLowerCase().replace(/[^a-z0-9_]/g, '');
+      const policy = validateUsername(document.getElementById('account-username-input').value);
+      const val = policy.username;
       document.getElementById('account-username-input').value = val;
       err.classList.remove('show');
-      if (!val || val.length < 3) {
-        err.textContent = 'Username must be at least 3 characters.';
+      if (!policy.ok) {
+        err.textContent = policy.error;
         err.classList.add('show');
         return;
       }
@@ -3369,19 +4298,41 @@ route();
           'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRjcnJnc3lseGJ5eXJtbm91aWhsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4ODUyMTEsImV4cCI6MjA5MzQ2MTIxMX0.eOp6ma-mfgh8F20nM7E2OaBW28LlZlwuEEWr6k2zDWw'
         );
         const session = RA10.getSession();
+        const currentUserId = session?.user?.id || RA10.getProfile()?.id || '';
+        if (!currentUserId) {
+          throw new Error('You are not signed in. Please refresh and try again.');
+        }
         const { data: taken, error: checkError } = await sb.from('profiles')
           .select('id')
           .eq('username', val)
-          .neq('id', session.user.id)
+          .neq('id', currentUserId)
           .limit(1);
         if (checkError) throw checkError;
-        if (taken && taken.length) {
+        if (taken && taken.some(function(row) { return String(row.id || '') !== String(currentUserId); })) {
           err.textContent = 'That username is already taken.';
           err.classList.add('show');
           return;
         }
-        const { error } = await sb.from('profiles').update({ username: val }).eq('id', session.user.id);
+        const { data: updatedRows, error } = await sb.from('profiles')
+          .update({ username: val })
+          .eq('id', currentUserId)
+          .select('username')
+          .limit(1);
         if (error) throw error;
+        if (!updatedRows || !updatedRows.length || String(updatedRows[0].username || '') !== val) {
+          err.textContent = 'That username is not allowed by safety rules. Please choose another.';
+          err.classList.add('show');
+          return;
+        }
+        const { data: persistedRow, error: persistedError } = await sb.from('profiles')
+          .select('username')
+          .eq('id', currentUserId)
+          .single();
+        if (persistedError || String(persistedRow?.username || '') !== val) {
+          err.textContent = 'Your username was not saved because a database policy changed it. Please try a different clean username.';
+          err.classList.add('show');
+          return;
+        }
         await RA10.init();
         _updateNavAuth();
         document.getElementById('account-username-edit').style.display = 'none';

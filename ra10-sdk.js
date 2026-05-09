@@ -76,6 +76,7 @@
   const ACTION_COSTS = {
     practice_question: 1,
     quiz_question: 1,
+    revision_guide_full: 10,
     flashcard_flip: 0,
     mock_paper_gen: 5,
     ai_mark: 3,
@@ -102,12 +103,48 @@
 
   const EXAM_SEASON_BONUS_CREDITS = 50;
   const EXAM_SEASON_BONUS_END_UTC = Date.parse('2026-08-02T00:00:00Z');
+  const CREDIT_ACTIVITY_LIMIT = 200;
 
   let _supabaseClient = null;
   let _session = null;
   let _profile = null;
   let _scriptLoader = null;
   let _authSubscription = null;
+
+  const PAYMENTS_PAUSED_MESSAGE = 'Payments are not ready yet and will be available soon (by Monday hopefully).';
+
+  function showPaymentsPausedPopup() {
+    try {
+      window.alert(PAYMENTS_PAUSED_MESSAGE);
+    } catch (e) {
+      console.warn(PAYMENTS_PAUSED_MESSAGE);
+    }
+  }
+
+  function _isUpgradeHref(href) {
+    if (!href || typeof href !== 'string') return false;
+    const text = href.toLowerCase();
+    return text.includes('/#/upgrade') || text.includes('upgrade');
+  }
+
+  function _installPaymentClickBlocker() {
+    if (window.__ra10PaymentsBlockedHandlerInstalled) return;
+    window.__ra10PaymentsBlockedHandlerInstalled = true;
+    document.addEventListener('click', function (event) {
+      const target = event.target;
+      if (!target || typeof target.closest !== 'function') return;
+      const link = target.closest('a[href]');
+      if (!link) return;
+      const href = link.getAttribute('href') || '';
+      if (_isUpgradeHref(href)) {
+        event.preventDefault();
+        event.stopPropagation();
+        showPaymentsPausedPopup();
+      }
+    }, true);
+  }
+
+  _installPaymentClickBlocker();
 
   function _emit(eventName, payload) {
     const listeners = EVENTS[eventName] || [];
@@ -138,6 +175,163 @@
   function _getExamBonusUsageKey() {
     const userId = _session?.user?.id || _profile?.id || '';
     return userId ? ('ra10_exam_bonus_used_' + userId) : '';
+  }
+
+  function _getExamBonusGrantLoggedKey() {
+    const userId = _session?.user?.id || _profile?.id || '';
+    return userId ? ('ra10_exam_bonus_grant_logged_' + userId) : '';
+  }
+
+  function _getCreditActivityKey() {
+    const userId = _session?.user?.id || _profile?.id || '';
+    return userId ? ('ra10_credit_activity_' + userId) : '';
+  }
+
+  function _getCreditSnapshotKey() {
+    const userId = _session?.user?.id || _profile?.id || '';
+    return userId ? ('ra10_credit_snapshot_' + userId) : '';
+  }
+
+  function _readCreditSnapshot() {
+    const key = _getCreditSnapshotKey();
+    if (!key) {
+      return null;
+    }
+    try {
+      const parsed = JSON.parse(localStorage.getItem(key) || 'null');
+      return parsed && typeof parsed === 'object' ? parsed : null;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function _writeCreditSnapshot(profile) {
+    const key = _getCreditSnapshotKey();
+    if (!key || !profile) {
+      return;
+    }
+    const next = {
+      credits: Math.max(0, Number(profile.credits || 0)),
+      tier: _normalizeTier(profile.tier),
+      creditsResetAt: String(profile.credits_reset_at || ''),
+      unlimited: !!profile.unlimited_credits,
+      ts: Date.now(),
+    };
+    localStorage.setItem(key, JSON.stringify(next));
+  }
+
+  function _syncPlanCreditActivity(profile) {
+    if (!profile || profile.unlimited_credits || UNLIMITED_TIERS.has(_normalizeTier(profile.tier))) {
+      _writeCreditSnapshot(profile);
+      return;
+    }
+
+    const previous = _readCreditSnapshot();
+    const currentCredits = Math.max(0, Number(profile.credits || 0));
+    if (previous && Number.isFinite(Number(previous.credits))) {
+      const previousCredits = Math.max(0, Number(previous.credits || 0));
+      const delta = currentCredits - previousCredits;
+      if (delta > 0) {
+        const currentTier = _normalizeTier(profile.tier);
+        const previousTier = _normalizeTier(previous.tier);
+        const resetChanged = String(previous.creditsResetAt || '') !== String(profile.credits_reset_at || '');
+        const tierLabel = _getTierDefaults(currentTier).label;
+        let source = 'plan_credits';
+        let note = tierLabel + ' plan credits added';
+        if (resetChanged && MONTHLY_TIERS.has(currentTier) && currentTier === previousTier) {
+          source = 'plan_renewal';
+          note = tierLabel + ' monthly renewal credits added';
+        } else if (currentTier !== previousTier) {
+          note = 'Plan changed to ' + tierLabel + ' and credits were added';
+        }
+        const examBonusRemaining = _getExamBonusRemaining();
+        _appendCreditActivity({
+          type: 'gain',
+          source,
+          action: 'plan_topup',
+          amount: delta,
+          note,
+          balanceAfter: currentCredits + examBonusRemaining,
+          storedAfter: currentCredits,
+          examBonusRemainingAfter: examBonusRemaining,
+        });
+      }
+    }
+
+    _writeCreditSnapshot(profile);
+  }
+
+  function _readCreditActivity() {
+    const key = _getCreditActivityKey();
+    if (!key) {
+      return [];
+    }
+    try {
+      const parsed = JSON.parse(localStorage.getItem(key) || '[]');
+      return Array.isArray(parsed) ? parsed : [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  function _writeCreditActivity(entries) {
+    const key = _getCreditActivityKey();
+    if (!key) {
+      return;
+    }
+    const safe = Array.isArray(entries) ? entries.slice(0, CREDIT_ACTIVITY_LIMIT) : [];
+    localStorage.setItem(key, JSON.stringify(safe));
+  }
+
+  function _appendCreditActivity(entry) {
+    const now = Date.now();
+    const breakdown = getCreditBreakdown();
+    const computedTotal = breakdown.totalCredits;
+    const computedStored = breakdown.storedCredits;
+    const computedExamBonusRemaining = breakdown.examBonusRemaining;
+    const explicitBalanceAfter = Number(entry?.balanceAfter);
+    const explicitStoredAfter = Number(entry?.storedAfter);
+    const explicitExamBonusRemainingAfter = Number(entry?.examBonusRemainingAfter);
+    const next = {
+      id: String(now) + ':' + Math.random().toString(36).slice(2, 8),
+      ts: now,
+      type: String(entry?.type || 'info'),
+      source: String(entry?.source || 'manual'),
+      action: String(entry?.action || ''),
+      note: String(entry?.note || ''),
+      amount: Number(entry?.amount || 0),
+      balanceAfter: Number.isFinite(explicitBalanceAfter) ? explicitBalanceAfter : computedTotal,
+      storedAfter: Number.isFinite(explicitStoredAfter) ? explicitStoredAfter : computedStored,
+      examBonusRemainingAfter: Number.isFinite(explicitExamBonusRemainingAfter)
+        ? explicitExamBonusRemainingAfter
+        : computedExamBonusRemaining,
+    };
+    const list = _readCreditActivity();
+    list.unshift(next);
+    _writeCreditActivity(list);
+  }
+
+  function _ensureExamBonusGrantLogged() {
+    if (!isLoggedIn() || !_isExamSeasonBonusActive()) {
+      return;
+    }
+    if (UNLIMITED_TIERS.has(_normalizeTier(_profile?.tier))) {
+      return;
+    }
+    const key = _getExamBonusGrantLoggedKey();
+    if (!key) {
+      return;
+    }
+    if (localStorage.getItem(key) === '1') {
+      return;
+    }
+    localStorage.setItem(key, '1');
+    _appendCreditActivity({
+      type: 'gain',
+      source: 'exam_season_bonus',
+      amount: EXAM_SEASON_BONUS_CREDITS,
+      note: 'Exam season bonus awarded',
+    });
   }
 
   function _getExamBonusUsed() {
@@ -455,6 +649,7 @@
 
     if (_profile) {
       await _maybeResetMonthlyCredits();
+      _syncPlanCreditActivity(_profile);
     }
 
     return _profile;
@@ -539,6 +734,7 @@
       const created = await _ensureProfileRow(user);
       _session = result.data.session || null;
       _profile = created;
+      _writeCreditSnapshot(_profile);
       _emit('authchange', { event: 'SIGNED_UP', session: _session, profile: _profile });
       return { data: { user, session: _session, profile: _profile }, error: null };
     }
@@ -553,6 +749,7 @@
     }
     _session = result.data.session || null;
     _profile = _session ? await _loadProfileFromSession(_session) : null;
+    _writeCreditSnapshot(_profile);
     _emit('authchange', { event: 'SIGNED_IN', session: _session, profile: _profile });
     return { data: { session: _session, profile: _profile }, error: null };
   }
@@ -623,7 +820,44 @@
     if (_profile.unlimited_credits) {
       return Infinity;
     }
+    _ensureExamBonusGrantLogged();
     return _getStoredCredits() + _getExamBonusRemaining();
+  }
+
+  function getCreditBreakdown() {
+    if (!_profile) {
+      return {
+        totalCredits: 0,
+        storedCredits: 0,
+        examBonusRemaining: 0,
+        examBonusUsed: 0,
+        unlimited: false,
+      };
+    }
+    if (_profile.unlimited_credits || UNLIMITED_TIERS.has(_normalizeTier(_profile.tier))) {
+      return {
+        totalCredits: Infinity,
+        storedCredits: Infinity,
+        examBonusRemaining: 0,
+        examBonusUsed: 0,
+        unlimited: true,
+      };
+    }
+    _ensureExamBonusGrantLogged();
+    const storedCredits = _getStoredCredits();
+    const examBonusRemaining = _getExamBonusRemaining();
+    return {
+      totalCredits: storedCredits + examBonusRemaining,
+      storedCredits,
+      examBonusRemaining,
+      examBonusUsed: _getExamBonusUsed(),
+      unlimited: false,
+    };
+  }
+
+  function getCreditActivity(limit) {
+    const max = Math.max(1, Math.min(200, Number(limit || 30)));
+    return _readCreditActivity().slice(0, max);
   }
 
   function canAfford(action) {
@@ -675,6 +909,25 @@
       return false;
     }
     _profile = result.data;
+    _writeCreditSnapshot(_profile);
+    if (fromBonus > 0) {
+      _appendCreditActivity({
+        type: 'spend',
+        source: 'exam_season_bonus',
+        action,
+        amount: -fromBonus,
+        note: 'Spent from exam-season bonus',
+      });
+    }
+    if (fromBase > 0) {
+      _appendCreditActivity({
+        type: 'spend',
+        source: 'stored_credits',
+        action,
+        amount: -fromBase,
+        note: 'Spent from account credits',
+      });
+    }
     _emit('creditschange', _profile);
     return true;
   }
@@ -696,6 +949,13 @@
       return false;
     }
     _profile = result.data;
+    _writeCreditSnapshot(_profile);
+    _appendCreditActivity({
+      type: 'gain',
+      source: 'credit_award',
+      amount: grant,
+      note: 'Credits awarded',
+    });
     _emit('creditschange', _profile);
     return true;
   }
@@ -776,19 +1036,21 @@
       message.textContent = 'You need to sign in before continuing.';
     }
 
-    const actionButton = document.createElement('button');
-    actionButton.type = 'button';
-    actionButton.style.cssText = 'background:#1d4ed8;color:#fff;border:none;border-radius:10px;padding:12px 18px;font-size:1rem;cursor:pointer;';
     if (reason === 'credits') {
-      actionButton.textContent = 'Upgrade on RA10';
-      actionButton.style.cssText = 'background:#f1c40f;color:#2b1700;border:none;border-radius:10px;padding:12px 18px;font-size:1rem;cursor:pointer;';
-        actionButton.addEventListener('click', () => {
-        const base = (window.top.location.hostname === 'localhost' || window.top.location.hostname === '127.0.0.1')
-            ? `http://${window.top.location.host}`
-            : 'https://ra10.co.uk';
-        window.top.location.href = base + '/#/upgrade';
-        });
+      const note = document.createElement('div');
+      note.textContent = 'Purchases are paused for now.';
+      note.style.cssText = 'padding:12px 14px;border-radius:10px;background:#f8fafc;color:#334155;font-size:0.95rem;line-height:1.45;border:1px solid #e2e8f0;';
+      card.appendChild(closeBtn);
+      card.appendChild(title);
+      card.appendChild(message);
+      card.appendChild(note);
+      overlay.appendChild(card);
+      document.body.appendChild(overlay);
+      return overlay;
     } else {
+      const actionButton = document.createElement('button');
+      actionButton.type = 'button';
+      actionButton.style.cssText = 'background:#1d4ed8;color:#fff;border:none;border-radius:10px;padding:12px 18px;font-size:1rem;cursor:pointer;';
       actionButton.textContent = 'Sign In / Register';
       actionButton.addEventListener('click', () => {
   overlay.remove();
@@ -837,48 +1099,13 @@
     chip.appendChild(badge);
     chip.appendChild(creditsEl);
 
-    if (!loggedIn || getTier() === 'free') {
-      const upgradeBtn = document.createElement('a');
-      const base = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') ? window.location.origin : 'https://ra10.co.uk';
-      upgradeBtn.href = base + '/#/upgrade';
-      upgradeBtn.target = '_top';
-      upgradeBtn.textContent = 'Upgrade';
-      upgradeBtn.style.cssText = 'background:#f1c40f;color:#2b1700;border-radius:999px;padding:3px 10px;font-size:0.75rem;font-weight:700;text-decoration:none;margin-left:4px;';
-      chip.appendChild(upgradeBtn);
-    }
-
     container.appendChild(chip);
     return true;
   }
 
   async function startCheckout(input) {
-    throw new Error('Purchases are temporarily unavailable while RA10 is being approved. Please check back soon.');
-    if (!isLoggedIn()) {
-      throw new Error('Must be signed in to start checkout');
-    }
-    const token = _session?.access_token;
-    if (!token) {
-      throw new Error('No auth token available');
-    }
-    const endpoint = `${SUPABASE_URL}/functions/v1/create-checkout`;
-    const response = await fetch(endpoint, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(typeof input === 'string' ? { plan: input } : (input || {})),
-    });
-    if (!response.ok) {
-      const text = await response.text();
-      throw new Error(`Checkout request failed: ${text}`);
-    }
-    const payload = await response.json();
-    if (!payload?.url) {
-      throw new Error('Checkout response did not return a URL');
-    }
-    window.location.href = payload.url;
-    return payload.url;
+    showPaymentsPausedPopup();
+    throw new Error('Payments are temporarily unavailable. Please try again soon.');
   }
 
   function on(event, callback) {
@@ -916,6 +1143,8 @@
     getTier,
     getTierInfo,
     getCredits,
+    getCreditBreakdown,
+    getCreditActivity,
     getGuestCredits,
     canAfford,
     spendCredits,
@@ -926,6 +1155,7 @@
     renderCreditChip,
     startCheckout,
     refreshProfile: _refreshProfile,
+    _appendCreditActivity,
     on,
     off,
     // Expose internal config for debugging if needed.

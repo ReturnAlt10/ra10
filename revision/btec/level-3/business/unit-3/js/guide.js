@@ -598,34 +598,46 @@ Students use net profit for ROCE instead of operating (net) profit. ROCE uses <s
       <span class="guide-topic-chevron">&#9660;</span>
     </div>
     <div class="guide-topic-body">
-      <div class="formula-box">BREAK-EVEN
-Contribution per unit   = Selling price – Variable cost per unit
-Break-even output       = Fixed costs ÷ Contribution per unit
-Margin of safety        = Actual output – Break-even output
-Total revenue           = Selling price × Units
-Total costs             = Fixed costs + (Variable cost × Units)
-Profit                  = Total revenue – Total costs
+      <h5 style="margin-top:0;color:#f59e0b;font-size:0.9rem;letter-spacing:0.05em;text-transform:uppercase">BREAK-EVEN</h5>
+      <div class="formula-box formula-grid">
+        <div class="formula-row"><span>Contribution per unit</span><span>=</span><span>Selling price – Variable cost per unit</span></div>
+        <div class="formula-row"><span>Break-even output</span><span>=</span><span>Fixed costs ÷ Contribution per unit</span></div>
+        <div class="formula-row"><span>Margin of safety</span><span>=</span><span>Actual output – Break-even output</span></div>
+        <div class="formula-row"><span>Total revenue</span><span>=</span><span>Selling price × Units</span></div>
+        <div class="formula-row"><span>Total costs</span><span>=</span><span>Fixed costs + (Variable cost × Units)</span></div>
+        <div class="formula-row"><span>Profit</span><span>=</span><span>Total revenue – Total costs</span></div>
+      </div>
 
-CASH FLOW
-Net cash flow           = Total inflows – Total outflows
-Closing balance         = Opening balance + Net cash flow
+      <h5 style="margin-top:16px;color:#f59e0b;font-size:0.9rem;letter-spacing:0.05em;text-transform:uppercase">CASH FLOW</h5>
+      <div class="formula-box formula-grid">
+        <div class="formula-row"><span>Net cash flow</span><span>=</span><span>Total inflows – Total outflows</span></div>
+        <div class="formula-row"><span>Closing balance</span><span>=</span><span>Opening balance + Net cash flow</span></div>
+      </div>
 
-DEPRECIATION
-Straight-line p.a.      = (Cost – Residual value) ÷ Useful life
-Reducing balance p.a.   = Net book value × Rate %
+      <h5 style="margin-top:16px;color:#f59e0b;font-size:0.9rem;letter-spacing:0.05em;text-transform:uppercase">DEPRECIATION</h5>
+      <div class="formula-box formula-grid">
+        <div class="formula-row"><span>Straight-line p.a.</span><span>=</span><span>(Cost – Residual value) ÷ Useful life</span></div>
+        <div class="formula-row"><span>Reducing balance p.a.</span><span>=</span><span>Net book value × Rate %</span></div>
+      </div>
 
-PROFITABILITY RATIOS
-Gross profit margin (%) = Gross profit ÷ Revenue × 100
-Net profit margin (%)   = Net profit ÷ Revenue × 100
-ROCE (%)                = Operating profit ÷ Capital employed × 100
+      <h5 style="margin-top:16px;color:#f59e0b;font-size:0.9rem;letter-spacing:0.05em;text-transform:uppercase">PROFITABILITY RATIOS</h5>
+      <div class="formula-box formula-grid">
+        <div class="formula-row"><span>Gross profit margin (%)</span><span>=</span><span>Gross profit ÷ Revenue × 100</span></div>
+        <div class="formula-row"><span>Net profit margin (%)</span><span>=</span><span>Net profit ÷ Revenue × 100</span></div>
+        <div class="formula-row"><span>ROCE (%)</span><span>=</span><span>Operating profit ÷ Capital employed × 100</span></div>
+      </div>
 
-LIQUIDITY RATIOS
-Current ratio           = Current assets ÷ Current liabilities
-Acid test ratio         = (Current assets – Inventories) ÷ Current liabilities
+      <h5 style="margin-top:16px;color:#f59e0b;font-size:0.9rem;letter-spacing:0.05em;text-transform:uppercase">LIQUIDITY RATIOS</h5>
+      <div class="formula-box formula-grid">
+        <div class="formula-row"><span>Current ratio</span><span>=</span><span>Current assets ÷ Current liabilities</span></div>
+        <div class="formula-row"><span>Acid test ratio</span><span>=</span><span>(Current assets – Inventories) ÷ Current liabilities</span></div>
+      </div>
 
-OTHER
-Capital employed        = Total equity + Non-current liabilities
-Accounting equation:    Assets = Equity + Liabilities</div>
+      <h5 style="margin-top:16px;color:#f59e0b;font-size:0.9rem;letter-spacing:0.05em;text-transform:uppercase">OTHER</h5>
+      <div class="formula-box formula-grid">
+        <div class="formula-row"><span>Capital employed</span><span>=</span><span>Total equity + Non-current liabilities</span></div>
+        <div class="formula-row"><span>Accounting equation</span><span>=</span><span>Assets = Equity + Liabilities</span></div>
+      </div>
     </div>
   </div>
 </div>`;

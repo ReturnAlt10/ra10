@@ -4,8 +4,9 @@
   <script>
   (function(){
     var s = document.createElement('script');
-    var isLocal = location.hostname === '127.0.0.1' || location.hostname === 'localhost';
-    s.src = isLocal ? 'http://127.0.0.1:5500/ra10-sdk.js' : 'https://ra10.co.uk/ra10-sdk.js';
+    var isFile = location.protocol === 'file:';
+    var isLocalHost = location.hostname === '127.0.0.1' || location.hostname === 'localhost';
+    s.src = isFile ? '../../ra10-sdk.js' : (isLocalHost ? 'http://127.0.0.1:5500/ra10-sdk.js' : 'https://ra10.co.uk/ra10-sdk.js');
     document.head.insertBefore(s, document.head.firstChild);
   })();
   </script>

@@ -4,8 +4,9 @@
 <script>
 (function(){
   var s = document.createElement('script');
-  var isLocal = location.hostname === '127.0.0.1' || location.hostname === 'localhost';
-  s.src = isLocal ? 'http://127.0.0.1:5500/ra10-sdk.js' : 'https://ra10.co.uk/ra10-sdk.js';
+  var isFile = location.protocol === 'file:';
+  var isLocalHost = location.hostname === '127.0.0.1' || location.hostname === 'localhost';
+  s.src = isFile ? '../ra10-sdk.js' : (isLocalHost ? 'http://127.0.0.1:5500/ra10-sdk.js' : 'https://ra10.co.uk/ra10-sdk.js');
   document.head.insertBefore(s, document.head.firstChild);
 })();
 </script>
@@ -604,6 +605,36 @@ function selectableSubjectNames() {
   return SUBJECTS.filter(function(s) { return s && s.selectable; }).map(function(s) { return s.name; });
 }
 
+var BLOCKED_ROOTS = ['nigg', 'fagg'];
+var BLOCKED_TERMS = ['kike', 'cunt', 'whore', 'slut', 'retard', 'rapist', 'hitler', 'nazi', 'terrorist'];
+
+function normalizeUsername(raw) {
+  return String(raw || '').trim().toLowerCase().replace(/[^a-z0-9_]/g, '');
+}
+
+function validateUsername(raw) {
+  var username = normalizeUsername(raw);
+  if (!username || username.length < 3) {
+    return { ok: false, username: username, error: 'Username must be at least 3 characters.' };
+  }
+  if (username.length > 24) {
+    return { ok: false, username: username, error: 'Username must be 24 characters or fewer.' };
+  }
+  if (username.startsWith('_') || username.endsWith('_')) {
+    return { ok: false, username: username, error: 'Username cannot start or end with an underscore.' };
+  }
+  var usernameTokens = username.split(/[_0-9]+/).filter(Boolean);
+  if (usernameTokens.some(function(t) { return BLOCKED_TERMS.includes(t); })) {
+    return { ok: false, username: username, error: 'That username is not allowed.' };
+  }
+  if (usernameTokens.some(function(t) {
+    return BLOCKED_ROOTS.some(function(root) { return t.includes(root); });
+  })) {
+    return { ok: false, username: username, error: 'That username is not allowed.' };
+  }
+  return { ok: true, username: username, error: '' };
+}
+
 /* ═══════════════════════════════════════════════
    THEME
 ═══════════════════════════════════════════════ */
@@ -728,6 +759,7 @@ function renderTable(role) {
       '<td>' +
         '<button class="btn btn-g" style="font-size:var(--tx-xs);margin-right:var(--sp2)" data-resend="' + safeId + '">Resend invite</button>' +
         '<button class="btn btn-g" style="font-size:var(--tx-xs);margin-right:var(--sp2)" data-editsubjects="' + safeId + '">Edit subjects</button>' +
+        '<button class="btn btn-g" style="font-size:var(--tx-xs);margin-right:var(--sp2)" data-fixusername="' + safeId + '">Set/reset username</button>' +
         '<button class="btn btn-g" style="font-size:var(--tx-xs)" data-remove="' + safeId + '">Remove</button>' +
       '</td>' +
       '</tr>';
@@ -1091,6 +1123,57 @@ async function removeMember(memberId) {
   await loadMembers();
 }
 
+async function setOrResetMemberUsername(memberId) {
+  var m = state.members.find(function(x) { return String(x.id) === String(memberId); });
+  if (!m) return;
+
+  var input = prompt(
+    'Set a new username for ' + m.email + '. Leave empty to reset/remove their username.',
+    ''
+  );
+  if (input === null) return;
+
+  var normalized = normalizeUsername(input);
+  if (!normalized) {
+    var resetRes = await state.sb.from('profiles').update({ username: null }).ilike('email', m.email);
+    if (resetRes.error) {
+      toast('Could not reset username: ' + (resetRes.error.message || 'unknown error'));
+      return;
+    }
+    toast('Username reset for ' + m.email + '.');
+    return;
+  }
+
+  var policy = validateUsername(normalized);
+  if (!policy.ok) {
+    toast(policy.error);
+    return;
+  }
+
+  var conflict = await state.sb
+    .from('profiles')
+    .select('id, email')
+    .eq('username', policy.username)
+    .neq('email', String(m.email || '').toLowerCase())
+    .limit(1)
+    .maybeSingle();
+  if (conflict.error) {
+    toast('Could not validate username uniqueness.');
+    return;
+  }
+  if (conflict.data && conflict.data.id) {
+    toast('That username is already taken.');
+    return;
+  }
+
+  var upd = await state.sb.from('profiles').update({ username: policy.username }).ilike('email', m.email);
+  if (upd.error) {
+    toast('Could not update username: ' + (upd.error.message || 'unknown error'));
+    return;
+  }
+  toast('Username updated for ' + m.email + '.');
+}
+
 /* ═══════════════════════════════════════════════
    SETTINGS
 ═══════════════════════════════════════════════ */
@@ -1156,6 +1239,8 @@ async function resendInvite(memberId) {
     if (resendBtn) { await resendInvite(resendBtn.dataset.resend); return; }
     var editBtn = e.target.closest('[data-editsubjects]');
     if (editBtn) { await editMemberSubjects(editBtn.dataset.editsubjects); return; }
+    var userBtn = e.target.closest('[data-fixusername]');
+    if (userBtn) { await setOrResetMemberUsername(userBtn.dataset.fixusername); return; }
     var btn = e.target.closest('[data-remove]');
     if (btn) await removeMember(btn.dataset.remove);
   });

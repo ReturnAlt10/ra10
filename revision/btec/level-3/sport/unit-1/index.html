@@ -20,8 +20,9 @@
 
 (function(){
   var s = document.createElement('script');
-  var isLocal = location.hostname === '127.0.0.1' || location.hostname === 'localhost';
-  s.src = isLocal ? 'http://127.0.0.1:5500/ra10-sdk.js' : 'https://ra10.co.uk/ra10-sdk.js';
+  var isFile = location.protocol === 'file:';
+  var isLocalHost = location.hostname === '127.0.0.1' || location.hostname === 'localhost';
+  s.src = isFile ? 'file:///C:/Users/mistr/Downloads/ra10/ra10-sdk.js' : (isLocalHost ? 'http://127.0.0.1:5500/ra10-sdk.js' : 'https://ra10.co.uk/ra10-sdk.js');
   document.head.insertBefore(s, document.head.firstChild);
 })();
 </script>
@@ -258,6 +259,9 @@
   padding: 12px;
   background: #f7f9ff;
   border-left: 4px solid #059669;
+  color: #233;
+  font-style: italic;
+}
 
 [data-theme="dark"] .you-task-card,
 [data-theme="dark"] .you-stats-mini,
@@ -293,9 +297,6 @@
   background: var(--surface) !important;
   color: var(--ink) !important;
   border-color: var(--line) !important;
-}
-  color: #233;
-  font-style: italic;
 }
 
 @media (max-width: 880px) {
@@ -433,62 +434,105 @@
       <div class="stats" id="dashboard-stats"></div>
     </div>
 
-    <div class="section-block">
-      <div class="section-block-head">
-        <span class="sb-eyebrow">01 · Sit a paper</span>
-        <h3>Exam-style practice</h3>
-        <p>Work through full exam questions, write timed answers, or print a paper to attempt by hand.</p>
+    <div class="section-block" style="background:linear-gradient(135deg,#5b21b6 0%,#a855f7 58%,#d8b4fe 100%);border:none;border-radius:12px;padding:20px;margin-bottom:30px;position:relative;overflow:hidden;">
+      <div style="position:absolute;top:-40px;right:-40px;width:120px;height:120px;background:rgba(255,255,255,.05);border-radius:50%;"></div>
+      <div style="position:absolute;bottom:-30px;left:-30px;width:100px;height:100px;background:rgba(255,255,255,.03);border-radius:50%;"></div>
+      <div style="position:relative;z-index:1;max-width:800px;">
+        <h3 style="margin-top:0;color:#ffffff;font-size:1.1rem;margin-bottom:8px;">Why some features cost credits 🤍</h3>
+        <p style="margin:0;font-size:0.95rem;color:rgba(255,255,255,.95);line-height:1.65;">This website is built and funded by a student who knows how hard it is to find reliable, high-quality revision resources. Hosting, content updates, and ongoing support all have real costs. We're keeping subscriptions cheap and straightforward to make revision better and more accessible while keeping the site sustainable.</p>
       </div>
-      <div class="grid-3">
-        <article class="card primary-card">
-          <span class="card-tag">Recommended</span>
-          <h3>Build a mock paper</h3>
-          <p>Randomised 80-, 40- or 30-mark paper with Pearson-style answer lines, candidate header, and one-click print.</p>
-          <button class="btn primary" data-goto="mock">Build mock paper<span class="ra10-cost-label">5 credits</span></button>
-        </article>
-        <article class="card">
-          <h3>Practice by topic</h3>
-          <p>Single questions filtered by aim, command verb, or marks. Self-mark or get auto-marked feedback.</p>
-          <button class="btn" data-goto="practice">Start practising<span class="ra10-cost-label">1 credit per question</span></button>
-        </article>
-        <article class="card">
-          <h3>Browse all questions</h3>
-          <p>Read every question and full mark scheme. Search and filter 500+ sport anatomy and physiology items.</p>
-          <button class="btn" data-goto="browse">Browse questions</button>
-        </article>
+    </div>
+
+    <div class="dashboard-grid">
+      <div class="feature-section">
+        <div class="feature-header">
+          <div class="feature-icon">📝</div>
+          <div>
+            <h3>Practice Papers</h3>
+            <p>Build and solve full exam papers</p>
+          </div>
+        </div>
+        <div class="feature-cards grid-2">
+          <article class="card primary-card">
+            <span class="card-tag">Recommended</span>
+            <h4>Build a mock paper</h4>
+            <p>Randomised 80-, 40- or 30-mark paper with Pearson-style answer lines and one-click print.</p>
+            <button class="btn primary" data-goto="mock">Build mock paper<span class="ra10-cost-label">5 credits</span></button>
+          </article>
+          <article class="card">
+            <h4>Practice by topic</h4>
+            <p>Single questions filtered by aim, command verb, or marks. Self-mark or get auto-marked feedback.</p>
+            <button class="btn" data-goto="practice">Start practising<span class="ra10-cost-label">1 credit per question</span></button>
+          </article>
+        </div>
+      </div>
+
+      <div class="feature-section">
+        <div class="feature-header">
+          <div class="feature-icon">🧠</div>
+          <div>
+            <h3>Quick Revision</h3>
+            <p>Memorise key facts and concepts</p>
+          </div>
+        </div>
+        <div class="feature-cards grid-2">
+          <article class="card">
+            <h4>Flashcards</h4>
+            <p>70+ flippable cards covering anatomy, physiology, adaptations and performance links.</p>
+            <button class="btn" data-goto="flash">Open flashcards</button>
+          </article>
+          <article class="card">
+            <h4>Quick-fire quiz</h4>
+            <p>80+ multiple-choice and true/false questions with explanations and per-section scoring.</p>
+            <button class="btn" data-goto="quiz">Start quiz<span class="ra10-cost-label">1 credit per question</span></button>
+          </article>
+        </div>
+      </div>
+
+      <div class="feature-section">
+        <div class="feature-header">
+          <div class="feature-icon">📖</div>
+          <div>
+            <h3>Comprehensive Guide</h3>
+            <p>Full topic breakdown with examples</p>
+          </div>
+        </div>
+        <div class="feature-cards grid-1">
+          <article class="card">
+            <h4>Complete revision guide</h4>
+            <p>Full topic guide covering all learning aims with detailed explanations, anatomical diagrams, illustrations, and key facts. Preview Aim A free, unlock Aims B-F for 10 credits.</p>
+            <button class="btn" data-goto="guide">Open revision guide<span class="ra10-cost-label">10 credits to unlock</span></button>
+          </article>
+        </div>
+      </div>
+
+      <div class="feature-section">
+        <div class="feature-header">
+          <div class="feature-icon">🔎</div>
+          <div>
+            <h3>Browse Questions</h3>
+            <p>Search all 500+ exam-style questions</p>
+          </div>
+        </div>
+        <div class="feature-cards grid-1">
+          <article class="card">
+            <h4>Full question bank</h4>
+            <p>Read every question and full mark scheme. Search and filter all items by aim, topic, command verb, or marks.</p>
+            <button class="btn" data-goto="browse">Browse questions</button>
+          </article>
+        </div>
       </div>
     </div>
 
     <div class="section-block">
       <div class="section-block-head">
-        <span class="sb-eyebrow">02 · Quick revision</span>
-        <h3>Memorise key facts</h3>
-        <p>Short, focused activities for definitions, acronyms, and recall — ideal between exam-style sessions.</p>
-      </div>
-      <div class="grid-2">
-        <article class="card">
-          <h3>Quick-fire quiz</h3>
-          <p>80+ multiple-choice and true/false questions with explanations and per-section scoring.</p>
-          <button class="btn" data-goto="quiz">Start quiz<span class="ra10-cost-label">1 credit per question</span></button>
-        </article>
-        <article class="card">
-          <h3>Flashcards</h3>
-          <p>70+ flippable cards covering anatomy, physiology, adaptations and performance links.</p>
-          <button class="btn" data-goto="flash">Open flashcards</button>
-        </article>
-      </div>
-    </div>
-
-    <div class="section-block">
-      <div class="section-block-head">
-        <span class="sb-eyebrow">03 · Specification</span>
-        <h3>Coverage by Learning Aim</h3>
-        <p>Every Section and sub-topic in BTEC Sport Unit 1, with question counts. Click any card to browse questions for that section.</p>
-        <p><a href="https://qualifications.pearson.com/" target="_blank" rel="noopener noreferrer">Open Pearson qualifications</a></p>
+        <span class="sb-eyebrow">Learning Aims Coverage</span>
+        <h3>See question distribution</h3>
+        <p>All aims covered with question counts. Click any card to focus practice on that aim.</p>
       </div>
       <div class="aim-grid" id="aim-grid"></div>
       <div style="text-align:center;margin-top:18px;">
-        <button class="btn" data-goto="spec">View full spec breakdown</button>
+        <button class="btn" data-goto="spec">View specification breakdown</button>
       </div>
     </div>
   </section>
@@ -496,48 +540,121 @@
   <section id="view-questions" class="view">
     <header class="section-head">
       <h2>Questions</h2>
-      <p>Choose how you want to practise exam questions.</p>
+      <p style="font-size:1.15rem;color:var(--accent);font-weight:700;">How do you want to practise? <span style="font-size:1.5em;">📝</span></p>
     </header>
-    <div class="grid-3">
-      <article class="card">
-        <h3>Mock paper</h3>
-        <p>Build a full exam-style paper with answer lines and print options.</p>
-        <button class="btn primary" data-goto="mock">Open mock paper</button>
-      </article>
-      <article class="card">
-        <h3>Practice mode</h3>
-        <p>Answer one question at a time with auto-mark and mark scheme support.</p>
-        <button class="btn" data-goto="practice">Open practice mode</button>
-      </article>
-      <article class="card">
-        <h3>Browse questions</h3>
-        <p>Search and filter all questions and open the full mark schemes.</p>
-        <button class="btn" data-goto="browse">Open question browser</button>
-      </article>
+    <div class="dashboard-grid">
+      <div class="feature-section">
+        <div class="feature-header">
+          <div class="feature-icon">📝</div>
+          <div>
+            <h3>Mock Paper</h3>
+            <p>Build a randomised exam paper with answer lines and print options.</p>
+          </div>
+        </div>
+        <div class="feature-cards grid-1">
+          <article class="card primary-card">
+            <span class="card-tag">Recommended</span>
+            <h4>Build a mock paper</h4>
+            <p>Simulate a real exam with a full-length paper.</p>
+            <button class="btn primary" data-goto="mock">Open</button>
+            <p class="card-cost-note">Uses 5 credits per mock paper.</p>
+          </article>
+        </div>
+      </div>
+      <div class="feature-section">
+        <div class="feature-header">
+          <div class="feature-icon">🎯</div>
+          <div>
+            <h3>Practice Mode</h3>
+            <p>Answer one question at a time with instant feedback.</p>
+          </div>
+        </div>
+        <div class="feature-cards grid-1">
+          <article class="card">
+            <h4>Practice by topic</h4>
+            <p>Target your weakest areas or focus on specific aims.</p>
+            <button class="btn" data-goto="practice">Open</button>
+            <p class="card-cost-note">Uses 1 credit per question.</p>
+          </article>
+        </div>
+      </div>
+      <div class="feature-section">
+        <div class="feature-header">
+          <div class="feature-icon">🔎</div>
+          <div>
+            <h3>Browse Questions</h3>
+            <p>Search and filter all questions and mark schemes.</p>
+          </div>
+        </div>
+        <div class="feature-cards grid-1">
+          <article class="card">
+            <h4>Full question browser</h4>
+            <p>See every question and mark scheme in the bank.</p>
+            <button class="btn" data-goto="browse">Open</button>
+          </article>
+        </div>
+      </div>
     </div>
   </section>
 
   <section id="view-revise" class="view">
     <header class="section-head">
       <h2>Revise</h2>
-      <p>Quick revision tools for recall and topic understanding.</p>
+      <p style="font-size:1.15rem;color:var(--accent);font-weight:700;">Choose a fun way to revise! <span style="font-size:1.5em;">💡</span></p>
     </header>
-    <div class="grid-3">
-      <article class="card">
-        <h3>Flashcards</h3>
-        <p>Rapid term and concept recall with tracked known/still-learning cards.</p>
-        <button class="btn" data-goto="flash">Open flashcards</button>
-      </article>
-      <article class="card">
-        <h3>Quiz</h3>
-        <p>Multiple-choice and true/false checks with instant explanations.</p>
-        <button class="btn" data-goto="quiz">Open quiz</button>
-      </article>
-      <article class="card">
-        <h3>Revision guide</h3>
-        <p>Topic-by-topic guide from the unit specification with quick jump links.</p>
-        <button class="btn" data-goto="guide">Open revision guide</button>
-      </article>
+    <div class="dashboard-grid">
+      <div class="feature-section">
+        <div class="feature-header">
+          <div class="feature-icon">🃏</div>
+          <div>
+            <h3>Flashcards</h3>
+            <p>Flip through 70+ cards for rapid recall and spaced repetition.</p>
+          </div>
+        </div>
+        <div class="feature-cards grid-1">
+          <article class="card">
+            <h4>Open flashcards</h4>
+            <p>Definitions, acronyms, and key facts—track your progress!</p>
+            <button class="btn" data-goto="flash">Open</button>
+          </article>
+        </div>
+      </div>
+      <div class="feature-section">
+        <div class="feature-header">
+          <div class="feature-icon">❓</div>
+          <div>
+            <h3>Quiz</h3>
+            <p>Multiple-choice and true/false questions with instant feedback.</p>
+          </div>
+        </div>
+        <div class="feature-cards grid-1">
+          <article class="card">
+            <h4>Start quiz</h4>
+            <p>Test your knowledge and get explanations for every answer.</p>
+            <button class="btn" data-goto="quiz">Open</button>
+          </article>
+        </div>
+      </div>
+      <div class="feature-section">
+        <div class="feature-header">
+          <div class="feature-icon">📖</div>
+          <div>
+            <h3>Revision Guide</h3>
+            <p>Full topic-by-topic breakdown with worked examples and diagrams.</p>
+          </div>
+        </div>
+        <div class="feature-cards grid-1">
+          <article class="card">
+            <h4>Open revision guide</h4>
+            <p>Preview Aim A free, unlock Aims B-F for 10 credits.</p>
+            <div class="card-action-row">
+              <button class="btn" data-goto="guide">Open</button>
+              <button class="btn btn-spec-mini" data-goto="spec">View spec <span style="font-size:1.1em;">📄</span></button>
+            </div>
+            <p class="card-cost-note">Unlock Aims B-F for a one-time 10 credits.</p>
+          </article>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -1059,6 +1176,7 @@ const RA10_SUBJECT_BONUS = 300;
 const RA10_ACTION_COSTS = {
   practice_question: 1,
   quiz_question: 1,
+  revision_guide_full: 10,
   flashcard_flip: 0,
   mock_paper_gen: 5,
   ai_mark: 3,
@@ -1089,22 +1207,83 @@ function _ra10WriteSubjectState(profile, state) {
 }
 
 function _ra10SyncSubjectState(profile, totalCredits, ownedSubjects) {
-  const ownedKey = ownedSubjects.slice().sort().join('|');
-  const expectedBaseline = Math.max(0, totalCredits - (ownedSubjects.length * RA10_SUBJECT_BONUS));
+  const cleanOwned = Array.isArray(ownedSubjects) ? ownedSubjects.filter(Boolean) : [];
+  const ownedKey = cleanOwned.slice().sort().join('|');
   const saved = _ra10ReadSubjectState(profile);
-  let baselineRemaining = expectedBaseline;
+  const prevOwned = (saved && typeof saved.ownedKey === 'string')
+    ? saved.ownedKey.split('|').filter(Boolean)
+    : [];
+  const prevOwnedSet = new Set(prevOwned);
+  const addedSubjects = cleanOwned.filter(subj => !prevOwnedSet.has(subj));
+  const addedSet = new Set(addedSubjects);
 
-  if (saved && saved.ownedKey === ownedKey && Number.isFinite(saved.baselineRemaining)) {
-    baselineRemaining = saved.baselineRemaining;
+  // Track per-subject spending so one subject purchase does not unlock all subjects.
+  const savedSpent = (saved && saved.subjectSpent && typeof saved.subjectSpent === 'object')
+    ? saved.subjectSpent
+    : {};
+  const hasSavedSpent = Object.keys(savedSpent).length > 0;
+  const subjectSpent = {};
+  const prevSubjectRemainingBySubject = {};
+  if (!hasSavedSpent && saved && Number.isFinite(saved.baselineRemaining) && Number.isFinite(saved.storedCreditsAtSync)) {
+    let budget = Math.max(0, Math.min(
+      Number(saved.storedCreditsAtSync) - Number(saved.baselineRemaining),
+      prevOwned.length * RA10_SUBJECT_BONUS,
+    ));
+    prevOwned.forEach((subj) => {
+      const alloc = Math.max(0, Math.min(RA10_SUBJECT_BONUS, budget));
+      prevSubjectRemainingBySubject[subj] = alloc;
+      budget -= alloc;
+    });
+  }
+  cleanOwned.forEach((subj) => {
+    let spent = 0;
+    if (hasSavedSpent) {
+      const raw = Number(savedSpent[subj] || 0);
+      spent = Math.max(0, Math.min(RA10_SUBJECT_BONUS, Math.floor(Number.isFinite(raw) ? raw : 0)));
+    } else if (Object.prototype.hasOwnProperty.call(prevSubjectRemainingBySubject, subj)) {
+      const prevRemaining = Number(prevSubjectRemainingBySubject[subj] || 0);
+      spent = Math.max(0, RA10_SUBJECT_BONUS - Math.max(0, Math.min(RA10_SUBJECT_BONUS, prevRemaining)));
+    }
+    subjectSpent[subj] = spent;
+  });
+
+  if (addedSubjects.length && window.RA10 && typeof RA10._appendCreditActivity === 'function') {
+    addedSubjects.forEach((subj) => {
+      RA10._appendCreditActivity({
+        type: 'gain',
+        source: 'subject_purchase',
+        amount: RA10_SUBJECT_BONUS,
+        note: 'Subject purchased: ' + subj,
+      });
+    });
   }
 
-  const maxFromPools = baselineRemaining + (ownedSubjects.length * RA10_SUBJECT_BONUS);
-  if (totalCredits > maxFromPools) {
-    baselineRemaining += totalCredits - maxFromPools;
+  let totalSubjectRemaining = cleanOwned.reduce((sum, subj) => {
+    const spent = Number(subjectSpent[subj] || 0);
+    return sum + Math.max(0, RA10_SUBJECT_BONUS - spent);
+  }, 0);
+
+  if (totalSubjectRemaining > totalCredits) {
+    let overflow = totalSubjectRemaining - totalCredits;
+    const trimOrder = cleanOwned
+      .filter(subj => !addedSet.has(subj))
+      .concat(cleanOwned.filter(subj => addedSet.has(subj)));
+    trimOrder.forEach((subj) => {
+      if (overflow <= 0) return;
+      const spent = Number(subjectSpent[subj] || 0);
+      const remaining = Math.max(0, RA10_SUBJECT_BONUS - spent);
+      const trim = Math.min(remaining, overflow);
+      subjectSpent[subj] = Math.min(RA10_SUBJECT_BONUS, spent + trim);
+      overflow -= trim;
+    });
+    totalSubjectRemaining = cleanOwned.reduce((sum, subj) => {
+      const spent = Number(subjectSpent[subj] || 0);
+      return sum + Math.max(0, RA10_SUBJECT_BONUS - spent);
+    }, 0);
   }
 
-  baselineRemaining = Math.max(0, Math.min(totalCredits, baselineRemaining));
-  const next = { ownedKey, baselineRemaining };
+  const baselineRemaining = Math.max(0, Math.min(totalCredits, Math.floor(totalCredits - totalSubjectRemaining)));
+  const next = { ownedKey, baselineRemaining, storedCreditsAtSync: totalCredits, subjectSpent };
   _ra10WriteSubjectState(profile, next);
   return next;
 }
@@ -1119,13 +1298,18 @@ function _ra10GetUnitCreditsContext() {
   }
 
   const tier = RA10.getTier();
-  const totalCredits = Number(RA10.getCredits()) || 0;
+  const breakdown = (typeof RA10.getCreditBreakdown === 'function') ? RA10.getCreditBreakdown() : null;
+  const totalCredits = breakdown ? Number(breakdown.totalCredits || 0) : (Number(RA10.getCredits()) || 0);
+  const storedCredits = breakdown ? Number(breakdown.storedCredits || 0) : totalCredits;
+  const examBonusRemaining = breakdown ? Number(breakdown.examBonusRemaining || 0) : 0;
   if (tier !== 'subject') {
     return {
       isSubjectTier: false,
       ownsCurrentSubject: true,
       usableCredits: totalCredits,
       totalCredits,
+      storedCredits,
+      examBonusRemaining,
       ownedSubjects: [],
       baselineRemaining: totalCredits,
     };
@@ -1134,17 +1318,26 @@ function _ra10GetUnitCreditsContext() {
   const ownedSubjects = Array.isArray(profile.unlocked_subjects)
     ? profile.unlocked_subjects.filter(Boolean)
     : [];
-  const state = _ra10SyncSubjectState(profile, totalCredits, ownedSubjects);
+  const state = _ra10SyncSubjectState(profile, storedCredits, ownedSubjects);
   const ownsCurrentSubject = ownedSubjects.includes(RA10_UNIT_SUBJECT);
-  const usableCredits = ownsCurrentSubject ? totalCredits : state.baselineRemaining;
+  const subjectSpent = (state && state.subjectSpent && typeof state.subjectSpent === 'object')
+    ? Number(state.subjectSpent[RA10_UNIT_SUBJECT] || 0)
+    : 0;
+  const subjectCreditsRemaining = ownsCurrentSubject
+    ? Math.max(0, RA10_SUBJECT_BONUS - Math.max(0, Math.min(RA10_SUBJECT_BONUS, subjectSpent)))
+    : 0;
+  const usableCredits = (ownsCurrentSubject ? subjectCreditsRemaining : 0) + state.baselineRemaining + examBonusRemaining;
 
   return {
     isSubjectTier: true,
     ownsCurrentSubject,
     usableCredits,
     totalCredits,
+    storedCredits,
+    examBonusRemaining,
     ownedSubjects,
     baselineRemaining: state.baselineRemaining,
+    subjectCreditsRemaining,
   };
 }
 
@@ -1228,18 +1421,38 @@ async function ra10Gate(action) {
     }
 
     const ctx = _ra10GetUnitCreditsContext();
-    if (ctx && ctx.isSubjectTier && !ctx.ownsCurrentSubject) {
+    if (ctx && ctx.isSubjectTier) {
       const cost = _ra10GetActionCost(action);
       if (ctx.usableCredits < cost) {
         RA10.showPaywall('credits', action);
         return false;
       }
+      const beforeStored = Number(ctx.storedCredits || 0);
       const spent = await RA10.gate(action, RA10.showPaywall);
       if (spent) {
         const profile = RA10.getProfile();
         const state = _ra10ReadSubjectState(profile);
         if (state && Number.isFinite(state.baselineRemaining)) {
-          state.baselineRemaining = Math.max(0, state.baselineRemaining - cost);
+          let deductedFromStored = cost;
+          let afterStored = NaN;
+          if (typeof RA10.getCreditBreakdown === 'function') {
+            afterStored = Number((RA10.getCreditBreakdown() || {}).storedCredits || 0);
+            deductedFromStored = Math.max(0, beforeStored - afterStored);
+          }
+          if (ctx.ownsCurrentSubject) {
+            state.subjectSpent = (state.subjectSpent && typeof state.subjectSpent === 'object') ? state.subjectSpent : {};
+            const currentSpent = Math.max(0, Math.min(RA10_SUBJECT_BONUS, Number(state.subjectSpent[RA10_UNIT_SUBJECT] || 0)));
+            const subjectRemaining = Math.max(0, RA10_SUBJECT_BONUS - currentSpent);
+            const fromSubject = Math.min(subjectRemaining, deductedFromStored);
+            const fromBaseline = Math.max(0, deductedFromStored - fromSubject);
+            state.subjectSpent[RA10_UNIT_SUBJECT] = Math.min(RA10_SUBJECT_BONUS, currentSpent + fromSubject);
+            state.baselineRemaining = Math.max(0, state.baselineRemaining - fromBaseline);
+          } else {
+            state.baselineRemaining = Math.max(0, state.baselineRemaining - deductedFromStored);
+          }
+          if (Number.isFinite(afterStored)) {
+            state.storedCreditsAtSync = afterStored;
+          }
           _ra10WriteSubjectState(profile, state);
         }
         _ra10RenderUnitCreditChip();

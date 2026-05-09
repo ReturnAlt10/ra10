@@ -633,6 +633,7 @@ function switchTab(name) {
 }
 
 const GUIDE_STATE = { entries: null, bound: false };
+const GUIDE_FULL_UNLOCK_SESSION_KEY = 'ra10_guide_full_unlock_sport_u1';
 
 function normalizeGuideText(value) {
   return String(value || '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
@@ -686,6 +687,13 @@ function openRevisionGuideForQuestion(q) {
   const entry = findGuideEntryForQuestion(q);
   switchTab('guide');
   const aimLetter = entry?.aim || (q?.learning_aim || '');
+  if (aimLetter && aimLetter !== 'A' && !canViewFullRevisionGuide()) {
+    setTimeout(() => {
+      const gateCard = document.getElementById('guide-access-gate-card');
+      if (gateCard) gateCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 200);
+    return;
+  }
   if (aimLetter) {
     setTimeout(() => {
       const section = document.getElementById('guide-aim-' + aimLetter);
@@ -698,8 +706,227 @@ function openRevisionGuideForQuestion(q) {
   }
 }
 
+function hasGuideSessionUnlock() {
+  try {
+    return sessionStorage.getItem(GUIDE_FULL_UNLOCK_SESSION_KEY) === '1';
+  } catch (e) {
+    return false;
+  }
+}
+
+function setGuideSessionUnlock(enabled) {
+  try {
+    if (enabled) sessionStorage.setItem(GUIDE_FULL_UNLOCK_SESSION_KEY, '1');
+    else sessionStorage.removeItem(GUIDE_FULL_UNLOCK_SESSION_KEY);
+  } catch (e) {}
+}
+
+function hasPlanGuideAccess() {
+  if (!window.RA10 || !RA10.isLoggedIn()) return false;
+  if (RA10.isOwner()) return true;
+  const tier = RA10.getTier ? RA10.getTier() : 'free';
+  if (tier === 'subject') {
+    const ctx = (typeof window._ra10GetUnitCreditsContext === 'function') ? window._ra10GetUnitCreditsContext() : null;
+    return !!(ctx && ctx.ownsCurrentSubject);
+  }
+  return tier !== 'free';
+}
+
+function canViewFullRevisionGuide() {
+  return hasGuideSessionUnlock() || hasPlanGuideAccess();
+}
+
+function goToUpgradeFromGuideGate() {
+  try {
+    if (window.top && window.top !== window) {
+      window.top.location.hash = '/upgrade';
+      return;
+    }
+  } catch (e) {}
+  location.hash = '/upgrade';
+}
+
+function renderGuideAccessGate(container, aimASection) {
+  if (!container || !aimASection) return;
+
+  const existing = document.getElementById('guide-access-gate-card');
+  if (existing) existing.remove();
+
+  const card = document.createElement('div');
+  card.id = 'guide-access-gate-card';
+  card.className = 'card';
+  card.style.marginTop = 'var(--space-4, 16px)';
+  card.style.border = '1px solid var(--line)';
+  card.style.background = 'linear-gradient(135deg, rgba(29,78,216,.10), rgba(16,185,129,.10))';
+  card.innerHTML = `
+    <h4 style="margin-top:0">Aims B-F are locked</h4>
+    <p style="margin-bottom:10px">You can preview Aim A for free. The other aims below have padlocks and need an unlock.</p>
+    <ul style="margin-top:0;margin-bottom:12px;">
+      <li>Click <strong>Unlock once (10 credits)</strong> to open all aims in this session only</li>
+      <li><strong>Session unlocks are lost when you refresh the page</strong> — upgrade for permanent access</li>
+      <li>Sport one-time subject plan gives full guide access for Sport</li>
+      <li>Pro / Ultra (and school plans) include full guide access</li>
+    </ul>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <button class="btn primary" id="guide-unlock-once-btn">Unlock once (10 credits)</button>
+      <button class="btn" id="guide-upgrade-btn">View plans</button>
+    </div>
+  `;
+
+  aimASection.insertAdjacentElement('afterend', card);
+
+  const unlockBtn = card.querySelector('#guide-unlock-once-btn');
+  const upgradeBtn = card.querySelector('#guide-upgrade-btn');
+
+  if (!window.RA10 || !RA10.isLoggedIn()) {
+    unlockBtn.textContent = 'Sign in to unlock';
+    unlockBtn.addEventListener('click', () => {
+      if (window.RA10 && typeof RA10.showPaywall === 'function') RA10.showPaywall('login', 'revision_guide_full');
+    });
+  } else {
+    unlockBtn.addEventListener('click', async () => {
+      unlockBtn.disabled = true;
+      const ok = await ra10Gate('revision_guide_full');
+      if (ok) {
+        setGuideSessionUnlock(true);
+        renderRevisionGuide();
+        return;
+      }
+      unlockBtn.disabled = false;
+    });
+  }
+
+  upgradeBtn.addEventListener('click', goToUpgradeFromGuideGate);
+}
+
+function setGuideSectionLocked(section, locked) {
+  if (!section) return;
+  const existingBadge = section.querySelector('.guide-lock-badge');
+  const existingOverlay = section.querySelector('.guide-lock-overlay');
+  if (locked) {
+    section.style.display = '';
+    section.style.position = 'relative';
+    section.style.pointerEvents = 'none';
+    section.style.userSelect = 'none';
+    section.style.WebkitUserSelect = 'none';
+    section.style.filter = 'blur(18px) brightness(0.35)';
+    
+    if (!existingBadge) {
+      const badge = document.createElement('div');
+      badge.className = 'guide-lock-badge';
+      badge.textContent = 'LOCKED';
+      badge.style.position = 'absolute';
+      badge.style.top = '50%';
+      badge.style.left = '50%';
+      badge.style.transform = 'translate(-50%, -50%)';
+      badge.style.padding = '10px 16px';
+      badge.style.borderRadius = '8px';
+      badge.style.fontSize = '0.85rem';
+      badge.style.fontWeight = '700';
+      badge.style.letterSpacing = '0.08em';
+      badge.style.background = '#1f2937';
+      badge.style.color = '#ffffff';
+      badge.style.zIndex = '10';
+      badge.style.pointerEvents = 'all';
+      badge.style.filter = 'blur(0px)';
+      section.appendChild(badge);
+    }
+  } else {
+    section.style.position = '';
+    section.style.pointerEvents = '';
+    section.style.userSelect = '';
+    section.style.WebkitUserSelect = '';
+    section.style.filter = '';
+    if (existingBadge) existingBadge.remove();
+    if (existingOverlay) existingOverlay.remove();
+  }
+}
+
+function updateGuidePrintButtons() {
+  const fullAccess = canViewFullRevisionGuide();
+  const printBtns = $$('[id^="btn-print"]');
+  printBtns.forEach(btn => {
+    if (btn.textContent.toLowerCase().includes('guide') || btn.textContent.toLowerCase().includes('revision')) {
+      btn.style.display = fullAccess ? '' : 'none';
+      btn.disabled = !fullAccess;
+    }
+  });
+}
+
+function setGuideTocLocked(group, locked) {
+  if (!group) return;
+  const link = group.querySelector('.guide-toc-aim-link');
+  if (!link) return;
+
+  let lockMarker = group.querySelector('.guide-toc-lock-marker');
+  if (locked) {
+    group.style.display = '';
+    link.style.pointerEvents = 'none';
+    link.style.opacity = '0.7';
+    link.style.cursor = 'not-allowed';
+    if (!lockMarker) {
+      lockMarker = document.createElement('span');
+      lockMarker.className = 'guide-toc-lock-marker';
+      lockMarker.textContent = ' \ud83d\udd12';
+      lockMarker.style.marginLeft = '6px';
+      lockMarker.style.fontSize = '0.95em';
+      link.appendChild(lockMarker);
+    }
+  } else {
+    link.style.pointerEvents = '';
+    link.style.opacity = '';
+    link.style.cursor = '';
+    if (lockMarker) lockMarker.remove();
+  }
+}
+
+function applyGuideAccessRules() {
+  const container = document.getElementById('guide-comprehensive');
+  if (!container) return;
+
+  const sections = Array.from(container.querySelectorAll('.guide-aim-section[id]'));
+  if (!sections.length) return;
+
+  const fullAccess = canViewFullRevisionGuide();
+  sections.forEach((section) => {
+    const isAimA = section.id === 'guide-aim-A';
+    setGuideSectionLocked(section, !fullAccess && !isAimA);
+  });
+
+  container.querySelectorAll('.guide-toc-aim-group').forEach((group) => {
+    const link = group.querySelector('.guide-toc-aim-link');
+    const isAimA = !!(link && (link.getAttribute('onclick') || '').includes('guide-aim-A'));
+    setGuideTocLocked(group, !fullAccess && !isAimA);
+  });
+  
+  updateGuidePrintButtons();
+
+  const gateCard = document.getElementById('guide-access-gate-card');
+  if (fullAccess) {
+    if (gateCard) gateCard.remove();
+  } else {
+    const aimA = document.getElementById('guide-aim-A');
+    renderGuideAccessGate(container, aimA);
+  }
+}
+
 function renderRevisionGuide() {
-  if (window.initComprehensiveGuide) { window.initComprehensiveGuide(); return; }
+  if (window.initComprehensiveGuide) {
+    window.initComprehensiveGuide();
+    applyGuideAccessRules();
+    return;
+  }
+}
+
+function setupGuideAuthListener() {
+  if (!window.RA10 || typeof RA10.on !== 'function') return;
+  RA10.on('authchange', () => {
+    if (!RA10.isLoggedIn()) {
+      setGuideSessionUnlock(false);
+      const container = document.getElementById('guide-comprehensive');
+      if (container) applyGuideAccessRules();
+    }
+  });
 }
 
 // ---------- Boot when data loaded ----------
@@ -720,6 +947,7 @@ onDataReady(() => {
   renderRevisionGuide();
   renderSpec();
   ensureDailyLoginBonus();
+  setupGuideAuthListener();
 });
 
 // ---------- Dashboard ----------
