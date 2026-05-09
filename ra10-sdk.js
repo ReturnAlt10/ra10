@@ -24,7 +24,7 @@
       description: 'One subject unlocked, 300 one-time credits',
     },
     all_subjects: {
-      label: 'Pro — All Subjects',
+      label: 'Pro',
       price: '£20/year',
       credits: 1000,
       resets: 'monthly',
@@ -110,41 +110,6 @@
   let _profile = null;
   let _scriptLoader = null;
   let _authSubscription = null;
-
-  const PAYMENTS_PAUSED_MESSAGE = 'Payments are not ready yet and will be available soon (by Monday hopefully).';
-
-  function showPaymentsPausedPopup() {
-    try {
-      window.alert(PAYMENTS_PAUSED_MESSAGE);
-    } catch (e) {
-      console.warn(PAYMENTS_PAUSED_MESSAGE);
-    }
-  }
-
-  function _isUpgradeHref(href) {
-    if (!href || typeof href !== 'string') return false;
-    const text = href.toLowerCase();
-    return text.includes('/#/upgrade') || text.includes('upgrade');
-  }
-
-  function _installPaymentClickBlocker() {
-    if (window.__ra10PaymentsBlockedHandlerInstalled) return;
-    window.__ra10PaymentsBlockedHandlerInstalled = true;
-    document.addEventListener('click', function (event) {
-      const target = event.target;
-      if (!target || typeof target.closest !== 'function') return;
-      const link = target.closest('a[href]');
-      if (!link) return;
-      const href = link.getAttribute('href') || '';
-      if (_isUpgradeHref(href)) {
-        event.preventDefault();
-        event.stopPropagation();
-        showPaymentsPausedPopup();
-      }
-    }, true);
-  }
-
-  _installPaymentClickBlocker();
 
   function _emit(eventName, payload) {
     const listeners = EVENTS[eventName] || [];
@@ -504,33 +469,10 @@
       return profile;
     }
     if (!memberResult.data) {
-      const tierNow = String(profile.tier || '').toLowerCase();
-      const hadSchoolSeat = tierNow === 'school_student' || tierNow === 'school_teacher';
-      if (!hadSchoolSeat) {
-        return profile;
-      }
-
-      // Member seat has been removed: automatically revert to free account.
-      const revertResult = await client
-        .from('profiles')
-        .update({
-          tier: 'free',
-          credits: Number(TIER_INFO.free.credits || 10),
-          credits_reset_at: new Date().toISOString(),
-          school_id: null,
-          school_name: null,
-          unlocked_subjects: [],
-        })
-        .eq('id', profile.id)
-        .select('*')
-        .single();
-
-      if (revertResult.error) {
-        console.warn('RA10 school entitlement revert error', revertResult.error);
-        return profile;
-      }
-
-      return revertResult.data || profile;
+      // Do not auto-revert on missing member row.
+      // School-member visibility/lookups can be delayed or restricted;
+      // preserving current profile avoids incorrect free-tier downgrades.
+      return profile;
     }
 
     const member = memberResult.data;
@@ -1104,8 +1046,77 @@
   }
 
   async function startCheckout(input) {
-    showPaymentsPausedPopup();
-    throw new Error('Payments are temporarily unavailable. Please try again soon.');
+    if (!isLoggedIn()) {
+      throw new Error('You need to sign in before checkout.');
+    }
+
+    const session = getSession();
+    const token = session && session.access_token ? session.access_token : '';
+    if (!token) {
+      throw new Error('Missing auth session token. Please sign in again.');
+    }
+
+    const payload = {
+      plan: String((input && input.plan) || '').toUpperCase(),
+      subject: String((input && input.subject) || '').toUpperCase(),
+      returnUrl: window.location && window.location.origin ? window.location.origin : '',
+    };
+
+    const response = await fetch(SUPABASE_URL + '/functions/v1/create-checkout', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token,
+      },
+      body: JSON.stringify(payload),
+    });
+
+    const result = await response.json().catch(function () { return {}; });
+    if (!response.ok) {
+      throw new Error(result && result.error ? String(result.error) : 'Failed to create checkout session.');
+    }
+
+    if (!result || !result.url) {
+      throw new Error('Checkout URL was not returned.');
+    }
+
+    return result;
+  }
+
+  async function startBillingPortal(input) {
+    if (!isLoggedIn()) {
+      throw new Error('You need to sign in before managing billing.');
+    }
+
+    const session = getSession();
+    const token = session && session.access_token ? session.access_token : '';
+    if (!token) {
+      throw new Error('Missing auth session token. Please sign in again.');
+    }
+
+    const payload = {
+      returnUrl: String((input && input.returnUrl) || (window.location && window.location.origin ? window.location.origin : '')),
+    };
+
+    const response = await fetch(SUPABASE_URL + '/functions/v1/create-billing-portal', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token,
+      },
+      body: JSON.stringify(payload),
+    });
+
+    const result = await response.json().catch(function () { return {}; });
+    if (!response.ok) {
+      throw new Error(result && result.error ? String(result.error) : 'Failed to open billing portal.');
+    }
+
+    if (!result || !result.url) {
+      throw new Error('Billing portal URL was not returned.');
+    }
+
+    return result;
   }
 
   function on(event, callback) {
@@ -1154,6 +1165,7 @@
     showPaywall,
     renderCreditChip,
     startCheckout,
+    startBillingPortal,
     refreshProfile: _refreshProfile,
     _appendCreditActivity,
     on,

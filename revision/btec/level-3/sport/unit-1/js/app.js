@@ -633,7 +633,9 @@ function switchTab(name) {
 }
 
 const GUIDE_STATE = { entries: null, bound: false };
-const GUIDE_FULL_UNLOCK_SESSION_KEY = 'ra10_guide_full_unlock_sport_u1';
+const GUIDE_FULL_UNLOCK_EXPIRY_KEY = 'ra10_guide_full_unlock_sport_u1_expires_at';
+const GUIDE_FULL_UNLOCK_DURATION_MS = 2 * 60 * 60 * 1000;
+let guideUnlockCountdownTimer = null;
 
 function normalizeGuideText(value) {
   return String(value || '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
@@ -708,7 +710,14 @@ function openRevisionGuideForQuestion(q) {
 
 function hasGuideSessionUnlock() {
   try {
-    return sessionStorage.getItem(GUIDE_FULL_UNLOCK_SESSION_KEY) === '1';
+    const raw = localStorage.getItem(GUIDE_FULL_UNLOCK_EXPIRY_KEY);
+    const expiry = Number(raw || 0);
+    if (!Number.isFinite(expiry) || expiry <= 0) return false;
+    if (Date.now() >= expiry) {
+      localStorage.removeItem(GUIDE_FULL_UNLOCK_EXPIRY_KEY);
+      return false;
+    }
+    return true;
   } catch (e) {
     return false;
   }
@@ -716,9 +725,57 @@ function hasGuideSessionUnlock() {
 
 function setGuideSessionUnlock(enabled) {
   try {
-    if (enabled) sessionStorage.setItem(GUIDE_FULL_UNLOCK_SESSION_KEY, '1');
-    else sessionStorage.removeItem(GUIDE_FULL_UNLOCK_SESSION_KEY);
+    if (enabled) {
+      localStorage.setItem(GUIDE_FULL_UNLOCK_EXPIRY_KEY, String(Date.now() + GUIDE_FULL_UNLOCK_DURATION_MS));
+    } else {
+      localStorage.removeItem(GUIDE_FULL_UNLOCK_EXPIRY_KEY);
+    }
   } catch (e) {}
+}
+
+function getGuideUnlockRemainingMs() {
+  try {
+    const expiry = Number(localStorage.getItem(GUIDE_FULL_UNLOCK_EXPIRY_KEY) || 0);
+    if (!Number.isFinite(expiry) || expiry <= 0) return 0;
+    return Math.max(0, expiry - Date.now());
+  } catch (e) {
+    return 0;
+  }
+}
+
+function formatGuideUnlockRemaining(ms) {
+  const totalSeconds = Math.max(0, Math.ceil(ms / 1000));
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+  return String(hours).padStart(2, '0') + ':' + String(minutes).padStart(2, '0') + ':' + String(seconds).padStart(2, '0');
+}
+
+function clearGuideUnlockCountdownTimer() {
+  if (guideUnlockCountdownTimer) {
+    clearInterval(guideUnlockCountdownTimer);
+    guideUnlockCountdownTimer = null;
+  }
+}
+
+function startGuideUnlockCountdown(card) {
+  clearGuideUnlockCountdownTimer();
+  const target = card ? card.querySelector('#guide-unlock-remaining') : null;
+  if (!target) return;
+
+  const tick = () => {
+    const remaining = getGuideUnlockRemainingMs();
+    if (remaining <= 0) {
+      clearGuideUnlockCountdownTimer();
+      setGuideSessionUnlock(false);
+      renderRevisionGuide();
+      return;
+    }
+    target.textContent = formatGuideUnlockRemaining(remaining);
+  };
+
+  tick();
+  guideUnlockCountdownTimer = setInterval(tick, 1000);
 }
 
 function hasPlanGuideAccess() {
@@ -752,38 +809,55 @@ function renderGuideAccessGate(container, aimASection) {
   const existing = document.getElementById('guide-access-gate-card');
   if (existing) existing.remove();
 
+  const timedUnlockActive = hasGuideSessionUnlock() && !hasPlanGuideAccess();
+
   const card = document.createElement('div');
   card.id = 'guide-access-gate-card';
   card.className = 'card';
   card.style.marginTop = 'var(--space-4, 16px)';
   card.style.border = '1px solid var(--line)';
   card.style.background = 'linear-gradient(135deg, rgba(29,78,216,.10), rgba(16,185,129,.10))';
-  card.innerHTML = `
-    <h4 style="margin-top:0">Aims B-F are locked</h4>
-    <p style="margin-bottom:10px">You can preview Aim A for free. The other aims below have padlocks and need an unlock.</p>
-    <ul style="margin-top:0;margin-bottom:12px;">
-      <li>Click <strong>Unlock once (10 credits)</strong> to open all aims in this session only</li>
-      <li><strong>Session unlocks are lost when you refresh the page</strong> — upgrade for permanent access</li>
-      <li>Sport one-time subject plan gives full guide access for Sport</li>
-      <li>Pro / Ultra (and school plans) include full guide access</li>
-    </ul>
-    <div style="display:flex;gap:8px;flex-wrap:wrap;">
-      <button class="btn primary" id="guide-unlock-once-btn">Unlock once (10 credits)</button>
-      <button class="btn" id="guide-upgrade-btn">View plans</button>
-    </div>
-  `;
+  card.innerHTML = timedUnlockActive
+    ? `
+      <h4 style="margin-top:0">Full guide unlocked</h4>
+      <p style="margin-bottom:8px">Your 10-credit unlock is active for all aims.</p>
+      <p style="margin-top:0;margin-bottom:12px;"><strong>Unlock ends in <span id="guide-unlock-remaining">--:--:--</span></strong></p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="btn" id="guide-upgrade-btn">View plans</button>
+      </div>
+    `
+    : `
+      <h4 style="margin-top:0">Aims B-F are locked</h4>
+      <p style="margin-bottom:10px">You can preview Aim A for free. The other aims below have padlocks and need an unlock.</p>
+      <ul style="margin-top:0;margin-bottom:12px;">
+        <li>Click <strong>Unlock for 2 hours (10 credits)</strong> to open all aims temporarily</li>
+        <li>You can refresh and keep access until the timer ends</li>
+        <li>Sport one-time subject plan gives full guide access for Sport</li>
+        <li>Pro / Ultra (and school plans) include full guide access</li>
+      </ul>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="btn primary" id="guide-unlock-once-btn">Unlock for 2 hours (10 credits)</button>
+        <button class="btn" id="guide-upgrade-btn">View plans</button>
+      </div>
+    `;
 
   aimASection.insertAdjacentElement('afterend', card);
 
   const unlockBtn = card.querySelector('#guide-unlock-once-btn');
   const upgradeBtn = card.querySelector('#guide-upgrade-btn');
 
-  if (!window.RA10 || !RA10.isLoggedIn()) {
+  if (timedUnlockActive) {
+    startGuideUnlockCountdown(card);
+  } else {
+    clearGuideUnlockCountdownTimer();
+  }
+
+  if (unlockBtn && (!window.RA10 || !RA10.isLoggedIn())) {
     unlockBtn.textContent = 'Sign in to unlock';
     unlockBtn.addEventListener('click', () => {
       if (window.RA10 && typeof RA10.showPaywall === 'function') RA10.showPaywall('login', 'revision_guide_full');
     });
-  } else {
+  } else if (unlockBtn) {
     unlockBtn.addEventListener('click', async () => {
       unlockBtn.disabled = true;
       const ok = await ra10Gate('revision_guide_full');
@@ -902,7 +976,9 @@ function applyGuideAccessRules() {
   updateGuidePrintButtons();
 
   const gateCard = document.getElementById('guide-access-gate-card');
-  if (fullAccess) {
+  const timedUnlockOnly = hasGuideSessionUnlock() && !hasPlanGuideAccess();
+  if (fullAccess && !timedUnlockOnly) {
+    clearGuideUnlockCountdownTimer();
     if (gateCard) gateCard.remove();
   } else {
     const aimA = document.getElementById('guide-aim-A');

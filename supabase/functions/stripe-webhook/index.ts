@@ -3,28 +3,26 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 type SubjectName = "IT" | "Business" | "Sport";
 type TierName = "all_subjects" | "ultra" | "school_admin";
 
-type VariantMap = {
-  subjects: Record<number, SubjectName>;
-  recurring: Record<number, { tier: TierName; credits: number; unlockedSubjects: SubjectName[] }>;
+type RecurringTier = {
+  tier: TierName;
+  credits: number;
+  unlockedSubjects: SubjectName[];
 };
 
-function getVariantMap(): VariantMap {
-  const subjects: Record<number, SubjectName> = {
-    1628887: "IT",
-    1628904: "Business",
-    1628908: "Sport",
-  };
-  const recurring: Record<number, { tier: TierName; credits: number; unlockedSubjects: SubjectName[] }> = {
-    1628911: { tier: "all_subjects", credits: 1000, unlockedSubjects: ["IT", "Business", "Sport"] },
-    1628915: { tier: "ultra",        credits: 999999, unlockedSubjects: ["IT", "Business", "Sport"] },
-    1628917: { tier: "school_admin", credits: 300,    unlockedSubjects: ["IT", "Business", "Sport"] },
-  };
-  return { subjects, recurring };
-}
+type PriceAction =
+  | { type: "subject"; subject: SubjectName }
+  | { type: "recurring"; recurring: RecurringTier };
 
-function toLower(s: unknown): string {
-  return String(s || "").trim().toLowerCase();
-}
+type StripeEvent = {
+  id?: string;
+  type?: string;
+  data?: {
+    object?: any;
+  };
+};
+
+const SUBJECTS_ALL: SubjectName[] = ["IT", "Business", "Sport"];
+const SIGNATURE_TOLERANCE_SECONDS = 300;
 
 function oneMonthFromNowIso(): string {
   const d = new Date();
@@ -32,7 +30,100 @@ function oneMonthFromNowIso(): string {
   return d.toISOString();
 }
 
-async function verifySignature(rawBody: string, signature: string, secret: string): Promise<boolean> {
+function toLower(s: unknown): string {
+  return String(s || "").trim().toLowerCase();
+}
+
+function toUpper(s: unknown): string {
+  return String(s || "").trim().toUpperCase();
+}
+
+function getRecurringByPlan(planRaw: unknown): RecurringTier | null {
+  const plan = toUpper(planRaw);
+  if (plan === "PRO") {
+    return { tier: "all_subjects", credits: 1000, unlockedSubjects: SUBJECTS_ALL };
+  }
+  if (plan === "ULTRA") {
+    return { tier: "ultra", credits: 999999, unlockedSubjects: SUBJECTS_ALL };
+  }
+  if (plan === "EDU") {
+    return { tier: "school_admin", credits: 300, unlockedSubjects: SUBJECTS_ALL };
+  }
+  return null;
+}
+
+function getSubjectByAny(value: unknown): SubjectName | null {
+  const key = toUpper(value);
+  if (key === "IT") return "IT";
+  if (key === "BUSINESS") return "Business";
+  if (key === "SPORT") return "Sport";
+  return null;
+}
+
+function getPriceMap(): Record<string, PriceAction> {
+  const map: Record<string, PriceAction> = {};
+
+  const stripePriceIt = Deno.env.get("STRIPE_PRICE_IT") || "";
+  const stripePriceBusiness = Deno.env.get("STRIPE_PRICE_BUSINESS") || "";
+  const stripePriceSport = Deno.env.get("STRIPE_PRICE_SPORT") || "";
+  const stripePricePro = Deno.env.get("STRIPE_PRICE_PRO") || "";
+  const stripePriceUltra = Deno.env.get("STRIPE_PRICE_ULTRA") || "";
+  const stripePriceEdu = Deno.env.get("STRIPE_PRICE_EDU") || "";
+
+  if (stripePriceIt) map[stripePriceIt] = { type: "subject", subject: "IT" };
+  if (stripePriceBusiness) map[stripePriceBusiness] = { type: "subject", subject: "Business" };
+  if (stripePriceSport) map[stripePriceSport] = { type: "subject", subject: "Sport" };
+  if (stripePricePro) {
+    map[stripePricePro] = {
+      type: "recurring",
+      recurring: { tier: "all_subjects", credits: 1000, unlockedSubjects: SUBJECTS_ALL },
+    };
+  }
+  if (stripePriceUltra) {
+    map[stripePriceUltra] = {
+      type: "recurring",
+      recurring: { tier: "ultra", credits: 999999, unlockedSubjects: SUBJECTS_ALL },
+    };
+  }
+  if (stripePriceEdu) {
+    map[stripePriceEdu] = {
+      type: "recurring",
+      recurring: { tier: "school_admin", credits: 300, unlockedSubjects: SUBJECTS_ALL },
+    };
+  }
+
+  return map;
+}
+
+function parseStripeSignature(header: string): { timestamp: number; signatures: string[] } | null {
+  const pairs = String(header || "")
+    .split(",")
+    .map((part) => part.trim())
+    .filter(Boolean);
+
+  let timestamp = 0;
+  const signatures: string[] = [];
+
+  for (const pair of pairs) {
+    const [k, v] = pair.split("=");
+    if (!k || !v) continue;
+    if (k === "t") {
+      timestamp = Number(v);
+      continue;
+    }
+    if (k === "v1") {
+      signatures.push(v);
+    }
+  }
+
+  if (!timestamp || !signatures.length) {
+    return null;
+  }
+
+  return { timestamp, signatures };
+}
+
+async function hmacSha256Hex(secret: string, payload: string): Promise<string> {
   const enc = new TextEncoder();
   const key = await crypto.subtle.importKey(
     "raw",
@@ -41,26 +132,87 @@ async function verifySignature(rawBody: string, signature: string, secret: strin
     false,
     ["sign"],
   );
-  const mac = await crypto.subtle.sign("HMAC", key, enc.encode(rawBody));
-  const digestHex = Array.from(new Uint8Array(mac)).map((b) => b.toString(16).padStart(2, "0")).join("");
-  return digestHex === signature;
+  const mac = await crypto.subtle.sign("HMAC", key, enc.encode(payload));
+  return Array.from(new Uint8Array(mac)).map((b) => b.toString(16).padStart(2, "0")).join("");
 }
 
-async function findProfileIdByUserOrEmail(supabase: ReturnType<typeof createClient>, userId: string, email: string): Promise<string | null> {
+async function verifyStripeSignature(rawBody: string, signatureHeader: string, secret: string): Promise<boolean> {
+  const parsed = parseStripeSignature(signatureHeader);
+  if (!parsed) return false;
+
+  const nowSec = Math.floor(Date.now() / 1000);
+  if (Math.abs(nowSec - parsed.timestamp) > SIGNATURE_TOLERANCE_SECONDS) {
+    return false;
+  }
+
+  const signedPayload = `${parsed.timestamp}.${rawBody}`;
+  const expected = await hmacSha256Hex(secret, signedPayload);
+  return parsed.signatures.includes(expected);
+}
+
+async function findProfileIdByUserOrEmail(
+  supabase: ReturnType<typeof createClient>,
+  userId: string,
+  email: string,
+): Promise<string | null> {
   if (userId) {
     const byId = await supabase.from("profiles").select("id").eq("id", userId).maybeSingle();
     if (!byId.error && byId.data?.id) {
       return String(byId.data.id);
     }
   }
+
   if (!email) {
     return null;
   }
+
   const byEmail = await supabase.from("profiles").select("id").eq("email", email).maybeSingle();
   if (byEmail.error || !byEmail.data?.id) {
     return null;
   }
+
   return String(byEmail.data.id);
+}
+
+async function ensureProfileRowByUserOrEmail(
+  supabase: ReturnType<typeof createClient>,
+  userId: string,
+  email: string,
+): Promise<string | null> {
+  const existing = await findProfileIdByUserOrEmail(supabase, userId, email);
+  if (existing) return existing;
+
+  if (!userId) {
+    return null;
+  }
+
+  const createdAt = new Date();
+  createdAt.setUTCMonth(createdAt.getUTCMonth() + 1);
+  const displayName = String(email || "").split("@")[0] || "";
+
+  const insert = await supabase
+    .from("profiles")
+    .upsert(
+      {
+        id: userId,
+        email: email || "",
+        display_name: displayName,
+        tier: "free",
+        credits: 10,
+        credits_reset_at: createdAt.toISOString(),
+        unlimited_credits: false,
+        unlocked_subjects: [],
+      },
+      { onConflict: "id" },
+    )
+    .select("id")
+    .single();
+
+  if (!insert.error && insert.data?.id) {
+    return String(insert.data.id);
+  }
+
+  return await findProfileIdByUserOrEmail(supabase, userId, email);
 }
 
 async function appendSubjectUnlock(
@@ -74,6 +226,9 @@ async function appendSubjectUnlock(
   }
 
   const existing = Array.isArray(profileRes.data.unlocked_subjects) ? profileRes.data.unlocked_subjects : [];
+  if (existing.includes(subject)) {
+    return;
+  }
   const nextSubjects = existing.includes(subject) ? existing : [...existing, subject];
   const nextCredits = Number(profileRes.data.credits || 0) + 300;
   const nextTier = profileRes.data.tier === "free" ? "subject" : profileRes.data.tier;
@@ -86,6 +241,7 @@ async function appendSubjectUnlock(
       unlocked_subjects: nextSubjects,
     })
     .eq("id", profileId);
+
   if (update.error) {
     throw new Error(update.error.message || "Could not update profile for subject unlock");
   }
@@ -94,7 +250,7 @@ async function appendSubjectUnlock(
 async function applyRecurringTier(
   supabase: ReturnType<typeof createClient>,
   profileId: string,
-  recurring: { tier: TierName; credits: number; unlockedSubjects: SubjectName[] },
+  recurring: RecurringTier,
 ): Promise<void> {
   const update = await supabase
     .from("profiles")
@@ -106,6 +262,7 @@ async function applyRecurringTier(
       unlimited_credits: recurring.tier === "ultra",
     })
     .eq("id", profileId);
+
   if (update.error) {
     throw new Error(update.error.message || "Could not apply recurring tier");
   }
@@ -119,148 +276,207 @@ async function downgradeToFree(supabase: ReturnType<typeof createClient>, profil
       credits: 10,
       credits_reset_at: oneMonthFromNowIso(),
       unlimited_credits: false,
+      unlocked_subjects: [],
       school_id: null,
       school_name: null,
     })
     .eq("id", profileId);
+
   if (update.error) {
     throw new Error(update.error.message || "Could not downgrade to free");
   }
 }
 
+function resolveActionFromMetadata(metadata: any): PriceAction | null {
+  const subject = getSubjectByAny(metadata?.subject);
+  if (subject) {
+    return { type: "subject", subject };
+  }
+
+  const recurring = getRecurringByPlan(metadata?.plan);
+  if (recurring) {
+    return { type: "recurring", recurring };
+  }
+
+  return null;
+}
+
+function extractPriceIdFromObject(obj: any): string {
+  const fromLines = obj?.lines?.data?.[0]?.price?.id;
+  const fromItems = obj?.items?.data?.[0]?.price?.id;
+  const fromLineItems = obj?.line_items?.data?.[0]?.price?.id;
+  const fromPlan = obj?.plan?.id;
+  const fromPrice = obj?.price?.id;
+  return String(fromLines || fromItems || fromLineItems || fromPlan || fromPrice || "").trim();
+}
+
+function getStripeSecretKey(): string {
+  return Deno.env.get("STRIPE_SECRET_KEY") || "";
+}
+
+async function stripeGet(path: string): Promise<any | null> {
+  const secret = getStripeSecretKey();
+  if (!secret) return null;
+  const res = await fetch(`https://api.stripe.com/v1/${path}`, {
+    method: "GET",
+    headers: {
+      "Authorization": `Bearer ${secret}`,
+    },
+  });
+  if (!res.ok) return null;
+  return await res.json();
+}
+
+async function getCustomerEmail(customerId: string): Promise<string> {
+  if (!customerId) return "";
+  const customer = await stripeGet(`customers/${customerId}`);
+  return toLower(customer?.email || "");
+}
+
+async function getCheckoutSessionLineItemPriceId(sessionId: string): Promise<string> {
+  if (!sessionId) return "";
+  const payload = await stripeGet(`checkout/sessions/${sessionId}/line_items?limit=1`);
+  return String(payload?.data?.[0]?.price?.id || "").trim();
+}
+
+async function applyAction(
+  supabase: ReturnType<typeof createClient>,
+  profileId: string,
+  action: PriceAction,
+): Promise<void> {
+  if (action.type === "subject") {
+    await appendSubjectUnlock(supabase, profileId, action.subject);
+    return;
+  }
+  await applyRecurringTier(supabase, profileId, action.recurring);
+}
+
 export default Deno.serve(async (req: Request) => {
-  console.log("[LS-webhook] Received request", req.method, new Date().toISOString());
   try {
     if (req.method !== "POST") {
-      console.log("[LS-webhook] Rejected: not POST");
-      return new Response(
-        JSON.stringify({ error: "Method not allowed" }),
-        { status: 405 }
-      );
+      return new Response(JSON.stringify({ error: "Method not allowed" }), { status: 405 });
     }
 
     const rawBody = await req.text();
-    const signature = req.headers.get("x-signature") || "";
-    const webhookSecret = Deno.env.get("LEMONSQUEEZY_WEBHOOK_SECRET") || "";
-
-    console.log("[LS-webhook] sig present:", !!signature, "secret present:", !!webhookSecret, "body length:", rawBody.length);
+    const signature = req.headers.get("stripe-signature") || "";
+    const webhookSecret = Deno.env.get("STRIPE_WEBHOOK_SECRET") || "";
 
     if (!signature || !webhookSecret) {
-      console.error("[LS-webhook] Missing signature or secret - sig:", !!signature, "secret:", !!webhookSecret);
       return new Response(
-        JSON.stringify({ error: "Missing LemonSqueezy webhook configuration" }),
-        { status: 400 }
+        JSON.stringify({ error: "Missing STRIPE_WEBHOOK_SECRET or stripe-signature" }),
+        { status: 400 },
       );
     }
 
-    const isValid = await verifySignature(rawBody, signature, webhookSecret);
-    console.log("[LS-webhook] Signature valid:", isValid);
-    if (!isValid) {
-      console.error("[LS-webhook] Invalid signature - check LEMONSQUEEZY_WEBHOOK_SECRET matches LemonSqueezy dashboard");
-      return new Response(
-        JSON.stringify({ error: "Invalid signature" }),
-        { status: 401 }
-      );
+    const valid = await verifyStripeSignature(rawBody, signature, webhookSecret);
+    if (!valid) {
+      return new Response(JSON.stringify({ error: "Invalid signature" }), { status: 401 });
     }
 
-    let payload: any = null;
+    let event: StripeEvent;
     try {
-      payload = JSON.parse(rawBody);
-    } catch (err) {
-      console.error("Invalid JSON payload", err);
-      return new Response(
-        JSON.stringify({ error: "Invalid payload" }),
-        { status: 400 }
-      );
+      event = JSON.parse(rawBody);
+    } catch {
+      return new Response(JSON.stringify({ error: "Invalid payload" }), { status: 400 });
     }
 
-    // Initialize Supabase client with service role
     const supabaseUrl = Deno.env.get("SUPABASE_URL");
-    const supabaseServiceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
-
-    if (!supabaseUrl || !supabaseServiceRoleKey) {
-      console.error("Missing Supabase configuration");
-      return new Response(
-        JSON.stringify({ error: "Missing Supabase configuration" }),
-        { status: 500 }
-      );
+    const serviceRole = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+    if (!supabaseUrl || !serviceRole) {
+      return new Response(JSON.stringify({ error: "Missing Supabase configuration" }), { status: 500 });
     }
 
-    const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+    const supabase = createClient(supabaseUrl, serviceRole);
+    const priceMap = getPriceMap();
 
-    const eventName = String(payload?.meta?.event_name || "");
-    const data = payload?.data || {};
-    const attributes = data?.attributes || {};
-    const customData = payload?.meta?.custom_data || attributes?.custom_data || {};
+    const eventType = String(event?.type || "");
+    const object = event?.data?.object || {};
 
-    const userId = String(customData?.user_id || "").trim();
-    const email = toLower(customData?.email || attributes?.user_email || attributes?.customer_email);
-    const variantId = Number(
-      attributes?.first_order_item?.variant_id
-      || attributes?.variant_id
-      || attributes?.order_item?.variant_id
-      || customData?.variant_id
-      || 0,
+    const metadata = object?.metadata || {};
+    const userId = String(metadata?.user_id || object?.client_reference_id || "").trim();
+    let email = toLower(
+      metadata?.email
+      || object?.customer_details?.email
+      || object?.customer_email
+      || object?.receipt_email,
     );
 
-    console.log("[LS-webhook] Event:", eventName, "variantId:", variantId, "userId:", userId, "email:", email);
+    if (!email) {
+      email = await getCustomerEmail(String(object?.customer || "").trim());
+    }
 
-    const variantMap = getVariantMap();
-    const profileId = await findProfileIdByUserOrEmail(supabase, userId, email);
+    const profileId = await ensureProfileRowByUserOrEmail(supabase, userId, email);
     if (!profileId) {
-      console.warn("[LS-webhook] Unknown user/profile - userId:", userId, "email:", email, "event:", eventName);
+      return new Response(JSON.stringify({ received: true, skipped: true }), { status: 200 });
+    }
+
+    if (eventType === "checkout.session.completed") {
+      let action = resolveActionFromMetadata(metadata);
+      if (!action) {
+        let priceId = extractPriceIdFromObject(object);
+        if (!priceId) {
+          priceId = await getCheckoutSessionLineItemPriceId(String(object?.id || "").trim());
+        }
+        action = priceMap[priceId] || null;
+      }
+
+      if (action) {
+        await applyAction(supabase, profileId, action);
+      }
       return new Response(JSON.stringify({ received: true }), { status: 200 });
     }
-    console.log("[LS-webhook] Found profileId:", profileId);
 
-    if (eventName === "order_created") {
-      const subject = variantMap.subjects[variantId];
-      const recurring = variantMap.recurring[variantId];
-      if (subject) {
-        await appendSubjectUnlock(supabase, profileId, subject);
-      } else if (recurring) {
-        await applyRecurringTier(supabase, profileId, recurring);
+    if (eventType === "invoice.paid" || eventType === "invoice.payment_succeeded") {
+      const priceId = extractPriceIdFromObject(object);
+      const mapped = priceMap[priceId];
+      if (mapped && mapped.type === "recurring") {
+        await applyRecurringTier(supabase, profileId, mapped.recurring);
+      }
+      return new Response(JSON.stringify({ received: true }), { status: 200 });
+    }
+
+    if (eventType === "customer.subscription.updated" || eventType === "customer.subscription.created") {
+      const status = String(object?.status || "").toLowerCase();
+      const active = status === "active" || status === "trialing" || status === "past_due";
+      if (active) {
+        const priceId = extractPriceIdFromObject(object);
+        const mapped = priceMap[priceId];
+        if (mapped && mapped.type === "recurring") {
+          await applyRecurringTier(supabase, profileId, mapped.recurring);
+        }
+      } else {
+        const isCancelledNow = status === "canceled"
+          || status === "incomplete_expired"
+          || (eventType === "customer.subscription.updated" && !!object?.canceled_at && !object?.cancel_at_period_end);
+        if (isCancelledNow) {
+          await downgradeToFree(supabase, profileId);
+        }
       }
       return new Response(JSON.stringify({ received: true }), { status: 200 });
     }
 
     if (
-      eventName === "subscription_created"
-      || eventName === "subscription_updated"
-      || eventName === "subscription_resumed"
-      || eventName === "subscription_unpaused"
-      || eventName === "subscription_payment_success"
+      eventType === "customer.subscription.deleted"
+      || eventType === "invoice.payment_failed"
+      || eventType === "charge.refunded"
+      || eventType === "charge.refund.updated"
     ) {
-      const recurring = variantMap.recurring[variantId];
-      if (recurring) {
-        await applyRecurringTier(supabase, profileId, recurring);
+      const isRefundEvent = eventType === "charge.refunded" || eventType === "charge.refund.updated";
+      const refundedNow = Boolean(object?.refunded) || Number(object?.amount_refunded || 0) > 0;
+      if (!isRefundEvent || refundedNow) {
+        await downgradeToFree(supabase, profileId);
       }
-      return new Response(JSON.stringify({ received: true }), { status: 200 });
-    }
-
-    if (
-      eventName === "subscription_cancelled"
-      || eventName === "subscription_expired"
-      || eventName === "subscription_paused"
-      || eventName === "subscription_payment_failed"
-    ) {
-      const endsAtRaw = String(attributes?.ends_at || attributes?.renews_at || "");
-      const endsAt = endsAtRaw ? new Date(endsAtRaw) : null;
-      if (endsAt && !Number.isNaN(endsAt.getTime()) && endsAt.getTime() > Date.now()) {
-        return new Response(JSON.stringify({ received: true, deferred: true }), { status: 200 });
-      }
-      await downgradeToFree(supabase, profileId);
       return new Response(JSON.stringify({ received: true }), { status: 200 });
     }
 
     return new Response(JSON.stringify({ received: true }), { status: 200 });
   } catch (error) {
-    console.error("Webhook handler error:", error);
+    console.error("Stripe webhook error:", error);
     return new Response(
       JSON.stringify({
         error: error instanceof Error ? error.message : "Internal server error",
       }),
-      { status: 500 }
+      { status: 500 },
     );
   }
 });

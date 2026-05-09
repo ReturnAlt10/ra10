@@ -383,12 +383,15 @@ th{font-size:var(--tx-xs);text-transform:uppercase;letter-spacing:.08em;color:va
           <select id="filter-student-group" class="field-input" style="width:auto;padding:var(--sp2) var(--sp3);font-size:var(--tx-sm)">
             <option value="">All groups</option>
           </select>
+          <button class="btn btn-g" id="btn-download-csv-template">CSV template</button>
+          <button class="btn btn-g" id="btn-import-members-csv">Import CSV</button>
+          <input id="members-csv-input" type="file" accept=".csv,text/csv" style="display:none">
           <button class="btn btn-p" id="btn-add-student">Add Student</button>
         </div>
       </div>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>Email</th><th>Status</th><th>Group</th><th>Subjects</th><th>Actions</th></tr></thead>
+          <thead><tr><th>Email</th><th>Status</th><th>Group</th><th>Access</th><th>Actions</th></tr></thead>
           <tbody id="students-body"></tbody>
         </table>
       </div>
@@ -409,7 +412,7 @@ th{font-size:var(--tx-xs);text-transform:uppercase;letter-spacing:.08em;color:va
       </div>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>Email</th><th>Status</th><th>Group</th><th>Subjects</th><th>Actions</th></tr></thead>
+          <thead><tr><th>Email</th><th>Status</th><th>Group</th><th>Access</th><th>Actions</th></tr></thead>
           <tbody id="teachers-body"></tbody>
         </table>
       </div>
@@ -479,10 +482,6 @@ th{font-size:var(--tx-xs);text-transform:uppercase;letter-spacing:.08em;color:va
       <label class="field-label" for="member-group">Group <span style="font-weight:400;text-transform:none;letter-spacing:0">(optional)</span></label>
       <select class="field-input" id="member-group"><option value="">No group</option></select>
     </div>
-    <div class="field">
-      <span class="field-label">Subjects</span>
-      <div class="subject-checks" id="subject-checks"></div>
-    </div>
     <div class="modal-actions">
       <button class="btn btn-p" id="btn-member-save">Add</button>
       <button class="btn btn-g" id="btn-member-cancel">Cancel</button>
@@ -500,6 +499,7 @@ th{font-size:var(--tx-xs);text-transform:uppercase;letter-spacing:.08em;color:va
 var SUPABASE_URL = 'https://tcrrgsylxbyyrmnouihl.supabase.co';
 var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRjcnJnc3lseGJ5eXJtbm91aWhsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4ODUyMTEsImV4cCI6MjA5MzQ2MTIxMX0.eOp6ma-mfgh8F20nM7E2OaBW28LlZlwuEEWr6k2zDWw';
 var OWNER_EMAIL = 'mistry.hashim@icloud.com';
+var SCHOOL_CANCEL_NOTICE_KEY = 'ra10:edu-cancel-notice';
 
 var SUBJECTS = [
   { key: 'IT_AAQ',      name: 'IT AAQ',           label: 'IT AAQ (BTEC Level 3)',        live: true, selectable: true },
@@ -544,12 +544,14 @@ var dom = {
   teachersBody:  document.getElementById('teachers-body'),
   groupsList:    document.getElementById('groups-list'),
   subjectsGrid:  document.getElementById('subjects-grid'),
+  csvTemplateBtn: document.getElementById('btn-download-csv-template'),
+  csvImportBtn:   document.getElementById('btn-import-members-csv'),
+  csvInput:       document.getElementById('members-csv-input'),
   settingsName:  document.getElementById('settings-school-name'),
   modal:         document.getElementById('member-modal'),
   modalTitle:    document.getElementById('modal-title'),
   memberEmail:   document.getElementById('member-email'),
   memberGroup:   document.getElementById('member-group'),
-  subjectChecks: document.getElementById('subject-checks'),
   toastHost:     document.getElementById('toast-host')
 };
 
@@ -755,10 +757,9 @@ function renderTable(role) {
           groupOptions.replace('value="' + esc(gName) + '"', 'value="' + esc(gName) + '" selected') +
         '</select>' +
       '</td>' +
-      '<td>' + subjectChips(m.subjects) + '</td>' +
+      '<td><span class="chip">All subjects</span></td>' +
       '<td>' +
         '<button class="btn btn-g" style="font-size:var(--tx-xs);margin-right:var(--sp2)" data-resend="' + safeId + '">Resend invite</button>' +
-        '<button class="btn btn-g" style="font-size:var(--tx-xs);margin-right:var(--sp2)" data-editsubjects="' + safeId + '">Edit subjects</button>' +
         '<button class="btn btn-g" style="font-size:var(--tx-xs);margin-right:var(--sp2)" data-fixusername="' + safeId + '">Set/reset username</button>' +
         '<button class="btn btn-g" style="font-size:var(--tx-xs)" data-remove="' + safeId + '">Remove</button>' +
       '</td>' +
@@ -953,19 +954,6 @@ function openModal(role) {
   dom.memberGroup.innerHTML = '<option value="">No group</option>' +
     state.groups.map(function(g) { return '<option value="' + esc(g) + '">' + esc(g) + '</option>'; }).join('');
   dom.memberGroup.value = '';
-  dom.subjectChecks.innerHTML = '';
-  SUBJECTS.forEach(function(sub, i) {
-    var id = 'sc-' + i;
-    var row = document.createElement('label');
-    row.className = 'check-row' + (sub.selectable ? '' : ' disabled');
-    row.htmlFor = id;
-    row.innerHTML =
-      '<input type="checkbox" id="' + id + '" value="' + esc(sub.name) + '"' +
-      (sub.selectable ? ' checked' : ' disabled') + '> ' +
-      esc(sub.label) +
-      (sub.selectable ? '' : '<span class="soon-pill">Coming Soon</span>');
-    dom.subjectChecks.appendChild(row);
-  });
   dom.modal.classList.remove('hidden');
   setTimeout(function() { dom.memberEmail.focus(); }, 50);
 }
@@ -974,26 +962,31 @@ function closeModal() {
   dom.modal.classList.add('hidden');
 }
 
-function selectedSubjects() {
-  return Array.from(dom.subjectChecks.querySelectorAll('input[type="checkbox"]:checked')).map(function(cb) { return cb.value; });
+function normalizeMemberRole(value) {
+  var role = String(value || '').trim().toLowerCase();
+  if (role === 'teacher' || role === 'teachers') return 'teacher';
+  return 'student';
 }
 
-async function addMember() {
-  var email = dom.memberEmail.value.trim().toLowerCase();
-  var role = state.modalRole;
-  var subjects = selectedSubjects();
-  var groupName = dom.memberGroup.value || null;
+async function addOrInviteMember(payload, options) {
+  options = options || {};
+  var email = String(payload && payload.email || '').trim().toLowerCase();
+  var role = normalizeMemberRole(payload && payload.role || state.modalRole);
+  var groupName = (payload && payload.groupName != null && String(payload.groupName).trim() !== '')
+    ? String(payload.groupName).trim()
+    : null;
+  var subjects = selectableSubjectNames();
 
-  if (!email) { toast('Enter an email address.'); return; }
-  if (!state.schoolId) { toast('School not loaded. Please refresh.'); return; }
+  if (!email) return { ok: false, message: 'Missing email.' };
+  if (!state.schoolId) return { ok: false, message: 'School not loaded. Please refresh.' };
 
   var dup = state.members.find(function(m) {
     return String(m.email || '').toLowerCase() === email && String(m.status).toLowerCase() !== 'removed';
   });
-  if (dup) { toast('This person is already a member.'); return; }
+  if (dup) return { ok: false, message: email + ' is already a member.' };
 
   var btn = document.getElementById('btn-member-save');
-  btn.disabled = true;
+  if (options.disableModalButton && btn) btn.disabled = true;
 
   // If this person existed before (any status), reactivate the latest record (no invite email).
   var priorMember = null;
@@ -1051,12 +1044,11 @@ async function addMember() {
     });
   }
 
-  btn.disabled = false;
+  if (options.disableModalButton && btn) btn.disabled = false;
 
   if (res.error) {
     console.error('addMember insert:', res.error);
-    toast('Could not add member: ' + (res.error.message || 'unknown error'));
-    return;
+    return { ok: false, message: 'Could not add ' + email + ': ' + (res.error.message || 'unknown error') };
   }
 
   var memberTier = role === 'teacher' ? 'school_teacher' : 'school_student';
@@ -1072,11 +1064,17 @@ async function addMember() {
       school_name: state.schoolName,
       unlocked_subjects: subjects
     }).ilike('email', email);
+    if (window.RA10_ACTIVATE_SCHOOL_MEMBER) {
+      const forceActivated = await window.RA10_ACTIVATE_SCHOOL_MEMBER(email, role, state.schoolId, state.schoolName);
+      if (forceActivated && !forceActivated.ok && profUpdate.error) {
+        console.warn('addMember fallback activation failed', forceActivated.error || 'unknown');
+      }
+    }
     if (profUpdate.error) {
       console.warn('addMember profile activation failed', profUpdate.error);
-      toast('Member added. Account will activate on next login/refresh.');
+      return { ok: true, message: email + ' added. Activation is syncing — ask them to refresh once.' };
     } else {
-      toast(role === 'teacher' ? '✅ Teacher added and activated immediately.' : '✅ Student added and activated immediately.');
+      return { ok: true, message: (role === 'teacher' ? 'Teacher' : 'Student') + ' added and activated: ' + email };
     }
   } else {
     const inviteResult = await window.RA10_INVITE(
@@ -1086,19 +1084,133 @@ async function addMember() {
       state.schoolName
     );
     if (inviteResult.ok && inviteResult.skipped) {
-      toast((role === 'teacher' ? '✅ Teacher' : '✅ Student') + ' added. They already have an account — no invite email needed.');
+      await state.sb
+        .from('school_members')
+        .update({ status: 'active' })
+        .eq('school_id', state.schoolId)
+        .ilike('email', email)
+        .eq('role', role);
+      if (inviteResult.activationError) {
+        return { ok: true, message: (role === 'teacher' ? 'Teacher' : 'Student') + ' added (existing account), but profile activation needs retry: ' + email };
+      }
+      return { ok: true, message: (role === 'teacher' ? 'Teacher' : 'Student') + ' added and activated (existing account): ' + email };
     } else if (inviteResult.ok) {
-      toast(role === 'teacher' ? '✅ Teacher invited.' : '✅ Student invited.');
+      return { ok: true, message: (role === 'teacher' ? 'Teacher invited: ' : 'Student invited: ') + email };
     } else {
-      toast('Member added but invite email failed: ' + (inviteResult.error || 'unknown error'));
+      return { ok: true, message: email + ' added, but invite email failed: ' + (inviteResult.error || 'unknown error') };
     }
   }
-  // Remind admin to notify the member manually
-  setTimeout(function() {
-    toast('📧 Remember to let ' + email + ' know they can sign up or log in to ra10.co.uk — their ' + (role === 'teacher' ? 'teacher' : 'student') + ' account is ready.', 7000);
-  }, 2000);
+}
+
+async function addMember() {
+  var result = await addOrInviteMember({
+    email: dom.memberEmail.value,
+    role: state.modalRole,
+    groupName: dom.memberGroup.value || null,
+  }, { disableModalButton: true });
+  if (!result.ok) {
+    toast(result.message || 'Could not add member.');
+    return;
+  }
+  toast(result.message || 'Member added.');
   closeModal();
   await loadMembers();
+}
+
+function downloadMembersCsvTemplate() {
+  var rows = [
+    'email,role,group',
+    'student1@school.edu,student,Year 12',
+    'teacher1@school.edu,teacher,Staff',
+  ];
+  var blob = new Blob([rows.join('\n')], { type: 'text/csv;charset=utf-8;' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = 'ra10-members-template.csv';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
+function parseCsvRow(line) {
+  var out = [];
+  var cur = '';
+  var inQuotes = false;
+  for (var i = 0; i < line.length; i++) {
+    var ch = line[i];
+    var next = line[i + 1];
+    if (ch === '"') {
+      if (inQuotes && next === '"') {
+        cur += '"';
+        i++;
+      } else {
+        inQuotes = !inQuotes;
+      }
+    } else if (ch === ',' && !inQuotes) {
+      out.push(cur.trim());
+      cur = '';
+    } else {
+      cur += ch;
+    }
+  }
+  out.push(cur.trim());
+  return out;
+}
+
+async function importMembersCsvFile(file) {
+  if (!file) return;
+  var text = await file.text();
+  var lines = String(text || '').replace(/^\uFEFF/, '').split(/\r?\n/).filter(function(l) { return l.trim(); });
+  if (!lines.length) {
+    toast('CSV is empty.');
+    return;
+  }
+
+  var headers = parseCsvRow(lines[0]).map(function(h) { return String(h || '').trim().toLowerCase(); });
+  var emailIdx = headers.indexOf('email');
+  var roleIdx = headers.indexOf('role');
+  var groupIdx = headers.indexOf('group');
+  if (emailIdx < 0 || roleIdx < 0) {
+    toast('CSV must include headers: email, role, group');
+    return;
+  }
+
+  var imported = 0;
+  var failed = 0;
+  var failedRows = [];
+  for (var i = 1; i < lines.length; i++) {
+    var cols = parseCsvRow(lines[i]);
+    var email = String(cols[emailIdx] || '').trim().toLowerCase();
+    var role = normalizeMemberRole(cols[roleIdx]);
+    var groupName = groupIdx >= 0 ? String(cols[groupIdx] || '').trim() : '';
+    if (!email) continue;
+
+    var result = await addOrInviteMember({
+      email: email,
+      role: role,
+      groupName: groupName || null,
+    }, { disableModalButton: false });
+
+    if (result.ok) {
+      imported++;
+    } else {
+      failed++;
+      failedRows.push('Row ' + (i + 1) + ': ' + (result.message || 'Unknown error'));
+    }
+  }
+
+  await loadMembers();
+  if (!failed) {
+    toast('CSV import complete: ' + imported + ' member(s) processed.');
+    return;
+  }
+  var summary = 'CSV import: ' + imported + ' added, ' + failed + ' failed.';
+  if (failedRows.length) {
+    summary += ' ' + failedRows.slice(0, 2).join(' | ');
+  }
+  toast(summary, 9000);
 }
 
 /* ═══════════════════════════════════════════════
@@ -1112,14 +1224,20 @@ async function removeMember(memberId) {
   var res = await state.sb.from('school_members').update({ status: 'removed' }).eq('id', m.id);
   if (res.error) { toast('Could not remove member.'); return; }
 
-  await state.sb.from('profiles').update({
+  var profileRes = await state.sb.from('profiles').update({
     tier: 'free',
-    credits: 10,
-    credits_reset_at: new Date().toISOString(),
     school_id: null,
-    school_name: null
-  }).ilike('email', m.email);
-  toast(m.email + ' removed.');
+    school_name: null,
+    unlocked_subjects: [],
+    unlimited_credits: false
+  }).ilike('email', m.email.toLowerCase());
+  
+  if (profileRes.error) { 
+    toast('Warning: profile tier may not have been updated. ' + (profileRes.error.message || 'unknown error')); 
+    return; 
+  }
+  
+  toast(m.email + ' removed and reverted to free tier.');
   await loadMembers();
 }
 
@@ -1237,8 +1355,6 @@ async function resendInvite(memberId) {
   tbody.addEventListener('click', async function(e) {
     var resendBtn = e.target.closest('[data-resend]');
     if (resendBtn) { await resendInvite(resendBtn.dataset.resend); return; }
-    var editBtn = e.target.closest('[data-editsubjects]');
-    if (editBtn) { await editMemberSubjects(editBtn.dataset.editsubjects); return; }
     var userBtn = e.target.closest('[data-fixusername]');
     if (userBtn) { await setOrResetMemberUsername(userBtn.dataset.fixusername); return; }
     var btn = e.target.closest('[data-remove]');
@@ -1284,6 +1400,27 @@ document.getElementById('btn-add-teacher').addEventListener('click', function() 
     }
   }
   openModal('teacher');
+});
+
+document.getElementById('btn-download-csv-template')?.addEventListener('click', function() {
+  downloadMembersCsvTemplate();
+});
+
+document.getElementById('btn-import-members-csv')?.addEventListener('click', function() {
+  if (dom.csvInput) dom.csvInput.click();
+});
+
+dom.csvInput?.addEventListener('change', async function(e) {
+  var file = e.target && e.target.files && e.target.files[0] ? e.target.files[0] : null;
+  if (!file) return;
+  try {
+    await importMembersCsvFile(file);
+  } catch (err) {
+    console.error('CSV import failed', err);
+    toast('CSV import failed. Please check the template and try again.');
+  } finally {
+    e.target.value = '';
+  }
 });
 
 ['student','teacher'].forEach(function(role) {
@@ -1458,6 +1595,20 @@ async function initAccess() {
       var schoolSubRes = await state.sb.from('schools').select('*').eq('id', state.schoolId).maybeSingle();
       if (schoolSubRes.data) {
         var schoolActive = isSchoolSubscriptionActive(schoolSubRes.data);
+        var schoolStatus = String(schoolSubRes.data.subscription_status || '').toLowerCase();
+        var schoolRenewAt = getSchoolRenewalDate(schoolSubRes.data);
+        var schoolEnding = (schoolStatus === 'cancelled' || schoolStatus === 'canceled' || schoolStatus === 'cancel_at_period_end')
+          && schoolRenewAt && schoolRenewAt.getTime() > Date.now();
+        if (schoolEnding) {
+          var schoolEndText = schoolRenewAt.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+          var noticeKey = SCHOOL_CANCEL_NOTICE_KEY + ':' + String(state.schoolId || '') + ':' + schoolEndText;
+          var alreadyShown = false;
+          try { alreadyShown = localStorage.getItem(noticeKey) === '1'; } catch(e) {}
+          if (!alreadyShown) {
+            alert('Your school subscription will end on ' + schoolEndText + '.');
+            try { localStorage.setItem(noticeKey, '1'); } catch(e) {}
+          }
+        }
         if (!schoolActive) {
           var subStatus = String(schoolSubRes.data.subscription_status || 'expired').toLowerCase();
           var renewAt = getSchoolRenewalDate(schoolSubRes.data);

@@ -1862,6 +1862,8 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
     <p style="color:var(--color-text-muted);font-size:var(--tx-base);line-height:1.7;">Start free. Upgrade when you need more. No hidden fees.</p>
   </div>
 
+  <div id="upgrade-checkout-status" class="card" style="display:none;max-width:760px;margin:0 auto var(--sp6) auto;"></div>
+
   <div class="price-compare-hero">
     <h3>See the difference instantly: RA10 is built to stay affordable.</h3>
     <p>RA10 Pro is £20/year and Ultra is £30/year. Against common monthly pricing from other revision sites, that is a huge saving while we keep expanding BTEC-first subjects, units and features.</p>
@@ -2121,6 +2123,7 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
         </div>
         <div class="card-ft"><span class="pill" id="account-tier-badge">Tier</span><span class="pill" id="account-credits">Credits remaining</span></div>
         <p>Subscription status: <strong id="account-sub-status">—</strong></p>
+        <p>Next billing: <strong id="account-next-billing">—</strong></p>
         <p>Credits renew on: <strong id="account-reset-date">—</strong></p>
         <div class="account-credit-log">
           <h4>Credit activity</h4>
@@ -2129,7 +2132,7 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
           </div>
         </div>
         <div class="card-ft" style="flex-wrap:wrap;gap:var(--sp3)">
-          <a class="btn btn-s" href="https://app.lemonsqueezy.com/my-orders" target="_blank">Manage subscription</a>
+          <button class="btn btn-s" id="btn-manage-billing" type="button">Manage billing</button>
           <button class="btn btn-p" id="btn-account-signout">Sign out</button>
         </div>
       </div>
@@ -2773,7 +2776,7 @@ async function checkWeeklyXpReset() {
 
 // Render leaderboard when navigating to it
 window.addEventListener('hashchange', () => {
-  const routePath = location.hash.replace('#/','').replace('#','');
+  const routePath = (location.hash.replace('#/','').replace('#','').split('?')[0] || '');
   if (routePath === 'leaderboard') {
     setTimeout(renderLeaderboard, 100);
   }
@@ -2861,7 +2864,7 @@ async function syncDailyTaskXpToLeaderboard(state) {
   if (window.RA10 && typeof RA10.refreshProfile === 'function') {
     try { await RA10.refreshProfile(); } catch (e) {}
   }
-  const routePath = location.hash.replace('#/','').replace('#','');
+  const routePath = (location.hash.replace('#/','').replace('#','').split('?')[0] || '');
   if (routePath === 'leaderboard') {
     setTimeout(renderLeaderboard, 60);
   }
@@ -2977,7 +2980,8 @@ function renderGlobalTasksPage() {
 }
 
 function route(){
-  const path = location.hash.replace('#','') || '/';
+  const rawPath = location.hash.replace('#','') || '/';
+  const path = rawPath.split('?')[0] || '/';
   const id   = ROUTES[path] || 'p-home';
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   const el = document.getElementById(id);
@@ -3082,6 +3086,66 @@ route();
     });
 
     let schoolSubLookupSeq = 0;
+    let stripeBillingLookupSeq = 0;
+    let stripeBillingCache = { key: '', ts: 0, data: null };
+    let billingReconcileInFlight = false;
+    let navSyncRefreshTimer = null;
+    const SUBSCRIPTION_SYNC_KEY = 'ra10:subscription-sync-until';
+    const SCHOOL_CANCEL_NOTICE_KEY = 'ra10:school-cancel-notice';
+
+    function setSubscriptionSyncWindow(ms) {
+      const duration = Math.max(0, Number(ms || 0));
+      const until = Date.now() + duration;
+      try {
+        localStorage.setItem(SUBSCRIPTION_SYNC_KEY, String(until));
+      } catch (e) {}
+      return until;
+    }
+
+    function getSubscriptionSyncUntil() {
+      try {
+        const raw = localStorage.getItem(SUBSCRIPTION_SYNC_KEY);
+        const val = Number(raw || 0);
+        return Number.isFinite(val) ? val : 0;
+      } catch (e) {
+        return 0;
+      }
+    }
+
+    function isRecurringPaidTier(tier) {
+      return tier === 'all_subjects' || tier === 'ultra' || tier === 'school_admin' || tier === 'owner';
+    }
+
+    async function getStripeBillingMeta(profile, tier) {
+      if (!profile || !isRecurringPaidTier(tier)) return null;
+      const session = RA10.getSession ? RA10.getSession() : null;
+      const token = session && session.access_token ? session.access_token : '';
+      if (!token) return null;
+
+      const cacheKey = String(profile.id || '') + ':' + String(tier || '') + ':' + String(profile.email || '');
+      const now = Date.now();
+      if (stripeBillingCache.key === cacheKey && stripeBillingCache.data && (now - stripeBillingCache.ts) < 60000) {
+        return stripeBillingCache.data;
+      }
+
+      try {
+        const res = await fetch('https://tcrrgsylxbyyrmnouihl.supabase.co/functions/v1/billing-status', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token,
+          },
+          body: JSON.stringify({})
+        });
+        if (!res.ok) return null;
+        const payload = await res.json();
+        const data = payload && payload.billing ? payload.billing : null;
+        stripeBillingCache = { key: cacheKey, ts: Date.now(), data };
+        return data;
+      } catch (e) {
+        return null;
+      }
+    }
 
     async function getSchoolSubscriptionMeta(profile, tier) {
       if (!window.supabase || !profile || tier !== 'school_admin') return null;
@@ -3234,6 +3298,35 @@ route();
         const badge = document.getElementById('nav-tier-badge');
         badge.textContent = RA10.getTierInfo().label;
         badge.className = 'nav-tier-badge ' + RA10.getTier();
+        const syncUntil = getSubscriptionSyncUntil();
+        const inSyncWindow = syncUntil > Date.now();
+        if (inSyncWindow && RA10.getTier() === 'free') {
+          badge.textContent = 'Syncing subscription...';
+          badge.className = 'nav-tier-badge pro';
+          if (!navSyncRefreshTimer) {
+            navSyncRefreshTimer = setTimeout(async () => {
+              navSyncRefreshTimer = null;
+              try {
+                await RA10.refreshProfile();
+              } catch (e) {}
+              _updateNavAuth();
+            }, 1500);
+          }
+        }
+        if (isRecurringPaidTier(RA10.getTier())) {
+          const billingMetaForNav = await getStripeBillingMeta(profile, RA10.getTier());
+          const navBillingStatus = String((billingMetaForNav && billingMetaForNav.status) || '').toLowerCase();
+          if (navBillingStatus === 'canceled' || navBillingStatus === 'incomplete_expired') {
+            try {
+              await RA10.refreshProfile();
+            } catch (e) {}
+            try {
+              localStorage.removeItem(SUBSCRIPTION_SYNC_KEY);
+            } catch (e) {}
+            badge.textContent = 'Free';
+            badge.className = 'nav-tier-badge free';
+          }
+        }
         const tierMap = {
           free:'free',
           subject:'subject',
@@ -3341,10 +3434,17 @@ route();
         }
         const resetAt = profile.credits_reset_at ? new Date(profile.credits_reset_at) : null;
         const resetDate = resetAt ? resetAt.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) : 'N/A';
+        const accountNextBillingEl = document.getElementById('account-next-billing');
+        if (accountNextBillingEl) {
+          accountNextBillingEl.textContent = '—';
+        }
         if (tier === 'subject') {
           document.getElementById('account-reset-date').textContent = 'No renewal (one-time credits)';
+          if (accountNextBillingEl) accountNextBillingEl.textContent = 'No billing (one-time purchase)';
         } else {
           document.getElementById('account-reset-date').textContent = resetDate;
+          if (accountNextBillingEl && tier === 'free') accountNextBillingEl.textContent = 'No active subscription';
+          if (accountNextBillingEl && isRecurringPaidTier(tier)) accountNextBillingEl.textContent = 'Loading billing date...';
         }
         const subStatusEl = document.getElementById('account-sub-status');
         if (subStatusEl) {
@@ -3367,34 +3467,146 @@ route();
         }
 
         if (tier === 'school_admin') {
-          const lookupSeq = ++schoolSubLookupSeq;
-          const schoolRow = await getSchoolSubscriptionMeta(profile, tier);
-          if (lookupSeq !== schoolSubLookupSeq) return;
+          const stripeLookupSeq = ++stripeBillingLookupSeq;
+          const billingMeta = await getStripeBillingMeta(profile, tier);
+          if (stripeLookupSeq !== stripeBillingLookupSeq) return;
 
-          if (schoolRow) {
-            const active = isSchoolSubscriptionActive(schoolRow);
-            if (subStatusEl) {
-              subStatusEl.textContent = active ? 'Active' : 'Expired / cancelled';
-              subStatusEl.style.color = active ? 'var(--color-success)' : 'var(--color-error)';
-            }
-            if (!active && eduLink) {
-              eduLink.style.display = 'none';
-            }
-
-            const schoolStatus = String((schoolRow.subscription_status || '')).trim().toLowerCase();
-            const schoolRenewal = getSchoolRenewalDate(schoolRow);
-            const schoolRenewalText = schoolRenewal && !Number.isNaN(schoolRenewal.getTime())
-              ? schoolRenewal.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
+          let handledByStripe = false;
+          if (billingMeta) {
+            const billingStatus = String(billingMeta.status || '').toLowerCase();
+            const periodEndDate = billingMeta.current_period_end ? new Date(billingMeta.current_period_end) : null;
+            const periodEndText = periodEndDate && !Number.isNaN(periodEndDate.getTime())
+              ? periodEndDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
               : null;
-            const isEnding = (schoolStatus === 'cancelled' || schoolStatus === 'canceled' || schoolStatus === 'cancel_at_period_end')
-              && schoolRenewal && schoolRenewal.getTime() > Date.now();
-            if (subStatusEl && isEnding && schoolRenewalText) {
-              subStatusEl.textContent = 'Active (ending on ' + schoolRenewalText + ')';
-              subStatusEl.style.color = 'var(--color-warning)';
+            const nextBillingDate = billingMeta.next_billing_at ? new Date(billingMeta.next_billing_at) : null;
+            const nextBillingText = nextBillingDate && !Number.isNaN(nextBillingDate.getTime())
+              ? nextBillingDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
+              : 'Billing date unavailable';
+
+            if (billingStatus === 'canceled' || billingStatus === 'incomplete_expired') {
+              handledByStripe = true;
+              if (subStatusEl) {
+                subStatusEl.textContent = 'Cancelled';
+                subStatusEl.style.color = 'var(--color-error)';
+              }
+              if (accountNextBillingEl) accountNextBillingEl.textContent = 'No active subscription';
+              if (eduLink) eduLink.style.display = 'none';
+            } else if (billingMeta.cancel_at_period_end) {
+              handledByStripe = true;
+              if (subStatusEl) {
+                subStatusEl.textContent = periodEndText ? ('Cancelled (ending on ' + periodEndText + ')') : 'Cancelled (ending at period end)';
+                subStatusEl.style.color = 'var(--color-warning)';
+              }
+              if (accountNextBillingEl) accountNextBillingEl.textContent = periodEndText ? ('Ending on ' + periodEndText) : 'Cancelled at period end';
+              if (periodEndText) {
+                document.getElementById('account-reset-date').textContent = 'Ending on ' + periodEndText;
+              }
+              if (periodEndText && profile && profile.id) {
+                const noticeKey = SCHOOL_CANCEL_NOTICE_KEY + ':' + String(profile.id) + ':' + periodEndText;
+                let alreadyShown = false;
+                try {
+                  alreadyShown = localStorage.getItem(noticeKey) === '1';
+                } catch (e) {}
+                if (!alreadyShown) {
+                  alert('Your school subscription will end on ' + periodEndText + '.');
+                  try {
+                    localStorage.setItem(noticeKey, '1');
+                  } catch (e) {}
+                }
+              }
+            } else {
+              handledByStripe = true;
+              if (subStatusEl) {
+                subStatusEl.textContent = 'Active';
+                subStatusEl.style.color = 'var(--color-success)';
+              }
+              if (accountNextBillingEl) accountNextBillingEl.textContent = nextBillingText;
             }
-            if (schoolRenewalText) {
-              document.getElementById('account-reset-date').textContent = (isEnding ? 'Ending on ' : '') + schoolRenewalText;
+          }
+
+          if (!handledByStripe) {
+            const schoolLookupSeq = ++schoolSubLookupSeq;
+            const schoolRow = await getSchoolSubscriptionMeta(profile, tier);
+            if (schoolLookupSeq !== schoolSubLookupSeq) return;
+
+            if (schoolRow) {
+              const active = isSchoolSubscriptionActive(schoolRow);
+              if (subStatusEl) {
+                subStatusEl.textContent = active ? 'Active' : 'Expired / cancelled';
+                subStatusEl.style.color = active ? 'var(--color-success)' : 'var(--color-error)';
+              }
+              if (!active && eduLink) {
+                eduLink.style.display = 'none';
+              }
+
+              const schoolStatus = String((schoolRow.subscription_status || '')).trim().toLowerCase();
+              const schoolRenewal = getSchoolRenewalDate(schoolRow);
+              const schoolRenewalText = schoolRenewal && !Number.isNaN(schoolRenewal.getTime())
+                ? schoolRenewal.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
+                : null;
+              const isEnding = (schoolStatus === 'cancelled' || schoolStatus === 'canceled' || schoolStatus === 'cancel_at_period_end')
+                && schoolRenewal && schoolRenewal.getTime() > Date.now();
+              if (subStatusEl && isEnding && schoolRenewalText) {
+                subStatusEl.textContent = 'Cancelled (ending on ' + schoolRenewalText + ')';
+                subStatusEl.style.color = 'var(--color-warning)';
+              }
+              if (schoolRenewalText) {
+                document.getElementById('account-reset-date').textContent = (isEnding ? 'Ending on ' : '') + schoolRenewalText;
+                if (accountNextBillingEl) {
+                  accountNextBillingEl.textContent = isEnding ? ('Ending on ' + schoolRenewalText) : schoolRenewalText;
+                }
+              } else if (accountNextBillingEl) {
+                accountNextBillingEl.textContent = 'Billing date unavailable';
+              }
+            } else if (accountNextBillingEl) {
+              accountNextBillingEl.textContent = 'Billing date unavailable';
             }
+          }
+        } else if (isRecurringPaidTier(tier)) {
+          const lookupSeq = ++stripeBillingLookupSeq;
+          const billingMeta = await getStripeBillingMeta(profile, tier);
+          if (lookupSeq !== stripeBillingLookupSeq) return;
+          if (billingMeta) {
+            const billingStatus = String(billingMeta.status || '').toLowerCase();
+            const nextBillingDate = billingMeta.next_billing_at ? new Date(billingMeta.next_billing_at) : null;
+            const periodEndDate = billingMeta.current_period_end ? new Date(billingMeta.current_period_end) : null;
+            const nextBillingText = nextBillingDate && !Number.isNaN(nextBillingDate.getTime())
+              ? nextBillingDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
+              : '—';
+            const periodEndText = periodEndDate && !Number.isNaN(periodEndDate.getTime())
+              ? periodEndDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
+              : null;
+
+            if (billingStatus === 'canceled' || billingStatus === 'incomplete_expired') {
+              if (subStatusEl) {
+                subStatusEl.textContent = 'Cancelled';
+                subStatusEl.style.color = 'var(--color-error)';
+              }
+              if (accountNextBillingEl) accountNextBillingEl.textContent = 'No active subscription';
+              if (!billingReconcileInFlight && tier !== 'free') {
+                billingReconcileInFlight = true;
+                try {
+                  await RA10.refreshProfile();
+                } catch (e) {}
+                _updateNavAuth();
+                billingReconcileInFlight = false;
+              }
+            } else if (billingMeta.cancel_at_period_end) {
+              if (subStatusEl) {
+                subStatusEl.textContent = periodEndText ? ('Active (ending on ' + periodEndText + ')') : 'Active (ending at period end)';
+                subStatusEl.style.color = 'var(--color-warning)';
+              }
+              if (accountNextBillingEl) accountNextBillingEl.textContent = 'Cancelled at period end';
+            } else {
+              if (accountNextBillingEl) {
+                const isYearly = String(billingMeta.billing_interval || '').toLowerCase() === 'year';
+                accountNextBillingEl.textContent = nextBillingText !== '—'
+                  ? (isYearly ? (nextBillingText + ' (yearly)') : nextBillingText)
+                  : 'Billing date unavailable';
+              }
+            }
+          } else if (accountNextBillingEl) {
+            accountNextBillingEl.textContent = 'Billing date unavailable';
           }
         }
         renderAccountCreditLog();
@@ -4126,16 +4338,8 @@ route();
       }
     });
 
-    const LS_LINKS = {
-      it:       'https://ra10edu.lemonsqueezy.com/checkout/buy/b428f59a-2ea6-4bed-86d4-09541c3457b9',
-      business: 'https://ra10edu.lemonsqueezy.com/checkout/buy/4e639075-b1f4-4850-a7af-729fb8c5a4bb',
-      sport:    'https://ra10edu.lemonsqueezy.com/checkout/buy/877858f8-0ebd-4948-8894-8b647eeac756',
-      pro:      'https://ra10edu.lemonsqueezy.com/checkout/buy/e5ddcd2d-d806-43cc-b0b8-40017d83f80e',
-      ultra:    'https://ra10edu.lemonsqueezy.com/checkout/buy/dbb9ef1f-9a7e-4a4b-bb9e-74bf480781dd',
-      edu:      'https://ra10edu.lemonsqueezy.com/checkout/buy/8c8421fa-7b05-4bfb-930b-a4073cb78f19',
-    };
-
-    const PURCHASES_TEMPORARILY_DISABLED = true;
+    const IS_LOCAL_PAYMENT_TEST = location.hostname === '127.0.0.1' || location.hostname === 'localhost';
+    const PURCHASES_TEMPORARILY_DISABLED = !IS_LOCAL_PAYMENT_TEST;
 
     function showPurchasesPausedPopup() {
       const existing = document.getElementById('purchase-paused-overlay');
@@ -4151,7 +4355,7 @@ route();
       card.style.cssText = 'width:min(520px,100%);background:var(--color-surface,#fff);color:var(--color-text,#101218);border:1px solid var(--color-border,#d6dbe8);border-radius:18px;padding:20px;box-shadow:0 12px 40px rgba(0,0,0,.28);';
       card.innerHTML = ''
         + '<h3 style="margin:0 0 8px 0;font-size:1.15rem;">Payments are not ready yet</h3>'
-        + '<p style="margin:0;color:var(--color-text-muted,#5f6780);line-height:1.6;">Payments are not ready yet and will be available soon (by Monday hopefully).</p>'
+        + '<p style="margin:0;color:var(--color-text-muted,#5f6780);line-height:1.6;">Payments are only enabled on localhost test mode right now. Live checkout is still disabled.</p>'
         + '<div style="margin-top:16px;display:flex;justify-content:flex-end;">'
         + '<button id="purchase-paused-close" class="btn btn-p" style="justify-content:center;">OK</button>'
         + '</div>';
@@ -4166,7 +4370,7 @@ route();
       document.getElementById('purchase-paused-close')?.addEventListener('click', close);
     }
 
-    function lsBuy(plan, subject) {
+    async function lsBuy(plan, subject) {
       if (PURCHASES_TEMPORARILY_DISABLED) {
         showPurchasesPausedPopup();
         return;
@@ -4175,31 +4379,16 @@ route();
         document.getElementById('auth-overlay').classList.add('open');
         return;
       }
-      const profile = RA10.getProfile();
-      const email = profile?.email || '';
-      const userId = RA10.getSession()?.user?.id || '';
-      const base = LS_LINKS[plan];
-      if (!base) {
-        alert('This checkout link is not configured yet.');
-        return;
+      try {
+        const result = await RA10.startCheckout({
+          plan: String(plan || '').toUpperCase(),
+          subject: subject ? String(subject).toUpperCase() : '',
+        });
+        window.location.href = result.url;
+      } catch (err) {
+        const message = (err && err.message) ? String(err.message) : 'Checkout could not be started.';
+        alert(message);
       }
-      const params = new URLSearchParams();
-      params.set('checkout[email]', email);
-      params.set('checkout[custom][user_id]', userId);
-      params.set('checkout[custom][email]', email);
-      params.set('checkout[custom][plan]', String(plan || '').toUpperCase());
-      if (subject) {
-        params.set('checkout[custom][subject]', String(subject).toUpperCase());
-      }
-      const url = base + '?' + params.toString();
-      window.open(url, '_blank');
-      // Refresh profile once when user returns from checkout tab
-      const onFocus = async () => {
-        window.removeEventListener('focus', onFocus);
-        await RA10.refreshProfile();
-        window.dispatchEvent(new Event('ra10:profilerefreshed'));
-      };
-      window.addEventListener('focus', onFocus);
     }
 
     document.getElementById('btn-buy-it')?.addEventListener('click', () => lsBuy('it', 'it'));
@@ -4228,8 +4417,111 @@ route();
     });
     setUpgradeGroup('personal');
 
+    function showUpgradeCheckoutStatus(kind, message) {
+      const host = document.getElementById('upgrade-checkout-status');
+      if (!host) return;
+      const palette = kind === 'ok'
+        ? { bg: 'var(--color-success-highlight,#e8f4df)', border: 'var(--color-success,#2e7d32)', text: 'var(--color-text,#102018)' }
+        : kind === 'warn'
+          ? { bg: 'var(--color-warning-highlight,#fff3e3)', border: 'var(--color-warning,#b4691f)', text: 'var(--color-text,#2a1b0f)' }
+          : { bg: 'var(--color-error-soft,#fdecec)', border: 'var(--color-error,#c62828)', text: 'var(--color-text,#2a1111)' };
+      host.style.display = '';
+      host.style.background = palette.bg;
+      host.style.borderColor = palette.border;
+      host.style.color = palette.text;
+      host.innerHTML = '<strong style="display:block;margin-bottom:6px;">' + (kind === 'ok' ? 'Payment successful' : kind === 'warn' ? 'Checkout update pending' : 'Checkout error') + '</strong>'
+        + '<div style="font-size:var(--tx-sm);line-height:1.6;">' + message + '</div>';
+    }
+
+    async function confirmCheckoutSession(sessionId) {
+      if (!sessionId || !window.RA10 || !RA10.isLoggedIn()) return false;
+      const session = RA10.getSession && RA10.getSession();
+      const token = session && session.access_token ? session.access_token : '';
+      if (!token) return false;
+      const endpoint = 'https://tcrrgsylxbyyrmnouihl.supabase.co/functions/v1/confirm-checkout';
+      const res = await fetch(endpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token,
+        },
+        body: JSON.stringify({ sessionId: String(sessionId) }),
+      });
+      return !!res.ok;
+    }
+
+    async function handleCheckoutReturn() {
+      const rawHash = String(window.location.hash || '');
+      const hashNoPrefix = rawHash.replace('#', '');
+      const currentPath = (hashNoPrefix.split('?')[0] || '/');
+      if (currentPath !== '/upgrade') return;
+      const query = rawHash.includes('?') ? rawHash.slice(rawHash.indexOf('?') + 1) : '';
+      const params = new URLSearchParams(query);
+      const status = params.get('checkout');
+      const sessionId = params.get('session_id') || '';
+      if (!status) return;
+
+      if (status === 'success') {
+        setSubscriptionSyncWindow(30000);
+        showUpgradeCheckoutStatus('warn', 'Payment received. Updating your account now...');
+        try {
+          const confirmed = await confirmCheckoutSession(sessionId);
+          if (confirmed) {
+            showUpgradeCheckoutStatus('ok', 'Your plan has been applied. If values look stale, wait a few seconds and refresh once.');
+          } else {
+            showUpgradeCheckoutStatus('warn', 'Payment succeeded, but profile update is still syncing. It should appear shortly after webhook processing.');
+          }
+        } catch (e) {
+          showUpgradeCheckoutStatus('warn', 'Payment succeeded, but immediate sync failed. Webhook processing should still update your account shortly.');
+        }
+        for (let i = 0; i < 6; i++) {
+          try {
+            await RA10.refreshProfile();
+            _updateNavAuth();
+            window.dispatchEvent(new Event('ra10:profilerefreshed'));
+          } catch (e) {}
+          await new Promise((resolve) => setTimeout(resolve, 1500));
+        }
+      } else if (status === 'cancel') {
+        showUpgradeCheckoutStatus('warn', 'Checkout was cancelled. No payment was taken.');
+      }
+
+      history.replaceState(null, '', window.location.pathname + window.location.search + '#/upgrade');
+      route();
+      if (status === 'success') {
+        setTimeout(() => {
+          window.location.reload();
+        }, 1200);
+      }
+    }
+
+    handleCheckoutReturn();
+
     document.getElementById('btn-account-signout')?.addEventListener('click', async () => {
       await RA10.signOut(); go('/');
+    });
+
+    document.getElementById('btn-manage-billing')?.addEventListener('click', async () => {
+      const btn = document.getElementById('btn-manage-billing');
+      const original = btn ? btn.textContent : 'Manage billing';
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = 'Opening...';
+      }
+      try {
+        const result = await RA10.startBillingPortal({
+          returnUrl: window.location.origin + '/#/account',
+        });
+        if (!result || !result.url) throw new Error('Billing portal is unavailable right now.');
+        window.location.href = result.url;
+      } catch (e) {
+        alert((e && e.message) ? e.message : 'Could not open billing portal.');
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.textContent = original;
+        }
+      }
     });
 
     document.getElementById('account-change-name-btn')?.addEventListener('click', () => {
