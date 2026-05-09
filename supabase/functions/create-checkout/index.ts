@@ -16,6 +16,10 @@ const ALLOWED_ORIGINS = [
   "http://localhost:5500",
 ];
 
+const PAYMENTS_ENABLED = false;
+const PAYMENTS_PAUSED_MESSAGE =
+  "Payments are not ready yet and will be available soon (by Monday hopefully).";
+
 // Helper: Get CORS headers
 function getCorsHeaders(origin: string) {
   const isAllowed = ALLOWED_ORIGINS.includes(origin);
@@ -45,6 +49,16 @@ export default Deno.serve(async (req: Request) => {
         JSON.stringify({ error: "Method not allowed" }),
         {
           status: 405,
+          headers: corsHeaders,
+        }
+      );
+    }
+
+    if (!PAYMENTS_ENABLED) {
+      return new Response(
+        JSON.stringify({ error: PAYMENTS_PAUSED_MESSAGE }),
+        {
+          status: 503,
           headers: corsHeaders,
         }
       );
