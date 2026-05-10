@@ -3151,6 +3151,9 @@ function exitIframeFullscreen(){
 const DAILY_TASK_XP_SYNC_KEY = 'ra10-daily-task-xp-sync-v1';
 const CREDIT_GIFT_OWNER_EMAIL = 'mistry.hashim@icloud.com';
 const CREDIT_GIFT_POPUP_SEEN_KEY = 'ra10_credit_gift_popup_seen_ids_v1';
+const CREDIT_GIFT_SENT_REFRESH_MS = 20000;
+let _giftSentFetchInFlight = false;
+let _giftSentLastLoadedAt = 0;
 
 function readDailyTaskXpSyncState(today) {
   try {
@@ -3870,7 +3873,7 @@ route();
           const em = String(profile.email || '').toLowerCase();
           giftPanel.style.display = em === CREDIT_GIFT_OWNER_EMAIL ? '' : 'none';
         }
-        loadSentCreditGifts();
+        loadSentCreditGifts({ silent: true });
         const accountSchoolEl = document.getElementById('account-school');
         if (accountSchoolEl) {
           const tier = String(RA10.getTier() || '');
@@ -4208,24 +4211,37 @@ route();
       }
     }
 
-    async function loadSentCreditGifts() {
+    async function loadSentCreditGifts(opts) {
+      const options = opts || {};
+      const force = !!options.force;
+      const silent = options.silent !== false;
       const host = document.getElementById('gift-credit-sent-list');
       if (!host) return;
       if (!window.supabase || !RA10.isLoggedIn()) {
-        host.innerHTML = '<div class="credit-log-note">Sign in to view sent gifts.</div>';
+        if (!silent) host.innerHTML = '<div class="credit-log-note">Sign in to view sent gifts.</div>';
+        host.dataset.loaded = '0';
         return;
       }
       const profile = RA10.getProfile();
       const email = String((profile && profile.email) || '').toLowerCase();
       if (email !== CREDIT_GIFT_OWNER_EMAIL) {
-        host.innerHTML = '<div class="credit-log-note">No gifts sent yet.</div>';
+        if (!silent) host.innerHTML = '<div class="credit-log-note">No gifts sent yet.</div>';
+        host.dataset.loaded = '0';
         return;
       }
-      host.innerHTML = '<div class="credit-log-note">Loading sent gifts...</div>';
+      if (_giftSentFetchInFlight) return;
+      const isFresh = (Date.now() - _giftSentLastLoadedAt) < CREDIT_GIFT_SENT_REFRESH_MS;
+      if (!force && isFresh && host.dataset.loaded === '1') return;
+      if (!silent || host.dataset.loaded !== '1') {
+        host.innerHTML = '<div class="credit-log-note">Loading sent gifts...</div>';
+      }
+      _giftSentFetchInFlight = true;
       try {
         const data = await callAuthedRpc('get_sent_credit_gifts', { limit_count: 8 });
         if (!Array.isArray(data) || !data.length) {
           host.innerHTML = '<div class="credit-log-note">No gifts sent yet.</div>';
+          host.dataset.loaded = '1';
+          _giftSentLastLoadedAt = Date.now();
           return;
         }
         host.innerHTML = data.map((row) => {
@@ -4242,8 +4258,12 @@ route();
             +   '<div class="credit-log-amt gain">+' + amount + '</div>'
             + '</div>';
         }).join('');
+        host.dataset.loaded = '1';
+        _giftSentLastLoadedAt = Date.now();
       } catch (e) {
-        host.innerHTML = '<div class="credit-log-note">Could not load sent gifts.</div>';
+        if (!silent) host.innerHTML = '<div class="credit-log-note">Could not load sent gifts.</div>';
+      } finally {
+        _giftSentFetchInFlight = false;
       }
     }
 
@@ -5315,7 +5335,7 @@ route();
         if (emailInput) emailInput.value = '';
         if (amountInput) amountInput.value = '';
         if (noteInput) noteInput.value = '';
-        await loadSentCreditGifts();
+        await loadSentCreditGifts({ force: true, silent: false });
         await RA10.refreshProfile();
         _updateNavAuth();
       } catch (e) {
