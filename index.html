@@ -108,11 +108,14 @@ a,button,[role="button"],input,select,textarea{
 .nav-link:hover{color:var(--color-text);background:oklch(from var(--color-text) l c h/.06)}
 .nav-link.active{color:var(--color-primary);background:var(--color-primary-highlight)}
 .nav-actions{margin-left:auto;display:flex;align-items:center;gap:var(--sp2)}
-.theme-toggle{
+.theme-toggle,
+.theme-toggle,
+.news-toggle{
   width:36px;height:36px;display:flex;align-items:center;justify-content:center;
-  border-radius:var(--radius-md);color:var(--color-text-muted);
+  border-radius:var(--radius-md);color:var(--color-text-muted);position:relative;
 }
-.theme-toggle:hover{background:oklch(from var(--color-text) l c h/.06);color:var(--color-text)}
+.theme-toggle:hover,
+.news-toggle:hover{background:oklch(from var(--color-text) l c h/.06);color:var(--color-text)}
 
 .nav-auth-btn{display:inline-flex;align-items:center;gap:var(--sp2);padding:calc(var(--sp1) + 2px) var(--sp3);border-radius:var(--radius-md);background:var(--color-primary);color:var(--color-text-inverse);font-size:var(--tx-sm);font-weight:600;border:none}
 .nav-auth-btn:hover{background:var(--color-primary-hover)}
@@ -289,15 +292,16 @@ a,button,[role="button"],input,select,textarea{
   display:none;
   font-size:var(--tx-xs);
   font-weight:800;
-  padding:.28rem .82rem;
+  padding:.4rem .95rem;
   border-radius:var(--radius-full);
   background:linear-gradient(135deg,#8b5cf6,#7c3aed 55%,#a855f7);
   color:#fff;
   border:1px solid rgba(255,255,255,.2);
   cursor:pointer;
-  text-decoration:none;
   white-space:nowrap;
   box-shadow:0 0 0 1px rgba(124,58,237,.16),0 8px 20px rgba(124,58,237,.34);
+  align-items:center;
+  justify-content:center;
 }
 #nav-upgrade-btn:hover{filter:brightness(1.04);box-shadow:0 0 0 1px rgba(168,85,247,.3),0 10px 24px rgba(124,58,237,.42)}
 #nav-upgrade-btn:active{transform:translateY(1px)}
@@ -663,24 +667,117 @@ a,button,[role="button"],input,select,textarea{
   border-radius:var(--radius-full);border:1px solid oklch(from var(--color-text) l c h/.08)}
 
 /* =====================================================
+   REVISION SHOWCASE
+===================================================== */
+.revision-showcase{
+  margin-top:var(--sp2);
+  border:1px solid oklch(from var(--color-text) l c h/.08);
+  border-radius:var(--radius-xl);
+  padding:var(--sp6);
+  background:
+    radial-gradient(120% 120% at 0% 0%, rgba(59,130,246,.14) 0%, rgba(59,130,246,0) 45%),
+    radial-gradient(120% 120% at 100% 100%, rgba(249,115,22,.12) 0%, rgba(249,115,22,0) 50%),
+    var(--color-surface);
+  box-shadow:var(--shadow-md);
+  display:grid;
+  grid-template-columns:1.2fr .9fr;
+  gap:var(--sp6);
+  align-items:center;
+}
+.revision-kicker{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:999px;background:rgba(255,255,255,.75);border:1px solid oklch(from var(--color-text) l c h/.1);font-size:var(--tx-xs);font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--color-text-muted)}
+.revision-showcase h1{margin-top:var(--sp3);margin-bottom:var(--sp3)}
+.revision-showcase p{max-width:56ch}
+.revision-stat-row{display:flex;flex-wrap:wrap;gap:var(--sp2);margin-top:var(--sp4)}
+.revision-stat{padding:8px 12px;border-radius:999px;background:var(--color-surface-offset);border:1px solid var(--color-border);font-size:var(--tx-xs);font-weight:700}
+.revision-showcase-media{position:relative;min-height:260px;border-radius:var(--radius-xl);overflow:hidden;border:1px solid oklch(from var(--color-text) l c h/.09)}
+.revision-showcase-media img{width:100%;height:100%;object-fit:cover;display:block;filter:saturate(1.08)}
+.revision-showcase-media::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,15,40,.02),rgba(8,15,40,.45));}
+
+.rev-flow{margin-top:var(--sp6);display:grid;gap:var(--sp4)}
+.rev-flow-row{border:1px solid oklch(from var(--color-text) l c h/.08);border-radius:18px;padding:var(--sp4);background:var(--color-surface);box-shadow:var(--shadow-sm)}
+.rev-flow-head{display:flex;align-items:center;justify-content:space-between;gap:var(--sp3);margin-bottom:var(--sp3);flex-wrap:wrap}
+.rev-step{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:999px;background:var(--color-primary);color:#fff;font-size:12px;font-weight:800}
+.rev-flow-title{display:flex;align-items:center;gap:10px;font-size:var(--tx-sm);font-weight:700;letter-spacing:.03em;text-transform:uppercase;color:var(--color-text-muted)}
+.rev-flow-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--sp3)}
+.rev-flow-grid.levels{grid-template-columns:repeat(3,minmax(0,1fr))}
+.rev-flow-card{position:relative;overflow:hidden;border:1px solid oklch(from var(--color-text) l c h/.09);border-radius:16px;padding:var(--sp4);background:var(--color-bg-soft);display:flex;flex-direction:column;gap:var(--sp2);cursor:pointer;transition:transform .16s ease,box-shadow .16s ease}
+.rev-flow-card:hover{transform:translateY(-1px);box-shadow:var(--shadow-md)}
+.rev-flow-card h3{font-size:clamp(1rem,1.8vw,1.25rem);font-family:var(--font-d);font-weight:400}
+.rev-flow-card p{font-size:var(--tx-sm);color:var(--color-text-muted);max-width:100%}
+.rev-flow-card.off{opacity:.55;cursor:not-allowed}
+.rev-flow-chip{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:999px;font-size:11px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;width:max-content}
+.rev-flow-chip.ok{background:#dcfce7;color:#166534}
+.rev-flow-chip.soon{background:var(--color-surface-offset-2);color:var(--color-text-muted)}
+
+.revision-app-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--sp4);margin-top:var(--sp8)}
+.revision-app-card{position:relative;overflow:hidden;border-radius:22px;border:1px solid oklch(from var(--color-text) l c h/.1);background:var(--color-surface);box-shadow:var(--shadow-md);display:flex;flex-direction:column;min-height:360px;cursor:pointer;transition:transform .18s ease, box-shadow .18s ease}
+.revision-app-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg)}
+.revision-app-cover{position:relative;height:170px;overflow:hidden}
+.revision-app-cover img{width:100%;height:100%;object-fit:cover;object-position:center;display:block;transform:scale(1.02)}
+.revision-app-cover::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,12,34,.05),rgba(8,12,34,.5));}
+.revision-app-pill{position:absolute;left:12px;top:12px;z-index:2;padding:5px 10px;border-radius:999px;font-size:11px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;background:rgba(255,255,255,.9);color:#111827}
+.revision-app-body{display:flex;flex-direction:column;gap:var(--sp2);padding:var(--sp4);flex:1}
+.revision-app-body h3{font-size:clamp(1.1rem,2.2vw,1.35rem);font-family:var(--font-d);font-weight:400}
+.revision-app-meta{font-size:var(--tx-xs);font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--color-text-muted)}
+.revision-app-body p{font-size:var(--tx-sm);color:var(--color-text-muted);line-height:1.6;max-width:100%}
+.revision-app-foot{margin-top:auto;display:flex;align-items:center;justify-content:space-between;gap:var(--sp2)}
+.revision-app-it{background:linear-gradient(145deg,#ecfeff 0%,#eef2ff 100%)}
+.revision-app-business{background:linear-gradient(145deg,#eff6ff 0%,#e0f2fe 100%)}
+.revision-app-sport{background:linear-gradient(145deg,#f5f3ff 0%,#fdf2f8 100%)}
+
+/* =====================================================
+   LEADERBOARD STAGE
+===================================================== */
+.lb-stage{border:1px solid oklch(from var(--color-text) l c h/.1);border-radius:24px;padding:var(--sp4);background:linear-gradient(145deg,rgba(255,255,255,.78),rgba(255,255,255,.48));box-shadow:var(--shadow-lg)}
+.lb-podium-shell{border-radius:18px;padding:var(--sp4);border:1px solid oklch(from var(--color-text) l c h/.09);background:linear-gradient(145deg,rgba(255,255,255,.65),rgba(255,255,255,.3));margin-bottom:var(--sp4)}
+.lb-podium-head{display:flex;align-items:center;justify-content:space-between;gap:var(--sp3);flex-wrap:wrap;margin-bottom:var(--sp3)}
+.lb-podium-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;align-items:end}
+.lb-row-wrap{border-radius:16px;padding:var(--sp3);background:var(--color-surface-offset);border:1px solid oklch(from var(--color-text) l c h/.08)}
+
+@media (max-width: 980px){
+  .revision-app-grid{grid-template-columns:1fr 1fr}
+  .rev-flow-grid.levels{grid-template-columns:1fr 1fr}
+}
+@media (max-width: 768px){
+  .revision-showcase{grid-template-columns:1fr;padding:var(--sp4)}
+  .revision-showcase-media{min-height:200px}
+  .rev-flow-grid,.rev-flow-grid.levels{grid-template-columns:1fr}
+  .revision-app-grid{grid-template-columns:1fr}
+  .lb-stage{padding:var(--sp3)}
+}
+
+/* =====================================================
    UNIT GRID
 ===================================================== */
 .unit-grid{display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(min(260px,100%),1fr));
-  gap:var(--sp5);padding-block:var(--sp10)}
+  grid-template-columns:repeat(auto-fill,minmax(min(320px,100%),1fr));
+  gap:var(--sp6);padding-block:var(--sp10)}
 .unit-card{
   background:var(--color-surface);
-  border:1px solid oklch(from var(--color-text) l c h/.08);
-  border-radius:var(--radius-xl);padding:var(--sp5);
-  display:flex;flex-direction:column;gap:var(--sp3);box-shadow:var(--shadow-sm);
+  border:1px solid oklch(from var(--color-text) l c h/.1);
+  border-radius:var(--radius-xl);padding:var(--sp6);
+  display:flex;flex-direction:column;gap:var(--sp4);box-shadow:var(--shadow-md);
+  position:relative;overflow:hidden;
 }
-.unit-card.click{cursor:pointer;transition:box-shadow var(--t),transform var(--t)}
-.unit-card.click:hover{box-shadow:var(--shadow-md);transform:translateY(-2px)}
-.unit-card.off{opacity:.5}
-.unit-num{font-size:var(--tx-xs);font-weight:600;letter-spacing:.1em;
-  text-transform:uppercase;color:var(--color-text-faint)}
-.unit-title{font-family:var(--font-d);font-size:var(--tx-lg);font-weight:400;
-  color:var(--color-text);line-height:1.2}
+.unit-card::before{
+  content:'';
+  position:absolute;top:0;left:0;right:0;height:3px;
+  background:var(--color-primary);
+  opacity:0;
+  transition:opacity var(--t);
+}
+.unit-card.click{cursor:pointer;transition:box-shadow var(--t),transform var(--t),background var(--t)}
+.unit-card.click:hover{
+  box-shadow:var(--shadow-lg);
+  transform:translateY(-4px);
+  background:oklch(from var(--color-surface) l c h / 1.02);
+}
+.unit-card.click:hover::before{opacity:1}
+.unit-card.off{opacity:.48}
+.unit-num{font-size:var(--tx-xs);font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--color-primary);opacity:.85}
+.unit-title{font-family:var(--font-d);font-size:clamp(1.1rem,1.8vw,1.5rem);font-weight:400;
+  color:var(--color-text);line-height:1.2;margin-top:var(--sp2)}
 .unit-desc{font-size:var(--tx-sm);color:var(--color-text-muted);line-height:1.6;flex:1}
 .unit-ft{display:flex;align-items:center;justify-content:space-between;margin-top:var(--sp2)}
 .badge{font-size:var(--tx-xs);font-weight:600;letter-spacing:.05em;text-transform:uppercase;
@@ -1378,7 +1475,7 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
     </div>
     <div class="nav-actions">
       <div id="nav-credit-chip" class="nav-credit-chip" style="display:none"></div>
-      <a id="nav-upgrade-btn" onclick="go('/upgrade')">Upgrade</a>
+      <button id="nav-upgrade-btn" class="nav-upgrade-btn" type="button" onclick="go('/upgrade')">Upgrade</button>
       <button id="nav-auth-btn" class="nav-auth-btn">Sign in</button>
       <div class="nav-user-wrap" id="nav-user-wrap" style="display:none">
         <button class="nav-user-btn" id="nav-user-btn">
@@ -1398,6 +1495,9 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
           <button class="dropdown-item danger" id="nav-signout-btn">Sign out</button>
         </div>
       </div>
+      <button class="news-toggle" id="news-toggle" onclick="go('/news')" aria-label="View news and updates" title="Latest news">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 7h10"/><path d="M7 12h10"/><path d="M7 17h4"/></svg>
+      </button>
       <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
       </button>
@@ -1465,7 +1565,12 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
   <span class="brand">RA10</span>
   <div id="mobile-credit-chip" class="mobile-credit-chip" style="display:none"></div>
   <button id="mobile-upgrade-btn" class="mobile-upgrade-btn" type="button" onclick="go('/upgrade')">Upgrade</button>
-  <button class="theme-toggle mobile-theme-toggle" id="mobile-theme-toggle" aria-label="Toggle dark mode"></button>
+  <button class="news-toggle mobile-theme-toggle" id="mobile-news-toggle" onclick="go('/news')" aria-label="View news" title="Latest news">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 7h10"/><path d="M7 12h10"/><path d="M7 17h4"/></svg>
+  </button>
+  <button class="theme-toggle mobile-theme-toggle" id="mobile-theme-toggle" aria-label="Toggle dark mode">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+  </button>
 </div>
 
 <nav class="mobile-bottom-nav" aria-label="Mobile app navigation">
@@ -1707,29 +1812,56 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
       <span class="bc-sep">›</span>
       <span class="bc-item cur">Revision</span>
     </nav>
-    <div class="hero">
-      <div class="hero-label">Revision Hub</div>
-      <h1>Revision</h1>
-      <p>All your course revision tools in one place. Pick a qualification below to get started.</p>
+    <div class="revision-showcase">
+      <div>
+        <div class="revision-kicker">Revision Studio · Pick your path</div>
+        <h1>Choose qualification, level, then launch your subject app</h1>
+        <p>Everything on one page and in the right order: start with qualification type, move to level, then jump into the subject app you need for this week.</p>
+        <div class="ctas" style="margin-top:var(--sp4)">
+          <button class="btn btn-p btn-lg" onclick="go('/revision/btec')">Start with BTEC</button>
+          <button class="btn btn-s btn-lg" onclick="go('leaderboard')">See Weekly Race</button>
+        </div>
+        <div class="revision-stat-row">
+          <span class="revision-stat">3 Live Apps</span>
+          <span class="revision-stat">BTEC AAQ Aligned</span>
+          <span class="revision-stat">Daily XP + Weekly Rewards</span>
+        </div>
+      </div>
+      <div class="revision-showcase-media">
+        <img src="https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=1200&q=80" alt="Student revision desk">
+      </div>
     </div>
-    <div class="sec">
-      <div class="sec-label">Qualifications</div>
-      <div class="grid">
-        <div class="card click" onclick="go('/revision/btec')">
-          <div class="card-tag">BTEC</div>
-          <h3>BTEC Qualifications</h3>
-          <p>Applied general qualifications by Pearson. Revision tools aligned to AAQ specifications.</p>
-          <div class="card-ft">
-            <span class="pill pill-ok">3 subjects available</span>
-            <button class="btn btn-g" onclick="event.stopPropagation();go('/revision/btec')">Browse →</button>
-          </div>
+
+    <div class="rev-flow">
+      <section class="rev-flow-row">
+        <div class="rev-flow-head">
+          <div class="rev-flow-title"><span class="rev-step">1</span>Choose qualification type</div>
+          <span class="rev-flow-chip ok">Start here</span>
         </div>
-        <div class="card off">
-          <div class="card-tag">A-Level</div>
-          <h3>A-Level Qualifications</h3>
-          <p>AQA, Edexcel and OCR A-Level revision tools. Coming soon.</p>
-          <div class="card-ft"><span class="pill pill-soon">Coming soon</span></div>
+        <div class="rev-flow-grid">
+          <article class="rev-flow-card" onclick="go('/revision/btec')">
+            <span class="rev-flow-chip ok">Live now</span>
+            <h3>BTEC</h3>
+            <p>AAQ-focused revision tracks with live subject apps and exam-ready tools.</p>
+            <button class="btn btn-g" onclick="event.stopPropagation();go('/revision/btec')">Open BTEC</button>
+          </article>
+          <article class="rev-flow-card off" aria-disabled="true">
+            <span class="rev-flow-chip soon">Coming soon</span>
+            <h3>A-Level</h3>
+            <p>AQA, Edexcel and OCR pathways are planned next with the same app-style experience.</p>
+            <button class="btn btn-g" disabled>Coming soon</button>
+          </article>
         </div>
+      </section>
+
+    </div>
+
+    <div class="card" style="margin-top:var(--sp6);background:linear-gradient(135deg,#e0f2fe,#f0f9ff 45%,#ede9fe);border-color:rgba(59,130,246,.18)">
+      <div class="card-tag" style="color:#1d4ed8">Next step</div>
+      <h3 style="margin:0">After this, choose your level on the BTEC page</h3>
+      <p style="color:#475569">You asked for cleaner navigation, so levels now live on their own page and subjects live on the Level 3 page.</p>
+      <div class="card-ft" style="margin-top:var(--sp2)">
+        <button class="btn btn-p" onclick="go('/revision/btec')">Go to BTEC levels</button>
       </div>
     </div>
   </div>
@@ -1747,24 +1879,50 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
       <span class="bc-sep">›</span>
       <span class="bc-item cur">BTEC</span>
     </nav>
-    <div class="hero">
-      <div class="hero-label">BTEC</div>
-      <h1>BTEC Qualifications</h1>
-      <p>Pearson BTEC revision tools, aligned to the latest AAQ specifications.</p>
-    </div>
-    <div class="sec">
-      <div class="sec-label">Levels</div>
-      <div class="grid">
-        <div class="card click" onclick="go('/revision/btec/level-3')">
-          <div class="card-tag">Level 3</div>
-          <h3>BTEC Level 3</h3>
-          <p>Applied qualifications for Sixth Form and college. IT AAQ, Business and Sport available now.</p>
-          <div class="card-ft">
-            <span class="pill pill-ok">Available</span>
-            <button class="btn btn-g" onclick="event.stopPropagation();go('/revision/btec/level-3')">Browse →</button>
-          </div>
+
+    <div class="revision-showcase">
+      <div>
+        <div class="revision-kicker">Step 2 · Choose level</div>
+        <h1>BTEC levels</h1>
+        <p>Pick your study level, then we will take you to the subject app collection for that pathway.</p>
+        <div class="revision-stat-row">
+          <span class="revision-stat">Level 3 live</span>
+          <span class="revision-stat">AAQ aligned</span>
+          <span class="revision-stat">More levels coming</span>
         </div>
       </div>
+      <div class="revision-showcase-media">
+        <img src="https://images.unsplash.com/photo-1484417894907-623942c8ee29?auto=format&fit=crop&w=1200&q=80" alt="Students studying together">
+      </div>
+    </div>
+
+    <div class="rev-flow" style="margin-top:var(--sp8)">
+      <section class="rev-flow-row">
+        <div class="rev-flow-head">
+          <div class="rev-flow-title"><span class="rev-step">2</span>Choose level</div>
+          <span class="rev-flow-chip ok">BTEC pathway</span>
+        </div>
+        <div class="rev-flow-grid levels">
+          <article class="rev-flow-card" onclick="go('/revision/btec/level-3')">
+            <span class="rev-flow-chip ok">Available</span>
+            <h3>Level 3</h3>
+            <p>Current live pathway with IT, Business, and Sport subject apps.</p>
+            <button class="btn btn-g" onclick="event.stopPropagation();go('/revision/btec/level-3')">Open Level 3</button>
+          </article>
+          <article class="rev-flow-card off" aria-disabled="true">
+            <span class="rev-flow-chip soon">Soon</span>
+            <h3>Level 2</h3>
+            <p>Additional level pathways will be added as content expands.</p>
+            <button class="btn btn-g" disabled>Coming soon</button>
+          </article>
+          <article class="rev-flow-card off" aria-disabled="true">
+            <span class="rev-flow-chip soon">Soon</span>
+            <h3>Other pathways</h3>
+            <p>New levels and course types will slot into this flow as content launches.</p>
+            <button class="btn btn-g" disabled>Coming soon</button>
+          </article>
+        </div>
+      </section>
     </div>
   </div>
 </div>
@@ -1783,41 +1941,73 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
       <span class="bc-sep">›</span>
       <span class="bc-item cur">Level 3</span>
     </nav>
-    <div class="hero">
-      <div class="hero-label">BTEC Level 3</div>
-      <h1>BTEC Level 3</h1>
-      <p>Pearson BTEC Level 3 Applied General Qualifications — AAQ spec revision tools.</p>
+
+    <div class="revision-showcase">
+      <div>
+        <div class="revision-kicker">Choose your subject</div>
+        <h1>BTEC Level 3 subject apps</h1>
+        <p>Now pick the subject app you want and dive straight into live revision tools, quizzes, flashcards, and exam practice.</p>
+        <div class="revision-stat-row">
+          <span class="revision-stat">IT live</span>
+          <span class="revision-stat">Business live</span>
+          <span class="revision-stat">Sport live</span>
+        </div>
+      </div>
+      <div class="revision-showcase-media">
+        <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1200&q=80" alt="Students collaborating">
+      </div>
     </div>
-    <div class="sec">
+
+    <div class="sec" style="padding-top:var(--sp8)">
       <div class="sec-label">Subjects</div>
-      <div class="grid">
-        <div class="card click" onclick="go('/revision/btec/level-3/IT-AAQ')">
-          <div class="card-tag">IT</div>
-          <h3>Information Technology (AAQ)</h3>
-          <p>Unit 1 revision live now. Units 2–4 coming soon.</p>
-          <div class="card-ft">
-            <span class="pill pill-ok">Unit 1 live</span>
-            <button class="btn btn-g" onclick="event.stopPropagation();go('/revision/btec/level-3/IT-AAQ')">Open →</button>
+      <div class="revision-app-grid" style="margin-top:var(--sp2)">
+        <article class="revision-app-card revision-app-it" onclick="go('/revision/btec/level-3/IT-AAQ')">
+          <div class="revision-app-cover">
+            <span class="revision-app-pill">IT · Live</span>
+            <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=80" alt="Technology workspace">
           </div>
-        </div>
-        <div class="card click" onclick="go('/revision/btec/level-3/business')">
-          <div class="card-tag">Business</div>
-          <h3>Business</h3>
-          <p>Unit 3 Personal and Business Finance revision. Cash flow, break-even, ratios, financial statements and more.</p>
-          <div class="card-ft">
-            <span class="pill pill-ok">Unit 3 live</span>
-            <button class="btn btn-g" onclick="event.stopPropagation();go('/revision/btec/level-3/business')">Open</button>
+          <div class="revision-app-body">
+            <div class="revision-app-meta">BTEC IT AAQ</div>
+            <h3>Information Technology</h3>
+            <p>Unit 1 is live now with spec explorer, revision guide, flashcards, quizzes, and AI-mark support.</p>
+            <div class="revision-app-foot">
+              <span class="pill pill-ok">Unit 1 live</span>
+              <button class="btn btn-p" onclick="event.stopPropagation();go('/revision/btec/level-3/IT-AAQ')">Open App</button>
+            </div>
           </div>
-        </div>
-        <div class="card click" onclick="go('/revision/btec/level-3/sport')">
-          <div class="card-tag">Sport</div>
-          <h3>Sport</h3>
-          <p>Unit 1 Anatomy and Physiology revision with exam-style questions, mock papers, flashcards and quizzes.</p>
-          <div class="card-ft">
-            <span class="pill pill-ok">Unit 1 live</span>
-            <button class="btn btn-g" onclick="event.stopPropagation();go('/revision/btec/level-3/sport')">Open</button>
+        </article>
+
+        <article class="revision-app-card revision-app-business" onclick="go('/revision/btec/level-3/business')">
+          <div class="revision-app-cover">
+            <span class="revision-app-pill">Business · Live</span>
+            <img src="https://images.unsplash.com/photo-1554224155-1696413565d3?auto=format&fit=crop&w=1200&q=80" alt="Business planning charts">
           </div>
-        </div>
+          <div class="revision-app-body">
+            <div class="revision-app-meta">BTEC Business</div>
+            <h3>Personal and Business Finance</h3>
+            <p>Cash flow, break-even, ratios, and exam-style finance practice with focused revision resources.</p>
+            <div class="revision-app-foot">
+              <span class="pill pill-ok">Unit 3 live</span>
+              <button class="btn btn-p" onclick="event.stopPropagation();go('/revision/btec/level-3/business')">Open App</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="revision-app-card revision-app-sport" onclick="go('/revision/btec/level-3/sport')">
+          <div class="revision-app-cover">
+            <span class="revision-app-pill">Sport · Live</span>
+            <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&w=1200&q=80" alt="Sports training action">
+          </div>
+          <div class="revision-app-body">
+            <div class="revision-app-meta">BTEC Sport</div>
+            <h3>Anatomy and Physiology</h3>
+            <p>Exam-style unit prep with flashcards, quizzes, and realistic question practice for faster confidence.</p>
+            <div class="revision-app-foot">
+              <span class="pill pill-ok">Unit 1 live</span>
+              <button class="btn btn-p" onclick="event.stopPropagation();go('/revision/btec/level-3/sport')">Open App</button>
+            </div>
+          </div>
+        </article>
       </div>
     </div>
   </div>
@@ -2481,10 +2671,10 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
       <span class="bc-sep">›</span>
       <span class="bc-item cur">Leaderboard</span>
     </nav>
-    <div class="hero" style="position:relative;overflow:hidden;border-radius:var(--radius-xl);padding:var(--sp12);margin-top:var(--sp2);margin-bottom:var(--sp4);background:radial-gradient(circle at top right, rgba(210,0,0,.16), transparent 34%), linear-gradient(135deg, rgba(210,0,0,.09), rgba(255,255,255,.06));border:1px solid oklch(from var(--color-primary) l c h/.12);box-shadow:var(--shadow-lg);">
+    <div class="hero" style="position:relative;overflow:hidden;border-radius:var(--radius-xl);padding:var(--sp12);margin-top:var(--sp2);margin-bottom:var(--sp4);background:radial-gradient(circle at top right, rgba(59,130,246,.22), transparent 34%),radial-gradient(circle at bottom left, rgba(249,115,22,.18), transparent 30%), linear-gradient(135deg, rgba(210,0,0,.09), rgba(255,255,255,.06));border:1px solid oklch(from var(--color-primary) l c h/.12);box-shadow:var(--shadow-lg);">
       <div style="position:absolute;inset:auto -48px -48px auto;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle, rgba(210,0,0,.20), rgba(210,0,0,0) 68%);pointer-events:none;"></div>
       <div class="hero-label">Weekly XP Leaderboard</div>
-      <h1>Who's revising the most?</h1>
+      <h1>Weekly revision race</h1>
       <p>XP resets at the end of every Saturday. The weekly winner gets 30 credits, second place gets 20 and third place gets 10.</p>
       <div style="display:flex;gap:var(--sp2);flex-wrap:wrap;margin-top:var(--sp4);margin-bottom:var(--sp4);">
         <span style="display:inline-flex;align-items:center;gap:var(--sp2);padding:8px 12px;border-radius:999px;background:var(--color-surface);border:1px solid var(--color-border);font-size:var(--tx-xs);font-weight:700;">🥇 Top spot: 30 credits</span>
@@ -2493,7 +2683,7 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
       </div>
       <div id="lb-countdown-inline" class="lb-countdown-pill" style="margin-top:var(--sp2);">Resets in --:--:--</div>
     </div>
-    <div id="lb-page-content" style="max-width:680px;margin:0 auto;
+    <div id="lb-page-content" style="max-width:1000px;margin:0 auto;
       padding-bottom:var(--sp16);">
       <div id="lb-loading" style="text-align:center;padding:40px;
         color:var(--color-text-muted)">Loading leaderboard...</div>
@@ -2672,13 +2862,6 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
   </div>
 </div>
 
-<footer>
-  <div class="footer-inner">
-    <span class="footer-brand">RA10</span>
-    <span class="footer-copy">Built for revision, tools and more.</span>
-  </div>
-</footer>
-
 <!-- ============================================================
      SCRIPTS
 ============================================================ -->
@@ -2732,6 +2915,7 @@ const ROUTES = {
   '':                                     'p-home',
   'leaderboard':                          'p-leaderboard',
   '/leaderboard':                         'p-leaderboard',
+  '/news':                                'p-news',
   '/revision':                            'p-revision',
   '/revision/btec':                       'p-btec',
   '/revision/btec/level-3':              'p-btec-l3',
@@ -2974,53 +3158,6 @@ async function renderLeaderboard() {
       return;
     }
     const winner = data[0];
-    tableEl.innerHTML = `
-      <div style="margin-bottom:var(--sp4);">
-        <div style="display:flex;justify-content:space-between;
-          font-size:var(--tx-xs);font-weight:700;letter-spacing:.08em;
-          text-transform:uppercase;color:var(--color-text-muted);
-          padding:8px 16px;margin-bottom:4px;">
-          <span>Player</span><span>XP This Week</span>
-        </div>
-        ${data.map((u, i) => {
-          const isMe = u.id === currentId;
-          const isWinner = i === 0;
-          const badgeEmoji = getLeaderboardBadgeEmoji(u);
-          const name = getLeaderboardDisplayName(u);
-          return `
-            <div style="display:flex;align-items:center;
-              justify-content:space-between;padding:14px 16px;
-              border-radius:var(--radius-lg);margin-bottom:6px;
-              background:${isMe ? 'var(--color-primary-highlight)' : 'var(--color-surface)'};
-              border:1px solid ${isMe ? 'var(--color-primary)' : 'var(--color-border)'};">
-              <div style="display:flex;align-items:center;gap:12px;">
-                <span style="font-size:1.1rem;min-width:28px">
-                  ${medals[i] || (i+1)+'.'}
-                </span>
-                <div style="display:flex;flex-direction:column;gap:2px;">
-                  <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:var(--tx-sm);font-weight:${isMe?'700':'400'}">
-                    <span>${name}</span>
-                    ${badgeEmoji ? '<span style="display:inline-flex;align-items:center;justify-content:center;min-width:1.8em;height:1.8em;padding:0 .45em;border-radius:999px;background:var(--color-surface-offset);font-size:1rem;">' + badgeEmoji + '</span>' : ''}
-                    ${isWinner ? '<span style="font-size:0.7rem;background:var(--color-warning);color:#fff;padding:1px 6px;border-radius:999px;">Top</span>' : ''}
-                    ${isMe ? '<span style="font-size:0.7rem;background:var(--color-primary);color:#fff;padding:1px 6px;border-radius:999px;">You</span>' : ''}
-                  </div>
-                  <div style="font-size:var(--tx-xs);color:var(--color-text-muted)">
-                    ${u.xp_total||0} total XP
-                  </div>
-                </div>
-              </div>
-              <div style="font-size:var(--tx-base);font-weight:700;
-                color:var(--color-primary)">${u.xp_this_week} XP</div>
-            </div>
-          `;
-        }).join('')}
-      </div>
-      <div style="background:var(--color-surface-offset);
-        border-radius:var(--radius-lg);padding:var(--sp4);
-        text-align:center;font-size:var(--tx-sm);color:var(--color-text-muted);">
-        <div>🏆 First place wins <strong>30 credits</strong>, second gets <strong>20</strong> and third gets <strong>10</strong> when the week ends on Saturday.</div>
-      </div>
-    `;
     const top3 = [data[1], data[0], data[2]].filter(Boolean);
     const podium = top3.map((u, i) => {
       const rank = i === 1 ? 1 : (i === 0 ? 2 : 3);
@@ -3048,23 +3185,56 @@ async function renderLeaderboard() {
         </div>
       `;
     }).join('');
-    tableEl.insertAdjacentHTML('beforebegin', `
-      <div style="margin-bottom:var(--sp5);padding:var(--sp4);border-radius:24px;background:linear-gradient(135deg,rgba(210,0,0,.08),rgba(255,255,255,.58));border:1px solid oklch(from var(--color-primary) l c h/.12);box-shadow:var(--shadow-md);overflow:hidden;">
-        <div style="display:flex;align-items:center;justify-content:space-between;gap:var(--sp3);flex-wrap:wrap;margin-bottom:var(--sp3);">
-          <div>
-            <div style="font-size:var(--tx-xs);font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--color-primary);">Podium</div>
-            <div style="font-family:var(--font-d);font-size:var(--tx-lg);font-weight:400;">Top 3 this week</div>
+    tableEl.innerHTML = `
+      <div class="lb-stage">
+        <div class="lb-podium-shell">
+          <div class="lb-podium-head">
+            <div>
+              <div style="font-size:var(--tx-xs);font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--color-primary);">Podium</div>
+              <div style="font-family:var(--font-d);font-size:var(--tx-lg);font-weight:400;">Top 3 this week</div>
+            </div>
+            <div style="display:inline-flex;align-items:center;gap:var(--sp2);padding:8px 12px;border-radius:999px;background:var(--color-surface);border:1px solid var(--color-border);font-size:var(--tx-xs);font-weight:700;">⚡ Keep grinding for the reset</div>
           </div>
-          <div style="display:inline-flex;align-items:center;gap:var(--sp2);padding:8px 12px;border-radius:999px;background:var(--color-surface);border:1px solid var(--color-border);font-size:var(--tx-xs);font-weight:700;">⚡ Keep grinding for the reset</div>
+          <div style="padding:4px 6px 0;background:linear-gradient(180deg,rgba(255,255,255,.16),rgba(255,255,255,.03));border-radius:16px;">
+            <div class="lb-podium-grid">${podium}</div>
+            <div style="height:14px;margin:6px auto 0;max-width:92%;border-radius:999px;background:linear-gradient(90deg,rgba(96,165,250,.42),rgba(245,158,11,.45),rgba(217,70,239,.42));filter:blur(2px);box-shadow:0 0 22px rgba(245,158,11,.35),0 0 30px rgba(217,70,239,.2);"></div>
+          </div>
         </div>
-        <div style="padding:4px 6px 0;background:linear-gradient(180deg,rgba(255,255,255,.16),rgba(255,255,255,.03));border-radius:16px;">
-          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;align-items:end;">
-            ${podium}
+
+        <div class="lb-row-wrap">
+          <div style="display:flex;justify-content:space-between;font-size:var(--tx-xs);font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--color-text-muted);padding:8px 16px;margin-bottom:4px;">
+            <span>Player</span><span>XP This Week</span>
           </div>
-          <div style="height:14px;margin:6px auto 0;max-width:92%;border-radius:999px;background:linear-gradient(90deg,rgba(96,165,250,.42),rgba(245,158,11,.45),rgba(217,70,239,.42));filter:blur(2px);box-shadow:0 0 22px rgba(245,158,11,.35),0 0 30px rgba(217,70,239,.2);"></div>
+          ${data.map((u, i) => {
+            const isMe = u.id === currentId;
+            const isWinner = i === 0;
+            const badgeEmoji = getLeaderboardBadgeEmoji(u);
+            const name = getLeaderboardDisplayName(u);
+            return `
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-radius:var(--radius-lg);margin-bottom:6px;background:${isMe ? 'var(--color-primary-highlight)' : 'var(--color-surface)'};border:1px solid ${isMe ? 'var(--color-primary)' : 'var(--color-border)'};">
+                <div style="display:flex;align-items:center;gap:12px;">
+                  <span style="font-size:1.1rem;min-width:28px">${medals[i] || (i+1)+'.'}</span>
+                  <div style="display:flex;flex-direction:column;gap:2px;">
+                    <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:var(--tx-sm);font-weight:${isMe?'700':'400'}">
+                      <span>${name}</span>
+                      ${badgeEmoji ? '<span style="display:inline-flex;align-items:center;justify-content:center;min-width:1.8em;height:1.8em;padding:0 .45em;border-radius:999px;background:var(--color-surface-offset);font-size:1rem;">' + badgeEmoji + '</span>' : ''}
+                      ${isWinner ? '<span style="font-size:0.7rem;background:var(--color-warning);color:#fff;padding:1px 6px;border-radius:999px;">Top</span>' : ''}
+                      ${isMe ? '<span style="font-size:0.7rem;background:var(--color-primary);color:#fff;padding:1px 6px;border-radius:999px;">You</span>' : ''}
+                    </div>
+                    <div style="font-size:var(--tx-xs);color:var(--color-text-muted)">${u.xp_total||0} total XP</div>
+                  </div>
+                </div>
+                <div style="font-size:var(--tx-base);font-weight:700;color:var(--color-primary)">${u.xp_this_week} XP</div>
+              </div>
+            `;
+          }).join('')}
+        </div>
+
+        <div style="margin-top:var(--sp3);background:var(--color-surface-offset);border-radius:var(--radius-lg);padding:var(--sp4);text-align:center;font-size:var(--tx-sm);color:var(--color-text-muted);">
+          🏆 First place wins <strong>30 credits</strong>, second gets <strong>20</strong> and third gets <strong>10</strong> when the week ends on Saturday.
         </div>
       </div>
-    `);
+    `;
     updateLeaderboardCountdown();
     if (currentId && winner && winner.id === currentId) {
       showLeaderboardWinnerPopup(winner, 30);
@@ -3455,9 +3625,9 @@ function setPriceSnapshotView(mode, trigger) {
 }
 
 window.addEventListener('hashchange', route);
-route();
 
   document.addEventListener('DOMContentLoaded', async () => {
+    route();
     setPriceSnapshotView('all');
     updateLeaderboardCountdown();
     setInterval(updateLeaderboardCountdown, 1000);
@@ -3759,9 +3929,9 @@ route();
       const tier = RA10.getTier();
       document.getElementById('nav-auth-btn').style.display = loggedIn ? 'none' : '';
       document.getElementById('nav-user-wrap').style.display = loggedIn ? '' : 'none';
-      if (!loggedIn || tier === 'free') document.getElementById('nav-upgrade-btn').style.display = '';
+      if (!loggedIn || !tier || tier === 'free') document.getElementById('nav-upgrade-btn').style.display = 'inline-flex';
       else document.getElementById('nav-upgrade-btn').style.display = 'none';
-      if (mobileUpgradeBtn) mobileUpgradeBtn.style.display = (!loggedIn || tier === 'free') ? 'inline-flex' : 'none';
+      if (mobileUpgradeBtn) mobileUpgradeBtn.style.display = (!loggedIn || !tier || tier === 'free') ? 'inline-flex' : 'none';
       if (examBanner) {
         const isFreeOrSignedOut = !loggedIn || tier === 'free';
         examBanner.style.display = isFreeOrSignedOut ? '' : 'none';
@@ -5425,6 +5595,203 @@ route();
     }
   });
 </script>
+
+<!-- ============================================================
+     NEWS PAGE  /news
+============================================================ -->
+<div class="page" id="p-news">
+  <div class="c">
+    <div class="hero">
+      <div class="hero-label">Latest updates</div>
+      <h1>What's new in RA10</h1>
+      <p>Check out the latest features and improvements we've shipped over the past week.</p>
+    </div>
+    <div style="display:grid;gap:var(--sp8);padding-block:var(--sp8)">
+      
+      <!-- News Item: Business Level Coming Soon -->
+      <div style="border:1px solid oklch(from var(--color-text) l c h/.08);border-radius:var(--radius-xl);padding:var(--sp6);background:var(--color-surface)">
+        <div style="display:flex;gap:var(--sp4);align-items:flex-start">
+          <div style="width:48px;height:48px;border-radius:var(--radius-lg);background:#f0f4ff;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0">📈</div>
+          <div style="flex:1;min-width:0">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp2)">
+              <h3 style="font-size:var(--tx-lg);margin:0">Business A-Level Coming Soon</h3>
+              <span style="font-size:var(--tx-xs);color:var(--color-text-faint);white-space:nowrap">10.05.2026</span>
+            </div>
+            <p style="color:var(--color-text-muted);margin-bottom:var(--sp3)">We're expanding to A-Level qualifications with a dedicated Business A-Level program. Comprehensive units and exam-style practice coming soon.</p>
+            <span class="pill pill-soon">Coming soon</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- News Item: Stripe Live -->
+      <div style="border:1px solid oklch(from var(--color-text) l c h/.08);border-radius:var(--radius-xl);padding:var(--sp6);background:var(--color-surface)">
+        <div style="display:flex;gap:var(--sp4);align-items:flex-start">
+          <div style="width:48px;height:48px;border-radius:var(--radius-lg);background:var(--color-primary-highlight);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0">💳</div>
+          <div style="flex:1;min-width:0">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp2)">
+              <h3 style="font-size:var(--tx-lg);margin:0">Live Payment Processing</h3>
+              <span style="font-size:var(--tx-xs);color:var(--color-text-faint);white-space:nowrap">10.05.2026</span>
+            </div>
+            <p style="color:var(--color-text-muted);margin-bottom:var(--sp3)">We've fully migrated from test mode to live Stripe payments. Upgrade securely with real-time payment processing and robust webhook handling.</p>
+            <span class="pill pill-ok">Live now</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- News Item: Gift Credits -->
+      <div style="border:1px solid oklch(from var(--color-text) l c h/.08);border-radius:var(--radius-xl);padding:var(--sp6);background:var(--color-surface)">
+        <div style="display:flex;gap:var(--sp4);align-items:flex-start">
+          <div style="width:48px;height:48px;border-radius:var(--radius-lg);background:#f2e5ff;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0">🎁</div>
+          <div style="flex:1;min-width:0">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp2)">
+              <h3 style="font-size:var(--tx-lg);margin:0">Send Credits as Gifts</h3>
+              <span style="font-size:var(--tx-xs);color:var(--color-text-faint);white-space:nowrap">10.05.2026</span>
+            </div>
+            <p style="color:var(--color-text-muted);margin-bottom:var(--sp3)">Reward friends and students by gifting RA10 credits directly. Send credits by email, track history, and recipients get instant notifications.</p>
+            <span class="pill pill-ok">Available in Account</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- News Item: Leaderboard Redesign -->
+      <div style="border:1px solid oklch(from var(--color-text) l c h/.08);border-radius:var(--radius-xl);padding:var(--sp6);background:var(--color-surface)">
+        <div style="display:flex;gap:var(--sp4);align-items:flex-start">
+          <div style="width:48px;height:48px;border-radius:var(--radius-lg);background:#dcfce7;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0">🏆</div>
+          <div style="flex:1;min-width:0">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp2)">
+              <h3 style="font-size:var(--tx-lg);margin:0">New Leaderboard Design</h3>
+              <span style="font-size:var(--tx-xs);color:var(--color-text-faint);white-space:nowrap">10.05.2026</span>
+            </div>
+            <p style="color:var(--color-text-muted);margin-bottom:var(--sp3)">Completely redesigned leaderboard with a stunning podium display, glowing hero section, and weekly countdown timer. Compete for top 3 status every week.</p>
+            <span class="pill pill-ok">Live now</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- News Item: Revision Page Restructure -->
+      <div style="border:1px solid oklch(from var(--color-text) l c h/.08);border-radius:var(--radius-xl);padding:var(--sp6);background:var(--color-surface)">
+        <div style="display:flex;gap:var(--sp4);align-items:flex-start">
+          <div style="width:48px;height:48px;border-radius:var(--radius-lg);background:#f4d4d4;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0">📚</div>
+          <div style="flex:1;min-width:0">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp2)">
+              <h3 style="font-size:var(--tx-lg);margin:0">Cleaner Revision Flow</h3>
+              <span style="font-size:var(--tx-xs);color:var(--color-text-faint);white-space:nowrap">10.05.2026</span>
+            </div>
+            <p style="color:var(--color-text-muted);margin-bottom:var(--sp3)">Restructured the revision navigation: start with qualifications, choose a level, then pick your subject. Each step is now on its own dedicated page for clarity.</p>
+            <span class="pill pill-ok">Live now</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- News Item: Subject Apps Launch -->
+      <div style="border:1px solid oklch(from var(--color-text) l c h/.08);border-radius:var(--radius-xl);padding:var(--sp6);background:var(--color-surface)">
+        <div style="display:flex;gap:var(--sp4);align-items:flex-start">
+          <div style="width:48px;height:48px;border-radius:var(--radius-lg);background:#dcfce7;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0">📱</div>
+          <div style="flex:1;min-width:0">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp2)">
+              <h3 style="font-size:var(--tx-lg);margin:0">Sport & Business Subject Apps Launch</h3>
+              <span style="font-size:var(--tx-xs);color:var(--color-text-faint);white-space:nowrap">06.05.2026</span>
+            </div>
+            <p style="color:var(--color-text-muted);margin-bottom:var(--sp3)">Added Sport (Unit 1) and Business (Unit 3) to join IT (Unit 1) in our BTEC Level 3 revision suite. Three subjects live with full flashcards, quizzes, and exam practice.</p>
+            <span class="pill pill-ok">Live now</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- News Item: Unit Grid Redesign -->
+      <div style="border:1px solid oklch(from var(--color-text) l c h/.08);border-radius:var(--radius-xl);padding:var(--sp6);background:var(--color-surface)">
+        <div style="display:flex;gap:var(--sp4);align-items:flex-start">
+          <div style="width:48px;height:48px;border-radius:var(--radius-lg);background:#ffebee;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0">✨</div>
+          <div style="flex:1;min-width:0">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp2)">
+              <h3 style="font-size:var(--tx-lg);margin:0">Enhanced Unit Selection</h3>
+              <span style="font-size:var(--tx-xs);color:var(--color-text-faint);white-space:nowrap">05.05.2026</span>
+            </div>
+            <p style="color:var(--color-text-muted);margin-bottom:var(--sp3)">Unit cards now feature larger, more readable layouts with color-coded unit numbers and smooth hover animations. Better visual hierarchy for faster navigation.</p>
+            <span class="pill pill-ok">Live now</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- News Item: Tasks & XP -->
+      <div style="border:1px solid oklch(from var(--color-text) l c h/.08);border-radius:var(--radius-xl);padding:var(--sp6);background:var(--color-surface)">
+        <div style="display:flex;gap:var(--sp4);align-items:flex-start">
+          <div style="width:48px;height:48px;border-radius:var(--radius-lg);background:#fff3e0;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0">⚡</div>
+          <div style="flex:1;min-width:0">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp2)">
+              <h3 style="font-size:var(--tx-lg);margin:0">Daily Tasks & XP System</h3>
+              <span style="font-size:var(--tx-xs);color:var(--color-text-faint);white-space:nowrap">04.05.2026</span>
+            </div>
+            <p style="color:var(--color-text-muted);margin-bottom:var(--sp3)">Complete daily missions to earn XP. Stack points across the week, share your progress, and climb the leaderboard. Reset every midnight.</p>
+            <span class="pill pill-ok">Live now</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- News Item: Responsive Updates -->
+      <div style="border:1px solid oklch(from var(--color-text) l c h/.08);border-radius:var(--radius-xl);padding:var(--sp6);background:var(--color-surface)">
+        <div style="display:flex;gap:var(--sp4);align-items:flex-start">
+          <div style="width:48px;height:48px;border-radius:var(--radius-lg);background:#e3f2fd;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0">🎨</div>
+          <div style="flex:1;min-width:0">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp2)">
+              <h3 style="font-size:var(--tx-lg);margin:0">Mobile-First Polish</h3>
+              <span style="font-size:var(--tx-xs);color:var(--color-text-faint);white-space:nowrap">03.05.2026</span>
+            </div>
+            <p style="color:var(--color-text-muted);margin-bottom:var(--sp3)">Improved mobile navigation, faster touch interactions, and refined responsive breakpoints. RA10 feels great on all devices.</p>
+            <span class="pill pill-ok">Live now</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- News Item: Performance Boost -->
+      <div style="border:1px solid oklch(from var(--color-text) l c h/.08);border-radius:var(--radius-xl);padding:var(--sp6);background:var(--color-surface)">
+        <div style="display:flex;gap:var(--sp4);align-items:flex-start">
+          <div style="width:48px;height:48px;border-radius:var(--radius-lg);background:#fff9e6;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0">⚙️</div>
+          <div style="flex:1;min-width:0">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp2)">
+              <h3 style="font-size:var(--tx-lg);margin:0">Performance & Speed Improvements</h3>
+              <span style="font-size:var(--tx-xs);color:var(--color-text-faint);white-space:nowrap">02.05.2026</span>
+            </div>
+            <p style="color:var(--color-text-muted);margin-bottom:var(--sp3)">Optimized asset loading and improved caching strategies. Pages now load 40% faster. Enjoy smoother quiz interactions and instant navigation across subjects.</p>
+            <span class="pill pill-ok">Live now</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- News Item: AI Marking Improvements -->
+      <div style="border:1px solid oklch(from var(--color-text) l c h/.08);border-radius:var(--radius-xl);padding:var(--sp6);background:var(--color-surface)">
+        <div style="display:flex;gap:var(--sp4);align-items:flex-start">
+          <div style="width:48px;height:48px;border-radius:var(--radius-lg);background:#f5e1a9;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0">🤖</div>
+          <div style="flex:1;min-width:0">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp2)">
+              <h3 style="font-size:var(--tx-lg);margin:0">Smarter AI Marking Engine</h3>
+              <span style="font-size:var(--tx-xs);color:var(--color-text-faint);white-space:nowrap">01.05.2026</span>
+            </div>
+            <p style="color:var(--color-text-muted);margin-bottom:var(--sp3)">Updated our AI marking model with improved accuracy for exam-style questions. Better feedback, more consistent grading, and enhanced learning hints.</p>
+            <span class="pill pill-ok">Live now</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- News Item: Study Stats Dashboard -->
+      <div style="border:1px solid oklch(from var(--color-text) l c h/.08);border-radius:var(--radius-xl);padding:var(--sp6);background:var(--color-surface)">
+        <div style="display:flex;gap:var(--sp4);align-items:flex-start">
+          <div style="width:48px;height:48px;border-radius:var(--radius-lg);background:#fce8e8;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0">📊</div>
+          <div style="flex:1;min-width:0">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp2)">
+              <h3 style="font-size:var(--tx-lg);margin:0">Study Progress Insights</h3>
+              <span style="font-size:var(--tx-xs);color:var(--color-text-faint);white-space:nowrap">01.05.2026</span>
+            </div>
+            <p style="color:var(--color-text-muted);margin-bottom:var(--sp3)">Track your progress with detailed stats on quiz performance, time spent studying, and learning objectives mastered. See which topics need more practice.</p>
+            <span class="pill pill-ok">Available in Account</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
 <div class="auth-overlay" id="auth-overlay">
   <div class="auth-modal">
     <button class="auth-close" id="auth-close">✕</button>
@@ -5672,5 +6039,16 @@ function dismissA2HS() {
   if (b) { b.style.display = 'none'; b.setAttribute('hidden', ''); }
 }
 </script>
+
+<!-- ============================================================
+     FOOTER
+============================================================ -->
+<footer>
+  <div class="footer-inner">
+    <span class="footer-brand">RA10</span>
+    <span class="footer-copy">Built for revision, tools and more.</span>
+  </div>
+</footer>
+
 </body>
 </html>
