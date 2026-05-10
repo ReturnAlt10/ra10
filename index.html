@@ -2020,9 +2020,9 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
   <div id="upgrade-checkout-status" class="card" style="display:none;max-width:760px;margin:0 auto var(--sp6) auto;"></div>
 
   <div style="display:flex;justify-content:center;gap:var(--sp2);flex-wrap:wrap;margin-bottom:var(--sp6);" id="upgrade-filter" role="tablist" aria-label="Plan categories">
-    <button class="btn btn-p" type="button" data-upgrade-group="personal" aria-selected="true">Personal subscriptions</button>
-    <button class="btn btn-g" type="button" data-upgrade-group="onetime" aria-selected="false">One-time subject payments</button>
-    <button class="btn btn-g" type="button" data-upgrade-group="education" aria-selected="false">Education</button>
+    <button class="btn btn-p" type="button" data-upgrade-group="personal" aria-selected="true" onclick="setUpgradeGroup('personal')">Personal subscriptions</button>
+    <button class="btn btn-g" type="button" data-upgrade-group="onetime" aria-selected="false" onclick="setUpgradeGroup('onetime')">One-time subject payments</button>
+    <button class="btn btn-g" type="button" data-upgrade-group="education" aria-selected="false" onclick="setUpgradeGroup('education')">Education</button>
   </div>
 
   <div style="display:flex;flex-wrap:wrap;justify-content:center;align-items:stretch;gap:var(--sp5);padding-bottom:var(--sp16);" id="upgrade-cards">
@@ -5001,6 +5001,7 @@ route();
         card.style.display = show ? '' : 'none';
       });
     }
+    window.setUpgradeGroup = setUpgradeGroup;
 
     document.querySelectorAll('[data-upgrade-group]').forEach((btn) => {
       btn.addEventListener('click', () => setUpgradeGroup(btn.getAttribute('data-upgrade-group')));
