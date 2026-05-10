@@ -281,7 +281,26 @@ a,button,[role="button"],input,select,textarea{
 .tasks-kpi-row{display:flex;gap:var(--sp3);flex-wrap:wrap;margin-top:var(--sp3)}
 .tasks-kpi{padding:6px 12px;border-radius:999px;background:rgba(255,255,255,.75);font-size:var(--tx-xs);font-weight:700;color:#3b1f13}
 .tasks-card{position:relative;overflow:hidden}
-.tasks-card::before{content:'';position:absolute;inset:auto -24px -30px auto;width:120px;height:120px;border-radius:999px;background:rgba(210,0,0,.08)}
+.tasks-card::before{content:'';position:absolute;inset:auto -24px -30px auto;width:120px;height:120px;border-radius:999px;background:rgba(210,0,0,.08);pointer-events:none;z-index:0}
+.tasks-card > *{position:relative;z-index:1}
+.tasks-card .btn{position:relative;z-index:2}
+
+#nav-upgrade-btn{
+  display:none;
+  font-size:var(--tx-xs);
+  font-weight:800;
+  padding:.28rem .82rem;
+  border-radius:var(--radius-full);
+  background:linear-gradient(135deg,#8b5cf6,#7c3aed 55%,#a855f7);
+  color:#fff;
+  border:1px solid rgba(255,255,255,.2);
+  cursor:pointer;
+  text-decoration:none;
+  white-space:nowrap;
+  box-shadow:0 0 0 1px rgba(124,58,237,.16),0 8px 20px rgba(124,58,237,.34);
+}
+#nav-upgrade-btn:hover{filter:brightness(1.04);box-shadow:0 0 0 1px rgba(168,85,247,.3),0 10px 24px rgba(124,58,237,.42)}
+#nav-upgrade-btn:active{transform:translateY(1px)}
 [data-theme="dark"] .tasks-hero-panel{
   background:linear-gradient(120deg,#3b2a1f 0%,#452739 35%,#202e4d 100%);
 }
@@ -618,6 +637,7 @@ a,button,[role="button"],input,select,textarea{
 .upgrade-compare-table td:first-child{font-weight:700;color:var(--color-text)}
 .upgrade-yes{font-weight:700;color:#166534}
 .upgrade-no{font-weight:700;color:#b91c1c}
+.upgrade-compare-mobile{display:none}
 [data-theme="dark"] .upgrade-compare-table td:nth-child(2){background:rgba(22,163,74,.14)}
 [data-theme="dark"] .upgrade-compare-table td:nth-child(3){background:rgba(37,99,235,.16)}
 [data-theme="dark"] .upgrade-compare-table td:nth-child(4){background:rgba(124,58,237,.18)}
@@ -882,6 +902,23 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
   }
   .mobile-top-nav img{width:26px;height:26px;border-radius:8px;}
   .mobile-top-nav .brand{font-family:var(--font-d);font-size:var(--tx-lg);line-height:1;color:var(--color-text);}
+  .mobile-upgrade-btn{
+    margin-left:auto;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    min-height:34px;
+    padding:0 12px;
+    border-radius:999px;
+    background:linear-gradient(135deg,#8b5cf6,#7c3aed 55%,#a855f7);
+    color:#fff;
+    font-size:12px;
+    font-weight:800;
+    letter-spacing:.03em;
+    border:1px solid rgba(255,255,255,.22);
+    box-shadow:0 0 0 1px rgba(124,58,237,.22),0 9px 20px rgba(124,58,237,.4);
+  }
+  .mobile-upgrade-btn:hover{filter:brightness(1.05)}
 
   .mobile-bottom-nav{
     position:fixed;
@@ -911,6 +948,8 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
     border-radius:var(--radius-lg);
     color:var(--color-text-muted);
     background:transparent;
+    touch-action:manipulation;
+    -webkit-tap-highlight-color:transparent;
   }
   .mobile-nav-btn svg{width:20px;height:20px;stroke:currentColor}
   .mobile-nav-btn span{font-size:11px;font-weight:700;letter-spacing:.03em}
@@ -947,6 +986,7 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
     border-top:1px solid oklch(from var(--color-text) l c h/.08);
     box-shadow:0 -20px 48px oklch(0 0 0/.18);
     padding:var(--sp4) var(--sp4) calc(var(--sp6) + env(safe-area-inset-bottom, 0px));
+    background-image:linear-gradient(180deg,oklch(from var(--color-surface-2) l c h/.98),oklch(from var(--color-surface) l c h/.98));
   }
   .mobile-sheet-handle{
     width:44px;
@@ -959,25 +999,120 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
   .mobile-sheet-title{font-family:var(--font-d);font-size:var(--tx-lg);line-height:1.1}
   .mobile-sheet-copy{font-size:var(--tx-sm);color:var(--color-text-muted);margin-top:4px}
   .mobile-sheet-close{width:36px;height:36px;border-radius:999px;background:var(--color-surface-offset);color:var(--color-text-muted)}
+  .mobile-sheet-meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:var(--sp3)}
+  .mobile-sheet-meta span{
+    display:inline-flex;
+    align-items:center;
+    padding:5px 10px;
+    border-radius:999px;
+    background:rgba(210,0,0,.08);
+    color:var(--color-primary);
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:.04em;
+    text-transform:uppercase;
+  }
   .mobile-subject-list{display:grid;gap:var(--sp3)}
   .mobile-subject-link{
-    display:flex;
+    display:grid;
+    grid-template-columns:auto 1fr auto;
     align-items:center;
-    justify-content:space-between;
     gap:var(--sp3);
     width:100%;
     padding:var(--sp4);
-    border-radius:var(--radius-xl);
-    background:var(--color-surface-offset);
-    border:1px solid oklch(from var(--color-text) l c h/.06);
+    border-radius:22px;
+    background:
+      linear-gradient(140deg, oklch(from var(--color-surface) l c h/.98), oklch(from var(--color-surface-offset) l c h/.98)),
+      var(--color-surface-offset);
+    border:1px solid oklch(from var(--color-text) l c h/.08);
     text-align:left;
+    box-shadow:0 10px 24px oklch(0 0 0/.05);
   }
-  .mobile-subject-link strong{display:block;font-size:var(--tx-sm);color:var(--color-text)}
-  .mobile-subject-link small{display:block;font-size:var(--tx-xs);color:var(--color-text-muted);margin-top:2px}
-  .mobile-subject-link em{font-style:normal;font-size:var(--tx-xs);font-weight:700;color:var(--color-primary)}
+  .mobile-subject-link:hover{transform:translateY(-1px);border-color:oklch(from var(--color-primary) l c h/.2)}
+  .mobile-subject-icon{
+    width:46px;
+    height:46px;
+    border-radius:16px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:20px;
+    font-weight:800;
+    color:#fff;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.32);
+  }
+  .mobile-subject-icon.it{background:linear-gradient(135deg,#16a34a,#0f766e)}
+  .mobile-subject-icon.business{background:linear-gradient(135deg,#2563eb,#1e3a8a)}
+  .mobile-subject-icon.sport{background:linear-gradient(135deg,#7c3aed,#c026d3)}
+  .mobile-subject-copy strong{display:block;font-size:var(--tx-sm);color:var(--color-text)}
+  .mobile-subject-copy small{display:block;font-size:var(--tx-xs);color:var(--color-text-muted);margin-top:2px}
+  .mobile-subject-meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+  .mobile-subject-meta span{
+    display:inline-flex;
+    align-items:center;
+    padding:4px 8px;
+    border-radius:999px;
+    background:var(--color-surface-offset-2);
+    color:var(--color-text-muted);
+    font-size:10px;
+    font-weight:700;
+    letter-spacing:.05em;
+    text-transform:uppercase;
+  }
+  .mobile-subject-link em{
+    font-style:normal;
+    font-size:12px;
+    font-weight:800;
+    color:var(--color-primary);
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+  }
+  .mobile-subject-link em::after{content:'›';font-size:15px;line-height:1}
+  .upgrade-compare-mobile{display:none}
   body.mobile-sheet-open{overflow:hidden}
   body.mobile-sheet-open .mobile-sheet-backdrop,
   body.mobile-sheet-open .mobile-subject-sheet{display:block}
+  .upgrade-compare-wrap{
+    padding:var(--sp4);
+    border-radius:22px;
+  }
+  .upgrade-compare-scroll{display:none}
+  .upgrade-compare-mobile{display:grid;gap:var(--sp3)}
+  .upgrade-mobile-card{
+    border:1px solid oklch(from var(--color-text) l c h/.08);
+    border-radius:20px;
+    background:var(--color-surface);
+    overflow:hidden;
+    box-shadow:var(--shadow-sm);
+  }
+  .upgrade-mobile-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:var(--sp2);
+    padding:14px 16px;
+    color:#fff;
+    font-weight:800;
+    letter-spacing:.04em;
+    text-transform:uppercase;
+    font-size:12px;
+  }
+  .upgrade-mobile-head.free{background:linear-gradient(135deg,#6b7280,#4b5563)}
+  .upgrade-mobile-head.pro{background:linear-gradient(135deg,#2563eb,#1d4ed8)}
+  .upgrade-mobile-head.ultra{background:linear-gradient(135deg,#7c3aed,#c026d3)}
+  .upgrade-mobile-price{font-size:22px;font-weight:400;font-family:var(--font-d);text-transform:none;letter-spacing:0}
+  .upgrade-mobile-list{display:grid;gap:0}
+  .upgrade-mobile-row{
+    display:grid;
+    grid-template-columns:1fr auto;
+    gap:var(--sp3);
+    padding:12px 16px;
+    border-top:1px solid oklch(from var(--color-text) l c h/.08);
+    font-size:var(--tx-sm);
+  }
+  .upgrade-mobile-row strong{font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--color-text-muted)}
+  .upgrade-mobile-row span:last-child{text-align:right;font-weight:700;color:var(--color-text)}
   body.iframe-fullscreen-mode .page-iframe.active > .cd{
     top:calc(52px + env(safe-area-inset-top, 0px));
     z-index:10022;
@@ -1243,7 +1378,7 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
     </div>
     <div class="nav-actions">
       <div id="nav-credit-chip" class="nav-credit-chip" style="display:none"></div>
-      <a id="nav-upgrade-btn" onclick="go('/upgrade')" style="display:none;font-size:var(--tx-xs);font-weight:700;padding:.2rem .75rem;border-radius:var(--radius-full);background:#f1c40f;color:#2b1700;cursor:pointer;text-decoration:none;white-space:nowrap;">Upgrade</a>
+      <a id="nav-upgrade-btn" onclick="go('/upgrade')">Upgrade</a>
       <button id="nav-auth-btn" class="nav-auth-btn">Sign in</button>
       <div class="nav-user-wrap" id="nav-user-wrap" style="display:none">
         <button class="nav-user-btn" id="nav-user-btn">
@@ -1278,28 +1413,47 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
     <div>
       <div class="mobile-sheet-title">Subjects</div>
       <div class="mobile-sheet-copy">Jump straight into the live BTEC revision apps.</div>
+      <div class="mobile-sheet-meta">
+        <span>3 live apps</span>
+        <span>All BTEC Level 3</span>
+      </div>
     </div>
     <button class="mobile-sheet-close" id="mobile-sheet-close" aria-label="Close subjects">✕</button>
   </div>
   <div class="mobile-subject-list">
     <button class="mobile-subject-link" type="button" data-mobile-subject="/revision/btec/level-3/IT-AAQ/unit-1">
-      <span>
+      <span class="mobile-subject-icon it">IT</span>
+      <span class="mobile-subject-copy">
         <strong>Information Technology</strong>
         <small>AAQ · Unit 1 live</small>
+        <span class="mobile-subject-meta">
+          <span>Spec guide</span>
+          <span>AI marking</span>
+        </span>
       </span>
       <em>Open</em>
     </button>
     <button class="mobile-subject-link" type="button" data-mobile-subject="/revision/btec/level-3/business/unit-3">
-      <span>
+      <span class="mobile-subject-icon business">BU</span>
+      <span class="mobile-subject-copy">
         <strong>Business</strong>
         <small>Level 3 · Unit 3 live</small>
+        <span class="mobile-subject-meta">
+          <span>Ratios</span>
+          <span>Exam tasks</span>
+        </span>
       </span>
       <em>Open</em>
     </button>
     <button class="mobile-subject-link" type="button" data-mobile-subject="/revision/btec/level-3/sport/unit-1">
-      <span>
+      <span class="mobile-subject-icon sport">SP</span>
+      <span class="mobile-subject-copy">
         <strong>Sport</strong>
         <small>Level 3 · Unit 1 live</small>
+        <span class="mobile-subject-meta">
+          <span>Flashcards</span>
+          <span>Mock papers</span>
+        </span>
       </span>
       <em>Open</em>
     </button>
@@ -1310,6 +1464,7 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
   <img src="logo.png" alt="RA10 logo" width="26" height="26">
   <span class="brand">RA10</span>
   <div id="mobile-credit-chip" class="mobile-credit-chip" style="display:none"></div>
+  <button id="mobile-upgrade-btn" class="mobile-upgrade-btn" type="button" onclick="go('/upgrade')">Upgrade</button>
   <button class="theme-toggle mobile-theme-toggle" id="mobile-theme-toggle" aria-label="Toggle dark mode"></button>
 </div>
 
@@ -1371,9 +1526,9 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
     </div>
     <div class="home-hero">
       <div class="home-hero-panel">
-        <div class="home-eyebrow"><span class="home-dot"></span>RA10 · Learn Faster, Score Higher</div>
-        <h1>Turn revision into your <em>winning streak</em>.</h1>
-        <p>Build momentum with live BTEC subjects, instant AI feedback, rapid-fire quizzes, and leaderboard battles. This is revision in main-character mode.</p>
+        <div class="home-eyebrow"><span class="home-dot"></span>RA10 · BTEC Revision That Keeps You Moving</div>
+        <h1>Turn revision into a <em>clear routine you actually stick to</em>.</h1>
+        <p>Revise with live BTEC subjects, fast quizzes, AI feedback, mock papers, and weekly leaderboard challenges. Everything is built to help you practise more often and improve faster.</p>
         <div class="ctas">
           <button class="btn btn-p btn-lg" onclick="go('/revision/btec/level-3')">
             Start Revising
@@ -1388,7 +1543,7 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
         <div class="home-stat-row">
           <div class="home-stat"><strong>3 live subjects</strong><span>IT, Business, Sport</span></div>
           <div class="home-stat"><strong>AI Mark + Mock Papers</strong><span>Exam-ready practice</span></div>
-          <div class="home-stat"><strong>Weekly XP race</strong><span>10 credit bonus prize</span></div>
+          <div class="home-stat"><strong>Weekly XP race</strong><span>30 / 20 / 10 credit prizes</span></div>
         </div>
       </div>
     </div>
@@ -1400,7 +1555,7 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
         <div class="home-subject-card it" onclick="go('/revision/btec/level-3/IT-AAQ/unit-1')">
           <span class="home-subject-chip">IT AAQ · Live · Early Pioneer</span>
           <h3>Information Technology</h3>
-          <p>One of the first platforms building a full IT AAQ revision guide and revision course, with spec explorer, flashcards, quizzes, AI mark scheme checks and mock paper generation.</p>
+          <p>A full IT AAQ revision experience with a spec explorer, revision guide, flashcards, quizzes, AI marking support, and mock paper generation.</p>
           <div class="card-ft"><button class="btn btn-p" onclick="event.stopPropagation();go('/revision/btec/level-3/IT-AAQ/unit-1')">Open IT</button></div>
         </div>
         <div class="home-subject-card business" onclick="go('/revision/btec/level-3/business/unit-3')">
@@ -1419,11 +1574,11 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
 
       <div class="home-feature-grid">
         <div class="home-feature-card primary">
-          <h4>Fun Features Students Actually Use</h4>
-          <p>RA10 is built for momentum. Quick wins, streaks, and powerful tools make revision feel like a game loop you want to keep playing.</p>
+          <h4>Revision Features Students Will Actually Use</h4>
+          <p>RA10 is designed for momentum. Short practice loops, visible progress, and useful tools make it easier to keep showing up.</p>
           <ul>
             <li>Daily tasks and XP tracking across units</li>
-            <li>Weekly leaderboard with a 10-credit top spot bonus</li>
+            <li>Weekly leaderboard with 30, 20 and 10 credit rewards</li>
             <li>AI marker feedback on longer responses</li>
             <li>Mock paper builders for realistic timed practice</li>
           </ul>
@@ -1442,8 +1597,8 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
 
       <div class="home-price-showdown">
         <div class="home-price-head">
-          <h3>Incredibly cheap subscriptions. No joke.</h3>
-          <p>RA10 keeps prices tiny: Pro is £20/year and Ultra is £30/year. With Seneca around £8/month and Save My Exams around £48/year, RA10 is significantly cheaper while also offering BTEC subjects they do not focus on. Students can also get RA10 free when their school signs up.</p>
+          <h3>Simple pricing that stays affordable</h3>
+          <p>RA10 Pro is £20 per year and Ultra is £30 per year. Compared with services such as Seneca Premium at around £8 per month and Save My Exams at around £48 per year, RA10 stays much cheaper while focusing on BTEC content. Students can also get RA10 free when their school joins.</p>
         </div>
         <div class="home-price-grid">
           <div class="home-price-card ra10">
@@ -1864,76 +2019,6 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
 
   <div id="upgrade-checkout-status" class="card" style="display:none;max-width:760px;margin:0 auto var(--sp6) auto;"></div>
 
-  <div class="price-compare-hero">
-    <h3>See the difference instantly: RA10 is built to stay affordable.</h3>
-    <p>RA10 Pro is £20/year and Ultra is £30/year. Against common monthly pricing from other revision sites, that is a huge saving while we keep expanding BTEC-first subjects, units and features.</p>
-    <div class="price-compare-grid">
-      <div class="price-compare-cell">
-        <strong>RA10 Pro: £20/year</strong>
-        <span>About 79% cheaper than £8/month plans.</span>
-      </div>
-      <div class="price-compare-cell">
-        <strong>RA10 vs Save My Exams: £48/year</strong>
-        <span>RA10 Pro is roughly 58% cheaper.</span>
-      </div>
-      <div class="price-compare-cell">
-        <strong>Students can be £0 with school signup</strong>
-        <span>If your school buys EDU Admin, student accounts are included free.</span>
-      </div>
-    </div>
-  </div>
-
-  <div class="upgrade-compare-wrap">
-    <div class="upgrade-compare-head">
-      <h3>RA10 plan comparison</h3>
-      <p>Compare Free, Pro and Ultra side-by-side to choose the best fit for your revision style.</p>
-    </div>
-    <div class="upgrade-compare-scroll">
-      <table class="upgrade-compare-table" aria-label="RA10 plans comparison">
-        <thead>
-          <tr>
-            <th>Feature</th>
-            <th>Free</th>
-            <th>Pro</th>
-            <th>Ultra</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Price</td>
-            <td>£0</td>
-            <td>£20/year</td>
-            <td>£30/year</td>
-          </tr>
-          <tr>
-            <td>Monthly credits</td>
-            <td>10</td>
-            <td>1,000</td>
-            <td>Unlimited</td>
-          </tr>
-          <tr>
-            <td>Subjects unlocked</td>
-            <td>Credit-gated</td>
-            <td>All subjects</td>
-            <td>All subjects + tools</td>
-          </tr>
-          <tr>
-            <td>Ads</td>
-            <td class="upgrade-no">Shown</td>
-            <td class="upgrade-yes">No ads</td>
-            <td class="upgrade-yes">No ads</td>
-          </tr>
-          <tr>
-            <td>Priority access to new features</td>
-            <td class="upgrade-no">No</td>
-            <td class="upgrade-no">No</td>
-            <td class="upgrade-yes">Yes</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
   <div style="display:flex;justify-content:center;gap:var(--sp2);flex-wrap:wrap;margin-bottom:var(--sp6);" id="upgrade-filter" role="tablist" aria-label="Plan categories">
     <button class="btn btn-p" type="button" data-upgrade-group="personal" aria-selected="true">Personal subscriptions</button>
     <button class="btn btn-g" type="button" data-upgrade-group="onetime" aria-selected="false">One-time subject payments</button>
@@ -2068,6 +2153,136 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
     </div>
 
   </div>
+
+  <div class="price-compare-hero">
+    <h3>See the difference instantly: RA10 is built to stay affordable.</h3>
+    <p>RA10 Pro is £20/year and Ultra is £30/year. Against common monthly pricing from other revision sites, that is a huge saving while we keep expanding BTEC-first subjects, units and features.</p>
+    <div class="price-compare-grid">
+      <div class="price-compare-cell">
+        <strong>RA10 Pro: £20/year</strong>
+        <span>About 79% cheaper than £8/month plans.</span>
+      </div>
+      <div class="price-compare-cell">
+        <strong>RA10 vs Save My Exams: £48/year</strong>
+        <span>RA10 Pro is roughly 58% cheaper.</span>
+      </div>
+      <div class="price-compare-cell">
+        <strong>Students can be £0 with school signup</strong>
+        <span>If your school buys EDU Admin, student accounts are included free.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="upgrade-compare-wrap">
+    <div class="upgrade-compare-head">
+      <h3>RA10 plan comparison</h3>
+      <p>Compare Free, Pro and Ultra side-by-side to choose the best fit for your revision style.</p>
+    </div>
+    <div style="margin-bottom:var(--sp4);padding:var(--sp4);border:1px solid oklch(from var(--color-primary) l c h/.12);border-radius:var(--radius-lg);background:linear-gradient(135deg,rgba(210,0,0,.06),rgba(245,158,11,.08));">
+      <strong style="display:block;font-size:var(--tx-sm);margin-bottom:4px;color:var(--color-primary);text-transform:uppercase;letter-spacing:.08em;">Exam period offer</strong>
+      <p style="margin:0;font-size:var(--tx-sm);color:var(--color-text-muted);line-height:1.6;">Use code <strong>EXAM5</strong> for 5% off during exam season, available until 1st August.</p>
+    </div>
+    <div class="upgrade-compare-scroll">
+      <table class="upgrade-compare-table" aria-label="RA10 plans comparison">
+        <thead>
+          <tr>
+            <th>Feature</th>
+            <th>Free</th>
+            <th>Pro</th>
+            <th>Ultra</th>
+            <th>EDU Admin</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Price</td>
+            <td>£0</td>
+            <td>£20/year</td>
+            <td>£30/year</td>
+            <td>£100/year</td>
+          </tr>
+          <tr>
+            <td>Monthly credits</td>
+            <td>10</td>
+            <td>1,000</td>
+            <td>Unlimited</td>
+            <td>Students 300, teachers 600</td>
+          </tr>
+          <tr>
+            <td>Subjects unlocked</td>
+            <td>Credit-gated</td>
+            <td>All subjects</td>
+            <td>All subjects + tools</td>
+            <td>All subjects for students and teachers</td>
+          </tr>
+          <tr>
+            <td>Ads</td>
+            <td class="upgrade-no">Shown</td>
+            <td class="upgrade-yes">No ads</td>
+            <td class="upgrade-yes">No ads</td>
+            <td class="upgrade-yes">No ads</td>
+          </tr>
+          <tr>
+            <td>Priority access to new features</td>
+            <td class="upgrade-no">No</td>
+            <td class="upgrade-no">No</td>
+            <td class="upgrade-yes">Yes</td>
+            <td class="upgrade-no">School portal access</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="upgrade-compare-mobile" aria-label="RA10 mobile plan comparison">
+      <div class="upgrade-mobile-card">
+        <div class="upgrade-mobile-head free">
+          <span>Free</span>
+          <span class="upgrade-mobile-price">£0</span>
+        </div>
+        <div class="upgrade-mobile-list">
+          <div class="upgrade-mobile-row"><strong>Credits</strong><span>10 / month</span></div>
+          <div class="upgrade-mobile-row"><strong>Subjects</strong><span>Credit-gated</span></div>
+          <div class="upgrade-mobile-row"><strong>Ads</strong><span>Shown</span></div>
+          <div class="upgrade-mobile-row"><strong>Priority</strong><span>No</span></div>
+        </div>
+      </div>
+      <div class="upgrade-mobile-card">
+        <div class="upgrade-mobile-head pro">
+          <span>Pro</span>
+          <span class="upgrade-mobile-price">£20/yr</span>
+        </div>
+        <div class="upgrade-mobile-list">
+          <div class="upgrade-mobile-row"><strong>Credits</strong><span>1,000 / month</span></div>
+          <div class="upgrade-mobile-row"><strong>Subjects</strong><span>All unlocked</span></div>
+          <div class="upgrade-mobile-row"><strong>Ads</strong><span>No ads</span></div>
+          <div class="upgrade-mobile-row"><strong>Priority</strong><span>No</span></div>
+        </div>
+      </div>
+      <div class="upgrade-mobile-card">
+        <div class="upgrade-mobile-head ultra">
+          <span>Ultra</span>
+          <span class="upgrade-mobile-price">£30/yr</span>
+        </div>
+        <div class="upgrade-mobile-list">
+          <div class="upgrade-mobile-row"><strong>Credits</strong><span>Unlimited</span></div>
+          <div class="upgrade-mobile-row"><strong>Subjects</strong><span>All + tools</span></div>
+          <div class="upgrade-mobile-row"><strong>Ads</strong><span>No ads</span></div>
+          <div class="upgrade-mobile-row"><strong>Priority</strong><span>Yes</span></div>
+        </div>
+      </div>
+      <div class="upgrade-mobile-card">
+        <div class="upgrade-mobile-head" style="background:linear-gradient(135deg,#16a34a,#047857)">
+          <span>EDU Admin</span>
+          <span class="upgrade-mobile-price">£100/yr</span>
+        </div>
+        <div class="upgrade-mobile-list">
+          <div class="upgrade-mobile-row"><strong>Credits</strong><span>Students 300, teachers 600</span></div>
+          <div class="upgrade-mobile-row"><strong>Subjects</strong><span>All unlocked</span></div>
+          <div class="upgrade-mobile-row"><strong>Ads</strong><span>No ads</span></div>
+          <div class="upgrade-mobile-row"><strong>Access</strong><span>School portal</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 </div>
 
@@ -2120,6 +2335,20 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
             </div>
             <div class="auth-error" id="account-username-error" style="margin-top:var(--sp2);"></div>
           </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:var(--sp3);margin-top:var(--sp4);margin-bottom:var(--sp2);">
+            <div>
+              <div style="font-size:var(--tx-xs);color:var(--color-text-muted);text-transform:uppercase;letter-spacing:.06em;">Leaderboard badge</div>
+              <div id="account-badge-current">No badge set</div>
+            </div>
+            <button class="btn btn-s" id="account-change-badge-btn" type="button">Change</button>
+          </div>
+          <div id="account-badge-edit" style="display:none;gap:var(--sp2);">
+            <div style="display:flex;align-items:center;gap:var(--sp2);max-width:360px;">
+              <input id="account-badge-input" type="text" class="auth-input" placeholder="🏆" maxlength="8" style="flex:1;">
+              <button class="btn btn-p" id="account-save-badge-btn" type="button">Save</button>
+            </div>
+            <div class="auth-error" id="account-badge-error" style="margin-top:var(--sp2);"></div>
+          </div>
         </div>
         <div class="card-ft"><span class="pill" id="account-tier-badge">Tier</span><span class="pill" id="account-credits">Credits remaining</span></div>
         <p>Subscription status: <strong id="account-sub-status">—</strong></p>
@@ -2129,6 +2358,32 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
           <h4>Credit activity</h4>
           <div id="account-credit-log" class="credit-log-list">
             <div class="credit-log-note">No recent credit activity yet.</div>
+          </div>
+        </div>
+        <div id="account-credit-gift-panel" style="display:none;margin-top:var(--sp4);padding:var(--sp3);border:1px solid var(--color-border);border-radius:var(--radius-md);background:var(--color-bg-soft);">
+          <h4 style="margin:0 0 var(--sp3) 0;font-size:var(--tx-sm);letter-spacing:.03em;">Send Gift Credits</h4>
+          <div style="display:flex;flex-wrap:wrap;gap:var(--sp2);align-items:flex-end;">
+            <div style="flex:1;min-width:220px;">
+              <label class="auth-label" for="gift-credit-email">Recipient email</label>
+              <input id="gift-credit-email" class="auth-input" type="email" placeholder="student@email.com">
+            </div>
+            <div style="width:140px;">
+              <label class="auth-label" for="gift-credit-amount">Credits</label>
+              <input id="gift-credit-amount" class="auth-input" type="number" min="1" step="1" placeholder="50">
+            </div>
+            <button class="btn btn-p" id="gift-credit-send-btn" type="button">Send gift</button>
+          </div>
+          <div style="margin-top:var(--sp2);">
+            <label class="auth-label" for="gift-credit-note">Note (optional)</label>
+            <input id="gift-credit-note" class="auth-input" type="text" maxlength="180" placeholder="Great work this week - keep going!">
+          </div>
+          <div class="auth-error" id="gift-credit-error" style="margin-top:var(--sp2);"></div>
+          <div class="auth-success" id="gift-credit-success" style="margin-top:var(--sp2);"></div>
+          <div style="margin-top:var(--sp3);">
+            <div style="font-size:var(--tx-xs);font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--color-text-muted);margin-bottom:var(--sp2);">Recent gifts sent</div>
+            <div id="gift-credit-sent-list" class="credit-log-list">
+              <div class="credit-log-note">No gifts sent yet.</div>
+            </div>
           </div>
         </div>
         <div class="card-ft" style="flex-wrap:wrap;gap:var(--sp3)">
@@ -2226,11 +2481,17 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
       <span class="bc-sep">›</span>
       <span class="bc-item cur">Leaderboard</span>
     </nav>
-    <div class="hero">
+    <div class="hero" style="position:relative;overflow:hidden;border-radius:var(--radius-xl);padding:var(--sp12);margin-top:var(--sp2);margin-bottom:var(--sp4);background:radial-gradient(circle at top right, rgba(210,0,0,.16), transparent 34%), linear-gradient(135deg, rgba(210,0,0,.09), rgba(255,255,255,.06));border:1px solid oklch(from var(--color-primary) l c h/.12);box-shadow:var(--shadow-lg);">
+      <div style="position:absolute;inset:auto -48px -48px auto;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle, rgba(210,0,0,.20), rgba(210,0,0,0) 68%);pointer-events:none;"></div>
       <div class="hero-label">Weekly XP Leaderboard</div>
       <h1>Who's revising the most?</h1>
-      <p>XP resets every Sunday at midnight. Top scorer this week wins 10 bonus credits!</p>
-      <div id="lb-countdown-inline" class="lb-countdown-pill" style="margin-top:var(--sp4);">Resets in --:--:--</div>
+      <p>XP resets at the end of every Saturday. The weekly winner gets 30 credits, second place gets 20 and third place gets 10.</p>
+      <div style="display:flex;gap:var(--sp2);flex-wrap:wrap;margin-top:var(--sp4);margin-bottom:var(--sp4);">
+        <span style="display:inline-flex;align-items:center;gap:var(--sp2);padding:8px 12px;border-radius:999px;background:var(--color-surface);border:1px solid var(--color-border);font-size:var(--tx-xs);font-weight:700;">🥇 Top spot: 30 credits</span>
+        <span style="display:inline-flex;align-items:center;gap:var(--sp2);padding:8px 12px;border-radius:999px;background:var(--color-surface);border:1px solid var(--color-border);font-size:var(--tx-xs);font-weight:700;">🥈 Second: 20 credits</span>
+        <span style="display:inline-flex;align-items:center;gap:var(--sp2);padding:8px 12px;border-radius:999px;background:var(--color-surface);border:1px solid var(--color-border);font-size:var(--tx-xs);font-weight:700;">🥉 Third: 10 credits</span>
+      </div>
+      <div id="lb-countdown-inline" class="lb-countdown-pill" style="margin-top:var(--sp2);">Resets in --:--:--</div>
     </div>
     <div id="lb-page-content" style="max-width:680px;margin:0 auto;
       padding-bottom:var(--sp16);">
@@ -2637,6 +2898,36 @@ function closeMobileSubjectSheet() {
   if (sheet) sheet.setAttribute('aria-hidden', 'true');
 }
 
+function getLeaderboardBadgeEmoji(profile) {
+  return String((profile && (profile.leaderboard_badge || profile.badge_emoji || profile.emoji_badge)) || '').trim();
+}
+
+function getLeaderboardDisplayName(profile) {
+  const badge = getLeaderboardBadgeEmoji(profile);
+  const name = profile?.username ? '@' + profile.username : (profile?.full_name || 'Anonymous');
+  return badge ? badge + ' ' + name : name;
+}
+
+function getLeaderboardWeekKey() {
+  return nextSundayResetDate().toISOString().slice(0, 10);
+}
+
+function showLeaderboardWinnerPopup(profile, creditsReward) {
+  const popup = document.getElementById('leaderboard-win-popup');
+  if (!popup) return;
+  const key = 'ra10_leaderboard_win_seen_' + getLeaderboardWeekKey();
+  if (localStorage.getItem(key) === '1') return;
+  localStorage.setItem(key, '1');
+  const titleEl = popup.querySelector('[data-lb-win-title]');
+  const bodyEl = popup.querySelector('[data-lb-win-body]');
+  const name = getLeaderboardDisplayName(profile);
+  if (titleEl) titleEl.textContent = 'Top spot';
+  if (bodyEl) {
+    bodyEl.textContent = name + ' is currently in first place. You will get ' + creditsReward + ' credits when the leaderboard resets at the end of Saturday.';
+  }
+  popup.style.display = 'block';
+}
+
 async function loadLbPreview() {
   const listEl = document.getElementById('lb-preview-list');
   if (!listEl || !window.supabase) return;
@@ -2654,7 +2945,7 @@ async function loadLbPreview() {
     listEl.innerHTML = data.map((u, i) => `
       <div style="display:flex;align-items:center;justify-content:space-between;
         padding:4px 0;font-size:var(--tx-sm);">
-        <span>${medals[i]} ${u.username ? '@'+u.username : (u.full_name || 'Anonymous')}</span>
+        <span>${medals[i]} ${getLeaderboardDisplayName(u)}</span>
         <span style="font-weight:700;color:var(--color-primary)">${u.xp_this_week} XP</span>
       </div>
     `).join('');
@@ -2682,6 +2973,7 @@ async function renderLeaderboard() {
       tableEl.innerHTML = '<div style="text-align:center;padding:40px;color:var(--color-text-muted)">No XP earned yet this week. Be the first!</div>';
       return;
     }
+    const winner = data[0];
     tableEl.innerHTML = `
       <div style="margin-bottom:var(--sp4);">
         <div style="display:flex;justify-content:space-between;
@@ -2692,7 +2984,9 @@ async function renderLeaderboard() {
         </div>
         ${data.map((u, i) => {
           const isMe = u.id === currentId;
-          const name = u.username ? '@'+u.username : (u.full_name || 'Anonymous');
+          const isWinner = i === 0;
+          const badgeEmoji = getLeaderboardBadgeEmoji(u);
+          const name = getLeaderboardDisplayName(u);
           return `
             <div style="display:flex;align-items:center;
               justify-content:space-between;padding:14px 16px;
@@ -2703,10 +2997,12 @@ async function renderLeaderboard() {
                 <span style="font-size:1.1rem;min-width:28px">
                   ${medals[i] || (i+1)+'.'}
                 </span>
-                <div>
-                  <div style="font-size:var(--tx-sm);font-weight:${isMe?'700':'400'}">
-                    ${name}
-                    ${isMe ? '<span style="font-size:0.7rem;background:var(--color-primary);color:#fff;padding:1px 6px;border-radius:999px;margin-left:4px">You</span>' : ''}
+                <div style="display:flex;flex-direction:column;gap:2px;">
+                  <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:var(--tx-sm);font-weight:${isMe?'700':'400'}">
+                    <span>${name}</span>
+                    ${badgeEmoji ? '<span style="display:inline-flex;align-items:center;justify-content:center;min-width:1.8em;height:1.8em;padding:0 .45em;border-radius:999px;background:var(--color-surface-offset);font-size:1rem;">' + badgeEmoji + '</span>' : ''}
+                    ${isWinner ? '<span style="font-size:0.7rem;background:var(--color-warning);color:#fff;padding:1px 6px;border-radius:999px;">Top</span>' : ''}
+                    ${isMe ? '<span style="font-size:0.7rem;background:var(--color-primary);color:#fff;padding:1px 6px;border-radius:999px;">You</span>' : ''}
                   </div>
                   <div style="font-size:var(--tx-xs);color:var(--color-text-muted)">
                     ${u.xp_total||0} total XP
@@ -2722,13 +3018,59 @@ async function renderLeaderboard() {
       <div style="background:var(--color-surface-offset);
         border-radius:var(--radius-lg);padding:var(--sp4);
         text-align:center;font-size:var(--tx-sm);color:var(--color-text-muted);">
-        <div>🏆 Top scorer wins <strong>10 bonus credits</strong> every Sunday</div>
+        <div>🏆 First place wins <strong>30 credits</strong>, second gets <strong>20</strong> and third gets <strong>10</strong> when the week ends on Saturday.</div>
       </div>
     `;
+    const top3 = [data[1], data[0], data[2]].filter(Boolean);
+    const podium = top3.map((u, i) => {
+      const rank = i === 1 ? 1 : (i === 0 ? 2 : 3);
+      const medals = { 1: '🥇', 2: '🥈', 3: '🥉' };
+      const blockHeight = rank === 1 ? 178 : (rank === 2 ? 140 : 120);
+      const accent = rank === 1
+        ? 'linear-gradient(180deg,#fde68a 0%,#f59e0b 100%)'
+        : (rank === 2
+          ? 'linear-gradient(180deg,#dbeafe 0%,#60a5fa 100%)'
+          : 'linear-gradient(180deg,#f5d0fe 0%,#d946ef 100%)');
+      const glow = rank === 1
+        ? '0 20px 35px rgba(245,158,11,.28)'
+        : (rank === 2 ? '0 16px 28px rgba(59,130,246,.20)' : '0 16px 28px rgba(217,70,239,.20)');
+      return `
+        <div style="display:flex;flex-direction:column;align-items:center;justify-content:flex-end;min-width:96px;">
+          <div style="text-align:center;margin-bottom:10px;max-width:180px;">
+            <div style="font-size:1.35rem;line-height:1;margin-bottom:6px;">${medals[rank]}</div>
+            <div style="font-size:var(--tx-xs);font-weight:700;line-height:1.35;word-break:break-word;">${getLeaderboardDisplayName(u)}</div>
+            <div style="font-size:var(--tx-xs);color:var(--color-text-muted);margin-top:2px;">${u.xp_this_week} XP</div>
+          </div>
+          <div style="width:100%;max-width:200px;height:${blockHeight}px;border-radius:14px 14px 0 0;background:${accent};box-shadow:${glow};border:1px solid rgba(255,255,255,.36);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;">
+            <div style="position:absolute;inset:0;background:linear-gradient(130deg,rgba(255,255,255,.35),rgba(255,255,255,0));pointer-events:none;"></div>
+            <div style="font-size:2rem;font-family:var(--font-d);color:rgba(17,24,39,.78);line-height:1;">${rank}</div>
+          </div>
+        </div>
+      `;
+    }).join('');
+    tableEl.insertAdjacentHTML('beforebegin', `
+      <div style="margin-bottom:var(--sp5);padding:var(--sp4);border-radius:24px;background:linear-gradient(135deg,rgba(210,0,0,.08),rgba(255,255,255,.58));border:1px solid oklch(from var(--color-primary) l c h/.12);box-shadow:var(--shadow-md);overflow:hidden;">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:var(--sp3);flex-wrap:wrap;margin-bottom:var(--sp3);">
+          <div>
+            <div style="font-size:var(--tx-xs);font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--color-primary);">Podium</div>
+            <div style="font-family:var(--font-d);font-size:var(--tx-lg);font-weight:400;">Top 3 this week</div>
+          </div>
+          <div style="display:inline-flex;align-items:center;gap:var(--sp2);padding:8px 12px;border-radius:999px;background:var(--color-surface);border:1px solid var(--color-border);font-size:var(--tx-xs);font-weight:700;">⚡ Keep grinding for the reset</div>
+        </div>
+        <div style="padding:4px 6px 0;background:linear-gradient(180deg,rgba(255,255,255,.16),rgba(255,255,255,.03));border-radius:16px;">
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;align-items:end;">
+            ${podium}
+          </div>
+          <div style="height:14px;margin:6px auto 0;max-width:92%;border-radius:999px;background:linear-gradient(90deg,rgba(96,165,250,.42),rgba(245,158,11,.45),rgba(217,70,239,.42));filter:blur(2px);box-shadow:0 0 22px rgba(245,158,11,.35),0 0 30px rgba(217,70,239,.2);"></div>
+        </div>
+      </div>
+    `);
     updateLeaderboardCountdown();
-    if (currentId && !data.find(u => u.id === currentId)) {
+    if (currentId && winner && winner.id === currentId) {
+      showLeaderboardWinnerPopup(winner, 30);
+    } else if (currentId && !data.find(u => u.id === currentId)) {
       const { data: me } = await sb.from('profiles')
-        .select('username, full_name, xp_this_week, xp_total')
+        .select('username, full_name, leaderboard_badge, badge_emoji, emoji_badge, xp_this_week, xp_total')
         .eq('id', currentId).single();
       if (me && myRankEl) {
         myRankEl.innerHTML = `
@@ -2737,8 +3079,9 @@ async function renderLeaderboard() {
             border-radius:var(--radius-lg);padding:14px 16px;
             display:flex;justify-content:space-between;align-items:center;">
             <div>
-              <div style="font-size:var(--tx-sm);font-weight:700">
-                You — ${me.username ? '@'+me.username : (me.full_name||'Anonymous')}
+              <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:var(--tx-sm);font-weight:700">
+                <span>You — ${getLeaderboardDisplayName(me)}</span>
+                ${getLeaderboardBadgeEmoji(me) ? '<span style="display:inline-flex;align-items:center;justify-content:center;min-width:1.8em;height:1.8em;padding:0 .45em;border-radius:999px;background:var(--color-surface-offset);font-size:1rem;">' + getLeaderboardBadgeEmoji(me) + '</span>' : ''}
               </div>
               <div style="font-size:var(--tx-xs);color:var(--color-text-muted)">
                 ${me.xp_total||0} total XP
@@ -2806,6 +3149,8 @@ function exitIframeFullscreen(){
 }
 
 const DAILY_TASK_XP_SYNC_KEY = 'ra10-daily-task-xp-sync-v1';
+const CREDIT_GIFT_OWNER_EMAIL = 'mistry.hashim@icloud.com';
+const CREDIT_GIFT_POPUP_SEEN_KEY = 'ra10_credit_gift_popup_seen_ids_v1';
 
 function readDailyTaskXpSyncState(today) {
   try {
@@ -2847,7 +3192,7 @@ async function syncDailyTaskXpToLeaderboard(state) {
   if (!state || !state.date || !state.tasks) return;
   const today = state.date;
   const syncState = readDailyTaskXpSyncState(today);
-  const taskXp = { login: 5 };
+  const taskXp = { dailyQuiz: 25, practice5: 50, practice10: 30, practice15: 45, flashReview: 15, share: 30, leaderboard: 10, hub: 10, login: 5 };
   let changed = false;
 
   for (const [taskKey, xp] of Object.entries(taskXp)) {
@@ -2870,6 +3215,89 @@ async function syncDailyTaskXpToLeaderboard(state) {
   }
 }
 
+const GLOBAL_DAILY_TASKS_KEY = 'ra10-daily-tasks-v2';
+
+function readGlobalDailyTasksState() {
+  const today = new Date().toISOString().slice(0, 10);
+  const defaultTasks = {
+    dailyQuiz: false,
+    practice5: false,
+    practice10: false,
+    practice15: false,
+    flashReview: false,
+    share: false,
+    leaderboard: false,
+    hub: false,
+    login: false,
+  };
+  let state = null;
+  try {
+    const raw = localStorage.getItem(GLOBAL_DAILY_TASKS_KEY);
+    state = raw ? JSON.parse(raw) : null;
+  } catch (e) {
+    state = null;
+  }
+  if (!state || state.date !== today || !state.tasks) {
+    state = {
+      date: today,
+      tasks: Object.assign({}, defaultTasks),
+      practiceCount: 0
+    };
+  } else {
+    state = {
+      date: today,
+      tasks: Object.assign({}, defaultTasks, state.tasks || {}),
+      practiceCount: Number(state.practiceCount || 0)
+    };
+  }
+  return state;
+}
+
+function writeGlobalDailyTasksState(state) {
+  localStorage.setItem(GLOBAL_DAILY_TASKS_KEY, JSON.stringify(state));
+}
+
+async function completeGlobalDailyTask(taskKey) {
+  if (!window.RA10 || !RA10.isLoggedIn()) return false;
+  const state = readGlobalDailyTasksState();
+  if (state.tasks[taskKey]) return false;
+  state.tasks[taskKey] = true;
+  writeGlobalDailyTasksState(state);
+  await syncDailyTaskXpToLeaderboard(state);
+  if (document.getElementById('p-tasks')?.classList.contains('active')) {
+    renderGlobalTasksPage();
+  }
+  return true;
+}
+
+async function shareGlobalDailyLink() {
+  const text = 'Check out RA10 for BTEC revision: https://ra10.co.uk';
+  try {
+    if (navigator.share) {
+      await navigator.share({ title: 'RA10', text, url: 'https://ra10.co.uk' });
+    } else if (navigator.clipboard && navigator.clipboard.writeText) {
+      await navigator.clipboard.writeText(text);
+    } else {
+      throw new Error('Clipboard unavailable');
+    }
+  } catch (e) {
+    try {
+      const t = document.createElement('textarea');
+      t.value = text;
+      document.body.appendChild(t);
+      t.select();
+      const copied = document.execCommand('copy');
+      t.remove();
+      if (!copied) throw new Error('Copy fallback failed');
+    } catch (fallbackError) {
+      window.prompt('Copy this share link', text);
+    }
+  }
+  if (await completeGlobalDailyTask('share')) {
+    showMiniToast('Share link copied');
+  }
+}
+
 function renderGlobalTasksPage() {
   const host = document.getElementById('global-tasks-host');
   if (!host) return;
@@ -2878,20 +3306,9 @@ function renderGlobalTasksPage() {
     return;
   }
 
-  const today = new Date().toISOString().slice(0, 10);
-  const stateKey = 'ra10-daily-tasks-v2';
-  const defaultTasks = {
-    dailyQuiz: false,
-    practice5: false,
-    practice10: false,
-    practice15: false,
-    flashReview: false,
-    share: false,
-    login: false
-  };
-
   function readPracticeCountForToday() {
     let count = 0;
+    const today = new Date().toISOString().slice(0, 10);
     const legacyCount = Number(localStorage.getItem('ra10_practice_today_' + today) || '0');
     if (Number.isFinite(legacyCount) && legacyCount > 0) count = legacyCount;
     try {
@@ -2903,26 +3320,7 @@ function renderGlobalTasksPage() {
     } catch (e) {}
     return count;
   }
-  let state = null;
-  try {
-    const raw = localStorage.getItem(stateKey);
-    state = raw ? JSON.parse(raw) : null;
-  } catch (e) {
-    state = null;
-  }
-  if (!state || state.date !== today || !state.tasks) {
-    state = {
-      date: today,
-      tasks: Object.assign({}, defaultTasks),
-      practiceCount: readPracticeCountForToday()
-    };
-  } else {
-    state = {
-      date: today,
-      tasks: Object.assign({}, defaultTasks, state.tasks || {}),
-      practiceCount: Number(state.practiceCount || 0)
-    };
-  }
+  const state = readGlobalDailyTasksState();
 
   state.practiceCount = Math.max(state.practiceCount, readPracticeCountForToday());
   state.tasks.practice5 = state.tasks.practice5 || state.practiceCount >= 5;
@@ -2930,7 +3328,7 @@ function renderGlobalTasksPage() {
   state.tasks.practice15 = state.tasks.practice15 || state.practiceCount >= 15;
   const loginJustCompleted = !state.tasks.login;
   state.tasks.login = true;
-  localStorage.setItem(stateKey, JSON.stringify(state));
+  writeGlobalDailyTasksState(state);
 
   // Ensure global daily login XP is synced to profile/leaderboard once per day.
   if (loginJustCompleted) {
@@ -2940,12 +3338,14 @@ function renderGlobalTasksPage() {
   const practiceCount = Number(state.practiceCount || 0);
 
   const items = [
-    { key: 'dailyQuiz', name: 'Daily Quiz', xp: 25, note: 'Complete one 10-question quiz on any unit.' },
+    { key: 'dailyQuiz', name: 'Daily Quiz', xp: 25, note: 'Complete one 10-question quiz on any unit.', actionLabel: 'Start quiz', action: "go('/revision/btec/level-3/IT-AAQ/unit-1')" },
     { key: 'practice5', name: 'Answer 5 practice questions', xp: 50, note: String(Math.min(practiceCount, 5)) + ' / 5 completed' },
     { key: 'practice10', name: 'Answer 10 practice questions', xp: 30, note: String(Math.min(practiceCount, 10)) + ' / 10 completed' },
     { key: 'practice15', name: 'Answer 15 practice questions', xp: 45, note: String(Math.min(practiceCount, 15)) + ' / 15 completed' },
-    { key: 'flashReview', name: 'Review flashcards', xp: 15, note: 'Open flashcards in any unit.' },
-    { key: 'share', name: 'Share RA10', xp: 30, note: 'Use the share action once.' },
+    { key: 'flashReview', name: 'Review flashcards', xp: 15, note: 'Open flashcards in any unit.', actionLabel: 'Open flashcards', action: "go('/revision/btec/level-3/IT-AAQ/unit-1')" },
+    { key: 'share', name: 'Share RA10', xp: 30, note: 'Use the share action once.', actionLabel: 'Copy share link', action: 'shareGlobalDailyLink()' },
+    { key: 'leaderboard', name: 'Visit the leaderboard', xp: 10, note: 'Open the weekly leaderboard once.', actionLabel: 'Open leaderboard', action: "completeGlobalDailyTask('leaderboard').then(() => go('leaderboard'))" },
+    { key: 'hub', name: 'Open the revision hub', xp: 10, note: 'Jump into the BTEC level 3 hub once.', actionLabel: 'Open hub', action: "completeGlobalDailyTask('hub').then(() => go('/revision/btec/level-3'))" },
     { key: 'login', name: 'Log in today', xp: 5, note: 'Automatic bonus once per day.' }
   ];
 
@@ -2965,11 +3365,17 @@ function renderGlobalTasksPage() {
     + '</div>'
     + '<div class="grid grid-2">' + items.map(function(item) {
     const done = !!state.tasks[item.key];
+    const actionButton = item.action ? (
+      '<button class="btn ' + (item.key === 'share' ? 'btn-p' : 'btn-s') + '" type="button"' + (done ? ' disabled' : '') + ' onclick="' + item.action + '">' + (done ? 'Completed today' : item.actionLabel) + '</button>'
+    ) : '';
     return '<div class="card tasks-card" style="border-color:' + (done ? 'var(--color-success)' : 'var(--color-border)') + ';">'
       + '<div class="card-tag">Task</div>'
       + '<h3>' + item.name + '</h3>'
       + '<p>' + item.note + '</p>'
-      + '<div class="card-ft"><span class="pill ' + (done ? 'pill-ok' : 'pill-live') + '">' + (done ? 'Completed' : 'Available') + '</span><span class="pill">⚡ ' + item.xp + ' XP</span></div>'
+      + '<div class="card-ft" style="gap:var(--sp2);flex-wrap:wrap;align-items:center;">'
+      + '<span class="pill ' + (done ? 'pill-ok' : 'pill-live') + '">' + (done ? 'Completed' : 'Available') + '</span><span class="pill">⚡ ' + item.xp + ' XP</span>'
+      + actionButton
+      + '</div>'
       + '</div>';
   }).join('') + '</div>'
     + '<div style="display:flex;gap:var(--sp3);flex-wrap:wrap;margin-top:var(--sp5);">'
@@ -3053,7 +3459,73 @@ route();
     updateLeaderboardCountdown();
     setInterval(updateLeaderboardCountdown, 1000);
 
-    await RA10.init();
+    let uiHandlersBound = false;
+    function bindUiEventHandlers() {
+      if (uiHandlersBound) return;
+      uiHandlersBound = true;
+
+      document.getElementById('nav-auth-btn').addEventListener('click', () => openAuthModal('signin'));
+      document.getElementById('mobile-profile-btn')?.addEventListener('click', () => {
+        if (RA10.isLoggedIn()) go('/account');
+        else openAuthModal('signin');
+      });
+      document.getElementById('mobile-subjects-btn')?.addEventListener('click', (event) => {
+        event.preventDefault();
+        if (document.body.classList.contains('mobile-sheet-open')) closeMobileSubjectSheet();
+        else openMobileSubjectSheet();
+      });
+      document.getElementById('mobile-sheet-backdrop')?.addEventListener('click', closeMobileSubjectSheet);
+      document.getElementById('mobile-sheet-close')?.addEventListener('click', closeMobileSubjectSheet);
+      document.querySelectorAll('[data-mobile-subject]').forEach(button => {
+        button.addEventListener('click', () => {
+          closeMobileSubjectSheet();
+          go(button.dataset.mobileSubject);
+        });
+      });
+      document.getElementById('auth-close').addEventListener('click', closeAuthModal);
+      document.getElementById('auth-overlay').addEventListener('click', e => { if (e.target === document.getElementById('auth-overlay')) closeAuthModal(); });
+      document.getElementById('tab-signin').addEventListener('click', () => switchAuthTab('signin'));
+      document.getElementById('tab-signup').addEventListener('click', () => switchAuthTab('signup'));
+      document.getElementById('forgot-link').addEventListener('click', () => switchAuthTab('forgot'));
+      document.getElementById('back-to-signin').addEventListener('click', () => switchAuthTab('signin'));
+
+      document.getElementById('signin-btn').addEventListener('click', async () => {
+        const btn = document.getElementById('signin-btn');
+        const err = document.getElementById('signin-error');
+        err.classList.remove('show');
+        btn.disabled = true; btn.textContent = 'Signing in…';
+        const { error } = await RA10.signIn(
+          document.getElementById('signin-email').value,
+          document.getElementById('signin-password').value
+        );
+        btn.disabled = false; btn.textContent = 'Sign in';
+        if (error) {
+          err.textContent = error.message;
+          err.classList.add('show');
+        } else {
+          closeAuthModal();
+          try { await RA10.refreshProfile(); } catch (e) {}
+          await _updateNavAuth();
+        }
+      });
+
+      ['signin-email', 'signin-password'].forEach((id) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.addEventListener('keydown', (e) => {
+          if (e.key !== 'Enter') return;
+          e.preventDefault();
+          const btn = document.getElementById('signin-btn');
+          if (btn && !btn.disabled) btn.click();
+        });
+      });
+    }
+
+    bindUiEventHandlers();
+
+    const initPromise = RA10.init();
+
+    await initPromise;
 
     // Handle Supabase email callback (invite or password reset)
     const hashParams = new URLSearchParams(window.location.hash.slice(1));
@@ -3279,10 +3751,18 @@ route();
     async function _updateNavAuth() {
       const loggedIn = RA10.isLoggedIn();
       const profile = RA10.getProfile();
+      const mobileUpgradeBtn = document.getElementById('mobile-upgrade-btn');
+      const examBanner = document.getElementById('exam-banner');
+      const tier = RA10.getTier();
       document.getElementById('nav-auth-btn').style.display = loggedIn ? 'none' : '';
       document.getElementById('nav-user-wrap').style.display = loggedIn ? '' : 'none';
-      if (!loggedIn || RA10.getTier() === 'free') document.getElementById('nav-upgrade-btn').style.display = '';
+      if (!loggedIn || tier === 'free') document.getElementById('nav-upgrade-btn').style.display = '';
       else document.getElementById('nav-upgrade-btn').style.display = 'none';
+      if (mobileUpgradeBtn) mobileUpgradeBtn.style.display = (!loggedIn || tier === 'free') ? 'inline-flex' : 'none';
+      if (examBanner) {
+        const isFreeOrSignedOut = !loggedIn || tier === 'free';
+        examBanner.style.display = isFreeOrSignedOut ? '' : 'none';
+      }
       document.getElementById('nav-credit-chip').style.display = loggedIn ? '' : 'none';
       const mobileCreditChip = document.getElementById('mobile-credit-chip');
       if (mobileCreditChip) mobileCreditChip.style.display = loggedIn ? '' : 'none';
@@ -3385,6 +3865,12 @@ route();
         });
         document.getElementById('account-display-name').textContent = profile.display_name || profile.email;
         document.getElementById('account-email').textContent = profile.email;
+        const giftPanel = document.getElementById('account-credit-gift-panel');
+        if (giftPanel) {
+          const em = String(profile.email || '').toLowerCase();
+          giftPanel.style.display = em === CREDIT_GIFT_OWNER_EMAIL ? '' : 'none';
+        }
+        loadSentCreditGifts();
         const accountSchoolEl = document.getElementById('account-school');
         if (accountSchoolEl) {
           const tier = String(RA10.getTier() || '');
@@ -3402,7 +3888,9 @@ route();
         document.getElementById('account-display-name-current').textContent = profile.full_name || profile.display_name || profile.email;
         const accountNameInput = document.getElementById('account-name-input');
         const accountUsernameInput = document.getElementById('account-username-input');
+        const accountBadgeInput = document.getElementById('account-badge-input');
         document.getElementById('account-username-current').textContent = profile.username ? ('@' + profile.username) : 'No username set';
+        document.getElementById('account-badge-current').textContent = getLeaderboardBadgeEmoji(profile) || 'No badge set';
         if (accountNameInput) {
           const isNameEditing = document.activeElement === accountNameInput;
           if (!isNameEditing) {
@@ -3413,6 +3901,12 @@ route();
           const isUsernameEditing = document.activeElement === accountUsernameInput;
           if (!isUsernameEditing) {
             accountUsernameInput.value = profile.username || '';
+          }
+        }
+        if (accountBadgeInput) {
+          const isBadgeEditing = document.activeElement === accountBadgeInput;
+          if (!isBadgeEditing) {
+            accountBadgeInput.value = getLeaderboardBadgeEmoji(profile) || '';
           }
         }
         const tier = RA10.getTier();
@@ -3634,6 +4128,123 @@ route();
         t.style.opacity = '0';
         t.style.transform = 'translateY(8px)';
       }, 2000);
+    }
+
+    async function callAuthedRpc(name, payload) {
+      const session = RA10.getSession ? RA10.getSession() : null;
+      const token = session && session.access_token;
+      if (!token) throw new Error('Not authenticated.');
+      const res = await fetch('https://tcrrgsylxbyyrmnouihl.supabase.co/rest/v1/rpc/' + encodeURIComponent(name), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRjcnJnc3lseGJ5eXJtbm91aWhsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4ODUyMTEsImV4cCI6MjA5MzQ2MTIxMX0.eOp6ma-mfgh8F20nM7E2OaBW28LlZlwuEEWr6k2zDWw',
+          'Authorization': 'Bearer ' + token
+        },
+        body: JSON.stringify(payload || {})
+      });
+      const text = await res.text();
+      let data = null;
+      try {
+        data = text ? JSON.parse(text) : null;
+      } catch (e) {}
+      if (!res.ok) {
+        const msg = (data && (data.message || data.error_description || data.error)) || text || 'Request failed.';
+        throw new Error(msg);
+      }
+      return data;
+    }
+
+    async function checkGiftCreditPopup() {
+      if (!window.supabase || !RA10.isLoggedIn()) return;
+      try {
+        const data = await callAuthedRpc('get_unseen_credit_gifts');
+        if (!Array.isArray(data) || !data.length) return;
+        const ids = data.map((row) => Number(row.id)).filter((n) => Number.isFinite(n));
+        if (!ids.length) return;
+        const seenMap = (() => {
+          try {
+            return JSON.parse(localStorage.getItem(CREDIT_GIFT_POPUP_SEEN_KEY) || '{}') || {};
+          } catch (e) {
+            return {};
+          }
+        })();
+        const unseenForPopup = ids.filter((id) => !seenMap[String(id)]);
+        if (!unseenForPopup.length) return;
+        const total = data.reduce((sum, row) => sum + Number(row.amount || 0), 0);
+        const senders = Array.from(new Set(data.map((row) => String(row.sender_email || '').toLowerCase()).filter(Boolean)));
+        const senderLabel = senders.length ? senders.join(', ') : 'a supporter';
+        const popup = document.getElementById('gift-credit-popup');
+        if (!popup) return;
+        const amountEl = popup.querySelector('[data-gift-amount]');
+        const senderEl = popup.querySelector('[data-gift-sender]');
+        const noteWrapEl = popup.querySelector('[data-gift-note-wrap]');
+        const noteEl = popup.querySelector('[data-gift-note]');
+        if (amountEl) amountEl.textContent = String(total);
+        if (senderEl) senderEl.textContent = senderLabel;
+        const firstNote = String(((data[0] && data[0].note) || '')).trim();
+        if (noteWrapEl && noteEl) {
+          if (firstNote) {
+            noteEl.textContent = firstNote;
+            noteWrapEl.style.display = '';
+          } else {
+            noteEl.textContent = '';
+            noteWrapEl.style.display = 'none';
+          }
+        }
+        popup.dataset.ids = ids.join(',');
+        popup.style.display = 'block';
+        ids.forEach((id) => { seenMap[String(id)] = 1; });
+        try {
+          localStorage.setItem(CREDIT_GIFT_POPUP_SEEN_KEY, JSON.stringify(seenMap));
+        } catch (e) {}
+        try {
+          await callAuthedRpc('mark_credit_gifts_seen', { gift_ids: ids });
+        } catch (e) {
+          console.warn('mark seen on gift popup open failed', e);
+        }
+      } catch (e) {
+        console.warn('gift popup check failed', e);
+      }
+    }
+
+    async function loadSentCreditGifts() {
+      const host = document.getElementById('gift-credit-sent-list');
+      if (!host) return;
+      if (!window.supabase || !RA10.isLoggedIn()) {
+        host.innerHTML = '<div class="credit-log-note">Sign in to view sent gifts.</div>';
+        return;
+      }
+      const profile = RA10.getProfile();
+      const email = String((profile && profile.email) || '').toLowerCase();
+      if (email !== CREDIT_GIFT_OWNER_EMAIL) {
+        host.innerHTML = '<div class="credit-log-note">No gifts sent yet.</div>';
+        return;
+      }
+      host.innerHTML = '<div class="credit-log-note">Loading sent gifts...</div>';
+      try {
+        const data = await callAuthedRpc('get_sent_credit_gifts', { limit_count: 8 });
+        if (!Array.isArray(data) || !data.length) {
+          host.innerHTML = '<div class="credit-log-note">No gifts sent yet.</div>';
+          return;
+        }
+        host.innerHTML = data.map((row) => {
+          const toEmail = String(row.recipient_email || '').trim() || 'unknown';
+          const amount = Number(row.amount || 0);
+          const note = String(row.note || '').trim();
+          const when = row.created_at ? new Date(row.created_at).toLocaleString() : '';
+          return ''
+            + '<div class="credit-log-item">'
+            +   '<div class="credit-log-main">'
+            +     '<div class="credit-log-note">To: ' + toEmail + (note ? ' - ' + note : '') + '</div>'
+            +     '<div class="credit-log-time">' + when + '</div>'
+            +   '</div>'
+            +   '<div class="credit-log-amt gain">+' + amount + '</div>'
+            + '</div>';
+        }).join('');
+      } catch (e) {
+        host.innerHTML = '<div class="credit-log-note">Could not load sent gifts.</div>';
+      }
     }
 
     function getPlanWelcomeContent() {
@@ -4088,6 +4699,8 @@ route();
       if (!RA10.isLoggedIn()) return;
       if (localStorage.getItem('ra10_exam_toast_seen')) return;
       if (sessionStorage.getItem('ra10_exam_toast_shown')) return;
+      const activity = (typeof RA10.getCreditActivity === 'function') ? (RA10.getCreditActivity(200) || []) : [];
+      if (activity.some((entry) => String(entry.source || '') === 'exam_season_bonus')) return;
       const session = RA10.getSession();
       if (!session?.user) return;
       const created = new Date(session.user.created_at);
@@ -4105,9 +4718,11 @@ route();
     RA10.on('authchange', checkProfileCompletion);
     RA10.on('authchange', checkWeeklyXpReset);
     RA10.on('authchange', checkExamSeasonToast);
+    RA10.on('authchange', checkGiftCreditPopup);
     checkProfileCompletion();
     checkWeeklyXpReset();
     checkExamSeasonToast();
+    checkGiftCreditPopup();
 
     if ((location.hash.replace('#/','').replace('#','')) === 'leaderboard') {
       setTimeout(renderLeaderboard, 100);
@@ -4125,51 +4740,7 @@ route();
       });
     }
 
-    document.getElementById('nav-auth-btn').addEventListener('click', () => openAuthModal('signin'));
-    document.getElementById('mobile-profile-btn')?.addEventListener('click', () => {
-      if (RA10.isLoggedIn()) go('/account');
-      else openAuthModal('signin');
-    });
-    document.getElementById('mobile-subjects-btn')?.addEventListener('click', () => {
-      if (document.body.classList.contains('mobile-sheet-open')) closeMobileSubjectSheet();
-      else openMobileSubjectSheet();
-    });
-    document.getElementById('mobile-sheet-backdrop')?.addEventListener('click', closeMobileSubjectSheet);
-    document.getElementById('mobile-sheet-close')?.addEventListener('click', closeMobileSubjectSheet);
-    document.querySelectorAll('[data-mobile-subject]').forEach(button => {
-      button.addEventListener('click', () => go(button.dataset.mobileSubject));
-    });
-    document.getElementById('auth-close').addEventListener('click', closeAuthModal);
-    document.getElementById('auth-overlay').addEventListener('click', e => { if (e.target === document.getElementById('auth-overlay')) closeAuthModal(); });
-    document.getElementById('tab-signin').addEventListener('click', () => switchAuthTab('signin'));
-    document.getElementById('tab-signup').addEventListener('click', () => switchAuthTab('signup'));
-    document.getElementById('forgot-link').addEventListener('click', () => switchAuthTab('forgot'));
-    document.getElementById('back-to-signin').addEventListener('click', () => switchAuthTab('signin'));
-
-    document.getElementById('signin-btn').addEventListener('click', async () => {
-      const btn = document.getElementById('signin-btn');
-      const err = document.getElementById('signin-error');
-      err.classList.remove('show');
-      btn.disabled = true; btn.textContent = 'Signing in…';
-      const { error } = await RA10.signIn(
-        document.getElementById('signin-email').value,
-        document.getElementById('signin-password').value
-      );
-      btn.disabled = false; btn.textContent = 'Sign in';
-      if (error) { err.textContent = error.message; err.classList.add('show'); }
-      else { closeAuthModal(); }
-    });
-
-    ['signin-email', 'signin-password'].forEach((id) => {
-      const el = document.getElementById(id);
-      if (!el) return;
-      el.addEventListener('keydown', (e) => {
-        if (e.key !== 'Enter') return;
-        e.preventDefault();
-        const btn = document.getElementById('signin-btn');
-        if (btn && !btn.disabled) btn.click();
-      });
-    });
+    bindUiEventHandlers();
 
     function isEmailRateLimitError(error) {
       var msg = String((error && error.message) || '').toLowerCase();
@@ -4338,8 +4909,7 @@ route();
       }
     });
 
-    const IS_LOCAL_PAYMENT_TEST = location.hostname === '127.0.0.1' || location.hostname === 'localhost';
-    const PURCHASES_TEMPORARILY_DISABLED = !IS_LOCAL_PAYMENT_TEST;
+    const PURCHASES_TEMPORARILY_DISABLED = false;
 
     function showPurchasesPausedPopup() {
       const existing = document.getElementById('purchase-paused-overlay');
@@ -4354,8 +4924,8 @@ route();
       const card = document.createElement('div');
       card.style.cssText = 'width:min(520px,100%);background:var(--color-surface,#fff);color:var(--color-text,#101218);border:1px solid var(--color-border,#d6dbe8);border-radius:18px;padding:20px;box-shadow:0 12px 40px rgba(0,0,0,.28);';
       card.innerHTML = ''
-        + '<h3 style="margin:0 0 8px 0;font-size:1.15rem;">Payments are not ready yet</h3>'
-        + '<p style="margin:0;color:var(--color-text-muted,#5f6780);line-height:1.6;">Payments are only enabled on localhost test mode right now. Live checkout is still disabled.</p>'
+        + '<h3 style="margin:0 0 8px 0;font-size:1.15rem;">Payments are live</h3>'
+        + '<p style="margin:0;color:var(--color-text-muted,#5f6780);line-height:1.6;">If checkout does not open, refresh once and try again. Live payments are now enabled on the website.</p>'
         + '<div style="margin-top:16px;display:flex;justify-content:flex-end;">'
         + '<button id="purchase-paused-close" class="btn btn-p" style="justify-content:center;">OK</button>'
         + '</div>';
@@ -4450,6 +5020,18 @@ route();
       return !!res.ok;
     }
 
+    function hasCheckoutStateAdvanced(previousTier, previousCredits, previousSubjects) {
+      const nextProfile = RA10.getProfile();
+      if (!nextProfile) return false;
+      const nextTier = String(RA10.getTier() || '');
+      const nextCredits = Number(RA10.getCredits());
+      const nextSubjects = Array.isArray(nextProfile.unlocked_subjects) ? nextProfile.unlocked_subjects.filter(Boolean) : [];
+      if (nextTier !== String(previousTier || '')) return true;
+      if (Number.isFinite(previousCredits) && Number.isFinite(nextCredits) && nextCredits !== previousCredits) return true;
+      if (JSON.stringify(nextSubjects) !== JSON.stringify(previousSubjects || [])) return true;
+      return false;
+    }
+
     async function handleCheckoutReturn() {
       const rawHash = String(window.location.hash || '');
       const hashNoPrefix = rawHash.replace('#', '');
@@ -4462,25 +5044,41 @@ route();
       if (!status) return;
 
       if (status === 'success') {
+        const previousProfile = RA10.getProfile() || {};
+        const previousTier = String(RA10.getTier() || '');
+        const previousCredits = Number(RA10.getCredits());
+        const previousSubjects = Array.isArray(previousProfile.unlocked_subjects)
+          ? previousProfile.unlocked_subjects.filter(Boolean)
+          : [];
         setSubscriptionSyncWindow(30000);
         showUpgradeCheckoutStatus('warn', 'Payment received. Updating your account now...');
         try {
           const confirmed = await confirmCheckoutSession(sessionId);
           if (confirmed) {
-            showUpgradeCheckoutStatus('ok', 'Your plan has been applied. If values look stale, wait a few seconds and refresh once.');
+            showUpgradeCheckoutStatus('warn', 'Payment received. Finalising your account now...');
           } else {
             showUpgradeCheckoutStatus('warn', 'Payment succeeded, but profile update is still syncing. It should appear shortly after webhook processing.');
           }
         } catch (e) {
           showUpgradeCheckoutStatus('warn', 'Payment succeeded, but immediate sync failed. Webhook processing should still update your account shortly.');
         }
-        for (let i = 0; i < 6; i++) {
+        let synced = false;
+        for (let i = 0; i < 10; i++) {
           try {
             await RA10.refreshProfile();
-            _updateNavAuth();
+            await _updateNavAuth();
             window.dispatchEvent(new Event('ra10:profilerefreshed'));
+            if (hasCheckoutStateAdvanced(previousTier, previousCredits, previousSubjects)) {
+              synced = true;
+              break;
+            }
           } catch (e) {}
-          await new Promise((resolve) => setTimeout(resolve, 1500));
+          await new Promise((resolve) => setTimeout(resolve, 1200));
+        }
+        if (synced) {
+          showUpgradeCheckoutStatus('ok', 'Your plan is now active and your account has been updated.');
+        } else {
+          showUpgradeCheckoutStatus('warn', 'Payment succeeded, but the account update is still syncing. It should appear automatically shortly.');
         }
       } else if (status === 'cancel') {
         showUpgradeCheckoutStatus('warn', 'Checkout was cancelled. No payment was taken.');
@@ -4488,11 +5086,6 @@ route();
 
       history.replaceState(null, '', window.location.pathname + window.location.search + '#/upgrade');
       route();
-      if (status === 'success') {
-        setTimeout(() => {
-          window.location.reload();
-        }, 1200);
-      }
     }
 
     handleCheckoutReturn();
@@ -4534,6 +5127,12 @@ route();
       document.getElementById('account-username-edit').style.display = 'block';
       document.getElementById('account-username-error').classList.remove('show');
       document.getElementById('account-username-input')?.focus();
+    });
+
+    document.getElementById('account-change-badge-btn')?.addEventListener('click', () => {
+      document.getElementById('account-badge-edit').style.display = 'block';
+      document.getElementById('account-badge-error').classList.remove('show');
+      document.getElementById('account-badge-input')?.focus();
     });
 
     document.getElementById('account-save-name-btn')?.addEventListener('click', async () => {
@@ -4636,6 +5235,114 @@ route();
         btn.disabled = false;
         btn.textContent = 'Save';
       }
+    });
+
+    document.getElementById('account-save-badge-btn')?.addEventListener('click', async () => {
+      const err = document.getElementById('account-badge-error');
+      const btn = document.getElementById('account-save-badge-btn');
+      const input = document.getElementById('account-badge-input');
+      const val = String((input && input.value) || '').trim().slice(0, 8);
+      if (input) input.value = val;
+      err.classList.remove('show');
+      btn.disabled = true;
+      btn.textContent = 'Saving...';
+      try {
+        const sb = window.supabase.createClient(
+          'https://tcrrgsylxbyyrmnouihl.supabase.co',
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRjcnJnc3lseGJ5eXJtbm91aWhsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4ODUyMTEsImV4cCI6MjA5MzQ2MTIxMX0.eOp6ma-mfgh8F20nM7E2OaBW28LlZlwuEEWr6k2zDWw'
+        );
+        const session = RA10.getSession();
+        const currentUserId = session?.user?.id || RA10.getProfile()?.id || '';
+        if (!currentUserId) {
+          throw new Error('You are not signed in. Please refresh and try again.');
+        }
+        const { error } = await sb.from('profiles').update({ leaderboard_badge: val || null }).eq('id', currentUserId);
+        if (error) throw error;
+        await RA10.init();
+        _updateNavAuth();
+        document.getElementById('account-badge-edit').style.display = 'none';
+        showMiniToast('Badge updated');
+      } catch (e) {
+        err.textContent = e.message || 'Could not save badge.';
+        err.classList.add('show');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Save';
+      }
+    });
+
+    document.getElementById('gift-credit-send-btn')?.addEventListener('click', async () => {
+      const err = document.getElementById('gift-credit-error');
+      const suc = document.getElementById('gift-credit-success');
+      const btn = document.getElementById('gift-credit-send-btn');
+      const emailInput = document.getElementById('gift-credit-email');
+      const amountInput = document.getElementById('gift-credit-amount');
+      const noteInput = document.getElementById('gift-credit-note');
+      const email = String((emailInput && emailInput.value) || '').trim().toLowerCase();
+      const amount = Number((amountInput && amountInput.value) || 0);
+      const note = String((noteInput && noteInput.value) || '').trim();
+      err.classList.remove('show');
+      suc.classList.remove('show');
+      if (!email || !email.includes('@')) {
+        err.textContent = 'Enter a valid recipient email.';
+        err.classList.add('show');
+        return;
+      }
+      if (!Number.isFinite(amount) || amount < 1 || amount > 5000) {
+        err.textContent = 'Enter a credit amount between 1 and 5000.';
+        err.classList.add('show');
+        return;
+      }
+      if (note.length > 180) {
+        err.textContent = 'Note must be 180 characters or less.';
+        err.classList.add('show');
+        return;
+      }
+      btn.disabled = true;
+      btn.textContent = 'Sending...';
+      try {
+        const data = await callAuthedRpc('grant_credit_gift_by_email', {
+          target_email: email,
+          gift_amount: Math.floor(amount),
+          gift_note: note || null
+        });
+        const result = Array.isArray(data) ? data[0] : data;
+        if (!result || !result.ok) {
+          throw new Error((result && result.message) || 'Could not send credits.');
+        }
+        suc.textContent = 'Gift sent to ' + email + ' (' + Math.floor(amount) + ' credits).';
+        suc.classList.add('show');
+        if (emailInput) emailInput.value = '';
+        if (amountInput) amountInput.value = '';
+        if (noteInput) noteInput.value = '';
+        await loadSentCreditGifts();
+        await RA10.refreshProfile();
+        _updateNavAuth();
+      } catch (e) {
+        err.textContent = e.message || 'Could not send gift credits.';
+        err.classList.add('show');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Send gift';
+      }
+    });
+
+    document.getElementById('gift-credit-popup-close')?.addEventListener('click', async () => {
+      const popup = document.getElementById('gift-credit-popup');
+      if (!popup || !window.supabase || !RA10.isLoggedIn()) {
+        if (popup) popup.style.display = 'none';
+        return;
+      }
+      const ids = String(popup.dataset.ids || '').split(',').map((v) => Number(v)).filter((n) => Number.isFinite(n));
+      try {
+        if (ids.length) {
+          await callAuthedRpc('mark_credit_gifts_seen', { gift_ids: ids });
+        }
+      } catch (e) {
+        console.warn('mark gift popup seen failed', e);
+      }
+      popup.style.display = 'none';
+      popup.dataset.ids = '';
     });
 
     document.getElementById('btn-account-delete')?.addEventListener('click', () => {
@@ -4849,6 +5556,30 @@ route();
   <div style="display:flex;gap:var(--sp3);justify-content:center;flex-wrap:wrap">
     <button class="btn btn-p" onclick="document.getElementById('exam-credits-toast').style.display='none'">Thanks!</button>
     <button class="btn btn-g" onclick="localStorage.setItem('ra10_exam_toast_seen','1');document.getElementById('exam-credits-toast').style.display='none'">Do not show again</button>
+  </div>
+</div>
+
+<div id="leaderboard-win-popup" style="display:none;position:fixed;inset:0;z-index:10026;background:rgba(15,23,42,.5);backdrop-filter:blur(8px);padding:var(--sp4);">
+  <div style="max-width:520px;margin:10vh auto 0;background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-xl);box-shadow:var(--shadow-lg);padding:var(--sp6);text-align:center;">
+    <div style="font-size:2rem;margin-bottom:var(--sp2)">🏆</div>
+    <h2 data-lb-win-title style="margin:0 0 var(--sp3) 0;font-size:var(--tx-xl);font-weight:400;">You won the leaderboard</h2>
+    <p data-lb-win-body style="margin:0 0 var(--sp5) 0;color:var(--color-text-muted);line-height:1.7;">You are currently in first place.</p>
+    <div style="display:flex;justify-content:center;gap:var(--sp3);flex-wrap:wrap;">
+      <button class="btn btn-p" type="button" onclick="document.getElementById('leaderboard-win-popup').style.display='none'">Nice</button>
+    </div>
+  </div>
+</div>
+
+<div id="gift-credit-popup" style="display:none;position:fixed;inset:0;z-index:10027;background:rgba(15,23,42,.55);backdrop-filter:blur(8px);padding:var(--sp4);">
+  <div style="max-width:520px;margin:10vh auto 0;background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-xl);box-shadow:var(--shadow-lg);padding:var(--sp6);text-align:center;">
+    <div style="font-size:2rem;margin-bottom:var(--sp2)">🎁</div>
+    <h2 style="margin:0 0 var(--sp3) 0;font-size:var(--tx-xl);font-weight:400;">You received a credit gift</h2>
+    <p style="margin:0 0 var(--sp2) 0;color:var(--color-text);line-height:1.6;">You received <strong data-gift-amount>0</strong> credits.</p>
+    <p style="margin:0 0 var(--sp5) 0;color:var(--color-text-muted);line-height:1.6;">From: <span data-gift-sender>someone</span></p>
+    <p data-gift-note-wrap style="display:none;margin:0 0 var(--sp5) 0;color:var(--color-text);line-height:1.6;"><strong>Note:</strong> <span data-gift-note></span></p>
+    <div style="display:flex;justify-content:center;gap:var(--sp3);flex-wrap:wrap;">
+      <button class="btn btn-p" type="button" id="gift-credit-popup-close">Nice, thanks!</button>
+    </div>
   </div>
 </div>
 

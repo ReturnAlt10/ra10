@@ -236,14 +236,25 @@ async function startDailyQuiz() {
 async function copyDailyShareLink() {
   const text = 'Check out RA10 for BTEC Sport revision: https://ra10.co.uk';
   try {
-    await navigator.clipboard.writeText(text);
+    if (navigator.share) {
+      await navigator.share({ title: 'RA10', text, url: 'https://ra10.co.uk' });
+    } else if (navigator.clipboard && navigator.clipboard.writeText) {
+      await navigator.clipboard.writeText(text);
+    } else {
+      throw new Error('Clipboard unavailable');
+    }
   } catch (e) {
-    const t = document.createElement('textarea');
-    t.value = text;
-    document.body.appendChild(t);
-    t.select();
-    document.execCommand('copy');
-    t.remove();
+    try {
+      const t = document.createElement('textarea');
+      t.value = text;
+      document.body.appendChild(t);
+      t.select();
+      const copied = document.execCommand('copy');
+      t.remove();
+      if (!copied) throw new Error('Copy fallback failed');
+    } catch (fallbackError) {
+      window.prompt('Copy this share link', text);
+    }
   }
   if (completeDailyTask('share')) awardXP(30, '+30 XP — Thanks for sharing!');
   if (document.getElementById('view-you')?.classList.contains('active')) renderYou();
