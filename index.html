@@ -593,6 +593,18 @@ a,button,[role="button"],input,select,textarea{
   to{transform:translateX(120%)}
 }
 
+@keyframes pulse-gradient{
+  0%, 100%{opacity:1;filter:brightness(1)}
+  50%{opacity:0.85;filter:brightness(1.1)}
+}
+
+@keyframes examine-glow{
+  0%{background-position:0% 50%;filter:saturate(1) brightness(1);box-shadow:0 0 18px rgba(59,130,246,0.28),0 0 32px rgba(236,72,153,0.26),inset 0 0 18px rgba(255,255,255,0.10)}
+  35%{background-position:100% 50%;filter:saturate(1.15) brightness(1.05);box-shadow:0 0 22px rgba(14,165,233,0.34),0 0 38px rgba(168,85,247,0.32),inset 0 0 22px rgba(255,255,255,0.14)}
+  70%{background-position:50% 100%;filter:saturate(1.2) brightness(1.08);box-shadow:0 0 24px rgba(236,72,153,0.36),0 0 44px rgba(249,115,22,0.28),inset 0 0 24px rgba(255,255,255,0.18)}
+  100%{background-position:0% 50%;filter:saturate(1) brightness(1);box-shadow:0 0 18px rgba(59,130,246,0.28),0 0 32px rgba(236,72,153,0.26),inset 0 0 18px rgba(255,255,255,0.10)}
+}
+
 .price-compare-hero{
   margin-inline:auto;
   width:min(980px,100%);
@@ -1647,7 +1659,7 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
         </div>
         <div class="home-stat-row">
           <div class="home-stat"><strong>3 live subjects</strong><span>IT, Business, Sport</span></div>
-          <div class="home-stat"><strong>AI Mark + Mock Papers</strong><span>Exam-ready practice</span></div>
+          <div class="home-stat"><strong><span style="background:linear-gradient(90deg,#a21caf 0%,#0ea5e9 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-weight:700;">AI Examiner</span> + Mock Papers</strong><span>Exam-ready practice</span></div>
           <div class="home-stat"><strong>Weekly XP race</strong><span>30 / 20 / 10 credit prizes</span></div>
         </div>
       </div>
@@ -1684,7 +1696,7 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
           <ul>
             <li>Daily tasks and XP tracking across units</li>
             <li>Weekly leaderboard with 30, 20 and 10 credit rewards</li>
-            <li>AI marker feedback on longer responses</li>
+            <li><span style="background:linear-gradient(90deg,#a21caf 0%,#0ea5e9 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-weight:700;">AI Examiner</span> feedback on longer responses</li>
             <li>Mock paper builders for realistic timed practice</li>
           </ul>
         </div>
@@ -2228,6 +2240,7 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
       <ul class="feat" style="margin-bottom:var(--sp6);">
         <li>10 credits per month</li>
         <li>All subjects (credit-gated)</li>
+        <li><span style="background:linear-gradient(90deg,#a21caf 0%,#0ea5e9 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-weight:700;">AI Examiner</span>: <strong>5 credits per question</strong></li>
         <li>Ads shown</li>
       </ul>
       <button class="btn btn-g" style="width:100%;justify-content:center;" disabled>Current plan</button>
@@ -2242,9 +2255,11 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
       </div>
       <div style="font-size:var(--tx-2xl);font-weight:400;font-family:var(--font-d);margin-bottom:var(--sp1);">£20</div>
       <div style="font-size:var(--tx-xs);color:var(--color-text-muted);margin-bottom:var(--sp5);">per year</div>
+      <div style="font-size:var(--tx-xs);color:var(--color-primary);font-weight:700;margin-top:calc(var(--sp5) * -1);margin-bottom:var(--sp5);">£1.67/month equivalent (billed yearly)</div>
       <ul class="feat" style="margin-bottom:var(--sp6);">
         <li>1,000 credits per month</li>
         <li>All subjects unlocked</li>
+        <li><span style="background:linear-gradient(90deg,#a21caf 0%,#0ea5e9 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-weight:700;">AI Examiner</span>: <strong>1 credit per question</strong></li>
         <li>No ads</li>
       </ul>
       <button class="btn btn-p" id="btn-buy-pro" style="width:100%;justify-content:center;">Buy Pro</button>
@@ -2257,9 +2272,11 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
       </div>
       <div style="font-size:var(--tx-2xl);font-weight:400;font-family:var(--font-d);margin-bottom:var(--sp1);">£30</div>
       <div style="font-size:var(--tx-xs);color:var(--color-text-muted);margin-bottom:var(--sp5);">per year</div>
+      <div style="font-size:var(--tx-xs);color:#7c3aed;font-weight:700;margin-top:calc(var(--sp5) * -1);margin-bottom:var(--sp5);">£2.50/month equivalent (billed yearly)</div>
       <ul class="feat" style="margin-bottom:var(--sp6);">
         <li>Unlimited credits</li>
         <li>All subjects + all tools</li>
+        <li><span style="background:linear-gradient(90deg,#a21caf 0%,#0ea5e9 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-weight:700;">AI Examiner</span>: <strong>0 credits per question</strong></li>
         <li>No ads</li>
         <li>Priority access to new features</li>
       </ul>
@@ -2333,8 +2350,8 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
       </div>
       <ul class="feat" style="margin-bottom:var(--sp6);">
         <li>Unlimited teachers and students</li>
-        <li>Students get 300 credits/month each</li>
-        <li>Teachers get 600 credits/month each</li>
+        <li>Students get 300 credits/month each<br><span style="background:linear-gradient(90deg,#a21caf 0%,#0ea5e9 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-weight:700;">AI Examiner</span>: <strong>2 credits per question</strong></li>
+        <li>Teachers get 600 credits/month each<br><span style="background:linear-gradient(90deg,#a21caf 0%,#0ea5e9 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-weight:700;">AI Examiner</span>: <strong>2 credits per question</strong></li>
         <li>Admin portal to manage all users</li>
         <li>All subjects unlocked for everyone</li>
         <li>No ads</li>
@@ -2350,7 +2367,7 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
     <div class="price-compare-grid">
       <div class="price-compare-cell">
         <strong>RA10 Pro: £20/year</strong>
-        <span>About 79% cheaper than £8/month plans.</span>
+        <span>Equivalent to £1.67/month (yearly billing), about 79% cheaper than £8/month plans.</span>
       </div>
       <div class="price-compare-cell">
         <strong>RA10 vs Save My Exams: £48/year</strong>
@@ -2387,8 +2404,8 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
           <tr>
             <td>Price</td>
             <td>£0</td>
-            <td>£20/year</td>
-            <td>£30/year</td>
+            <td>£20/year<br><small>£1.67/month equivalent</small></td>
+            <td>£30/year<br><small>£2.50/month equivalent</small></td>
             <td>£100/year</td>
           </tr>
           <tr>
@@ -2411,6 +2428,20 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
             <td class="upgrade-yes">No ads</td>
             <td class="upgrade-yes">No ads</td>
             <td class="upgrade-yes">No ads</td>
+          </tr>
+          <tr>
+            <td><span style="background:linear-gradient(90deg,#a21caf 0%,#0ea5e9 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-weight:700;">AI Examiner</span> credit cost<br><span style="font-weight:400;color:#0ea5e9;font-size:0.98em;">(per question)</span></td>
+            <td>5 credits</td>
+            <td>1 credit</td>
+            <td>0 credits</td>
+            <td>2 credits</td>
+          </tr>
+          <tr>
+            <td>AI Examiner feedback</td>
+            <td>Limited</td>
+            <td class="upgrade-yes">Yes</td>
+            <td class="upgrade-yes">Yes</td>
+            <td class="upgrade-yes">Yes</td>
           </tr>
           <tr>
             <td>Priority access to new features</td>
@@ -2441,6 +2472,7 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
           <span class="upgrade-mobile-price">£20/yr</span>
         </div>
         <div class="upgrade-mobile-list">
+          <div class="upgrade-mobile-row"><strong>Monthly equivalent</strong><span>£1.67 (yearly billing)</span></div>
           <div class="upgrade-mobile-row"><strong>Credits</strong><span>1,000 / month</span></div>
           <div class="upgrade-mobile-row"><strong>Subjects</strong><span>All unlocked</span></div>
           <div class="upgrade-mobile-row"><strong>Ads</strong><span>No ads</span></div>
@@ -2453,8 +2485,10 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
           <span class="upgrade-mobile-price">£30/yr</span>
         </div>
         <div class="upgrade-mobile-list">
+          <div class="upgrade-mobile-row"><strong>Monthly equivalent</strong><span>£2.50 (yearly billing)</span></div>
           <div class="upgrade-mobile-row"><strong>Credits</strong><span>Unlimited</span></div>
           <div class="upgrade-mobile-row"><strong>Subjects</strong><span>All + tools</span></div>
+          <div class="upgrade-mobile-row"><strong>AI marking</strong><span>Included</span></div>
           <div class="upgrade-mobile-row"><strong>Ads</strong><span>No ads</span></div>
           <div class="upgrade-mobile-row"><strong>Priority</strong><span>Yes</span></div>
         </div>
@@ -3626,6 +3660,8 @@ function setPriceSnapshotView(mode, trigger) {
 
 window.addEventListener('hashchange', route);
 
+  let authRestorePending = true;
+
   document.addEventListener('DOMContentLoaded', async () => {
     route();
     setPriceSnapshotView('all');
@@ -3696,9 +3732,12 @@ window.addEventListener('hashchange', route);
 
     bindUiEventHandlers();
 
+    _updateNavAuth();
+
     const initPromise = RA10.init();
 
     await initPromise;
+    authRestorePending = false;
 
     // Handle Supabase email callback (invite or password reset)
     const hashParams = new URLSearchParams(window.location.hash.slice(1));
@@ -3922,13 +3961,38 @@ window.addEventListener('hashchange', route);
     }
 
     async function _updateNavAuth() {
-      const loggedIn = RA10.isLoggedIn();
-      const profile = RA10.getProfile();
+      const navAuthBtn = document.getElementById('nav-auth-btn');
+      const navUserWrap = document.getElementById('nav-user-wrap');
+      const mobileProfileLabel = document.getElementById('mobile-profile-label');
+      const navCreditChip = document.getElementById('nav-credit-chip');
+      const mobileCreditChip = document.getElementById('mobile-credit-chip');
       const mobileUpgradeBtn = document.getElementById('mobile-upgrade-btn');
       const examBanner = document.getElementById('exam-banner');
+
+      if (authRestorePending) {
+        if (navAuthBtn) {
+          navAuthBtn.style.display = '';
+          navAuthBtn.textContent = 'Signing in...';
+          navAuthBtn.disabled = true;
+        }
+        if (navUserWrap) navUserWrap.style.display = 'none';
+        if (mobileProfileLabel) mobileProfileLabel.textContent = 'Signing in...';
+        if (navCreditChip) navCreditChip.style.display = 'none';
+        if (mobileCreditChip) mobileCreditChip.style.display = 'none';
+        if (mobileUpgradeBtn) mobileUpgradeBtn.style.display = 'inline-flex';
+        if (examBanner) examBanner.style.display = '';
+        return;
+      }
+
+      const loggedIn = RA10.isLoggedIn();
+      const profile = RA10.getProfile();
       const tier = RA10.getTier();
-      document.getElementById('nav-auth-btn').style.display = loggedIn ? 'none' : '';
-      document.getElementById('nav-user-wrap').style.display = loggedIn ? '' : 'none';
+      if (navAuthBtn) {
+        navAuthBtn.style.display = loggedIn ? 'none' : '';
+        navAuthBtn.textContent = 'Sign in';
+        navAuthBtn.disabled = false;
+      }
+      if (navUserWrap) navUserWrap.style.display = loggedIn ? '' : 'none';
       if (!loggedIn || !tier || tier === 'free') document.getElementById('nav-upgrade-btn').style.display = 'inline-flex';
       else document.getElementById('nav-upgrade-btn').style.display = 'none';
       if (mobileUpgradeBtn) mobileUpgradeBtn.style.display = (!loggedIn || !tier || tier === 'free') ? 'inline-flex' : 'none';
@@ -3936,10 +4000,8 @@ window.addEventListener('hashchange', route);
         const isFreeOrSignedOut = !loggedIn || tier === 'free';
         examBanner.style.display = isFreeOrSignedOut ? '' : 'none';
       }
-      document.getElementById('nav-credit-chip').style.display = loggedIn ? '' : 'none';
-      const mobileCreditChip = document.getElementById('mobile-credit-chip');
+      if (navCreditChip) navCreditChip.style.display = loggedIn ? '' : 'none';
       if (mobileCreditChip) mobileCreditChip.style.display = loggedIn ? '' : 'none';
-      const mobileProfileLabel = document.getElementById('mobile-profile-label');
       const mobileNavAvatar = document.getElementById('mobile-nav-avatar');
       if (mobileProfileLabel) mobileProfileLabel.textContent = loggedIn ? 'Profile' : 'Sign in';
       if (loggedIn && profile) {
@@ -5572,7 +5634,7 @@ window.addEventListener('hashchange', route);
         );
         await sb.auth.signOut();
         document.getElementById('account-delete-overlay').classList.remove('open');
-        msg.textContent = 'Account deletion requested — contact support@ra10.co.uk to complete removal.';
+        msg.textContent = 'Account deletion requested — contact contact.ra10@outlook.com to complete removal.';
         msg.style.display = 'block';
       } catch (e) {
         err.textContent = 'Could not process request. Please try again.';
@@ -5607,6 +5669,24 @@ window.addEventListener('hashchange', route);
       <p>Check out the latest features and improvements we've shipped over the past week.</p>
     </div>
     <div style="display:grid;gap:var(--sp8);padding-block:var(--sp8)">
+        <!-- News Item: AI Examiner Launch -->
+        <div style="border:1px solid oklch(from var(--color-text) l c h/.08);border-radius:var(--radius-xl);padding:var(--sp6);background:var(--color-surface)">
+          <div style="display:flex;gap:var(--sp4);align-items:flex-start">
+            <div style="width:48px;height:48px;border-radius:var(--radius-lg);background:linear-gradient(135deg,#a21caf 0%,#0ea5e9 100%);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;box-shadow:0 0 16px 3px #fff8;">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="filter:drop-shadow(0 0 6px #fff8);"><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/><circle cx="12" cy="12" r="5" fill="#fff"/></svg>
+            </div>
+            <div style="flex:1;min-width:0">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp2)">
+                <h3 style="font-size:var(--tx-lg);margin:0">AI Examiner: Animated, Reliable, Free</h3>
+                <span style="font-size:var(--tx-xs);color:var(--color-text-faint);white-space:nowrap">11.05.2026</span>
+              </div>
+              <p style="color:var(--color-text-muted);margin-bottom:var(--sp3)">
+                Meet the new <b>AI Examiner</b>! Instantly mark your answers with a beautiful animated button and glowing effect. Powered by multiple free/cheap AI models (OpenRouter, DeepSeek, OpenAI fallback), it always finds a working provider. Credits are only used on success, and you always see the cost before confirming. Enjoy robust reliability, clear feedback, and a premium look—now live in all revision units!
+              </p>
+              <span class="pill pill-ok">Live now</span>
+            </div>
+          </div>
+        </div>
       
       <!-- News Item: Business Level Coming Soon -->
       <div style="border:1px solid oklch(from var(--color-text) l c h/.08);border-radius:var(--radius-xl);padding:var(--sp6);background:var(--color-surface)">
@@ -6038,6 +6118,31 @@ function dismissA2HS() {
   const b = document.getElementById('a2hs-banner');
   if (b) { b.style.display = 'none'; b.setAttribute('hidden', ''); }
 }
+
+function contactSupportFromFooter() {
+  const issue = window.prompt('Tell us what issue you are having:');
+  if (issue === null) return;
+  const message = (issue || '').trim();
+  if (!message) {
+    window.alert('Please add a short message before sending.');
+    return;
+  }
+
+  const pageRef = location.hash || location.pathname || '/';
+  const body = [
+    'Issue details:',
+    message,
+    '',
+    'Page:',
+    pageRef,
+    '',
+    'User agent:',
+    navigator.userAgent
+  ].join('\n');
+
+  const subject = 'RA10 Support Request';
+  window.location.href = 'mailto:contact.ra10@outlook.com?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+}
 </script>
 
 <!-- ============================================================
@@ -6047,6 +6152,7 @@ function dismissA2HS() {
   <div class="footer-inner">
     <span class="footer-brand">RA10</span>
     <span class="footer-copy">Built for revision, tools and more.</span>
+    <button class="btn btn-g" type="button" onclick="contactSupportFromFooter()" aria-label="Contact RA10 support" style="padding:8px 14px;font-size:var(--tx-xs);">Contact Us</button>
   </div>
 </footer>
 

@@ -663,18 +663,41 @@
     }
 
     if (typeof client.auth.onAuthStateChange === 'function') {
-        const { data: { subscription } } = client.auth.onAuthStateChange((event, updatedSession) => {
-        _session = updatedSession || null;
-        if (_session) {
-            _loadProfileFromSession(_session).then(() => {
-            _emit('authchange', { event, session: _session, profile: _profile });
-            });
-        } else {
-            _profile = null;
-            _emit('authchange', { event, session: null, profile: null });
-        }
+      const { data: { subscription } } = client.auth.onAuthStateChange((event, updatedSession) => {
+      if (updatedSession) {
+        _session = updatedSession;
+        _loadProfileFromSession(_session).then(() => {
+        _emit('authchange', { event, session: _session, profile: _profile });
         });
-        _authSubscription = subscription;
+        return;
+      }
+
+      if (event === 'SIGNED_OUT') {
+        _session = null;
+        _profile = null;
+        _emit('authchange', { event, session: null, profile: null });
+        return;
+      }
+
+      client.auth.getSession().then(({ data }) => {
+        const confirmedSession = data && data.session ? data.session : null;
+        if (confirmedSession) {
+        _session = confirmedSession;
+        _loadProfileFromSession(_session).then(() => {
+          _emit('authchange', { event, session: _session, profile: _profile });
+        });
+        return;
+        }
+        _session = null;
+        _profile = null;
+        _emit('authchange', { event, session: null, profile: null });
+      }).catch(() => {
+        _session = null;
+        _profile = null;
+        _emit('authchange', { event, session: null, profile: null });
+      });
+      });
+      _authSubscription = subscription;
     }
 
     return { session: _session, profile: _profile };
@@ -941,32 +964,82 @@
     return await spendCredits(action);
   }
 
-  function getGuestCredits() {
-    return parseInt(localStorage.getItem('ra10_guest_credits') ?? '10');
+
+  // --- Guest ID and persistent credits ---
+  function _getGuestId() {
+    // Try cookie first
+    const match = document.cookie.match(/(?:^|; )ra10_guest_id=([^;]+)/);
+    if (match) return match[1];
+    // If not found, generate and set
+    const uuid = ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+      (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+    );
+    document.cookie = `ra10_guest_id=${uuid}; path=/; max-age=31536000; samesite=strict`;
+    return uuid;
   }
 
-  function setGuestCredits(n) {
-    localStorage.setItem('ra10_guest_credits', String(Math.max(0, n)));
+  async function getGuestCredits() {
+    const guestId = _getGuestId();
+    // Try localStorage for fast access
+    const local = localStorage.getItem('ra10_guest_credits');
+    if (local !== null) return parseInt(local);
+    // Fallback: fetch from server
+    try {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/guest_credits?id=eq.${guestId}`, {
+        headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` }
+      });
+      if (res.ok) {
+        const arr = await res.json();
+        if (arr && arr[0] && typeof arr[0].credits === 'number') {
+          localStorage.setItem('ra10_guest_credits', String(arr[0].credits));
+          return arr[0].credits;
+        }
+      }
+    } catch (e) {}
+    // Default if not found
+    localStorage.setItem('ra10_guest_credits', '10');
+    return 10;
   }
 
-  function spendGuestCredit(action) {
+  async function setGuestCredits(n) {
+    const credits = Math.max(0, n);
+    localStorage.setItem('ra10_guest_credits', String(credits));
+    const guestId = _getGuestId();
+    // Sync to server
+    try {
+      await fetch(`${SUPABASE_URL}/rest/v1/guest_credits`, {
+        method: 'POST',
+        headers: {
+          'apikey': SUPABASE_ANON_KEY,
+          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+          'Content-Type': 'application/json',
+          'Prefer': 'resolution=merge-duplicates'
+        },
+        body: JSON.stringify({ id: guestId, credits })
+      });
+    } catch (e) {}
+  }
+
+
+  async function spendGuestCredit(action) {
     const cost = ACTION_COSTS[action] ?? 1;
     if (cost === 0) return true;
-    const current = getGuestCredits();
+    const current = await getGuestCredits();
     if (current < cost) return false;
-    setGuestCredits(current - cost);
+    await setGuestCredits(current - cost);
     return true;
   }
 
-  function guestGate(action, freeLimit, onDenied) {
+
+  async function guestGate(action, freeLimit, onDenied) {
     const cost = ACTION_COSTS[action] ?? 1;
     if (cost === 0) return true;
-    const current = getGuestCredits();
+    const current = await getGuestCredits();
     if (current < cost) {
       if (typeof onDenied === 'function') onDenied('login', action);
       return false;
     }
-    setGuestCredits(current - cost);
+    await setGuestCredits(current - cost);
     return true;
   }
 
@@ -1142,6 +1215,140 @@
     return result;
   }
 
+  function canUseAiMarking() {
+    const tier = _normalizeTier(getTier());
+    return tier === 'ultra' || tier === 'owner' || UNLIMITED_TIERS.has(tier);
+  }
+
+  async function aiMarkAnswer(input) {
+    if (!isLoggedIn()) {
+      throw new Error('You need to sign in before AI marking.');
+    }
+    if (!canUseAiMarking()) {
+      throw new Error('AI marking is available on Ultra only.');
+    }
+
+    const session = getSession();
+    const token = session && session.access_token ? session.access_token : '';
+    if (!token) {
+      throw new Error('Missing auth session token. Please sign in again.');
+    }
+
+    const payload = {
+      question: input && input.question ? input.question : null,
+      answer: input && typeof input.answer === 'string' ? input.answer : '',
+    };
+
+    if (!payload.question || !payload.answer.trim()) {
+      throw new Error('Question and answer are required for AI marking.');
+    }
+
+    const response = await fetch(SUPABASE_URL + '/functions/v1/ai-mark', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token,
+      },
+      body: JSON.stringify(payload),
+    });
+
+    const result = await response.json().catch(function () { return {}; });
+    if (!response.ok) {
+      throw new Error(result && result.error ? String(result.error) : 'AI marking is unavailable right now.');
+    }
+    if (!result || !result.result) {
+      throw new Error('AI marking returned an invalid response.');
+    }
+    return result;
+  }
+
+  async function examineAnswer(input) {
+    if (!isLoggedIn()) {
+      throw new Error('You need to sign in before using AI Examiner.');
+    }
+
+    const tier = _normalizeTier(getTier());
+    const isUltra = tier === 'ultra' || tier === 'owner' || UNLIMITED_TIERS.has(tier);
+    const isPro = tier === 'all_subjects';
+
+    let costToDeduct = 5;
+    if (isPro) costToDeduct = 1;
+    else if (isUltra) costToDeduct = 0;
+
+    const session = getSession();
+    const token = session && session.access_token ? session.access_token : '';
+    if (!token) {
+      throw new Error('Missing auth session token. Please sign in again.');
+    }
+
+    const payload = {
+      question: input && input.question ? input.question : null,
+      answer: input && typeof input.answer === 'string' ? input.answer : '',
+    };
+
+    if (!payload.question || !payload.answer.trim()) {
+      throw new Error('Question and answer are required for AI Examiner.');
+    }
+
+    const response = await fetch(SUPABASE_URL + '/functions/v1/ai-mark', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token,
+      },
+      body: JSON.stringify(payload),
+    });
+
+    const result = await response.json().catch(function () { return {}; });
+    if (!response.ok) {
+      throw new Error(result && result.error ? String(result.error) : 'AI Examiner is unavailable right now.');
+    }
+    if (!result || !result.result) {
+      throw new Error('AI Examiner returned an invalid response.');
+    }
+
+    // Only deduct credits AFTER successful API response
+    if (costToDeduct > 0) {
+      const currentBase = _getStoredCredits();
+      const bonusRemaining = _getExamBonusRemaining();
+      const totalCredit = currentBase + bonusRemaining;
+      
+      if (totalCredit >= costToDeduct) {
+        const fromBonus = Math.min(costToDeduct, bonusRemaining);
+        const fromBase = costToDeduct - fromBonus;
+        
+        const newBase = currentBase - fromBase;
+        const newBonus = bonusRemaining - fromBonus;
+        
+        const client = await _ensureSupabaseClient();
+        const updateRes = await client.from('profiles').update({ credits: newBase }).eq('id', _profile.id).select().single();
+        
+        if (updateRes.error) {
+          console.error('RA10 examineAnswer credit deduction failed:', updateRes.error);
+          throw new Error('Your answer was marked, but we failed to deduct credits. Please try again or contact support.');
+        } else if (updateRes.data) {
+          _profile = updateRes.data;
+          _writeCreditSnapshot(_profile);
+          _appendCreditActivity({
+            type: 'spend',
+            source: 'ai_examiner',
+            action: 'ai_examiner_use',
+            amount: -costToDeduct,
+            note: 'AI Examiner used',
+            balanceAfter: newBase + newBonus,
+          });
+          _emit('creditschange', _profile);
+        } else {
+          throw new Error('Credit deduction update returned no data. Please try again.');
+        }
+      } else {
+        throw new Error('Not enough credits. AI Examiner costs ' + costToDeduct + ' credit(s).');
+      }
+    }
+
+    return result;
+  }
+
   function on(event, callback) {
     if (!EVENTS[event] || typeof callback !== 'function') {
       return false;
@@ -1189,6 +1396,9 @@
     renderCreditChip,
     startCheckout,
     startBillingPortal,
+    canUseAiMarking,
+    aiMarkAnswer,
+    examineAnswer,
     refreshProfile: _refreshProfile,
     _appendCreditActivity,
     on,

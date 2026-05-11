@@ -1450,6 +1450,25 @@ main {
   color: #fcd34d !important;
 }
 
+/* --- Enhanced dark mode for podium and revision page --- */
+[data-theme="dark"] .lb-podium-shell,
+[data-theme="dark"] .lb-row-wrap {
+  background: linear-gradient(145deg, rgba(30,40,36,0.85), rgba(9,31,26,0.7));
+  box-shadow: 0 0 0 1.5px var(--accent), 0 4px 32px 0 rgba(0,0,0,0.22), 0 0 16px 2px var(--accent-2);
+  border: 1.5px solid var(--accent-2);
+  backdrop-filter: blur(6px) saturate(120%);
+}
+[data-theme="dark"] .lb-podium-head, [data-theme="dark"] .lb-podium-grid, [data-theme="dark"] .lb-row-wrap {
+  color: var(--ink);
+}
+[data-theme="dark"] .lb-row-wrap.lb-top-1 { box-shadow: 0 0 0 2px #ffd70088, 0 0 16px 2px #ffd70044, 0 4px 32px 0 rgba(0,0,0,0.22); }
+[data-theme="dark"] .lb-row-wrap.lb-top-2 { box-shadow: 0 0 0 2px #c0c0c088, 0 0 12px 2px #c0c0c044, 0 4px 32px 0 rgba(0,0,0,0.22); }
+[data-theme="dark"] .lb-row-wrap.lb-top-3 { box-shadow: 0 0 0 2px #cd7f3288, 0 0 10px 2px #cd7f3244, 0 4px 32px 0 rgba(0,0,0,0.22); }
+[data-theme="dark"] .revision-app-grid, [data-theme="dark"] .rev-flow-grid, [data-theme="dark"] .primary-card {
+  background: color-mix(in oklab, var(--surface) 96%, var(--accent) 4%) !important;
+  border-color: var(--line-2) !important;
+}
+
 /* Keep chip visible in unit pages so users can see usable credits for this unit */
 #unit1-credit-chip {
   display: flex !important;

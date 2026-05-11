@@ -721,6 +721,13 @@ main {
   border: 1px solid var(--accent); border-radius: var(--r-md);
   background: var(--surface);
 }
+.ai-examiner-box {
+  border: 1px solid rgba(124, 58, 237, 0.35);
+  background:
+    radial-gradient(circle at top right, rgba(236,72,153,.12), transparent 56%),
+    linear-gradient(165deg, rgba(37,99,235,.08) 0%, rgba(124,58,237,.12) 42%, rgba(255,255,255,.94) 100%);
+  box-shadow: 0 8px 24px rgba(124,58,237,.14);
+}
 .automark-head {
   display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
   margin-bottom: 10px;
@@ -753,6 +760,62 @@ main {
   display: inline-block; padding: 3px 10px; border-radius: 999px;
   font-size: 12px; font-weight: 700; background: var(--accent-2); color: var(--accent-ink);
   margin-left: 8px;
+}
+
+.ai-feedback-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.ai-feedback-card {
+  border-radius: 10px;
+  padding: 12px 12px 10px;
+  border: 1px solid rgba(148,163,184,.28);
+  background: rgba(255,255,255,.84);
+}
+
+.ai-feedback-card h4 {
+  margin: 0 0 8px;
+  font-size: 12px;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+.ai-feedback-card ul {
+  margin: 0;
+  padding-left: 18px;
+  display: grid;
+  gap: 4px;
+}
+
+.ai-feedback-card li {
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--ink-2);
+}
+
+.ai-feedback-card.good {
+  border-color: rgba(34,197,94,.28);
+  background: linear-gradient(160deg, rgba(34,197,94,.08) 0%, rgba(255,255,255,.9) 90%);
+}
+
+.ai-feedback-card.good h4 {
+  color: #166534;
+}
+
+.ai-feedback-card.improve {
+  border-color: rgba(59,130,246,.28);
+  background: linear-gradient(160deg, rgba(59,130,246,.08) 0%, rgba(255,255,255,.9) 90%);
+}
+
+.ai-feedback-card.improve h4 {
+  color: #1d4ed8;
+}
+
+@media (max-width: 700px) {
+  .ai-feedback-grid { grid-template-columns: 1fr; }
 }
 
 /* ============================================================
@@ -1440,6 +1503,25 @@ main {
   color: #fcd34d !important;
 }
 
+/* --- Enhanced dark mode for podium and revision page --- */
+[data-theme="dark"] .lb-podium-shell,
+[data-theme="dark"] .lb-row-wrap {
+  background: linear-gradient(145deg, rgba(30,40,36,0.85), rgba(20,32,30,0.7));
+  box-shadow: 0 0 0 1.5px var(--accent), 0 4px 32px 0 rgba(0,0,0,0.22), 0 0 16px 2px var(--accent-2);
+  border: 1.5px solid var(--accent-2);
+  backdrop-filter: blur(6px) saturate(120%);
+}
+[data-theme="dark"] .lb-podium-head, [data-theme="dark"] .lb-podium-grid, [data-theme="dark"] .lb-row-wrap {
+  color: var(--ink);
+}
+[data-theme="dark"] .lb-row-wrap.lb-top-1 { box-shadow: 0 0 0 2px #ffd70088, 0 0 16px 2px #ffd70044, 0 4px 32px 0 rgba(0,0,0,0.22); }
+[data-theme="dark"] .lb-row-wrap.lb-top-2 { box-shadow: 0 0 0 2px #c0c0c088, 0 0 12px 2px #c0c0c044, 0 4px 32px 0 rgba(0,0,0,0.22); }
+[data-theme="dark"] .lb-row-wrap.lb-top-3 { box-shadow: 0 0 0 2px #cd7f3288, 0 0 10px 2px #cd7f3244, 0 4px 32px 0 rgba(0,0,0,0.22); }
+[data-theme="dark"] .revision-app-grid, [data-theme="dark"] .rev-flow-grid, [data-theme="dark"] .primary-card {
+  background: color-mix(in oklab, var(--surface) 96%, var(--accent) 4%) !important;
+  border-color: var(--line-2) !important;
+}
+
 /* Keep chip visible in unit pages so users can see usable credits for this unit */
 #unit1-credit-chip {
   display: flex !important;
@@ -1978,6 +2060,58 @@ main {
 #view-questions .feature-icon,
 #view-revise .feature-icon {
   font-size: 28px;
+}
+
+#view-home .feature-icon.ai-book-icon,
+#view-questions .feature-icon.ai-book-icon,
+#view-revise .feature-icon.ai-book-icon {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  font-size: 26px;
+  background: linear-gradient(135deg, #2563eb 0%, #7c3aed 52%, #ec4899 100%);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,.3) inset,
+    0 10px 22px rgba(124,58,237,.3),
+    0 0 24px rgba(236,72,153,.22);
+  animation: aiBookGlow 2.8s ease-in-out infinite;
+}
+
+#view-home .feature-icon.ai-book-icon::after,
+#view-questions .feature-icon.ai-book-icon::after,
+#view-revise .feature-icon.ai-book-icon::after {
+  content: 'AI';
+  position: absolute;
+  transform: translate(14px, 14px);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .05em;
+  color: #fff;
+  padding: 2px 5px;
+  border-radius: 999px;
+  background: rgba(15,23,42,.6);
+  border: 1px solid rgba(255,255,255,.25);
+}
+
+@keyframes aiBookGlow {
+  0%, 100% {
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,.3) inset,
+      0 10px 22px rgba(124,58,237,.24),
+      0 0 18px rgba(236,72,153,.16);
+    transform: translateY(0);
+  }
+  50% {
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,.38) inset,
+      0 14px 28px rgba(124,58,237,.32),
+      0 0 30px rgba(236,72,153,.26);
+    transform: translateY(-1px);
+  }
 }
 
 #view-questions .feature-cards .card,

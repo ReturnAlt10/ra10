@@ -457,12 +457,45 @@ function buildQuiz() {
   const sections = LEARNING_AIMS.slice();
   let id = 1;
   sections.forEach((section, sIdx) => {
-    for (let i = 0; i < 15; i++) {
+    for (let i = 0; i < 40; i++) {
       const a = athlete((sIdx * 20) + i);
       const termA = SECTION_TERMS[section][i % SECTION_TERMS[section].length];
       const termB = SECTION_TERMS[section][(i + 2) % SECTION_TERMS[section].length];
       const termC = SECTION_TERMS[section][(i + 4) % SECTION_TERMS[section].length];
       const termD = SECTION_TERMS[section][(i + 6) % SECTION_TERMS[section].length];
+      const qId = 'QZ-SPT-' + String(id++).padStart(3, '0');
+      const styleIdx = i % 3;
+      const questionStem = styleIdx === 0
+        ? a.name + ' is performing in ' + a.sport + '. Which option best matches ' + learningAimLabel(section) + ' for this scenario?'
+        : styleIdx === 1
+          ? 'During a ' + a.sport + ' session, which statement is MOST accurate for ' + a.name + ' in ' + learningAimLabel(section) + '?'
+          : 'Coach feedback mentions ' + learningAimLabel(section) + '. Which choice should ' + a.name + ' prioritise next?';
+
+      if (i % 8 === 7) {
+        const tfChoices = ['True', 'False'];
+        const tfCorrect = (i + sIdx) % 2 === 0;
+        const tfStatement = tfCorrect
+          ? termA.charAt(0).toUpperCase() + termA.slice(1) + ' can directly influence performance in ' + a.sport + ' for ' + a.name + '.'
+          : termA.charAt(0).toUpperCase() + termA.slice(1) + ' has no impact on performance in any sport context.';
+
+        out.push({
+          id: qId,
+          learning_aim: section,
+          topic: SPEC[section].title,
+          type: 'true_false',
+          question: tfStatement,
+          source_material: section === 'C'
+            ? sectionDiagramSource(section, a)
+            : caseStudySource(section, a, i),
+          choices: tfChoices,
+          correct_index: tfCorrect ? 0 : 1,
+          explanation: tfCorrect
+            ? termA + ' can affect sporting outcomes when applied to the athlete, task and intensity in ' + learningAimLabel(section) + '.'
+            : 'The statement is false because ' + termA + ' can influence performance depending on sport demands and athlete context.'
+        });
+        continue;
+      }
+
       const rawChoices = [
         { text: 'Correct applied point: ' + termA, correct: true },
         { text: 'Distractor 1: ' + termB, correct: false },
@@ -470,7 +503,7 @@ function buildQuiz() {
         { text: 'Distractor 3: ' + termD, correct: false }
       ];
       // Shuffle choices using a deterministic seed so order is stable per question
-      const rng = _dlMakeRng('QZ-SPT-' + String(id).padStart(3, '0'));
+      const rng = _dlMakeRng(qId);
       const shuffled = rawChoices.slice();
       for (let k = shuffled.length - 1; k > 0; k--) {
         const j = Math.floor(rng() * (k + 1));
@@ -478,10 +511,11 @@ function buildQuiz() {
       }
       const correct_index = shuffled.findIndex(c => c.correct);
       out.push({
-        id: 'QZ-SPT-' + String(id++).padStart(3, '0'),
+        id: qId,
         learning_aim: section,
         topic: SPEC[section].title,
-        question: a.name + ' is performing in ' + a.sport + '. Which option best matches ' + learningAimLabel(section) + ' for this scenario?',
+        type: 'mcq',
+        question: questionStem,
         source_material: section === 'C'
           ? sectionDiagramSource(section, a)
           : caseStudySource(section, a, i),

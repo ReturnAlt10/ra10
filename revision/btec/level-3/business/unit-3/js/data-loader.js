@@ -41,6 +41,49 @@ function postProcessQuestions() {
   });
 }
 
+function dedupeQuizItems(items) {
+  const seen = new Set();
+  const out = [];
+  (items || []).forEach((item) => {
+    if (!item || !item.question || !Array.isArray(item.choices) || item.choices.length < 2) return;
+    const key = String(item.question).trim().toLowerCase() + '|' + item.choices.map(c => String(c).trim().toLowerCase()).join('|') + '|' + String(item.correct_index);
+    if (seen.has(key)) return;
+    seen.add(key);
+    out.push(item);
+  });
+  return out;
+}
+
+function makeQuizVariants(baseItems, variantCount, idPrefix) {
+  const out = [];
+  (baseItems || []).forEach((q, idx) => {
+    if (!q || !Array.isArray(q.choices) || q.choices.length < 2) return;
+    const maxVar = Math.max(0, Number(variantCount || 0));
+    const baseChoices = q.choices.slice();
+    for (let v = 1; v <= maxVar; v++) {
+      const rot = (idx + v) % baseChoices.length;
+      const rotated = baseChoices.slice(rot).concat(baseChoices.slice(0, rot));
+      const correctText = baseChoices[q.correct_index];
+      const nextCorrect = rotated.findIndex(c => c === correctText);
+      if (nextCorrect < 0) continue;
+      let question = String(q.question || '').trim();
+      if (v === 1) question = 'Scenario check: ' + question;
+      else if (v === 2) question = 'Knowledge check: ' + question;
+      out.push({
+        id: idPrefix + String(idx + 1).padStart(3, '0') + 'V' + v,
+        learning_aim: q.learning_aim,
+        topic: q.topic,
+        type: q.type || 'mcq',
+        question,
+        choices: rotated,
+        correct_index: nextCorrect,
+        explanation: q.explanation || ''
+      });
+    }
+  });
+  return out;
+}
+
 async function loadData() {
   const BASE = 'data/';
   const aims = ['A','B','C','D','E','F'];
@@ -55,7 +98,12 @@ async function loadData() {
       if (Array.isArray(arr)) QUESTIONS.push(...arr);
     });
 
-    if (Array.isArray(quizRes)) QUIZ.push(...quizRes);
+    if (Array.isArray(quizRes)) {
+      const base = dedupeQuizItems(quizRes);
+      const mcqBase = base.filter(q => (q.type || 'mcq') !== 'true_false');
+      const variants = makeQuizVariants(mcqBase, 2, 'QVARBUS');
+      QUIZ.push(...dedupeQuizItems(base.concat(variants)));
+    }
     if (Array.isArray(flashRes)) FLASHCARDS.push(...flashRes);
 
     postProcessQuestions();

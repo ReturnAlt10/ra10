@@ -1764,5 +1764,91 @@
     ],
     "correct_index": 1,
     "explanation": "Writing in all capital letters is widely considered shouting in online communication and is poor netiquette, especially in professional contexts. Clear subject lines, signatures and timely responses are all examples of good netiquette."
+  },
+  {
+    "id": "Q121",
+    "learning_aim": "B",
+    "topic": "B2.1 Network hardware",
+    "type": "mcq",
+    "question": "Which statement best describes a managed switch in a school network?",
+    "choices": [
+      "It broadcasts every frame to all devices and cannot be configured",
+      "It allows VLANs, port security and traffic monitoring for better control",
+      "It connects home users to the internet via a SIM card",
+      "It converts digital signals to analogue signals for phone lines"
+    ],
+    "correct_index": 1,
+    "explanation": "Managed switches provide advanced configuration (such as VLANs and port security) and monitoring, unlike unmanaged switches which are plug-and-play."
+  },
+  {
+    "id": "Q122",
+    "learning_aim": "D",
+    "topic": "D2.2 Security controls",
+    "type": "true_false",
+    "question": "Using multi-factor authentication can reduce the risk of account compromise even if a password is leaked.",
+    "choices": [
+      "True",
+      "False"
+    ],
+    "correct_index": 0,
+    "explanation": "MFA adds a second factor (such as an app code or biometric), so a stolen password alone is usually not enough to access the account."
+  },
+  {
+    "id": "Q123",
+    "learning_aim": "E",
+    "topic": "E2.5 Data quality",
+    "type": "mcq",
+    "question": "A text field only accepts UK postcodes matching a specific pattern. This is primarily an example of:",
+    "choices": [
+      "Verification",
+      "Format validation",
+      "Data mining",
+      "Encryption"
+    ],
+    "correct_index": 1,
+    "explanation": "Format validation checks whether input matches a required structure (for example postcode format). Verification checks whether data was entered correctly, not format rules."
+  },
+  {
+    "id": "Q124",
+    "learning_aim": "C",
+    "topic": "C1.2 Socio-economic impacts",
+    "type": "mcq",
+    "question": "Which scenario is most clearly an economic impact of IT rather than a social impact?",
+    "choices": [
+      "Employees feeling isolated while working remotely",
+      "A retailer reducing staffing costs through self-checkout systems",
+      "Students collaborating globally through video calls",
+      "Families spending less face-to-face time due to social media use"
+    ],
+    "correct_index": 1,
+    "explanation": "Reducing staffing costs directly affects financial performance, which is an economic impact. The other options are primarily social effects."
+  },
+  {
+    "id": "Q125",
+    "learning_aim": "A",
+    "topic": "A3.7 File types and compression",
+    "type": "true_false",
+    "question": "Lossy compression always reduces file size without any loss of data quality.",
+    "choices": [
+      "True",
+      "False"
+    ],
+    "correct_index": 1,
+    "explanation": "Lossy compression achieves smaller files by discarding some data, so quality can be reduced. Lossless compression preserves all original data."
+  },
+  {
+    "id": "Q126",
+    "learning_aim": "F",
+    "topic": "F2.1.2 Copyright and licensing",
+    "type": "mcq",
+    "question": "A teacher installs one single-user licensed app on 30 classroom PCs without permission. Which issue is most directly involved?",
+    "choices": [
+      "Breach of software licensing and copyright rules",
+      "Breach of the Computer Misuse Act for unauthorised access",
+      "Breach of GDPR for storing student data",
+      "Breach of DSE regulations for workstation setup"
+    ],
+    "correct_index": 0,
+    "explanation": "Installing beyond licence terms breaches software licensing and copyright law. It is not primarily a CMA, GDPR, or DSE issue."
   }
 ]

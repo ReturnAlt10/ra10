@@ -438,6 +438,43 @@
       <div class="stats" id="dashboard-stats"></div>
     </div>
 
+      <!-- AI Examiner Feature Visual -->
+      <div class="section-block" style="background:linear-gradient(135deg,#2e1065 0%,#0ea5e9 100%);border:none;border-radius:14px;padding:24px 20px 20px 20px;margin-bottom:32px;position:relative;overflow:hidden;box-shadow:0 4px 24px rgba(14,165,233,0.10);color:#fff;">
+        <div style="position:absolute;top:-40px;right:-40px;width:120px;height:120px;background:rgba(255,255,255,.08);border-radius:50%;"></div>
+        <div style="position:absolute;bottom:-30px;left:-30px;width:100px;height:100px;background:rgba(255,255,255,.04);border-radius:50%;"></div>
+        <div style="position:relative;z-index:1;max-width:800px;display:flex;align-items:center;gap:32px;flex-wrap:wrap;">
+          <div style="flex:1 1 320px;min-width:260px;">
+            <h3 style="margin-top:0;color:#fff;font-size:1.15rem;margin-bottom:8px;display:flex;align-items:center;gap:10px;">
+              <span style="display:inline-block;width:28px;height:28px;background:linear-gradient(135deg,#7c3aed 0%,#a855f7 100%);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 3px rgba(255,255,255,0.18);margin-right:6px;animation:examine-glow 2.8s infinite alternate;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" style="filter:drop-shadow(0 0 6px #fff8);"><path d="M12 3l2.1 4.9L19 10l-4.9 2.1L12 17l-2.1-4.9L5 10l4.9-2.1L12 3z"/><path d="M18.5 4.5l.9 2.1 2.1.9-2.1.9-.9 2.1-.9-2.1-2.1-.9 2.1-.9.9-2.1z"/></svg>
+              </span>
+              <span style="background:linear-gradient(90deg,#a21caf 0%,#0ea5e9 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">AI Examiner <span style="font-size:0.92em;font-weight:400;opacity:0.85;">(Beta)</span></span>
+            </h3>
+            <p style="margin:0 0 10px 0;font-size:1.01rem;color:rgba(255,255,255,0.96);line-height:1.65;">Try the new <strong>AI Examiner</strong> in Practice Mode! Get instant, exam-style feedback on your answers:<br>
+              <ul style="margin:10px 0 0 18px;padding:0 0 0 0.5em;color:#e0e7ff;font-size:0.98em;">
+                <li>Advice on how to improve</li>
+                <li>What you did well</li>
+                <li>Clear mark out of the total</li>
+                <li>Works for all long-answer questions</li>
+              </ul>
+              <span style="display:inline-block;margin-top:10px;font-size:0.98em;color:#bae6fd;">AI Examiner cost per question: Free 5 credits, Pro 1 credit, Ultra 0 credits, Students/Teachers 2 credits.</span>
+            </p>
+          </div>
+          <div style="flex:0 1 320px;min-width:220px;max-width:340px;background:rgba(255,255,255,0.10);border-radius:10px;padding:18px 16px;box-shadow:0 2px 12px rgba(14,165,233,0.10);display:flex;flex-direction:column;align-items:center;">
+            <div style="width:100%;display:flex;flex-direction:column;align-items:center;gap:10px;">
+              <span style="font-size:0.98em;color:#fff;opacity:0.92;margin-bottom:6px;">How it looks in Practice Mode:</span>
+              <div style="width:100%;display:flex;align-items:center;justify-content:center;">
+                <button class="btn" style="background:linear-gradient(120deg,#581c87 0%,#7c3aed 45%,#a855f7 100%);color:#fff;font-weight:700;font-size:1.08em;padding:10px 20px;border-radius:10px;box-shadow:0 0 14px rgba(124,58,237,0.30),0 0 28px rgba(168,85,247,0.20),inset 0 0 14px rgba(255,255,255,0.10);display:flex;align-items:center;gap:8px;animation:examine-glow 2.8s infinite alternate;border:none;">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" style="filter:drop-shadow(0 0 6px #fff8);"><path d="M12 3l2.1 4.9L19 10l-4.9 2.1L12 17l-2.1-4.9L5 10l4.9-2.1L12 3z"/><path d="M18.5 4.5l.9 2.1 2.1.9-2.1.9-.9 2.1-.9-2.1-2.1-.9 2.1-.9.9-2.1z"/></svg>
+                  <span style="color:#fff;">AI Examiner</span>
+                </button>
+              </div>
+              <span style="font-size:0.93em;color:#e0e7ff;opacity:0.85;margin-top:8px;text-align:center;">Tap after writing your answer to get instant feedback and a mark.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
     <div class="section-block" style="background:linear-gradient(135deg,#0a3d2f 0%,#0d7a52 58%,#1a9f6f 100%);border:none;border-radius:12px;padding:20px;margin-bottom:30px;position:relative;overflow:hidden;">
       <div style="position:absolute;top:-40px;right:-40px;width:120px;height:120px;background:rgba(255,255,255,.05);border-radius:50%;"></div>
       <div style="position:absolute;bottom:-30px;left:-30px;width:100px;height:100px;background:rgba(255,255,255,.03);border-radius:50%;"></div>
@@ -473,7 +510,7 @@
 
       <div class="feature-section">
         <div class="feature-header">
-          <div class="feature-icon">🧠</div>
+          <div class="feature-icon ai-book-icon">📘</div>
           <div>
             <h3>Quick Revision</h3>
             <p>Memorise key facts and concepts</p>
@@ -487,15 +524,15 @@
           </article>
           <article class="card">
             <h4>Quick-fire quiz</h4>
-            <p>120 multiple-choice and true/false questions with instant explanations.</p>
-            <button class="btn" data-goto="quiz">Start quiz<span class="ra10-cost-label">1 credit per question</span></button>
+            <p>453 multiple-choice and true/false questions with instant explanations.</p>
+            <button class="btn" data-goto="quiz">Start quiz<span class="ra10-cost-label">1 credit per session</span></button>
           </article>
         </div>
       </div>
 
       <div class="feature-section">
         <div class="feature-header">
-          <div class="feature-icon">📚</div>
+          <div class="feature-icon ai-book-icon">📚</div>
           <div>
             <h3>Comprehensive Guide</h3>
             <p>Full topic breakdown with examples</p>
@@ -512,7 +549,7 @@
 
       <div class="feature-section">
         <div class="feature-header">
-          <div class="feature-icon">🎯</div>
+          <div class="feature-icon ai-book-icon">📘</div>
           <div>
             <h3>Browse Questions</h3>
             <p>Search all 600+ exam-style questions</p>
@@ -567,7 +604,7 @@
       </div>
       <div class="feature-section">
         <div class="feature-header">
-          <div class="feature-icon">🎯</div>
+          <div class="feature-icon ai-book-icon">📘</div>
           <div>
             <h3>Practice Mode</h3>
             <p>Answer one question at a time with instant feedback.</p>
@@ -628,7 +665,7 @@
           <div class="feature-icon">❓</div>
           <div>
             <h3>Quiz</h3>
-            <p>120+ multiple-choice and true/false questions with instant feedback.</p>
+            <p>453 multiple-choice and true/false questions with instant feedback.</p>
           </div>
         </div>
         <div class="feature-cards grid-1">
@@ -641,7 +678,7 @@
       </div>
       <div class="feature-section">
         <div class="feature-header">
-          <div class="feature-icon">📖</div>
+          <div class="feature-icon ai-book-icon">📖</div>
           <div>
             <h3>Revision Guide</h3>
             <p>Full topic-by-topic breakdown with worked examples and diagrams.</p>
@@ -784,7 +821,7 @@
         <option value="40">40 questions</option>
         <option value="all">All questions</option>
       </select>
-      <button id="btn-quiz-start" class="btn primary">Start quiz<span class="ra10-cost-label">1 credit per question</span></button>
+      <button id="btn-quiz-start" class="btn primary">Start quiz<span class="ra10-cost-label">1 credit per session</span></button>
       <span id="quiz-progress" class="muted"></span>
     </div>
     <div id="quiz-card"></div>

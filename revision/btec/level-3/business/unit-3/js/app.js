@@ -55,7 +55,10 @@
   const DAILY_TASKS_KEY = 'ra10-daily-tasks-v2';
   const STREAK_DATES_KEY = 'ra10_streak_dates';
   const FLASH_STORE_KEY  = 'btec-bus-u3-flash-progress-v1';
-  const SESSION_TYPES = ['quiz_business_u3', 'practice_business_u3', 'mock_business_u3', 'flashcard_business_u3'];
+  const SESSION_TYPES = [
+    'quiz_business_u3', 'practice_business_u3', 'mock_business_u3', 'flashcard_business_u3',
+    'quiz', 'practice', 'mock', 'flashcard'
+  ];
 
   // ---------- Spec (Business Unit 3) ----------
   const SPEC = {
@@ -1640,12 +1643,14 @@
     const actions = el('div', { class: 'practice-actions' });
     const btnLabel = q.type === 'multiple_choice' ? 'Check my answer' : 'Auto-mark my answer';
     const btnAutoMark = el('button', { class: 'btn primary' }, btnLabel);
+    const btnExamine = el('button', { class: 'btn btn-examine', style: 'background:linear-gradient(120deg,#2563eb 0%,#7c3aed 24%,#ec4899 52%,#f97316 76%,#22c55e 100%);background-size:300% 300%;color:#fff;border:none;animation:examine-glow 3.6s ease-in-out infinite;box-shadow:0 0 18px rgba(59,130,246,0.28),0 0 32px rgba(236,72,153,0.26),inset 0 0 18px rgba(255,255,255,0.10);border-radius:6px;font-weight:600;' }, '✦ AI Examiner');
     const btnReveal = el('button', { class: 'btn' }, 'Reveal mark scheme');
     const btnNext = el('button', { class: 'btn' }, 'Next question →');
     const btnPrev = el('button', { class: 'btn ghost' }, '← Previous');
     btnPrev.disabled = practiceIdx === 0;
     btnNext.disabled = practiceIdx >= practiceQueue.length - 1;
     actions.appendChild(btnAutoMark);
+    actions.appendChild(btnExamine);
     actions.appendChild(btnReveal);
     actions.appendChild(btnPrev);
     actions.appendChild(btnNext);
@@ -1662,12 +1667,63 @@
       msBox.style.display = msBox.style.display === 'none' ? 'block' : 'none';
       btnReveal.textContent = msBox.style.display === 'none' ? 'Reveal mark scheme' : 'Hide mark scheme';
     });
+    btnExamine.addEventListener('click', async () => {
+      if (q.type === 'multiple_choice') {
+        alert('AI Examiner is for extended-answer questions only.');
+        return;
+      }
+      const answer = ta.value.trim();
+      if (!answer) { alert('Write an answer first, then I can examine it.'); return; }
+      if (!window.RA10 || typeof RA10.examineAnswer !== 'function') {
+        alert('AI Examiner is not available right now.');
+        return;
+      }
+
+      // Show cost warning for free/pro users
+      const tier = window.RA10 && typeof window.RA10.getTier === 'function' ? window.RA10.getTier() : '';
+      const isFree = tier === '' || tier === 'free';
+      const isPro = tier === 'all_subjects';
+      if (isFree || isPro) {
+        const cost = isFree ? 5 : 1;
+        const proceed = confirm(`AI Examiner will cost ${cost} credit(s). Do you want to continue?`);
+        if (!proceed) return;
+      }
+
+      btnExamine.disabled = true;
+      const _origLabel = btnExamine.textContent;
+      btnExamine.textContent = 'Examining…';
+      try {
+        const response = await RA10.examineAnswer({ question: q, answer });
+        automarkHost.innerHTML = '';
+        if (response && response.result) {
+          const aiResult = normaliseAiMarkResult(response.result, q, true, answer);
+          if (aiResult) {
+            automarkHost.appendChild(buildAutoMarkUI(q, answer, aiResult, 'ai'));
+          } else {
+            automarkHost.appendChild(el('p', { style: 'color:var(--color-error);' }, 'AI Examiner response was invalid. Please try again.'));
+          }
+        } else {
+          automarkHost.appendChild(el('p', { style: 'color:var(--color-error);' }, 'AI Examiner response was empty. Please try again.'));
+        }
+        updatePracticeSessionFromUi(q, automarkHost);
+        automarkHost.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      } catch (err) {
+        const message = err && err.message ? String(err.message) : 'AI Examiner request failed.';
+        if (message.includes('Not enough credits')) {
+          RA10.showPaywall('credits', 'ai_examiner');
+        } else {
+          alert('Error: ' + message);
+        }
+      } finally {
+        btnExamine.disabled = false;
+        btnExamine.textContent = _origLabel;
+      }
+    });
     btnAutoMark.addEventListener('click', async () => {
       btnAutoMark.disabled = true;
       const _origLabel = btnAutoMark.textContent;
       btnAutoMark.textContent = 'Marking…';
       try {
-      if (!(await ra10Gate('ai_mark'))) return;
       if (q.type === 'multiple_choice') {
         if (!mcChoice.value) { alert('Pick an answer (A–D) first.'); return; }
         automarkHost.innerHTML = '';
@@ -1679,7 +1735,11 @@
       const answer = ta.value.trim();
       if (!answer) { alert('Write an answer first, then I can mark it.'); return; }
       automarkHost.innerHTML = '';
-      automarkHost.appendChild(buildAutoMarkUI(q, answer));
+      const markBundle = await buildBestAutoMarkUI(q, answer);
+      automarkHost.appendChild(markBundle.ui);
+      if (markBundle.aiError) {
+        automarkHost.appendChild(el('p', { class: 'muted', style: 'margin-top:8px;' }, `AI marking is unavailable right now, so local automark was used (${markBundle.aiError}).`));
+      }
       const earned = parseInt(automarkHost.querySelector('.automark-score .value')?.textContent || '0', 10);
       const struggleThreshold = Math.ceil((Number(q.marks) || 1) / 2);
       if (earned < struggleThreshold) {
@@ -1744,7 +1804,20 @@
   }
 
   // ---------- Auto-marking ----------
-  const STOP_WORDS = new Set(['the','a','an','and','or','but','of','to','in','on','at','for','with','by','from','as','is','are','was','were','be','been','being','have','has','had','do','does','did','will','would','could','should','may','might','can','that','this','these','those','it','its','their','they','them','he','she','his','her','i','you','your','we','us','our','if','than','then','so','not','no','also','about','into','more','most','some','any','one','two','use','used','using','make','makes','made','allow','allows','allowed','provide','provides','provided','example','e.g.','i.e.','such','very','accept','reject','any','one','mark','marks','award','points','point','idea']);
+  const STOP_WORDS = new Set(['the','a','an','and','or','but','of','to','in','on','at','for','with','by','from','as','is','are','was','were','be','been','being','have','has','had','do','does','did','will','would','could','should','may','might','can','that','this','these','those','it','its','their','they','them','he','she','his','her','i','you','your','we','us','our','if','than','then','so','not','no','also','about','into','more','most','some','any','one','two','use','used','using','make','makes','made','allow','allows','allowed','provide','provides','provided','example','e.g.','i.e.','such','very','accept','reject','mark','marks','award','points','point','idea']);
+  const ANALYSIS_CUES = new Set(['because','therefore','however','whereas','thus','hence','results','resulting','impact','improves','improve','reduces','reduce','causes','means','leads']);
+  const SYNONYM_GROUPS = [
+    ['increase','improve','improvement','rise','higher','boost','enhance'],
+    ['decrease','reduce','reduction','lower','drop','decline'],
+    ['secure','security','protect','protection','safe','safety'],
+    ['data','information'],
+    ['network','connectivity'],
+    ['performance','outcome','result']
+  ];
+  const SYNONYMS = SYNONYM_GROUPS.reduce((acc, group) => {
+    group.forEach((term) => { acc[term] = group; });
+    return acc;
+  }, {});
 
   function tokenise(text) {
     return String(text || '')
@@ -1755,34 +1828,111 @@
       .split(/\s+/)
       .filter(Boolean);
   }
-  function contentTokens(text) {
-    return tokenise(text).filter(t => !STOP_WORDS.has(t) && t.length > 2);
+
+  function normaliseToken(token) {
+    let t = String(token || '').toLowerCase();
+    if (t.length > 5 && t.endsWith('ing')) t = t.slice(0, -3);
+    else if (t.length > 4 && t.endsWith('ed')) t = t.slice(0, -2);
+    else if (t.length > 4 && t.endsWith('es')) t = t.slice(0, -2);
+    else if (t.length > 3 && t.endsWith('s')) t = t.slice(0, -1);
+    return t;
   }
+
+  function contentTokens(text) {
+    return tokenise(text)
+      .map(normaliseToken)
+      .filter(t => !STOP_WORDS.has(t) && t.length > 2);
+  }
+
+  function unique(arr) {
+    return Array.from(new Set(arr));
+  }
+
   function extractSchemeKeywords(point) {
-    let p = String(point || '').replace(/\(\d+\)/g, '').trim();
+    const p = String(point || '').replace(/\(\d+\)/g, '').trim();
     const clauses = p.split(/[;\u2013\u2014]|\s\/\s|\sor\s|,\s+(?=[A-Z])/i)
       .map(c => c.trim()).filter(Boolean);
     return clauses.length ? clauses : [p];
   }
-  function matchClause(clause, answerTokens) {
-    const kw = contentTokens(clause);
-    if (!kw.length) return { hit: false, matched: [] };
-    const answerSet = new Set(answerTokens);
-    const matched = kw.filter(k => answerSet.has(k) || [...answerSet].some(a => a.length > 4 && (a.startsWith(k.slice(0, 5)) || k.startsWith(a.slice(0, 5)))));
-    const need = Math.max(1, Math.ceil(kw.length * 0.5));
-    return { hit: matched.length >= need, matched, need, total: kw.length };
+
+  function editDistanceAtMostOne(a, b) {
+    if (a === b) return true;
+    const la = a.length;
+    const lb = b.length;
+    if (Math.abs(la - lb) > 1) return false;
+    let i = 0;
+    let j = 0;
+    let edits = 0;
+    while (i < la && j < lb) {
+      if (a[i] === b[j]) {
+        i++;
+        j++;
+        continue;
+      }
+      edits++;
+      if (edits > 1) return false;
+      if (la > lb) i++;
+      else if (lb > la) j++;
+      else {
+        i++;
+        j++;
+      }
+    }
+    if (i < la || j < lb) edits++;
+    return edits <= 1;
+  }
+
+  function buildAnswerLexicon(answer) {
+    const base = contentTokens(answer);
+    const lex = new Set(base);
+    base.forEach((t) => {
+      const syn = SYNONYMS[t];
+      if (syn) syn.forEach(s => lex.add(normaliseToken(s)));
+    });
+    return { tokens: base, set: lex };
+  }
+
+  function tokenMatches(target, lexicon) {
+    if (lexicon.set.has(target)) return true;
+    const syn = SYNONYMS[target] || [];
+    if (syn.some(s => lexicon.set.has(normaliseToken(s)))) return true;
+    if (target.length < 5) return false;
+    for (const candidate of lexicon.set) {
+      if (candidate.length >= 5 && (candidate.startsWith(target.slice(0, 5)) || target.startsWith(candidate.slice(0, 5)))) return true;
+      if (candidate.length >= 6 && editDistanceAtMostOne(candidate, target)) return true;
+    }
+    return false;
+  }
+
+  function matchClause(clause, lexicon) {
+    const kw = unique(contentTokens(clause));
+    if (!kw.length) return { hit: false, matched: [], need: 0, total: 0 };
+    const matched = kw.filter(k => tokenMatches(k, lexicon));
+    let need = 1;
+    if (kw.length <= 2) need = 1;
+    else if (kw.length <= 4) need = 2;
+    else need = Math.max(2, Math.ceil(kw.length * 0.45));
+
+    const hasStrongPair = kw.length >= 2 && kw.some((k, idx) => {
+      if (idx === kw.length - 1) return false;
+      const nxt = kw[idx + 1];
+      return tokenMatches(k, lexicon) && tokenMatches(nxt, lexicon);
+    });
+
+    const hit = matched.length >= need || (hasStrongPair && matched.length >= Math.max(1, need - 1));
+    return { hit, matched, need, total: kw.length };
   }
 
   function autoMarkShort(q, answer) {
     const points = (q.mark_scheme && q.mark_scheme.points) || [];
-    const answerTokens = contentTokens(answer);
+    const lexicon = buildAnswerLexicon(answer);
     const lines = [];
     let earned = 0;
     points.forEach(pt => {
       const clauses = extractSchemeKeywords(pt);
-      const clauseResults = clauses.map(c => matchClause(c, answerTokens));
+      const clauseResults = clauses.map(c => matchClause(c, lexicon));
       const anyHit = clauseResults.some(r => r.hit);
-      lines.push({ label: pt, hit: anyHit, details: clauseResults.map(r => `${r.matched.length}/${r.total} keywords`).join(' · ') });
+      lines.push({ label: pt, hit: anyHit, details: clauseResults.map(r => `${r.matched.length}/${r.total} tokens`).join(' · ') });
       if (anyHit) earned++;
     });
     earned = Math.min(earned, q.marks);
@@ -1791,13 +1941,14 @@
 
   function autoMarkExtended(q, answer) {
     const ic = (q.mark_scheme && q.mark_scheme.indicative_content) || [];
-    const answerTokens = contentTokens(answer);
+    const lexicon = buildAnswerLexicon(answer);
     const wordCount = tokenise(answer).length;
+    const cueCount = Array.from(ANALYSIS_CUES).filter(c => lexicon.set.has(c)).length;
     const lines = [];
     let hits = 0;
     ic.forEach(pt => {
-      const r = matchClause(pt, answerTokens);
-      lines.push({ label: pt, hit: r.hit, details: `${r.matched.length}/${r.total} keywords` });
+      const r = matchClause(pt, lexicon);
+      lines.push({ label: pt, hit: r.hit, details: `${r.matched.length}/${r.total} tokens` });
       if (r.hit) hits++;
     });
     const coverage = ic.length ? (hits / ic.length) : 0;
@@ -1808,7 +1959,8 @@
     else if (q.marks >= 9) lengthFactor = wordCount >= 170 ? 1 : wordCount >= 100 ? 0.7 : wordCount >= 50 ? 0.45 : 0.2;
     else if (q.marks >= 8) lengthFactor = wordCount >= 150 ? 1 : wordCount >= 90  ? 0.7 : wordCount >= 45 ? 0.45 : 0.2;
     else                   lengthFactor = wordCount >= 110 ? 1 : wordCount >= 60  ? 0.7 : wordCount >= 30 ? 0.45 : 0.2;
-    const score = coverage * 0.7 + lengthFactor * 0.3;
+    const structureFactor = Math.min(1, cueCount / 4);
+    const score = coverage * 0.65 + lengthFactor * 0.25 + structureFactor * 0.10;
     if (bands.length === 3) {
       if (score >= 0.66) level = 3; else if (score >= 0.36) level = 2; else if (score > 0.05) level = 1; else level = 0;
     } else if (bands.length === 2) {
@@ -1832,12 +1984,94 @@
         }
       }
     }
-    return { type: 'extended', earned, max: q.marks, level, levelMarks: bandStr, lines, coverage, lengthFactor, wordCount };
+    return { type: 'extended', earned, max: q.marks, level, levelMarks: bandStr, lines, coverage, lengthFactor, structureFactor, wordCount };
   }
 
-  function buildAutoMarkUI(q, answer) {
+  function isUltraTierForAiMarking() {
+    if (!window.RA10 || !RA10.isLoggedIn || !RA10.isLoggedIn()) return false;
+    if (typeof RA10.canUseAiMarking === 'function') {
+      try {
+        return !!RA10.canUseAiMarking();
+      } catch (e) {
+        return false;
+      }
+    }
+    const tier = String(RA10.getTier ? RA10.getTier() : '').toLowerCase();
+    return tier === 'ultra' || tier === 'owner';
+  }
+
+  function normaliseAiMarkResult(raw, q, isExt, answer) {
+    if (!raw || typeof raw !== 'object') return null;
+    const max = Math.max(1, Number(q.marks) || 1);
+    const numericMax = Number(raw.max);
+    const resultMax = Number.isFinite(numericMax) ? Math.max(1, Math.min(max, Math.round(numericMax))) : max;
+    const numericEarned = Number(raw.earned);
+    const earned = Number.isFinite(numericEarned) ? Math.max(0, Math.min(resultMax, Math.round(numericEarned))) : 0;
+    
+    // Handle new simple format (strengths/improvements/feedback)
+    let lines = [];
+    if (Array.isArray(raw.strengths) || Array.isArray(raw.improvements)) {
+      // New format: convert strengths and improvements to lines
+      if (Array.isArray(raw.strengths)) {
+        raw.strengths.forEach(s => {
+          const label = String(s || '').trim();
+          if (label) lines.push({ label, hit: true, details: 'Well done' });
+        });
+      }
+      if (Array.isArray(raw.improvements)) {
+        raw.improvements.forEach(i => {
+          const label = String(i || '').trim();
+          if (label) lines.push({ label, hit: false, details: 'Room for improvement' });
+        });
+      }
+    } else if (Array.isArray(raw.lines)) {
+      // Old format: use existing lines
+      lines = raw.lines
+        .map((line) => ({
+          label: String(line && line.label ? line.label : '').trim(),
+          hit: !!(line && line.hit),
+          details: String(line && line.details ? line.details : '').trim(),
+        }))
+        .filter((line) => !!line.label)
+        .slice(0, 20);
+    }
+    
+    const words = String(answer || '').trim().split(/\s+/).filter(Boolean).length;
+    const result = {
+      type: isExt ? 'extended' : 'short',
+      earned,
+      max: resultMax,
+      lines,
+      coverage: Number.isFinite(Number(raw.coverage)) ? Math.max(0, Math.min(1, Number(raw.coverage))) : 0,
+      wordCount: Number.isFinite(Number(raw.wordCount)) ? Math.max(0, Math.round(Number(raw.wordCount))) : words,
+      level: Number.isFinite(Number(raw.level)) ? Math.max(0, Math.round(Number(raw.level))) : 0,
+      levelMarks: String(raw.levelMarks || '').trim(),
+    };
+    return result;
+  }
+
+  async function buildBestAutoMarkUI(q, answer) {
     const isExt = q.type === 'extended_levels' || (q.mark_scheme && q.mark_scheme.indicative_content);
-    const result = isExt ? autoMarkExtended(q, answer) : autoMarkShort(q, answer);
+    if (!isUltraTierForAiMarking() || !window.RA10 || typeof RA10.aiMarkAnswer !== 'function') {
+      return { ui: buildAutoMarkUI(q, answer), source: 'local', aiError: '' };
+    }
+
+    try {
+      const response = await RA10.aiMarkAnswer({ question: q, answer });
+      const aiResult = normaliseAiMarkResult(response && response.result ? response.result : null, q, isExt, answer);
+      if (!aiResult) {
+        return { ui: buildAutoMarkUI(q, answer), source: 'local', aiError: 'invalid AI response' };
+      }
+      return { ui: buildAutoMarkUI(q, answer, aiResult, 'ai'), source: 'ai', aiError: '' };
+    } catch (err) {
+      const message = err && err.message ? String(err.message) : 'request failed';
+      return { ui: buildAutoMarkUI(q, answer), source: 'local', aiError: message };
+    }
+  }
+
+  function buildAutoMarkUI(q, answer, forcedResult, sourceLabel) {
+    const isExt = q.type === 'extended_levels' || (q.mark_scheme && q.mark_scheme.indicative_content);
+    const result = forcedResult || (isExt ? autoMarkExtended(q, answer) : autoMarkShort(q, answer));
 
     const box = el('div', { class: 'automark-box' });
     const head = el('div', { class: 'automark-head' });
@@ -1861,9 +2095,15 @@
     }
     box.appendChild(head);
 
-    const blurb = isExt
-      ? `Estimated by checking how many indicative-content points appear in your answer (${Math.round(result.coverage * 100)}% covered, ${result.wordCount} words). Adjust the mark with + / − if you'd grade differently.`
-      : `Estimated by matching key phrases from each scheme point against your answer. Adjust the mark with + / − if you'd grade differently.`;
+    const safeCoverage = Number.isFinite(Number(result.coverage)) ? Math.round(Number(result.coverage) * 100) : 0;
+    const safeWordCount = Number.isFinite(Number(result.wordCount)) ? Number(result.wordCount) : String(answer || '').trim().split(/\s+/).filter(Boolean).length;
+    const blurb = sourceLabel === 'ai'
+      ? (isExt
+        ? `AI-assisted estimate from your mark scheme and indicative-content coverage (${safeCoverage}% covered, ${safeWordCount} words). Adjust with + / − if needed.`
+        : `AI-assisted estimate from your mark scheme points and answer accuracy. Adjust with + / − if needed.`)
+      : (isExt
+        ? `Estimated from content coverage, answer depth and analysis cues (${safeCoverage}% covered, ${safeWordCount} words). Adjust with + / − if needed.`
+        : `Estimated by matching scheme concepts using token, stem and near-match checks. Adjust with + / − if needed.`);
     box.appendChild(el('p', { class: 'automark-detail' }, blurb));
 
     const detail = el('div', { class: 'automark-detail automark-hits' });
