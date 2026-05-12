@@ -1115,11 +1115,11 @@
     return overlay;
   }
 
-  function renderCreditChip(containerId) {
+  async function renderCreditChip(containerId) {
     const container = document.getElementById(containerId);
     if (!container) return false;
     const loggedIn = isLoggedIn();
-    const credits = loggedIn ? getCredits() : getGuestCredits();
+    const credits = loggedIn ? getCredits() : await getGuestCredits();
     const tierLabel = loggedIn ? getTierInfo().label : 'Guest';
     const creditText = credits === Infinity ? 'Unlimited' : credits + ' credits';
 

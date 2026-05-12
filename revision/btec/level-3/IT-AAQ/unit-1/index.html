@@ -1385,11 +1385,11 @@ function _ra10GetUnitCreditsContext() {
 
 window._ra10GetUnitCreditsContext = _ra10GetUnitCreditsContext;
 
-function _ra10RenderUnitCreditChip() {
+async function _ra10RenderUnitCreditChip() {
   if (!window.RA10) {
     return;
   }
-  RA10.renderCreditChip(RA10_CREDIT_CHIP_ID);
+  await RA10.renderCreditChip(RA10_CREDIT_CHIP_ID);
 
   const container = document.getElementById(RA10_CREDIT_CHIP_ID);
   if (!container) {
@@ -1457,8 +1457,8 @@ async function ra10Gate(action) {
     if (!window.RA10) return true;
     if (RA10.isOwner()) return true;
     if (!RA10.isLoggedIn()) {
-      const result = RA10.guestGate(action, 3, RA10.showPaywall);
-      if (window.RA10) _ra10RenderUnitCreditChip();
+      const result = await RA10.guestGate(action, 3, RA10.showPaywall);
+      if (window.RA10) await _ra10RenderUnitCreditChip();
       return result === true;
     }
 
@@ -1497,14 +1497,14 @@ async function ra10Gate(action) {
           }
           _ra10WriteSubjectState(profile, state);
         }
-        _ra10RenderUnitCreditChip();
+        await _ra10RenderUnitCreditChip();
         window._updateSubjectBanner();
       }
       return spent;
     }
 
     const result = await RA10.gate(action, RA10.showPaywall);
-    _ra10RenderUnitCreditChip();
+    await _ra10RenderUnitCreditChip();
     window._updateSubjectBanner();
     return result;
   } catch(e) {
@@ -1513,9 +1513,9 @@ async function ra10Gate(action) {
   }
 }
 
-function _updateGuestChip() {
+async function _updateGuestChip() {
   if (window.RA10) {
-    _ra10RenderUnitCreditChip();
+    await _ra10RenderUnitCreditChip();
     window._updateSubjectBanner();
   }
 }
