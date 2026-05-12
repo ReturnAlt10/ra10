@@ -349,8 +349,20 @@
     _scriptLoader = new Promise((resolve, reject) => {
       const existing = document.querySelector('script[data-ra10-supabase]');
       if (existing) {
-        existing.addEventListener('load', () => resolve(_getSupabaseFactory()));
-        existing.addEventListener('error', () => reject(new Error('Failed to load Supabase SDK')));
+        const existingFactory = _getSupabaseFactory();
+        if (existingFactory) {
+          resolve(existingFactory);
+          return;
+        }
+        existing.addEventListener('load', () => {
+          const loadedFactory = _getSupabaseFactory();
+          if (loadedFactory) {
+            resolve(loadedFactory);
+            return;
+          }
+          reject(new Error('Supabase SDK loaded but createClient was not found'));
+        }, { once: true });
+        existing.addEventListener('error', () => reject(new Error('Failed to load Supabase SDK')), { once: true });
         return;
       }
 
@@ -358,8 +370,15 @@
       script.setAttribute('src', SUPABASE_CDN);
       script.setAttribute('defer', '');
       script.setAttribute('data-ra10-supabase', 'true');
-      script.addEventListener('load', () => resolve(_getSupabaseFactory()));
-      script.addEventListener('error', () => reject(new Error('Failed to load Supabase SDK')));
+      script.addEventListener('load', () => {
+        const loadedFactory = _getSupabaseFactory();
+        if (loadedFactory) {
+          resolve(loadedFactory);
+          return;
+        }
+        reject(new Error('Supabase SDK loaded but createClient was not found'));
+      }, { once: true });
+      script.addEventListener('error', () => reject(new Error('Failed to load Supabase SDK')), { once: true });
       document.head.appendChild(script);
     });
 
@@ -982,8 +1001,11 @@
     const guestId = _getGuestId();
     // Try localStorage for fast access
     const local = localStorage.getItem('ra10_guest_credits');
-    if (local !== null) return parseInt(local);
-    // Fallback: fetch from server
+    if (local !== null) {
+      const parsed = parseInt(local);
+      return Number.isFinite(parsed) ? Math.max(0, parsed) : 0;
+    }
+    // Fallback: fetch from server only if localStorage is empty
     try {
       const res = await fetch(`${SUPABASE_URL}/rest/v1/guest_credits?id=eq.${guestId}`, {
         headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` }
@@ -991,12 +1013,13 @@
       if (res.ok) {
         const arr = await res.json();
         if (arr && arr[0] && typeof arr[0].credits === 'number') {
-          localStorage.setItem('ra10_guest_credits', String(arr[0].credits));
-          return arr[0].credits;
+          const credits = Math.max(0, arr[0].credits);
+          localStorage.setItem('ra10_guest_credits', String(credits));
+          return credits;
         }
       }
     } catch (e) {}
-    // Default if not found
+    // Default only if localStorage is truly empty AND Supabase has no record
     localStorage.setItem('ra10_guest_credits', '10');
     return 10;
   }
@@ -1024,8 +1047,15 @@
   async function spendGuestCredit(action) {
     const cost = ACTION_COSTS[action] ?? 1;
     if (cost === 0) return true;
-    const current = await getGuestCredits();
+    
+    // First check
+    let current = await getGuestCredits();
     if (current < cost) return false;
+    
+    // Double check immediately before spending (prevents race conditions)
+    current = await getGuestCredits();
+    if (current < cost) return false;
+    
     await setGuestCredits(current - cost);
     return true;
   }
@@ -1034,11 +1064,20 @@
   async function guestGate(action, freeLimit, onDenied) {
     const cost = ACTION_COSTS[action] ?? 1;
     if (cost === 0) return true;
-    const current = await getGuestCredits();
+    
+    // First check
+    let current = await getGuestCredits();
     if (current < cost) {
-      if (typeof onDenied === 'function') onDenied('login', action);
+      if (typeof onDenied === 'function') onDenied('credits', action);
       return false;
     }
+    
+    // Double check immediately before spending (prevents race conditions)
+    current = await getGuestCredits();
+    if (current < cost) {
+      return false; // Silently fail (don't show paywall again)
+    }
+    
     await setGuestCredits(current - cost);
     return true;
   }
@@ -1074,42 +1113,35 @@
       message.textContent = 'You need to sign in before continuing.';
     }
 
+    card.appendChild(closeBtn);
+    card.appendChild(title);
+    card.appendChild(message);
+
     if (reason === 'credits') {
       const note = document.createElement('div');
-      note.textContent = 'Purchases are paused for now.';
+      note.textContent = "features that use credits won't work right now";
       note.style.cssText = 'padding:12px 14px;border-radius:10px;background:#f8fafc;color:#334155;font-size:0.95rem;line-height:1.45;border:1px solid #e2e8f0;';
-      card.appendChild(closeBtn);
-      card.appendChild(title);
-      card.appendChild(message);
       card.appendChild(note);
-      overlay.appendChild(card);
-      document.body.appendChild(overlay);
-      return overlay;
     } else {
       const actionButton = document.createElement('button');
       actionButton.type = 'button';
       actionButton.style.cssText = 'background:#1d4ed8;color:#fff;border:none;border-radius:10px;padding:12px 18px;font-size:1rem;cursor:pointer;';
       actionButton.textContent = 'Sign In / Register';
       actionButton.addEventListener('click', () => {
-  overlay.remove();
-  try {
-    if (window.top && window.top !== window) {
-      // We are inside an iframe — post a message to the parent
-      window.top.postMessage({ type: 'RA10_OPEN_AUTH' }, '*');
-    } else {
-      // We are the top window
-      document.getElementById('auth-overlay')?.classList.add('open');
-    }
-  } catch(e) {
-    window.top.location.hash = '#/auth';
-  }
-});
+        overlay.remove();
+        try {
+          if (window.top && window.top !== window) {
+            window.top.postMessage({ type: 'RA10_OPEN_AUTH' }, '*');
+          } else {
+            document.getElementById('auth-overlay')?.classList.add('open');
+          }
+        } catch(e) {
+          window.top.location.hash = '#/auth';
+        }
+      });
+      card.appendChild(actionButton);
     }
 
-    card.appendChild(closeBtn);
-    card.appendChild(title);
-    card.appendChild(message);
-    card.appendChild(actionButton);
     overlay.appendChild(card);
     document.body.appendChild(overlay);
     return overlay;

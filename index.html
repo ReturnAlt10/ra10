@@ -966,9 +966,11 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
   .nav-credit-chip { display: none !important; }
   .mobile-credit-chip { display: inline-flex !important; }
   body {
+    overflow-x: hidden;
     padding-top: calc(58px + env(safe-area-inset-top, 0px));
     padding-bottom: calc(84px + env(safe-area-inset-bottom, 0px));
   }
+  .page { min-height: calc(100dvh - 142px); }
   .home-hero h1 { font-size: clamp(1.8rem, 8vw, 3rem); }
   .hero h1 { font-size: clamp(1.4rem, 6vw, 2.2rem); }
   .home-stat-row { grid-template-columns: 1fr; }
@@ -995,10 +997,12 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
   .nav-user-dropdown { min-width: 180px; }
   .footer-inner { flex-direction: column; gap: var(--sp3); text-align: center; }
   .mobile-top-nav{
-    position:fixed;
+    position:fixed !important;
     top:0;
     left:0;
     right:0;
+    width:100%;
+    max-width:100vw;
     z-index:10023;
     display:flex;
     align-items:center;
@@ -1008,6 +1012,8 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
     background:oklch(from var(--color-surface) l c h/.98);
     border-bottom:1px solid oklch(from var(--color-text) l c h/.08);
     backdrop-filter:blur(16px);
+    transform:translateZ(0);
+    -webkit-transform:translateZ(0);
   }
   .mobile-top-nav img{width:26px;height:26px;border-radius:8px;}
   .mobile-top-nav .brand{font-family:var(--font-d);font-size:var(--tx-lg);line-height:1;color:var(--color-text);}
@@ -1030,10 +1036,12 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
   .mobile-upgrade-btn:hover{filter:brightness(1.05)}
 
   .mobile-bottom-nav{
-    position:fixed;
+    position:fixed !important;
     left:0;
     right:0;
     bottom:0;
+    width:100%;
+    max-width:100vw;
     z-index:10020;
     display:flex;
     flex-wrap:nowrap;
@@ -1043,6 +1051,8 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
     backdrop-filter:blur(18px);
     border-top:1px solid oklch(from var(--color-text) l c h/.08);
     box-shadow:0 -12px 32px oklch(0 0 0/.08);
+    transform:translateZ(0);
+    -webkit-transform:translateZ(0);
   }
   .mobile-nav-btn{
     display:flex;
@@ -3116,6 +3126,33 @@ function closeMobileSubjectSheet() {
   if (sheet) sheet.setAttribute('aria-hidden', 'true');
 }
 
+function syncMobileNavChrome() {
+  const isMobile = window.matchMedia('(max-width: 768px)').matches;
+  const topNav = document.querySelector('.mobile-top-nav');
+  const bottomNav = document.querySelector('.mobile-bottom-nav');
+  if (topNav) {
+    topNav.style.display = isMobile ? 'flex' : 'none';
+    if (isMobile) {
+      topNav.style.position = 'fixed';
+      topNav.style.top = '0';
+      topNav.style.left = '0';
+      topNav.style.right = '0';
+    }
+  }
+  if (bottomNav) {
+    bottomNav.style.display = isMobile ? 'flex' : 'none';
+    if (isMobile) {
+      bottomNav.style.position = 'fixed';
+      bottomNav.style.left = '0';
+      bottomNav.style.right = '0';
+      bottomNav.style.bottom = '0';
+    }
+  }
+  if (!isMobile && document.body.classList.contains('mobile-sheet-open')) {
+    closeMobileSubjectSheet();
+  }
+}
+
 function getLeaderboardBadgeEmoji(profile) {
   return String((profile && (profile.leaderboard_badge || profile.badge_emoji || profile.emoji_badge)) || '').trim();
 }
@@ -3627,6 +3664,7 @@ function route(){
     const mobileBtn = document.querySelector(`[data-mobile-nav="${mobileKey}"]`);
     if (mobileBtn) mobileBtn.classList.add('active');
   }
+  syncMobileNavChrome();
 }
 
 function setPriceSnapshotView(mode, trigger) {
@@ -3659,11 +3697,14 @@ function setPriceSnapshotView(mode, trigger) {
 }
 
 window.addEventListener('hashchange', route);
+window.addEventListener('resize', syncMobileNavChrome);
+window.addEventListener('orientationchange', syncMobileNavChrome);
 
   let authRestorePending = true;
 
   document.addEventListener('DOMContentLoaded', async () => {
     route();
+    syncMobileNavChrome();
     setPriceSnapshotView('all');
     updateLeaderboardCountdown();
     setInterval(updateLeaderboardCountdown, 1000);
@@ -3702,19 +3743,29 @@ window.addEventListener('hashchange', route);
         const btn = document.getElementById('signin-btn');
         const err = document.getElementById('signin-error');
         err.classList.remove('show');
-        btn.disabled = true; btn.textContent = 'Signing in…';
-        const { error } = await RA10.signIn(
-          document.getElementById('signin-email').value,
-          document.getElementById('signin-password').value
-        );
-        btn.disabled = false; btn.textContent = 'Sign in';
-        if (error) {
-          err.textContent = error.message;
+        btn.disabled = true;
+        btn.textContent = 'Signing in…';
+        try {
+          const { error } = await RA10.signIn(
+            document.getElementById('signin-email').value,
+            document.getElementById('signin-password').value
+          );
+          if (error) {
+            err.textContent = error.message || 'Could not sign in. Please try again.';
+            err.classList.add('show');
+          } else {
+            closeAuthModal();
+            try { await RA10.refreshProfile(); } catch (e) {}
+            await _updateNavAuth();
+          }
+        } catch (signInErr) {
+          err.textContent = (signInErr && signInErr.message) ? signInErr.message : 'Could not sign in. Please try again.';
           err.classList.add('show');
-        } else {
-          closeAuthModal();
-          try { await RA10.refreshProfile(); } catch (e) {}
-          await _updateNavAuth();
+        } finally {
+          authRestorePending = false;
+          btn.disabled = false;
+          btn.textContent = 'Sign in';
+          _updateNavAuth();
         }
       });
 
@@ -3735,9 +3786,16 @@ window.addEventListener('hashchange', route);
     _updateNavAuth();
 
     const initPromise = RA10.init();
-
-    await initPromise;
-    authRestorePending = false;
+    try {
+      await Promise.race([
+        initPromise,
+        new Promise((_, reject) => setTimeout(() => reject(new Error('Auth init timeout')), 12000)),
+      ]);
+    } catch (initErr) {
+      console.warn('RA10 auth init failed', initErr);
+    } finally {
+      authRestorePending = false;
+    }
 
     // Handle Supabase email callback (invite or password reset)
     const hashParams = new URLSearchParams(window.location.hash.slice(1));
