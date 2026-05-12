@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mark Scheme 3 — BTEC IT Unit 1 — RA10</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Arial, Helvetica, sans-serif; font-size: 11pt; color: #000; background: linear-gradient(180deg, #eef2ff 0%, #f7f2eb 100%); line-height: 1.45; padding: 18px 0 36px; }
+  .page { width: 210mm; min-height: 297mm; margin: 0 auto 24px auto; padding: 18mm 20mm 20mm 20mm; background: #fff; border: 1px solid #d8dce8; border-radius: 18px; box-shadow: 0 20px 48px rgba(26, 26, 46, 0.14); position: relative; overflow: hidden; }
+  @media print {
+    body { margin: 0; padding: 0; }
+    .page { width: 210mm; min-height: 297mm; margin: 0; padding: 18mm 20mm 20mm 20mm; border: none; border-radius: 0; box-shadow: none; page-break-after: always; overflow: visible; }
+    .page:last-child { page-break-after: avoid; }
+    .no-print { display: none !important; }
+  }
+  .cover-top-bar { background: #1a1a2e; color: #fff; padding: 12px 16px; display: flex; align-items: center; gap: 16px; margin-bottom: 24px; }
+  .cover-ra10-logo { font-size: 28pt; font-weight: 900; color: #e63946; font-family: Arial Black, Arial, sans-serif; }
+  .cover-ra10-tag { font-size: 9pt; color: rgba(255,255,255,0.7); line-height: 1.3; }
+  .ms-badge { display: inline-block; background: #1a6e3c; color: #fff; font-weight: bold; font-size: 10pt; padding: 4px 12px; border-radius: 4px; margin-bottom: 16px; text-transform: uppercase; }
+  .cover-title { font-size: 20pt; font-weight: 900; margin-bottom: 6px; }
+  .cover-sub { font-size: 13pt; font-weight: bold; margin-bottom: 24px; color: #444; }
+  .cover-info-box { border: 2px solid #000; padding: 14px 18px; margin-bottom: 20px; }
+  .cover-info-box table { width: 100%; border-collapse: collapse; }
+  .cover-info-box td { padding: 4px 8px; }
+  .cover-info-box td:first-child { font-weight: bold; width: 130px; }
+  h2.q-head { font-size: 13pt; margin-bottom: 16px; border-bottom: 2px solid #000; padding-bottom: 6px; }
+  .part { margin-bottom: 16px; }
+  .part-header { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 6px; }
+  .part-label { font-weight: bold; min-width: 28px; flex-shrink: 0; }
+  .part-q { flex: 1; font-size: 10.5pt; color: #333; font-style: italic; line-height: 1.4; }
+  .part-marks-badge { background: #1a6e3c; color: #fff; font-weight: bold; font-size: 9.5pt; padding: 2px 8px; border-radius: 3px; white-space: nowrap; flex-shrink: 0; }
+  .ms-box { border: 1px solid #bcd0b8; background: #f4fbf5; padding: 10px 14px; margin-left: 28px; }
+  .ms-instruction { font-weight: bold; font-size: 10pt; margin-bottom: 6px; color: #155724; }
+  .ms-points { margin-left: 16px; margin-bottom: 6px; }
+  .ms-points li { margin-bottom: 3px; font-size: 10.5pt; }
+  .ms-accept { font-size: 10pt; color: #555; margin-top: 4px; }
+  .ms-dna { font-size: 10pt; color: #8b0000; margin-top: 2px; }
+  .diagram-example { margin-left: 16px; margin-bottom: 10px; border: 1px solid #a7b9ad; border-radius: 8px; background: #fff; padding: 10px; overflow: auto; }
+  .diagram-example svg { width: 100%; height: auto; display: block; min-height: 320px; }
+  .diagram-example .node { fill: #f7fbff; stroke: #1a1a2e; stroke-width: 1.8; }
+  .diagram-example .node-soft { fill: #eef7f1; stroke: #1a6e3c; stroke-width: 1.8; }
+  .diagram-example .flow { stroke: #1a1a2e; stroke-width: 2; fill: none; }
+  .diagram-example .title { font-size: 15px; font-weight: 700; fill: #111; }
+  .diagram-example .txt { font-size: 12px; font-weight: 600; fill: #111; }
+  .diagram-example .subtxt { font-size: 11px; fill: #333; }
+  .diagram-example .note { font-size: 11px; fill: #0f5132; font-weight: 700; }
+  .levels-box { border: 1px solid #bcd0b8; background: #f4fbf5; margin-left: 28px; overflow: hidden; }
+  .indicative-section { padding: 10px 14px; border-bottom: 1px solid #c8ddc8; }
+  .indicative-heading { font-weight: bold; font-size: 10pt; color: #155724; margin-bottom: 6px; }
+  .indicative-list { margin-left: 16px; }
+  .indicative-list li { margin-bottom: 3px; font-size: 10pt; }
+  .levels-table { width: 100%; border-collapse: collapse; }
+  .levels-table th { background: #d6ead8; font-weight: bold; font-size: 10pt; padding: 5px 10px; border: 1px solid #aacaaa; text-align: left; }
+  .levels-table td { padding: 6px 10px; border: 1px solid #c8ddc8; font-size: 10pt; vertical-align: top; }
+  .level-mark { font-weight: bold; white-space: nowrap; }
+  .q-total { border-top: 2px solid #000; margin-top: 12px; padding-top: 6px; text-align: right; font-weight: bold; font-size: 10pt; }
+  .page-footer { position: absolute; bottom: 12mm; left: 20mm; right: 20mm; display: flex; justify-content: space-between; font-size: 9pt; color: #555; border-top: 1px solid #ccc; padding-top: 4px; }
+  .print-bar { background: rgba(26, 26, 46, 0.9); color: #fff; padding: 12px 16px; position: sticky; top: 10px; z-index: 100; display: flex; gap: 12px; align-items: center; justify-content: space-between; width: min(960px, calc(100% - 24px)); margin: 0 auto 18px auto; border: 1px solid rgba(255,255,255,0.14); border-radius: 18px; box-shadow: 0 18px 40px rgba(15, 15, 30, 0.22); backdrop-filter: blur(14px); }
+  .print-bar span { display: inline-flex; align-items: center; padding: 8px 12px; border-radius: 999px; background: rgba(255,255,255,0.08); font-size: 9.5pt; font-weight: bold; letter-spacing: 0.02em; }
+  .viewer-counter { min-width: 68px; justify-content: center; }
+  .print-bar button { background: linear-gradient(135deg, #1a6e3c 0%, #12512c 100%); color: #fff; border: none; padding: 9px 16px; border-radius: 12px; font-weight: bold; font-size: 9.5pt; cursor: pointer; box-shadow: 0 10px 24px rgba(26, 110, 60, 0.24); }
+  .print-bar a { color: #fff; font-size: 9pt; text-decoration: none; padding: 8px 12px; border-radius: 10px; background: rgba(255,255,255,0.08); margin-left: 0; }
+</style>
+</head>
+<body>
+<div class="print-bar no-print">
+  <span>RA10 — BTEC IT Unit 1 — Mark Scheme 3</span>
+  <button onclick="window.print()">&#x2399; Print / Save as PDF</button>
+  <a href="paper-3.html">&larr; View Question Paper</a>
+  <span class="viewer-counter" id="viewerPageCounter">1 / 1</span>
+</div>
+
+<!-- COVER -->
+<div class="page">
+  <div class="cover-top-bar">
+    <div class="cover-ra10-logo">RA10</div>
+    <div class="cover-ra10-tag"><strong>Mark Schemes</strong><br>BTEC Level 3 National Extended Certificate in IT</div>
+  </div>
+  <div style="margin-bottom:10px;"><div class="ms-badge">Mark Scheme — Predicted Paper 3</div></div>
+  <div class="cover-title">Unit 1: Information Technology Systems</div>
+  <div class="cover-sub">BTEC Level 3 National Extended Certificate in Information Technology</div>
+  <div class="cover-info-box">
+    <table>
+      <tr><td>Paper Reference</td><td>RA10/IT/U1/PP3</td></tr>
+      <tr><td>Total marks</td><td>90</td></tr>
+    </table>
+  </div>
+  <p style="font-size:10.5pt; margin-bottom:10px;">For levels-based questions, use the Level Descriptors holistically alongside the indicative content. Indicative content is not a checklist — reward any well-developed, contextualised response.</p>
+  <p style="font-size:10pt; color:#555; font-style:italic;">For revision purposes only. Not an official Pearson qualification document.</p>
+  <div class="page-footer"><span>RA10 — Mark Scheme 3</span><span>Page 1</span></div>
+</div>
+
+<!-- Q1: AutoTech Manufacturing -->
+<div class="page">
+  <h2 class="q-head">Question 1 — AutoTech Manufacturing <span style="font-size:10pt; font-weight:normal">(22 marks)</span></h2>
+
+  <div class="part">
+    <div class="part-header"><span class="part-label">(a)</span><span class="part-q">Define the term 'embedded system'.</span><span class="part-marks-badge">1 mark</span></div>
+    <div class="ms-box">
+      <ul class="ms-points">
+        <li>A dedicated computer system / microcontroller built into a device to perform a specific, predefined function (1)</li>
+        <li>A computer system within a larger device that performs a dedicated function (1)</li>
+      </ul>
+      <div class="ms-accept">Accept equivalent definition — must convey 'built into a device' and 'specific/dedicated purpose'</div>
+    </div>
+  </div>
+
+  <div class="part">
+    <div class="part-header"><span class="part-label">(b)</span><span class="part-q">Give two implications for AutoTech Manufacturing of introducing IoT-connected devices on the factory floor.</span><span class="part-marks-badge">2 marks</span></div>
+    <div class="ms-box">
+      <ul class="ms-points">
+        <li>Machines can be monitored in real time, allowing predictive maintenance to reduce downtime (1)</li>
+        <li>IoT devices are internet-connected, increasing the number of potential entry points for cyber attacks (1)</li>
+        <li>Production data can be collected and analysed to optimise manufacturing processes (1)</li>
+        <li>Large quantities of sensor data will be generated, requiring data storage and processing infrastructure (1)</li>
+        <li>IoT devices may require firmware updates to maintain security (1)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="part">
+    <div class="part-header"><span class="part-label">(c)</span><span class="part-q">Describe three benefits of using a real-time operating system (RTOS) for AutoTech's robotic assembly lines.</span><span class="part-marks-badge">3 marks</span></div>
+    <div class="ms-box">
+      <div class="ms-instruction">Award one mark per benefit, up to three marks.</div>
+      <ul class="ms-points">
+        <li>Tasks are completed within guaranteed time constraints / deadlines (1)</li>
+        <li>The RTOS can prioritise safety-critical responses over routine tasks (1)</li>
+        <li>Deterministic behaviour makes the robotic system reliable and predictable (1)</li>
+        <li>Suitable for running resource-limited embedded hardware with minimal memory overhead (1)</li>
+        <li>Multiple processes can be managed concurrently without missing time-critical production signals (1)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="part">
+    <div class="part-header"><span class="part-label">(d)</span><span class="part-q">Explain two factors AutoTech should consider when designing the network for its factory sites.</span><span class="part-marks-badge">4 marks</span></div>
+    <div class="ms-box">
+      <div class="ms-instruction">Award one mark for identification and one mark for linked justification, up to four marks.</div>
+      <ul class="ms-points">
+        <li>Security (1) — the factory network carries production data and is connected to IoT devices; unauthorised access could disrupt production or cause safety incidents (1)</li>
+        <li>Reliability / uptime (1) — production line downtime is extremely costly; the network must have redundancy to minimise outage time (1)</li>
+        <li>Bandwidth / speed (1) — real-time IoT sensor data from assembly lines requires sufficient bandwidth to avoid bottlenecks (1)</li>
+        <li>Physical environment (1) — factory floors may have electromagnetic interference from machinery; shielded cabling or appropriate Wi-Fi standards must be chosen (1)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="part">
+    <div class="part-header"><span class="part-label">(e)</span><span class="part-q">Discuss the implications of introducing a multi-user operating system across AutoTech's shared engineering workstations.</span><span class="part-marks-badge">6 marks — Levels</span></div>
+    <div class="levels-box">
+      <div class="indicative-section">
+        <div class="indicative-heading">Indicative Content</div>
+        <ul class="indicative-list">
+          <li>Multiple engineers can share the same workstations without accessing each other's CAD files / project data</li>
+          <li>File permissions assigned per user role ensure engineers only access relevant files — critical in a competitive manufacturing environment</li>
+          <li>Centralised user account management: IT can add, modify, or disable accounts without touching each machine</li>
+          <li>System resources (CPU, memory) are allocated across concurrent users, which may reduce performance for intensive CAD tasks</li>
+          <li>If the OS or centralised authentication system fails, all users on that system are affected simultaneously</li>
+          <li>Software licences for multi-user environments may be more expensive</li>
+          <li>Security: audit trails can be maintained to track which user accessed which design files</li>
+          <li>Reduces hardware cost — fewer workstations needed as multiple engineers share each one</li>
+        </ul>
+      </div>
+      <table class="levels-table">
+        <tr><th>Level</th><th>Mark</th><th>Descriptor</th></tr>
+        <tr><td>0</td><td class="level-mark">0</td><td>No rewardable material.</td></tr>
+        <tr><td>1</td><td class="level-mark">1–2</td><td>Basic application of multi-user OS knowledge. Limited reference to manufacturing or engineering context. (AO2)</td></tr>
+        <tr><td>2</td><td class="level-mark">3–4</td><td>Good application covering at least two benefits and drawbacks for a manufacturing environment. (AO2/AO3a)</td></tr>
+        <tr><td>3</td><td class="level-mark">5–6</td><td>Comprehensive application covering file permissions, resource management, centralised control, security, cost, and the specific needs of engineers sharing workstations on a factory floor. (AO2/AO3a)</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="part" style="margin-top:18px;">
+    <div class="part-header"><span class="part-label">(f)</span><span class="part-q">Discuss the implications for AutoTech Manufacturing of using cloud analytics to process sensor data from the factory floor.</span><span class="part-marks-badge">6 marks — Levels</span></div>
+    <div class="levels-box">
+      <div class="indicative-section">
+        <div class="indicative-heading">Indicative Content</div>
+        <ul class="indicative-list">
+          <li>Scalable processing: cloud can handle large volumes of real-time IoT sensor data without on-premise infrastructure</li>
+          <li>Cost: pay-for-use model may be more cost-effective than buying and maintaining analytics servers</li>
+          <li>Production insights: analytics can identify production line inefficiencies and predict maintenance needs</li>
+          <li>Security: sensitive production data leaves the factory network and is processed externally — intellectual property risk</li>
+          <li>Internet dependency: if connectivity fails, real-time analytics are unavailable — potential production impact</li>
+          <li>Data sovereignty: production data stored in cloud must remain within UK/relevant jurisdiction</li>
+          <li>Latency: real-time decisions on the factory floor may require low-latency processing which cloud may not always guarantee</li>
+          <li>Vendor lock-in: reliance on a specific cloud analytics provider makes switching difficult</li>
+        </ul>
+      </div>
+      <table class="levels-table">
+        <tr><th>Level</th><th>Mark</th><th>Descriptor</th></tr>
+        <tr><td>0</td><td class="level-mark">0</td><td>No rewardable material.</td></tr>
+        <tr><td>1</td><td class="level-mark">1–2</td><td>Basic application about cloud computing. Limited reference to manufacturing context. (AO2)</td></tr>
+        <tr><td>2</td><td class="level-mark">3–4</td><td>Good application covering benefits and risks of cloud analytics in a manufacturing setting. (AO2/AO3a)</td></tr>
+        <tr><td>3</td><td class="level-mark">5–6</td><td>Comprehensive application. Covers scalability, cost, IP security, latency, connectivity dependency, and data sovereignty, clearly contextualised to a factory floor IoT environment. (AO2/AO3a)</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="q-total">Question 1 Total: 22 marks</div>
+  <div class="page-footer"><span>RA10 — Mark Scheme 3</span><span>Page 2</span></div>
+</div>
+
+<!-- Q2: Broadmore University Library -->
+<div class="page">
+  <h2 class="q-head">Question 2 — Broadmore University Library <span style="font-size:10pt; font-weight:normal">(22 marks)</span></h2>
+
+  <div class="part">
+    <div class="part-header"><span class="part-label">(a)</span><span class="part-q">Identify the wireless technology used for short-range device connections such as keyboards and mice.</span><span class="part-marks-badge">1 mark</span></div>
+    <div class="ms-box"><ul class="ms-points"><li>Bluetooth (1)</li></ul><div class="ms-dna">Do not accept: Wi-Fi / NFC / infrared for Bluetooth connections</div></div>
+  </div>
+
+  <div class="part">
+    <div class="part-header"><span class="part-label">(b)</span><span class="part-q">Explain why lossless compression is used for archiving research papers in the digital repository.</span><span class="part-marks-badge">2 marks</span></div>
+    <div class="ms-box">
+      <ul class="ms-points">
+        <li>Lossless compression reduces the file size of the documents (1) while ensuring every single bit of data is preserved exactly when the file is decompressed, so the academic content is not altered (1)</li>
+        <li>Unlike lossy compression, lossless compression does not discard any data (1) which is essential for academic texts where every word and citation must be retained accurately (1)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="part">
+    <div class="part-header"><span class="part-label">(c)</span><span class="part-q">Describe three factors that could affect the performance of Wi-Fi in the library's study areas.</span><span class="part-marks-badge">3 marks</span></div>
+    <div class="ms-box">
+      <div class="ms-instruction">Award one mark per factor, up to three marks.</div>
+      <ul class="ms-points">
+        <li>Physical distance from the access point (1) — signal strength decreases over greater distances</li>
+        <li>Physical obstacles / walls / bookshelves (1) — thick materials absorb and reflect Wi-Fi signals</li>
+        <li>Number of concurrent users on the same access point (1) — bandwidth is shared, reducing speed per device</li>
+        <li>Interference from other Wi-Fi networks or electronic devices operating on the same frequency (1)</li>
+        <li>The Wi-Fi standard in use (1) — older standards such as 802.11n have lower maximum speeds than 802.11ac or Wi-Fi 6</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="part">
+    <div class="part-header"><span class="part-label">(d)</span><span class="part-q">Explain two differences between a LAN and a WAN.</span><span class="part-marks-badge">4 marks</span></div>
+    <div class="ms-box">
+      <div class="ms-instruction">Award one mark for identification and one mark for linked explanation, up to four marks.</div>
+      <ul class="ms-points">
+        <li>Geographic scale (1) — a LAN covers a limited area such as a single building or campus, whereas a WAN spans large geographic distances, potentially connecting sites in different countries (1)</li>
+        <li>Ownership (1) — a LAN is typically owned and managed by one organisation, whereas a WAN uses infrastructure provided by external telecommunications companies (1)</li>
+        <li>Speed (1) — LANs typically offer higher data transfer speeds (Gbps) than WANs, which are constrained by distance and shared infrastructure (1)</li>
+        <li>Cost (1) — setting up a LAN is generally less expensive than a WAN, which requires leased lines or carrier services (1)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="part">
+    <div class="part-header"><span class="part-label">(e)</span><span class="part-q">Discuss the implications for the library of choosing Wi-Fi rather than Ethernet for student workstations in the study areas.</span><span class="part-marks-badge">6 marks — Levels</span></div>
+    <div class="levels-box">
+      <div class="indicative-section">
+        <div class="indicative-heading">Indicative Content</div>
+        <ul class="indicative-list">
+          <li>Wi-Fi: students can move around the study space with laptops and mobile devices — flexibility for users</li>
+          <li>Wi-Fi: no need to cable every desk — lower installation cost for a large library reading room</li>
+          <li>Wi-Fi: signal can be affected by physical obstacles (bookshelves, walls) reducing reliability at certain positions</li>
+          <li>Wi-Fi: bandwidth is shared between concurrent users — 100+ students online simultaneously will experience slower speeds</li>
+          <li>Wi-Fi: signals can be intercepted — greater security risk if students access unencrypted connections</li>
+          <li>Ethernet: provides a dedicated, faster and more reliable connection per workstation</li>
+          <li>Ethernet: more secure — data confined to physical cables, harder to intercept</li>
+          <li>Ethernet: expensive to run cabling to every desk in a large reading room; inflexible if layout changes</li>
+          <li>Hybrid approach: Ethernet for fixed staff workstations; Wi-Fi for student zones</li>
+        </ul>
+      </div>
+      <table class="levels-table">
+        <tr><th>Level</th><th>Mark</th><th>Descriptor</th></tr>
+        <tr><td>0</td><td class="level-mark">0</td><td>No rewardable material.</td></tr>
+        <tr><td>1</td><td class="level-mark">1–2</td><td>Basic application. Considers only one technology with limited development. (AO2)</td></tr>
+        <tr><td>2</td><td class="level-mark">3–4</td><td>Good application comparing Wi-Fi and Ethernet across at least two factors, with reference to the library context. (AO2/AO3a)</td></tr>
+        <tr><td>3</td><td class="level-mark">5–6</td><td>Comprehensive application. Discusses flexibility, installation cost, shared bandwidth, security, and reliability for both options, clearly contextualised to a large library with 100+ concurrent student users. Considers a hybrid approach. (AO2/AO3a)</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="part" style="margin-top:18px;">
+    <div class="part-header"><span class="part-label">(f)</span><span class="part-q">Draw a diagram to show how a library file moves from server to user.</span><span class="part-marks-badge">6 marks</span></div>
+    <div class="ms-box">
+      <div class="ms-instruction">Award one mark for each appropriate device, stage or annotation shown, up to a maximum of six marks.</div>
+      <div class="diagram-example">
+        <svg viewBox="0 0 860 560" aria-label="Model diagram for compressed library file transfer">
+          <defs>
+            <marker id="arrowC" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#1a1a2e"></path>
+            </marker>
+          </defs>
+
+          <text x="430" y="28" text-anchor="middle" class="title">Library File Transfer (Example Diagram)</text>
+
+          <rect x="30" y="50" width="800" height="460" fill="#fcfdff" stroke="#9aa4b2" stroke-width="1.5"></rect>
+
+          <rect x="70" y="90" width="370" height="300" fill="#f6f8fc" stroke="#808a98" stroke-width="1.2"></rect>
+          <text x="390" y="112" text-anchor="end" class="txt">Library System</text>
+
+          <rect class="node" x="95" y="130" width="150" height="70" rx="8" ry="8"></rect>
+          <text x="170" y="158" text-anchor="middle" class="txt">File Server</text>
+          <text x="170" y="178" text-anchor="middle" class="subtxt">research.pdf</text>
+
+          <rect class="node-soft" x="270" y="130" width="145" height="70" rx="8" ry="8"></rect>
+          <text x="342" y="158" text-anchor="middle" class="txt">Compression</text>
+          <text x="342" y="178" text-anchor="middle" class="subtxt">ZIP service</text>
+
+          <rect class="node" x="150" y="250" width="190" height="70" rx="8" ry="8"></rect>
+          <text x="245" y="278" text-anchor="middle" class="txt">Library Router</text>
+          <text x="245" y="298" text-anchor="middle" class="subtxt">Sends zip file</text>
+
+          <rect x="500" y="210" width="300" height="220" fill="#f6f8fc" stroke="#808a98" stroke-width="1.2"></rect>
+          <text x="785" y="232" text-anchor="end" class="txt">User Side</text>
+
+          <rect class="node" x="525" y="255" width="120" height="60" rx="8" ry="8"></rect>
+          <text x="585" y="282" text-anchor="middle" class="txt">User Router</text>
+
+          <rect class="node-soft" x="665" y="255" width="120" height="60" rx="8" ry="8"></rect>
+          <text x="725" y="282" text-anchor="middle" class="txt">Laptop</text>
+          <text x="725" y="300" text-anchor="middle" class="subtxt">.zip file</text>
+
+          <rect class="node" x="595" y="340" width="170" height="70" rx="8" ry="8"></rect>
+          <text x="680" y="367" text-anchor="middle" class="txt">Decompress + Open</text>
+          <text x="680" y="387" text-anchor="middle" class="subtxt">Final document</text>
+
+          <circle cx="520" cy="120" r="24" fill="#eef7f1" stroke="#1a6e3c" stroke-width="1.6"></circle>
+          <text x="520" y="126" text-anchor="middle" class="subtxt">Internet</text>
+
+          <line class="flow" x1="245" y1="165" x2="270" y2="165" marker-end="url(#arrowC)"></line>
+          <line class="flow" x1="342" y1="200" x2="245" y2="250" marker-end="url(#arrowC)"></line>
+          <line class="flow" x1="340" y1="285" x2="496" y2="130" marker-end="url(#arrowC)"></line>
+          <line class="flow" x1="540" y1="137" x2="650" y2="246" stroke-dasharray="6 4" marker-end="url(#arrowC)"></line>
+          <line class="flow" x1="645" y1="285" x2="665" y2="285" marker-end="url(#arrowC)"></line>
+          <line class="flow" x1="725" y1="315" x2="695" y2="340" marker-end="url(#arrowC)"></line>
+
+          <text x="374" y="268" class="note">Compressed file transfer</text>
+          <text x="568" y="168" class="note">Internet path</text>
+
+          <line x1="120" y1="448" x2="220" y2="448" stroke="#1a1a2e" stroke-width="2" stroke-dasharray="6 4"></line>
+          <text x="236" y="452" class="subtxt">Wireless</text>
+          <line x1="120" y1="478" x2="220" y2="478" stroke="#1a1a2e" stroke-width="2"></line>
+          <text x="236" y="482" class="subtxt">Wired</text>
+        </svg>
+      </div>
+      <div class="ms-instruction" style="margin-top: 8px;"><strong>Marking Guidance:</strong></div>
+      <ul class="ms-points" style="margin-top: 4px;">
+        <li>Library server and file source shown — 1 mark</li>
+        <li>Compression stage shown — 1 mark</li>
+        <li>Network transfer shown — 1 mark</li>
+        <li>User device and decompression shown — 1 mark</li>
+        <li>User opening the final file shown — 1 mark</li>
+        <li>Annotations and arrows showing data movement — 1 mark</li>
+      </ul>
+      <div class="ms-accept" style="margin-top: 6px;">Accept any other appropriate diagram showing devices/systems used, file movement and clear annotations.</div>
+    </div>
+  </div>
+
+  <div class="q-total">Question 2 Total: 22 marks</div>
+  <div class="page-footer"><span>RA10 — Mark Scheme 3</span><span>Page 3</span></div>
+</div>
+
+<!-- Q3: Westview Sports Club -->
+<div class="page">
+  <h2 class="q-head">Question 3 — Westview Sports Club <span style="font-size:10pt; font-weight:normal">(22 marks)</span></h2>
+
+  <div class="part">
+    <div class="part-header"><span class="part-label">(a)</span><span class="part-q">Identify the cloud service model in which a provider supplies computing infrastructure such as virtual servers.</span><span class="part-marks-badge">1 mark</span></div>
+    <div class="ms-box"><ul class="ms-points"><li>Infrastructure as a Service / IaaS (1)</li></ul><div class="ms-dna">Do not accept: SaaS / PaaS</div></div>
+  </div>
+
+  <div class="part">
+    <div class="part-header"><span class="part-label">(b)</span><span class="part-q">Give two benefits to the coaching team of using a VPN to access the club's systems remotely.</span><span class="part-marks-badge">2 marks</span></div>
+    <div class="ms-box">
+      <ul class="ms-points">
+        <li>Data sent between the coach's device and the club's systems is encrypted, protecting sensitive athlete performance data from interception (1)</li>
+        <li>The coach appears to be connecting from the club's network, allowing access to systems restricted to the internal network (1)</li>
+        <li>Security is maintained even when using public Wi-Fi at competition venues (1)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="part">
+    <div class="part-header"><span class="part-label">(c)</span><span class="part-q">Describe three considerations for Westview Sports Club when managing its online community platform for members.</span><span class="part-marks-badge">3 marks</span></div>
+    <div class="ms-box">
+      <div class="ms-instruction">Award one mark per consideration, up to three marks.</div>
+      <ul class="ms-points">
+        <li>Privacy (1) — member data shared on the platform must be protected under UK GDPR</li>
+        <li>Security (1) — member accounts must be protected against unauthorised access with strong authentication</li>
+        <li>Acceptable use policy (1) — rules must be in place to prevent inappropriate or abusive posts between members</li>
+        <li>Accessibility (1) — the platform must work on mobile devices and be accessible for members with disabilities</li>
+        <li>Downtime (1) — if the platform is unavailable, members lose access to session booking and club communications</li>
+        <li>Moderation (1) — staff time is needed to monitor and moderate content posted to the community area</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="part">
+    <div class="part-header"><span class="part-label">(d)</span><span class="part-q">Explain two benefits to Westview Sports Club of adopting collaborative working tools.</span><span class="part-marks-badge">4 marks</span></div>
+    <div class="ms-box">
+      <div class="ms-instruction">Award one mark for identification and one mark for linked justification, up to four marks.</div>
+      <ul class="ms-points">
+        <li>Real-time document collaboration (1) — multiple coaches and the admin team can update training programmes and event rotas simultaneously, avoiding version conflicts (1)</li>
+        <li>Communication efficiency (1) — messaging and video call tools reduce the need for in-person or phone-based communication, saving time when coordinating events across different sites (1)</li>
+        <li>Remote working (1) — volunteer coaches who are not on site can participate fully in club planning without attending the sports centre (1)</li>
+        <li>Shared calendar access (1) — all staff see the same up-to-date fixture schedule, reducing double-booking errors (1)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="part">
+    <div class="part-header"><span class="part-label">(e)</span><span class="part-q">Discuss the implications for Westview Sports Club of enabling coaches and administrators to work remotely.</span><span class="part-marks-badge">6 marks — Levels</span></div>
+    <div class="levels-box">
+      <div class="indicative-section">
+        <div class="indicative-heading">Indicative Content</div>
+        <ul class="indicative-list">
+          <li>Flexibility: coaches can prepare training plans and respond to members from any location</li>
+          <li>Recruitment: ability to recruit volunteer coaches who are geographically distant from the club</li>
+          <li>Security: athlete performance and medical data accessed remotely must be protected</li>
+          <li>VPN required for all remote access to club management systems</li>
+          <li>Device security: coaches' personal devices used for work must be secured with encryption and password</li>
+          <li>GDPR: personal data about members (including health/injury data for athletes) must be protected when accessed remotely</li>
+          <li>Monitoring: IT manager cannot monitor remote device usage as easily as on-premise workstations</li>
+          <li>Training: staff need guidance on secure remote working practices</li>
+          <li>Acceptable use policy must cover remote working with club data</li>
+        </ul>
+      </div>
+      <table class="levels-table">
+        <tr><th>Level</th><th>Mark</th><th>Descriptor</th></tr>
+        <tr><td>0</td><td class="level-mark">0</td><td>No rewardable material.</td></tr>
+        <tr><td>1</td><td class="level-mark">1–2</td><td>Basic application about remote working. Limited reference to sports club context. (AO2)</td></tr>
+        <tr><td>2</td><td class="level-mark">3–4</td><td>Good application covering operational benefits and security/GDPR risks of remote working. (AO2/AO3a)</td></tr>
+        <tr><td>3</td><td class="level-mark">5–6</td><td>Comprehensive application covering flexibility, security measures (VPN, device encryption), GDPR obligations for member data, monitoring challenges, and training requirements, applied to a sports club context. (AO2/AO3a)</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="part" style="margin-top:18px;">
+    <div class="part-header"><span class="part-label">(f)</span><span class="part-q">Discuss the security threats Westview Sports Club faces and the measures it should implement to protect its data.</span><span class="part-marks-badge">6 marks — Levels</span></div>
+    <div class="levels-box">
+      <div class="indicative-section">
+        <div class="indicative-heading">Indicative Content</div>
+        <ul class="indicative-list">
+          <li>Threats: phishing emails targeting staff to steal login credentials</li>
+          <li>Threats: ransomware encrypting member records and financial data, disrupting operations</li>
+          <li>Threats: brute-force attacks on the member portal login page</li>
+          <li>Threats: physical access to the server/admin area by unauthorised visitors at the sports centre</li>
+          <li>Measures: MFA on all staff and admin accounts</li>
+          <li>Measures: strong password policy and account lockout after failed attempts</li>
+          <li>Measures: firewall and antivirus/malware protection</li>
+          <li>Measures: regular offsite backups to enable recovery from ransomware without paying a ransom</li>
+          <li>Measures: staff training on phishing recognition</li>
+          <li>Measures: physical security on server room and IT equipment</li>
+          <li>Measures: HTTPS on the member portal for all online transactions</li>
+        </ul>
+      </div>
+      <table class="levels-table">
+        <tr><th>Level</th><th>Mark</th><th>Descriptor</th></tr>
+        <tr><td>0</td><td class="level-mark">0</td><td>No rewardable material.</td></tr>
+        <tr><td>1</td><td class="level-mark">1–2</td><td>Basic application listing some security threats or measures. Limited development. (AO2)</td></tr>
+        <tr><td>2</td><td class="level-mark">3–4</td><td>Good application covering a range of threats and corresponding measures applied to the sports club. (AO2/AO3a)</td></tr>
+        <tr><td>3</td><td class="level-mark">5–6</td><td>Comprehensive application. Discusses multiple specific threats (phishing, ransomware, brute-force, physical) and a range of proportionate countermeasures (MFA, backups, firewall, training, physical security), contextualised to the sports club's member data and online portal. (AO2/AO3a)</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="q-total">Question 3 Total: 22 marks</div>
+  <div class="page-footer"><span>RA10 — Mark Scheme 3</span><span>Page 4</span></div>
+</div>
+
+<!-- Q4: Lakeland Housing Association -->
+<div class="page">
+  <h2 class="q-head">Question 4 — Lakeland Housing Association <span style="font-size:10pt; font-weight:normal">(24 marks)</span></h2>
+
+  <div class="part">
+    <div class="part-header"><span class="part-label">(a)</span><span class="part-q">Define the term 'ransomware'.</span><span class="part-marks-badge">1 mark</span></div>
+    <div class="ms-box">
+      <ul class="ms-points">
+        <li>Malicious software that encrypts the victim's files and demands a payment (ransom) in exchange for the decryption key (1)</li>
+        <li>Malware that locks or encrypts data and demands payment for its release (1)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="part">
+    <div class="part-header"><span class="part-label">(b)</span><span class="part-q">Give two impacts on Lakeland Housing Association caused by a 48-hour IT system outage following the ransomware attack.</span><span class="part-marks-badge">2 marks</span></div>
+    <div class="ms-box">
+      <ul class="ms-points">
+        <li>Staff unable to process maintenance requests or repairs, leaving tenants without essential services (1)</li>
+        <li>Rent payment processing halted, affecting cash flow (1)</li>
+        <li>Communication with tenants disrupted (1)</li>
+        <li>Reputational damage — tenants and media become aware of the attack (1)</li>
+        <li>Staff productivity significantly reduced during recovery period (1)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="part">
+    <div class="part-header"><span class="part-label">(c)</span><span class="part-q">Describe a backup procedure that would have reduced the impact of the ransomware attack.</span><span class="part-marks-badge">3 marks</span></div>
+    <div class="ms-box">
+      <div class="ms-instruction">Award one mark per correct element, up to three marks.</div>
+      <ul class="ms-points">
+        <li>Regular, frequent automated backups of all tenant and operational data (at least daily) (1)</li>
+        <li>Backups stored offsite or in the cloud, physically separate from the main network (1)</li>
+        <li>Air-gapped backup — offline backups not connected to the network so they cannot be encrypted by ransomware (1)</li>
+        <li>Tested recovery process — backups should be regularly tested to verify files can be successfully restored (1)</li>
+        <li>Versioned backups — multiple restore points maintained so data can be restored to a point before infection (1)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="part">
+    <div class="part-header"><span class="part-label">(d)</span><span class="part-q">Explain two physical security measures Lakeland Housing Association should implement to protect its server room.</span><span class="part-marks-badge">4 marks</span></div>
+    <div class="ms-box">
+      <div class="ms-instruction">Award one mark for identification and one mark for linked justification, up to four marks.</div>
+      <ul class="ms-points">
+        <li>Key card / PIN-based access control (1) — only authorised IT staff can enter the server room, preventing physical tampering or theft of storage media (1)</li>
+        <li>CCTV camera monitoring the server room door (1) — records all access attempts and deters unauthorised entry, providing evidence if a physical breach occurs (1)</li>
+        <li>Mantrap / secure airlock (1) — prevents tailgating where an unauthorised person enters the server room by following an authorised member of staff (1)</li>
+        <li>Visitor sign-in log (1) — all maintenance staff who visit the server room are recorded, creating an audit trail (1)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="part">
+    <div class="part-header"><span class="part-label">(e)</span><span class="part-q">Discuss the ethical implications for Lakeland Housing Association of storing highly sensitive information about vulnerable tenants.</span><span class="part-marks-badge">6 marks — Levels</span></div>
+    <div class="levels-box">
+      <div class="indicative-section">
+        <div class="indicative-heading">Indicative Content</div>
+        <ul class="indicative-list">
+          <li>Data includes mental health conditions, domestic abuse history, child protection concerns — all special category data</li>
+          <li>Tenants are in a vulnerable position and have limited power to protect their own data — ethical duty of care</li>
+          <li>Privacy: tenants have a reasonable expectation that sensitive personal circumstances are kept confidential</li>
+          <li>Data minimisation — the association should only store data essential for housing management, not speculative records</li>
+          <li>Security obligation — given the sensitivity, the organisation has an especially strong ethical obligation to secure data</li>
+          <li>Consent: tenants must be informed why data is collected and must not feel coerced into providing sensitive information</li>
+          <li>Data sharing: sharing health or welfare information with other agencies must have a clear lawful basis and tenant awareness</li>
+          <li>Impact of a breach: exposure of tenant data could cause direct harm — tenants could face risks to personal safety</li>
+          <li>Staff training and access restrictions are ethically required to limit exposure of sensitive data</li>
+        </ul>
+      </div>
+      <table class="levels-table">
+        <tr><th>Level</th><th>Mark</th><th>Descriptor</th></tr>
+        <tr><td>0</td><td class="level-mark">0</td><td>No rewardable material.</td></tr>
+        <tr><td>1</td><td class="level-mark">1–2</td><td>Basic ethical discussion. Considers privacy or security with limited application to the housing context. (AO2)</td></tr>
+        <tr><td>2</td><td class="level-mark">3–4</td><td>Good application of ethical principles to the housing association's data. Discusses at least two ethical considerations with reference to the vulnerability of tenants. (AO2/AO3a)</td></tr>
+        <tr><td>3</td><td class="level-mark">5–6</td><td>Comprehensive application. Covers duty of care, data minimisation, consent, security obligations, impact of breaches on vulnerable individuals, and data sharing ethics, clearly contextualised to a housing association with vulnerable tenants. (AO2/AO3a)</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="part" style="margin-top:18px;">
+    <div class="part-header"><span class="part-label">(f)</span><span class="part-q">Evaluate the range of security measures Lakeland Housing Association should implement to protect its systems and tenant data following the ransomware attack. Justify which measures should be prioritised.</span><span class="part-marks-badge">8 marks — Levels</span></div>
+    <div class="levels-box">
+      <div class="indicative-section">
+        <div class="indicative-heading">Indicative Content</div>
+        <ul class="indicative-list">
+          <li>Antivirus/anti-malware software — detects and blocks known ransomware; must be kept up to date</li>
+          <li>Firewall — filters incoming and outgoing traffic; reduces attack surface</li>
+          <li>Multi-factor authentication (MFA) on all staff accounts — prevents ransomware spreading via stolen credentials</li>
+          <li>Regular offline/air-gapped backups — most important mitigation: allows data recovery without paying ransom</li>
+          <li>Staff training on phishing — ransomware most commonly delivered via phishing email; human layer of defence</li>
+          <li>Email filtering — reduces phishing emails reaching staff inboxes</li>
+          <li>Patch management — keeping OS and software updated closes known vulnerabilities used by ransomware</li>
+          <li>Network segmentation — limits ransomware spread to other parts of the network if one system is infected</li>
+          <li>Incident response plan — tested recovery procedure reduces downtime if another attack occurs</li>
+          <li>PRIORITISATION: Offline backups and staff training should be top priority as they directly address both prevention (training) and recovery (backups) for the most damaging attack vector. MFA is also critical as credential theft is a common ransomware entry point. Physical security and network segmentation are important but second-tier given the financial constraints of a housing association.</li>
+        </ul>
+      </div>
+      <table class="levels-table">
+        <tr><th>Level</th><th>Mark</th><th>Descriptor</th></tr>
+        <tr><td>0</td><td class="level-mark">0</td><td>No rewardable material.</td></tr>
+        <tr><td>1</td><td class="level-mark">1–3</td><td>Basic knowledge of some security measures. Lists measures without contextualising to the housing association or justifying prioritisation. (AO2)</td></tr>
+        <tr><td>2</td><td class="level-mark">4–6</td><td>Good application covering a range of security measures for the housing association, with some analysis of their effectiveness. Some attempt at prioritisation with justification. (AO2/AO3a/AO3b)</td></tr>
+        <tr><td>3</td><td class="level-mark">7–8</td><td>Comprehensive application. Evaluates a full range of security measures (antivirus, firewall, MFA, backups, training, email filtering, patching, segmentation) against the context of a ransomware-targeted housing association. Makes and justifies a clear prioritisation decision, acknowledging organisational constraints and the most likely attack vectors. (AO2/AO3a/AO3b)</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="q-total">Question 4 Total: 24 marks &nbsp;&nbsp;&nbsp; Paper Total: 90 marks</div>
+  <div class="page-footer"><span>RA10 — Mark Scheme 3</span><span>Page 5</span></div>
+</div>
+
+<script>
+  (function () {
+    var pages = document.querySelectorAll('.page');
+    var counter = document.getElementById('viewerPageCounter');
+    var total = pages.length;
+    if (!counter || !total) return;
+
+    function getCurrentPage() {
+      var viewportTarget = window.innerHeight * 0.45;
+      var bestIndex = 0;
+      var bestDistance = Infinity;
+
+      pages.forEach(function (page, index) {
+        var rect = page.getBoundingClientRect();
+        var pageMid = rect.top + (rect.height / 2);
+        var distance = Math.abs(pageMid - viewportTarget);
+        if (distance < bestDistance) {
+          bestDistance = distance;
+          bestIndex = index;
+        }
+      });
+
+      return bestIndex + 1;
+    }
+
+    function updateCounter() {
+      counter.textContent = getCurrentPage() + ' / ' + total;
+    }
+
+    updateCounter();
+    window.addEventListener('scroll', updateCounter, { passive: true });
+    window.addEventListener('resize', updateCounter);
+  })();
+</script>
+
+</body>
+</html>

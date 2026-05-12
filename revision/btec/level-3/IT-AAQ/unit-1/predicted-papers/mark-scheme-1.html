@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mark Scheme 1 — BTEC IT Unit 1 — RA10</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Arial, Helvetica, sans-serif; font-size: 11pt; color: #000; background: linear-gradient(180deg, #eef2ff 0%, #f7f2eb 100%); line-height: 1.45; padding: 18px 0 36px; }
+  .page { width: 210mm; min-height: 297mm; margin: 0 auto 24px auto; padding: 18mm 20mm 20mm 20mm; background: #fff; border: 1px solid #d8dce8; border-radius: 18px; box-shadow: 0 20px 48px rgba(26, 26, 46, 0.14); position: relative; overflow: hidden; }
+  @media print {
+    body { margin: 0; padding: 0; background: #fff; }
+    .page { width: 210mm; min-height: 297mm; margin: 0; padding: 18mm 20mm 20mm 20mm; border: none; border-radius: 0; box-shadow: none; page-break-after: always; overflow: visible; }
+    .page:last-child { page-break-after: avoid; }
+    .no-print { display: none !important; }
+  }
+
+  /* Cover styles */
+  .cover-top-bar { background: #1a1a2e; color: #fff; padding: 12px 16px; display: flex; align-items: center; gap: 16px; margin-bottom: 24px; }
+  .cover-ra10-logo { font-size: 28pt; font-weight: 900; color: #e63946; font-family: Arial Black, Arial, sans-serif; }
+  .cover-ra10-tag { font-size: 9pt; color: rgba(255,255,255,0.7); line-height: 1.3; }
+  .ms-badge { display: inline-block; background: #1a6e3c; color: #fff; font-weight: bold; font-size: 10pt; padding: 4px 12px; border-radius: 4px; margin-bottom: 16px; letter-spacing: 0.04em; text-transform: uppercase; }
+  .cover-title { font-size: 20pt; font-weight: 900; margin-bottom: 6px; }
+  .cover-sub { font-size: 13pt; font-weight: bold; margin-bottom: 24px; color: #444; }
+  .cover-info-box { border: 2px solid #000; padding: 14px 18px; margin-bottom: 20px; }
+  .cover-info-box table { width: 100%; border-collapse: collapse; }
+  .cover-info-box td { padding: 4px 8px; }
+  .cover-info-box td:first-child { font-weight: bold; width: 130px; }
+
+  /* Mark scheme content */
+  .q-section { margin-bottom: 28px; }
+  .q-title { background: #1a1a2e; color: #fff; padding: 7px 12px; font-weight: bold; font-size: 11pt; margin-bottom: 0; }
+  .scenario-ref { background: #f0f4f8; border: 1px solid #c0ccd8; border-top: none; padding: 8px 14px; font-size: 10pt; color: #333; margin-bottom: 12px; font-style: italic; }
+
+  .part { margin-bottom: 16px; margin-left: 0; }
+  .part-header { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 6px; }
+  .part-label { font-weight: bold; min-width: 28px; flex-shrink: 0; font-size: 11pt; }
+  .part-q { flex: 1; font-size: 10.5pt; color: #333; font-style: italic; line-height: 1.4; }
+  .part-marks-badge { background: #1a6e3c; color: #fff; font-weight: bold; font-size: 9.5pt; padding: 2px 8px; border-radius: 3px; white-space: nowrap; flex-shrink: 0; }
+
+  .ms-box { border: 1px solid #bcd0b8; background: #f4fbf5; padding: 10px 14px; margin-left: 28px; }
+  .ms-instruction { font-weight: bold; font-size: 10pt; margin-bottom: 6px; color: #155724; }
+  .ms-points { margin-left: 16px; margin-bottom: 6px; }
+  .ms-points li { margin-bottom: 3px; font-size: 10.5pt; line-height: 1.4; }
+  .ms-accept { font-size: 10pt; color: #555; margin-top: 4px; }
+  .ms-dna { font-size: 10pt; color: #8b0000; margin-top: 2px; }
+  .ms-dna strong { color: #8b0000; }
+  .diagram-example { margin-left: 16px; margin-bottom: 10px; border: 1px solid #a7b9ad; border-radius: 8px; background: #fff; padding: 10px; overflow: auto; }
+  .diagram-example svg { width: 100%; height: auto; display: block; min-height: 320px; }
+  .diagram-example .node { fill: #f7fbff; stroke: #1a1a2e; stroke-width: 1.8; }
+  .diagram-example .node-soft { fill: #eef7f1; stroke: #1a6e3c; stroke-width: 1.8; }
+  .diagram-example .flow { stroke: #1a1a2e; stroke-width: 2; fill: none; }
+  .diagram-example .title { font-size: 15px; font-weight: 700; fill: #111; }
+  .diagram-example .txt { font-size: 12px; font-weight: 600; fill: #111; }
+  .diagram-example .subtxt { font-size: 11px; fill: #333; }
+  .diagram-example .note { font-size: 11px; fill: #0f5132; font-weight: 700; }
+
+  /* Levels-based mark schemes */
+  .levels-box { border: 1px solid #bcd0b8; background: #f4fbf5; margin-left: 28px; overflow: hidden; }
+  .indicative-section { padding: 10px 14px; border-bottom: 1px solid #c8ddc8; }
+  .indicative-heading { font-weight: bold; font-size: 10pt; color: #155724; margin-bottom: 6px; }
+  .indicative-list { margin-left: 16px; }
+  .indicative-list li { margin-bottom: 3px; font-size: 10pt; }
+  .levels-table { width: 100%; border-collapse: collapse; }
+  .levels-table th { background: #d6ead8; font-weight: bold; font-size: 10pt; padding: 5px 10px; border: 1px solid #aacaaa; text-align: left; }
+  .levels-table td { padding: 6px 10px; border: 1px solid #c8ddc8; font-size: 10pt; vertical-align: top; }
+  .levels-table .level-0 { background: #fef9f9; }
+  .levels-table .level-1 { background: #fff; }
+  .levels-table .level-2 { background: #fafff8; }
+  .levels-table .level-3 { background: #f2fbf3; }
+  .level-mark { font-weight: bold; white-space: nowrap; }
+
+  .page-footer { position: absolute; bottom: 12mm; left: 20mm; right: 20mm; display: flex; justify-content: space-between; font-size: 9pt; color: #555; border-top: 1px solid #ccc; padding-top: 4px; }
+  .print-bar { background: rgba(26, 26, 46, 0.9); color: #fff; padding: 12px 16px; position: sticky; top: 10px; z-index: 100; display: flex; gap: 12px; align-items: center; justify-content: space-between; width: min(960px, calc(100% - 24px)); margin: 0 auto 18px auto; border: 1px solid rgba(255,255,255,0.14); border-radius: 18px; box-shadow: 0 18px 40px rgba(15, 15, 30, 0.22); backdrop-filter: blur(14px); }
+  .print-bar span { display: inline-flex; align-items: center; padding: 8px 12px; border-radius: 999px; background: rgba(255,255,255,0.08); font-size: 9.5pt; font-weight: bold; letter-spacing: 0.02em; }
+  .viewer-counter { min-width: 68px; justify-content: center; }
+  .print-bar button { background: linear-gradient(135deg, #1a6e3c 0%, #12512c 100%); color: #fff; border: none; padding: 9px 16px; border-radius: 12px; font-weight: bold; font-size: 9.5pt; cursor: pointer; box-shadow: 0 10px 24px rgba(26, 110, 60, 0.24); }
+  .print-bar a { color: #fff; font-size: 9pt; text-decoration: none; padding: 8px 12px; border-radius: 10px; background: rgba(255,255,255,0.08); margin-left: 0; }
+</style>
+</head>
+<body>
+
+<div class="print-bar no-print">
+  <span style="font-size:10pt">RA10 — BTEC IT Unit 1 — Mark Scheme 1</span>
+  <button onclick="window.print()">&#x2399; Print / Save as PDF</button>
+  <a href="paper-1.html">&larr; View Question Paper</a>
+  <span class="viewer-counter" id="viewerPageCounter">1 / 1</span>
+</div>
+
+<!-- COVER -->
+<div class="page">
+  <div class="cover-top-bar">
+    <div class="cover-ra10-logo">RA10</div>
+    <div class="cover-ra10-tag"><strong>Mark Schemes</strong><br>BTEC Level 3 National Extended Certificate in IT</div>
+  </div>
+  <div style="margin-bottom:10px;"><div class="ms-badge">Mark Scheme — Predicted Paper 1</div></div>
+  <div class="cover-title">Unit 1: Information Technology Systems</div>
+  <div class="cover-sub">BTEC Level 3 National Extended Certificate in Information Technology</div>
+  <div class="cover-info-box">
+    <table>
+      <tr><td>Paper Reference</td><td>RA10/IT/U1/PP1</td></tr>
+      <tr><td>Total marks</td><td>90</td></tr>
+      <tr><td>Series</td><td>Practice Paper &mdash; Spring 2026</td></tr>
+    </table>
+  </div>
+
+  <p style="margin-bottom:10px; font-size:10.5pt;">This mark scheme has been prepared by RA10 for use with Predicted Paper 1. It follows the Pearson BTEC Level 3 mark scheme conventions for Unit 1 (AAQ 2025, Issue 5).</p>
+
+  <p style="margin-bottom:10px; font-size:10pt; color:#333;"><strong>Using this mark scheme:</strong><br>
+  For short-answer questions, award the marks specified. "Accept any other appropriate/alternative response" means equivalent correct answers should be credited.<br>
+  For levels-based questions, use the Level Descriptors holistically alongside the indicative content. Indicative content is not a checklist.</p>
+
+  <p style="font-size:10pt; color:#555; font-style:italic;">For revision purposes only. Not an official Pearson qualification document.</p>
+
+  <div class="page-footer">
+    <span>RA10 — Mark Scheme 1 &bull; <em>For revision purposes only.</em></span>
+    <span>Page 1</span>
+  </div>
+</div>
+
+<!-- MARK SCHEME CONTENT -->
+<div class="page">
+  <h2 style="font-size:13pt; margin-bottom:16px; border-bottom:2px solid #000; padding-bottom:6px;">Question 1 — Hartley Academy &nbsp; <span style="font-size:10pt; font-weight:normal">(22 marks total)</span></h2>
+
+  <!-- 1a -->
+  <div class="part">
+    <div class="part-header">
+      <span class="part-label">(a)</span>
+      <span class="part-q">State one purpose of the file server on Hartley Academy's network.</span>
+      <span class="part-marks-badge">1 mark</span>
+    </div>
+    <div class="ms-box">
+      <div class="ms-instruction">Award one mark for any one of the following.</div>
+      <ul class="ms-points">
+        <li>Centralised storage of files / documents (1)</li>
+        <li>Allows users to access their files from any computer on the network (1)</li>
+        <li>Controls access to shared files through user permissions (1)</li>
+      </ul>
+      <div class="ms-accept">Accept any other appropriate/alternative response</div>
+    </div>
+  </div>
+
+  <!-- 1b -->
+  <div class="part">
+    <div class="part-header">
+      <span class="part-label">(b)</span>
+      <span class="part-q">Give two types of malware that could threaten Hartley Academy's network.</span>
+      <span class="part-marks-badge">2 marks</span>
+    </div>
+    <div class="ms-box">
+      <div class="ms-instruction">Award one mark for each correct type, up to a maximum of two marks.</div>
+      <ul class="ms-points">
+        <li>Virus (1)</li>
+        <li>Ransomware (1)</li>
+        <li>Trojan / Trojan horse (1)</li>
+        <li>Spyware / keylogger (1)</li>
+        <li>Worm (1)</li>
+        <li>Adware (1)</li>
+      </ul>
+      <div class="ms-accept">Accept any other appropriate/alternative response</div>
+    </div>
+  </div>
+
+  <!-- 1c -->
+  <div class="part">
+    <div class="part-header">
+      <span class="part-label">(c)</span>
+      <span class="part-q">Describe how a braille display allows a student with visual impairment to access digital course materials.</span>
+      <span class="part-marks-badge">3 marks</span>
+    </div>
+    <div class="ms-box">
+      <div class="ms-instruction">Award one mark per correct linked point, up to a maximum of three marks.</div>
+      <ul class="ms-points">
+        <li>A braille display connects to the student's computer / device (1)</li>
+        <li>A screen reader sends text from the VLE / screen to the braille display (1)</li>
+        <li>Tiny rounded pins on the surface rise and fall to form braille characters (1)</li>
+        <li>The student reads the characters by touch / feel (1)</li>
+        <li>The display refreshes as the student moves through pages of content (1)</li>
+        <li>This allows a blind / visually impaired user to read digital text without audio output (1)</li>
+      </ul>
+      <div class="ms-accept">Accept any other appropriate/alternative response</div>
+    </div>
+  </div>
+
+  <!-- 1d -->
+  <div class="part">
+    <div class="part-header">
+      <span class="part-label">(d)</span>
+      <span class="part-q">Explain two methods Hartley Academy could use to verify the identity of students logging into the VLE from home.</span>
+      <span class="part-marks-badge">4 marks</span>
+    </div>
+    <div class="ms-box">
+      <div class="ms-instruction">Award one mark for identification and one mark for an appropriate linked justification/expansion, up to a maximum of four marks.</div>
+      <ul class="ms-points">
+        <li>Password (1) — a unique password known only to the student prevents any other person from accessing the account (1)</li>
+        <li>Multi-factor authentication / MFA (1) — a second verification step such as a code sent to the student's registered mobile device is required, meaning access is blocked even if the password is stolen (1)</li>
+        <li>Biometric login / fingerprint scan (1) — uses the student's unique biological characteristic so only the registered student can log in (1)</li>
+        <li>Security question (1) — the student must answer a question only they know, providing an additional layer of verification (1)</li>
+      </ul>
+      <div class="ms-accept">Accept any other appropriate/alternative response</div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span>RA10 — Mark Scheme 1</span><span>Page 2</span>
+  </div>
+</div>
+
+<div class="page">
+  <!-- 1e - Levels-based 6 marks -->
+  <div class="part">
+    <div class="part-header">
+      <span class="part-label">(e)</span>
+      <span class="part-q">Discuss the implications for Hartley Academy of moving student files to cloud storage.</span>
+      <span class="part-marks-badge">6 marks — Levels</span>
+    </div>
+    <div class="levels-box">
+      <div class="indicative-section">
+        <div class="indicative-heading">Indicative Content (not prescriptive — reward any well-developed point)</div>
+        <ul class="indicative-list">
+          <li>Cost savings — no need to maintain, upgrade or replace local file servers; predictable subscription model</li>
+          <li>Accessibility — students can access files from any device at home, benefiting remote learners and VLE use</li>
+          <li>Automatic backups and disaster recovery — no risk of losing all student work if local hardware fails</li>
+          <li>Scalability — storage can grow as the school expands without capital investment</li>
+          <li>Data security concerns — sensitive student records held by a third-party provider; requires strong data protection agreements</li>
+          <li>GDPR implications — student data (including minors) stored off-premise; school must ensure provider is GDPR compliant</li>
+          <li>Internet dependency — if school internet connection fails, staff and students lose access to files entirely</li>
+          <li>Vendor lock-in — switching cloud provider in future could be complex and costly</li>
+          <li>Staff training required — new workflows for saving, sharing, and managing files in the cloud</li>
+          <li>Parental consent may be required for storing pupil data off-premise</li>
+        </ul>
+      </div>
+      <table class="levels-table">
+        <tr><th>Level</th><th>Mark</th><th>Descriptor</th></tr>
+        <tr class="level-0"><td>0</td><td class="level-mark">0</td><td>No rewardable material.</td></tr>
+        <tr class="level-1"><td>1</td><td class="level-mark">1–2</td><td>Demonstrates basic application of knowledge about cloud storage that is partially relevant to the school's context. Considers only one or two implications with limited development. (AO2)</td></tr>
+        <tr class="level-2"><td>2</td><td class="level-mark">3–4</td><td>Demonstrates good application of knowledge about cloud storage to the school's context. Considers both benefits and drawbacks with some development of implications specific to Hartley Academy. (AO2/AO3a)</td></tr>
+        <tr class="level-3"><td>3</td><td class="level-mark">5–6</td><td>Demonstrates comprehensive application. Discusses multiple well-developed implications clearly related to a school context, covering benefits, risks (including data security and GDPR), and practical considerations such as internet dependency and training. (AO2/AO3a)</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- 1f - Levels-based 6 marks -->
+  <div class="part" style="margin-top:20px;">
+    <div class="part-header">
+      <span class="part-label">(f)</span>
+      <span class="part-q">Discuss the implications of phishing attacks on Hartley Academy.</span>
+      <span class="part-marks-badge">6 marks — Levels</span>
+    </div>
+    <div class="levels-box">
+      <div class="indicative-section">
+        <div class="indicative-heading">Indicative Content</div>
+        <ul class="indicative-list">
+          <li>A successful phishing attack could result in a staff member's account credentials being stolen</li>
+          <li>Stolen credentials could allow an attacker to access the school's network, student records and HR data</li>
+          <li>Student personal data could be compromised, triggering a legal obligation to report the breach to the ICO</li>
+          <li>Financial fraud — staff may be tricked into making unauthorised payments or purchasing gift cards</li>
+          <li>Ransomware may be delivered via a phishing link, encrypting school files and disrupting lessons</li>
+          <li>Reputational damage — parents and students may lose trust in the school's data management</li>
+          <li>Staff training on recognising phishing emails is essential and relatively low cost</li>
+          <li>Email filtering software can reduce the number of phishing emails reaching staff inboxes</li>
+          <li>MFA on all accounts limits damage even if credentials are stolen</li>
+          <li>An acceptable use policy setting out staff responsibilities around email security</li>
+        </ul>
+      </div>
+      <table class="levels-table">
+        <tr><th>Level</th><th>Mark</th><th>Descriptor</th></tr>
+        <tr class="level-0"><td>0</td><td class="level-mark">0</td><td>No rewardable material.</td></tr>
+        <tr class="level-1"><td>1</td><td class="level-mark">1–2</td><td>Basic application. May simply state that phishing could lead to data loss. Limited application to school context. (AO2)</td></tr>
+        <tr class="level-2"><td>2</td><td class="level-mark">3–4</td><td>Good application. Discusses at least two distinct implications (e.g. data breach and reputation) and/or considers both the risks and at least one protective measure. Context-specific. (AO2/AO3a)</td></tr>
+        <tr class="level-3"><td>3</td><td class="level-mark">5–6</td><td>Comprehensive application. Covers multiple implications including data breach, GDPR reporting, ransomware risk, financial fraud, reputation, and several protective measures specific to a school environment. Balanced discussion. (AO2/AO3a)</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div style="border-top:2px solid #000; margin-top:12px; padding-top:6px; text-align:right; font-weight:bold; font-size:10pt;">Question 1 Total: 22 marks</div>
+  <div class="page-footer">
+    <span>RA10 — Mark Scheme 1</span><span>Page 3</span>
+  </div>
+</div>
+
+<!-- QUESTION 2 MARK SCHEME -->
+<div class="page">
+  <h2 style="font-size:13pt; margin-bottom:16px; border-bottom:2px solid #000; padding-bottom:6px;">Question 2 — Premier Payroll Ltd &nbsp; <span style="font-size:10pt; font-weight:normal">(22 marks total)</span></h2>
+
+  <div class="part">
+    <div class="part-header">
+      <span class="part-label">(a)</span>
+      <span class="part-q">Identify the cloud computing service model the managing director is proposing.</span>
+      <span class="part-marks-badge">1 mark</span>
+    </div>
+    <div class="ms-box">
+      <div class="ms-instruction">Award one mark for a correct response.</div>
+      <ul class="ms-points"><li>Software as a Service / SaaS (1)</li></ul>
+      <div class="ms-dna"><strong>Do not accept:</strong> IaaS / PaaS</div>
+    </div>
+  </div>
+
+  <div class="part">
+    <div class="part-header">
+      <span class="part-label">(b)</span>
+      <span class="part-q">Explain one reason why Premier Payroll Ltd must use HTTPS when staff access the cloud-based system remotely.</span>
+      <span class="part-marks-badge">2 marks</span>
+    </div>
+    <div class="ms-box">
+      <div class="ms-instruction">Award one mark for identification and one mark for an appropriate linked justification/expansion.</div>
+      <ul class="ms-points">
+        <li>HTTPS encrypts the data sent between the browser and the server (1) so that payroll and salary data cannot be read by a third party if the connection is intercepted (1)</li>
+        <li>HTTPS authenticates the server (1) ensuring staff are connecting to the genuine payroll system and not a fraudulent site (1)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="part">
+    <div class="part-header">
+      <span class="part-label">(c)</span>
+      <span class="part-q">Describe three validation methods that could be used in the payroll software's data entry system.</span>
+      <span class="part-marks-badge">3 marks</span>
+    </div>
+    <div class="ms-box">
+      <div class="ms-instruction">Award one mark for each correct validation method (method name alone is sufficient), up to a maximum of three marks. Accept a brief description of what the method does.</div>
+      <ul class="ms-points">
+        <li>Range check (1) — ensures numeric values such as salary fall within an acceptable range (1)</li>
+        <li>Format check (1) — ensures data matches expected format, e.g. National Insurance number format (1)</li>
+        <li>Presence check (1) — ensures required fields are not left empty (1)</li>
+        <li>Length check (1) — ensures data does not exceed a specified number of characters (1)</li>
+        <li>Type check (1) — ensures only the correct data type is entered, e.g. numbers in a numeric field (1)</li>
+      </ul>
+      <div class="ms-accept">Accept any other appropriate/alternative response</div>
+    </div>
+  </div>
+
+  <div class="part">
+    <div class="part-header">
+      <span class="part-label">(d)</span>
+      <span class="part-q">Explain two benefits to Premier Payroll Ltd of moving to a SaaS payroll solution.</span>
+      <span class="part-marks-badge">4 marks</span>
+    </div>
+    <div class="ms-box">
+      <div class="ms-instruction">Award one mark for identification and one mark for linked justification, up to a maximum of four marks.</div>
+      <ul class="ms-points">
+        <li>No upfront software purchase / no capital expenditure (1) — Premier Payroll pays a predictable monthly subscription, improving cash flow management (1)</li>
+        <li>Staff can access the system from any location with internet access (1) — enabling remote and flexible working, reducing office dependency (1)</li>
+        <li>Automatic software updates (1) — the payroll software is always up to date with the latest HMRC tax codes without manual IT intervention (1)</li>
+        <li>No server maintenance required (1) — the cloud provider manages hardware, freeing up Premier Payroll's IT staff time (1)</li>
+      </ul>
+      <div class="ms-accept">Accept any other appropriate/alternative response</div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span>RA10 — Mark Scheme 1</span><span>Page 4</span>
+  </div>
+</div>
+
+<div class="page">
+  <!-- 2e Levels -->
+  <div class="part">
+    <div class="part-header">
+      <span class="part-label">(e)</span>
+      <span class="part-q">Discuss the implications for Premier Payroll Ltd of moving its payroll software to a SaaS solution.</span>
+      <span class="part-marks-badge">6 marks — Levels</span>
+    </div>
+    <div class="levels-box">
+      <div class="indicative-section">
+        <div class="indicative-heading">Indicative Content</div>
+        <ul class="indicative-list">
+          <li>Cost savings — no upfront software purchase; predictable monthly subscription; no server hardware investment</li>
+          <li>Accessibility — staff can access payroll from any location with internet access</li>
+          <li>Automatic updates — software stays compliant with latest HMRC tax codes without manual IT work</li>
+          <li>Data security risks — sensitive employee and client payroll data is held by a third-party provider</li>
+          <li>Internet dependency — if connectivity fails, payroll cannot be processed, risking missed payment deadlines</li>
+          <li>GDPR compliance — must ensure SaaS provider meets UK GDPR; data processing agreement required</li>
+          <li>Training required — staff need training on the new system</li>
+          <li>Vendor lock-in — switching providers in future could be costly if data is in proprietary format</li>
+          <li>Integration — existing accounting and HR systems may require integration with the SaaS platform</li>
+        </ul>
+      </div>
+      <table class="levels-table">
+        <tr><th>Level</th><th>Mark</th><th>Descriptor</th></tr>
+        <tr class="level-0"><td>0</td><td class="level-mark">0</td><td>No rewardable material.</td></tr>
+        <tr class="level-1"><td>1</td><td class="level-mark">1–2</td><td>Basic application partially relevant to Premier Payroll's context. Considers only one or two implications with limited development. (AO2)</td></tr>
+        <tr class="level-2"><td>2</td><td class="level-mark">3–4</td><td>Good application covering both benefits and drawbacks for Premier Payroll Ltd. At least two implications clearly linked to the payroll services context. (AO2/AO3a)</td></tr>
+        <tr class="level-3"><td>3</td><td class="level-mark">5–6</td><td>Comprehensive application. Multiple well-developed implications including cost, accessibility, data security, GDPR and operational risks, clearly contextualised to a payroll services business. Balanced discussion. (AO2/AO3a)</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- 2f Diagram -->
+  <div class="part" style="margin-top:18px;">
+    <div class="part-header">
+      <span class="part-label">(f)</span>
+      <span class="part-q">Draw a flowchart to show the process for secure staff access to the payroll system.</span>
+      <span class="part-marks-badge">6 marks</span>
+    </div>
+    <div class="ms-box">
+      <div class="ms-instruction">Award one mark for each appropriate stage shown, up to a maximum of six marks.</div>
+      <div class="diagram-example">
+        <svg viewBox="0 0 860 560" aria-label="Model flowchart for secure payroll login process">
+          <defs>
+            <marker id="arrowA" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#1a1a2e"></path>
+            </marker>
+          </defs>
+
+          <text x="430" y="28" text-anchor="middle" class="title">Secure Payroll Access (Example Flowchart)</text>
+
+          <rect class="node" x="310" y="52" width="240" height="42" rx="20" ry="20"></rect>
+          <text x="430" y="78" text-anchor="middle" class="txt">Start</text>
+
+          <rect class="node-soft" x="280" y="116" width="300" height="52" rx="8" ry="8"></rect>
+          <text x="430" y="147" text-anchor="middle" class="txt">Open payroll login page</text>
+
+          <polygon class="node-soft" points="300,190 580,190 560,242 280,242"></polygon>
+          <text x="430" y="221" text-anchor="middle" class="txt">Enter username and password</text>
+
+          <polygon class="node-soft" points="300,264 580,264 560,316 280,316"></polygon>
+          <text x="430" y="295" text-anchor="middle" class="txt">Enter MFA code</text>
+
+          <polygon class="node" points="430,338 520,382 430,426 340,382"></polygon>
+          <text x="430" y="386" text-anchor="middle" class="txt">MFA valid?</text>
+
+          <rect class="node-soft" x="280" y="448" width="300" height="52" rx="8" ry="8"></rect>
+          <text x="430" y="479" text-anchor="middle" class="txt">Access payroll dashboard</text>
+
+          <rect class="node-soft" x="40" y="356" width="220" height="52" rx="8" ry="8"></rect>
+          <text x="150" y="387" text-anchor="middle" class="txt">Show error / retry login</text>
+
+          <rect class="node" x="310" y="514" width="240" height="34" rx="16" ry="16"></rect>
+          <text x="430" y="536" text-anchor="middle" class="txt">End (logout / timeout)</text>
+
+          <line class="flow" x1="430" y1="94" x2="430" y2="116" marker-end="url(#arrowA)"></line>
+          <line class="flow" x1="430" y1="168" x2="430" y2="190" marker-end="url(#arrowA)"></line>
+          <line class="flow" x1="430" y1="242" x2="430" y2="264" marker-end="url(#arrowA)"></line>
+          <line class="flow" x1="430" y1="316" x2="430" y2="338" marker-end="url(#arrowA)"></line>
+          <line class="flow" x1="430" y1="426" x2="430" y2="448" marker-end="url(#arrowA)"></line>
+          <line class="flow" x1="430" y1="500" x2="430" y2="514" marker-end="url(#arrowA)"></line>
+
+          <line class="flow" x1="340" y1="382" x2="260" y2="382" marker-end="url(#arrowA)"></line>
+          <line class="flow" x1="150" y1="356" x2="150" y2="286"></line>
+          <line class="flow" x1="150" y1="286" x2="280" y2="286" marker-end="url(#arrowA)"></line>
+
+          <text x="448" y="440" class="note">Yes</text>
+          <text x="284" y="372" class="note">No</text>
+        </svg>
+      </div>
+      <div class="ms-instruction" style="margin-top: 8px;"><strong>Marking Guidance:</strong></div>
+      <ul class="ms-points" style="margin-top: 4px;">
+        <li>Login page/start stage shown — 1 mark</li>
+        <li>Username/password stage shown — 1 mark</li>
+        <li>MFA/security check shown — 1 mark</li>
+        <li>Access to payroll dashboard shown — 1 mark</li>
+        <li>Logout or session timeout stage shown — 1 mark</li>
+        <li>Logical flow with arrows and annotations — 1 mark</li>
+      </ul>
+      <div class="ms-accept" style="margin-top: 6px;">Accept any other appropriate flowchart that shows the secure access process with clear sequence and annotations.</div>
+    </div>
+  </div>
+
+  <div style="border-top:2px solid #000; margin-top:12px; padding-top:6px; text-align:right; font-weight:bold; font-size:10pt;">Question 2 Total: 22 marks</div>
+  <div class="page-footer">
+    <span>RA10 — Mark Scheme 1</span><span>Page 5</span>
+  </div>
+</div>
+
+<!-- QUESTION 3 MARK SCHEME -->
+<div class="page">
+  <h2 style="font-size:13pt; margin-bottom:16px; border-bottom:2px solid #000; padding-bottom:6px;">Question 3 — Crestford College &nbsp; <span style="font-size:10pt; font-weight:normal">(22 marks total)</span></h2>
+
+  <div class="part">
+    <div class="part-header"><span class="part-label">(a)</span><span class="part-q">State the device that forms the central connection point in a star topology.</span><span class="part-marks-badge">1 mark</span></div>
+    <div class="ms-box">
+      <div class="ms-instruction">Award one mark for a correct response.</div>
+      <ul class="ms-points"><li>Switch (1)</li><li>Hub (1)</li></ul>
+      <div class="ms-accept">Accept switch or hub</div>
+    </div>
+  </div>
+
+  <div class="part">
+    <div class="part-header"><span class="part-label">(b)</span><span class="part-q">Give two advantages of a star topology over a ring topology.</span><span class="part-marks-badge">2 marks</span></div>
+    <div class="ms-box">
+      <div class="ms-instruction">Award one mark for each correct advantage, up to a maximum of two marks.</div>
+      <ul class="ms-points">
+        <li>If one cable fails, only that device is affected — the rest of the network continues to function (1)</li>
+        <li>New devices can be added without disrupting other connections / easier to scale (1)</li>
+        <li>Fault finding is easier — the switch can identify the faulty port (1)</li>
+        <li>Better performance — each device has a dedicated connection to the switch (1)</li>
+      </ul>
+      <div class="ms-accept">Accept any other appropriate/alternative response</div>
+    </div>
+  </div>
+
+  <div class="part">
+    <div class="part-header"><span class="part-label">(c)</span><span class="part-q">Describe three measures the college could implement to protect staff against social engineering attacks.</span><span class="part-marks-badge">3 marks</span></div>
+    <div class="ms-box">
+      <div class="ms-instruction">Award one mark per correct measure described, up to a maximum of three marks.</div>
+      <ul class="ms-points">
+        <li>Staff training / awareness training on recognising phishing emails (1)</li>
+        <li>Email filtering software to block suspicious messages before they reach staff inboxes (1)</li>
+        <li>Multi-factor authentication / MFA so access is blocked even if credentials are stolen (1)</li>
+        <li>Acceptable use policy requiring staff to report suspicious emails to IT (1)</li>
+        <li>Regular simulated phishing exercises to test staff awareness (1)</li>
+        <li>Strong password policy and regular password changes (1)</li>
+      </ul>
+      <div class="ms-accept">Accept any other appropriate/alternative response</div>
+    </div>
+  </div>
+
+  <div class="part">
+    <div class="part-header"><span class="part-label">(d)</span><span class="part-q">Explain two factors the college should consider when choosing between Wi-Fi and Ethernet.</span><span class="part-marks-badge">4 marks</span></div>
+    <div class="ms-box">
+      <div class="ms-instruction">Award one mark for identification and one mark for linked justification, up to a maximum of four marks.</div>
+      <ul class="ms-points">
+        <li>Security (1) — Ethernet signals are confined to physical cables so cannot be intercepted wirelessly, making it more secure for handling sensitive HR and financial records (1)</li>
+        <li>Speed / performance (1) — Ethernet provides faster, more reliable data transfer than Wi-Fi, which can be affected by interference and shared bandwidth (1)</li>
+        <li>Cost of installation (1) — Ethernet cabling across the administration block requires significant installation cost, whereas Wi-Fi can be deployed with fewer cables (1)</li>
+        <li>Mobility (1) — Wi-Fi allows staff to move around the office with laptops and tablets, whereas Ethernet requires staff to remain at fixed desk locations (1)</li>
+      </ul>
+      <div class="ms-accept">Accept any other appropriate/alternative response</div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span>RA10 — Mark Scheme 1</span><span>Page 6</span>
+  </div>
+</div>
+
+<div class="page">
+  <!-- 3e Levels -->
+  <div class="part">
+    <div class="part-header"><span class="part-label">(e)</span><span class="part-q">Discuss the implications of choosing a star topology rather than a ring topology for Crestford College's administration block.</span><span class="part-marks-badge">6 marks — Levels</span></div>
+    <div class="levels-box">
+      <div class="indicative-section">
+        <div class="indicative-heading">Indicative Content</div>
+        <ul class="indicative-list">
+          <li>Star: if one cable fails, only that computer is affected — rest of admin network continues working, essential for HR and finance systems</li>
+          <li>Star: fault finding is straightforward — the switch can identify the faulty port, reducing IT staff time</li>
+          <li>Star: adding new devices is easy without disrupting existing connections — scalable as the admin block grows</li>
+          <li>Star: requires a central switch — adds cost; if the switch fails, the entire admin network goes down</li>
+          <li>Ring: data travels predictably in one direction — but if any node or cable fails, the entire network may fail</li>
+          <li>Ring: generally lower initial cost as no central switch required</li>
+          <li>Star provides better performance under heavy concurrent use — 20 admin computers all in use simultaneously is better served by star</li>
+          <li>For sensitive admin data (HR, finance), reliability of star outweighs its higher cost</li>
+        </ul>
+      </div>
+      <table class="levels-table">
+        <tr><th>Level</th><th>Mark</th><th>Descriptor</th></tr>
+        <tr class="level-0"><td>0</td><td class="level-mark">0</td><td>No rewardable material.</td></tr>
+        <tr class="level-1"><td>1</td><td class="level-mark">1–2</td><td>Basic knowledge of star or ring topology. Limited application to the college context. (AO2)</td></tr>
+        <tr class="level-2"><td>2</td><td class="level-mark">3–4</td><td>Good application of topology knowledge to the administration block. Discusses both topologies with at least two implications relevant to the college. (AO2/AO3a)</td></tr>
+        <tr class="level-3"><td>3</td><td class="level-mark">5–6</td><td>Comprehensive application. Discusses fault tolerance, scalability, performance, cost, and the specific needs of an admin block running sensitive college data, with a balanced comparison. (AO2/AO3a)</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- 3f Levels -->
+  <div class="part" style="margin-top:18px;">
+    <div class="part-header"><span class="part-label">(f)</span><span class="part-q">Discuss the considerations Crestford College should address when managing its online student community platform.</span><span class="part-marks-badge">6 marks — Levels</span></div>
+    <div class="levels-box">
+      <div class="indicative-section">
+        <div class="indicative-heading">Indicative Content</div>
+        <ul class="indicative-list">
+          <li>Privacy — student data and coursework materials shared on the platform must be protected; GDPR considerations for student posts</li>
+          <li>Security — accounts must be protected against unauthorised access with strong authentication</li>
+          <li>Acceptable use policy — rules to prevent inappropriate, offensive or abusive content between students and tutors</li>
+          <li>Downtime — if the platform is unavailable, students cannot access lectures, impacting learning</li>
+          <li>Accessibility — platform must be usable on mobile devices and accessible for students with disabilities</li>
+          <li>Ease of use — students and tutors of varying IT ability need an intuitive interface</li>
+          <li>Integration — the platform must connect with the college's existing VLE and student record system</li>
+          <li>Training — staff and tutors need training to use and moderate the platform effectively</li>
+          <li>Cost — subscription or development costs must be weighed against educational benefit</li>
+        </ul>
+      </div>
+      <table class="levels-table">
+        <tr><th>Level</th><th>Mark</th><th>Descriptor</th></tr>
+        <tr class="level-0"><td>0</td><td class="level-mark">0</td><td>No rewardable material.</td></tr>
+        <tr class="level-1"><td>1</td><td class="level-mark">1–2</td><td>Basic knowledge. Considers one or two considerations with limited application to a college context. (AO2)</td></tr>
+        <tr class="level-2"><td>2</td><td class="level-mark">3–4</td><td>Good application covering several relevant considerations linked to Crestford College's situation. (AO2/AO3a)</td></tr>
+        <tr class="level-3"><td>3</td><td class="level-mark">5–6</td><td>Comprehensive application across multiple considerations (privacy/GDPR, security, AUP, accessibility, downtime, cost) clearly contextualised for a sixth-form college community platform. (AO2/AO3a)</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div style="border-top:2px solid #000; margin-top:12px; padding-top:6px; text-align:right; font-weight:bold; font-size:10pt;">Question 3 Total: 22 marks</div>
+  <div class="page-footer">
+    <span>RA10 — Mark Scheme 1</span><span>Page 7</span>
+  </div>
+</div>
+
+<!-- QUESTION 4 MARK SCHEME -->
+<div class="page">
+  <h2 style="font-size:13pt; margin-bottom:16px; border-bottom:2px solid #000; padding-bottom:6px;">Question 4 — Hargreaves Catering &nbsp; <span style="font-size:10pt; font-weight:normal">(24 marks total)</span></h2>
+
+  <div class="part">
+    <div class="part-header"><span class="part-label">(a)</span><span class="part-q">Give one example of an embedded system that could be used in a commercial kitchen.</span><span class="part-marks-badge">1 mark</span></div>
+    <div class="ms-box">
+      <div class="ms-instruction">Award one mark for any appropriate example.</div>
+      <ul class="ms-points">
+        <li>Temperature sensor (in an oven / refrigeration unit) (1)</li>
+        <li>Programmable Logic Controller (PLC) controlling a conveyor belt / mixing machine (1)</li>
+        <li>Automated portion control system (1)</li>
+        <li>IoT sensor monitoring food storage temperature (1)</li>
+      </ul>
+      <div class="ms-accept">Accept any appropriate embedded system used in kitchen/catering context</div>
+    </div>
+  </div>
+
+  <div class="part">
+    <div class="part-header"><span class="part-label">(b)</span><span class="part-q">Give two implications for Hargreaves Catering of using AI tools to automate meal planning.</span><span class="part-marks-badge">2 marks</span></div>
+    <div class="ms-box">
+      <div class="ms-instruction">Award one mark for each correct implication, up to a maximum of two marks.</div>
+      <ul class="ms-points">
+        <li>Meals can be planned more efficiently, saving time for staff (1)</li>
+        <li>AI can process dietary requirements and nutritional targets across all 12 canteens simultaneously (1)</li>
+        <li>If the AI system fails or produces incorrect outputs, meal planning could be disrupted (1)</li>
+        <li>Staff who previously planned meals may need retraining or may have reduced responsibilities (1)</li>
+        <li>Cost savings from reduced manual planning time (1)</li>
+        <li>AI recommendations depend on accurate input data — errors in data produce poor recommendations (1)</li>
+      </ul>
+      <div class="ms-accept">Accept any other appropriate/alternative response</div>
+    </div>
+  </div>
+
+  <div class="part">
+    <div class="part-header"><span class="part-label">(c)</span><span class="part-q">Describe three differences between open-source and proprietary software.</span><span class="part-marks-badge">3 marks</span></div>
+    <div class="ms-box">
+      <div class="ms-instruction">Award one mark per correct difference, up to a maximum of three marks.</div>
+      <ul class="ms-points">
+        <li>Open-source is free to use / no licence fee; proprietary software typically requires a licence fee (1)</li>
+        <li>Open-source source code is publicly available and can be modified; proprietary source code is closed (1)</li>
+        <li>Proprietary software usually includes dedicated vendor support; open-source relies on community forums (1)</li>
+        <li>Proprietary updates are professionally managed; open-source updates depend on community contributors (1)</li>
+        <li>Open-source has no vendor lock-in; proprietary may create dependency on a single supplier (1)</li>
+      </ul>
+      <div class="ms-accept">Accept any other appropriate/alternative response</div>
+    </div>
+  </div>
+
+  <div class="part">
+    <div class="part-header"><span class="part-label">(d)</span><span class="part-q">Explain two benefits to Hargreaves Catering of using cloud-based systems to manage operations across its 12 canteen sites.</span><span class="part-marks-badge">4 marks</span></div>
+    <div class="ms-box">
+      <div class="ms-instruction">Award one mark for identification and one mark for linked justification, up to a maximum of four marks.</div>
+      <ul class="ms-points">
+        <li>Centralised data access (1) — meal planning, delivery schedules and stock levels can be viewed and updated in real time from all 12 canteen sites simultaneously (1)</li>
+        <li>Automatic system updates (1) — all 12 canteens run the latest version of the management software without manual installation visits to each site (1)</li>
+        <li>Scalability (1) — the company can add further canteen sites without significant additional IT infrastructure investment (1)</li>
+        <li>Remote access (1) — management can monitor and update operations from the central kitchen without travelling to individual canteens (1)</li>
+      </ul>
+      <div class="ms-accept">Accept any other appropriate/alternative response</div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span>RA10 — Mark Scheme 1</span><span>Page 8</span>
+  </div>
+</div>
+
+<div class="page">
+  <!-- 4e Levels 6 -->
+  <div class="part">
+    <div class="part-header"><span class="part-label">(e)</span><span class="part-q">Discuss the implications for Hargreaves Catering of choosing open-source catering software compared with the current proprietary package, with particular reference to security.</span><span class="part-marks-badge">6 marks — Levels</span></div>
+    <div class="levels-box">
+      <div class="indicative-section">
+        <div class="indicative-heading">Indicative Content</div>
+        <ul class="indicative-list">
+          <li>Open-source: source code publicly available — security researchers can identify vulnerabilities quickly</li>
+          <li>Open-source: same visibility means malicious actors can study code to find exploits</li>
+          <li>Open-source: updates/patches may depend on community contributors — could be slower than proprietary vendor</li>
+          <li>Proprietary: dedicated vendor security team issues patches regularly as part of the £6,000 annual fee</li>
+          <li>Proprietary: vendor accountability — if a known vulnerability leads to a breach, the company has recourse</li>
+          <li>Proprietary: professional support including security guidance included in licence</li>
+          <li>Open-source: no vendor lock-in; but may lack enterprise-grade security features like audit trails</li>
+          <li>For a food service company serving children, reliability and accountability may outweigh cost savings</li>
+          <li>Both options require additional security layers such as firewalls, staff training, and access controls</li>
+        </ul>
+      </div>
+      <table class="levels-table">
+        <tr><th>Level</th><th>Mark</th><th>Descriptor</th></tr>
+        <tr class="level-0"><td>0</td><td class="level-mark">0</td><td>No rewardable material.</td></tr>
+        <tr class="level-1"><td>1</td><td class="level-mark">1–2</td><td>Basic application of knowledge about open-source or proprietary software. Limited reference to security. (AO2)</td></tr>
+        <tr class="level-2"><td>2</td><td class="level-mark">3–4</td><td>Good application covering both software types in the Hargreaves context, discussing security implications from at least two angles. (AO2/AO3a)</td></tr>
+        <tr class="level-3"><td>3</td><td class="level-mark">5–6</td><td>Comprehensive application. Thorough discussion of security for both software types applied to the catering context, covering vendor accountability, patch management, community vs professional support, and the specific obligations of a company serving schools. (AO2/AO3a)</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- 4f Evaluate 8 marks -->
+  <div class="part" style="margin-top:18px;">
+    <div class="part-header"><span class="part-label">(f)</span><span class="part-q">Evaluate whether Hargreaves Catering should switch from its proprietary catering management software to a free open-source alternative. (Benefits; Drawbacks)</span><span class="part-marks-badge">8 marks — Levels</span></div>
+    <div class="levels-box">
+      <div class="indicative-section">
+        <div class="indicative-heading">Indicative Content</div>
+        <ul class="indicative-list">
+          <li>BENEFITS: No annual licence fee — saves £6,000/year which could fund other improvements</li>
+          <li>BENEFITS: Source code can be modified to match Hargreaves' specific catering requirements</li>
+          <li>BENEFITS: No vendor dependency — not at risk if the proprietary vendor closes or changes pricing</li>
+          <li>BENEFITS: Large developer community may provide rapid bug fixes</li>
+          <li>DRAWBACKS: No dedicated vendor support — reliance on community help which may be slower</li>
+          <li>DRAWBACKS: May lack features specific to school catering management in the proprietary package</li>
+          <li>DRAWBACKS: Staff retraining required — cost and productivity loss during transition</li>
+          <li>DRAWBACKS: Compatibility with local authority systems used by the 12 schools may be reduced</li>
+          <li>DRAWBACKS: Ongoing IT staff time needed to configure, maintain and update the open-source solution</li>
+          <li>EVALUATION: For a company managing food for children, reliability, compliance and vendor support are critical — a £6,000 saving may not outweigh the risks of poor support and potential downtime in a food service setting</li>
+        </ul>
+      </div>
+      <table class="levels-table">
+        <tr><th>Level</th><th>Mark</th><th>Descriptor</th></tr>
+        <tr class="level-0"><td>0</td><td class="level-mark">0</td><td>No rewardable material.</td></tr>
+        <tr class="level-1"><td>1</td><td class="level-mark">1–3</td><td>Basic application of knowledge about open-source vs proprietary software with limited reference to Hargreaves Catering. Only one side (benefits or drawbacks) considered. No evaluative conclusion. (AO2)</td></tr>
+        <tr class="level-2"><td>2</td><td class="level-mark">4–6</td><td>Good application covering both benefits and drawbacks, applied to Hargreaves Catering's context. Some attempt at evaluation or recommendation, though not fully developed. (AO2/AO3a/AO3b)</td></tr>
+        <tr class="level-3"><td>3</td><td class="level-mark">7–8</td><td>Comprehensive application thoroughly contextualised to Hargreaves Catering as a school meals provider. Analyses multiple benefits and drawbacks in detail and draws a justified conclusion weighing the financial saving against the risks of support gaps, retraining costs, compliance and reliability. (AO2/AO3a/AO3b)</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div style="border-top:2px solid #000; margin-top:12px; padding-top:6px; text-align:right; font-weight:bold; font-size:10pt;">Question 4 Total: 24 marks &nbsp;&nbsp;&nbsp; Paper Total: 90 marks</div>
+  <div class="page-footer">
+    <span>RA10 — Mark Scheme 1</span><span>Page 9</span>
+  </div>
+</div>
+
+<script>
+  (function () {
+    var pages = document.querySelectorAll('.page');
+    var counter = document.getElementById('viewerPageCounter');
+    var total = pages.length;
+    if (!counter || !total) return;
+
+    function getCurrentPage() {
+      var viewportTarget = window.innerHeight * 0.45;
+      var bestIndex = 0;
+      var bestDistance = Infinity;
+
+      pages.forEach(function (page, index) {
+        var rect = page.getBoundingClientRect();
+        var pageMid = rect.top + (rect.height / 2);
+        var distance = Math.abs(pageMid - viewportTarget);
+        if (distance < bestDistance) {
+          bestDistance = distance;
+          bestIndex = index;
+        }
+      });
+
+      return bestIndex + 1;
+    }
+
+    function updateCounter() {
+      counter.textContent = getCurrentPage() + ' / ' + total;
+    }
+
+    updateCounter();
+    window.addEventListener('scroll', updateCounter, { passive: true });
+    window.addEventListener('resize', updateCounter);
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mark Scheme 2 — BTEC IT Unit 1 — RA10</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Arial, Helvetica, sans-serif; font-size: 11pt; color: #000; background: linear-gradient(180deg, #eef2ff 0%, #f7f2eb 100%); line-height: 1.45; padding: 18px 0 36px; }
+  .page { width: 210mm; min-height: 297mm; margin: 0 auto 24px auto; padding: 18mm 20mm 20mm 20mm; background: #fff; border: 1px solid #d8dce8; border-radius: 18px; box-shadow: 0 20px 48px rgba(26, 26, 46, 0.14); position: relative; overflow: hidden; }
+  @media print {
+    body { margin: 0; padding: 0; }
+    .page { width: 210mm; min-height: 297mm; margin: 0; padding: 18mm 20mm 20mm 20mm; border: none; border-radius: 0; box-shadow: none; page-break-after: always; overflow: visible; }
+    .page:last-child { page-break-after: avoid; }
+    .no-print { display: none !important; }
+  }
+  .cover-top-bar { background: #1a1a2e; color: #fff; padding: 12px 16px; display: flex; align-items: center; gap: 16px; margin-bottom: 24px; }
+  .cover-ra10-logo { font-size: 28pt; font-weight: 900; color: #e63946; font-family: Arial Black, Arial, sans-serif; }
+  .cover-ra10-tag { font-size: 9pt; color: rgba(255,255,255,0.7); line-height: 1.3; }
+  .ms-badge { display: inline-block; background: #1a6e3c; color: #fff; font-weight: bold; font-size: 10pt; padding: 4px 12px; border-radius: 4px; margin-bottom: 16px; text-transform: uppercase; }
+  .cover-title { font-size: 20pt; font-weight: 900; margin-bottom: 6px; }
+  .cover-sub { font-size: 13pt; font-weight: bold; margin-bottom: 24px; color: #444; }
+  .cover-info-box { border: 2px solid #000; padding: 14px 18px; margin-bottom: 20px; }
+  .cover-info-box table { width: 100%; border-collapse: collapse; }
+  .cover-info-box td { padding: 4px 8px; }
+  .cover-info-box td:first-child { font-weight: bold; width: 130px; }
+  .q-title { background: #1a1a2e; color: #fff; padding: 7px 12px; font-weight: bold; font-size: 11pt; margin-bottom: 0; }
+  .part { margin-bottom: 16px; }
+  .part-header { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 6px; }
+  .part-label { font-weight: bold; min-width: 28px; flex-shrink: 0; }
+  .part-q { flex: 1; font-size: 10.5pt; color: #333; font-style: italic; line-height: 1.4; }
+  .part-marks-badge { background: #1a6e3c; color: #fff; font-weight: bold; font-size: 9.5pt; padding: 2px 8px; border-radius: 3px; white-space: nowrap; flex-shrink: 0; }
+  .ms-box { border: 1px solid #bcd0b8; background: #f4fbf5; padding: 10px 14px; margin-left: 28px; }
+  .ms-instruction { font-weight: bold; font-size: 10pt; margin-bottom: 6px; color: #155724; }
+  .ms-points { margin-left: 16px; margin-bottom: 6px; }
+  .ms-points li { margin-bottom: 3px; font-size: 10.5pt; }
+  .ms-accept { font-size: 10pt; color: #555; margin-top: 4px; }
+  .ms-dna { font-size: 10pt; color: #8b0000; margin-top: 2px; }
+  .diagram-example { margin-left: 16px; margin-bottom: 10px; border: 1px solid #a7b9ad; border-radius: 8px; background: #fff; padding: 10px; overflow: auto; }
+  .diagram-example svg { width: 100%; height: auto; display: block; min-height: 320px; }
+  .diagram-example .node { fill: #f7fbff; stroke: #1a1a2e; stroke-width: 1.8; }
+  .diagram-example .node-soft { fill: #eef7f1; stroke: #1a6e3c; stroke-width: 1.8; }
+  .diagram-example .flow { stroke: #1a1a2e; stroke-width: 2; fill: none; }
+  .diagram-example .title { font-size: 15px; font-weight: 700; fill: #111; }
+  .diagram-example .txt { font-size: 12px; font-weight: 600; fill: #111; }
+  .diagram-example .subtxt { font-size: 11px; fill: #333; }
+  .diagram-example .note { font-size: 11px; fill: #0f5132; font-weight: 700; }
+  .levels-box { border: 1px solid #bcd0b8; background: #f4fbf5; margin-left: 28px; overflow: hidden; }
+  .indicative-section { padding: 10px 14px; border-bottom: 1px solid #c8ddc8; }
+  .indicative-heading { font-weight: bold; font-size: 10pt; color: #155724; margin-bottom: 6px; }
+  .indicative-list { margin-left: 16px; }
+  .indicative-list li { margin-bottom: 3px; font-size: 10pt; }
+  .levels-table { width: 100%; border-collapse: collapse; }
+  .levels-table th { background: #d6ead8; font-weight: bold; font-size: 10pt; padding: 5px 10px; border: 1px solid #aacaaa; text-align: left; }
+  .levels-table td { padding: 6px 10px; border: 1px solid #c8ddc8; font-size: 10pt; vertical-align: top; }
+  .level-mark { font-weight: bold; white-space: nowrap; }
+  .q-total { border-top: 2px solid #000; margin-top: 12px; padding-top: 6px; text-align: right; font-weight: bold; font-size: 10pt; }
+  .page-footer { position: absolute; bottom: 12mm; left: 20mm; right: 20mm; display: flex; justify-content: space-between; font-size: 9pt; color: #555; border-top: 1px solid #ccc; padding-top: 4px; }
+  .print-bar { background: rgba(26, 26, 46, 0.9); color: #fff; padding: 12px 16px; position: sticky; top: 10px; z-index: 100; display: flex; gap: 12px; align-items: center; justify-content: space-between; width: min(960px, calc(100% - 24px)); margin: 0 auto 18px auto; border: 1px solid rgba(255,255,255,0.14); border-radius: 18px; box-shadow: 0 18px 40px rgba(15, 15, 30, 0.22); backdrop-filter: blur(14px); }
+  .print-bar span { display: inline-flex; align-items: center; padding: 8px 12px; border-radius: 999px; background: rgba(255,255,255,0.08); font-size: 9.5pt; font-weight: bold; letter-spacing: 0.02em; }
+  .viewer-counter { min-width: 68px; justify-content: center; }
+  .print-bar button { background: linear-gradient(135deg, #1a6e3c 0%, #12512c 100%); color: #fff; border: none; padding: 9px 16px; border-radius: 12px; font-weight: bold; font-size: 9.5pt; cursor: pointer; box-shadow: 0 10px 24px rgba(26, 110, 60, 0.24); }
+  .print-bar a { color: #fff; font-size: 9pt; text-decoration: none; padding: 8px 12px; border-radius: 10px; background: rgba(255,255,255,0.08); margin-left: 0; }
+  h2.q-head { font-size: 13pt; margin-bottom: 16px; border-bottom: 2px solid #000; padding-bottom: 6px; }
+</style>
+</head>
+<body>
+<div class="print-bar no-print">
+  <span>RA10 — BTEC IT Unit 1 — Mark Scheme 2</span>
+  <button onclick="window.print()">&#x2399; Print / Save as PDF</button>
+  <a href="paper-2.html">&larr; View Question Paper</a>
+  <span class="viewer-counter" id="viewerPageCounter">1 / 1</span>
+</div>
+
+<!-- COVER -->
+<div class="page">
+  <div class="cover-top-bar">
+    <div class="cover-ra10-logo">RA10</div>
+    <div class="cover-ra10-tag"><strong>Mark Schemes</strong><br>BTEC Level 3 National Extended Certificate in IT</div>
+  </div>
+  <div style="margin-bottom:10px;"><div class="ms-badge">Mark Scheme — Predicted Paper 2</div></div>
+  <div class="cover-title">Unit 1: Information Technology Systems</div>
+  <div class="cover-sub">BTEC Level 3 National Extended Certificate in Information Technology</div>
+  <div class="cover-info-box">
+    <table>
+      <tr><td>Paper Reference</td><td>RA10/IT/U1/PP2</td></tr>
+      <tr><td>Total marks</td><td>90</td></tr>
+    </table>
+  </div>
+  <p style="font-size:10.5pt; margin-bottom:10px;">For levels-based questions, use the Level Descriptors holistically alongside the indicative content. Indicative content is not a checklist — reward any well-developed, contextualised response.</p>
+  <p style="font-size:10pt; color:#555; font-style:italic;">For revision purposes only. Not an official Pearson qualification document.</p>
+  <div class="page-footer"><span>RA10 — Mark Scheme 2</span><span>Page 1</span></div>
+</div>
+
+<!-- Q1: Thornton's Furniture -->
+<div class="page">
+  <h2 class="q-head">Question 1 — Thornton's Furniture <span style="font-size:10pt; font-weight:normal">(22 marks)</span></h2>
+
+  <div class="part">
+    <div class="part-header"><span class="part-label">(a)</span><span class="part-q">Identify the type of network used by Thornton's Furniture within a single store.</span><span class="part-marks-badge">1 mark</span></div>
+    <div class="ms-box">
+      <ul class="ms-points"><li>Local Area Network / LAN (1)</li></ul>
+      <div class="ms-dna">Do not accept: WAN / PAN / VPN</div>
+    </div>
+  </div>
+
+  <div class="part">
+    <div class="part-header"><span class="part-label">(b)</span><span class="part-q">Explain one reason why the online shop must use HTTPS when customers enter payment details.</span><span class="part-marks-badge">2 marks</span></div>
+    <div class="ms-box">
+      <div class="ms-instruction">Award one mark for identification, one mark for linked justification.</div>
+      <ul class="ms-points">
+        <li>HTTPS encrypts data transmitted between the customer's browser and the website (1) so that payment card details cannot be intercepted and read by a third party (1)</li>
+        <li>HTTPS verifies the identity of the website (1) so customers can be certain they are connecting to the genuine Thornton's shop and not a fraudulent imitation (1)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="part">
+    <div class="part-header"><span class="part-label">(c)</span><span class="part-q">Describe three validation methods that could be used in the customer account registration form.</span><span class="part-marks-badge">3 marks</span></div>
+    <div class="ms-box">
+      <div class="ms-instruction">Award one mark per correct method, up to three marks. Method name alone is sufficient.</div>
+      <ul class="ms-points">
+        <li>Format check (1) — ensures email address matches expected format, e.g. name@domain.com (1)</li>
+        <li>Presence check (1) — ensures required fields such as email and password are not left empty (1)</li>
+        <li>Length check (1) — ensures password meets minimum length requirement (1)</li>
+        <li>Range check (1) — ensures postcode or date of birth is within an acceptable range (1)</li>
+        <li>Type check (1) — ensures only correct data type entered in each field (1)</li>
+      </ul>
+      <div class="ms-accept">Accept any appropriate/alternative validation method</div>
+    </div>
+  </div>
+
+  <div class="part">
+    <div class="part-header"><span class="part-label">(d)</span><span class="part-q">Explain two benefits to Thornton's Furniture of selling products through an online shop.</span><span class="part-marks-badge">4 marks</span></div>
+    <div class="ms-box">
+      <div class="ms-instruction">Award one mark for identification and one mark for linked justification, up to four marks.</div>
+      <ul class="ms-points">
+        <li>Available 24/7 (1) — customers can browse and purchase outside of store opening hours, increasing potential revenue (1)</li>
+        <li>Wider customer reach (1) — the company can reach customers across the UK rather than only shoppers near the two Midlands stores (1)</li>
+        <li>Lower overhead costs (1) — no additional retail premises are needed to reach a larger customer base online (1)</li>
+        <li>Customer data collection (1) — purchase history and browsing data can be used to personalise future marketing (1)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="part">
+    <div class="part-header"><span class="part-label">(e)</span><span class="part-q">Discuss the implications for Thornton's Furniture of using social media for marketing.</span><span class="part-marks-badge">6 marks — Levels</span></div>
+    <div class="levels-box">
+      <div class="indicative-section">
+        <div class="indicative-heading">Indicative Content</div>
+        <ul class="indicative-list">
+          <li>Wider audience — social media platforms reach large audiences, including demographics who may not have discovered the physical stores</li>
+          <li>Cost-effective — organic posting is free; targeted advertising is cheaper than print or TV advertising</li>
+          <li>Two-way engagement — customers can ask questions, share reviews, and Thornton's can respond directly</li>
+          <li>Direct sales link — posts can include links driving customers directly to the online shop</li>
+          <li>Negative reviews — dissatisfied customers can post complaints publicly, which could damage the brand</li>
+          <li>Time investment — managing accounts and creating engaging content requires significant ongoing staff effort</li>
+          <li>Legal/data: running targeted paid ads requires compliance with GDPR regarding use of customer data</li>
+          <li>Staff posting risks — employees may inadvertently share inappropriate content</li>
+          <li>Platform dependency — if a platform changes its algorithm or terms, reach can be significantly reduced</li>
+        </ul>
+      </div>
+      <table class="levels-table">
+        <tr><th>Level</th><th>Mark</th><th>Descriptor</th></tr>
+        <tr><td>0</td><td class="level-mark">0</td><td>No rewardable material.</td></tr>
+        <tr><td>1</td><td class="level-mark">1–2</td><td>Basic application. Considers only benefits or only drawbacks. Limited development. (AO2)</td></tr>
+        <tr><td>2</td><td class="level-mark">3–4</td><td>Good application covering both benefits and drawbacks in the retail context. Implications are developed with some reference to Thornton's situation. (AO2/AO3a)</td></tr>
+        <tr><td>3</td><td class="level-mark">5–6</td><td>Comprehensive application. Covers a range of marketing benefits, reputational risks, legal considerations (GDPR), and practical implications such as time and platform dependence, clearly applied to a small furniture retailer. (AO2/AO3a)</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="part" style="margin-top:18px;">
+    <div class="part-header"><span class="part-label">(f)</span><span class="part-q">Discuss the implications of data protection legislation for Thornton's Furniture as an online retailer.</span><span class="part-marks-badge">6 marks — Levels</span></div>
+    <div class="levels-box">
+      <div class="indicative-section">
+        <div class="indicative-heading">Indicative Content</div>
+        <ul class="indicative-list">
+          <li>UK GDPR applies to all personal data collected from customers (names, addresses, payment data)</li>
+          <li>Thornton's must have a lawful basis to collect and process customer data — typically consent or contract</li>
+          <li>Customers must be informed how their data is used through a clear privacy policy</li>
+          <li>Data minimisation — only data necessary for processing orders should be collected</li>
+          <li>Payment card data must be stored securely or not stored at all (PCI DSS compliance)</li>
+          <li>Customers have the right to access, correct, or request deletion of their data</li>
+          <li>In the event of a data breach, Thornton's must notify the ICO within 72 hours</li>
+          <li>Marketing emails require explicit consent from customers (email marketing rules)</li>
+          <li>Third-party services used (e.g. payment processors) must have data processing agreements in place</li>
+          <li>Non-compliance could result in ICO fines up to £17.5 million or 4% of global turnover</li>
+        </ul>
+      </div>
+      <table class="levels-table">
+        <tr><th>Level</th><th>Mark</th><th>Descriptor</th></tr>
+        <tr><td>0</td><td class="level-mark">0</td><td>No rewardable material.</td></tr>
+        <tr><td>1</td><td class="level-mark">1–2</td><td>Basic knowledge of data protection. Limited application to an online retail context. (AO2)</td></tr>
+        <tr><td>2</td><td class="level-mark">3–4</td><td>Good application of UK GDPR principles to Thornton's situation. Considers obligations and consequences. (AO2/AO3a)</td></tr>
+        <tr><td>3</td><td class="level-mark">5–6</td><td>Comprehensive application of multiple UK GDPR obligations (consent, rights, breach notification, data minimisation, marketing rules), clearly applied to an online retailer collecting customer payment and personal data. (AO2/AO3a)</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="q-total">Question 1 Total: 22 marks</div>
+  <div class="page-footer"><span>RA10 — Mark Scheme 2</span><span>Page 2</span></div>
+</div>
+
+<!-- Q2: Goldstone Solicitors -->
+<div class="page">
+  <h2 class="q-head">Question 2 — Goldstone Solicitors <span style="font-size:10pt; font-weight:normal">(22 marks)</span></h2>
+
+  <div class="part">
+    <div class="part-header"><span class="part-label">(a)</span><span class="part-q">State one function of the network OS that ensures staff can only access files relevant to their role.</span><span class="part-marks-badge">1 mark</span></div>
+    <div class="ms-box">
+      <ul class="ms-points"><li>File permissions / access control (1)</li><li>User accounts / user account management (1)</li></ul>
+      <div class="ms-accept">Accept any appropriate response describing file/role-based access control</div>
+    </div>
+  </div>
+
+  <div class="part">
+    <div class="part-header"><span class="part-label">(b)</span><span class="part-q">Give two reasons why client documents should be encrypted when stored on the firm's server.</span><span class="part-marks-badge">2 marks</span></div>
+    <div class="ms-box">
+      <div class="ms-instruction">Award one mark for each correct reason, up to two marks.</div>
+      <ul class="ms-points">
+        <li>If the server is accessed by an unauthorised person or stolen, encrypted files cannot be read without the encryption key (1)</li>
+        <li>If a cyber attack results in files being copied, encrypted data remains unreadable to the attacker (1)</li>
+        <li>Encryption demonstrates compliance with GDPR requirements for securing special category / sensitive personal data (1)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="part">
+    <div class="part-header"><span class="part-label">(c)</span><span class="part-q">Describe three measures Goldstone Solicitors could implement to prevent unauthorised access to client data.</span><span class="part-marks-badge">3 marks</span></div>
+    <div class="ms-box">
+      <div class="ms-instruction">Award one mark per measure, up to three marks.</div>
+      <ul class="ms-points">
+        <li>Strong passwords and MFA on all staff accounts (1)</li>
+        <li>File permissions limiting access to client files to the relevant solicitor only (1)</li>
+        <li>Physical access control (key card / PIN) on the server room (1)</li>
+        <li>Firewall to prevent external intrusion attempts (1)</li>
+        <li>Antivirus software to prevent malware gaining access to stored files (1)</li>
+      </ul>
+      <div class="ms-accept">Accept any other appropriate response</div>
+    </div>
+  </div>
+
+  <div class="part">
+    <div class="part-header"><span class="part-label">(d)</span><span class="part-q">Explain two implications of the Computer Misuse Act for Goldstone Solicitors.</span><span class="part-marks-badge">4 marks</span></div>
+    <div class="ms-box">
+      <div class="ms-instruction">Award one mark for identification and one mark for linked justification, up to four marks.</div>
+      <ul class="ms-points">
+        <li>Staff accessing client files or accounts without authorisation commits an offence under the Computer Misuse Act (1) so the firm must enforce strict access controls and audit staff account activity (1)</li>
+        <li>A hacker gaining access to the firm's network commits an offence under the Act (1) which means the firm must have security measures to prevent and detect intrusions, and report breaches to authorities (1)</li>
+        <li>Using another staff member's login credentials without permission (1) is an offence, requiring the firm to prohibit credential sharing in its acceptable use policy (1)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="part">
+    <div class="part-header"><span class="part-label">(e)</span><span class="part-q">Discuss the implications for Goldstone Solicitors of choosing open-source office software rather than proprietary, with reference to security.</span><span class="part-marks-badge">6 marks — Levels</span></div>
+    <div class="levels-box">
+      <div class="indicative-section">
+        <div class="indicative-heading">Indicative Content</div>
+        <ul class="indicative-list">
+          <li>Open-source: publicly visible source code — researchers can find and report vulnerabilities quickly</li>
+          <li>Open-source: same visibility means malicious actors can study code; risk of targeted exploits</li>
+          <li>Open-source: patch frequency depends on community; may be slower than proprietary vendor</li>
+          <li>Proprietary: vendor security team issues regular patches included in the £15,000 licence</li>
+          <li>Proprietary: vendor accountability — if a known vulnerability leads to a client data breach, recourse available</li>
+          <li>Proprietary: professional support including security guidance; more suited to a regulated legal environment</li>
+          <li>Open-source: no vendor lock-in but may lack enterprise security features (audit trails, DLP)</li>
+          <li>Both require additional layers: firewall, staff training, encryption, MFA</li>
+          <li>For a law firm, client confidentiality obligations and regulatory expectations make vendor accountability critical</li>
+        </ul>
+      </div>
+      <table class="levels-table">
+        <tr><th>Level</th><th>Mark</th><th>Descriptor</th></tr>
+        <tr><td>0</td><td class="level-mark">0</td><td>No rewardable material.</td></tr>
+        <tr><td>1</td><td class="level-mark">1–2</td><td>Basic application about open-source or proprietary software. Limited reference to security or legal context. (AO2)</td></tr>
+        <tr><td>2</td><td class="level-mark">3–4</td><td>Good application covering security aspects of both software types applied to a solicitors' firm. (AO2/AO3a)</td></tr>
+        <tr><td>3</td><td class="level-mark">5–6</td><td>Comprehensive application. Detailed discussion of patch management, vendor accountability, community support vs professional support, and specific obligations of a law firm handling client data. (AO2/AO3a)</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="part" style="margin-top:18px;">
+    <div class="part-header"><span class="part-label">(f)</span><span class="part-q">Draw a flowchart to show the process for secure handling of client data from login to deletion.</span><span class="part-marks-badge">6 marks</span></div>
+    <div class="ms-box">
+      <div class="ms-instruction">Award one mark for each appropriate stage shown, up to a maximum of six marks.</div>
+      <div class="diagram-example">
+        <svg viewBox="0 0 860 600" aria-label="Model flowchart for client data handling lifecycle">
+          <defs>
+            <marker id="arrowB" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#1a1a2e"></path>
+            </marker>
+          </defs>
+
+          <text x="430" y="28" text-anchor="middle" class="title">Client Data Lifecycle (Example Flowchart)</text>
+
+          <rect class="node" x="320" y="50" width="220" height="38" rx="18" ry="18"></rect>
+          <text x="430" y="74" text-anchor="middle" class="txt">Start</text>
+
+          <polygon class="node-soft" points="292,108 590,108 568,156 270,156"></polygon>
+          <text x="430" y="137" text-anchor="middle" class="txt">Staff login and request client record</text>
+
+          <polygon class="node" points="430,176 520,220 430,264 340,220"></polygon>
+          <text x="430" y="224" text-anchor="middle" class="txt">Authorised?</text>
+
+          <rect class="node-soft" x="270" y="284" width="320" height="48" rx="8" ry="8"></rect>
+          <text x="430" y="313" text-anchor="middle" class="txt">Send and store client data securely</text>
+
+          <rect class="node-soft" x="270" y="352" width="320" height="48" rx="8" ry="8"></rect>
+          <text x="430" y="381" text-anchor="middle" class="txt">Record audit log and usage</text>
+
+          <polygon class="node" points="430,420 520,464 430,508 340,464"></polygon>
+          <text x="430" y="468" text-anchor="middle" class="txt">Retention expired?</text>
+
+          <rect class="node-soft" x="270" y="528" width="320" height="48" rx="8" ry="8"></rect>
+          <text x="430" y="557" text-anchor="middle" class="txt">Secure deletion and deletion log</text>
+
+          <rect class="node" x="620" y="200" width="200" height="46" rx="8" ry="8"></rect>
+          <text x="720" y="228" text-anchor="middle" class="txt">Deny access + alert</text>
+
+          <rect class="node" x="620" y="442" width="200" height="46" rx="8" ry="8"></rect>
+          <text x="720" y="470" text-anchor="middle" class="txt">Keep data securely</text>
+
+          <rect class="node" x="320" y="586" width="220" height="12" rx="6" ry="6"></rect>
+
+          <line class="flow" x1="430" y1="88" x2="430" y2="108" marker-end="url(#arrowB)"></line>
+          <line class="flow" x1="430" y1="156" x2="430" y2="176" marker-end="url(#arrowB)"></line>
+          <line class="flow" x1="430" y1="264" x2="430" y2="284" marker-end="url(#arrowB)"></line>
+          <line class="flow" x1="430" y1="332" x2="430" y2="352" marker-end="url(#arrowB)"></line>
+          <line class="flow" x1="430" y1="400" x2="430" y2="420" marker-end="url(#arrowB)"></line>
+          <line class="flow" x1="430" y1="508" x2="430" y2="528" marker-end="url(#arrowB)"></line>
+
+          <line class="flow" x1="520" y1="220" x2="620" y2="223" marker-end="url(#arrowB)"></line>
+          <line class="flow" x1="520" y1="464" x2="620" y2="465" marker-end="url(#arrowB)"></line>
+
+          <text x="448" y="276" class="note">Yes</text>
+          <text x="542" y="210" class="note">No</text>
+          <text x="448" y="520" class="note">Yes</text>
+          <text x="542" y="454" class="note">No</text>
+        </svg>
+      </div>
+      <div class="ms-instruction" style="margin-top: 8px;"><strong>Marking Guidance:</strong></div>
+      <ul class="ms-points" style="margin-top: 4px;">
+        <li>Access to client data shown — 1 mark</li>
+        <li>Transmission of client data shown — 1 mark</li>
+        <li>Storage of client data shown — 1 mark</li>
+        <li>Security methods at stages shown, for example MFA, encryption or file permissions — 1 mark</li>
+        <li>Secure deletion shown — 1 mark</li>
+        <li>Logical sequence with clear labels / annotations — 1 mark</li>
+      </ul>
+      <div class="ms-accept" style="margin-top: 6px;">Accept any other appropriate flowchart showing the client-data process with clear sequence and annotations.</div>
+    </div>
+  </div>
+
+  <div class="q-total">Question 2 Total: 22 marks</div>
+  <div class="page-footer"><span>RA10 — Mark Scheme 2</span><span>Page 3</span></div>
+</div>
+
+<!-- Q3: Pinnacle Pension Fund -->
+<div class="page">
+  <h2 class="q-head">Question 3 — Pinnacle Pension Fund <span style="font-size:10pt; font-weight:normal">(22 marks)</span></h2>
+
+  <div class="part">
+    <div class="part-header"><span class="part-label">(a)</span><span class="part-q">Identify the cloud model in which infrastructure is dedicated exclusively to one organisation.</span><span class="part-marks-badge">1 mark</span></div>
+    <div class="ms-box"><ul class="ms-points"><li>Private cloud (1)</li></ul><div class="ms-dna">Do not accept: public cloud / hybrid cloud</div></div>
+  </div>
+
+  <div class="part">
+    <div class="part-header"><span class="part-label">(b)</span><span class="part-q">Give two features of a hybrid cloud model.</span><span class="part-marks-badge">2 marks</span></div>
+    <div class="ms-box">
+      <ul class="ms-points">
+        <li>Combines both private and public cloud components (1)</li>
+        <li>Sensitive data can be kept on the private cloud while less sensitive tasks use the public cloud (1)</li>
+        <li>Allows an organisation to scale using public cloud during periods of high demand (1)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="part">
+    <div class="part-header"><span class="part-label">(c)</span><span class="part-q">Describe three factors the pension fund should consider when selecting a cloud system for its member portal.</span><span class="part-marks-badge">3 marks</span></div>
+    <div class="ms-box">
+      <div class="ms-instruction">Award one mark per factor, up to three marks.</div>
+      <ul class="ms-points">
+        <li>Security (1) — the provider must protect member financial data with encryption and access controls appropriate for financial services</li>
+        <li>Scalability (1) — the system must handle increased traffic at quarter-end and annual statement periods</li>
+        <li>Regulatory compliance (1) — the provider must meet FCA, PRA and UK GDPR requirements for financial data</li>
+        <li>Cost (1) — subscription costs must be weighed against in-house infrastructure costs</li>
+        <li>Uptime / reliability (1) — members must be able to access their pension information without service outages</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="part">
+    <div class="part-header"><span class="part-label">(d)</span><span class="part-q">Explain two security risks of storing pension fund data on a public cloud.</span><span class="part-marks-badge">4 marks</span></div>
+    <div class="ms-box">
+      <ul class="ms-points">
+        <li>Data sovereignty (1) — data may be stored on servers outside the UK, creating compliance issues under UK GDPR regarding cross-border data transfers (1)</li>
+        <li>Third-party access risk (1) — the cloud provider's staff may have access to pension data, increasing insider threat risk (1)</li>
+        <li>Shared infrastructure (1) — public cloud uses multi-tenant infrastructure, raising the risk that a vulnerability affecting another tenant could expose pension data (1)</li>
+        <li>Internet-facing systems (1) — public cloud components accessible via the internet are at greater risk of attack than on-premise servers (1)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="part">
+    <div class="part-header"><span class="part-label">(e)</span><span class="part-q">Discuss the implications for Pinnacle Pension Fund of enabling staff to work remotely and access central financial systems.</span><span class="part-marks-badge">6 marks — Levels</span></div>
+    <div class="levels-box">
+      <div class="indicative-section">
+        <div class="indicative-heading">Indicative Content</div>
+        <ul class="indicative-list">
+          <li>Productivity benefit — staff can work from satellite offices or home without travelling to head office</li>
+          <li>Talent retention — flexible working is valued by employees and aids recruitment and retention</li>
+          <li>Security risk — accessing highly sensitive pension data from remote locations over public networks creates interception risk</li>
+          <li>VPN essential — all remote access must use VPN to encrypt connections between satellite offices and central systems</li>
+          <li>MFA required — staff must use MFA given the sensitivity of pension data</li>
+          <li>Device security — remote devices must have encryption, antivirus, and remote wipe capability</li>
+          <li>FCA / regulatory implications — regulators require financial firms to control data access regardless of location</li>
+          <li>Audit logging required — all remote access must be logged to detect unauthorised activity</li>
+          <li>Staff training on security when working remotely</li>
+        </ul>
+      </div>
+      <table class="levels-table">
+        <tr><th>Level</th><th>Mark</th><th>Descriptor</th></tr>
+        <tr><td>0</td><td class="level-mark">0</td><td>No rewardable material.</td></tr>
+        <tr><td>1</td><td class="level-mark">1–2</td><td>Basic application about remote working. Limited reference to financial services context. (AO2)</td></tr>
+        <tr><td>2</td><td class="level-mark">3–4</td><td>Good application covering both benefits and risks of remote working at a financial services organisation. (AO2/AO3a)</td></tr>
+        <tr><td>3</td><td class="level-mark">5–6</td><td>Comprehensive application. Covers productivity benefits, security risks (VPN, MFA, device security), regulatory obligations, and audit requirements, clearly contextualised to a pension fund handling sensitive member financial data. (AO2/AO3a)</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="part" style="margin-top:18px;">
+    <div class="part-header"><span class="part-label">(f)</span><span class="part-q">Discuss the implications for Pinnacle Pension Fund of migrating its IT operations to a hybrid cloud infrastructure.</span><span class="part-marks-badge">6 marks — Levels</span></div>
+    <div class="levels-box">
+      <div class="indicative-section">
+        <div class="indicative-heading">Indicative Content</div>
+        <ul class="indicative-list">
+          <li>Sensitive member and financial data can remain on the private cloud, meeting FCA/GDPR requirements</li>
+          <li>Less sensitive analytics and reporting tasks can move to public cloud, reducing costs</li>
+          <li>Scalability: public cloud component can scale at quarter-end reporting periods without capital investment</li>
+          <li>Complexity: managing two cloud environments requires specialist IT skills and governance</li>
+          <li>Security: data moving between private and public elements must be encrypted</li>
+          <li>Data sovereignty: any data stored in public cloud must remain within UK/EU to meet GDPR</li>
+          <li>Disaster recovery: public cloud provides additional resilience if private infrastructure fails</li>
+          <li>Vendor management: contracts with private host and public provider both require careful management</li>
+          <li>Migration risk: transitioning existing systems to cloud involves downtime and data migration challenges</li>
+        </ul>
+      </div>
+      <table class="levels-table">
+        <tr><th>Level</th><th>Mark</th><th>Descriptor</th></tr>
+        <tr><td>0</td><td class="level-mark">0</td><td>No rewardable material.</td></tr>
+        <tr><td>1</td><td class="level-mark">1–2</td><td>Basic knowledge of hybrid cloud. Limited application to the pension fund context. (AO2)</td></tr>
+        <tr><td>2</td><td class="level-mark">3–4</td><td>Good application covering multiple implications for a financial services organisation migrating to hybrid cloud. (AO2/AO3a)</td></tr>
+        <tr><td>3</td><td class="level-mark">5–6</td><td>Comprehensive application. Discusses data segregation, scalability, complexity, security, regulatory compliance (FCA/GDPR), and migration risk explicitly in the context of a £2bn pension fund. (AO2/AO3a)</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="q-total">Question 3 Total: 22 marks</div>
+  <div class="page-footer"><span>RA10 — Mark Scheme 2</span><span>Page 4</span></div>
+</div>
+
+<!-- Q4: Evergreen Recruitment Agency -->
+<div class="page">
+  <h2 class="q-head">Question 4 — Evergreen Recruitment Agency <span style="font-size:10pt; font-weight:normal">(24 marks)</span></h2>
+
+  <div class="part">
+    <div class="part-header"><span class="part-label">(a)</span><span class="part-q">State the name of the UK data protection legislation that regulates how organisations process personal data.</span><span class="part-marks-badge">1 mark</span></div>
+    <div class="ms-box">
+      <ul class="ms-points"><li>UK GDPR / UK General Data Protection Regulation (1)</li><li>Data Protection Act 2018 (1)</li></ul>
+      <div class="ms-accept">Accept either</div>
+    </div>
+  </div>
+
+  <div class="part">
+    <div class="part-header"><span class="part-label">(b)</span><span class="part-q">Give two rights that data subjects have under UK GDPR.</span><span class="part-marks-badge">2 marks</span></div>
+    <div class="ms-box">
+      <ul class="ms-points">
+        <li>Right of access / subject access request (1)</li>
+        <li>Right to erasure / right to be forgotten (1)</li>
+        <li>Right to rectification (1)</li>
+        <li>Right to restrict processing (1)</li>
+        <li>Right to data portability (1)</li>
+        <li>Right to object (to processing) (1)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="part">
+    <div class="part-header"><span class="part-label">(c)</span><span class="part-q">Describe how Evergreen Recruitment Agency should respond if it suffers a personal data breach.</span><span class="part-marks-badge">3 marks</span></div>
+    <div class="ms-box">
+      <div class="ms-instruction">Award one mark per correct action, up to three marks.</div>
+      <ul class="ms-points">
+        <li>Assess the breach to determine what data was affected and the risk to data subjects (1)</li>
+        <li>Report the breach to the ICO within 72 hours if likely to result in risk to individuals' rights and freedoms (1)</li>
+        <li>Notify affected data subjects directly if the breach poses a high risk to their rights and freedoms (1)</li>
+        <li>Document the breach in the organisation's internal breach register (1)</li>
+        <li>Take steps to contain and prevent further exposure of personal data (1)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="part">
+    <div class="part-header"><span class="part-label">(d)</span><span class="part-q">Explain two ethical implications for Evergreen Recruitment Agency of retaining candidate data indefinitely.</span><span class="part-marks-badge">4 marks</span></div>
+    <div class="ms-box">
+      <ul class="ms-points">
+        <li>Privacy violation (1) — candidates are unaware their personal data is still being held long after their job search ended, violating their reasonable expectation of privacy (1)</li>
+        <li>Unequal power relationship (1) — the agency has detailed personal information about candidates without their knowledge, creating an imbalance of power candidates cannot challenge (1)</li>
+        <li>Risk of data misuse (1) — indefinitely retained data could be used for purposes beyond recruitment, such as marketing, without candidates' consent (1)</li>
+        <li>Harm to vulnerable candidates (1) — health information retained beyond its purpose could be accessed and used in ways that damage candidates' interests (1)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="part">
+    <div class="part-header"><span class="part-label">(e)</span><span class="part-q">Discuss the implications of the Computer Misuse Act and data protection legislation for Evergreen Recruitment Agency.</span><span class="part-marks-badge">6 marks — Levels</span></div>
+    <div class="levels-box">
+      <div class="indicative-section">
+        <div class="indicative-heading">Indicative Content</div>
+        <ul class="indicative-list">
+          <li>Computer Misuse Act: if an employee accesses candidate records beyond their role, this is an offence</li>
+          <li>Computer Misuse Act: if a third party hacks the agency's systems to access candidate data, they commit an offence — agency must have measures to detect and report this</li>
+          <li>Computer Misuse Act: the agency must have an acceptable use policy preventing staff from misusing computer systems</li>
+          <li>UK GDPR: health data is special category data requiring explicit consent or specific legal basis to process</li>
+          <li>UK GDPR: storing data indefinitely breaches the storage limitation principle</li>
+          <li>UK GDPR: sharing candidate data with employers requires a lawful basis and data processing agreements</li>
+          <li>UK GDPR: ICO investigation could result in a formal enforcement notice or significant financial penalty</li>
+          <li>ICO can fine up to £17.5 million or 4% of global turnover for serious GDPR breaches</li>
+          <li>Reputational harm — exposure of the agency's practices could deter candidates from registering</li>
+        </ul>
+      </div>
+      <table class="levels-table">
+        <tr><th>Level</th><th>Mark</th><th>Descriptor</th></tr>
+        <tr><td>0</td><td class="level-mark">0</td><td>No rewardable material.</td></tr>
+        <tr><td>1</td><td class="level-mark">1–2</td><td>Basic knowledge of Computer Misuse Act or GDPR. Limited application to the recruitment agency context. (AO2)</td></tr>
+        <tr><td>2</td><td class="level-mark">3–4</td><td>Good application covering implications of both pieces of legislation to the agency's situation. (AO2/AO3a)</td></tr>
+        <tr><td>3</td><td class="level-mark">5–6</td><td>Comprehensive application covering Computer Misuse Act obligations, multiple GDPR obligations (special category data, storage limitation, lawful basis, ICO penalties), and the specific risks for a recruitment agency holding sensitive candidate data. (AO2/AO3a)</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="part" style="margin-top:18px;">
+    <div class="part-header"><span class="part-label">(f)</span><span class="part-q">Discuss the extent to which Evergreen Recruitment Agency is complying with UK GDPR, with reference to the data it holds and shares. (Principles; data subject rights; special category data)</span><span class="part-marks-badge">8 marks — Levels</span></div>
+    <div class="levels-box">
+      <div class="indicative-section">
+        <div class="indicative-heading">Indicative Content</div>
+        <ul class="indicative-list">
+          <li>Health information is special category data — requires explicit consent or specific condition; the agency appears to lack this</li>
+          <li>Data minimisation principle breached — retaining all data for all candidates indefinitely, far beyond what is needed</li>
+          <li>Storage limitation principle breached — data must not be held longer than necessary; indefinite retention is a clear breach</li>
+          <li>Sharing data with employers requires a lawful basis — candidates should consent or this should be clearly communicated at collection</li>
+          <li>Transparency principle: candidates were unaware data was being retained and shared — information obligation not met</li>
+          <li>Candidates have the right to access their data (the complaint was raised this way) and the right to erasure</li>
+          <li>With 50,000+ records, agency likely required to appoint a Data Protection Officer (DPO)</li>
+          <li>ICO could issue enforcement notice, require data deletion, and impose a significant fine</li>
+          <li>A Data Protection Impact Assessment (DPIA) should be conducted for high-risk processing of health data</li>
+          <li>Corrective actions: implement a clear retention policy, obtain explicit consent for health data, issue updated privacy notice</li>
+        </ul>
+      </div>
+      <table class="levels-table">
+        <tr><th>Level</th><th>Mark</th><th>Descriptor</th></tr>
+        <tr><td>0</td><td class="level-mark">0</td><td>No rewardable material.</td></tr>
+        <tr><td>1</td><td class="level-mark">1–3</td><td>Basic GDPR knowledge. Identifies that data should be kept securely or that sharing requires permission. Limited analysis of compliance failures. (AO2)</td></tr>
+        <tr><td>2</td><td class="level-mark">4–6</td><td>Good application analysing several GDPR failures including storage limitation, special category data, and/or data subject rights, applied to the agency's practices. Some analysis of implications. (AO2/AO3a/AO3b)</td></tr>
+        <tr><td>3</td><td class="level-mark">7–8</td><td>Comprehensive application thoroughly analysing compliance failures across multiple UK GDPR principles and rights (storage limitation, data minimisation, transparency, special category data, right of access), implications of ICO enforcement, and required corrective actions, with a clear evaluative judgement. (AO2/AO3a/AO3b)</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="q-total">Question 4 Total: 24 marks &nbsp;&nbsp;&nbsp; Paper Total: 90 marks</div>
+  <div class="page-footer"><span>RA10 — Mark Scheme 2</span><span>Page 5</span></div>
+</div>
+
+<script>
+  (function () {
+    var pages = document.querySelectorAll('.page');
+    var counter = document.getElementById('viewerPageCounter');
+    var total = pages.length;
+    if (!counter || !total) return;
+
+    function getCurrentPage() {
+      var viewportTarget = window.innerHeight * 0.45;
+      var bestIndex = 0;
+      var bestDistance = Infinity;
+
+      pages.forEach(function (page, index) {
+        var rect = page.getBoundingClientRect();
+        var pageMid = rect.top + (rect.height / 2);
+        var distance = Math.abs(pageMid - viewportTarget);
+        if (distance < bestDistance) {
+          bestDistance = distance;
+          bestIndex = index;
+        }
+      });
+
+      return bestIndex + 1;
+    }
+
+    function updateCounter() {
+      counter.textContent = getCurrentPage() + ' / ' + total;
+    }
+
+    updateCounter();
+    window.addEventListener('scroll', updateCounter, { passive: true });
+    window.addEventListener('resize', updateCounter);
+  })();
+</script>
+
+</body>
+</html>
