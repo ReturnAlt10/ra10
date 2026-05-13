@@ -1381,11 +1381,38 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
 </style>
 <script>
 (function(){
-  var s = document.createElement('script');
   var isFile = location.protocol === 'file:';
   var isLocalHost = location.hostname === '127.0.0.1' || location.hostname === 'localhost';
-  s.src = isFile ? 'file:///C:/Users/mistr/Downloads/ra10/ra10-sdk.js' : (isLocalHost ? 'http://127.0.0.1:5500/ra10-sdk.js' : 'https://ra10.co.uk/ra10-sdk.js');
-  document.head.insertBefore(s, document.head.firstChild);
+  var candidates = isFile
+    ? ['file:///C:/Users/mistr/Downloads/ra10/ra10-sdk.js', 'https://ra10.co.uk/ra10-sdk.js']
+    : (isLocalHost
+      ? ['/ra10-sdk.js', 'http://127.0.0.1:5500/ra10-sdk.js', 'https://ra10.co.uk/ra10-sdk.js']
+      : ['https://ra10.co.uk/ra10-sdk.js', '/ra10-sdk.js']);
+
+  function loadScriptFrom(url) {
+    return new Promise(function(resolve, reject) {
+      var s = document.createElement('script');
+      s.src = url;
+      s.async = false;
+      s.onload = function() { resolve(url); };
+      s.onerror = function() { reject(new Error('Failed to load RA10 SDK: ' + url)); };
+      document.head.insertBefore(s, document.head.firstChild);
+    });
+  }
+
+  window.__ra10SdkReady = (async function() {
+    if (window.RA10) return window.RA10;
+    var lastErr = null;
+    for (var i = 0; i < candidates.length; i++) {
+      try {
+        await loadScriptFrom(candidates[i]);
+        if (window.RA10) return window.RA10;
+      } catch (err) {
+        lastErr = err;
+      }
+    }
+    throw (lastErr || new Error('RA10 SDK unavailable'));
+  })();
 })();
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
@@ -3700,6 +3727,25 @@ window.addEventListener('hashchange', route);
 window.addEventListener('resize', syncMobileNavChrome);
 window.addEventListener('orientationchange', syncMobileNavChrome);
 
+async function waitForRA10Sdk(timeoutMs) {
+  if (window.RA10) return window.RA10;
+  const ready = window.__ra10SdkReady;
+  if (!ready || typeof ready.then !== 'function') {
+    throw new Error('RA10 SDK loader unavailable');
+  }
+  const timeout = Number(timeoutMs || 0);
+  if (!timeout || timeout < 1) {
+    await ready;
+  } else {
+    await Promise.race([
+      ready,
+      new Promise((_, reject) => setTimeout(() => reject(new Error('RA10 SDK timeout')), timeout)),
+    ]);
+  }
+  if (!window.RA10) throw new Error('RA10 SDK unavailable');
+  return window.RA10;
+}
+
   let authRestorePending = true;
 
   document.addEventListener('DOMContentLoaded', async () => {
@@ -3716,7 +3762,7 @@ window.addEventListener('orientationchange', syncMobileNavChrome);
 
       document.getElementById('nav-auth-btn').addEventListener('click', () => openAuthModal('signin'));
       document.getElementById('mobile-profile-btn')?.addEventListener('click', () => {
-        if (RA10.isLoggedIn()) go('/account');
+        if (window.RA10 && RA10.isLoggedIn()) go('/account');
         else openAuthModal('signin');
       });
       document.getElementById('mobile-subjects-btn')?.addEventListener('click', (event) => {
@@ -3746,6 +3792,7 @@ window.addEventListener('orientationchange', syncMobileNavChrome);
         btn.disabled = true;
         btn.textContent = 'Signing in…';
         try {
+          const ra10 = await waitForRA10Sdk(8000);
           const { error } = await RA10.signIn(
             document.getElementById('signin-email').value,
             document.getElementById('signin-password').value
@@ -3755,7 +3802,7 @@ window.addEventListener('orientationchange', syncMobileNavChrome);
             err.classList.add('show');
           } else {
             closeAuthModal();
-            try { await RA10.refreshProfile(); } catch (e) {}
+            try { await ra10.refreshProfile(); } catch (e) {}
             await _updateNavAuth();
           }
         } catch (signInErr) {
@@ -3785,11 +3832,21 @@ window.addEventListener('orientationchange', syncMobileNavChrome);
 
     _updateNavAuth();
 
-    const initPromise = RA10.init();
+    let ra10;
+    try {
+      ra10 = await waitForRA10Sdk(6000);
+    } catch (sdkErr) {
+      console.warn('RA10 SDK failed to load', sdkErr);
+      authRestorePending = false;
+      _updateNavAuth();
+      return;
+    }
+
+    const initPromise = ra10.init();
     try {
       await Promise.race([
         initPromise,
-        new Promise((_, reject) => setTimeout(() => reject(new Error('Auth init timeout')), 12000)),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('Auth init timeout')), 8000)),
       ]);
     } catch (initErr) {
       console.warn('RA10 auth init failed', initErr);
@@ -3810,15 +3867,15 @@ window.addEventListener('orientationchange', syncMobileNavChrome);
 
     _updateNavAuth();
 
-    RA10.on('authchange', () => { _updateNavAuth(); });
-    RA10.on('creditschange', _updateNavAuth);
+  ra10.on('authchange', () => { _updateNavAuth(); });
+  ra10.on('creditschange', _updateNavAuth);
 
     let focusRefreshInFlight = false;
     window.addEventListener('focus', async () => {
-      if (!RA10.isLoggedIn() || focusRefreshInFlight) return;
+      if (!ra10.isLoggedIn() || focusRefreshInFlight) return;
       focusRefreshInFlight = true;
       try {
-        await RA10.refreshProfile();
+        await ra10.refreshProfile();
         _updateNavAuth();
       } catch (e) {
         console.warn('Profile refresh on focus failed', e);
@@ -4035,6 +4092,21 @@ window.addEventListener('orientationchange', syncMobileNavChrome);
         }
         if (navUserWrap) navUserWrap.style.display = 'none';
         if (mobileProfileLabel) mobileProfileLabel.textContent = 'Signing in...';
+        if (navCreditChip) navCreditChip.style.display = 'none';
+        if (mobileCreditChip) mobileCreditChip.style.display = 'none';
+        if (mobileUpgradeBtn) mobileUpgradeBtn.style.display = 'inline-flex';
+        if (examBanner) examBanner.style.display = '';
+        return;
+      }
+
+      if (!window.RA10) {
+        if (navAuthBtn) {
+          navAuthBtn.style.display = '';
+          navAuthBtn.textContent = 'Sign in';
+          navAuthBtn.disabled = false;
+        }
+        if (navUserWrap) navUserWrap.style.display = 'none';
+        if (mobileProfileLabel) mobileProfileLabel.textContent = 'Sign in';
         if (navCreditChip) navCreditChip.style.display = 'none';
         if (mobileCreditChip) mobileCreditChip.style.display = 'none';
         if (mobileUpgradeBtn) mobileUpgradeBtn.style.display = 'inline-flex';
