@@ -1818,9 +1818,15 @@ function renderPracticeCard() {
       if (message.includes('Not enough credits')) {
         RA10.showPaywall('credits', 'ai_examiner');
       } else {
-        alert('Error: ' + message);
+        alert(friendlyAiConnectError(message));
       }
     } finally {
+      if (window._ra10RenderUnitCreditChip) {
+        try { await window._ra10RenderUnitCreditChip(); } catch (e) {}
+      }
+      if (window._updateSubjectBanner) {
+        try { window._updateSubjectBanner(); } catch (e) {}
+      }
       btnExamine.disabled = false;
       btnExamine.textContent = _origLabel;
     }
@@ -2736,6 +2742,24 @@ function normaliseAiMarkResult(raw, q, isExt, answer) {
   return result;
 }
 
+function friendlyAiConnectError(message) {
+  const msg = String(message || '').toLowerCase();
+  if (
+    !msg ||
+    msg.includes('failed to fetch') ||
+    msg.includes('networkerror') ||
+    msg.includes('network request failed') ||
+    msg.includes('load failed') ||
+    msg.includes('timeout') ||
+    msg.includes('unavailable right now') ||
+    msg.includes('request failed') ||
+    msg.includes('gateway')
+  ) {
+    return 'Could not connect to AI. Try again or refresh the page.';
+  }
+  return String(message || 'Could not connect to AI. Try again or refresh the page.');
+}
+
 async function buildBestAutoMarkUI(q, answer) {
   const isExt = q.type === 'extended_levels' || (q.mark_scheme && q.mark_scheme.indicative_content);
   if (!isUltraTierForAiMarking() || !window.RA10 || typeof RA10.aiMarkAnswer !== 'function') {
@@ -2751,7 +2775,7 @@ async function buildBestAutoMarkUI(q, answer) {
     return { ui: buildAutoMarkUI(q, answer, aiResult, 'ai'), source: 'ai', aiError: '' };
   } catch (err) {
     const message = err && err.message ? String(err.message) : 'request failed';
-    return { ui: buildAutoMarkUI(q, answer), source: 'local', aiError: message };
+    return { ui: buildAutoMarkUI(q, answer), source: 'local', aiError: friendlyAiConnectError(message) };
   }
 }
 

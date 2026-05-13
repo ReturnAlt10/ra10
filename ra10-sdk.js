@@ -632,6 +632,26 @@
     }
 
     if (_profile) {
+      const tier = _normalizeTier(_profile.tier);
+      const createdAtMs = Date.parse(String(_profile.created_at || ''));
+      const looksFresh = Number.isFinite(createdAtMs) && (Date.now() - createdAtMs) < (24 * 60 * 60 * 1000);
+      if (tier === 'free' && !_profile.unlimited_credits && looksFresh) {
+        const stored = Number(_profile.credits || 0);
+        if (Number.isFinite(stored) && stored > 10) {
+          const client = await _ensureSupabaseClient();
+          const nextReset = new Date();
+          nextReset.setUTCMonth(nextReset.getUTCMonth() + 1);
+          const starterFix = await client
+            .from('profiles')
+            .update({ credits: 10, credits_reset_at: nextReset.toISOString() })
+            .eq('id', _profile.id)
+            .select('*')
+            .single();
+          if (!starterFix.error && starterFix.data) {
+            _profile = starterFix.data;
+          }
+        }
+      }
       await _maybeResetMonthlyCredits();
       _syncPlanCreditActivity(_profile);
     }
@@ -738,7 +758,25 @@
 
     const user = result.data?.user;
     if (user) {
-      const created = await _ensureProfileRow(user);
+      let created = await _ensureProfileRow(user);
+      const createdTier = _normalizeTier(created?.tier);
+      if (created && createdTier === 'free' && !created.unlimited_credits) {
+        const expectedStarterCredits = 10;
+        const currentStarterCredits = Number(created.credits || 0);
+        if (!Number.isFinite(currentStarterCredits) || currentStarterCredits !== expectedStarterCredits) {
+          const nextReset = new Date();
+          nextReset.setUTCMonth(nextReset.getUTCMonth() + 1);
+          const starterFix = await client
+            .from('profiles')
+            .update({ credits: expectedStarterCredits, credits_reset_at: nextReset.toISOString() })
+            .eq('id', user.id)
+            .select('*')
+            .single();
+          if (!starterFix.error && starterFix.data) {
+            created = starterFix.data;
+          }
+        }
+      }
       _session = result.data.session || null;
       _profile = created;
       _writeCreditSnapshot(_profile);
@@ -1303,8 +1341,11 @@
     const isUltra = tier === 'ultra' || tier === 'owner' || UNLIMITED_TIERS.has(tier);
     const isPro = tier === 'all_subjects';
 
-    let costToDeduct = 5;
-    if (isPro) costToDeduct = 1;
+    const isSchool = tier === 'school_student' || tier === 'school_teacher' || tier === 'school_admin';
+    let costToDeduct = 3;
+    if (tier === 'free') costToDeduct = 5;
+    else if (isPro) costToDeduct = 1;
+    else if (isSchool) costToDeduct = 2;
     else if (isUltra) costToDeduct = 0;
 
     const session = getSession();
@@ -1351,16 +1392,41 @@
         
         const newBase = currentBase - fromBase;
         const newBonus = bonusRemaining - fromBonus;
+        const prevBonusUsed = _getExamBonusUsed();
+        if (fromBonus > 0) {
+          _setExamBonusUsed(prevBonusUsed + fromBonus);
+        }
         
         const client = await _ensureSupabaseClient();
         const updateRes = await client.from('profiles').update({ credits: newBase }).eq('id', _profile.id).select().single();
         
         if (updateRes.error) {
+          if (fromBonus > 0) {
+            _setExamBonusUsed(prevBonusUsed);
+          }
           console.error('RA10 examineAnswer credit deduction failed:', updateRes.error);
           throw new Error('Your answer was marked, but we failed to deduct credits. Please try again or contact support.');
         } else if (updateRes.data) {
           _profile = updateRes.data;
           _writeCreditSnapshot(_profile);
+          if (fromBonus > 0) {
+            _appendCreditActivity({
+              type: 'spend',
+              source: 'exam_season_bonus',
+              action: 'ai_examiner_use',
+              amount: -fromBonus,
+              note: 'AI Examiner spent exam-season bonus credits',
+            });
+          }
+          if (fromBase > 0) {
+            _appendCreditActivity({
+              type: 'spend',
+              source: 'stored_credits',
+              action: 'ai_examiner_use',
+              amount: -fromBase,
+              note: 'AI Examiner spent account credits',
+            });
+          }
           _appendCreditActivity({
             type: 'spend',
             source: 'ai_examiner',
@@ -1371,6 +1437,9 @@
           });
           _emit('creditschange', _profile);
         } else {
+          if (fromBonus > 0) {
+            _setExamBonusUsed(prevBonusUsed);
+          }
           throw new Error('Credit deduction update returned no data. Please try again.');
         }
       } else {

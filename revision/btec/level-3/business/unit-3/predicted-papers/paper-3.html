@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Predicted Paper 3 — BTEC Business Unit 3 — RA10</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Arial, Helvetica, sans-serif; font-size: 11pt; color: #000; background: linear-gradient(180deg, #eef2ff 0%, #f7f2eb 100%); line-height: 1.45; padding: 18px 0 36px; }
+  .page { width: 210mm; min-height: 297mm; margin: 0 auto 24px auto; padding: 18mm 20mm 20mm 20mm; background: #fff; border: 1px solid #d8dce8; border-radius: 18px; box-shadow: 0 20px 48px rgba(26, 26, 46, 0.14); position: relative; overflow: hidden; }
+  @media print { body { margin: 0; padding: 0; background: #fff; } .page { width: 210mm; min-height: 297mm; margin: 0; padding: 18mm 20mm 20mm 20mm; border: none; border-radius: 0; box-shadow: none; page-break-after: always; overflow: visible; } .page:last-child { page-break-after: avoid; } .no-print { display: none !important; } }
+
+  .cover-header { border: none; border-radius: 12px; padding: 14px 20px; margin: 0 0 16px 0; display: flex; align-items: center; gap: 18px; background: linear-gradient(135deg, #0d1b3e 0%, #1a3a8f 55%, #1a56db 100%); }
+  .cover-logo { font-size: 32pt; font-weight: 900; color: #fff; line-height: 1; letter-spacing: -0.02em; }
+  .cover-tagline { flex: 1; }
+  .cover-tagline-main { font-size: 13pt; font-weight: 900; margin-bottom: 2px; letter-spacing: 0.02em; color: #fff; }
+  .cover-tagline-sub { font-size: 9.5pt; color: rgba(255,255,255,0.72); }
+
+  .cover-badge { display: inline-block; border: 2px solid #3b5bdb; border-radius: 999px; color: #1a3a7a; background: #ecf1ff; font-weight: 900; font-size: 9pt; padding: 4px 14px; margin: 0 0 8px 0; letter-spacing: 0.06em; text-transform: uppercase; }
+  .cover-detail { font-size: 9pt; color: #5a6a8a; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.04em; }
+  .cover-title { font-size: 18pt; font-weight: 900; margin-bottom: 6px; line-height: 1.2; color: #121827; }
+  .cover-subtitle { font-size: 9.5pt; color: #4a5568; margin-bottom: 14px; }
+  .cover-topics { border: 1.5px solid #d1d9ec; border-top: 4px solid #1a56db; border-radius: 10px; padding: 12px 14px; background: #fff; }
+  .cover-topics-title { font-weight: 900; font-size: 8.5pt; text-transform: uppercase; letter-spacing: 0.06em; color: #1e2d4a; margin-bottom: 9px; }
+  .cover-topics-grid { display: grid; grid-template-columns: 1fr; gap: 7px; }
+  .cover-topic-row { display: flex; gap: 8px; align-items: baseline; font-size: 8.5pt; line-height: 1.4; }
+  .cover-topic-q { font-weight: 900; font-size: 7.5pt; border-radius: 4px; padding: 2px 6px; flex-shrink: 0; color: #fff; background: #1a56db; }
+  .cover-topic-q.q2 { background: #4b7cdb; }
+  .cover-topic-q.q3 { background: #2563eb; }
+  .cover-topic-q.q4 { background: #3b5bdb; }
+  .cover-topic-desc { color: #2a3550; flex: 1; }
+  .cover-topic-aims { color: #7a8aaa; font-size: 7.5pt; white-space: nowrap; }
+
+  .cover-candidate { border: 1.5px solid #d1d9ec; border-top: 4px solid #1a56db; border-radius: 10px; padding: 12px 14px; background: #fff; }
+  .cover-candidate-title { font-weight: 900; font-size: 8.5pt; color: #1e2d4a; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.06em; }
+  .cover-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 14px; }
+  .cover-field-label { font-weight: bold; font-size: 8pt; color: #667; margin-bottom: 4px; }
+  .cover-field-line { border-bottom: 1.5px solid #b0b8cc; min-height: 22px; }
+
+  .cover-bottom-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: stretch; }
+  .cover-marks { border: 1.5px solid #d1d9ec; border-top: 4px solid #1a56db; border-radius: 10px; overflow: hidden; background: #fff; width: 100%; margin-bottom: 0; }
+  .cover-marks th { background: #ecf1ff; color: #1d1d1d; font-weight: bold; border: 1px solid #d8e2ff; padding: 6px; font-size: 9pt; }
+  .cover-marks td { border: 1px solid #d8e2ff; padding: 6px; text-align: center; font-size: 9pt; }
+  .cover-marks-label { font-weight: bold; text-align: left !important; background: #f5f9ff; font-size: 8.5pt; }
+
+  .cover-instructions { display: flex; flex-direction: column; gap: 0; border: 1.5px solid #d1d9ec; border-top: 4px solid #2563eb; border-radius: 10px; overflow: hidden; background: #fff; margin-bottom: 0; }
+  .instr-box { padding: 10px 14px; flex: 1; }
+  .instr-box + .instr-box { border-top: 1px dashed #d1d9ec; }
+  .instr-title { font-weight: 900; font-size: 8.5pt; color: #1e2d4a; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.06em; }
+  .instr-box li { font-size: 8.5pt; margin-bottom: 4px; margin-left: 16px; color: #333; }
+
+  .question-header { background: #1a1a2e; color: #fff; padding: 10px 16px; font-weight: bold; font-size: 11.5pt; margin-bottom: 0; }
+  .scenario-box { border: 1px solid #1a1a2e; border-top: none; background: #f0f4f8; padding: 12px 14px; margin-bottom: 16px; font-size: 10pt; line-height: 1.4; }
+  .scenario-title { font-weight: 900; color: #1a56db; margin-bottom: 3px; font-size: 10.5pt; }
+  .scenario-text { color: #333; }
+
+  .sub-question { margin-bottom: 20px; }
+  .sub-q-row { display: flex; gap: 8px; align-items: flex-start; margin-bottom: 5px; }
+  .sub-q-label { font-weight: bold; min-width: 22px; flex-shrink: 0; font-size: 10.5pt; }
+  .sub-q-text { flex: 1; line-height: 1.4; font-size: 10pt; }
+  .sub-q-marks { font-weight: bold; white-space: nowrap; flex-shrink: 0; font-size: 10pt; }
+
+  .answer-lines { margin-left: 28px; margin-top: 8px; margin-bottom: 6px; }
+  .answer-line { border-bottom: 1px solid #000; height: 24px; margin-bottom: 5px; }
+  .point-answer { display: flex; gap: 10px; align-items: flex-start; margin-left: 28px; margin-top: 8px; margin-bottom: 10px; }
+  .point-number { width: 18px; font-weight: bold; font-size: 10pt; line-height: 1.8; flex-shrink: 0; }
+  .point-lines { flex: 1; }
+
+  .q-total-bar { border-top: 2px solid #000; margin-top: 8px; padding-top: 5px; text-align: right; font-weight: bold; font-size: 10pt; }
+  .page-footer { position: absolute; bottom: 12mm; left: 20mm; right: 20mm; display: flex; justify-content: space-between; font-size: 9pt; color: #555; border-top: 1px solid #ccc; padding-top: 3px; }
+  .page-number { font-weight: bold; }
+
+  .viewer-topbar { position: sticky; top: 12px; z-index: 180; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; width: min(1180px, calc(100% - 28px)); margin: 0 auto 18px auto; padding: 12px 14px; border-radius: 16px; border: 1px solid #d7deef; background: #ffffff; box-shadow: 0 10px 24px rgba(23, 35, 72, 0.14); }
+  .viewer-group { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .viewer-group-nav { flex: 1 1 520px; min-width: 0; }
+  .viewer-group-actions { justify-content: flex-end; }
+  .viewer-title { color: #18213f; font-size: 9.25pt; font-weight: 900; letter-spacing: 0.04em; text-transform: uppercase; padding: 8px 11px; border-radius: 11px; background: #eef3ff; border: 1px solid #d8e2ff; }
+  .viewer-btn,
+  .viewer-nav-btn { border: 1px solid #ced8f1; background: #f7f9ff; color: #1f2b4f; text-decoration: none; font-size: 9pt; font-weight: 700; line-height: 1; padding: 8px 11px; border-radius: 10px; cursor: pointer; transition: background 0.2s, border-color 0.2s, color 0.2s; }
+  .viewer-btn:hover,
+  .viewer-nav-btn:hover { background: #edf3ff; border-color: #b8c8ef; }
+  .viewer-nav-btn.active { background: #2f4fc7; border-color: #2f4fc7; color: #fff; }
+  .viewer-btn-primary { background: linear-gradient(135deg, #1f6feb 0%, #154aa8 100%); border-color: #245fca; color: #fff; }
+  .viewer-btn-primary:hover { background: linear-gradient(135deg, #2b7dff 0%, #1e5ac6 100%); }
+  .viewer-counter,
+  .viewer-zoom-value { min-width: 62px; text-align: center; color: #162244; font-size: 9pt; font-weight: 800; padding: 8px 10px; border-radius: 10px; background: #f1f5ff; border: 1px solid #d7e1fb; }
+  .viewer-zoom-label { color: #4b5f95; font-size: 8.6pt; font-weight: 700; padding: 0 2px; }
+
+  .extended-space-page .scenario-box { margin-bottom: 10px; }
+  .answer-lines-extended { margin-left: 0; margin-top: 10px; }
+  .answer-lines-extended .answer-line { height: 13px; margin-bottom: 6px; }
+
+  @media screen and (max-width: 980px) {
+    .viewer-topbar { border-radius: 0; width: 100%; margin: 0 0 12px 0; top: 0; }
+    .page { width: min(210mm, calc(100% - 24px)); }
+  }
+
+  @media screen and (max-width: 720px) {
+    body { padding: 0 0 18px; }
+    .viewer-topbar { margin: 0 0 10px 0; padding: 10px 12px; gap: 10px; }
+    .viewer-group { width: 100%; }
+    .viewer-group-nav,
+    .viewer-group-actions { flex-wrap: nowrap; overflow-x: auto; justify-content: flex-start; padding-bottom: 2px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+    .viewer-group-nav::-webkit-scrollbar,
+    .viewer-group-actions::-webkit-scrollbar { display: none; }
+    .viewer-title,
+    .viewer-btn,
+    .viewer-nav-btn,
+    .viewer-counter,
+    .viewer-zoom-value,
+    .viewer-zoom-label { flex: 0 0 auto; }
+  }
+
+  @media print {
+    .viewer-topbar { display: none !important; }
+    body { margin: 0 !important; padding: 0 !important; background: #fff !important; }
+    .page { transform: none !important; margin: 0 !important; width: 210mm !important; min-height: 297mm !important; border: none !important; border-radius: 0 !important; box-shadow: none !important; page-break-after: always !important; overflow: visible !important; }
+    .page:last-child { page-break-after: avoid !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="viewer-topbar no-print">
+  <div class="viewer-group viewer-group-nav">
+    <span class="viewer-title">RA10 • Unit 3 • Paper 3</span>
+    <button class="viewer-nav-btn active" data-target="cover" onclick="scrollToPage(0)">Cover</button>
+    <button class="viewer-nav-btn" data-q="1" onclick="scrollToQuestion(1)">Q1</button>
+    <button class="viewer-nav-btn" data-q="2" onclick="scrollToQuestion(2)">Q2</button>
+    <button class="viewer-nav-btn" data-q="3" onclick="scrollToQuestion(3)">Q3</button>
+    <button class="viewer-nav-btn" data-q="4" onclick="scrollToQuestion(4)">Q4</button>
+  </div>
+  <div class="viewer-group viewer-group-actions">
+    <span class="viewer-zoom-label">Zoom</span>
+    <button class="viewer-btn" id="zoomOutBtn" type="button">-</button>
+    <span class="viewer-zoom-value" id="zoomLevel">100%</span>
+    <button class="viewer-btn" id="zoomInBtn" type="button">+</button>
+    <button class="viewer-btn" id="zoomResetBtn" type="button">Reset</button>
+    <span class="viewer-counter" id="viewerPageCounter">1 / 1</span>
+    <button class="viewer-btn viewer-btn-primary" type="button" onclick="window.print()">Print / Save PDF</button>
+    <a class="viewer-btn" href="mark-scheme-3.html">Mark Scheme</a>
+  </div>
+</div>
+
+<!-- COVER PAGE -->
+<div class="page">
+  <div class="cover-header">
+    <div class="cover-logo">U3</div>
+    <div class="cover-tagline">
+      <div class="cover-tagline-main">BTEC Level 3 Business</div>
+      <div class="cover-tagline-sub">Unit 3: Personal and Business Finance</div>
+    </div>
+  </div>
+
+  <div class="cover-badge">Predicted Paper 3</div>
+  <div class="cover-detail">90 marks • 2 hours • June 2026</div>
+  <div class="cover-title">Personal and Business Finance</div>
+  <div class="cover-subtitle">Meridian Bank • TechStart Ventures • Community Health Trust • Capital Growth Ltd</div>
+
+  <div class="cover-meta-grid" style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 12px; align-items: stretch;">
+    <div class="cover-topics">
+      <div class="cover-topics-title">Topics Covered in This Paper</div>
+      <div class="cover-topics-grid">
+        <div class="cover-topic-row"><span class="cover-topic-q q1">Q1</span><span class="cover-topic-desc">Government regulation, consumer protection, FCA, taxation, benefits</span><span class="cover-topic-aims">[C1, C2]</span></div>
+        <div class="cover-topic-row"><span class="cover-topic-q q2">Q2</span><span class="cover-topic-desc">Finance sources, crowdfunding, venture capital, decision-making</span><span class="cover-topic-aims">[D2, D3]</span></div>
+        <div class="cover-topic-row"><span class="cover-topic-q q3">Q3</span><span class="cover-topic-desc">Budgeting, budget variance, cost control, personal finance</span><span class="cover-topic-aims">[A3, E3]</span></div>
+        <div class="cover-topic-row"><span class="cover-topic-q q4">Q4</span><span class="cover-topic-desc">Depreciation, working capital, financial decision-making</span><span class="cover-topic-aims">[F2.2, E]</span></div>
+      </div>
+    </div>
+
+    <div class="cover-candidate">
+      <div class="cover-candidate-title">Candidate Details</div>
+      <div class="cover-fields">
+        <div>
+          <div class="cover-field-label">Name</div>
+          <div class="cover-field-line"></div>
+        </div>
+        <div>
+          <div class="cover-field-label">Date</div>
+          <div class="cover-field-line"></div>
+        </div>
+        <div>
+          <div class="cover-field-label">Centre/School</div>
+          <div class="cover-field-line"></div>
+        </div>
+        <div>
+          <div class="cover-field-label">Candidate No.</div>
+          <div class="cover-field-line"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cover-bottom-grid">
+    <table class="cover-marks">
+      <tr><th>Question</th><th>1</th><th>2</th><th>3</th><th>4</th><th>Total</th></tr>
+      <tr><td class="cover-marks-label">Marks Available</td><td>22</td><td>24</td><td>22</td><td>22</td><td>90</td></tr>
+      <tr><td class="cover-marks-label">Marks Awarded</td><td></td><td></td><td></td><td></td><td></td></tr>
+    </table>
+
+    <div class="cover-instructions">
+      <div class="instr-box">
+        <div class="instr-title">Instructions to Candidates</div>
+        <ul><li>Answer ALL questions</li><li>Show working in calculations</li><li>Use black ink or pen</li></ul>
+      </div>
+      <div class="instr-box">
+        <div class="instr-title">Information for Candidates</div>
+        <ul><li>Marks are shown in brackets</li><li>Total marks: 90</li><li>Time allowed: 2 hours</li></ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span>For revision purposes • Not an official Pearson paper</span>
+    <span class="page-number">Page 1</span>
+  </div>
+</div>
+
+<!-- QUESTION 1 -->
+<div class="page">
+  <div class="question-header">QUESTION 1 — 22 marks</div>
+  <div class="scenario-box">
+    <div class="scenario-title">Meridian Bank — Government Policy and Regulation</div>
+    <div class="scenario-text">Meridian Bank is a high-street bank serving customers nationwide. The Chief Executive wants to understand how government taxation and benefit systems affect customer financial planning decisions, and how FCA regulations impact business operations.</div>
+  </div>
+
+  <div class="sub-question">
+    <div class="sub-q-row"><span class="sub-q-label">(a)</span><span class="sub-q-text">Identify three forms of taxation that affect personal finance decisions.</span><span class="sub-q-marks">(3)</span></div>
+    <div class="answer-lines"><div class="answer-line"></div><div class="answer-line"></div><div class="answer-line"></div></div>
+  </div>
+
+  <div class="sub-question">
+    <div class="sub-q-row"><span class="sub-q-label">(b)</span><span class="sub-q-text">Explain two government benefits that help support individuals during difficult financial periods.</span><span class="sub-q-marks">(6)</span></div>
+    <div class="point-answer"><div class="point-number">1</div><div class="point-lines"><div class="answer-line"></div><div class="answer-line"></div><div class="answer-line"></div><div class="answer-line"></div></div></div>
+    <div class="point-answer"><div class="point-number">2</div><div class="point-lines"><div class="answer-line"></div><div class="answer-line"></div><div class="answer-line"></div><div class="answer-line"></div></div></div>
+  </div>
+
+  <div class="sub-question">
+    <div class="sub-q-row"><span class="sub-q-label">(c)</span><span class="sub-q-text">Discuss the impact of FCA regulations on how Meridian Bank operates and offers financial products.</span><span class="sub-q-marks">(8)</span></div>
+    <div class="answer-lines">
+      <div class="answer-line"></div><div class="answer-line"></div><div class="answer-line"></div><div class="answer-line"></div><div class="answer-line"></div><div class="answer-line"></div>
+      <div class="answer-line"></div><div class="answer-line"></div><div class="answer-line"></div><div class="answer-line"></div>
+    </div>
+  </div>
+
+  <div class="sub-question">
+    <div class="sub-q-row"><span class="sub-q-label">(d)</span><span class="sub-q-text">Evaluate the effectiveness of the FSCS and FOS in protecting Meridian Bank's customers.</span><span class="sub-q-marks">(5)</span></div>
+    <div class="answer-lines"><div class="answer-line"></div><div class="answer-line"></div><div class="answer-line"></div><div class="answer-line"></div><div class="answer-line"></div><div class="answer-line"></div></div>
+  </div>
+
+  <div class="q-total-bar">Question 1 Total: 22 marks</div>
+  <div class="page-footer">
+    <span>RA10 — BTEC Business Unit 3 — Predicted Paper 3</span>
+    <span class="page-number">Page 2</span>
+  </div>
+</div>
+
+<!-- QUESTION 2 -->
+<div class="page">
+  <div class="question-header">QUESTION 2 — 24 marks</div>
+  <div class="scenario-box">
+    <div class="scenario-title">TechStart Ventures — Alternative Finance and Investment Decisions</div>
+    <div class="scenario-text">TechStart Ventures is a software development startup. The founders need £300,000 to develop their flagship product. They are considering three options: (1) Personal investment and bank loans; (2) Crowdfunding campaign; (3) Venture capital investment. The founders are concerned about maintaining control of the business.</div>
+  </div>
+
+  <div class="sub-question">
+    <div class="sub-q-row"><span class="sub-q-label">(a)</span><span class="sub-q-text">Explain what venture capital is and identify two advantages of seeking venture capital investment.</span><span class="sub-q-marks">(6)</span></div>
+    <div class="answer-lines">
+      <div class="answer-line"></div><div class="answer-line"></div><div class="answer-line"></div><div class="answer-line"></div><div class="answer-line"></div><div class="answer-line"></div>
+      <div class="answer-line"></div><div class="answer-line"></div>
+    </div>
+  </div>
+
+  <div class="sub-question">
+    <div class="sub-q-row"><span class="sub-q-label">(b)</span><span class="sub-q-text">Analyse the benefits and drawbacks of using crowdfunding to raise the required capital.</span><span class="sub-q-marks">(8)</span></div>
+    <div class="answer-lines">
+      <div class="answer-line"></div><div class="answer-line"></div><div class="answer-line"></div><div class="answer-line"></div><div class="answer-line"></div><div class="answer-line"></div>
+      <div class="answer-line"></div><div class="answer-line"></div><div class="answer-line"></div><div class="answer-line"></div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span>RA10 — BTEC Business Unit 3 — Predicted Paper 3</span>
+    <span class="page-number">Page 3</span>
+  </div>
+</div>
+
+<div class="page">
+  <div class="question-header">QUESTION 2 (continued)</div>
+
+  <div class="sub-question">
+    <div class="sub-q-row"><span class="sub-q-label">(c)</span><span class="sub-q-text">Evaluate which finance source would be most suitable for TechStart Ventures, considering their need to maintain control.</span><span class="sub-q-marks">(10)</span></div>
+    <div class="answer-lines">
+      <div class="answer-line"></div><div class="answer-line"></div><div class="answer-line"></div><div class="answer-line"></div><div class="answer-line"></div><div class="answer-line"></div>
+      <div class="answer-line"></div><div class="answer-line"></div><div class="answer-line"></div><div class="answer-line"></div>
+    </div>
+  </div>
+
+  <div class="q-total-bar">Question 2 Total: 24 marks</div>
+  <div class="page-footer">
+    <span>RA10 — BTEC Business Unit 3 — Predicted Paper 3</span>
+    <span class="page-number">Page 4</span>
+  </div>
+</div>
+
+<!-- QUESTION 3 -->
+<div class="page">
+  <div class="question-header">QUESTION 3 — 22 marks</div>
+  <div class="scenario-box">
+    <div class="scenario-title">Community Health Trust — Budgeting and Cost Control</div>
+    <div class="scenario-text">Community Health Trust operates outreach services in three regions. For Q4 2025, they budgeted for staff costs of £280,000, equipment costs of £45,000, and administration costs of £35,000. Actual expenditure was: staff costs £295,000, equipment costs £38,000, and administration costs £42,000.</div>
+  </div>
+
+  <div class="sub-question">
+    <div class="sub-q-row"><span class="sub-q-label">(a)</span><span class="sub-q-text">Calculate the budget variance for each cost category and overall.</span><span class="sub-q-marks">(9)</span></div>
+    <div class="answer-lines">
+      <div class="answer-line"></div><div class="answer-line"></div><div class="answer-line"></div><div class="answer-line"></div><div class="answer-line"></div><div class="answer-line"></div>
+      <div class="answer-line"></div><div class="answer-line"></div><div class="answer-line"></div><div class="answer-line"></div>
+    </div>
+  </div>
+
+  <div class="sub-question">
+    <div class="sub-q-row"><span class="sub-q-label">(b)</span><span class="sub-q-text">Identify which cost categories have favourable or adverse variances, and explain what this means.</span><span class="sub-q-marks">(6)</span></div>
+    <div class="answer-lines">
+      <div class="answer-line"></div><div class="answer-line"></div><div class="answer-line"></div><div class="answer-line"></div><div class="answer-line"></div><div class="answer-line"></div>
+      <div class="answer-line"></div>
+    </div>
+  </div>
+
+  <div class="sub-question">
+    <div class="sub-q-row"><span class="sub-q-label">(c)</span><span class="sub-q-text">Suggest reasons why staff costs exceeded the budget and recommend control measures.</span><span class="sub-q-marks">(7)</span></div>
+    <div class="answer-lines">
+      <div class="answer-line"></div><div class="answer-line"></div><div class="answer-line"></div><div class="answer-line"></div><div class="answer-line"></div><div class="answer-line"></div>
+      <div class="answer-line"></div>
+    </div>
+  </div>
+
+  <div class="q-total-bar">Question 3 Total: 22 marks</div>
+  <div class="page-footer">
+    <span>RA10 — BTEC Business Unit 3 — Predicted Paper 3</span>
+    <span class="page-number">Page 5</span>
+  </div>
+</div>
+
+<!-- QUESTION 4 -->
+<div class="page">
+  <div class="question-header">QUESTION 4 — 22 marks</div>
+  <div class="scenario-box">
+    <div class="scenario-title">Capital Growth Ltd — Depreciation and Working Capital</div>
+    <div class="scenario-text">Capital Growth Ltd acquired delivery vehicles on 1 January 2024 at a cost of £120,000. They have a useful life of 5 years with an estimated residual value of £20,000. The Finance Director wants to understand how different depreciation methods affect financial statements and working capital decisions.</div>
+  </div>
+
+  <div class="sub-question">
+    <div class="sub-q-row"><span class="sub-q-label">(a)</span><span class="sub-q-text">Calculate the annual depreciation charge using the straight-line method.</span><span class="sub-q-marks">(3)</span></div>
+    <div class="answer-lines"><div class="answer-line"></div><div class="answer-line"></div><div class="answer-line"></div><div class="answer-line"></div></div>
+  </div>
+
+  <div class="sub-question">
+    <div class="sub-q-row"><span class="sub-q-label">(b)</span><span class="sub-q-text">Calculate the net book value of the vehicles after two years using straight-line depreciation.</span><span class="sub-q-marks">(3)</span></div>
+    <div class="answer-lines"><div class="answer-line"></div><div class="answer-line"></div><div class="answer-line"></div><div class="answer-line"></div></div>
+  </div>
+
+  <div class="sub-question">
+    <div class="sub-q-row"><span class="sub-q-label">(c)</span><span class="sub-q-text">Explain the difference between straight-line and reducing balance depreciation methods.</span><span class="sub-q-marks">(6)</span></div>
+    <div class="answer-lines">
+      <div class="answer-line"></div><div class="answer-line"></div><div class="answer-line"></div><div class="answer-line"></div><div class="answer-line"></div><div class="answer-line"></div><div class="answer-line"></div>
+    </div>
+  </div>
+
+  <div class="sub-question">
+    <div class="sub-q-row"><span class="sub-q-label">(d)</span><span class="sub-q-text">Evaluate how depreciation affects working capital management and cash flow for Capital Growth Ltd.</span><span class="sub-q-marks">(10)</span></div>
+    <div class="answer-lines">
+      <div class="answer-line"></div><div class="answer-line"></div><div class="answer-line"></div><div class="answer-line"></div><div class="answer-line"></div><div class="answer-line"></div>
+      <div class="answer-line"></div><div class="answer-line"></div><div class="answer-line"></div><div class="answer-line"></div>
+    </div>
+  </div>
+
+  <div class="q-total-bar">Question 4 Total: 22 marks</div>
+  <div class="page-footer">
+    <span>RA10 — BTEC Business Unit 3 — Predicted Paper 3</span>
+    <span class="page-number">Page 6</span>
+  </div>
+</div>
+
+<div class="page">
+  <div style="text-align: center; padding: 40px 20px; color: #666;">
+    <p style="font-size: 14pt; font-weight: bold; margin-bottom: 20px;">END OF PAPER</p>
+    <p style="font-size: 10pt;">Total marks available: 90</p>
+    <p style="font-size: 10pt; margin-top: 20px; color: #999;">For revision purposes. Not an official Pearson paper.</p>
+  </div>
+</div>
+
+<script>
+  (function () {
+    function parseMarks(text) {
+      var match = String(text || '').match(/(\d+)/);
+      return match ? Number(match[1]) : 0;
+    }
+
+    function makeLines(count) {
+      var wrap = document.createElement('div');
+      wrap.className = 'answer-lines answer-lines-extended';
+      for (var i = 0; i < count; i += 1) {
+        var line = document.createElement('div');
+        line.className = 'answer-line';
+        wrap.appendChild(line);
+      }
+      return wrap;
+    }
+
+    function insertAfter(newNode, referenceNode) {
+      if (!referenceNode || !referenceNode.parentNode) return;
+      referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
+    }
+
+    var footerText = Array.from(document.querySelectorAll('.page-footer span'))
+      .map(function (el) { return el.textContent.trim(); })
+      .find(function (txt) { return txt.indexOf('RA10') !== -1; }) || 'RA10 — BTEC Business Unit 3';
+
+    var allSubQuestions = Array.from(document.querySelectorAll('.sub-question'));
+    var insertAnchors = new Map();
+
+    allSubQuestions.forEach(function (subQuestion) {
+      var marks = parseMarks(subQuestion.querySelector('.sub-q-marks') ? subQuestion.querySelector('.sub-q-marks').textContent : '');
+      if (marks < 8) return;
+
+      var sourcePage = subQuestion.closest('.page');
+      if (!sourcePage) return;
+
+      var questionHeader = sourcePage.querySelector('.question-header') ? sourcePage.querySelector('.question-header').textContent.trim() : 'Extended Response';
+      var partLabel = subQuestion.querySelector('.sub-q-label') ? subQuestion.querySelector('.sub-q-label').textContent.trim() : '(Part)';
+      var partText = subQuestion.querySelector('.sub-q-text') ? subQuestion.querySelector('.sub-q-text').textContent.trim() : 'Use this space for your response.';
+
+      var pageOne = document.createElement('div');
+      pageOne.className = 'page extended-space-page';
+      pageOne.innerHTML = '<div class="question-header"></div><div class="scenario-box"><div class="scenario-title"></div><div class="scenario-text"></div></div><div class="page-footer"><span></span><span class="page-number"></span></div>';
+      pageOne.querySelector('.question-header').textContent = questionHeader + ' — Extended Response Space';
+      pageOne.querySelector('.scenario-title').textContent = partLabel + ' ' + marks + ' marks — Continuation page 1 of 2';
+      pageOne.querySelector('.scenario-text').textContent = partText;
+      pageOne.querySelector('.page-footer span').textContent = footerText;
+      pageOne.insertBefore(makeLines(38), pageOne.querySelector('.page-footer'));
+
+      var pageTwo = document.createElement('div');
+      pageTwo.className = 'page extended-space-page';
+      pageTwo.innerHTML = '<div class="question-header"></div><div class="scenario-box"><div class="scenario-title"></div><div class="scenario-text"></div></div><div class="page-footer"><span></span><span class="page-number"></span></div>';
+      pageTwo.querySelector('.question-header').textContent = questionHeader + ' — Extended Response Space';
+      pageTwo.querySelector('.scenario-title').textContent = partLabel + ' ' + marks + ' marks — Continuation page 2 of 2';
+      pageTwo.querySelector('.scenario-text').textContent = partText;
+      pageTwo.querySelector('.page-footer span').textContent = footerText;
+      pageTwo.insertBefore(makeLines(20), pageTwo.querySelector('.page-footer'));
+
+      var anchor = insertAnchors.get(sourcePage) || sourcePage;
+      insertAfter(pageOne, anchor);
+      insertAfter(pageTwo, pageOne);
+      insertAnchors.set(sourcePage, pageTwo);
+    });
+
+    var pages = Array.from(document.querySelectorAll('.page'));
+    pages.forEach(function (page, index) {
+      var number = page.querySelector('.page-number');
+      if (number) number.textContent = 'Page ' + (index + 1);
+    });
+
+    var counter = document.getElementById('viewerPageCounter');
+    var questionHeaders = document.querySelectorAll('.question-header');
+    var navButtons = document.querySelectorAll('.viewer-nav-btn');
+    var zoomOutBtn = document.getElementById('zoomOutBtn');
+    var zoomInBtn = document.getElementById('zoomInBtn');
+    var zoomResetBtn = document.getElementById('zoomResetBtn');
+    var zoomLevelLabel = document.getElementById('zoomLevel');
+    var zoomLevel = 1;
+
+    function getCurrentPage() {
+      var viewportTarget = window.innerHeight * 0.45;
+      var bestIndex = 0;
+      var bestDistance = Infinity;
+      pages.forEach(function (page, index) {
+        var rect = page.getBoundingClientRect();
+        var pageMid = rect.top + (rect.height / 2);
+        var distance = Math.abs(pageMid - viewportTarget);
+        if (distance < bestDistance) {
+          bestDistance = distance;
+          bestIndex = index;
+        }
+      });
+      return bestIndex + 1;
+    }
+
+    function updateCounter() {
+      if (counter) counter.textContent = getCurrentPage() + ' / ' + pages.length;
+    }
+
+    function getMinZoom() {
+      if (!pages.length) return 0.8;
+      if (window.innerWidth > 720) return 0.8;
+      var baseWidth = pages[0].offsetWidth || 1;
+      var availableWidth = Math.max(320, window.innerWidth - 12);
+      return Math.min(1, Math.max(0.55, availableWidth / baseWidth));
+    }
+
+    function applyZoom() {
+      pages.forEach(function (page) {
+        if (!page.dataset.baseHeight) {
+          page.dataset.baseHeight = String(page.offsetHeight);
+        }
+        var baseHeight = Number(page.dataset.baseHeight) || page.offsetHeight;
+        var extraHeight = Math.max(0, (baseHeight * zoomLevel) - baseHeight);
+        page.style.transformOrigin = 'top center';
+        page.style.transform = 'scale(' + zoomLevel + ')';
+        page.style.marginBottom = (24 + extraHeight) + 'px';
+      });
+      if (zoomLevelLabel) zoomLevelLabel.textContent = Math.round(zoomLevel * 100) + '%';
+    }
+
+    function setZoom(nextZoom) {
+      zoomLevel = Math.min(1.5, Math.max(getMinZoom(), nextZoom));
+      applyZoom();
+      updateCounter();
+    }
+
+    function scrollToPage(pageNum) {
+      if (!pages[pageNum]) return;
+      pages[pageNum].scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function scrollToQuestion(qNum) {
+      var header = null;
+      for (var i = 0; i < questionHeaders.length; i += 1) {
+        if (questionHeaders[i].textContent.indexOf('QUESTION ' + qNum) !== -1) {
+          header = questionHeaders[i];
+          break;
+        }
+      }
+      if (header) header.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    window.scrollToPage = scrollToPage;
+    window.scrollToQuestion = scrollToQuestion;
+
+    function updateActiveNav() {
+      var scrollPos = window.scrollY + window.innerHeight / 3;
+      var currentQ = 0;
+      for (var i = 0; i < questionHeaders.length; i += 1) {
+        var rect = questionHeaders[i].getBoundingClientRect();
+        if (rect.top + window.scrollY < scrollPos) {
+          var text = questionHeaders[i].textContent;
+          if (text.indexOf('QUESTION 1') !== -1) currentQ = 1;
+          else if (text.indexOf('QUESTION 2') !== -1) currentQ = 2;
+          else if (text.indexOf('QUESTION 3') !== -1) currentQ = 3;
+          else if (text.indexOf('QUESTION 4') !== -1) currentQ = 4;
+        }
+      }
+
+      navButtons.forEach(function (item) { item.classList.remove('active'); });
+      if (currentQ > 0) {
+        var activeItem = document.querySelector('.viewer-nav-btn[data-q="' + currentQ + '"]');
+        if (activeItem) activeItem.classList.add('active');
+      } else {
+        var coverButton = document.querySelector('.viewer-nav-btn[data-target="cover"]');
+        if (coverButton) coverButton.classList.add('active');
+      }
+    }
+
+    if (zoomOutBtn) zoomOutBtn.addEventListener('click', function () { setZoom(zoomLevel - 0.1); });
+    if (zoomInBtn) zoomInBtn.addEventListener('click', function () { setZoom(zoomLevel + 0.1); });
+    if (zoomResetBtn) zoomResetBtn.addEventListener('click', function () { setZoom(1); });
+
+    zoomLevel = getMinZoom();
+    applyZoom();
+    updateCounter();
+    updateActiveNav();
+
+    window.addEventListener('scroll', function () {
+      updateCounter();
+      updateActiveNav();
+    }, { passive: true });
+
+    window.addEventListener('resize', function () {
+      zoomLevel = Math.min(1.5, Math.max(getMinZoom(), zoomLevel));
+      applyZoom();
+      updateCounter();
+      updateActiveNav();
+    });
+  })();
+</script>
+
+</body>
+</html>

@@ -107,15 +107,20 @@
 }
 
 .tabs .tab.tab-special {
-  background: #eef2fb;
-  border: 1px solid #b8cef5;
-  color: #0d3591;
+  border-color: #1a56db;
+  color: #0d3b9a;
+  background: #ecf1ff;
+}
+
+.tabs .tab.tab-special:hover {
+  background: #dae4ff;
+  border-color: #0d3b9a;
 }
 
 .tabs .tab.tab-special.active {
-  background: #d4e4fc;
-  border-color: #3b6fd4;
-  color: #0a2a7a;
+  border-bottom-color: #1a56db;
+  background: transparent;
+  color: #1a56db;
 }
 
 .you-hero {
@@ -321,6 +326,500 @@
   color: var(--ink) !important;
   border-color: var(--line) !important;
 }
+
+/* ===== PREDICTED PAPERS STYLES ===== */
+.papers-hero-grid {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 18px;
+  align-items: start;
+}
+
+.papers-insight-card {
+  background: linear-gradient(180deg, #fcfdfb 0%, #f0f5ff 100%);
+  border: 1px solid #d8e2ff;
+  border-radius: 16px;
+  padding: 18px;
+}
+
+.papers-insight-card h3 {
+  margin: 0 0 6px;
+  font-size: 1.02rem;
+}
+
+.papers-insight-card p {
+  margin: 0 0 12px;
+  color: #4f5f58;
+  font-size: 0.92rem;
+}
+
+.papers-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.papers-kpi {
+  background: linear-gradient(145deg, #f5f9ff 0%, #ecf1ff 100%);
+  border: 1px solid #d8e2ff;
+  border-radius: 14px;
+  padding: 14px;
+}
+
+.papers-kpi strong {
+  display: block;
+  font-size: 1.4rem;
+  line-height: 1;
+  color: #0d3b9a;
+}
+
+.papers-kpi span {
+  display: block;
+  margin-top: 6px;
+  color: #4d6459;
+  font-size: 0.84rem;
+}
+
+.trend-chart {
+  display: grid;
+  gap: 10px;
+}
+
+.revise-quick-nav {
+  display: grid;
+  gap: 10px;
+  margin: 0 0 12px;
+  padding: 12px;
+  border: 1px solid #d8e2ff;
+  border-radius: 12px;
+  background: linear-gradient(140deg, #f7f9ff 0%, #ecf1ff 100%);
+}
+
+.revise-quick-nav-title {
+  margin: 0;
+  color: #0d2d7a;
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.revise-quick-nav-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.revise-focus-btn {
+  border: 1px solid #b8c8ef;
+  border-radius: 999px;
+  padding: 6px 10px;
+  background: #ffffff;
+  color: #0d3b9a;
+  font-size: 0.76rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.revise-focus-btn:hover,
+.revise-focus-btn.active {
+  background: #2563eb;
+  border-color: #2563eb;
+  color: #ffffff;
+}
+
+.revise-focus-status {
+  margin: 0;
+  color: #4a5f8a;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.trend-row {
+  display: grid;
+  grid-template-columns: minmax(280px, 1.7fr) minmax(120px, 1fr) 72px;
+  align-items: start;
+  gap: 12px;
+}
+
+.trend-row.trend-row-focus {
+  border: 1px solid #b8c8ef;
+  border-radius: 10px;
+  background: #f7f9ff;
+  padding: 8px;
+}
+
+.trend-meta strong,
+.trend-meta span {
+  display: block;
+}
+
+.trend-meta strong {
+  color: #0d3b9a;
+  font-size: 0.84rem;
+}
+
+.trend-meta span {
+  color: #4a5f8a;
+  font-size: 0.77rem;
+}
+
+.trend-topic-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.trend-topic-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: #ecf1ff;
+  color: #0d3b9a;
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.trend-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  overflow: visible;
+  padding-bottom: 0;
+}
+
+.trend-actions .btn {
+  flex: 0 1 auto;
+  padding: 8px 12px;
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+.papers-fun-card {
+  border: 1px solid #d8e2ff;
+  background: linear-gradient(140deg, #f7f9ff 0%, #ecf1ff 45%, #fff6e6 100%);
+}
+
+.papers-fun-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.papers-fun-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: #ecf1ff;
+  color: #0d3b9a;
+}
+
+.papers-fun-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.papers-fun-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.papers-fun-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 999px;
+  border: 1px solid #b8c8ef;
+  background: rgba(255, 255, 255, 0.86);
+  color: #0d3b9a;
+  font-size: 0.74rem;
+  font-weight: 800;
+  padding: 4px 10px;
+}
+
+.papers-fun-pill .val {
+  color: #1a56db;
+}
+
+.papers-fun-result {
+  margin-top: 12px;
+  border: 1px solid #d8e2ff;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.78);
+  padding: 12px;
+}
+
+.papers-fun-title {
+  margin: 0;
+  color: #0d3b9a;
+  font-weight: 800;
+  font-size: 0.92rem;
+}
+
+.papers-fun-copy {
+  margin: 5px 0 0;
+  color: #4a5f8a;
+  font-size: 0.82rem;
+}
+
+.papers-fun-mission-meta {
+  margin: 8px 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.papers-fun-mission-tag {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 4px 9px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  background: #ecf1ff;
+  color: #0d3b9a;
+}
+
+.papers-fun-timer {
+  margin-top: 8px;
+  color: #4a5f8a;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.papers-fun-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.papers-fun-actions .btn {
+  padding: 7px 11px;
+  font-size: 0.8rem;
+}
+
+.papers-fun-today {
+  display: grid;
+  gap: 8px;
+  margin-top: 12px;
+  background: rgba(255,255,255,0.65);
+  border-radius: 10px;
+  border: 1px solid #d8e9e1;
+  padding: 10px;
+}
+
+.papers-fun-check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8rem;
+  color: #4a5f8a;
+}
+
+.papers-fun-check input {
+  width: 16px;
+  height: 16px;
+}
+
+.papers-fun-status {
+  margin-top: 2px;
+  color: #4a5f8a;
+  font-size: 0.76rem;
+  font-weight: 700;
+}
+
+.trend-bar {
+  height: 12px;
+  border-radius: 999px;
+  background: #ecf1ff;
+  overflow: hidden;
+}
+
+.trend-bar span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #1a56db 0%, #3b5bdb 55%, #4b7cdb 100%);
+}
+
+.trend-value {
+  color: #4a5f8a;
+  font-size: 0.79rem;
+  font-weight: 700;
+}
+
+.papers-slot-signals {
+  display: grid;
+  gap: 12px;
+  align-content: start;
+}
+
+.signal-card {
+  border: 1px solid #d8e2ff;
+  border-radius: 14px;
+  padding: 14px;
+  background: rgba(255, 255, 255, 0.72);
+  height: auto;
+}
+
+.signal-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #0d3b9a;
+}
+
+.signal-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: #ecf1ff;
+  color: #0d3b9a;
+}
+
+.signal-card p {
+  margin: 0;
+}
+
+.papers-footnote {
+  margin: 10px 2px 0;
+  color: #4a5f8a;
+  font-size: 0.82rem;
+}
+
+/* Dark theme for papers */
+[data-theme="dark"] .papers-insight-card {
+  background: var(--surface);
+  border-color: var(--line-2);
+}
+
+[data-theme="dark"] .papers-insight-card h3,
+[data-theme="dark"] .papers-insight-card p,
+[data-theme="dark"] .papers-fun-title,
+[data-theme="dark"] .papers-footnote {
+  color: var(--ink-2);
+}
+
+[data-theme="dark"] .papers-kpi {
+  background: #1a2240;
+  border-color: #2a3a5a;
+}
+
+[data-theme="dark"] .papers-kpi strong {
+  color: #6da8ff;
+}
+
+[data-theme="dark"] .papers-kpi span {
+  color: var(--ink-2);
+}
+
+[data-theme="dark"] .revise-quick-nav,
+[data-theme="dark"] .trend-row.trend-row-focus {
+  background: #1a2240;
+  border-color: #2a3a5a;
+}
+
+[data-theme="dark"] .trend-meta strong {
+  color: var(--ink);
+}
+
+[data-theme="dark"] .trend-meta span,
+[data-theme="dark"] .trend-value {
+  color: var(--ink-2);
+}
+
+[data-theme="dark"] .trend-topic-chip,
+[data-theme="dark"] .signal-pill {
+  background: #2a3a5a;
+  color: #b8c8ff;
+}
+
+[data-theme="dark"] .papers-fun-card {
+  background: linear-gradient(140deg, #1a2a24 0%, #1d3028 45%, #2c2b1e 100%);
+  border-color: #395346;
+}
+
+[data-theme="dark"] .papers-fun-result,
+[data-theme="dark"] .papers-fun-today {
+  background: rgba(19, 28, 40, 0.75);
+  border-color: #395346;
+}
+
+[data-theme="dark"] .papers-fun-badge,
+[data-theme="dark"] .papers-fun-mission-tag {
+  background: #2a3a5a;
+  color: #b8c8ff;
+}
+
+[data-theme="dark"] .papers-fun-copy {
+  color: #9ac0ff;
+}
+
+[data-theme="dark"] .papers-fun-status {
+  color: #9ac0ff;
+}
+
+.papers-deep-dive {
+  margin-top: 16px;
+  border: 1px solid #d5e6dc;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.5);
+  padding: 12px;
+}
+
+.papers-deep-dive > summary {
+  cursor: pointer;
+  user-select: none;
+  padding: 4px;
+  color: #16553a;
+  font-weight: 700;
+}
+
+.papers-deep-dive-body {
+  margin-top: 12px;
+}
+
+@media (max-width: 980px) {
+  .papers-hero-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .trend-row {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+
+  .trend-actions .btn {
+    width: auto;
+  }
+}
 </style>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%231a56db'/%3E%3Ctext x='16' y='22' text-anchor='middle' font-family='sans-serif' font-weight='900' font-size='18' fill='%23e8efff'%3EU3%3C/text%3E%3C/svg%3E">
 </head>
@@ -330,6 +829,7 @@
     <button class="tab active" data-tab="dashboard">Dashboard</button>
     <button class="tab" data-tab="questions">Questions</button>
     <button class="tab" data-tab="revise">Revise</button>
+    <button class="tab tab-special" data-tab="papers">Predicted Papers</button>
     <button class="tab tab-special" data-tab="progress">Progress</button>
   </nav>
   <div id="unit3-bus-credit-chip" style="margin-left:auto;display:flex;align-items:center;"></div>
@@ -733,6 +1233,126 @@
       <span id="flash-progress" class="muted"></span>
     </div>
     <div id="flash-stage"></div>
+  </section>
+
+  <!-- PREDICTED PAPERS SECTION -->
+  <section id="view-papers" class="view" style="margin-top:24px;margin-bottom:24px;">
+      <!-- Quick Access Predicted Papers Navigation -->
+      <div style="display: flex; flex-wrap: wrap; gap: 18px; justify-content: center; margin-bottom: 28px;">
+        <a href="predicted-papers/paper-1.html" class="btn primary" style="min-width:170px;font-size:1.08rem;font-weight:800;background:#1a56db;color:#fff;border-radius:12px;padding:18px 24px;text-align:center;box-shadow:0 2px 8px #1a56db22;">Paper 1</a>
+        <a href="predicted-papers/mark-scheme-1.html" class="btn" style="min-width:170px;font-size:1.08rem;font-weight:800;background:#ecf1ff;color:#1a56db;border-radius:12px;padding:18px 24px;text-align:center;box-shadow:0 2px 8px #1a56db22;">Mark Scheme 1</a>
+        <a href="predicted-papers/paper-2.html" class="btn primary" style="min-width:170px;font-size:1.08rem;font-weight:800;background:#1a56db;color:#fff;border-radius:12px;padding:18px 24px;text-align:center;box-shadow:0 2px 8px #1a56db22;">Paper 2</a>
+        <a href="predicted-papers/mark-scheme-2.html" class="btn" style="min-width:170px;font-size:1.08rem;font-weight:800;background:#ecf1ff;color:#1a56db;border-radius:12px;padding:18px 24px;text-align:center;box-shadow:0 2px 8px #1a56db22;">Mark Scheme 2</a>
+        <a href="predicted-papers/paper-3.html" class="btn primary" style="min-width:170px;font-size:1.08rem;font-weight:800;background:#1a56db;color:#fff;border-radius:12px;padding:18px 24px;text-align:center;box-shadow:0 2px 8px #1a56db22;">Paper 3</a>
+        <a href="predicted-papers/mark-scheme-3.html" class="btn" style="min-width:170px;font-size:1.08rem;font-weight:800;background:#ecf1ff;color:#1a56db;border-radius:12px;padding:18px 24px;text-align:center;box-shadow:0 2px 8px #1a56db22;">Mark Scheme 3</a>
+      </div>
+    <section class="papers-insight-card">
+      <h3>What to revise first</h3>
+      <p>Use this as a quick priority order. Start with the topics that show up most often in exam papers, then work down if you have more time.</p>
+      <div class="revise-quick-nav" id="revise-quick-nav">
+        <p class="revise-quick-nav-title">Fast jump to your next best topic</p>
+        <div class="revise-quick-nav-actions">
+          <button class="revise-focus-btn" type="button" data-focus="break-even">Break-even analysis</button>
+          <button class="revise-focus-btn" type="button" data-focus="ratios">Financial ratios</button>
+          <button class="revise-focus-btn" type="button" data-focus="cashflow">Cash flow forecasts</button>
+          <button class="revise-focus-btn" type="button" data-focus="finance-sources">Business finance</button>
+          <button class="revise-focus-btn" type="button" data-focus="statements">Financial statements</button>
+          <button class="revise-focus-btn" type="button" id="revise-focus-auto">Pick for me</button>
+        </div>
+        <p class="revise-focus-status" id="revise-focus-status">Tip: start with break-even if you only have 30 minutes—it's in almost every paper.</p>
+      </div>
+      <div class="papers-hero-grid">
+        <div>
+          <div class="papers-kpi-grid">
+            <div class="papers-kpi">
+              <strong>95%</strong>
+              <span>Break-even analysis appears in nearly every paper</span>
+            </div>
+            <div class="papers-kpi">
+              <strong>85%</strong>
+              <span>Ratio analysis is regularly tested across papers</span>
+            </div>
+            <div class="papers-kpi">
+              <strong>80%</strong>
+              <span>Cash flow forecasts and completions are common</span>
+            </div>
+            <div class="papers-kpi">
+              <strong>Most</strong>
+              <span>Finance sources and statements frequently appear</span>
+            </div>
+          </div>
+          <div class="trend-chart">
+            <div class="trend-row" data-focus="break-even">
+              <div class="trend-meta"><strong>1. Master break-even analysis first</strong><span>This is the single most important topic because it appears in nearly every paper, from calculations to applications.</span><div class="trend-topic-chips"><span class="trend-topic-chip">E1 Break-even</span><span class="trend-topic-chip">E1.1 Formulas</span><span class="trend-topic-chip">E1.2 Graphs</span></div><div class="trend-actions"><button class="btn" type="button" onclick="window.location.hash='guide';setTimeout(function(){if(document.getElementById('flash-aim'))document.getElementById('flash-aim').value='E'},100)">Review E1 in guide</button><button class="btn" type="button" onclick="window.location.hash='quiz'">Test with quiz</button><button class="btn" type="button" onclick="window.location.hash='practice'">Practice E1 questions</button></div></div>
+              <div class="trend-bar"><span style="width:100%"></span></div>
+              <div class="trend-value">Every paper</div>
+            </div>
+            <div class="trend-row" data-focus="ratios">
+              <div class="trend-meta"><strong>2. Then focus on financial ratio analysis</strong><span>Current ratio, acid test, ROCE, profit margin—these appear frequently in longer questions and financial statement interpretation.</span><div class="trend-topic-chips"><span class="trend-topic-chip">F3 Ratio Analysis</span><span class="trend-topic-chip">F3.1 Liquidity Ratios</span><span class="trend-topic-chip">F3.2 Profitability Ratios</span></div><div class="trend-actions"><button class="btn" type="button" onclick="window.location.hash='guide';setTimeout(function(){if(document.getElementById('flash-aim'))document.getElementById('flash-aim').value='F'},100)">Review F3 in guide</button><button class="btn" type="button" onclick="window.location.hash='quiz'">Test with quiz</button><button class="btn" type="button" onclick="window.location.hash='practice'">Practice F3 questions</button></div></div>
+              <div class="trend-bar"><span style="width:85%"></span></div>
+              <div class="trend-value">Most papers</div>
+            </div>
+            <div class="trend-row" data-focus="cashflow">
+              <div class="trend-meta"><strong>3. Cover cash flow forecasts next</strong><span>Completing forecasts and interpreting negative cash flow is a regular exam task that combines multiple skills.</span><div class="trend-topic-chips"><span class="trend-topic-chip">E2 Cash Flow</span><span class="trend-topic-chip">E2.1 Forecasting</span><span class="trend-topic-chip">E2.2 Interpretation</span></div><div class="trend-actions"><button class="btn" type="button" onclick="window.location.hash='guide';setTimeout(function(){if(document.getElementById('flash-aim'))document.getElementById('flash-aim').value='E'},100)">Review E2 in guide</button><button class="btn" type="button" onclick="window.location.hash='quiz'">Test with quiz</button><button class="btn" type="button" onclick="window.location.hash='practice'">Practice E2 questions</button></div></div>
+              <div class="trend-bar"><span style="width:80%"></span></div>
+              <div class="trend-value">Often</div>
+            </div>
+            <div class="trend-row" data-focus="finance-sources">
+              <div class="trend-meta"><strong>4. Revise business finance sources</strong><span>Understanding internal vs external funding, advantages and disadvantages of each—common in discuss and evaluate questions.</span><div class="trend-topic-chips"><span class="trend-topic-chip">D1 Finance Sources</span><span class="trend-topic-chip">D1.1 Internal</span><span class="trend-topic-chip">D1.2 External</span></div><div class="trend-actions"><button class="btn" type="button" onclick="window.location.hash='guide';setTimeout(function(){if(document.getElementById('flash-aim'))document.getElementById('flash-aim').value='D'},100)">Review D1 in guide</button><button class="btn" type="button" onclick="window.location.hash='quiz'">Test with quiz</button><button class="btn" type="button" onclick="window.location.hash='practice'">Practice D1 questions</button></div></div>
+              <div class="trend-bar"><span style="width:75%"></span></div>
+              <div class="trend-value">Fairly common</div>
+            </div>
+            <div class="trend-row" data-focus="statements">
+              <div class="trend-meta"><strong>5. Finish with financial statements</strong><span>Income statements and statements of financial position are still important but usually paired with ratio analysis questions.</span><div class="trend-topic-chips"><span class="trend-topic-chip">F1 Income Statements</span><span class="trend-topic-chip">F2 Financial Position</span></div><div class="trend-actions"><button class="btn" type="button" onclick="window.location.hash='guide';setTimeout(function(){if(document.getElementById('flash-aim'))document.getElementById('flash-aim').value='F'},100)">Review F1/F2 in guide</button><button class="btn" type="button" onclick="window.location.hash='quiz'">Test with quiz</button><button class="btn" type="button" onclick="window.location.hash='practice'">Practice F1/F2 questions</button></div></div>
+              <div class="trend-bar"><span style="width:75%"></span></div>
+              <div class="trend-value">Sometimes</div>
+            </div>
+          </div>
+          <p class="papers-footnote">Percentages show how often each topic appeared across typical exam papers. Higher percentage = stronger revision priority. The buttons jump you straight into relevant guide topics, quiz questions or filtered practice sets.</p>
+        </div>
+        <div class="papers-slot-signals">
+          <div class="signal-card">
+            <div class="signal-label"><span class="signal-pill">Q1–Q2</span> Short-answer boot</div>
+            <p>Early questions typically test knowledge and basic application: state a definition, identify a formula, calculate a ratio or simple break-even.</p>
+          </div>
+          <div class="signal-card">
+            <div class="signal-label"><span class="signal-pill">Q3</span> Long scenario task</div>
+            <p>The major 8–12 mark question usually involves a realistic business scenario where you apply multiple concepts: justify a finance choice, prepare a forecast, analyze ratios.</p>
+          </div>
+          <div class="signal-card">
+            <div class="signal-label"><span class="signal-pill">E1 &amp; F3</span> Most reusable revision</div>
+            <p>If time is tight, prioritise E1 (break-even) and F3 (ratios). They recur in both short calculation items and long justify/discuss questions.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="papers-insight-card papers-fun-card" id="papers-fun-card" style="margin-top:18px;">
+      <div class="papers-fun-head">
+        <h3>Revision arcade</h3>
+        <span class="papers-fun-badge">Live mission mode</span>
+      </div>
+      <p>Make revision less repetitive. Spin a mission and jump straight to the right topic in the guide, quiz, or practice area.</p>
+      <div class="papers-fun-controls">
+        <button class="btn primary" id="papers-fun-spin" type="button">Spin random mission</button>
+        <button class="btn" id="papers-fun-refresh" type="button">New mission</button>
+      </div>
+      <div class="papers-fun-meta">
+        <span class="papers-fun-pill">Streak: <span class="val" id="papers-fun-streak">0</span></span>
+        <span class="papers-fun-pill">Completed today: <span class="val" id="papers-fun-done">0</span></span>
+      </div>
+      <div class="papers-fun-result" id="papers-fun-result" aria-live="polite">
+        <p class="papers-fun-title">Ready?</p>
+        <p class="papers-fun-copy">Press <strong>Spin random mission</strong> to get your next revision challenge.</p>
+        <p class="papers-fun-timer" id="papers-fun-timer">Timer inactive</p>
+      </div>
+      <div class="papers-fun-today">
+        <label class="papers-fun-check"><input type="checkbox" id="papers-fun-check-guide"> Complete one guide topic</label>
+        <label class="papers-fun-check"><input type="checkbox" id="papers-fun-check-quiz"> Complete one focused quiz</label>
+        <label class="papers-fun-check"><input type="checkbox" id="papers-fun-check-practice"> Answer one practice question</label>
+        <div class="papers-fun-status" id="papers-fun-status">0 / 3 tasks complete today</div>
+      </div>
+    </section>
   </section>
 
 </main>

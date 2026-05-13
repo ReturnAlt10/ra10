@@ -288,6 +288,239 @@
   gap: 12px;
 }
 
+.papers-flow-wrap {
+  margin-bottom: 22px;
+  border: 1px solid #cfe2d8;
+  border-radius: 16px;
+  padding: 16px;
+  background: linear-gradient(130deg, #f2faf6 0%, #ecf6ff 55%, #fff8e7 100%);
+}
+
+.papers-flow-head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.papers-flow-head h3 {
+  margin: 0;
+  font-size: 1.02rem;
+  color: #103a2b;
+}
+
+.papers-flow-head p {
+  margin: 4px 0 0;
+  color: #4a6258;
+  font-size: 0.88rem;
+}
+
+.papers-flow-tags {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.papers-flow-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #e3f3eb;
+  color: #0f5d3c;
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.papers-flow-steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.papers-flow-step {
+  border: 1px solid #cfe2d8;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.82);
+  padding: 12px;
+}
+
+.papers-flow-step .num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #156542;
+  color: #fff;
+  font-size: 0.78rem;
+  font-weight: 800;
+  margin-bottom: 6px;
+}
+
+.papers-flow-step strong,
+.papers-flow-step span {
+  display: block;
+}
+
+.papers-flow-step strong {
+  color: #123a2b;
+  font-size: 0.86rem;
+}
+
+.papers-flow-step span {
+  margin-top: 4px;
+  color: #5a6c63;
+  font-size: 0.79rem;
+}
+
+.papers-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.paper-launch-card {
+  border: 1px solid #c7dfd2;
+  border-radius: 14px;
+  padding: 14px;
+  background: linear-gradient(160deg, #f7fdf9 0%, #eef8f3 100%);
+  display: grid;
+  gap: 10px;
+}
+
+.paper-launch-head {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: start;
+  gap: 10px;
+}
+
+.paper-launch-badge {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  color: #fff;
+  background: linear-gradient(140deg, #14663f 0%, #228858 100%);
+}
+
+.paper-launch-title {
+  margin: 0;
+  color: #113c2b;
+  font-size: 1rem;
+}
+
+.paper-launch-meta {
+  margin: 4px 0 0;
+  color: #5a6f64;
+  font-size: 0.78rem;
+  line-height: 1.4;
+}
+
+.paper-launch-copy {
+  margin: 0;
+  color: #435a50;
+  font-size: 0.83rem;
+}
+
+.paper-launch-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.paper-launch-actions .btn,
+.paper-launch-actions a.btn {
+  padding: 7px 10px;
+  font-size: 0.78rem;
+  text-decoration: none;
+}
+
+.papers-sprint {
+  margin-bottom: 20px;
+  border: 1px solid #c9e1d5;
+  border-radius: 14px;
+  padding: 14px;
+  background: linear-gradient(145deg, #ffffff 0%, #f3fbf6 100%);
+}
+
+.papers-sprint h3 {
+  margin: 0 0 6px;
+  color: #113a2b;
+  font-size: 0.98rem;
+}
+
+.papers-sprint p {
+  margin: 0;
+  color: #54685e;
+  font-size: 0.85rem;
+}
+
+.papers-sprint-actions {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.papers-sprint-actions .btn {
+  padding: 7px 11px;
+  font-size: 0.78rem;
+}
+
+.papers-deep-dive {
+  border: 1px solid #d1e3da;
+  border-radius: 14px;
+  background: #f8fcfa;
+  padding: 10px;
+}
+
+.papers-deep-dive > summary {
+  cursor: pointer;
+  list-style: none;
+  font-weight: 800;
+  color: #144b35;
+  font-size: 0.9rem;
+}
+
+.papers-deep-dive > summary::-webkit-details-marker {
+  display: none;
+}
+
+.papers-deep-dive > summary::before {
+  content: '+';
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  margin-right: 8px;
+  border-radius: 50%;
+  background: #ddf0e5;
+  color: #11583a;
+  font-weight: 900;
+}
+
+.papers-deep-dive[open] > summary::before {
+  content: '-';
+}
+
+.papers-deep-dive-body {
+  margin-top: 12px;
+  display: grid;
+  gap: 14px;
+}
+
 .ra10-subject-banner {
   display: none;
   padding: 12px 16px;
@@ -390,6 +623,7 @@
   display: grid;
   grid-template-columns: 1.3fr 1fr;
   gap: 18px;
+  align-items: start;
 }
 
 .papers-insight-card {
@@ -513,11 +747,68 @@
   gap: 10px;
 }
 
+.revise-quick-nav {
+  display: grid;
+  gap: 10px;
+  margin: 0 0 12px;
+  padding: 12px;
+  border: 1px solid #d2e6dc;
+  border-radius: 12px;
+  background: linear-gradient(140deg, #f8fffb 0%, #ecf7f1 100%);
+}
+
+.revise-quick-nav-title {
+  margin: 0;
+  color: #204a3a;
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.revise-quick-nav-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.revise-focus-btn {
+  border: 1px solid #bcd8cb;
+  border-radius: 999px;
+  padding: 6px 10px;
+  background: #ffffff;
+  color: #154736;
+  font-size: 0.76rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.revise-focus-btn:hover,
+.revise-focus-btn.active {
+  background: #1b7a4f;
+  border-color: #1b7a4f;
+  color: #ffffff;
+}
+
+.revise-focus-status {
+  margin: 0;
+  color: #4e655b;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
 .trend-row {
   display: grid;
   grid-template-columns: minmax(280px, 1.7fr) minmax(120px, 1fr) 72px;
   align-items: start;
   gap: 12px;
+}
+
+.trend-row.trend-row-focus {
+  border: 1px solid #b9d9c9;
+  border-radius: 10px;
+  background: #f6fcf8;
+  padding: 8px;
 }
 
 .trend-meta strong,
@@ -556,20 +847,18 @@
 
 .trend-actions {
   display: flex;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   align-items: center;
   gap: 8px;
-  margin-top: 10px;
-  overflow-x: auto;
-  overflow-y: hidden;
-  padding-bottom: 2px;
-  scrollbar-width: thin;
+  margin-top: 12px;
+  overflow: visible;
+  padding-bottom: 0;
 }
 
 .trend-actions .btn {
-  flex: 0 0 auto;
-  padding: 7px 11px;
-  font-size: 0.79rem;
+  flex: 0 1 auto;
+  padding: 8px 12px;
+  font-size: 0.8rem;
   white-space: nowrap;
 }
 
@@ -606,6 +895,30 @@
   margin-top: 8px;
 }
 
+.papers-fun-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.papers-fun-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 999px;
+  border: 1px solid #c9ddd3;
+  background: rgba(255, 255, 255, 0.86);
+  color: #1f4d3a;
+  font-size: 0.74rem;
+  font-weight: 800;
+  padding: 4px 10px;
+}
+
+.papers-fun-pill .val {
+  color: #11633f;
+}
+
 .papers-fun-result {
   margin-top: 12px;
   border: 1px solid #cfe5db;
@@ -625,6 +938,32 @@
   margin: 5px 0 0;
   color: #51665c;
   font-size: 0.82rem;
+}
+
+.papers-fun-mission-meta {
+  margin: 8px 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.papers-fun-mission-tag {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 4px 9px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  background: #e8f5ee;
+  color: #0f5f3d;
+}
+
+.papers-fun-timer {
+  margin-top: 8px;
+  color: #2e5946;
+  font-size: 0.78rem;
+  font-weight: 700;
 }
 
 .papers-fun-actions {
@@ -692,6 +1031,7 @@
 .papers-slot-signals {
   display: grid;
   gap: 12px;
+  align-content: start;
 }
 
 .signal-card {
@@ -699,6 +1039,7 @@
   border-radius: 14px;
   padding: 14px;
   background: rgba(255, 255, 255, 0.72);
+  height: auto;
 }
 
 .signal-label {
@@ -813,6 +1154,44 @@
   border-color: var(--line-2);
 }
 
+[data-theme="dark"] .papers-flow-wrap,
+[data-theme="dark"] .papers-flow-step,
+[data-theme="dark"] .paper-launch-card,
+[data-theme="dark"] .papers-sprint,
+[data-theme="dark"] .papers-deep-dive {
+  background: var(--surface);
+  border-color: var(--line-2);
+}
+
+[data-theme="dark"] .papers-flow-tag,
+[data-theme="dark"] .papers-flow-step .num,
+[data-theme="dark"] .paper-launch-badge,
+[data-theme="dark"] .papers-deep-dive > summary::before,
+[data-theme="dark"] .papers-fun-mission-tag,
+[data-theme="dark"] .papers-fun-pill {
+  background: #244535;
+  color: #d5f5e3;
+}
+
+[data-theme="dark"] .revise-quick-nav,
+[data-theme="dark"] .trend-row.trend-row-focus {
+  background: #1a2722;
+  border-color: #31423a;
+}
+
+[data-theme="dark"] .revise-focus-btn {
+  background: #1f3029;
+  border-color: #33473d;
+  color: #d2ebe0;
+}
+
+[data-theme="dark"] .revise-focus-btn:hover,
+[data-theme="dark"] .revise-focus-btn.active {
+  background: #2a6f4f;
+  border-color: #2a6f4f;
+  color: #ffffff;
+}
+
 [data-theme="dark"] .papers-kpi {
   background: #1d2722;
   border-color: #31423a;
@@ -824,6 +1203,15 @@
 }
 
 [data-theme="dark"] .papers-table td,
+[data-theme="dark"] .revise-quick-nav-title,
+[data-theme="dark"] .revise-focus-status,
+[data-theme="dark"] .papers-fun-timer,
+[data-theme="dark"] .papers-flow-head p,
+[data-theme="dark"] .papers-flow-step span,
+[data-theme="dark"] .paper-launch-meta,
+[data-theme="dark"] .paper-launch-copy,
+[data-theme="dark"] .papers-sprint p,
+[data-theme="dark"] .papers-deep-dive > summary,
 [data-theme="dark"] .papers-insight-card p,
 [data-theme="dark"] .papers-footnote,
 [data-theme="dark"] .slot-note,
@@ -834,6 +1222,10 @@
 }
 
 [data-theme="dark"] .papers-insight-card h3,
+[data-theme="dark"] .papers-flow-head h3,
+[data-theme="dark"] .papers-flow-step strong,
+[data-theme="dark"] .paper-launch-title,
+[data-theme="dark"] .papers-sprint h3,
 [data-theme="dark"] .papers-slot-block h4,
 [data-theme="dark"] .trend-meta strong,
 [data-theme="dark"] .papers-kpi strong {
@@ -878,6 +1270,10 @@
 }
 
 @media (max-width: 980px) {
+  .papers-flow-steps {
+    grid-template-columns: 1fr;
+  }
+
   .papers-hero-grid {
     grid-template-columns: 1fr;
   }
@@ -885,6 +1281,10 @@
   .trend-row {
     grid-template-columns: 1fr;
     gap: 6px;
+  }
+
+  .trend-actions .btn {
+    width: auto;
   }
 }
 </style>
@@ -1343,58 +1743,113 @@
       <h2>Predicted Papers</h2>
       <p>Three full predicted exam papers (90 marks, 2 hours) with full mark schemes &mdash; print-ready or save as PDF.</p>
     </header>
-    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;margin-bottom:32px;">
-
-      <div style="border:1.5px solid #bcd9ce;border-radius:14px;padding:22px;background:#f4fbf5;">
-        <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
-          <span style="background:#1a6e3c;color:#fff;font-weight:900;font-size:1.4rem;width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">1</span>
-          <div>
-            <div style="font-weight:700;font-size:1rem;">Predicted Paper 1</div>
-            <div style="font-size:0.8rem;color:#555;margin-top:2px;">Hartley Academy &bull; Premier Payroll &bull; Crestford College &bull; Hargreaves Catering</div>
-          </div>
+    <section class="papers-flow-wrap" id="papers-quick-start">
+      <div class="papers-flow-head">
+        <div>
+          <h3>Your 3-step predicted-paper flow</h3>
+          <p>Choose a paper, answer under time pressure, then jump straight into targeted revision.</p>
         </div>
-        <p style="font-size:0.85rem;color:#444;margin-bottom:16px;">90 marks &bull; 4 scenario-based questions &bull; Covers aims A&ndash;F including cloud, security, networking and open-source evaluation.</p>
-        <div style="display:flex;gap:10px;flex-wrap:wrap;">
-          <a href="predicted-papers/paper-1.html" target="_blank" style="background:#1a1a2e;color:#fff;padding:8px 16px;border-radius:8px;text-decoration:none;font-weight:600;font-size:0.85rem;">&#x1F4C4; Question Paper</a>
-          <a href="predicted-papers/mark-scheme-1.html" target="_blank" style="background:#1a6e3c;color:#fff;padding:8px 16px;border-radius:8px;text-decoration:none;font-weight:600;font-size:0.85rem;">&#x2713; Mark Scheme</a>
+        <div class="papers-flow-tags">
+          <span class="papers-flow-tag">Fast navigation</span>
+          <span class="papers-flow-tag">Exam-style practice</span>
+          <span class="papers-flow-tag">Focus by weak area</span>
         </div>
       </div>
-
-      <div style="border:1.5px solid #bcd9ce;border-radius:14px;padding:22px;background:#f4fbf5;">
-        <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
-          <span style="background:#1a6e3c;color:#fff;font-weight:900;font-size:1.4rem;width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">2</span>
-          <div>
-            <div style="font-weight:700;font-size:1rem;">Predicted Paper 2</div>
-            <div style="font-size:0.8rem;color:#555;margin-top:2px;">Thornton's Furniture &bull; Goldstone Solicitors &bull; Pinnacle Pension Fund &bull; Evergreen Recruitment</div>
-          </div>
+      <div class="papers-flow-steps">
+        <div class="papers-flow-step">
+          <span class="num">1</span>
+          <strong>Pick a paper</strong>
+          <span>Use the cards below to open question paper and mark scheme side by side.</span>
         </div>
-        <p style="font-size:0.85rem;color:#444;margin-bottom:16px;">90 marks &bull; 4 scenario-based questions &bull; Covers aims A&ndash;F including GDPR, hybrid cloud, Computer Misuse Act and data retention.</p>
-        <div style="display:flex;gap:10px;flex-wrap:wrap;">
-          <a href="predicted-papers/paper-2.html" target="_blank" style="background:#1a1a2e;color:#fff;padding:8px 16px;border-radius:8px;text-decoration:none;font-weight:600;font-size:0.85rem;">&#x1F4C4; Question Paper</a>
-          <a href="predicted-papers/mark-scheme-2.html" target="_blank" style="background:#1a6e3c;color:#fff;padding:8px 16px;border-radius:8px;text-decoration:none;font-weight:600;font-size:0.85rem;">&#x2713; Mark Scheme</a>
+        <div class="papers-flow-step">
+          <span class="num">2</span>
+          <strong>Run a timed sprint</strong>
+          <span>Do one full question in 25 minutes, then self-mark before moving on.</span>
         </div>
-      </div>
-
-      <div style="border:1.5px solid #bcd9ce;border-radius:14px;padding:22px;background:#f4fbf5;">
-        <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
-          <span style="background:#1a6e3c;color:#fff;font-weight:900;font-size:1.4rem;width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">3</span>
-          <div>
-            <div style="font-weight:700;font-size:1rem;">Predicted Paper 3</div>
-            <div style="font-size:0.8rem;color:#555;margin-top:2px;">AutoTech Manufacturing &bull; Broadmore University &bull; Westview Sports Club &bull; Lakeland Housing</div>
-          </div>
-        </div>
-        <p style="font-size:0.85rem;color:#444;margin-bottom:16px;">90 marks &bull; 4 scenario-based questions &bull; Covers aims A&ndash;F including IoT, RTOS, ransomware recovery and Wi-Fi vs Ethernet evaluation.</p>
-        <div style="display:flex;gap:10px;flex-wrap:wrap;">
-          <a href="predicted-papers/paper-3.html" target="_blank" style="background:#1a1a2e;color:#fff;padding:8px 16px;border-radius:8px;text-decoration:none;font-weight:600;font-size:0.85rem;">&#x1F4C4; Question Paper</a>
-          <a href="predicted-papers/mark-scheme-3.html" target="_blank" style="background:#1a6e3c;color:#fff;padding:8px 16px;border-radius:8px;text-decoration:none;font-weight:600;font-size:0.85rem;">&#x2713; Mark Scheme</a>
+        <div class="papers-flow-step">
+          <span class="num">3</span>
+          <strong>Patch weak topics</strong>
+          <span>Jump to guide, quiz, and filtered questions using the trend actions.</span>
         </div>
       </div>
+    </section>
 
+    <div class="papers-card-grid">
+      <article class="paper-launch-card">
+        <div class="paper-launch-head">
+          <span class="paper-launch-badge">1</span>
+          <div>
+            <h3 class="paper-launch-title">Predicted Paper 1</h3>
+            <p class="paper-launch-meta">Hartley Academy &bull; Premier Payroll &bull; Crestford College &bull; Hargreaves Catering</p>
+          </div>
+        </div>
+        <p class="paper-launch-copy">Balanced full paper with cloud, security, networking and open-source evaluation.</p>
+        <div class="paper-launch-actions">
+          <a class="btn" href="predicted-papers/paper-1.html" target="_blank" rel="noopener">Question Paper</a>
+          <a class="btn" href="predicted-papers/mark-scheme-1.html" target="_blank" rel="noopener">Mark Scheme</a>
+          <button class="btn ghost" type="button" onclick="window.open('predicted-papers/paper-1.html','_blank');openPredictedPaperFocus('questions','A','A1','flowchart')">Start Sprint</button>
+        </div>
+      </article>
+
+      <article class="paper-launch-card">
+        <div class="paper-launch-head">
+          <span class="paper-launch-badge">2</span>
+          <div>
+            <h3 class="paper-launch-title">Predicted Paper 2</h3>
+            <p class="paper-launch-meta">Thornton's Furniture &bull; Goldstone Solicitors &bull; Pinnacle Pension Fund &bull; Evergreen Recruitment</p>
+          </div>
+        </div>
+        <p class="paper-launch-copy">Great for security compliance, legal scenarios, and cloud-retention judgement tasks.</p>
+        <div class="paper-launch-actions">
+          <a class="btn" href="predicted-papers/paper-2.html" target="_blank" rel="noopener">Question Paper</a>
+          <a class="btn" href="predicted-papers/mark-scheme-2.html" target="_blank" rel="noopener">Mark Scheme</a>
+          <button class="btn ghost" type="button" onclick="window.open('predicted-papers/paper-2.html','_blank');openPredictedPaperFocus('quiz','D','D2','authentication encryption access control security')">Start Sprint</button>
+        </div>
+      </article>
+
+      <article class="paper-launch-card">
+        <div class="paper-launch-head">
+          <span class="paper-launch-badge">3</span>
+          <div>
+            <h3 class="paper-launch-title">Predicted Paper 3</h3>
+            <p class="paper-launch-meta">AutoTech Manufacturing &bull; Broadmore University &bull; Westview Sports Club &bull; Lakeland Housing</p>
+          </div>
+        </div>
+        <p class="paper-launch-copy">Best for IoT, resilience and infrastructure trade-off answers in longer evaluations.</p>
+        <div class="paper-launch-actions">
+          <a class="btn" href="predicted-papers/paper-3.html" target="_blank" rel="noopener">Question Paper</a>
+          <a class="btn" href="predicted-papers/mark-scheme-3.html" target="_blank" rel="noopener">Mark Scheme</a>
+          <button class="btn ghost" type="button" onclick="window.open('predicted-papers/paper-3.html','_blank');openPredictedPaperFocus('guide','C','C1','cloud vpn remote working')">Start Sprint</button>
+        </div>
+      </article>
     </div>
+
+    <section class="papers-sprint">
+      <h3>Quick routes</h3>
+      <p>Pick your mode: confidence boost, exam pressure, or weak-topic rescue.</p>
+      <div class="papers-sprint-actions">
+        <button class="btn" type="button" onclick="window.open('predicted-papers/paper-1.html','_blank');window.open('predicted-papers/mark-scheme-1.html','_blank')">Confidence route (Paper 1)</button>
+        <button class="btn" type="button" onclick="window.open('predicted-papers/paper-3.html','_blank');openPredictedPaperFocus('questions','D','D2','security')">Pressure route (harder security)</button>
+        <button class="btn" type="button" onclick="openPredictedPaperFocus('quiz','A','A1','flowchart')">Weak-topic rescue (Q3 visual)</button>
+      </div>
+    </section>
+
     <div class="papers-insight-grid">
       <section class="papers-insight-card">
         <h3>What to revise first</h3>
         <p>Use this as a quick priority order. Start with the themes that show up most often, then work down if you have more time.</p>
+        <div class="revise-quick-nav" id="revise-quick-nav">
+          <p class="revise-quick-nav-title">Fast jump to your next best topic</p>
+          <div class="revise-quick-nav-actions">
+            <button class="revise-focus-btn" type="button" data-focus="q3">Q3 visual task</button>
+            <button class="revise-focus-btn" type="button" data-focus="security">Security</button>
+            <button class="revise-focus-btn" type="button" data-focus="cloud">Cloud + remote work</button>
+            <button class="revise-focus-btn" type="button" data-focus="software">Software + OS</button>
+            <button class="revise-focus-btn" type="button" data-focus="legal">Legal + ethics</button>
+            <button class="revise-focus-btn" type="button" id="revise-focus-auto">Pick for me</button>
+          </div>
+          <p class="revise-focus-status" id="revise-focus-status">Tip: start with Q3 visual if you only have 20-30 minutes.</p>
+        </div>
         <div class="papers-hero-grid">
           <div>
             <div class="papers-kpi-grid">
@@ -1416,27 +1871,27 @@
               </div>
             </div>
             <div class="trend-chart">
-              <div class="trend-row">
+              <div class="trend-row" data-focus="q3">
                 <div class="trend-meta"><strong>1. Practise the Q3 diagram or flowchart first</strong><span>This is the safest revision bet because it appears in every uploaded paper.</span><div class="trend-topic-chips"><span class="trend-topic-chip">A1 Digital Devices</span><span class="trend-topic-chip">A1.3 Flowchart notation</span><span class="trend-topic-chip">A1.3 Network diagram notation</span></div><div class="trend-actions"><button class="btn" type="button" onclick="openPredictedPaperFocus('guide','A','A1','flowchart')">Open topic guide</button><button class="btn" type="button" onclick="openPredictedPaperFocus('quiz','A','A1','flowchart')">Open topic quiz</button><button class="btn" type="button" onclick="openPredictedPaperFocus('questions','A','A1','flowchart')">Practice questions</button></div></div>
                 <div class="trend-bar"><span style="width:100%"></span></div>
                 <div class="trend-value">Every paper</div>
               </div>
-              <div class="trend-row">
+              <div class="trend-row" data-focus="security">
                 <div class="trend-meta"><strong>2. Revise security, authentication and access control next</strong><span>These themes show up in both short questions and longer judgement answers.</span><div class="trend-topic-chips"><span class="trend-topic-chip">D1 Threats</span><span class="trend-topic-chip">D2 Protection Methods</span></div><div class="trend-actions"><button class="btn" type="button" onclick="openPredictedPaperFocus('guide','D','D2','authentication encryption access control security')">Open topic guide</button><button class="btn" type="button" onclick="openPredictedPaperFocus('quiz','D','D2','authentication encryption access control security')">Open topic quiz</button><button class="btn" type="button" onclick="openPredictedPaperFocus('questions','D','D2','authentication encryption access control security')">Practice questions</button></div></div>
                 <div class="trend-bar"><span style="width:86%"></span></div>
                 <div class="trend-value">Most papers</div>
               </div>
-              <div class="trend-row">
+              <div class="trend-row" data-focus="cloud">
                 <div class="trend-meta"><strong>3. Then cover cloud storage, VPNs and remote working</strong><span>These are common applied scenarios, especially when papers talk about online systems.</span><div class="trend-topic-chips"><span class="trend-topic-chip">C1 Cloud Computing</span><span class="trend-topic-chip">B3 Network Types</span></div><div class="trend-actions"><button class="btn" type="button" onclick="openPredictedPaperFocus('guide','C','C1','cloud vpn remote working')">Open topic guide</button><button class="btn" type="button" onclick="openPredictedPaperFocus('quiz','C','C1','cloud vpn remote working')">Open topic quiz</button><button class="btn" type="button" onclick="openPredictedPaperFocus('questions','C','C1','cloud vpn remote working')">Practice questions</button></div></div>
                 <div class="trend-bar"><span style="width:78%"></span></div>
                 <div class="trend-value">Often</div>
               </div>
-              <div class="trend-row">
+              <div class="trend-row" data-focus="software">
                 <div class="trend-meta"><strong>4. After that, revise operating systems and software choices</strong><span>These appear regularly, especially when you need to compare options for an organisation.</span><div class="trend-topic-chips"><span class="trend-topic-chip">A3 Software &amp; OS</span><span class="trend-topic-chip">A4 Choosing IT Systems</span></div><div class="trend-actions"><button class="btn" type="button" onclick="openPredictedPaperFocus('guide','A','A3','operating system software proprietary open source nos')">Open topic guide</button><button class="btn" type="button" onclick="openPredictedPaperFocus('quiz','A','A3','operating system software proprietary open source nos')">Open topic quiz</button><button class="btn" type="button" onclick="openPredictedPaperFocus('questions','A','A3','operating system software proprietary open source nos')">Practice questions</button></div></div>
                 <div class="trend-bar"><span style="width:71%"></span></div>
                 <div class="trend-value">Fairly common</div>
               </div>
-              <div class="trend-row">
+              <div class="trend-row" data-focus="legal">
                 <div class="trend-meta"><strong>5. Finish with legal, ethical and environmental issues</strong><span>Still worth knowing, but this is a later priority than the recurring security and systems material.</span><div class="trend-topic-chips"><span class="trend-topic-chip">F1 Moral &amp; Ethical</span><span class="trend-topic-chip">F2 Legal Issues</span></div><div class="trend-actions"><button class="btn" type="button" onclick="openPredictedPaperFocus('guide','F','F2','legal ethical environmental gdpr computer misuse')">Open topic guide</button><button class="btn" type="button" onclick="openPredictedPaperFocus('quiz','F','F2','legal ethical environmental gdpr computer misuse')">Open topic quiz</button><button class="btn" type="button" onclick="openPredictedPaperFocus('questions','F','F2','legal ethical environmental gdpr computer misuse')">Practice questions</button></div></div>
                 <div class="trend-bar"><span style="width:64%"></span></div>
                 <div class="trend-value">Sometimes</div>
@@ -1460,6 +1915,10 @@
           </div>
         </div>
       </section>
+
+      <details class="papers-deep-dive" id="papers-deep-dive">
+        <summary>Open detailed pattern analysis (optional)</summary>
+        <div class="papers-deep-dive-body">
 
       <section class="papers-insight-card">
         <h3>Detailed sub-question map</h3>
@@ -1892,6 +2351,8 @@
         </div>
         <p class="papers-footnote">The folder does not appear to include a separate 2022 Unit 1 paper, so this tracker is based on the papers currently uploaded and the AAQ specimen at the front of the combined PDF.</p>
       </section>
+        </div>
+      </details>
 
       <section class="papers-insight-card papers-fun-card" id="papers-fun-card">
         <div class="papers-fun-head">
@@ -1903,9 +2364,14 @@
           <button class="btn primary" id="papers-fun-spin" type="button">Spin random mission</button>
           <button class="btn" id="papers-fun-refresh" type="button">New mission</button>
         </div>
+        <div class="papers-fun-meta">
+          <span class="papers-fun-pill">Streak: <span class="val" id="papers-fun-streak">0</span></span>
+          <span class="papers-fun-pill">Completed today: <span class="val" id="papers-fun-done">0</span></span>
+        </div>
         <div class="papers-fun-result" id="papers-fun-result" aria-live="polite">
           <p class="papers-fun-title">Ready?</p>
           <p class="papers-fun-copy">Press <strong>Spin random mission</strong> to get your next predicted-paper challenge.</p>
+          <p class="papers-fun-timer" id="papers-fun-timer">Timer inactive</p>
         </div>
         <div class="papers-fun-today">
           <label class="papers-fun-check"><input type="checkbox" id="papers-fun-check-paper"> Complete one predicted paper section</label>
@@ -2602,7 +3068,10 @@ async function ra10Gate(action) {
     return result;
   } catch(e) {
     console.warn('ra10Gate error', e);
-    return true;
+    if (window.RA10 && typeof RA10.showPaywall === 'function') {
+      RA10.showPaywall('credits', action);
+    }
+    return false;
   }
 }
 
@@ -2654,18 +3123,62 @@ document.addEventListener('DOMContentLoaded', function () {
 </script>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
+  var quickNav = document.getElementById('revise-quick-nav');
+  if (quickNav) {
+    var focusStatus = document.getElementById('revise-focus-status');
+    var focusRows = Array.from(document.querySelectorAll('.trend-row[data-focus]'));
+    var focusButtons = Array.from(quickNav.querySelectorAll('.revise-focus-btn[data-focus]'));
+    var autoPickBtn = document.getElementById('revise-focus-auto');
+    var focusCopy = {
+      q3: 'Great choice: Q3 visual tasks recur in every uploaded paper.',
+      security: 'Smart pick: security themes are heavily repeated and high-mark.',
+      cloud: 'Nice: cloud and remote-working scenarios come up regularly.',
+      software: 'Good for compare/evaluate marks around software and OS choices.',
+      legal: 'Useful final sweep to secure policy and legislation marks.'
+    };
+
+    function setFocus(key) {
+      focusRows.forEach(function (row) {
+        row.classList.toggle('trend-row-focus', row.getAttribute('data-focus') === key);
+      });
+      focusButtons.forEach(function (btn) {
+        btn.classList.toggle('active', btn.getAttribute('data-focus') === key);
+      });
+      var target = focusRows.find(function (row) { return row.getAttribute('data-focus') === key; });
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      if (focusStatus) focusStatus.textContent = focusCopy[key] || 'Use a focus chip to jump to the best next revision target.';
+    }
+
+    focusButtons.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        setFocus(btn.getAttribute('data-focus'));
+      });
+    });
+
+    if (autoPickBtn) {
+      autoPickBtn.addEventListener('click', function () {
+        var priorityOrder = ['q3', 'security', 'cloud', 'software', 'legal'];
+        var pick = priorityOrder[Math.floor(Math.random() * Math.min(3, priorityOrder.length))];
+        setFocus(pick);
+      });
+    }
+  }
+
   var missionPool = [
-    { paper: 1, aim: 'A', code: 'A1', query: 'flowchart', title: 'Diagram sprint', copy: 'Open Paper 1 and target the Q3 draw-style structure first.' },
-    { paper: 2, aim: 'D', code: 'D2', query: 'authentication encryption access control security', title: 'Security lock-in', copy: 'Focus on access control and secure transmission patterns.' },
-    { paper: 3, aim: 'C', code: 'C1', query: 'cloud vpn remote working', title: 'Cloud impact round', copy: 'Run cloud and remote-working scenarios, then pressure-test with quiz items.' },
-    { paper: 1, aim: 'F', code: 'F2', query: 'legal ethical environmental gdpr computer misuse', title: 'Policy finisher', copy: 'Tackle legal, ethical and environmental implications as a long-answer warm-up.' },
-    { paper: 2, aim: 'A', code: 'A3', query: 'operating system software proprietary open source nos', title: 'Software decision lab', copy: 'Train comparison answers on OS, NOS and software choice trade-offs.' }
+    { paper: 1, aim: 'A', code: 'A1', query: 'flowchart', title: 'Diagram sprint', copy: 'Open Paper 1 and target the Q3 draw-style structure first.', level: 'Easy', mins: 20 },
+    { paper: 2, aim: 'D', code: 'D2', query: 'authentication encryption access control security', title: 'Security lock-in', copy: 'Focus on access control and secure transmission patterns.', level: 'Hard', mins: 30 },
+    { paper: 3, aim: 'C', code: 'C1', query: 'cloud vpn remote working', title: 'Cloud impact round', copy: 'Run cloud and remote-working scenarios, then pressure-test with quiz items.', level: 'Medium', mins: 25 },
+    { paper: 1, aim: 'F', code: 'F2', query: 'legal ethical environmental gdpr computer misuse', title: 'Policy finisher', copy: 'Tackle legal, ethical and environmental implications as a long-answer warm-up.', level: 'Medium', mins: 20 },
+    { paper: 2, aim: 'A', code: 'A3', query: 'operating system software proprietary open source nos', title: 'Software decision lab', copy: 'Train comparison answers on OS, NOS and software choice trade-offs.', level: 'Hard', mins: 30 }
   ];
 
   var resultEl = document.getElementById('papers-fun-result');
   var spinBtn = document.getElementById('papers-fun-spin');
   var refreshBtn = document.getElementById('papers-fun-refresh');
   var statusEl = document.getElementById('papers-fun-status');
+  var streakEl = document.getElementById('papers-fun-streak');
+  var doneEl = document.getElementById('papers-fun-done');
+  var timerEl = document.getElementById('papers-fun-timer');
   var checks = [
     document.getElementById('papers-fun-check-paper'),
     document.getElementById('papers-fun-check-quiz'),
@@ -2676,11 +3189,37 @@ document.addEventListener('DOMContentLoaded', function () {
 
   var dayKey = new Date().toISOString().slice(0, 10);
   var progressKey = 'ra10_u1_papers_fun_progress_' + dayKey;
+  var completeKey = 'ra10_u1_papers_fun_done_' + dayKey;
+  var streakKey = 'ra10_u1_papers_fun_streak_' + dayKey;
+  var lastMissionIdx = -1;
+  var timerRef = null;
 
   function updateStatus() {
     if (!statusEl) return;
     var done = checks.filter(function (box) { return box.checked; }).length;
     statusEl.textContent = done + ' / 3 tasks complete today';
+    if (doneEl) doneEl.textContent = String(done);
+  }
+
+  function getDoneCount() {
+    try {
+      return Math.max(0, Number(localStorage.getItem(completeKey) || 0));
+    } catch (e) {
+      return 0;
+    }
+  }
+
+  function getStreak() {
+    try {
+      return Math.max(0, Number(localStorage.getItem(streakKey) || 0));
+    } catch (e) {
+      return 0;
+    }
+  }
+
+  function renderCounters() {
+    if (streakEl) streakEl.textContent = String(getStreak());
+    if (doneEl) doneEl.textContent = String(checks.filter(function (box) { return box.checked; }).length);
   }
 
   function saveChecks() {
@@ -2705,13 +3244,44 @@ document.addEventListener('DOMContentLoaded', function () {
     box.addEventListener('change', saveChecks);
   });
   loadChecks();
+  renderCounters();
+
+  function updateTimer(seconds) {
+    if (!timerEl) return;
+    if (seconds <= 0) {
+      timerEl.textContent = 'Timer complete. Mark your answer and move to quiz/practice.';
+      return;
+    }
+    var mins = Math.floor(seconds / 60);
+    var secs = seconds % 60;
+    timerEl.textContent = 'Focus timer: ' + String(mins) + ':' + String(secs).padStart(2, '0');
+  }
+
+  function startMissionTimer(mins) {
+    if (timerRef) {
+      clearInterval(timerRef);
+      timerRef = null;
+    }
+    var remaining = Math.max(60, Number(mins || 20) * 60);
+    updateTimer(remaining);
+    timerRef = setInterval(function () {
+      remaining -= 1;
+      updateTimer(remaining);
+      if (remaining <= 0) {
+        clearInterval(timerRef);
+        timerRef = null;
+      }
+    }, 1000);
+  }
 
   function missionActions(m) {
     return '<div class="papers-fun-actions">'
       + '<a class="btn" href="predicted-papers/paper-' + m.paper + '.html" target="_blank" rel="noopener">Open Paper ' + m.paper + '</a>'
+      + '<button class="btn" type="button" data-fun-action="timer">Start ' + m.mins + ' min timer</button>'
       + '<button class="btn" type="button" data-fun-action="guide">Topic guide</button>'
       + '<button class="btn" type="button" data-fun-action="quiz">Topic quiz</button>'
       + '<button class="btn" type="button" data-fun-action="questions">Practice set</button>'
+      + '<button class="btn ghost" type="button" data-fun-action="complete">Mark mission done</button>'
       + '</div>';
   }
 
@@ -2719,11 +3289,33 @@ document.addEventListener('DOMContentLoaded', function () {
     resultEl.innerHTML = ''
       + '<p class="papers-fun-title">' + m.title + ' \u2022 Paper ' + m.paper + '</p>'
       + '<p class="papers-fun-copy">' + m.copy + '</p>'
+      + '<div class="papers-fun-mission-meta"><span class="papers-fun-mission-tag">' + m.level + '</span><span class="papers-fun-mission-tag">' + m.mins + ' min focus</span></div>'
+      + '<p class="papers-fun-timer" id="papers-fun-timer">Timer inactive</p>'
       + missionActions(m);
+
+    timerEl = document.getElementById('papers-fun-timer');
 
     resultEl.querySelectorAll('[data-fun-action]').forEach(function (btn) {
       btn.addEventListener('click', function () {
         var mode = btn.getAttribute('data-fun-action');
+        if (mode === 'timer') {
+          startMissionTimer(m.mins);
+          return;
+        }
+        if (mode === 'complete') {
+          try {
+            localStorage.setItem(completeKey, String(getDoneCount() + 1));
+            localStorage.setItem(streakKey, String(getStreak() + 1));
+          } catch (e) {}
+          var firstUnchecked = checks.find(function (box) { return !box.checked; });
+          if (firstUnchecked) {
+            firstUnchecked.checked = true;
+            saveChecks();
+          }
+          renderCounters();
+          if (timerEl) timerEl.textContent = 'Mission completed. Nice work. Spin again for next challenge.';
+          return;
+        }
         if (typeof window.openPredictedPaperFocus === 'function') {
           window.openPredictedPaperFocus(mode, m.aim, m.code, m.query);
         }
@@ -2732,12 +3324,27 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function spinMission() {
-    var mission = missionPool[Math.floor(Math.random() * missionPool.length)];
-    renderMission(mission);
+    var idx = Math.floor(Math.random() * missionPool.length);
+    if (missionPool.length > 1 && idx === lastMissionIdx) {
+      idx = (idx + 1) % missionPool.length;
+    }
+    lastMissionIdx = idx;
+    renderMission(missionPool[idx]);
   }
 
-  spinBtn.addEventListener('click', spinMission);
-  refreshBtn.addEventListener('click', spinMission);
+  function spinWithFeedback() {
+    spinBtn.disabled = true;
+    var oldText = spinBtn.textContent;
+    spinBtn.textContent = 'Spinning...';
+    setTimeout(function () {
+      spinMission();
+      spinBtn.disabled = false;
+      spinBtn.textContent = oldText;
+    }, 480);
+  }
+
+  spinBtn.addEventListener('click', spinWithFeedback);
+  refreshBtn.addEventListener('click', spinWithFeedback);
 });
 </script></body>
 </html>
