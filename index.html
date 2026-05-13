@@ -4737,8 +4737,7 @@ async function waitForRA10Sdk(timeoutMs) {
 
     const BLOCKED_TERMS = [
       'nigger', 'nigga', 'faggot', 'fag',
-      'kike', 'cunt', 'whore', 'slut',
-      'retard', 'rapist', 'hitler', 'nazi', 'terrorist'
+      'kike', 'cunt'
     ];
 
     function normalizeForModeration(raw) {
@@ -4792,6 +4791,51 @@ async function waitForRA10Sdk(timeoutMs) {
         return { ok: false, value: name, error: 'That display name is not allowed. Please choose another.' };
       }
       return { ok: true, value: name, error: '' };
+    }
+
+    async function saveUsernameForCurrentUser(username) {
+      const session = RA10.getSession();
+      const currentUserId = session?.user?.id || RA10.getProfile()?.id || '';
+      const token = session?.access_token || '';
+      if (!currentUserId) {
+        throw new Error('You are not signed in. Please refresh and try again.');
+      }
+      if (!token) {
+        throw new Error('Session expired. Please sign in again.');
+      }
+
+      const endpoint = 'https://tcrrgsylxbyyrmnouihl.supabase.co/rest/v1/profiles?id=eq.' + encodeURIComponent(currentUserId);
+      const res = await fetch(endpoint, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRjcnJnc3lseGJ5eXJtbm91aWhsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4ODUyMTEsImV4cCI6MjA5MzQ2MTIxMX0.eOp6ma-mfgh8F20nM7E2OaBW28LlZlwuEEWr6k2zDWw',
+          'Authorization': 'Bearer ' + token,
+          'Prefer': 'return=representation'
+        },
+        body: JSON.stringify({ username: username })
+      });
+
+      let payload = null;
+      try {
+        payload = await res.json();
+      } catch (e) {}
+
+      if (!res.ok) {
+        const code = String(payload?.code || '');
+        if (res.status === 409 || code === '23505') {
+          const duplicate = new Error('That username is already taken.');
+          duplicate.code = 'USERNAME_TAKEN';
+          throw duplicate;
+        }
+        throw new Error(payload?.message || 'Could not save username.');
+      }
+
+      if (!Array.isArray(payload) || !payload.length) {
+        throw new Error('Could not save username.');
+      }
+
+      return username;
     }
 
     function isDefaultResetUsername(raw) {
@@ -4969,50 +5013,21 @@ async function waitForRA10Sdk(timeoutMs) {
           err.classList.add('show');
           return;
         }
-        const sb = window.supabase.createClient(
-          'https://tcrrgsylxbyyrmnouihl.supabase.co',
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRjcnJnc3lseGJ5eXJtbm91aWhsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4ODUyMTEsImV4cCI6MjA5MzQ2MTIxMX0.eOp6ma-mfgh8F20nM7E2OaBW28LlZlwuEEWr6k2zDWw'
-        );
-        const session = RA10.getSession();
-        const currentUserId = session?.user?.id || RA10.getProfile()?.id || '';
-        if (!currentUserId) {
-          throw new Error('You are not signed in. Please refresh and try again.');
-        }
-        const { data: updatedRows, error } = await sb.from('profiles')
-          .update({ username: val })
-          .eq('id', currentUserId)
-          .select('username')
-          .limit(1);
-        if (error) {
-          err.textContent = error.code === '23505'
-            ? 'That username is taken. Try another.' : error.message;
-          err.classList.add('show');
-        } else if (!updatedRows || !updatedRows.length || String(updatedRows[0].username || '') !== val) {
-          err.textContent = 'That username is not allowed by safety rules. Please choose another.';
-          err.classList.add('show');
-        } else {
-          const { data: persistedRow, error: persistedError } = await sb.from('profiles')
-            .select('username')
-            .eq('id', currentUserId)
-            .single();
-          if (persistedError || String(persistedRow?.username || '') !== val) {
-            err.textContent = 'Your username was not saved because a database policy changed it. Please try a different clean username.';
-            err.classList.add('show');
-            return;
-          }
-          clearTimeout(safetyTimeout);
-          await RA10.init();
-          _updateNavAuth();
-          localStorage.removeItem(USERNAME_SETUP_DISMISSED_KEY);
-          document.getElementById('username-setup-overlay').classList.remove('open');
-          checkProfileCompletion();
-          showMiniToast('Username saved');
-          btn.disabled = false;
-          btn.textContent = originalText;
-          return;
-        }
+        await saveUsernameForCurrentUser(val);
+        clearTimeout(safetyTimeout);
+        await RA10.init();
+        _updateNavAuth();
+        localStorage.removeItem(USERNAME_SETUP_DISMISSED_KEY);
+        document.getElementById('username-setup-overlay').classList.remove('open');
+        checkProfileCompletion();
+        showMiniToast('Username saved');
+        btn.disabled = false;
+        btn.textContent = originalText;
+        return;
       } catch(e) {
-        err.textContent = 'Could not save. Try again.';
+        err.textContent = e?.code === 'USERNAME_TAKEN'
+          ? 'That username is already taken.'
+          : (e?.message || 'Could not save. Try again.');
         err.classList.add('show');
         btn.disabled = false;
         btn.textContent = originalText;
@@ -5562,52 +5577,15 @@ async function waitForRA10Sdk(timeoutMs) {
       btn.disabled = true;
       btn.textContent = 'Saving...';
       try {
-        const sb = window.supabase.createClient(
-          'https://tcrrgsylxbyyrmnouihl.supabase.co',
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRjcnJnc3lseGJ5eXJtbm91aWhsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4ODUyMTEsImV4cCI6MjA5MzQ2MTIxMX0.eOp6ma-mfgh8F20nM7E2OaBW28LlZlwuEEWr6k2zDWw'
-        );
-        const session = RA10.getSession();
-        const currentUserId = session?.user?.id || RA10.getProfile()?.id || '';
-        if (!currentUserId) {
-          throw new Error('You are not signed in. Please refresh and try again.');
-        }
-        const { data: taken, error: checkError } = await sb.from('profiles')
-          .select('id')
-          .eq('username', val)
-          .neq('id', currentUserId)
-          .limit(1);
-        if (checkError) throw checkError;
-        if (taken && taken.some(function(row) { return String(row.id || '') !== String(currentUserId); })) {
-          err.textContent = 'That username is already taken.';
-          err.classList.add('show');
-          return;
-        }
-        const { data: updatedRows, error } = await sb.from('profiles')
-          .update({ username: val })
-          .eq('id', currentUserId)
-          .select('username')
-          .limit(1);
-        if (error) throw error;
-        if (!updatedRows || !updatedRows.length || String(updatedRows[0].username || '') !== val) {
-          err.textContent = 'That username is not allowed by safety rules. Please choose another.';
-          err.classList.add('show');
-          return;
-        }
-        const { data: persistedRow, error: persistedError } = await sb.from('profiles')
-          .select('username')
-          .eq('id', currentUserId)
-          .single();
-        if (persistedError || String(persistedRow?.username || '') !== val) {
-          err.textContent = 'Your username was not saved because a database policy changed it. Please try a different clean username.';
-          err.classList.add('show');
-          return;
-        }
+        await saveUsernameForCurrentUser(val);
         await RA10.init();
         _updateNavAuth();
         document.getElementById('account-username-edit').style.display = 'none';
         showMiniToast('Username updated');
       } catch (e) {
-        err.textContent = e.message || 'Could not save username.';
+        err.textContent = e?.code === 'USERNAME_TAKEN'
+          ? 'That username is already taken.'
+          : (e?.message || 'Could not save username.');
         err.classList.add('show');
       } finally {
         btn.disabled = false;
@@ -6181,7 +6159,7 @@ async function waitForRA10Sdk(timeoutMs) {
 // Service worker registration
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', function() {
-    navigator.serviceWorker.register('sw.js').catch(function() {});
+    navigator.serviceWorker.register('sw.js?v=20260513b', { updateViaCache: 'none' }).catch(function() {});
   });
 }
 
