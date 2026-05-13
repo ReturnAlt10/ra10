@@ -638,6 +638,53 @@ function switchTab(name) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
+window.openPredictedPaperFocus = function(mode, aim, guideTopicCode, searchText) {
+  const safeAim = ['A', 'B', 'C', 'D', 'E', 'F'].includes(String(aim || '')) ? String(aim) : '';
+  const safeGuideCode = String(guideTopicCode || '').trim();
+  const safeSearch = String(searchText || '').trim();
+
+  if (mode === 'guide') {
+    switchTab('guide');
+    setTimeout(() => {
+      const targetId = safeGuideCode ? ('gt-' + safeGuideCode) : (safeAim ? ('guide-aim-' + safeAim) : '');
+      if (!targetId) return;
+      if (typeof window.guideScrollTo === 'function') {
+        window.guideScrollTo(targetId);
+      } else {
+        document.getElementById(targetId)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 220);
+    return;
+  }
+
+  if (mode === 'quiz') {
+    switchTab('quiz');
+    renderQuizControls();
+    const aimSel = $('#quiz-aim');
+    if (aimSel) aimSel.value = safeAim;
+    const lenSel = $('#quiz-length');
+    if (lenSel && !lenSel.value) lenSel.value = '10';
+    const quizCard = $('#quiz-card');
+    if (quizCard) {
+      quizCard.innerHTML = `<p class="muted" style="padding:30px;text-align:center;">${safeAim ? `Aim ${safeAim}` : 'Topic'} selected. Click <strong>Start quiz</strong> to begin.</p>`;
+    }
+    return;
+  }
+
+  if (mode === 'questions') {
+    switchTab('browse');
+    const aimSel = $('#filter-aim');
+    const searchInput = $('#search');
+    const marksSel = $('#filter-marks');
+    const verbSel = $('#filter-verb');
+    if (aimSel) aimSel.value = safeAim;
+    if (searchInput) searchInput.value = safeSearch;
+    if (marksSel) marksSel.value = '';
+    if (verbSel) verbSel.value = '';
+    applyBrowseFilters();
+  }
+};
+
 const GUIDE_STATE = { entries: null, bound: false };
 const GUIDE_FULL_UNLOCK_EXPIRY_KEY = 'ra10_guide_full_unlock_it_u1_expires_at';
 const GUIDE_FULL_UNLOCK_DURATION_MS = 2 * 60 * 60 * 1000;
@@ -1093,6 +1140,7 @@ function renderBrowse() {
 
 function applyBrowseFilters() {
   const q = $('#search').value.trim().toLowerCase();
+  const qTokens = q ? q.split(/\s+/).filter(Boolean) : [];
   const aim = $('#filter-aim').value;
   const marks = $('#filter-marks').value;
   const verb = $('#filter-verb').value;
@@ -1101,10 +1149,11 @@ function applyBrowseFilters() {
   if (aim) list = list.filter(x => x.learning_aim === aim);
   if (marks) list = list.filter(x => String(x.marks) === marks);
   if (verb) list = list.filter(x => (x.command_verb || '').toLowerCase() === verb.toLowerCase());
-  if (q) {
+  if (qTokens.length) {
     list = list.filter(x => {
       const blob = (x.scenario || '') + ' ' + (x.question || '') + ' ' + (x.topic || '') + ' ' + (x.id || '');
-      return blob.toLowerCase().includes(q);
+      const searchBlob = blob.toLowerCase();
+      return qTokens.every(token => searchBlob.includes(token));
     });
   }
 

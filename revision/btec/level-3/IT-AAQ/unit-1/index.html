@@ -515,8 +515,8 @@
 
 .trend-row {
   display: grid;
-  grid-template-columns: minmax(170px, 220px) minmax(140px, 1fr) 72px;
-  align-items: center;
+  grid-template-columns: minmax(280px, 1.7fr) minmax(120px, 1fr) 72px;
+  align-items: start;
   gap: 12px;
 }
 
@@ -533,6 +533,140 @@
 .trend-meta span {
   color: #607067;
   font-size: 0.77rem;
+}
+
+.trend-topic-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.trend-topic-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: #edf7f1;
+  color: #14543b;
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.trend-actions {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 2px;
+  scrollbar-width: thin;
+}
+
+.trend-actions .btn {
+  flex: 0 0 auto;
+  padding: 7px 11px;
+  font-size: 0.79rem;
+  white-space: nowrap;
+}
+
+.papers-fun-card {
+  border: 1px solid #c9e4d8;
+  background: linear-gradient(140deg, #f6fff9 0%, #ecf9f4 45%, #fff6e6 100%);
+}
+
+.papers-fun-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.papers-fun-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: #e0f3e9;
+  color: #12543a;
+}
+
+.papers-fun-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.papers-fun-result {
+  margin-top: 12px;
+  border: 1px solid #cfe5db;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.78);
+  padding: 12px;
+}
+
+.papers-fun-title {
+  margin: 0;
+  color: #173d2e;
+  font-weight: 800;
+  font-size: 0.92rem;
+}
+
+.papers-fun-copy {
+  margin: 5px 0 0;
+  color: #51665c;
+  font-size: 0.82rem;
+}
+
+.papers-fun-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.papers-fun-actions .btn {
+  padding: 7px 11px;
+  font-size: 0.8rem;
+}
+
+.papers-fun-today {
+  display: grid;
+  gap: 8px;
+  margin-top: 12px;
+  background: rgba(255,255,255,0.65);
+  border-radius: 10px;
+  border: 1px solid #d8e9e1;
+  padding: 10px;
+}
+
+.papers-fun-check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8rem;
+  color: #2f4b40;
+}
+
+.papers-fun-check input {
+  width: 16px;
+  height: 16px;
+}
+
+.papers-fun-status {
+  margin-top: 2px;
+  color: #456257;
+  font-size: 0.76rem;
+  font-weight: 700;
 }
 
 .trend-bar {
@@ -711,9 +845,36 @@
 }
 
 [data-theme="dark"] .code-chip,
-[data-theme="dark"] .signal-pill {
+[data-theme="dark"] .signal-pill,
+[data-theme="dark"] .trend-topic-chip {
   background: #234331;
   color: #d6f3e2;
+}
+
+[data-theme="dark"] .papers-fun-card {
+  background: linear-gradient(140deg, #1a2a24 0%, #1d3028 45%, #2c2b1e 100%);
+  border-color: #395346;
+}
+
+[data-theme="dark"] .papers-fun-result,
+[data-theme="dark"] .papers-fun-today {
+  background: rgba(19, 28, 24, 0.75);
+  border-color: #395346;
+}
+
+[data-theme="dark"] .papers-fun-badge {
+  background: #244535;
+  color: #d5f5e3;
+}
+
+[data-theme="dark"] .papers-fun-title,
+[data-theme="dark"] .papers-fun-check {
+  color: #ddf2e8;
+}
+
+[data-theme="dark"] .papers-fun-copy,
+[data-theme="dark"] .papers-fun-status {
+  color: #aac5ba;
 }
 
 @media (max-width: 980px) {
@@ -1232,55 +1393,56 @@
     </div>
     <div class="papers-insight-grid">
       <section class="papers-insight-card">
-        <h3>Visual trend tracker</h3>
-        <p>The uploaded papers lean hard into a few repeat code families. This gives you the quickest revision route before you drop into the detailed a/b/c/d/e/f tables below.</p>
+        <h3>What to revise first</h3>
+        <p>Use this as a quick priority order. Start with the themes that show up most often, then work down if you have more time.</p>
         <div class="papers-hero-grid">
           <div>
             <div class="papers-kpi-grid">
               <div class="papers-kpi">
                 <strong>7 / 7</strong>
-                <span>Papers with a Q3 visual draw task</span>
+                <span>Every uploaded paper includes a Q3 draw task</span>
               </div>
               <div class="papers-kpi">
-                <strong>6+</strong>
-                <span>Papers hitting security / protection codes</span>
+                <strong>Most</strong>
+                <span>Security and protection topics come up repeatedly</span>
               </div>
               <div class="papers-kpi">
-                <strong>5+</strong>
-                <span>Papers revisiting cloud or remote-access themes</span>
+                <strong>Often</strong>
+                <span>Cloud and remote-working questions return regularly</span>
               </div>
               <div class="papers-kpi">
                 <strong>Q4</strong>
-                <span>Most common home for the largest discuss / evaluate task</span>
+                <span>The biggest discuss or evaluate question usually lands here</span>
               </div>
             </div>
             <div class="trend-chart">
               <div class="trend-row">
-                <div class="trend-meta"><strong>A1.3</strong><span>Network diagrams and flowcharts</span></div>
+                <div class="trend-meta"><strong>1. Practise the Q3 diagram or flowchart first</strong><span>This is the safest revision bet because it appears in every uploaded paper.</span><div class="trend-topic-chips"><span class="trend-topic-chip">A1 Digital Devices</span><span class="trend-topic-chip">A1.3 Flowchart notation</span><span class="trend-topic-chip">A1.3 Network diagram notation</span></div><div class="trend-actions"><button class="btn" type="button" onclick="openPredictedPaperFocus('guide','A','A1','flowchart')">Open topic guide</button><button class="btn" type="button" onclick="openPredictedPaperFocus('quiz','A','A1','flowchart')">Open topic quiz</button><button class="btn" type="button" onclick="openPredictedPaperFocus('questions','A','A1','flowchart')">Practice questions</button></div></div>
                 <div class="trend-bar"><span style="width:100%"></span></div>
-                <div class="trend-value">7 papers</div>
+                <div class="trend-value">Every paper</div>
               </div>
               <div class="trend-row">
-                <div class="trend-meta"><strong>D2 / D2.1 / D2.4</strong><span>Authentication, encryption, access control</span></div>
+                <div class="trend-meta"><strong>2. Revise security, authentication and access control next</strong><span>These themes show up in both short questions and longer judgement answers.</span><div class="trend-topic-chips"><span class="trend-topic-chip">D1 Threats</span><span class="trend-topic-chip">D2 Protection Methods</span></div><div class="trend-actions"><button class="btn" type="button" onclick="openPredictedPaperFocus('guide','D','D2','authentication encryption access control security')">Open topic guide</button><button class="btn" type="button" onclick="openPredictedPaperFocus('quiz','D','D2','authentication encryption access control security')">Open topic quiz</button><button class="btn" type="button" onclick="openPredictedPaperFocus('questions','D','D2','authentication encryption access control security')">Practice questions</button></div></div>
                 <div class="trend-bar"><span style="width:86%"></span></div>
-                <div class="trend-value">6 papers</div>
+                <div class="trend-value">Most papers</div>
               </div>
               <div class="trend-row">
-                <div class="trend-meta"><strong>C1 / C1.2 / C1.3</strong><span>Cloud systems, storage, VPN, remote working</span></div>
+                <div class="trend-meta"><strong>3. Then cover cloud storage, VPNs and remote working</strong><span>These are common applied scenarios, especially when papers talk about online systems.</span><div class="trend-topic-chips"><span class="trend-topic-chip">C1 Cloud Computing</span><span class="trend-topic-chip">B3 Network Types</span></div><div class="trend-actions"><button class="btn" type="button" onclick="openPredictedPaperFocus('guide','C','C1','cloud vpn remote working')">Open topic guide</button><button class="btn" type="button" onclick="openPredictedPaperFocus('quiz','C','C1','cloud vpn remote working')">Open topic quiz</button><button class="btn" type="button" onclick="openPredictedPaperFocus('questions','C','C1','cloud vpn remote working')">Practice questions</button></div></div>
                 <div class="trend-bar"><span style="width:78%"></span></div>
-                <div class="trend-value">5 papers</div>
+                <div class="trend-value">Often</div>
               </div>
               <div class="trend-row">
-                <div class="trend-meta"><strong>A3</strong><span>Operating systems, NOS and software choices</span></div>
+                <div class="trend-meta"><strong>4. After that, revise operating systems and software choices</strong><span>These appear regularly, especially when you need to compare options for an organisation.</span><div class="trend-topic-chips"><span class="trend-topic-chip">A3 Software &amp; OS</span><span class="trend-topic-chip">A4 Choosing IT Systems</span></div><div class="trend-actions"><button class="btn" type="button" onclick="openPredictedPaperFocus('guide','A','A3','operating system software proprietary open source nos')">Open topic guide</button><button class="btn" type="button" onclick="openPredictedPaperFocus('quiz','A','A3','operating system software proprietary open source nos')">Open topic quiz</button><button class="btn" type="button" onclick="openPredictedPaperFocus('questions','A','A3','operating system software proprietary open source nos')">Practice questions</button></div></div>
                 <div class="trend-bar"><span style="width:71%"></span></div>
-                <div class="trend-value">5 papers</div>
+                <div class="trend-value">Fairly common</div>
               </div>
               <div class="trend-row">
-                <div class="trend-meta"><strong>F1 / F2</strong><span>Legal, ethical and environmental issues</span></div>
+                <div class="trend-meta"><strong>5. Finish with legal, ethical and environmental issues</strong><span>Still worth knowing, but this is a later priority than the recurring security and systems material.</span><div class="trend-topic-chips"><span class="trend-topic-chip">F1 Moral &amp; Ethical</span><span class="trend-topic-chip">F2 Legal Issues</span></div><div class="trend-actions"><button class="btn" type="button" onclick="openPredictedPaperFocus('guide','F','F2','legal ethical environmental gdpr computer misuse')">Open topic guide</button><button class="btn" type="button" onclick="openPredictedPaperFocus('quiz','F','F2','legal ethical environmental gdpr computer misuse')">Open topic quiz</button><button class="btn" type="button" onclick="openPredictedPaperFocus('questions','F','F2','legal ethical environmental gdpr computer misuse')">Practice questions</button></div></div>
                 <div class="trend-bar"><span style="width:64%"></span></div>
-                <div class="trend-value">4-5 papers</div>
+                <div class="trend-value">Sometimes</div>
               </div>
             </div>
+            <p class="papers-footnote">Bars show how often each theme appeared across the 7 uploaded papers. Higher bar = stronger revision priority. The buttons jump you straight into the closest guide section, quiz aim or filtered question list.</p>
           </div>
           <div class="papers-slot-signals">
             <div class="signal-card">
@@ -1729,6 +1891,28 @@
           </table>
         </div>
         <p class="papers-footnote">The folder does not appear to include a separate 2022 Unit 1 paper, so this tracker is based on the papers currently uploaded and the AAQ specimen at the front of the combined PDF.</p>
+      </section>
+
+      <section class="papers-insight-card papers-fun-card" id="papers-fun-card">
+        <div class="papers-fun-head">
+          <h3>Revision arcade</h3>
+          <span class="papers-fun-badge">Live mission mode</span>
+        </div>
+        <p>Make revision feel less repetitive. Spin a mission and jump straight to the right paper, guide section and quiz/practice focus.</p>
+        <div class="papers-fun-controls">
+          <button class="btn primary" id="papers-fun-spin" type="button">Spin random mission</button>
+          <button class="btn" id="papers-fun-refresh" type="button">New mission</button>
+        </div>
+        <div class="papers-fun-result" id="papers-fun-result" aria-live="polite">
+          <p class="papers-fun-title">Ready?</p>
+          <p class="papers-fun-copy">Press <strong>Spin random mission</strong> to get your next predicted-paper challenge.</p>
+        </div>
+        <div class="papers-fun-today">
+          <label class="papers-fun-check"><input type="checkbox" id="papers-fun-check-paper"> Complete one predicted paper section</label>
+          <label class="papers-fun-check"><input type="checkbox" id="papers-fun-check-quiz"> Complete one focused quiz</label>
+          <label class="papers-fun-check"><input type="checkbox" id="papers-fun-check-review"> Review one guide topic and mark it done</label>
+          <div class="papers-fun-status" id="papers-fun-status">0 / 3 tasks complete today</div>
+        </div>
       </section>
     </div>
     <div style="background:#fffbe6;border:1px solid #e6c700;border-radius:10px;padding:14px 18px;font-size:0.85rem;color:#5a4a00;">
@@ -2466,6 +2650,94 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     }
   });
+});
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var missionPool = [
+    { paper: 1, aim: 'A', code: 'A1', query: 'flowchart', title: 'Diagram sprint', copy: 'Open Paper 1 and target the Q3 draw-style structure first.' },
+    { paper: 2, aim: 'D', code: 'D2', query: 'authentication encryption access control security', title: 'Security lock-in', copy: 'Focus on access control and secure transmission patterns.' },
+    { paper: 3, aim: 'C', code: 'C1', query: 'cloud vpn remote working', title: 'Cloud impact round', copy: 'Run cloud and remote-working scenarios, then pressure-test with quiz items.' },
+    { paper: 1, aim: 'F', code: 'F2', query: 'legal ethical environmental gdpr computer misuse', title: 'Policy finisher', copy: 'Tackle legal, ethical and environmental implications as a long-answer warm-up.' },
+    { paper: 2, aim: 'A', code: 'A3', query: 'operating system software proprietary open source nos', title: 'Software decision lab', copy: 'Train comparison answers on OS, NOS and software choice trade-offs.' }
+  ];
+
+  var resultEl = document.getElementById('papers-fun-result');
+  var spinBtn = document.getElementById('papers-fun-spin');
+  var refreshBtn = document.getElementById('papers-fun-refresh');
+  var statusEl = document.getElementById('papers-fun-status');
+  var checks = [
+    document.getElementById('papers-fun-check-paper'),
+    document.getElementById('papers-fun-check-quiz'),
+    document.getElementById('papers-fun-check-review')
+  ].filter(Boolean);
+
+  if (!resultEl || !spinBtn || !refreshBtn) return;
+
+  var dayKey = new Date().toISOString().slice(0, 10);
+  var progressKey = 'ra10_u1_papers_fun_progress_' + dayKey;
+
+  function updateStatus() {
+    if (!statusEl) return;
+    var done = checks.filter(function (box) { return box.checked; }).length;
+    statusEl.textContent = done + ' / 3 tasks complete today';
+  }
+
+  function saveChecks() {
+    try {
+      localStorage.setItem(progressKey, JSON.stringify(checks.map(function (box) { return !!box.checked; })));
+    } catch (e) {}
+    updateStatus();
+  }
+
+  function loadChecks() {
+    try {
+      var raw = localStorage.getItem(progressKey);
+      if (!raw) return;
+      var values = JSON.parse(raw);
+      if (!Array.isArray(values)) return;
+      checks.forEach(function (box, idx) { box.checked = !!values[idx]; });
+    } catch (e) {}
+    updateStatus();
+  }
+
+  checks.forEach(function (box) {
+    box.addEventListener('change', saveChecks);
+  });
+  loadChecks();
+
+  function missionActions(m) {
+    return '<div class="papers-fun-actions">'
+      + '<a class="btn" href="predicted-papers/paper-' + m.paper + '.html" target="_blank" rel="noopener">Open Paper ' + m.paper + '</a>'
+      + '<button class="btn" type="button" data-fun-action="guide">Topic guide</button>'
+      + '<button class="btn" type="button" data-fun-action="quiz">Topic quiz</button>'
+      + '<button class="btn" type="button" data-fun-action="questions">Practice set</button>'
+      + '</div>';
+  }
+
+  function renderMission(m) {
+    resultEl.innerHTML = ''
+      + '<p class="papers-fun-title">' + m.title + ' \u2022 Paper ' + m.paper + '</p>'
+      + '<p class="papers-fun-copy">' + m.copy + '</p>'
+      + missionActions(m);
+
+    resultEl.querySelectorAll('[data-fun-action]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var mode = btn.getAttribute('data-fun-action');
+        if (typeof window.openPredictedPaperFocus === 'function') {
+          window.openPredictedPaperFocus(mode, m.aim, m.code, m.query);
+        }
+      });
+    });
+  }
+
+  function spinMission() {
+    var mission = missionPool[Math.floor(Math.random() * missionPool.length)];
+    renderMission(mission);
+  }
+
+  spinBtn.addEventListener('click', spinMission);
+  refreshBtn.addEventListener('click', spinMission);
 });
 </script></body>
 </html>

@@ -61,14 +61,79 @@
   .viewer-counter { min-width: 68px; justify-content: center; }
   .print-bar button { background: linear-gradient(135deg, #1a6e3c 0%, #12512c 100%); color: #fff; border: none; padding: 9px 16px; border-radius: 12px; font-weight: bold; font-size: 9.5pt; cursor: pointer; box-shadow: 0 10px 24px rgba(26, 110, 60, 0.24); }
   .print-bar a { color: #fff; font-size: 9pt; text-decoration: none; padding: 8px 12px; border-radius: 10px; background: rgba(255,255,255,0.08); margin-left: 0; }
+  .viewer-topbar { position: sticky; top: 12px; z-index: 180; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; width: min(1180px, calc(100% - 28px)); margin: 0 auto 18px auto; padding: 12px 14px; border-radius: 16px; border: 1px solid #d7deef; background: #ffffff; box-shadow: 0 10px 24px rgba(23, 35, 72, 0.14); }
+  .viewer-group { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .viewer-group-nav { flex: 1 1 520px; min-width: 0; }
+  .viewer-group-actions { justify-content: flex-end; }
+  .viewer-title { color: #18213f; font-size: 9.25pt; font-weight: 900; letter-spacing: 0.04em; text-transform: uppercase; padding: 8px 11px; border-radius: 11px; background: #eef3ff; border: 1px solid #d8e2ff; }
+  .viewer-btn,
+  .viewer-nav-btn { border: 1px solid #ced8f1; background: #f7f9ff; color: #1f2b4f; text-decoration: none; font-size: 9pt; font-weight: 700; line-height: 1; padding: 8px 11px; border-radius: 10px; cursor: pointer; transition: background 0.2s, border-color 0.2s, color 0.2s; }
+  .viewer-btn:hover,
+  .viewer-nav-btn:hover { background: #edf3ff; border-color: #b8c8ef; }
+  .viewer-nav-btn.active { background: #2f4fc7; border-color: #2f4fc7; color: #fff; }
+  .viewer-btn-primary { background: linear-gradient(135deg, #1f6feb 0%, #154aa8 100%); border-color: #245fca; color: #fff; }
+  .viewer-btn-primary:hover { background: linear-gradient(135deg, #2b7dff 0%, #1e5ac6 100%); }
+  .viewer-counter,
+  .viewer-zoom-value { min-width: 62px; text-align: center; color: #162244; font-size: 9pt; font-weight: 800; padding: 8px 10px; border-radius: 10px; background: #f1f5ff; border: 1px solid #d7e1fb; }
+  .viewer-zoom-label { color: #4b5f95; font-size: 8.6pt; font-weight: 700; padding: 0 2px; }
+  @media screen and (max-width: 980px) {
+    .viewer-topbar { border-radius: 0; width: 100%; margin: 0 0 12px 0; top: 0; }
+    .page { width: min(210mm, calc(100% - 24px)); }
+  }
+  @media screen and (max-width: 720px) {
+    body { padding: 0 0 18px; }
+    .viewer-topbar { margin: 0 0 10px 0; padding: 10px 12px; gap: 10px; }
+    .viewer-group { width: 100%; }
+    .viewer-group-nav,
+    .viewer-group-actions { flex-wrap: nowrap; overflow-x: auto; justify-content: flex-start; padding-bottom: 2px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+    .viewer-group-nav::-webkit-scrollbar,
+    .viewer-group-actions::-webkit-scrollbar { display: none; }
+    .viewer-title,
+    .viewer-btn,
+    .viewer-nav-btn,
+    .viewer-counter,
+    .viewer-zoom-value,
+    .viewer-zoom-label { flex: 0 0 auto; }
+    .page { width: calc(100vw - 12px); min-height: auto; margin: 0 auto 14px auto; padding: 14px 14px 42px 14px; border-radius: 14px; }
+    .cover-top-bar { margin-bottom: 18px; }
+    .cover-title { font-size: 16pt; }
+    .cover-sub,
+    .part-q,
+    .ms-points li,
+    .ms-instruction,
+    .ms-accept,
+    .ms-dna { font-size: 9pt; }
+    .part-header { flex-wrap: wrap; }
+    .part-marks-badge { margin-left: 28px; }
+    .ms-box,
+    .levels-box { margin-left: 0; }
+    .indicative-section,
+    .levels-table td,
+    .levels-table th { font-size: 9pt; }
+    .page-footer { left: 14px; right: 14px; bottom: 14px; font-size: 8pt; }
+  }
 </style>
 </head>
 <body>
-<div class="print-bar no-print">
-  <span>RA10 — BTEC IT Unit 1 — Mark Scheme 3</span>
-  <button onclick="window.print()">&#x2399; Print / Save as PDF</button>
-  <a href="paper-3.html">&larr; View Question Paper</a>
-  <span class="viewer-counter" id="viewerPageCounter">1 / 1</span>
+<div class="viewer-topbar no-print">
+  <div class="viewer-group viewer-group-nav">
+    <span class="viewer-title">RA10 • Unit 1 • Mark Scheme 3</span>
+    <button class="viewer-nav-btn active" data-target="cover" onclick="scrollToPage(0)">Cover</button>
+    <button class="viewer-nav-btn" data-q="1" onclick="scrollToQuestion(1)">Q1</button>
+    <button class="viewer-nav-btn" data-q="2" onclick="scrollToQuestion(2)">Q2</button>
+    <button class="viewer-nav-btn" data-q="3" onclick="scrollToQuestion(3)">Q3</button>
+    <button class="viewer-nav-btn" data-q="4" onclick="scrollToQuestion(4)">Q4</button>
+  </div>
+  <div class="viewer-group viewer-group-actions">
+    <span class="viewer-zoom-label">Zoom</span>
+    <button class="viewer-btn" id="zoomOutBtn" type="button">-</button>
+    <span class="viewer-zoom-value" id="zoomLevel">100%</span>
+    <button class="viewer-btn" id="zoomInBtn" type="button">+</button>
+    <button class="viewer-btn" id="zoomResetBtn" type="button">Reset</button>
+    <span class="viewer-counter" id="viewerPageCounter">1 / 1</span>
+    <button class="viewer-btn viewer-btn-primary" type="button" onclick="window.print()">Print / Save PDF</button>
+    <a class="viewer-btn" href="paper-3.html">Question Paper</a>
+  </div>
 </div>
 
 <!-- COVER -->
@@ -579,10 +644,27 @@
 
 <script>
   (function () {
-    var pages = document.querySelectorAll('.page');
+    var pages = Array.prototype.slice.call(document.querySelectorAll('.page'));
     var counter = document.getElementById('viewerPageCounter');
     var total = pages.length;
+    var questionHeaders = Array.prototype.filter.call(document.querySelectorAll('h2, .q-title'), function (node) {
+      return /Question\s+[1-4]/i.test(node.textContent || '');
+    });
+    var navButtons = document.querySelectorAll('.viewer-nav-btn');
+    var zoomOutBtn = document.getElementById('zoomOutBtn');
+    var zoomInBtn = document.getElementById('zoomInBtn');
+    var zoomResetBtn = document.getElementById('zoomResetBtn');
+    var zoomLevelLabel = document.getElementById('zoomLevel');
+    var zoomLevel = 1;
     if (!counter || !total) return;
+
+    function getMinZoom() {
+      if (!pages.length) return 0.8;
+      if (window.innerWidth > 720) return 0.8;
+      var baseWidth = pages[0].offsetWidth || 1;
+      var availableWidth = Math.max(320, window.innerWidth - 12);
+      return Math.min(1, Math.max(0.55, availableWidth / baseWidth));
+    }
 
     function getCurrentPage() {
       var viewportTarget = window.innerHeight * 0.45;
@@ -606,9 +688,81 @@
       counter.textContent = getCurrentPage() + ' / ' + total;
     }
 
+    function getQuestionNumber(text) {
+      var match = String(text || '').match(/Question\s+([1-4])/i);
+      return match ? Number(match[1]) : 0;
+    }
+
+    function scrollToPage(pageNum) {
+      if (pages[pageNum]) pages[pageNum].scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function scrollToQuestion(qNum) {
+      for (var i = 0; i < questionHeaders.length; i++) {
+        if (getQuestionNumber(questionHeaders[i].textContent) === qNum) {
+          questionHeaders[i].scrollIntoView({ behavior: 'smooth', block: 'start' });
+          break;
+        }
+      }
+    }
+
+    window.scrollToPage = scrollToPage;
+    window.scrollToQuestion = scrollToQuestion;
+
+    function updateActiveNav() {
+      var scrollPos = window.scrollY + window.innerHeight / 3;
+      var currentQ = 0;
+      questionHeaders.forEach(function (header) {
+        if (header.getBoundingClientRect().top + window.scrollY < scrollPos) {
+          currentQ = getQuestionNumber(header.textContent);
+        }
+      });
+      navButtons.forEach(function (item) { item.classList.remove('active'); });
+      if (currentQ > 0) {
+        var activeItem = document.querySelector('.viewer-nav-btn[data-q="' + currentQ + '"]');
+        if (activeItem) activeItem.classList.add('active');
+      } else {
+        var coverButton = document.querySelector('.viewer-nav-btn[data-target="cover"]');
+        if (coverButton) coverButton.classList.add('active');
+      }
+    }
+
+    function applyZoom() {
+      pages.forEach(function (page) {
+        if (!page.dataset.baseHeight) page.dataset.baseHeight = String(page.offsetHeight);
+        var baseHeight = Number(page.dataset.baseHeight) || page.offsetHeight;
+        var extraHeight = Math.max(0, (baseHeight * zoomLevel) - baseHeight);
+        page.style.transformOrigin = 'top center';
+        page.style.transform = 'scale(' + zoomLevel + ')';
+        page.style.marginBottom = (24 + extraHeight) + 'px';
+      });
+      if (zoomLevelLabel) zoomLevelLabel.textContent = Math.round(zoomLevel * 100) + '%';
+    }
+
+    function setZoom(nextZoom) {
+      zoomLevel = Math.min(1.5, Math.max(getMinZoom(), nextZoom));
+      applyZoom();
+      updateCounter();
+    }
+
+    if (zoomOutBtn) zoomOutBtn.addEventListener('click', function () { setZoom(zoomLevel - 0.1); });
+    if (zoomInBtn) zoomInBtn.addEventListener('click', function () { setZoom(zoomLevel + 0.1); });
+    if (zoomResetBtn) zoomResetBtn.addEventListener('click', function () { setZoom(1); });
+
+    zoomLevel = getMinZoom();
+    applyZoom();
     updateCounter();
-    window.addEventListener('scroll', updateCounter, { passive: true });
-    window.addEventListener('resize', updateCounter);
+    updateActiveNav();
+    window.addEventListener('scroll', function () {
+      updateCounter();
+      updateActiveNav();
+    }, { passive: true });
+    window.addEventListener('resize', function () {
+      zoomLevel = Math.min(1.5, Math.max(getMinZoom(), zoomLevel));
+      updateCounter();
+      updateActiveNav();
+      applyZoom();
+    });
   })();
 </script>
 

@@ -1,12 +1,22 @@
 // RA10 Service Worker — network-first, passthrough
-const CACHE_NAME = 'ra10-v1';
+const CACHE_NAME = 'ra10-v2';
 
 self.addEventListener('install', function(e) {
   self.skipWaiting();
 });
 
 self.addEventListener('activate', function(e) {
-  e.waitUntil(self.clients.claim());
+  e.waitUntil(
+    caches.keys().then(function(keys) {
+      return Promise.all(
+        keys
+          .filter(function(key) { return key !== CACHE_NAME; })
+          .map(function(key) { return caches.delete(key); })
+      );
+    }).then(function() {
+      return self.clients.claim();
+    })
+  );
 });
 
 // Network-first: always try network, fall back to cache for same-origin GET requests

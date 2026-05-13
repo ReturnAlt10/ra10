@@ -67,6 +67,7 @@
   .sub-q-marks { font-weight: bold; white-space: nowrap; flex-shrink: 0; font-size: 10pt; }
 
   .answer-lines { margin-left: 28px; margin-top: 8px; margin-bottom: 6px; }
+  .answer-lines.answer-lines-wide { margin-left: 0; }
   .answer-line { border-bottom: 1px solid #000; height: 24px; margin-bottom: 5px; }
   .point-answer { display: flex; gap: 10px; align-items: flex-start; margin-left: 28px; margin-top: 8px; margin-bottom: 10px; }
   .point-number { width: 18px; font-weight: bold; font-size: 10pt; line-height: 1.8; flex-shrink: 0; }
@@ -88,6 +89,8 @@
   body { margin: 0; padding: 14px 0 36px; }
   .viewer-topbar { position: sticky; top: 12px; z-index: 180; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; width: min(1180px, calc(100% - 28px)); margin: 0 auto 18px auto; padding: 12px 14px; border-radius: 16px; border: 1px solid #d7deef; background: #ffffff; box-shadow: 0 10px 24px rgba(23, 35, 72, 0.14); }
   .viewer-group { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .viewer-group-nav { flex: 1 1 520px; min-width: 0; }
+  .viewer-group-actions { justify-content: flex-end; }
   .viewer-title { color: #18213f; font-size: 9.25pt; font-weight: 900; letter-spacing: 0.04em; text-transform: uppercase; padding: 8px 11px; border-radius: 11px; background: #eef3ff; border: 1px solid #d8e2ff; }
   .viewer-btn,
   .viewer-nav-btn { border: 1px solid #ced8f1; background: #f7f9ff; color: #1f2b4f; text-decoration: none; font-size: 9pt; font-weight: 700; line-height: 1; padding: 8px 11px; border-radius: 10px; cursor: pointer; transition: background 0.2s, border-color 0.2s, color 0.2s; }
@@ -110,6 +113,43 @@
 
   @media screen and (max-width: 980px) {
     .viewer-topbar { border-radius: 0; width: 100%; margin: 0 0 12px 0; top: 0; }
+    .page { width: min(210mm, calc(100% - 24px)); }
+  }
+
+  @media screen and (max-width: 720px) {
+    body { padding: 0 0 18px; }
+    .viewer-topbar { margin: 0 0 10px 0; padding: 10px 12px; gap: 10px; }
+    .viewer-group { width: 100%; }
+    .viewer-group-nav,
+    .viewer-group-actions { flex-wrap: nowrap; overflow-x: auto; justify-content: flex-start; padding-bottom: 2px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+    .viewer-group-nav::-webkit-scrollbar,
+    .viewer-group-actions::-webkit-scrollbar { display: none; }
+    .viewer-title,
+    .viewer-btn,
+    .viewer-nav-btn,
+    .viewer-counter,
+    .viewer-zoom-value,
+    .viewer-zoom-label { flex: 0 0 auto; }
+    .page { width: calc(100vw - 12px); min-height: auto; margin: 0 auto 14px auto; padding: 14px 14px 42px 14px; border-radius: 14px; }
+    .cover-meta-grid,
+    .cover-bottom-grid,
+    .cover-fields { grid-template-columns: 1fr; }
+    .cover-header { padding: 12px 14px; gap: 12px; }
+    .cover-logo { font-size: 26pt; }
+    .cover-title { font-size: 15pt; }
+    .cover-subtitle,
+    .cover-topic-row,
+    .cover-field-label,
+    .instr-box li,
+    .sub-q-text,
+    .sub-q-marks,
+    .scenario-box,
+    .diagram-guide { font-size: 9pt; }
+    .answer-lines,
+    .point-answer,
+    .diagram-guide { margin-left: 0; }
+    .diagram-page .diagram-box { min-height: 420px; height: auto; }
+    .page-footer { left: 14px; right: 14px; bottom: 14px; font-size: 8pt; }
   }
 
   @media print {
@@ -123,7 +163,7 @@
 <body>
 
 <div class="viewer-topbar no-print">
-  <div class="viewer-group">
+  <div class="viewer-group viewer-group-nav">
     <span class="viewer-title">RA10 • Unit 1 • Paper 2</span>
     <button class="viewer-nav-btn active" data-target="cover" onclick="scrollToPage(0)">Cover</button>
     <button class="viewer-nav-btn" data-q="1" onclick="scrollToQuestion(1)">Q1</button>
@@ -131,7 +171,7 @@
     <button class="viewer-nav-btn" data-q="3" onclick="scrollToQuestion(3)">Q3</button>
     <button class="viewer-nav-btn" data-q="4" onclick="scrollToQuestion(4)">Q4</button>
   </div>
-  <div class="viewer-group">
+  <div class="viewer-group viewer-group-actions">
     <span class="viewer-zoom-label">Zoom</span>
     <button class="viewer-btn" id="zoomOutBtn" type="button">-</button>
     <span class="viewer-zoom-value" id="zoomLevel">100%</span>
@@ -528,17 +568,39 @@
       return 2;
     }
 
+    function isContinuationPage(page) {
+      if (!page) return false;
+      var header = page.querySelector('.question-header');
+      var text = header ? String(header.textContent || '').toLowerCase() : '';
+      return text.indexOf('continued') !== -1;
+    }
+
+    function fitLinesToFooter(group, minimum) {
+      var page = group.closest('.page');
+      var footer = page ? page.querySelector('.page-footer') : null;
+      if (!page || !footer) return;
+
+      var available = footer.getBoundingClientRect().top - group.getBoundingClientRect().top - 8;
+      var lineStride = 29;
+      var fitted = Math.floor(available / lineStride);
+      if (!Number.isFinite(fitted) || fitted <= 0) return;
+
+      buildLines(group, Math.max(minimum, fitted));
+    }
+
     document.querySelectorAll('.answer-lines').forEach(function (group) {
       var explicit = parseInt(group.getAttribute('data-lines') || '', 10);
-      if (Number.isFinite(explicit)) {
-        buildLines(group, explicit);
-        return;
-      }
-
       var question = group.closest('.sub-question');
       var marksText = question && question.querySelector('.sub-q-marks') ? question.querySelector('.sub-q-marks').textContent : '';
       var marks = parseInt((marksText.match(/\d+/) || ['0'])[0], 10);
-      buildLines(group, linesForMarks(marks));
+      group.classList.toggle('answer-lines-wide', marks >= 6);
+
+      var minimum = Number.isFinite(explicit) ? explicit : linesForMarks(marks);
+      buildLines(group, minimum);
+
+      if (isContinuationPage(group.closest('.page'))) {
+        fitLinesToFooter(group, minimum);
+      }
     });
 
     document.querySelectorAll('.point-lines').forEach(function (group) {
@@ -580,6 +642,14 @@
     var zoomResetBtn = document.getElementById('zoomResetBtn');
     var zoomLevelLabel = document.getElementById('zoomLevel');
     var zoomLevel = 1;
+
+    function getMinZoom() {
+      if (!pages.length) return 0.8;
+      if (window.innerWidth > 720) return 0.8;
+      var baseWidth = pages[0].offsetWidth || 1;
+      var availableWidth = Math.max(320, window.innerWidth - 12);
+      return Math.min(1, Math.max(0.55, availableWidth / baseWidth));
+    }
 
     function scrollToPage(pageNum) {
       pages[pageNum].scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -643,7 +713,7 @@
     }
 
     function setZoom(nextZoom) {
-      zoomLevel = Math.min(1.5, Math.max(0.8, nextZoom));
+      zoomLevel = Math.min(1.5, Math.max(getMinZoom(), nextZoom));
       applyZoom();
       updateCounter();
     }
@@ -652,6 +722,7 @@
     if (zoomInBtn) zoomInBtn.addEventListener('click', function () { setZoom(zoomLevel + 0.1); });
     if (zoomResetBtn) zoomResetBtn.addEventListener('click', function () { setZoom(1); });
 
+    zoomLevel = getMinZoom();
     applyZoom();
     updateCounter();
     updateActiveNav();
@@ -660,6 +731,7 @@
       updateActiveNav();
     }, { passive: true });
     window.addEventListener('resize', function () {
+      zoomLevel = Math.min(1.5, Math.max(getMinZoom(), zoomLevel));
       updateCounter();
       updateActiveNav();
       applyZoom();
