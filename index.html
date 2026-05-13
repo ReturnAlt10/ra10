@@ -4663,8 +4663,11 @@ window.addEventListener('orientationchange', syncMobileNavChrome);
     let usernameSetupTimer = 0;
     let usernamePolicySyncInFlight = false;
 
-    const BLOCKED_ROOTS = ['nigg', 'fagg'];
-    const BLOCKED_TERMS = ['kike', 'cunt', 'whore', 'slut', 'retard', 'rapist', 'hitler', 'nazi', 'terrorist'];
+    const BLOCKED_TERMS = [
+      'nigger', 'nigga', 'faggot', 'fag',
+      'kike', 'cunt', 'whore', 'slut',
+      'retard', 'rapist', 'hitler', 'nazi', 'terrorist'
+    ];
 
     function normalizeForModeration(raw) {
       return String(raw || '').toLowerCase();
@@ -4680,10 +4683,7 @@ window.addEventListener('orientationchange', syncMobileNavChrome);
     function hasBlockedContent(raw) {
       const tokens = getModerationTokens(raw);
       if (!tokens.length) return false;
-      if (tokens.some(function(t) { return BLOCKED_TERMS.includes(t); })) return true;
-      return tokens.some(function(t) {
-        return BLOCKED_ROOTS.some(function(root) { return t.includes(root); });
-      });
+      return tokens.some(function(t) { return BLOCKED_TERMS.includes(t); });
     }
 
     function normalizeUsername(raw) {
@@ -4703,11 +4703,6 @@ window.addEventListener('orientationchange', syncMobileNavChrome);
       }
       const usernameTokens = username.split(/[_0-9]+/).filter(Boolean);
       if (usernameTokens.some(function(t) { return BLOCKED_TERMS.includes(t); })) {
-        return { ok: false, username, error: 'That username is not allowed. Please choose another.' };
-      }
-      if (usernameTokens.some(function(t) {
-        return BLOCKED_ROOTS.some(function(root) { return t.includes(root); });
-      })) {
         return { ok: false, username, error: 'That username is not allowed. Please choose another.' };
       }
       return { ok: true, username, error: '' };

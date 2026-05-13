@@ -607,8 +607,11 @@ function selectableSubjectNames() {
   return SUBJECTS.filter(function(s) { return s && s.selectable; }).map(function(s) { return s.name; });
 }
 
-var BLOCKED_ROOTS = ['nigg', 'fagg'];
-var BLOCKED_TERMS = ['kike', 'cunt', 'whore', 'slut', 'retard', 'rapist', 'hitler', 'nazi', 'terrorist'];
+var BLOCKED_TERMS = [
+  'nigger', 'nigga', 'faggot', 'fag',
+  'kike', 'cunt', 'whore', 'slut',
+  'retard', 'rapist', 'hitler', 'nazi', 'terrorist'
+];
 
 function normalizeUsername(raw) {
   return String(raw || '').trim().toLowerCase().replace(/[^a-z0-9_]/g, '');
@@ -627,11 +630,6 @@ function validateUsername(raw) {
   }
   var usernameTokens = username.split(/[_0-9]+/).filter(Boolean);
   if (usernameTokens.some(function(t) { return BLOCKED_TERMS.includes(t); })) {
-    return { ok: false, username: username, error: 'That username is not allowed.' };
-  }
-  if (usernameTokens.some(function(t) {
-    return BLOCKED_ROOTS.some(function(root) { return t.includes(root); });
-  })) {
     return { ok: false, username: username, error: 'That username is not allowed.' };
   }
   return { ok: true, username: username, error: '' };
