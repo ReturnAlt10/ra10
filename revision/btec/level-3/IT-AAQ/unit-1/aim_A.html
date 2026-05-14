@@ -8,18 +8,19 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: 'Satoshi', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: #f8fafc;
+      background: #e9edf3;
       color: #1a1f2e;
       line-height: 1.6;
-      padding: 20px;
+      padding: 24px;
     }
     .container {
-      max-width: 900px;
+      width: min(210mm, calc(100vw - 48px));
       margin: 0 auto;
       background: #fff;
-      padding: 25px;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      padding: 16mm 14mm;
+      border-radius: 6px;
+      box-shadow: 0 16px 36px rgba(20, 28, 42, 0.16), 0 2px 8px rgba(20, 28, 42, 0.1);
+      border: 1px solid #d6dde8;
     }
     h1 {
       font-size: 1.8em;
@@ -120,6 +121,80 @@
     .scenario strong {
       color: #0f4f41;
     }
+    .diagram-example {
+      margin-top: 10px;
+      border: 1px solid #a7b9ad;
+      border-radius: 8px;
+      background: #fff;
+      padding: 10px;
+      overflow: auto;
+    }
+    .diagram-example svg {
+      width: 100%;
+      height: auto;
+      display: block;
+      min-height: 280px;
+    }
+    .node {
+      fill: #f7fbff;
+      stroke: #1a1a2e;
+      stroke-width: 1.8;
+    }
+    .node-soft {
+      fill: #eef7f1;
+      stroke: #1a6e3c;
+      stroke-width: 1.8;
+    }
+    .flow {
+      stroke: #1a1a2e;
+      stroke-width: 2;
+      fill: none;
+    }
+    .diag-title {
+      font-size: 15px;
+      font-weight: 700;
+      fill: #111;
+    }
+    .diag-txt {
+      font-size: 12px;
+      font-weight: 600;
+      fill: #111;
+    }
+    .diag-subtxt {
+      font-size: 11px;
+      fill: #333;
+    }
+    .diag-note {
+      font-size: 11px;
+      fill: #0f5132;
+      font-weight: 700;
+    }
+    .symbol-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .symbol-card {
+      border: 1px solid #d9e7df;
+      border-radius: 8px;
+      background: #f7faf8;
+      padding: 8px;
+      font-size: 0.9em;
+    }
+    .symbol-card svg {
+      width: 100%;
+      height: 70px;
+      display: block;
+      margin-bottom: 6px;
+    }
+    .diagram-canvas {
+      margin-top: 10px;
+      border: 1px solid #d9e7df;
+      border-radius: 8px;
+      padding: 10px;
+      background: #fbfdfc;
+    }
     .print-btn {
       display: block;
       margin: 0 auto 15px;
@@ -135,8 +210,9 @@
       background: #0f4f41;
     }
     @media print {
+      @page { size: A4; margin: 12mm; }
       body { background: #fff; padding: 0; }
-      .container { box-shadow: none; border: none; padding: 0; max-width: 100%; }
+      .container { width: auto; margin: 0; box-shadow: none; border: none; border-radius: 0; padding: 0; }
       .print-btn { display: none; }
       h2 { page-break-inside: avoid; margin-top: 30px; }
       .section { page-break-inside: avoid; }
@@ -506,6 +582,207 @@
           <li>Speed of access</li>
           <li>Data retention</li>
         </ul>
+      </div>
+    </div>
+
+    <h2>A1.3 Drawing Skills: Flowcharts & System Diagrams</h2>
+
+    <h3>How to Draw a Flowchart (Exam Method)</h3>
+    <div class="content-block">
+      <ol>
+        <li>Read the scenario and identify the exact process sequence first.</li>
+        <li>Use a <strong>Start</strong> and <strong>End</strong> terminal.</li>
+        <li>Use <strong>input/output</strong> for data entry or display steps.</li>
+        <li>Use <strong>process</strong> for actions (calculate, store, update).</li>
+        <li>Use <strong>decision</strong> diamonds for yes/no checks and label branches.</li>
+        <li>Keep arrows flowing top-to-bottom where possible to stay clear and readable.</li>
+      </ol>
+    </div>
+
+    <div class="content-block">
+      <h3>Flowchart Symbols (Drawn)</h3>
+      <div class="symbol-grid">
+        <div class="symbol-card">
+          <svg viewBox="0 0 180 70" aria-label="Terminal symbol">
+            <rect class="node" x="18" y="18" width="144" height="34" rx="17" ry="17"></rect>
+            <text x="90" y="39" text-anchor="middle" class="diag-txt">Start / End</text>
+          </svg>
+          <div><strong>Terminal:</strong> Start or finish point.</div>
+        </div>
+        <div class="symbol-card">
+          <svg viewBox="0 0 180 70" aria-label="Process symbol">
+            <rect class="node-soft" x="20" y="16" width="140" height="38" rx="5" ry="5"></rect>
+            <text x="90" y="40" text-anchor="middle" class="diag-txt">Process</text>
+          </svg>
+          <div><strong>Process:</strong> An action or operation.</div>
+        </div>
+        <div class="symbol-card">
+          <svg viewBox="0 0 180 70" aria-label="Input output symbol">
+            <polygon class="node-soft" points="26,16 160,16 146,54 12,54"></polygon>
+            <text x="88" y="40" text-anchor="middle" class="diag-txt">Input / Output</text>
+          </svg>
+          <div><strong>Input/Output:</strong> Data entered or shown.</div>
+        </div>
+        <div class="symbol-card">
+          <svg viewBox="0 0 180 70" aria-label="Decision symbol">
+            <polygon class="node" points="90,12 138,35 90,58 42,35"></polygon>
+            <text x="90" y="39" text-anchor="middle" class="diag-txt">Decision</text>
+          </svg>
+          <div><strong>Decision:</strong> A yes/no branch point.</div>
+        </div>
+        <div class="symbol-card">
+          <svg viewBox="0 0 180 70" aria-label="Connector symbol">
+            <circle class="node" cx="90" cy="35" r="20"></circle>
+            <text x="90" y="39" text-anchor="middle" class="diag-txt">A</text>
+          </svg>
+          <div><strong>Connector:</strong> Continue flow in another location.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="content-block">
+      <h3>Worked Flowchart Example (Login Check)</h3>
+      <div class="diagram-example">
+        <svg viewBox="0 0 860 560" aria-label="Model flowchart for secure user login">
+          <defs>
+            <marker id="arrowAimAFlow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#1a1a2e"></path>
+            </marker>
+          </defs>
+
+          <text x="430" y="28" text-anchor="middle" class="diag-title">Login Validation Flowchart (Exam Example)</text>
+
+          <rect class="node" x="320" y="50" width="220" height="38" rx="18" ry="18"></rect>
+          <text x="430" y="74" text-anchor="middle" class="diag-txt">Start</text>
+
+          <polygon class="node-soft" points="292,108 590,108 568,156 270,156"></polygon>
+          <text x="430" y="136" text-anchor="middle" class="diag-txt">Enter username and password</text>
+
+          <rect class="node-soft" x="270" y="178" width="320" height="48" rx="8" ry="8"></rect>
+          <text x="430" y="206" text-anchor="middle" class="diag-txt">Validate credentials</text>
+
+          <polygon class="node" points="430,244 520,288 430,332 340,288"></polygon>
+          <text x="430" y="292" text-anchor="middle" class="diag-txt">Credentials correct?</text>
+
+          <rect class="node-soft" x="270" y="356" width="320" height="48" rx="8" ry="8"></rect>
+          <text x="430" y="384" text-anchor="middle" class="diag-txt">Open dashboard</text>
+
+          <rect class="node" x="620" y="264" width="200" height="46" rx="8" ry="8"></rect>
+          <text x="720" y="292" text-anchor="middle" class="diag-txt">Show error + retry</text>
+
+          <rect class="node" x="320" y="432" width="220" height="38" rx="18" ry="18"></rect>
+          <text x="430" y="456" text-anchor="middle" class="diag-txt">End</text>
+
+          <line class="flow" x1="430" y1="88" x2="430" y2="108" marker-end="url(#arrowAimAFlow)"></line>
+          <line class="flow" x1="430" y1="156" x2="430" y2="178" marker-end="url(#arrowAimAFlow)"></line>
+          <line class="flow" x1="430" y1="226" x2="430" y2="244" marker-end="url(#arrowAimAFlow)"></line>
+          <line class="flow" x1="430" y1="332" x2="430" y2="356" marker-end="url(#arrowAimAFlow)"></line>
+          <line class="flow" x1="430" y1="404" x2="430" y2="432" marker-end="url(#arrowAimAFlow)"></line>
+          <line class="flow" x1="520" y1="288" x2="620" y2="288" marker-end="url(#arrowAimAFlow)"></line>
+          <line class="flow" x1="720" y1="310" x2="720" y2="520"></line>
+          <line class="flow" x1="720" y1="520" x2="430" y2="520"></line>
+          <line class="flow" x1="430" y1="520" x2="430" y2="156" marker-end="url(#arrowAimAFlow)"></line>
+
+          <text x="446" y="348" class="diag-note">Yes</text>
+          <text x="540" y="278" class="diag-note">No</text>
+          <text x="570" y="514" class="diag-subtxt">Retry loop to input</text>
+        </svg>
+      </div>
+      <ul>
+        <li><strong>Exam tip:</strong> Include branch labels (Yes/No) next to decision arrows.</li>
+        <li><strong>Exam tip:</strong> Keep each step short and action-focused, not long sentences.</li>
+      </ul>
+    </div>
+
+    <h3>How to Draw a System Diagram (Exam Method)</h3>
+    <div class="content-block">
+      <ol>
+        <li>List all components first: input devices, processing unit, storage, output devices, and network/cloud if used.</li>
+        <li>Draw each component as a clear labeled box.</li>
+        <li>Add arrows to show <strong>data flow direction</strong> between components.</li>
+        <li>Label important links (for example: Wi-Fi, Ethernet, USB, HTTPS, VPN).</li>
+        <li>Match your diagram directly to the scenario, not a generic setup.</li>
+      </ol>
+      <div class="diagram-example">
+        <svg viewBox="0 0 860 560" aria-label="Model network system diagram for office setup">
+          <defs>
+            <marker id="arrowAimADiagram" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#1a1a2e"></path>
+            </marker>
+          </defs>
+
+          <text x="430" y="28" text-anchor="middle" class="diag-title">Office System Diagram (Exam Example)</text>
+
+          <rect x="35" y="50" width="790" height="460" fill="#fcfdff" stroke="#9aa4b2" stroke-width="1.5"></rect>
+          <text x="780" y="72" text-anchor="end" class="diag-subtxt">Solid = wired, dotted = wireless</text>
+
+          <path class="node-soft" d="M370 116 C370 98 386 84 404 84 C412 68 428 58 446 58 C468 58 487 72 492 92 C507 93 520 105 520 120 C520 136 506 148 489 148 L400 148 C383 148 370 135 370 116 Z"></path>
+          <text x="445" y="122" text-anchor="middle" class="diag-txt">Cloud</text>
+
+          <rect class="node" x="360" y="250" width="150" height="72" rx="8" ry="8"></rect>
+          <rect x="380" y="266" width="22" height="12" fill="none" stroke="#1a1a2e" stroke-width="1.6"></rect>
+          <circle cx="386" cy="272" r="1.3" fill="#1a1a2e"></circle>
+          <circle cx="392" cy="272" r="1.3" fill="#1a1a2e"></circle>
+          <circle cx="398" cy="272" r="1.3" fill="#1a1a2e"></circle>
+          <text x="446" y="276" text-anchor="middle" class="diag-txt">Switch</text>
+          <text x="446" y="296" text-anchor="middle" class="diag-subtxt">Core node</text>
+
+          <rect class="node-soft" x="90" y="120" width="180" height="70" rx="8" ry="8"></rect>
+          <rect x="105" y="134" width="28" height="18" fill="none" stroke="#1a1a2e" stroke-width="1.6"></rect>
+          <line x1="119" y1="152" x2="119" y2="158" stroke="#1a1a2e" stroke-width="1.6"></line>
+          <line x1="111" y1="158" x2="127" y2="158" stroke="#1a1a2e" stroke-width="1.6"></line>
+          <text x="185" y="148" text-anchor="middle" class="diag-txt">Admin PC</text>
+          <text x="185" y="168" text-anchor="middle" class="diag-subtxt">Keyboard + mouse</text>
+
+          <rect class="node-soft" x="90" y="244" width="180" height="70" rx="8" ry="8"></rect>
+          <rect x="105" y="263" width="24" height="14" fill="none" stroke="#1a1a2e" stroke-width="1.6"></rect>
+          <rect x="108" y="257" width="18" height="7" fill="#fff" stroke="#1a1a2e" stroke-width="1.2"></rect>
+          <line x1="111" y1="278" x2="123" y2="278" stroke="#1a1a2e" stroke-width="1.6"></line>
+          <text x="185" y="272" text-anchor="middle" class="diag-txt">Laser Printer</text>
+          <text x="185" y="292" text-anchor="middle" class="diag-subtxt">Output</text>
+
+          <rect class="node-soft" x="90" y="368" width="190" height="76" rx="8" ry="8"></rect>
+          <rect x="106" y="384" width="28" height="10" fill="none" stroke="#1a1a2e" stroke-width="1.5"></rect>
+          <rect x="106" y="399" width="28" height="10" fill="none" stroke="#1a1a2e" stroke-width="1.5"></rect>
+          <rect x="106" y="414" width="28" height="10" fill="none" stroke="#1a1a2e" stroke-width="1.5"></rect>
+          <text x="192" y="398" text-anchor="middle" class="diag-txt">File Server</text>
+          <text x="192" y="418" text-anchor="middle" class="diag-subtxt">SSD storage</text>
+
+          <rect class="node-soft" x="610" y="248" width="190" height="76" rx="8" ry="8"></rect>
+          <rect x="626" y="270" width="30" height="14" rx="3" ry="3" fill="none" stroke="#1a1a2e" stroke-width="1.6"></rect>
+          <line x1="641" y1="270" x2="641" y2="261" stroke="#1a1a2e" stroke-width="1.6"></line>
+          <path d="M633 261 Q641 253 649 261" fill="none" stroke="#1a1a2e" stroke-width="1.4"></path>
+          <path d="M629 257 Q641 245 653 257" fill="none" stroke="#1a1a2e" stroke-width="1.4"></path>
+          <text x="705" y="278" text-anchor="middle" class="diag-txt">Wi-Fi Router</text>
+          <text x="705" y="298" text-anchor="middle" class="diag-subtxt">Gateway</text>
+
+          <rect class="node-soft" x="610" y="128" width="180" height="70" rx="8" ry="8"></rect>
+          <rect x="624" y="142" width="26" height="16" fill="none" stroke="#1a1a2e" stroke-width="1.6"></rect>
+          <line x1="624" y1="158" x2="650" y2="158" stroke="#1a1a2e" stroke-width="1.6"></line>
+          <text x="700" y="154" text-anchor="middle" class="diag-txt">Staff Laptop</text>
+          <text x="700" y="174" text-anchor="middle" class="diag-subtxt">Wireless client</text>
+
+          <line class="flow" x1="270" y1="156" x2="360" y2="270" marker-end="url(#arrowAimADiagram)"></line>
+          <line class="flow" x1="270" y1="279" x2="360" y2="285" marker-end="url(#arrowAimADiagram)"></line>
+          <line class="flow" x1="280" y1="406" x2="360" y2="305" marker-end="url(#arrowAimADiagram)"></line>
+          <line class="flow" x1="510" y1="286" x2="610" y2="286" marker-end="url(#arrowAimADiagram)"></line>
+          <line class="flow" x1="705" y1="248" x2="705" y2="198" stroke-dasharray="6 4" marker-end="url(#arrowAimADiagram)"></line>
+          <line class="flow" x1="705" y1="248" x2="500" y2="146" marker-end="url(#arrowAimADiagram)"></line>
+
+          <line x1="95" y1="480" x2="175" y2="480" stroke="#1a1a2e" stroke-width="2"></line>
+          <text x="185" y="484" class="diag-subtxt">Wired link</text>
+          <line x1="95" y1="500" x2="175" y2="500" stroke="#1a1a2e" stroke-width="2" stroke-dasharray="6 4"></line>
+          <text x="185" y="504" class="diag-subtxt">Wireless link</text>
+
+          <text x="302" y="210" class="diag-note">Ethernet</text>
+          <text x="302" y="270" class="diag-note">Print jobs</text>
+          <text x="300" y="360" class="diag-note">File read/write</text>
+          <text x="715" y="226" class="diag-note">Wi-Fi</text>
+          <text x="560" y="202" class="diag-note">WAN uplink</text>
+        </svg>
+      </div>
+      <div class="scenario">
+        <strong>Diagram Example:</strong> School office workstation — keyboard and scanner send data to CPU/RAM; files save to SSD; reports print to laser printer; encrypted backup syncs to cloud storage.
       </div>
     </div>
 
