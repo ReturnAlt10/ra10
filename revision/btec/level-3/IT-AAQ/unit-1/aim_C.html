@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Learning Aim C – Online Systems & Communities</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Satoshi', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f8fafc;
+      color: #1a1f2e;
+      line-height: 1.6;
+      padding: 20px;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    h1 {
+      font-size: 1.8em;
+      margin-bottom: 5px;
+      color: #0f4f41;
+    }
+    .subtitle {
+      font-size: 0.95em;
+      color: #666;
+      margin-bottom: 15px;
+      border-bottom: 2px solid #e0e7ff;
+      padding-bottom: 10px;
+    }
+    h2 {
+      font-size: 1.4em;
+      margin-top: 25px;
+      margin-bottom: 12px;
+      color: #0f4f41;
+      border-left: 4px solid #2d4c3a;
+      padding-left: 15px;
+    }
+    h3 {
+      font-size: 1.1em;
+      margin-top: 15px;
+      margin-bottom: 8px;
+      color: #2d4c3a;
+    }
+    .section {
+      margin-bottom: 15px;
+    }
+    .content-block {
+      background: #f9fafb;
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      border-left: 3px solid #b0b7a1;
+      font-size: 0.95em;
+    }
+    ul, ol {
+      margin: 8px 0 8px 18px;
+    }
+    li {
+      margin: 4px 0;
+      line-height: 1.5;
+      font-size: 0.95em;
+    }
+    strong {
+      color: #0f4f41;
+      font-weight: 600;
+    }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .card {
+      background: #f0f4f1;
+      padding: 12px;
+      border-radius: 8px;
+      border-top: 3px solid #7b8c8e;
+      font-size: 0.93em;
+    }
+    .card h4 {
+      color: #2d4c3a;
+      margin-bottom: 6px;
+      font-size: 1em;
+    }
+    .card ul {
+      margin-left: 12px;
+    }
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 10px 0;
+      font-size: 0.93em;
+    }
+    .comparison-table th, .comparison-table td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+    .comparison-table th {
+      background: #2d4c3a;
+      color: #fff;
+    }
+    .comparison-table tr:nth-child(even) {
+      background: #f9fafb;
+    }
+    .scenario {
+      background: #e8f4f0;
+      border-left: 4px solid #0f4f41;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 4px;
+      font-size: 0.93em;
+    }
+    .scenario strong {
+      color: #0f4f41;
+    }
+    .print-btn {
+      display: block;
+      margin: 0 auto 15px;
+      padding: 8px 16px;
+      background: #2d4c3a;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.95em;
+    }
+    .print-btn:hover {
+      background: #0f4f41;
+    }
+    @media print {
+      body { background: #fff; padding: 0; }
+      .container { box-shadow: none; border: none; padding: 0; max-width: 100%; }
+      .print-btn { display: none; }
+      h2 { page-break-inside: avoid; margin-top: 30px; }
+      .section { page-break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Learning Aim C</h1>
+    <div class="subtitle">Online Systems & Communities</div>
+    <button class="print-btn" onclick="window.print()">🖨️ Print Document</button>
+
+    <h3>Cloud Computing Models — Service Types</h3>
+    <div class="content-block">
+      <ul>
+        <li><strong>SaaS (Software as a Service):</strong> Accessing software through browser; no installation; examples include Google Workspace (Gmail, Docs, Sheets), Microsoft 365 (Word, Excel, Teams), Salesforce. Pay subscription, automatic updates, data stored in cloud.</li>
+        <li><strong>PaaS (Platform as a Service):</strong> Provides development environment and tools; developers can build applications; examples include Heroku, Google App Engine, AWS Elastic Beanstalk. Manages infrastructure, developers focus on code.</li>
+        <li><strong>IaaS (Infrastructure as a Service):</strong> Renting computing resources (servers, storage, networking) over the internet; examples include AWS (Elastic Compute Cloud), Microsoft Azure, Google Cloud. Complete control, most responsibility.</li>
+      </ul>
+    </div>
+
+    <div class="content-block">
+      <h3>Cloud Service Model Comparison</h3>
+      <table class="comparison-table">
+        <tr>
+          <th>Model</th>
+          <th>What's Provided</th>
+          <th>Examples</th>
+          <th>Best For</th>
+        </tr>
+        <tr>
+          <td><strong>SaaS</strong></td>
+          <td>Complete applications</td>
+          <td>Google Workspace, Teams, Slack</td>
+          <td>End users, everyday work</td>
+        </tr>
+        <tr>
+          <td><strong>PaaS</strong></td>
+          <td>Development platform</td>
+          <td>Heroku, App Engine</td>
+          <td>Developers building apps</td>
+        </tr>
+        <tr>
+          <td><strong>IaaS</strong></td>
+          <td>Computing infrastructure</td>
+          <td>AWS, Azure, Google Cloud</td>
+          <td>Organizations, full control</td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="scenario">
+      <strong>Scenario:</strong> A startup needs email/collaboration (SaaS: Google Workspace), development tools (PaaS: Heroku), and flexible servers (IaaS: AWS). They use all three layers, scaling and paying only for what they use.
+    </div>
+
+    <h3>Cloud Deployment Models</h3>
+    <div class="grid-2">
+      <div class="card">
+        <h4>Public Cloud</h4>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:5px 0 10px;">What is it:</h4>
+        <ul>
+          <li>Services available to general public</li>
+          <li>Shared infrastructure (resources shared with other companies)</li>
+          <li>Managed by cloud provider</li>
+        </ul>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:15px 0 10px;">Advantages:</h4>
+        <ul>
+          <li>Low cost</li>
+          <li>Scalable</li>
+          <li>No infrastructure needed</li>
+          <li>Reliable (provider manages)</li>
+        </ul>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:15px 0 10px;">Disadvantages:</h4>
+        <ul>
+          <li>Less control</li>
+          <li>Security/privacy concerns</li>
+          <li>Less customization</li>
+          <li>Shared resources</li>
+        </ul>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:15px 0 10px;">Examples:</h4>
+        <ul>
+          <li>AWS, Google Cloud, Azure</li>
+          <li>Dropbox, Google Drive</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Private Cloud</h4>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:5px 0 10px;">What is it:</h4>
+        <ul>
+          <li>Dedicated infrastructure for single organization</li>
+          <li>Only that company uses resources</li>
+          <li>Can be on-premise or hosted</li>
+        </ul>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:15px 0 10px;">Advantages:</h4>
+        <ul>
+          <li>More secure</li>
+          <li>Full control</li>
+          <li>Customizable</li>
+          <li>Better performance (no sharing)</li>
+        </ul>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:15px 0 10px;">Disadvantages:</h4>
+        <ul>
+          <li>Higher cost</li>
+          <li>Need technical expertise</li>
+          <li>Maintenance responsibility</li>
+          <li>Less scalable</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card" style="background: #f0f4f1; padding: 18px; border-radius: 8px; border-top: 3px solid #7b8c8e; margin-top: 20px;">
+      <h4>Hybrid Cloud</h4>
+      <ul>
+        <li><strong>What is it:</strong> Mix of public and private cloud</li>
+        <li><strong>Flexibility:</strong> Choose which apps go where</li>
+        <li><strong>Sensitive data:</strong> In private cloud; non-sensitive in public</li>
+        <li><strong>Cost balanced:</strong> Pay-as-you-go + controlled costs</li>
+        <li><strong>Complexity:</strong> More difficult to manage</li>
+      </ul>
+    </div>
+
+    <div class="content-block">
+      <h3>Cloud Deployment Model Comparison</h3>
+      <table class="comparison-table">
+        <tr>
+          <th>Model</th>
+          <th>Access</th>
+          <th>Cost</th>
+          <th>Security</th>
+          <th>Best For</th>
+        </tr>
+        <tr>
+          <td><strong>Public</strong></td>
+          <td>General public</td>
+          <td>Low</td>
+          <td>Standard</td>
+          <td>Startups, cost-conscious</td>
+        </tr>
+        <tr>
+          <td><strong>Private</strong></td>
+          <td>Single organization</td>
+          <td>High</td>
+          <td>High</td>
+          <td>Finance, healthcare, sensitive</td>
+        </tr>
+        <tr>
+          <td><strong>Hybrid</strong></td>
+          <td>Mix of both</td>
+          <td>Moderate</td>
+          <td>Good</td>
+          <td>Flexible organizations</td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="scenario">
+      <strong>Scenario:</strong> A bank uses private cloud for secure customer financial data (high security). But for non-sensitive apps like email (SaaS), it uses public cloud to save costs. A hybrid approach balances security and budget.
+    </div>
+
+    <h3>Impact & Implications of Cloud Computing</h3>
+    <div class="grid-2">
+      <div class="card">
+        <h4>Cost Considerations</h4>
+        <ul>
+          <li><strong>Pay-as-you-go:</strong> Only pay for what you use</li>
+          <li><strong>Low upfront cost:</strong> No hardware investment</li>
+          <li><strong>Scalability:</strong> Easily increase/decrease</li>
+          <li><strong>Predictable costs:</strong> Budget friendly</li>
+          <li><strong>But: High usage can be expensive</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Security & Privacy</h4>
+        <ul>
+          <li><strong>Data stored remotely:</strong> Trust provider</li>
+          <li><strong>Encryption needed:</strong> Protect in transit</li>
+          <li><strong>Access control:</strong> Strong authentication</li>
+          <li><strong>Compliance:</strong> GDPR, DPA requirements</li>
+          <li><strong>Breaches:</strong> Affect all users</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <h4>Scalability & Flexibility</h4>
+        <ul>
+          <li><strong>Scale up:</strong> Add resources instantly</li>
+          <li><strong>Scale down:</strong> Remove when not needed</li>
+          <li><strong>Global access:</strong> Anywhere with internet</li>
+          <li><strong>Automatic updates:</strong> Latest features</li>
+          <li><strong>High availability:</strong> Data replicated</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Operational Challenges</h4>
+        <ul>
+          <li><strong>Internet dependency:</strong> Need connection</li>
+          <li><strong>Provider outages:</strong> Your service down too</li>
+          <li><strong>Data lock-in:</strong> Hard to leave provider</li>
+          <li><strong>Latency:</strong> Slight delay possible</li>
+          <li><strong>Data sovereignty:</strong> Where is data stored?</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>Remote Working Tools & Technologies</h3>
+    <div class="grid-2">
+      <div class="card">
+        <h4>VPN (Virtual Private Network)</h4>
+        <ul>
+          <li><strong>Purpose:</strong> Secure connection to company network from home</li>
+          <li><strong>How:</strong> Encrypts all traffic to company server</li>
+          <li><strong>Benefits:</strong> Appears as if in office network</li>
+          <li><strong>Access:</strong> Company files, printers, systems</li>
+          <li><strong>Downside:</strong> Slower speeds, requires setup</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Remote Desktop</h4>
+        <ul>
+          <li><strong>Purpose:</strong> Control office computer from home</li>
+          <li><strong>How:</strong> Direct connection to office PC</li>
+          <li><strong>Benefits:</strong> Full control of office computer</li>
+          <li><strong>Examples:</strong> Windows Remote Desktop, TeamViewer</li>
+          <li><strong>Limitations:</strong> Office computer must be on</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <h4>Cloud Storage</h4>
+        <ul>
+          <li><strong>What:</strong> Files stored online, accessible from anywhere</li>
+          <li><strong>Examples:</strong> OneDrive, Google Drive, Dropbox</li>
+          <li><strong>Benefits:</strong> No USB drives, automatic backup</li>
+          <li><strong>Sharing:</strong> Easy collaboration with team</li>
+          <li><strong>Sync:</strong> Changes on all devices</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Collaboration Tools</h4>
+        <ul>
+          <li><strong>Video conferencing:</strong> Zoom, Teams, Google Meet</li>
+          <li><strong>Instant messaging:</strong> Slack, Microsoft Teams</li>
+          <li><strong>Real-time editing:</strong> Google Docs, Office 365</li>
+          <li><strong>Project management:</strong> Asana, Monday.com, Trello</li>
+          <li><strong>Benefits:</strong> Teamwork despite distance</li>
+        </ul>
+      </div>
+    </div>
+
+    <h2>Online Communities</h2>
+
+    <h3>Types of Online Communities</h3>
+    <div class="content-block">
+      <ul>
+        <li><strong>Social Media:</strong> Facebook, Twitter, Instagram – social networking and sharing</li>
+        <li><strong>Blogs/Vlogs:</strong> Written or video content; audience engagement</li>
+        <li><strong>Wikis:</strong> Collaborative knowledge bases; Wikipedia, internal wikis</li>
+        <li><strong>Forums:</strong> Discussion boards; topic-based conversations; Q&A sites</li>
+        <li><strong>Chatrooms/Instant Messaging:</strong> Real-time text communication; Discord, Slack</li>
+        <li><strong>Podcasts:</strong> Audio content series; subscriptions; topic discussions</li>
+        <li><strong>Gaming Communities:</strong> Multiplayer games, gaming forums, streaming</li>
+      </ul>
+    </div>
+
+    <h3>Implications of Online Communities</h3>
+    <div class="grid-2">
+      <div class="card">
+        <h4>Positive Aspects</h4>
+        <ul>
+          <li>Knowledge sharing</li>
+          <li>Global connections</li>
+          <li>Support networks</li>
+          <li>Collaboration</li>
+          <li>Cost-effective</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Challenges</h4>
+        <ul>
+          <li>Privacy concerns</li>
+          <li>Cyberbullying</li>
+          <li>Misinformation</li>
+          <li>Addiction risks</li>
+          <li>Security threats</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>Choosing Online Systems</h3>
+    <div class="content-block">
+      <ul>
+        <li><strong>User Needs:</strong> What are users trying to accomplish?</li>
+        <li><strong>Specific Requirements:</strong> Features needed?</li>
+        <li><strong>Cost:</strong> Subscription fees or free?</li>
+        <li><strong>Privacy & Security:</strong> Data protection policies?</li>
+        <li><strong>Downtime:</strong> Reliability and uptime?</li>
+        <li><strong>Training Required:</strong> Learning curve?</li>
+        <li><strong>Integration:</strong> Works with existing systems?</li>
+        <li><strong>Productivity Impact:</strong> Will it improve efficiency?</li>
+        <li><strong>Working Practices:</strong> Does it fit workflow?</li>
+      </ul>
+    </div>
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Learning Aim E – Legal & Regulatory</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Satoshi', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f8fafc;
+      color: #1a1f2e;
+      line-height: 1.6;
+      padding: 20px;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    h1 {
+      font-size: 1.8em;
+      margin-bottom: 5px;
+      color: #0f4f41;
+    }
+    .subtitle {
+      font-size: 0.95em;
+      color: #666;
+      margin-bottom: 15px;
+      border-bottom: 2px solid #e0e7ff;
+      padding-bottom: 10px;
+    }
+    h2 {
+      font-size: 1.4em;
+      margin-top: 25px;
+      margin-bottom: 12px;
+      color: #0f4f41;
+      border-left: 4px solid #2d4c3a;
+      padding-left: 15px;
+    }
+    h3 {
+      font-size: 1.1em;
+      margin-top: 15px;
+      margin-bottom: 8px;
+      color: #2d4c3a;
+    }
+    .section {
+      margin-bottom: 15px;
+    }
+    .content-block {
+      background: #f9fafb;
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      border-left: 3px solid #b0b7a1;
+      font-size: 0.95em;
+    }
+    ul, ol {
+      margin: 8px 0 8px 18px;
+    }
+    li {
+      margin: 4px 0;
+      line-height: 1.5;
+      font-size: 0.95em;
+    }
+    strong {
+      color: #0f4f41;
+      font-weight: 600;
+    }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .card {
+      background: #f0f4f1;
+      padding: 12px;
+      border-radius: 8px;
+      border-top: 3px solid #7b8c8e;
+      font-size: 0.93em;
+    }
+    .card h4 {
+      color: #2d4c3a;
+      margin-bottom: 6px;
+      font-size: 1em;
+    }
+    .card ul {
+      margin-left: 12px;
+    }
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 10px 0;
+      font-size: 0.93em;
+    }
+    .comparison-table th, .comparison-table td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+    .comparison-table th {
+      background: #2d4c3a;
+      color: #fff;
+    }
+    .comparison-table tr:nth-child(even) {
+      background: #f9fafb;
+    }
+    .scenario {
+      background: #e8f4f0;
+      border-left: 4px solid #0f4f41;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 4px;
+      font-size: 0.93em;
+    }
+    .scenario strong {
+      color: #0f4f41;
+    }
+    .print-btn {
+      display: block;
+      margin: 0 auto 15px;
+      padding: 8px 16px;
+      background: #2d4c3a;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.95em;
+    }
+    .print-btn:hover {
+      background: #0f4f41;
+    }
+    @media print {
+      body { background: #fff; padding: 0; }
+      .container { box-shadow: none; border: none; padding: 0; max-width: 100%; }
+      .print-btn { display: none; }
+      h2 { page-break-inside: avoid; margin-top: 30px; }
+      .section { page-break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Learning Aim E</h1>
+    <div class="subtitle">Legal & Regulatory Issues</div>
+    <button class="print-btn" onclick="window.print()">🖨️ Print Document</button>
+
+    <h2>Key Legislation</h2>
+
+    <h3>Data Protection Act 2018 (UK)</h3>
+    <div class="content-block">
+      <ul>
+        <li><strong>Purpose:</strong> Protects personal data of individuals in the UK</li>
+        <li><strong>Applies to:</strong> Any organization storing/processing personal data</li>
+        <li><strong>Key Principles:</strong> Data must be lawful, fair, transparent, limited, accurate, secure</li>
+        <li><strong>Data Subject Rights:</strong>
+          <ul style="margin: 10px 0 0 20px;">
+            <li>Right to access their data (Subject Access Request)</li>
+            <li>Right to rectify (correct) inaccurate data</li>
+            <li>Right to erase (be forgotten)</li>
+            <li>Right to restrict processing</li>
+            <li>Right to data portability (get a copy)</li>
+            <li>Right to object to processing</li>
+          </ul>
+        </li>
+        <li><strong>Organization Responsibilities:</strong>
+          <ul style="margin: 10px 0 0 20px;">
+            <li>DPIA (Data Protection Impact Assessment)</li>
+            <li>Appoint Data Protection Officer</li>
+            <li>Staff training</li>
+            <li>Incident reporting (within 72 hours if breach)</li>
+            <li>Privacy notices required</li>
+          </ul>
+        </li>
+        <li><strong>Penalties:</strong> Up to £20 million or 4% of global turnover (whichever is higher)</li>
+      </ul>
+    </div>
+
+    <h3>GDPR (General Data Protection Regulation)</h3>
+    <div class="content-block">
+      <ul>
+        <li><strong>Scope:</strong> Applies to all EU citizens and organizations handling EU data</li>
+        <li><strong>Key Requirements:</strong> Consent for data processing; data minimization; storage limitation</li>
+        <li><strong>Data Breaches:</strong> Must notify authorities and data subjects within 72 hours</li>
+        <li><strong>Data Protection Rights:</strong> Similar to Data Protection Act 2018</li>
+        <li><strong>Enforcement:</strong> Data Protection Authorities in each country</li>
+      </ul>
+    </div>
+
+    <h3>Computer Misuse Act 1990</h3>
+    <div class="grid-2">
+      <div class="card">
+        <h4>Offences & Penalties</h4>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:5px 0 10px;">Section 1: Unauthorized Access</h4>
+        <ul>
+          <li>Accessing computer without permission</li>
+          <li>Penalty: Up to 2 years imprisonment</li>
+          <li>Fine up to £5,000</li>
+          <li>Example: Hacking someone's email</li>
+        </ul>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:15px 0 10px;">Section 2: Unauthorized Modification</h4>
+        <ul>
+          <li>Altering data or software without permission</li>
+          <li>Penalty: Up to 5 years imprisonment</li>
+          <li>Example: Deleting files, installing malware</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>More Offences</h4>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:5px 0 10px;">Section 3: Denial of Service</h4>
+        <ul>
+          <li>Making systems unavailable (DDoS)</li>
+          <li>Penalty: Up to 10 years imprisonment</li>
+          <li>Most serious offense</li>
+        </ul>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:15px 0 10px;">What's Illegal:</h4>
+        <ul>
+          <li>Creating/distributing malware</li>
+          <li>Accessing others' accounts</li>
+          <li>Modifying programs</li>
+          <li>Password cracking</li>
+          <li>Bypassing security</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>Copyright & Intellectual Property</h3>
+    <div class="content-block">
+      <ul>
+        <li><strong>Copyright Protection:</strong> Automatic protection for original works (books, music, software, art); creators' exclusive rights</li>
+        <li><strong>Who owns it:</strong> Creator/author automatically owns copyright (© symbol optional but recommended)</li>
+        <li><strong>Duration:</strong> Copyright lasts for life of author + 70 years (or longer for works made for hire)</li>
+        <li><strong>Exclusive Rights:</strong>
+          <ul style="margin: 10px 0 0 20px;">
+            <li>Reproduction (copying)</li>
+            <li>Distribution (selling, lending)</li>
+            <li>Public performance</li>
+            <li>Public display</li>
+            <li>Derivative works (remixes, adaptations)</li>
+          </ul>
+        </li>
+        <li><strong>Infringement:</strong> Using copyrighted work without permission is illegal (copying, sharing, remixing)</li>
+        <li><strong>Fair Use/Fair Dealing:</strong> Limited use allowed in some cases:
+          <ul style="margin: 10px 0 0 20px;">
+            <li>Education/teaching (quoting)</li>
+            <li>Criticism and review</li>
+            <li>Parody and satire</li>
+            <li>News reporting</li>
+            <li>BUT: Must not harm commercial value</li>
+          </ul>
+        </li>
+        <li><strong>Licensing:</strong> Many works available under Creative Commons or other licenses (may allow some uses)</li>
+        <li><strong>Penalties:</strong> Up to 10 years imprisonment + large fines (£50,000+) for serious infringement</li>
+        <li><strong>Other IP:</strong> Trademarks, patents, design rights also protected</li>
+      </ul>
+    </div>
+
+    <h2>Health & Safety Legislation</h2>
+
+    <h3>Health and Safety at Work Act 1974</h3>
+    <div class="content-block">
+      <ul>
+        <li><strong>Ergonomics:</strong> Workstations designed to reduce strain and injury</li>
+        <li><strong>Screen Time:</strong> Regular breaks required (every 20-30 minutes recommended)</li>
+        <li><strong>Lighting:</strong> Adequate lighting to prevent eye strain</li>
+        <li><strong>Posture:</strong> Correct seating and desk height</li>
+        <li><strong>Equipment:</strong> Ergonomic chairs, keyboards, monitors provided</li>
+        <li><strong>Display Screen Equipment Regulations:</strong> Specific rules for computer workstations</li>
+      </ul>
+    </div>
+
+    <h3>Eye Strain & Fatigue</h3>
+    <div class="grid-2">
+      <div class="card">
+        <h4>Prevention Measures</h4>
+        <ul>
+          <li>20-20-20 rule (every 20 min, look 20 seconds at 20 feet)</li>
+          <li>Anti-glare screens</li>
+          <li>Adjust monitor brightness</li>
+          <li>Proper lighting</li>
+          <li>Regular breaks</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Risk Factors</h4>
+        <ul>
+          <li>Extended screen time</li>
+          <li>Poor monitor placement</li>
+          <li>Inadequate lighting</li>
+          <li>Glare on screen</li>
+          <li>Uncorrected vision</li>
+        </ul>
+      </div>
+    </div>
+
+    <h2>Other Relevant Legislation</h2>
+
+    <h3>Additional Laws</h3>
+    <div class="content-block">
+      <ul>
+        <li><strong>Freedom of Information Act 2000:</strong> Public right to request public body information</li>
+        <li><strong>Accessibility Regulations:</strong> Websites must be accessible to disabled users</li>
+        <li><strong>Equality Act 2010:</strong> No discrimination based on protected characteristics</li>
+        <li><strong>Communications Regulations:</strong> Govern electronic communications and privacy</li>
+        <li><strong>Intellectual Property Rights Act:</strong> Protects intellectual property ownership</li>
+        <li><strong>E-Commerce Regulations:</strong> Rules for online businesses and transactions</li>
+      </ul>
+    </div>
+
+    <h3>Regulatory Bodies & Enforcement</h3>
+    <div class="content-block">
+      <ul>
+        <li><strong>Information Commissioner's Office (ICO):</strong> UK data protection authority; enforces GDPR and Data Protection Act</li>
+        <li><strong>Ofcom:</strong> Communications regulator; oversees broadcasting and telecommunications</li>
+        <li><strong>Advertising Standards Authority (ASA):</strong> Regulates advertising; investigates complaints</li>
+        <li><strong>Intellectual Property Office (IPO):</strong> Manages patent, trademark, and copyright registrations</li>
+      </ul>
+    </div>
+
+    <h3>Implications for Individuals & Organizations</h3>
+    <div class="content-block">
+      <ul>
+        <li><strong>Compliance:</strong> Must follow all applicable laws; regular audits and training</li>
+        <li><strong>Penalties:</strong> Fines, imprisonment, reputation damage for violations</li>
+        <li><strong>User Rights:</strong> Individuals have rights to privacy, data access, and protection</li>
+        <li><strong>Organizational Duty:</strong> Must implement safeguards and privacy by design</li>
+        <li><strong>Liability:</strong> Organization responsible for employee actions</li>
+        <li><strong>Insurance:</strong> Cyber liability insurance may be needed</li>
+      </ul>
+    </div>
+
+  </div>
+</body>
+</html>

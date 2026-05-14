@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Learning Aim D – Threats to Data & Protection</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Satoshi', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f8fafc;
+      color: #1a1f2e;
+      line-height: 1.6;
+      padding: 20px;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    h1 {
+      font-size: 1.8em;
+      margin-bottom: 5px;
+      color: #0f4f41;
+    }
+    .subtitle {
+      font-size: 0.95em;
+      color: #666;
+      margin-bottom: 15px;
+      border-bottom: 2px solid #e0e7ff;
+      padding-bottom: 10px;
+    }
+    h2 {
+      font-size: 1.4em;
+      margin-top: 25px;
+      margin-bottom: 12px;
+      color: #0f4f41;
+      border-left: 4px solid #2d4c3a;
+      padding-left: 15px;
+    }
+    h3 {
+      font-size: 1.1em;
+      margin-top: 15px;
+      margin-bottom: 8px;
+      color: #2d4c3a;
+    }
+    .section {
+      margin-bottom: 15px;
+    }
+    .content-block {
+      background: #f9fafb;
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      border-left: 3px solid #b0b7a1;
+      font-size: 0.95em;
+    }
+    ul, ol {
+      margin: 8px 0 8px 18px;
+    }
+    li {
+      margin: 4px 0;
+      line-height: 1.5;
+      font-size: 0.95em;
+    }
+    strong {
+      color: #0f4f41;
+      font-weight: 600;
+    }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .card {
+      background: #f0f4f1;
+      padding: 12px;
+      border-radius: 8px;
+      border-top: 3px solid #7b8c8e;
+      font-size: 0.93em;
+    }
+    .card h4 {
+      color: #2d4c3a;
+      margin-bottom: 6px;
+      font-size: 1em;
+    }
+    .card ul {
+      margin-left: 12px;
+    }
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 10px 0;
+      font-size: 0.93em;
+    }
+    .comparison-table th, .comparison-table td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+    .comparison-table th {
+      background: #2d4c3a;
+      color: #fff;
+    }
+    .comparison-table tr:nth-child(even) {
+      background: #f9fafb;
+    }
+    .scenario {
+      background: #e8f4f0;
+      border-left: 4px solid #0f4f41;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 4px;
+      font-size: 0.93em;
+    }
+    .scenario strong {
+      color: #0f4f41;
+    }
+    .print-btn {
+      display: block;
+      margin: 0 auto 15px;
+      padding: 8px 16px;
+      background: #2d4c3a;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.95em;
+    }
+    .print-btn:hover {
+      background: #0f4f41;
+    }
+    @media print {
+      body { background: #fff; padding: 0; }
+      .container { box-shadow: none; border: none; padding: 0; max-width: 100%; }
+      .print-btn { display: none; }
+      h2 { page-break-inside: avoid; margin-top: 30px; }
+      .section { page-break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Learning Aim D</h1>
+    <div class="subtitle">Threats to Data & Protection</div>
+    <button class="print-btn" onclick="window.print()">🖨️ Print Document</button>
+
+    <h2>Threats to Data</h2>
+
+    <h3>External Threats</h3>
+    <div class="grid-2">
+      <div class="card">
+        <h4>Viruses & Malware</h4>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:5px 0 10px;">Definitions:</h4>
+        <ul>
+          <li><strong>Virus:</strong> Code that copies itself, needs host</li>
+          <li><strong>Worm:</strong> Self-replicating, spreads network</li>
+          <li><strong>Trojan:</strong> Disguises as legitimate software</li>
+          <li><strong>Ransomware:</strong> Encrypts files, demands payment</li>
+          <li><strong>Spyware:</strong> Monitors user activity</li>
+        </ul>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:15px 0 10px;">Impact:</h4>
+        <ul>
+          <li>Data loss/corruption</li>
+          <li>System damage</li>
+          <li>Slow performance</li>
+          <li>Identity theft</li>
+        </ul>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:15px 0 10px;">Detection:</h4>
+        <ul>
+          <li>Antivirus software</li>
+          <li>Unusual behavior</li>
+          <li>Unexpected files</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Hacking & Unauthorized Access</h4>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:5px 0 10px;">Methods:</h4>
+        <ul>
+          <li><strong>Brute force:</strong> Try many passwords</li>
+          <li><strong>Dictionary attack:</strong> Common passwords</li>
+          <li><strong>Phishing:</strong> Fake emails/websites</li>
+          <li><strong>Social engineering:</strong> Manipulate people</li>
+          <li><strong>SQL injection:</strong> Database exploitation</li>
+        </ul>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:15px 0 10px;">Impact:</h4>
+        <ul>
+          <li>Data theft</li>
+          <li>Privacy breach</li>
+          <li>Financial loss</li>
+          <li>Account compromise</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <h4>Phishing & Social Engineering</h4>
+        <ul>
+          <li><strong>Phishing:</strong> Fake emails pretending to be legitimate</li>
+          <li><strong>Example:</strong> "Confirm your password" emails</li>
+          <li><strong>Goal:</strong> Steal login credentials or personal info</li>
+          <li><strong>Signs:</strong> Spelling errors, unusual sender, urgent tone</li>
+          <li><strong>Spear phishing:</strong> Targeted at specific people</li>
+          <li><strong>Protection:</strong> Don't click links, verify sender</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>DDoS Attacks</h4>
+        <ul>
+          <li><strong>Distributed Denial of Service:</strong> Overwhelm server with requests</li>
+          <li><strong>Botnet:</strong> Thousands of compromised computers</li>
+          <li><strong>Effect:</strong> Website becomes unavailable</li>
+          <li><strong>Business impact:</strong> Lost sales, reputation damage</li>
+          <li><strong>Prevention:</strong> Rate limiting, traffic filtering</li>
+          <li><strong>Recovery:</strong> Slow process, service restoration</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>Internal Threats — Insider Risks</h3>
+    <div class="grid-2">
+      <div class="card">
+        <h4>Intentional Threats</h4>
+        <ul>
+          <li><strong>Malicious insiders:</strong> Employees deliberately stealing data</li>
+          <li><strong>Disgruntled staff:</strong> May delete or sabotage data</li>
+          <li><strong>Theft:</strong> Taking laptops, USB drives with sensitive data</li>
+          <li><strong>Selling data:</strong> Company secrets to competitors</li>
+          <li><strong>Prevention:</strong> Access controls, monitoring, background checks</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Accidental Threats</h4>
+        <ul>
+          <li><strong>User error:</strong> Sending email to wrong recipient</li>
+          <li><strong>Weak passwords:</strong> Easy to guess (password123)</li>
+          <li><strong>Portable devices:</strong> USB drives left in taxis</li>
+          <li><strong>Unencrypted laptops:</strong> Stolen and data easily accessed</li>
+          <li><strong>Shared passwords:</strong> Multiple people using same account</li>
+          <li><strong>Prevention:</strong> Training, enforcement, encryption</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <h4>Physical Security Threats</h4>
+        <ul>
+          <li><strong>Theft:</strong> Computers, servers, storage devices</li>
+          <li><strong>Shoulder surfing:</strong> Looking over someone's shoulder</li>
+          <li><strong>Dumpster diving:</strong> Finding discarded documents</li>
+          <li><strong>Unauthorized access:</strong> Accessing locked server rooms</li>
+          <li><strong>Prevention:</strong> Locks, badges, surveillance</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Environmental Threats</h4>
+        <ul>
+          <li><strong>Natural disasters:</strong> Floods, earthquakes, fires</li>
+          <li><strong>Power failures:</strong> Blackouts, surges</li>
+          <li><strong>Hardware failure:</strong> Drive crashes, overheating</li>
+          <li><strong>Connectivity loss:</strong> Internet outage</li>
+          <li><strong>Prevention:</strong> Backups, redundancy, disaster plans</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>Impact of Data Threats</h3>
+    <div class="grid-2">
+      <div class="card">
+        <h4>Business Impact</h4>
+        <ul>
+          <li>Financial loss</li>
+          <li>Operational downtime</li>
+          <li>Legal liability</li>
+          <li>Reputation damage</li>
+          <li>Customer trust loss</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Individual Impact</h4>
+        <ul>
+          <li>Identity theft</li>
+          <li>Financial fraud</li>
+          <li>Privacy violation</li>
+          <li>Personal data misuse</li>
+          <li>Emotional distress</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="content-block">
+      <h3>Data Threat Comparison</h3>
+      <table class="comparison-table">
+        <tr>
+          <th>Threat Type</th>
+          <th>Source</th>
+          <th>Detection Difficulty</th>
+          <th>Prevention</th>
+        </tr>
+        <tr>
+          <td><strong>External (Malware)</strong></td>
+          <td>Outside network</td>
+          <td>Easier (obvious signs)</td>
+          <td>Antivirus, firewalls</td>
+        </tr>
+        <tr>
+          <td><strong>External (Hacking)</strong></td>
+          <td>Remote attackers</td>
+          <td>Hard (logs needed)</td>
+          <td>Strong passwords, MFA</td>
+        </tr>
+        <tr>
+          <td><strong>Internal (Intentional)</strong></td>
+          <td>Employees</td>
+          <td>Hardest (trusted access)</td>
+          <td>Access controls, monitoring</td>
+        </tr>
+        <tr>
+          <td><strong>Internal (Accidental)</strong></td>
+          <td>Employee error</td>
+          <td>Moderate</td>
+          <td>Training, enforcement</td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="scenario">
+      <strong>Scenario:</strong> A healthcare employee accidentally emails patient records to the wrong address (accidental internal threat). The hospital must notify the patient (legal requirement), fix processes, and provide credit monitoring. This costs more than preventing malware with antivirus software alone.
+    </div>
+
+    <h2>Protecting Data</h2>
+
+    <h3>Access Control & Authentication Methods</h3>
+    <div class="grid-2">
+      <div class="card">
+        <h4>Passwords</h4>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:5px 0 10px;">Best practices:</h4>
+        <ul>
+          <li>At least 8 characters</li>
+          <li>Mix: uppercase, lowercase, numbers, symbols</li>
+          <li>Unique for each account</li>
+          <li>Changed regularly (every 90 days)</li>
+          <li>Not dictionary words</li>
+          <li>Never shared or written down</li>
+        </ul>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:15px 0 10px;">Advantages:</h4>
+        <ul>
+          <li>Simple to implement</li>
+          <li>User familiar</li>
+        </ul>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:15px 0 10px;">Disadvantages:</h4>
+        <ul>
+          <li>Users forget passwords</li>
+          <li>Can be cracked</li>
+          <li>Brute force attacks</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Multi-Factor Authentication (MFA)</h4>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:5px 0 10px;">Types of factors:</h4>
+        <ul>
+          <li><strong>Something you know:</strong> Password, PIN</li>
+          <li><strong>Something you have:</strong> Phone, security key</li>
+          <li><strong>Something you are:</strong> Fingerprint, face scan</li>
+          <li><strong>Where you are:</strong> Location verification</li>
+        </ul>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:15px 0 10px;">Examples:</h4>
+        <ul>
+          <li>Password + text code</li>
+          <li>Password + fingerprint</li>
+          <li>Password + security token</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <h4>Biometrics</h4>
+        <ul>
+          <li><strong>Fingerprint:</strong> Unique patterns, fast, can be spoofed</li>
+          <li><strong>Facial recognition:</strong> Cameras, masks may fool it</li>
+          <li><strong>Iris scan:</strong> Very accurate, expensive</li>
+          <li><strong>Advantages:</strong> Can't forget, more secure</li>
+          <li><strong>Disadvantages:</strong> Expensive, privacy concerns</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>User Permissions & Access Levels</h4>
+        <ul>
+          <li><strong>Read:</strong> View files only</li>
+          <li><strong>Write:</strong> Create and modify files</li>
+          <li><strong>Execute:</strong> Run programs</li>
+          <li><strong>Delete:</strong> Remove files</li>
+          <li><strong>Admin:</strong> Full system access</li>
+          <li><strong>Principle:</strong> Least privilege (minimum needed)</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>Encryption & Secure Transmission</h3>
+    <div class="grid-2">
+      <div class="card">
+        <h4>Encryption — Securing Data</h4>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:5px 0 10px;">How it works:</h4>
+        <ul>
+          <li>Converts data into unreadable code</li>
+          <li>Requires encryption key to decrypt</li>
+          <li>Only authorized users can decrypt</li>
+        </ul>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:15px 0 10px;">Types:</h4>
+        <ul>
+          <li><strong>Symmetric:</strong> Same key for encrypt/decrypt (faster)</li>
+          <li><strong>Asymmetric:</strong> Public and private keys (slower, more secure)</li>
+        </ul>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:15px 0 10px;">Uses:</h4>
+        <ul>
+          <li>Data at rest (stored)</li>
+          <li>Data in transit (transmission)</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>HTTPS & SSL/TLS</h4>
+        <ul>
+          <li><strong>HTTP:</strong> Unencrypted web traffic (port 80)</li>
+          <li><strong>HTTPS:</strong> HTTP + encryption (port 443)</li>
+          <li><strong>SSL:</strong> Secure Sockets Layer (older)</li>
+          <li><strong>TLS:</strong> Transport Layer Security (newer, preferred)</li>
+          <li><strong>Certificate:</strong> Proves website authenticity</li>
+          <li><strong>When used:</strong> Banking, shopping, login pages</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <h4>VPN (Virtual Private Network)</h4>
+        <ul>
+          <li><strong>What is it:</strong> Encrypted tunnel for all traffic</li>
+          <li><strong>Hides:</strong> IP address and location</li>
+          <li><strong>Encrypts:</strong> All data from computer to VPN server</li>
+          <li><strong>Uses:</strong> Public Wi-Fi, remote access, privacy</li>
+          <li><strong>Advantage:</strong> Protects all applications</li>
+          <li><strong>Disadvantage:</strong> Slower speeds</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Digital Certificates & PKI</h4>
+        <ul>
+          <li><strong>What is it:</strong> Proves identity of website/person</li>
+          <li><strong>Contains:</strong> Public key, website info, expiration</li>
+          <li><strong>Issued by:</strong> Certificate Authority (CA)</li>
+          <li><strong>Prevents:</strong> Man-in-the-middle attacks</li>
+          <li><strong>Check:</strong> Look for padlock icon in browser</li>
+          <li><strong>Validity:</strong> Usually 1 year, must be renewed</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>Security Software & Tools</h3>
+    <div class="grid-2">
+      <div class="card">
+        <h4>Antivirus & Antimalware</h4>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:5px 0 10px;">How it works:</h4>
+        <ul>
+          <li>Scans files for malware signatures</li>
+          <li>Monitors suspicious behavior</li>
+          <li>Quarantines threats</li>
+          <li>Updates virus definitions regularly</li>
+        </ul>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:15px 0 10px;">Features:</h4>
+        <ul>
+          <li>Real-time scanning</li>
+          <li>Scheduled scans</li>
+          <li>Automatic updates</li>
+          <li>Quarantine infected files</li>
+        </ul>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:15px 0 10px;">Examples:</h4>
+        <ul>
+          <li>Windows Defender (free)</li>
+          <li>Norton AntiVirus</li>
+          <li>McAfee</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Firewalls</h4>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:5px 0 10px;">How it works:</h4>
+        <ul>
+          <li>Monitors incoming/outgoing traffic</li>
+          <li>Allows/blocks based on rules</li>
+          <li>Acts as barrier</li>
+        </ul>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:15px 0 10px;">Types:</h4>
+        <ul>
+          <li><strong>Hardware:</strong> Router firewall</li>
+          <li><strong>Software:</strong> Windows Firewall</li>
+          <li><strong>Both recommended:</strong> Layered security</li>
+        </ul>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:15px 0 10px;">Features:</h4>
+        <ul>
+          <li>Block malicious IPs</li>
+          <li>Prevent unauthorized access</li>
+          <li>Log activity</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>Backup & Recovery — Data Protection</h3>
+    <div class="grid-2">
+      <div class="card">
+        <h4>Backup Types</h4>
+        <ul>
+          <li><strong>Full backup:</strong> Everything copied; slow, needs space</li>
+          <li><strong>Incremental:</strong> Only changes since last backup; fast, efficient</li>
+          <li><strong>Differential:</strong> Changes since last full backup; balance</li>
+          <li><strong>Frequency:</strong> Daily, weekly, or continuous</li>
+          <li><strong>3-2-1 rule:</strong> 3 copies, 2 different media, 1 offsite</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Backup Locations</h4>
+        <ul>
+          <li><strong>Local storage:</strong> External HDD (fast, not protected from disasters)</li>
+          <li><strong>Cloud storage:</strong> Google Drive, OneDrive (secure, offsite)</li>
+          <li><strong>Network storage:</strong> Server on network (accessible)</li>
+          <li><strong>Off-site:</strong> Different building (disaster protection)</li>
+          <li><strong>Important:</strong> Never only one copy</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>Disaster Recovery & Business Continuity</h3>
+    <div class="content-block">
+      <ul>
+        <li><strong>RTO (Recovery Time Objective):</strong> How quickly must service be restored?</li>
+        <li><strong>RPO (Recovery Point Objective):</strong> How much data loss is acceptable?</li>
+        <li><strong>Redundancy:</strong> Backup systems running in case of failure</li>
+        <li><strong>Failover:</strong> Automatic switch to backup system</li>
+        <li><strong>Testing:</strong> Regular test restores to ensure backups work</li>
+        <li><strong>Documentation:</strong> Step-by-step recovery procedures</li>
+        <li><strong>Plan updates:</strong> Review and update as systems change</li>
+      </ul>
+    </div>
+
+    <h3>User Training & Practices</h3>
+    <div class="content-block">
+      <ul>
+        <li>Security awareness training</li>
+        <li>Recognizing phishing emails</li>
+        <li>Safe password practices</li>
+        <li>Incident reporting procedures</li>
+        <li>Physical security awareness</li>
+      </ul>
+    </div>
+
+  </div>
+</body>
+</html>

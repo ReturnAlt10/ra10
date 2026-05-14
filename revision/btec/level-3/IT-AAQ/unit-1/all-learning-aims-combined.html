@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BTEC IT Unit 1 — All Learning Aims Combined</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Satoshi', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f8fafc;
+      color: #1a1f2e;
+      line-height: 1.6;
+      padding: 15px;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    h1 {
+      font-size: 2em;
+      margin-bottom: 5px;
+      color: #0f4f41;
+      text-align: center;
+    }
+    .master-subtitle {
+      font-size: 1em;
+      color: #666;
+      margin-bottom: 15px;
+      border-bottom: 3px solid #0f4f41;
+      padding-bottom: 10px;
+      text-align: center;
+      font-weight: bold;
+    }
+    .toc {
+      background: #f0f4f1;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      border-left: 4px solid #0f4f41;
+    }
+    .toc h3 {
+      color: #0f4f41;
+      margin-bottom: 10px;
+      font-size: 1.1em;
+    }
+    .toc ol {
+      margin-left: 20px;
+    }
+    .toc li {
+      margin: 4px 0;
+      font-size: 0.95em;
+    }
+    .aim-section {
+      page-break-before: always;
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 3px solid #0f4f41;
+    }
+    .aim-section:first-of-type {
+      page-break-before: avoid;
+      border-top: none;
+      margin-top: 0;
+      padding-top: 0;
+    }
+    h2 {
+      font-size: 1.6em;
+      margin-top: 20px;
+      margin-bottom: 10px;
+      color: #0f4f41;
+      border-left: 4px solid #2d4c3a;
+      padding-left: 15px;
+    }
+    .aim-header {
+      font-size: 1.3em;
+      color: #0f4f41;
+      margin-bottom: 3px;
+      font-weight: bold;
+    }
+    .aim-subheader {
+      font-size: 0.9em;
+      color: #666;
+      margin-bottom: 15px;
+      padding-bottom: 8px;
+    }
+    h3 {
+      font-size: 1em;
+      margin-top: 12px;
+      margin-bottom: 6px;
+      color: #2d4c3a;
+    }
+    .section {
+      margin-bottom: 12px;
+    }
+    .content-block {
+      background: #f9fafb;
+      padding: 10px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      border-left: 3px solid #b0b7a1;
+      font-size: 0.93em;
+    }
+    ul, ol {
+      margin: 6px 0 6px 16px;
+    }
+    li {
+      margin: 3px 0;
+      line-height: 1.4;
+      font-size: 0.93em;
+    }
+    strong {
+      color: #0f4f41;
+      font-weight: 600;
+    }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .card {
+      background: #f0f4f1;
+      padding: 10px;
+      border-radius: 8px;
+      border-top: 3px solid #7b8c8e;
+      font-size: 0.91em;
+    }
+    .card h4 {
+      color: #2d4c3a;
+      margin-bottom: 5px;
+      font-size: 0.95em;
+      margin-top: 0;
+    }
+    .card ul {
+      margin-left: 10px;
+    }
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 8px 0;
+      font-size: 0.91em;
+    }
+    .comparison-table th, .comparison-table td {
+      border: 1px solid #ddd;
+      padding: 6px;
+      text-align: left;
+    }
+    .comparison-table th {
+      background: #2d4c3a;
+      color: #fff;
+    }
+    .comparison-table tr:nth-child(even) {
+      background: #f9fafb;
+    }
+    .scenario {
+      background: #e8f4f0;
+      border-left: 4px solid #0f4f41;
+      padding: 8px;
+      margin: 8px 0;
+      border-radius: 4px;
+      font-size: 0.91em;
+    }
+    .scenario strong {
+      color: #0f4f41;
+    }
+    .print-btn {
+      display: block;
+      margin: 0 auto 15px;
+      padding: 8px 16px;
+      background: #2d4c3a;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.95em;
+    }
+    .print-btn:hover {
+      background: #0f4f41;
+    }
+    @media print {
+      body { background: #fff; padding: 0; }
+      .container { box-shadow: none; border: none; padding: 15px; max-width: 100%; }
+      .print-btn { display: none; }
+      .aim-section { page-break-before: always; }
+      h2 { page-break-inside: avoid; margin-top: 20px; }
+      .section { page-break-inside: avoid; }
+      .toc { page-break-after: always; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>📚 BTEC IT Unit 1</h1>
+    <div class="master-subtitle">All Learning Aims Reference Document (Aims A–F)</div>
+    <button class="print-btn" onclick="window.print()">🖨️ Print All Document</button>
+
+    <div class="toc">
+      <h3>Table of Contents</h3>
+      <ol>
+        <li><strong>Aim A:</strong> Devices & Peripherals | Software & System Choice</li>
+        <li><strong>Aim B:</strong> Connectivity & Networks</li>
+        <li><strong>Aim C:</strong> Online Systems & Communities</li>
+        <li><strong>Aim D:</strong> Threats to Data & Protection</li>
+        <li><strong>Aim E:</strong> Legal & Regulatory Framework</li>
+        <li><strong>Aim F:</strong> Planning & Communication</li>
+      </ol>
+    </div>
+
+    <!-- AIM A -->
+    <div class="aim-section">
+      <div class="aim-header">Learning Aim A</div>
+      <div class="aim-subheader">Devices & Peripherals | Software & System Choice</div>
+
+      <h2>Input Devices</h2>
+      <div class="content-block">
+        <ul>
+          <li><strong>Keyboard:</strong> Text input, accurate typing, requires flat surface</li>
+          <li><strong>Mouse:</strong> Pointer control, GUI navigation, intuitive use</li>
+          <li><strong>Touchpad:</strong> Laptops, pressure-sensitive, alternative to mouse</li>
+          <li><strong>Scanner:</strong> Converts paper to digital, OCR capability</li>
+          <li><strong>Touchscreen:</strong> Direct interaction, intuitive, responsive</li>
+          <li><strong>Microphone:</strong> Audio input, speech recognition, video calls</li>
+        </ul>
+      </div>
+
+      <h2>Output Devices</h2>
+      <div class="content-block">
+        <ul>
+          <li><strong>Monitor (LCD/OLED):</strong> Visual display, resolution matters, refresh rate for gaming</li>
+          <li><strong>Printer (Inkjet):</strong> Color printing, slower, cost-effective, used for photos/graphics</li>
+          <li><strong>Printer (Laser):</strong> Fast printing, monochrome, higher cost per unit, great for documents</li>
+          <li><strong>Speakers/Headphones:</strong> Audio output, surround sound options, wireless available</li>
+          <li><strong>Projector:</strong> Large display, presentations, brightness (lumens) important</li>
+        </ul>
+      </div>
+
+      <h2>Storage Devices</h2>
+      <h3>HDD vs SSD Comparison Table</h3>
+      <table class="comparison-table">
+        <tr>
+          <th>Feature</th>
+          <th>HDD</th>
+          <th>SSD</th>
+        </tr>
+        <tr>
+          <td><strong>Technology</strong></td>
+          <td>Magnetic spinning disk</td>
+          <td>Flash memory chips</td>
+        </tr>
+        <tr>
+          <td><strong>Speed</strong></td>
+          <td>Slower (200-300 MB/s)</td>
+          <td>Faster (500-3000 MB/s)</td>
+        </tr>
+        <tr>
+          <td><strong>Cost</strong></td>
+          <td>Cheaper</td>
+          <td>More expensive</td>
+        </tr>
+        <tr>
+          <td><strong>Reliability</strong></td>
+          <td>Moving parts fail</td>
+          <td>No moving parts</td>
+        </tr>
+        <tr>
+          <td><strong>Capacity</strong></td>
+          <td>Higher (4TB+)</td>
+          <td>Growing (2TB common)</td>
+        </tr>
+        <tr>
+          <td><strong>Best for</strong></td>
+          <td>Storage, archives</td>
+          <td>OS, programs, gaming</td>
+        </tr>
+      </table>
+
+      <div class="scenario">
+        <strong>Scenario:</strong> A video production company needs to store 10TB of raw footage. They should use HDDs for cost-effectiveness. But they also want the editing software on fast storage for quick response times, so they add an SSD for the operating system and applications.
+      </div>
+
+      <h3>Other Storage</h3>
+      <div class="content-block">
+        <ul>
+          <li><strong>USB Flash Drive:</strong> Portable, universal compatibility, 32GB–1TB typical, easy to lose</li>
+          <li><strong>Optical Media:</strong> CD (700MB), DVD (4.7GB), Blu-ray (25GB+), can degrade over time</li>
+        </ul>
+      </div>
+
+      <h2>Temporary Memory</h2>
+      <h3>RAM vs Cache Comparison</h3>
+      <table class="comparison-table">
+        <tr>
+          <th>Aspect</th>
+          <th>RAM</th>
+          <th>Cache</th>
+        </tr>
+        <tr>
+          <td><strong>Speed</strong></td>
+          <td>Nanoseconds</td>
+          <td>Sub-nanoseconds</td>
+        </tr>
+        <tr>
+          <td><strong>Size</strong></td>
+          <td>GigaBytes (8-32GB)</td>
+          <td>MegaBytes (8-20MB)</td>
+        </tr>
+        <tr>
+          <td><strong>Cost</strong></td>
+          <td>Moderate</td>
+          <td>Very expensive per byte</td>
+        </tr>
+        <tr>
+          <td><strong>Volatile</strong></td>
+          <td>Yes</td>
+          <td>Yes</td>
+        </tr>
+        <tr>
+          <td><strong>Location</strong></td>
+          <td>Separate chip</td>
+          <td>On CPU chip</td>
+        </tr>
+      </table>
+
+      <div class="scenario">
+        <strong>Scenario:</strong> A graphics designer opens Photoshop with a 500MB image. The OS loads in RAM (2GB used). The CPU uses cache to temporarily store pixel data it's processing. With more RAM, the system won't need to swap to disk, keeping everything fast.
+      </div>
+    </div>
+
+    <!-- AIM B -->
+    <div class="aim-section">
+      <div class="aim-header">Learning Aim B</div>
+      <div class="aim-subheader">Connectivity & Networks</div>
+
+      <h2>Wired vs Wireless Connection Comparison</h2>
+      <table class="comparison-table">
+        <tr>
+          <th>Feature</th>
+          <th>Wired</th>
+          <th>Wireless</th>
+        </tr>
+        <tr>
+          <td><strong>Speed</strong></td>
+          <td>Very fast (1-10 Gbps)</td>
+          <td>Good (50-600 Mbps)</td>
+        </tr>
+        <tr>
+          <td><strong>Reliability</strong></td>
+          <td>Stable, no interference</td>
+          <td>Can have interference</td>
+        </tr>
+        <tr>
+          <td><strong>Mobility</strong></td>
+          <td>Limited by cable</td>
+          <td>Very mobile</td>
+        </tr>
+        <tr>
+          <td><strong>Cost</strong></td>
+          <td>Installation costs</td>
+          <td>Low cost once set up</td>
+        </tr>
+        <tr>
+          <td><strong>Best for</strong></td>
+          <td>Fixed servers, high data</td>
+          <td>Laptops, mobile devices</td>
+        </tr>
+      </table>
+
+      <div class="scenario">
+        <strong>Scenario:</strong> A school office needs desktop computers wired with Ethernet for maximum speed and stability. But in classrooms, teachers use laptops and need Wi-Fi to move around. The school uses both technologies for different purposes.
+      </div>
+
+      <h2>Network Topologies</h2>
+      <h3>Network Topology Comparison</h3>
+      <table class="comparison-table">
+        <tr>
+          <th>Topology</th>
+          <th>Structure</th>
+          <th>Reliability</th>
+          <th>Cost</th>
+        </tr>
+        <tr>
+          <td><strong>Star</strong></td>
+          <td>Devices → Central hub</td>
+          <td>Good (hub failure=down)</td>
+          <td>Moderate</td>
+        </tr>
+        <tr>
+          <td><strong>Ring</strong></td>
+          <td>Devices in circle</td>
+          <td>Fair (break affects all)</td>
+          <td>Moderate</td>
+        </tr>
+        <tr>
+          <td><strong>Bus</strong></td>
+          <td>Linear chain</td>
+          <td>Poor (cable break=down)</td>
+          <td>Low</td>
+        </tr>
+        <tr>
+          <td><strong>Mesh</strong></td>
+          <td>Multiple connections</td>
+          <td>Excellent (multiple paths)</td>
+          <td>High</td>
+        </tr>
+      </table>
+
+      <div class="scenario">
+        <strong>Scenario:</strong> A hospital needs reliable patient data networks. Using star topology is standard and cost-effective. But critical ICU units use mesh topology so if one connection fails, vital signs still transmit through alternative paths.
+      </div>
+
+      <h2>Network Types & Protocols</h2>
+      <div class="content-block">
+        <ul>
+          <li><strong>PAN:</strong> Personal devices, Bluetooth, 10m range</li>
+          <li><strong>LAN:</strong> Same building, fast, secure, office/school</li>
+          <li><strong>WAN:</strong> Multiple locations, cities/countries, via Internet</li>
+          <li><strong>VPN:</strong> Encrypted tunnel, remote access, public network protection</li>
+        </ul>
+      </div>
+
+      <div class="content-block">
+        <h3>Key Internet Protocols</h3>
+        <ul>
+          <li><strong>SMTP:</strong> Sends email</li>
+          <li><strong>POP/IMAP:</strong> Retrieves email (IMAP for multiple devices)</li>
+          <li><strong>HTTP/HTTPS:</strong> Web traffic (HTTPS for secure, port 443)</li>
+          <li><strong>FTP/SFTP:</strong> File transfer (SFTP encrypted)</li>
+          <li><strong>DNS:</strong> Converts domain names to IP addresses</li>
+          <li><strong>TCP/IP:</strong> Foundation of internet communication</li>
+        </ul>
+      </div>
+
+      <h2>Bandwidth & Latency</h2>
+      <div class="content-block">
+        <ul>
+          <li><strong>Bandwidth:</strong> Amount of data per second (Mbps/Gbps), higher = faster</li>
+          <li><strong>Latency:</strong> Delay in transmission (milliseconds), lower = more responsive</li>
+          <li><strong>Both matter:</strong> High bandwidth but high latency = fast but delayed</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- AIM C -->
+    <div class="aim-section">
+      <div class="aim-header">Learning Aim C</div>
+      <div class="aim-subheader">Online Systems & Communities</div>
+
+      <h2>Cloud Service Models</h2>
+      <h3>SaaS vs PaaS vs IaaS Comparison</h3>
+      <table class="comparison-table">
+        <tr>
+          <th>Model</th>
+          <th>What's Provided</th>
+          <th>Examples</th>
+          <th>Best For</th>
+        </tr>
+        <tr>
+          <td><strong>SaaS</strong></td>
+          <td>Complete applications</td>
+          <td>Google Workspace, Teams, Slack</td>
+          <td>End users, everyday work</td>
+        </tr>
+        <tr>
+          <td><strong>PaaS</strong></td>
+          <td>Development platform</td>
+          <td>Heroku, App Engine</td>
+          <td>Developers building apps</td>
+        </tr>
+        <tr>
+          <td><strong>IaaS</strong></td>
+          <td>Computing infrastructure</td>
+          <td>AWS, Azure, Google Cloud</td>
+          <td>Organizations, full control</td>
+        </tr>
+      </table>
+
+      <div class="scenario">
+        <strong>Scenario:</strong> A startup needs email/collaboration (SaaS: Google Workspace), development tools (PaaS: Heroku), and flexible servers (IaaS: AWS). They use all three layers, scaling and paying only for what they use.
+      </div>
+
+      <h2>Cloud Deployment Models</h2>
+      <h3>Cloud Deployment Model Comparison</h3>
+      <table class="comparison-table">
+        <tr>
+          <th>Model</th>
+          <th>Access</th>
+          <th>Cost</th>
+          <th>Security</th>
+          <th>Best For</th>
+        </tr>
+        <tr>
+          <td><strong>Public</strong></td>
+          <td>General public</td>
+          <td>Low</td>
+          <td>Standard</td>
+          <td>Startups, cost-conscious</td>
+        </tr>
+        <tr>
+          <td><strong>Private</strong></td>
+          <td>Single organization</td>
+          <td>High</td>
+          <td>High</td>
+          <td>Finance, healthcare, sensitive</td>
+        </tr>
+        <tr>
+          <td><strong>Hybrid</strong></td>
+          <td>Mix of both</td>
+          <td>Moderate</td>
+          <td>Good</td>
+          <td>Flexible organizations</td>
+        </tr>
+      </table>
+
+      <div class="scenario">
+        <strong>Scenario:</strong> A bank uses private cloud for secure customer financial data (high security). But for non-sensitive apps like email (SaaS), it uses public cloud to save costs. A hybrid approach balances security and budget.
+      </div>
+
+      <h2>Cloud Benefits & Challenges</h2>
+      <div class="content-block">
+        <ul>
+          <li><strong>Benefits:</strong> Low cost, scalability, automatic updates, global access, high availability</li>
+          <li><strong>Challenges:</strong> Internet dependency, provider outages, data lock-in, latency, data sovereignty concerns</li>
+        </ul>
+      </div>
+
+      <h2>Remote Working Tools</h2>
+      <div class="content-block">
+        <ul>
+          <li><strong>VPN:</strong> Encrypted tunnel to company network</li>
+          <li><strong>Remote Desktop:</strong> Control office computer from home</li>
+          <li><strong>Cloud Storage:</strong> Files accessible from anywhere (OneDrive, Google Drive, Dropbox)</li>
+          <li><strong>Collaboration:</strong> Video conferencing, instant messaging, real-time editing</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- AIM D -->
+    <div class="aim-section">
+      <div class="aim-header">Learning Aim D</div>
+      <div class="aim-subheader">Threats to Data & Protection</div>
+
+      <h2>Data Threats Overview</h2>
+      <h3>Data Threat Comparison</h3>
+      <table class="comparison-table">
+        <tr>
+          <th>Threat Type</th>
+          <th>Source</th>
+          <th>Detection</th>
+          <th>Prevention</th>
+        </tr>
+        <tr>
+          <td><strong>External (Malware)</strong></td>
+          <td>Outside network</td>
+          <td>Easier (obvious)</td>
+          <td>Antivirus, firewalls</td>
+        </tr>
+        <tr>
+          <td><strong>External (Hacking)</strong></td>
+          <td>Remote attackers</td>
+          <td>Hard (logs needed)</td>
+          <td>Strong passwords, MFA</td>
+        </tr>
+        <tr>
+          <td><strong>Internal (Intentional)</strong></td>
+          <td>Employees</td>
+          <td>Hardest (trusted)</td>
+          <td>Access controls, monitoring</td>
+        </tr>
+        <tr>
+          <td><strong>Internal (Accidental)</strong></td>
+          <td>Employee error</td>
+          <td>Moderate</td>
+          <td>Training, enforcement</td>
+        </tr>
+      </table>
+
+      <div class="scenario">
+        <strong>Scenario:</strong> A healthcare employee accidentally emails patient records to the wrong address (accidental internal threat). The hospital must notify the patient (legal requirement), fix processes, and provide credit monitoring. This costs more than preventing malware with antivirus software alone.
+      </div>
+
+      <h2>External Threats</h2>
+      <div class="content-block">
+        <ul>
+          <li><strong>Viruses:</strong> Self-replicating code, needs host program</li>
+          <li><strong>Worms:</strong> Self-replicating, spreads over network</li>
+          <li><strong>Trojans:</strong> Disguises as legitimate software, opens backdoors</li>
+          <li><strong>Ransomware:</strong> Encrypts files, demands payment</li>
+          <li><strong>Spyware:</strong> Monitors user activity, steals data</li>
+          <li><strong>Hacking:</strong> Brute force, phishing, SQL injection, social engineering</li>
+          <li><strong>DDoS:</strong> Overwhelms servers with traffic, causes outage</li>
+        </ul>
+      </div>
+
+      <h2>Internal Threats</h2>
+      <div class="content-block">
+        <ul>
+          <li><strong>Intentional:</strong> Malicious insiders, employees stealing data, sabotage</li>
+          <li><strong>Accidental:</strong> User error, weak passwords, unencrypted devices, shared accounts</li>
+          <li><strong>Physical:</strong> Theft of devices, shoulder surfing, dumpster diving</li>
+          <li><strong>Environmental:</strong> Natural disasters, power failures, hardware failure</li>
+        </ul>
+      </div>
+
+      <h2>Data Protection Methods</h2>
+
+      <h3>Authentication</h3>
+      <div class="content-block">
+        <ul>
+          <li><strong>Passwords:</strong> 8+ characters, mixed case, numbers, symbols, never shared</li>
+          <li><strong>MFA:</strong> Requires multiple factors (password + code, fingerprint, etc.)</li>
+          <li><strong>Biometrics:</strong> Fingerprint, facial recognition, iris scan</li>
+          <li><strong>Permissions:</strong> Read, Write, Execute, Delete, Admin (least privilege principle)</li>
+        </ul>
+      </div>
+
+      <h3>Encryption Methods Comparison</h3>
+      <table class="comparison-table">
+        <tr>
+          <th>Method</th>
+          <th>Keys Used</th>
+          <th>Speed</th>
+          <th>Security</th>
+          <th>Best For</th>
+        </tr>
+        <tr>
+          <td><strong>Symmetric</strong></td>
+          <td>Same key both ways</td>
+          <td>Fast</td>
+          <td>Good if key secure</td>
+          <td>Local storage, bulk data</td>
+        </tr>
+        <tr>
+          <td><strong>Asymmetric</strong></td>
+          <td>Public + private keys</td>
+          <td>Slower</td>
+          <td>Very high</td>
+          <td>Initial handshake, email</td>
+        </tr>
+      </table>
+
+      <div class="scenario">
+        <strong>Scenario:</strong> A bank needs to send loan documents to a customer over email. It uses asymmetric encryption (public key) to encrypt the document. Only the customer's private key decrypts it. Even if someone intercepts the email, they can't read it without the private key.
+      </div>
+
+      <h3>Security Software</h3>
+      <div class="content-block">
+        <ul>
+          <li><strong>Antivirus:</strong> Detects and removes malware, real-time scanning, updates signatures</li>
+          <li><strong>Firewalls:</strong> Hardware and software, monitors incoming/outgoing traffic, rule-based control</li>
+          <li><strong>HTTPS/SSL/TLS:</strong> Encrypts web traffic, port 443, Certificate Authority validation</li>
+          <li><strong>VPN:</strong> Encrypted tunnel to company network, masks IP address</li>
+          <li><strong>Digital Certificates:</strong> Proves website authenticity and identity</li>
+        </ul>
+      </div>
+
+      <h3>Backup & Recovery</h3>
+      <div class="content-block">
+        <ul>
+          <li><strong>Backup Types:</strong> Full (all data), Incremental (changes only), Differential (changes since last full)</li>
+          <li><strong>Storage:</strong> Local (on-site), Cloud, Off-site (different location)</li>
+          <li><strong>3-2-1 Rule:</strong> 3 copies, 2 different media types, 1 copy off-site</li>
+          <li><strong>RTO/RPO:</strong> Recovery Time Objective, Recovery Point Objective</li>
+          <li><strong>Testing:</strong> Regular disaster recovery drills to ensure it works</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- AIM E -->
+    <div class="aim-section">
+      <div class="aim-header">Learning Aim E</div>
+      <div class="aim-subheader">Legal & Regulatory Framework</div>
+
+      <h2>Data Protection Act 2018 (DPA)</h2>
+      <div class="content-block">
+        <ul>
+          <li><strong>6 Key Principles:</strong> Lawful, fair, transparent, limited, accurate, secure</li>
+          <li><strong>Data Subject Rights:</strong> Access, rectify, erase, restrict, port, object</li>
+          <li><strong>Organization Responsibilities:</strong> DPIA, Data Protection Officer, staff training, breach notification within 72 hours</li>
+          <li><strong>Penalties:</strong> Up to £20 million or 4% of global turnover (whichever is higher)</li>
+        </ul>
+      </div>
+
+      <h2>Computer Misuse Act 1990</h2>
+      <div class="content-block">
+        <ul>
+          <li><strong>Section 1:</strong> Unauthorized access to computer systems (penalty: up to 2 years imprisonment)</li>
+          <li><strong>Section 2:</strong> Unauthorized modification of data (penalty: up to 5 years imprisonment)</li>
+          <li><strong>Section 3:</strong> Denial of service/system disruption (penalty: up to 10 years imprisonment)</li>
+          <li><strong>Most serious:</strong> Section 3 carries the highest penalty</li>
+        </ul>
+      </div>
+
+      <h2>Copyright & Intellectual Property</h2>
+      <div class="content-block">
+        <ul>
+          <li><strong>Duration:</strong> Automatic protection for lifetime of author + 70 years</li>
+          <li><strong>Exclusive Rights:</strong> Reproduction, distribution, performance, display, derivatives</li>
+          <li><strong>Fair Use/Fair Dealing:</strong> Education, criticism, parody allowed in some cases</li>
+          <li><strong>Licensing:</strong> Creative Commons allows flexible usage</li>
+          <li><strong>Penalties:</strong> Up to 10 years imprisonment and/or fines</li>
+        </ul>
+      </div>
+
+      <h2>Health & Safety</h2>
+      <div class="content-block">
+        <ul>
+          <li><strong>Screen breaks:</strong> Every 20-30 minutes recommended</li>
+          <li><strong>20-20-20 Rule:</strong> Every 20 minutes, look at something 20 feet away for 20 seconds</li>
+          <li><strong>Posture:</strong> Back support, feet flat, screen at eye level</li>
+          <li><strong>Lighting:</strong> Adequate lighting, reduce glare</li>
+          <li><strong>Ergonomics:</strong> Proper desk setup, mouse/keyboard positioning</li>
+        </ul>
+      </div>
+
+      <h2>Regulatory Bodies</h2>
+      <div class="content-block">
+        <ul>
+          <li><strong>ICO:</strong> Information Commissioner's Office (data protection)</li>
+          <li><strong>Ofcom:</strong> Office of Communications (telecommunications)</li>
+          <li><strong>ASA:</strong> Advertising Standards Authority</li>
+          <li><strong>IPO:</strong> Intellectual Property Office</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- AIM F -->
+    <div class="aim-section">
+      <div class="aim-header">Learning Aim F</div>
+      <div class="aim-subheader">Planning & Communication</div>
+
+      <h2>Project Planning</h2>
+
+      <h3>Planning Fundamentals</h3>
+      <div class="content-block">
+        <ul>
+          <li><strong>Scope:</strong> What needs to be delivered?</li>
+          <li><strong>Goals:</strong> Clear, measurable targets</li>
+          <li><strong>Deliverables:</strong> Specific outputs to be produced</li>
+          <li><strong>Resources:</strong> People, equipment, budget needed</li>
+          <li><strong>Timeline:</strong> Start date, end date, milestones</li>
+        </ul>
+      </div>
+
+      <h2>Project Management Methodologies</h2>
+
+      <h3>Waterfall vs Agile Comparison</h3>
+      <table class="comparison-table">
+        <tr>
+          <th>Feature</th>
+          <th>Waterfall</th>
+          <th>Agile</th>
+        </tr>
+        <tr>
+          <td><strong>Approach</strong></td>
+          <td>Sequential, linear phases</td>
+          <td>Iterative, sprints (1-4 weeks)</td>
+        </tr>
+        <tr>
+          <td><strong>Planning</strong></td>
+          <td>Detailed upfront</td>
+          <td>Continuous planning</td>
+        </tr>
+        <tr>
+          <td><strong>Testing</strong></td>
+          <td>At the end</td>
+          <td>Throughout (continuous)</td>
+        </tr>
+        <tr>
+          <td><strong>Changes</strong></td>
+          <td>Expensive, difficult</td>
+          <td>Easy, expected</td>
+        </tr>
+        <tr>
+          <td><strong>Delivery</strong></td>
+          <td>All at once</td>
+          <td>Incremental releases</td>
+        </tr>
+        <tr>
+          <td><strong>Best for</strong></td>
+          <td>Fixed requirements</td>
+          <td>Changing requirements</td>
+        </tr>
+      </table>
+
+      <div class="scenario">
+        <strong>Scenario - Waterfall:</strong> Building a bridge requires extensive planning upfront—changes during construction are very expensive. All requirements must be perfect before starting.
+      </div>
+
+      <div class="scenario">
+        <strong>Scenario - Agile:</strong> Building a mobile app with uncertain market needs. Start with core features (1-week sprint), get user feedback, adjust in next sprint. Flexibility helps discover what users actually want.
+      </div>
+
+      <h2>Planning Tools & Techniques</h2>
+      <div class="content-block">
+        <ul>
+          <li><strong>Gantt Charts:</strong> Visual timeline showing tasks, duration, dependencies, milestones</li>
+          <li><strong>Critical Path Method:</strong> Identifies longest sequence, determines project duration, shows slack time</li>
+          <li><strong>Milestones:</strong> Key checkpoints marking phase completion</li>
+          <li><strong>Risk Assessment:</strong> Identify potential issues and mitigation strategies</li>
+        </ul>
+      </div>
+
+      <h2>Communication</h2>
+
+      <h3>Communication Methods</h3>
+      <div class="content-block">
+        <ul>
+          <li><strong>Synchronous (Real-time):</strong> Face-to-face meetings, phone calls, video conferencing, instant messaging - for complex discussions and urgent decisions</li>
+          <li><strong>Asynchronous (Delayed):</strong> Email, forums, documentation, status reports - for non-urgent, distributed teams, time zone differences</li>
+        </ul>
+      </div>
+
+      <h3>Communication Barriers & Solutions</h3>
+      <div class="content-block">
+        <ul>
+          <li><strong>Barriers:</strong> Language, technical issues, time zones, misunderstanding, noise, cultural differences, overload</li>
+          <li><strong>Solutions:</strong> Clear language, feedback mechanisms, scheduled meetings, documentation, multiple channels, active listening, frequent updates, communication plan</li>
+        </ul>
+      </div>
+
+      <h2>Documentation & Evaluation</h2>
+      <div class="content-block">
+        <ul>
+          <li><strong>Documentation Types:</strong> Project plans, meeting notes, status reports, user guides, technical specifications</li>
+          <li><strong>Evaluation Criteria:</strong> Were objectives met? On time? On budget? Quality acceptable? Team satisfaction?</li>
+          <li><strong>Continuous Improvement:</strong> Learn from projects, update processes, share knowledge with team</li>
+        </ul>
+      </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 2px solid #e0e7ff; font-size: 0.9em; color: #666;">
+      <p>BTEC IT Unit 1 — All Learning Aims Combined Document</p>
+      <p>Printed: <span id="printDate"></span></p>
+    </div>
+
+  </div>
+
+  <script>
+    document.getElementById('printDate').textContent = new Date().toLocaleDateString('en-GB', { 
+      day: 'numeric', 
+      month: 'long', 
+      year: 'numeric' 
+    });
+  </script>
+</body>
+</html>

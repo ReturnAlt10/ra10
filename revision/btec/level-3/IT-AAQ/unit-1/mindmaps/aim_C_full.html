@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Learning Aim C Mindmap – IT Unit 1</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <style>
+    body { font-family: 'Satoshi', Arial, sans-serif; background: #f8fafc; margin: 0; padding: 0; }
+    .container { max-width: 1100px; margin: 0 auto; padding: 32px 16px; }
+    h1 { text-align: center; color: #18332a; margin-bottom: 8px; }
+    h2 { text-align: center; color: #2d4c3a; margin: 32px 0 18px 0; }
+    .print-btn { display: block; margin: 0 auto 18px auto; padding: 8px 18px; background: #2d4c3a; color: #fff; border: none; border-radius: 8px; font-size: 1.1em; cursor: pointer; }
+    .print-btn:hover { background: #18332a; }
+    .mermaid { background: #fff; border-radius: 12px; box-shadow: 0 2px 16px #0001; padding: 24px 8px; margin-bottom: 36px; overflow-x: auto; }
+    @media print {
+      .print-btn { display: none; }
+      body { background: #fff; }
+      .container { padding: 0; }
+      .mermaid { box-shadow: none; border: none; page-break-inside: avoid; }
+      h2 { margin-top: 24px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Learning Aim C Mindmap</h1>
+    <button class="print-btn" onclick="window.print()">🖨️ Print Mindmap</button>
+    <h2>Online Systems & Communities</h2>
+    <div class="mermaid" id="online">
+      mindmap
+        root((C1: Online Systems))
+          Cloud Computing Models
+            Private
+            Public
+            Hybrid
+            IaaS
+            SaaS
+            PaaS
+          Impact/Implications
+            Cost
+            Security
+            Scalability
+            Features
+            Ease of use
+            Connectivity
+          Remote Working
+            VPNs
+            Remote desktop
+        root((C2: Online Communities))
+          Types
+            Social media
+            Blogs/vlogs
+            Wikis
+            Chatrooms
+            IM
+            Podcasts
+            Forums
+          Implications
+            User experience
+            Needs
+            Cost
+            Privacy
+            Security
+            Downtime
+            Training
+            Integration
+            Productivity
+            Working practices
+    </div>
+    <p style="margin-top:24px;color:#2d4c3a;text-align:center;font-size:1.05em;">Diagram is spaced for clarity and prints on a single page. All key points for Learning Aim C included.</p>
+  </div>
+  <script>
+    if(window.mermaid){
+      mermaid.initialize({
+        startOnLoad:true,
+        theme:'neutral',
+        mindmap: {
+          padding: 24,
+          spacingVertical: 28,
+          spacingHorizontal: 36,
+          branchColor: ["#7b8c8e", "#b0b7a1", "#b5b682", "#eaf4f4", "#b0b0b0"],
+          lineColor: "#b0b0b0",
+          lineStyle: "angular"
+        }
+      });
+    }
+  </script>
+</body>
+</html>

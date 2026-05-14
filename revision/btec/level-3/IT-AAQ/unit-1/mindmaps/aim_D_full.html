@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Learning Aim D Mindmap – IT Unit 1</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <style>
+    body { font-family: 'Satoshi', Arial, sans-serif; background: #f8fafc; margin: 0; padding: 0; }
+    .container { max-width: 1100px; margin: 0 auto; padding: 32px 16px; }
+    h1 { text-align: center; color: #18332a; margin-bottom: 8px; }
+    h2 { text-align: center; color: #2d4c3a; margin: 32px 0 18px 0; }
+    .print-btn { display: block; margin: 0 auto 18px auto; padding: 8px 18px; background: #2d4c3a; color: #fff; border: none; border-radius: 8px; font-size: 1.1em; cursor: pointer; }
+    .print-btn:hover { background: #18332a; }
+    .mermaid { background: #fff; border-radius: 12px; box-shadow: 0 2px 16px #0001; padding: 24px 8px; margin-bottom: 36px; overflow-x: auto; }
+    @media print {
+      .print-btn { display: none; }
+      body { background: #fff; }
+      .container { padding: 0; }
+      .mermaid { box-shadow: none; border: none; page-break-inside: avoid; }
+      h2 { margin-top: 24px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Learning Aim D Mindmap</h1>
+    <button class="print-btn" onclick="window.print()">🖨️ Print Mindmap</button>
+    <h2>Threats to Data & Protection</h2>
+    <div class="mermaid" id="threats">
+      mindmap
+        root((D1: Threats to Data))
+          External
+            Viruses/malware
+              Advantages:::adv
+                Can be detected
+              Disadvantages:::disadv
+                Data loss
+                System damage
+            Hackers
+              Disadvantages:::disadv
+                Data theft
+                Privacy breach
+            Accidental damage
+              Disadvantages:::disadv
+                Data loss
+                Downtime
+            Social engineering
+              Disadvantages:::disadv
+                Data theft
+                Fraud
+            Natural disasters
+              Disadvantages:::disadv
+                Data loss
+                Service disruption
+          Internal
+            Inappropriate access
+              Disadvantages:::disadv
+                Data leak
+            Accidental disclosure
+              Disadvantages:::disadv
+                Data breach
+            Data theft/leak
+              Disadvantages:::disadv
+                Legal issues
+            Portable device misuse
+              Disadvantages:::disadv
+                Data loss
+                Security risk
+          Impacts
+            Data loss
+            Financial/legal loss
+            Reputation damage
+    </div>
+    <h2>Protecting Data</h2>
+    <div class="mermaid" id="protection">
+      mindmap
+        root((D2: Protecting Data))
+          Techniques
+            File permissions
+            Access levels
+            Backup/recovery
+            Passwords/MFA
+            Biometrics
+            Physical controls
+            Digital certificates
+          Antivirus
+            Features/functions
+          Firewalls
+            Features/functions
+          Encryption
+            Stored data
+            Transmission
+            HTTPS
+    </div>
+    <p style="margin-top:24px;color:#2d4c3a;text-align:center;font-size:1.05em;">Both diagrams are spaced for clarity and print on separate pages. All key points for Learning Aim D included.</p>
+  </div>
+  <script>
+    if(window.mermaid){
+      mermaid.initialize({
+        startOnLoad:true,
+        theme:'neutral',
+        mindmap: {
+          padding: 24,
+          spacingVertical: 28,
+          spacingHorizontal: 36,
+          branchColor: ["#7b8c8e", "#b0b7a1", "#b5b682", "#eaf4f4", "#b0b0b0"],
+          lineColor: "#b0b0b0",
+          lineStyle: "angular"
+        }
+      });
+    }
+  </script>
+</body>
+</html>

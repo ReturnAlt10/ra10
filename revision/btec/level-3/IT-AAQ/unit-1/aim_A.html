@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Learning Aim A – Devices & Peripherals</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Satoshi', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f8fafc;
+      color: #1a1f2e;
+      line-height: 1.6;
+      padding: 20px;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    h1 {
+      font-size: 1.8em;
+      margin-bottom: 5px;
+      color: #0f4f41;
+    }
+    .subtitle {
+      font-size: 0.95em;
+      color: #666;
+      margin-bottom: 15px;
+      border-bottom: 2px solid #e0e7ff;
+      padding-bottom: 10px;
+    }
+    h2 {
+      font-size: 1.4em;
+      margin-top: 25px;
+      margin-bottom: 12px;
+      color: #0f4f41;
+      border-left: 4px solid #2d4c3a;
+      padding-left: 15px;
+    }
+    h3 {
+      font-size: 1.1em;
+      margin-top: 15px;
+      margin-bottom: 8px;
+      color: #2d4c3a;
+    }
+    .section {
+      margin-bottom: 15px;
+    }
+    .content-block {
+      background: #f9fafb;
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      border-left: 3px solid #b0b7a1;
+      font-size: 0.95em;
+    }
+    ul, ol {
+      margin: 8px 0 8px 18px;
+    }
+    li {
+      margin: 4px 0;
+      line-height: 1.5;
+      font-size: 0.95em;
+    }
+    strong {
+      color: #0f4f41;
+      font-weight: 600;
+    }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .card {
+      background: #f0f4f1;
+      padding: 12px;
+      border-radius: 8px;
+      border-top: 3px solid #7b8c8e;
+      font-size: 0.93em;
+    }
+    .card h4 {
+      color: #2d4c3a;
+      margin-bottom: 6px;
+      font-size: 1em;
+    }
+    .card ul {
+      margin-left: 12px;
+    }
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 10px 0;
+      font-size: 0.93em;
+    }
+    .comparison-table th, .comparison-table td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+    .comparison-table th {
+      background: #2d4c3a;
+      color: #fff;
+    }
+    .comparison-table tr:nth-child(even) {
+      background: #f9fafb;
+    }
+    .scenario {
+      background: #e8f4f0;
+      border-left: 4px solid #0f4f41;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 4px;
+      font-size: 0.93em;
+    }
+    .scenario strong {
+      color: #0f4f41;
+    }
+    .print-btn {
+      display: block;
+      margin: 0 auto 15px;
+      padding: 8px 16px;
+      background: #2d4c3a;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.95em;
+    }
+    .print-btn:hover {
+      background: #0f4f41;
+    }
+    @media print {
+      body { background: #fff; padding: 0; }
+      .container { box-shadow: none; border: none; padding: 0; max-width: 100%; }
+      .print-btn { display: none; }
+      h2 { page-break-inside: avoid; margin-top: 30px; }
+      .section { page-break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Learning Aim A</h1>
+    <div class="subtitle">Devices & Peripherals | Software & System Choice</div>
+    <button class="print-btn" onclick="window.print()">🖨️ Print Document</button>
+
+    <h2>Devices & Peripherals</h2>
+    
+    <h3>Input Devices</h3>
+    <div class="grid-2">
+      <div class="card">
+        <h4>Keyboard</h4>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:5px 0 10px;">Uses:</h4>
+        <ul>
+          <li>Text input</li>
+          <li>Command entry</li>
+          <li>Data typing</li>
+        </ul>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:15px 0 10px;">Advantages:</h4>
+        <ul>
+          <li>Accurate typing</li>
+          <li>Fast data entry</li>
+          <li>Large keys easy to use</li>
+        </ul>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:15px 0 10px;">Disadvantages:</h4>
+        <ul>
+          <li>Requires flat surface</li>
+          <li>Not portable</li>
+          <li>Limited for GUI navigation</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Mouse</h4>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:5px 0 10px;">Uses:</h4>
+        <ul>
+          <li>Pointer control</li>
+          <li>Menu navigation</li>
+          <li>Icon selection</li>
+        </ul>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:15px 0 10px;">Advantages:</h4>
+        <ul>
+          <li>Precise control</li>
+          <li>Intuitive use</li>
+          <li>Supports GUI</li>
+        </ul>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:15px 0 10px;">Disadvantages:</h4>
+        <ul>
+          <li>Requires space</li>
+          <li>Cable limitation</li>
+          <li>Can cause RSI</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>More Input Devices</h3>
+    <div class="grid-2">
+      <div class="card">
+        <h4>Touchpad</h4>
+        <ul>
+          <li><strong>Portable:</strong> Built into laptops</li>
+          <li><strong>No space needed:</strong> Compact design</li>
+          <li><strong>Responsive:</strong> Gesture control</li>
+          <li><strong>Downside:</strong> Smaller, less precise</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Scanner</h4>
+        <ul>
+          <li><strong>Digitizes:</strong> Converts paper to digital</li>
+          <li><strong>OCR:</strong> Can recognize text</li>
+          <li><strong>Quality:</strong> DPI affects resolution</li>
+          <li><strong>Speed:</strong> Slower than typing</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <h4>Touchscreen</h4>
+        <ul>
+          <li><strong>Direct input:</strong> Tap to interact</li>
+          <li><strong>Intuitive:</strong> Natural for users</li>
+          <li><strong>Portable:</strong> Mobile/tablet use</li>
+          <li><strong>Limitation:</strong> No multi-tasking easily</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Microphone</h4>
+        <ul>
+          <li><strong>Audio input:</strong> Voice commands</li>
+          <li><strong>Recording:</strong> Podcasts, calls</li>
+          <li><strong>Hands-free:</strong> Accessibility benefit</li>
+          <li><strong>Background noise:</strong> Poor in noisy areas</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>Output Devices</h3>
+    <div class="grid-2">
+      <div class="card">
+        <h4>Monitor / Display</h4>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:5px 0 10px;">Features:</h4>
+        <ul>
+          <li>Screen quality critical</li>
+          <li>Resolution matters (pixels)</li>
+          <li>Refresh rate for gaming</li>
+          <li>Color accuracy important</li>
+        </ul>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:15px 0 10px;">Types:</h4>
+        <ul>
+          <li>LCD (energy efficient)</li>
+          <li>OLED (better colors)</li>
+          <li>Curved (immersive)</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Printer</h4>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:5px 0 10px;">Types:</h4>
+        <ul>
+          <li><strong>Inkjet:</strong> Color, slow, cheap</li>
+          <li><strong>Laser:</strong> Fast, monochrome, expensive</li>
+          <li><strong>3D:</strong> Objects, specialized</li>
+        </ul>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:15px 0 10px;">Considerations:</h4>
+        <ul>
+          <li>Cost per page</li>
+          <li>Speed (pages/min)</li>
+          <li>Quality needed</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <h4>Speaker / Headphones</h4>
+        <ul>
+          <li><strong>Speaker:</strong> Shared audio output</li>
+          <li><strong>Headphones:</strong> Personal audio</li>
+          <li><strong>Surround sound:</strong> Multiple speakers</li>
+          <li><strong>Wireless:</strong> Bluetooth option</li>
+          <li><strong>Quality:</strong> Frequency range matters</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Projector</h4>
+        <ul>
+          <li><strong>Large display:</strong> Presentations</li>
+          <li><strong>Group viewing:</strong> Multiple people</li>
+          <li><strong>Brightness:</strong> Lumens important</li>
+          <li><strong>Resolution:</strong> 1080p, 4K</li>
+          <li><strong>Placement:</strong> Throw distance</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>Storage Devices — Permanent Storage</h3>
+    <div class="grid-2">
+      <div class="card">
+        <h4>Hard Drive (HDD)</h4>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:5px 0 10px;">How it works:</h4>
+        <ul>
+          <li>Spinning magnetic disk</li>
+          <li>Read/write head moves</li>
+          <li>Mechanical components</li>
+        </ul>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:15px 0 10px;">Advantages:</h4>
+        <ul>
+          <li>Large capacity</li>
+          <li>Low cost</li>
+          <li>Reliable for storage</li>
+        </ul>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:15px 0 10px;">Disadvantages:</h4>
+        <ul>
+          <li>Slower access</li>
+          <li>Moving parts fail</li>
+          <li>Fragile if dropped</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Solid State Drive (SSD)</h4>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:5px 0 10px;">How it works:</h4>
+        <ul>
+          <li>No moving parts</li>
+          <li>Flash memory chips</li>
+          <li>Instant access</li>
+        </ul>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:15px 0 10px;">Advantages:</h4>
+        <ul>
+          <li>Very fast access</li>
+          <li>More reliable</li>
+          <li>Durable</li>
+        </ul>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:15px 0 10px;">Disadvantages:</h4>
+        <ul>
+          <li>More expensive</li>
+          <li>Lower capacity options</li>
+          <li>Can wear out</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="content-block">
+      <h3>HDD vs SSD Comparison Table</h3>
+      <table class="comparison-table">
+        <tr>
+          <th>Feature</th>
+          <th>HDD</th>
+          <th>SSD</th>
+        </tr>
+        <tr>
+          <td><strong>Technology</strong></td>
+          <td>Magnetic spinning disk</td>
+          <td>Flash memory chips</td>
+        </tr>
+        <tr>
+          <td><strong>Speed</strong></td>
+          <td>Slower (200-300 MB/s)</td>
+          <td>Faster (500-3000 MB/s)</td>
+        </tr>
+        <tr>
+          <td><strong>Cost</strong></td>
+          <td>Cheaper</td>
+          <td>More expensive</td>
+        </tr>
+        <tr>
+          <td><strong>Reliability</strong></td>
+          <td>Moving parts fail</td>
+          <td>No moving parts</td>
+        </tr>
+        <tr>
+          <td><strong>Capacity</strong></td>
+          <td>Higher (4TB+)</td>
+          <td>Growing (2TB common)</td>
+        </tr>
+        <tr>
+          <td><strong>Best for</strong></td>
+          <td>Storage, archives</td>
+          <td>OS, programs, gaming</td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="scenario">
+      <strong>Scenario:</strong> A video production company needs to store 10TB of raw footage. They should use HDDs for cost-effectiveness. But they also want the editing software on fast storage for quick response times, so they add an SSD for the operating system and applications.
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <h4>USB Flash Drive</h4>
+        <ul>
+          <li><strong>Portable:</strong> Pocket-sized</li>
+          <li><strong>Universal:</strong> Works on any computer</li>
+          <li><strong>Capacity:</strong> 32GB–1TB typical</li>
+          <li><strong>Speed:</strong> USB 2.0 vs USB 3.0</li>
+          <li><strong>Loss risk:</strong> Easy to misplace</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Optical Media (CD/DVD/Blu-ray)</h4>
+        <ul>
+          <li><strong>CD:</strong> 700MB capacity</li>
+          <li><strong>DVD:</strong> 4.7GB capacity</li>
+          <li><strong>Blu-ray:</strong> 25GB+ capacity</li>
+          <li><strong>Uses:</strong> Archival, distribution</li>
+          <li><strong>Downside:</strong> Can degrade over time</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>Temporary Storage (Memory)</h3>
+    <div class="grid-2">
+      <div class="card">
+        <h4>RAM (Random Access Memory)</h4>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:5px 0 10px;">Purpose:</h4>
+        <ul>
+          <li>Temporary data storage</li>
+          <li>Currently running programs</li>
+          <li>Working data during processing</li>
+        </ul>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:15px 0 10px;">Key Facts:</h4>
+        <ul>
+          <li><strong>Fast:</strong> Much faster than HDD</li>
+          <li><strong>Volatile:</strong> Data lost when powered off</li>
+          <li><strong>More RAM:</strong> Better multitasking</li>
+          <li><strong>Typical:</strong> 8GB, 16GB, 32GB</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Cache Memory</h4>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:5px 0 10px;">Purpose:</h4>
+        <ul>
+          <li>Extremely fast temporary storage</li>
+          <li>Between CPU and RAM</li>
+          <li>Stores frequently used data</li>
+        </ul>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:15px 0 10px;">Key Facts:</h4>
+        <ul>
+          <li><strong>Fastest:</strong> Nanosecond access</li>
+          <li><strong>Small:</strong> Usually 8MB–20MB</li>
+          <li><strong>Expensive:</strong> High cost per MB</li>
+          <li><strong>L1, L2, L3:</strong> Different levels</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="content-block">
+      <h3>RAM vs Cache Comparison</h3>
+      <table class="comparison-table">
+        <tr>
+          <th>Aspect</th>
+          <th>RAM</th>
+          <th>Cache</th>
+        </tr>
+        <tr>
+          <td><strong>Speed</strong></td>
+          <td>Nanoseconds</td>
+          <td>Sub-nanoseconds</td>
+        </tr>
+        <tr>
+          <td><strong>Size</strong></td>
+          <td>GigaBytes (8-32GB)</td>
+          <td>MegaBytes (8-20MB)</td>
+        </tr>
+        <tr>
+          <td><strong>Cost</strong></td>
+          <td>Moderate</td>
+          <td>Very expensive per byte</td>
+        </tr>
+        <tr>
+          <td><strong>Volatile</strong></td>
+          <td>Yes</td>
+          <td>Yes</td>
+        </tr>
+        <tr>
+          <td><strong>Location</strong></td>
+          <td>Separate chip</td>
+          <td>On CPU chip</td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="scenario">
+      <strong>Scenario:</strong> A graphics designer opens Photoshop with a 500MB image. The OS loads in RAM (2GB used). The CPU uses cache to temporarily store pixel data it's processing. With more RAM, the system won't need to swap to disk, keeping everything fast.
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <h4>Processing Power</h4>
+        <ul>
+          <li>CPU speed (GHz)</li>
+          <li>Number of cores</li>
+          <li>Cache memory</li>
+          <li>Task execution speed</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Memory & Storage</h4>
+        <ul>
+          <li>RAM capacity</li>
+          <li>Storage capacity</li>
+          <li>Speed of access</li>
+          <li>Data retention</li>
+        </ul>
+      </div>
+    </div>
+
+    <h2>Software & System Choice</h2>
+
+    <h3>Operating Systems</h3>
+    <div class="content-block">
+      <ul>
+        <li><strong>Windows:</strong> Widely used, compatible with many applications</li>
+        <li><strong>macOS:</strong> Apple ecosystem, integrated hardware/software</li>
+        <li><strong>Linux:</strong> Open-source, customizable, free</li>
+        <li><strong>Android:</strong> Mobile OS, flexible, customizable</li>
+        <li><strong>iOS:</strong> Apple mobile OS, integrated, secure</li>
+      </ul>
+    </div>
+
+    <h3>Software Applications</h3>
+    <div class="content-block">
+      <ul>
+        <li><strong>Productivity:</strong> Word processors, spreadsheets, presentations</li>
+        <li><strong>Creative:</strong> Graphics, video, audio editing tools</li>
+        <li><strong>Communication:</strong> Email, messaging, collaboration tools</li>
+        <li><strong>Development:</strong> IDEs, compilers, debugging tools</li>
+        <li><strong>Utilities:</strong> File managers, antivirus, system tools</li>
+      </ul>
+    </div>
+
+    <h3>Factors When Choosing Devices & Software</h3>
+    <div class="content-block">
+      <ul>
+        <li><strong>Requirements:</strong> What tasks need to be performed?</li>
+        <li><strong>Performance:</strong> Will it handle the workload?</li>
+        <li><strong>Compatibility:</strong> Works with existing systems and software?</li>
+        <li><strong>Cost:</strong> Budget constraints and value for money</li>
+        <li><strong>Reliability:</strong> Durability and support availability</li>
+        <li><strong>Ease of Use:</strong> User training requirements</li>
+        <li><strong>Security:</strong> Data protection and built-in security features</li>
+        <li><strong>Scalability:</strong> Can it grow with future needs?</li>
+      </ul>
+    </div>
+
+  </div>
+</body>
+</html>

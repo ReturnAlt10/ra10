@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Learning Aim B – Connectivity & Networks</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Satoshi', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f8fafc;
+      color: #1a1f2e;
+      line-height: 1.6;
+      padding: 20px;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    h1 {
+      font-size: 1.8em;
+      margin-bottom: 5px;
+      color: #0f4f41;
+    }
+    .subtitle {
+      font-size: 0.95em;
+      color: #666;
+      margin-bottom: 15px;
+      border-bottom: 2px solid #e0e7ff;
+      padding-bottom: 10px;
+    }
+    h2 {
+      font-size: 1.4em;
+      margin-top: 25px;
+      margin-bottom: 12px;
+      color: #0f4f41;
+      border-left: 4px solid #2d4c3a;
+      padding-left: 15px;
+    }
+    h3 {
+      font-size: 1.1em;
+      margin-top: 15px;
+      margin-bottom: 8px;
+      color: #2d4c3a;
+    }
+    .section {
+      margin-bottom: 15px;
+    }
+    .content-block {
+      background: #f9fafb;
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      border-left: 3px solid #b0b7a1;
+      font-size: 0.95em;
+    }
+    ul, ol {
+      margin: 8px 0 8px 18px;
+    }
+    li {
+      margin: 4px 0;
+      line-height: 1.5;
+      font-size: 0.95em;
+    }
+    strong {
+      color: #0f4f41;
+      font-weight: 600;
+    }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .card {
+      background: #f0f4f1;
+      padding: 12px;
+      border-radius: 8px;
+      border-top: 3px solid #7b8c8e;
+      font-size: 0.93em;
+    }
+    .card h4 {
+      color: #2d4c3a;
+      margin-bottom: 6px;
+      font-size: 1em;
+    }
+    .card ul {
+      margin-left: 12px;
+    }
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 10px 0;
+      font-size: 0.93em;
+    }
+    .comparison-table th, .comparison-table td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+    .comparison-table th {
+      background: #2d4c3a;
+      color: #fff;
+    }
+    .comparison-table tr:nth-child(even) {
+      background: #f9fafb;
+    }
+    .scenario {
+      background: #e8f4f0;
+      border-left: 4px solid #0f4f41;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 4px;
+      font-size: 0.93em;
+    }
+    .scenario strong {
+      color: #0f4f41;
+    }
+    .print-btn {
+      display: block;
+      margin: 0 auto 15px;
+      padding: 8px 16px;
+      background: #2d4c3a;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.95em;
+    }
+    .print-btn:hover {
+      background: #0f4f41;
+    }
+    @media print {
+      body { background: #fff; padding: 0; }
+      .container { box-shadow: none; border: none; padding: 0; max-width: 100%; }
+      .print-btn { display: none; }
+      h2 { page-break-inside: avoid; margin-top: 30px; }
+      .section { page-break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Learning Aim B</h1>
+    <div class="subtitle">Connectivity & Networks | Data Transmission & Protocols</div>
+    <button class="print-btn" onclick="window.print()">🖨️ Print Document</button>
+
+    <h2>Connectivity & Networks</h2>
+
+    <h3>Wired Connections</h3>
+    <div class="grid-2">
+      <div class="card">
+        <h4>USB (Universal Serial Bus)</h4>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:5px 0 10px;">Versions:</h4>
+        <ul>
+          <li>USB 2.0: 480 Mbps</li>
+          <li>USB 3.0: 5 Gbps</li>
+          <li>USB 3.1: 10 Gbps</li>
+          <li>USB-C: Newer standard</li>
+        </ul>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:15px 0 10px;">Uses:</h4>
+        <ul>
+          <li>Data transfer</li>
+          <li>Power supply</li>
+          <li>Peripherals (printers, drives)</li>
+        </ul>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:15px 0 10px;">Advantages:</h4>
+        <ul>
+          <li>Fast data transfer</li>
+          <li>Supplies power</li>
+          <li>Reliable connection</li>
+        </ul>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:15px 0 10px;">Disadvantages:</h4>
+        <ul>
+          <li>Limited range (up to 5m)</li>
+          <li>Requires physical cable</li>
+          <li>Cable clutter</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Ethernet (Network Cable)</h4>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:5px 0 10px;">Standards:</h4>
+        <ul>
+          <li>Cat5e: 1 Gbps</li>
+          <li>Cat6: 10 Gbps</li>
+          <li>Cat7: 100 Gbps</li>
+          <li>Cat8: Future standard</li>
+        </ul>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:15px 0 10px;">Uses:</h4>
+        <ul>
+          <li>Local network (LAN)</li>
+          <li>Internet connection</li>
+          <li>Stable connections</li>
+        </ul>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:15px 0 10px;">Advantages:</h4>
+        <ul>
+          <li>Very high speed</li>
+          <li>Stable connection</li>
+          <li>Secure (harder to intercept)</li>
+        </ul>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:15px 0 10px;">Disadvantages:</h4>
+        <ul>
+          <li>Not portable</li>
+          <li>Installation cost</li>
+          <li>Fixed locations</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="content-block">
+      <h3>Wired vs Wireless Comparison</h3>
+      <table class="comparison-table">
+        <tr>
+          <th>Feature</th>
+          <th>Wired</th>
+          <th>Wireless</th>
+        </tr>
+        <tr>
+          <td><strong>Speed</strong></td>
+          <td>Very fast (1-10 Gbps)</td>
+          <td>Good (50-600 Mbps)</td>
+        </tr>
+        <tr>
+          <td><strong>Reliability</strong></td>
+          <td>Stable, no interference</td>
+          <td>Can have interference</td>
+        </tr>
+        <tr>
+          <td><strong>Mobility</strong></td>
+          <td>Limited by cable</td>
+          <td>Very mobile</td>
+        </tr>
+        <tr>
+          <td><strong>Cost</strong></td>
+          <td>Installation costs</td>
+          <td>Low cost once set up</td>
+        </tr>
+        <tr>
+          <td><strong>Best for</strong></td>
+          <td>Fixed servers, high data</td>
+          <td>Laptops, mobile devices</td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="scenario">
+      <strong>Scenario:</strong> A school office needs desktop computers wired with Ethernet for maximum speed and stability. But in classrooms, teachers use laptops and need Wi-Fi to move around. The school uses both technologies for different purposes.
+    </div>
+
+    <h3>Wireless Connections</h3>
+    <div class="grid-2">
+      <div class="card">
+        <h4>Bluetooth</h4>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:5px 0 10px;">Specifications:</h4>
+        <ul>
+          <li>Frequency: 2.4 GHz</li>
+          <li>Range: 10–100 meters</li>
+          <li>Speed: 1–3 Mbps (older)</li>
+          <li>Bluetooth 5.0: Much faster</li>
+        </ul>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:15px 0 10px;">Uses:</h4>
+        <ul>
+          <li>Headphones/speakers</li>
+          <li>Wireless mice/keyboards</li>
+          <li>Personal devices</li>
+          <li>PAN (Personal Area Network)</li>
+        </ul>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:15px 0 10px;">Advantages:</h4>
+        <ul>
+          <li>Wireless convenience</li>
+          <li>Easy pairing</li>
+          <li>Low power use</li>
+          <li>Common standard</li>
+        </ul>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:15px 0 10px;">Disadvantages:</h4>
+        <ul>
+          <li>Short range only</li>
+          <li>Interference from other devices</li>
+          <li>Lower bandwidth</li>
+          <li>Not suitable for streaming</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Wi-Fi (802.11)</h4>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:5px 0 10px;">Standards:</h4>
+        <ul>
+          <li>802.11b: 11 Mbps</li>
+          <li>802.11g: 54 Mbps</li>
+          <li>802.11n: 300 Mbps</li>
+          <li>802.11ac: 1300 Mbps</li>
+          <li>802.11ax: 10 Gbps (Wi-Fi 6)</li>
+        </ul>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:15px 0 10px;">Uses:</h4>
+        <ul>
+          <li>Internet access</li>
+          <li>Home/office networks</li>
+          <li>Mobile device connectivity</li>
+          <li>Hotspots</li>
+        </ul>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:15px 0 10px;">Advantages:</h4>
+        <ul>
+          <li>Wireless freedom</li>
+          <li>Flexible positioning</li>
+          <li>Multiple devices supported</li>
+          <li>Reasonable speed</li>
+        </ul>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:15px 0 10px;">Disadvantages:</h4>
+        <ul>
+          <li>Security risks (encryption needed)</li>
+          <li>Interference from other networks</li>
+          <li>Slower than Ethernet</li>
+          <li>Range limitations</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>Network Topologies</h3>
+    <div class="grid-2">
+      <div class="card">
+        <h4>Star Topology</h4>
+        <ul>
+          <li><strong>Structure:</strong> All devices connect to central switch/hub</li>
+          <li><strong>Most common:</strong> Used in offices and schools</li>
+          <li><strong>Advantage:</strong> Easy to add/remove devices</li>
+          <li><strong>Advantage:</strong> One device failure doesn't affect others</li>
+          <li><strong>Disadvantage:</strong> Central point failure affects all</li>
+          <li><strong>Disadvantage:</strong> More cabling needed</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Ring Topology</h4>
+        <ul>
+          <li><strong>Structure:</strong> Devices form a ring/circle</li>
+          <li><strong>Data flow:</strong> Travels around the ring</li>
+          <li><strong>Advantage:</strong> No central point</li>
+          <li><strong>Advantage:</strong> Fair bandwidth sharing</li>
+          <li><strong>Disadvantage:</strong> Break anywhere affects all</li>
+          <li><strong>Disadvantage:</strong> More complex to install</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <h4>Bus Topology</h4>
+        <ul>
+          <li><strong>Structure:</strong> All devices share single cable</li>
+          <li><strong>Oldest design:</strong> Simple and cheap</li>
+          <li><strong>Advantage:</strong> Low cost</li>
+          <li><strong>Advantage:</strong> Simple installation</li>
+          <li><strong>Disadvantage:</strong> Collision issues</li>
+          <li><strong>Disadvantage:</strong> Cable break affects all</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Mesh Topology</h4>
+        <ul>
+          <li><strong>Structure:</strong> Multiple connections between nodes</li>
+          <li><strong>Redundant:</strong> Multiple paths for data</li>
+          <li><strong>Advantage:</strong> Very reliable</li>
+          <li><strong>Advantage:</strong> One failure doesn't disrupt network</li>
+          <li><strong>Disadvantage:</strong> Very expensive</li>
+          <li><strong>Disadvantage:</strong> Complex to manage</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="content-block">
+      <h3>Network Topology Comparison</h3>
+      <table class="comparison-table">
+        <tr>
+          <th>Topology</th>
+          <th>Structure</th>
+          <th>Reliability</th>
+          <th>Cost</th>
+        </tr>
+        <tr>
+          <td><strong>Star</strong></td>
+          <td>Devices → Central hub</td>
+          <td>Good (hub failure=down)</td>
+          <td>Moderate</td>
+        </tr>
+        <tr>
+          <td><strong>Ring</strong></td>
+          <td>Devices in circle</td>
+          <td>Fair (break affects all)</td>
+          <td>Moderate</td>
+        </tr>
+        <tr>
+          <td><strong>Bus</strong></td>
+          <td>Linear chain</td>
+          <td>Poor (cable break=down)</td>
+          <td>Low</td>
+        </tr>
+        <tr>
+          <td><strong>Mesh</strong></td>
+          <td>Multiple connections</td>
+          <td>Excellent (multiple paths)</td>
+          <td>High</td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="scenario">
+      <strong>Scenario:</strong> A hospital needs reliable patient data networks. Using star topology is standard and cost-effective. But critical ICU units use mesh topology so if one connection fails, vital signs still transmit through alternative paths.
+    </div>
+
+    <h3>Network Types — Scope & Scale</h3>
+    <div class="content-block">
+      <ul>
+        <li><strong>PAN (Personal Area Network):</strong> Device to device connection (phone to laptop via Bluetooth); very short range (up to 10m); example: phone connected to wireless headphones</li>
+        <li><strong>LAN (Local Area Network):</strong> Same building or small area; fast speeds (Ethernet); secure connection; example: office network, school network</li>
+        <li><strong>WAN (Wide Area Network):</strong> Large geographic area (cities, countries); connected via Internet; slower than LAN; example: company with multiple offices</li>
+        <li><strong>VPN (Virtual Private Network):</strong> Secure encrypted connection over public network; appears as private connection; used for remote working; protects data while using public Wi-Fi</li>
+      </ul>
+    </div>
+
+    <h2>Data Transmission & Protocols</h2>
+
+    <h3>Key Protocols — How Internet Works</h3>
+    <div class="grid-2">
+      <div class="card">
+        <h4>Email Protocols</h4>
+        <ul>
+          <li><strong>SMTP (Simple Mail Transfer Protocol):</strong> Sends emails FROM client to server</li>
+          <li><strong>POP (Post Office Protocol):</strong> Downloads emails to client; deletes from server</li>
+          <li><strong>IMAP (Internet Message Access Protocol):</strong> Accesses emails on server; syncs across devices</li>
+          <li><strong>When to use IMAP:</strong> Multiple devices, cloud access needed</li>
+          <li><strong>When to use POP:</strong> Single device, offline access preferred</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Web Protocols</h4>
+        <ul>
+          <li><strong>HTTP (HyperText Transfer Protocol):</strong> Unencrypted web traffic</li>
+          <li><strong>HTTPS:</strong> Encrypted version (secure); 'S' = SSL/TLS encryption</li>
+          <li><strong>When to use HTTPS:</strong> Always for sensitive data (banking, shopping)</li>
+          <li><strong>SSL Certificate:</strong> Proves website is legitimate</li>
+          <li><strong>Port 80:</strong> HTTP default</li>
+          <li><strong>Port 443:</strong> HTTPS default</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <h4>Other Protocols</h4>
+        <ul>
+          <li><strong>FTP (File Transfer Protocol):</strong> Transfers files between computers</li>
+          <li><strong>SFTP:</strong> Secure version with encryption</li>
+          <li><strong>VoIP:</strong> Voice over IP; internet phone calls</li>
+          <li><strong>DNS:</strong> Converts domain names to IP addresses (google.com → 142.251.32.46)</li>
+          <li><strong>TCP/IP:</strong> Foundation of internet communication</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Protocol Selection</h4>
+        <ul>
+          <li><strong>Email sending:</strong> SMTP required</li>
+          <li><strong>Email retrieval:</strong> POP or IMAP</li>
+          <li><strong>Web browsing:</strong> HTTP or HTTPS</li>
+          <li><strong>Sensitive data:</strong> Always use encrypted versions</li>
+          <li><strong>Video calls:</strong> Often VoIP-based</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>Bandwidth & Latency</h3>
+    <div class="grid-2">
+      <div class="card">
+        <h4>Bandwidth</h4>
+        <ul>
+          <li>Amount of data transferred per second</li>
+          <li>Measured in Mbps or Gbps</li>
+          <li>Higher is faster</li>
+          <li>Affects download/upload speed</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Latency</h4>
+        <ul>
+          <li>Delay in data transmission</li>
+          <li>Measured in milliseconds</li>
+          <li>Lower is better</li>
+          <li>Affects responsiveness</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>Data Compression — Reducing File Size</h3>
+    <div class="grid-2">
+      <div class="card">
+        <h4>Lossy Compression</h4>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:5px 0 10px;">How it works:</h4>
+        <ul>
+          <li>Removes some data permanently</li>
+          <li>Data cannot be recovered</li>
+          <li>Unnoticeable to human senses</li>
+        </ul>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:15px 0 10px;">Examples:</h4>
+        <ul>
+          <li>JPG (images)</li>
+          <li>MP3 (audio)</li>
+          <li>MP4 (video)</li>
+        </ul>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:15px 0 10px;">When to use:</h4>
+        <ul>
+          <li>Photos/videos</li>
+          <li>When file size matters</li>
+          <li>Streaming media</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Lossless Compression</h4>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:5px 0 10px;">How it works:</h4>
+        <ul>
+          <li>No data is lost</li>
+          <li>Decompresses to original</li>
+          <li>Uses clever encoding</li>
+        </ul>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:15px 0 10px;">Examples:</h4>
+        <ul>
+          <li>PNG (images)</li>
+          <li>ZIP (archives)</li>
+          <li>FLAC (audio)</li>
+        </ul>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:15px 0 10px;">When to use:</h4>
+        <ul>
+          <li>Documents/text</li>
+          <li>When accuracy matters</li>
+          <li>Archival storage</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>File Types for Transmission</h3>
+    <div class="grid-2">
+      <div class="card">
+        <h4>Image Files</h4>
+        <ul>
+          <li><strong>PNG:</strong> Lossless, transparent background, best quality</li>
+          <li><strong>JPG:</strong> Lossy, smaller files, best for photos</li>
+          <li><strong>GIF:</strong> Lossless, animations, limited colors</li>
+          <li><strong>WebP:</strong> Modern, smallest files, browsers may not support</li>
+          <li><strong>BMP:</strong> Uncompressed, very large, rarely used online</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Audio Files</h4>
+        <ul>
+          <li><strong>MP3:</strong> Lossy, small files, most compatible</li>
+          <li><strong>WAV:</strong> Uncompressed, large files, professional quality</li>
+          <li><strong>FLAC:</strong> Lossless, medium file size, high quality</li>
+          <li><strong>AAC:</strong> Lossy, better quality than MP3 at same size</li>
+          <li><strong>Bitrate:</strong> 128kbps (streaming) to 320kbps (high quality)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <h4>Video Files</h4>
+        <ul>
+          <li><strong>MP4:</strong> Most common, good quality, small files</li>
+          <li><strong>MKV:</strong> Container format, multiple tracks/subtitles</li>
+          <li><strong>AVI:</strong> Older format, larger files</li>
+          <li><strong>WebM:</strong> Optimized for web, open source</li>
+          <li><strong>Resolution:</strong> 480p, 720p, 1080p, 4K</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Codecs (Coder-Decoder)</h4>
+        <ul>
+          <li><strong>What is it:</strong> Software that compresses/decompresses media</li>
+          <li><strong>Video codecs:</strong> H.264, H.265 (HEVC), VP9</li>
+          <li><strong>Audio codecs:</strong> MP3, AAC, Vorbis</li>
+          <li><strong>Needed to:</strong> Play files, stream media</li>
+          <li><strong>Examples:</strong> Both sides need same codec</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>

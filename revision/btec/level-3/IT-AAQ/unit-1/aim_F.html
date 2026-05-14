@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Learning Aim F – Planning & Communication</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Satoshi', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f8fafc;
+      color: #1a1f2e;
+      line-height: 1.6;
+      padding: 20px;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    h1 {
+      font-size: 1.8em;
+      margin-bottom: 5px;
+      color: #0f4f41;
+    }
+    .subtitle {
+      font-size: 0.95em;
+      color: #666;
+      margin-bottom: 15px;
+      border-bottom: 2px solid #e0e7ff;
+      padding-bottom: 10px;
+    }
+    h2 {
+      font-size: 1.4em;
+      margin-top: 25px;
+      margin-bottom: 12px;
+      color: #0f4f41;
+      border-left: 4px solid #2d4c3a;
+      padding-left: 15px;
+    }
+    h3 {
+      font-size: 1.1em;
+      margin-top: 15px;
+      margin-bottom: 8px;
+      color: #2d4c3a;
+    }
+    .section {
+      margin-bottom: 15px;
+    }
+    .content-block {
+      background: #f9fafb;
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      border-left: 3px solid #b0b7a1;
+      font-size: 0.95em;
+    }
+    ul, ol {
+      margin: 8px 0 8px 18px;
+    }
+    li {
+      margin: 4px 0;
+      line-height: 1.5;
+      font-size: 0.95em;
+    }
+    strong {
+      color: #0f4f41;
+      font-weight: 600;
+    }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .card {
+      background: #f0f4f1;
+      padding: 12px;
+      border-radius: 8px;
+      border-top: 3px solid #7b8c8e;
+      font-size: 0.93em;
+    }
+    .card h4 {
+      color: #2d4c3a;
+      margin-bottom: 6px;
+      font-size: 1em;
+    }
+    .card ul {
+      margin-left: 12px;
+    }
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 10px 0;
+      font-size: 0.93em;
+    }
+    .comparison-table th, .comparison-table td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+    .comparison-table th {
+      background: #2d4c3a;
+      color: #fff;
+    }
+    .comparison-table tr:nth-child(even) {
+      background: #f9fafb;
+    }
+    .scenario {
+      background: #e8f4f0;
+      border-left: 4px solid #0f4f41;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 4px;
+      font-size: 0.93em;
+    }
+    .scenario strong {
+      color: #0f4f41;
+    }
+    .print-btn {
+      display: block;
+      margin: 0 auto 15px;
+      padding: 8px 16px;
+      background: #2d4c3a;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.95em;
+    }
+    .print-btn:hover {
+      background: #0f4f41;
+    }
+    @media print {
+      body { background: #fff; padding: 0; }
+      .container { box-shadow: none; border: none; padding: 0; max-width: 100%; }
+      .print-btn { display: none; }
+      h2 { page-break-inside: avoid; margin-top: 30px; }
+      .section { page-break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Learning Aim F</h1>
+    <div class="subtitle">Planning & Communication</div>
+    <button class="print-btn" onclick="window.print()">🖨️ Print Document</button>
+
+    <h2>Project Planning</h2>
+
+    <h3>Planning Fundamentals</h3>
+    <div class="content-block">
+      <ul>
+        <li><strong>Project Scope:</strong> What needs to be delivered?</li>
+        <li><strong>Goals & Objectives:</strong> Clear, measurable targets</li>
+        <li><strong>Deliverables:</strong> Specific outputs to be produced</li>
+        <li><strong>Resources:</strong> People, equipment, budget needed</li>
+        <li><strong>Timeline:</strong> Start date, end date, milestones</li>
+      </ul>
+    </div>
+
+    <h3>Project Management Methodologies</h3>
+    <div class="grid-2">
+      <div class="card">
+        <h4>Waterfall Method</h4>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:5px 0 10px;">Approach:</h4>
+        <ul>
+          <li>Linear, sequential phases</li>
+          <li>Each phase completed before next</li>
+          <li>Detailed upfront planning</li>
+        </ul>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:15px 0 10px;">When to use:</h4>
+        <ul>
+          <li>Clear, stable requirements</li>
+          <li>Large projects with contractors</li>
+          <li>Hardware projects</li>
+        </ul>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:15px 0 10px;">Disadvantages:</h4>
+        <ul>
+          <li>Changes are expensive</li>
+          <li>Issues found late</li>
+          <li>Long delivery time</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Agile Method</h4>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:5px 0 10px;">Approach:</h4>
+        <ul>
+          <li>Iterative, incremental</li>
+          <li>Sprints (1–4 weeks)</li>
+          <li>Continuous feedback</li>
+        </ul>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:15px 0 10px;">When to use:</h4>
+        <ul>
+          <li>Unclear/changing requirements</li>
+          <li>Software development</li>
+          <li>Fast delivery needed</li>
+        </ul>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:15px 0 10px;">Advantages:</h4>
+        <ul>
+          <li>Flexible to changes</li>
+          <li>Issues found early</li>
+          <li>Regular deliverables</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="content-block">
+      <h3>Waterfall vs Agile Comparison</h3>
+      <table class="comparison-table">
+        <tr>
+          <th>Feature</th>
+          <th>Waterfall</th>
+          <th>Agile</th>
+        </tr>
+        <tr>
+          <td><strong>Approach</strong></td>
+          <td>Sequential, linear phases</td>
+          <td>Iterative, sprints (1-4 weeks)</td>
+        </tr>
+        <tr>
+          <td><strong>Planning</strong></td>
+          <td>Detailed upfront</td>
+          <td>Continuous planning</td>
+        </tr>
+        <tr>
+          <td><strong>Testing</strong></td>
+          <td>At the end</td>
+          <td>Throughout (continuous)</td>
+        </tr>
+        <tr>
+          <td><strong>Changes</strong></td>
+          <td>Expensive, difficult</td>
+          <td>Easy, expected</td>
+        </tr>
+        <tr>
+          <td><strong>Delivery</strong></td>
+          <td>All at once</td>
+          <td>Incremental releases</td>
+        </tr>
+        <tr>
+          <td><strong>Best for</strong></td>
+          <td>Fixed requirements</td>
+          <td>Changing requirements</td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="scenario">
+      <strong>Scenario - Waterfall:</strong> Building a bridge requires extensive planning upfront—changes during construction are very expensive. All requirements must be perfect before starting.
+    </div>
+
+    <div class="scenario">
+      <strong>Scenario - Agile:</strong> Building a mobile app with uncertain market needs. Start with core features (1-week sprint), get user feedback, adjust in next sprint. Flexibility helps discover what users actually want.
+    </div>
+
+    <h3>Planning Tools & Techniques</h3>
+    <div class="grid-2">
+      <div class="card">
+        <h4>Gantt Charts</h4>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:5px 0 10px;">What it is:</h4>
+        <ul>
+          <li>Bar chart showing timeline</li>
+          <li>Horizontal axis = time</li>
+          <li>Vertical axis = tasks</li>
+        </ul>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:15px 0 10px;">Shows:</h4>
+        <ul>
+          <li>Task duration (bar length)</li>
+          <li>Start and end dates</li>
+          <li>Dependencies (which tasks must complete first)</li>
+          <li>Overlapping tasks (parallel work)</li>
+          <li>Milestones (key dates)</li>
+        </ul>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:15px 0 10px;">Benefits:</h4>
+        <ul>
+          <li>Visual clarity</li>
+          <li>Easy progress tracking</li>
+          <li>Identify delays early</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Critical Path Method (CPM)</h4>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:5px 0 10px;">What it is:</h4>
+        <ul>
+          <li>Identifies longest sequence of tasks</li>
+          <li>Determines minimum project duration</li>
+          <li>Highlights critical activities</li>
+        </ul>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:15px 0 10px;">Key concepts:</h4>
+        <ul>
+          <li><strong>Slack time:</strong> How much delay allowed</li>
+          <li><strong>Float:</strong> Flexibility in timing</li>
+          <li><strong>Critical tasks:</strong> No slack = delay project</li>
+        </ul>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:15px 0 10px;">Benefits:</h4>
+        <ul>
+          <li>Focus on important tasks</li>
+          <li>Prevent delays</li>
+          <li>Resource allocation</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>Planning Components</h3>
+    <div class="content-block">
+      <ul>
+        <li><strong>Milestones:</strong> Key checkpoints; mark completion of phases</li>
+        <li><strong>Dependencies:</strong> Tasks that must be completed before others</li>
+        <li><strong>Resource Allocation:</strong> Assign people and equipment to tasks</li>
+        <li><strong>Risk Assessment:</strong> Identify potential issues and mitigation</li>
+        <li><strong>Contingency Planning:</strong> Plans for when things go wrong</li>
+        <li><strong>Quality Standards:</strong> Criteria for acceptable output</li>
+      </ul>
+    </div>
+
+    <h2>Communication</h2>
+
+    <h3>Communication Methods & Tools</h3>
+    <div class="grid-2">
+      <div class="card">
+        <h4>Synchronous (Real-time)</h4>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:5px 0 10px;">What:</h4>
+        <ul>
+          <li>Communication happens immediately</li>
+          <li>Both parties present/available</li>
+          <li>Instant feedback</li>
+        </ul>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:15px 0 10px;">Examples:</h4>
+        <ul>
+          <li>Face-to-face meetings</li>
+          <li>Phone calls</li>
+          <li>Video conferencing (Zoom, Teams)</li>
+          <li>Instant messaging (Slack, WhatsApp)</li>
+        </ul>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:15px 0 10px;">When to use:</h4>
+        <ul>
+          <li>Complex discussions</li>
+          <li>Urgent decisions</li>
+          <li>Problem solving</li>
+          <li>Building relationships</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Asynchronous (Delayed)</h4>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:5px 0 10px;">What:</h4>
+        <ul>
+          <li>Communication happens over time</li>
+          <li>Parties respond when available</li>
+          <li>Creates written record</li>
+        </ul>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:15px 0 10px;">Examples:</h4>
+        <ul>
+          <li>Email</li>
+          <li>Project management tools (Asana)</li>
+          <li>Shared documents</li>
+          <li>Forum posts</li>
+          <li>Status reports</li>
+        </ul>
+        <h4 style="font-size:0.9em;color:#666;font-weight:400;margin:15px 0 10px;">When to use:</h4>
+        <ul>
+          <li>Documentation needed</li>
+          <li>Non-urgent</li>
+          <li>Distributed teams</li>
+          <li>Time zone differences</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>Communication Barriers & Solutions</h3>
+    <div class="grid-2">
+      <div class="card">
+        <h4>Key Barriers</h4>
+        <ul>
+          <li><strong>Language:</strong> Different languages, technical jargon, unclear terminology</li>
+          <li><strong>Technical:</strong> Poor audio/video, connectivity issues</li>
+          <li><strong>Time zones:</strong> Different working hours globally</li>
+          <li><strong>Misunderstanding:</strong> Ambiguous messages, assumptions</li>
+          <li><strong>Noise:</strong> Background noise, interruptions</li>
+          <li><strong>Cultural:</strong> Different communication styles</li>
+          <li><strong>Overload:</strong> Too many messages to prioritize</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Solutions</h4>
+        <ul>
+          <li><strong>Clear language:</strong> Use simple terms, avoid jargon</li>
+          <li><strong>Feedback:</strong> Confirm understanding, ask questions</li>
+          <li><strong>Scheduling:</strong> Plan meetings across time zones</li>
+          <li><strong>Documentation:</strong> Written summaries of decisions</li>
+          <li><strong>Multiple channels:</strong> Email for important, chat for quick</li>
+          <li><strong>Active listening:</strong> Pay attention, don't interrupt</li>
+          <li><strong>Frequent updates:</strong> Reduces misunderstandings</li>
+          <li><strong>Communication plan:</strong> Define how team communicates</li>
+        </ul>
+      </div>
+    </div>
+
+    <h2>Documentation</h2>
+
+    <h3>Types of Documentation</h3>
+    <div class="content-block">
+      <ul>
+        <li><strong>Requirements Documentation:</strong> What the project must deliver; specifications</li>
+        <li><strong>Design Documentation:</strong> How the system will be built; technical details</li>
+        <li><strong>User Guides:</strong> Instructions for end users; how to use the system</li>
+        <li><strong>Test Plans:</strong> What testing will be done; test cases and expected results</li>
+        <li><strong>Project Reports:</strong> Progress updates; status, issues, risks</li>
+        <li><strong>Meeting Minutes:</strong> Decisions made, action items, next steps</li>
+        <li><strong>Code Documentation:</strong> Comments and guides for developers</li>
+      </ul>
+    </div>
+
+    <h3>Documentation Best Practices</h3>
+    <div class="content-block">
+      <ul>
+        <li><strong>Clarity:</strong> Clear, concise, easy to understand</li>
+        <li><strong>Completeness:</strong> All necessary information included</li>
+        <li><strong>Currency:</strong> Keep updated as project progresses</li>
+        <li><strong>Consistency:</strong> Standardized format and terminology</li>
+        <li><strong>Organization:</strong> Logical structure, easy to navigate</li>
+        <li><strong>Accuracy:</strong> Information is correct and verified</li>
+        <li><strong>Accessibility:</strong> Available to all who need it</li>
+      </ul>
+    </div>
+
+    <h2>Evaluation & Review</h2>
+
+    <h3>Project Evaluation</h3>
+    <div class="grid-2">
+      <div class="card">
+        <h4>Success Criteria</h4>
+        <ul>
+          <li>Delivered on time</li>
+          <li>Within budget</li>
+          <li>Meets requirements</li>
+          <li>Quality standards met</li>
+          <li>Stakeholder satisfaction</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Review Process</h4>
+        <ul>
+          <li>Gather feedback</li>
+          <li>Compare to goals</li>
+          <li>Identify what went well</li>
+          <li>Identify improvements</li>
+          <li>Document lessons learned</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>Continuous Improvement</h3>
+    <div class="content-block">
+      <ul>
+        <li><strong>Post-Project Review:</strong> Conducted after project completion</li>
+        <li><strong>Lessons Learned:</strong> Document successes and failures</li>
+        <li><strong>Process Improvements:</strong> Update processes based on learnings</li>
+        <li><strong>Team Feedback:</strong> Gather input from team members</li>
+        <li><strong>Client Feedback:</strong> Understand client satisfaction and needs</li>
+        <li><strong>Knowledge Management:</strong> Share learnings across organization</li>
+      </ul>
+    </div>
+
+  </div>
+</body>
+</html>
