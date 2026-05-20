@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BTEC IT Level 2 Unit 2 — Practice Paper 1</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f5f5; }
+
+.exam-viewer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50px;
+  background: #1a56db;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.viewer-info {
+  display: flex;
+  gap: 30px;
+  font-size: 14px;
+}
+
+.viewer-controls {
+  display: flex;
+  gap: 10px;
+}
+
+.viewer-controls button {
+  background: rgba(255,255,255,0.2);
+  border: none;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.viewer-controls button:hover {
+  background: rgba(255,255,255,0.3);
+}
+
+.paper-container {
+  margin-top: 60px;
+  padding: 40px;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.exam-paper {
+  background: white;
+  padding: 60px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  page-break-after: always;
+  line-height: 1.6;
+}
+
+.paper-header {
+  text-align: center;
+  margin-bottom: 40px;
+  border-bottom: 2px solid #1a56db;
+  padding-bottom: 20px;
+}
+
+.paper-header h1 {
+  font-size: 24px;
+  color: #1a56db;
+  margin-bottom: 8px;
+}
+
+.paper-header p {
+  color: #666;
+  font-size: 14px;
+}
+
+.instructions {
+  background: #f9f9f9;
+  border-left: 4px solid #1a56db;
+  padding: 15px;
+  margin-bottom: 30px;
+  font-size: 14px;
+}
+
+.instructions h3 {
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.instructions ul {
+  margin-left: 20px;
+}
+
+.instructions li {
+  margin-bottom: 6px;
+}
+
+.question-section {
+  margin-bottom: 30px;
+  page-break-inside: avoid;
+}
+
+.question {
+  margin-bottom: 20px;
+}
+
+.question-number {
+  font-weight: bold;
+  color: #1a56db;
+  margin-bottom: 6px;
+}
+
+.question-text {
+  margin-bottom: 8px;
+  color: #333;
+}
+
+.mark-allocation {
+  color: #666;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.answer-space {
+  border: 1px dashed #ccc;
+  background: #fafafa;
+  min-height: 40px;
+  padding: 8px;
+  margin-top: 8px;
+  font-size: 13px;
+  color: #999;
+}
+
+.scenario {
+  background: #f0f4ff;
+  border-left: 3px solid #1a56db;
+  padding: 12px;
+  margin-bottom: 12px;
+  font-size: 13px;
+  font-style: italic;
+}
+
+.multiple-choice {
+  margin-top: 12px;
+}
+
+.mc-option {
+  margin-bottom: 8px;
+  padding: 6px;
+}
+
+.mc-option input {
+  margin-right: 8px;
+}
+
+.mc-option label {
+  cursor: pointer;
+}
+
+.answer-textarea {
+  width: 100%;
+  border: 1px solid #ccc;
+  padding: 8px;
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  resize: none;
+  margin-top: 8px;
+}
+
+.page-break {
+  page-break-before: always;
+  margin-top: 40px;
+  padding-top: 40px;
+}
+
+@media screen {
+  .exam-paper {
+    margin: 20px;
+  }
+}
+
+@media print {
+  .exam-viewer {
+    display: none;
+  }
+  
+  .paper-container {
+    margin: 0;
+    padding: 0;
+  }
+  
+  .exam-paper {
+    margin: 0;
+    padding: 40px;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="exam-viewer">
+  <div class="viewer-info">
+    <span id="page-info">Page 1 of 3</span>
+    <span>BTEC IT Level 2 Unit 2 — Practice Paper 1</span>
+  </div>
+  <div class="viewer-controls">
+    <button onclick="zoomOut();">−</button>
+    <button onclick="zoomReset();">100%</button>
+    <button onclick="zoomIn();">+</button>
+    <button onclick="window.print();">Print</button>
+  </div>
+</div>
+
+<div class="paper-container">
+  <div class="exam-paper">
+    <div class="paper-header">
+      <h1>BTEC IT Level 2 — Unit 2: Technology Systems</h1>
+      <p>Practice Exam Paper 1 | Total Marks: 60 | Time: Varies</p>
+    </div>
+
+    <div class="instructions">
+      <h3>Instructions</h3>
+      <ul>
+        <li>Answer all 18 questions</li>
+        <li>For multiple-choice questions, select the best answer</li>
+        <li>For short-answer questions, provide brief responses</li>
+        <li>For extended questions, write full explanations</li>
+        <li>Use the space provided for answers</li>
+        <li>Show all calculations for numerical questions</li>
+      </ul>
+    </div>
+
+    <!-- Learning Aim A Questions -->
+    <div class="question-section">
+      <h2 style="color: #1a56db; border-bottom: 2px solid #1a56db; padding-bottom: 10px; margin-bottom: 20px;">Learning Aim A: Applications & Issues</h2>
+
+      <div class="question">
+        <div class="question-number">Question 1</div>
+        <div class="question-text">Which of the following is an example of cloud storage?</div>
+        <div class="mark-allocation">1 mark</div>
+        <div class="multiple-choice">
+          <div class="mc-option"><input type="radio" name="q1"> A) A local USB drive</div>
+          <div class="mc-option"><input type="radio" name="q1"> B) Microsoft OneDrive</div>
+          <div class="mc-option"><input type="radio" name="q1"> C) A printer</div>
+          <div class="mc-option"><input type="radio" name="q1"> D) A scanner</div>
+        </div>
+        <div class="answer-space">Answer: ___</div>
+      </div>
+
+      <div class="question">
+        <div class="question-number">Question 2</div>
+        <div class="scenario">A retail store uses a point-of-sale system to process sales. The system is suddenly hit by ransomware that encrypts all customer records.</div>
+        <div class="question-text">Describe what ransomware does and explain one way the store could have prevented this attack.</div>
+        <div class="mark-allocation">4 marks</div>
+        <div class="answer-space">
+          <textarea class="answer-textarea" rows="6" placeholder="Write your answer here..."></textarea>
+        </div>
+      </div>
+
+      <div class="question">
+        <div class="question-number">Question 3</div>
+        <div class="scenario">A law firm stores confidential client documents in a cloud service operated by a company based in the USA.</div>
+        <div class="question-text">Identify two GDPR concerns about this arrangement.</div>
+        <div class="mark-allocation">2 marks</div>
+        <div class="answer-space">
+          <textarea class="answer-textarea" rows="4" placeholder="Write your answer here..."></textarea>
+        </div>
+      </div>
+
+      <div class="question">
+        <div class="question-number">Question 4</div>
+        <div class="question-text">Explain the difference between a full backup and an incremental backup.</div>
+        <div class="mark-allocation">3 marks</div>
+        <div class="answer-space">
+          <textarea class="answer-textarea" rows="5" placeholder="Write your answer here..."></textarea>
+        </div>
+      </div>
+
+      <div class="question">
+        <div class="question-number">Question 5</div>
+        <div class="question-text">What type of network is used to connect devices across multiple cities?</div>
+        <div class="mark-allocation">1 mark</div>
+        <div class="multiple-choice">
+          <div class="mc-option"><input type="radio" name="q5"> A) PAN</div>
+          <div class="mc-option"><input type="radio" name="q5"> B) LAN</div>
+          <div class="mc-option"><input type="radio" name="q5"> C) WAN</div>
+          <div class="mc-option"><input type="radio" name="q5"> D) VPN</div>
+        </div>
+        <div class="answer-space">Answer: ___</div>
+      </div>
+
+      <div class="question">
+        <div class="question-number">Question 6</div>
+        <div class="question-text">A business is choosing between a LAN and a WAN. Explain when a WAN would be necessary.</div>
+        <div class="mark-allocation">2 marks</div>
+        <div class="answer-space">
+          <textarea class="answer-textarea" rows="4" placeholder="Write your answer here..."></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- Learning Aim B Questions -->
+    <div class="question-section">
+      <h2 style="color: #1a56db; border-bottom: 2px solid #1a56db; padding-bottom: 10px; margin-bottom: 20px;">Learning Aim B: Hardware & Software</h2>
+
+      <div class="question">
+        <div class="question-number">Question 7</div>
+        <div class="question-text">Which component of the CPU performs calculations?</div>
+        <div class="mark-allocation">1 mark</div>
+        <div class="multiple-choice">
+          <div class="mc-option"><input type="radio" name="q7"> A) ALU</div>
+          <div class="mc-option"><input type="radio" name="q7"> B) Cache</div>
+          <div class="mc-option"><input type="radio" name="q7"> C) ROM</div>
+          <div class="mc-option"><input type="radio" name="q7"> D) Bus</div>
+        </div>
+        <div class="answer-space">Answer: ___</div>
+      </div>
+
+      <div class="question">
+        <div class="question-number">Question 8</div>
+        <div class="question-text">Explain why cache memory improves CPU performance.</div>
+        <div class="mark-allocation">2 marks</div>
+        <div class="answer-space">
+          <textarea class="answer-textarea" rows="4" placeholder="Write your answer here..."></textarea>
+        </div>
+      </div>
+
+      <div class="question">
+        <div class="question-number">Question 9</div>
+        <div class="question-text">What is the main difference between RAM and ROM?</div>
+        <div class="mark-allocation">2 marks</div>
+        <div class="answer-space">
+          <textarea class="answer-textarea" rows="4" placeholder="Write your answer here..."></textarea>
+        </div>
+      </div>
+
+      <div class="question">
+        <div class="question-number">Question 10</div>
+        <div class="scenario">A business is choosing between an SSD and an HDD for their file server.</div>
+        <div class="question-text">Evaluate both options, considering speed, cost and reliability.</div>
+        <div class="mark-allocation">4 marks</div>
+        <div class="answer-space">
+          <textarea class="answer-textarea" rows="6" placeholder="Write your answer here..."></textarea>
+        </div>
+      </div>
+
+      <div class="question">
+        <div class="question-number">Question 11</div>
+        <div class="question-text">Which is an example of application software?</div>
+        <div class="mark-allocation">1 mark</div>
+        <div class="multiple-choice">
+          <div class="mc-option"><input type="radio" name="q11"> A) Windows 11</div>
+          <div class="mc-option"><input type="radio" name="q11"> B) Device driver</div>
+          <div class="mc-option"><input type="radio" name="q11"> C) Excel spreadsheet</div>
+          <div class="mc-option"><input type="radio" name="q11"> D) BIOS firmware</div>
+        </div>
+        <div class="answer-space">Answer: ___</div>
+      </div>
+
+      <div class="question">
+        <div class="question-number">Question 12</div>
+        <div class="question-text">Name two examples of utility software and describe their purpose.</div>
+        <div class="mark-allocation">2 marks</div>
+        <div class="answer-space">
+          <textarea class="answer-textarea" rows="4" placeholder="Write your answer here..."></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- Learning Aim C Questions -->
+    <div class="question-section">
+      <h2 style="color: #1a56db; border-bottom: 2px solid #1a56db; padding-bottom: 10px; margin-bottom: 20px;">Learning Aim C: Programming Basics</h2>
+
+      <div class="question">
+        <div class="question-number">Question 13</div>
+        <div class="question-text">Which of these is a high-level programming language?</div>
+        <div class="mark-allocation">1 mark</div>
+        <div class="multiple-choice">
+          <div class="mc-option"><input type="radio" name="q13"> A) Machine code</div>
+          <div class="mc-option"><input type="radio" name="q13"> B) Python</div>
+          <div class="mc-option"><input type="radio" name="q13"> C) Assembly</div>
+          <div class="mc-option"><input type="radio" name="q13"> D) Binary</div>
+        </div>
+        <div class="answer-space">Answer: ___</div>
+      </div>
+
+      <div class="question">
+        <div class="question-number">Question 14</div>
+        <div class="question-text">What data type would be best for storing a person's email address?</div>
+        <div class="mark-allocation">1 mark</div>
+        <div class="multiple-choice">
+          <div class="mc-option"><input type="radio" name="q14"> A) Integer</div>
+          <div class="mc-option"><input type="radio" name="q14"> B) Boolean</div>
+          <div class="mc-option"><input type="radio" name="q14"> C) String</div>
+          <div class="mc-option"><input type="radio" name="q14"> D) Array</div>
+        </div>
+        <div class="answer-space">Answer: ___</div>
+      </div>
+
+      <div class="question">
+        <div class="question-number">Question 15</div>
+        <div class="question-text">Explain the difference between a FOR loop and a WHILE loop.</div>
+        <div class="mark-allocation">3 marks</div>
+        <div class="answer-space">
+          <textarea class="answer-textarea" rows="5" placeholder="Write your answer here..."></textarea>
+        </div>
+      </div>
+
+      <div class="question">
+        <div class="question-number">Question 16</div>
+        <div class="question-text">What is the purpose of a function in programming?</div>
+        <div class="mark-allocation">2 marks</div>
+        <div class="answer-space">
+          <textarea class="answer-textarea" rows="4" placeholder="Write your answer here..."></textarea>
+        </div>
+      </div>
+
+      <div class="question">
+        <div class="question-number">Question 17</div>
+        <div class="question-text">Trace this code and state the output:</div>
+        <div style="background: #f0f0f0; padding: 10px; margin: 8px 0; font-family: 'Courier New'; font-size: 12px;">
+          count = 0<br>
+          FOR i = 1 TO 5<br>
+          &nbsp;&nbsp;count = count + 2<br>
+          NEXT i<br>
+          PRINT count
+        </div>
+        <div class="mark-allocation">2 marks</div>
+        <div class="answer-space">Answer: ___</div>
+      </div>
+
+      <div class="question">
+        <div class="question-number">Question 18</div>
+        <div class="scenario">A programmer is analyzing code that performs a calculation and stores the result in a variable called 'total'.</div>
+        <div class="question-text">Describe what code analysis is and explain why it is important for programmers.</div>
+        <div class="mark-allocation">3 marks</div>
+        <div class="answer-space">
+          <textarea class="answer-textarea" rows="5" placeholder="Write your answer here..."></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 40px; color: #999; font-size: 12px;">
+      --- End of Paper ---
+    </div>
+  </div>
+</div>
+
+<script>
+let zoomLevel = 1;
+
+function zoomIn() {
+  zoomLevel += 0.1;
+  updateZoom();
+}
+
+function zoomOut() {
+  if (zoomLevel > 0.5) {
+    zoomLevel -= 0.1;
+  }
+  updateZoom();
+}
+
+function zoomReset() {
+  zoomLevel = 1;
+  updateZoom();
+}
+
+function updateZoom() {
+  document.querySelector('.paper-container').style.transform = `scale(${zoomLevel})`;
+  document.querySelector('.paper-container').style.transformOrigin = 'top center';
+}
+</script>
+
+</body>
+</html>

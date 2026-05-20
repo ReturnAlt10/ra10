@@ -1,0 +1,1379 @@
+[
+  {
+    "id": "C001",
+    "learning_aim": "C",
+    "topic": "Programming Languages - High-level",
+    "command_verb": "Identify",
+    "marks": 1,
+    "scenario": "Selecting a language for web development",
+    "question": "Which of these is a high-level programming language?",
+    "type": "multipleChoice",
+    "options": ["A) Assembly", "B) Machine code", "C) Python", "D) Hexadecimal"],
+    "correct_answer": "C",
+    "guidance": "Students should know language classification",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for correct answer",
+      "points": ["C - Python is high-level language closer to human language"],
+      "additional_guidance": "Also accept Java, C++, Visual Basic",
+      "do_not_accept": "Low-level or non-programming terms"
+    }
+  },
+  {
+    "id": "C002",
+    "learning_aim": "C",
+    "topic": "Programming Languages - Low-level",
+    "command_verb": "Describe",
+    "marks": 2,
+    "scenario": "Writing code close to machine level",
+    "question": "What is low-level programming and why might it be used despite being harder?",
+    "type": "short",
+    "guidance": "Should define and explain purpose",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for definition, 1 for reason",
+      "points": [
+        "Definition: Programming languages close to machine code",
+        "Types: Assembly language, Machine code",
+        "Reason: Direct hardware control",
+        "Reason: Better performance/efficiency",
+        "Reason: Required for system-level programming",
+        "Reason: Access to hardware features"
+      ],
+      "additional_guidance": "Focus on control and performance reasons",
+      "do_not_accept": "'Closer to computer' without explaining benefit"
+    }
+  },
+  {
+    "id": "C003",
+    "learning_aim": "C",
+    "topic": "Machine Code",
+    "command_verb": "Identify",
+    "marks": 1,
+    "scenario": "Computer executes instructions in binary",
+    "question": "What is machine code?",
+    "type": "multipleChoice",
+    "options": ["A) High-level programming language", "B) Binary instructions processor understands directly", "C) Text-based programming", "D) Network protocol"],
+    "correct_answer": "B",
+    "guidance": "Students should understand machine code nature",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for correct answer",
+      "points": ["B - Machine code is binary instructions processor executes directly"],
+      "additional_guidance": "Lowest level of programming",
+      "do_not_accept": "High-level or application terms"
+    }
+  },
+  {
+    "id": "C004",
+    "learning_aim": "C",
+    "topic": "Assembly Language",
+    "command_verb": "Explain",
+    "marks": 2,
+    "scenario": "Assembly provides human-readable machine instructions",
+    "question": "What is Assembly language and what are mnemonics?",
+    "type": "short",
+    "guidance": "Should define assembly and explain mnemonics",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for assembly, 1 for mnemonics",
+      "points": [
+        "Assembly: Low-level language with 1:1 mapping to machine code",
+        "Mnemonics: Three-letter commands representing instructions (MOV, ADD, etc.)",
+        "More readable than binary but still hardware-specific",
+        "Assembler converts to machine code"
+      ],
+      "additional_guidance": "Focus on readability vs machine code",
+      "do_not_accept": "'Low-level language' without explaining mnemonics"
+    }
+  },
+  {
+    "id": "C005",
+    "learning_aim": "C",
+    "topic": "Programming Paradigms - Procedural",
+    "command_verb": "Identify",
+    "marks": 1,
+    "scenario": "Writing a program as sequence of instructions",
+    "question": "What is procedural programming?",
+    "type": "multipleChoice",
+    "options": ["A) Programming with objects and classes", "B) Program as sequence of procedures/functions", "C) Programming with events", "D) Functional composition of operations"],
+    "correct_answer": "B",
+    "guidance": "Students should know procedural programming",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for correct answer",
+      "points": ["B - Procedural programming structures code as procedures/functions"],
+      "additional_guidance": "Focus on sequence of steps approach",
+      "do_not_accept": "Other paradigms"
+    }
+  },
+  {
+    "id": "C006",
+    "learning_aim": "C",
+    "topic": "Programming Paradigms - Event-driven",
+    "command_verb": "Describe",
+    "marks": 2,
+    "scenario": "Program responds to user interactions",
+    "question": "Explain event-driven programming with an example.",
+    "type": "short",
+    "guidance": "Should define and provide relevant example",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for definition, 1 for example",
+      "points": [
+        "Definition: Program responds to events (clicks, keypresses)",
+        "Example: Button click triggers function",
+        "Example: Mouse movement updates display",
+        "Example: Form submission processes data",
+        "Program waits for events then executes appropriate code"
+      ],
+      "additional_guidance": "Focus on event and response relationship",
+      "do_not_accept": "'User interaction' without explaining event-driven concept"
+    }
+  },
+  {
+    "id": "C007",
+    "learning_aim": "C",
+    "topic": "Programming Paradigms - Object-oriented",
+    "command_verb": "Explain",
+    "marks": 2,
+    "scenario": "Organizing code using objects and classes",
+    "question": "What is object-oriented programming and name one benefit?",
+    "type": "short",
+    "guidance": "Should define OOP and identify advantage",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for definition, 1 for benefit",
+      "points": [
+        "Definition: Programming using objects combining data and methods",
+        "Definition: Organized around classes and inheritance",
+        "Benefit: Easier to maintain and modify code",
+        "Benefit: Reusable code through classes",
+        "Benefit: Reflects real-world objects",
+        "Benefit: Better for large projects"
+      ],
+      "additional_guidance": "Award marks for definition and any valid benefit",
+      "do_not_accept": "'Uses classes' without explaining OOP concept"
+    }
+  },
+  {
+    "id": "C008",
+    "learning_aim": "C",
+    "topic": "Variables",
+    "command_verb": "Identify",
+    "marks": 1,
+    "scenario": "Storing values in a program",
+    "question": "What is a variable in programming?",
+    "type": "multipleChoice",
+    "options": ["A) A fixed value", "B) A named storage location holding changeable values", "C) A mathematical equation", "D) A permanent constant"],
+    "correct_answer": "B",
+    "guidance": "Students should understand variable concept",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for correct answer",
+      "points": ["B - Variable is named location storing values that can change"],
+      "additional_guidance": "Like a labeled box containing data",
+      "do_not_accept": "Fixed or constant definitions"
+    }
+  },
+  {
+    "id": "C009",
+    "learning_aim": "C",
+    "topic": "Constants",
+    "command_verb": "Describe",
+    "marks": 2,
+    "scenario": "Using unchangeable values in program",
+    "question": "What is a constant and how does it differ from a variable?",
+    "type": "short",
+    "guidance": "Should contrast constant vs variable",
+    "mark_scheme": {
+      "instruction": "Award 1 mark per contrast",
+      "points": [
+        "Constant: Fixed value that cannot change during program",
+        "Variable: Value that can change during program",
+        "Constant: Set once, never modified",
+        "Variable: Modified multiple times",
+        "Example constant: PI = 3.14159"
+      ],
+      "additional_guidance": "Focus on mutability as key difference",
+      "do_not_accept": "'Different' without explaining change aspect"
+    }
+  },
+  {
+    "id": "C010",
+    "learning_aim": "C",
+    "topic": "Data Types - Integer",
+    "command_verb": "Identify",
+    "marks": 1,
+    "scenario": "Storing whole numbers",
+    "question": "Which data type stores whole numbers without decimal points?",
+    "type": "multipleChoice",
+    "options": ["A) String", "B) Real", "C) Integer", "D) Boolean"],
+    "correct_answer": "C",
+    "guidance": "Students should know data type purposes",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for correct answer",
+      "points": ["C - Integer stores whole numbers"],
+      "additional_guidance": "Examples: 5, -10, 0",
+      "do_not_accept": "Other data types"
+    }
+  },
+  {
+    "id": "C011",
+    "learning_aim": "C",
+    "topic": "Data Types - Real",
+    "command_verb": "Identify",
+    "marks": 1,
+    "scenario": "Storing decimal numbers",
+    "question": "What data type stores numbers with decimal places?",
+    "type": "multipleChoice",
+    "options": ["A) Character", "B) Real", "C) String", "D) Boolean"],
+    "correct_answer": "B",
+    "guidance": "Students should know real/floating point data type",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for correct answer",
+      "points": ["B - Real data type stores decimal numbers (floating point)"],
+      "additional_guidance": "Also called float or double",
+      "do_not_accept": "Other data types"
+    }
+  },
+  {
+    "id": "C012",
+    "learning_aim": "C",
+    "topic": "Data Types - String",
+    "command_verb": "Describe",
+    "marks": 1,
+    "scenario": "Storing text data",
+    "question": "What is a string data type used for?",
+    "type": "short",
+    "guidance": "Should explain string purpose",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for correct purpose",
+      "points": ["String stores text/characters (Hello, name, etc.)"],
+      "additional_guidance": "Sequence of characters enclosed in quotes",
+      "do_not_accept": "'Text' without mentioning string/character sequence"
+    }
+  },
+  {
+    "id": "C013",
+    "learning_aim": "C",
+    "topic": "Data Types - Boolean",
+    "command_verb": "Identify",
+    "marks": 1,
+    "scenario": "Storing true/false values",
+    "question": "What is a Boolean data type?",
+    "type": "multipleChoice",
+    "options": ["A) Decimal number", "B) Text string", "C) True or False value", "D) Whole number"],
+    "correct_answer": "C",
+    "guidance": "Students should know Boolean type",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for correct answer",
+      "points": ["C - Boolean stores true or false values"],
+      "additional_guidance": "Used for conditions and decision-making",
+      "do_not_accept": "Other data types"
+    }
+  },
+  {
+    "id": "C014",
+    "learning_aim": "C",
+    "topic": "Data Types - Character",
+    "command_verb": "Describe",
+    "marks": 1,
+    "scenario": "Storing single characters",
+    "question": "What is a character data type used for?",
+    "type": "short",
+    "guidance": "Should explain character type",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for correct use",
+      "points": ["Character stores single letter/symbol/number (A, 5, !)"],
+      "additional_guidance": "Usually 1 byte of storage",
+      "do_not_accept": "'A letter' without mentioning single character"
+    }
+  },
+  {
+    "id": "C015",
+    "learning_aim": "C",
+    "topic": "Variable Declaration",
+    "command_verb": "Identify",
+    "marks": 1,
+    "scenario": "Creating a variable for use",
+    "question": "What is variable declaration?",
+    "type": "multipleChoice",
+    "options": ["A) Using a variable in code", "B) Printing a variable", "C) Creating a variable and specifying its data type", "D) Modifying variable value"],
+    "correct_answer": "C",
+    "guidance": "Students should understand declaration",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for correct answer",
+      "points": ["C - Declaration creates variable and specifies type"],
+      "additional_guidance": "Example: int age; declares integer variable",
+      "do_not_accept": "Using variable (assignment/output)"
+    }
+  },
+  {
+    "id": "C016",
+    "learning_aim": "C",
+    "topic": "Assignment",
+    "command_verb": "Describe",
+    "marks": 1,
+    "scenario": "Giving a value to a variable",
+    "question": "What does assignment do?",
+    "type": "short",
+    "guidance": "Should explain assignment operation",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for correct explanation",
+      "points": ["Assignment gives a value to a variable (e.g., age = 15)"],
+      "additional_guidance": "Uses = operator",
+      "do_not_accept": "'Equals sign' without explaining value transfer"
+    }
+  },
+  {
+    "id": "C017",
+    "learning_aim": "C",
+    "topic": "Input",
+    "command_verb": "Identify",
+    "marks": 1,
+    "scenario": "Program receives data from user",
+    "question": "What is input in programming?",
+    "type": "multipleChoice",
+    "options": ["A) Data displayed to user", "B) Data received from user/file", "C) Calculation result", "D) Error message"],
+    "correct_answer": "B",
+    "guidance": "Students should know input/output functions",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for correct answer",
+      "points": ["B - Input is data received from external source"],
+      "additional_guidance": "From user, file, or network",
+      "do_not_accept": "Output or processing"
+    }
+  },
+  {
+    "id": "C018",
+    "learning_aim": "C",
+    "topic": "Output",
+    "command_verb": "Identify",
+    "marks": 1,
+    "scenario": "Program sends data to display",
+    "question": "What is output in programming?",
+    "type": "multipleChoice",
+    "options": ["A) Data received from user", "B) Data sent to display/file", "C) Program error", "D) Variable declaration"],
+    "correct_answer": "B",
+    "guidance": "Students should know output function",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for correct answer",
+      "points": ["B - Output is data sent to display or storage"],
+      "additional_guidance": "Using print, write, etc.",
+      "do_not_accept": "Input or other operations"
+    }
+  },
+  {
+    "id": "C019",
+    "learning_aim": "C",
+    "topic": "Control Flow - If Statement",
+    "command_verb": "Explain",
+    "marks": 2,
+    "scenario": "Making conditional decisions in code",
+    "question": "What does an IF statement do and give a simple example.",
+    "type": "short",
+    "guidance": "Should explain conditional execution",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for explanation, 1 for example",
+      "points": [
+        "IF: Executes code block if condition is true",
+        "Example: IF age >= 18 THEN print(\"Adult\")",
+        "Example: IF score > 50 THEN pass = true",
+        "Allows conditional program flow"
+      ],
+      "additional_guidance": "Accept any simple true/false condition example",
+      "do_not_accept": "'Makes decisions' without explaining true condition"
+    }
+  },
+  {
+    "id": "C020",
+    "learning_aim": "C",
+    "topic": "Control Flow - If-Else",
+    "command_verb": "Describe",
+    "marks": 2,
+    "scenario": "Executing different code based on condition",
+    "question": "Explain how IF-ELSE allows different code paths.",
+    "type": "short",
+    "guidance": "Should explain alternative code branches",
+    "mark_scheme": {
+      "instruction": "Award 1 mark per code path",
+      "points": [
+        "IF condition true: Executes first block",
+        "ELSE (condition false): Executes alternative block",
+        "Only one block executes per run",
+        "Provides two alternative paths"
+      ],
+      "additional_guidance": "Focus on either/or execution",
+      "do_not_accept": "'Different code' without explaining two paths"
+    }
+  },
+  {
+    "id": "C021",
+    "learning_aim": "C",
+    "topic": "Control Flow - While Loop",
+    "command_verb": "Explain",
+    "marks": 2,
+    "scenario": "Repeating code while condition is true",
+    "question": "What does a WHILE loop do? Give an example.",
+    "type": "short",
+    "guidance": "Should explain loop mechanism and give example",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for explanation, 1 for example",
+      "points": [
+        "WHILE: Repeats code block while condition is true",
+        "Stops when condition becomes false",
+        "Example: WHILE count < 10 DO (print(count), count = count + 1)",
+        "Allows variable repetition based on condition"
+      ],
+      "additional_guidance": "Accept any loop example with visible condition",
+      "do_not_accept": "'Repeats code' without condition aspect"
+    }
+  },
+  {
+    "id": "C022",
+    "learning_aim": "C",
+    "topic": "Control Flow - For Loop",
+    "command_verb": "Describe",
+    "marks": 2,
+    "scenario": "Repeating code fixed number of times",
+    "question": "Explain how a FOR loop differs from a WHILE loop.",
+    "type": "short",
+    "guidance": "Should contrast loop types",
+    "mark_scheme": {
+      "instruction": "Award 1 mark per difference",
+      "points": [
+        "FOR: Repeats known number of times",
+        "WHILE: Repeats until condition becomes false",
+        "FOR: Counter automatically managed",
+        "FOR: For fixed iterations, WHILE for conditional",
+        "Example FOR: FOR i = 1 to 5"
+      ],
+      "additional_guidance": "Focus on fixed vs condition-based repetition",
+      "do_not_accept": "'Different' without explaining known vs unknown iterations"
+    }
+  },
+  {
+    "id": "C023",
+    "learning_aim": "C",
+    "topic": "Functions - Definition",
+    "command_verb": "Identify",
+    "marks": 1,
+    "scenario": "Writing reusable code blocks",
+    "question": "What is a function in programming?",
+    "type": "multipleChoice",
+    "options": ["A) A mathematical operation", "B) A reusable block of code performing specific task", "C) A type of variable", "D) A loop structure"],
+    "correct_answer": "B",
+    "guidance": "Students should understand function concept",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for correct answer",
+      "points": ["B - Function is reusable code block with specific purpose"],
+      "additional_guidance": "Also called subroutine or procedure",
+      "do_not_accept": "Other programming elements"
+    }
+  },
+  {
+    "id": "C024",
+    "learning_aim": "C",
+    "topic": "Functions - Parameters",
+    "command_verb": "Explain",
+    "marks": 2,
+    "scenario": "Passing data to functions",
+    "question": "What are parameters and why are they useful?",
+    "type": "short",
+    "guidance": "Should explain parameter purpose",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for definition, 1 for usefulness",
+      "points": [
+        "Parameters: Variables passed to function",
+        "Allow function to work with different values",
+        "Make functions flexible and reusable",
+        "Data passed into function at call time"
+      ],
+      "additional_guidance": "Focus on flexibility and reusability",
+      "do_not_accept": "'Function inputs' without explaining reusability benefit"
+    }
+  },
+  {
+    "id": "C025",
+    "learning_aim": "C",
+    "topic": "Functions - Return Values",
+    "command_verb": "Describe",
+    "marks": 2,
+    "scenario": "Function produces result for use in code",
+    "question": "What is a return value and how is it used?",
+    "type": "short",
+    "guidance": "Should explain return mechanism",
+    "mark_scheme": {
+      "instruction": "Award 1 mark per aspect",
+      "points": [
+        "Return value: Data function sends back to caller",
+        "Used: Assigned to variable or used in expression",
+        "Example: result = add(5, 3) returns 8",
+        "Allows function output to be captured and used"
+      ],
+      "additional_guidance": "Focus on value passing back to caller",
+      "do_not_accept": "'Function outputs' without explaining assignment"
+    }
+  },
+  {
+    "id": "C026",
+    "learning_aim": "C",
+    "topic": "Variable Scope",
+    "command_verb": "Explain",
+    "marks": 2,
+    "scenario": "Variables are accessible only in certain parts of program",
+    "question": "What is variable scope and explain the difference between local and global variables.",
+    "type": "short",
+    "guidance": "Should define scope and contrast variable types",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for definition, 1 for local/global difference",
+      "points": [
+        "Scope: Where variable can be accessed in program",
+        "Local: Variable only accessible within function",
+        "Global: Variable accessible throughout program",
+        "Local: More secure, prevents accidental changes",
+        "Global: Accessible everywhere"
+      ],
+      "additional_guidance": "Focus on accessibility boundaries",
+      "do_not_accept": "'Variables are different' without scope explanation"
+    }
+  },
+  {
+    "id": "C027",
+    "learning_aim": "C",
+    "topic": "Arrays - 1D",
+    "command_verb": "Identify",
+    "marks": 1,
+    "scenario": "Storing list of related values",
+    "question": "What is a one-dimensional array?",
+    "type": "multipleChoice",
+    "options": ["A) Single variable", "B) List of values in one row", "C) Matrix of numbers", "D) Single value stored"],
+    "correct_answer": "B",
+    "guidance": "Students should know array structure",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for correct answer",
+      "points": ["B - 1D array stores sequence of values in single row"],
+      "additional_guidance": "Example: [5, 10, 15, 20]",
+      "do_not_accept": "Single value or multi-dimensional structures"
+    }
+  },
+  {
+    "id": "C028",
+    "learning_aim": "C",
+    "topic": "Arrays - 2D",
+    "command_verb": "Describe",
+    "marks": 2,
+    "scenario": "Storing data in table format",
+    "question": "What is a two-dimensional array and give an example of its use.",
+    "type": "short",
+    "guidance": "Should define 2D array and provide realistic example",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for definition, 1 for example",
+      "points": [
+        "Definition: Array with rows and columns (table structure)",
+        "Example: Student grades by subject",
+        "Example: Chess board positions",
+        "Example: Spreadsheet data",
+        "Accessed using two indices: array[row][column]"
+      ],
+      "additional_guidance": "Accept any table/grid use case",
+      "do_not_accept": "'Table of data' without explaining 2D structure"
+    }
+  },
+  {
+    "id": "C029",
+    "learning_aim": "C",
+    "topic": "Array Indexing",
+    "command_verb": "Identify",
+    "marks": 1,
+    "scenario": "Accessing array elements",
+    "question": "What is the starting index for arrays in most programming languages?",
+    "type": "multipleChoice",
+    "options": ["A) 0", "B) 1", "C) -1", "D) Variable"],
+    "correct_answer": "A",
+    "guidance": "Students should know zero-based indexing",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for correct answer",
+      "points": ["A - Most languages use zero-based indexing (0, 1, 2...)"],
+      "additional_guidance": "First element is array[0]",
+      "do_not_accept": "Other starting indices"
+    }
+  },
+  {
+    "id": "C030",
+    "learning_aim": "C",
+    "topic": "Records/Structs",
+    "command_verb": "Explain",
+    "marks": 2,
+    "scenario": "Combining multiple data types",
+    "question": "What is a record (or struct) in programming?",
+    "type": "short",
+    "guidance": "Should explain structure concept",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for definition, 1 for purpose",
+      "points": [
+        "Record: Collection of different data types grouped together",
+        "Contains fields of different types",
+        "Purpose: Organize related data",
+        "Example: Student record with name (string), age (integer), GPA (real)",
+        "Like a template for complex data"
+      ],
+      "additional_guidance": "Focus on combining different types",
+      "do_not_accept": "'Group of data' without explaining multiple types"
+    }
+  },
+  {
+    "id": "C031",
+    "learning_aim": "C",
+    "topic": "Flowcharts - Symbols",
+    "command_verb": "Identify",
+    "marks": 1,
+    "scenario": "Designing algorithm visually",
+    "question": "What does a diamond symbol represent in a flowchart?",
+    "type": "multipleChoice",
+    "options": ["A) Start/End", "B) Process/Action", "C) Decision/Condition", "D) Input/Output"],
+    "correct_answer": "C",
+    "guidance": "Students should know flowchart symbols",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for correct answer",
+      "points": ["C - Diamond represents decision (if statement)"],
+      "additional_guidance": "Contains condition with yes/no branches",
+      "do_not_accept": "Other flowchart symbols"
+    }
+  },
+  {
+    "id": "C032",
+    "learning_aim": "C",
+    "topic": "Flowcharts - Drawing",
+    "command_verb": "Describe",
+    "marks": 2,
+    "scenario": "Creating flowchart for program",
+    "question": "Describe the basic steps for creating a flowchart.",
+    "type": "short",
+    "guidance": "Should outline flowchart creation process",
+    "mark_scheme": {
+      "instruction": "Award 1 mark per step",
+      "points": [
+        "Identify start and end points",
+        "Identify main processes and decisions",
+        "Use appropriate symbols for each type",
+        "Connect with arrows showing flow direction",
+        "Ensure logical sequence from start to end"
+      ],
+      "additional_guidance": "Focus on process and symbol usage",
+      "do_not_accept": "'Draw boxes' without explaining symbol types"
+    }
+  },
+  {
+    "id": "C033",
+    "learning_aim": "C",
+    "topic": "Algorithm",
+    "command_verb": "Identify",
+    "marks": 1,
+    "scenario": "Step-by-step solution to problem",
+    "question": "What is an algorithm?",
+    "type": "multipleChoice",
+    "options": ["A) Computer programming language", "B) Step-by-step procedure to solve problem", "C) Hardware component", "D) Operating system function"],
+    "correct_answer": "B",
+    "guidance": "Students should understand algorithm definition",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for correct answer",
+      "points": ["B - Algorithm is step-by-step solution procedure"],
+      "additional_guidance": "Basis for all computer programs",
+      "do_not_accept": "Language or hardware terms"
+    }
+  },
+  {
+    "id": "C034",
+    "learning_aim": "C",
+    "topic": "Code Comments",
+    "command_verb": "Explain",
+    "marks": 2,
+    "scenario": "Documenting code with explanations",
+    "question": "Why are comments important in code and what do they contain?",
+    "type": "short",
+    "guidance": "Should explain purpose and content of comments",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for importance, 1 for content",
+      "points": [
+        "Importance: Explain code logic for other programmers",
+        "Importance: Help understand complex sections",
+        "Content: Explanations of what code does",
+        "Content: Why certain approach was chosen",
+        "Content: Parameters and return values"
+      ],
+      "additional_guidance": "Focus on clarity and documentation",
+      "do_not_accept": "'Explain code' without mentioning readability"
+    }
+  },
+  {
+    "id": "C035",
+    "learning_aim": "C",
+    "topic": "Code Analysis - Variables",
+    "command_verb": "Identify",
+    "marks": 1,
+    "scenario": "Analyzing code snippet",
+    "question": "Looking at the code: age = 25, what is the variable name?",
+    "type": "short",
+    "guidance": "Should identify variable from assignment",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for correct variable name",
+      "points": ["age is the variable name"],
+      "additional_guidance": "Left side of assignment",
+      "do_not_accept": "Value (25) or data type"
+    }
+  },
+  {
+    "id": "C036",
+    "learning_aim": "C",
+    "topic": "Code Analysis - Data Types",
+    "command_verb": "Identify",
+    "marks": 1,
+    "scenario": "Determining data type from value",
+    "question": "What data type is the value 3.14?",
+    "type": "multipleChoice",
+    "options": ["A) Integer", "B) String", "C) Real", "D) Boolean"],
+    "correct_answer": "C",
+    "guidance": "Students should identify data types",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for correct answer",
+      "points": ["C - 3.14 is a real number (decimal)"],
+      "additional_guidance": "Contains decimal point",
+      "do_not_accept": "Integer or other types"
+    }
+  },
+  {
+    "id": "C037",
+    "learning_aim": "C",
+    "topic": "Code Analysis - Operators",
+    "command_verb": "Identify",
+    "marks": 1,
+    "scenario": "Recognizing mathematical operations",
+    "question": "What does the * operator represent?",
+    "type": "multipleChoice",
+    "options": ["A) Addition", "B) Subtraction", "C) Multiplication", "D) Division"],
+    "correct_answer": "C",
+    "guidance": "Students should know arithmetic operators",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for correct answer",
+      "points": ["C - * represents multiplication"],
+      "additional_guidance": "Basic arithmetic operator",
+      "do_not_accept": "Other operators"
+    }
+  },
+  {
+    "id": "C038",
+    "learning_aim": "C",
+    "topic": "Code Analysis - Loops",
+    "command_verb": "Describe",
+    "marks": 2,
+    "scenario": "Analyzing loop structure",
+    "question": "Describe what happens when this code runs: FOR i = 1 to 3, PRINT(i)",
+    "type": "short",
+    "guidance": "Should trace loop execution",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for understanding, 1 for output",
+      "points": [
+        "Loop executes 3 times (i = 1, 2, 3)",
+        "Prints: 1, then 2, then 3",
+        "Shows counter incrementing each iteration"
+      ],
+      "additional_guidance": "Focus on number of iterations and output",
+      "do_not_accept": "'Loop runs' without showing output"
+    }
+  },
+  {
+    "id": "C039",
+    "learning_aim": "C",
+    "topic": "Code Analysis - Conditions",
+    "command_verb": "Identify",
+    "marks": 1,
+    "scenario": "Reading conditional code",
+    "question": "In the code IF x > 5, what is the condition?",
+    "type": "short",
+    "guidance": "Should identify condition from IF statement",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for identifying condition",
+      "points": ["The condition is 'x > 5' (is x greater than 5?)"],
+      "additional_guidance": "What is evaluated as true/false",
+      "do_not_accept": "Code actions that follow condition"
+    }
+  },
+  {
+    "id": "C040",
+    "learning_aim": "C",
+    "topic": "Errors - Syntax",
+    "command_verb": "Identify",
+    "marks": 1,
+    "scenario": "Code has a syntax error",
+    "question": "What is a syntax error?",
+    "type": "multipleChoice",
+    "options": ["A) Logic is incorrect", "B) Variable doesn't exist", "C) Wrong program structure/grammar", "D) Program runs slowly"],
+    "correct_answer": "C",
+    "guidance": "Students should know error types",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for correct answer",
+      "points": ["C - Syntax error is incorrect program structure"],
+      "additional_guidance": "Like grammar error in language",
+      "do_not_accept": "Logic or runtime errors"
+    }
+  },
+  {
+    "id": "C041",
+    "learning_aim": "C",
+    "topic": "Errors - Runtime",
+    "command_verb": "Describe",
+    "marks": 2,
+    "scenario": "Program crashes while running",
+    "question": "What is a runtime error and give an example.",
+    "type": "short",
+    "guidance": "Should define and provide example",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for definition, 1 for example",
+      "points": [
+        "Runtime error: Problem that occurs while program runs",
+        "Example: Division by zero",
+        "Example: Accessing non-existent array element",
+        "Example: Null pointer exception",
+        "Program crashes or behaves unexpectedly"
+      ],
+      "additional_guidance": "Accept any valid runtime error example",
+      "do_not_accept": "'Program stops' without explaining cause"
+    }
+  },
+  {
+    "id": "C042",
+    "learning_aim": "C",
+    "topic": "Errors - Logic",
+    "command_verb": "Explain",
+    "marks": 2,
+    "scenario": "Program runs but produces wrong results",
+    "question": "What is a logic error and why is it hard to detect?",
+    "type": "short",
+    "guidance": "Should explain logic error difficulty",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for definition, 1 for difficulty reason",
+      "points": [
+        "Logic error: Code runs but produces wrong results",
+        "Difficult: No error message given",
+        "Difficult: Program doesn't crash",
+        "Example: Wrong formula, wrong condition",
+        "Requires testing and debugging to find"
+      ],
+      "additional_guidance": "Focus on lack of error notification",
+      "do_not_accept": "'Wrong answer' without explaining detection difficulty"
+    }
+  },
+  {
+    "id": "C043",
+    "learning_aim": "C",
+    "topic": "Testing - Unit Testing",
+    "command_verb": "Explain",
+    "marks": 2,
+    "scenario": "Testing individual functions",
+    "question": "What is unit testing and why is it important?",
+    "type": "short",
+    "guidance": "Should define and explain importance",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for definition, 1 for importance",
+      "points": [
+        "Unit testing: Testing individual components/functions",
+        "Importance: Catches errors early",
+        "Importance: Ensures components work correctly",
+        "Importance: Makes debugging easier",
+        "Used throughout development process"
+      ],
+      "additional_guidance": "Focus on early error detection",
+      "do_not_accept": "'Testing code' without explaining scope"
+    }
+  },
+  {
+    "id": "C044",
+    "learning_aim": "C",
+    "topic": "Debugging",
+    "command_verb": "Describe",
+    "marks": 2,
+    "scenario": "Finding and fixing program errors",
+    "question": "Describe two debugging techniques.",
+    "type": "short",
+    "guidance": "Should identify debugging methods",
+    "mark_scheme": {
+      "instruction": "Award 1 mark per technique",
+      "points": [
+        "Tracing: Follow code step-by-step to find error",
+        "Print statements: Output variable values to see state",
+        "Debugger: Use IDE debugging tools to step through code",
+        "Breakpoints: Pause execution at specific lines",
+        "Test with sample data: Use known inputs/outputs"
+      ],
+      "additional_guidance": "Accept any two valid debugging approaches",
+      "do_not_accept": "'Find errors' without specific technique"
+    }
+  },
+  {
+    "id": "C045",
+    "learning_aim": "C",
+    "topic": "String Operations",
+    "command_verb": "Identify",
+    "marks": 1,
+    "scenario": "Manipulating text strings",
+    "question": "What does string concatenation do?",
+    "type": "multipleChoice",
+    "options": ["A) Removes characters", "B) Joins strings together", "C) Splits string apart", "D) Replaces characters"],
+    "correct_answer": "B",
+    "guidance": "Students should know string operations",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for correct answer",
+      "points": ["B - Concatenation joins/combines strings"],
+      "additional_guidance": "Often uses + operator",
+      "do_not_accept": "Other string operations"
+    }
+  },
+  {
+    "id": "C046",
+    "learning_aim": "C",
+    "topic": "Arithmetic Operations",
+    "command_verb": "Calculate",
+    "marks": 1,
+    "scenario": "Performing mathematical calculations",
+    "question": "What is the result of: 10 + 5 * 2",
+    "type": "short",
+    "guidance": "Should apply operator precedence",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for correct answer",
+      "points": ["20 (multiply first: 5 * 2 = 10, then add: 10 + 10 = 20)"],
+      "additional_guidance": "Multiplication before addition",
+      "do_not_accept": "30 (wrong precedence)"
+    }
+  },
+  {
+    "id": "C047",
+    "learning_aim": "C",
+    "topic": "Comparison Operators",
+    "command_verb": "Identify",
+    "marks": 1,
+    "scenario": "Comparing values in conditions",
+    "question": "What does the == operator do?",
+    "type": "multipleChoice",
+    "options": ["A) Assigns value", "B) Compares if equal", "C) Less than", "D) Greater than"],
+    "correct_answer": "B",
+    "guidance": "Students should know comparison operators",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for correct answer",
+      "points": ["B - == checks if values are equal"],
+      "additional_guidance": "Returns true/false",
+      "do_not_accept": "Assignment (=) or other operators"
+    }
+  },
+  {
+    "id": "C048",
+    "learning_aim": "C",
+    "topic": "Logical Operators",
+    "command_verb": "Describe",
+    "marks": 2,
+    "scenario": "Combining multiple conditions",
+    "question": "Describe two logical operators and give an example of their use.",
+    "type": "short",
+    "guidance": "Should identify logical operators and provide example",
+    "mark_scheme": {
+      "instruction": "Award 1 mark per operator with example",
+      "points": [
+        "AND: Both conditions must be true (age >= 18 AND has_license)",
+        "OR: At least one condition true (weekday OR weekend)",
+        "NOT: Reverses condition (NOT is_raining)",
+        "Examples show real-world logic combining"
+      ],
+      "additional_guidance": "Accept any two logical operators with valid examples",
+      "do_not_accept": "Just listing operators without examples"
+    }
+  },
+  {
+    "id": "C049",
+    "learning_aim": "C",
+    "topic": "Modulo Operator",
+    "command_verb": "Calculate",
+    "marks": 1,
+    "scenario": "Finding remainder after division",
+    "question": "What is 17 modulo 5 (17 % 5)?",
+    "type": "short",
+    "guidance": "Should calculate remainder",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for correct answer",
+      "points": ["2 (17 ÷ 5 = 3 remainder 2)"],
+      "additional_guidance": "Modulo returns the remainder",
+      "do_not_accept": "3 or other quotient"
+    }
+  },
+  {
+    "id": "C050",
+    "learning_aim": "C",
+    "topic": "Casting/Conversion",
+    "command_verb": "Explain",
+    "marks": 2,
+    "scenario": "Converting between data types",
+    "question": "What is type casting and why might it be needed?",
+    "type": "short",
+    "guidance": "Should explain conversion and reason",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for definition, 1 for reason",
+      "points": [
+        "Type casting: Converting value from one data type to another",
+        "Reason: Different operations require specific types",
+        "Reason: Combining data of different types",
+        "Example: Integer to string for display/output",
+        "Example: String to integer for calculation"
+      ],
+      "additional_guidance": "Focus on necessity of conversion",
+      "do_not_accept": "'Changing type' without explaining when needed"
+    }
+  },
+  {
+    "id": "C051",
+    "learning_aim": "C",
+    "topic": "Pseudocode",
+    "command_verb": "Identify",
+    "marks": 1,
+    "scenario": "Writing code-like description",
+    "question": "What is pseudocode?",
+    "type": "multipleChoice",
+    "options": ["A) Machine code", "B) Human-readable description of algorithm", "C) Programming language", "D) Error message"],
+    "correct_answer": "B",
+    "guidance": "Students should understand pseudocode",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for correct answer",
+      "points": ["B - Pseudocode is algorithm in human-readable form"],
+      "additional_guidance": "Bridge between planning and coding",
+      "do_not_accept": "Actual programming or machine code"
+    }
+  },
+  {
+    "id": "C052",
+    "learning_aim": "C",
+    "topic": "Object-Oriented - Classes",
+    "command_verb": "Explain",
+    "marks": 2,
+    "scenario": "Defining blueprint for objects",
+    "question": "What is a class in object-oriented programming?",
+    "type": "short",
+    "guidance": "Should explain class concept",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for definition, 1 for purpose",
+      "points": [
+        "Class: Blueprint defining properties and methods",
+        "Purpose: Create multiple objects with same structure",
+        "Contains: Variables (properties) and functions (methods)",
+        "Used: To organize related data and operations"
+      ],
+      "additional_guidance": "Focus on template/blueprint concept",
+      "do_not_accept": "'Group of code' without blueprint explanation"
+    }
+  },
+  {
+    "id": "C053",
+    "learning_aim": "C",
+    "topic": "Object-Oriented - Objects",
+    "command_verb": "Describe",
+    "marks": 2,
+    "scenario": "Creating instances of a class",
+    "question": "What is an object and how does it relate to a class?",
+    "type": "short",
+    "guidance": "Should explain object creation from class",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for definition, 1 for relationship",
+      "points": [
+        "Object: Instance/example of a class",
+        "Class: Blueprint, Object: Actual thing created",
+        "Example: Dog class, specific dog object",
+        "Each object has own property values",
+        "Multiple objects can be created from one class"
+      ],
+      "additional_guidance": "Focus on blueprint vs instance",
+      "do_not_accept": "'Thing in program' without class relationship"
+    }
+  },
+  {
+    "id": "C054",
+    "learning_aim": "C",
+    "topic": "Object-Oriented - Properties",
+    "command_verb": "Identify",
+    "marks": 1,
+    "scenario": "Object stores characteristics",
+    "question": "What are properties (or attributes) in a class?",
+    "type": "multipleChoice",
+    "options": ["A) Actions the class can perform", "B) Data/characteristics stored in object", "C) Function parameters", "D) Programming syntax"],
+    "correct_answer": "B",
+    "guidance": "Students should know class properties",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for correct answer",
+      "points": ["B - Properties are data characteristics of objects"],
+      "additional_guidance": "Also called attributes or member variables",
+      "do_not_accept": "Methods or functions"
+    }
+  },
+  {
+    "id": "C055",
+    "learning_aim": "C",
+    "topic": "Object-Oriented - Methods",
+    "command_verb": "Describe",
+    "marks": 2,
+    "scenario": "Class defines actions objects can perform",
+    "question": "What are methods in object-oriented programming?",
+    "type": "short",
+    "guidance": "Should explain methods/actions",
+    "mark_scheme": {
+      "instruction": "Award 1 mark per aspect",
+      "points": [
+        "Methods: Functions defined within a class",
+        "Represent: Actions or behaviors objects can perform",
+        "Example: Dog class with methods bark(), sit(), eat()",
+        "Can: Access object properties, perform operations"
+      ],
+      "additional_guidance": "Focus on actions/behaviors",
+      "do_not_accept": "'Functions in class' without explaining action purpose"
+    }
+  },
+  {
+    "id": "C056",
+    "learning_aim": "C",
+    "topic": "Software Development Lifecycle",
+    "command_verb": "Describe",
+    "marks": 3,
+    "scenario": "Planning and building software project",
+    "question": "Describe the main phases of software development.",
+    "type": "short",
+    "guidance": "Should outline SDLC phases",
+    "mark_scheme": {
+      "instruction": "Award 1 mark per phase",
+      "points": [
+        "Analysis: Understand requirements and problems",
+        "Design: Plan solution architecture and structure",
+        "Development: Write code implementing design",
+        "Testing: Check functionality and find bugs",
+        "Deployment: Release to users",
+        "Maintenance: Fix issues and make improvements"
+      ],
+      "additional_guidance": "Award up to 3 marks for any three phases",
+      "do_not_accept": "'Creating software' without phases"
+    }
+  },
+  {
+    "id": "C057",
+    "learning_aim": "C",
+    "topic": "Version Control",
+    "command_verb": "Explain",
+    "marks": 2,
+    "scenario": "Team manages code changes",
+    "question": "What is version control and why do developers use it?",
+    "type": "short",
+    "guidance": "Should explain version control purpose",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for definition, 1 for purpose",
+      "points": [
+        "Version control: System tracking code changes over time",
+        "Purpose: Manage multiple developers working together",
+        "Purpose: Track who made changes and when",
+        "Purpose: Revert to previous versions if needed",
+        "Example: Git, SVN"
+      ],
+      "additional_guidance": "Focus on collaboration and history tracking",
+      "do_not_accept": "'Saving code' without explaining version aspect"
+    }
+  },
+  {
+    "id": "C058",
+    "learning_aim": "C",
+    "topic": "Code Refactoring",
+    "command_verb": "Explain",
+    "marks": 2,
+    "scenario": "Improving existing code quality",
+    "question": "What is code refactoring and when might it be done?",
+    "type": "short",
+    "guidance": "Should explain refactoring purpose",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for definition, 1 for when",
+      "points": [
+        "Refactoring: Rewriting code without changing function",
+        "When: Code is hard to understand",
+        "When: Improving performance",
+        "When: Reducing code duplication",
+        "When: Preparing for maintenance"
+      ],
+      "additional_guidance": "Focus on improving code quality without changing behavior",
+      "do_not_accept": "'Changing code' without explaining purpose"
+    }
+  },
+  {
+    "id": "C059",
+    "learning_aim": "C",
+    "topic": "Documentation",
+    "command_verb": "Describe",
+    "marks": 2,
+    "scenario": "Recording how code works",
+    "question": "Why is code documentation important and what should it include?",
+    "type": "short",
+    "guidance": "Should explain documentation purpose and content",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for importance, 1 for content",
+      "points": [
+        "Importance: Help others understand code",
+        "Importance: Reference for maintenance",
+        "Content: Function purpose and parameters",
+        "Content: How to use code/API",
+        "Content: Complex logic explanations"
+      ],
+      "additional_guidance": "Focus on helping future developers",
+      "do_not_accept": "'Writing about code' without specific content"
+    }
+  },
+  {
+    "id": "C060",
+    "learning_aim": "C",
+    "topic": "Recursion",
+    "command_verb": "Explain",
+    "marks": 2,
+    "scenario": "Function calls itself to solve problem",
+    "question": "What is recursion and why is a base case important?",
+    "type": "short",
+    "guidance": "Should explain recursion and base case necessity",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for definition, 1 for base case",
+      "points": [
+        "Recursion: Function calling itself",
+        "Base case: Condition stopping recursion",
+        "Without base case: Infinite loop/stack overflow",
+        "Example: Factorial, tree traversal",
+        "Powerful for problems with recursive structure"
+      ],
+      "additional_guidance": "Focus on why base case essential",
+      "do_not_accept": "'Function calls itself' without base case explanation"
+    }
+  },
+  {
+    "id": "C061",
+    "learning_aim": "C",
+    "topic": "Memory Management",
+    "command_verb": "Describe",
+    "marks": 2,
+    "scenario": "Program uses memory efficiently",
+    "question": "Describe memory allocation and deallocation in programming.",
+    "type": "short",
+    "guidance": "Should explain memory lifecycle",
+    "mark_scheme": {
+      "instruction": "Award 1 mark per aspect",
+      "points": [
+        "Allocation: Requesting memory for variables/objects",
+        "Deallocation: Releasing memory when no longer needed",
+        "Automatic: In some languages (garbage collection)",
+        "Manual: In others (free, delete)",
+        "Importance: Prevents memory leaks"
+      ],
+      "additional_guidance": "Focus on allocation and deallocation processes",
+      "do_not_accept": "'Using memory' without lifecycle"
+    }
+  },
+  {
+    "id": "C062",
+    "learning_aim": "C",
+    "topic": "File Input/Output",
+    "command_verb": "Explain",
+    "marks": 2,
+    "scenario": "Program reads and writes files",
+    "question": "Explain how programs read from and write to files.",
+    "type": "short",
+    "guidance": "Should describe file I/O process",
+    "mark_scheme": {
+      "instruction": "Award 1 mark per operation",
+      "points": [
+        "Read: Open file, read data into program variables",
+        "Write: Open file, write program data to file",
+        "File modes: Read, write, append, read-write",
+        "Must: Close file after use"
+      ],
+      "additional_guidance": "Focus on open-read/write-close sequence",
+      "do_not_accept": "'Files are used' without explaining process"
+    }
+  },
+  {
+    "id": "C063",
+    "learning_aim": "C",
+    "topic": "Exception Handling",
+    "command_verb": "Describe",
+    "marks": 2,
+    "scenario": "Handling errors gracefully",
+    "question": "What is exception handling and why is it useful?",
+    "type": "short",
+    "guidance": "Should explain exception handling purpose",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for explanation, 1 for usefulness",
+      "points": [
+        "Exception handling: Catching and managing errors during execution",
+        "Try block: Code that might cause error",
+        "Catch block: Code to handle error",
+        "Usefulness: Prevents program crashing",
+        "Usefulness: Allows graceful error recovery"
+      ],
+      "additional_guidance": "Focus on error recovery instead of crashing",
+      "do_not_accept": "'Dealing with errors' without try/catch concept"
+    }
+  },
+  {
+    "id": "C064",
+    "learning_aim": "C",
+    "topic": "API Usage",
+    "command_verb": "Explain",
+    "marks": 2,
+    "scenario": "Using library/framework functions",
+    "question": "What is an API and how do programmers use it?",
+    "type": "short",
+    "guidance": "Should explain API concept and usage",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for definition, 1 for usage",
+      "points": [
+        "API: Interface for using library/service functions",
+        "Usage: Call functions with parameters",
+        "Usage: Receive return values from functions",
+        "Purpose: Reuse existing code without writing it",
+        "Documentation: Shows available functions and parameters"
+      ],
+      "additional_guidance": "Focus on function calling and reuse",
+      "do_not_accept": "'Using library' without explaining function calls"
+    }
+  },
+  {
+    "id": "C065",
+    "learning_aim": "C",
+    "topic": "Performance Optimization",
+    "command_verb": "Discuss",
+    "marks": 8,
+    "scenario": "Program runs slowly and needs optimization",
+    "question": "Discuss different strategies for optimizing program performance. Consider algorithm choice, data structure selection, and resource management. What are the tradeoffs?",
+    "type": "extended",
+    "guidance": "Should analyze multiple optimization approaches",
+    "mark_scheme": {
+      "instruction": "Award marks based on comprehensive discussion",
+      "levels": [
+        {
+          "level": 1,
+          "marks": "1-3",
+          "description": "Identifies some optimization approaches (faster algorithm, less memory) but lacks depth or analysis"
+        },
+        {
+          "level": 2,
+          "marks": "4-6",
+          "description": "Explains several optimization strategies (algorithm choice, data structures, caching) and mentions some tradeoffs; discusses code readability vs performance"
+        },
+        {
+          "level": 3,
+          "marks": "7-8",
+          "description": "Comprehensive discussion of multiple strategies with detailed tradeoffs; considers development time, maintenance, complexity, memory usage, and execution speed"
+        }
+      ],
+      "points": [
+        "Algorithm choice: Better algorithm saves time (O(n) vs O(n²))",
+        "Data structure choice: Appropriate structure for operations",
+        "Caching: Store results to avoid recalculation",
+        "Memory management: Efficient allocation/deallocation",
+        "Profiling: Identify bottlenecks before optimizing",
+        "Tradeoff: Optimization effort vs performance gain",
+        "Tradeoff: Code complexity vs readability",
+        "Tradeoff: Memory usage vs speed",
+        "Tradeoff: Development time vs runtime efficiency"
+      ],
+      "additional_guidance": "Credit discussion of multiple strategies and realistic tradeoffs",
+      "do_not_accept": "Only listing techniques without explaining tradeoffs"
+    }
+  }
+]

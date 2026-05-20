@@ -1,0 +1,530 @@
+﻿[
+  {
+    "id": "A001",
+    "type": "multiple-choice",
+    "marks": 1,
+    "question": "Which of the following is an example of hardware used in a retail point-of-sale system?",
+    "scenario": "retail",
+    "topics": ["Hardware in applications"],
+    "answers": [
+      {"text": "Receipt printer", "correct": true},
+      {"text": "GDPR regulation", "correct": false},
+      {"text": "Encryption algorithm", "correct": false},
+      {"text": "Cloud storage service", "correct": false}
+    ]
+  },
+  {
+    "id": "A002",
+    "type": "multiple-choice",
+    "marks": 1,
+    "question": "What type of software manages patient records in a hospital system?",
+    "scenario": "hospital",
+    "topics": ["Software types"],
+    "answers": [
+      {"text": "Database management system", "correct": true},
+      {"text": "Antivirus software", "correct": false},
+      {"text": "Web browser", "correct": false},
+      {"text": "Operating system", "correct": false}
+    ]
+  },
+  {
+    "id": "A003",
+    "type": "multiple-choice",
+    "marks": 1,
+    "question": "Which of the following best describes a Wide Area Network (WAN)?",
+    "topics": ["Networking"],
+    "answers": [
+      {"text": "A network connecting multiple buildings across a city or country", "correct": true},
+      {"text": "A network within a single office building", "correct": false},
+      {"text": "A network of internet servers", "correct": false},
+      {"text": "A wireless network in a home", "correct": false}
+    ]
+  },
+  {
+    "id": "A004",
+    "type": "multiple-choice",
+    "marks": 1,
+    "question": "What is a key advantage of cloud services for a school?",
+    "scenario": "school",
+    "topics": ["Cloud services"],
+    "answers": [
+      {"text": "Accessible from any device with internet connection", "correct": true},
+      {"text": "Requires no internet connection", "correct": false},
+      {"text": "Eliminates the need for backups", "correct": false},
+      {"text": "Reduces electricity costs to zero", "correct": false}
+    ]
+  },
+  {
+    "id": "A005",
+    "type": "multiple-choice",
+    "marks": 1,
+    "question": "Which of the following is a data security threat?",
+    "topics": ["Data security threats"],
+    "answers": [
+      {"text": "Malware", "correct": true},
+      {"text": "Cloud backup", "correct": false},
+      {"text": "Firewall", "correct": false},
+      {"text": "Encryption", "correct": false}
+    ]
+  },
+  {
+    "id": "A006",
+    "type": "multiple-choice",
+    "marks": 1,
+    "question": "What does GDPR stand for?",
+    "topics": ["GDPR/privacy"],
+    "answers": [
+      {"text": "General Data Protection Regulation", "correct": true},
+      {"text": "Global Data Privacy Registry", "correct": false},
+      {"text": "General Directive for Personal Rights", "correct": false},
+      {"text": "Government Data Protection Rule", "correct": false}
+    ]
+  },
+  {
+    "id": "A007",
+    "type": "multiple-choice",
+    "marks": 1,
+    "question": "Which backup strategy involves storing copies on both internal and external locations?",
+    "topics": ["Backup strategies"],
+    "answers": [
+      {"text": "3-2-1 backup rule", "correct": true},
+      {"text": "Full backup only", "correct": false},
+      {"text": "Incremental backup", "correct": false},
+      {"text": "Real-time replication", "correct": false}
+    ]
+  },
+  {
+    "id": "A008",
+    "type": "multiple-choice",
+    "marks": 1,
+    "question": "In a bank's network, what is the primary purpose of a Local Area Network (LAN)?",
+    "scenario": "bank",
+    "topics": ["Networking"],
+    "answers": [
+      {"text": "Connect computers within a branch office", "correct": true},
+      {"text": "Connect to other bank branches worldwide", "correct": false},
+      {"text": "Provide internet access", "correct": false},
+      {"text": "Protect against cybercriminals", "correct": false}
+    ]
+  },
+  {
+    "id": "A009",
+    "type": "multiple-choice",
+    "marks": 1,
+    "question": "What is an example of proprietary software?",
+    "topics": ["Software types"],
+    "answers": [
+      {"text": "Microsoft Windows", "correct": true},
+      {"text": "Linux", "correct": false},
+      {"text": "Apache web server", "correct": false},
+      {"text": "Firefox browser", "correct": false}
+    ]
+  },
+  {
+    "id": "A010",
+    "type": "multiple-choice",
+    "marks": 1,
+    "question": "Which of the following is a phishing attack?",
+    "topics": ["Data security threats"],
+    "answers": [
+      {"text": "Sending fake emails to trick users into revealing passwords", "correct": true},
+      {"text": "Installing a firewall on a computer", "correct": false},
+      {"text": "Creating a backup of files", "correct": false},
+      {"text": "Using cloud storage services", "correct": false}
+    ]
+  },
+  {
+    "id": "A011",
+    "type": "multiple-choice",
+    "marks": 1,
+    "question": "What must a hospital obtain under GDPR before collecting patient data?",
+    "scenario": "hospital",
+    "topics": ["GDPR/privacy"],
+    "answers": [
+      {"text": "Informed consent from patients", "correct": true},
+      {"text": "Permission from the internet provider", "correct": false},
+      {"text": "Approval from a backup company", "correct": false},
+      {"text": "Registration with a cloud provider", "correct": false}
+    ]
+  },
+  {
+    "id": "A012",
+    "type": "multiple-choice",
+    "marks": 1,
+    "question": "Which type of cloud service provides pre-built software accessed via a web browser?",
+    "topics": ["Cloud services"],
+    "answers": [
+      {"text": "Software as a Service (SaaS)", "correct": true},
+      {"text": "Platform as a Service (PaaS)", "correct": false},
+      {"text": "Infrastructure as a Service (IaaS)", "correct": false},
+      {"text": "Desktop as a Service (DaaS)", "correct": false}
+    ]
+  },
+  {
+    "id": "A013",
+    "type": "multiple-choice",
+    "marks": 1,
+    "question": "A retailer suffers a ransomware attack. What is ransomware?",
+    "scenario": "retail",
+    "topics": ["Data security threats"],
+    "answers": [
+      {"text": "Malware that encrypts files and demands payment for decryption", "correct": true},
+      {"text": "A type of backup software", "correct": false},
+      {"text": "An encryption tool used to protect data", "correct": false},
+      {"text": "A network security protocol", "correct": false}
+    ]
+  },
+  {
+    "id": "A014",
+    "type": "multiple-choice",
+    "marks": 1,
+    "question": "What is the right to be forgotten under GDPR?",
+    "topics": ["GDPR/privacy"],
+    "answers": [
+      {"text": "The right of individuals to request deletion of their personal data", "correct": true},
+      {"text": "The right to use cloud services", "correct": false},
+      {"text": "The right to access any network", "correct": false},
+      {"text": "The right to receive free backups", "correct": false}
+    ]
+  },
+  {
+    "id": "A015",
+    "type": "multiple-choice",
+    "marks": 1,
+    "question": "Which device is typically used in a school's LAN to manage network traffic?",
+    "scenario": "school",
+    "topics": ["Networking", "Hardware in applications"],
+    "answers": [
+      {"text": "Network switch", "correct": true},
+      {"text": "Printer", "correct": false},
+      {"text": "Keyboard", "correct": false},
+      {"text": "USB drive", "correct": false}
+    ]
+  },
+  {
+    "id": "A016",
+    "type": "multiple-choice",
+    "marks": 1,
+    "question": "A bank stores customer data using IaaS cloud services. What does this mean?",
+    "scenario": "bank",
+    "topics": ["Cloud services"],
+    "answers": [
+      {"text": "The bank rents computing infrastructure (servers, storage) from a cloud provider", "correct": true},
+      {"text": "The bank uses pre-built software via the cloud", "correct": false},
+      {"text": "The bank has a private network only", "correct": false},
+      {"text": "The bank no longer needs data backups", "correct": false}
+    ]
+  },
+  {
+    "id": "A017",
+    "type": "multiple-choice",
+    "marks": 1,
+    "question": "What is SQL injection?",
+    "topics": ["Data security threats"],
+    "answers": [
+      {"text": "An attack where malicious SQL code is inserted into a database", "correct": true},
+      {"text": "A method of backing up database records", "correct": false},
+      {"text": "A type of cloud encryption", "correct": false},
+      {"text": "A network protocol for data transfer", "correct": false}
+    ]
+  },
+  {
+    "id": "A018",
+    "type": "multiple-choice",
+    "marks": 1,
+    "question": "Which backup strategy backs up only files that have changed since the last backup?",
+    "topics": ["Backup strategies"],
+    "answers": [
+      {"text": "Incremental backup", "correct": true},
+      {"text": "Full backup", "correct": false},
+      {"text": "Differential backup", "correct": false},
+      {"text": "Mirror backup", "correct": false}
+    ]
+  },
+  {
+    "id": "A019",
+    "type": "multiple-choice",
+    "marks": 1,
+    "question": "A hospital implements a VPN. What is a VPN?",
+    "scenario": "hospital",
+    "topics": ["Networking", "Data security threats"],
+    "answers": [
+      {"text": "A Virtual Private Network that encrypts data transmission between locations", "correct": true},
+      {"text": "A very powerful network adapter", "correct": false},
+      {"text": "A virus protection application", "correct": false},
+      {"text": "A virtual cloud server", "correct": false}
+    ]
+  },
+  {
+    "id": "A020",
+    "type": "multiple-choice",
+    "marks": 1,
+    "question": "What is open-source software?",
+    "topics": ["Software types"],
+    "answers": [
+      {"text": "Software where the source code is freely available for modification and distribution", "correct": true},
+      {"text": "Software that has no security features", "correct": false},
+      {"text": "Software that can only be used on cloud servers", "correct": false},
+      {"text": "Software that requires no backup", "correct": false}
+    ]
+  },
+  {
+    "id": "A021",
+    "type": "short-answer",
+    "marks": "1-3",
+    "question": "State two types of hardware found in a school computer lab.",
+    "scenario": "school",
+    "topics": ["Hardware in applications"],
+    "markingGuidance": "Award 1 mark per valid hardware example (CPU/processor, RAM, motherboard, hard drive, GPU, network card, monitor, keyboard, mouse, printer, scanner, router, etc.)"
+  },
+  {
+    "id": "A022",
+    "type": "short-answer",
+    "marks": "1-3",
+    "question": "Identify three security threats to a retail store's point-of-sale system.",
+    "scenario": "retail",
+    "topics": ["Data security threats"],
+    "markingGuidance": "Award 1 mark per valid threat (malware, phishing, ransomware, brute force attack, social engineering, weak passwords, unpatched software, shoulder surfing, etc.)"
+  },
+  {
+    "id": "A023",
+    "type": "short-answer",
+    "marks": "1-3",
+    "question": "Explain the difference between a LAN and a WAN with one example each.",
+    "topics": ["Networking"],
+    "markingGuidance": "1 mark for LAN definition/example, 1 mark for WAN definition/example, 1 mark for clear distinction between local and wide area"
+  },
+  {
+    "id": "A024",
+    "type": "short-answer",
+    "marks": "1-3",
+    "question": "Give two advantages of cloud services for a healthcare organisation.",
+    "scenario": "hospital",
+    "topics": ["Cloud services"],
+    "markingGuidance": "Award 1 mark per advantage (scalability, accessibility, cost reduction, automatic updates, disaster recovery, reduced IT overhead, etc.)"
+  },
+  {
+    "id": "A025",
+    "type": "short-answer",
+    "marks": "1-3",
+    "question": "List three types of backup storage locations used in the 3-2-1 backup strategy.",
+    "topics": ["Backup strategies"],
+    "markingGuidance": "Award 1 mark per valid location (local hard drive, external HDD/SSD, cloud storage, tape, secondary site, offsite location, etc.)"
+  },
+  {
+    "id": "A026",
+    "type": "short-answer",
+    "marks": "1-3",
+    "question": "Identify two pieces of personal data protected under GDPR in a school's student records system.",
+    "scenario": "school",
+    "topics": ["GDPR/privacy"],
+    "markingGuidance": "Award 1 mark per valid example (name, date of birth, address, phone number, email, student ID, grades, medical information, parent contact details, etc.)"
+  },
+  {
+    "id": "A027",
+    "type": "short-answer",
+    "marks": "1-3",
+    "question": "Describe what happens during a distributed denial-of-service (DDoS) attack.",
+    "topics": ["Data security threats"],
+    "markingGuidance": "1 mark for identifying multiple sources, 1 mark for explaining the flooding/overwhelming of target, 1 mark for service unavailability or impact"
+  },
+  {
+    "id": "A028",
+    "type": "short-answer",
+    "marks": "1-3",
+    "question": "State two differences between SaaS and IaaS cloud services.",
+    "topics": ["Cloud services"],
+    "markingGuidance": "Award marks for: SaaS provides applications vs IaaS provides infrastructure (1 mark), SaaS is browser-based vs IaaS is configurable (1 mark), pricing models differ (1 mark)"
+  },
+  {
+    "id": "A029",
+    "type": "short-answer",
+    "marks": "1-3",
+    "question": "A bank experiences a data breach. Identify three actions it must take under GDPR.",
+    "scenario": "bank",
+    "topics": ["GDPR/privacy", "Data security threats"],
+    "markingGuidance": "Award 1 mark per action (notify authorities, inform affected individuals, conduct investigation, implement remediation, maintain records, etc.)"
+  },
+  {
+    "id": "A030",
+    "type": "short-answer",
+    "marks": "1-3",
+    "question": "Explain what encryption does to protect data in transit.",
+    "topics": ["Data security threats"],
+    "markingGuidance": "1 mark for encoding/converting data, 1 mark for making unreadable without key, 1 mark for protection during transmission"
+  },
+  {
+    "id": "A031",
+    "type": "short-answer",
+    "marks": "1-3",
+    "question": "Give two examples of software used in a hospital's patient management system.",
+    "scenario": "hospital",
+    "topics": ["Software types"],
+    "markingGuidance": "Award 1 mark per valid example (DBMS, EHR software, appointment scheduling, billing software, lab management, pharmacy software, etc.)"
+  },
+  {
+    "id": "A032",
+    "type": "short-answer",
+    "marks": "1-3",
+    "question": "Describe the steps a user should take to prevent phishing attacks.",
+    "topics": ["Data security threats"],
+    "markingGuidance": "1 mark per prevention method (verify sender, check URLs, don't click links, enable 2FA, use email filters, report suspicious emails, security training, etc.) up to 3 marks"
+  },
+  {
+    "id": "A033",
+    "type": "short-answer",
+    "marks": "1-3",
+    "question": "List the hardware components required to set up a school's wired LAN.",
+    "scenario": "school",
+    "topics": ["Networking", "Hardware in applications"],
+    "markingGuidance": "Award 1 mark per component (router, network switch, network cables, NIC cards, optional: patch panel, firewall, etc.)"
+  },
+  {
+    "id": "A034",
+    "type": "short-answer",
+    "marks": "1-3",
+    "question": "Identify two privacy concerns when storing data on public cloud services.",
+    "topics": ["Cloud services", "GDPR/privacy"],
+    "markingGuidance": "Award 1 mark per concern (data location/jurisdiction, third-party access, compliance issues, data sovereignty, potential breaches, etc.)"
+  },
+  {
+    "id": "A035",
+    "type": "short-answer",
+    "marks": "1-3",
+    "question": "State what is meant by a security patch and why it is important.",
+    "topics": ["Data security threats"],
+    "markingGuidance": "1 mark for definition (update fixing vulnerabilities), 1 mark for importance (prevents exploitation, closes security holes, fixes bugs, etc.)"
+  },
+  {
+    "id": "A036",
+    "type": "short-answer",
+    "marks": "1-3",
+    "question": "Explain the difference between full backup and incremental backup.",
+    "topics": ["Backup strategies"],
+    "markingGuidance": "1 mark for full backup definition (all files), 1 mark for incremental definition (changed files only), 1 mark for storage/time difference"
+  },
+  {
+    "id": "A037",
+    "type": "short-answer",
+    "marks": "1-3",
+    "question": "A retail business uses cloud-based POS system. Give two benefits of this approach.",
+    "scenario": "retail",
+    "topics": ["Cloud services", "Software types"],
+    "markingGuidance": "Award 1 mark per benefit (accessibility, automatic updates, reduced infrastructure costs, real-time data, scalability, etc.)"
+  },
+  {
+    "id": "A038",
+    "type": "short-answer",
+    "marks": "1-3",
+    "question": "Describe what a firewall does in a bank's network.",
+    "scenario": "bank",
+    "topics": ["Networking", "Data security threats"],
+    "markingGuidance": "1 mark for monitoring traffic, 1 mark for blocking unauthorized access, 1 mark for filtering based on rules"
+  },
+  {
+    "id": "A039",
+    "type": "short-answer",
+    "marks": "1-3",
+    "question": "Identify the key regulations or principles hospitals must follow when using cloud services.",
+    "scenario": "hospital",
+    "topics": ["Cloud services", "GDPR/privacy"],
+    "markingGuidance": "Award 1 mark per regulation (GDPR, HIPAA if applicable, data protection laws, compliance requirements, etc.)"
+  },
+  {
+    "id": "A040",
+    "type": "short-answer",
+    "marks": "1-3",
+    "question": "List three types of malware that could infect a school's network.",
+    "scenario": "school",
+    "topics": ["Data security threats"],
+    "markingGuidance": "Award 1 mark per type (virus, worm, trojan, ransomware, spyware, adware, rootkit, etc.)"
+  },
+  {
+    "id": "A041",
+    "type": "short-answer",
+    "marks": "1-3",
+    "question": "Explain what multi-factor authentication (MFA) is and why it is important.",
+    "topics": ["Data security threats"],
+    "markingGuidance": "1 mark for definition (multiple verification methods), 1 mark for example (password + code), 1 mark for security benefit (prevents unauthorized access)"
+  },
+  {
+    "id": "A042",
+    "type": "short-answer",
+    "marks": "1-3",
+    "question": "State two ways a backup system can fail, and how to mitigate them.",
+    "topics": ["Backup strategies"],
+    "markingGuidance": "1 mark per failure type identified, 1 mark per mitigation method (off-site storage, test restores, redundancy, monitoring, etc.)"
+  },
+  {
+    "id": "A043",
+    "type": "short-answer",
+    "marks": "1-3",
+    "question": "Identify two hardware components essential for a retail store's checkout system.",
+    "scenario": "retail",
+    "topics": ["Hardware in applications"],
+    "markingGuidance": "Award 1 mark per component (receipt printer, POS terminal, barcode scanner, payment terminal, monitor, cash drawer, etc.)"
+  },
+  {
+    "id": "A044",
+    "type": "short-answer",
+    "marks": "1-3",
+    "question": "Describe how a VPN protects data when employees access a bank's network remotely.",
+    "scenario": "bank",
+    "topics": ["Networking", "Data security threats"],
+    "markingGuidance": "1 mark for encryption, 1 mark for secure tunnel, 1 mark for preventing interception/eavesdropping"
+  },
+  {
+    "id": "A045",
+    "type": "short-answer",
+    "marks": "1-3",
+    "question": "Give three considerations when choosing a cloud provider for storing school data.",
+    "scenario": "school",
+    "topics": ["Cloud services", "GDPR/privacy"],
+    "markingGuidance": "Award 1 mark per consideration (compliance, data centre location, uptime guarantee, support, pricing, security certifications, etc.)"
+  },
+  {
+    "id": "A046",
+    "type": "extended",
+    "marks": 8,
+    "question": "A hospital is planning to migrate its patient records system from on-premises servers to a hybrid cloud solution. Analyse the hardware, software, networking, security, and backup considerations involved in this migration. Discuss the benefits and risks of this approach in relation to GDPR compliance, data security threats, and business continuity.",
+    "scenario": "hospital",
+    "topics": ["Cloud services", "Hardware in applications", "Software types", "Networking", "Data security threats", "GDPR/privacy", "Backup strategies"],
+    "markingGuidance": "Award marks for: hardware considerations in hybrid setup (1 mark), software architecture/licensing (1 mark), networking requirements (WAN/VPN) (1 mark), security measures (encryption, access control) (1 mark), backup/disaster recovery (1 mark), GDPR compliance discussion (1 mark), risk analysis (data residency, third-party access) (1 mark), business continuity benefits (1 mark). Expect discussion of scalability, cost, accessibility, and regulatory requirements."
+  },
+  {
+    "id": "A047",
+    "type": "extended",
+    "marks": 8,
+    "question": "A retail chain operates 50 stores across the country. Each store has its own LAN connected via WAN to a central data centre. Discuss the network architecture, hardware components at each location, and security measures needed to protect customer payment data. Analyse the backup strategy required to prevent loss of transaction records and ensure GDPR compliance for customer information stored across this distributed system.",
+    "scenario": "retail",
+    "topics": ["Networking", "Hardware in applications", "Data security threats", "Backup strategies", "GDPR/privacy"],
+    "markingGuidance": "Award marks for: LAN/WAN architecture explanation (1 mark), hardware components identified (1 mark), security measures for payment data (1 mark), PCI DSS/compliance mention (1 mark), backup strategy design (1 mark), encryption/data protection (1 mark), GDPR considerations (1 mark), disaster recovery plan (1 mark). Expect discussion of redundancy, monitoring, and incident response."
+  },
+  {
+    "id": "A048",
+    "type": "extended",
+    "marks": 8,
+    "question": "A bank has experienced a data breach affecting customer financial information. Analyse the possible security threats that led to the breach, the steps the organisation must take under GDPR, and a comprehensive backup and recovery strategy to prevent future incidents. Discuss how cloud services and advanced security technologies could strengthen the bank's defences.",
+    "scenario": "bank",
+    "topics": ["Data security threats", "GDPR/privacy", "Backup strategies", "Cloud services"],
+    "markingGuidance": "Award marks for: identification of breach vectors (malware, phishing, weak security) (1 mark), GDPR notification and investigation requirements (1 mark), affected individual notification (1 mark), backup recovery procedures (1 mark), security hardening measures (1 mark), cloud security benefits (1 mark), encryption and access controls (1 mark), incident response planning (1 mark). Expect discussion of regulatory penalties, trust restoration, and lessons learned."
+  },
+  {
+    "id": "A049",
+    "type": "extended",
+    "marks": 8,
+    "question": "A large school with 1000 students needs to implement a complete IT infrastructure for online learning, including LANs in different buildings, cloud-based applications, and secure storage of student records. Explain the hardware, networking, and cloud service requirements. Analyse the security threats unique to educational environments and propose appropriate mitigation strategies. Discuss GDPR considerations for student and staff data protection.",
+    "scenario": "school",
+    "topics": ["Hardware in applications", "Networking", "Cloud services", "Data security threats", "GDPR/privacy"],
+    "markingGuidance": "Award marks for: hardware specifications for multi-building LAN (1 mark), networking infrastructure (Wi-Fi, switches, routers) (1 mark), cloud service selection (SaaS for applications) (1 mark), security threats in schools (inappropriate content, student data, unauthorised access) (1 mark), mitigation strategies (filters, access controls, monitoring) (1 mark), GDPR student data handling (1 mark), staff privacy considerations (1 mark), backup and disaster recovery for educational records (1 mark)."
+  },
+  {
+    "id": "A050",
+    "type": "extended",
+    "marks": 8,
+    "question": "Analyse the complete lifecycle of data protection in a distributed enterprise using multiple software systems, LANs, WANs, and cloud services. From data collection through deletion, discuss security threats at each stage, appropriate safeguards, backup strategies, GDPR compliance measures, and disaster recovery planning. Use a real-world scenario (retail, hospital, school, or bank) to illustrate your answer, and evaluate how hybrid cloud architecture could improve the organization's resilience and regulatory compliance.",
+    "scenario": "retail/hospital/school/bank",
+    "topics": ["All topics"],
+    "markingGuidance": "Award marks for: data collection phase security (consent, GDPR) (1 mark), storage security (encryption, access controls) (1 mark), transmission security (VPN, TLS) (1 mark), processing security (software security, authentication) (1 mark), backup and recovery procedures (1 mark), threat analysis across phases (1 mark), deletion/data retention compliance (1 mark), comprehensive GDPR compliance and hybrid cloud benefits (1 mark). Expect integrated discussion of all topic areas with critical analysis."
+  }
+]

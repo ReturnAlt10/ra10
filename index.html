@@ -1441,7 +1441,24 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
           onmouseleave="hideRevPreview()">
           <div style="font-size:var(--tx-xs);font-weight:700;letter-spacing:.08em;
             text-transform:uppercase;color:var(--color-text-muted);
-            margin-bottom:var(--sp3)">BTEC Level 3</div>
+            margin-bottom:var(--sp3)">BTEC Level 2</div>
+          <a style="display:flex;align-items:center;justify-content:space-between;
+            padding:8px 10px;border-radius:var(--radius-md);cursor:pointer;
+            color:var(--color-text);text-decoration:none;font-size:var(--tx-sm);"
+            onmouseenter="this.style.background='oklch(from var(--color-text) l c h/.06)'"
+            onmouseleave="this.style.background=''"
+            onclick="go('/revision/btec/level-2/it/unit-2');hideRevPreview()">
+            <span>
+              <span style="font-weight:600">IT Level 2</span>
+              <span style="display:block;font-size:var(--tx-xs);color:var(--color-text-muted)">Unit 2 · Technology Systems</span>
+            </span>
+            <span style="font-size:0.65rem;font-weight:700;text-transform:uppercase;
+              letter-spacing:.06em;padding:2px 7px;border-radius:999px;
+              background:var(--color-primary-highlight);color:var(--color-primary)">Live</span>
+          </a>
+          <div style="margin-top:var(--sp2);padding-top:var(--sp2);margin-bottom:var(--sp2);
+            border-top:1px solid var(--color-divider);font-size:var(--tx-xs);font-weight:700;letter-spacing:.08em;
+            text-transform:uppercase;color:var(--color-text-muted);">BTEC Level 3</div>
           <a style="display:flex;align-items:center;justify-content:space-between;
             padding:8px 10px;border-radius:var(--radius-md);cursor:pointer;
             color:var(--color-text);text-decoration:none;font-size:var(--tx-sm);"
@@ -1563,13 +1580,25 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
       <div class="mobile-sheet-title">Subjects</div>
       <div class="mobile-sheet-copy">Jump straight into the live BTEC revision apps.</div>
       <div class="mobile-sheet-meta">
-        <span>3 live apps</span>
-        <span>All BTEC Level 3</span>
+        <span>4 live apps</span>
+        <span>BTEC Level 2 &amp; 3</span>
       </div>
     </div>
     <button class="mobile-sheet-close" id="mobile-sheet-close" aria-label="Close subjects">✕</button>
   </div>
   <div class="mobile-subject-list">
+    <button class="mobile-subject-link" type="button" data-mobile-subject="/revision/btec/level-2/it/unit-2">
+      <span class="mobile-subject-icon it">IT</span>
+      <span class="mobile-subject-copy">
+        <strong>IT Level 2 — Unit 2</strong>
+        <small>Technology Systems · Live</small>
+        <span class="mobile-subject-meta">
+          <span>Practice Q&amp;A</span>
+          <span>AI marking</span>
+        </span>
+      </span>
+      <em>Open</em>
+    </button>
     <button class="mobile-subject-link" type="button" data-mobile-subject="/revision/btec/level-3/IT-AAQ/unit-1">
       <span class="mobile-subject-icon it">IT</span>
       <span class="mobile-subject-copy">
@@ -1695,7 +1724,7 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
           </button>
         </div>
         <div class="home-stat-row">
-          <div class="home-stat"><strong>3 live subjects</strong><span>IT, Business, Sport</span></div>
+          <div class="home-stat"><strong>4 live subjects</strong><span>IT L2, IT L3, Business, Sport</span></div>
           <div class="home-stat"><strong><span style="background:linear-gradient(90deg,#a21caf 0%,#0ea5e9 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-weight:700;">AI Examiner</span> + Mock Papers</strong><span>Exam-ready practice</span></div>
           <div class="home-stat"><strong>Weekly XP race</strong><span>30 / 20 / 10 credit prizes</span></div>
         </div>
@@ -1723,6 +1752,12 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
           <h3>Anatomy and Physiology</h3>
           <p>Unit 1 practice with flashcards, quizzes and mock-paper style prep focused on exam success.</p>
           <div class="card-ft"><button class="btn btn-p" onclick="event.stopPropagation();go('/revision/btec/level-3/sport/unit-1')">Open Sport</button></div>
+        </div>
+        <div class="home-subject-card it" onclick="go('/revision/btec/level-2/it/unit-2')">
+          <span class="home-subject-chip">IT Level 2 · Live</span>
+          <h3>Technology Systems</h3>
+          <p>Unit 2 full revision with practice questions, auto-marking, quiz, flashcards and digital exam paper.</p>
+          <div class="card-ft"><button class="btn btn-p" onclick="event.stopPropagation();go('/revision/btec/level-2/it/unit-2')">Open IT L2</button></div>
         </div>
       </div>
 
@@ -1840,7 +1875,7 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
         <span class="strip-label">Coming soon</span>
         <div class="chips">
-          <span class="chip">IT Unit 2, 3, 4</span>
+          <span class="chip">IT L3 Units 2, 3, 4</span>
           <span class="chip">Business Unit 1 &amp; 2</span>
           <span class="chip">More Sport content</span>
           <span class="chip">PDF tools</span>
@@ -1958,11 +1993,11 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
             <p>Current live pathway with IT, Business, and Sport subject apps.</p>
             <button class="btn btn-g" onclick="event.stopPropagation();go('/revision/btec/level-3')">Open Level 3</button>
           </article>
-          <article class="rev-flow-card off" aria-disabled="true">
-            <span class="rev-flow-chip soon">Soon</span>
+          <article class="rev-flow-card" onclick="go('/revision/btec/level-2')">
+            <span class="rev-flow-chip ok">Available</span>
             <h3>Level 2</h3>
-            <p>Additional level pathways will be added as content expands.</p>
-            <button class="btn btn-g" disabled>Coming soon</button>
+            <p>IT Unit 2: Technology Systems — live now with practice questions, quiz, flashcards and auto-marking.</p>
+            <button class="btn btn-g" onclick="event.stopPropagation();go('/revision/btec/level-2')">Open Level 2</button>
           </article>
           <article class="rev-flow-card off" aria-disabled="true">
             <span class="rev-flow-chip soon">Soon</span>
@@ -2177,6 +2212,133 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
       <iframe
         src="revision/btec/level-3/IT-AAQ/unit-1/index.html"
         title="Unit 1 – Information Technology Systems"
+        loading="lazy"
+        allowfullscreen
+      ></iframe>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     BTEC LEVEL 2  /revision/btec/level-2
+============================================================ -->
+<div class="page" id="p-btec-l2">
+  <div class="cd">
+    <nav class="bc">
+      <button class="bc-item" onclick="go('/')">Home</button>
+      <span class="bc-sep">›</span>
+      <button class="bc-item" onclick="go('/revision')">Revision</button>
+      <span class="bc-sep">›</span>
+      <button class="bc-item" onclick="go('/revision/btec')">BTEC</button>
+      <span class="bc-sep">›</span>
+      <span class="bc-item cur">Level 2</span>
+    </nav>
+    <div class="revision-showcase">
+      <div>
+        <div class="revision-kicker">Step 3 · Choose your subject</div>
+        <h1>BTEC Level 2 subject apps</h1>
+        <p>Pick the subject app you need and dive straight into revision tools, quizzes, flashcards and practice questions.</p>
+        <div class="revision-stat-row">
+          <span class="revision-stat">IT live</span>
+          <span class="revision-stat">Unit 2 available</span>
+          <span class="revision-stat">More coming</span>
+        </div>
+      </div>
+    </div>
+    <div class="sec" style="padding-top:var(--sp8)">
+      <div class="sec-label">Subjects</div>
+      <div class="revision-app-grid" style="margin-top:var(--sp2)">
+        <article class="revision-app-card revision-app-it" onclick="go('/revision/btec/level-2/it')">
+          <div class="revision-app-cover">
+            <span class="revision-app-pill">IT · Live</span>
+            <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=80" alt="Technology workspace">
+          </div>
+          <div class="revision-app-body">
+            <div class="revision-app-meta">BTEC IT Level 2</div>
+            <h3>Information Technology</h3>
+            <p>Unit 2: Technology Systems is live with practice questions, auto-marking, quiz, flashcards and a digital exam paper.</p>
+            <div class="revision-app-foot">
+              <span class="pill pill-ok">Unit 2 live</span>
+              <button class="btn btn-p" onclick="event.stopPropagation();go('/revision/btec/level-2/it')">Open App</button>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     BTEC LEVEL 2 IT  /revision/btec/level-2/it
+============================================================ -->
+<div class="page" id="p-btec-l2-it">
+  <div class="cd">
+    <nav class="bc">
+      <button class="bc-item" onclick="go('/')">Home</button>
+      <span class="bc-sep">›</span>
+      <button class="bc-item" onclick="go('/revision')">Revision</button>
+      <span class="bc-sep">›</span>
+      <button class="bc-item" onclick="go('/revision/btec')">BTEC</button>
+      <span class="bc-sep">›</span>
+      <button class="bc-item" onclick="go('/revision/btec/level-2')">Level 2</button>
+      <span class="bc-sep">›</span>
+      <span class="bc-item cur">IT</span>
+    </nav>
+    <div class="hero">
+      <div class="hero-label">BTEC Level 2 · IT</div>
+      <h1>Information Technology</h1>
+      <p>Course revision hub for BTEC Level 2 IT. Select a unit below to start revising.</p>
+      <div class="meta-tags">
+        <span class="meta-tag">Pearson BTEC</span>
+        <span class="meta-tag">Level 2</span>
+        <span class="meta-tag">Technology Systems</span>
+      </div>
+    </div>
+    <div class="sec">
+      <div class="sec-label">Units</div>
+      <div class="unit-grid">
+        <div class="unit-card click" onclick="go('/revision/btec/level-2/it/unit-2')">
+          <div class="unit-num">Unit 02</div>
+          <div class="unit-title">Technology Systems</div>
+          <div class="unit-desc">Applications &amp; issues, hardware &amp; software, and programming basics. Practice questions, auto-marking, quiz, flashcards, and digital exam paper.</div>
+          <div class="unit-ft">
+            <div style="display:flex;gap:var(--sp2);align-items:center">
+              <span class="badge badge-ext">External</span>
+              <span class="pill pill-ok">Live</span>
+            </div>
+            <button class="btn btn-p" onclick="event.stopPropagation();go('/revision/btec/level-2/it/unit-2')">Open →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     IT LEVEL 2 UNIT 2  /revision/btec/level-2/it/unit-2
+     iframe src: revision/btec/level-2/it/unit-2/index.html
+============================================================ -->
+<div class="page page-iframe" id="p-it-l2-u2">
+  <div class="cd">
+    <nav class="bc">
+      <button class="bc-item" onclick="go('/')">Home</button>
+      <span class="bc-sep">›</span>
+      <button class="bc-item" onclick="go('/revision')">Revision</button>
+      <span class="bc-sep">›</span>
+      <button class="bc-item" onclick="go('/revision/btec')">BTEC</button>
+      <span class="bc-sep">›</span>
+      <button class="bc-item" onclick="go('/revision/btec/level-2')">Level 2</button>
+      <span class="bc-sep">›</span>
+      <button class="bc-item" onclick="go('/revision/btec/level-2/it')">IT</button>
+      <span class="bc-sep">›</span>
+      <span class="bc-item cur">Unit 2</span>
+    </nav>
+  </div>
+  <div class="cf">
+    <div class="iframe-wrap">
+      <iframe
+        src="revision/btec/level-2/it/unit-2/index.html"
+        title="Unit 2 – Technology Systems"
         loading="lazy"
         allowfullscreen
       ></iframe>
@@ -2996,6 +3158,9 @@ const ROUTES = {
   '/revision/btec/level-3/sport/unit-1': 'p-sport-u1',
   '/revision/btec/level-3/IT-AAQ':       'p-it-aaq',
   '/revision/btec/level-3/IT-AAQ/unit-1':'p-unit1',
+  '/revision/btec/level-2':              'p-btec-l2',
+  '/revision/btec/level-2/it':           'p-btec-l2-it',
+  '/revision/btec/level-2/it/unit-2':    'p-it-l2-u2',
   '/tools':                               'p-tools',
   '/tools/whatsapp-exporter':            'p-whatsapp',
   '/tasks':                               'p-tasks',

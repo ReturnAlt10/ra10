@@ -1,0 +1,1540 @@
+[
+  {
+    "id": "B001",
+    "learning_aim": "B",
+    "topic": "CPU Components - Control Unit",
+    "command_verb": "Identify",
+    "marks": 1,
+    "scenario": "A processor executes computer instructions",
+    "question": "Which CPU component interprets and executes instructions from memory?",
+    "type": "multipleChoice",
+    "options": ["A) ALU", "B) Control Unit", "C) Cache", "D) Bus"],
+    "correct_answer": "B",
+    "guidance": "Students should know CPU component functions",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for correct answer",
+      "points": ["B - Control Unit coordinates instruction execution"],
+      "additional_guidance": "CU is the 'director' of CPU operations",
+      "do_not_accept": "Other CPU components"
+    }
+  },
+  {
+    "id": "B002",
+    "learning_aim": "B",
+    "topic": "CPU Components - ALU",
+    "command_verb": "Identify",
+    "marks": 1,
+    "scenario": "A processor performs mathematical calculations",
+    "question": "What does the ALU do in a CPU?",
+    "type": "multipleChoice",
+    "options": ["A) Stores data temporarily", "B) Performs arithmetic and logic operations", "C) Interprets instructions", "D) Controls memory access"],
+    "correct_answer": "B",
+    "guidance": "Students should understand ALU function",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for correct answer",
+      "points": ["B - ALU performs arithmetic and logic operations"],
+      "additional_guidance": "ALU handles calculations and comparisons",
+      "do_not_accept": "Other CPU functions"
+    }
+  },
+  {
+    "id": "B003",
+    "learning_aim": "B",
+    "topic": "Registers",
+    "command_verb": "Describe",
+    "marks": 2,
+    "scenario": "CPU registers hold data during processing",
+    "question": "What are CPU registers and explain why they are important.",
+    "type": "short",
+    "guidance": "Should explain register purpose and benefit",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for definition, 1 for importance",
+      "points": [
+        "Definition: Very fast temporary storage locations within CPU",
+        "Importance: Hold data being actively processed",
+        "Importance: Fastest memory access type",
+        "Importance: Enable quick calculations without memory delay",
+        "Importance: Critical for CPU performance"
+      ],
+      "additional_guidance": "Focus on speed and immediate access benefits",
+      "do_not_accept": "'Storage in CPU' without explaining speed advantage"
+    }
+  },
+  {
+    "id": "B004",
+    "learning_aim": "B",
+    "topic": "RAM",
+    "command_verb": "Identify",
+    "marks": 1,
+    "scenario": "A computer needs memory for running applications",
+    "question": "What is RAM used for?",
+    "type": "multipleChoice",
+    "options": ["A) Permanent storage of programs", "B) Temporary storage while programs are running", "C) Storing BIOS", "D) Cache memory"],
+    "correct_answer": "B",
+    "guidance": "Students should understand RAM function",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for correct answer",
+      "points": ["B - RAM is temporary volatile memory for running programs"],
+      "additional_guidance": "RAM clears when power off",
+      "do_not_accept": "Permanent storage or other memory types"
+    }
+  },
+  {
+    "id": "B005",
+    "learning_aim": "B",
+    "topic": "ROM",
+    "command_verb": "Describe",
+    "marks": 2,
+    "scenario": "A computer needs firmware to boot up",
+    "question": "What is ROM and what is stored in it?",
+    "type": "short",
+    "guidance": "Should explain ROM purpose and contents",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for definition, 1 for content",
+      "points": [
+        "Definition: Read-Only Memory - permanent non-volatile memory",
+        "Content: BIOS (firmware needed to start computer)",
+        "Content: Boot instructions",
+        "Content: Permanent system data",
+        "Cannot be changed under normal use"
+      ],
+      "additional_guidance": "Focus on permanent nature and boot function",
+      "do_not_accept": "'Stores data' without explaining permanent nature"
+    }
+  },
+  {
+    "id": "B006",
+    "learning_aim": "B",
+    "topic": "Cache Memory",
+    "command_verb": "Explain",
+    "marks": 2,
+    "scenario": "CPU cache improves performance for frequently accessed data",
+    "question": "Explain why cache memory improves CPU performance.",
+    "type": "short",
+    "guidance": "Should explain speed advantage",
+    "mark_scheme": {
+      "instruction": "Award 1 mark per aspect explained",
+      "points": [
+        "Cache is much faster than main RAM",
+        "Stores frequently accessed data close to CPU",
+        "Reduces need to fetch from slower main memory",
+        "Speeds up instruction execution",
+        "Very fast but limited in size"
+      ],
+      "additional_guidance": "Focus on speed comparison with main memory",
+      "do_not_accept": "'Stores data' without speed comparison"
+    }
+  },
+  {
+    "id": "B007",
+    "learning_aim": "B",
+    "topic": "Clock Speed",
+    "command_verb": "Identify",
+    "marks": 1,
+    "scenario": "A CPU specification shows clock speed of 3.6 GHz",
+    "question": "What does clock speed measure?",
+    "type": "multipleChoice",
+    "options": ["A) Amount of RAM in gigabytes", "B) Number of instructions executed per second", "C) Storage capacity in gigabytes", "D) Network speed"],
+    "correct_answer": "B",
+    "guidance": "Students should understand clock speed significance",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for correct answer",
+      "points": ["B - Clock speed is frequency of processor cycles per second"],
+      "additional_guidance": "Higher GHz = more cycles per second",
+      "do_not_accept": "Storage or network related answers"
+    }
+  },
+  {
+    "id": "B008",
+    "learning_aim": "B",
+    "topic": "HDD vs SSD",
+    "command_verb": "Describe",
+    "marks": 2,
+    "scenario": "A computer upgrade considers replacing HDD with SSD",
+    "question": "Describe the key differences between HDD and SSD storage.",
+    "type": "short",
+    "guidance": "Should contrast mechanical vs electronic storage",
+    "mark_scheme": {
+      "instruction": "Award 1 mark per clear difference",
+      "points": [
+        "HDD: Uses spinning magnetic disks and mechanical read/write heads",
+        "SSD: Uses flash memory (no moving parts)",
+        "HDD: Slower but more affordable, larger capacity",
+        "SSD: Much faster but more expensive, smaller capacity",
+        "HDD: More likely to fail from physical damage",
+        "SSD: More reliable with no moving parts",
+        "SSD: Draws less power, quieter operation"
+      ],
+      "additional_guidance": "Focus on technology difference and performance tradeoff",
+      "do_not_accept": "'Different' without explaining how"
+    }
+  },
+  {
+    "id": "B009",
+    "learning_aim": "B",
+    "topic": "Optical Storage",
+    "command_verb": "Identify",
+    "marks": 1,
+    "scenario": "Legacy data is stored on CD or DVD disks",
+    "question": "Which of these is an example of optical storage?",
+    "type": "multipleChoice",
+    "options": ["A) USB flash drive", "B) DVD", "C) External HDD", "D) SD card"],
+    "correct_answer": "B",
+    "guidance": "Students should know storage device types",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for correct answer",
+      "points": ["B - DVD is optical storage using laser to read data"],
+      "additional_guidance": "Also accepts CD, Blu-ray as optical",
+      "do_not_accept": "Solid state or magnetic storage"
+    }
+  },
+  {
+    "id": "B010",
+    "learning_aim": "B",
+    "topic": "Input Devices - Keyboard",
+    "command_verb": "Describe",
+    "marks": 1,
+    "scenario": "User inputs text and commands via keyboard",
+    "question": "What is the main purpose of a keyboard?",
+    "type": "short",
+    "guidance": "Should explain input function",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for correct purpose",
+      "points": ["To input text, numbers, and commands into computer"],
+      "additional_guidance": "Primary text input device",
+      "do_not_accept": "Just 'enter data' without specifying text/commands"
+    }
+  },
+  {
+    "id": "B011",
+    "learning_aim": "B",
+    "topic": "Input Devices - Mouse",
+    "command_verb": "Identify",
+    "marks": 1,
+    "scenario": "User navigates graphical interface with mouse",
+    "question": "What does a mouse detect to move the cursor?",
+    "type": "multipleChoice",
+    "options": ["A) Keyboard presses", "B) Mouse movement and clicks", "C) Voice commands", "D) Network signals"],
+    "correct_answer": "B",
+    "guidance": "Students should know mouse input method",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for correct answer",
+      "points": ["B - Mouse detects movement and clicks"],
+      "additional_guidance": "Creates visual cursor movement on screen",
+      "do_not_accept": "Other input devices"
+    }
+  },
+  {
+    "id": "B012",
+    "learning_aim": "B",
+    "topic": "Input Devices - Scanner",
+    "command_verb": "Describe",
+    "marks": 2,
+    "scenario": "Paper documents are converted to digital format",
+    "question": "What does a scanner do and what input does it accept?",
+    "type": "short",
+    "guidance": "Should explain scanner function",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for function, 1 for input type",
+      "points": [
+        "Function: Converts physical documents into digital images/data",
+        "Input: Accepts paper documents",
+        "Input: Can scan photographs, text, graphics",
+        "Creates digital file from physical original"
+      ],
+      "additional_guidance": "Focus on image/document capture",
+      "do_not_accept": "'Reads documents' without explaining digital conversion"
+    }
+  },
+  {
+    "id": "B013",
+    "learning_aim": "B",
+    "topic": "Input Devices - Microphone",
+    "command_verb": "Identify",
+    "marks": 1,
+    "scenario": "User records audio or uses voice commands",
+    "question": "What type of input does a microphone accept?",
+    "type": "multipleChoice",
+    "options": ["A) Touch input", "B) Audio input", "C) Visual input", "D) Network input"],
+    "correct_answer": "B",
+    "guidance": "Students should know microphone input type",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for correct answer",
+      "points": ["B - Microphone accepts sound/audio input"],
+      "additional_guidance": "Converts sound waves to digital signal",
+      "do_not_accept": "Other input types"
+    }
+  },
+  {
+    "id": "B014",
+    "learning_aim": "B",
+    "topic": "Output Devices - Monitor",
+    "command_verb": "Describe",
+    "marks": 2,
+    "scenario": "Information is displayed on computer screen",
+    "question": "What is the purpose of a monitor and what key specification affects image quality?",
+    "type": "short",
+    "guidance": "Should explain display function and resolution",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for purpose, 1 for specification",
+      "points": [
+        "Purpose: Displays visual output from computer to user",
+        "Specification: Resolution (pixel count) affects clarity",
+        "Specification: Refresh rate affects smoothness",
+        "Specification: Size and screen type (LCD, LED, etc.)",
+        "Higher resolution = sharper image"
+      ],
+      "additional_guidance": "Focus on visual display and resolution impact",
+      "do_not_accept": "'Shows image' without mentioning specifications"
+    }
+  },
+  {
+    "id": "B015",
+    "learning_aim": "B",
+    "topic": "Output Devices - Printer",
+    "command_verb": "Identify",
+    "marks": 1,
+    "scenario": "User needs physical copies of documents",
+    "question": "Which of these is a printer type?",
+    "type": "multipleChoice",
+    "options": ["A) LCD", "B) SSD", "C) Laser printer", "D) Monitor"],
+    "correct_answer": "C",
+    "guidance": "Students should know printer types",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for correct answer",
+      "points": ["C - Laser printer is a type of output device"],
+      "additional_guidance": "Also accept inkjet, thermal, dot matrix",
+      "do_not_accept": "Display or storage devices"
+    }
+  },
+  {
+    "id": "B016",
+    "learning_aim": "B",
+    "topic": "Inkjet vs Laser Printers",
+    "command_verb": "Explain",
+    "marks": 3,
+    "scenario": "Office needs to decide between inkjet and laser printer",
+    "question": "Explain the differences between inkjet and laser printers. Which is better for high-volume printing?",
+    "type": "short",
+    "guidance": "Should compare and make recommendation",
+    "mark_scheme": {
+      "instruction": "Award marks for comparison and recommendation",
+      "points": [
+        "Inkjet: Sprays liquid ink onto paper, slower, cheaper upfront",
+        "Laser: Uses toner cartridge and heat, faster, higher per-unit cost",
+        "Inkjet: Lower cost per page for occasional use",
+        "Laser: Lower cost per page for high-volume printing",
+        "Laser: Better for business/office use with high volume",
+        "Inkjet: Better for home/photo printing"
+      ],
+      "additional_guidance": "Award marks for clear comparison and justified recommendation",
+      "do_not_accept": "Just listing features without comparison"
+    }
+  },
+  {
+    "id": "B017",
+    "learning_aim": "B",
+    "topic": "Speakers",
+    "command_verb": "Identify",
+    "marks": 1,
+    "scenario": "Audio output is needed from a computer",
+    "question": "What type of output do speakers provide?",
+    "type": "multipleChoice",
+    "options": ["A) Visual output", "B) Audio output", "C) Printed output", "D) Network output"],
+    "correct_answer": "B",
+    "guidance": "Students should know output device types",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for correct answer",
+      "points": ["B - Speakers convert digital audio to sound waves"],
+      "additional_guidance": "Audio output device",
+      "do_not_accept": "Other output types"
+    }
+  },
+  {
+    "id": "B018",
+    "learning_aim": "B",
+    "topic": "Motherboard Components",
+    "command_verb": "Describe",
+    "marks": 2,
+    "scenario": "Motherboard contains all main computer components",
+    "question": "What is a motherboard and name two components connected to it.",
+    "type": "short",
+    "guidance": "Should define and list connections",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for definition, 1 for components",
+      "points": [
+        "Definition: Main circuit board connecting all computer components",
+        "Components: CPU socket, RAM slots, expansion cards",
+        "Components: Storage controllers, power connectors",
+        "Components: BIOS chip, chipset",
+        "Components: PCI slots, USB headers"
+      ],
+      "additional_guidance": "Award marks for defining circuit board function and any two components",
+      "do_not_accept": "'Circuit board' without explaining purpose"
+    }
+  },
+  {
+    "id": "B019",
+    "learning_aim": "B",
+    "topic": "Buses",
+    "command_verb": "Explain",
+    "marks": 2,
+    "scenario": "Data travels through computer via buses",
+    "question": "What is a bus in computer architecture? Name one type of bus.",
+    "type": "short",
+    "guidance": "Should define and identify bus type",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for definition, 1 for bus type",
+      "points": [
+        "Definition: Pathway for data transmission between components",
+        "Type: Address bus - carries memory addresses",
+        "Type: Data bus - carries actual data",
+        "Type: Control bus - carries control signals",
+        "Buses coordinate component communication"
+      ],
+      "additional_guidance": "Award marks for definition and any correct bus type",
+      "do_not_accept": "'Carries data' without bus specificity"
+    }
+  },
+  {
+    "id": "B020",
+    "learning_aim": "B",
+    "topic": "Address Bus",
+    "command_verb": "Identify",
+    "marks": 1,
+    "scenario": "CPU needs to access specific memory location",
+    "question": "What does the address bus carry?",
+    "type": "multipleChoice",
+    "options": ["A) Data being processed", "B) Memory addresses", "C) Control signals", "D) Power supply"],
+    "correct_answer": "B",
+    "guidance": "Students should understand bus types",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for correct answer",
+      "points": ["B - Address bus specifies which memory location to access"],
+      "additional_guidance": "Width of address bus determines addressable memory",
+      "do_not_accept": "Other bus types"
+    }
+  },
+  {
+    "id": "B021",
+    "learning_aim": "B",
+    "topic": "Data Bus",
+    "command_verb": "Identify",
+    "marks": 1,
+    "scenario": "Data is transferred between components",
+    "question": "What is the purpose of the data bus?",
+    "type": "multipleChoice",
+    "options": ["A) Specify memory locations", "B) Carry actual data between components", "C) Send control signals", "D) Supply power"],
+    "correct_answer": "B",
+    "guidance": "Students should understand data bus function",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for correct answer",
+      "points": ["B - Data bus transfers actual data/instructions"],
+      "additional_guidance": "Width (bits) determines amount of data transferred at once",
+      "do_not_accept": "Other bus functions"
+    }
+  },
+  {
+    "id": "B022",
+    "learning_aim": "B",
+    "topic": "Control Bus",
+    "command_verb": "Describe",
+    "marks": 2,
+    "scenario": "Components must coordinate timing and operations",
+    "question": "Describe what the control bus does in a computer.",
+    "type": "short",
+    "guidance": "Should explain control signal function",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for control bus explanation",
+      "points": [
+        "Carries control signals coordinating component operations",
+        "Signals include: read/write commands, interrupt signals",
+        "Coordinates timing of data transfers",
+        "Manages interaction between CPU, memory, I/O devices",
+        "Enables synchronization of operations"
+      ],
+      "additional_guidance": "Focus on coordination and control function",
+      "do_not_accept": "'Carries signals' without explaining purpose"
+    }
+  },
+  {
+    "id": "B023",
+    "learning_aim": "B",
+    "topic": "Binary Number System",
+    "command_verb": "Explain",
+    "marks": 2,
+    "scenario": "Digital computers work with binary numbers",
+    "question": "Explain what binary is and why computers use it.",
+    "type": "short",
+    "guidance": "Should define binary and explain computer relevance",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for definition, 1 for computer use reason",
+      "points": [
+        "Definition: Number system using base 2 (digits 0 and 1)",
+        "Reason: Computer circuits use on/off states (1/0)",
+        "Reason: Binary directly maps to electronic states",
+        "Reason: Simpler than decimal for electronic representation",
+        "All computer data ultimately represented as binary"
+      ],
+      "additional_guidance": "Focus on on/off electronic nature explanation",
+      "do_not_accept": "'Uses 0 and 1' without explaining computer relevance"
+    }
+  },
+  {
+    "id": "B024",
+    "learning_aim": "B",
+    "topic": "Binary Conversion",
+    "command_verb": "Calculate",
+    "marks": 2,
+    "scenario": "Converting between number systems",
+    "question": "Convert the binary number 1011 to denary (decimal).",
+    "type": "short",
+    "guidance": "Should show calculation and answer",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for correct answer, 1 for working",
+      "points": [
+        "Calculation: 1×8 + 0×4 + 1×2 + 1×1 = 11",
+        "Answer: 11 (denary)",
+        "Award mark for showing positional value calculation",
+        "Award mark for correct final answer"
+      ],
+      "additional_guidance": "Accept working shown in different notation",
+      "do_not_accept": "Only answer without calculation shown"
+    }
+  },
+  {
+    "id": "B025",
+    "learning_aim": "B",
+    "topic": "Denary to Binary Conversion",
+    "command_verb": "Calculate",
+    "marks": 2,
+    "scenario": "Converting decimal number to binary",
+    "question": "Convert the denary number 25 to binary.",
+    "type": "short",
+    "guidance": "Should show conversion method",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for working, 1 for answer",
+      "points": [
+        "Answer: 11001",
+        "Working: 25 ÷ 2 = 12 rem 1, 12 ÷ 2 = 6 rem 0, etc.",
+        "OR: 16 + 8 + 1 = 25, so 11001",
+        "Award for either division or powers of 2 method"
+      ],
+      "additional_guidance": "Accept either division or powers of 2 approach",
+      "do_not_accept": "Only answer without method shown"
+    }
+  },
+  {
+    "id": "B026",
+    "learning_aim": "B",
+    "topic": "Bit and Byte",
+    "command_verb": "Identify",
+    "marks": 1,
+    "scenario": "Data storage uses bits and bytes as units",
+    "question": "How many bits are in one byte?",
+    "type": "multipleChoice",
+    "options": ["A) 1", "B) 4", "C) 8", "D) 16"],
+    "correct_answer": "C",
+    "guidance": "Students should know basic data units",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for correct answer",
+      "points": ["C - 1 byte = 8 bits"],
+      "additional_guidance": "Fundamental data unit measurement",
+      "do_not_accept": "Other values"
+    }
+  },
+  {
+    "id": "B027",
+    "learning_aim": "B",
+    "topic": "Data Units - Kilobyte to Terabyte",
+    "command_verb": "Describe",
+    "marks": 2,
+    "scenario": "Understanding file and storage sizes",
+    "question": "Describe the relationship between kilobyte, megabyte, and gigabyte.",
+    "type": "short",
+    "guidance": "Should explain data unit progression",
+    "mark_scheme": {
+      "instruction": "Award 1 mark per correct unit relationship",
+      "points": [
+        "1 KB = 1,024 bytes (approximately 1,000)",
+        "1 MB = 1,024 KB",
+        "1 GB = 1,024 MB",
+        "Each unit is 1,024 times larger than previous",
+        "OR approximately 1,000 times for simplification"
+      ],
+      "additional_guidance": "Award marks for showing progression/relationships",
+      "do_not_accept": "'Different sizes' without specific ratios"
+    }
+  },
+  {
+    "id": "B028",
+    "learning_aim": "B",
+    "topic": "File Size Calculation",
+    "command_verb": "Calculate",
+    "marks": 3,
+    "scenario": "Determining storage requirements",
+    "question": "An image is 2.5 MB. How many images of this size can fit on a USB drive with 2 GB capacity?",
+    "type": "short",
+    "guidance": "Should show calculation with unit conversion",
+    "mark_scheme": {
+      "instruction": "Award marks for calculation steps",
+      "points": [
+        "Convert 2 GB to MB: 2 × 1024 = 2048 MB",
+        "Divide: 2048 ÷ 2.5 = 819.2",
+        "Answer: 819 complete images (rounded down)",
+        "Award 1 mark for unit conversion",
+        "Award 1 mark for division",
+        "Award 1 mark for correct final answer"
+      ],
+      "additional_guidance": "Accept either 1,000 or 1,024 multiplier if clearly stated",
+      "do_not_accept": "Only answer without showing working"
+    }
+  },
+  {
+    "id": "B029",
+    "learning_aim": "B",
+    "topic": "Memory Calculation",
+    "command_verb": "Calculate",
+    "marks": 2,
+    "scenario": "Determining system memory requirements",
+    "question": "If a computer has 8 GB of RAM, how many bytes is this?",
+    "type": "short",
+    "guidance": "Should convert to bytes",
+    "mark_scheme": {
+      "instruction": "Award marks for conversion",
+      "points": [
+        "8 GB to MB: 8 × 1,024 = 8,192 MB",
+        "8,192 MB to KB: 8,192 × 1,024 = 8,388,608 KB",
+        "8,388,608 KB to bytes: 8,388,608 × 1,024 = 8,589,934,592 bytes",
+        "Award 1 mark for working shown",
+        "Award 1 mark for correct answer"
+      ],
+      "additional_guidance": "Accept scientific notation or full number",
+      "do_not_accept": "Only answer without conversion steps"
+    }
+  },
+  {
+    "id": "B030",
+    "learning_aim": "B",
+    "topic": "ASCII",
+    "command_verb": "Identify",
+    "marks": 1,
+    "scenario": "Text is stored using character encoding",
+    "question": "What does ASCII stand for?",
+    "type": "multipleChoice",
+    "options": ["A) American Standard Code for Information Interchange", "B) Australian System Computer Interface Code", "C) Application System Code and Interchange", "D) Advanced Security Code Integration"],
+    "correct_answer": "A",
+    "guidance": "Students should know character encoding standards",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for correct answer",
+      "points": ["A - American Standard Code for Information Interchange"],
+      "additional_guidance": "Standard 7-bit character encoding",
+      "do_not_accept": "Other options"
+    }
+  },
+  {
+    "id": "B031",
+    "learning_aim": "B",
+    "topic": "Extended ASCII",
+    "command_verb": "Describe",
+    "marks": 2,
+    "scenario": "Extended ASCII allows more characters than standard ASCII",
+    "question": "Explain why Extended ASCII was developed and what it provides.",
+    "type": "short",
+    "guidance": "Should explain limitation and solution",
+    "mark_scheme": {
+      "instruction": "Award 1 mark per aspect",
+      "points": [
+        "Standard ASCII limited to 128 characters (7-bit)",
+        "Extended ASCII expanded to 256 characters (8-bit)",
+        "Provides special characters, symbols, accented letters",
+        "Allows support for non-English languages",
+        "Includes graphics and box-drawing characters"
+      ],
+      "additional_guidance": "Focus on limitation solved and characters added",
+      "do_not_accept": "'More characters' without explaining limitation"
+    }
+  },
+  {
+    "id": "B032",
+    "learning_aim": "B",
+    "topic": "Unicode",
+    "command_verb": "Explain",
+    "marks": 2,
+    "scenario": "Unicode supports all world languages",
+    "question": "What is Unicode and why is it important for global applications?",
+    "type": "short",
+    "guidance": "Should define and explain importance",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for definition, 1 for importance",
+      "points": [
+        "Definition: Universal character encoding supporting all languages",
+        "Supports: Over 1.1 million characters from all scripts",
+        "Importance: Enables global communication and software",
+        "Importance: Supports Chinese, Arabic, Emoji, etc.",
+        "Importance: Standard for modern applications"
+      ],
+      "additional_guidance": "Focus on global language support",
+      "do_not_accept": "'Supports many characters' without explaining global aspect"
+    }
+  },
+  {
+    "id": "B033",
+    "learning_aim": "B",
+    "topic": "Operating System Functions",
+    "command_verb": "Identify",
+    "marks": 1,
+    "scenario": "Operating system manages computer resources",
+    "question": "Which of these is a key function of the operating system?",
+    "type": "multipleChoice",
+    "options": ["A) Create spreadsheets", "B) Manage hardware resources and run applications", "C) Browse the internet", "D) Edit documents"],
+    "correct_answer": "B",
+    "guidance": "Students should know OS primary functions",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for correct answer",
+      "points": ["B - OS manages resources and provides platform for applications"],
+      "additional_guidance": "Core OS responsibility",
+      "do_not_accept": "Application functions"
+    }
+  },
+  {
+    "id": "B034",
+    "learning_aim": "B",
+    "topic": "OS - Memory Management",
+    "command_verb": "Describe",
+    "marks": 2,
+    "scenario": "Operating system manages RAM allocation",
+    "question": "Describe how the operating system manages computer memory.",
+    "type": "short",
+    "guidance": "Should explain memory allocation and management",
+    "mark_scheme": {
+      "instruction": "Award 1 mark per management function",
+      "points": [
+        "Allocates RAM to running programs",
+        "Deallocates memory when programs close",
+        "Uses virtual memory to extend RAM using disk",
+        "Prevents programs accessing other programs' memory",
+        "Manages memory pages and segments",
+        "Optimizes memory usage for performance"
+      ],
+      "additional_guidance": "Focus on allocation, deallocation, and protection aspects",
+      "do_not_accept": "'Manages memory' without specific functions"
+    }
+  },
+  {
+    "id": "B035",
+    "learning_aim": "B",
+    "topic": "OS - File Management",
+    "command_verb": "Describe",
+    "marks": 2,
+    "scenario": "Operating system organizes file storage",
+    "question": "What file management functions does the operating system provide?",
+    "type": "short",
+    "guidance": "Should identify file system responsibilities",
+    "mark_scheme": {
+      "instruction": "Award 1 mark per function",
+      "points": [
+        "Creates, opens, reads, writes, and deletes files",
+        "Organizes files in folders and directories",
+        "Manages file permissions and access control",
+        "Allocates disk space to files",
+        "Tracks file locations on disk",
+        "Backs up file system"
+      ],
+      "additional_guidance": "Accept any two relevant file management functions",
+      "do_not_accept": "'Manages files' without specific operations"
+    }
+  },
+  {
+    "id": "B036",
+    "learning_aim": "B",
+    "topic": "OS - Device Management",
+    "command_verb": "Identify",
+    "marks": 1,
+    "scenario": "Operating system communicates with hardware devices",
+    "question": "What does the OS use to communicate with hardware devices?",
+    "type": "multipleChoice",
+    "options": ["A) Device drivers", "B) Network protocols", "C) Compilers", "D) Firewalls"],
+    "correct_answer": "A",
+    "guidance": "Students should know device driver role",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for correct answer",
+      "points": ["A - Device drivers are software that control hardware"],
+      "additional_guidance": "Drivers translate OS commands to device-specific actions",
+      "do_not_accept": "Other software types"
+    }
+  },
+  {
+    "id": "B037",
+    "learning_aim": "B",
+    "topic": "OS - Process Management",
+    "command_verb": "Explain",
+    "marks": 2,
+    "scenario": "Operating system runs multiple programs simultaneously",
+    "question": "How does the OS enable multiple programs to run at the same time?",
+    "type": "short",
+    "guidance": "Should explain multitasking mechanism",
+    "mark_scheme": {
+      "instruction": "Award 1 mark per aspect",
+      "points": [
+        "Uses time-slicing to rapidly switch between programs",
+        "Allocates CPU time to each process in turn",
+        "Context switching stores/restores program state",
+        "User perceives simultaneous operation",
+        "Scheduler determines which process runs when"
+      ],
+      "additional_guidance": "Focus on time-slicing and rapid switching",
+      "do_not_accept": "'Programs run together' without explaining mechanism"
+    }
+  },
+  {
+    "id": "B038",
+    "learning_aim": "B",
+    "topic": "User Interfaces - GUI",
+    "command_verb": "Identify",
+    "marks": 1,
+    "scenario": "Modern computers use graphical user interfaces",
+    "question": "What does GUI stand for?",
+    "type": "multipleChoice",
+    "options": ["A) General User Interface", "B) Graphical User Interface", "C) Global Unified Interface", "D) Graphics Utility Interface"],
+    "correct_answer": "B",
+    "guidance": "Students should know interface terminology",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for correct answer",
+      "points": ["B - Graphical User Interface using visual elements"],
+      "additional_guidance": "Modern standard interface",
+      "do_not_accept": "Other abbreviations"
+    }
+  },
+  {
+    "id": "B039",
+    "learning_aim": "B",
+    "topic": "User Interfaces - CLI",
+    "command_verb": "Describe",
+    "marks": 2,
+    "scenario": "Some systems use text-based command line interfaces",
+    "question": "What is a command-line interface and describe how it differs from GUI.",
+    "type": "short",
+    "guidance": "Should contrast interfaces",
+    "mark_scheme": {
+      "instruction": "Award 1 mark per aspect",
+      "points": [
+        "CLI: Text-based interface using typed commands",
+        "GUI: Visual interface with icons, buttons, menus",
+        "CLI: Requires knowledge of commands",
+        "GUI: Intuitive for most users",
+        "CLI: Faster for expert users",
+        "CLI: Still used for system administration"
+      ],
+      "additional_guidance": "Focus on text-based vs visual as key difference",
+      "do_not_accept": "'Different interfaces' without explaining how"
+    }
+  },
+  {
+    "id": "B040",
+    "learning_aim": "B",
+    "topic": "GUI Elements",
+    "command_verb": "Describe",
+    "marks": 2,
+    "scenario": "GUI uses visual elements for interaction",
+    "question": "Describe two GUI elements and explain what they do.",
+    "type": "short",
+    "guidance": "Should identify and explain GUI components",
+    "mark_scheme": {
+      "instruction": "Award 1 mark per GUI element",
+      "points": [
+        "Icon: Visual symbol representing file, program, or action",
+        "Button: Clickable element performing action when clicked",
+        "Menu: List of options user can select from",
+        "Window: Container displaying program content",
+        "Text box: Input field where user types text",
+        "Scroll bar: Controls what portion of content is visible"
+      ],
+      "additional_guidance": "Award marks for identifying two elements and explaining purpose",
+      "do_not_accept": "Just 'part of GUI' without explaining function"
+    }
+  },
+  {
+    "id": "B041",
+    "learning_aim": "B",
+    "topic": "System Software vs Application Software",
+    "command_verb": "Explain",
+    "marks": 2,
+    "scenario": "Different software types serve different purposes",
+    "question": "Explain the difference between system software and application software.",
+    "type": "short",
+    "guidance": "Should contrast software categories",
+    "mark_scheme": {
+      "instruction": "Award 1 mark per software type explained",
+      "points": [
+        "System software: Manages computer resources and hardware",
+        "Application software: Performs specific user tasks",
+        "System software includes: OS, drivers, utilities",
+        "Application software includes: Word, Excel, browsers",
+        "System software is essential for computer operation",
+        "Application software is optional based on needs"
+      ],
+      "additional_guidance": "Focus on function (resource management vs task specific)",
+      "do_not_accept": "'Different software' without functional distinction"
+    }
+  },
+  {
+    "id": "B042",
+    "learning_aim": "B",
+    "topic": "Utility Software",
+    "command_verb": "Identify",
+    "marks": 1,
+    "scenario": "System maintenance uses utility software",
+    "question": "Which of these is a utility software?",
+    "type": "multipleChoice",
+    "options": ["A) Microsoft Word", "B) Disk defragmenter", "C) Adobe Photoshop", "D) Google Chrome"],
+    "correct_answer": "B",
+    "guidance": "Students should know utility software examples",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for correct answer",
+      "points": ["B - Disk defragmenter is system utility software"],
+      "additional_guidance": "Utilities optimize and maintain computer",
+      "do_not_accept": "Application software (A, C, D)"
+    }
+  },
+  {
+    "id": "B043",
+    "learning_aim": "B",
+    "topic": "Types of Utility Software",
+    "command_verb": "Describe",
+    "marks": 2,
+    "scenario": "Various utilities optimize computer performance",
+    "question": "Describe two types of utility software and their purpose.",
+    "type": "short",
+    "guidance": "Should identify utilities and functions",
+    "mark_scheme": {
+      "instruction": "Award 1 mark per utility type",
+      "points": [
+        "Disk defragmenter: Reorganizes disk data for faster access",
+        "Antivirus: Detects and removes malware",
+        "Firewall: Blocks unauthorized network access",
+        "Backup utility: Creates copies of data",
+        "Compression utility: Reduces file/folder size",
+        "Registry cleaner: Removes unnecessary system data"
+      ],
+      "additional_guidance": "Accept any two utilities with explanation of purpose",
+      "do_not_accept": "'Maintains computer' without specific utility type"
+    }
+  },
+  {
+    "id": "B044",
+    "learning_aim": "B",
+    "topic": "Software Licensing Models",
+    "command_verb": "Describe",
+    "marks": 2,
+    "scenario": "Software is available under different licensing arrangements",
+    "question": "Describe two different software licensing models.",
+    "type": "short",
+    "guidance": "Should explain licensing types",
+    "mark_scheme": {
+      "instruction": "Award 1 mark per licensing model",
+      "points": [
+        "Perpetual license: One-time purchase, indefinite use",
+        "Subscription: Annual/monthly fee for continued use",
+        "Free software: No cost, may have restrictions",
+        "Freeware: Free to use but copyright retained",
+        "Open source: Source code available for modification",
+        "Trial: Limited time or feature version"
+      ],
+      "additional_guidance": "Accept any two distinct licensing models",
+      "do_not_accept": "'Different licenses' without explaining terms"
+    }
+  },
+  {
+    "id": "B045",
+    "learning_aim": "B",
+    "topic": "Hardware Specifications",
+    "command_verb": "Calculate",
+    "marks": 2,
+    "scenario": "Determining system memory requirements",
+    "question": "A video file is 700 MB and user has 2 GB of free disk space. How many complete copies can be stored?",
+    "type": "short",
+    "guidance": "Should convert and calculate",
+    "mark_scheme": {
+      "instruction": "Award marks for calculation",
+      "points": [
+        "Convert 2 GB to MB: 2 × 1024 = 2048 MB",
+        "Divide: 2048 ÷ 700 = 2.92",
+        "Answer: 2 complete copies (rounded down)",
+        "Award 1 mark for conversion/working",
+        "Award 1 mark for correct answer"
+      ],
+      "additional_guidance": "Accept 1000 conversion if clearly stated",
+      "do_not_accept": "Answer without working shown"
+    }
+  },
+  {
+    "id": "B046",
+    "learning_aim": "B",
+    "topic": "Processor Architecture",
+    "command_verb": "Explain",
+    "marks": 3,
+    "scenario": "CPU must execute instructions efficiently",
+    "question": "Explain the fetch-execute cycle and describe what happens at each stage.",
+    "type": "short",
+    "guidance": "Should outline instruction execution process",
+    "mark_scheme": {
+      "instruction": "Award 1 mark per stage explained",
+      "points": [
+        "Fetch: Retrieves instruction from memory address",
+        "Decode: Control Unit interprets instruction meaning",
+        "Execute: ALU performs operation if needed",
+        "Store: Result written back to memory/register",
+        "Repeat: Processor continues with next instruction"
+      ],
+      "additional_guidance": "Award up to 3 marks for clear explanation of stages",
+      "do_not_accept": "'Processor runs instructions' without stage details"
+    }
+  },
+  {
+    "id": "B047",
+    "learning_aim": "B",
+    "topic": "Multi-core Processors",
+    "command_verb": "Explain",
+    "marks": 2,
+    "scenario": "Modern CPUs have multiple cores",
+    "question": "What is a multi-core processor and what advantage does it provide?",
+    "type": "short",
+    "guidance": "Should explain architecture and benefit",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for definition, 1 for advantage",
+      "points": [
+        "Definition: Processor with multiple independent processing units",
+        "Advantage: Can execute multiple instructions simultaneously",
+        "Advantage: Better performance for multitasking",
+        "Advantage: Parallel processing capabilities",
+        "Each core can run different thread/process"
+      ],
+      "additional_guidance": "Focus on simultaneous processing capability",
+      "do_not_accept": "'Faster' without explaining parallel execution"
+    }
+  },
+  {
+    "id": "B048",
+    "learning_aim": "B",
+    "topic": "Network Types - LAN",
+    "command_verb": "Describe",
+    "marks": 2,
+    "scenario": "Office computers are networked together",
+    "question": "What is a LAN and describe its typical usage.",
+    "type": "short",
+    "guidance": "Should define and provide context",
+    "mark_scheme": {
+      "instruction": "Award 1 mark per aspect",
+      "points": [
+        "Definition: Local Area Network covering single building/campus",
+        "Usage: Connects computers within office/school",
+        "Usage: Enables file sharing and resource sharing",
+        "Usage: Relatively high speed connections",
+        "Typically uses Ethernet cables or WiFi"
+      ],
+      "additional_guidance": "Focus on local scope and office/campus context",
+      "do_not_accept": "'Network in building' without explaining purpose"
+    }
+  },
+  {
+    "id": "B049",
+    "learning_aim": "B",
+    "topic": "Network Types - WAN",
+    "command_verb": "Identify",
+    "marks": 1,
+    "scenario": "Company connects offices across countries",
+    "question": "What type of network connects locations in different cities or countries?",
+    "type": "multipleChoice",
+    "options": ["A) LAN", "B) PAN", "C) WAN", "D) WLAN"],
+    "correct_answer": "C",
+    "guidance": "Students should distinguish network types by scope",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for correct answer",
+      "points": ["C - WAN (Wide Area Network) for large geographic areas"],
+      "additional_guidance": "Internet is largest WAN example",
+      "do_not_accept": "Local network types (A, B, D)"
+    }
+  },
+  {
+    "id": "B050",
+    "learning_aim": "B",
+    "topic": "Network Types - PAN",
+    "command_verb": "Explain",
+    "marks": 2,
+    "scenario": "Personal devices connect wirelessly",
+    "question": "What is a PAN (Personal Area Network) and give an example?",
+    "type": "short",
+    "guidance": "Should define and provide relevant example",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for definition, 1 for example",
+      "points": [
+        "Definition: Network covering small personal area (few meters)",
+        "Example: Bluetooth connection between phone and headphones",
+        "Example: Phone connected to smartwatch",
+        "Example: Printer connected to laptop via Bluetooth",
+        "Example: Synchronizing devices together"
+      ],
+      "additional_guidance": "Accept any personal device connection example",
+      "do_not_accept": "'Small network' without scope or examples"
+    }
+  },
+  {
+    "id": "B051",
+    "learning_aim": "B",
+    "topic": "Wired Networks - Twisted Pair",
+    "command_verb": "Identify",
+    "marks": 1,
+    "scenario": "Network cable connects computer to switch",
+    "question": "What is the most common type of network cable used in LANs?",
+    "type": "multipleChoice",
+    "options": ["A) Coaxial", "B) Twisted pair", "C) Fibre optic", "D) Serial"],
+    "correct_answer": "B",
+    "guidance": "Students should know common network media",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for correct answer",
+      "points": ["B - Twisted pair (UTP or STP) is standard LAN cable"],
+      "additional_guidance": "Also called Ethernet cable",
+      "do_not_accept": "Other cable types"
+    }
+  },
+  {
+    "id": "B052",
+    "learning_aim": "B",
+    "topic": "Wired Networks - Coaxial",
+    "command_verb": "Describe",
+    "marks": 2,
+    "scenario": "Older systems may use coaxial cables",
+    "question": "Describe coaxial cable and where it is commonly used.",
+    "type": "short",
+    "guidance": "Should explain structure and application",
+    "mark_scheme": {
+      "instruction": "Award 1 mark per aspect",
+      "points": [
+        "Structure: Central conductor surrounded by shielding",
+        "Usage: Cable TV and cable modem connections",
+        "Usage: Older computer networks (less common now)",
+        "Advantage: Better shielded than twisted pair",
+        "Disadvantage: Bulkier, lower bandwidth"
+      ],
+      "additional_guidance": "Focus on structure and TV/cable modem use",
+      "do_not_accept": "'Different cable' without describing structure"
+    }
+  },
+  {
+    "id": "B053",
+    "learning_aim": "B",
+    "topic": "Wireless Networks - WiFi",
+    "command_verb": "Describe",
+    "marks": 2,
+    "scenario": "Wireless internet access in buildings",
+    "question": "Describe how WiFi enables wireless network connections.",
+    "type": "short",
+    "guidance": "Should explain wireless transmission",
+    "mark_scheme": {
+      "instruction": "Award 1 mark per aspect",
+      "points": [
+        "Uses radio waves to transmit data wirelessly",
+        "Operates on 2.4 GHz or 5 GHz frequency",
+        "Access point broadcasts signal for devices to connect",
+        "Enables mobile device connectivity",
+        "Range typically 50-100 meters"
+      ],
+      "additional_guidance": "Focus on radio wave transmission and device connectivity",
+      "do_not_accept": "'Wireless' without explaining mechanism"
+    }
+  },
+  {
+    "id": "B054",
+    "learning_aim": "B",
+    "topic": "Wireless Networks - Bluetooth",
+    "command_verb": "Identify",
+    "marks": 1,
+    "scenario": "Wireless headphones use Bluetooth",
+    "question": "What is Bluetooth used for?",
+    "type": "multipleChoice",
+    "options": ["A) Long-distance data transmission", "B) Cable TV distribution", "C) Short-range wireless connections", "D) Satellite communication"],
+    "correct_answer": "C",
+    "guidance": "Students should know Bluetooth purpose",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for correct answer",
+      "points": ["C - Bluetooth for short-range wireless (typically 10-100 meters)"],
+      "additional_guidance": "Common in phones, headphones, speakers",
+      "do_not_accept": "Long-distance or other technologies"
+    }
+  },
+  {
+    "id": "B055",
+    "learning_aim": "B",
+    "topic": "Network Topologies",
+    "command_verb": "Explain",
+    "marks": 2,
+    "scenario": "Computers can be arranged in different network patterns",
+    "question": "What is a network topology and describe two types.",
+    "type": "short",
+    "guidance": "Should define and identify topology types",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for definition, 1 per topology",
+      "points": [
+        "Definition: Physical or logical arrangement of network devices",
+        "Star topology: All devices connected to central hub/switch",
+        "Ring topology: Devices form circle with data passing around",
+        "Bus topology: Devices share single main cable",
+        "Mesh topology: Multiple connections between devices",
+        "Advantages/disadvantages of each arrangement"
+      ],
+      "additional_guidance": "Award marks for definition and two topology types",
+      "do_not_accept": "'How computers connect' without topology type names"
+    }
+  },
+  {
+    "id": "B056",
+    "learning_aim": "B",
+    "topic": "Network Hardware - Router",
+    "command_verb": "Identify",
+    "marks": 1,
+    "scenario": "Device directs data between networks",
+    "question": "What does a router do in a network?",
+    "type": "multipleChoice",
+    "options": ["A) Amplifies network signal", "B) Routes data between networks", "C) Stores data temporarily", "D) Encrypts all data"],
+    "correct_answer": "B",
+    "guidance": "Students should know router function",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for correct answer",
+      "points": ["B - Router directs data packets between networks"],
+      "additional_guidance": "Uses IP addresses to determine best path",
+      "do_not_accept": "Other network device functions"
+    }
+  },
+  {
+    "id": "B057",
+    "learning_aim": "B",
+    "topic": "Network Hardware - Switch",
+    "command_verb": "Describe",
+    "marks": 2,
+    "scenario": "Switch connects multiple devices in a LAN",
+    "question": "What is a network switch and how does it differ from a router?",
+    "type": "short",
+    "guidance": "Should explain switch function and difference",
+    "mark_scheme": {
+      "instruction": "Award 1 mark per aspect",
+      "points": [
+        "Switch: Connects devices within single LAN",
+        "Router: Connects different networks together",
+        "Switch: Uses MAC addresses",
+        "Router: Uses IP addresses",
+        "Switch: Operates within local network only",
+        "Router: Routes between networks"
+      ],
+      "additional_guidance": "Focus on scope difference (local vs between networks)",
+      "do_not_accept": "'Different devices' without explaining role difference"
+    }
+  },
+  {
+    "id": "B058",
+    "learning_aim": "B",
+    "topic": "Network Hardware - Modem",
+    "command_verb": "Identify",
+    "marks": 1,
+    "scenario": "Device connects computer to internet service",
+    "question": "What does a modem do?",
+    "type": "multipleChoice",
+    "options": ["A) Amplifies network signals", "B) Stores network data", "C) Converts between analog and digital signals", "D) Encrypts network traffic"],
+    "correct_answer": "C",
+    "guidance": "Students should know modem function",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for correct answer",
+      "points": ["C - Modem converts between analog (phone/cable) and digital signals"],
+      "additional_guidance": "Modulation/demodulation device",
+      "do_not_accept": "Other network device functions"
+    }
+  },
+  {
+    "id": "B059",
+    "learning_aim": "B",
+    "topic": "IP Addresses",
+    "command_verb": "Explain",
+    "marks": 2,
+    "scenario": "Devices need unique network addresses",
+    "question": "What is an IP address and why is it necessary?",
+    "type": "short",
+    "guidance": "Should define and explain purpose",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for definition, 1 for purpose",
+      "points": [
+        "Definition: Unique numerical identifier for each device on network",
+        "Purpose: Enables routing of data to correct device",
+        "Purpose: Ensures data reaches intended recipient",
+        "Format: IPv4 (xxx.xxx.xxx.xxx) or IPv6",
+        "Like postal address for network packets"
+      ],
+      "additional_guidance": "Focus on identification and routing purpose",
+      "do_not_accept": "'Address for devices' without explaining routing"
+    }
+  },
+  {
+    "id": "B060",
+    "learning_aim": "B",
+    "topic": "DHCP",
+    "command_verb": "Describe",
+    "marks": 2,
+    "scenario": "Automatic IP address assignment",
+    "question": "What does DHCP do and why is it useful?",
+    "type": "short",
+    "guidance": "Should explain automated address assignment",
+    "mark_scheme": {
+      "instruction": "Award 1 mark per aspect",
+      "points": [
+        "DHCP: Dynamic Host Configuration Protocol",
+        "Function: Automatically assigns IP addresses to devices",
+        "Useful: No manual configuration needed",
+        "Useful: Reuses addresses when devices disconnect",
+        "Useful: Simplifies network management",
+        "Typical in home networks and LANs"
+      ],
+      "additional_guidance": "Focus on automation and ease of use",
+      "do_not_accept": "'Assigns addresses' without explaining dynamic aspect"
+    }
+  },
+  {
+    "id": "B061",
+    "learning_aim": "B",
+    "topic": "Bandwidth",
+    "command_verb": "Identify",
+    "marks": 1,
+    "scenario": "Network speed is described in bandwidth",
+    "question": "What does bandwidth measure in a network?",
+    "type": "multipleChoice",
+    "options": ["A) Number of devices connected", "B) Maximum data transfer rate", "C) Distance covered by network", "D) Number of routers"],
+    "correct_answer": "B",
+    "guidance": "Students should understand bandwidth concept",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for correct answer",
+      "points": ["B - Bandwidth is maximum data transmission rate"],
+      "additional_guidance": "Measured in bits per second (Mbps, Gbps)",
+      "do_not_accept": "Other network parameters"
+    }
+  },
+  {
+    "id": "B062",
+    "learning_aim": "B",
+    "topic": "Latency",
+    "command_verb": "Describe",
+    "marks": 2,
+    "scenario": "Network delay affects user experience",
+    "question": "What is network latency and how does it affect users?",
+    "type": "short",
+    "guidance": "Should explain delay and impact",
+    "mark_scheme": {
+      "instruction": "Award 1 mark per aspect",
+      "points": [
+        "Latency: Delay time for data to travel from source to destination",
+        "Measured in milliseconds",
+        "Effects: Slow response times, lag in gaming/video calls",
+        "Effects: Frustrating user experience for time-sensitive apps",
+        "Lower latency is better for interactive applications"
+      ],
+      "additional_guidance": "Focus on delay and user experience impact",
+      "do_not_accept": "'Slow network' without explaining latency mechanism"
+    }
+  },
+  {
+    "id": "B063",
+    "learning_aim": "B",
+    "topic": "Throughput",
+    "command_verb": "Explain",
+    "marks": 2,
+    "scenario": "Actual data transfer speed differs from bandwidth",
+    "question": "What is throughput and how does it differ from bandwidth?",
+    "type": "short",
+    "guidance": "Should contrast theoretical vs practical speeds",
+    "mark_scheme": {
+      "instruction": "Award 1 mark per aspect",
+      "points": [
+        "Bandwidth: Theoretical maximum speed",
+        "Throughput: Actual speed achieved in practice",
+        "Throughput less than bandwidth due to: Overhead, interference, congestion",
+        "Throughput affected by: Distance, obstacles, network load"
+      ],
+      "additional_guidance": "Focus on theory vs practice difference",
+      "do_not_accept": "'Bandwidth and throughput are same' or only stating definitions"
+    }
+  },
+  {
+    "id": "B064",
+    "learning_aim": "B",
+    "topic": "Protocol",
+    "command_verb": "Identify",
+    "marks": 1,
+    "scenario": "Data transfer follows agreed rules",
+    "question": "What is a network protocol?",
+    "type": "multipleChoice",
+    "options": ["A) Type of cable", "B) Set of rules for data transmission", "C) Network device", "D) Internet company"],
+    "correct_answer": "B",
+    "guidance": "Students should understand protocol concept",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for correct answer",
+      "points": ["B - Protocol is agreed set of rules for communication"],
+      "additional_guidance": "Examples: TCP/IP, HTTP, FTP",
+      "do_not_accept": "Hardware or service terms"
+    }
+  },
+  {
+    "id": "B065",
+    "learning_aim": "B",
+    "topic": "TCP/IP",
+    "command_verb": "Describe",
+    "marks": 2,
+    "scenario": "Internet relies on TCP/IP protocol suite",
+    "question": "What is TCP/IP and explain why it's important for internet communication?",
+    "type": "short",
+    "guidance": "Should define and explain importance",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for definition, 1 for importance",
+      "points": [
+        "Definition: Transmission Control Protocol/Internet Protocol",
+        "TCP: Ensures reliable data delivery and ordering",
+        "IP: Handles routing of data packets",
+        "Importance: Standard protocol for internet communication",
+        "Importance: Enables worldwide connectivity",
+        "Universally adopted standard"
+      ],
+      "additional_guidance": "Award marks for definition and role explanation",
+      "do_not_accept": "'Allows internet' without protocol detail"
+    }
+  },
+  {
+    "id": "B066",
+    "learning_aim": "B",
+    "topic": "DNS",
+    "command_verb": "Identify",
+    "marks": 1,
+    "scenario": "Converting domain names to IP addresses",
+    "question": "What does DNS stand for and what does it do?",
+    "type": "multipleChoice",
+    "options": ["A) Digital Network Service", "B) Domain Name System", "C) Direct Network Signal", "D) Data Network Server"],
+    "correct_answer": "B",
+    "guidance": "Students should know DNS function",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for correct answer",
+      "points": ["B - DNS converts domain names (like google.com) to IP addresses"],
+      "additional_guidance": "Essential for web browsing",
+      "do_not_accept": "Other network services"
+    }
+  },
+  {
+    "id": "B067",
+    "learning_aim": "B",
+    "topic": "VPN",
+    "command_verb": "Explain",
+    "marks": 2,
+    "scenario": "Secure remote access to network",
+    "question": "What is a VPN and why might a business use it?",
+    "type": "short",
+    "guidance": "Should explain and give business use case",
+    "mark_scheme": {
+      "instruction": "Award 1 mark for definition, 1 for use case",
+      "points": [
+        "Definition: Virtual Private Network creates secure encrypted connection",
+        "Use: Remote workers accessing company network securely",
+        "Use: Protecting privacy on public WiFi",
+        "Use: Bypassing geographic restrictions",
+        "Encrypts all traffic through secure tunnel"
+      ],
+      "additional_guidance": "Focus on security and remote access benefit",
+      "do_not_accept": "'Secure connection' without explaining tunnel/encryption"
+    }
+  },
+  {
+    "id": "B068",
+    "learning_aim": "B",
+    "topic": "Packet Switching",
+    "command_verb": "Describe",
+    "marks": 2,
+    "scenario": "Data is broken into packets for transmission",
+    "question": "What is packet switching and how does it work?",
+    "type": "short",
+    "guidance": "Should explain packet concept and routing",
+    "mark_scheme": {
+      "instruction": "Award 1 mark per aspect",
+      "points": [
+        "Breaks data into small packets with destination address",
+        "Each packet routes independently through network",
+        "Packets may take different paths",
+        "Reassembled at destination in correct order",
+        "Efficient use of network resources"
+      ],
+      "additional_guidance": "Focus on breaking up data and independent routing",
+      "do_not_accept": "'Data is sent' without explaining packet mechanism"
+    }
+  },
+  {
+    "id": "B069",
+    "learning_aim": "B",
+    "topic": "Internet vs Web",
+    "command_verb": "Explain",
+    "marks": 2,
+    "scenario": "Internet and Web are related but different",
+    "question": "Explain the difference between the Internet and the World Wide Web.",
+    "type": "short",
+    "guidance": "Should contrast infrastructure and service",
+    "mark_scheme": {
+      "instruction": "Award 1 mark per concept",
+      "points": [
+        "Internet: Global network of interconnected computers",
+        "Web: Service running on internet using HTTP/HTTPS",
+        "Internet: Infrastructure/hardware system",
+        "Web: Application layer service",
+        "Internet: Supports email, FTP, web, etc.",
+        "Web: Only one service on internet"
+      ],
+      "additional_guidance": "Focus on infrastructure vs application distinction",
+      "do_not_accept": "'Different' without explaining what each is"
+    }
+  },
+  {
+    "id": "B070",
+    "learning_aim": "B",
+    "topic": "Cloud Storage",
+    "command_verb": "Discuss",
+    "marks": 8,
+    "scenario": "Business considers adopting cloud storage for all documents",
+    "question": "Discuss the advantages and disadvantages of using cloud storage for business data. Consider security, accessibility, cost, and vendor dependency.",
+    "type": "extended",
+    "guidance": "Should analyze multiple aspects comprehensively",
+    "mark_scheme": {
+      "instruction": "Award marks based on balanced discussion",
+      "levels": [
+        {
+          "level": 1,
+          "marks": "1-3",
+          "description": "Identifies some benefits or drawbacks (easy access, cost) but lacks depth or balance"
+        },
+        {
+          "level": 2,
+          "marks": "4-6",
+          "description": "Explains several advantages (access, backups, scalability) and disadvantages (security, dependency); considers some business implications"
+        },
+        {
+          "level": 3,
+          "marks": "7-8",
+          "description": "Comprehensive discussion of multiple advantages and disadvantages with balanced perspective; addresses business, security, and operational concerns"
+        }
+      ],
+      "points": [
+        "Advantages: Access from anywhere with internet connection",
+        "Advantages: Automatic backups and disaster recovery",
+        "Advantages: Scalable storage without physical hardware",
+        "Advantages: Lower infrastructure costs",
+        "Advantages: Easier collaboration and file sharing",
+        "Disadvantages: Security/privacy concerns with third party",
+        "Disadvantages: Vendor lock-in and dependency",
+        "Disadvantages: Internet access required",
+        "Disadvantages: Ongoing subscription costs",
+        "Disadvantages: Data breach risk with cloud provider"
+      ],
+      "additional_guidance": "Credit analysis of tradeoffs and business impact",
+      "do_not_accept": "Only listing pros or cons without balance"
+    }
+  }
+]

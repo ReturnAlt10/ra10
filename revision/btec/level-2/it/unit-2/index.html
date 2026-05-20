@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>
+(function(){
+  var THEME_KEY = 'ra10-theme';
+  function applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme === 'dark' ? 'dark' : 'light');
+  }
+  var saved = localStorage.getItem(THEME_KEY);
+  applyTheme(saved || 'light');
+  window.addEventListener('message', function(event) {
+    if (event.source !== window.parent || !event.data || event.data.type !== 'RA10_THEME') return;
+    applyTheme(event.data.theme);
+  });
+  window.addEventListener('storage', function(event) {
+    if (event.key === THEME_KEY) applyTheme(event.newValue || 'light');
+  });
+})();
+
+(function(){
+  var s = document.createElement('script');
+  var isFile = location.protocol === 'file:';
+  var isLocalHost = location.hostname === '127.0.0.1' || location.hostname === 'localhost';
+  s.src = isFile ? 'file:///C:/Users/mistr/Downloads/ra10/ra10-sdk.js' : (isLocalHost ? 'http://127.0.0.1:5500/ra10-sdk.js' : 'https://ra10.co.uk/ra10-sdk.js');
+  document.head.insertBefore(s, document.head.firstChild);
+})();
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BTEC IT Level 2 Unit 2 — Technology Systems</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<link rel="preconnect" href="https://api.fontshare.com">
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@500,700,900,400&f[]=jetbrains-mono@500&display=swap">
+<link rel="stylesheet" href="css/style.css?v=20260521">
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="navbar-content">
+    <div class="navbar-brand">RA10 — IT Level 2 Unit 2</div>
+    <ul class="navbar-nav">
+      <li><a href="#" class="nav-link active" data-tab="home" onclick="event.preventDefault(); switchTab('home');">Home</a></li>
+      <li><a href="#" class="nav-link" data-tab="practice" onclick="event.preventDefault(); switchTab('practice');">Practice</a></li>
+      <li><a href="#" class="nav-link" data-tab="quiz" onclick="event.preventDefault(); switchTab('quiz');">Quiz</a></li>
+      <li><a href="#" class="nav-link" data-tab="flash" onclick="event.preventDefault(); switchTab('flash');">Flashcards</a></li>
+      <li><a href="#" class="nav-link" data-tab="browse" onclick="event.preventDefault(); switchTab('browse');">All Questions</a></li>
+      <li><a href="#" class="nav-link" data-tab="guide" onclick="event.preventDefault(); switchTab('guide');">Guide</a></li>
+    </ul>
+    <div id="unit2-credit-chip" style="margin-left:auto;display:flex;align-items:center;"></div>
+  </div>
+</nav>
+<div id="ra10-subject-banner" class="ra10-subject-banner" style="display:none"></div>
+
+<div class="page-content">
+  <div class="container">
+    <div id="main-content" class="tab-content active"></div>
+  </div>
+</div>
+
+<script src="js/spec.js"></script>
+<script src="js/guide.js"></script>
+<script src="js/app.js"></script>
+
+<script>
+// ====== RA10 CREDIT SYSTEM (mirrors IT Level 3 Unit 1) ======
+const RA10_UNIT_SUBJECT = 'IT';
+const RA10_CREDIT_CHIP_ID = 'unit2-credit-chip';
+const RA10_SUBJECT_BONUS = 300;
+const RA10_ACTION_COSTS = {
+  practice_question: 1,
+  quiz_session: 1,
+  ai_mark: 3,
+  flashcard_flip: 0,
+};
+
+window._updateSubjectBanner = function() {
+  const banner = document.getElementById('ra10-subject-banner');
+  if (!banner || !window.RA10 || typeof window._ra10GetUnitCreditsContext !== 'function') {
+    if (banner) banner.style.display = 'none';
+    return;
+  }
+  const ctx = window._ra10GetUnitCreditsContext();
+  if (!ctx || !ctx.isSubjectTier) { banner.style.display = 'none'; return; }
+  if (ctx.ownsCurrentSubject) {
+    banner.innerHTML = '<div class="line-main">Usable now on IT Unit 2: ' + ctx.usableCredits + ' credits</div><div class="line-sub">Includes your IT subject credits and universal credits.</div>';
+  } else {
+    const ownedText = ctx.ownedSubjects.length ? ctx.ownedSubjects.join(', ') : 'another subject';
+    banner.innerHTML = '<div class="line-main">Usable now on IT Unit 2: ' + ctx.usableCredits + ' credits</div><div class="line-sub">You purchased ' + ownedText + '. Only universal credits can be spent on this unit.</div>';
+  }
+  banner.style.display = '';
+};
+
+function _ra10GetSubjectStateKey(profile) {
+  return 'ra10_subject_credit_state:' + String(profile&&profile.id||profile&&profile.email||'anon');
+}
+function _ra10ReadSubjectState(profile) {
+  try { const r = localStorage.getItem(_ra10GetSubjectStateKey(profile)); return r ? JSON.parse(r) : null; } catch(e) { return null; }
+}
+function _ra10WriteSubjectState(profile, state) {
+  try { localStorage.setItem(_ra10GetSubjectStateKey(profile), JSON.stringify(state)); } catch(e) {}
+}
+function _ra10SyncSubjectState(profile, totalCredits, ownedSubjects) {
+  const cleanOwned = Array.isArray(ownedSubjects) ? ownedSubjects.filter(Boolean) : [];
+  const ownedKey = cleanOwned.slice().sort().join('|');
+  const saved = _ra10ReadSubjectState(profile);
+  const prevOwned = (saved && typeof saved.ownedKey === 'string') ? saved.ownedKey.split('|').filter(Boolean) : [];
+  const prevOwnedSet = new Set(prevOwned);
+  const addedSubjects = cleanOwned.filter(s => !prevOwnedSet.has(s));
+  const savedSpent = (saved && saved.subjectSpent && typeof saved.subjectSpent === 'object') ? saved.subjectSpent : {};
+  const hasSavedSpent = Object.keys(savedSpent).length > 0;
+  const subjectSpent = {};
+  const prevSubjectRemainingBySubject = {};
+  if (!hasSavedSpent && saved && Number.isFinite(saved.baselineRemaining) && Number.isFinite(saved.storedCreditsAtSync)) {
+    let budget = Math.max(0, Math.min(Number(saved.storedCreditsAtSync)-Number(saved.baselineRemaining), prevOwned.length*RA10_SUBJECT_BONUS));
+    prevOwned.forEach(s => { const alloc=Math.max(0,Math.min(RA10_SUBJECT_BONUS,budget)); prevSubjectRemainingBySubject[s]=alloc; budget-=alloc; });
+  }
+  cleanOwned.forEach(s => {
+    let spent = 0;
+    if (hasSavedSpent) { const raw=Number(savedSpent[s]||0); spent=Math.max(0,Math.min(RA10_SUBJECT_BONUS,Math.floor(Number.isFinite(raw)?raw:0))); }
+    else if (Object.prototype.hasOwnProperty.call(prevSubjectRemainingBySubject,s)) { spent=Math.max(0,RA10_SUBJECT_BONUS-Math.max(0,Math.min(RA10_SUBJECT_BONUS,Number(prevSubjectRemainingBySubject[s]||0)))); }
+    subjectSpent[s] = spent;
+  });
+  let totalSubjectRemaining = cleanOwned.reduce((sum,s) => sum+Math.max(0,RA10_SUBJECT_BONUS-Number(subjectSpent[s]||0)), 0);
+  if (totalSubjectRemaining > totalCredits) {
+    let overflow = totalSubjectRemaining - totalCredits;
+    cleanOwned.filter(s=>!new Set(addedSubjects).has(s)).concat(cleanOwned.filter(s=>new Set(addedSubjects).has(s))).forEach(s=>{
+      if (overflow<=0) return;
+      const spent=Number(subjectSpent[s]||0); const remaining=Math.max(0,RA10_SUBJECT_BONUS-spent);
+      const trim=Math.min(remaining,overflow); subjectSpent[s]=Math.min(RA10_SUBJECT_BONUS,spent+trim); overflow-=trim;
+    });
+    totalSubjectRemaining = cleanOwned.reduce((sum,s)=>sum+Math.max(0,RA10_SUBJECT_BONUS-Number(subjectSpent[s]||0)),0);
+  }
+  const baselineRemaining = Math.max(0,Math.min(totalCredits,Math.floor(totalCredits-totalSubjectRemaining)));
+  const next = { ownedKey, baselineRemaining, storedCreditsAtSync: totalCredits, subjectSpent };
+  _ra10WriteSubjectState(profile, next);
+  return next;
+}
+function _ra10GetUnitCreditsContext() {
+  if (!window.RA10 || !RA10.isLoggedIn()) return null;
+  const profile = RA10.getProfile();
+  if (!profile) return null;
+  const tier = RA10.getTier();
+  const breakdown = (typeof RA10.getCreditBreakdown==='function') ? RA10.getCreditBreakdown() : null;
+  const totalCredits = breakdown ? Number(breakdown.totalCredits||0) : (Number(RA10.getCredits())||0);
+  const storedCredits = breakdown ? Number(breakdown.storedCredits||0) : totalCredits;
+  const examBonusRemaining = breakdown ? Number(breakdown.examBonusRemaining||0) : 0;
+  if (tier !== 'subject') {
+    return { isSubjectTier:false, ownsCurrentSubject:true, usableCredits:totalCredits, totalCredits, storedCredits, examBonusRemaining, ownedSubjects:[], baselineRemaining:totalCredits };
+  }
+  const ownedSubjects = Array.isArray(profile.unlocked_subjects) ? profile.unlocked_subjects.filter(Boolean) : [];
+  const state = _ra10SyncSubjectState(profile, storedCredits, ownedSubjects);
+  const ownsCurrentSubject = ownedSubjects.includes(RA10_UNIT_SUBJECT);
+  const subjectSpent = (state&&state.subjectSpent&&typeof state.subjectSpent==='object') ? Number(state.subjectSpent[RA10_UNIT_SUBJECT]||0) : 0;
+  const subjectCreditsRemaining = ownsCurrentSubject ? Math.max(0,RA10_SUBJECT_BONUS-Math.max(0,Math.min(RA10_SUBJECT_BONUS,subjectSpent))) : 0;
+  const usableCredits = (ownsCurrentSubject?subjectCreditsRemaining:0)+state.baselineRemaining+examBonusRemaining;
+  return { isSubjectTier:true, ownsCurrentSubject, usableCredits, totalCredits, storedCredits, examBonusRemaining, ownedSubjects, baselineRemaining:state.baselineRemaining, subjectCreditsRemaining };
+}
+window._ra10GetUnitCreditsContext = _ra10GetUnitCreditsContext;
+
+async function _ra10RenderUnitCreditChip() {
+  if (!window.RA10) return;
+  await RA10.renderCreditChip(RA10_CREDIT_CHIP_ID);
+  const container = document.getElementById(RA10_CREDIT_CHIP_ID);
+  if (!container) return;
+  const ctx = _ra10GetUnitCreditsContext();
+  if (!ctx || !ctx.isSubjectTier) return;
+  const chip = container.firstElementChild;
+  if (!chip) return;
+  const spans = chip.querySelectorAll('span');
+  const creditsEl = spans.length > 1 ? spans[1] : null;
+  if (creditsEl) creditsEl.textContent = ctx.usableCredits + ' usable credits';
+}
+window._ra10RenderUnitCreditChip = _ra10RenderUnitCreditChip;
+
+async function ra10Gate(action) {
+  try {
+    if (!window.RA10) return true;
+    if (RA10.isOwner()) return true;
+    if (!RA10.isLoggedIn()) {
+      const result = await RA10.guestGate(action, 3, RA10.showPaywall);
+      if (window.RA10) await _ra10RenderUnitCreditChip();
+      return result === true;
+    }
+    const ctx = _ra10GetUnitCreditsContext();
+    if (ctx && ctx.isSubjectTier) {
+      const cost = Number(RA10_ACTION_COSTS[action]||0);
+      if (ctx.usableCredits < cost) { RA10.showPaywall('credits', action); return false; }
+      const beforeStored = Number(ctx.storedCredits||0);
+      const spent = await RA10.gate(action, RA10.showPaywall);
+      if (spent) {
+        const profile = RA10.getProfile();
+        const state = _ra10ReadSubjectState(profile);
+        if (state && Number.isFinite(state.baselineRemaining)) {
+          let deducted = cost, afterStored = NaN;
+          if (typeof RA10.getCreditBreakdown==='function') { afterStored=Number((RA10.getCreditBreakdown()||{}).storedCredits||0); deducted=Math.max(0,beforeStored-afterStored); }
+          if (ctx.ownsCurrentSubject) {
+            state.subjectSpent = (state.subjectSpent&&typeof state.subjectSpent==='object')?state.subjectSpent:{};
+            const cur=Math.max(0,Math.min(RA10_SUBJECT_BONUS,Number(state.subjectSpent[RA10_UNIT_SUBJECT]||0)));
+            const rem=Math.max(0,RA10_SUBJECT_BONUS-cur); const fromSubj=Math.min(rem,deducted); const fromBase=Math.max(0,deducted-fromSubj);
+            state.subjectSpent[RA10_UNIT_SUBJECT]=Math.min(RA10_SUBJECT_BONUS,cur+fromSubj);
+            state.baselineRemaining=Math.max(0,state.baselineRemaining-fromBase);
+          } else { state.baselineRemaining=Math.max(0,state.baselineRemaining-deducted); }
+          if (Number.isFinite(afterStored)) state.storedCreditsAtSync=afterStored;
+          _ra10WriteSubjectState(profile, state);
+        }
+        await _ra10RenderUnitCreditChip();
+        window._updateSubjectBanner();
+      }
+      return spent;
+    }
+    const result = await RA10.gate(action, RA10.showPaywall);
+    await _ra10RenderUnitCreditChip();
+    window._updateSubjectBanner();
+    return result;
+  } catch(e) {
+    console.warn('ra10Gate error', e);
+    if (window.RA10 && typeof RA10.showPaywall==='function') RA10.showPaywall('credits', action);
+    return false;
+  }
+}
+window.ra10Gate = ra10Gate;
+
+document.addEventListener('DOMContentLoaded', function() {
+  function waitForRA10(cb, tries) {
+    tries = tries || 0;
+    if (window.RA10 && typeof RA10.init === 'function') { cb(); }
+    else if (tries < 60) { setTimeout(function() { waitForRA10(cb, tries+1); }, 100); }
+  }
+  waitForRA10(async function() {
+    await RA10.init();
+    RA10.on('authchange', function() { _ra10RenderUnitCreditChip(); window._updateSubjectBanner(); });
+    RA10.on('creditschange', function() { _ra10RenderUnitCreditChip(); window._updateSubjectBanner(); });
+    _ra10RenderUnitCreditChip();
+    window._updateSubjectBanner();
+  });
+});
+</script>
+</body>
+</html>
