@@ -1,3 +1,19 @@
+// ---------- Config ----------
+// Personalized greeting for dashboard
+function addDashboardGreeting() {
+  const profile = (window.RA10 && window.RA10.getProfile ? window.RA10.getProfile() : null) || {};
+  const name = profile.full_name || profile.display_name || profile.email || 'Learner';
+  const hero = document.querySelector('.hero > div');
+  if (hero) {
+    let greet = hero.querySelector('.dashboard-greeting');
+    if (!greet) {
+      greet = document.createElement('p');
+      greet.className = 'dashboard-greeting';
+      hero.appendChild(greet);
+    }
+    greet.innerHTML = `Welcome back, <strong>${escapeHTML(name)}</strong>! Ready to revise?`;
+  }
+}
 // BTEC Sport Unit 1 — Question Bank App
 (function() {
 'use strict';
@@ -1364,6 +1380,7 @@ async function generateMock(total, seed, aims, styles) {
     const wanted = new Set(styles.filter(s => s !== 'pearson'));
     // If pearson is also on, treat it as "any style allowed" filler.
     const allowAny = styles.includes('pearson');
+    addDashboardGreeting();
     const stylePool = {};
     pool.forEach(q => {
       const s = styleOfQuestion(q);

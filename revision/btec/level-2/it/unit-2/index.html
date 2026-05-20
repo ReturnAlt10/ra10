@@ -38,9 +38,9 @@
 
 <nav class="navbar">
   <div class="navbar-content">
-    <div class="navbar-brand">RA10 — IT Level 2 Unit 2</div>
+    <!-- Removed navbar-brand for cleaner look -->
     <ul class="navbar-nav">
-      <li><a href="#" class="nav-link active" data-tab="home" onclick="event.preventDefault(); switchTab('home');">Home</a></li>
+      <li><a href="#" class="nav-link active" data-tab="home" onclick="event.preventDefault(); switchTab('home');">Dashboard</a></li>
       <li><a href="#" class="nav-link" data-tab="practice" onclick="event.preventDefault(); switchTab('practice');">Practice</a></li>
       <li><a href="#" class="nav-link" data-tab="quiz" onclick="event.preventDefault(); switchTab('quiz');">Quiz</a></li>
       <li><a href="#" class="nav-link" data-tab="flash" onclick="event.preventDefault(); switchTab('flash');">Flashcards</a></li>
@@ -53,9 +53,11 @@
 <div id="ra10-subject-banner" class="ra10-subject-banner" style="display:none"></div>
 
 <div class="page-content">
-  <div class="container">
-    <div id="main-content" class="tab-content active"></div>
-  </div>
+  <main id="app">
+    <section class="view active">
+      <div class="container" id="main-content"></div>
+    </section>
+  </main>
 </div>
 
 <script src="js/spec.js"></script>

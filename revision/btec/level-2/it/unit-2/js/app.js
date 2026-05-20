@@ -33,6 +33,8 @@ let practiceState = null;
 let flashState = { aim: '', current: 0, known: new Set(), learning: new Set(), flipped: false };
 let flashcardData = [];
 let userProgress = {};
+let practiceXpAwarded = false;
+let flashXpAwarded = false;
 
 const SB_URL = 'https://tcrrgsylxbyyrmnouihl.supabase.co';
 const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRjcnJnc3lseGJ5eXJtbm91aWhsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4ODUyMTEsImV4cCI6MjA5MzQ2MTIxMX0.eOp6ma-mfgh8F20nM7E2OaBW28LlZlwuEEWr6k2zDWw';
@@ -126,11 +128,16 @@ function renderHome() {
   const name = profile.full_name || profile.email || 'Learner';
 
   const totalQ = questionData.A.length + questionData.B.length + questionData.C.length;
-  const mcCount = [...questionData.A, ...questionData.B, ...questionData.C]
-    .filter(q => q.type === 'multiple-choice' || q.type === 'multipleChoice').length;
+  const allQuestions = [...questionData.A, ...questionData.B, ...questionData.C];
+  const mcCount = allQuestions.filter(q => q.type === 'multiple-choice' || q.type === 'multipleChoice').length;
+  const totalMarks = allQuestions.reduce((sum, q) => {
+    const parsed = parseMarks(q.marks);
+    return sum + (Number.isFinite(parsed.max) ? parsed.max : 1);
+  }, 0);
   const practisedToday = getCounter('ra10_practice_today');
   const bestQuiz = Number(localStorage.getItem('ra10_best_quiz_it_l2_u2') || 0);
   const knownCards = Number(localStorage.getItem('ra10_flash_known_it_l2_u2') || 0);
+  const quizCount = Number(localStorage.getItem('ra10_quiz_sessions_it_l2_u2') || 0);
 
   host.innerHTML = `
     <div class="dashboard">
@@ -141,10 +148,18 @@ function renderHome() {
           <p>Welcome back, <strong>${escapeHTML(name)}</strong>! Ready to revise?</p>
         </div>
         <div class="hero-actions">
-          <button class="btn hero-btn" onclick="switchTab('quiz')">⚡ Start Quiz</button>
-          <button class="btn hero-btn secondary" onclick="switchTab('flash')">🎴 Flashcards</button>
+          <button class="btn hero-btn" data-goto="quiz">⚡ Start Quiz</button>
+          <button class="btn hero-btn secondary" data-goto="flash">🎴 Flashcards</button>
+        </div>
+        <div class="hero-stats">
+          <div class="stat-block"><strong>${totalQ}</strong><br><span class="stat-label">Questions</span></div>
+          <div class="stat-block"><strong>${totalMarks}</strong><br><span class="stat-label">Total Marks</span></div>
+          <div class="stat-block"><strong>${quizCount}</strong><br><span class="stat-label">Quizzes</span></div>
         </div>
       </div>
+      <aside id="progress-sidebar" class="progress-sidebar hidden">
+        <!-- Progress sidebar will be rendered here -->
+      </aside>
 
       <div class="stats-row">
         <div class="stat-card">
@@ -187,54 +202,59 @@ function renderHome() {
             <div class="aim-count">${questionData.A.length} questions</div>
           </div>
           <div class="aim-btns">
-            <button class="btn sm" onclick="switchTab('practice'); selectAim('A')">Practice</button>
-            <button class="btn sm" onclick="switchTab('flash'); filterFlashcards('A')">Flashcards</button>
+            <button class="btn sm" data-action="practice-aim" data-aim="A">Practice</button>
+            <button class="btn sm" data-action="flash-aim" data-aim="A">Flashcards</button>
           </div>
         </div>
         <div class="aim-card aim-b">
-          <div class="aim-badge" style="background:#7c3aed">B</div>
+          <div class="aim-badge">B</div>
           <div class="aim-body">
             <div class="aim-name">Hardware &amp; Software</div>
             <div class="aim-desc">CPU, memory, storage, devices &amp; software licensing</div>
             <div class="aim-count">${questionData.B.length} questions</div>
           </div>
           <div class="aim-btns">
-            <button class="btn sm" onclick="switchTab('practice'); selectAim('B')">Practice</button>
-            <button class="btn sm" onclick="switchTab('flash'); filterFlashcards('B')">Flashcards</button>
+            <button class="btn sm" data-action="practice-aim" data-aim="B">Practice</button>
+            <button class="btn sm" data-action="flash-aim" data-aim="B">Flashcards</button>
           </div>
         </div>
         <div class="aim-card aim-c">
-          <div class="aim-badge" style="background:#0891b2">C</div>
+          <div class="aim-badge">C</div>
           <div class="aim-body">
             <div class="aim-name">Programming Basics</div>
             <div class="aim-desc">Variables, data types, control flow &amp; functions</div>
             <div class="aim-count">${questionData.C.length} questions</div>
           </div>
           <div class="aim-btns">
-            <button class="btn sm" onclick="switchTab('practice'); selectAim('C')">Practice</button>
-            <button class="btn sm" onclick="switchTab('flash'); filterFlashcards('C')">Flashcards</button>
+            <button class="btn sm" data-action="practice-aim" data-aim="C">Practice</button>
+            <button class="btn sm" data-action="flash-aim" data-aim="C">Flashcards</button>
           </div>
         </div>
       </div>
 
       <div class="section-heading">Study Tools</div>
       <div class="tools-grid">
-        <button class="tool-card" onclick="switchTab('quiz')">
+        <button class="tool-card" data-goto="quiz">
           <div class="tool-icon">⚡</div>
           <div class="tool-name">Quick Quiz</div>
           <div class="tool-desc">Auto-marked multiple-choice · ${mcCount} MC questions</div>
         </button>
-        <button class="tool-card" onclick="switchTab('practice')">
+        <button class="tool-card" data-goto="practice">
           <div class="tool-icon">📝</div>
           <div class="tool-name">Practice Mode</div>
           <div class="tool-desc">All question types · mark scheme feedback</div>
         </button>
-        <button class="tool-card" onclick="switchTab('flash')">
+        <button class="tool-card ai-tool-card" data-goto="practice">
+          <div class="tool-icon">✦</div>
+          <div class="tool-name">AI Examiner</div>
+          <div class="tool-desc">Instant feedback, strengths, improvements, and marks</div>
+        </button>
+        <button class="tool-card" data-goto="flash">
           <div class="tool-icon">🎴</div>
           <div class="tool-name">Flashcards</div>
           <div class="tool-desc">45 key terms · flip &amp; track progress</div>
         </button>
-        <button class="tool-card" onclick="switchTab('guide')">
+        <button class="tool-card" data-goto="guide">
           <div class="tool-icon">📖</div>
           <div class="tool-name">Revision Guide</div>
           <div class="tool-desc">Full notes for all 3 aims · accordion sections</div>
@@ -242,12 +262,47 @@ function renderHome() {
       </div>
     </div>
   `;
+
+  $$('[data-goto]', host).forEach(btn => {
+    btn.addEventListener('click', () => switchTab(btn.dataset.goto));
+  });
+  $$('[data-action="practice-aim"]', host).forEach(btn => {
+    btn.addEventListener('click', () => selectAim(btn.dataset.aim));
+  });
+  $$('[data-action="flash-aim"]', host).forEach(btn => {
+    btn.addEventListener('click', () => {
+      switchTab('flash');
+      filterFlashcards(btn.dataset.aim || '');
+    });
+  });
 }
 
 // ====== PRACTICE — data helpers ======
 
 let practiceQueue = [];
 let practiceIdx = 0;
+
+// Practice-only curation: remove outlier questions that are too advanced or low-value for L2 exam prep.
+const PRACTICE_EXCLUDED_IDS = new Set([
+  'A046', 'A047', 'A048', 'A049', 'A050', 'B070', 'C065'
+]);
+const PRACTICE_EXCLUDED_EXACT_TEXT = new Set([
+  'what does assignment do?',
+  'what does gui stand for?'
+]);
+
+function isPracticeEligible(q) {
+  if (!q) return false;
+  if (q.id && PRACTICE_EXCLUDED_IDS.has(String(q.id))) return false;
+
+  const text = String(q.question || '').trim().toLowerCase();
+  if (PRACTICE_EXCLUDED_EXACT_TEXT.has(text)) return false;
+
+  const marks = parseMarks(q.marks);
+  if ((marks.max || 0) >= 8) return false;
+
+  return true;
+}
 
 function isMcType(type) {
   return type === 'multiple-choice' || type === 'multipleChoice' || type === 'mc';
@@ -662,11 +717,13 @@ function startPractice() {
       return true;
     });
   }
+  pool = pool.filter(isPracticeEligible);
   if (!pool.length) { $('#practice-card-area').innerHTML = '<p class="muted">No questions match those filters.</p>'; return; }
 
   // Shuffle
   practiceQueue = pool.slice().sort(()=>Math.random()-0.5);
   practiceIdx = 0;
+  practiceXpAwarded = false;
   renderPracticeCard();
 }
 
@@ -837,20 +894,57 @@ function renderPracticeCard() {
 function renderPracticeComplete() {
   const area = $('#practice-card-area');
   if (!area) return;
+  if (!practiceXpAwarded && practiceQueue.length) {
+    const xp = Math.min(practiceQueue.length * 10, 50);
+    awardXP(xp, `+${xp} XP - Practice done!`);
+    practiceXpAwarded = true;
+  }
   area.innerHTML = `
     <div class="practice-complete">
       <div class="pc-icon">🎉</div>
       <h3>Session complete!</h3>
       <p>You worked through all ${practiceQueue.length} questions.</p>
       <button class="btn primary" onclick="startPractice()">Practice again</button>
-      <button class="btn" onclick="switchTab('home')">Back to home</button>
+      <button class="btn" onclick="switchTab('home')">Back to Dashboard</button>
     </div>
   `;
 }
 
 function awardXP(amount, message) {
-  if (!window.RA10 || !RA10.isLoggedIn) return;
-  console.log(message);
+  if (!window.RA10 || !RA10.isLoggedIn || !RA10.isLoggedIn()) return;
+  const session = RA10.getSession ? RA10.getSession() : null;
+  if (!session || !session.user || !session.user.id) return;
+
+  fetch(SB_URL + '/rest/v1/rpc/increment_xp', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'apikey': SB_KEY,
+      'Authorization': 'Bearer ' + session.access_token
+    },
+    body: JSON.stringify({ amount })
+  }).then(res => {
+    if (!res.ok) return;
+    incrementCounter('ra10_xp_today', Number(amount || 0));
+    showXPToast(message || ('+' + amount + ' XP'));
+  }).catch(() => {});
+}
+
+function showXPToast(msg) {
+  let t = document.getElementById('xp-toast');
+  if (!t) {
+    t = document.createElement('div');
+    t.id = 'xp-toast';
+    t.style.cssText = 'position:fixed;bottom:80px;right:24px;z-index:99999;' +
+      'background:#1c1430;color:#fff;padding:10px 18px;border-radius:999px;' +
+      'font-weight:700;font-size:0.9rem;opacity:0;transition:opacity 0.3s;' +
+      'pointer-events:none;box-shadow:0 8px 24px rgba(88,28,135,.28);';
+    document.body.appendChild(t);
+  }
+  t.textContent = msg;
+  t.style.opacity = '1';
+  clearTimeout(window._xpToastTimer);
+  window._xpToastTimer = setTimeout(() => { t.style.opacity = '0'; }, 1400);
 }
 
 function addPracticeProgress(count) {
@@ -1038,13 +1132,13 @@ function renderQuizResults() {
   const btnRow = el('div', { class: 'qr-btns' });
   const btnAgain = el('button', { class: 'btn primary' }, 'Take Another Quiz');
   btnAgain.addEventListener('click', renderQuiz);
-  const btnHome = el('button', { class: 'btn ghost' }, 'Home');
+  const btnHome = el('button', { class: 'btn ghost' }, 'Dashboard');
   btnHome.addEventListener('click', renderHome);
   btnRow.appendChild(btnAgain);
   btnRow.appendChild(btnHome);
   res.appendChild(btnRow);
   host.appendChild(res);
-  awardXP(Math.min(correct * 5, 50), `+${Math.min(correct * 5, 50)} XP — Quiz complete!`);
+  awardXP(20, '+20 XP - Quiz complete!');
 }
 
 // ====== FLASHCARD ENGINE ======
@@ -1083,6 +1177,7 @@ function renderFlashcards() {
     if (!ok) { $('#flash-area').innerHTML = '<p class="error">Failed to load flashcards.</p>'; return; }
     flashState.current = 0;
     flashState.flipped = false;
+    flashXpAwarded = false;
     renderFlashcard();
     updateFlashProgress();
   });
@@ -1093,6 +1188,7 @@ function filterFlashcards(aim) {
   flashState.aim = aim;
   flashState.current = 0;
   flashState.flipped = false;
+  flashXpAwarded = false;
   renderFlashcard();
   updateFlashProgress();
 }
@@ -1150,6 +1246,11 @@ function flipCard() {
 
 function nextCard() {
   const cards = getFilteredCards();
+  if (!flashXpAwarded && cards.length && flashState.current >= cards.length - 1) {
+    awardXP(5, '+5 XP - Flashcards done!');
+    flashXpAwarded = true;
+    return;
+  }
   if (flashState.current < cards.length - 1) {
     flashState.current++;
     flashState.flipped = false;
@@ -1363,17 +1464,37 @@ function renderGuide() {
   if (!host) return;
 
   host.innerHTML = `
-    <div class="guide-page">
-      <div class="guide-header">
-        <h2>Revision Guide</h2>
-        <p>Full notes for all three learning aims — click any section to expand</p>
+    <div class="guide-shell">
+      <aside class="guide-sidebar" id="guide-sidebar">
+        <div class="guide-sidebar-hd">
+          <div class="guide-toc-label">Revision Guide</div>
+          <button class="guide-sb-toggle" type="button" onclick="toggleGuideSidebar()">Menu</button>
+        </div>
+        <div class="guide-toc-scroll" id="guide-toc-list">
+          <button class="guide-toc-aim-link active" data-aim="A" onclick="switchGuideAim('A')">
+            <span class="guide-toc-badge">A</span>
+            <span class="guide-toc-name">Applications &amp; Issues</span>
+          </button>
+          <button class="guide-toc-aim-link" data-aim="B" onclick="switchGuideAim('B')">
+            <span class="guide-toc-badge">B</span>
+            <span class="guide-toc-name">Hardware &amp; Software</span>
+          </button>
+          <button class="guide-toc-aim-link" data-aim="C" onclick="switchGuideAim('C')">
+            <span class="guide-toc-badge">C</span>
+            <span class="guide-toc-name">Programming Basics</span>
+          </button>
+        </div>
+      </aside>
+
+      <div class="guide-main">
+        <div class="guide-topbar">
+          <div>
+            <h2 id="guide-aim-title">Learning Aim A: Applications &amp; Issues</h2>
+            <p id="guide-aim-subtitle">Exam-focused notes, key terms, and common pitfalls.</p>
+          </div>
+        </div>
+        <div id="guide-body"></div>
       </div>
-      <div class="guide-aim-tabs">
-        <button class="guide-aim-tab active" data-aim="A" onclick="switchGuideAim('A')">Aim A: Applications &amp; Issues</button>
-        <button class="guide-aim-tab" data-aim="B" onclick="switchGuideAim('B')">Aim B: Hardware &amp; Software</button>
-        <button class="guide-aim-tab" data-aim="C" onclick="switchGuideAim('C')">Aim C: Programming Basics</button>
-      </div>
-      <div id="guide-body"></div>
     </div>
   `;
 
@@ -1381,7 +1502,18 @@ function renderGuide() {
 }
 
 function switchGuideAim(aim) {
-  $$('.guide-aim-tab').forEach(t => t.classList.toggle('active', t.dataset.aim === aim));
+  const subtitles = {
+    A: 'Systems in context, cloud trade-offs, security and GDPR.',
+    B: 'Hardware, memory, storage and software decisions for scenarios.',
+    C: 'Programming fundamentals, logic, and algorithm interpretation.'
+  };
+  $$('.guide-toc-aim-link').forEach(t => t.classList.toggle('active', t.dataset.aim === aim));
+  const titleEl = $('#guide-aim-title');
+  const subEl = $('#guide-aim-subtitle');
+  if (window.GuideContent && window.GuideContent.aims[aim] && titleEl) {
+    titleEl.textContent = window.GuideContent.aims[aim].title;
+  }
+  if (subEl) subEl.textContent = subtitles[aim] || subtitles.A;
   renderGuideAim(aim);
 }
 
@@ -1396,41 +1528,66 @@ function renderGuideAim(aim) {
 
   const aimData = window.GuideContent.aims[aim];
   const sectionsHtml = aimData.sections.map((section, i) => {
+    const heading = String(section.heading || 'Topic').trim();
+    const codeMatch = heading.match(/^([A-Z](?:\d+(?:\.\d+)?(?:-[A-Z]?\d+(?:\.\d+)?)?)?)\.?\s*(.*)$/);
+    const code = codeMatch ? codeMatch[1] : 'Topic';
+    const name = codeMatch ? (codeMatch[2] || heading) : heading;
     const isFirst = i === 0;
     return `
-      <div class="guide-section" data-open="${isFirst}">
-        <button class="guide-section-toggle ${isFirst ? 'open' : ''}" onclick="toggleSection(this)">
-          <span class="gs-heading">${escapeHTML(section.heading)}</span>
-          <span class="gs-chevron">${isFirst ? '▲' : '▼'}</span>
+      <article class="guide-topic ${isFirst ? 'open' : ''}">
+        <button class="guide-topic-hd" onclick="toggleGuideTopic(this)">
+          <span class="guide-topic-code">${escapeHTML(code)}</span>
+          <span class="guide-topic-name">${escapeHTML(name)}</span>
+          <span class="guide-topic-chevron">▼</span>
         </button>
-        <div class="guide-section-content ${isFirst ? 'open' : ''}">
+        <div class="guide-topic-body">
           ${formatGuideContent(section.content)}
         </div>
-      </div>
+      </article>
     `;
   }).join('');
 
-  body.innerHTML = `<div class="guide-sections">${sectionsHtml}</div>`;
+  body.innerHTML = `
+    <section class="guide-aim-section" id="guide-aim-${escapeHTML(aim)}">
+      ${sectionsHtml}
+    </section>
+  `;
 }
 
-function toggleSection(btn) {
-  const content = btn.nextElementSibling;
-  const nowOpen = !content.classList.contains('open');
-  content.classList.toggle('open', nowOpen);
-  btn.classList.toggle('open', nowOpen);
-  btn.querySelector('.gs-chevron').textContent = nowOpen ? '▲' : '▼';
+function toggleGuideTopic(btn) {
+  const topic = btn.closest('.guide-topic');
+  if (!topic) return;
+  topic.classList.toggle('open');
+}
+
+function toggleGuideSidebar() {
+  const sidebar = $('#guide-sidebar');
+  if (!sidebar) return;
+  sidebar.classList.toggle('sb-open');
 }
 
 function formatGuideContent(text) {
   const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
   let html = '';
   let inList = false;
+  let inOrdered = false;
+
+  function closeLists() {
+    if (inList) { html += '</ul>'; inList = false; }
+    if (inOrdered) { html += '</ol>'; inOrdered = false; }
+  }
+
   for (const line of lines) {
     if (line.startsWith('- ')) {
+      if (inOrdered) { html += '</ol>'; inOrdered = false; }
       if (!inList) { html += '<ul>'; inList = true; }
       html += `<li>${escapeHTML(line.slice(2))}</li>`;
-    } else {
+    } else if (/^\d+\.\s+/.test(line)) {
       if (inList) { html += '</ul>'; inList = false; }
+      if (!inOrdered) { html += '<ol>'; inOrdered = true; }
+      html += `<li>${escapeHTML(line.replace(/^\d+\.\s+/, ''))}</li>`;
+    } else {
+      closeLists();
       if (line.endsWith(':') && line.length < 70) {
         html += `<p class="guide-subheading">${escapeHTML(line)}</p>`;
       } else {
@@ -1438,7 +1595,7 @@ function formatGuideContent(text) {
       }
     }
   }
-  if (inList) html += '</ul>';
+  closeLists();
   return html;
 }
 
@@ -1504,7 +1661,9 @@ window.nextCard = nextCard;
 window.prevCard = prevCard;
 window.markCard = markCard;
 window.switchGuideAim = switchGuideAim;
-window.toggleSection = toggleSection;
+window.toggleSection = toggleGuideTopic;
+window.toggleGuideTopic = toggleGuideTopic;
+window.toggleGuideSidebar = toggleGuideSidebar;
 window.startQuiz = startQuiz;
 window.nextQuizQuestion = nextQuizQuestion;
 window.prevQuizQuestion = prevQuizQuestion;

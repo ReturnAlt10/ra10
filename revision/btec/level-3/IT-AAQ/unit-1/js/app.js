@@ -1081,6 +1081,20 @@ onDataReady(() => {
 
 // ---------- Dashboard ----------
 function renderDashboard() {
+  // Personalized greeting
+  const profile = (window.RA10 && window.RA10.getProfile ? window.RA10.getProfile() : null) || {};
+  const name = profile.full_name || profile.display_name || profile.email || 'Learner';
+  const hero = document.querySelector('.hero > div');
+  if (hero) {
+    let greet = hero.querySelector('.dashboard-greeting');
+    if (!greet) {
+      greet = document.createElement('p');
+      greet.className = 'dashboard-greeting';
+      hero.appendChild(greet);
+    }
+    greet.innerHTML = `Welcome back, <strong>${escapeHTML(name)}</strong>! Ready to revise?`;
+  }
+
   const stats = {
     total: QUESTIONS.length,
     aims: new Set(QUESTIONS.map(q => q.learning_aim)).size,

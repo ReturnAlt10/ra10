@@ -109,6 +109,25 @@ Networking:
 - WANs for multi-site connectivity
 - Secure protocols (HTTPS, SFTP)
 - VPNs for remote access`
+        },
+        {
+          heading: 'A Exam Focus: Typical Questions and Mistakes',
+          content: `Use real scenarios when answering A questions.
+
+Strong exam approach:
+- Identify the user or business need first
+- Link each advantage/disadvantage to that context
+- Include at least one security and one legal point where relevant
+
+Common mistakes to avoid:
+- Listing cloud benefits without explaining why they matter
+- Confusing GDPR principles with security controls
+- Giving generic networking definitions without context
+
+High-value language to use:
+- "This improves reliability because..."
+- "A key risk is... which can be reduced by..."
+- "For this organisation, the best option is... because..."`
         }
       ]
     },
@@ -297,6 +316,26 @@ Software Licensing:
 - Freeware: No cost but proprietary
 - Shareware: Trial period, then purchase
 - Site/Volume licenses: Multiple users/installations`
+        },
+        {
+          heading: 'B Exam Focus: Comparison and Calculation Skills',
+          content: `Most B questions reward clear comparison and accurate terminology.
+
+What examiners want to see:
+- Direct comparisons (for example SSD vs HDD) with clear consequences
+- Correct use of terms such as volatile, non-volatile, throughput, latency
+- Accurate unit conversion and working in capacity calculations
+
+Recommended structure for 3-8 mark responses:
+1. Define the key concept briefly
+2. Compare at least two valid options
+3. Apply your comparison to the scenario given
+4. Conclude with a justified recommendation
+
+Common mistakes to avoid:
+- Treating RAM and storage as the same thing
+- Using "faster" without saying what is faster and why
+- Missing units in calculations (MB, GB, Mbps)`
         }
       ]
     },
@@ -412,6 +451,25 @@ Pseudocode:
 - Not dependent on specific language
 - Helps plan before coding
 - Easier to understand algorithm`
+        },
+        {
+          heading: 'C Exam Focus: Writing Better Algorithm Answers',
+          content: `C questions usually test logic, not memorisation.
+
+For trace-table or code-analysis questions:
+- Track variable values line by line
+- Note loop conditions and stop points clearly
+- Watch out for off-by-one errors in loops
+
+For pseudocode/algorithm design questions:
+- Start with clear inputs, processing, and outputs
+- Use selection and iteration correctly
+- Include validation where user input is involved
+
+Good habits in exam answers:
+- Use meaningful variable names
+- Keep steps in logical order
+- Add brief comments if they clarify intent`
         }
       ]
     }
