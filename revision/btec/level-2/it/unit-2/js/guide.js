@@ -216,6 +216,56 @@ Selection based on:
 - Accessibility
 - Cost`
         },
+  {
+    heading: 'B1.5 CPU Performance Factors',
+    content: `CPU performance is affected by several hardware factors.
+
+Clock speed (GHz):
+- Higher clock speed means more cycles per second
+- More cycles can increase instruction throughput
+
+Number of cores:
+- Multi-core CPUs can process multiple tasks in parallel
+- Useful for multitasking and multi-threaded software
+
+Cache size:
+- Larger cache stores more frequently used data close to CPU
+- Reduces delays caused by accessing slower RAM
+
+Architecture and instruction efficiency:
+- Newer CPU designs can complete more work per cycle
+- Instruction set and pipeline design affect real-world speed
+
+Thermal limits and throttling:
+- If a CPU gets too hot, it may reduce speed
+- Cooling quality impacts sustained performance`
+  },
+  {
+    heading: 'B1.6 Memory and Storage Capacity',
+    content: `You should compare and calculate data sizes accurately.
+
+Common units:
+- 8 bits = 1 byte
+- 1024 bytes = 1 KB
+- 1024 KB = 1 MB
+- 1024 MB = 1 GB
+- 1024 GB = 1 TB
+
+Capacity examples:
+- RAM is typically measured in GB (e.g., 8 GB, 16 GB)
+- SSD/HDD capacity is measured in GB/TB (e.g., 512 GB SSD)
+
+Memory vs storage:
+- RAM is volatile working memory for active programs
+- Storage (SSD/HDD) is non-volatile for long-term data
+
+Data transfer considerations:
+- File transfer time depends on file size and transfer rate
+- Larger files and slower connections increase transfer time
+
+Exam tip:
+- Always show unit conversions clearly in calculation questions`
+  },
         {
           heading: 'B2.1-B2.3 Software Types and Licensing',
           content: `Software is licensed and categorized by type and use.
