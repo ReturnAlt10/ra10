@@ -773,7 +773,7 @@ body.unit-shell-mode .site-announcement-bar{
   .home-reframe-plan-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
   .home-reframe-main p{font-size:var(--tx-base)}
 }
-@media (max-width: 768px){
+@media (max-width: 640px){
   .home-reframe-banner{padding-right:44px}
   .home-reframe{gap:var(--sp3);padding-block:var(--sp2) var(--sp4)}
   .home-reframe-main h1{max-width:100%;font-size:clamp(1.85rem,10vw,2.7rem)}
@@ -1667,7 +1667,7 @@ body.unit-shell-mode .site-announcement-bar{
   .rev-flow-grid.levels{grid-template-columns:1fr 1fr}
   .lb-hero-duo{padding:var(--sp5)}
 }
-@media (max-width: 768px){
+@media (max-width: 640px){
   .revision-showcase{grid-template-columns:1fr;padding:var(--sp4)}
   .revision-showcase-media{min-height:200px}
   .rev-flow-grid,.rev-flow-grid.levels{grid-template-columns:1fr}
@@ -1890,7 +1890,7 @@ body.unit-shell-mode .iframe-wrap.full-screen{
   height:100vh;
 }
 
-@media (max-width: 768px){
+@media (max-width: 640px){
   body.unit-shell-mode{
     padding-top:0 !important;
     padding-bottom:0 !important;
@@ -1931,7 +1931,20 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
   .grid-2{grid-template-columns:1fr}
 }
 
-@media (max-width: 768px) {
+@media (min-width: 641px) and (max-width: 1024px){
+  .home-reframe-grid{grid-template-columns:minmax(0,1.05fr) minmax(280px,.95fr);gap:var(--sp4)}
+  .home-reframe-principles{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .home-reframe-lanes{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .home-reframe-plan-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .home-price-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .price-compare-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .c,.cd,.cf{padding-inline:var(--sp5)}
+  .nav-inner{padding-inline:var(--sp5)}
+  .home-hero h1{font-size:clamp(2.1rem,5vw,3.25rem)}
+  .hero h1{font-size:clamp(1.8rem,4vw,2.6rem)}
+}
+
+@media (max-width: 640px){
   .site-announcement-inner{padding:9px var(--sp4);gap:8px}
   .site-announcement-text{font-size:12px}
   .site-announcement-meta{font-size:11px}
@@ -2252,7 +2265,7 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
   }
 }
 
-@media (hover: none) and (pointer: coarse) {
+@media (max-width: 640px) and (hover: none) and (pointer: coarse) {
   .nav{display:none !important;}
   .mobile-top-nav{display:flex !important;}
   .mobile-bottom-nav{display:flex !important;}
@@ -2278,7 +2291,7 @@ body.mobile-ui{
 }
 body.mobile-ui.mobile-sheet-open .mobile-bottom-nav{display:flex !important;}
 
-@media (max-width: 768px) {
+@media (max-width: 640px) {
   body.ra10-refresh-enabled .topbar .tabs,
   body.ra10-refresh-enabled .navbar .tabs,
   body.ra10-refresh-enabled .viewer-topbar .tabs {
@@ -2983,7 +2996,7 @@ body.mobile-ui.mobile-sheet-open .mobile-bottom-nav{display:flex !important;}
   .home-radical-subjects{grid-template-columns:1fr}
   .home-radical-pricing{grid-template-columns:1fr}
 }
-@media (max-width: 768px){
+@media (max-width: 640px){
   .home-radical{gap:var(--sp3);padding-block:var(--sp3) var(--sp4)}
   .home-radical-hero{border-radius:24px;padding:var(--sp4)}
   .home-radical-title{max-width:100%}
@@ -3129,7 +3142,7 @@ body.mobile-ui.mobile-sheet-open .mobile-bottom-nav{display:flex !important;}
 @media (max-width: 980px){
   .home-radical-grid{grid-template-columns:1fr}
 }
-@media (max-width: 768px){
+@media (max-width: 640px){
   .home-radical{gap:var(--sp2);padding-block:var(--sp1) var(--sp3)}
   .home-radical-title{max-width:100%;font-size:clamp(1.55rem,8vw,2.2rem)}
   .home-radical-copy{font-size:var(--tx-sm);line-height:1.52}
@@ -3198,7 +3211,7 @@ body.mobile-ui.mobile-sheet-open .mobile-bottom-nav{display:flex !important;}
   .home-v2-launch-grid{grid-template-columns:1fr}
   .home-v2-close-grid{grid-template-columns:1fr}
 }
-@media (max-width: 768px){
+@media (max-width: 640px){
   .bc{margin-top:var(--sp2);padding:6px}
   .bc-item{min-height:30px;padding:5px 10px}
   .bc-sep{width:22px;height:22px}
@@ -5535,7 +5548,7 @@ function closeMobileSubjectSheet() {
 }
 
 function syncMobileNavChrome() {
-  const isMobile = window.matchMedia('(max-width: 900px), (hover: none) and (pointer: coarse)').matches;
+  const isMobile = window.matchMedia('(max-width: 640px) and (hover: none) and (pointer: coarse)').matches;
   const topNav = document.querySelector('.mobile-top-nav');
   const bottomNav = document.querySelector('.mobile-bottom-nav');
   const sheet = document.getElementById('mobile-subject-sheet');
