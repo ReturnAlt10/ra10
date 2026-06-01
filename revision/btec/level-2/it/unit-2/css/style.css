@@ -101,10 +101,13 @@ select, option { color: var(--ink); background: var(--surface); }
   background: rgba(251,250,246,.92);
   backdrop-filter: saturate(140%) blur(8px);
   -webkit-backdrop-filter: saturate(140%) blur(8px);
+    display: flex;
+    flex-direction: row;
   border-bottom: 1px solid var(--line);
   padding: 10px 20px;
 }
 [data-theme="dark"] .navbar { background: rgba(17,22,20,.92); }
+    align-items: center;
 .navbar-content {
   width: 100%; max-width: none; margin: 0;
   display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
@@ -725,6 +728,63 @@ select, option { color: var(--ink); background: var(--surface); }
   }
 }
 
+@media (min-width: 641px) and (max-width: 1024px) {
+  .navbar-content {
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 0;
+    align-items: flex-start;
+  }
+
+  .unit-brand {
+    flex-shrink: 0;
+  }
+
+  .site-unit-nav,
+  .navbar-nav {
+    width: auto;
+    flex: 0 1 auto;
+    min-width: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+    scrollbar-width: none;
+    padding-bottom: 2px;
+  }
+
+  .site-unit-nav::-webkit-scrollbar,
+  .navbar-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .site-unit-link,
+  .nav-link {
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+
+  .navbar-nav {
+    order: 6;
+    width: 100%;
+    flex: 1 0 100%;
+    min-width: 100%;
+  }
+
+  .site-unit-nav {
+    order: 3;
+  }
+
+  #unit2-credit-chip {
+    margin-left: 0 !important;
+    flex-shrink: 0;
+  }
+
+  .unit-avatar-btn {
+    flex-shrink: 0;
+  }
+}
+
 /* ====== UTILITIES ====== */
 .muted { color: var(--muted); font-size: 13px; text-align: center; padding: 32px; }
 .error {
@@ -802,6 +862,33 @@ select, option { color: var(--ink); background: var(--surface); }
 }
 .mc-practice-row:has(input:checked) .mc-practice-letter { background: var(--accent); color: white; border-color: var(--accent); }
 .mc-practice-text { font-size: 14px; }
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  .navbar-content {
+    flex-wrap: wrap !important;
+    align-items: flex-start !important;
+  }
+
+  .navbar-nav {
+    order: 20 !important;
+    width: 100% !important;
+    min-width: 100% !important;
+    flex: 1 0 100% !important;
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    white-space: nowrap !important;
+  }
+
+  .nav-link {
+    flex: 0 0 auto !important;
+    white-space: nowrap !important;
+  }
+}
 .mc-practice-row input[type="radio"] { display: none; }
 
 /* Written answer textarea */

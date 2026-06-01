@@ -60,6 +60,31 @@ select, option { color: var(--ink); background: var(--surface); }
   padding: 8px 16px;
   display: flex; align-items: center; justify-content: flex-start; gap: 12px; flex-wrap: wrap;
 }
+  @media (min-width: 641px) and (max-width: 1024px) {
+    .topbar {
+      flex-wrap: wrap !important;
+      align-items: flex-start !important;
+    }
+
+    .topbar .tabs {
+      order: 20 !important;
+      width: 100% !important;
+      min-width: 100% !important;
+      flex: 1 0 100% !important;
+      display: flex !important;
+      flex-direction: row !important;
+      flex-wrap: nowrap !important;
+      align-items: center !important;
+      justify-content: flex-start !important;
+      overflow-x: auto !important;
+      overflow-y: hidden !important;
+    }
+
+    .topbar .tab {
+      flex: 0 0 auto !important;
+      white-space: nowrap !important;
+    }
+  }
 [data-theme="dark"] .topbar { background: rgba(17,22,20,.92); }
 .site-unit-nav{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .site-unit-link{
@@ -1115,6 +1140,65 @@ main {
   }
   .u1-progress-sidebar.open {
     transform: translateY(0);
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .topbar {
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 8px 12px;
+    align-items: flex-start;
+  }
+
+  .unit-brand {
+    flex-shrink: 0;
+  }
+
+  .site-unit-nav {
+    width: auto;
+    flex: 0 1 auto;
+    min-width: 0;
+    overflow-x: auto;
+    white-space: nowrap;
+    flex-wrap: nowrap;
+    padding-bottom: 2px;
+    scrollbar-width: none;
+  }
+
+  .site-unit-nav::-webkit-scrollbar,
+  .topbar .tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .topbar .tabs {
+    order: 6;
+    width: 100%;
+    flex: 1 0 100%;
+    min-width: 100%;
+    display: flex;
+    flex-direction: row;
+    overflow-x: auto;
+    overflow-y: hidden;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    padding-bottom: 2px;
+    scrollbar-width: none;
+  }
+
+  .topbar .tab {
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+
+  #unit1-credit-chip {
+    margin-left: 0;
+    flex-shrink: 0;
+  }
+
+  .unit-avatar-btn {
+    flex-shrink: 0;
+  }
+}
     opacity: 1;
     pointer-events: auto;
   }
