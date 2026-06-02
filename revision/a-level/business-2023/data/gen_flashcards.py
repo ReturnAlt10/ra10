@@ -1,0 +1,1221 @@
+import json
+
+cards = [
+    # ─────────────── LEARNING AIM A (FC001–FC025) ───────────────
+    {
+        "id": "FC001",
+        "learning_aim": "A",
+        "topic": "A1.1.1 Personal Computers",
+        "front": "What is a personal computer (PC)?",
+        "back": "A general-purpose computing device designed for individual use, with a CPU, RAM, storage, and OS. It can run a wide range of software for tasks such as word processing, web browsing, and gaming.",
+        "tags": ["hardware", "devices", "PC"]
+    },
+    {
+        "id": "FC002",
+        "learning_aim": "A",
+        "topic": "A1.1.2 Multifunctional Devices",
+        "front": "What is a multifunctional device (MFD)?",
+        "back": "A device that combines the functionality of multiple peripherals into one unit, typically integrating printing, scanning, copying, and faxing. MFDs reduce desk space and cost in office environments.",
+        "tags": ["hardware", "devices", "MFD", "peripheral"]
+    },
+    {
+        "id": "FC003",
+        "learning_aim": "A",
+        "topic": "A1.1.3 Mobile Devices",
+        "front": "Give three examples of mobile devices.",
+        "back": "Smartphones, tablets, and laptops are all mobile devices. They are battery-powered, portable, and typically support wireless connectivity such as Wi-Fi and Bluetooth.",
+        "tags": ["hardware", "devices", "mobile"]
+    },
+    {
+        "id": "FC004",
+        "learning_aim": "A",
+        "topic": "A1.1.4 Servers",
+        "front": "What is a web server?",
+        "back": "A server that hosts websites and delivers web pages to clients over the internet using HTTP or HTTPS. When a user requests a URL, the web server processes the request and returns the appropriate HTML content.",
+        "tags": ["hardware", "servers", "networks"]
+    },
+    {
+        "id": "FC005",
+        "learning_aim": "A",
+        "topic": "A1.1.4 Servers",
+        "front": "Difference between a file server and an application server?",
+        "back": "A file server provides centralised storage so users can access and share files across a network. An application server hosts and runs software applications, processing logic server-side and sending results to clients.",
+        "tags": ["hardware", "servers", "compare"]
+    },
+    {
+        "id": "FC006",
+        "learning_aim": "A",
+        "topic": "A1.1.5 Entertainment Systems",
+        "front": "Give two examples of entertainment systems and their uses.",
+        "back": "Smart TVs stream on-demand video content via services such as Netflix. Games consoles (e.g. PlayStation, Xbox) provide interactive gaming and online multiplayer experiences.",
+        "tags": ["hardware", "devices", "entertainment"]
+    },
+    {
+        "id": "FC007",
+        "learning_aim": "A",
+        "topic": "A1.1.9 Embedded Systems",
+        "front": "What is an embedded system?",
+        "back": "A dedicated computer system built into a larger device to perform a specific function, with hardware and software tightly integrated. Examples include the control unit in a washing machine, a car's ECU, and a smart thermostat.",
+        "tags": ["hardware", "embedded", "IoT"]
+    },
+    {
+        "id": "FC008",
+        "learning_aim": "A",
+        "topic": "A1.1.9 Embedded Systems",
+        "front": "What does IoT stand for, and what does it describe?",
+        "back": "IoT stands for Internet of Things. It describes a network of physical objects embedded with sensors and software that connect to the internet to collect and exchange data, such as smart home devices and wearables.",
+        "tags": ["IoT", "embedded", "acronym"]
+    },
+    {
+        "id": "FC009",
+        "learning_aim": "A",
+        "topic": "A1.2.5 Manufacturing Use",
+        "front": "How are IT systems used in manufacturing?",
+        "back": "IT systems control robotic arms on assembly lines, monitor production quality via sensors, and manage stock levels through automated stock control. Computer-Aided Manufacturing (CAM) uses software to control machinery directly.",
+        "tags": ["use", "manufacturing", "automation"]
+    },
+    {
+        "id": "FC010",
+        "learning_aim": "A",
+        "topic": "A1.2.6 Healthcare Use",
+        "front": "Give two uses of IT systems in healthcare.",
+        "back": "Electronic Patient Records (EPR) store and share patient data securely between NHS services. Diagnostic imaging systems (e.g. MRI scanners) use embedded computers to capture and analyse medical images.",
+        "tags": ["use", "healthcare", "EPR"]
+    },
+    {
+        "id": "FC011",
+        "learning_aim": "A",
+        "topic": "A1.3.1 Network Diagrams",
+        "front": "What is a network diagram used for?",
+        "back": "A network diagram is a visual representation of how devices (nodes) are connected within a network. Standard symbols represent routers, switches, servers, and clients, enabling engineers to plan and document IT infrastructure.",
+        "tags": ["notation", "network diagram", "design"]
+    },
+    {
+        "id": "FC012",
+        "learning_aim": "A",
+        "topic": "A1.3.2 Flowcharts",
+        "front": "Name the four standard flowchart symbols and their meanings.",
+        "back": "Oval/terminator = start or end • Rectangle/process = an action or instruction • Diamond/decision = a yes/no question • Parallelogram/input-output = data entry or output. Arrows show the direction of flow.",
+        "tags": ["notation", "flowchart", "symbols"]
+    },
+    {
+        "id": "FC013",
+        "learning_aim": "A",
+        "topic": "A2.2 Assistive Technologies",
+        "front": "What is a screen reader, and who benefits from it?",
+        "back": "Screen-reading software converts on-screen text and interface elements into synthesised speech or braille output. It primarily benefits users who are blind or have severe visual impairments, enabling them to use a computer independently.",
+        "tags": ["assistive technology", "accessibility", "A2.2.2"]
+    },
+    {
+        "id": "FC014",
+        "learning_aim": "A",
+        "topic": "A2.3 Storage Media",
+        "front": "What four characteristics are used to compare storage media?",
+        "back": "Capacity (how much data it stores) • Cost (price per GB) • Speed (read/write transfer rate) • Compatibility (whether the device works with the required system or interface, e.g. USB, SATA).",
+        "tags": ["storage", "media", "characteristics"]
+    },
+    {
+        "id": "FC015",
+        "learning_aim": "A",
+        "topic": "A2.4 Data Processing",
+        "front": "Difference between manual and automatic data processing?",
+        "back": "Manual processing requires human intervention at each step (e.g. entering data into a spreadsheet by hand). Automatic processing uses hardware and software to process data without human involvement (e.g. a sensor automatically logging temperature readings).",
+        "tags": ["data processing", "manual", "automatic"]
+    },
+    {
+        "id": "FC016",
+        "learning_aim": "A",
+        "topic": "A3.1 Operating Systems",
+        "front": "What is a real-time operating system (RTOS)?",
+        "back": "An RTOS processes inputs and produces outputs within guaranteed time constraints, making it essential for safety-critical applications. Examples include the OS controlling an aircraft's autopilot or a medical monitoring device.",
+        "tags": ["OS", "RTOS", "A3.1.5"]
+    },
+    {
+        "id": "FC017",
+        "learning_aim": "A",
+        "topic": "A3.2 OS Memory Management",
+        "front": "What is virtual memory?",
+        "back": "Virtual memory is a memory management technique where the OS uses a portion of secondary storage (the page file) as an extension of RAM. This allows programs larger than physical RAM to run, though it is slower than using RAM alone.",
+        "tags": ["OS", "memory management", "virtual memory"]
+    },
+    {
+        "id": "FC018",
+        "learning_aim": "A",
+        "topic": "A3.3 Utility Software",
+        "front": "Give three examples of utility software.",
+        "back": "Antivirus software, disk defragmenters, and file compression tools (e.g. WinZip) are all utilities. Utility software performs maintenance and optimisation tasks for the operating system and hardware.",
+        "tags": ["software", "utility", "A3.3.1"]
+    },
+    {
+        "id": "FC019",
+        "learning_aim": "A",
+        "topic": "A3.5 User Interfaces",
+        "front": "What is a Command Line Interface (CLI)?",
+        "back": "A CLI allows users to interact with the OS by typing text commands directly. It offers precise control and is often faster for experienced users but has a steep learning curve compared to graphical interfaces.",
+        "tags": ["UI", "CLI", "A3.5.1"]
+    },
+    {
+        "id": "FC020",
+        "learning_aim": "A",
+        "topic": "A3.6 Open Source vs Proprietary Software",
+        "front": "What is the key difference between open source and proprietary software?",
+        "back": "Open source software provides access to its source code, allowing anyone to view, modify, and distribute it (e.g. Linux, LibreOffice). Proprietary software is owned by a company, with the source code kept private (e.g. Microsoft Windows, Adobe Photoshop).",
+        "tags": ["software", "open source", "proprietary", "A3.6"]
+    },
+    {
+        "id": "FC021",
+        "learning_aim": "A",
+        "topic": "A3.7 File Formats",
+        "front": "What is the difference between a JPEG and a PNG image file?",
+        "back": "JPEG uses lossy compression, reducing file size but permanently discarding some image data — suitable for photographs. PNG uses lossless compression, preserving all image data and supporting transparency — better for logos and diagrams.",
+        "tags": ["file formats", "images", "A3.7.1"]
+    },
+    {
+        "id": "FC022",
+        "learning_aim": "A",
+        "topic": "A4.1 Choosing IT Systems",
+        "front": "What does 'downtime' mean in the context of implementing a new IT system?",
+        "back": "Downtime refers to the period during which an IT system is unavailable, typically while it is being replaced, updated, or migrated to a new system. Organisations must plan to minimise downtime to avoid loss of productivity and revenue.",
+        "tags": ["implementation", "downtime", "A4.1.7"]
+    },
+    {
+        "id": "FC023",
+        "learning_aim": "A",
+        "topic": "A4.2 IT System Uses",
+        "front": "How is an IT system used for stock control in retail?",
+        "back": "Barcode or RFID scanners automatically update stock levels when items are sold or received. The system can trigger automatic reordering when stock falls below a minimum threshold, reducing both stockouts and overstocking.",
+        "tags": ["stock control", "retail", "A4.2.1"]
+    },
+    {
+        "id": "FC024",
+        "learning_aim": "A",
+        "topic": "A4.3 Impact on Organisations",
+        "front": "Why do employees need initial and ongoing training when a new IT system is introduced?",
+        "back": "Initial training ensures staff can use the new system safely and effectively from launch. Ongoing training is needed as software is updated, new features are added, or security threats evolve, maintaining productivity and compliance.",
+        "tags": ["training", "implementation", "A4.3.8"]
+    },
+    {
+        "id": "FC025",
+        "learning_aim": "A",
+        "topic": "A5 Emerging Technologies",
+        "front": "Give two implications of artificial intelligence (AI) on IT system performance.",
+        "back": "AI can improve system performance through automation of repetitive tasks and predictive maintenance (identifying hardware faults before failure). However, AI models require significant processing power and large datasets, increasing hardware and energy demands.",
+        "tags": ["AI", "emerging technology", "A5.1"]
+    },
+
+    # ─────────────── LEARNING AIM B (FC026–FC050) ───────────────
+    {
+        "id": "FC026",
+        "learning_aim": "B",
+        "topic": "B1.1.1 Bluetooth",
+        "front": "What is Bluetooth, and what is its typical range?",
+        "back": "Bluetooth is a short-range wireless standard used to connect devices over Personal Area Networks (PANs), typically within 10 metres (Class 2). It is commonly used for connecting keyboards, headphones, and smartphones.",
+        "tags": ["connectivity", "Bluetooth", "wireless"]
+    },
+    {
+        "id": "FC027",
+        "learning_aim": "B",
+        "topic": "B1.1.3 Wi-Fi",
+        "front": "What is Wi-Fi, and which IEEE standard defines it?",
+        "back": "Wi-Fi is a wireless networking technology that allows devices to connect to a Local Area Network (LAN) and the internet using radio waves. It is defined by the IEEE 802.11 family of standards (e.g. 802.11ac, 802.11ax/Wi-Fi 6).",
+        "tags": ["connectivity", "Wi-Fi", "wireless", "B1.1.3"]
+    },
+    {
+        "id": "FC028",
+        "learning_aim": "B",
+        "topic": "B1.1.4 Ethernet",
+        "front": "What is Ethernet, and what are two advantages over Wi-Fi?",
+        "back": "Ethernet is a wired networking standard (IEEE 802.3) that connects devices using cables (e.g. Cat5e, Cat6). Advantages over Wi-Fi: faster and more consistent speeds, and more secure as signals cannot be intercepted wirelessly.",
+        "tags": ["connectivity", "Ethernet", "wired", "B1.1.4"]
+    },
+    {
+        "id": "FC029",
+        "learning_aim": "B",
+        "topic": "B2.1 Network Topologies",
+        "front": "What is a star network topology?",
+        "back": "In a star topology, all devices (nodes) connect to a central switch or hub. If one node fails, others are unaffected. The main disadvantage is that if the central switch fails, the entire network goes down.",
+        "tags": ["network topology", "star", "B2.1.1"]
+    },
+    {
+        "id": "FC030",
+        "learning_aim": "B",
+        "topic": "B2.1 Network Topologies",
+        "front": "Compare ring and bus network topologies.",
+        "back": "In a ring topology, each device connects to exactly two others, forming a closed loop; a single break can disrupt the whole network. In a bus topology, all devices share one central cable (backbone); collisions occur if multiple devices transmit simultaneously, and a break in the bus disrupts all communications.",
+        "tags": ["network topology", "ring", "bus", "compare"]
+    },
+    {
+        "id": "FC031",
+        "learning_aim": "B",
+        "topic": "B2.2.1 PAN",
+        "front": "What does PAN stand for, and give an example of its use?",
+        "back": "PAN stands for Personal Area Network. It covers a very short range (typically up to 10 m) and connects personal devices, such as a smartphone paired to a Bluetooth headset or smartwatch.",
+        "tags": ["networks", "PAN", "acronym"]
+    },
+    {
+        "id": "FC032",
+        "learning_aim": "B",
+        "topic": "B2.2.2 LAN",
+        "front": "What is a LAN?",
+        "back": "A Local Area Network (LAN) connects devices within a limited geographic area such as a single building or campus. LANs are typically privately owned and use Ethernet or Wi-Fi. They offer high speeds and low latency.",
+        "tags": ["networks", "LAN", "definition"]
+    },
+    {
+        "id": "FC033",
+        "learning_aim": "B",
+        "topic": "B2.2.3 WAN",
+        "front": "Difference between a LAN and a WAN?",
+        "back": "A LAN (Local Area Network) covers a small area (one building/site) and is usually privately owned. A WAN (Wide Area Network) spans large geographic distances (cities, countries, or globally), often using leased lines or the internet, and is typically managed by a telecoms provider.",
+        "tags": ["networks", "LAN", "WAN", "compare"]
+    },
+    {
+        "id": "FC034",
+        "learning_aim": "B",
+        "topic": "B2.2.4 VPN",
+        "front": "What is a VPN and how does it protect data?",
+        "back": "A Virtual Private Network (VPN) creates an encrypted tunnel between a device and a remote server over the public internet. It masks the user's IP address and encrypts all transmitted data, protecting it from interception and enabling secure remote access to corporate networks.",
+        "tags": ["VPN", "encryption", "security", "B2.2.4"]
+    },
+    {
+        "id": "FC035",
+        "learning_aim": "B",
+        "topic": "B2.3 Choosing a Network",
+        "front": "Give three factors affecting the choice of network for an organisation.",
+        "back": "Cost (installation and running costs) • Security (protection of data in transit) • Scalability and compatibility with existing hardware and software. Organisations must also consider downtime during implementation and long-term productivity impact.",
+        "tags": ["networks", "choice", "B2.3"]
+    },
+    {
+        "id": "FC036",
+        "learning_aim": "B",
+        "topic": "B3.1.1 Email Protocols",
+        "front": "What is the difference between POP3 and IMAP for email retrieval?",
+        "back": "POP3 (Post Office Protocol 3) downloads emails to a local device and typically deletes them from the server. IMAP (Internet Message Access Protocol) keeps emails on the server and synchronises them across multiple devices, making it better for users accessing email on several devices.",
+        "tags": ["protocols", "email", "POP3", "IMAP", "compare"]
+    },
+    {
+        "id": "FC037",
+        "learning_aim": "B",
+        "topic": "B3.1.1 SMTP",
+        "front": "What does SMTP stand for and what is it used for?",
+        "back": "SMTP stands for Simple Mail Transfer Protocol. It is used to send and relay email messages between mail servers. SMTP works alongside POP3 or IMAP: SMTP sends mail, while POP3/IMAP retrieve it.",
+        "tags": ["protocols", "SMTP", "email", "acronym"]
+    },
+    {
+        "id": "FC038",
+        "learning_aim": "B",
+        "topic": "B3.1.3 HTTP and HTTPS",
+        "front": "What is the difference between HTTP and HTTPS?",
+        "back": "HTTP (HyperText Transfer Protocol) transmits web page data in plain text, making it vulnerable to interception. HTTPS (HTTP Secure) adds TLS/SSL encryption, ensuring data passed between the browser and server is secure. HTTPS is required for e-commerce and login pages.",
+        "tags": ["protocols", "HTTP", "HTTPS", "encryption", "compare"]
+    },
+    {
+        "id": "FC039",
+        "learning_aim": "B",
+        "topic": "B3.1 TCP/IP",
+        "front": "What does TCP/IP stand for and what is its role?",
+        "back": "TCP/IP stands for Transmission Control Protocol/Internet Protocol. It is the foundational suite of protocols governing how data is packaged, addressed, transmitted, and received across the internet and local networks.",
+        "tags": ["protocols", "TCP/IP", "acronym"]
+    },
+    {
+        "id": "FC040",
+        "learning_aim": "B",
+        "topic": "B3.1.4 Secure Payment Protocols",
+        "front": "What protocol is used to secure online payment transactions?",
+        "back": "HTTPS with TLS (Transport Layer Security) encrypts payment data in transit. Additionally, payment systems use tokenisation and 3D Secure (3DS) authentication to protect card details and verify the cardholder's identity.",
+        "tags": ["protocols", "payment", "security", "TLS"]
+    },
+    {
+        "id": "FC041",
+        "learning_aim": "B",
+        "topic": "B3.3 Bandwidth and Latency",
+        "front": "What is bandwidth?",
+        "back": "Bandwidth is the maximum amount of data that can be transmitted over a network connection in a given time, measured in megabits per second (Mbps) or gigabits per second (Gbps). Higher bandwidth allows more data to be sent simultaneously, improving performance for data-intensive tasks.",
+        "tags": ["bandwidth", "transmission", "B3.3"]
+    },
+    {
+        "id": "FC042",
+        "learning_aim": "B",
+        "topic": "B3.3 Bandwidth and Latency",
+        "front": "What is latency and how does it affect network performance?",
+        "back": "Latency is the time delay between a data packet being sent and received, measured in milliseconds (ms). High latency causes noticeable lag in real-time applications such as video calls, online gaming, and VoIP, even when bandwidth is sufficient.",
+        "tags": ["latency", "transmission", "performance", "B3.3"]
+    },
+    {
+        "id": "FC043",
+        "learning_aim": "B",
+        "topic": "B3.4 File Formats — Audio",
+        "front": "What is the difference between MP3 and WAV audio formats?",
+        "back": "MP3 uses lossy compression to reduce file size by removing audio data deemed less perceptible to the human ear — suitable for music streaming. WAV is an uncompressed format that preserves full audio quality but produces much larger files, used in professional audio production.",
+        "tags": ["file formats", "audio", "MP3", "WAV", "B3.4.2"]
+    },
+    {
+        "id": "FC044",
+        "learning_aim": "B",
+        "topic": "B3.4 File Formats — Video",
+        "front": "Give two common video file formats and describe their uses.",
+        "back": "MP4 (MPEG-4) is widely used for streaming and sharing due to its high compression and broad device compatibility. AVI (Audio Video Interleave) is an older Microsoft format with larger file sizes but high quality, still used in some editing workflows.",
+        "tags": ["file formats", "video", "MP4", "AVI", "B3.4.3"]
+    },
+    {
+        "id": "FC045",
+        "learning_aim": "B",
+        "topic": "B3.5 Compression Types",
+        "front": "What is lossy compression?",
+        "back": "Lossy compression permanently removes some data from a file to achieve a smaller file size. The lost data cannot be recovered, so quality is reduced. It is used for images (JPEG), audio (MP3), and video (MP4) where some quality loss is acceptable.",
+        "tags": ["compression", "lossy", "B3.5.1"]
+    },
+    {
+        "id": "FC046",
+        "learning_aim": "B",
+        "topic": "B3.5 Compression Types",
+        "front": "What is lossless compression, and give an example?",
+        "back": "Lossless compression reduces file size without any loss of data; the original file can be perfectly reconstructed. Examples include PNG (images), FLAC (audio), and ZIP (general files). It is used where data integrity is critical, such as software distribution.",
+        "tags": ["compression", "lossless", "B3.5.2"]
+    },
+    {
+        "id": "FC047",
+        "learning_aim": "B",
+        "topic": "B3.6 Codecs",
+        "front": "What is a codec?",
+        "back": "A codec (COder-DECoder) is software or hardware that compresses and decompresses digital audio or video data. Common video codecs include H.264 and H.265 (HEVC); common audio codecs include AAC and MP3. Without the correct codec, media cannot be played.",
+        "tags": ["codec", "audio", "video", "B3.6"]
+    },
+    {
+        "id": "FC048",
+        "learning_aim": "B",
+        "topic": "B1.2 Connection Types",
+        "front": "Give two implications of choosing a wireless connection over a wired one.",
+        "back": "Wireless connections offer greater mobility, allowing devices to be used anywhere within range without physical cables. However, they are more susceptible to interference and security risks (e.g. eavesdropping on unsecured Wi-Fi) and typically have lower and less consistent speeds than wired connections.",
+        "tags": ["connectivity", "wireless", "wired", "B1.2"]
+    },
+    {
+        "id": "FC049",
+        "learning_aim": "B",
+        "topic": "B2.4 Network Performance",
+        "front": "Name two network components and explain how they affect performance.",
+        "back": "A router directs data packets between networks; a slow router creates a bottleneck reducing overall throughput. A switch connects devices within a LAN; a managed switch can prioritise traffic (Quality of Service) to improve performance for critical applications.",
+        "tags": ["networks", "router", "switch", "performance", "B2.4"]
+    },
+    {
+        "id": "FC050",
+        "learning_aim": "B",
+        "topic": "B3.2 Security in Transmission",
+        "front": "What is a man-in-the-middle (MitM) attack in data transmission?",
+        "back": "A MitM attack occurs when an attacker secretly intercepts and potentially alters communications between two parties who believe they are communicating directly. It is a risk on unsecured public Wi-Fi networks. HTTPS and VPNs help mitigate this threat.",
+        "tags": ["security", "MitM", "transmission", "B3.2"]
+    },
+
+    # ─────────────── LEARNING AIM C (FC051–FC075) ───────────────
+    {
+        "id": "FC051",
+        "learning_aim": "C",
+        "topic": "C1.1.1 Private Cloud",
+        "front": "What is a private cloud?",
+        "back": "A private cloud is a cloud computing environment dedicated exclusively to one organisation, hosted either on-premises or by a third party. It offers greater control, customisation, and security than public cloud, but at higher cost.",
+        "tags": ["cloud", "private cloud", "C1.1.1"]
+    },
+    {
+        "id": "FC052",
+        "learning_aim": "C",
+        "topic": "C1.1.2 Public Cloud",
+        "front": "What is a public cloud?",
+        "back": "A public cloud is a cloud environment where computing resources (servers, storage, software) are owned and managed by a third-party provider (e.g. Microsoft Azure, AWS, Google Cloud) and shared across multiple customers over the internet.",
+        "tags": ["cloud", "public cloud", "C1.1.2"]
+    },
+    {
+        "id": "FC053",
+        "learning_aim": "C",
+        "topic": "C1.1.3 Hybrid Cloud",
+        "front": "What is a hybrid cloud and why would an organisation use one?",
+        "back": "A hybrid cloud combines private and public cloud environments, allowing data and applications to move between them. Organisations use it to keep sensitive data on a private cloud while using public cloud for less sensitive workloads, balancing cost and security.",
+        "tags": ["cloud", "hybrid cloud", "C1.1.3"]
+    },
+    {
+        "id": "FC054",
+        "learning_aim": "C",
+        "topic": "C1.1.4 IaaS",
+        "front": "What does IaaS stand for and what does it provide?",
+        "back": "IaaS stands for Infrastructure as a Service. The provider supplies virtualised computing infrastructure (servers, networking, storage) over the internet. The customer manages the OS, middleware, and applications. Example: Amazon EC2.",
+        "tags": ["cloud", "IaaS", "acronym", "C1.1.4"]
+    },
+    {
+        "id": "FC055",
+        "learning_aim": "C",
+        "topic": "C1.1.5 SaaS",
+        "front": "What does SaaS stand for and give two examples?",
+        "back": "SaaS stands for Software as a Service. The provider hosts and delivers software over the internet; users access it via a web browser without installing it locally. Examples: Microsoft 365, Google Workspace, Salesforce.",
+        "tags": ["cloud", "SaaS", "acronym", "C1.1.5"]
+    },
+    {
+        "id": "FC056",
+        "learning_aim": "C",
+        "topic": "C1.1.6 PaaS",
+        "front": "What does PaaS stand for and who uses it?",
+        "back": "PaaS stands for Platform as a Service. It provides a cloud-based environment where developers can build, test, and deploy applications without managing the underlying infrastructure. Example: Google App Engine, Microsoft Azure App Service.",
+        "tags": ["cloud", "PaaS", "acronym", "C1.1.6"]
+    },
+    {
+        "id": "FC057",
+        "learning_aim": "C",
+        "topic": "C1.1 Cloud Computing",
+        "front": "Compare IaaS, PaaS, and SaaS — what does each layer manage?",
+        "back": "IaaS: provider manages hardware/virtualisation; user manages OS upwards. PaaS: provider manages hardware + OS + runtime; user manages application and data. SaaS: provider manages everything; user only interacts with the application.",
+        "tags": ["cloud", "IaaS", "PaaS", "SaaS", "compare"]
+    },
+    {
+        "id": "FC058",
+        "learning_aim": "C",
+        "topic": "C1.2 Cloud Implications",
+        "front": "Give two benefits and two drawbacks of cloud computing for organisations.",
+        "back": "Benefits: scalability (scale resources up/down on demand) and reduced capital expenditure (pay-as-you-go). Drawbacks: dependency on internet connectivity (downtime if connection fails) and potential security and data sovereignty concerns.",
+        "tags": ["cloud", "implications", "C1.2"]
+    },
+    {
+        "id": "FC059",
+        "learning_aim": "C",
+        "topic": "C1.3.1 VPNs",
+        "front": "How does a VPN support remote working?",
+        "back": "A VPN allows remote employees to securely connect to their organisation's internal network over the internet by creating an encrypted tunnel. This means home workers can access files, applications, and systems as if they were in the office.",
+        "tags": ["VPN", "remote working", "C1.3.1"]
+    },
+    {
+        "id": "FC060",
+        "learning_aim": "C",
+        "topic": "C1.3.2 Remote Desktop",
+        "front": "What is remote desktop technology?",
+        "back": "Remote desktop software (e.g. Microsoft Remote Desktop, TeamViewer) allows a user to view and control another computer's desktop over a network connection. It is used by IT support staff and remote workers who need access to office computers.",
+        "tags": ["remote desktop", "remote working", "C1.3.2"]
+    },
+    {
+        "id": "FC061",
+        "learning_aim": "C",
+        "topic": "C1.4 Online System Selection",
+        "front": "What does 'scalability' mean when choosing an online system?",
+        "back": "Scalability refers to the ability of a system to handle increasing workloads by adding resources (scaling up or scaling out). Cloud systems are considered highly scalable because additional storage or computing power can be provisioned quickly to meet demand.",
+        "tags": ["cloud", "scalability", "C1.4.6"]
+    },
+    {
+        "id": "FC062",
+        "learning_aim": "C",
+        "topic": "C2.1.1 Social Media",
+        "front": "Give two implications of social media use for organisations.",
+        "back": "Positive: organisations can use social media for marketing, brand building, and direct customer engagement at low cost. Negative: negative reviews or staff misconduct posted publicly can cause reputational damage quickly and be difficult to control.",
+        "tags": ["social media", "online communities", "C2.1.1"]
+    },
+    {
+        "id": "FC063",
+        "learning_aim": "C",
+        "topic": "C2.1.2 Blog and Vlog",
+        "front": "What is the difference between a blog and a vlog?",
+        "back": "A blog (weblog) is an online journal or informational website consisting primarily of written posts. A vlog (video blog) is a blog in video format, typically hosted on platforms such as YouTube. Both are used for sharing opinions, tutorials, and news.",
+        "tags": ["blog", "vlog", "online communities", "C2.1.2"]
+    },
+    {
+        "id": "FC064",
+        "learning_aim": "C",
+        "topic": "C2.1.3 Wiki",
+        "front": "What is a wiki and give an example?",
+        "back": "A wiki is a collaborative website where multiple users can create and edit content. Wikipedia is the most widely known example. Organisations use internal wikis (e.g. Confluence) for knowledge management and documentation.",
+        "tags": ["wiki", "online communities", "C2.1.3"]
+    },
+    {
+        "id": "FC065",
+        "learning_aim": "C",
+        "topic": "C2.1.6 Podcasts",
+        "front": "What is a podcast?",
+        "back": "A podcast is an on-demand audio programme distributed via the internet as episodic files, typically in MP3 format. Users subscribe to podcast feeds and listen at a time convenient to them, through platforms such as Spotify or Apple Podcasts.",
+        "tags": ["podcast", "online communities", "C2.1.6"]
+    },
+    {
+        "id": "FC066",
+        "learning_aim": "C",
+        "topic": "C2.2.4 Privacy",
+        "front": "What privacy risks arise for individuals using online communities?",
+        "back": "Personal data (location, age, relationships) shared on social media can be harvested by third parties or used for targeted advertising. Data breaches on platforms can expose private information. Users should apply privacy settings and avoid sharing sensitive details.",
+        "tags": ["privacy", "online communities", "C2.2.4"]
+    },
+    {
+        "id": "FC067",
+        "learning_aim": "C",
+        "topic": "C2.2.5 Security",
+        "front": "Give two security risks associated with online communities.",
+        "back": "Phishing attacks exploit trust built in online communities to trick users into revealing credentials. Malicious links shared in forums or instant messages can deliver malware to a user's device.",
+        "tags": ["security", "online communities", "C2.2.5"]
+    },
+    {
+        "id": "FC068",
+        "learning_aim": "C",
+        "topic": "C2.2.9 Productivity",
+        "front": "How can online communities both increase and decrease employee productivity?",
+        "back": "Online communities and instant messaging tools (e.g. Microsoft Teams) can increase productivity by enabling rapid collaboration and knowledge sharing. However, excessive use of social media or chatrooms during work hours can distract employees and reduce output.",
+        "tags": ["productivity", "online communities", "C2.2.9"]
+    },
+    {
+        "id": "FC069",
+        "learning_aim": "C",
+        "topic": "C2.2.10 Acceptable Use Policies",
+        "front": "What is an acceptable use policy (AUP) in relation to online communities?",
+        "back": "An AUP is a document that sets out rules governing how employees may use an organisation's IT systems and internet access, including rules about social media and online communities. It protects the organisation from legal liability and misuse of resources.",
+        "tags": ["AUP", "policy", "C2.2.10"]
+    },
+    {
+        "id": "FC070",
+        "learning_aim": "C",
+        "topic": "C2.1.5 Instant Messaging",
+        "front": "Give two business uses of instant messaging platforms.",
+        "back": "Instant messaging tools such as Microsoft Teams or Slack allow employees to communicate in real time via text, voice, or video. They support remote working by replicating informal office communication and can integrate with other business applications (e.g. project management tools).",
+        "tags": ["instant messaging", "collaboration", "C2.1.5"]
+    },
+    {
+        "id": "FC071",
+        "learning_aim": "C",
+        "topic": "C1.4.1 Cloud Security",
+        "front": "Give two security considerations when selecting a cloud provider.",
+        "back": "Data encryption (both in transit and at rest) ensures data cannot be read if intercepted. Data sovereignty — checking whether data is stored in the UK/EU — ensures compliance with UK GDPR, which restricts transfers of personal data outside the UK.",
+        "tags": ["cloud", "security", "C1.4.1", "UK GDPR"]
+    },
+    {
+        "id": "FC072",
+        "learning_aim": "C",
+        "topic": "C2.2.1 User Experience",
+        "front": "Why is accessibility an important consideration for online communities?",
+        "back": "Accessibility ensures that users with disabilities (visual, hearing, motor, or cognitive) can participate in online communities. Failure to provide accessible features (e.g. captions, screen-reader-compatible layouts) may exclude users and could breach the Equality Act 2010.",
+        "tags": ["accessibility", "online communities", "C2.2.1", "Equality Act"]
+    },
+    {
+        "id": "FC073",
+        "learning_aim": "C",
+        "topic": "C2.2.6 Downtime",
+        "front": "What is the impact of downtime on an organisation using an online community platform?",
+        "back": "Downtime means the platform is unavailable, preventing communication and collaboration. This reduces productivity and may affect customer relationships if the platform is customer-facing. Organisations should check a provider's Service Level Agreement (SLA) for uptime guarantees.",
+        "tags": ["downtime", "online communities", "C2.2.6", "SLA"]
+    },
+    {
+        "id": "FC074",
+        "learning_aim": "C",
+        "topic": "C1.4.2 Cloud Cost",
+        "front": "How does cloud computing change the cost model for organisations?",
+        "back": "Cloud computing shifts costs from capital expenditure (CapEx — buying physical hardware) to operational expenditure (OpEx — paying a subscription or usage-based fee). This improves cash flow and avoids the cost of maintaining ageing hardware.",
+        "tags": ["cloud", "cost", "CapEx", "OpEx", "C1.4.2"]
+    },
+    {
+        "id": "FC075",
+        "learning_aim": "C",
+        "topic": "C2.1.7 Forums",
+        "front": "What is an online forum and how is it used?",
+        "back": "An online forum is a discussion platform where users post questions, answers, and comments organised into threads and topics. Examples include Reddit and specialist tech communities. Organisations use forums for community support and product feedback.",
+        "tags": ["forums", "online communities", "C2.1.7"]
+    },
+
+    # ─────────────── LEARNING AIM D (FC076–FC100) ───────────────
+    {
+        "id": "FC076",
+        "learning_aim": "D",
+        "topic": "D1.1.1 Malware",
+        "front": "What is malware?",
+        "back": "Malware (malicious software) is any software intentionally designed to damage, disrupt, or gain unauthorised access to a computer system. Types include viruses, worms, ransomware, spyware, and Trojans.",
+        "tags": ["malware", "threats", "D1.1.1"]
+    },
+    {
+        "id": "FC077",
+        "learning_aim": "D",
+        "topic": "D1.1.1 Malware Types",
+        "front": "What is ransomware?",
+        "back": "Ransomware is malware that encrypts the victim's files and demands a ransom payment (often cryptocurrency) for the decryption key. High-profile examples include the WannaCry attack (2017), which affected NHS systems in the UK.",
+        "tags": ["malware", "ransomware", "threats", "D1.1.1"]
+    },
+    {
+        "id": "FC078",
+        "learning_aim": "D",
+        "topic": "D1.1.1 Malware Types",
+        "front": "Difference between a virus and a worm?",
+        "back": "A virus attaches itself to a legitimate file and requires a user action (e.g. opening the file) to spread. A worm is self-replicating and spreads automatically across networks without user interaction, often exploiting security vulnerabilities.",
+        "tags": ["malware", "virus", "worm", "compare", "D1.1.1"]
+    },
+    {
+        "id": "FC079",
+        "learning_aim": "D",
+        "topic": "D1.1.2 Hackers",
+        "front": "What is the difference between a white hat and a black hat hacker?",
+        "back": "A white hat (ethical) hacker is employed to test systems for vulnerabilities with permission, improving security. A black hat hacker exploits vulnerabilities illegally and maliciously, with the intent to steal data or cause damage.",
+        "tags": ["hackers", "threats", "D1.1.2", "compare"]
+    },
+    {
+        "id": "FC080",
+        "learning_aim": "D",
+        "topic": "D1.1.4 Social Engineering",
+        "front": "What is phishing?",
+        "back": "Phishing is a social engineering attack where criminals send fraudulent emails or messages that appear to be from legitimate organisations (e.g. banks or HMRC) to trick recipients into revealing sensitive information such as passwords or bank details.",
+        "tags": ["social engineering", "phishing", "threats", "D1.1.4"]
+    },
+    {
+        "id": "FC081",
+        "learning_aim": "D",
+        "topic": "D1.1.4 Social Engineering",
+        "front": "What is pretexting in social engineering?",
+        "back": "Pretexting involves an attacker fabricating a scenario (pretext) to manipulate a victim into revealing confidential information or performing an action. For example, an attacker may impersonate IT support to obtain a user's password.",
+        "tags": ["social engineering", "pretexting", "D1.1.4"]
+    },
+    {
+        "id": "FC082",
+        "learning_aim": "D",
+        "topic": "D1.2 Internal Threats",
+        "front": "Why are portable devices (e.g. USB drives) considered an internal threat to data?",
+        "back": "USB drives and other portable storage can be used to copy sensitive data and remove it from the organisation, intentionally or accidentally. They can also introduce malware if infected drives are plugged into organisational computers.",
+        "tags": ["internal threats", "portable devices", "D1.2.4"]
+    },
+    {
+        "id": "FC083",
+        "learning_aim": "D",
+        "topic": "D1.3 Impact of Threats",
+        "front": "What is the impact of a data breach on an organisation's public image?",
+        "back": "A data breach can severely damage customer trust, leading to loss of business and reputational harm. Organisations may face negative press coverage, loss of customers to competitors, and difficulty attracting new clients — particularly if personal data was compromised.",
+        "tags": ["impact", "data breach", "D1.3.3"]
+    },
+    {
+        "id": "FC084",
+        "learning_aim": "D",
+        "topic": "D2.1.1 File Permissions",
+        "front": "What are file permissions and why are they used?",
+        "back": "File permissions control who can read, write, or execute a file or folder. By assigning permissions to specific users or groups, organisations restrict access to sensitive data, reducing the risk of unauthorised access or accidental modification.",
+        "tags": ["file permissions", "access control", "D2.1.1"]
+    },
+    {
+        "id": "FC085",
+        "learning_aim": "D",
+        "topic": "D2.1.2 Access Levels",
+        "front": "What is the principle of least privilege?",
+        "back": "The principle of least privilege means users are granted only the minimum level of access rights required to perform their job. This limits the potential damage from insider threats or compromised accounts, as users cannot access systems or data outside their role.",
+        "tags": ["access levels", "least privilege", "D2.1.2"]
+    },
+    {
+        "id": "FC086",
+        "learning_aim": "D",
+        "topic": "D2.1.3 Backup and Recovery",
+        "front": "What is the 3-2-1 backup rule?",
+        "back": "The 3-2-1 rule recommends keeping 3 copies of data, on 2 different types of storage media, with 1 copy stored off-site (e.g. cloud or remote location). This strategy protects against data loss from hardware failure, ransomware, or physical disasters.",
+        "tags": ["backup", "recovery", "D2.1.3"]
+    },
+    {
+        "id": "FC087",
+        "learning_aim": "D",
+        "topic": "D2.1.4 Multi-Factor Authentication",
+        "front": "What is multi-factor authentication (MFA)?",
+        "back": "MFA requires users to provide two or more verification factors before gaining access: something they know (password), something they have (authenticator app or hardware token), and/or something they are (biometric). It significantly reduces risk from stolen passwords.",
+        "tags": ["MFA", "authentication", "D2.1.4"]
+    },
+    {
+        "id": "FC088",
+        "learning_aim": "D",
+        "topic": "D2.1.5 Biometrics",
+        "front": "Give three examples of biometric authentication methods.",
+        "back": "Fingerprint scanning, facial recognition, and iris scanning are all biometric authentication methods. They use unique biological characteristics to verify identity, offering stronger security than passwords as they are much harder to steal or replicate.",
+        "tags": ["biometrics", "authentication", "D2.1.5"]
+    },
+    {
+        "id": "FC089",
+        "learning_aim": "D",
+        "topic": "D2.1.6 Physical Access Control",
+        "front": "Give two examples of physical access control methods.",
+        "back": "Swipe cards and PIN-protected door locks restrict physical entry to server rooms and sensitive areas. CCTV surveillance monitors access and deters unauthorised entry. Physical security prevents hardware theft and tampering.",
+        "tags": ["physical security", "access control", "D2.1.6"]
+    },
+    {
+        "id": "FC090",
+        "learning_aim": "D",
+        "topic": "D2.1.7 Digital Certificates",
+        "front": "What is a digital certificate?",
+        "back": "A digital certificate is an electronic document issued by a Certificate Authority (CA) that verifies the identity of a website or organisation. It binds a public key to an entity's identity and is used to establish encrypted HTTPS connections.",
+        "tags": ["digital certificate", "encryption", "D2.1.7"]
+    },
+    {
+        "id": "FC091",
+        "learning_aim": "D",
+        "topic": "D2.2 Antivirus Software",
+        "front": "How does antivirus software protect a computer system?",
+        "back": "Antivirus software scans files and processes for known malware signatures and suspicious behaviour. It quarantines or deletes detected threats, provides real-time protection by monitoring activity, and receives regular updates to detect new malware variants.",
+        "tags": ["antivirus", "protection", "D2.2"]
+    },
+    {
+        "id": "FC092",
+        "learning_aim": "D",
+        "topic": "D2.3 Firewalls",
+        "front": "What is a firewall and how does it protect a network?",
+        "back": "A firewall monitors and filters incoming and outgoing network traffic based on predefined security rules. It blocks unauthorised access attempts and can prevent malicious traffic from reaching devices on the network. Firewalls can be hardware or software-based.",
+        "tags": ["firewall", "network security", "D2.3"]
+    },
+    {
+        "id": "FC093",
+        "learning_aim": "D",
+        "topic": "D2.4 Encryption",
+        "front": "What is encryption and how does it protect stored data?",
+        "back": "Encryption transforms readable data (plaintext) into an unreadable format (ciphertext) using an algorithm and key. If encrypted storage is accessed without the key, the data cannot be read. Full-disk encryption (e.g. BitLocker) protects data on lost or stolen devices.",
+        "tags": ["encryption", "stored data", "D2.4.1"]
+    },
+    {
+        "id": "FC094",
+        "learning_aim": "D",
+        "topic": "D2.4.3 HTTPS Encryption",
+        "front": "How does HTTPS encryption protect users of secure websites?",
+        "back": "HTTPS uses TLS (Transport Layer Security) to encrypt data passing between the user's browser and the web server, preventing interception. A padlock icon in the browser address bar confirms a valid certificate is in use. It is essential for login pages and e-commerce.",
+        "tags": ["HTTPS", "encryption", "TLS", "D2.4.3"]
+    },
+    {
+        "id": "FC095",
+        "learning_aim": "D",
+        "topic": "D1.1.5 Natural Disasters",
+        "front": "How can natural disasters pose a threat to data?",
+        "back": "Floods, fires, and earthquakes can physically destroy servers and storage hardware, resulting in permanent data loss. Organisations must protect against this risk using off-site backups, cloud storage, and disaster recovery plans.",
+        "tags": ["threats", "natural disaster", "D1.1.5", "backup"]
+    },
+    {
+        "id": "FC096",
+        "learning_aim": "D",
+        "topic": "D1.3.2 Financial Loss",
+        "front": "How can a data breach lead to financial loss for an organisation?",
+        "back": "Organisations may face fines from the ICO under UK GDPR (up to £17.5 million or 4% of global annual turnover), compensation claims from affected individuals, and legal costs. There are also indirect costs such as reputational damage leading to lost business.",
+        "tags": ["financial loss", "UK GDPR", "D1.3.2", "ICO"]
+    },
+    {
+        "id": "FC097",
+        "learning_aim": "D",
+        "topic": "D1.2.2 Accidental Disclosure",
+        "front": "Give an example of accidental data disclosure and how to prevent it.",
+        "back": "An employee accidentally CC-ing personal data to the wrong recipient in an email is a common accidental disclosure. Prevention methods include staff training on data handling, email 'delay send' features, and data loss prevention (DLP) tools that flag sensitive data in emails.",
+        "tags": ["internal threats", "accidental disclosure", "D1.2.2"]
+    },
+    {
+        "id": "FC098",
+        "learning_aim": "D",
+        "topic": "D2.1 Audit Logs",
+        "front": "What is an audit log and why is it important for data protection?",
+        "back": "An audit log is an automated record of user activities on a system, capturing events such as logins, file access, and changes. It supports data protection by enabling the detection of suspicious behaviour, investigation of incidents, and demonstrating compliance to regulators.",
+        "tags": ["audit log", "monitoring", "D2.1"]
+    },
+    {
+        "id": "FC099",
+        "learning_aim": "D",
+        "topic": "D1.1.1 Spyware",
+        "front": "What is spyware?",
+        "back": "Spyware is malware that secretly monitors a user's activity and collects data (such as keystrokes, browsing history, and login credentials) without their knowledge, transmitting it to a third party. It can be installed via malicious downloads or drive-by website attacks.",
+        "tags": ["malware", "spyware", "D1.1.1"]
+    },
+    {
+        "id": "FC100",
+        "learning_aim": "D",
+        "topic": "D1.1.3 Accidental Damage",
+        "front": "Give two examples of accidental damage as a threat to data.",
+        "back": "Accidental deletion of critical files by an employee is a common accidental threat. Hardware failure (e.g. hard drive crash due to physical impact or power surge) can also cause data loss. Regular backups and access controls help mitigate these risks.",
+        "tags": ["accidental damage", "threats", "D1.1.3"]
+    },
+
+    # ─────────────── LEARNING AIM E (FC101–FC125) ───────────────
+    {
+        "id": "FC101",
+        "learning_aim": "E",
+        "topic": "E1.1.1 Online Retail",
+        "front": "Give two implications of online retail (e-commerce) for organisations.",
+        "back": "E-commerce allows businesses to sell 24/7 to a global customer base, removing geographic limitations and reducing overhead costs compared to physical stores. However, organisations must invest in secure payment systems, website maintenance, and logistics to compete effectively.",
+        "tags": ["e-commerce", "retail", "E1.1.1"]
+    },
+    {
+        "id": "FC102",
+        "learning_aim": "E",
+        "topic": "E1.1.2 Financial Services Online",
+        "front": "Give two features of online banking services.",
+        "back": "Online banking allows customers to view balances, transfer funds, and pay bills at any time via a website or mobile app. Security features include multi-factor authentication (e.g. OTP codes) and device registration to prevent unauthorised access.",
+        "tags": ["financial services", "online banking", "E1.1.2"]
+    },
+    {
+        "id": "FC103",
+        "learning_aim": "E",
+        "topic": "E1.1.3 Online Education",
+        "front": "Give two benefits of online education and training for individuals.",
+        "back": "Flexible access — learners can study at their own pace and from any location with internet access. Wider choice — individuals can access courses from institutions worldwide without needing to relocate or travel, often at lower cost than face-to-face provision.",
+        "tags": ["education", "online learning", "E1.1.3"]
+    },
+    {
+        "id": "FC104",
+        "learning_aim": "E",
+        "topic": "E1.1.5 Entertainment and Leisure Online",
+        "front": "Give two examples of online entertainment services and their implications.",
+        "back": "Streaming services (e.g. Netflix, Spotify) provide on-demand video and music, reducing the need for physical media. Online gaming platforms provide multiplayer experiences globally; however, both raise data privacy concerns and may contribute to sedentary lifestyles.",
+        "tags": ["entertainment", "streaming", "E1.1.5"]
+    },
+    {
+        "id": "FC105",
+        "learning_aim": "E",
+        "topic": "E1.1.6 Booking Systems",
+        "front": "How do online booking systems benefit organisations and customers?",
+        "back": "Organisations benefit from reduced administration costs and 24/7 availability of bookings without staff involvement. Customers can instantly check availability, compare prices, and confirm bookings in real time, improving experience and convenience.",
+        "tags": ["booking systems", "e-commerce", "E1.1.6"]
+    },
+    {
+        "id": "FC106",
+        "learning_aim": "E",
+        "topic": "E1.2.1 Transactional Data",
+        "front": "What is transactional data and give two examples of its use.",
+        "back": "Transactional data records details of individual transactions, such as purchases, bookings, or payments. Retailers analyse it to track buying trends and manage stock; banks use it to detect fraudulent card activity by identifying unusual spending patterns.",
+        "tags": ["transactional data", "data use", "E1.2.1"]
+    },
+    {
+        "id": "FC107",
+        "learning_aim": "E",
+        "topic": "E1.2.2 Targeted Marketing",
+        "front": "What is targeted marketing and how is it enabled by IT systems?",
+        "back": "Targeted marketing uses data analysis to show personalised adverts to individuals based on their browsing history, purchase behaviour, and demographics. Algorithms on platforms such as Facebook Ads and Google Ads match ads to users most likely to convert.",
+        "tags": ["targeted marketing", "data", "E1.2.2"]
+    },
+    {
+        "id": "FC108",
+        "learning_aim": "E",
+        "topic": "E1.2.3 Collaborative Working",
+        "front": "Give two IT tools that support collaborative working and explain how.",
+        "back": "Microsoft SharePoint allows teams to co-author documents and share files from a central repository. Google Workspace (Docs/Sheets) enables multiple users to edit the same document simultaneously in real time, with changes tracked automatically.",
+        "tags": ["collaborative working", "tools", "E1.2.3"]
+    },
+    {
+        "id": "FC109",
+        "learning_aim": "E",
+        "topic": "E1.2.4 Remote Working",
+        "front": "Give two IT systems that enable remote working.",
+        "back": "VPNs provide secure encrypted access to an organisation's network from remote locations. Video conferencing tools (e.g. Microsoft Teams, Zoom) enable face-to-face meetings and screen sharing without requiring physical presence.",
+        "tags": ["remote working", "IT tools", "E1.2.4"]
+    },
+    {
+        "id": "FC110",
+        "learning_aim": "E",
+        "topic": "E2.1 Data Sources",
+        "front": "What is the difference between primary and secondary data?",
+        "back": "Primary data is original data collected first-hand for a specific purpose (e.g. surveys, interviews, experiments). Secondary data is data that already exists and was collected by someone else for a different purpose (e.g. government statistics, published reports).",
+        "tags": ["data sources", "primary", "secondary", "E2.1"]
+    },
+    {
+        "id": "FC111",
+        "learning_aim": "E",
+        "topic": "E2.2 Reliability of Information",
+        "front": "Give two methods of ensuring the reliability of information.",
+        "back": "Cross-referencing data against multiple independent sources helps verify accuracy. Checking the authority and recency of sources — such as using government or peer-reviewed publications — ensures information is credible and up to date.",
+        "tags": ["reliability", "information", "E2.2"]
+    },
+    {
+        "id": "FC112",
+        "learning_aim": "E",
+        "topic": "E2.3 Data Collection Methods",
+        "front": "Compare questionnaires and focus groups as methods of data collection.",
+        "back": "Questionnaires can reach large numbers of respondents quickly and cost-effectively, generating quantitative data. Focus groups involve small group discussions, producing richer qualitative insights but are more time-consuming and expensive to run.",
+        "tags": ["data collection", "questionnaire", "focus group", "compare", "E2.3"]
+    },
+    {
+        "id": "FC113",
+        "learning_aim": "E",
+        "topic": "E2.4 Data Accuracy",
+        "front": "Why is data accuracy important for organisations?",
+        "back": "Inaccurate data leads to poor decision-making (e.g. ordering the wrong stock levels), wasted resources, and potential legal liability (e.g. incorrect personal data held in breach of UK GDPR). Accurate data improves operational efficiency and customer satisfaction.",
+        "tags": ["data accuracy", "implications", "E2.4"]
+    },
+    {
+        "id": "FC114",
+        "learning_aim": "E",
+        "topic": "E2.5.1 Verification",
+        "front": "What is data verification?",
+        "back": "Verification is the process of checking that data has been accurately transferred or input — i.e. that it matches the original source. Methods include double entry (typing data twice and comparing) and proofreading. It checks for transcription errors rather than whether data is valid.",
+        "tags": ["verification", "data accuracy", "E2.5.1"]
+    },
+    {
+        "id": "FC115",
+        "learning_aim": "E",
+        "topic": "E2.5.2 Validation",
+        "front": "What is data validation and give three validation checks?",
+        "back": "Validation checks that data entered meets defined rules before being accepted. Examples: Range check (value within acceptable limits, e.g. age 0–120) • Presence check (required field not left blank) • Format check (data matches a pattern, e.g. postcode format).",
+        "tags": ["validation", "data accuracy", "E2.5.2"]
+    },
+    {
+        "id": "FC116",
+        "learning_aim": "E",
+        "topic": "E2.6 User Interface Design",
+        "front": "What does 'ease of use' mean in the context of user interface design for data collection?",
+        "back": "Ease of use (usability) means the interface is intuitive and requires minimal effort to navigate. Clear labelling, logical layout, and helpful error messages reduce user errors and training needs, improving data quality and user satisfaction.",
+        "tags": ["UI design", "ease of use", "E2.6.1"]
+    },
+    {
+        "id": "FC117",
+        "learning_aim": "E",
+        "topic": "E2.6.3 Error Reduction",
+        "front": "Give two UI design features that reduce data entry errors.",
+        "back": "Drop-down menus restrict input to valid options, eliminating typing errors. Input masks enforce a specific format (e.g. a date field showing DD/MM/YYYY) so users enter data correctly. Both reduce the need for post-entry validation.",
+        "tags": ["UI design", "error reduction", "E2.6.3"]
+    },
+    {
+        "id": "FC118",
+        "learning_aim": "E",
+        "topic": "E1.1.4 News and Information Online",
+        "front": "Give two implications of online news for individuals.",
+        "back": "Online news provides instant access to breaking stories globally, free from geographic or time constraints. However, individuals may encounter misinformation or 'fake news' on social media, requiring critical evaluation of source credibility before sharing.",
+        "tags": ["online news", "information", "E1.1.4"]
+    },
+    {
+        "id": "FC119",
+        "learning_aim": "E",
+        "topic": "E2.6.2 Accessibility",
+        "front": "What accessibility features should a data collection UI include?",
+        "back": "Screen-reader compatibility (using correct HTML semantics and ARIA labels) allows visually impaired users to complete forms. Sufficient colour contrast and scalable text sizes support users with low vision. Keyboard-only navigation assists users who cannot use a mouse.",
+        "tags": ["UI design", "accessibility", "E2.6.2"]
+    },
+    {
+        "id": "FC120",
+        "learning_aim": "E",
+        "topic": "E2.3.4 Interviews",
+        "front": "What are the advantages and disadvantages of using interviews for data collection?",
+        "back": "Interviews allow in-depth exploration of responses and follow-up questions, yielding rich qualitative data. Disadvantages include being time-consuming, expensive, and potentially subject to interviewer bias, making them unsuitable for large-scale data collection.",
+        "tags": ["data collection", "interviews", "E2.3.4"]
+    },
+    {
+        "id": "FC121",
+        "learning_aim": "E",
+        "topic": "E1.2.1 Transactional Data",
+        "front": "What is a loyalty card scheme and what data does it generate for retailers?",
+        "back": "A loyalty card scheme (e.g. Tesco Clubcard) rewards repeat customers and collects transactional data showing what products each customer buys, when, and how often. Retailers use this data to personalise offers, manage stock, and analyse buying trends.",
+        "tags": ["transactional data", "loyalty", "retail", "E1.2.1"]
+    },
+    {
+        "id": "FC122",
+        "learning_aim": "E",
+        "topic": "E2.6.5 Performance",
+        "front": "How does system performance affect a data collection user interface?",
+        "back": "Slow response times frustrate users, leading to errors (e.g. clicking a button multiple times) or abandonment of the form. A high-performance UI ensures data is processed and saved quickly, particularly important in high-traffic or real-time data collection systems.",
+        "tags": ["UI design", "performance", "E2.6.5"]
+    },
+    {
+        "id": "FC123",
+        "learning_aim": "E",
+        "topic": "E2.6.6 Compatibility",
+        "front": "Why is compatibility important when designing a data collection interface?",
+        "back": "The UI must function correctly across different operating systems (Windows, macOS, Android, iOS) and browsers (Chrome, Edge, Safari) to ensure all users can submit data. Lack of compatibility can result in data loss or exclusion of certain user groups.",
+        "tags": ["UI design", "compatibility", "E2.6.6"]
+    },
+    {
+        "id": "FC124",
+        "learning_aim": "E",
+        "topic": "E1.1.1 Online Retail Implications",
+        "front": "Give two implications of e-commerce for individuals as consumers.",
+        "back": "Consumers benefit from price comparison across many retailers and the convenience of home delivery. Risks include online fraud (e.g. counterfeit goods, payment scams) and the digital divide excluding those without reliable internet access or digital skills.",
+        "tags": ["e-commerce", "consumers", "implications", "E1.1.1"]
+    },
+    {
+        "id": "FC125",
+        "learning_aim": "E",
+        "topic": "E2.3.1 Surveys",
+        "front": "What is the difference between open and closed survey questions?",
+        "back": "Closed questions offer a fixed set of responses (e.g. multiple choice, rating scales), making data easy to quantify and analyse. Open questions allow free-text answers, providing richer qualitative insight but making analysis more difficult.",
+        "tags": ["surveys", "data collection", "E2.3.1"]
+    },
+
+    # ─────────────── LEARNING AIM F (FC126–FC150) ───────────────
+    {
+        "id": "FC126",
+        "learning_aim": "F",
+        "topic": "F1.1.1 Privacy",
+        "front": "What moral and ethical issues around privacy arise from the use of IT systems?",
+        "back": "IT systems can collect, store, and share vast amounts of personal data without users' full awareness (e.g. location tracking by apps, employee monitoring software). This raises ethical concerns about informed consent, surveillance, and the right to a private life.",
+        "tags": ["privacy", "ethics", "F1.1.1"]
+    },
+    {
+        "id": "FC127",
+        "learning_aim": "F",
+        "topic": "F1.1.2 Environmental Impact",
+        "front": "What are the environmental implications of IT systems?",
+        "back": "Data centres consume large amounts of electricity, contributing to carbon emissions. Manufacturing digital devices uses rare earth minerals and creates e-waste when devices are discarded. Cloud computing can improve energy efficiency through shared infrastructure.",
+        "tags": ["environment", "ethics", "F1.1.2"]
+    },
+    {
+        "id": "FC128",
+        "learning_aim": "F",
+        "topic": "F1.1.3 Digital Divide",
+        "front": "What is the digital divide?",
+        "back": "The digital divide refers to the gap between those who have access to modern information technology and the internet, and those who do not. Causes include cost, geographic location (rural broadband coverage), age, disability, and lack of digital skills.",
+        "tags": ["digital divide", "ethics", "F1.1.3"]
+    },
+    {
+        "id": "FC129",
+        "learning_aim": "F",
+        "topic": "F1.1.4 Assistive Technology Access",
+        "front": "What is the ethical issue around access to assistive technology?",
+        "back": "Assistive technologies (e.g. screen readers, voice input software) are essential for people with disabilities to use IT. However, they can be expensive or unavailable in some regions, creating an ethical obligation on organisations and governments to ensure equal access.",
+        "tags": ["assistive technology", "ethics", "accessibility", "F1.1.4"]
+    },
+    {
+        "id": "FC130",
+        "learning_aim": "F",
+        "topic": "F1.1.5 Netiquette",
+        "front": "What is netiquette?",
+        "back": "Netiquette is a set of informal rules governing polite and respectful online behaviour, covering communication on forums, email, social media, and instant messaging. Examples include not using ALL CAPS (which implies shouting), respecting others' opinions, and not sharing private information without permission.",
+        "tags": ["netiquette", "online behaviour", "F1.1.5"]
+    },
+    {
+        "id": "FC131",
+        "learning_aim": "F",
+        "topic": "F1.1.6 Acceptable Use Policies",
+        "front": "What should an acceptable use policy (AUP) cover?",
+        "back": "An AUP should specify permitted and prohibited use of IT systems and internet access, rules around social media, requirements for password security, consequences for policy violations, and guidance on reporting incidents. All employees should sign and acknowledge the AUP.",
+        "tags": ["AUP", "policy", "F1.1.6"]
+    },
+    {
+        "id": "FC132",
+        "learning_aim": "F",
+        "topic": "F2.1.1 Computer Misuse Act 1990",
+        "front": "What is the Computer Misuse Act 1990?",
+        "back": "The Computer Misuse Act 1990 is UK legislation that criminalises three offences: (1) unauthorised access to computer material, (2) unauthorised access with intent to commit a further offence, and (3) unauthorised modification of computer material (e.g. installing malware).",
+        "tags": ["legislation", "Computer Misuse Act", "F2.1.1"]
+    },
+    {
+        "id": "FC133",
+        "learning_aim": "F",
+        "topic": "F2.1.1 Computer Misuse Act 1990",
+        "front": "Give an example of an offence under Section 1 and Section 3 of the Computer Misuse Act 1990.",
+        "back": "Section 1: Logging into someone else's email account without permission — unauthorised access to computer material. Section 3: Installing ransomware or a virus on a system without authorisation — unauthorised modification of computer material.",
+        "tags": ["legislation", "Computer Misuse Act", "F2.1.1", "examples"]
+    },
+    {
+        "id": "FC134",
+        "learning_aim": "F",
+        "topic": "F2.1.5 Data Protection Act 2018",
+        "front": "What is the Data Protection Act 2018?",
+        "back": "The Data Protection Act (DPA) 2018 is UK legislation that controls how organisations collect, store, and use personal data. It supplements and enforces UK GDPR in domestic law. The Information Commissioner's Office (ICO) is the UK's supervisory authority for data protection.",
+        "tags": ["legislation", "DPA 2018", "F2.1.5"]
+    },
+    {
+        "id": "FC135",
+        "learning_aim": "F",
+        "topic": "F2.1.5 UK GDPR",
+        "front": "What are the six lawful bases for processing personal data under UK GDPR?",
+        "back": "Consent • Contract • Legal obligation • Vital interests • Public task • Legitimate interests. Organisations must identify a lawful basis before processing personal data, and document it in their privacy notice.",
+        "tags": ["UK GDPR", "legislation", "lawful bases", "F2.1.5"]
+    },
+    {
+        "id": "FC136",
+        "learning_aim": "F",
+        "topic": "F2.1.5 UK GDPR",
+        "front": "Name five of the seven UK GDPR data protection principles.",
+        "back": "Lawfulness, fairness and transparency • Purpose limitation (data collected for specific purposes) • Data minimisation (only what is necessary) • Accuracy • Storage limitation (not kept longer than needed) • Integrity and confidentiality (security) • Accountability.",
+        "tags": ["UK GDPR", "principles", "legislation", "F2.1.5"]
+    },
+    {
+        "id": "FC137",
+        "learning_aim": "F",
+        "topic": "F2.1.5 UK GDPR Rights",
+        "front": "What is the 'right to erasure' under UK GDPR?",
+        "back": "The right to erasure (also known as the 'right to be forgotten') allows individuals to request that an organisation deletes their personal data in certain circumstances, such as when the data is no longer necessary for the original purpose or consent is withdrawn.",
+        "tags": ["UK GDPR", "rights", "erasure", "F2.1.5"]
+    },
+    {
+        "id": "FC138",
+        "learning_aim": "F",
+        "topic": "F2.1.2 Copyright Designs and Patents Act 1988",
+        "front": "What does the Copyright, Designs and Patents Act 1988 protect?",
+        "back": "The Copyright, Designs and Patents Act (CDPA) 1988 protects original creative works, including literary, musical, artistic works, films, and software. It gives creators exclusive rights to copy, distribute, or adapt their work. Unauthorised copying is infringement.",
+        "tags": ["legislation", "CDPA 1988", "copyright", "F2.1.2"]
+    },
+    {
+        "id": "FC139",
+        "learning_aim": "F",
+        "topic": "F2.1.3 Software Copyright",
+        "front": "How does the Copyright, Designs and Patents Act 1988 apply to computer software?",
+        "back": "Computer programs are protected as literary works under the CDPA 1988. It is illegal to copy, distribute, or reverse-engineer software without the licence holder's permission. Software licences (e.g. proprietary, open source) define permitted use.",
+        "tags": ["legislation", "software", "copyright", "F2.1.3"]
+    },
+    {
+        "id": "FC140",
+        "learning_aim": "F",
+        "topic": "F2.1.4 Health and Safety Regulations",
+        "front": "What do the Health and Safety (Display Screen Equipment) Regulations 1992 require?",
+        "back": "The DSE Regulations require employers to carry out workstation risk assessments, provide adequate breaks for DSE users, offer eye tests, and ensure ergonomic equipment (e.g. adjustable chairs, wrist rests). They protect workers from conditions such as RSI and eye strain.",
+        "tags": ["legislation", "health and safety", "DSE", "F2.1.4"]
+    },
+    {
+        "id": "FC141",
+        "learning_aim": "F",
+        "topic": "F2.1.4 Health and Safety Regulations",
+        "front": "Give two health risks associated with prolonged use of display screen equipment (DSE).",
+        "back": "Repetitive Strain Injury (RSI) — pain or injury in hands, wrists, or arms from repetitive keyboard and mouse movements. Eye strain — caused by staring at a screen for extended periods without breaks, leading to headaches, blurred vision, or dry eyes.",
+        "tags": ["health and safety", "DSE", "F2.1.4"]
+    },
+    {
+        "id": "FC142",
+        "learning_aim": "F",
+        "topic": "F2.1 Equality Act 2010",
+        "front": "How does the Equality Act 2010 apply to IT systems?",
+        "back": "The Equality Act 2010 prohibits discrimination based on protected characteristics (e.g. disability, age, gender). In IT, this means organisations must make reasonable adjustments to provide accessible systems and websites, preventing discrimination against users with disabilities.",
+        "tags": ["legislation", "Equality Act 2010", "accessibility"]
+    },
+    {
+        "id": "FC143",
+        "learning_aim": "F",
+        "topic": "F2.1 Freedom of Information Act 2000",
+        "front": "What does the Freedom of Information Act 2000 entitle individuals to?",
+        "back": "The Freedom of Information (FOI) Act 2000 gives the public the right to request access to information held by public authorities (e.g. government departments, NHS, schools). Authorities must respond within 20 working days and may only withhold information under specified exemptions.",
+        "tags": ["legislation", "FOI Act 2000", "F2.1"]
+    },
+    {
+        "id": "FC144",
+        "learning_aim": "F",
+        "topic": "F1.1.1 Monitoring and Surveillance",
+        "front": "What ethical issues arise from organisations monitoring employees' IT usage?",
+        "back": "Monitoring email, browsing, and keystrokes raises privacy concerns and may damage trust between employer and employee. Organisations have a legitimate interest in security and productivity, but monitoring must be proportionate, disclosed to staff, and compliant with UK GDPR.",
+        "tags": ["privacy", "monitoring", "ethics", "F1.1.1"]
+    },
+    {
+        "id": "FC145",
+        "learning_aim": "F",
+        "topic": "F1.1.2 E-waste",
+        "front": "What is e-waste and why is it an ethical concern?",
+        "back": "E-waste is discarded electronic devices. It is an ethical concern because devices contain hazardous materials (e.g. lead, mercury) that can pollute if landfilled. Much e-waste from wealthy nations is exported to developing countries, creating health and environmental risks for communities there.",
+        "tags": ["e-waste", "environment", "ethics", "F1.1.2"]
+    },
+    {
+        "id": "FC146",
+        "learning_aim": "F",
+        "topic": "F2.1.5 ICO",
+        "front": "What is the ICO and what is its role?",
+        "back": "The Information Commissioner's Office (ICO) is the UK's independent authority for data protection and information rights. It enforces UK GDPR and the Data Protection Act 2018, investigates complaints, issues guidance, and can impose fines for serious breaches.",
+        "tags": ["ICO", "data protection", "UK GDPR", "F2.1.5"]
+    },
+    {
+        "id": "FC147",
+        "learning_aim": "F",
+        "topic": "F2.1.2 Software Licensing",
+        "front": "What is the difference between a single-user licence and a site licence for software?",
+        "back": "A single-user licence permits one person to install and use software on a specified number of devices. A site licence (multi-user licence) allows an organisation to install software on all machines at a site or within the whole organisation for a single fee.",
+        "tags": ["software", "licensing", "copyright", "F2.1.2"]
+    },
+    {
+        "id": "FC148",
+        "learning_aim": "F",
+        "topic": "F1.1.3 Freedom of Speech vs Censorship",
+        "front": "What ethical tension exists between freedom of speech and censorship online?",
+        "back": "Freedom of speech allows individuals to express opinions without restriction, but online platforms must also prevent harmful content (e.g. hate speech, misinformation). Organisations and governments face ethical challenges in deciding what content to restrict without infringing on civil liberties.",
+        "tags": ["freedom of speech", "censorship", "ethics", "F1.1.3"]
+    },
+    {
+        "id": "FC149",
+        "learning_aim": "F",
+        "topic": "F2.1.5 Data Breach Notification",
+        "front": "Under UK GDPR, what must an organisation do if it suffers a data breach?",
+        "back": "If a breach is likely to result in a risk to individuals' rights, the organisation must notify the ICO within 72 hours of becoming aware. If the breach is likely to result in high risk to individuals, those individuals must also be informed directly without undue delay.",
+        "tags": ["UK GDPR", "data breach", "notification", "F2.1.5"]
+    },
+    {
+        "id": "FC150",
+        "learning_aim": "F",
+        "topic": "F1.1.6 Acceptable Use Policy",
+        "front": "Why should an organisation have an acceptable use policy (AUP) for social media?",
+        "back": "A social media AUP protects the organisation's reputation by setting clear rules on what employees may post publicly about the organisation, clients, or colleagues. Without one, the organisation may be held liable for defamatory or confidential content posted by staff.",
+        "tags": ["AUP", "social media", "policy", "F1.1.6"]
+    }
+]
+
+# Write out JSON
+with open('/home/user/workspace/btec-tool/data/flashcards.json', 'w', encoding='utf-8') as f:
+    json.dump(cards, f, ensure_ascii=False, indent=2)
+
+print("Done — wrote", len(cards), "cards")

@@ -3366,6 +3366,19 @@ body.mobile-ui.mobile-sheet-open .mobile-bottom-nav{display:flex !important;}
             <span class="rev-subject-copy"><strong>Sport</strong><small>Level 3 · Unit 1 live</small></span>
             <span class="rev-subject-live">Live</span>
           </a>
+          <div style="margin-top:var(--sp2);padding-top:var(--sp2);margin-bottom:var(--sp2);
+            border-top:1px solid var(--color-divider);font-size:var(--tx-xs);font-weight:700;letter-spacing:.08em;
+            text-transform:uppercase;color:var(--color-text-muted);">A-Level</div>
+          <a class="rev-subject-link" style="display:flex;align-items:center;justify-content:space-between;
+            padding:8px 10px;border-radius:var(--radius-md);cursor:pointer;
+            color:var(--color-text);text-decoration:none;font-size:var(--tx-sm);"
+            onmouseenter="this.style.background='oklch(from var(--color-text) l c h/.06)'"
+            onmouseleave="this.style.background=''"
+            onclick="go('/revision/a-level/business-2023');hideRevPreview()">
+            <span class="rev-subject-icon business">AL</span>
+            <span class="rev-subject-copy"><strong>AQA Business (2023)</strong><small>A-Level · 7132 live</small></span>
+            <span class="rev-subject-live">Live</span>
+          </a>
           <div style="margin-top:var(--sp3);padding-top:var(--sp3);
             border-top:1px solid var(--color-divider);text-align:center;">
             <button class="btn btn-g" style="width:100%;font-size:var(--tx-xs);"
@@ -3451,10 +3464,10 @@ body.mobile-ui.mobile-sheet-open .mobile-bottom-nav{display:flex !important;}
   <div class="mobile-sheet-head">
     <div>
       <div class="mobile-sheet-title">Subjects</div>
-      <div class="mobile-sheet-copy">Jump straight into the live BTEC revision apps.</div>
+      <div class="mobile-sheet-copy">Jump straight into live revision apps, including A-Level Business.</div>
       <div class="mobile-sheet-meta">
-        <span>4 live apps</span>
-        <span>BTEC Level 2 &amp; 3</span>
+        <span>5 live apps</span>
+        <span>BTEC + A-Level</span>
       </div>
     </div>
     <button class="mobile-sheet-close" id="mobile-sheet-close" aria-label="Close subjects">✕</button>
@@ -3505,6 +3518,18 @@ body.mobile-ui.mobile-sheet-open .mobile-bottom-nav{display:flex !important;}
         <span class="mobile-subject-meta">
           <span>Flashcards</span>
           <span>Mock papers</span>
+        </span>
+      </span>
+      <em>Open</em>
+    </button>
+    <button class="mobile-subject-link" type="button" data-mobile-subject="/revision/a-level/business-2023">
+      <span class="mobile-subject-icon business">AL</span>
+      <span class="mobile-subject-copy">
+        <strong>AQA Business (2023)</strong>
+        <small>A-Level · 7132 live</small>
+        <span class="mobile-subject-meta">
+          <span>Paper 1-3</span>
+          <span>AI Examiner</span>
         </span>
       </span>
       <em>Open</em>
@@ -3632,6 +3657,13 @@ body.mobile-ui.mobile-sheet-open .mobile-bottom-nav{display:flex !important;}
                   <small>Finance confidence and exam control</small>
                 </span>
               </button>
+              <button class="home-reframe-launch" type="button" onclick="go('/revision/a-level/business-2023')">
+                <span class="home-reframe-dot business">AL</span>
+                <span>
+                  <strong>A-Level Business (7132)</strong>
+                  <small>Topic-by-topic revision with quizzes and exam practice</small>
+                </span>
+              </button>
               <button class="home-reframe-launch" type="button" onclick="go('/revision/btec/level-3/sport/unit-1')">
                 <span class="home-reframe-dot sport">SP</span>
                 <span>
@@ -3747,6 +3779,12 @@ body.mobile-ui.mobile-sheet-open .mobile-bottom-nav{display:flex !important;}
             <h3>Technology Systems</h3>
             <p>Level 2 technology systems content with practice questions and revision support.</p>
             <button class="btn btn-p btn-accent-l2" type="button" onclick="event.stopPropagation();go('/revision/btec/level-2/it/unit-2')">Open IT L2</button>
+          </article>
+          <article class="home-reframe-lane business" onclick="go('/revision/a-level/business-2023')">
+            <span class="lane-tag">Live · A-Level</span>
+            <h3>AQA Business (7132)</h3>
+            <p>Topic 1-10 revision app with case-study questions, quizzes, mock papers and AI marking support.</p>
+            <button class="btn btn-p btn-accent-business" type="button" onclick="event.stopPropagation();go('/revision/a-level/business-2023')">Open A-Level Business</button>
           </article>
         </div>
       </section>
@@ -3879,7 +3917,7 @@ body.mobile-ui.mobile-sheet-open .mobile-bottom-nav{display:flex !important;}
           <button class="btn btn-s btn-lg" onclick="go('leaderboard')">See Weekly Race</button>
         </div>
         <div class="revision-stat-row">
-          <span class="revision-stat">3 Live Apps</span>
+          <span class="revision-stat">4 Live Apps</span>
           <span class="revision-stat">BTEC AAQ Aligned</span>
           <span class="revision-stat">Daily XP + Weekly Rewards</span>
         </div>
@@ -3902,11 +3940,11 @@ body.mobile-ui.mobile-sheet-open .mobile-bottom-nav{display:flex !important;}
             <p>AAQ-focused revision tracks with live subject apps and exam-ready tools.</p>
             <button class="btn btn-g" onclick="event.stopPropagation();go('/revision/btec')">Open BTEC</button>
           </article>
-          <article class="rev-flow-card off" aria-disabled="true">
-            <span class="rev-flow-chip soon">Coming soon</span>
+          <article class="rev-flow-card" onclick="go('/revision/a-level/business-2023')">
+            <span class="rev-flow-chip ok">Live now</span>
             <h3>A-Level</h3>
-            <p>AQA, Edexcel and OCR pathways are planned next with the same app-style experience.</p>
-            <button class="btn btn-g" disabled>Coming soon</button>
+            <p>AQA Business (2023) is now available with paper-aware filters, predicted papers and AI Examiner support.</p>
+            <button class="btn btn-g" onclick="event.stopPropagation();go('/revision/a-level/business-2023')">Open A-Level</button>
           </article>
         </div>
       </section>
@@ -5208,6 +5246,31 @@ body.mobile-ui.mobile-sheet-open .mobile-bottom-nav{display:flex !important;}
 </div>
 
 <!-- ============================================================
+     A-LEVEL AQA BUSINESS (2023)  /revision/a-level/business-2023
+============================================================ -->
+<div class="page page-iframe" id="p-aqa-business-2023">
+  <div class="cd">
+    <nav class="bc">
+      <button class="bc-item" onclick="go('')">Home</button>
+      <span class="bc-sep">›</span>
+      <button class="bc-item" onclick="go('/revision')">Revision</button>
+      <span class="bc-sep">›</span>
+      <span class="bc-item cur">A-Level AQA Business (2023)</span>
+    </nav>
+  </div>
+  <div class="cf">
+    <div class="iframe-wrap">
+      <iframe
+        src="revision/a-level/business-2023/index.html"
+        title="A-Level AQA Business 2023"
+        loading="lazy"
+        allowfullscreen>
+      </iframe>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
      SCRIPTS
 ============================================================ -->
 <script>
@@ -5262,6 +5325,7 @@ const ROUTES = {
   '/leaderboard':                         'p-leaderboard',
   '/news':                                'p-news',
   '/revision':                            'p-revision',
+  '/revision/a-level/business-2023':      'p-aqa-business-2023',
   '/revision/btec':                       'p-btec',
   '/revision/btec/level-3':              'p-btec-l3',
   '/revision/btec/level-3/business':     'p-btec-business-l3',

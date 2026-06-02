@@ -1,0 +1,3506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>
+(function(){
+  var THEME_KEY = 'ra10-theme';
+  function applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme === 'dark' ? 'dark' : 'light');
+  }
+  var saved = localStorage.getItem(THEME_KEY);
+  applyTheme(saved || 'light');
+  window.addEventListener('message', function(event) {
+    if (event.source !== window.parent || !event.data || event.data.type !== 'RA10_THEME') return;
+    applyTheme(event.data.theme);
+  });
+  window.addEventListener('storage', function(event) {
+    if (event.key === THEME_KEY) applyTheme(event.newValue || 'light');
+  });
+
+  window.toggleUnitTheme = function() {
+    var current = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+    var next = current === 'dark' ? 'light' : 'dark';
+    localStorage.setItem(THEME_KEY, next);
+    applyTheme(next);
+    try {
+      if (window.parent && window.parent !== window) {
+        window.parent.postMessage({ type: 'RA10_THEME', theme: next }, '*');
+      }
+    } catch (e) {}
+  };
+
+  window.openUnitNews = function() {
+    try {
+      if (window.top && window.top !== window) {
+        window.top.location.hash = '/news';
+        return;
+      }
+    } catch (e) {}
+    location.href = '/index.html#/news';
+  };
+})();
+
+(function(){
+  var s = document.createElement('script');
+  var isFile = location.protocol === 'file:';
+  var isLocalHost = location.hostname === '127.0.0.1' || location.hostname === 'localhost';
+  s.src = isFile ? 'file:///C:/Users/mistr/Downloads/ra10/ra10-sdk.js' : (isLocalHost ? 'http://127.0.0.1:5500/ra10-sdk.js' : 'https://ra10.co.uk/ra10-sdk.js');
+  document.head.insertBefore(s, document.head.firstChild);
+})();
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A-Level AQA Business 2023 &mdash; Question Bank & Mock Paper Builder</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>document.addEventListener('DOMContentLoaded', function() {
+  if (window.mermaid) mermaid.initialize({ startOnLoad: false, theme: 'neutral' });
+});</script>
+<link rel="preconnect" href="https://api.fontshare.com">
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@500,700,900,400&f[]=jetbrains-mono@500&display=swap">
+<link rel="stylesheet" href="css/style.css?v=20260507c">
+<style>
+.ra10-cost-label {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.75);
+  background: rgba(0,0,0,0.15);
+  padding: 1px 6px;
+  border-radius: 999px;
+  margin-left: 6px;
+  vertical-align: middle;
+  letter-spacing: 0.03em;
+}
+
+.ra10-cost-label.free-label {
+  color: rgba(255,255,255,0.6);
+  background: rgba(255,255,255,0.12);
+}
+
+.tabs .tab.tab-special {
+  background: #eef7f3;
+  border-color: #bcd9ce;
+  color: #0f4f41;
+}
+
+.tabs .tab.tab-special.active {
+  background: #d8efe5;
+  border-color: #5b9f89;
+  color: #0c4135;
+}
+
+.you-hero {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 18px;
+  border-radius: 18px;
+  padding: 22px;
+  margin-bottom: 16px;
+  color: #fff;
+  background: linear-gradient(130deg, #14201E 0%, #8a1a1a 58%, #d20000 100%);
+}
+
+.you-hero-title {
+  margin: 0;
+  font-size: clamp(1.35rem, 2.5vw, 2rem);
+  font-weight: 900;
+}
+
+.you-hero-streak {
+  margin: 10px 0 0 0;
+  font-size: 1.08rem;
+}
+
+.you-hero-xp-label {
+  font-size: 0.86rem;
+  opacity: 0.9;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.you-hero-xp-val {
+  font-size: 1.25rem;
+  font-weight: 800;
+  margin: 6px 0 8px;
+}
+
+.you-hero-xp-bar {
+  height: 11px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.25);
+  overflow: hidden;
+}
+
+.you-hero-xp-bar span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #f2ff7e 0%, #ffd84c 100%);
+}
+
+.you-tasks-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.you-task-card {
+  border: 1px solid var(--line-2);
+  border-radius: 14px;
+  padding: 14px;
+  background: #fff;
+}
+
+.you-task-card.done {
+  border-color: #4bbf88;
+  background: linear-gradient(145deg, #e7fff1 0%, #d6f8ea 100%);
+}
+
+.you-task-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.you-xp-pill {
+  background: linear-gradient(120deg, #ffe96b 0%, #ffbe2f 100%);
+  color: #5a3b00;
+  font-weight: 800;
+  border-radius: 999px;
+  padding: 4px 10px;
+  white-space: nowrap;
+}
+
+.you-task-foot {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.you-task-progress {
+  margin-top: 10px;
+  height: 8px;
+  border-radius: 999px;
+  background: #edf0ef;
+  overflow: hidden;
+}
+
+.you-task-progress span {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, #208e62 0%, #28c07d 100%);
+}
+
+.you-stats-mini {
+  margin-top: 14px;
+  border: 1px solid var(--line-2);
+  border-radius: 14px;
+  padding: 14px;
+  background: #fff;
+}
+
+.you-stats-mini h4 {
+  margin: 0 0 10px 0;
+}
+
+.you-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.you-stats-grid div {
+  border: 1px solid var(--line-2);
+  border-radius: 10px;
+  padding: 10px;
+  display: grid;
+  gap: 4px;
+}
+
+.you-stats-grid strong {
+  font-size: 1.15rem;
+}
+
+.you-quote {
+  margin-top: 12px;
+  border-radius: 12px;
+  padding: 12px;
+  background: #f7f9ff;
+  border-left: 4px solid #d20000;
+  color: #233;
+  font-style: italic;
+}
+
+[data-theme="dark"] .you-task-card,
+[data-theme="dark"] .you-stats-mini,
+[data-theme="dark"] .you-quote,
+[data-theme="dark"] .you-stats-grid div {
+  background: var(--surface) !important;
+  color: var(--ink) !important;
+  border-color: var(--line) !important;
+}
+
+[data-theme="dark"] .you-task-card.done {
+  background: color-mix(in oklab, var(--accent-2) 36%, var(--surface)) !important;
+  border-color: var(--accent) !important;
+}
+
+[data-theme="dark"] .you-task-progress {
+  background: var(--line) !important;
+}
+
+[data-theme="dark"] select,
+[data-theme="dark"] option,
+[data-theme="dark"] input,
+[data-theme="dark"] textarea {
+  background: var(--surface) !important;
+  color: var(--ink) !important;
+}
+
+[data-theme="dark"] .diagram-builder-panel,
+[data-theme="dark"] .diagram-color-input,
+[data-theme="dark"] .diagram-builder-panel .field-input,
+[data-theme="dark"] .diagram-builder-canvas-wrap,
+[data-theme="dark"] .diagram-inline-editor {
+  background: var(--surface) !important;
+  color: var(--ink) !important;
+  border-color: var(--line) !important;
+}
+
+@media (max-width: 880px) {
+  .you-hero {
+    grid-template-columns: 1fr;
+  }
+
+  .you-tasks-grid,
+  .you-stats-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.diagram-tool-wrap {
+  margin-top: 16px;
+  border: 1px solid var(--line-2);
+  border-radius: var(--r-md);
+  background: var(--bg);
+  padding: 12px;
+}
+
+.diagram-mode-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.diagram-pane {
+  display: none;
+}
+
+.diagram-pane.diagram-pane-active {
+  display: block;
+}
+
+.diagram-builder-layout {
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr);
+  gap: 12px;
+}
+
+.papers-flow-wrap {
+  margin-bottom: 22px;
+  border: 1px solid #cfe2d8;
+  border-radius: 16px;
+  padding: 16px;
+  background: linear-gradient(130deg, #f2faf6 0%, #ecf6ff 55%, #fff8e7 100%);
+}
+
+.papers-flow-head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.papers-flow-head h3 {
+  margin: 0;
+  font-size: 1.02rem;
+  color: #103a2b;
+}
+
+.papers-flow-head p {
+  margin: 4px 0 0;
+  color: #4a6258;
+  font-size: 0.88rem;
+}
+
+.papers-flow-tags {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.papers-flow-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #e3f3eb;
+  color: #0f5d3c;
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.papers-flow-steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.papers-flow-step {
+  border: 1px solid #cfe2d8;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.82);
+  padding: 12px;
+}
+
+.papers-flow-step .num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #156542;
+  color: #fff;
+  font-size: 0.78rem;
+  font-weight: 800;
+  margin-bottom: 6px;
+}
+
+.papers-flow-step strong,
+.papers-flow-step span {
+  display: block;
+}
+
+.papers-flow-step strong {
+  color: #123a2b;
+  font-size: 0.86rem;
+}
+
+.papers-flow-step span {
+  margin-top: 4px;
+  color: #5a6c63;
+  font-size: 0.79rem;
+}
+
+.papers-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.paper-launch-card {
+  border: 1px solid #c7dfd2;
+  border-radius: 14px;
+  padding: 14px;
+  background: linear-gradient(160deg, #f7fdf9 0%, #eef8f3 100%);
+  display: grid;
+  gap: 10px;
+}
+
+.paper-launch-head {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: start;
+  gap: 10px;
+}
+
+.paper-launch-badge {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  color: #fff;
+  background: linear-gradient(140deg, #14663f 0%, #228858 100%);
+}
+
+.paper-launch-title {
+  margin: 0;
+  color: #113c2b;
+  font-size: 1rem;
+}
+
+.paper-launch-meta {
+  margin: 4px 0 0;
+  color: #5a6f64;
+  font-size: 0.78rem;
+  line-height: 1.4;
+}
+
+.paper-launch-copy {
+  margin: 0;
+  color: #435a50;
+  font-size: 0.83rem;
+}
+
+.paper-launch-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.paper-launch-actions .btn,
+.paper-launch-actions a.btn {
+  padding: 7px 10px;
+  font-size: 0.78rem;
+  text-decoration: none;
+}
+
+.papers-sprint {
+  margin-bottom: 20px;
+  border: 1px solid #c9e1d5;
+  border-radius: 14px;
+  padding: 14px;
+  background: linear-gradient(145deg, #ffffff 0%, #f3fbf6 100%);
+}
+
+.papers-sprint h3 {
+  margin: 0 0 6px;
+  color: #113a2b;
+  font-size: 0.98rem;
+}
+
+.papers-sprint p {
+  margin: 0;
+  color: #54685e;
+  font-size: 0.85rem;
+}
+
+.papers-sprint-actions {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.papers-sprint-actions .btn {
+  padding: 7px 11px;
+  font-size: 0.78rem;
+}
+
+.papers-deep-dive {
+  border: 1px solid #d1e3da;
+  border-radius: 14px;
+  background: #f8fcfa;
+  padding: 10px;
+}
+
+.papers-deep-dive > summary {
+  cursor: pointer;
+  list-style: none;
+  font-weight: 800;
+  color: #144b35;
+  font-size: 0.9rem;
+}
+
+.papers-deep-dive > summary::-webkit-details-marker {
+  display: none;
+}
+
+.papers-deep-dive > summary::before {
+  content: '+';
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  margin-right: 8px;
+  border-radius: 50%;
+  background: #ddf0e5;
+  color: #11583a;
+  font-weight: 900;
+}
+
+.papers-deep-dive[open] > summary::before {
+  content: '-';
+}
+
+.papers-deep-dive-body {
+  margin-top: 12px;
+  display: grid;
+  gap: 14px;
+}
+
+.ra10-subject-banner {
+  display: none;
+  padding: 12px 16px;
+  background: linear-gradient(90deg, var(--accent-2), var(--surface));
+  border-bottom: 1px solid var(--line);
+  color: var(--ink);
+}
+
+.ra10-subject-banner .line-main {
+  font-size: 14px;
+  font-weight: 800;
+  margin-bottom: 2px;
+}
+
+.ra10-subject-banner .line-sub {
+  font-size: 12px;
+  color: var(--ink-2);
+}
+
+[data-theme="dark"] .ra10-subject-banner {
+  background: linear-gradient(90deg, #1c2b2c, #1a1d20);
+}
+
+.diagram-builder-panel {
+  background: #ffffff;
+  border: 1px solid var(--line-2);
+  border-radius: var(--r-sm);
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.diagram-panel-title {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-2);
+}
+
+.diagram-tool-buttons {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 6px;
+}
+
+.diagram-color-input,
+.diagram-builder-panel .field-input {
+  width: 100%;
+  border: 1px solid var(--line-2);
+  border-radius: var(--r-sm);
+  padding: 8px;
+  font-family: inherit;
+  font-size: 14px;
+  background: #fff;
+}
+
+.diagram-builder-canvas-wrap {
+  border: 1px solid var(--line-2);
+  border-radius: var(--r-sm);
+  background: #ffffff;
+  overflow: auto;
+  position: relative;
+  min-height: 500px;
+}
+
+.diagram-builder-canvas {
+  display: block;
+  min-width: 800px;
+  min-height: 500px;
+  width: 1000px;
+  height: 560px;
+  cursor: crosshair;
+}
+
+.diagram-inline-editor {
+  position: absolute;
+  z-index: 2;
+  border: 1px solid var(--line-2);
+  border-radius: 6px;
+  padding: 4px 6px;
+  font-size: 14px;
+  font-family: inherit;
+}
+
+@media (max-width: 900px) {
+  .diagram-builder-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.papers-insight-grid {
+  display: grid;
+  gap: 18px;
+  margin-bottom: 24px;
+}
+
+.papers-hero-grid {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 18px;
+  align-items: start;
+}
+
+.papers-insight-card {
+  background: linear-gradient(180deg, #fcfdfb 0%, #f2f8f4 100%);
+  border: 1px solid #cfe1d8;
+  border-radius: 16px;
+  padding: 18px;
+}
+
+.papers-insight-card h3 {
+  margin: 0 0 6px;
+  font-size: 1.02rem;
+}
+
+.papers-insight-card p {
+  margin: 0 0 12px;
+  color: #4f5f58;
+  font-size: 0.92rem;
+}
+
+.papers-table-wrap {
+  overflow-x: auto;
+  border: 1px solid #d6e4dc;
+  border-radius: 12px;
+  background: #ffffff;
+}
+
+.papers-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 860px;
+}
+
+.papers-table th,
+.papers-table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid #e3ece7;
+  text-align: left;
+  vertical-align: top;
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+.papers-table th {
+  background: #e8f3ed;
+  color: #14392b;
+  font-size: 0.79rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.papers-table tr:last-child td {
+  border-bottom: none;
+}
+
+.trend-band {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 88px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.trend-band.high {
+  background: #dff6e8;
+  color: #0f6b3c;
+}
+
+.trend-band.medium {
+  background: #fff3cd;
+  color: #8a6400;
+}
+
+.trend-band.lower {
+  background: #eef1f4;
+  color: #55616b;
+}
+
+.papers-footnote {
+  margin: 10px 2px 0;
+  color: #5a6b63;
+  font-size: 0.82rem;
+}
+
+.papers-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.papers-kpi {
+  background: linear-gradient(145deg, #f7fffa 0%, #e4f4eb 100%);
+  border: 1px solid #d4e7dc;
+  border-radius: 14px;
+  padding: 14px;
+}
+
+.papers-kpi strong {
+  display: block;
+  font-size: 1.4rem;
+  line-height: 1;
+  color: #0f5f39;
+}
+
+.papers-kpi span {
+  display: block;
+  margin-top: 6px;
+  color: #4d6459;
+  font-size: 0.84rem;
+}
+
+.trend-chart {
+  display: grid;
+  gap: 10px;
+}
+
+.revise-quick-nav {
+  display: grid;
+  gap: 10px;
+  margin: 0 0 12px;
+  padding: 12px;
+  border: 1px solid #d2e6dc;
+  border-radius: 12px;
+  background: linear-gradient(140deg, #f8fffb 0%, #ecf7f1 100%);
+}
+
+.revise-quick-nav-title {
+  margin: 0;
+  color: #204a3a;
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.revise-quick-nav-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.revise-focus-btn {
+  border: 1px solid #bcd8cb;
+  border-radius: 999px;
+  padding: 6px 10px;
+  background: #ffffff;
+  color: #154736;
+  font-size: 0.76rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.revise-focus-btn:hover,
+.revise-focus-btn.active {
+  background: #1b7a4f;
+  border-color: #1b7a4f;
+  color: #ffffff;
+}
+
+.revise-focus-status {
+  margin: 0;
+  color: #4e655b;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.trend-row {
+  display: grid;
+  grid-template-columns: minmax(280px, 1.7fr) minmax(120px, 1fr) 72px;
+  align-items: start;
+  gap: 12px;
+}
+
+.trend-row.trend-row-focus {
+  border: 1px solid #b9d9c9;
+  border-radius: 10px;
+  background: #f6fcf8;
+  padding: 8px;
+}
+
+.trend-meta strong,
+.trend-meta span {
+  display: block;
+}
+
+.trend-meta strong {
+  color: #173d2e;
+  font-size: 0.84rem;
+}
+
+.trend-meta span {
+  color: #607067;
+  font-size: 0.77rem;
+}
+
+.trend-topic-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.trend-topic-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: #edf7f1;
+  color: #14543b;
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.trend-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  overflow: visible;
+  padding-bottom: 0;
+}
+
+.trend-actions .btn {
+  flex: 0 1 auto;
+  padding: 8px 12px;
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+.papers-fun-card {
+  border: 1px solid #c9e4d8;
+  background: linear-gradient(140deg, #f6fff9 0%, #ecf9f4 45%, #fff6e6 100%);
+}
+
+.papers-fun-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.papers-fun-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: #e0f3e9;
+  color: #12543a;
+}
+
+.papers-fun-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.papers-fun-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.papers-fun-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 999px;
+  border: 1px solid #c9ddd3;
+  background: rgba(255, 255, 255, 0.86);
+  color: #1f4d3a;
+  font-size: 0.74rem;
+  font-weight: 800;
+  padding: 4px 10px;
+}
+
+.papers-fun-pill .val {
+  color: #11633f;
+}
+
+.papers-fun-result {
+  margin-top: 12px;
+  border: 1px solid #cfe5db;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.78);
+  padding: 12px;
+}
+
+.papers-fun-title {
+  margin: 0;
+  color: #173d2e;
+  font-weight: 800;
+  font-size: 0.92rem;
+}
+
+.papers-fun-copy {
+  margin: 5px 0 0;
+  color: #51665c;
+  font-size: 0.82rem;
+}
+
+.papers-fun-mission-meta {
+  margin: 8px 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.papers-fun-mission-tag {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 4px 9px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  background: #e8f5ee;
+  color: #0f5f3d;
+}
+
+.papers-fun-timer {
+  margin-top: 8px;
+  color: #2e5946;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.papers-fun-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.papers-fun-actions .btn {
+  padding: 7px 11px;
+  font-size: 0.8rem;
+}
+
+.papers-fun-today {
+  display: grid;
+  gap: 8px;
+  margin-top: 12px;
+  background: rgba(255,255,255,0.65);
+  border-radius: 10px;
+  border: 1px solid #d8e9e1;
+  padding: 10px;
+}
+
+.papers-fun-check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8rem;
+  color: #2f4b40;
+}
+
+.papers-fun-check input {
+  width: 16px;
+  height: 16px;
+}
+
+.papers-fun-status {
+  margin-top: 2px;
+  color: #456257;
+  font-size: 0.76rem;
+  font-weight: 700;
+}
+
+.trend-bar {
+  height: 12px;
+  border-radius: 999px;
+  background: #e3eee8;
+  overflow: hidden;
+}
+
+.trend-bar span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #157347 0%, #1a8b62 55%, #5db58c 100%);
+}
+
+.trend-value {
+  color: #4a6156;
+  font-size: 0.79rem;
+  font-weight: 700;
+}
+
+.papers-slot-signals {
+  display: grid;
+  gap: 12px;
+  align-content: start;
+}
+
+.signal-card {
+  border: 1px solid #d5e6dc;
+  border-radius: 14px;
+  padding: 14px;
+  background: rgba(255, 255, 255, 0.72);
+  height: auto;
+}
+
+.signal-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #16553a;
+}
+
+.signal-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: #dff4e8;
+  color: #0f6a3b;
+}
+
+.signal-card p {
+  margin: 0;
+}
+
+.papers-slot-grid {
+  display: grid;
+  gap: 16px;
+}
+
+.papers-slot-block {
+  border: 1px solid #d7e6de;
+  border-radius: 14px;
+  padding: 14px;
+  background: rgba(255, 255, 255, 0.78);
+}
+
+.papers-slot-block h4 {
+  margin: 0 0 4px;
+  font-size: 0.98rem;
+}
+
+.papers-slot-block p {
+  margin: 0 0 10px;
+  font-size: 0.84rem;
+}
+.slot-table {
+  min-width: auto;
+}
+
+.slot-col-hidden {
+  display: none;
+}
+
+.slot-cell {
+  min-width: 118px;
+}
+
+.slot-meta-row th {
+  background: #f6faf8;
+  font-size: 0.72rem;
+  color: #2e4b3f;
+  line-height: 1.25;
+  font-weight: 700;
+}
+
+.slot-head-meta {
+  display: block;
+  margin-top: 2px;
+  font-size: 0.68rem;
+  color: #5a7468;
+  font-weight: 600;
+}
+
+
+.code-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: #e6f4ed;
+  color: #115f39;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.slot-note {
+  display: block;
+  margin-top: 6px;
+  color: #465950;
+  font-size: 0.79rem;
+  line-height: 1.35;
+}
+
+.slot-empty {
+  color: #91a49a;
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+[data-theme="dark"] .papers-insight-card,
+[data-theme="dark"] .papers-slot-block,
+[data-theme="dark"] .signal-card,
+[data-theme="dark"] .papers-table-wrap {
+  background: var(--surface);
+  border-color: var(--line-2);
+}
+
+[data-theme="dark"] .papers-flow-wrap,
+[data-theme="dark"] .papers-flow-step,
+[data-theme="dark"] .paper-launch-card,
+[data-theme="dark"] .papers-sprint,
+[data-theme="dark"] .papers-deep-dive {
+  background: var(--surface);
+  border-color: var(--line-2);
+}
+
+[data-theme="dark"] .papers-flow-tag,
+[data-theme="dark"] .papers-flow-step .num,
+[data-theme="dark"] .paper-launch-badge,
+[data-theme="dark"] .papers-deep-dive > summary::before,
+[data-theme="dark"] .papers-fun-mission-tag,
+[data-theme="dark"] .papers-fun-pill {
+  background: #244535;
+  color: #d5f5e3;
+}
+
+[data-theme="dark"] .revise-quick-nav,
+[data-theme="dark"] .trend-row.trend-row-focus {
+  background: #1a2722;
+  border-color: #31423a;
+}
+
+[data-theme="dark"] .revise-focus-btn {
+  background: #1f3029;
+  border-color: #33473d;
+  color: #d2ebe0;
+}
+
+[data-theme="dark"] .revise-focus-btn:hover,
+[data-theme="dark"] .revise-focus-btn.active {
+  background: #2a6f4f;
+  border-color: #2a6f4f;
+  color: #ffffff;
+}
+
+[data-theme="dark"] .papers-kpi {
+  background: #1d2722;
+  border-color: #31423a;
+}
+
+[data-theme="dark"] .papers-table th {
+  background: #203129;
+  color: #dbeee5;
+}
+
+[data-theme="dark"] .papers-table td,
+[data-theme="dark"] .revise-quick-nav-title,
+[data-theme="dark"] .revise-focus-status,
+[data-theme="dark"] .papers-fun-timer,
+[data-theme="dark"] .papers-flow-head p,
+[data-theme="dark"] .papers-flow-step span,
+[data-theme="dark"] .paper-launch-meta,
+[data-theme="dark"] .paper-launch-copy,
+[data-theme="dark"] .papers-sprint p,
+[data-theme="dark"] .papers-deep-dive > summary,
+[data-theme="dark"] .papers-insight-card p,
+[data-theme="dark"] .papers-footnote,
+[data-theme="dark"] .slot-note,
+[data-theme="dark"] .trend-meta span,
+[data-theme="dark"] .trend-value,
+[data-theme="dark"] .papers-kpi span {
+  color: var(--ink-2);
+}
+
+[data-theme="dark"] .papers-insight-card h3,
+[data-theme="dark"] .papers-flow-head h3,
+[data-theme="dark"] .papers-flow-step strong,
+[data-theme="dark"] .paper-launch-title,
+[data-theme="dark"] .papers-sprint h3,
+[data-theme="dark"] .papers-slot-block h4,
+[data-theme="dark"] .trend-meta strong,
+[data-theme="dark"] .papers-kpi strong {
+  color: var(--ink);
+}
+
+[data-theme="dark"] .trend-bar {
+  background: #29352f;
+}
+
+[data-theme="dark"] .code-chip,
+[data-theme="dark"] .signal-pill,
+[data-theme="dark"] .trend-topic-chip {
+  background: #234331;
+  color: #d6f3e2;
+}
+
+[data-theme="dark"] .papers-fun-card {
+  background: linear-gradient(140deg, #1a2a24 0%, #1d3028 45%, #2c2b1e 100%);
+  border-color: #395346;
+}
+
+[data-theme="dark"] .papers-fun-result,
+[data-theme="dark"] .papers-fun-today {
+  background: rgba(19, 28, 24, 0.75);
+  border-color: #395346;
+}
+
+[data-theme="dark"] .papers-fun-badge {
+  background: #244535;
+  color: #d5f5e3;
+}
+
+[data-theme="dark"] .papers-fun-title,
+[data-theme="dark"] .papers-fun-check {
+  color: #ddf2e8;
+}
+
+[data-theme="dark"] .papers-fun-copy,
+[data-theme="dark"] .papers-fun-status {
+  color: #aac5ba;
+}
+
+@media (max-width: 980px) {
+  .papers-flow-steps {
+    grid-template-columns: 1fr;
+  }
+
+  .papers-hero-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .trend-row {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+
+  .trend-actions .btn {
+    width: auto;
+  }
+}
+</style>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%2300594E'/%3E%3Ctext x='16' y='22' text-anchor='middle' font-family='sans-serif' font-weight='900' font-size='18' fill='%23E8F1EE'%3EU1%3C/text%3E%3C/svg%3E">
+<script>
+  // Subject-credit banner updater
+  window._updateSubjectBanner = function() {
+    const banner = document.getElementById('ra10-subject-banner');
+    if (!banner || !window.RA10 || typeof window._ra10GetUnitCreditsContext !== 'function') {
+      banner.style.display = 'none';
+      return;
+    }
+    const ctx = window._ra10GetUnitCreditsContext();
+    if (!ctx || !ctx.isSubjectTier) {
+      banner.style.display = 'none';
+      return;
+    }
+    if (ctx.ownsCurrentSubject) {
+      banner.innerHTML = '<div class="line-main">Usable now on A-Level Business: ' + ctx.usableCredits + ' credits</div><div class="line-sub">Includes your subject credits and universal credits.</div>';
+    } else {
+      const ownedText = ctx.ownedSubjects.length ? ctx.ownedSubjects.join(', ') : 'another subject';
+      banner.innerHTML = '<div class="line-main">Usable now on A-Level Business: ' + ctx.usableCredits + ' credits</div><div class="line-sub">You purchased ' + ownedText + '. Only universal credits can be spent on this unit.</div>';
+    }
+    banner.style.display = '';
+  };
+  document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(function() {
+      if (window.RA10 && typeof RA10.on === 'function') {
+        RA10.on('authchange', window._updateSubjectBanner);
+        RA10.on('creditschange', window._updateSubjectBanner);
+        window._updateSubjectBanner();
+      }
+    }, 100);
+  });
+</script>
+<!-- ra10-refresh-loader -->
+<script>
+(function(){
+  var path = String(location.pathname || '').replace(/\\/g, '/');
+  var lower = path.toLowerCase();
+  var idx = lower.lastIndexOf('/ra10/');
+  var rootFromPath = idx >= 0 ? path.slice(0, idx + 5) : '';
+  var base;
+  if (location.protocol === 'file:') {
+    base = rootFromPath ? ('file://' + rootFromPath) : '';
+  } else {
+    var isLocalHost = location.hostname === '127.0.0.1' || location.hostname === 'localhost';
+    base = isLocalHost ? 'http://127.0.0.1:5500' : 'https://ra10.co.uk';
+  }
+  if (!base) return;
+
+  var font = document.createElement('link');
+  font.rel = 'stylesheet';
+  font.href = 'https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Sora:wght@500;600;700;800&display=swap';
+  document.head.appendChild(font);
+
+  var css = document.createElement('link');
+  css.rel = 'stylesheet';
+  css.href = base + '/refresh/ra10-refresh.css?v=20260525';
+  document.head.appendChild(css);
+
+  var js = document.createElement('script');
+  js.src = base + '/refresh/ra10-refresh.js?v=20260525';
+  document.head.appendChild(js);
+})();
+</script>
+</head>
+<body>
+<header class="topbar">
+  <a class="unit-brand" href="/index.html#/" target="_top" aria-label="RA10 home">
+    <img src="/logo.png" alt="RA10">
+    <span>RA10</span>
+  </a>
+  <div class="site-unit-nav" aria-label="RA10 site navigation">
+    <a class="site-unit-link" href="/index.html#/revision" target="_top">Revision</a>
+    <a class="site-unit-link" href="/index.html#/tools" target="_top">Tools</a>
+    <a class="site-unit-link" href="/index.html#/tasks" target="_top">Tasks</a>
+    <a class="site-unit-link" href="/index.html#/leaderboard" target="_top">Leaderboard</a>
+  </div>
+  <nav class="tabs">
+    <button class="tab active" data-tab="dashboard">Dashboard</button>
+    <button class="tab" data-tab="questions">Questions</button>
+    <button class="tab" data-tab="revise">Revise</button>
+    <button class="tab tab-special" data-tab="progress">Progress</button>
+  </nav>
+  <div id="unit1-credit-chip" style="margin-left:auto;display:flex;align-items:center;"></div>
+  <div style="display:flex;align-items:center;gap:8px;">
+    <button class="unit-avatar-btn" type="button" onclick="openUnitNews()" aria-label="Open news" title="News" style="background:var(--surface);color:var(--ink-2);border:1px solid var(--line-2);">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 8h10"/><path d="M7 12h10"/><path d="M7 16h6"/></svg>
+    </button>
+    <button class="unit-avatar-btn" type="button" onclick="toggleUnitTheme()" aria-label="Toggle theme" title="Light or dark mode" style="background:var(--surface);color:var(--ink-2);border:1px solid var(--line-2);">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+    <button id="unit-account-avatar" class="unit-avatar-btn" type="button" onclick="if(window.top&&typeof window.top.openAccountOrSignIn==='function'){window.top.openAccountOrSignIn()}else{window.top.location.hash='/account'}" aria-label="Open account" title="Account">?</button>
+  </div>
+</header>
+<div id="ra10-subject-banner" class="ra10-subject-banner"></div>
+
+<main id="app">
+
+  <!-- DASHBOARD -->
+  <section id="view-dashboard" class="view active">
+    <div class="hero">
+      <div>
+        <p class="eyebrow">A-Level AQA Business (2023)</p>
+        <h2>Paper-aware exam practice across Papers 1, 2 and 3</h2>
+        <p class="lede">Exam-style questions, quizzes and revision guide content organised for AQA Business with paper-tagged filtering.</p>
+      </div>
+      <div class="stats" id="dashboard-stats"></div>
+    </div>
+
+      <!-- AI Examiner Feature Visual -->
+      <div class="section-block" style="background:linear-gradient(135deg,#2e1065 0%,#0ea5e9 100%);border:none;border-radius:14px;padding:24px 20px 20px 20px;margin-bottom:32px;position:relative;overflow:hidden;box-shadow:0 4px 24px rgba(14,165,233,0.10);color:#fff;">
+        <div style="position:absolute;top:-40px;right:-40px;width:120px;height:120px;background:rgba(255,255,255,.08);border-radius:50%;"></div>
+        <div style="position:absolute;bottom:-30px;left:-30px;width:100px;height:100px;background:rgba(255,255,255,.04);border-radius:50%;"></div>
+        <div style="position:relative;z-index:1;max-width:800px;display:flex;align-items:center;gap:32px;flex-wrap:wrap;">
+          <div style="flex:1 1 320px;min-width:260px;">
+            <h3 style="margin-top:0;color:#fff;font-size:1.15rem;margin-bottom:8px;display:flex;align-items:center;gap:10px;">
+              <span style="display:inline-block;width:28px;height:28px;background:linear-gradient(135deg,#7c3aed 0%,#a855f7 100%);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 3px rgba(255,255,255,0.18);margin-right:6px;animation:examine-glow 2.8s infinite alternate;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" style="filter:drop-shadow(0 0 6px #fff8);"><path d="M12 3l2.1 4.9L19 10l-4.9 2.1L12 17l-2.1-4.9L5 10l4.9-2.1L12 3z"/><path d="M18.5 4.5l.9 2.1 2.1.9-2.1.9-.9 2.1-.9-2.1-2.1-.9 2.1-.9.9-2.1z"/></svg>
+              </span>
+              <span style="background:linear-gradient(90deg,#a21caf 0%,#0ea5e9 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">AI Examiner <span style="font-size:0.92em;font-weight:400;opacity:0.85;">(Beta)</span></span>
+            </h3>
+            <p style="margin:0 0 10px 0;font-size:1.01rem;color:rgba(255,255,255,0.96);line-height:1.65;">Try the new <strong>AI Examiner</strong> in Practice Mode! Get instant, exam-style feedback on your answers:<br>
+              <ul style="margin:10px 0 0 18px;padding:0 0 0 0.5em;color:#e0e7ff;font-size:0.98em;">
+                <li>Advice on how to improve</li>
+                <li>What you did well</li>
+                <li>Clear mark out of the total</li>
+                <li>Works for all long-answer questions</li>
+              </ul>
+              <span style="display:inline-block;margin-top:10px;font-size:0.98em;color:#bae6fd;">AI Examiner cost per question: Free 5 credits, Pro 1 credit, Ultra 0 credits, Students/Teachers 2 credits.</span>
+            </p>
+          </div>
+          <div style="flex:0 1 320px;min-width:220px;max-width:340px;background:rgba(255,255,255,0.10);border-radius:10px;padding:18px 16px;box-shadow:0 2px 12px rgba(14,165,233,0.10);display:flex;flex-direction:column;align-items:center;">
+            <div style="width:100%;display:flex;flex-direction:column;align-items:center;gap:10px;">
+              <span style="font-size:0.98em;color:#fff;opacity:0.92;margin-bottom:6px;">How it looks in Practice Mode:</span>
+              <div style="width:100%;display:flex;align-items:center;justify-content:center;">
+                <button class="btn" style="background:linear-gradient(120deg,#581c87 0%,#7c3aed 45%,#a855f7 100%);color:#fff;font-weight:700;font-size:1.08em;padding:10px 20px;border-radius:10px;box-shadow:0 0 14px rgba(124,58,237,0.30),0 0 28px rgba(168,85,247,0.20),inset 0 0 14px rgba(255,255,255,0.10);display:flex;align-items:center;gap:8px;animation:examine-glow 2.8s infinite alternate;border:none;">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" style="filter:drop-shadow(0 0 6px #fff8);"><path d="M12 3l2.1 4.9L19 10l-4.9 2.1L12 17l-2.1-4.9L5 10l4.9-2.1L12 3z"/><path d="M18.5 4.5l.9 2.1 2.1.9-2.1.9-.9 2.1-.9-2.1-2.1-.9 2.1-.9.9-2.1z"/></svg>
+                  <span style="color:#fff;">AI Examiner</span>
+                </button>
+              </div>
+              <span style="font-size:0.93em;color:#e0e7ff;opacity:0.85;margin-top:8px;text-align:center;">Tap after writing your answer to get instant feedback and a mark.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    <div class="section-block" style="background:linear-gradient(135deg,#0a3d2f 0%,#0d7a52 58%,#1a9f6f 100%);border:none;border-radius:12px;padding:20px;margin-bottom:30px;position:relative;overflow:hidden;">
+      <div style="position:absolute;top:-40px;right:-40px;width:120px;height:120px;background:rgba(255,255,255,.05);border-radius:50%;"></div>
+      <div style="position:absolute;bottom:-30px;left:-30px;width:100px;height:100px;background:rgba(255,255,255,.03);border-radius:50%;"></div>
+      <div style="position:relative;z-index:1;max-width:800px;">
+        <h3 style="margin-top:0;color:#ffffff;font-size:1.1rem;margin-bottom:8px;">Why some features cost credits &#x1F90D;</h3>
+        <p style="margin:0;font-size:0.95rem;color:rgba(255,255,255,.95);line-height:1.65;">This website is built and funded by a student who knows how hard it is to find reliable, high-quality revision resources. Hosting, content updates, and ongoing support all have real costs. We're keeping subscriptions cheap and straightforward to make revision better and more accessible while keeping the site sustainable.</p>
+      </div>
+    </div>
+
+    <div class="dashboard-grid">
+      <div class="feature-section">
+        <div class="feature-header">
+          <div class="feature-icon">&#x1F4DD;</div>
+          <div>
+            <h3>Practice Papers</h3>
+            <p>Build and solve full exam papers</p>
+          </div>
+        </div>
+        <div class="feature-cards grid-2">
+          <article class="card primary-card">
+            <span class="card-tag">Recommended</span>
+            <h4>Build a mock paper</h4>
+            <p>Randomised 90-, 45- or 30-mark paper with A-Level Business style command verbs and printable answer lines.</p>
+            <button class="btn primary" data-goto="mock">Build mock paper<span class="ra10-cost-label">5 credits</span></button>
+          </article>
+          <article class="card">
+            <h4>Practice by topic</h4>
+            <p>Single questions filtered by topic or command verb. Auto-mark feedback available.</p>
+            <button class="btn" data-goto="practice">Start practising<span class="ra10-cost-label">1 credit per question</span></button>
+          </article>
+        </div>
+      </div>
+
+      <div class="feature-section">
+        <div class="feature-header">
+          <div class="feature-icon ai-book-icon">&#x1F4D8;</div>
+          <div>
+            <h3>Quick Revision</h3>
+            <p>Memorise key facts and concepts</p>
+          </div>
+        </div>
+        <div class="feature-cards grid-2">
+          <article class="card">
+            <h4>Flashcards</h4>
+            <p>150 flippable cards covering definitions, acronyms, examples, and legislation.</p>
+            <button class="btn" data-goto="flash">Open flashcards</button>
+          </article>
+          <article class="card">
+            <h4>Quick-fire quiz</h4>
+            <p>453 multiple-choice and true/false questions with instant explanations.</p>
+            <button class="btn" data-goto="quiz">Start quiz<span class="ra10-cost-label">1 credit per session</span></button>
+          </article>
+        </div>
+      </div>
+
+      <div class="feature-section">
+        <div class="feature-header">
+          <div class="feature-icon ai-book-icon">&#x1F4DA;</div>
+          <div>
+            <h3>Comprehensive Guide</h3>
+            <p>Full topic breakdown with examples</p>
+          </div>
+        </div>
+        <div class="feature-cards grid-1">
+          <article class="card">
+            <h4>Complete revision guide</h4>
+            <p>Topic-by-topic breakdown with worked examples, case-study links, and key definitions. Preview Topic 1 free, unlock Topics 2-10 for 10 credits.</p>
+            <button class="btn" data-goto="guide">Open revision guide<span class="ra10-cost-label">10 credits to unlock</span></button>
+          </article>
+        </div>
+      </div>
+
+      <div class="feature-section">
+        <div class="feature-header">
+          <div class="feature-icon ai-book-icon">&#x1F4D8;</div>
+          <div>
+            <h3>Browse Questions</h3>
+            <p>Search all 600+ exam-style questions</p>
+          </div>
+        </div>
+        <div class="feature-cards grid-1">
+          <article class="card">
+            <h4>Full question bank</h4>
+            <p>Read every question and full mark scheme. Search and filter all items by topic, paper, command verb, or marks.</p>
+            <button class="btn" data-goto="browse">Browse questions</button>
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-block">
+      <div class="section-block-head">
+        <span class="sb-eyebrow">Topic Coverage</span>
+        <h3>See question distribution</h3>
+        <p>All ten topics covered with question counts. Click any card to focus practice on that topic.</p>
+      </div>
+      <div class="aim-grid" id="aim-grid"></div>
+      <div style="text-align:center;margin-top:18px;">
+        <button class="btn" data-goto="spec">View specification breakdown</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="view-questions" class="view">
+    <header class="section-head">
+      <h2>Questions</h2>
+      <p style="font-size:1.15rem;color:var(--accent);font-weight:700;">How do you want to practise? <span style="font-size:1.5em;">&#x1F4DD;</span></p>
+    </header>
+    <div class="dashboard-grid">
+      <div class="feature-section">
+        <div class="feature-header">
+          <div class="feature-icon">&#x1F4DD;</div>
+          <div>
+            <h3>Mock Paper</h3>
+            <p>Build a randomised exam paper with answer lines and print options.</p>
+          </div>
+        </div>
+        <div class="feature-cards grid-1">
+          <article class="card primary-card">
+            <span class="card-tag">Recommended</span>
+            <h4>Build a mock paper</h4>
+            <p>Simulate a real exam with a full-length paper.</p>
+            <button class="btn primary" data-goto="mock">Open</button>
+            <p class="card-cost-note">Uses 5 credits per mock paper.</p>
+          </article>
+        </div>
+      </div>
+      <div class="feature-section">
+        <div class="feature-header">
+          <div class="feature-icon ai-book-icon">&#x1F4D8;</div>
+          <div>
+            <h3>Practice Mode</h3>
+            <p>Answer one question at a time with instant feedback.</p>
+          </div>
+        </div>
+        <div class="feature-cards grid-1">
+          <article class="card">
+            <h4>Practice by topic</h4>
+            <p>Target your weakest areas or focus on specific topics.</p>
+            <button class="btn" data-goto="practice">Open</button>
+            <p class="card-cost-note">Uses 1 credit per question.</p>
+          </article>
+        </div>
+      </div>
+      <div class="feature-section">
+        <div class="feature-header">
+          <div class="feature-icon">&#x1F50E;</div>
+          <div>
+            <h3>Browse Questions</h3>
+            <p>Search and filter all questions and mark schemes.</p>
+          </div>
+        </div>
+        <div class="feature-cards grid-1">
+          <article class="card">
+            <h4>Full question browser</h4>
+            <p>See every question and mark scheme in the bank.</p>
+            <button class="btn" data-goto="browse">Open</button>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="view-revise" class="view">
+    <header class="section-head">
+      <h2>Revise</h2>
+      <p style="font-size:1.15rem;color:var(--accent);font-weight:700;">Choose a fun way to revise! <span style="font-size:1.5em;">&#x1F4A1;</span></p>
+    </header>
+    <div class="dashboard-grid">
+      <div class="feature-section">
+        <div class="feature-header">
+          <div class="feature-icon">&#x1F0CF;</div>
+          <div>
+            <h3>Flashcards</h3>
+            <p>Flip through 150+ cards for rapid recall and spaced repetition.</p>
+          </div>
+        </div>
+        <div class="feature-cards grid-1">
+          <article class="card">
+            <h4>Open flashcards</h4>
+            <p>Definitions, acronyms, and key facts&mdash;track your progress!</p>
+            <button class="btn" data-goto="flash">Open</button>
+          </article>
+        </div>
+      </div>
+      <div class="feature-section">
+        <div class="feature-header">
+          <div class="feature-icon">&#x2753;</div>
+          <div>
+            <h3>Quiz</h3>
+            <p>453 multiple-choice and true/false questions with instant feedback.</p>
+          </div>
+        </div>
+        <div class="feature-cards grid-1">
+          <article class="card">
+            <h4>Start quiz</h4>
+            <p>Test your knowledge and get explanations for every answer.</p>
+            <button class="btn" data-goto="quiz">Open</button>
+          </article>
+        </div>
+      </div>
+      <div class="feature-section">
+        <div class="feature-header">
+          <div class="feature-icon ai-book-icon">&#x1F4D6;</div>
+          <div>
+            <h3>Revision Guide</h3>
+            <p>Full topic-by-topic breakdown with worked examples and diagrams.</p>
+          </div>
+        </div>
+        <div class="feature-cards grid-1">
+          <article class="card">
+            <h4>Open revision guide</h4>
+            <p>Preview Topic 1 free, unlock Topics 2-10 for 10 credits.</p>
+            <div class="card-action-row">
+              <button class="btn" data-goto="guide">Open</button>
+              <button class="btn btn-spec-mini" data-goto="spec">View spec <span style="font-size:1.1em;">&#x1F4C4;</span></button>
+            </div>
+            <p class="card-cost-note">Unlock Topics 2-10 for a one-time 10 credits.</p>
+          </article>
+        </div>
+      </div>
+
+        <!-- Topic Guide Access -->
+        <div class="feature-section">
+          <div class="feature-header">
+            <div class="feature-icon">??</div>
+            <div>
+              <h3>Topic Guide Reference</h3>
+              <p>Use the in-app revision guide for all Topic 1-10 content with worked application notes.</p>
+            </div>
+          </div>
+          <div class="feature-cards grid-1">
+            <article class="card">
+              <h4>Open Topic Guides</h4>
+              <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 10px;">
+                <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                  <button class="btn revise-focus-btn" type="button" data-goto="guide">Topic 1-10 Guide</button>
+                  <button class="btn revise-focus-btn" type="button" data-goto="spec">Specification Map</button>
+                </div>
+                <ul style="margin:10px 0 0 0;padding:0 0 0 1.2em;font-size:0.97em;">
+                  <li>Guides are now organised by Topic 1 to Topic 10.</li>
+                  <li>Use the in-app unlock to access all topics in one place.</li>
+                </ul>
+              </div>
+            </article>
+          </div>
+        </div>
+    </div>
+  </section>
+
+  <section id="view-guide" class="view">
+    <div id="guide-comprehensive"></div>
+  </section>
+
+  <!-- BROWSE -->
+  <section id="view-browse" class="view">
+    <header class="section-head">
+      <h2>Browse questions</h2>
+      <p>Search and filter all questions by topic, paper, marks, and command verb.</p>
+    </header>
+    <div class="filters">
+      <input type="search" id="search" placeholder="Search question, scenario or topic...">
+      <select id="filter-aim"><option value="">All topics</option></select>
+      <select id="filter-paper"><option value="">All papers</option></select>
+      <select id="filter-marks"><option value="">All marks</option></select>
+      <select id="filter-verb"><option value="">All command verbs</option></select>
+      <button id="btn-clear" class="btn ghost">Clear</button>
+      <span id="result-count" class="muted"></span>
+    </div>
+    <div id="question-list" class="qlist"></div>
+  </section>
+
+  <!-- MOCK PAPER -->
+  <section id="view-mock" class="view">
+    <header class="section-head">
+      <h2>Mock paper builder</h2>
+      <p>Generate a random mock paper using real exam structure. Add a candidate header, choose how many answer lines to print, then attempt the paper or hand it to a teacher.</p>
+    </header>
+    <div class="mock-controls">
+      <div class="mock-row">
+        <div class="control">
+          <label>Paper style</label>
+          <select id="mock-paper-type">
+            <option value="Paper 1" selected>Paper 1 (Topics 1-6)</option>
+            <option value="Paper 2">Paper 2 (Topics 7-10)</option>
+            <option value="Paper 3">Paper 3 (Synoptic)</option>
+          </select>
+        </div>
+        <div class="control">
+          <label>Total marks</label>
+          <input type="text" id="mock-total" value="100" readonly>
+        </div>
+        <div class="control">
+          <label>Focus topics</label>
+          <div id="mock-aims" class="chip-row"></div>
+        </div>
+        <div class="control">
+          <label>Seed (optional)</label>
+          <input type="text" id="mock-seed" placeholder="e.g. mock-1">
+        </div>
+      </div>
+      <div class="mock-row">
+        <div class="control wide">
+          <label>Question styles <span class="label-hint">(paper-aligned defaults are auto-selected)</span></label>
+          <div id="mock-styles" class="chip-row"></div>
+        </div>
+      </div>
+      <details class="mock-options" open>
+        <summary>Paper header &amp; print options</summary>
+        <div class="mock-row">
+          <div class="control checkbox">
+            <label><input type="checkbox" id="opt-header-name" checked> Name line</label>
+          </div>
+          <div class="control checkbox">
+            <label><input type="checkbox" id="opt-header-class"> Class line</label>
+          </div>
+          <div class="control checkbox">
+            <label><input type="checkbox" id="opt-header-date" checked> Date line</label>
+          </div>
+          <div class="control checkbox">
+            <label><input type="checkbox" id="opt-header-centre"> Centre / candidate number</label>
+          </div>
+          <div class="control checkbox">
+            <label><input type="checkbox" id="opt-header-teacher"> Teacher line</label>
+          </div>
+        </div>
+        <div class="mock-row">
+          <div class="control">
+            <label>Custom header text (optional)</label>
+            <input type="text" id="opt-header-custom" placeholder="e.g. Year 13 Mock 2 &mdash; Wycombe High School">
+          </div>
+          <div class="control">
+            <label>Answer lines</label>
+            <select id="opt-line-density">
+              <option value="normal" selected>Normal (exam booklet style)</option>
+              <option value="extra">Extra (more space)</option>
+              <option value="compact">Compact (less paper)</option>
+              <option value="none">None</option>
+            </select>
+          </div>
+        </div>
+      </details>
+      <div class="mock-actions">
+        <button id="btn-generate" class="btn primary big">Generate mock paper<span class="ra10-cost-label">5 credits</span></button>
+        <button id="btn-toggle-ms" class="btn ghost">Show mark scheme</button>
+        <button id="btn-print" class="btn">Print question paper</button>
+        <button id="btn-print-ms" class="btn">Print mark scheme only</button>
+      </div>
+    </div>
+    <div id="mock-paper" class="paper"></div>
+  </section>
+
+  <!-- PRACTICE -->
+  <section id="view-practice" class="view">
+    <header class="section-head">
+      <h2>Practice mode</h2>
+      <p>Work through questions one at a time, write your answer, then reveal the mark scheme to self-mark.</p>
+    </header>
+    <div class="practice-controls">
+      <select id="practice-aim"><option value="">All topics</option></select>
+      <select id="practice-paper"><option value="">All papers</option></select>
+      <select id="practice-marks"><option value="">All marks</option></select>
+      <button id="btn-practice-start" class="btn primary">Start session<span class="ra10-cost-label">1 credit per question</span></button>
+      <span id="practice-progress" class="muted"></span>
+    </div>
+    <div id="practice-card"></div>
+  </section>
+
+  <!-- QUIZ -->
+  <section id="view-quiz" class="view">
+    <header class="section-head">
+      <h2>Quick-fire quiz</h2>
+      <p>Multiple-choice and true/false questions to test recall of facts, definitions, and terminology across the spec.</p>
+    </header>
+    <div class="quiz-controls">
+      <select id="quiz-aim"><option value="">All topics</option></select>
+      <select id="quiz-paper"><option value="">All papers</option></select>
+      <select id="quiz-length">
+        <option value="10">10 questions</option>
+        <option value="20" selected>20 questions</option>
+        <option value="40">40 questions</option>
+        <option value="all">All questions</option>
+      </select>
+      <button id="btn-quiz-start" class="btn primary">Start quiz<span class="ra10-cost-label">1 credit per session</span></button>
+      <span id="quiz-progress" class="muted"></span>
+    </div>
+    <div id="quiz-card"></div>
+    <div id="quiz-results" style="display:none;"></div>
+  </section>
+
+  <!-- PREDICTED PAPERS -->
+  <section id="view-papers" class="view">
+    <header class="section-head">
+      <h2>Predicted Papers</h2>
+      <p>Three full predicted exam papers (90 marks, 2 hours) with full mark schemes &mdash; print-ready or save as PDF.</p>
+    </header>
+    <section class="papers-flow-wrap" id="papers-quick-start">
+      <div class="papers-flow-head">
+        <div>
+          <h3>Your 3-step predicted-paper flow</h3>
+          <p>Choose a paper, answer under time pressure, then jump straight into targeted revision.</p>
+        </div>
+        <div class="papers-flow-tags">
+          <span class="papers-flow-tag">Fast navigation</span>
+          <span class="papers-flow-tag">Exam-style practice</span>
+          <span class="papers-flow-tag">Focus by weak area</span>
+        </div>
+      </div>
+      <div class="papers-flow-steps">
+        <div class="papers-flow-step">
+          <span class="num">1</span>
+          <strong>Pick a paper</strong>
+          <span>Use the cards below to open question paper and mark scheme side by side.</span>
+        </div>
+        <div class="papers-flow-step">
+          <span class="num">2</span>
+          <strong>Run a timed sprint</strong>
+          <span>Do one full question in 25 minutes, then self-mark before moving on.</span>
+        </div>
+        <div class="papers-flow-step">
+          <span class="num">3</span>
+          <strong>Patch weak topics</strong>
+          <span>Jump to guide, quiz, and filtered questions using the trend actions.</span>
+        </div>
+      </div>
+    </section>
+
+    <div class="papers-card-grid">
+      <article class="paper-launch-card">
+        <div class="paper-launch-head">
+          <span class="paper-launch-badge">1</span>
+          <div>
+            <h3 class="paper-launch-title">Predicted Paper 1</h3>
+            <p class="paper-launch-meta">Hartley Academy &bull; Premier Payroll &bull; Crestford College &bull; Hargreaves Catering</p>
+          </div>
+        </div>
+        <p class="paper-launch-copy">Balanced full paper with cloud, security, networking and open-source evaluation.</p>
+        <div class="paper-launch-actions">
+          <a class="btn" href="predicted-papers/paper-1.html" target="_blank" rel="noopener">Question Paper</a>
+          <a class="btn" href="predicted-papers/mark-scheme-1.html" target="_blank" rel="noopener">Mark Scheme</a>
+          <button class="btn ghost" type="button" onclick="window.open('predicted-papers/paper-1.html','_blank');openPredictedPaperFocus('questions','1','1.3','market mapping segmentation targeting')">Start Sprint</button>
+        </div>
+      </article>
+
+      <article class="paper-launch-card">
+        <div class="paper-launch-head">
+          <span class="paper-launch-badge">2</span>
+          <div>
+            <h3 class="paper-launch-title">Predicted Paper 2</h3>
+            <p class="paper-launch-meta">Thornton's Furniture &bull; Goldstone Solicitors &bull; Pinnacle Pension Fund &bull; Evergreen Recruitment</p>
+          </div>
+        </div>
+        <p class="paper-launch-copy">Great for security compliance, legal scenarios, and cloud-retention judgement tasks.</p>
+        <div class="paper-launch-actions">
+          <a class="btn" href="predicted-papers/paper-2.html" target="_blank" rel="noopener">Question Paper</a>
+          <a class="btn" href="predicted-papers/mark-scheme-2.html" target="_blank" rel="noopener">Mark Scheme</a>
+          <button class="btn ghost" type="button" onclick="window.open('predicted-papers/paper-2.html','_blank');openPredictedPaperFocus('quiz','6','6.3','capacity utilisation labour productivity')">Start Sprint</button>
+        </div>
+      </article>
+
+      <article class="paper-launch-card">
+        <div class="paper-launch-head">
+          <span class="paper-launch-badge">3</span>
+          <div>
+            <h3 class="paper-launch-title">Predicted Paper 3</h3>
+            <p class="paper-launch-meta">AutoTech Manufacturing &bull; Broadmore University &bull; Westview Sports Club &bull; Lakeland Housing</p>
+          </div>
+        </div>
+        <p class="paper-launch-copy">Best for IoT, resilience and infrastructure trade-off answers in longer evaluations.</p>
+        <div class="paper-launch-actions">
+          <a class="btn" href="predicted-papers/paper-3.html" target="_blank" rel="noopener">Question Paper</a>
+          <a class="btn" href="predicted-papers/mark-scheme-3.html" target="_blank" rel="noopener">Mark Scheme</a>
+          <button class="btn ghost" type="button" onclick="window.open('predicted-papers/paper-3.html','_blank');openPredictedPaperFocus('guide','9','9.4','globalisation location offshoring')">Start Sprint</button>
+        </div>
+      </article>
+    </div>
+
+    <section class="papers-sprint">
+      <h3>Quick routes</h3>
+      <p>Pick your mode: confidence boost, exam pressure, or weak-topic rescue.</p>
+      <div class="papers-sprint-actions">
+        <button class="btn" type="button" onclick="window.open('predicted-papers/paper-1.html','_blank');window.open('predicted-papers/mark-scheme-1.html','_blank')">Confidence route (Paper 1)</button>
+        <button class="btn" type="button" onclick="window.open('predicted-papers/paper-3.html','_blank');openPredictedPaperFocus('questions','6','6.1','capacity utilisation breakeven productivity')">Pressure route (quantitative analysis)</button>
+        <button class="btn" type="button" onclick="openPredictedPaperFocus('quiz','3','3.2','decision trees investment appraisal')">Weak-topic rescue (calculations)</button>
+      </div>
+    </section>
+
+    <div class="papers-insight-grid">
+      <section class="papers-insight-card">
+        <h3>What to revise first</h3>
+        <p>Use this as a quick priority order. Start with the themes that show up most often, then work down if you have more time.</p>
+        <div class="revise-quick-nav" id="revise-quick-nav">
+          <p class="revise-quick-nav-title">Fast jump to your next best topic</p>
+          <div class="revise-quick-nav-actions">
+            <button class="revise-focus-btn" type="button" data-focus="q3">Q3 visual task</button>
+            <button class="revise-focus-btn" type="button" data-focus="security">Security</button>
+            <button class="revise-focus-btn" type="button" data-focus="cloud">Cloud + remote work</button>
+            <button class="revise-focus-btn" type="button" data-focus="software">Software + OS</button>
+            <button class="revise-focus-btn" type="button" data-focus="legal">Legal + ethics</button>
+            <button class="revise-focus-btn" type="button" id="revise-focus-auto">Pick for me</button>
+          </div>
+          <p class="revise-focus-status" id="revise-focus-status">Tip: start with Q3 visual if you only have 20-30 minutes.</p>
+        </div>
+        <div class="papers-hero-grid">
+          <div>
+            <div class="papers-kpi-grid">
+              <div class="papers-kpi">
+                <strong>7 / 7</strong>
+                <span>Every uploaded paper includes a Q3 draw task</span>
+              </div>
+              <div class="papers-kpi">
+                <strong>Most</strong>
+                <span>Security and protection topics come up repeatedly</span>
+              </div>
+              <div class="papers-kpi">
+                <strong>Often</strong>
+                <span>Cloud and remote-working questions return regularly</span>
+              </div>
+              <div class="papers-kpi">
+                <strong>Q4</strong>
+                <span>The biggest discuss or evaluate question usually lands here</span>
+              </div>
+            </div>
+            <div class="trend-chart">
+              <div class="trend-row" data-focus="q3">
+                <div class="trend-meta"><strong>1. Start with market mapping and segmentation</strong><span>This theme is a strong entry point for Paper 1 application chains.</span><div class="trend-topic-chips"><span class="trend-topic-chip">1.3 Market mapping</span><span class="trend-topic-chip">1.4 Segmentation</span><span class="trend-topic-chip">1.5 Targeting and positioning</span></div><div class="trend-actions"><button class="btn" type="button" onclick="openPredictedPaperFocus('guide','1','1.3','market mapping segmentation targeting')">Open topic guide</button><button class="btn" type="button" onclick="openPredictedPaperFocus('quiz','1','1.3','market mapping segmentation targeting')">Open topic quiz</button><button class="btn" type="button" onclick="openPredictedPaperFocus('questions','1','1.3','market mapping segmentation targeting')">Practice questions</button></div></div>
+                <div class="trend-bar"><span style="width:100%"></span></div>
+                <div class="trend-value">Every paper</div>
+              </div>
+              <div class="trend-row" data-focus="security">
+                <div class="trend-meta"><strong>2. Revise operations productivity metrics next</strong><span>These appear often in quantitative and applied operations questions.</span><div class="trend-topic-chips"><span class="trend-topic-chip">6.3 Capacity utilisation</span><span class="trend-topic-chip">6.4 Labour productivity</span></div><div class="trend-actions"><button class="btn" type="button" onclick="openPredictedPaperFocus('guide','6','6.3','capacity utilisation labour productivity')">Open topic guide</button><button class="btn" type="button" onclick="openPredictedPaperFocus('quiz','6','6.3','capacity utilisation labour productivity')">Open topic quiz</button><button class="btn" type="button" onclick="openPredictedPaperFocus('questions','6','6.3','capacity utilisation labour productivity')">Practice questions</button></div></div>
+                <div class="trend-bar"><span style="width:86%"></span></div>
+                <div class="trend-value">Most papers</div>
+              </div>
+              <div class="trend-row" data-focus="cloud">
+                <div class="trend-meta"><strong>3. Then cover strategic positioning and globalisation</strong><span>These are common synoptic Paper 3 scenario themes.</span><div class="trend-topic-chips"><span class="trend-topic-chip">9.2 Ansoff matrix</span><span class="trend-topic-chip">9.4 Globalisation</span></div><div class="trend-actions"><button class="btn" type="button" onclick="openPredictedPaperFocus('guide','9','9.4','globalisation location offshoring')">Open topic guide</button><button class="btn" type="button" onclick="openPredictedPaperFocus('quiz','9','9.4','globalisation location offshoring')">Open topic quiz</button><button class="btn" type="button" onclick="openPredictedPaperFocus('questions','9','9.4','globalisation location offshoring')">Practice questions</button></div></div>
+                <div class="trend-bar"><span style="width:78%"></span></div>
+                <div class="trend-value">Often</div>
+              </div>
+              <div class="trend-row" data-focus="software">
+                <div class="trend-meta"><strong>4. After that, revise decision trees and investment appraisal</strong><span>These score well when method and interpretation are both shown clearly.</span><div class="trend-topic-chips"><span class="trend-topic-chip">3.7 Decision trees</span><span class="trend-topic-chip">3.8 Investment appraisal</span></div><div class="trend-actions"><button class="btn" type="button" onclick="openPredictedPaperFocus('guide','3','3.7','decision trees investment appraisal expected value')">Open topic guide</button><button class="btn" type="button" onclick="openPredictedPaperFocus('quiz','3','3.7','decision trees investment appraisal expected value')">Open topic quiz</button><button class="btn" type="button" onclick="openPredictedPaperFocus('questions','3','3.7','decision trees investment appraisal expected value')">Practice questions</button></div></div>
+                <div class="trend-bar"><span style="width:71%"></span></div>
+                <div class="trend-value">Fairly common</div>
+              </div>
+              <div class="trend-row" data-focus="legal">
+                <div class="trend-meta"><strong>5. Finish with leadership and organisational culture</strong><span>These are high-value judgement themes in longer responses.</span><div class="trend-topic-chips"><span class="trend-topic-chip">2.3 Leadership</span><span class="trend-topic-chip">2.4 Culture</span></div><div class="trend-actions"><button class="btn" type="button" onclick="openPredictedPaperFocus('guide','2','2.3','leadership organisational culture motivation')">Open topic guide</button><button class="btn" type="button" onclick="openPredictedPaperFocus('quiz','2','2.3','leadership organisational culture motivation')">Open topic quiz</button><button class="btn" type="button" onclick="openPredictedPaperFocus('questions','2','2.3','leadership organisational culture motivation')">Practice questions</button></div></div>
+                <div class="trend-bar"><span style="width:64%"></span></div>
+                <div class="trend-value">Sometimes</div>
+              </div>
+            </div>
+            <p class="papers-footnote">Bars show how often each theme appeared across the 7 uploaded papers. Higher bar = stronger revision priority. The buttons jump you straight into the closest guide section, quiz aim or filtered question list.</p>
+          </div>
+          <div class="papers-slot-signals">
+            <div class="signal-card">
+              <div class="signal-label"><span class="signal-pill">Q3a</span> Locked visual slot</div>
+              <p>Across the uploaded set, the cleanest recurring pattern is a 6-mark draw task in Question 3(a): either a systems diagram or a flowchart.</p>
+            </div>
+            <div class="signal-card">
+              <div class="signal-label"><span class="signal-pill">Q4</span> Long-answer finish</div>
+              <p>The heaviest 10-12 mark discussion or evaluation usually lands in Question 4, often tied to cloud, policy, impact or wider organisational implications.</p>
+            </div>
+            <div class="signal-card">
+              <div class="signal-label"><span class="signal-pill">D / C</span> Most reusable revision</div>
+              <p>If time is tight, prioritise protection codes in D and online-system codes in C. They recur in both short explain items and long discuss tasks.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <details class="papers-deep-dive" id="papers-deep-dive">
+        <summary>Open detailed pattern analysis (optional)</summary>
+        <div class="papers-deep-dive-body">
+
+      <section class="papers-insight-card">
+        <h3>Detailed sub-question map</h3>
+        <p>Each cell shows the best-fit AQA topic family for that exam slot. This makes it easier to revise by pattern rather than re-reading full papers one by one.</p>
+        <div class="papers-slot-grid">
+          <div class="papers-slot-block">
+            <h4>Question 1 slot map</h4>
+            <p>Question 1 usually opens with short applied knowledge and then moves into security, online working or communication tools.</p>
+            <div class="papers-table-wrap">
+              <table class="papers-table slot-table">
+                <thead>
+                  <tr>
+                    <th>Paper</th>
+                    <th>a</th>
+                    <th>b</th>
+                    <th>c</th>
+                    <th>d</th>
+                    <th>e</th>
+                    <th>f</th>
+                  </tr>
+                  <tr class="slot-meta-row">
+                    <th>Typical marks / command</th>
+                    <th>2-4<span class="slot-head-meta">identify / state</span></th>
+                    <th>3-5<span class="slot-head-meta">describe / explain</span></th>
+                    <th>4-6<span class="slot-head-meta">explain / apply</span></th>
+                    <th>6-8<span class="slot-head-meta">analyse / discuss</span></th>
+                    <th>6-10<span class="slot-head-meta">analyse / evaluate</span></th>
+                    <th>8-12<span class="slot-head-meta">evaluate / justify</span></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>AAQ specimen 2025</strong></td>
+                    <td class="slot-cell"><span class="code-chip">D1.1</span><span class="slot-note">External threats</span></td>
+                    <td class="slot-cell"><span class="code-chip">D2.1</span><span class="slot-note">Password authentication</span></td>
+                    <td class="slot-cell"><span class="code-chip">E2.5</span><span class="slot-note">Validation methods</span></td>
+                    <td class="slot-cell"><span class="code-chip">C1.3 / D2.4</span><span class="slot-note">VPN secure transmission</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Jan 2025</strong></td>
+                    <td class="slot-cell"><span class="code-chip">A2.1</span><span class="slot-note">Input devices</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                    <td class="slot-cell"><span class="code-chip">C1.3</span><span class="slot-note">VPN benefits</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Jan 2024</strong></td>
+                    <td class="slot-cell"><span class="code-chip">F2.1</span><span class="slot-note">Legislation</span></td>
+                    <td class="slot-cell"><span class="code-chip">E1.2</span><span class="slot-note">Targeted marketing</span></td>
+                    <td class="slot-cell"><span class="code-chip">D2.4</span><span class="slot-note">Masked card data</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Jun 2023</strong></td>
+                    <td class="slot-cell"><span class="code-chip">A3.3</span><span class="slot-note">Software types</span></td>
+                    <td class="slot-cell"><span class="code-chip">D1.1</span><span class="slot-note">Malware types</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong>2021 paper</strong></td>
+                    <td class="slot-cell"><span class="code-chip">C1.1</span><span class="slot-note">Cloud reasons</span></td>
+                    <td class="slot-cell"><span class="code-chip">C1.2</span><span class="slot-note">Cloud concerns</span></td>
+                    <td class="slot-cell"><span class="code-chip">D1.1</span><span class="slot-note">Phishing signs</span></td>
+                    <td class="slot-cell"><span class="code-chip">C2.1</span><span class="slot-note">Blog setup process</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Jan 2020</strong></td>
+                    <td class="slot-cell"><span class="code-chip">E1.2</span><span class="slot-note">Online-version drawbacks</span></td>
+                    <td class="slot-cell"><span class="code-chip">B3.5</span><span class="slot-note">Image format choice</span></td>
+                    <td class="slot-cell"><span class="code-chip">B3.1</span><span class="slot-note">SMTP and IMAP</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Jun 2019</strong></td>
+                    <td class="slot-cell"><span class="code-chip">C2.1</span><span class="slot-note">Wiki benefits</span></td>
+                    <td class="slot-cell"><span class="code-chip">C2.2</span><span class="slot-note">Wiki drawbacks</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="papers-slot-block">
+            <h4>Question 2 slot map</h4>
+            <p>Question 2 often rotates between software / operating-system knowledge and protection of data in use or in transit.</p>
+            <div class="papers-table-wrap">
+              <table class="papers-table slot-table">
+                <thead>
+                  <tr>
+                    <th>Paper</th>
+                    <th>a</th>
+                    <th>b</th>
+                    <th>c</th>
+                    <th>d</th>
+                    <th>e</th>
+                    <th>f</th>
+                  </tr>
+                  <tr class="slot-meta-row">
+                    <th>Typical marks / command</th>
+                    <th>2-4<span class="slot-head-meta">identify / state</span></th>
+                    <th>3-5<span class="slot-head-meta">describe / explain</span></th>
+                    <th>4-6<span class="slot-head-meta">explain / apply</span></th>
+                    <th>6-8<span class="slot-head-meta">analyse / discuss</span></th>
+                    <th>6-10<span class="slot-head-meta">analyse / evaluate</span></th>
+                    <th>8-12<span class="slot-head-meta">evaluate / justify</span></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>AAQ specimen 2025</strong></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                    <td class="slot-cell"><span class="code-chip">A3.6</span><span class="slot-note">Open-source benefits</span></td>
+                    <td class="slot-cell"><span class="code-chip">A3.2</span><span class="slot-note">NOS function</span></td>
+                    <td class="slot-cell"><span class="code-chip">A4.3</span><span class="slot-note">System-update impact</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Jan 2025</strong></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                    <td class="slot-cell"><span class="code-chip">D2.2</span><span class="slot-note">Anti-virus action</span></td>
+                    <td class="slot-cell"><span class="code-chip">D2.1</span><span class="slot-note">Login authentication</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Jan 2024</strong></td>
+                    <td class="slot-cell"><span class="code-chip">D1.1</span><span class="slot-note">Threats to device data</span></td>
+                    <td class="slot-cell"><span class="code-chip">D2.4</span><span class="slot-note">Encryption in transit</span></td>
+                    <td class="slot-cell"><span class="code-chip">B2.2</span><span class="slot-note">PAN reasons</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Jun 2023</strong></td>
+                    <td class="slot-cell"><span class="code-chip">A3.3</span><span class="slot-note">Application vs systems software</span></td>
+                    <td class="slot-cell"><span class="code-chip">A3.6</span><span class="slot-note">Open source vs proprietary</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong>2021 paper</strong></td>
+                    <td class="slot-cell"><span class="code-chip">E2.1</span><span class="slot-note">Primary data benefits</span></td>
+                    <td class="slot-cell"><span class="code-chip">E2.3</span><span class="slot-note">Questionnaire design</span></td>
+                    <td class="slot-cell"><span class="code-chip">E2.3</span><span class="slot-note">Online form benefits</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Jan 2020</strong></td>
+                    <td class="slot-cell"><span class="code-chip">D2.1</span><span class="slot-note">Physical access control</span></td>
+                    <td class="slot-cell"><span class="code-chip">D2.1</span><span class="slot-note">Password authentication</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Jun 2019</strong></td>
+                    <td class="slot-cell"><span class="code-chip">E2.6</span><span class="slot-note">Accessibility features</span></td>
+                    <td class="slot-cell"><span class="code-chip">E2.5</span><span class="slot-note">Validation checks</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="papers-slot-block">
+            <h4>Question 3 slot map</h4>
+            <p>This is the most stable pattern in the paper set. Q3(a) is the main draw slot, then the follow-up parts often test networks, protocols or related systems knowledge.</p>
+            <div class="papers-table-wrap">
+              <table class="papers-table slot-table">
+                <thead>
+                  <tr>
+                    <th>Paper</th>
+                    <th>a</th>
+                    <th>b</th>
+                    <th>c</th>
+                    <th>d</th>
+                    <th>e</th>
+                    <th>f</th>
+                  </tr>
+                  <tr class="slot-meta-row">
+                    <th>Typical marks / command</th>
+                    <th>2-4<span class="slot-head-meta">identify / state</span></th>
+                    <th>3-5<span class="slot-head-meta">describe / explain</span></th>
+                    <th>4-6<span class="slot-head-meta">explain / apply</span></th>
+                    <th>6-8<span class="slot-head-meta">analyse / discuss</span></th>
+                    <th>6-10<span class="slot-head-meta">analyse / evaluate</span></th>
+                    <th>8-12<span class="slot-head-meta">evaluate / justify</span></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>AAQ specimen 2025</strong></td>
+                    <td class="slot-cell"><span class="code-chip">A1.3</span><span class="slot-note">Flowchart</span></td>
+                    <td class="slot-cell"><span class="code-chip">D2.1</span><span class="slot-note">Digital certificates</span></td>
+                    <td class="slot-cell"><span class="code-chip">B2.1</span><span class="slot-note">Topology choice</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Jan 2025</strong></td>
+                    <td class="slot-cell"><span class="code-chip">A1.3</span><span class="slot-note">Systems diagram</span></td>
+                    <td class="slot-cell"><span class="code-chip">D2</span><span class="slot-note">Other protection methods</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Jan 2024</strong></td>
+                    <td class="slot-cell"><span class="code-chip">A1.3</span><span class="slot-note">Garage integration diagram</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Jun 2023</strong></td>
+                    <td class="slot-cell"><span class="code-chip">A1.3</span><span class="slot-note">Systems diagram</span></td>
+                    <td class="slot-cell"><span class="code-chip">A3.1</span><span class="slot-note">OS types</span></td>
+                    <td class="slot-cell"><span class="code-chip">B3.1</span><span class="slot-note">SSL / TLS</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong>2021 paper</strong></td>
+                    <td class="slot-cell"><span class="code-chip">A1.3</span><span class="slot-note">Systems integration diagram</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Jan 2020</strong></td>
+                    <td class="slot-cell"><span class="code-chip">A1.3</span><span class="slot-note">LAN setup diagram</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Jun 2019</strong></td>
+                    <td class="slot-cell"><span class="code-chip">A1.3</span><span class="slot-note">Click-and-collect flowchart</span></td>
+                    <td class="slot-cell"><span class="code-chip">E2.2</span><span class="slot-note">Data modelling</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="papers-slot-block">
+            <h4>Question 4 slot map</h4>
+            <p>Question 4 is where the largest judgement task usually lands, especially around cloud, policy, impact, ethics or organisation-wide change.</p>
+            <div class="papers-table-wrap">
+              <table class="papers-table slot-table">
+                <thead>
+                  <tr>
+                    <th>Paper</th>
+                    <th>a</th>
+                    <th>b</th>
+                    <th>c</th>
+                    <th>d</th>
+                    <th>e</th>
+                    <th>f</th>
+                  </tr>
+                  <tr class="slot-meta-row">
+                    <th>Typical marks / command</th>
+                    <th>2-4<span class="slot-head-meta">identify / state</span></th>
+                    <th>3-5<span class="slot-head-meta">describe / explain</span></th>
+                    <th>4-6<span class="slot-head-meta">explain / apply</span></th>
+                    <th>6-8<span class="slot-head-meta">analyse / discuss</span></th>
+                    <th>6-10<span class="slot-head-meta">analyse / evaluate</span></th>
+                    <th>8-12<span class="slot-head-meta">evaluate / justify</span></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>AAQ specimen 2025</strong></td>
+                    <td class="slot-cell"><span class="code-chip">B1.1</span><span class="slot-note">Connection method</span></td>
+                    <td class="slot-cell"><span class="code-chip">B1.1</span><span class="slot-note">Wired benefit</span></td>
+                    <td class="slot-cell"><span class="code-chip">F1.1</span><span class="slot-note">Acceptable use policy</span></td>
+                    <td class="slot-cell"><span class="code-chip">A5</span><span class="slot-note">Emerging technology impact</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Jan 2025</strong></td>
+                    <td class="slot-cell"><span class="code-chip">C1.2</span><span class="slot-note">Cloud storage impacts</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Jan 2024</strong></td>
+                    <td class="slot-cell"><span class="code-chip">A4.3</span><span class="slot-note">NOS upgrade factors</span></td>
+                    <td class="slot-cell"><span class="code-chip">F1.1</span><span class="slot-note">Environmental impact</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Jun 2023</strong></td>
+                    <td class="slot-cell"><span class="code-chip">D2.1</span><span class="slot-note">Security processes</span></td>
+                    <td class="slot-cell"><span class="code-chip">C2.1 / F1.1</span><span class="slot-note">Social media impact</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong>2021 paper</strong></td>
+                    <td class="slot-cell"><span class="code-chip">C2.2</span><span class="slot-note">Online-resource implications</span></td>
+                    <td class="slot-cell"><span class="code-chip">F1.1</span><span class="slot-note">Ethical access limits</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Jan 2020</strong></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                    <td class="slot-cell"><span class="code-chip">A4.3</span><span class="slot-note">Whole-system update</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Jun 2019</strong></td>
+                    <td class="slot-cell"><span class="code-chip">C1.2</span><span class="slot-note">Cloud cost evaluation</span></td>
+                    <td class="slot-cell"><span class="code-chip">F1.1</span><span class="slot-note">Moral / ethical issues</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                    <td class="slot-cell"><span class="slot-empty">-</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="papers-insight-card">
+        <h3>Likely next-paper view</h3>
+        <p>The strongest trend call is still a protection-heavy paper with one visual draw task and at least one longer judgement question around online systems, policy or organisational impact.</p>
+        <div class="papers-table-wrap">
+          <table class="papers-table" style="min-width:760px;">
+            <thead>
+              <tr>
+                <th>Chance</th>
+                <th>Likely area</th>
+                <th>Unit code focus</th>
+                <th>Most likely exam form</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="trend-band high">High</span></td>
+                <td>Security, access control and secure transmission</td>
+                <td>D1, D2, D2.1, D2.4</td>
+                <td>2-4 mark explain item plus a later discuss / evaluate task in a scenario</td>
+              </tr>
+              <tr>
+                <td><span class="trend-band high">High</span></td>
+                <td>Diagram or flowchart slot</td>
+                <td>A1.3</td>
+                <td>Q3(a), 6 marks, labelled process or system map</td>
+              </tr>
+              <tr>
+                <td><span class="trend-band high">High</span></td>
+                <td>Cloud, hosting, remote working or online service impact</td>
+                <td>C1.1, C1.2, C1.3, C2.2</td>
+                <td>6-12 mark discuss / evaluate question, often near the end of the paper</td>
+              </tr>
+              <tr>
+                <td><span class="trend-band medium">Medium</span></td>
+                <td>Operating systems, NOS or software choice</td>
+                <td>A3.1, A3.2, A3.6</td>
+                <td>4-9 mark explain / evaluate question</td>
+              </tr>
+              <tr>
+                <td><span class="trend-band medium">Medium</span></td>
+                <td>Ethical, legal or environmental implications</td>
+                <td>F1.1, F2.1</td>
+                <td>Longer Q4 discussion or evaluation with organisation + staff impact</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="papers-footnote">The folder does not appear to include a separate 2022 Unit 1 paper, so this tracker is based on the papers currently uploaded and the AAQ specimen at the front of the combined PDF.</p>
+      </section>
+        </div>
+      </details>
+
+      <section class="papers-insight-card papers-fun-card" id="papers-fun-card">
+        <div class="papers-fun-head">
+          <h3>Revision arcade</h3>
+          <span class="papers-fun-badge">Live mission mode</span>
+        </div>
+        <p>Make revision feel less repetitive. Spin a mission and jump straight to the right paper, guide section and quiz/practice focus.</p>
+        <div class="papers-fun-controls">
+          <button class="btn primary" id="papers-fun-spin" type="button">Spin random mission</button>
+          <button class="btn" id="papers-fun-refresh" type="button">New mission</button>
+        </div>
+        <div class="papers-fun-meta">
+          <span class="papers-fun-pill">Streak: <span class="val" id="papers-fun-streak">0</span></span>
+          <span class="papers-fun-pill">Completed today: <span class="val" id="papers-fun-done">0</span></span>
+        </div>
+        <div class="papers-fun-result" id="papers-fun-result" aria-live="polite">
+          <p class="papers-fun-title">Ready?</p>
+          <p class="papers-fun-copy">Press <strong>Spin random mission</strong> to get your next predicted-paper challenge.</p>
+          <p class="papers-fun-timer" id="papers-fun-timer">Timer inactive</p>
+        </div>
+        <div class="papers-fun-today">
+          <label class="papers-fun-check"><input type="checkbox" id="papers-fun-check-paper"> Complete one predicted paper section</label>
+          <label class="papers-fun-check"><input type="checkbox" id="papers-fun-check-quiz"> Complete one focused quiz</label>
+          <label class="papers-fun-check"><input type="checkbox" id="papers-fun-check-review"> Review one guide topic and mark it done</label>
+          <div class="papers-fun-status" id="papers-fun-status">0 / 3 tasks complete today</div>
+        </div>
+      </section>
+    </div>
+    <div style="background:#fffbe6;border:1px solid #e6c700;border-radius:10px;padding:14px 18px;font-size:0.85rem;color:#5a4a00;">
+      <strong>How to save as PDF:</strong> Open a paper or mark scheme &rarr; click <em>Print / Save as PDF</em> &rarr; set destination to <em>Save as PDF</em> &rarr; choose A4 paper size. For best results, enable <em>Background graphics</em> in print options.
+    </div>
+  </section>
+
+  <!-- PROGRESS -->
+  <section id="view-progress" class="view">
+    <header class="section-head">
+      <h2>Your Progress</h2>
+      <p>Track your revision sessions over the last 30 days.</p>
+    </header>
+    <div id="progress-gate" style="display:none;text-align:center;padding:40px;">
+      <p style="margin-bottom:16px;color:var(--ink-2);">Sign in to save and view your progress.</p>
+      <button class="btn primary" id="btn-progress-signin">Sign in</button>
+    </div>
+    <div id="progress-content" style="display:none;">
+      <div id="progress-stats" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:16px;margin-bottom:24px;"></div>
+      <div id="weak-aims-section" style="margin-bottom:24px;"></div>
+      <div id="sessions-list"></div>
+    </div>
+  </section>
+
+  <!-- FLASHCARDS -->
+  <section id="view-flash" class="view">
+    <header class="section-head">
+      <h2>Flashcards</h2>
+      <p>Tap or click any card to flip. Mark cards as known or still learning to track progress.</p>
+    </header>
+    <div class="flash-controls">
+      <select id="flash-aim"><option value="">All topics</option></select>
+      <button id="btn-flash-start" class="btn primary">Start session<span class="ra10-cost-label free-label">Free</span></button>
+      <button id="btn-flash-shuffle" class="btn">Shuffle</button>
+      <button id="btn-flash-reset" class="btn ghost">Reset progress</button>
+      <span id="flash-progress" class="muted"></span>
+    </div>
+    <div id="flash-stage"></div>
+  </section>
+
+  <!-- SPEC -->
+  <section id="view-spec" class="view">
+    <header class="section-head">
+      <h2>AQA Business specification map</h2>
+      <p>Core topic map aligned to A-Level AQA Business and linked to the question bank.</p>
+      <button class="btn" onclick="window.open('https://www.aqa.org.uk/subjects/business/a-level/business-7132/specification-at-a-glance', '_blank')">Open Official AQA Spec Page</button>
+    </header>
+    <div id="spec-jump" class="spec-jump"></div>
+    <div id="spec-content"></div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <p>A-Level AQA Business (7132) revision tool. This is an independent study resource and is not an official AQA product.</p>
+  <p>2026 RA10 (www.ra10.co.uk)</p>
+</footer>
+
+<script src="js/data-loader.js"></script>
+<script src="js/spec.js"></script>
+<script src="js/guide.js"></script>
+<script src="js/app.js"></script>
+
+<script data-pplx-inline-edit>
+(function () {
+  if (window === window.top) return;
+
+  const allowedParentOrigins = ["https://www.perplexity.ai","https://perplexity.ai","https://testing.perplexity.ai","https://staging.perplexity.ai","https://*.preview.i.perplexity.ai","http://localhost:3000","http://127.0.0.1:3000","http://localhost:5173","http://127.0.0.1:5173"];
+  const MAX_FONT_BYTES = 500 * 1024;
+  const MAX_TOTAL_FONT_BYTES = 2 * 1024 * 1024;
+  let scrollForwarding = false;
+  let scrollRaf = 0;
+  let trustedTopOrigin = null;
+
+  // Allow entries like "https://*.preview.i.perplexity.ai" &mdash; the wildcard
+  // matches a single DNS label (no dots), so "https://*.foo" cannot stretch
+  // across multiple labels.
+  function matchesAllowedOrigin(origin) {
+    if (!origin) return false;
+    for (const entry of allowedParentOrigins) {
+      if (!entry.includes("*")) {
+        if (entry === origin) return true;
+        continue;
+      }
+      const pattern = new RegExp(
+        "^" +
+          entry.replace(/[.+?^${}()|[\]\\]/g, "\\$&").replace(/\*/g, "[^.]+") +
+          "$",
+      );
+      if (pattern.test(origin)) return true;
+    }
+    return false;
+  }
+
+  // Trust decision: when the sender is same-origin-visible (event.origin is a
+  // real origin like https://www.perplexity.ai) we trust event.origin directly.
+  // When event.origin is "null" (opaque broker srcdoc), we fall back to the
+  // broker's stamped `parentOrigin` to identify the top window. The fallback
+  // is claim-only &mdash; we rely on the browser's native `targetOrigin` enforcement
+  // on the response path (see postToTrustedTop) to ensure replies can't be
+  // delivered to anyone but the actual top window of that claimed origin.
+  function getTrustedParentOrigin(event) {
+    const forwardedParentOrigin =
+      typeof event.data.parentOrigin === "string" ? event.data.parentOrigin : null;
+    const parentOrigin = event.origin === "null" ? forwardedParentOrigin : event.origin;
+    return matchesAllowedOrigin(parentOrigin) ? parentOrigin : null;
+  }
+
+  // All responses go to window.top with targetOrigin = the allowlisted origin.
+  // An attacker that iframes us inside their own null-origin broker can claim
+  // any parentOrigin they like, but the browser will drop the reply whenever
+  // the real top's origin doesn't match &mdash; so the screenshot never leaves.
+  function postToTrustedTop(message) {
+    if (!trustedTopOrigin) return;
+    try {
+      window.top.postMessage(message, trustedTopOrigin);
+    } catch (_error) {}
+  }
+
+  function inlineAll(original, clone) {
+    if (original.nodeType !== 1 || clone.nodeType !== 1) return;
+
+    try {
+      const computedStyle = getComputedStyle(original);
+      // cssText on a computed style is the serialized declaration in modern
+      // Chromium/Safari &mdash; a single read beats enumerating ~400 longhand
+      // properties. Firefox returns "" here, so we fall back on empty.
+      const serialized = computedStyle.cssText;
+      if (serialized) {
+        clone.style.cssText = serialized;
+      } else {
+        const parts = new Array(computedStyle.length);
+        for (let index = 0; index < computedStyle.length; index += 1) {
+          const property = computedStyle[index];
+          parts[index] = `${property}:${computedStyle.getPropertyValue(property)};`;
+        }
+        clone.style.cssText = parts.join("");
+      }
+    } catch (_error) {}
+
+    const originalChildren = original.children;
+    const clonedChildren = clone.children;
+    for (
+      let index = 0;
+      index < originalChildren.length && index < clonedChildren.length;
+      index += 1
+    ) {
+      inlineAll(originalChildren[index], clonedChildren[index]);
+    }
+  }
+
+  function extractFontUrl(srcValue) {
+    const matches = [
+      ...srcValue.matchAll(
+        /url\(["']?([^"')]+)["']?\)(?:\s*format\(["']?([^"')]+)["']?\))?/gi,
+      ),
+    ];
+    if (matches.length === 0) return null;
+    const woff2 = matches.find((m) => m[2] && m[2].toLowerCase().includes("woff2"));
+    if (woff2) return woff2[1];
+    const woff = matches.find((m) => m[2] && m[2].toLowerCase().includes("woff"));
+    if (woff) return woff[1];
+    return matches[0][1];
+  }
+
+  // Cache resolved font URL -> data URI across captures. Fonts on a page
+  // essentially never change, and a batch run emits multiple captures back to
+  // back &mdash; without this we'd refetch + re-base64 every time.
+  const fontDataUriCache = new Map();
+  const SRC_DECLARATION_RE = /src\s*:\s*[^;}]+/i;
+
+  async function fetchAsDataUri(url) {
+    if (fontDataUriCache.has(url)) return fontDataUriCache.get(url);
+    let dataUri = null;
+    try {
+      const response = await fetch(url, { mode: "cors", credentials: "omit" });
+      if (response.ok) {
+        const blob = await response.blob();
+        if (blob.size <= MAX_FONT_BYTES) {
+          dataUri = await new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onloadend = () =>
+              resolve(typeof reader.result === "string" ? reader.result : null);
+            reader.onerror = () => resolve(null);
+            reader.readAsDataURL(blob);
+          });
+        }
+      }
+    } catch (_error) {
+      dataUri = null;
+    }
+    fontDataUriCache.set(url, dataUri);
+    return dataUri;
+  }
+
+  function collectFontFaceRuleTexts() {
+    const rules = [];
+    for (const sheet of document.styleSheets) {
+      let cssRules;
+      try {
+        cssRules = sheet.cssRules;
+      } catch (_error) {
+        continue;
+      }
+      if (!cssRules) continue;
+      for (const rule of cssRules) {
+        const cssText = rule.cssText || "";
+        if (cssText.startsWith("@font-face")) rules.push(cssText);
+      }
+    }
+    return rules;
+  }
+
+  async function buildInlinedFontCss() {
+    const ruleTexts = collectFontFaceRuleTexts();
+    if (ruleTexts.length === 0) return null;
+
+    const resolved = ruleTexts.map((cssText) => {
+      if (!SRC_DECLARATION_RE.test(cssText)) return null;
+      const srcMatch = cssText.match(/src\s*:\s*([^;}]+)[;}]/i);
+      if (!srcMatch) return null;
+      const url = extractFontUrl(srcMatch[1]);
+      if (!url) return null;
+      try {
+        return { cssText, url: new URL(url, document.baseURI).href };
+      } catch (_error) {
+        return null;
+      }
+    });
+
+    const dataUris = await Promise.all(
+      resolved.map((entry) => (entry ? fetchAsDataUri(entry.url) : Promise.resolve(null))),
+    );
+
+    const inlined = [];
+    let totalBytes = 0;
+    for (let index = 0; index < resolved.length; index += 1) {
+      const entry = resolved[index];
+      const dataUri = dataUris[index];
+      if (!entry || !dataUri) continue;
+      const approxBytes = dataUri.length * 0.75;
+      if (totalBytes + approxBytes > MAX_TOTAL_FONT_BYTES) break;
+      totalBytes += approxBytes;
+      inlined.push(entry.cssText.replace(SRC_DECLARATION_RE, `src: url("${dataUri}")`));
+    }
+    return inlined.length > 0 ? inlined.join("\n") : null;
+  }
+
+  function stripExternal(clone) {
+    const images = clone.querySelectorAll("img");
+    for (let index = 0; index < images.length; index += 1) {
+      const src = images[index].getAttribute("src");
+      if (src && !src.startsWith("data:")) images[index].removeAttribute("src");
+    }
+
+    const elements = clone.querySelectorAll("*");
+    for (let index = 0; index < elements.length; index += 1) {
+      const style = elements[index].style.cssText;
+      if (style && style.includes("url(")) {
+        elements[index].style.cssText = style.replace(
+          /url\(["']?(?!data:)[^)"']*["']?\)/gi,
+          "none",
+        );
+      }
+    }
+  }
+
+  function emitScroll() {
+    scrollRaf = 0;
+    if (!scrollForwarding) return;
+    postToTrustedTop({
+      type: "INLINE_EDIT_SCROLL",
+      scrollX: window.scrollX,
+      scrollY: window.scrollY,
+    });
+  }
+
+  window.addEventListener(
+    "scroll",
+    function () {
+      if (!scrollForwarding || scrollRaf) return;
+      scrollRaf = requestAnimationFrame(emitScroll);
+    },
+    { passive: true, capture: true },
+  );
+
+  async function handleCaptureRequest(event) {
+    const requestId = event.data.requestId;
+    const scrollX = window.scrollX;
+    const scrollY = window.scrollY;
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+
+    function postResult(dataUrl) {
+      postToTrustedTop({
+        type: "INLINE_EDIT_SCREENSHOT_RESULT",
+        requestId,
+        dataUrl,
+        scrollX,
+        scrollY,
+      });
+    }
+
+    try {
+      // Wait for any pending web fonts to resolve so both inline metrics and
+      // the @font-face inlining below see the same loaded faces.
+      if (document.fonts && document.fonts.ready) {
+        try {
+          await document.fonts.ready;
+        } catch (_error) {}
+      }
+
+      const clone = document.documentElement.cloneNode(true);
+      inlineAll(document.documentElement, clone);
+
+      const removedNodes = clone.querySelectorAll("script,link[rel=\"stylesheet\"],style");
+      for (let index = 0; index < removedNodes.length; index += 1) {
+        removedNodes[index].remove();
+      }
+
+      stripExternal(clone);
+
+      // Re-embed web fonts as data-URI @font-face rules so the SVG rasterizer
+      // can resolve them &mdash; external font URLs aren't fetched during
+      // foreignObject rendering, which would otherwise force a fallback face
+      // and change text metrics.
+      const inlinedFontCss = await buildInlinedFontCss();
+      if (inlinedFontCss) {
+        const styleEl = document.createElement("style");
+        styleEl.textContent = inlinedFontCss;
+        const head = clone.querySelector("head");
+        if (head) head.appendChild(styleEl);
+        else clone.insertBefore(styleEl, clone.firstChild);
+      }
+
+      const html = new XMLSerializer().serializeToString(clone);
+      const svg =
+        `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}">` +
+        '<foreignObject width="100%" height="100%">' +
+        `<div xmlns="http://www.w3.org/1999/xhtml" style="width:${width}px;height:${height}px;overflow:hidden">` +
+        `<div style="transform:translate(-${scrollX}px,-${scrollY}px);transform-origin:top left">` +
+        html +
+        "</div></div></foreignObject></svg>";
+      const svgUrl = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+      const image = new Image();
+      image.onload = function () {
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        canvas.getContext("2d").drawImage(image, 0, 0);
+        postResult(canvas.toDataURL("image/png"));
+      };
+      image.onerror = function () {
+        postResult(null);
+      };
+      image.src = svgUrl;
+    } catch (_error) {
+      postResult(null);
+    }
+  }
+
+  window.addEventListener("message", function (event) {
+    if (!event.data) return;
+    // Only accept messages from the direct parent frame. Blocks sibling /
+    // unrelated-window postMessage senders that could otherwise reach us.
+    if (event.source !== window.parent) return;
+
+    const trustedParentOrigin = getTrustedParentOrigin(event);
+    if (!trustedParentOrigin) return;
+    trustedTopOrigin = trustedParentOrigin;
+
+    if (event.data.type === "INLINE_EDIT_SCROLL_START") {
+      scrollForwarding = true;
+      emitScroll();
+      return;
+    }
+
+    if (event.data.type === "INLINE_EDIT_SCROLL_STOP") {
+      scrollForwarding = false;
+      if (scrollRaf) cancelAnimationFrame(scrollRaf);
+      scrollRaf = 0;
+      return;
+    }
+
+    if (event.data.type !== "INLINE_EDIT_CAPTURE_REQUEST") return;
+
+    handleCaptureRequest(event);
+  });
+})();
+
+</script>
+<script>
+const RA10_UNIT_SUBJECT = 'IT';
+const RA10_CREDIT_CHIP_ID = 'unit1-credit-chip';
+const RA10_SUBJECT_BONUS = 300;
+const RA10_ACTION_COSTS = {
+  practice_question: 1,
+  quiz_question: 1,
+  revision_guide_full: 10,
+  flashcard_flip: 0,
+  mock_paper_gen: 5,
+  ai_mark: 3,
+  whatsapp_export: 2,
+  whatsapp_pdf: 3,
+};
+
+function _ra10GetSubjectStateKey(profile) {
+  const id = String(profile?.id || profile?.email || 'anon');
+  return 'ra10_subject_credit_state:' + id;
+}
+
+function _ra10ReadSubjectState(profile) {
+  try {
+    const raw = localStorage.getItem(_ra10GetSubjectStateKey(profile));
+    return raw ? JSON.parse(raw) : null;
+  } catch (e) {
+    return null;
+  }
+}
+
+function _ra10WriteSubjectState(profile, state) {
+  try {
+    localStorage.setItem(_ra10GetSubjectStateKey(profile), JSON.stringify(state));
+  } catch (e) {
+    // no-op
+  }
+}
+
+function _ra10SyncSubjectState(profile, totalCredits, ownedSubjects) {
+  const cleanOwned = Array.isArray(ownedSubjects) ? ownedSubjects.filter(Boolean) : [];
+  const ownedKey = cleanOwned.slice().sort().join('|');
+  const saved = _ra10ReadSubjectState(profile);
+  const prevOwned = (saved && typeof saved.ownedKey === 'string')
+    ? saved.ownedKey.split('|').filter(Boolean)
+    : [];
+  const prevOwnedSet = new Set(prevOwned);
+  const addedSubjects = cleanOwned.filter(subj => !prevOwnedSet.has(subj));
+  const addedSet = new Set(addedSubjects);
+
+  // Track per-subject spending so one subject purchase does not unlock all subjects.
+  const savedSpent = (saved && saved.subjectSpent && typeof saved.subjectSpent === 'object')
+    ? saved.subjectSpent
+    : {};
+  const hasSavedSpent = Object.keys(savedSpent).length > 0;
+  const subjectSpent = {};
+  const prevSubjectRemainingBySubject = {};
+  if (!hasSavedSpent && saved && Number.isFinite(saved.baselineRemaining) && Number.isFinite(saved.storedCreditsAtSync)) {
+    let budget = Math.max(0, Math.min(
+      Number(saved.storedCreditsAtSync) - Number(saved.baselineRemaining),
+      prevOwned.length * RA10_SUBJECT_BONUS,
+    ));
+    prevOwned.forEach((subj) => {
+      const alloc = Math.max(0, Math.min(RA10_SUBJECT_BONUS, budget));
+      prevSubjectRemainingBySubject[subj] = alloc;
+      budget -= alloc;
+    });
+  }
+  cleanOwned.forEach((subj) => {
+    let spent = 0;
+    if (hasSavedSpent) {
+      const raw = Number(savedSpent[subj] || 0);
+      spent = Math.max(0, Math.min(RA10_SUBJECT_BONUS, Math.floor(Number.isFinite(raw) ? raw : 0)));
+    } else if (Object.prototype.hasOwnProperty.call(prevSubjectRemainingBySubject, subj)) {
+      const prevRemaining = Number(prevSubjectRemainingBySubject[subj] || 0);
+      spent = Math.max(0, RA10_SUBJECT_BONUS - Math.max(0, Math.min(RA10_SUBJECT_BONUS, prevRemaining)));
+    }
+    subjectSpent[subj] = spent;
+  });
+
+  if (addedSubjects.length && window.RA10 && typeof RA10._appendCreditActivity === 'function') {
+    addedSubjects.forEach((subj) => {
+      RA10._appendCreditActivity({
+        type: 'gain',
+        source: 'subject_purchase',
+        amount: RA10_SUBJECT_BONUS,
+        note: 'Subject purchased: ' + subj,
+      });
+    });
+  }
+
+  let totalSubjectRemaining = cleanOwned.reduce((sum, subj) => {
+    const spent = Number(subjectSpent[subj] || 0);
+    return sum + Math.max(0, RA10_SUBJECT_BONUS - spent);
+  }, 0);
+
+  if (totalSubjectRemaining > totalCredits) {
+    let overflow = totalSubjectRemaining - totalCredits;
+    const trimOrder = cleanOwned
+      .filter(subj => !addedSet.has(subj))
+      .concat(cleanOwned.filter(subj => addedSet.has(subj)));
+    trimOrder.forEach((subj) => {
+      if (overflow <= 0) return;
+      const spent = Number(subjectSpent[subj] || 0);
+      const remaining = Math.max(0, RA10_SUBJECT_BONUS - spent);
+      const trim = Math.min(remaining, overflow);
+      subjectSpent[subj] = Math.min(RA10_SUBJECT_BONUS, spent + trim);
+      overflow -= trim;
+    });
+    totalSubjectRemaining = cleanOwned.reduce((sum, subj) => {
+      const spent = Number(subjectSpent[subj] || 0);
+      return sum + Math.max(0, RA10_SUBJECT_BONUS - spent);
+    }, 0);
+  }
+
+  const baselineRemaining = Math.max(0, Math.min(totalCredits, Math.floor(totalCredits - totalSubjectRemaining)));
+  const next = { ownedKey, baselineRemaining, storedCreditsAtSync: totalCredits, subjectSpent };
+  _ra10WriteSubjectState(profile, next);
+  return next;
+}
+
+function _ra10GetUnitCreditsContext() {
+  if (!window.RA10 || !RA10.isLoggedIn()) {
+    return null;
+  }
+  const profile = RA10.getProfile();
+  if (!profile) {
+    return null;
+  }
+
+  const tier = RA10.getTier();
+  const breakdown = (typeof RA10.getCreditBreakdown === 'function') ? RA10.getCreditBreakdown() : null;
+  const totalCredits = breakdown ? Number(breakdown.totalCredits || 0) : (Number(RA10.getCredits()) || 0);
+  const storedCredits = breakdown ? Number(breakdown.storedCredits || 0) : totalCredits;
+  const examBonusRemaining = breakdown ? Number(breakdown.examBonusRemaining || 0) : 0;
+  if (tier !== 'subject') {
+    return {
+      isSubjectTier: false,
+      ownsCurrentSubject: true,
+      usableCredits: totalCredits,
+      totalCredits,
+      storedCredits,
+      examBonusRemaining,
+      ownedSubjects: [],
+      baselineRemaining: totalCredits,
+    };
+  }
+
+  const ownedSubjects = Array.isArray(profile.unlocked_subjects)
+    ? profile.unlocked_subjects.filter(Boolean)
+    : [];
+  const state = _ra10SyncSubjectState(profile, storedCredits, ownedSubjects);
+  const ownsCurrentSubject = ownedSubjects.includes(RA10_UNIT_SUBJECT);
+  const subjectSpent = (state && state.subjectSpent && typeof state.subjectSpent === 'object')
+    ? Number(state.subjectSpent[RA10_UNIT_SUBJECT] || 0)
+    : 0;
+  const subjectCreditsRemaining = ownsCurrentSubject
+    ? Math.max(0, RA10_SUBJECT_BONUS - Math.max(0, Math.min(RA10_SUBJECT_BONUS, subjectSpent)))
+    : 0;
+  const usableCredits = (ownsCurrentSubject ? subjectCreditsRemaining : 0) + state.baselineRemaining + examBonusRemaining;
+
+  return {
+    isSubjectTier: true,
+    ownsCurrentSubject,
+    usableCredits,
+    totalCredits,
+    storedCredits,
+    examBonusRemaining,
+    ownedSubjects,
+    baselineRemaining: state.baselineRemaining,
+    subjectCreditsRemaining,
+  };
+}
+
+window._ra10GetUnitCreditsContext = _ra10GetUnitCreditsContext;
+
+async function _ra10RenderUnitCreditChip() {
+  if (!window.RA10) {
+    return;
+  }
+  await RA10.renderCreditChip(RA10_CREDIT_CHIP_ID);
+
+  const container = document.getElementById(RA10_CREDIT_CHIP_ID);
+  if (!container) {
+    return;
+  }
+
+  const ctx = _ra10GetUnitCreditsContext();
+  if (!ctx || !ctx.isSubjectTier) {
+    return;
+  }
+
+  const chip = container.firstElementChild;
+  if (!chip) {
+    return;
+  }
+  const spans = chip.querySelectorAll('span');
+  const creditsEl = spans.length > 1 ? spans[1] : null;
+  if (creditsEl) {
+    creditsEl.textContent = ctx.usableCredits + ' usable credits';
+  }
+}
+
+function _ra10RenderUnitAvatar() {
+  const btn = document.getElementById('unit-account-avatar');
+  if (!btn || !window.RA10) {
+    return;
+  }
+
+  btn.innerHTML = '';
+
+  if (!RA10.isLoggedIn()) {
+    btn.textContent = '?';
+    btn.setAttribute('title', 'Sign in');
+    btn.setAttribute('aria-label', 'Sign in');
+    return;
+  }
+
+  const profile = RA10.getProfile() || {};
+  const rawName = String(profile.display_name || profile.full_name || profile.email || 'User').trim();
+  const initials = rawName
+    .split(/\s+/)
+    .filter(Boolean)
+    .map(part => part.charAt(0))
+    .join('')
+    .slice(0, 2)
+    .toUpperCase() || 'U';
+  const imageUrl = String(profile.profile_pic_url || profile.avatar_url || '').trim();
+
+  if (imageUrl) {
+    const img = document.createElement('img');
+    img.src = imageUrl;
+    img.alt = '';
+    img.loading = 'lazy';
+    img.onerror = function() {
+      btn.innerHTML = '';
+      btn.textContent = initials;
+    };
+    btn.appendChild(img);
+  } else {
+    btn.textContent = initials;
+  }
+
+  btn.setAttribute('title', rawName);
+  btn.setAttribute('aria-label', 'Open account');
+}
+
+function _ra10GetActionCost(action) {
+  return Number(RA10_ACTION_COSTS[action] || 0);
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  function waitForRA10(cb, tries) {
+    tries = tries || 0;
+    if (window.RA10 && typeof RA10.init === 'function') {
+      cb();
+    } else if (tries < 50) {
+      setTimeout(function() { waitForRA10(cb, tries + 1); }, 100);
+    }
+  }
+
+  waitForRA10(async function() {
+    await RA10.init();
+
+    function updateCostLabels() {
+      const hide = RA10.isPaid() || RA10.isOwner();
+      document.querySelectorAll('.ra10-cost-label').forEach(el => {
+        el.style.display = hide ? 'none' : '';
+      });
+    }
+
+    updateCostLabels();
+    RA10.on('authchange', updateCostLabels);
+    RA10.on('authchange', function() {
+      _ra10RenderUnitCreditChip();
+      _ra10RenderUnitAvatar();
+      window._updateSubjectBanner();
+    });
+    RA10.on('creditschange', function() {
+      _ra10RenderUnitCreditChip();
+      window._updateSubjectBanner();
+    });
+    _ra10RenderUnitCreditChip();
+    _ra10RenderUnitAvatar();
+    window._updateSubjectBanner();
+  });
+});
+
+// Credit gate helper &mdash; returns true if action is allowed, false if blocked
+async function ra10Gate(action) {
+  try {
+    if (!window.RA10) return true;
+    if (RA10.isOwner()) return true;
+    if (!RA10.isLoggedIn()) {
+      const result = await RA10.guestGate(action, 3, RA10.showPaywall);
+      if (window.RA10) await _ra10RenderUnitCreditChip();
+      return result === true;
+    }
+
+    const ctx = _ra10GetUnitCreditsContext();
+    if (ctx && ctx.isSubjectTier) {
+      const cost = _ra10GetActionCost(action);
+      if (ctx.usableCredits < cost) {
+        RA10.showPaywall('credits', action);
+        return false;
+      }
+      const beforeStored = Number(ctx.storedCredits || 0);
+      const spent = await RA10.gate(action, RA10.showPaywall);
+      if (spent) {
+        const profile = RA10.getProfile();
+        const state = _ra10ReadSubjectState(profile);
+        if (state && Number.isFinite(state.baselineRemaining)) {
+          let deductedFromStored = cost;
+          let afterStored = NaN;
+          if (typeof RA10.getCreditBreakdown === 'function') {
+            afterStored = Number((RA10.getCreditBreakdown() || {}).storedCredits || 0);
+            deductedFromStored = Math.max(0, beforeStored - afterStored);
+          }
+          if (ctx.ownsCurrentSubject) {
+            state.subjectSpent = (state.subjectSpent && typeof state.subjectSpent === 'object') ? state.subjectSpent : {};
+            const currentSpent = Math.max(0, Math.min(RA10_SUBJECT_BONUS, Number(state.subjectSpent[RA10_UNIT_SUBJECT] || 0)));
+            const subjectRemaining = Math.max(0, RA10_SUBJECT_BONUS - currentSpent);
+            const fromSubject = Math.min(subjectRemaining, deductedFromStored);
+            const fromBaseline = Math.max(0, deductedFromStored - fromSubject);
+            state.subjectSpent[RA10_UNIT_SUBJECT] = Math.min(RA10_SUBJECT_BONUS, currentSpent + fromSubject);
+            state.baselineRemaining = Math.max(0, state.baselineRemaining - fromBaseline);
+          } else {
+            state.baselineRemaining = Math.max(0, state.baselineRemaining - deductedFromStored);
+          }
+          if (Number.isFinite(afterStored)) {
+            state.storedCreditsAtSync = afterStored;
+          }
+          _ra10WriteSubjectState(profile, state);
+        }
+        await _ra10RenderUnitCreditChip();
+        window._updateSubjectBanner();
+      }
+      return spent;
+    }
+
+    const result = await RA10.gate(action, RA10.showPaywall);
+    await _ra10RenderUnitCreditChip();
+    window._updateSubjectBanner();
+    return result;
+  } catch(e) {
+    console.warn('ra10Gate error', e);
+    if (window.RA10 && typeof RA10.showPaywall === 'function') {
+      RA10.showPaywall('credits', action);
+    }
+    return false;
+  }
+}
+
+async function _updateGuestChip() {
+  if (window.RA10) {
+    await _ra10RenderUnitCreditChip();
+    window._updateSubjectBanner();
+  }
+}
+
+// Clear sidebar cache when this iframe becomes visible so XP syncs across units
+document.addEventListener('visibilitychange', function() {
+  if (document.visibilityState === 'visible') {
+    window._sidebarCache = null;
+    if (typeof refreshProgressSidebar === 'function') refreshProgressSidebar(true);
+  }
+});
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  document.querySelectorAll('.slot-table').forEach(function (table) {
+    var bodyRows = Array.from(table.querySelectorAll('tbody tr'));
+    if (!bodyRows.length) return;
+
+    var headRows = Array.from(table.querySelectorAll('thead tr'));
+    var columnCount = headRows.reduce(function (maxCols, row) {
+      return Math.max(maxCols, row.children.length);
+    }, 0);
+
+    for (var col = columnCount - 1; col >= 1; col -= 1) {
+      var allEmpty = bodyRows.every(function (row) {
+        var cell = row.children[col];
+        if (!cell) return true;
+        var text = cell.textContent.replace(/\s+/g, ' ').trim();
+        return text === '' || text === '-';
+      });
+
+      if (!allEmpty) continue;
+
+      headRows.forEach(function (row) {
+        if (row.children[col]) row.children[col].classList.add('slot-col-hidden');
+      });
+      bodyRows.forEach(function (row) {
+        if (row.children[col]) row.children[col].classList.add('slot-col-hidden');
+      });
+    }
+  });
+});
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var quickNav = document.getElementById('revise-quick-nav');
+  if (quickNav) {
+    var focusStatus = document.getElementById('revise-focus-status');
+    var focusRows = Array.from(document.querySelectorAll('.trend-row[data-focus]'));
+    var focusButtons = Array.from(quickNav.querySelectorAll('.revise-focus-btn[data-focus]'));
+    var autoPickBtn = document.getElementById('revise-focus-auto');
+    var focusCopy = {
+      q3: 'Great choice: Q3 visual tasks recur in every uploaded paper.',
+      security: 'Smart pick: security themes are heavily repeated and high-mark.',
+      cloud: 'Nice: cloud and remote-working scenarios come up regularly.',
+      software: 'Good for compare/evaluate marks around software and OS choices.',
+      legal: 'Useful final sweep to secure policy and legislation marks.'
+    };
+
+    function setFocus(key) {
+      focusRows.forEach(function (row) {
+        row.classList.toggle('trend-row-focus', row.getAttribute('data-focus') === key);
+      });
+      focusButtons.forEach(function (btn) {
+        btn.classList.toggle('active', btn.getAttribute('data-focus') === key);
+      });
+      var target = focusRows.find(function (row) { return row.getAttribute('data-focus') === key; });
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      if (focusStatus) focusStatus.textContent = focusCopy[key] || 'Use a focus chip to jump to the best next revision target.';
+    }
+
+    focusButtons.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        setFocus(btn.getAttribute('data-focus'));
+      });
+    });
+
+    if (autoPickBtn) {
+      autoPickBtn.addEventListener('click', function () {
+        var priorityOrder = ['q3', 'security', 'cloud', 'software', 'legal'];
+        var pick = priorityOrder[Math.floor(Math.random() * Math.min(3, priorityOrder.length))];
+        setFocus(pick);
+      });
+    }
+  }
+
+  var missionPool = [
+    { paper: 1, aim: '1', code: '1.3', query: 'market mapping segmentation targeting positioning', title: 'Market mapping sprint', copy: 'Open Paper 1 and target segmentation and positioning chains first.', level: 'Easy', mins: 20 },
+    { paper: 2, aim: '6', code: '6.3', query: 'capacity utilisation labour productivity', title: 'Operations numbers lock-in', copy: 'Focus on calculations and interpreted quantitative impacts.', level: 'Hard', mins: 30 },
+    { paper: 3, aim: '9', code: '9.4', query: 'globalisation location offshoring', title: 'Global strategy round', copy: 'Run strategic location scenarios and challenge each option.', level: 'Medium', mins: 25 },
+    { paper: 1, aim: '2', code: '2.5', query: 'leadership motivation organisational culture', title: 'People policy finisher', copy: 'Tackle leadership and motivation judgement chains as a long-answer warm-up.', level: 'Medium', mins: 20 },
+    { paper: 2, aim: '3', code: '3.7', query: 'decision trees expected value investment appraisal', title: 'Finance decision lab', copy: 'Train calculation plus evaluation answers for investment decisions.', level: 'Hard', mins: 30 }
+  ];
+
+  var resultEl = document.getElementById('papers-fun-result');
+  var spinBtn = document.getElementById('papers-fun-spin');
+  var refreshBtn = document.getElementById('papers-fun-refresh');
+  var statusEl = document.getElementById('papers-fun-status');
+  var streakEl = document.getElementById('papers-fun-streak');
+  var doneEl = document.getElementById('papers-fun-done');
+  var timerEl = document.getElementById('papers-fun-timer');
+  var checks = [
+    document.getElementById('papers-fun-check-paper'),
+    document.getElementById('papers-fun-check-quiz'),
+    document.getElementById('papers-fun-check-review')
+  ].filter(Boolean);
+
+  if (!resultEl || !spinBtn || !refreshBtn) return;
+
+  var dayKey = new Date().toISOString().slice(0, 10);
+  var progressKey = 'ra10_u1_papers_fun_progress_' + dayKey;
+  var completeKey = 'ra10_u1_papers_fun_done_' + dayKey;
+  var streakKey = 'ra10_u1_papers_fun_streak_' + dayKey;
+  var lastMissionIdx = -1;
+  var timerRef = null;
+
+  function updateStatus() {
+    if (!statusEl) return;
+    var done = checks.filter(function (box) { return box.checked; }).length;
+    statusEl.textContent = done + ' / 3 tasks complete today';
+    if (doneEl) doneEl.textContent = String(done);
+  }
+
+  function getDoneCount() {
+    try {
+      return Math.max(0, Number(localStorage.getItem(completeKey) || 0));
+    } catch (e) {
+      return 0;
+    }
+  }
+
+  function getStreak() {
+    try {
+      return Math.max(0, Number(localStorage.getItem(streakKey) || 0));
+    } catch (e) {
+      return 0;
+    }
+  }
+
+  function renderCounters() {
+    if (streakEl) streakEl.textContent = String(getStreak());
+    if (doneEl) doneEl.textContent = String(checks.filter(function (box) { return box.checked; }).length);
+  }
+
+  function saveChecks() {
+    try {
+      localStorage.setItem(progressKey, JSON.stringify(checks.map(function (box) { return !!box.checked; })));
+    } catch (e) {}
+    updateStatus();
+  }
+
+  function loadChecks() {
+    try {
+      var raw = localStorage.getItem(progressKey);
+      if (!raw) return;
+      var values = JSON.parse(raw);
+      if (!Array.isArray(values)) return;
+      checks.forEach(function (box, idx) { box.checked = !!values[idx]; });
+    } catch (e) {}
+    updateStatus();
+  }
+
+  checks.forEach(function (box) {
+    box.addEventListener('change', saveChecks);
+  });
+  loadChecks();
+  renderCounters();
+
+  function updateTimer(seconds) {
+    if (!timerEl) return;
+    if (seconds <= 0) {
+      timerEl.textContent = 'Timer complete. Mark your answer and move to quiz/practice.';
+      return;
+    }
+    var mins = Math.floor(seconds / 60);
+    var secs = seconds % 60;
+    timerEl.textContent = 'Focus timer: ' + String(mins) + ':' + String(secs).padStart(2, '0');
+  }
+
+  function startMissionTimer(mins) {
+    if (timerRef) {
+      clearInterval(timerRef);
+      timerRef = null;
+    }
+    var remaining = Math.max(60, Number(mins || 20) * 60);
+    updateTimer(remaining);
+    timerRef = setInterval(function () {
+      remaining -= 1;
+      updateTimer(remaining);
+      if (remaining <= 0) {
+        clearInterval(timerRef);
+        timerRef = null;
+      }
+    }, 1000);
+  }
+
+  function missionActions(m) {
+    return '<div class="papers-fun-actions">'
+      + '<a class="btn" href="predicted-papers/paper-' + m.paper + '.html" target="_blank" rel="noopener">Open Paper ' + m.paper + '</a>'
+      + '<button class="btn" type="button" data-fun-action="timer">Start ' + m.mins + ' min timer</button>'
+      + '<button class="btn" type="button" data-fun-action="guide">Topic guide</button>'
+      + '<button class="btn" type="button" data-fun-action="quiz">Topic quiz</button>'
+      + '<button class="btn" type="button" data-fun-action="questions">Practice set</button>'
+      + '<button class="btn ghost" type="button" data-fun-action="complete">Mark mission done</button>'
+      + '</div>';
+  }
+
+  function renderMission(m) {
+    resultEl.innerHTML = ''
+      + '<p class="papers-fun-title">' + m.title + ' \u2022 Paper ' + m.paper + '</p>'
+      + '<p class="papers-fun-copy">' + m.copy + '</p>'
+      + '<div class="papers-fun-mission-meta"><span class="papers-fun-mission-tag">' + m.level + '</span><span class="papers-fun-mission-tag">' + m.mins + ' min focus</span></div>'
+      + '<p class="papers-fun-timer" id="papers-fun-timer">Timer inactive</p>'
+      + missionActions(m);
+
+    timerEl = document.getElementById('papers-fun-timer');
+
+    resultEl.querySelectorAll('[data-fun-action]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var mode = btn.getAttribute('data-fun-action');
+        if (mode === 'timer') {
+          startMissionTimer(m.mins);
+          return;
+        }
+        if (mode === 'complete') {
+          try {
+            localStorage.setItem(completeKey, String(getDoneCount() + 1));
+            localStorage.setItem(streakKey, String(getStreak() + 1));
+          } catch (e) {}
+          var firstUnchecked = checks.find(function (box) { return !box.checked; });
+          if (firstUnchecked) {
+            firstUnchecked.checked = true;
+            saveChecks();
+          }
+          renderCounters();
+          if (timerEl) timerEl.textContent = 'Mission completed. Nice work. Spin again for next challenge.';
+          return;
+        }
+        if (typeof window.openPredictedPaperFocus === 'function') {
+          window.openPredictedPaperFocus(mode, m.aim, m.code, m.query);
+        }
+      });
+    });
+  }
+
+  function spinMission() {
+    var idx = Math.floor(Math.random() * missionPool.length);
+    if (missionPool.length > 1 && idx === lastMissionIdx) {
+      idx = (idx + 1) % missionPool.length;
+    }
+    lastMissionIdx = idx;
+    renderMission(missionPool[idx]);
+  }
+
+  function spinWithFeedback() {
+    spinBtn.disabled = true;
+    var oldText = spinBtn.textContent;
+    spinBtn.textContent = 'Spinning...';
+    setTimeout(function () {
+      spinMission();
+      spinBtn.disabled = false;
+      spinBtn.textContent = oldText;
+    }, 480);
+  }
+
+  spinBtn.addEventListener('click', spinWithFeedback);
+  refreshBtn.addEventListener('click', spinWithFeedback);
+});
+</script></body>
+</html>
+
+

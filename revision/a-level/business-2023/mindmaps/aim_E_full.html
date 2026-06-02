@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Learning Aim E Mindmap – IT Unit 1</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <style>
+    body { font-family: 'Satoshi', Arial, sans-serif; background: #f8fafc; margin: 0; padding: 0; }
+    .container { max-width: 1100px; margin: 0 auto; padding: 32px 16px; }
+    h1 { text-align: center; color: #18332a; margin-bottom: 8px; }
+    h2 { text-align: center; color: #2d4c3a; margin: 32px 0 18px 0; }
+    .print-btn { display: block; margin: 0 auto 18px auto; padding: 8px 18px; background: #2d4c3a; color: #fff; border: none; border-radius: 8px; font-size: 1.1em; cursor: pointer; }
+    .print-btn:hover { background: #18332a; }
+    .mermaid { background: #fff; border-radius: 12px; box-shadow: 0 2px 16px #0001; padding: 24px 8px; margin-bottom: 36px; overflow-x: auto; }
+    @media print {
+      .print-btn { display: none; }
+      body { background: #fff; }
+      .container { padding: 0; }
+      .mermaid { box-shadow: none; border: none; page-break-inside: avoid; }
+      h2 { margin-top: 24px; }
+    }
+  </style>
+<!-- ra10-refresh-loader -->
+<script>
+(function(){
+  var path = String(location.pathname || '').replace(/\\/g, '/');
+  var lower = path.toLowerCase();
+  var idx = lower.lastIndexOf('/ra10/');
+  var rootFromPath = idx >= 0 ? path.slice(0, idx + 5) : '';
+  var base;
+  if (location.protocol === 'file:') {
+    base = rootFromPath ? ('file://' + rootFromPath) : '';
+  } else {
+    var isLocalHost = location.hostname === '127.0.0.1' || location.hostname === 'localhost';
+    base = isLocalHost ? 'http://127.0.0.1:5500' : 'https://ra10.co.uk';
+  }
+  if (!base) return;
+
+  var font = document.createElement('link');
+  font.rel = 'stylesheet';
+  font.href = 'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Sora:wght@500;600;700;800&display=swap';
+  document.head.appendChild(font);
+
+  var css = document.createElement('link');
+  css.rel = 'stylesheet';
+  css.href = base + '/refresh/ra10-refresh.css?v=20260525';
+  document.head.appendChild(css);
+
+  var js = document.createElement('script');
+  js.src = base + '/refresh/ra10-refresh.js?v=20260525';
+  document.head.appendChild(js);
+})();
+</script>
+</head>
+<body>
+  <div class="container">
+    <h1>Learning Aim E Mindmap</h1>
+    <button class="print-btn" onclick="window.print()">🖨️ Print Mindmap</button>
+    <h2>Legal & Regulatory Issues</h2>
+    <div class="mermaid" id="legal">
+      mindmap
+        root((E1: Legal & Regulatory))
+          Data Protection Act
+            Principles
+            Rights
+            Responsibilities
+          Computer Misuse Act
+            Offences
+            Penalties
+          Copyright
+            Ownership
+            Infringement
+            Fair use
+          Health & Safety
+            Ergonomics
+            Screen breaks
+            Lighting
+            Posture
+          Other Legislation
+            GDPR
+            Freedom of Information
+            Equality Act
+          Regulatory Bodies
+            ICO
+            Ofcom
+            ASA
+          Implications
+            Compliance
+            Penalties
+            User rights
+            Organisation duties
+    </div>
+    <p style="margin-top:24px;color:#2d4c3a;text-align:center;font-size:1.05em;">Diagram is spaced for clarity and prints on a single page. All key points for Learning Aim E included.</p>
+  </div>
+  <script>
+    if(window.mermaid){
+      mermaid.initialize({
+        startOnLoad:true,
+        theme:'neutral',
+        mindmap: {
+          padding: 24,
+          spacingVertical: 28,
+          spacingHorizontal: 36,
+          branchColor: ["#7b8c8e", "#b0b7a1", "#b5b682", "#eaf4f4", "#b0b0b0"],
+          lineColor: "#b0b0b0",
+          lineStyle: "angular"
+        }
+      });
+    }
+  </script>
+</body>
+</html>

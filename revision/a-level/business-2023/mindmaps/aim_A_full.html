@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Learning Aim A Mindmap – IT Unit 1</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <style>
+    body { font-family: 'Satoshi', Arial, sans-serif; background: #f8fafc; margin: 0; padding: 0; }
+    .container { max-width: 1100px; margin: 0 auto; padding: 32px 16px; }
+    h1 { text-align: center; color: #18332a; margin-bottom: 8px; }
+    h2 { text-align: center; color: #2d4c3a; margin: 32px 0 18px 0; }
+    .print-btn { display: block; margin: 0 auto 18px auto; padding: 8px 18px; background: #2d4c3a; color: #fff; border: none; border-radius: 8px; font-size: 1.1em; cursor: pointer; }
+    .print-btn:hover { background: #18332a; }
+    .mermaid { background: #fff; border-radius: 12px; box-shadow: 0 2px 16px #0001; padding: 24px 8px; margin-bottom: 36px; overflow-x: auto; }
+    @media print {
+      .print-btn { display: none; }
+      body { background: #fff; }
+      .container { padding: 0; }
+      .mermaid { box-shadow: none; border: none; page-break-inside: avoid; }
+      h2 { margin-top: 24px; }
+    }
+  </style>
+<!-- ra10-refresh-loader -->
+<script>
+(function(){
+  var path = String(location.pathname || '').replace(/\\/g, '/');
+  var lower = path.toLowerCase();
+  var idx = lower.lastIndexOf('/ra10/');
+  var rootFromPath = idx >= 0 ? path.slice(0, idx + 5) : '';
+  var base;
+  if (location.protocol === 'file:') {
+    base = rootFromPath ? ('file://' + rootFromPath) : '';
+  } else {
+    var isLocalHost = location.hostname === '127.0.0.1' || location.hostname === 'localhost';
+    base = isLocalHost ? 'http://127.0.0.1:5500' : 'https://ra10.co.uk';
+  }
+  if (!base) return;
+
+  var font = document.createElement('link');
+  font.rel = 'stylesheet';
+  font.href = 'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Sora:wght@500;600;700;800&display=swap';
+  document.head.appendChild(font);
+
+  var css = document.createElement('link');
+  css.rel = 'stylesheet';
+  css.href = base + '/refresh/ra10-refresh.css?v=20260525';
+  document.head.appendChild(css);
+
+  var js = document.createElement('script');
+  js.src = base + '/refresh/ra10-refresh.js?v=20260525';
+  document.head.appendChild(js);
+})();
+</script>
+</head>
+<body>
+  <div class="container">
+    <h1>Learning Aim A Mindmap</h1>
+    <button class="print-btn" onclick="window.print()">🖨️ Print Mindmap</button>
+    <h2>Devices & Peripherals</h2>
+    <div class="mermaid" id="devices">
+      mindmap
+        root((A1: Digital Devices & Peripherals))
+          Personal Computers:::pc
+            Advantages:::adv
+              High performance
+              Multitasking
+              Upgradeable
+              Large storage
+              Versatile software
+            Disadvantages:::disadv
+              Bulky
+              Higher cost
+              Less portable
+              Power consumption
+              Maintenance
+          Multifunctional Devices:::multi
+            Advantages:::adv
+              Space-saving
+              Cost-effective
+              All-in-one convenience
+            Disadvantages:::disadv
+              If one fails, all affected
+              Limited specialist features
+          Mobile Devices:::mobile
+            Advantages:::adv
+              Portable
+              Always connected
+              Wide app ecosystem
+              Touchscreen
+              Camera integration
+            Disadvantages:::disadv
+              Limited power
+              Small screens
+              Shorter lifespan
+              Security risks
+          Servers:::server
+            File
+            Application
+            Web
+            Advantages:::adv
+              Centralised management
+              Resource sharing
+              High reliability
+              Scalable
+            Disadvantages:::disadv
+              Expensive
+              Requires maintenance
+              Needs skilled staff
+              Downtime risk
+          Entertainment Systems:::ent
+            Advantages:::adv
+              User-friendly
+              High-quality media
+              Connectivity
+            Disadvantages:::disadv
+              Limited productivity use
+              Can be costly
+          Digital Cameras:::cam
+            Still
+            Video
+            Advantages:::adv
+              High image quality
+              Versatile
+              Portable
+            Disadvantages:::disadv
+              Storage limits
+              Battery life
+          Navigation Systems:::nav
+            Advantages:::adv
+              Accurate directions
+              Real-time updates
+            Disadvantages:::disadv
+              Signal loss
+              Map updates needed
+          Communication Devices/Systems:::comm
+            Advantages:::adv
+              Enables remote work
+              Fast communication
+            Disadvantages:::disadv
+              Security risks
+              Reliance on network
+          Embedded Systems:::embed
+            Sensors
+            IoT
+            Advantages:::adv
+              Automation
+              Energy efficient
+              Real-time data
+            Disadvantages:::disadv
+              Limited flexibility
+              Security concerns
+          Peripheral Devices:::periph
+            Input:::input
+              Keyboard
+              Mouse
+              Scanner
+              Microphone
+              Touchpad
+            Output:::output
+              Monitor
+              Printer
+              Speakers
+              Projector
+            Storage:::storage
+              HDD
+              SSD
+              USB
+              SD card
+            Assistive Tech:::assist
+              Adaptive keyboards
+              Screen readers
+              Braille displays
+              Eye-tracking
+              Sip-and-puff
+    </div>
+    <h2>Software, Notation & System Choice</h2>
+    <div class="mermaid" id="software">
+      mindmap
+        root((A3–A5: Software, Notation, System Choice))
+          Software:::soft
+            OS Types
+              Batch
+              Distributed
+              Multitasking
+              Network
+              Real-time
+              Mobile
+              Single-user
+              Multi-user
+            OS Roles
+              Networking
+              Security
+              Memory
+              Multitasking
+              Drivers
+              User accounts
+            Software Types
+              Utility
+              Application
+            Choice Factors
+              Cost
+              Security
+              Compatibility
+              Features
+              User needs
+              Performance
+            User Interfaces
+              CLI
+              Menu
+              GUI
+              Touchscreen
+            Open Source vs Proprietary
+              Open Source
+                Advantages:::adv
+                  Free/low cost
+                  Community support
+                  Customisable
+                Disadvantages:::disadv
+                  May lack support
+                  Compatibility issues
+              Proprietary
+                Advantages:::adv
+                  Official support
+                  Reliable updates
+                  Integration
+                Disadvantages:::disadv
+                  Costly
+                  Less flexible
+          Notation:::notate
+            Network Diagrams
+              Visualise device connections
+            Flowcharts
+              Show processes/logic
+          Choosing IT Systems:::choose
+            Factors
+              User needs
+              Specs
+              Compatibility
+              Connectivity
+              Cost
+              Efficiency
+              Implementation
+              Productivity
+              Security
+            Organisational Use
+              Stock control
+              Data logging
+              Analysis
+              Office
+              Creative
+              Advertising
+              Manufacturing
+              Security
+              Automation
+            Impacts
+              User experience
+              Cost
+              Implementation
+              Productivity
+              Training
+              Support
+              Security
+          Emerging Technologies:::emerge
+            AI
+              Advantages:::adv
+                Automation
+                Data analysis
+                Personalisation
+              Disadvantages:::disadv
+                Job displacement
+                Bias risk
+            IoT
+              Advantages:::adv
+                Real-time data
+                Smart automation
+              Disadvantages:::disadv
+                Security
+                Privacy
+            New tech
+              Impact on performance
+              Personal/organisational use
+    </div>
+    <p style="margin-top:24px;color:#2d4c3a;text-align:center;font-size:1.05em;">Both diagrams are spaced for clarity and print on separate pages. All key points for Learning Aim A included.</p>
+  </div>
+  <script>
+    if(window.mermaid){
+      mermaid.initialize({
+        startOnLoad:true,
+        theme:'neutral',
+        mindmap: {
+          padding: 24,
+          spacingVertical: 24,
+          spacingHorizontal: 32,
+          branchColor: ["#6b9080", "#a4c3b2", "#b5b682", "#eaf4f4", "#b0b0b0"],
+          lineColor: "#b0b0b0",
+          lineStyle: "angular"
+        }
+      });
+    }
+  </script>
+</body>
+</html>
