@@ -1055,11 +1055,15 @@ function applyGuideAccessRules() {
 
 function renderRevisionGuide() {
   if (window.initComprehensiveGuide) {
+    // applyGuideAccessRules is called from inside guide.js after the async fetch
+    // completes and the DOM is populated — do NOT call it here prematurely.
     window.initComprehensiveGuide();
-    applyGuideAccessRules();
     return;
   }
 }
+
+// Expose so guide.js can call it after render without importing app.js symbols.
+window.applyGuideAccessRules = applyGuideAccessRules;
 
 function setupGuideAuthListener() {
   if (!window.RA10 || typeof RA10.on !== 'function') return;
@@ -1446,6 +1450,129 @@ function styleOfQuestion(q) {
   return 'short';
 }
 
+function selectQuestion(pool, targetMark, used, rng, opts) {
+  opts = opts || {};
+  const requireScenario = !!opts.requireScenario;
+  const type = opts.type || '';
+  const sameAim = opts.sameAim || '';
+
+  let candidates = pool.filter((q) => !used.has(q.id));
+  if (type) candidates = candidates.filter((q) => String(q.type || '') === type);
+  if (sameAim) candidates = candidates.filter((q) => String(q.learning_aim) === String(sameAim));
+
+  const exact = candidates.filter((q) => Number(q.marks) === Number(targetMark));
+  const exactByScenario = requireScenario
+    ? exact.filter((q) => !!q.scenario)
+    : exact.slice();
+  if (exactByScenario.length) return shuffle(exactByScenario.slice(), rng)[0];
+  if (exact.length) return shuffle(exact.slice(), rng)[0];
+
+  if (requireScenario) {
+    const anyScenario = candidates.filter((q) => !!q.scenario);
+    if (anyScenario.length) {
+      anyScenario.sort((a, b) => Math.abs(Number(a.marks) - Number(targetMark)) - Math.abs(Number(b.marks) - Number(targetMark)));
+      return anyScenario[0];
+    }
+  }
+
+  if (!candidates.length) return null;
+  candidates.sort((a, b) => Math.abs(Number(a.marks) - Number(targetMark)) - Math.abs(Number(b.marks) - Number(targetMark)));
+  return candidates[0];
+}
+
+function buildPaper1Structure(pool, rng) {
+  const used = new Set();
+  const items = [];
+
+  const mcPool = pool.filter((q) => q.type === 'multiple_choice' && Number(q.marks) === 1);
+  const secA = shuffle(mcPool.slice(), rng).slice(0, 15);
+  secA.forEach((q, idx) => {
+    used.add(q.id);
+    items.push({ ...q, _section: 'Section A', _label: String(idx + 1).padStart(2, '0') });
+  });
+
+  const secBMarks = [4, 4, 9, 9, 9];
+  secBMarks.forEach((m, idx) => {
+    const pick = selectQuestion(pool.filter((q) => q.type !== 'multiple_choice'), m, used, rng, { requireScenario: m >= 9 });
+    if (!pick) return;
+    used.add(pick.id);
+    items.push({ ...pick, _section: 'Section B', _label: `B${idx + 1}` });
+  });
+
+  const secC = selectQuestion(pool.filter((q) => q.type !== 'multiple_choice'), 25, used, rng, { requireScenario: true });
+  if (secC) {
+    used.add(secC.id);
+    items.push({ ...secC, _section: 'Section C', _label: 'C1' });
+  }
+
+  const secD = selectQuestion(pool.filter((q) => q.type !== 'multiple_choice'), 25, used, rng, { requireScenario: true });
+  if (secD) {
+    used.add(secD.id);
+    items.push({ ...secD, _section: 'Section D', _label: 'D1' });
+  }
+
+  return items;
+}
+
+function buildPaper2Structure(pool, rng) {
+  const used = new Set();
+  const items = [];
+  const groups = [
+    [6, 4, 9, 16],
+    [3, 5, 9, 16],
+    [2, 5, 9, 16]
+  ];
+
+  groups.forEach((marks, gIdx) => {
+    const stem = selectQuestion(pool.filter((q) => q.type !== 'multiple_choice'), marks[3], used, rng, { requireScenario: true });
+    if (!stem) return;
+    used.add(stem.id);
+    const sharedScenario = stem.scenario || '';
+    const aim = stem.learning_aim;
+
+    marks.forEach((m, qIdx) => {
+      if (qIdx === 3) {
+        items.push({
+          ...stem,
+          _section: `Question ${gIdx + 1}`,
+          _label: `${gIdx + 1}.${qIdx + 1}`,
+          _sharedScenario: sharedScenario,
+          _hideScenario: true
+        });
+        return;
+      }
+      const pick = selectQuestion(pool.filter((q) => q.type !== 'multiple_choice'), m, used, rng, {
+        sameAim: aim,
+        requireScenario: false
+      }) || selectQuestion(pool.filter((q) => q.type !== 'multiple_choice'), m, used, rng, { requireScenario: false });
+      if (!pick) return;
+      used.add(pick.id);
+      items.push({
+        ...pick,
+        _section: `Question ${gIdx + 1}`,
+        _label: `${gIdx + 1}.${qIdx + 1}`,
+        _sharedScenario: qIdx === 0 ? sharedScenario : '',
+        _hideScenario: true
+      });
+    });
+  });
+
+  return items;
+}
+
+function buildPaper3Structure(pool, rng) {
+  const used = new Set();
+  const items = [];
+  const marks = [12, 12, 16, 16, 20, 24];
+  marks.forEach((m, idx) => {
+    const pick = selectQuestion(pool.filter((q) => q.type !== 'multiple_choice'), m, used, rng, { requireScenario: true });
+    if (!pick) return;
+    used.add(pick.id);
+    items.push({ ...pick, _section: 'Case Study Questions', _label: String(idx + 1) });
+  });
+  return items;
+}
+
 async function generateMock(total, seed, aims, styles, paperType) {
   if (!await ra10Gate('mock_paper_gen')) return;
   const rng = makeRng(seed);
@@ -1453,61 +1580,27 @@ async function generateMock(total, seed, aims, styles, paperType) {
   const basePool = QUESTIONS.filter(q => aims.includes(String(q.learning_aim)) && questionHasPaper(q, paperType));
   if (!basePool.length) { alert('No questions available for selected topics.'); return; }
   const wanted = new Set(styles);
-  const templates = {
-    // Keep templates aligned with marks actually present in each paper bank.
-    'Paper 1': [25, 20, 16, 12, 9, 6, 4, 3, 3, 2],
-    'Paper 2': [10, 10, 15, 15, 25, 25],
-    'Paper 3': [12, 13, 15, 15, 20, 25]
-  };
-  const tpl = (templates[paperType] || templates['Paper 1']).slice();
-
-  function scenarioWanted(mark) {
-    if (paperType === 'Paper 3') return true;
-    if (paperType === 'Paper 2') return mark >= 10;
-    return mark >= 6;
-  }
 
   function styleAllowed(q) {
     const style = styleOfQuestion(q);
     return wanted.has(style) || (style === 'data' && wanted.has('essay'));
   }
 
-  function buildFromPool(pool) {
-    const byMark = {};
-    pool.forEach(q => {
-      const key = String(q.marks);
-      byMark[key] = byMark[key] || [];
-      byMark[key].push(q);
-    });
-    Object.keys(byMark).forEach((k) => byMark[k] = shuffle(byMark[k], rng));
-
-    const items = [];
-    const used = new Set();
-    tpl.forEach((m) => {
-      const preferredScenario = scenarioWanted(m);
-      const direct = (byMark[String(m)] || []).filter(q => !used.has(q.id));
-      let pick = direct.find(q => !!q.scenario === preferredScenario) || direct[0] || null;
-
-      if (!pick) {
-        const exactFallback = pool.filter(q => Number(q.marks) === m && !used.has(q.id));
-        pick = exactFallback.find(q => !!q.scenario === preferredScenario) || exactFallback[0] || null;
-      }
-
-      if (pick) {
-        used.add(pick.id);
-        items.push(pick);
-      }
-    });
-    return items;
-  }
-
   const stylePool = basePool.filter(styleAllowed);
-  let items = buildFromPool(stylePool);
+  let items = [];
+  if (paperType === 'Paper 1') items = buildPaper1Structure(stylePool, rng);
+  else if (paperType === 'Paper 2') items = buildPaper2Structure(stylePool, rng);
+  else if (paperType === 'Paper 3') items = buildPaper3Structure(stylePool, rng);
+  else items = buildPaper1Structure(stylePool, rng);
+
   let totalMarks = items.reduce((s, q) => s + Number(q.marks || 0), 0);
 
   // If style filters are too restrictive, retry with all styles so users still get a full paper.
   if (totalMarks !== 100) {
-    items = buildFromPool(basePool);
+    if (paperType === 'Paper 1') items = buildPaper1Structure(basePool, rng);
+    else if (paperType === 'Paper 2') items = buildPaper2Structure(basePool, rng);
+    else if (paperType === 'Paper 3') items = buildPaper3Structure(basePool, rng);
+    else items = buildPaper1Structure(basePool, rng);
     totalMarks = items.reduce((s, q) => s + Number(q.marks || 0), 0);
   }
 
@@ -1539,7 +1632,13 @@ function renderMock(mock) {
   wrap.appendChild(el('div', { class: 'paper-header' },
     el('h3', null, `A-Level AQA Business (7132) — ${mock.paperType || 'Mock Paper'}`),
     el('p', null, `${mock.paperType || 'Mock paper'} · ${totalMarks} marks · Time allowed: ${Math.round(totalMarks * 4 / 3)} minutes · Seed: ${mock.seed}`),
-    el('p', { class: 'paper-instructions' }, 'Answer all questions selected for this paper build. Use context and analytical chains where relevant.')
+    el('p', { class: 'paper-instructions' },
+      mock.paperType === 'Paper 1'
+        ? 'Section A and B are compulsory. Then answer the sectioned long-response tasks provided in this mock build for C and D.'
+        : mock.paperType === 'Paper 2'
+          ? 'Answer all three data-response question sets. Show clear working for calculations and develop analysis to judgement in 16-mark parts.'
+          : 'Answer all case-study questions using evidence from the context and synoptic analysis across business functions.'
+    )
   ));
 
   // Candidate header lines (Name / Class / Date / Centre / Teacher / Custom)
@@ -1563,13 +1662,20 @@ function renderMock(mock) {
     wrap.appendChild(ch);
   }
 
+  let currentSection = '';
   mock.items.forEach((q, i) => {
+    if (q._section && q._section !== currentSection) {
+      currentSection = q._section;
+      wrap.appendChild(el('div', { class: 'paper-section-title' }, currentSection));
+    }
+
     const sx = el('div', { class: 'paper-section' });
     sx.appendChild(el('div', { class: 'section-tag' },
-      `Question ${i + 1}`,
+      q._label ? `Question ${q._label}` : `Question ${i + 1}`,
       el('span', { class: 'aim-pill' }, topicLabel(q.learning_aim))
     ));
-    if (q.scenario) sx.appendChild(el('div', { class: 'scenario' }, q.scenario));
+    if (q._sharedScenario) sx.appendChild(el('div', { class: 'scenario' }, q._sharedScenario));
+    else if (q.scenario && !q._hideScenario) sx.appendChild(el('div', { class: 'scenario' }, q.scenario));
     const subQ = el('div', { class: 'paper-question' });
     subQ.appendChild(el('span', { class: 'qtext' },
       q.question,

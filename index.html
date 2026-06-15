@@ -2247,7 +2247,7 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
   body.mobile-sheet-open .mobile-bottom-nav{
     border-top-color:transparent;
     box-shadow:none;
-    background:#ffffff;
+    background:oklch(from var(--color-surface) l c h/.98);
   }
   body.mobile-sheet-open .mobile-nav-btn:not([data-mobile-nav="subjects"]){opacity:.84}
   .upgrade-compare-wrap{
@@ -3231,6 +3231,290 @@ body.mobile-ui.mobile-sheet-open .mobile-bottom-nav{display:flex !important;}
     font-size:10px;
   }
 }
+
+.community-shell{
+  --chat-bg:#0e131b;
+  --chat-surface:#171f2b;
+  --chat-surface-soft:#1f2938;
+  --chat-line:rgba(255,255,255,.1);
+  --chat-text:#eaf2ff;
+  --chat-muted:#9caec9;
+  --chat-accent:#1fa37b;
+  --chat-accent-2:#2563eb;
+  --chat-danger:#f97373;
+  --chat-shadow:0 26px 48px rgba(2,6,23,.5);
+  margin-top:var(--sp4);
+  border-radius:26px;
+  border:1px solid rgba(255,255,255,.1);
+  background:
+    radial-gradient(120% 90% at 85% -20%, rgba(37,99,235,.16), rgba(37,99,235,0) 55%),
+    radial-gradient(100% 80% at 0% 0%, rgba(31,163,123,.15), rgba(31,163,123,0) 48%),
+    linear-gradient(180deg,#0e131b 0%,#111827 100%);
+  box-shadow:var(--chat-shadow), inset 0 1px 0 rgba(255,255,255,.04);
+  padding:clamp(14px,2.1vw,24px);
+  position:relative;
+  overflow:hidden;
+}
+.community-shell::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background-image:linear-gradient(to right,rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(to bottom,rgba(255,255,255,.03) 1px,transparent 1px);
+  background-size:26px 26px;
+  mask-image:radial-gradient(circle at 50% 12%,rgba(0,0,0,.72),transparent 85%);
+}
+
+
+.community-social-header{position:relative;z-index:1;display:flex;justify-content:space-between;align-items:flex-end;gap:14px;flex-wrap:wrap;margin-bottom:16px}
+.community-social-title .hero-label{letter-spacing:.09em}
+.community-social-title h1{margin:3px 0 0 0;color:var(--chat-text);font-family:var(--font-d);font-size:clamp(1.7rem,1.2rem + 1.35vw,2.5rem);letter-spacing:-.025em;line-height:1.04}
+.community-social-title p{margin:8px 0 0 0;color:var(--chat-muted);max-width:72ch;font-size:clamp(.95rem,.9rem + .15vw,1.02rem);line-height:1.6}
+.community-social-pills{display:flex;gap:9px;flex-wrap:wrap}
+.community-social-pills .pill{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.16);color:#deebff}
+
+.community-layout{position:relative;z-index:1;display:grid;grid-template-columns:minmax(290px,.92fr) minmax(0,1.3fr) minmax(325px,.95fr);gap:14px;align-items:start}
+.community-left,.community-main,.community-right{display:grid;gap:14px}
+
+.community-panel{
+  border:1px solid var(--chat-line);
+  border-radius:18px;
+  background:linear-gradient(180deg,var(--chat-surface),var(--chat-surface-soft));
+  padding:14px;
+  color:var(--chat-text);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.04),0 14px 26px rgba(2,6,23,.22);
+}
+.community-panel h3{margin:0;color:#f5f9ff;font-size:1.05rem;letter-spacing:-.01em}
+
+.community-feed-panel,.community-viewer-panel{min-height:74vh;display:flex;flex-direction:column}
+.community-head-row{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.community-filters{display:grid;gap:10px}
+.community-filters .auth-input{width:100%;background:#0a1018;border-color:rgba(255,255,255,.18);color:#e9f2ff;min-height:42px}
+.community-filters .auth-input::placeholder{color:#8fa1bd}
+
+.community-library-grid{margin-top:10px;display:grid;gap:10px;max-height:60vh;overflow:auto;padding-right:4px}
+.community-card{
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:16px;
+  padding:12px;
+  background:linear-gradient(180deg,rgba(11,16,24,.82),rgba(15,22,34,.82));
+  display:grid;
+  gap:9px;
+  cursor:pointer;
+  transition:border-color .2s ease,background .2s ease,transform .2s ease,box-shadow .2s ease;
+}
+.community-card:hover{border-color:rgba(31,163,123,.75);background:linear-gradient(180deg,rgba(11,16,24,.96),rgba(17,25,39,.96));transform:translateY(-2px);box-shadow:0 12px 18px rgba(2,6,23,.3)}
+.community-card-head{display:flex;justify-content:space-between;gap:10px}
+.community-card-title{display:flex;gap:10px;min-width:0}
+.community-card-icon{font-size:1.15rem;line-height:1.2;opacity:.95}
+.community-card-summary{display:grid;gap:4px;min-width:0}
+.community-card-summary h4{margin:0;color:#f8fbff;font-size:.98rem;line-height:1.32}
+.community-card-byline{display:flex;gap:7px;flex-wrap:wrap;font-size:12px;color:#9db0cd}
+.community-card p{margin:0;color:#c0d0e7;font-size:.82rem;line-height:1.5}
+.community-card-stats{display:flex;gap:10px;flex-wrap:wrap;font-size:.74rem;color:#8fa4c2}
+.community-meta{display:flex;gap:6px;flex-wrap:wrap}
+.community-meta .pill{background:rgba(31,163,123,.16);border-color:rgba(31,163,123,.3);color:#c5faea}
+.community-actions{display:flex;gap:8px;flex-wrap:wrap}
+.community-actions .btn{font-size:12px;padding:6px 10px;border-radius:10px;background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.16);color:#d8e6ff}
+.community-actions .btn.btn-p{background:linear-gradient(120deg,var(--chat-accent),#0ea37a);color:#00170f;border-color:transparent}
+
+.community-open-app{display:grid;gap:12px;flex:1;min-height:0}
+.community-open-head{position:sticky;top:0;z-index:2;background:linear-gradient(180deg,#121a27,#172235);border:1px solid rgba(255,255,255,.14);border-radius:14px;padding:12px}
+.community-viewer-menu{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,.11)}
+.community-viewer-menu .btn{border-radius:999px;font-size:12px;padding:7px 11px;background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.16);color:#dce8fb}
+.community-viewer-menu .btn.active{background:linear-gradient(120deg,var(--chat-accent),#0ea37a);color:#021b13;border-color:transparent}
+
+.community-create-panel{display:none}
+.community-create-panel.open{display:block;animation:communityPop .22s ease both}
+.community-muted{color:var(--chat-muted);font-size:.82rem;line-height:1.5;margin-top:5px}
+.community-create-panel .auth-input{background:#0a1018;border-color:rgba(255,255,255,.17);color:#e6effd;min-height:42px}
+.community-create-panel .auth-input::placeholder{color:#8da0be}
+.community-create-panel .auth-label{display:block;margin:10px 0 6px}
+.community-features{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.community-features label{display:flex;gap:8px;align-items:center;font-size:.82rem;color:#d4e1f5}
+.community-target-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.community-target-note{font-size:.74rem;color:#8da0be;margin-top:9px}
+.community-uploader{margin-top:10px;padding:11px;border:1px dashed rgba(31,163,123,.55);border-radius:12px;background:rgba(31,163,123,.09)}
+.community-upload-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.community-upload-btn{display:inline-flex;align-items:center;gap:7px;padding:8px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.16);background:linear-gradient(120deg,var(--chat-accent),#0ea37a);color:#012217;font-weight:800;cursor:pointer}
+.community-upload-note{font-size:.74rem;color:#8da0be;margin-top:7px}
+.community-upload-status{font-size:.74rem;font-weight:700;color:#94f3de}
+.community-file-hidden{position:absolute !important;left:-9999px !important;width:1px !important;height:1px !important;opacity:0 !important}
+
+.community-list{display:grid;gap:9px;max-height:40vh;overflow:auto;padding-right:4px}
+.community-job-item{padding:10px;border:1px solid rgba(255,255,255,.14);border-radius:12px;background:rgba(12,16,23,.68)}
+.community-job-top{display:flex;justify-content:space-between;gap:8px;font-size:.8rem;font-weight:700;color:#e2ebfa}
+.community-job-meta{font-size:.74rem;color:#8da0be}
+.community-job-progress{height:6px;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden;margin-top:6px}
+.community-job-progress span{display:block;height:100%;background:linear-gradient(90deg,var(--chat-accent),#22d3ee);background-size:180% 100%;animation:communityShimmer 1.5s linear infinite}
+
+.community-content-box{border:1px solid rgba(255,255,255,.13);border-radius:12px;background:rgba(12,16,23,.62);padding:12px;color:#d7e5fb}
+.community-content-scroll{max-height:300px;overflow:auto;white-space:pre-wrap;color:#c1d0e6;font-size:.84rem;line-height:1.55}
+.community-structured-list{display:grid;gap:9px;max-height:300px;overflow:auto}
+.community-structured-item{padding:10px;border-radius:11px;border:1px solid rgba(255,255,255,.11);background:rgba(17,23,34,.74)}
+.community-comment-list{display:grid;gap:9px}
+.community-comment{padding:10px;border-radius:11px;background:rgba(17,23,34,.74);font-size:.82rem;color:#d7e3f8}
+.community-comment-head{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.community-creator-avatar{width:30px;height:30px;border-radius:999px;background:linear-gradient(145deg,#10a37f,#0ea37a);color:#ecfff9;display:flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:700;overflow:hidden;border:1px solid rgba(255,255,255,.16)}
+.community-creator-avatar img{width:100%;height:100%;object-fit:cover}
+
+.community-question-shell{display:grid;gap:14px}
+.community-question-top{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.community-question-sub{margin:0;color:#9eb2ce;font-size:.83rem}
+.community-question-nav{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.community-question-counter{display:inline-flex;align-items:center;padding:7px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.05);font-weight:700;font-size:.73rem;color:#d8e6ff}
+.community-question-stem{padding:14px;border-radius:13px;border:1px solid rgba(255,255,255,.13);background:rgba(18,25,37,.74)}
+.community-question-kicker{font-size:.71rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#95f6e0}
+.community-question-text{margin-top:9px;font-size:clamp(1.02rem,.96rem + .33vw,1.26rem);line-height:1.55;color:#ebf3ff}
+.community-answer-box{width:100%;min-height:240px;border-radius:13px;border:1px solid rgba(255,255,255,.15);background:#0a1018;padding:14px;color:#e4eeff}
+.community-answer-actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.community-answer-note{font-size:.74rem;color:#96abc8}
+.community-question-browser{border:1px solid rgba(255,255,255,.12);border-radius:11px;background:rgba(18,25,37,.74);padding:9px}
+
+.community-refine-tags{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.community-refine-tags .btn{font-size:.72rem;padding:6px 10px;border-radius:999px}
+
+.community-panel :is(.btn, .auth-input, textarea, select){font-size:13px}
+.community-panel textarea.auth-input,
+.community-panel .community-answer-box{line-height:1.55}
+
+.community-fab{
+  position:fixed;
+  right:20px;
+  bottom:92px;
+  z-index:1201;
+  width:58px;
+  height:58px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.2);
+  background:linear-gradient(130deg,var(--chat-accent),#0ea37a);
+  color:#001a11;
+  font-size:1.7rem;
+  font-weight:800;
+  box-shadow:0 16px 26px rgba(2,6,23,.48);
+}
+
+[data-theme="light"] .community-shell,
+body[data-theme="light"] .community-shell,
+html[data-theme="light"] .community-shell{
+  --chat-bg:#f4f7fc;
+  --chat-surface:#ffffff;
+  --chat-surface-soft:#f2f6fc;
+  --chat-line:rgba(100,116,139,.24);
+  --chat-text:#0f172a;
+  --chat-muted:#526480;
+  background:linear-gradient(180deg,#f7f9fc 0%,#edf2f8 100%);
+  border-color:rgba(100,116,139,.24);
+  box-shadow:0 18px 34px rgba(15,23,42,.13);
+}
+[data-theme="light"] .community-panel,
+body[data-theme="light"] .community-panel,
+html[data-theme="light"] .community-panel,
+[data-theme="light"] .community-card,
+body[data-theme="light"] .community-card,
+html[data-theme="light"] .community-card,
+[data-theme="light"] .community-open-head,
+body[data-theme="light"] .community-open-head,
+html[data-theme="light"] .community-open-head,
+[data-theme="light"] .community-content-box,
+body[data-theme="light"] .community-content-box,
+html[data-theme="light"] .community-content-box{
+  background:linear-gradient(180deg,#ffffff,#f3f7fc);
+  color:#0f172a;
+  border-color:rgba(100,116,139,.24);
+}
+[data-theme="light"] .community-social-title h1,
+body[data-theme="light"] .community-social-title h1,
+html[data-theme="light"] .community-social-title h1{color:#0f172a}
+[data-theme="light"] .community-social-title p,
+body[data-theme="light"] .community-social-title p,
+html[data-theme="light"] .community-social-title p,
+[data-theme="light"] .community-muted,
+body[data-theme="light"] .community-muted,
+html[data-theme="light"] .community-muted{color:#54657f}
+[data-theme="light"] .community-filters .auth-input,
+body[data-theme="light"] .community-filters .auth-input,
+html[data-theme="light"] .community-filters .auth-input,
+[data-theme="light"] .community-create-panel .auth-input,
+body[data-theme="light"] .community-create-panel .auth-input,
+html[data-theme="light"] .community-create-panel .auth-input,
+[data-theme="light"] .community-answer-box,
+body[data-theme="light"] .community-answer-box,
+html[data-theme="light"] .community-answer-box{background:#ffffff;border-color:rgba(100,116,139,.25);color:#0f172a}
+[data-theme="light"] .community-card-summary h4,
+body[data-theme="light"] .community-card-summary h4,
+html[data-theme="light"] .community-card-summary h4{color:#0f172a}
+[data-theme="light"] .community-card p,
+body[data-theme="light"] .community-card p,
+html[data-theme="light"] .community-card p,
+[data-theme="light"] .community-card-stats,
+body[data-theme="light"] .community-card-stats,
+html[data-theme="light"] .community-card-stats,
+[data-theme="light"] .community-content-scroll,
+body[data-theme="light"] .community-content-scroll,
+html[data-theme="light"] .community-content-scroll{color:#54657f}
+[data-theme="light"] .community-meta .pill,
+body[data-theme="light"] .community-meta .pill,
+html[data-theme="light"] .community-meta .pill{background:rgba(16,163,127,.1);border-color:rgba(16,163,127,.24);color:#065f46}
+[data-theme="light"] .community-actions .btn,
+body[data-theme="light"] .community-actions .btn,
+html[data-theme="light"] .community-actions .btn,
+[data-theme="light"] .community-viewer-menu .btn,
+body[data-theme="light"] .community-viewer-menu .btn,
+html[data-theme="light"] .community-viewer-menu .btn{background:#ffffff;border-color:rgba(100,116,139,.24);color:#0f172a}
+[data-theme="light"] .community-question-stem,
+body[data-theme="light"] .community-question-stem,
+html[data-theme="light"] .community-question-stem,
+[data-theme="light"] .community-question-browser,
+body[data-theme="light"] .community-question-browser,
+html[data-theme="light"] .community-question-browser,
+[data-theme="light"] .community-comment,
+body[data-theme="light"] .community-comment,
+html[data-theme="light"] .community-comment,
+[data-theme="light"] .community-structured-item,
+body[data-theme="light"] .community-structured-item,
+html[data-theme="light"] .community-structured-item{background:#f8fbff;border-color:rgba(100,116,139,.23);color:#0f172a}
+[data-theme="light"] .community-question-kicker,
+body[data-theme="light"] .community-question-kicker,
+html[data-theme="light"] .community-question-kicker{color:#0f766e}
+[data-theme="light"] .community-upload-status,
+body[data-theme="light"] .community-upload-status,
+html[data-theme="light"] .community-upload-status{color:#0f766e}
+
+[data-theme="light"] .community-fab,
+body[data-theme="light"] .community-fab,
+html[data-theme="light"] .community-fab{
+  border-color:rgba(15,23,42,.15);
+  box-shadow:0 16px 24px rgba(15,23,42,.24);
+}
+
+@keyframes communityShimmer{0%{background-position:0% 50%}100%{background-position:180% 50%}}
+@keyframes communityPop{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+@media (max-width: 1180px){
+  .community-layout{grid-template-columns:1fr 1.15fr}
+  .community-right{grid-column:1/-1}
+  .community-right{grid-template-columns:1fr 1fr;align-items:start}
+}
+@media (max-width: 860px){
+  .community-layout{grid-template-columns:1fr}
+  .community-right{grid-template-columns:1fr}
+  .community-shell{padding:12px}
+  .community-social-header{margin-bottom:12px}
+  .community-social-title h1{font-size:clamp(1.45rem,6.8vw,2rem)}
+  .community-feed-panel,.community-viewer-panel{min-height:0}
+  .community-library-grid{max-height:44vh}
+  .community-list{max-height:30vh}
+  .community-features,.community-target-grid{grid-template-columns:1fr}
+  .community-fab{bottom:82px;right:14px;width:54px;height:54px}
+}
+@media (max-width: 560px){
+  .community-panel{padding:11px}
+  .community-card{padding:10px}
+  .community-head-row .pill{font-size:10px}
+  .community-panel :is(.btn, .auth-input, textarea, select){font-size:12px}
+  .community-answer-box{min-height:200px;padding:12px}
+}
 </style>
 <script>
 (function(){
@@ -3387,6 +3671,7 @@ body.mobile-ui.mobile-sheet-open .mobile-bottom-nav{display:flex !important;}
         </div>
       </div>
       <button class="nav-link" data-nav="tools"    onclick="go('/tools')">Tools</button>
+      <button class="nav-link" data-nav="community" onclick="go('/community')">Community</button>
       <button class="nav-link" data-nav="tasks"    onclick="go('/tasks')">Tasks</button>
       <div style="position:relative;display:inline-flex;" id="nav-lb-wrap">
         <button class="nav-link" data-nav="leaderboard" onclick="go('leaderboard')">
@@ -3563,6 +3848,10 @@ body.mobile-ui.mobile-sheet-open .mobile-bottom-nav{display:flex !important;}
   <button class="mobile-nav-btn" type="button" data-mobile-nav="tasks" onclick="go('/tasks')">
     <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M9 6h11"></path><path d="M9 12h11"></path><path d="M9 18h11"></path><path d="M4 6l1.5 1.5L7.5 5.5"></path><path d="M4 12l1.5 1.5L7.5 11.5"></path><path d="M4 18l1.5 1.5L7.5 17.5"></path></svg>
     <span>Tasks</span>
+  </button>
+  <button class="mobile-nav-btn" type="button" data-mobile-nav="community" onclick="go('/community')">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M4 6h16v12H4z"></path><path d="M8 10h8"></path><path d="M8 14h5"></path></svg>
+    <span>Community</span>
   </button>
   <button class="mobile-nav-btn" type="button" data-mobile-nav="leaderboard" onclick="go('leaderboard')">
     <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M8 21h8"></path><path d="M12 17v4"></path><path d="M7 4h10v3a5 5 0 0 1-10 0z"></path></svg>
@@ -5045,6 +5334,156 @@ body.mobile-ui.mobile-sheet-open .mobile-bottom-nav{display:flex !important;}
 </div>
 
 <!-- ============================================================
+     COMMUNITY LIBRARY  /community
+============================================================ -->
+<div class="page" id="p-community">
+  <div class="c">
+    <nav class="bc">
+      <button class="bc-item" onclick="go('')">Home</button>
+      <span class="bc-sep">›</span>
+      <span class="bc-item cur">Community</span>
+    </nav>
+
+    <section class="community-shell">
+      <div class="community-social-header">
+        <div class="community-social-title">
+          <div class="hero-label">RA10 AI Workspace</div>
+          <h1>Community Assistant</h1>
+          <p>Chat-style workspace for discovering community study apps, opening AI-powered learning threads, and publishing your own assistant-ready revision packs.</p>
+        </div>
+        <div class="community-social-pills">
+          <span class="pill">Conversation Threads</span>
+          <span class="pill">Assistant Workspace</span>
+          <span class="pill">Prompt Studio</span>
+        </div>
+      </div>
+
+      <div class="community-layout">
+        <aside class="community-left">
+          <article class="community-panel community-feed-panel">
+            <div class="community-head-row">
+              <h3>Threads</h3>
+              <button id="community-refresh-btn" class="btn btn-s" type="button">Refresh</button>
+            </div>
+            <div class="community-filters">
+              <input id="community-search" class="auth-input" type="text" placeholder="Search by title, topic, level...">
+              <select id="community-subject-filter" class="auth-input">
+                <option value="">All subjects</option>
+                <option>Business</option>
+                <option>IT</option>
+                <option>Sport</option>
+                <option>Maths</option>
+                <option>Science</option>
+                <option>English</option>
+                <option>History</option>
+                <option>General</option>
+              </select>
+            </div>
+            <div id="community-library" class="community-library-grid">
+              <div class="credit-log-note">Loading community apps...</div>
+            </div>
+          </article>
+        </aside>
+
+        <main class="community-main">
+          <article class="community-panel community-viewer-panel">
+            <div class="community-head-row">
+              <h3>Assistant</h3>
+              <span class="pill">1 credit unlock</span>
+            </div>
+            <div id="community-open-app" class="community-open-app">
+              <div class="credit-log-note">Select a thread to open the full AI study workspace.</div>
+            </div>
+          </article>
+        </main>
+
+        <aside class="community-right">
+          <article class="community-panel community-create-panel" id="community-create-panel">
+          <h3>Prompt Studio</h3>
+          <p class="community-muted">DeepTutor is built in by default. Pro, Ultra, and Education plans are included. Free can still generate for 30 credits per app.</p>
+          <label class="auth-label" for="community-title">App title</label>
+          <input id="community-title" class="auth-input" type="text" maxlength="120" placeholder="e.g. GCSE Biology Cell Division">
+          <label class="auth-label" for="community-subject" style="margin-top:var(--sp2);">Subject</label>
+          <select id="community-subject" class="auth-input">
+            <option value="">Auto-detect from document</option>
+            <option>Business</option>
+            <option>IT</option>
+            <option>Science</option>
+            <option>Maths</option>
+            <option>English</option>
+            <option>History</option>
+            <option>Sport</option>
+            <option>General</option>
+          </select>
+          <label class="auth-label" for="community-desc" style="margin-top:var(--sp2);">Description</label>
+          <textarea id="community-desc" class="auth-input" rows="3" maxlength="320" placeholder="What should this app focus on?"></textarea>
+          <label class="auth-label" for="community-guidance" style="margin-top:var(--sp2);">Extra AI guidance</label>
+          <textarea id="community-guidance" class="auth-input" rows="3" maxlength="480" placeholder="Tell the AI what to prioritise (difficulty, style, must-cover topics, exam wording)."></textarea>
+          <label class="auth-label" for="community-focus" style="margin-top:var(--sp2);">Focus keywords (comma separated)</label>
+          <input id="community-focus" class="auth-input" type="text" maxlength="220" placeholder="e.g. market structure, elasticity, economies of scale">
+          <label class="auth-label" for="community-level" style="margin-top:var(--sp2);">Level</label>
+          <input id="community-level" class="auth-input" type="text" maxlength="60" placeholder="GCSE / A-Level / BTEC">
+          <label class="auth-label" for="community-exam-board" style="margin-top:var(--sp2);">Exam board</label>
+          <input id="community-exam-board" class="auth-input" type="text" maxlength="60" placeholder="AQA / Edexcel / OCR">
+          <label class="auth-label" for="community-file" style="margin-top:var(--sp2);">Document</label>
+          <div class="community-uploader">
+            <input id="community-file" class="community-file-hidden" type="file" accept=".txt,.md,.csv,.json,.html,.xml,.rtf,.pdf,.docx,.doc">
+            <div class="community-upload-row">
+              <label for="community-file" class="community-upload-btn">Upload File</label>
+              <span class="community-upload-status" id="community-file-status">No file selected</span>
+            </div>
+            <div class="community-upload-note">Supports TXT, MD, CSV, JSON, HTML, XML, RTF, PDF, and DOCX.</div>
+          </div>
+          <label class="auth-label" for="community-source" style="margin-top:var(--sp2);">Or paste source text</label>
+          <textarea id="community-source" class="auth-input" rows="8" placeholder="Paste your notes/document text here"></textarea>
+          <label style="display:flex;align-items:center;gap:8px;margin-top:8px;font-size:var(--tx-sm);"><input id="community-lock-title" type="checkbox" checked> Keep my title exactly (do not auto-rename)</label>
+          <div class="community-features">
+            <label><input type="checkbox" class="community-feature" value="revision_guide" checked> Revision guide</label>
+            <label><input type="checkbox" class="community-feature" value="question_bank" checked> Question bank</label>
+            <label><input type="checkbox" class="community-feature" value="flashcards" checked> Flashcards</label>
+            <label><input type="checkbox" class="community-feature" value="quiz" checked> Quiz</label>
+            <label><span class="pill">DeepTutor always on</span></label>
+          </div>
+          <div class="community-target-grid">
+            <div>
+              <label class="auth-label" for="community-target-questions">Question bank count</label>
+              <input id="community-target-questions" class="auth-input" type="number" min="8" max="80" step="1" value="24">
+            </div>
+            <div>
+              <label class="auth-label" for="community-target-flashcards">Flashcards count</label>
+              <input id="community-target-flashcards" class="auth-input" type="number" min="8" max="120" step="1" value="30">
+            </div>
+            <div>
+              <label class="auth-label" for="community-target-quiz">Quiz questions</label>
+              <input id="community-target-quiz" class="auth-input" type="number" min="6" max="60" step="1" value="20">
+            </div>
+            <div>
+              <label class="auth-label" for="community-target-chapters">Guide chapters</label>
+              <input id="community-target-chapters" class="auth-input" type="number" min="3" max="20" step="1" value="8">
+            </div>
+          </div>
+          <div class="community-target-note">Higher counts create richer apps but take longer to generate.</div>
+          <button id="community-create-btn" class="btn btn-p" type="button">Generate community app</button>
+          <div id="community-create-msg" class="auth-success" style="margin-top:var(--sp2);"></div>
+          <div id="community-create-err" class="auth-error" style="margin-top:var(--sp2);"></div>
+        </article>
+
+          <article class="community-panel">
+            <h3>Run Queue</h3>
+            <p class="community-muted">Server-side generation continues even if you close the tab.</p>
+            <div id="community-jobs" class="community-list">
+              <div class="credit-log-note">Sign in to view your jobs.</div>
+            </div>
+          </article>
+        </aside>
+      </div>
+
+      <button id="community-fab" class="community-fab" type="button" title="Open Prompt Studio" aria-label="Open prompt studio">+</button>
+    </section>
+  </div>
+</div>
+
+<!-- ============================================================
      LEADERBOARD  /leaderboard
 ============================================================ -->
 <div class="page" id="p-leaderboard">
@@ -5339,12 +5778,13 @@ const ROUTES = {
   '/revision/btec/level-2/it/unit-2':    'p-it-l2-u2',
   '/tools':                               'p-tools',
   '/tools/whatsapp-exporter':            'p-whatsapp',
+  '/community':                           'p-community',
   '/tasks':                               'p-tasks',
   '/auth':                                'p-auth',
   '/upgrade':                             'p-upgrade',
   '/account':                             'p-account',
 };
-const NAV_MAP = {'leaderboard':'leaderboard','/revision':'revision','/tools':'tools','/tasks':'tasks'};
+const NAV_MAP = {'leaderboard':'leaderboard','/revision':'revision','/tools':'tools','/community':'community','/tasks':'tasks'};
 
 let _lbHideTimeout = null;
 window._lbHideTimeout = null;
@@ -6610,6 +7050,1207 @@ async function renderGlobalTasksPage() {
     + '</div>';
 }
 
+const COMMUNITY_SB_URL = 'https://tcrrgsylxbyyrmnouihl.supabase.co';
+const COMMUNITY_SB_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRjcnJnc3lseGJ5eXJtbm91aWhsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4ODUyMTEsImV4cCI6MjA5MzQ2MTIxMX0.eOp6ma-mfgh8F20nM7E2OaBW28LlZlwuEEWr6k2zDWw';
+let _communityApps = [];
+let _communityJobsPoller = null;
+let _communityCreatorsById = {};
+let _communityOpenState = null;
+let _communityQueuedKickoff = {};
+let _communityPdfLoader = null;
+let _communityDocxLoader = null;
+
+function communityLoadExternalScript(src) {
+  return new Promise((resolve, reject) => {
+    const tag = document.createElement('script');
+    tag.src = src;
+    tag.async = true;
+    tag.onload = () => resolve(true);
+    tag.onerror = () => reject(new Error('Failed to load script: ' + src));
+    document.head.appendChild(tag);
+  });
+}
+
+async function communityEnsurePdfJs() {
+  if (window.pdfjsLib) return window.pdfjsLib;
+  if (!_communityPdfLoader) {
+    _communityPdfLoader = communityLoadExternalScript('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js')
+      .then(() => {
+        if (!window.pdfjsLib) throw new Error('PDF parser unavailable.');
+        window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+        return window.pdfjsLib;
+      })
+      .catch((e) => {
+        _communityPdfLoader = null;
+        throw e;
+      });
+  }
+  return _communityPdfLoader;
+}
+
+async function communityEnsureMammoth() {
+  if (window.mammoth) return window.mammoth;
+  if (!_communityDocxLoader) {
+    _communityDocxLoader = communityLoadExternalScript('https://unpkg.com/mammoth@1.8.0/mammoth.browser.min.js')
+      .then(() => {
+        if (!window.mammoth) throw new Error('DOCX parser unavailable.');
+        return window.mammoth;
+      })
+      .catch((e) => {
+        _communityDocxLoader = null;
+        throw e;
+      });
+  }
+  return _communityDocxLoader;
+}
+
+function communityGetToken() {
+  const s = RA10.getSession ? RA10.getSession() : null;
+  return s && s.access_token ? s.access_token : '';
+}
+
+async function communityCallFunction(functionName, payload) {
+  const token = communityGetToken();
+  if (!token) throw new Error('Sign in required.');
+  const res = await fetch(COMMUNITY_SB_URL + '/functions/v1/' + encodeURIComponent(functionName), {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + token,
+    },
+    body: JSON.stringify(payload || {}),
+  });
+  const text = await res.text();
+  let data = null;
+  try { data = text ? JSON.parse(text) : null; } catch (e) {}
+  if (!res.ok) throw new Error((data && (data.error || data.message)) || text || 'Request failed.');
+  return data;
+}
+
+async function communityLoadPublicProfiles(userIds) {
+  const ids = Array.isArray(userIds) ? userIds.map((x) => String(x || '').trim()).filter(Boolean) : [];
+  if (!ids.length) return {};
+  try {
+    const data = await communityCallFunction('community-public-profiles', { userIds: ids });
+    const map = {};
+    const rows = Array.isArray(data && data.profiles) ? data.profiles : [];
+    rows.forEach((row) => {
+      const id = String(row && row.id || '').trim();
+      if (!id) return;
+      map[id] = {
+        id,
+        username: String(row.username || ''),
+        full_name: String(row.full_name || ''),
+        profile_pic_url: String(row.profile_pic_url || ''),
+      };
+    });
+    return map;
+  } catch (e) {
+    return {};
+  }
+}
+
+async function communityRest(path, method, payload, useAuth) {
+  const headers = {
+    'Content-Type': 'application/json',
+    'apikey': COMMUNITY_SB_ANON,
+  };
+  if (useAuth) {
+    const token = communityGetToken();
+    if (!token) throw new Error('Sign in required.');
+    headers['Authorization'] = 'Bearer ' + token;
+  }
+  const res = await fetch(COMMUNITY_SB_URL + '/rest/v1/' + path, {
+    method: method || 'GET',
+    headers,
+    body: payload ? JSON.stringify(payload) : undefined,
+  });
+  const text = await res.text();
+  let data = null;
+  try { data = text ? JSON.parse(text) : null; } catch (e) {}
+  if (!res.ok) {
+    throw new Error((data && (data.message || data.error_description || data.error)) || text || 'REST request failed.');
+  }
+  return data;
+}
+
+function communityEscape(v) {
+  return String(v || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+function communityInitials(name) {
+  const raw = String(name || 'RA').trim();
+  if (!raw) return 'RA';
+  const parts = raw.split(/\s+/).filter(Boolean);
+  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+  return (parts[0][0] + parts[1][0]).toUpperCase();
+}
+
+function communityUserLabel(profile, userId) {
+  const p = profile || {};
+  if (p.username) return '@' + String(p.username);
+  if (p.full_name) return String(p.full_name);
+  if (RA10 && RA10.isLoggedIn && RA10.isLoggedIn()) {
+    const me = RA10.getSession().user;
+    if (String(me && me.id || '') === String(userId || '')) return 'You';
+  }
+  return 'Community member';
+}
+
+function communityResolveCreator(userId) {
+  const me = RA10 && RA10.isLoggedIn && RA10.isLoggedIn() ? RA10.getSession().user : null;
+  const cached = _communityCreatorsById[String(userId || '')] || {};
+  const mine = me && String(me.id || '') === String(userId || '')
+    ? {
+        id: me.id,
+        username: String(me.user_metadata?.username || me.user_metadata?.user_name || ''),
+        full_name: String(me.user_metadata?.full_name || me.user_metadata?.name || ''),
+        profile_pic_url: String(me.user_metadata?.avatar_url || ''),
+      }
+    : {};
+  return {
+    id: String(userId || ''),
+    username: cached.username || mine.username || '',
+    full_name: cached.full_name || mine.full_name || '',
+    profile_pic_url: cached.profile_pic_url || mine.profile_pic_url || '',
+  };
+}
+
+function communityParseArray(raw) {
+  try {
+    const parsed = JSON.parse(String(raw || '[]'));
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (e) {
+    return [];
+  }
+}
+
+function communityGetQuestionText(item, idx) {
+  const obj = item && typeof item === 'object' ? item : {};
+  const text = String(obj.question || obj.q || obj.stem || obj.prompt || '').trim();
+  return text || ('Question ' + (idx + 1));
+}
+
+function communityGetQuestionAnswer(item) {
+  const obj = item && typeof item === 'object' ? item : {};
+  const direct = String(obj.answer || obj.model_answer || obj.mark_scheme_text || '').trim();
+  if (direct) return direct;
+  const points = obj.mark_scheme && Array.isArray(obj.mark_scheme.points)
+    ? obj.mark_scheme.points.map((x) => String(x || '').trim()).filter(Boolean)
+    : [];
+  return points.length ? points.join('; ') : '';
+}
+
+function communityGetQuestionMarkScheme(item) {
+  const obj = item && typeof item === 'object' ? item : {};
+  const raw = obj.mark_scheme && typeof obj.mark_scheme === 'object' && !Array.isArray(obj.mark_scheme) ? obj.mark_scheme : {};
+  const points = Array.isArray(raw.points) ? raw.points.map((x) => String(x || '').trim()).filter(Boolean) : [];
+  const indicative = Array.isArray(raw.indicative_content) ? raw.indicative_content.map((x) => String(x || '').trim()).filter(Boolean) : [];
+  const levels = Array.isArray(raw.level_descriptors) ? raw.level_descriptors : [];
+  return {
+    ...raw,
+    points: points.length ? points : (communityGetQuestionAnswer(obj) ? [communityGetQuestionAnswer(obj)] : []),
+    indicative_content: indicative,
+    level_descriptors: levels,
+    answer: String(raw.answer || obj.answer || '').trim(),
+    explanation: String(raw.explanation || '').trim(),
+    formulae: Array.isArray(raw.formulae) ? raw.formulae : [],
+  };
+}
+
+function communityGetQuestionMarks(item) {
+  const obj = item && typeof item === 'object' ? item : {};
+  const n = Number(obj.marks ?? obj.marks_available ?? obj.points ?? 4);
+  if (!Number.isFinite(n)) return 4;
+  return Math.max(1, Math.min(40, Math.round(n)));
+}
+
+function communityNormalizeQuestionBank(list) {
+  const source = Array.isArray(list) ? list : [];
+  const normalized = source.map((item, idx) => {
+    return {
+      question: communityGetQuestionText(item, idx),
+      answer: communityGetQuestionAnswer(item),
+      marks: communityGetQuestionMarks(item),
+      topic: String((item && item.topic) || '').trim(),
+      command_verb: String((item && item.command_verb) || '').trim(),
+      scenario: String((item && (item.scenario || item.context || item.case_study)) || '').trim(),
+      subject: String((item && item.subject) || '').trim(),
+      type: String((item && (item.type || item.question_type)) || '').trim(),
+      mark_scheme: communityGetQuestionMarkScheme(item),
+    };
+  }).filter((item) => item.question.length >= 8);
+  return normalized;
+}
+
+function communityClampInt(raw, fallback, min, max) {
+  const n = Number(raw);
+  if (!Number.isFinite(n)) return fallback;
+  return Math.max(min, Math.min(max, Math.round(n)));
+}
+
+function communityParseGuideSections(raw) {
+  const text = String(raw || '').trim();
+  if (!text) return [];
+  const lines = text.split(/\r?\n/);
+  const sections = [];
+  let title = '';
+  let buf = [];
+  for (const lineRaw of lines) {
+    const line = String(lineRaw || '').trim();
+    const mdHeading = line.match(/^#{1,3}\s+(.+)$/);
+    const chapterHeading = !mdHeading ? line.match(/^(chapter|topic|unit|section)\s*\d*[:.-]?\s*(.+)?$/i) : null;
+    if (mdHeading || chapterHeading) {
+      if (title || buf.length) {
+        sections.push({ title: title || ('Chapter ' + (sections.length + 1)), body: buf.join('\n').trim() });
+      }
+      title = (mdHeading ? mdHeading[1] : (chapterHeading[2] || line)).trim();
+      buf = [];
+    } else {
+      buf.push(lineRaw);
+    }
+  }
+  if (title || buf.length) {
+    sections.push({ title: title || ('Chapter ' + (sections.length + 1)), body: buf.join('\n').trim() });
+  }
+  if (sections.length > 1) return sections;
+
+  const chunks = text.split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean);
+  return chunks.map((chunk, idx) => ({
+    title: 'Chapter ' + (idx + 1),
+    body: chunk,
+  }));
+}
+
+function communityRenderGuide(raw) {
+  const emojis = ['📘', '🧠', '🧩', '📝', '🎯', '📌', '⚙️', '🔎'];
+  const sections = communityParseGuideSections(raw);
+  if (!sections.length) return '<div class="community-content-scroll">No revision guide data.</div>';
+  return sections.slice(0, 24).map((section, idx) => {
+    const heading = communityEscape(section.title || ('Chapter ' + (idx + 1)));
+    const body = communityEscape(String(section.body || '').replace(/\n{3,}/g, '\n\n'));
+    return '<div class="community-guide-section"><h6>' + emojis[idx % emojis.length] + ' ' + heading + '</h6><div class="community-content-scroll" style="max-height:180px;">' + body + '</div></div>';
+  }).join('');
+}
+
+function communityBuildQuestionObject(item, idx) {
+  const marks = communityGetQuestionMarks(item);
+  const answerText = communityGetQuestionAnswer(item);
+  const markScheme = communityGetQuestionMarkScheme(item);
+  return {
+    question: communityGetQuestionText(item, idx),
+    marks,
+    mark_scheme: {
+      ...markScheme,
+      points: Array.isArray(markScheme.points) && markScheme.points.length ? markScheme.points : (answerText ? [answerText] : []),
+    },
+    topic: String(item.topic || ''),
+    command_verb: String(item.command_verb || ''),
+    scenario: String(item.scenario || ''),
+    subject: String(item.subject || _communityOpenState?.app?.subject || ''),
+    type: String(item.type || ''),
+  };
+}
+
+function communityResolveQuizAnswerIndex(item) {
+  const options = Array.isArray(item && item.options) ? item.options.map((x) => String(x || '')) : [];
+  const max = options.length;
+  const candidates = [
+    item && item.answer,
+    item && item.correct,
+    item && item.correct_answer,
+    item && item.answer_index,
+    item && item.correct_index,
+  ];
+  for (const value of candidates) {
+    if (Number.isInteger(value)) {
+      const n = Number(value);
+      if (n >= 0 && n < max) return n;
+      if (n >= 1 && n <= max) return n - 1;
+    }
+    const asNum = Number(value);
+    if (Number.isInteger(asNum)) {
+      if (asNum >= 0 && asNum < max) return asNum;
+      if (asNum >= 1 && asNum <= max) return asNum - 1;
+    }
+    const txt = String(value || '').trim();
+    if (!txt) continue;
+    const letter = txt.toUpperCase();
+    if (/^[A-D]$/.test(letter)) {
+      const idx = letter.charCodeAt(0) - 65;
+      if (idx >= 0 && idx < max) return idx;
+    }
+    const optionMatch = options.findIndex((opt) => opt.trim().toLowerCase() === txt.toLowerCase());
+    if (optionMatch >= 0) return optionMatch;
+  }
+  return -1;
+}
+
+function communityRenderQuestionBank(raw) {
+  const list = communityNormalizeQuestionBank(communityParseArray(raw));
+  if (!list.length) return '<div class="community-content-scroll">No question bank data.</div>';
+  return '<div class="community-structured-list">' + list.slice(0, 40).map((item, idx) => {
+    const q = communityEscape(communityGetQuestionText(item, idx));
+    const a = communityEscape(communityGetQuestionAnswer(item));
+    const marks = communityGetQuestionMarks(item);
+    const active = _communityOpenState && Number(_communityOpenState.activeQuestionIndex) === idx;
+    return ''
+      + '<div class="community-structured-item">'
+      +   '<h6>Q' + (idx + 1) + (marks ? ' · ' + marks + ' marks' : '') + '</h6>'
+      +   '<div>' + q + '</div>'
+      +   (a ? '<details style="margin-top:8px;"><summary>Model answer</summary><div style="margin-top:6px;color:var(--color-text-muted);">' + a + '</div></details>' : '')
+      +   '<button class="btn btn-s" type="button" style="margin-top:8px;" onclick="communitySetActiveQuestion(' + idx + ')">' + (active ? 'Open in Questions' : 'Use this question') + '</button>'
+      + '</div>';
+  }).join('') + '</div>';
+}
+
+function communityRenderFlashcards(raw) {
+  const list = communityParseArray(raw);
+  if (!list.length) return '<div class="community-content-scroll">No flashcard data.</div>';
+  if (!_communityOpenState) return '<div class="community-content-scroll">Open an app to use flashcards.</div>';
+  const idx = Math.max(0, Math.min(list.length - 1, Number(_communityOpenState.flashcardIndex || 0)));
+  const item = list[idx] || {};
+  const front = communityEscape(item.front || item.term || 'Front');
+  const back = communityEscape(item.back || item.definition || 'Back');
+  const showingBack = !!_communityOpenState.flashcardReveal;
+  return ''
+    + '<div class="community-content-box">'
+    +   '<h5>Flashcards</h5>'
+    +   '<div class="community-job-meta">Card ' + (idx + 1) + ' of ' + list.length + '</div>'
+    +   '<div class="community-flash-scene" style="margin-top:10px;">'
+    +     '<div class="community-flash-card ' + (showingBack ? 'is-flipped' : '') + '">'
+    +       '<div class="community-flash-face front"><div><div class="community-flash-label">Front</div><div style="font-size:var(--tx-lg);font-weight:700;">' + front + '</div></div></div>'
+    +       '<div class="community-flash-face back"><div><div class="community-flash-label">Back</div><div style="font-size:var(--tx-lg);font-weight:700;">' + back + '</div></div></div>'
+    +     '</div>'
+    +   '</div>'
+    +   '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;">'
+    +     '<button class="btn btn-s" type="button" onclick="communitySetFlashcardIndex(' + (idx - 1) + ')">Previous</button>'
+    +     '<button class="btn btn-s" type="button" onclick="communityToggleFlashcard()">' + (showingBack ? 'Show front' : 'Flip card') + '</button>'
+    +     '<button class="btn btn-s" type="button" onclick="communitySetFlashcardIndex(' + (idx + 1) + ')">Next</button>'
+    +     '<button class="btn btn-s" type="button" onclick="communityShuffleFlashcards()">Shuffle</button>'
+    +   '</div>'
+    + '</div>';
+}
+
+function communitySetFlashcardIndex(nextIdx) {
+  if (!_communityOpenState) return;
+  const list = Array.isArray(_communityOpenState.flashcards) ? _communityOpenState.flashcards : [];
+  if (!list.length) return;
+  _communityOpenState.flashcardIndex = Math.max(0, Math.min(list.length - 1, Number(nextIdx || 0)));
+  _communityOpenState.flashcardReveal = false;
+  communityRenderOpenTab();
+}
+
+function communityToggleFlashcard() {
+  if (!_communityOpenState) return;
+  _communityOpenState.flashcardReveal = !_communityOpenState.flashcardReveal;
+  communityRenderOpenTab();
+}
+
+function communityShuffleFlashcards() {
+  if (!_communityOpenState) return;
+  const list = Array.isArray(_communityOpenState.flashcards) ? _communityOpenState.flashcards.slice() : [];
+  for (let i = list.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const t = list[i];
+    list[i] = list[j];
+    list[j] = t;
+  }
+  _communityOpenState.flashcards = list;
+  _communityOpenState.flashcardIndex = 0;
+  _communityOpenState.flashcardReveal = false;
+  communityRenderOpenTab();
+}
+
+function communityApplyRefineTag(tag) {
+  const input = document.getElementById('community-chat-input');
+  if (!input) return;
+  input.value = String(tag || '').trim();
+  input.focus();
+}
+
+async function communityReadSourceText() {
+  const pasted = String(document.getElementById('community-source')?.value || '').trim();
+  const fileInput = document.getElementById('community-file');
+  const file = fileInput && fileInput.files && fileInput.files[0] ? fileInput.files[0] : null;
+  let fileText = '';
+  if (file) {
+    const fileName = String(file.name || '').toLowerCase();
+    if (/\.(txt|md|csv|json|html|xml|rtf)$/i.test(fileName)) {
+      fileText = await file.text();
+    } else if (/\.pdf$/i.test(fileName)) {
+      const pdfjs = await communityEnsurePdfJs();
+      const data = new Uint8Array(await file.arrayBuffer());
+      const doc = await pdfjs.getDocument({ data }).promise;
+      const pages = [];
+      for (let i = 1; i <= doc.numPages; i += 1) {
+        const page = await doc.getPage(i);
+        const txt = await page.getTextContent();
+        const line = (txt.items || []).map((it) => String(it && it.str || '')).join(' ').trim();
+        if (line) pages.push(line);
+      }
+      fileText = pages.join('\n\n');
+    } else if (/\.docx$/i.test(fileName)) {
+      const mammoth = await communityEnsureMammoth();
+      const result = await mammoth.extractRawText({ arrayBuffer: await file.arrayBuffer() });
+      fileText = String(result && result.value || '').trim();
+    } else if (/\.doc$/i.test(fileName)) {
+      throw new Error('Legacy .doc is not supported in-browser. Save it as .docx or .pdf first.');
+    } else {
+      throw new Error('Unsupported file type. Use txt/md/csv/json/html/xml/rtf/pdf/docx.');
+    }
+    if (!String(fileText || '').trim()) {
+      throw new Error('Could not extract readable text from this file. Try another export or paste text.');
+    }
+  }
+  return {
+    text: [pasted, fileText].filter(Boolean).join('\n\n').trim(),
+    fileName: file ? String(file.name || '') : '',
+  };
+}
+
+async function createCommunityAppJob() {
+  const msg = document.getElementById('community-create-msg');
+  const err = document.getElementById('community-create-err');
+  const btn = document.getElementById('community-create-btn');
+  if (msg) msg.textContent = '';
+  if (err) err.textContent = '';
+  if (btn) btn.disabled = true;
+  try {
+    if (!RA10 || !RA10.isLoggedIn || !RA10.isLoggedIn()) {
+      throw new Error('Sign in to create community apps.');
+    }
+    const source = await communityReadSourceText();
+    if (!source.text || source.text.length < 120) {
+      throw new Error('Please provide more source text (at least 120 characters).');
+    }
+    const title = String(document.getElementById('community-title')?.value || '').trim();
+    const subject = String(document.getElementById('community-subject')?.value || '').trim();
+    const description = String(document.getElementById('community-desc')?.value || '').trim();
+    const guidance = String(document.getElementById('community-guidance')?.value || '').trim();
+    const focus = String(document.getElementById('community-focus')?.value || '').split(',').map((x) => String(x || '').trim()).filter(Boolean).slice(0, 12);
+    const lockTitle = !!document.getElementById('community-lock-title')?.checked;
+    const level = String(document.getElementById('community-level')?.value || '').trim() || 'Mixed';
+    const examBoard = String(document.getElementById('community-exam-board')?.value || '').trim() || 'Mixed';
+    const features = Array.from(document.querySelectorAll('.community-feature:checked')).map((el) => String(el.value || '').trim()).filter(Boolean);
+    const generationTargets = {
+      question_count: communityClampInt(document.getElementById('community-target-questions')?.value, 24, 8, 80),
+      flashcard_count: communityClampInt(document.getElementById('community-target-flashcards')?.value, 30, 8, 120),
+      quiz_count: communityClampInt(document.getElementById('community-target-quiz')?.value, 20, 6, 60),
+      guide_chapter_count: communityClampInt(document.getElementById('community-target-chapters')?.value, 8, 3, 20),
+    };
+
+    const tier = String((RA10.getTier && RA10.getTier()) || 'free').toLowerCase();
+    const included = tier === 'all_subjects' || tier === 'ultra' || tier === 'school_student' || tier === 'school_teacher' || tier === 'school_admin' || tier === 'owner';
+    if (!included && tier !== 'free') {
+      throw new Error('This tool is included for Pro, Ultra and Education plans. Free can still generate with 30 credits.');
+    }
+    if (tier === 'free' && Number(RA10.getCredits ? RA10.getCredits() : 0) < 30) {
+      throw new Error('Free accounts need 30 credits to generate a community app.');
+    }
+
+    const data = await communityCallFunction('community-create-job', {
+      title,
+      subject,
+      description,
+      level,
+      examBoard,
+      guidance,
+      focus,
+      lockTitle,
+      features,
+      generationTargets,
+      sourceText: source.text,
+      sourceFileName: source.fileName,
+    });
+
+    const costText = Number(data?.generationCost || 0) > 0 ? (' Charged ' + Number(data?.generationCost || 0) + ' credits.') : ' Included in your plan.';
+    const effort = Math.round((generationTargets.question_count + generationTargets.flashcard_count + generationTargets.quiz_count) * 1.6);
+    if (msg) msg.textContent = 'Job queued and auto-started. Subject: ' + String(data?.subject || 'General') + '. Target content: ' + generationTargets.question_count + ' questions, ' + generationTargets.flashcard_count + ' flashcards, ' + generationTargets.quiz_count + ' quiz items. Higher counts can take longer (~' + effort + 's).' + costText;
+    if (data && data.jobId) {
+      const newJobId = String(data.jobId || '');
+      if (newJobId) {
+        _communityQueuedKickoff[newJobId] = true;
+        communityCallFunction('community-process-job', { jobId: newJobId })
+          .catch(() => null)
+          .finally(() => { setTimeout(() => { loadCommunityJobs(); }, 1400); });
+      }
+    }
+    const panel = document.getElementById('community-create-panel');
+    if (panel) panel.classList.remove('open');
+    await Promise.all([loadCommunityJobs(), loadCommunityApps()]);
+  } catch (e) {
+    if (err) err.textContent = String((e && e.message) || e || 'Could not create job.');
+  } finally {
+    if (btn) btn.disabled = false;
+  }
+}
+
+async function loadCommunityJobs() {
+  const host = document.getElementById('community-jobs');
+  if (!host) return;
+  if (!RA10 || !RA10.isLoggedIn || !RA10.isLoggedIn()) {
+    host.innerHTML = '<div class="credit-log-note">Sign in to view your jobs.</div>';
+    return;
+  }
+  try {
+    const rows = await communityRest('community_app_jobs?select=id,status,progress,status_note,eta_seconds,error_message,created_at,community_apps(title)&order=created_at.desc&limit=20', 'GET', null, true);
+    if (!Array.isArray(rows) || !rows.length) {
+      host.innerHTML = '<div class="credit-log-note">No jobs yet.</div>';
+      return;
+    }
+    host.innerHTML = rows.map((row) => {
+      const pct = Math.max(0, Math.min(100, Number(row.progress || 0)));
+      const title = communityEscape((row.community_apps && row.community_apps.title) || 'Untitled app');
+      const status = communityEscape(String(row.status || 'queued'));
+      const note = communityEscape(String(row.status_note || ''));
+      const etaRaw = Number(row.eta_seconds);
+      const eta = Number.isFinite(etaRaw) && etaRaw > 0 ? ('ETA ~ ' + etaRaw + 's') : '';
+      const when = row.created_at ? new Date(row.created_at).toLocaleString() : '';
+      const err = row.error_message ? '<div class="auth-error" style="margin-top:6px;">' + communityEscape(row.error_message) + '</div>' : '';
+      const canRetry = String(row.status || '') === 'failed';
+      const retryBtn = canRetry
+        ? '<button class="btn btn-s" type="button" style="margin-top:8px;" onclick="communityStartJob(\'' + String(row.id || '') + '\')">Retry</button>'
+        : '';
+      return ''
+        + '<div class="community-job-item">'
+        +   '<div class="community-job-top"><span>' + title + '</span><span>' + status + '</span></div>'
+        +   '<div class="community-job-meta">' + communityEscape(when) + '</div>'
+        +   (note ? '<div class="community-job-meta" style="margin-top:4px;">' + note + (eta ? ' · ' + eta : '') + '</div>' : (eta ? '<div class="community-job-meta" style="margin-top:4px;">' + eta + '</div>' : ''))
+        +   '<div class="community-job-progress"><span style="width:' + pct + '%"></span></div>'
+        +   retryBtn
+        +   err
+        + '</div>';
+    }).join('');
+
+    rows.forEach((row) => {
+      const status = String(row && row.status || '');
+      const id = String(row && row.id || '');
+      if (!id || status !== 'queued') return;
+      if (_communityQueuedKickoff[id]) return;
+      _communityQueuedKickoff[id] = true;
+      communityCallFunction('community-process-job', { jobId: id })
+        .catch(() => { delete _communityQueuedKickoff[id]; })
+        .finally(() => { setTimeout(() => { loadCommunityJobs(); }, 1600); });
+    });
+  } catch (e) {
+    host.innerHTML = '<div class="credit-log-note">Could not load jobs.</div>';
+  }
+}
+
+async function communityStartJob(jobId) {
+  if (!jobId) return;
+  try {
+    await communityCallFunction('community-process-job', { jobId });
+    showMiniToast('Job started');
+    await loadCommunityJobs();
+  } catch (e) {
+    showMiniToast(String((e && e.message) || 'Could not start job'));
+  }
+}
+
+async function loadCommunityApps() {
+  const host = document.getElementById('community-library');
+  if (!host) return;
+  const q = String(document.getElementById('community-search')?.value || '').trim().toLowerCase();
+  const subjectFilter = String(document.getElementById('community-subject-filter')?.value || '').trim();
+  try {
+    let path = 'community_apps?select=id,title,description,subject,level,exam_board,tags,icon_emoji,cover_image_url,credit_cost,like_count,comment_count,creator_id,uses_deeptutor,created_at&status=eq.published&visibility=eq.public&order=created_at.desc&limit=60';
+    if (subjectFilter) {
+      path += '&subject=eq.' + encodeURIComponent(subjectFilter);
+    }
+    const rows = await communityRest(path, 'GET', null, false);
+    const all = Array.isArray(rows) ? rows : [];
+    _communityApps = all.filter((row) => {
+      if (!q) return true;
+      const blob = [row.title, row.description, row.subject, row.level, row.exam_board].join(' ').toLowerCase();
+      return blob.includes(q);
+    });
+    if (!_communityApps.length) {
+      host.innerHTML = '<div class="credit-log-note">No community apps found for this filter yet.</div>';
+      return;
+    }
+
+    const creatorIds = Array.from(new Set(_communityApps.map((x) => String(x.creator_id || '')).filter(Boolean)));
+    const creatorsById = await communityLoadPublicProfiles(creatorIds);
+    _communityCreatorsById = creatorsById;
+
+    let following = {};
+    if (RA10 && RA10.isLoggedIn && RA10.isLoggedIn()) {
+      try {
+        if (creatorIds.length) {
+          const inList = creatorIds.map(encodeURIComponent).join(',');
+          const frows = await communityRest('community_user_follows?select=following_id&follower_id=eq.' + encodeURIComponent(RA10.getSession().user.id) + '&following_id=in.(' + inList + ')', 'GET', null, true);
+          (Array.isArray(frows) ? frows : []).forEach((x) => { following[String(x.following_id)] = true; });
+        }
+      } catch (e) {}
+    }
+
+    host.innerHTML = _communityApps.map((app) => {
+      const creator = communityResolveCreator(app.creator_id);
+      const creatorName = communityUserLabel(creator, app.creator_id);
+      const creatorAvatar = String(creator.profile_pic_url || '').trim();
+      const safeTitle = String(app.title || '').trim() || ((String(app.subject || '').trim() || 'General') + ' Revision App');
+      const safeDescription = String(app.description || '').trim() || ('AI-generated revision materials for ' + (String(app.subject || '').trim() || 'this subject') + '.');
+      const myId = RA10 && RA10.isLoggedIn && RA10.isLoggedIn() ? String(RA10.getSession().user.id || '') : '';
+      const canDelete = myId && myId === String(app.creator_id || '');
+      const deleteBtn = canDelete
+        ? '<button class="btn btn-s" type="button" onclick="event.stopPropagation();communityDeleteApp(\'' + String(app.id) + '\')">Delete app</button>'
+        : '';
+      const followBtn = (RA10 && RA10.isLoggedIn && RA10.isLoggedIn() && String(app.creator_id || '') !== String(RA10.getSession().user.id || ''))
+        ? '<button class="btn btn-s" type="button" onclick="event.stopPropagation();communityToggleFollow(\'' + String(app.creator_id) + '\')">' + (following[String(app.creator_id)] ? 'Unfollow' : 'Follow') + ' ' + communityEscape(creatorName) + '</button>'
+        : '';
+      const icon = communityEscape(String(app.icon_emoji || '📘'));
+      const tags = Array.isArray(app.tags) ? app.tags.slice(0, 5) : [];
+      return ''
+        + '<div class="community-card" role="button" tabindex="0" onclick="communityOpenApp(\'' + String(app.id) + '\')" onkeydown="if(event.key===\'Enter\'||event.key===\' \' ){event.preventDefault();communityOpenApp(\'' + String(app.id) + '\');}">'
+        +   '<div class="community-card-head">'
+        +     '<div class="community-card-title"><span class="community-card-icon">' + icon + '</span><div class="community-card-summary"><h4>' + communityEscape(safeTitle) + '</h4><div class="community-card-byline"><span>' + communityEscape(app.subject || 'General') + '</span><span>•</span><span>' + communityEscape(app.level || 'Mixed') + '</span><span>•</span><span>DeepTutor ON</span></div></div></div>'
+        +     '<div class="community-creator-avatar">' + (creatorAvatar ? '<img src="' + communityEscape(creatorAvatar) + '" alt="creator" loading="lazy">' : communityEscape(communityInitials(creatorName))) + '</div>'
+        +   '</div>'
+        +   '<p>' + communityEscape(safeDescription) + '</p>'
+        +   '<div class="community-card-stats"><strong>' + communityEscape(creatorName) + '</strong><span>•</span><span>❤ ' + Number(app.like_count || 0) + '</span><span>💬 ' + Number(app.comment_count || 0) + '</span><span>•</span><span>Cost ' + Number(app.credit_cost || 1) + '</span></div>'
+        +   '<div class="community-meta">' + tags.map((t) => '<span class="pill">#' + communityEscape(t) + '</span>').join('') + '</div>'
+        +   '<div class="community-actions">'
+        +     '<button class="btn btn-p" type="button" onclick="event.stopPropagation();communityOpenApp(\'' + String(app.id) + '\')">Open app</button>'
+        +     '<button class="btn btn-s" type="button" onclick="event.stopPropagation();communityToggleLike(\'' + String(app.id) + '\')">Like</button>'
+        +     followBtn
+        +     deleteBtn
+        +   '</div>'
+        + '</div>';
+    }).join('');
+  } catch (e) {
+    host.innerHTML = '<div class="credit-log-note">Could not load community apps.</div>';
+  }
+}
+
+async function communityToggleLike(appId) {
+  if (!RA10 || !RA10.isLoggedIn || !RA10.isLoggedIn()) {
+    RA10.showPaywall('login', 'community_like');
+    return;
+  }
+  const userId = RA10.getSession().user.id;
+  try {
+    const existing = await communityRest('community_app_likes?select=app_id&app_id=eq.' + encodeURIComponent(appId) + '&user_id=eq.' + encodeURIComponent(userId) + '&limit=1', 'GET', null, true);
+    if (Array.isArray(existing) && existing.length) {
+      await communityRest('community_app_likes?app_id=eq.' + encodeURIComponent(appId) + '&user_id=eq.' + encodeURIComponent(userId), 'DELETE', null, true);
+    } else {
+      await communityRest('community_app_likes', 'POST', { app_id: appId, user_id: userId }, true);
+    }
+    await loadCommunityApps();
+  } catch (e) {
+    showMiniToast('Could not update like');
+  }
+}
+
+async function communityToggleFollow(targetUserId) {
+  if (!RA10 || !RA10.isLoggedIn || !RA10.isLoggedIn()) {
+    RA10.showPaywall('login', 'community_follow');
+    return;
+  }
+  const userId = RA10.getSession().user.id;
+  if (String(userId) === String(targetUserId)) return;
+  try {
+    const existing = await communityRest('community_user_follows?select=following_id&follower_id=eq.' + encodeURIComponent(userId) + '&following_id=eq.' + encodeURIComponent(targetUserId) + '&limit=1', 'GET', null, true);
+    if (Array.isArray(existing) && existing.length) {
+      await communityRest('community_user_follows?follower_id=eq.' + encodeURIComponent(userId) + '&following_id=eq.' + encodeURIComponent(targetUserId), 'DELETE', null, true);
+    } else {
+      await communityRest('community_user_follows', 'POST', { follower_id: userId, following_id: targetUserId }, true);
+    }
+    await loadCommunityApps();
+  } catch (e) {
+    showMiniToast('Could not update follow');
+  }
+}
+
+function communitySetViewerTab(tab) {
+  if (!_communityOpenState) return;
+  _communityOpenState.activeTab = String(tab || 'guide');
+  document.querySelectorAll('.community-viewer-menu .btn').forEach((btn) => {
+    const id = String(btn.id || '').replace('community-tab-', '');
+    btn.classList.toggle('active', id === _communityOpenState.activeTab);
+  });
+  communityRenderOpenTab();
+}
+
+function communitySetActiveQuestion(idx) {
+  if (!_communityOpenState) return;
+  const currentInput = document.getElementById('community-answer-input');
+  if (currentInput) {
+    _communityOpenState.answerDrafts = _communityOpenState.answerDrafts || {};
+    _communityOpenState.answerDrafts[Number(_communityOpenState.activeQuestionIndex || 0)] = String(currentInput.value || '');
+  }
+  const list = Array.isArray(_communityOpenState.questionBank) ? _communityOpenState.questionBank : [];
+  const safe = Math.max(0, Math.min(list.length - 1, Number(idx || 0)));
+  _communityOpenState.activeQuestionIndex = safe;
+  communitySetViewerTab('questions');
+}
+
+function communitySetQuestionDraft(value) {
+  if (!_communityOpenState) return;
+  const idx = Number(_communityOpenState.activeQuestionIndex || 0);
+  _communityOpenState.answerDrafts = _communityOpenState.answerDrafts || {};
+  _communityOpenState.answerDrafts[idx] = String(value || '');
+}
+
+function communitySetQuizIndex(nextIdx) {
+  if (!_communityOpenState) return;
+  const list = Array.isArray(_communityOpenState.quiz) ? _communityOpenState.quiz : [];
+  if (!list.length) return;
+  _communityOpenState.quizIndex = Math.max(0, Math.min(list.length - 1, Number(nextIdx || 0)));
+  _communityOpenState.quizReveal = _communityOpenState.quizReveal || {};
+  if (typeof _communityOpenState.quizReveal[_communityOpenState.quizIndex] === 'undefined') {
+    _communityOpenState.quizReveal[_communityOpenState.quizIndex] = false;
+  }
+  communityRenderOpenTab();
+}
+
+function communityPickQuizOption(optionIdx) {
+  if (!_communityOpenState) return;
+  const qIdx = Number(_communityOpenState.quizIndex || 0);
+  _communityOpenState.quizAnswers = _communityOpenState.quizAnswers || {};
+  _communityOpenState.quizAnswers[qIdx] = Number(optionIdx);
+  _communityOpenState.quizReveal = _communityOpenState.quizReveal || {};
+  _communityOpenState.quizReveal[qIdx] = false;
+  communityRenderOpenTab();
+}
+
+function communityCheckQuizAnswer() {
+  if (!_communityOpenState) return;
+  const qIdx = Number(_communityOpenState.quizIndex || 0);
+  _communityOpenState.quizReveal = _communityOpenState.quizReveal || {};
+  _communityOpenState.quizReveal[qIdx] = true;
+  communityRenderOpenTab();
+}
+
+function communitySubmitQuiz() {
+  if (!_communityOpenState) return;
+  const list = Array.isArray(_communityOpenState.quiz) ? _communityOpenState.quiz : [];
+  let correct = 0;
+  let gradable = 0;
+  let unknown = 0;
+  list.forEach((item, idx) => {
+    const expected = communityResolveQuizAnswerIndex(item);
+    const picked = Number(_communityOpenState.quizAnswers && _communityOpenState.quizAnswers[idx]);
+    if (expected >= 0) {
+      gradable += 1;
+      if (picked === expected) correct += 1;
+    } else {
+      unknown += 1;
+    }
+  });
+  _communityOpenState.quizScore = { correct, total: gradable || list.length, unknown };
+  communityRenderOpenTab();
+}
+
+async function communityRunAiMark(mode) {
+  if (!_communityOpenState || !RA10) return;
+  const output = document.getElementById('community-ai-output');
+  const answerInput = document.getElementById('community-answer-input');
+  if (!output || !answerInput) return;
+  const answer = String(answerInput.value || '').trim();
+  communitySetQuestionDraft(answerInput.value || '');
+  if (!answer) {
+    output.textContent = 'Write your answer first.';
+    return;
+  }
+  const list = Array.isArray(_communityOpenState.questionBank) ? _communityOpenState.questionBank : [];
+  const idx = Math.max(0, Math.min(list.length - 1, Number(_communityOpenState.activeQuestionIndex || 0)));
+  const item = list[idx] || {};
+  const question = communityBuildQuestionObject(item, idx);
+  output.textContent = 'Marking answer...';
+  try {
+    const payload = { question, answer };
+    const res = mode === 'examiner'
+      ? await RA10.examineAnswer(payload)
+      : await RA10.aiMarkAnswer(payload);
+    const result = res && res.result ? res.result : null;
+    if (!result) {
+      output.textContent = 'No marking result returned.';
+      return;
+    }
+    const strengths = Array.isArray(result.strengths) ? result.strengths : [];
+    const improvements = Array.isArray(result.improvements) ? result.improvements : [];
+    output.innerHTML = ''
+      + '<div><strong>Score:</strong> ' + communityEscape(result.earned) + '/' + communityEscape(result.max) + '</div>'
+      + (result.feedback ? '<div style="margin-top:6px;">' + communityEscape(result.feedback) + '</div>' : '')
+      + (strengths.length ? '<div style="margin-top:8px;"><strong>Strengths</strong><ul style="margin:6px 0 0 16px;">' + strengths.map((s) => '<li>' + communityEscape(s) + '</li>').join('') + '</ul></div>' : '')
+      + (improvements.length ? '<div style="margin-top:8px;"><strong>Improve</strong><ul style="margin:6px 0 0 16px;">' + improvements.map((s) => '<li>' + communityEscape(s) + '</li>').join('') + '</ul></div>' : '');
+  } catch (e) {
+    output.textContent = String((e && e.message) || e || 'Could not mark answer.');
+  }
+}
+
+function communityRenderOpenTab() {
+  if (!_communityOpenState) return;
+  const host = document.getElementById('community-open-tab-content');
+  if (!host) return;
+  const tab = String(_communityOpenState.activeTab || 'guide');
+  if (tab === 'guide') {
+    host.innerHTML = '<div class="community-content-box"><h5>Revision Guide</h5>' + communityRenderGuide(_communityOpenState.byKind.revision_guide || '') + '</div>';
+    return;
+  }
+  if (tab === 'questions') {
+    const list = Array.isArray(_communityOpenState.questionBank) ? _communityOpenState.questionBank : [];
+    if (!list.length) {
+      host.innerHTML = '<div class="community-content-box"><h5>Questions</h5><div class="community-content-scroll">No question bank data available.</div></div>';
+      return;
+    }
+    const qIdx = Math.max(0, Math.min(list.length - 1, Number(_communityOpenState.activeQuestionIndex || 0)));
+    const item = list[qIdx] || {};
+    const draft = String((_communityOpenState.answerDrafts && _communityOpenState.answerDrafts[qIdx]) || '');
+    const marks = communityGetQuestionMarks(item);
+    host.innerHTML = ''
+      + '<div class="community-content-box community-question-shell">'
+      +   '<div class="community-question-top">'
+      +     '<div><h5>Questions</h5><p class="community-question-sub">Navigate, answer, and mark in one focused workspace.</p></div>'
+      +     '<div class="community-question-nav">'
+      +       '<button class="btn btn-s" type="button" onclick="communitySetActiveQuestion(' + (qIdx - 1) + ')">Previous</button>'
+      +       '<span class="community-question-counter">Question ' + (qIdx + 1) + ' / ' + list.length + '</span>'
+      +       '<button class="btn btn-s" type="button" onclick="communitySetActiveQuestion(' + (qIdx + 1) + ')">Next</button>'
+      +     '</div>'
+      +   '</div>'
+      +   '<div class="community-question-stem">'
+      +     '<div class="community-question-kicker">Q' + (qIdx + 1) + ' · ' + marks + ' marks</div>'
+      +     '<div class="community-question-text">' + communityEscape(communityGetQuestionText(item, qIdx)) + '</div>'
+      +   '</div>'
+      +   '<textarea id="community-answer-input" class="community-answer-box" oninput="communitySetQuestionDraft(this.value)" placeholder="Write your answer here">' + communityEscape(draft) + '</textarea>'
+      +   '<div class="community-answer-actions">'
+      +     '<button class="btn btn-s" type="button" onclick="communityRunAiMark(\'marker\')">Auto Marker</button>'
+      +     '<button class="btn btn-s" type="button" onclick="communityRunAiMark(\'examiner\')">AI Examiner</button>'
+      +   '</div>'
+      +   '<div class="community-answer-note">Auto Marker gives faster feedback. AI Examiner gives fuller exam-style feedback.</div>'
+      +   '<div id="community-ai-output" class="community-content-scroll" style="max-height:240px;"></div>'
+      +   '<details class="community-question-browser"><summary>Browse all questions</summary><div style="margin-top:8px;">' + communityRenderQuestionBank(_communityOpenState.byKind.question_bank || '[]') + '</div></details>'
+      + '</div>';
+    return;
+  }
+  if (tab === 'flashcards') {
+    host.innerHTML = communityRenderFlashcards(_communityOpenState.byKind.flashcards || '[]');
+    return;
+  }
+  if (tab === 'quiz') {
+    const list = Array.isArray(_communityOpenState.quiz) ? _communityOpenState.quiz : [];
+    if (!list.length) {
+      host.innerHTML = '<div class="community-content-box"><h5>Quiz</h5><div class="community-content-scroll">No quiz data.</div></div>';
+      return;
+    }
+    const idx = Math.max(0, Math.min(list.length - 1, Number(_communityOpenState.quizIndex || 0)));
+    const q = list[idx] || {};
+    const options = Array.isArray(q.options) ? q.options : [];
+    const picked = Number(_communityOpenState.quizAnswers && _communityOpenState.quizAnswers[idx]);
+    const correct = communityResolveQuizAnswerIndex(q);
+    const reveal = !!(_communityOpenState.quizReveal && _communityOpenState.quizReveal[idx]);
+    const score = _communityOpenState.quizScore;
+    host.innerHTML = ''
+      + '<div class="community-content-box">'
+      +   '<h5>Quiz</h5>'
+      +   '<div class="community-quiz-card">'
+      +     '<div class="community-job-meta">Question ' + (idx + 1) + ' of ' + list.length + '</div>'
+      +     '<div style="margin-top:6px;">' + communityEscape(q.question || ('Quiz question ' + (idx + 1))) + '</div>'
+      +     '<div class="community-quiz-options">'
+      +       options.map((opt, oIdx) => {
+                const isPicked = picked === oIdx;
+                const isCorrect = correct >= 0 && correct === oIdx;
+                const cls = reveal ? (isCorrect ? 'correct' : (isPicked ? 'wrong' : '')) : (isPicked ? 'active' : '');
+                return '<button class="community-quiz-option ' + cls + '" type="button" onclick="communityPickQuizOption(' + oIdx + ')">' + communityEscape(opt) + '</button>';
+              }).join('')
+      +     '</div>'
+      +     '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;">'
+      +       '<button class="btn btn-s" type="button" onclick="communitySetQuizIndex(' + (idx - 1) + ')">Previous</button>'
+      +       '<button class="btn btn-s" type="button" onclick="communitySetQuizIndex(' + (idx + 1) + ')">Next</button>'
+      +       '<button class="btn btn-s" type="button" onclick="communityCheckQuizAnswer()">Check answer</button>'
+      +       '<button class="btn btn-p" type="button" onclick="communitySubmitQuiz()">Submit quiz</button>'
+      +     '</div>'
+      +     (reveal && correct >= 0 ? '<div style="margin-top:8px;">' + (picked === correct ? '<strong style="color:#166534;">Correct</strong>' : '<strong style="color:#b91c1c;">Not quite</strong> · Correct answer highlighted') + '</div>' : '')
+      +     (reveal && correct < 0 ? '<div style="margin-top:8px;color:var(--color-text-muted);">No answer key stored for this question.</div>' : '')
+      +     (score ? '<div style="margin-top:10px;"><strong>Score:</strong> ' + score.correct + '/' + score.total + (score.unknown ? ' · ' + score.unknown + ' without answer key' : '') + '</div>' : '')
+      +   '</div>'
+      + '</div>';
+    return;
+  }
+  if (tab === 'refine' && _communityOpenState.canOwnerControls) {
+    host.innerHTML = ''
+      + '<div class="community-content-box">'
+      +   '<h5>Creator Refinement Chat</h5>'
+      +   '<p class="community-muted">Creator-only. DeepTutor prompt style is enforced server-side.</p>'
+      +   '<div class="community-refine-tags">'
+      +     '<button class="btn btn-s" type="button" onclick="communityApplyRefineTag(\'Add more exam questions and raise difficulty progression\')">Add more questions</button>'
+      +     '<button class="btn btn-s" type="button" onclick="communityApplyRefineTag(\'Generate more flashcards with concise backs\')">Add flashcards</button>'
+      +     '<button class="btn btn-s" type="button" onclick="communityApplyRefineTag(\'Improve quiz quality and distractor options\')">Improve MCQs</button>'
+      +   '</div>'
+      +   '<div style="display:flex;gap:8px;flex-wrap:wrap;">'
+      +     '<input id="community-chat-input" class="auth-input" type="text" placeholder="Ask how to improve this app" style="flex:1;min-width:220px;">'
+      +     '<button class="btn btn-s" type="button" onclick="communityAskRefine(\'' + String(_communityOpenState.app.id || '') + '\')">Ask AI</button>'
+      +   '</div>'
+      +   '<div id="community-chat-reply" class="community-content-scroll" style="margin-top:10px;max-height:180px;"></div>'
+      + '</div>';
+    return;
+  }
+  host.innerHTML = '<div class="credit-log-note">Select a tab.</div>';
+}
+
+async function communityOpenApp(appId) {
+  const host = document.getElementById('community-open-app');
+  if (!host) return;
+  const app = _communityApps.find((x) => String(x.id) === String(appId));
+  if (!app) return;
+
+  let previewMode = false;
+  let canAuthRead = !!(RA10 && RA10.isLoggedIn && RA10.isLoggedIn());
+  if (!canAuthRead) {
+    previewMode = true;
+  } else {
+    try {
+      const spent = await RA10.spendCredits('community_open_app');
+      if (!spent) {
+        previewMode = true;
+        showMiniToast('Opened in preview mode (full open needs credits).');
+      }
+    } catch (e) {
+      previewMode = true;
+      showMiniToast('Opened in preview mode.');
+    }
+  }
+
+  let rows = [];
+  try {
+    rows = await communityRest('community_app_contents?select=kind,payload&app_id=eq.' + encodeURIComponent(appId), 'GET', null, canAuthRead && !previewMode);
+  } catch (e) {
+    rows = await communityRest('community_app_contents?select=kind,payload&app_id=eq.' + encodeURIComponent(appId), 'GET', null, false);
+    previewMode = true;
+  }
+  const items = Array.isArray(rows) ? rows : [];
+  const byKind = {};
+  items.forEach((x) => { byKind[String(x.kind)] = String(x.payload || ''); });
+  const creator = communityResolveCreator(app.creator_id);
+  const creatorName = communityUserLabel(creator, app.creator_id);
+  const creatorAvatar = String(creator.profile_pic_url || '').trim();
+  const myId = RA10 && RA10.isLoggedIn && RA10.isLoggedIn() ? String(RA10.getSession().user.id || '') : '';
+  const canDelete = myId && myId === String(app.creator_id || '');
+  const metadata = (() => {
+    try { return JSON.parse(String(byKind.metadata || '{}')); } catch (e) { return {}; }
+  })();
+
+  _communityOpenState = {
+    app,
+    byKind,
+    metadata,
+    activeTab: 'guide',
+    questionBank: communityNormalizeQuestionBank(communityParseArray(byKind.question_bank || '[]')),
+    flashcards: communityParseArray(byKind.flashcards || '[]'),
+    quiz: communityParseArray(byKind.quiz || '[]'),
+    quizIndex: 0,
+    quizAnswers: {},
+    quizReveal: {},
+    quizScore: null,
+    flashcardIndex: 0,
+    flashcardReveal: false,
+    answerDrafts: {},
+    activeQuestionIndex: 0,
+    canOwnerControls: !!canDelete,
+  };
+
+  host.innerHTML = ''
+    + '<div class="community-open-head">'
+    +   '<h4 style="margin:0 0 6px 0;">' + communityEscape(String(app.icon_emoji || '📘')) + ' ' + communityEscape(app.title) + '</h4>'
+    +   '<div class="community-meta"><span class="pill">' + communityEscape(app.subject) + '</span><span class="pill">' + communityEscape(app.level) + '</span><span class="pill">' + communityEscape(app.exam_board || 'Mixed') + '</span></div>'
+    +   '<div class="community-creator-widget" style="margin-top:8px;"><div class="community-creator-avatar">' + (creatorAvatar ? '<img src="' + communityEscape(creatorAvatar) + '" alt="creator" loading="lazy">' : communityEscape(communityInitials(creatorName))) + '</div><div><strong>' + communityEscape(creatorName) + '</strong><div style="font-size:var(--tx-xs);color:var(--color-text-muted);">Created this app</div></div>' + (canDelete ? '<button class="btn btn-s" type="button" style="margin-left:auto;" onclick="communityDeleteApp(\'' + String(app.id) + '\')">Delete app</button>' : '') + '</div>'
+    +   '<div class="community-meta" style="margin-top:8px;"><span class="pill">DeepTutor prompt mode: ON</span><span class="pill">Generator: ' + communityEscape(String(metadata.provider || 'ai')) + '</span>' + (previewMode ? '<span class="pill">Preview mode</span>' : '') + '</div>'
+    + '</div>'
+    + '<div class="community-viewer-menu">'
+    +   '<button class="btn btn-s active" id="community-tab-guide" type="button" onclick="communitySetViewerTab(\'guide\')">📘 Guide</button>'
+    +   '<button class="btn btn-s" id="community-tab-questions" type="button" onclick="communitySetViewerTab(\'questions\')">🧠 Questions</button>'
+    +   '<button class="btn btn-s" id="community-tab-flashcards" type="button" onclick="communitySetViewerTab(\'flashcards\')">🃏 Flashcards</button>'
+    +   '<button class="btn btn-s" id="community-tab-quiz" type="button" onclick="communitySetViewerTab(\'quiz\')">✅ Quiz</button>'
+    +   (canDelete ? '<button class="btn btn-s" id="community-tab-refine" type="button" onclick="communitySetViewerTab(\'refine\')">✨ Creator Refine</button>' : '')
+    + '</div>'
+    + '<div id="community-open-tab-content" class="community-tab-panel"></div>'
+    + '<div class="community-content-box">'
+    +   '<h5>Comments</h5>'
+    +   '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px;">'
+    +     '<input id="community-comment-input" class="auth-input" type="text" maxlength="320" placeholder="Add a comment" style="flex:1;min-width:220px;">'
+    +     '<button class="btn btn-s" type="button" onclick="communityPostComment(\'' + String(appId) + '\')">Post</button>'
+    +   '</div>'
+    +   '<div id="community-comments" class="community-comment-list"></div>'
+    + '</div>';
+
+  communitySetViewerTab('guide');
+
+  await communityLoadComments(appId);
+  if (window._updateNavAuth) {
+    try { await window._updateNavAuth(); } catch (e) {}
+  }
+}
+
+async function communityLoadComments(appId) {
+  const host = document.getElementById('community-comments');
+  if (!host) return;
+  try {
+    const rows = await communityRest('community_app_comments?select=id,user_id,body,created_at&app_id=eq.' + encodeURIComponent(appId) + '&order=created_at.desc&limit=40', 'GET', null, false);
+    const list = Array.isArray(rows) ? rows : [];
+    if (!list.length) {
+      host.innerHTML = '<div class="credit-log-note">No comments yet.</div>';
+      return;
+    }
+
+    const commentUserIds = Array.from(new Set(list.map((row) => String(row.user_id || '')).filter(Boolean)));
+    const commentersById = await communityLoadPublicProfiles(commentUserIds);
+
+    host.innerHTML = list.map((row) => {
+      const user = commentersById[String(row.user_id)] || communityResolveCreator(row.user_id);
+      const name = communityUserLabel(user, row.user_id);
+      const avatar = String(user.profile_pic_url || '').trim();
+      const when = row.created_at ? new Date(row.created_at).toLocaleString() : '';
+      return ''
+        + '<div class="community-comment">'
+        +   '<div class="community-comment-head">'
+        +     '<div class="community-creator-avatar" style="width:24px;height:24px;">' + (avatar ? '<img src="' + communityEscape(avatar) + '" alt="user" loading="lazy">' : communityEscape(communityInitials(name))) + '</div>'
+        +     '<strong>' + communityEscape(name) + '</strong>'
+        +     '<span style="color:var(--color-text-muted);font-size:var(--tx-xs);">' + communityEscape(when) + '</span>'
+        +   '</div>'
+        +   '<div>' + communityEscape(row.body || '') + '</div>'
+        + '</div>';
+    }).join('');
+  } catch (e) {
+    host.innerHTML = '<div class="credit-log-note">Could not load comments.</div>';
+  }
+}
+
+async function communityPostComment(appId) {
+  if (!RA10 || !RA10.isLoggedIn || !RA10.isLoggedIn()) {
+    RA10.showPaywall('login', 'community_comment');
+    return;
+  }
+  const input = document.getElementById('community-comment-input');
+  const body = String(input && input.value || '').trim();
+  if (!body) return;
+  try {
+    await communityRest('community_app_comments', 'POST', {
+      app_id: appId,
+      user_id: RA10.getSession().user.id,
+      body,
+    }, true);
+    input.value = '';
+    await Promise.all([communityLoadComments(appId), loadCommunityApps()]);
+  } catch (e) {
+    showMiniToast('Could not post comment');
+  }
+}
+
+async function communityDeleteApp(appId) {
+  if (!RA10 || !RA10.isLoggedIn || !RA10.isLoggedIn()) {
+    RA10.showPaywall('login', 'community_delete');
+    return;
+  }
+  const app = _communityApps.find((x) => String(x.id) === String(appId));
+  const userId = String(RA10.getSession().user.id || '');
+  if (!app || String(app.creator_id || '') !== userId) {
+    showMiniToast('Only the creator can delete this app.');
+    return;
+  }
+  if (!confirm('Delete this app permanently? This will remove generated content, likes, comments and jobs.')) return;
+  try {
+    await communityRest('community_apps?id=eq.' + encodeURIComponent(appId), 'DELETE', null, true);
+    const open = document.getElementById('community-open-app');
+    if (open) open.innerHTML = '<div class="credit-log-note">App deleted.</div>';
+    await Promise.all([loadCommunityApps(), loadCommunityJobs()]);
+    showMiniToast('App deleted');
+  } catch (e) {
+    showMiniToast(String((e && e.message) || 'Could not delete app'));
+  }
+}
+
+async function communityAskRefine(appId) {
+  const input = document.getElementById('community-chat-input');
+  const out = document.getElementById('community-chat-reply');
+  const message = String(input && input.value || '').trim();
+  if (!message || !out) return;
+  out.textContent = 'Thinking...';
+  try {
+    const data = await communityCallFunction('community-chat', { appId, message });
+    out.textContent = String(data && data.reply || 'No response');
+  } catch (e) {
+    out.textContent = String((e && e.message) || e || 'Could not get response');
+  }
+}
+
+function initCommunityBindings() {
+  const createBtn = document.getElementById('community-create-btn');
+  if (createBtn && !createBtn.dataset.bound) {
+    createBtn.dataset.bound = '1';
+    createBtn.addEventListener('click', createCommunityAppJob);
+  }
+  const refreshBtn = document.getElementById('community-refresh-btn');
+  if (refreshBtn && !refreshBtn.dataset.bound) {
+    refreshBtn.dataset.bound = '1';
+    refreshBtn.addEventListener('click', loadCommunityApps);
+  }
+  const search = document.getElementById('community-search');
+  if (search && !search.dataset.bound) {
+    search.dataset.bound = '1';
+    search.addEventListener('input', () => { loadCommunityApps(); });
+  }
+  const subject = document.getElementById('community-subject-filter');
+  if (subject && !subject.dataset.bound) {
+    subject.dataset.bound = '1';
+    subject.addEventListener('change', () => { loadCommunityApps(); });
+  }
+  const fab = document.getElementById('community-fab');
+  const panel = document.getElementById('community-create-panel');
+  if (fab && panel && !fab.dataset.bound) {
+    fab.dataset.bound = '1';
+    fab.addEventListener('click', () => {
+      panel.classList.toggle('open');
+      fab.textContent = panel.classList.contains('open') ? '−' : '+';
+      fab.setAttribute('title', panel.classList.contains('open') ? 'Close create app' : 'Create app');
+    });
+  }
+  const fileInput = document.getElementById('community-file');
+  const fileStatus = document.getElementById('community-file-status');
+  if (fileInput && fileStatus && !fileInput.dataset.bound) {
+    fileInput.dataset.bound = '1';
+    fileInput.addEventListener('change', () => {
+      const f = fileInput.files && fileInput.files[0] ? fileInput.files[0] : null;
+      fileStatus.textContent = f
+        ? (String(f.name || 'File selected') + ' (' + Math.max(1, Math.round(Number(f.size || 0) / 1024)) + ' KB)')
+        : 'No file selected';
+    });
+  }
+}
+
+async function renderCommunityPage() {
+  initCommunityBindings();
+  if (!_communityJobsPoller) {
+    _communityJobsPoller = setInterval(() => {
+      if (location.hash.replace('#', '').split('?')[0] === '/community') {
+        loadCommunityJobs();
+      }
+    }, 3000);
+  }
+  await Promise.all([loadCommunityApps(), loadCommunityJobs()]);
+}
+
+window.communityToggleLike = communityToggleLike;
+window.communityToggleFollow = communityToggleFollow;
+window.communityOpenApp = communityOpenApp;
+window.communitySetViewerTab = communitySetViewerTab;
+window.communitySetActiveQuestion = communitySetActiveQuestion;
+window.communitySetQuestionDraft = communitySetQuestionDraft;
+window.communitySetQuizIndex = communitySetQuizIndex;
+window.communityPickQuizOption = communityPickQuizOption;
+window.communityCheckQuizAnswer = communityCheckQuizAnswer;
+window.communitySubmitQuiz = communitySubmitQuiz;
+window.communityRunAiMark = communityRunAiMark;
+window.communitySetFlashcardIndex = communitySetFlashcardIndex;
+window.communityToggleFlashcard = communityToggleFlashcard;
+window.communityShuffleFlashcards = communityShuffleFlashcards;
+window.communityApplyRefineTag = communityApplyRefineTag;
+window.communityPostComment = communityPostComment;
+window.communityAskRefine = communityAskRefine;
+window.communityStartJob = communityStartJob;
+window.communityDeleteApp = communityDeleteApp;
+
 function route(){
   closeMobileSubjectSheet();
   document.body.classList.remove('iframe-fullscreen-mode');
@@ -6622,6 +8263,12 @@ function route(){
   if(el){ el.classList.add('active'); window.scrollTo(0,0); }
   if (id === 'p-tasks') {
     renderGlobalTasksPage();
+  }
+  if (id === 'p-community') {
+    renderCommunityPage();
+  } else if (_communityJobsPoller) {
+    clearInterval(_communityJobsPoller);
+    _communityJobsPoller = null;
   }
   if (id === 'p-leaderboard') {
     const tableEl = document.getElementById('lb-table');
@@ -6654,6 +8301,7 @@ function route(){
   }
   const mobileKey = path === '/' || path === '' ? 'home'
     : path.startsWith('leaderboard') ? 'leaderboard'
+    : path.startsWith('/community') ? 'community'
     : path.startsWith('/tasks') ? 'tasks'
     : path.startsWith('/account') ? 'profile'
     : path.startsWith('/revision/btec/level-3/') ? 'subjects'
