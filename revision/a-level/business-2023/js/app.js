@@ -32,6 +32,10 @@ function makeRng(seed) {
 function hashStr(str) { let h = 2166136261; for (let i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 16777619); } return h | 0; }
 function shuffle(arr, rng) { arr = arr.slice(); for (let i = arr.length - 1; i > 0; i--) { const j = Math.floor((rng ? rng() : Math.random()) * (i + 1)); [arr[i], arr[j]] = [arr[j], arr[i]]; } return arr; }
 
+const modeParam = new URLSearchParams(window.location.search || '').get('mode');
+const pathLower = String(window.location.pathname || '').toLowerCase();
+const IS_PAPER1_MODE = modeParam === 'paper1' || pathLower.includes('/paper-1/');
+window.RA10_BUSINESS_MODE = IS_PAPER1_MODE ? 'paper1' : 'full';
 const PAPER_OPTIONS = ['Paper 1', 'Paper 2', 'Paper 3'];
 const TOPIC_CODES = Object.keys(SPEC || {}).sort((a, b) => Number(a) - Number(b));
 function topicLabel(code) {
@@ -44,6 +48,25 @@ function getQuestionPapers(q) {
 function questionHasPaper(q, paper) {
   if (!paper) return true;
   return getQuestionPapers(q).includes(paper);
+}
+
+function questionAllowedInMode(q) {
+  return true;
+}
+
+function applyPaper1ModeUi() {
+  if (!IS_PAPER1_MODE) return;
+
+  document.title = 'A-Level AQA Business - RA10 Revision';
+  const heroTitle = document.querySelector('#view-dashboard .hero h2');
+  const heroLede = document.querySelector('#view-dashboard .hero .lede');
+  if (heroTitle) heroTitle.textContent = 'Business revision mode (All topics)';
+  if (heroLede) heroLede.textContent = 'Using the full RA10 interface with all 10 topics available in questions, quizzes, guide and mock generation.';
+
+  const paperHint = document.querySelector('#view-mock .section-head p');
+  if (paperHint) {
+    paperHint.textContent = 'Generate mock papers with full topic coverage and answer-line print options.';
+  }
 }
 
 const SB_URL = 'https://tcrrgsylxbyyrmnouihl.supabase.co';
@@ -1078,6 +1101,12 @@ function setupGuideAuthListener() {
 
 // ---------- Boot when data loaded ----------
 onDataReady(() => {
+  if (IS_PAPER1_MODE) {
+    for (let i = QUESTIONS.length - 1; i >= 0; i--) {
+      if (!questionAllowedInMode(QUESTIONS[i])) QUESTIONS.splice(i, 1);
+    }
+  }
+
   if (!QUESTIONS.length) {
     document.getElementById('app').innerHTML = `<div class="loading">
       <p>No questions loaded. The JSON files may not be present yet, or you are opening this file directly without a server.</p>
@@ -1093,6 +1122,7 @@ onDataReady(() => {
   renderFlashControls();
   renderRevisionGuide();
   renderSpec();
+  applyPaper1ModeUi();
   ensureDailyLoginBonus();
   setupGuideAuthListener();
 });

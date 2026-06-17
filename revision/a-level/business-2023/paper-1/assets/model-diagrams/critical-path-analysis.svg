@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="520" viewBox="0 0 900 520">
+  <rect width="900" height="520" fill="#f7fafc"/>
+  <text x="450" y="54" text-anchor="middle" font-size="32" font-family="Arial" fill="#1e2633">Critical Path Analysis</text>
+  <text x="450" y="92" text-anchor="middle" font-size="16" font-family="Arial" fill="#4d6074">Activities, dependencies, float, and the longest path</text>
+  <circle cx="140" cy="260" r="28" fill="#05668d"/><text x="140" y="267" text-anchor="middle" font-size="20" font-family="Arial" fill="#fff">A</text>
+  <circle cx="300" cy="180" r="28" fill="#2e8b57"/><text x="300" y="187" text-anchor="middle" font-size="20" font-family="Arial" fill="#fff">B</text>
+  <circle cx="300" cy="340" r="28" fill="#2e8b57"/><text x="300" y="347" text-anchor="middle" font-size="20" font-family="Arial" fill="#fff">C</text>
+  <circle cx="500" cy="180" r="28" fill="#2e8b57"/><text x="500" y="187" text-anchor="middle" font-size="20" font-family="Arial" fill="#fff">D</text>
+  <circle cx="500" cy="340" r="28" fill="#f4a259"/><text x="500" y="347" text-anchor="middle" font-size="20" font-family="Arial" fill="#fff">E</text>
+  <circle cx="700" cy="260" r="28" fill="#c53b3b"/><text x="700" y="267" text-anchor="middle" font-size="20" font-family="Arial" fill="#fff">F</text>
+  <line x1="168" y1="248" x2="272" y2="192" stroke="#c53b3b" stroke-width="5"/>
+  <line x1="168" y1="272" x2="272" y2="328" stroke="#1e2633" stroke-width="3"/>
+  <line x1="328" y1="180" x2="472" y2="180" stroke="#c53b3b" stroke-width="5"/>
+  <line x1="328" y1="340" x2="472" y2="340" stroke="#1e2633" stroke-width="3"/>
+  <line x1="528" y1="192" x2="672" y2="248" stroke="#c53b3b" stroke-width="5"/>
+  <line x1="528" y1="328" x2="672" y2="272" stroke="#1e2633" stroke-width="3"/>
+  <text x="450" y="470" text-anchor="middle" font-size="18" font-family="Arial" fill="#1e2633">Red path = critical path. Delays here delay the whole project.</text>
+</svg>

@@ -286,7 +286,7 @@
     const mount = document.getElementById('guide-comprehensive');
     if (!mount) return;
 
-    const topics = arr(data && data.topics);
+    let topics = arr(data && data.topics);
     const state = loadState();
     const subCount = topics.reduce((sum, t) => sum + arr(t.subtopics).length, 0);
 
