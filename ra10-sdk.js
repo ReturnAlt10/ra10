@@ -91,6 +91,10 @@
   const SUBJECT_LABEL_MAP = {
     IT: 'IT',
     'IT AAQ': 'IT',
+    'IT UNIT 1': 'IT',
+    'IT UNIT 2': 'IT',
+    'IT AAQ UNIT 1': 'IT',
+    'IT AAQ UNIT 2': 'IT',
     BUSINESS: 'Business',
     'BUSINESS LEVEL 3': 'Business',
     SPORT: 'Sport',

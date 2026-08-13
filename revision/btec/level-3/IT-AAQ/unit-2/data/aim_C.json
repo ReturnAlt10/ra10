@@ -1,0 +1,285 @@
+[
+  {
+    "id": "C001",
+    "learning_aim": "C",
+    "topic": "C1.1 Incident Response Lifecycle",
+    "command_verb": "State",
+    "marks": 1,
+    "ao": "AO1",
+    "question": "State the four phases of the NIST Incident Response Lifecycle.",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark for all four phases.",
+      "points": [
+        "Preparation; Detection and Analysis; Containment, Eradication and Recovery; Post-Incident Activity (1)"
+      ],
+      "additional_guidance": "Must name all four phases."
+    }
+  },
+  {
+    "id": "C002",
+    "learning_aim": "C",
+    "topic": "C1.2 Incident classification",
+    "command_verb": "Describe",
+    "marks": 2,
+    "ao": "AO1",
+    "question": "Describe why it is important to classify security incidents by severity level.",
+    "guidance": "(2)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award up to two marks.",
+      "points": [
+        "Classification ensures that the most critical incidents (e.g. active data breach) receive immediate priority and resources (1)",
+        "It helps determine the appropriate escalation path \u00e2\u20ac\u201d for example, a critical incident may require notifying senior management, legal, PR and regulators immediately (1)"
+      ]
+    }
+  },
+  {
+    "id": "C003",
+    "learning_aim": "C",
+    "topic": "C1.3 Containment strategies",
+    "command_verb": "Explain",
+    "marks": 3,
+    "ao": "AO2",
+    "scenario": "A network services company has detected ransomware spreading across several servers in their data centre.",
+    "question": "Explain the containment strategies that should be immediately implemented.",
+    "guidance": "(3)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award up to three marks.",
+      "points": [
+        "Immediately isolate/disconnect the affected systems from the network to prevent the ransomware from spreading further (1)",
+        "Disable affected user accounts and change privileged credentials \u00e2\u20ac\u201d the attacker may have obtained admin credentials (1)",
+        "Block known malicious IP addresses/domains at the firewall and implement network segmentation to quarantine affected network segments (1)"
+      ]
+    }
+  },
+  {
+    "id": "C004",
+    "learning_aim": "C",
+    "topic": "C1.4 Eradication and recovery",
+    "command_verb": "Describe",
+    "marks": 2,
+    "ao": "AO1",
+    "question": "Describe the steps involved in the eradication phase of incident response following a malware infection.",
+    "guidance": "(2)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award up to two marks.",
+      "points": [
+        "Identifying and removing all traces of the malware from affected systems \u00e2\u20ac\u201d including any backdoors or persistence mechanisms the attacker installed (1)",
+        "Applying patches to close the vulnerability that was exploited, and rebuilding affected systems from clean/trusted sources before restoring data from clean backups (1)"
+      ]
+    }
+  },
+  {
+    "id": "C005",
+    "learning_aim": "C",
+    "topic": "C1.5 Communication plans",
+    "command_verb": "Explain",
+    "marks": 4,
+    "ao": "AO2",
+    "scenario": "A financial services company has suffered a data breach affecting 10,000 customers' personal financial data.",
+    "question": "Explain who should be notified and in what order, and why communication planning is critical.",
+    "guidance": "(4)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award up to four marks.",
+      "points": [
+        "Internal IT security team first \u00e2\u20ac\u201d to contain and investigate the breach immediately (1)",
+        "Senior management and legal team \u00e2\u20ac\u201d to assess legal obligations and direct the response (1)",
+        "Regulator (ICO) must be notified within 72 hours under GDPR \u00e2\u20ac\u201d legal requirement (1)",
+        "Affected customers \u00e2\u20ac\u201d they need to take protective action (change passwords, monitor accounts); PR/media statements to manage reputation (1)"
+      ]
+    }
+  },
+  {
+    "id": "C006",
+    "learning_aim": "C",
+    "topic": "C1.7 Business continuity",
+    "command_verb": "Explain",
+    "marks": 3,
+    "ao": "AO2",
+    "question": "Explain the difference between RTO (Recovery Time Objective) and RPO (Recovery Point Objective) in disaster recovery planning.",
+    "guidance": "(3)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award up to three marks.",
+      "points": [
+        "RTO is the maximum acceptable time a system can be down after a disaster \u00e2\u20ac\u201d how quickly you need to restore operations (1)",
+        "RPO is the maximum acceptable amount of data loss measured in time \u00e2\u20ac\u201d how much data you can afford to lose (e.g. last 1 hour, last 24 hours) (1)",
+        "Lower RTO and RPO values require more expensive solutions (real-time replication, hot sites); a bank might need RTO of minutes and RPO of seconds, while a small business might accept RTO of 24 hours and RPO of 24 hours (1)"
+      ]
+    }
+  },
+  {
+    "id": "C007",
+    "learning_aim": "C",
+    "topic": "C2.1 Forensic principles",
+    "command_verb": "State",
+    "marks": 1,
+    "ao": "AO1",
+    "question": "State what the 'order of volatility' means in digital forensics.",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark.",
+      "points": [
+        "The order of volatility is the sequence in which digital evidence should be collected, starting with the most volatile (easily lost) data first \u00e2\u20ac\u201d typically: CPU registers/cache, RAM, running processes/network connections, temporary files, hard disk data (1)"
+      ]
+    }
+  },
+  {
+    "id": "C008",
+    "learning_aim": "C",
+    "topic": "C2.2 Evidence types",
+    "command_verb": "Describe",
+    "marks": 2,
+    "ao": "AO1",
+    "question": "Describe the difference between volatile and non-volatile digital evidence, giving an example of each.",
+    "guidance": "(2)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award up to two marks.",
+      "points": [
+        "Volatile evidence is lost when the device is powered off \u00e2\u20ac\u201d e.g. RAM contents, running processes, active network connections (1)",
+        "Non-volatile evidence persists after power loss \u00e2\u20ac\u201d e.g. files on a hard drive, system logs, registry entries, email archives (1)"
+      ]
+    }
+  },
+  {
+    "id": "C009",
+    "learning_aim": "C",
+    "topic": "C2.3 Forensic acquisition",
+    "command_verb": "Explain",
+    "marks": 3,
+    "ao": "AO2",
+    "question": "Explain the importance of using a write blocker when creating a forensic image of a suspect's hard drive.",
+    "guidance": "(3)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award up to three marks.",
+      "points": [
+        "A write blocker prevents any data from being written to or modified on the original evidence drive during the imaging process (1)",
+        "This preserves the integrity of the original evidence \u00e2\u20ac\u201d any modification would make it inadmissible in court (1)",
+        "After imaging, the forensic copy is hashed (MD5/SHA) and compared to the original's hash to prove the copy is identical \u00e2\u20ac\u201d if the original was modified, the hashes would not match, invalidating the evidence (1)"
+      ]
+    }
+  },
+  {
+    "id": "C010",
+    "learning_aim": "C",
+    "topic": "C2.4 Analysis techniques",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "question": "Identify the forensic technique used to recover deleted files by searching raw disk data for known file headers and footers.",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark.",
+      "points": [
+        "File carving (1)"
+      ],
+      "additional_guidance": "Accept: data carving."
+    }
+  },
+  {
+    "id": "C011",
+    "learning_aim": "C",
+    "topic": "C1.1 IR Lifecycle",
+    "command_verb": "Explain",
+    "marks": 4,
+    "ao": "AO2",
+    "scenario": "A healthcare organisation has detected unauthorised access to a server containing patient data. The security team must respond immediately.",
+    "question": "Explain the steps the security team should take during the Detection and Analysis phase of the NIST Incident Response Lifecycle.",
+    "guidance": "(4)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award up to four marks.",
+      "points": [
+        "Identify indicators of compromise (IoCs) \u2014 review SIEM alerts, IDS/IPS logs, and server access logs to determine what happened (1)",
+        "Determine the scope and impact \u2014 which server(s) were accessed, what data may have been viewed/exfiltrated, how many records affected (1)",
+        "Classify severity \u2014 patient data breach is critical given GDPR implications and potential harm to patients (1)",
+        "Document all findings in real time \u2014 create a timeline of events and preserve all log data for forensic analysis and potential regulatory reporting (1)"
+      ]
+    }
+  },
+  {
+    "id": "C012",
+    "learning_aim": "C",
+    "topic": "C1.3 Containment",
+    "command_verb": "Describe",
+    "marks": 3,
+    "ao": "AO1",
+    "question": "Describe three containment strategies that can be used when responding to a cybersecurity incident.",
+    "guidance": "(3)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark for each strategy described.",
+      "points": [
+        "Network isolation \u2014 disconnect affected systems from the network to prevent the threat from spreading to other devices (1)",
+        "Account disablement \u2014 immediately disable compromised user accounts and reset passwords for any accounts that may have been accessed (1)",
+        "IP/host blocking \u2014 block malicious IP addresses and domains at the firewall to cut off attacker communication channels (1)"
+      ]
+    }
+  },
+  {
+    "id": "C013",
+    "learning_aim": "C",
+    "topic": "C1.7 BCP/DR",
+    "command_verb": "Explain",
+    "marks": 4,
+    "ao": "AO2",
+    "scenario": "A retail business needs to plan for disaster recovery. They process online orders 24/7 and cannot afford more than 1 hour of downtime.",
+    "question": "Explain what RTO and RPO mean in this context and recommend appropriate targets.",
+    "guidance": "(4)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award up to four marks.",
+      "points": [
+        "RTO (Recovery Time Objective) \u2014 maximum acceptable downtime: for this business, RTO should be less than 1 hour given the 24/7 operation requirement (1)",
+        "RPO (Recovery Point Objective) \u2014 maximum acceptable data loss: for online orders, RPO should be near-zero (real-time replication) to avoid losing customer orders (1)",
+        "Meeting these targets requires a hot site with real-time data replication \u2014 fully operational duplicate that can failover within minutes (1)",
+        "Lower RTO/RPO targets require more expensive solutions \u2014 the business must balance the cost of downtime (lost sales + reputation) against the cost of the DR solution (1)"
+      ]
+    }
+  },
+  {
+    "id": "C014",
+    "learning_aim": "C",
+    "topic": "C2.3 Forensic acquisition",
+    "command_verb": "Explain",
+    "marks": 4,
+    "ao": "AO2",
+    "scenario": "A digital forensic investigator has been called to examine a suspect laptop suspected of containing evidence of fraud.",
+    "question": "Explain the steps the investigator should take to create a forensically sound copy of the laptop hard drive.",
+    "guidance": "(4)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award up to four marks.",
+      "points": [
+        "Connect a write blocker between the suspect drive and the forensic workstation \u2014 prevents any modification to the original evidence (1)",
+        "Create a bit-for-bit forensic image of the entire drive using tools such as FTK Imager or DD \u2014 captures all data including deleted files and slack space (1)",
+        "Calculate cryptographic hashes (MD5/SHA-256) of both the original drive and the forensic copy \u2014 if they match, the copy is proven identical (1)",
+        "Document the entire process including date, time, tools used, hashes \u2014 maintain chain of custody throughout for legal admissibility (1)"
+      ]
+    }
+  },
+  {
+    "id": "C015",
+    "learning_aim": "C",
+    "topic": "C2.5 Forensic tools",
+    "command_verb": "Describe",
+    "marks": 2,
+    "ao": "AO1",
+    "question": "Describe how timeline analysis is used in digital forensics investigations.",
+    "guidance": "(2)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award up to two marks.",
+      "points": [
+        "Timeline analysis reconstructs the sequence of events by examining file timestamps \u2014 MAC times (Modified, Accessed, Created) (1)",
+        "Investigators can determine when files were created, last accessed, and modified \u2014 helping establish what the suspect did and when (1)"
+      ]
+    }
+  }
+]

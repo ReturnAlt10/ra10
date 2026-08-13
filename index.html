@@ -494,6 +494,31 @@ body.unit-shell-mode .site-announcement-bar{
   font-size:var(--tx-sm);
 }
 
+/* Newsroom refresh */
+.news-page{padding-top:var(--sp8)}
+.news-hero{position:relative;overflow:hidden;border-radius:30px;box-shadow:0 20px 56px oklch(0 0 0/.09)}
+.news-hero::after{content:'';position:absolute;width:210px;height:210px;right:-74px;bottom:-118px;border-radius:50%;background:rgba(255,255,255,.42);pointer-events:none}
+.news-hero > *{position:relative;z-index:1}
+.news-hero .hero-label{display:inline-flex;align-items:center;gap:7px;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.74);border:1px solid rgba(15,23,42,.1);font-size:11px;font-weight:800;letter-spacing:.1em}
+.news-hero .hero-label::before{content:'●';font-size:9px;color:#16a34a}
+.news-pill{box-shadow:0 2px 6px oklch(0 0 0/.04)}
+.news-controls{padding:var(--sp3);border:1px solid oklch(from var(--color-text) l c h/.08);border-radius:18px;background:rgba(255,255,255,.54);backdrop-filter:blur(10px)}
+.news-search,.news-select{transition:border-color var(--t),box-shadow var(--t),transform var(--t)}
+.news-search:focus,.news-select:focus{outline:none;border-color:var(--color-primary);box-shadow:0 0 0 3px oklch(from var(--color-primary) l c h/.12)}
+.news-layout{align-items:start}
+.news-sidebar{border-radius:20px;box-shadow:var(--shadow-sm);overflow:hidden}
+.news-sidebar h3{font-family:var(--font-d);font-size:var(--tx-lg)}
+.news-sidebar li a{display:flex;padding:7px 8px;border-radius:10px;transition:background var(--t),color var(--t),transform var(--t)}
+.news-sidebar li a:hover{background:var(--color-primary-highlight);transform:translateX(2px)}
+.news-feed{gap:var(--sp4)}
+.news-article{border-radius:22px;transition:transform var(--t),box-shadow var(--t),border-color var(--t);animation:newsCardIn .45s cubic-bezier(.16,1,.3,1) both}
+.news-article:hover{transform:translateY(-3px);border-color:oklch(from var(--color-primary) l c h/.26);box-shadow:0 18px 36px oklch(0 0 0/.1)}
+.news-article:nth-child(2){animation-delay:45ms}.news-article:nth-child(3){animation-delay:90ms}.news-article:nth-child(4){animation-delay:135ms}.news-article:nth-child(5){animation-delay:180ms}
+.news-media{height:160px;position:relative;overflow:hidden}.news-media::after{content:'';position:absolute;inset:0;background:linear-gradient(120deg,transparent 25%,rgba(255,255,255,.22) 50%,transparent 75%);transform:translateX(-120%);transition:transform .8s ease}.news-article:hover .news-media::after{transform:translateX(120%)}
+.news-meta>span:last-child{display:inline-flex;align-items:center;padding:4px 8px;border-radius:999px;background:var(--color-surface-offset);color:var(--color-text-muted);font-weight:700}
+.news-tag:first-child{background:var(--color-success-highlight);color:var(--color-success)}
+@keyframes newsCardIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
 [data-theme="dark"] .news-search,
 [data-theme="dark"] .news-select{background:oklch(from var(--color-surface) l c h/.9)}
 [data-theme="dark"] .news-share-btn{background:oklch(from var(--color-surface) l c h/.92)}
@@ -512,7 +537,13 @@ body.unit-shell-mode .site-announcement-bar{
   .news-controls{grid-template-columns:1fr 1fr}
 }
 @media (max-width: 640px){
-  .news-controls{grid-template-columns:1fr}
+  .news-page{padding:var(--sp3) var(--sp3) var(--sp10)}
+  .news-hero{border-radius:22px;padding:var(--sp5)}
+  .news-hero h1{font-size:clamp(1.75rem,9vw,2.35rem);line-height:1.02}
+  .news-controls{grid-template-columns:1fr;padding:var(--sp2);border-radius:14px}
+  .news-content{padding:var(--sp4)}
+  .news-article{border-radius:18px}
+  .news-media{height:125px}
 }
 
 .home-reframe{display:grid;gap:var(--sp4);padding-block:var(--sp1) var(--sp6)}
@@ -1997,9 +2028,9 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
     gap:10px;
     height:calc(52px + env(safe-area-inset-top, 0px));
     padding:env(safe-area-inset-top, 0px) var(--sp4) 0 var(--sp4);
-    background:oklch(from var(--color-surface) l c h/.98);
-    border-bottom:1px solid oklch(from var(--color-text) l c h/.08);
-    backdrop-filter:blur(16px);
+    background:color-mix(in srgb,var(--color-surface) 90%,transparent);
+    border-bottom:1px solid color-mix(in srgb,var(--color-border) 82%,transparent);
+    backdrop-filter:blur(22px) saturate(140%);
     transform:translateZ(0);
     -webkit-transform:translateZ(0);
   }
@@ -2037,12 +2068,12 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
     z-index:10024;
     display:flex !important;
     flex-wrap:nowrap;
-    gap:var(--sp2);
-    padding:var(--sp3) var(--sp4) calc(var(--sp3) + env(safe-area-inset-bottom, 0px));
-    background:oklch(from var(--color-surface) l c h/.98);
-    backdrop-filter:blur(18px);
-    border-top:1px solid oklch(from var(--color-text) l c h/.08);
-    box-shadow:0 -12px 32px oklch(0 0 0/.08);
+    gap:3px;
+    padding:7px var(--sp3) calc(7px + env(safe-area-inset-bottom, 0px));
+    background:color-mix(in srgb,var(--color-surface) 92%,transparent);
+    backdrop-filter:blur(24px) saturate(145%);
+    border-top:1px solid color-mix(in srgb,var(--color-border) 84%,transparent);
+    box-shadow:0 -14px 38px oklch(0 0 0/.1);
     transform:translateZ(0);
     -webkit-transform:translateZ(0);
     visibility:visible;
@@ -2056,21 +2087,24 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
     justify-content:center;
     flex:1 1 0;
     min-width:0;
-    gap:4px;
-    min-height:56px;
-    padding:var(--sp2);
-    border-radius:var(--radius-lg);
+    gap:3px;
+    min-height:52px;
+    padding:6px 4px;
+    border-radius:14px;
     color:var(--color-text-muted);
     background:transparent;
     touch-action:manipulation;
     -webkit-tap-highlight-color:transparent;
   }
-  .mobile-nav-btn svg{width:20px;height:20px;stroke:currentColor}
-  .mobile-nav-btn span{font-size:11px;font-weight:700;letter-spacing:.03em}
+  .mobile-nav-btn svg{width:20px;height:20px;stroke:currentColor;transition:transform var(--t),stroke-width var(--t)}
+  .mobile-nav-btn span{font-size:10px;font-weight:700;letter-spacing:.02em;transition:transform var(--t)}
   .mobile-nav-btn.active{
     color:var(--color-primary);
-    background:var(--color-primary-highlight);
+    background:color-mix(in srgb,var(--color-primary-highlight) 80%,var(--color-surface));
+    box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--color-primary) 16%,transparent);
   }
+  .mobile-nav-btn.active svg{transform:translateY(-1px) scale(1.08);stroke-width:2.4}
+  .mobile-nav-btn.active span{transform:translateY(-1px)}
   .mobile-nav-avatar{
     width:22px;
     height:22px;
@@ -3232,290 +3266,434 @@ body.mobile-ui.mobile-sheet-open .mobile-bottom-nav{display:flex !important;}
   }
 }
 
-.community-shell{
-  --chat-bg:#0e131b;
-  --chat-surface:#171f2b;
-  --chat-surface-soft:#1f2938;
-  --chat-line:rgba(255,255,255,.1);
-  --chat-text:#eaf2ff;
-  --chat-muted:#9caec9;
-  --chat-accent:#1fa37b;
-  --chat-accent-2:#2563eb;
-  --chat-danger:#f97373;
-  --chat-shadow:0 26px 48px rgba(2,6,23,.5);
-  margin-top:var(--sp4);
-  border-radius:26px;
-  border:1px solid rgba(255,255,255,.1);
-  background:
-    radial-gradient(120% 90% at 85% -20%, rgba(37,99,235,.16), rgba(37,99,235,0) 55%),
-    radial-gradient(100% 80% at 0% 0%, rgba(31,163,123,.15), rgba(31,163,123,0) 48%),
-    linear-gradient(180deg,#0e131b 0%,#111827 100%);
-  box-shadow:var(--chat-shadow), inset 0 1px 0 rgba(255,255,255,.04);
-  padding:clamp(14px,2.1vw,24px);
-  position:relative;
-  overflow:hidden;
+/* =====================================================
+   COMMUNITY PAGE -- REDESIGNED
+===================================================== */
+.community-page-wrap{margin-top:var(--sp4);padding-bottom:var(--sp16)}
+
+/* ---- Hero banner ---- */
+.community-hero{border-radius:var(--radius-xl);border:1px solid var(--color-border);background:var(--color-surface);padding:clamp(var(--sp6),3vw,var(--sp10)) clamp(var(--sp6),3vw,var(--sp10));margin-bottom:var(--sp6);box-shadow:var(--shadow-sm);position:relative;overflow:hidden}
+.community-hero::before{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 70% 120% at 100% -10%,oklch(from var(--color-primary) l c h/.07),transparent 60%),radial-gradient(ellipse 60% 100% at -10% 110%,oklch(from var(--color-success) l c h/.06),transparent 55%)}
+.community-hero-inner{position:relative;z-index:1;display:flex;align-items:flex-start;justify-content:space-between;gap:var(--sp6);flex-wrap:wrap}
+.community-hero-text .hero-label{font-size:var(--tx-xs);font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--color-text-muted);margin-bottom:var(--sp2)}
+.community-hero-text h1{font-size:clamp(1.6rem,1.2rem + 1.5vw,2.4rem);margin:0 0 var(--sp3);color:var(--color-text);letter-spacing:-.025em;line-height:1.08;font-family:var(--font-d)}
+.community-hero-text p{margin:0;color:var(--color-text-muted);max-width:58ch;font-size:clamp(.95rem,.88rem + .2vw,1.05rem);line-height:1.65}
+.community-hero-badges{display:flex;gap:var(--sp2);flex-wrap:wrap;margin-top:var(--sp4)}
+.community-hero-stats{display:flex;gap:var(--sp3);flex-wrap:wrap;align-items:flex-start}
+.community-hero-stat{display:flex;flex-direction:column;align-items:center;gap:4px;padding:var(--sp4) var(--sp5);border-radius:var(--radius-lg);border:1px solid var(--color-border);background:var(--color-bg);min-width:80px;text-align:center;flex-shrink:0}
+.community-hero-stat strong{font-size:var(--tx-xl);font-weight:700;color:var(--color-text);letter-spacing:-.02em;line-height:1}
+.community-hero-stat span{font-size:var(--tx-xs);color:var(--color-text-muted);font-weight:500}
+
+/* ---- Toolbar ---- */
+.community-toolbar{display:flex;gap:var(--sp3);align-items:stretch;flex-wrap:wrap;margin-bottom:var(--sp4)}
+.community-toolbar .auth-input{flex:1;min-width:200px}
+.community-toolbar select.auth-input{flex:0 1 180px}
+.community-toolbar .btn{min-height:42px;border-radius:var(--radius-lg);font-weight:700;letter-spacing:-.01em;box-shadow:var(--shadow-sm);transition:transform var(--t),box-shadow var(--t),background var(--t),border-color var(--t)}
+.community-toolbar .btn:hover{transform:translateY(-2px);box-shadow:var(--shadow-md)}
+.community-toolbar .btn:active{transform:translateY(0);box-shadow:var(--shadow-sm)}
+#community-refresh-btn{background:var(--color-surface);border:1px solid var(--color-border);color:var(--color-text);display:inline-flex;align-items:center;gap:8px}
+#community-refresh-btn:hover{border-color:var(--color-primary);color:var(--color-primary);background:var(--color-primary-highlight)}
+#community-refresh-btn svg{transition:transform .45s cubic-bezier(.16,1,.3,1)}
+#community-refresh-btn.is-loading svg{animation:communitySpin .7s linear infinite}
+#community-new-app-btn{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--color-primary),var(--color-primary-hover));border-color:transparent;box-shadow:0 7px 18px oklch(from var(--color-primary) l c h/.25)}
+#community-new-app-btn:hover{box-shadow:0 11px 23px oklch(from var(--color-primary) l c h/.32)}
+
+/* ---- 2-column layout ---- */
+.community-layout{display:grid;grid-template-columns:minmax(280px,360px) minmax(0,1fr);gap:var(--sp5);align-items:start}
+.community-left{display:grid;gap:var(--sp4);position:sticky;top:calc(56px + var(--sp4));max-height:calc(100vh - 80px);overflow:auto}.community-main{display:grid;gap:var(--sp4)}
+
+/* ---- Panels ---- */
+.community-panel{border:1px solid var(--color-border);border-radius:var(--radius-xl);background:var(--color-surface);padding:var(--sp5);box-shadow:var(--shadow-sm);overflow:visible}
+.community-panel-head{display:flex;justify-content:space-between;align-items:center;gap:var(--sp3);flex-wrap:wrap;margin-bottom:var(--sp4)}
+.community-panel-head h3{margin:0;font-size:var(--tx-base);font-weight:700;color:var(--color-text)}
+.community-panel-head p{margin:var(--sp1) 0 0;font-size:var(--tx-xs);color:var(--color-text-muted)}
+
+/* ---- Library list ---- */
+.community-library-grid{display:grid;gap:var(--sp3);overflow:visible}
+.community-left::-webkit-scrollbar{width:4px}
+.community-left::-webkit-scrollbar-thumb{background:var(--color-border);border-radius:4px}
+
+/* ---- App card ---- */
+.community-card{border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:var(--sp4);background:var(--color-bg);display:flex;flex-direction:column;gap:var(--sp3);cursor:pointer;transition:border-color var(--t),box-shadow var(--t),transform var(--t),background var(--t);text-align:left;width:100%;animation:communityCardIn .42s cubic-bezier(.16,1,.3,1) both;animation-delay:var(--card-delay,0ms)}
+.community-card:hover{border-color:var(--color-primary);box-shadow:var(--shadow-md);transform:translateY(-2px);background:var(--color-surface)}
+.community-card:focus-visible{outline:2px solid var(--color-primary);outline-offset:2px}
+.community-card-head{display:flex;gap:var(--sp3);align-items:flex-start}
+.community-card-icon{width:40px;height:40px;flex-shrink:0;border-radius:var(--radius-md);background:var(--color-surface-offset);border:1px solid var(--color-border);display:flex;align-items:center;justify-content:center;font-size:1.25rem;line-height:1}
+.community-card-summary{flex:1;min-width:0}
+.community-card-summary h4{margin:0 0 4px;font-size:var(--tx-sm);font-weight:700;color:var(--color-text);line-height:1.3;white-space:normal;overflow:visible}
+.community-card-byline{display:flex;gap:6px;flex-wrap:wrap;font-size:var(--tx-xs);color:var(--color-text-muted);align-items:center}
+.community-card-byline-dot{color:var(--color-text-faint)}
+.community-card-desc{margin:0;color:var(--color-text-muted);font-size:var(--tx-xs);line-height:1.55;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.community-card-footer{display:flex;justify-content:space-between;align-items:center;gap:var(--sp2);flex-wrap:wrap}
+.community-card-stats{display:flex;gap:var(--sp3);font-size:var(--tx-xs);color:var(--color-text-muted);align-items:center}
+.community-card-actions{display:flex;gap:7px;align-items:center}
+.community-card-action{width:32px;height:32px;display:inline-flex;align-items:center;justify-content:center;border-radius:50%;border:1px solid var(--color-border);background:var(--color-surface);color:var(--color-text-muted);cursor:pointer;transition:background var(--t),color var(--t),border-color var(--t),transform var(--t),box-shadow var(--t);position:relative;padding:0}
+.community-card-action svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.community-card-action.like.is-liked svg{fill:currentColor}
+.community-card-action:hover{background:var(--color-surface-offset);border-color:var(--color-border);color:var(--color-text);transform:translateY(-1px)}
+.community-card-action.like:hover,.community-card-action.like.is-liked{color:var(--color-primary);background:var(--color-primary-highlight);border-color:oklch(from var(--color-primary) l c h/.25)}
+.community-card-action.comment:hover{color:var(--color-success);background:var(--color-success-highlight);border-color:oklch(from var(--color-success) l c h/.3)}
+.community-card-action.pin:hover,.community-card-action.pin.is-pinned{color:#a16207;background:#fef3c7;border-color:#fcd34d}
+.community-card-action.share:hover{color:#2563eb;background:#dbeafe;border-color:#93c5fd}
+.community-card-action:focus-visible{outline:2px solid var(--color-primary);outline-offset:2px}
+.community-card-action::after{content:attr(data-tooltip);position:absolute;left:50%;bottom:calc(100% + 7px);transform:translateX(-50%) translateY(2px);padding:4px 7px;border-radius:6px;background:var(--color-text);color:var(--color-text-inverse);font-size:10px;font-weight:700;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity var(--t),transform var(--t);z-index:20}
+.community-card-action:hover::after,.community-card-action:focus-visible::after{opacity:1;transform:translateX(-50%) translateY(0)}
+.community-card-open{display:inline-flex;align-items:center;gap:5px;color:var(--color-primary);font-size:11px;font-weight:800;white-space:nowrap}
+.community-share-sheet{position:fixed;inset:0;width:100vw;height:100dvh;z-index:2147483640;display:none;align-items:center;justify-content:center;padding:24px;background:transparent;pointer-events:none}
+.community-share-sheet::before{display:none}
+.community-share-sheet.open{display:flex;animation:communitySheetFade .18s ease both}
+.community-share-panel{width:min(440px,calc(100vw - 32px));padding:28px;border-radius:28px;border:1px solid color-mix(in srgb,var(--color-border) 70%,#fff);background:linear-gradient(150deg,color-mix(in srgb,var(--color-surface) 96%,#fff),var(--color-surface));box-shadow:0 36px 110px rgba(0,0,0,.42),0 10px 28px rgba(15,23,42,.18);animation:communityShareModalIn .3s cubic-bezier(.16,1,.3,1) both;position:fixed;top:50vh;left:50vw;margin:0;max-height:calc(100dvh - 48px);overflow:auto;z-index:1;pointer-events:auto}
+.community-share-panel h3{margin:0 0 4px;font-size:var(--tx-lg)}
+.community-share-panel p{margin:0;color:var(--color-text-muted);font-size:var(--tx-xs)}
+.community-share-preview{display:flex;gap:var(--sp3);align-items:center;margin:var(--sp4) 0;padding:var(--sp3);border:1px solid var(--color-border);border-radius:var(--radius-lg);background:var(--color-bg)}
+.community-share-preview-icon{width:42px;height:42px;display:flex;align-items:center;justify-content:center;border-radius:12px;background:var(--color-primary-highlight);font-size:1.35rem;flex-shrink:0}
+.community-share-preview strong{display:block;font-size:var(--tx-sm)}
+.community-share-preview span{display:block;margin-top:2px;font-size:var(--tx-xs);color:var(--color-text-muted)}
+.community-share-actions{display:grid;grid-template-columns:1fr 1fr;gap:var(--sp2)}
+.community-share-action{min-height:44px;border:1px solid var(--color-border);border-radius:var(--radius-md);background:var(--color-surface);font-size:var(--tx-xs);font-weight:700;display:flex;align-items:center;justify-content:center;gap:7px;cursor:pointer}
+.community-share-action:hover{border-color:var(--color-primary);background:var(--color-primary-highlight);color:var(--color-primary)}
+.community-share-close{position:absolute;top:12px;right:12px;width:32px;height:32px;border-radius:50%;color:var(--color-text-muted);font-weight:800;background:var(--color-surface-offset);border:1px solid var(--color-border);display:inline-flex;align-items:center;justify-content:center}
+.community-share-close:hover{background:var(--color-primary-highlight);border-color:var(--color-primary);color:var(--color-primary)}
+@keyframes communitySheetFade{from{opacity:0}to{opacity:1}}
+@keyframes communitySheetUp{from{transform:translateY(20px);opacity:0}to{transform:none;opacity:1}}
+@keyframes communityShareModalIn{from{transform:translate(-50%,-44%) scale(.94);opacity:0}to{transform:translate(-50%,-50%) scale(1);opacity:1}}
+@media(max-width:560px){.community-share-sheet{padding:16px}.community-share-panel{padding:24px;border-radius:24px;width:min(100%,420px)}}
+
+/* Keep the share popup above the app shell and any refresh/theme layers. */
+html body #community-share-sheet{
+  position:fixed !important;
+  inset:0 !important;
+  width:100vw !important;
+  height:100dvh !important;
+  z-index:2147483647 !important;
+  isolation:isolate;
 }
-.community-shell::before{
-  content:'';
-  position:absolute;
-  inset:0;
-  pointer-events:none;
-  background-image:linear-gradient(to right,rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(to bottom,rgba(255,255,255,.03) 1px,transparent 1px);
-  background-size:26px 26px;
-  mask-image:radial-gradient(circle at 50% 12%,rgba(0,0,0,.72),transparent 85%);
+html body #community-share-sheet.open{display:flex !important;}
+html body #community-share-sheet .community-share-panel{
+  position:fixed !important;
+  top:50vh !important;
+  left:50vw !important;
+  z-index:2147483647 !important;
 }
+.community-card-avatar{width:26px;height:26px;flex-shrink:0;border-radius:50%;background:var(--color-primary);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;overflow:hidden;border:2px solid var(--color-surface)}
+.community-card-avatar img{width:100%;height:100%;object-fit:cover;display:block}
+.community-card-creator{display:flex;align-items:center;gap:var(--sp2);font-size:var(--tx-xs);color:var(--color-text-muted)}
+.community-card-tags{display:flex;gap:6px;flex-wrap:wrap;row-gap:4px}
+.community-card-tags .pill{font-size:10px;padding:2px 8px;background:var(--color-primary-highlight);border-color:transparent;color:var(--color-primary)}
+.community-card-actions{display:flex;gap:var(--sp2);flex-wrap:wrap;margin-top:var(--sp1)}
+.community-card-actions .btn{font-size:var(--tx-xs);padding:5px 10px}
 
+/* ---- Viewer panel ---- */
+.community-viewer-panel{min-height:76vh;display:flex;flex-direction:column;gap:0}
+.community-viewer-empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:var(--sp10);gap:var(--sp4);text-align:center;color:var(--color-text-muted)}
+.community-viewer-empty-icon{font-size:3.5rem;opacity:.3;line-height:1}
+.community-viewer-empty h4{margin:0;font-size:var(--tx-base);color:var(--color-text)}
+.community-viewer-empty p{margin:0;font-size:var(--tx-sm);max-width:34ch}
 
-.community-social-header{position:relative;z-index:1;display:flex;justify-content:space-between;align-items:flex-end;gap:14px;flex-wrap:wrap;margin-bottom:16px}
-.community-social-title .hero-label{letter-spacing:.09em}
-.community-social-title h1{margin:3px 0 0 0;color:var(--chat-text);font-family:var(--font-d);font-size:clamp(1.7rem,1.2rem + 1.35vw,2.5rem);letter-spacing:-.025em;line-height:1.04}
-.community-social-title p{margin:8px 0 0 0;color:var(--chat-muted);max-width:72ch;font-size:clamp(.95rem,.9rem + .15vw,1.02rem);line-height:1.6}
-.community-social-pills{display:flex;gap:9px;flex-wrap:wrap}
-.community-social-pills .pill{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.16);color:#deebff}
+.community-open-head{border-bottom:1px solid var(--color-border);padding-bottom:var(--sp4);margin-bottom:var(--sp4)}
+.community-open-header-row{display:flex;gap:var(--sp3);align-items:flex-start}
+.community-open-icon{width:48px;height:48px;flex-shrink:0;border-radius:var(--radius-md);background:var(--color-surface-offset);border:1px solid var(--color-border);display:flex;align-items:center;justify-content:center;font-size:1.6rem;line-height:1}
+.community-open-meta{flex:1;min-width:0}
+.community-open-meta h4{margin:0 0 var(--sp2);font-size:var(--tx-base);font-weight:700;color:var(--color-text)}
+.community-open-pills{display:flex;gap:var(--sp2);flex-wrap:wrap;margin-top:var(--sp2)}
+.community-open-pills .pill{font-size:11px}
+.community-creator-widget{display:inline-flex;align-items:center;gap:var(--sp2);padding:var(--sp2) var(--sp3);border-radius:var(--radius-md);background:var(--color-bg);border:1px solid var(--color-border);font-size:var(--tx-xs);color:var(--color-text-muted);margin-top:var(--sp3)}
+.community-creator-avatar{width:28px;height:28px;border-radius:50%;background:var(--color-success);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;overflow:hidden;flex-shrink:0}
+.community-creator-avatar img{width:100%;height:100%;object-fit:cover;display:block}
+.community-creator-name{font-weight:600;color:var(--color-text)}
 
-.community-layout{position:relative;z-index:1;display:grid;grid-template-columns:minmax(290px,.92fr) minmax(0,1.3fr) minmax(325px,.95fr);gap:14px;align-items:start}
-.community-left,.community-main,.community-right{display:grid;gap:14px}
+/* ---- Viewer tab menu ---- */
+.community-viewer-menu{display:flex;gap:var(--sp1);padding:var(--sp1);background:var(--color-bg);border:1px solid var(--color-border);border-radius:var(--radius-lg);margin-bottom:var(--sp4);flex-wrap:wrap}
+.community-viewer-menu .btn{border-radius:var(--radius-md);font-size:var(--tx-xs);font-weight:600;padding:var(--sp2) var(--sp3);background:transparent;border:none;color:var(--color-text-muted);flex:1;min-width:64px;display:flex;align-items:center;justify-content:center;gap:4px}
+.community-viewer-menu .btn:hover{background:var(--color-surface-offset);color:var(--color-text)}
+.community-viewer-menu .btn.active{background:var(--color-surface);border:1px solid var(--color-border);color:var(--color-text);box-shadow:var(--shadow-sm)}
 
-.community-panel{
-  border:1px solid var(--chat-line);
-  border-radius:18px;
-  background:linear-gradient(180deg,var(--chat-surface),var(--chat-surface-soft));
-  padding:14px;
-  color:var(--chat-text);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.04),0 14px 26px rgba(2,6,23,.22);
-}
-.community-panel h3{margin:0;color:#f5f9ff;font-size:1.05rem;letter-spacing:-.01em}
+/* ---- Tab content ---- */
+.community-tab-panel{display:grid;gap:var(--sp4);flex:1}
 
-.community-feed-panel,.community-viewer-panel{min-height:74vh;display:flex;flex-direction:column}
-.community-head-row{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
-.community-filters{display:grid;gap:10px}
-.community-filters .auth-input{width:100%;background:#0a1018;border-color:rgba(255,255,255,.18);color:#e9f2ff;min-height:42px}
-.community-filters .auth-input::placeholder{color:#8fa1bd}
+/* ---- Guide ---- */
+.community-guide-wrap{display:grid;gap:0;border:1px solid var(--color-border);border-radius:var(--radius-lg);overflow:hidden}
+.community-guide-section{border-bottom:1px solid var(--color-border);background:var(--color-surface)}
+.community-guide-section:last-child{border-bottom:none}
+.community-guide-section-head{display:flex;align-items:center;gap:var(--sp2);padding:var(--sp3) var(--sp4);font-size:var(--tx-sm);font-weight:700;color:var(--color-text);cursor:pointer;user-select:none;background:var(--color-surface);transition:background var(--t)}.community-guide-section.open .community-guide-chevron{transform:rotate(180deg) !important}
+.community-guide-section-head:hover{background:var(--color-surface-offset)}
+.community-guide-section-body{padding:0 var(--sp4) var(--sp4);display:none}
+.community-guide-section.open .community-guide-section-body{display:block}
+.community-content-scroll{white-space:pre-wrap;color:var(--color-text-muted);font-size:var(--tx-xs);line-height:1.7;word-break:break-word}
 
-.community-library-grid{margin-top:10px;display:grid;gap:10px;max-height:60vh;overflow:auto;padding-right:4px}
-.community-card{
-  border:1px solid rgba(255,255,255,.14);
-  border-radius:16px;
-  padding:12px;
-  background:linear-gradient(180deg,rgba(11,16,24,.82),rgba(15,22,34,.82));
-  display:grid;
-  gap:9px;
-  cursor:pointer;
-  transition:border-color .2s ease,background .2s ease,transform .2s ease,box-shadow .2s ease;
-}
-.community-card:hover{border-color:rgba(31,163,123,.75);background:linear-gradient(180deg,rgba(11,16,24,.96),rgba(17,25,39,.96));transform:translateY(-2px);box-shadow:0 12px 18px rgba(2,6,23,.3)}
-.community-card-head{display:flex;justify-content:space-between;gap:10px}
-.community-card-title{display:flex;gap:10px;min-width:0}
-.community-card-icon{font-size:1.15rem;line-height:1.2;opacity:.95}
-.community-card-summary{display:grid;gap:4px;min-width:0}
-.community-card-summary h4{margin:0;color:#f8fbff;font-size:.98rem;line-height:1.32}
-.community-card-byline{display:flex;gap:7px;flex-wrap:wrap;font-size:12px;color:#9db0cd}
-.community-card p{margin:0;color:#c0d0e7;font-size:.82rem;line-height:1.5}
-.community-card-stats{display:flex;gap:10px;flex-wrap:wrap;font-size:.74rem;color:#8fa4c2}
-.community-meta{display:flex;gap:6px;flex-wrap:wrap}
-.community-meta .pill{background:rgba(31,163,123,.16);border-color:rgba(31,163,123,.3);color:#c5faea}
-.community-actions{display:flex;gap:8px;flex-wrap:wrap}
-.community-actions .btn{font-size:12px;padding:6px 10px;border-radius:10px;background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.16);color:#d8e6ff}
-.community-actions .btn.btn-p{background:linear-gradient(120deg,var(--chat-accent),#0ea37a);color:#00170f;border-color:transparent}
+/* ---- Questions ---- */
+.community-question-shell{display:grid;gap:var(--sp4)}
+.community-question-topbar{display:flex;align-items:flex-start;justify-content:space-between;gap:var(--sp3);flex-wrap:wrap}
+.community-question-title{margin:0;font-size:var(--tx-base);font-weight:700;color:var(--color-text)}
+.community-question-sub{margin:var(--sp1) 0 0;font-size:var(--tx-xs);color:var(--color-text-muted)}
+.community-question-nav{display:flex;gap:var(--sp2);align-items:center;flex-shrink:0}
+.community-question-counter{display:inline-flex;align-items:center;padding:5px 12px;border-radius:999px;border:1px solid var(--color-border);background:var(--color-bg);font-size:var(--tx-xs);font-weight:700;color:var(--color-text-muted);white-space:nowrap}
+.community-question-stem{padding:var(--sp5);border-radius:var(--radius-lg);border:1px solid var(--color-border);background:var(--color-surface-offset)}
+.community-question-kicker{font-size:var(--tx-xs);font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--color-primary);margin-bottom:var(--sp2)}
+.community-question-text{font-size:clamp(1rem,.94rem + .3vw,1.2rem);line-height:1.6;color:var(--color-text);margin:0}
+.community-answer-box{width:100%;min-height:160px;border-radius:var(--radius-lg);border:1px solid var(--color-border);background:var(--color-bg);padding:var(--sp4);color:var(--color-text);font-size:var(--tx-sm);line-height:1.65;resize:vertical;transition:border-color var(--t),box-shadow var(--t);font-family:inherit}
+.community-answer-box:focus{outline:none;border-color:var(--color-primary);box-shadow:0 0 0 3px oklch(from var(--color-primary) l c h/.12)}
+.community-answer-actions{display:flex;gap:var(--sp2);flex-wrap:wrap;align-items:center}
+.community-answer-note{font-size:var(--tx-xs);color:var(--color-text-muted)}
+.community-ai-result{border:1px solid var(--color-border);border-radius:var(--radius-lg);background:var(--color-surface-offset);padding:var(--sp4);font-size:var(--tx-xs);line-height:1.7;color:var(--color-text)}
+.community-question-browser{border:1px solid var(--color-border);border-radius:var(--radius-lg);background:var(--color-bg);overflow:hidden}
+.community-question-browser summary{padding:var(--sp3) var(--sp4);cursor:pointer;font-size:var(--tx-xs);font-weight:600;color:var(--color-text-muted);user-select:none;list-style:none}
+.community-structured-list{display:grid;gap:var(--sp3);max-height:320px;overflow:auto;padding:var(--sp4)}
+.community-structured-list::-webkit-scrollbar{width:4px}
+.community-structured-list::-webkit-scrollbar-thumb{background:var(--color-border);border-radius:4px}
+.community-structured-item{padding:var(--sp4);border-radius:var(--radius-md);border:1px solid var(--color-border);background:var(--color-surface)}
+.community-structured-item h6{margin:0 0 var(--sp2);font-size:var(--tx-xs);font-weight:700;color:var(--color-text-muted);letter-spacing:.04em;text-transform:uppercase}
 
-.community-open-app{display:grid;gap:12px;flex:1;min-height:0}
-.community-open-head{position:sticky;top:0;z-index:2;background:linear-gradient(180deg,#121a27,#172235);border:1px solid rgba(255,255,255,.14);border-radius:14px;padding:12px}
-.community-viewer-menu{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,.11)}
-.community-viewer-menu .btn{border-radius:999px;font-size:12px;padding:7px 11px;background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.16);color:#dce8fb}
-.community-viewer-menu .btn.active{background:linear-gradient(120deg,var(--chat-accent),#0ea37a);color:#021b13;border-color:transparent}
+/* ---- Flashcards ---- */
+.community-flash-scene{perspective:1200px;height:200px;cursor:pointer;margin:var(--sp3) 0}
+.community-flash-card{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .5s cubic-bezier(.4,0,.2,1);border-radius:var(--radius-lg)}
+.community-flash-card.is-flipped{transform:rotateY(180deg)}
+.community-flash-face{position:absolute;inset:0;backface-visibility:hidden;border-radius:inherit;border:1px solid var(--color-border);display:flex;align-items:center;justify-content:center;padding:var(--sp6);text-align:center;flex-direction:column;gap:var(--sp2)}
+.community-flash-face.front{background:var(--color-surface)}
+.community-flash-face.back{background:var(--color-success-highlight);border-color:var(--color-success);transform:rotateY(180deg)}
+.community-flash-label{font-size:var(--tx-xs);font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--color-text-muted)}
+.community-flash-text{font-size:clamp(1rem,.9rem + .4vw,1.25rem);font-weight:700;color:var(--color-text);line-height:1.4}
+.community-flash-hint{font-size:var(--tx-xs);color:var(--color-text-faint);margin-top:var(--sp4);text-align:center}
+.community-flash-counter{font-size:var(--tx-xs);font-weight:600;color:var(--color-text-muted);text-align:center;margin-bottom:var(--sp1)}
+.community-flash-actions{display:flex;gap:var(--sp2);flex-wrap:wrap;justify-content:center;margin-top:var(--sp3)}
 
-.community-create-panel{display:none}
-.community-create-panel.open{display:block;animation:communityPop .22s ease both}
-.community-muted{color:var(--chat-muted);font-size:.82rem;line-height:1.5;margin-top:5px}
-.community-create-panel .auth-input{background:#0a1018;border-color:rgba(255,255,255,.17);color:#e6effd;min-height:42px}
-.community-create-panel .auth-input::placeholder{color:#8da0be}
-.community-create-panel .auth-label{display:block;margin:10px 0 6px}
-.community-features{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
-.community-features label{display:flex;gap:8px;align-items:center;font-size:.82rem;color:#d4e1f5}
-.community-target-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
-.community-target-note{font-size:.74rem;color:#8da0be;margin-top:9px}
-.community-uploader{margin-top:10px;padding:11px;border:1px dashed rgba(31,163,123,.55);border-radius:12px;background:rgba(31,163,123,.09)}
-.community-upload-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.community-upload-btn{display:inline-flex;align-items:center;gap:7px;padding:8px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.16);background:linear-gradient(120deg,var(--chat-accent),#0ea37a);color:#012217;font-weight:800;cursor:pointer}
-.community-upload-note{font-size:.74rem;color:#8da0be;margin-top:7px}
-.community-upload-status{font-size:.74rem;font-weight:700;color:#94f3de}
+/* ---- Quiz ---- */
+.community-quiz-card{display:grid;gap:var(--sp3)}
+.community-quiz-question-text{font-size:var(--tx-base);line-height:1.6;color:var(--color-text);font-weight:500;margin:0}
+.community-quiz-counter{font-size:var(--tx-xs);font-weight:600;color:var(--color-text-muted)}
+.community-quiz-options{display:grid;gap:var(--sp2);margin-top:var(--sp3)}
+.community-quiz-option{display:block;width:100%;text-align:left;padding:var(--sp3) var(--sp4);border-radius:var(--radius-md);border:1px solid var(--color-border);background:var(--color-bg);font-size:var(--tx-sm);color:var(--color-text);transition:border-color var(--t),background var(--t);cursor:pointer;font-family:inherit}
+.community-quiz-option:hover{border-color:var(--color-primary);background:var(--color-primary-highlight)}
+.community-quiz-option.active{border-color:var(--color-primary);background:var(--color-primary-highlight);font-weight:600}
+.community-quiz-option.correct{border-color:var(--color-success);background:var(--color-success-highlight);color:var(--color-success);font-weight:700}
+.community-quiz-option.wrong{border-color:var(--color-error);background:var(--color-error-soft);color:var(--color-error)}
+.community-quiz-actions{display:flex;gap:var(--sp2);flex-wrap:wrap;margin-top:var(--sp3)}
+.community-quiz-score{padding:var(--sp4);border-radius:var(--radius-lg);border:1px solid var(--color-success);background:var(--color-success-highlight);font-size:var(--tx-sm);color:var(--color-text);margin-top:var(--sp3)}
+
+/* ---- Comments ---- */
+.community-comment-section{margin-top:var(--sp5);border-top:1px solid var(--color-border);padding-top:var(--sp5)}
+.community-comment-input-row{display:flex;gap:var(--sp2);flex-wrap:wrap;margin-bottom:var(--sp3)}
+.community-comment-input-row .auth-input{flex:1;min-width:180px}
+.community-comment-list{display:grid;gap:var(--sp2)}
+.community-comment{padding:var(--sp3) var(--sp4);border-radius:var(--radius-md);border:1px solid var(--color-border);background:var(--color-bg);font-size:var(--tx-xs);color:var(--color-text)}
+.community-comment-head{display:flex;align-items:center;gap:var(--sp2);margin-bottom:var(--sp2)}
+.community-comment-name{font-weight:700;color:var(--color-text);font-size:var(--tx-xs)}
+.community-comment-time{font-size:var(--tx-xs);color:var(--color-text-faint);margin-left:auto}
+
+/* ---- Muted helper ---- */
+.community-muted{color:var(--color-text-muted);font-size:var(--tx-xs);line-height:1.6;margin-top:var(--sp2)}
+
+/* ---- Create form ---- */
+.community-create-panel{border:1px solid var(--color-border);border-radius:var(--radius-xl);background:var(--color-surface);padding:var(--sp5);box-shadow:var(--shadow-sm)}
+.community-create-panel h3{margin:0 0 var(--sp2);font-size:var(--tx-base);font-weight:700;color:var(--color-text)}
+.community-create-panel .auth-label{display:block;margin:var(--sp3) 0 var(--sp2);font-size:var(--tx-xs);font-weight:600;color:var(--color-text)}
+.community-features{display:grid;grid-template-columns:1fr 1fr;gap:var(--sp2);margin-top:var(--sp3);padding:var(--sp3);background:var(--color-bg);border-radius:var(--radius-md);border:1px solid var(--color-border)}
+.community-features label{display:flex;gap:var(--sp2);align-items:center;font-size:var(--tx-xs);color:var(--color-text);cursor:pointer}
+.community-target-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--sp3);margin-top:var(--sp3)}
+.community-target-note{font-size:var(--tx-xs);color:var(--color-text-muted);margin-top:var(--sp2)}
+.community-uploader{margin-top:var(--sp2);padding:var(--sp4);border:2px dashed var(--color-border);border-radius:var(--radius-lg);background:var(--color-bg);transition:border-color var(--t),background var(--t)}
+.community-uploader:hover{border-color:var(--color-success);background:var(--color-success-highlight)}
+.community-upload-row{display:flex;align-items:center;gap:var(--sp3);flex-wrap:wrap}
+.community-upload-btn{display:inline-flex;align-items:center;gap:var(--sp2);padding:8px 16px;border-radius:var(--radius-full);border:1px solid var(--color-border);background:var(--color-surface);color:var(--color-text);font-size:var(--tx-xs);font-weight:700;cursor:pointer;transition:border-color var(--t),background var(--t),color var(--t)}
+.community-upload-btn:hover{border-color:var(--color-primary);background:var(--color-primary-highlight);color:var(--color-primary)}
+.community-upload-note{font-size:var(--tx-xs);color:var(--color-text-muted);margin-top:var(--sp2)}
+.community-upload-status{font-size:var(--tx-xs);font-weight:600;color:var(--color-success)}
 .community-file-hidden{position:absolute !important;left:-9999px !important;width:1px !important;height:1px !important;opacity:0 !important}
 
-.community-list{display:grid;gap:9px;max-height:40vh;overflow:auto;padding-right:4px}
-.community-job-item{padding:10px;border:1px solid rgba(255,255,255,.14);border-radius:12px;background:rgba(12,16,23,.68)}
-.community-job-top{display:flex;justify-content:space-between;gap:8px;font-size:.8rem;font-weight:700;color:#e2ebfa}
-.community-job-meta{font-size:.74rem;color:#8da0be}
-.community-job-progress{height:6px;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden;margin-top:6px}
-.community-job-progress span{display:block;height:100%;background:linear-gradient(90deg,var(--chat-accent),#22d3ee);background-size:180% 100%;animation:communityShimmer 1.5s linear infinite}
+/* ---- Jobs queue ---- */
+.community-list{display:grid;gap:var(--sp3);max-height:38vh;overflow:auto;padding-right:2px}
+.community-list::-webkit-scrollbar{width:4px}
+.community-list::-webkit-scrollbar-thumb{background:var(--color-border);border-radius:4px}
+.community-job-item{padding:var(--sp3) var(--sp4);border:1px solid var(--color-border);border-radius:var(--radius-md);background:var(--color-bg)}
+.community-job-top{display:flex;justify-content:space-between;gap:var(--sp2);font-size:var(--tx-xs);font-weight:700;color:var(--color-text);align-items:center}
+.community-job-title{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.community-job-status{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:var(--radius-full);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;background:var(--color-surface-offset);color:var(--color-text-muted);border:1px solid var(--color-border);white-space:nowrap;flex-shrink:0}
+.community-job-status.running{background:#fef3c7;color:#b45309;border-color:#fde68a}
+.community-job-status.done{background:var(--color-success-highlight);color:var(--color-success);border-color:var(--color-success)}
+.community-job-status.failed{background:var(--color-error-soft);color:var(--color-error);border-color:var(--color-error)}
+.community-job-meta{font-size:var(--tx-xs);color:var(--color-text-muted);margin-top:4px}
+.community-job-progress{height:5px;border-radius:999px;background:var(--color-surface-offset);overflow:hidden;margin-top:var(--sp2)}
+.community-job-progress span{display:block;height:100%;background:linear-gradient(90deg,var(--color-success),var(--color-primary));background-size:180% 100%;animation:communityShimmer 1.8s linear infinite}
 
-.community-content-box{border:1px solid rgba(255,255,255,.13);border-radius:12px;background:rgba(12,16,23,.62);padding:12px;color:#d7e5fb}
-.community-content-scroll{max-height:300px;overflow:auto;white-space:pre-wrap;color:#c1d0e6;font-size:.84rem;line-height:1.55}
-.community-structured-list{display:grid;gap:9px;max-height:300px;overflow:auto}
-.community-structured-item{padding:10px;border-radius:11px;border:1px solid rgba(255,255,255,.11);background:rgba(17,23,34,.74)}
-.community-comment-list{display:grid;gap:9px}
-.community-comment{padding:10px;border-radius:11px;background:rgba(17,23,34,.74);font-size:.82rem;color:#d7e3f8}
-.community-comment-head{display:flex;align-items:center;gap:8px;margin-bottom:6px}
-.community-creator-avatar{width:30px;height:30px;border-radius:999px;background:linear-gradient(145deg,#10a37f,#0ea37a);color:#ecfff9;display:flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:700;overflow:hidden;border:1px solid rgba(255,255,255,.16)}
-.community-creator-avatar img{width:100%;height:100%;object-fit:cover}
-
-.community-question-shell{display:grid;gap:14px}
-.community-question-top{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
-.community-question-sub{margin:0;color:#9eb2ce;font-size:.83rem}
-.community-question-nav{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-.community-question-counter{display:inline-flex;align-items:center;padding:7px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.05);font-weight:700;font-size:.73rem;color:#d8e6ff}
-.community-question-stem{padding:14px;border-radius:13px;border:1px solid rgba(255,255,255,.13);background:rgba(18,25,37,.74)}
-.community-question-kicker{font-size:.71rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#95f6e0}
-.community-question-text{margin-top:9px;font-size:clamp(1.02rem,.96rem + .33vw,1.26rem);line-height:1.55;color:#ebf3ff}
-.community-answer-box{width:100%;min-height:240px;border-radius:13px;border:1px solid rgba(255,255,255,.15);background:#0a1018;padding:14px;color:#e4eeff}
-.community-answer-actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-.community-answer-note{font-size:.74rem;color:#96abc8}
-.community-question-browser{border:1px solid rgba(255,255,255,.12);border-radius:11px;background:rgba(18,25,37,.74);padding:9px}
-
-.community-refine-tags{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
-.community-refine-tags .btn{font-size:.72rem;padding:6px 10px;border-radius:999px}
-
-.community-panel :is(.btn, .auth-input, textarea, select){font-size:13px}
-.community-panel textarea.auth-input,
-.community-panel .community-answer-box{line-height:1.55}
-
-.community-fab{
-  position:fixed;
-  right:20px;
-  bottom:92px;
-  z-index:1201;
-  width:58px;
-  height:58px;
-  border-radius:999px;
-  border:1px solid rgba(255,255,255,.2);
-  background:linear-gradient(130deg,var(--chat-accent),#0ea37a);
-  color:#001a11;
-  font-size:1.7rem;
-  font-weight:800;
-  box-shadow:0 16px 26px rgba(2,6,23,.48);
-}
-
-[data-theme="light"] .community-shell,
-body[data-theme="light"] .community-shell,
-html[data-theme="light"] .community-shell{
-  --chat-bg:#f4f7fc;
-  --chat-surface:#ffffff;
-  --chat-surface-soft:#f2f6fc;
-  --chat-line:rgba(100,116,139,.24);
-  --chat-text:#0f172a;
-  --chat-muted:#526480;
-  background:linear-gradient(180deg,#f7f9fc 0%,#edf2f8 100%);
-  border-color:rgba(100,116,139,.24);
-  box-shadow:0 18px 34px rgba(15,23,42,.13);
-}
-[data-theme="light"] .community-panel,
-body[data-theme="light"] .community-panel,
-html[data-theme="light"] .community-panel,
-[data-theme="light"] .community-card,
-body[data-theme="light"] .community-card,
-html[data-theme="light"] .community-card,
-[data-theme="light"] .community-open-head,
-body[data-theme="light"] .community-open-head,
-html[data-theme="light"] .community-open-head,
-[data-theme="light"] .community-content-box,
-body[data-theme="light"] .community-content-box,
-html[data-theme="light"] .community-content-box{
-  background:linear-gradient(180deg,#ffffff,#f3f7fc);
-  color:#0f172a;
-  border-color:rgba(100,116,139,.24);
-}
-[data-theme="light"] .community-social-title h1,
-body[data-theme="light"] .community-social-title h1,
-html[data-theme="light"] .community-social-title h1{color:#0f172a}
-[data-theme="light"] .community-social-title p,
-body[data-theme="light"] .community-social-title p,
-html[data-theme="light"] .community-social-title p,
-[data-theme="light"] .community-muted,
-body[data-theme="light"] .community-muted,
-html[data-theme="light"] .community-muted{color:#54657f}
-[data-theme="light"] .community-filters .auth-input,
-body[data-theme="light"] .community-filters .auth-input,
-html[data-theme="light"] .community-filters .auth-input,
-[data-theme="light"] .community-create-panel .auth-input,
-body[data-theme="light"] .community-create-panel .auth-input,
-html[data-theme="light"] .community-create-panel .auth-input,
-[data-theme="light"] .community-answer-box,
-body[data-theme="light"] .community-answer-box,
-html[data-theme="light"] .community-answer-box{background:#ffffff;border-color:rgba(100,116,139,.25);color:#0f172a}
-[data-theme="light"] .community-card-summary h4,
-body[data-theme="light"] .community-card-summary h4,
-html[data-theme="light"] .community-card-summary h4{color:#0f172a}
-[data-theme="light"] .community-card p,
-body[data-theme="light"] .community-card p,
-html[data-theme="light"] .community-card p,
-[data-theme="light"] .community-card-stats,
-body[data-theme="light"] .community-card-stats,
-html[data-theme="light"] .community-card-stats,
-[data-theme="light"] .community-content-scroll,
-body[data-theme="light"] .community-content-scroll,
-html[data-theme="light"] .community-content-scroll{color:#54657f}
-[data-theme="light"] .community-meta .pill,
-body[data-theme="light"] .community-meta .pill,
-html[data-theme="light"] .community-meta .pill{background:rgba(16,163,127,.1);border-color:rgba(16,163,127,.24);color:#065f46}
-[data-theme="light"] .community-actions .btn,
-body[data-theme="light"] .community-actions .btn,
-html[data-theme="light"] .community-actions .btn,
-[data-theme="light"] .community-viewer-menu .btn,
-body[data-theme="light"] .community-viewer-menu .btn,
-html[data-theme="light"] .community-viewer-menu .btn{background:#ffffff;border-color:rgba(100,116,139,.24);color:#0f172a}
-[data-theme="light"] .community-question-stem,
-body[data-theme="light"] .community-question-stem,
-html[data-theme="light"] .community-question-stem,
-[data-theme="light"] .community-question-browser,
-body[data-theme="light"] .community-question-browser,
-html[data-theme="light"] .community-question-browser,
-[data-theme="light"] .community-comment,
-body[data-theme="light"] .community-comment,
-html[data-theme="light"] .community-comment,
-[data-theme="light"] .community-structured-item,
-body[data-theme="light"] .community-structured-item,
-html[data-theme="light"] .community-structured-item{background:#f8fbff;border-color:rgba(100,116,139,.23);color:#0f172a}
-[data-theme="light"] .community-question-kicker,
-body[data-theme="light"] .community-question-kicker,
-html[data-theme="light"] .community-question-kicker{color:#0f766e}
-[data-theme="light"] .community-upload-status,
-body[data-theme="light"] .community-upload-status,
-html[data-theme="light"] .community-upload-status{color:#0f766e}
-
-[data-theme="light"] .community-fab,
-body[data-theme="light"] .community-fab,
-html[data-theme="light"] .community-fab{
-  border-color:rgba(15,23,42,.15);
-  box-shadow:0 16px 24px rgba(15,23,42,.24);
-}
+/* ---- Misc ---- */
+.community-panel :is(.btn,.auth-input,textarea,select){font-size:var(--tx-xs)}
+.community-create-panel :is(.btn,.auth-input,textarea,select){font-size:var(--tx-xs)}
 
 @keyframes communityShimmer{0%{background-position:0% 50%}100%{background-position:180% 50%}}
-@keyframes communityPop{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes communityPop{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes communitySpin{to{transform:rotate(360deg)}}
+@keyframes communityCardIn{from{opacity:0;transform:translateY(10px) scale(.985)}to{opacity:1;transform:none}}
+@keyframes communityHeartPop{0%{transform:scale(.7);opacity:0}35%{opacity:1}100%{transform:translate(var(--x),var(--y)) rotate(var(--r)) scale(1.15);opacity:0}}
+@keyframes communityPinLand{0%{transform:scale(.92);box-shadow:0 0 0 0 rgba(234,179,8,.3)}55%{transform:scale(1.025);box-shadow:0 0 0 8px rgba(234,179,8,0)}100%{transform:none;box-shadow:none}}
+.community-confetti-layer{position:fixed;inset:0;pointer-events:none;z-index:30000;overflow:hidden}
+.community-confetti-heart{position:fixed;color:var(--color-primary);font-size:18px;line-height:1;animation:communityHeartPop .75s cubic-bezier(.16,1,.3,1) forwards;filter:drop-shadow(0 2px 4px oklch(from var(--color-primary) l c h/.25))}
+.community-pin-flight{position:fixed;z-index:30001;pointer-events:none;border:1px solid #eab308;border-radius:10px;background:#fef3c7;color:#854d0e;padding:7px 10px;font-size:11px;font-weight:800;box-shadow:0 12px 28px rgba(15,23,42,.2);transition:transform .62s cubic-bezier(.16,1,.3,1),opacity .62s ease}
 
-@media (max-width: 1180px){
-  .community-layout{grid-template-columns:1fr 1.15fr}
-  .community-right{grid-column:1/-1}
-  .community-right{grid-template-columns:1fr 1fr;align-items:start}
+@media (max-width:1100px){
+  .community-layout{grid-template-columns:minmax(260px,300px) minmax(0,1fr)}
 }
-@media (max-width: 860px){
+@media (max-width:860px){
   .community-layout{grid-template-columns:1fr}
-  .community-right{grid-template-columns:1fr}
-  .community-shell{padding:12px}
-  .community-social-header{margin-bottom:12px}
-  .community-social-title h1{font-size:clamp(1.45rem,6.8vw,2rem)}
-  .community-feed-panel,.community-viewer-panel{min-height:0}
-  .community-library-grid{max-height:44vh}
-  .community-list{max-height:30vh}
+  .community-left{position:static;max-height:none;overflow:visible}
+  .community-viewer-panel{min-height:0}
+  .community-hero-stats{display:none}
+  .community-library-grid{max-height:none}
+}
+@media (max-width:560px){
+  .community-panel,.community-create-panel{padding:var(--sp4)}
+  .community-hero{padding:var(--sp5)}
   .community-features,.community-target-grid{grid-template-columns:1fr}
-  .community-fab{bottom:82px;right:14px;width:54px;height:54px}
+  .community-flash-scene{height:160px}
+  .community-toolbar{flex-direction:column}
+  .community-toolbar .auth-input,.community-toolbar select.auth-input{flex:1;width:100%}
+  .community-viewer-menu .btn{font-size:11px;padding:var(--sp1) var(--sp2);min-width:0}
+  .community-card-summary h4{white-space:normal}
+  .community-card-actions{width:100%;justify-content:space-between}
+  .community-card-action{width:34px;height:34px}
+  .community-card-action::after{display:none}
 }
-@media (max-width: 560px){
-  .community-panel{padding:11px}
-  .community-card{padding:10px}
-  .community-head-row .pill{font-size:10px}
-  .community-panel :is(.btn, .auth-input, textarea, select){font-size:12px}
-  .community-answer-box{min-height:200px;padding:12px}
+
+/* =====================================================
+   COMMUNITY CREATE WIZARD
+===================================================== */
+/* Wizard step pills */
+.cwiz-steps{display:flex;gap:0;border-bottom:1px solid var(--color-border);margin-bottom:var(--sp5);overflow-x:auto}
+.cwiz-step{display:flex;align-items:center;gap:var(--sp2);padding:var(--sp3) var(--sp4);font-size:var(--tx-xs);font-weight:600;color:var(--color-text-muted);border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap;flex-shrink:0;background:none;border-top:none;border-left:none;border-right:none;transition:color var(--t),border-color var(--t)}
+.cwiz-step:hover{color:var(--color-text)}
+.cwiz-step.active{color:var(--color-primary);border-bottom-color:var(--color-primary)}
+.cwiz-step.done{color:var(--color-success)}
+.cwiz-step-num{width:20px;height:20px;border-radius:50%;background:var(--color-surface-offset);border:1px solid var(--color-border);display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0;transition:background var(--t),border-color var(--t),color var(--t)}
+.cwiz-step.active .cwiz-step-num{background:var(--color-primary);border-color:var(--color-primary);color:#fff}
+.cwiz-step.done .cwiz-step-num{background:var(--color-success);border-color:var(--color-success);color:#fff}
+.cwiz-pane{display:none}.cwiz-pane.active{display:block;animation:communityPop .18s ease both}
+.cwiz-footer{display:flex;gap:var(--sp3);align-items:center;flex-wrap:wrap;margin-top:var(--sp5);padding-top:var(--sp4);border-top:1px solid var(--color-border)}
+.cwiz-footer-actions{display:flex;gap:var(--sp3);align-items:center;flex-wrap:wrap;flex:1}
+.cwiz-footer .btn{min-height:44px;border-radius:14px;font-weight:800;box-shadow:var(--shadow-sm)}
+#community-create-btn{background:linear-gradient(135deg,var(--color-primary),#ef4444);border-color:transparent;box-shadow:0 8px 18px oklch(from var(--color-primary) l c h/.25)}
+#community-create-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 24px oklch(from var(--color-primary) l c h/.3)}
+#community-create-btn:disabled{opacity:.62;cursor:wait}
+.cwiz-inline-error{display:none;margin:0 0 var(--sp3);padding:var(--sp3);border:1px solid var(--color-error);border-radius:var(--radius-md);background:var(--color-error-soft);color:var(--color-error);font-size:var(--tx-xs);font-weight:600}
+.cwiz-inline-error.show{display:block;animation:communityPop .18s ease both}
+
+/* Exam board / subject picker tiles */
+.cw-picker-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:var(--sp2);margin-top:var(--sp2)}
+.cw-picker-tile{display:flex;flex-direction:column;align-items:center;gap:var(--sp2);padding:var(--sp3) var(--sp2);border-radius:var(--radius-lg);border:2px solid var(--color-border);background:var(--color-bg);cursor:pointer;transition:border-color var(--t),background var(--t),box-shadow var(--t);text-align:center;position:relative;user-select:none}
+.cw-picker-tile:hover{border-color:var(--color-primary);background:var(--color-surface)}
+.cw-picker-tile.selected{border-color:var(--color-primary);background:var(--color-primary-highlight);box-shadow:0 0 0 3px oklch(from var(--color-primary) l c h/.12)}
+.cw-picker-tile input[type=radio],.cw-picker-tile input[type=checkbox]{position:absolute;opacity:0;width:1px;height:1px}
+.cw-picker-logo{width:36px;height:36px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:1.2rem;font-weight:900;letter-spacing:-.02em;flex-shrink:0}
+.cw-picker-name{font-size:var(--tx-xs);font-weight:700;color:var(--color-text);line-height:1.2}
+.cw-picker-sub{font-size:10px;color:var(--color-text-muted);line-height:1.2}
+.cw-picker-check{position:absolute;top:6px;right:6px;width:16px;height:16px;border-radius:50%;background:var(--color-primary);display:none;align-items:center;justify-content:center}
+.cw-picker-tile.selected .cw-picker-check{display:flex}
+.cw-picker-check svg{color:#fff}
+
+/* Exam board brand colours */
+.cw-logo-aqa{background:#003087;color:#fff}
+.cw-logo-edexcel{background:#003087;color:#fff}
+.cw-logo-pearson{background:#003087;color:#fff}
+.cw-logo-ocr{background:#5a1f6a;color:#fff}
+.cw-logo-wjec{background:#2e7d32;color:#fff}
+.cw-logo-ccea{background:#8b1c1c;color:#fff}
+.cw-logo-cambridge{background:#1b3a6b;color:#fff}
+.cw-logo-ib{background:#1b3a6b;color:#fff}
+.cw-logo-btec{background:#ff4500;color:#fff}
+.cw-logo-ctec{background:#e65100;color:#fff}
+.cw-logo-other{background:var(--color-surface-offset);color:var(--color-text)}
+
+/* Subject tiles colours */
+.cw-subj-business{background:#dbeafe;color:#1e40af}
+.cw-subj-it{background:#d1fae5;color:#065f46}
+.cw-subj-science{background:#fce7f3;color:#831843}
+.cw-subj-maths{background:#fef3c7;color:#92400e}
+.cw-subj-english{background:#ede9fe;color:#4c1d95}
+.cw-subj-history{background:#ffedd5;color:#7c2d12}
+.cw-subj-sport{background:#d1fae5;color:#065f46}
+.cw-subj-psychology{background:#fce7f3;color:#831843}
+.cw-subj-geography{background:#d1fae5;color:#065f46}
+.cw-subj-economics{background:#dbeafe;color:#1e40af}
+.cw-subj-art{background:#fde68a;color:#92400e}
+.cw-subj-general{background:var(--color-surface-offset);color:var(--color-text)}
+
+/* Level toggle row */
+.cw-level-row{display:flex;gap:var(--sp2);flex-wrap:wrap;margin-top:var(--sp2)}
+.cw-level-btn{padding:7px 14px;border-radius:var(--radius-full);border:1px solid var(--color-border);background:var(--color-bg);font-size:var(--tx-xs);font-weight:600;color:var(--color-text);cursor:pointer;transition:border-color var(--t),background var(--t),color var(--t)}
+.cw-level-btn:hover{border-color:var(--color-primary);background:var(--color-primary-highlight);color:var(--color-primary)}
+.cw-level-btn.selected{background:var(--color-primary);border-color:var(--color-primary);color:#fff}
+
+/* Quality preset cards */
+.cw-preset-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--sp3);margin-top:var(--sp2)}
+.cw-preset-card{padding:var(--sp4);border-radius:var(--radius-lg);border:2px solid var(--color-border);background:var(--color-bg);cursor:pointer;transition:border-color var(--t),background var(--t);text-align:center;user-select:none}
+.cw-preset-card:hover{border-color:var(--color-primary);background:var(--color-surface)}
+.cw-preset-card.selected{border-color:var(--color-primary);background:var(--color-primary-highlight)}
+.cw-preset-card strong{display:block;font-size:var(--tx-sm);font-weight:800;color:var(--color-text);margin-bottom:4px}
+.cw-preset-card p{margin:0;font-size:11px;color:var(--color-text-muted);line-height:1.4}
+.cw-preset-card .cw-preset-icon{font-size:1.6rem;margin-bottom:var(--sp2)}
+
+/* Toggle switches */
+.cw-toggle-row{display:flex;align-items:center;justify-content:space-between;gap:var(--sp3);padding:var(--sp3) var(--sp4);border:1px solid var(--color-border);border-radius:var(--radius-md);background:var(--color-bg);margin-top:var(--sp2)}
+.cw-toggle-row:hover{background:var(--color-surface)}
+.cw-toggle-label{flex:1}
+.cw-toggle-label strong{display:block;font-size:var(--tx-xs);font-weight:700;color:var(--color-text)}
+.cw-toggle-label span{font-size:11px;color:var(--color-text-muted)}
+.cw-switch{position:relative;width:38px;height:22px;flex-shrink:0;cursor:pointer}
+.cw-switch input{opacity:0;width:0;height:0;position:absolute}
+.cw-switch-track{position:absolute;inset:0;background:var(--color-border);border-radius:999px;transition:background var(--t)}
+.cw-switch input:checked~.cw-switch-track{background:var(--color-success)}
+.cw-switch-thumb{position:absolute;top:2px;left:2px;width:18px;height:18px;background:#fff;border-radius:50%;transition:transform var(--t);box-shadow:0 1px 3px oklch(0 0 0/.25)}
+.cw-switch input:checked~.cw-switch-thumb{transform:translateX(16px)}
+
+/* Progress bar inside form */
+.cw-gen-progress{padding:var(--sp4);border:1px solid #93c5fd;border-radius:var(--radius-lg);background:#eff6ff;display:none}
+.cw-gen-progress.visible{display:block;animation:communityPop .2s ease both}
+.cw-gen-progress.failed{border-color:var(--color-error);background:var(--color-error-soft)}
+.cw-gen-progress.failed .cw-gen-step-row{color:var(--color-error)}
+.cw-gen-progress.failed .cw-gen-step-dot{background:var(--color-error)}
+.cw-gen-progress.failed .cw-gen-bar-fill{background:var(--color-error);animation:none}
+.cw-gen-progress.failed strong{color:var(--color-error) !important}
+.cw-gen-bar{height:8px;background:var(--color-border);border-radius:999px;overflow:hidden;margin-top:var(--sp3)}
+.cw-gen-bar-fill{height:100%;border-radius:inherit;background:linear-gradient(90deg,#0ea5e9,#2563eb);background-size:200% 100%;animation:communityShimmer 2s linear infinite;width:0%;transition:width .5s ease}
+.cw-gen-steps{display:grid;gap:var(--sp2);margin-top:var(--sp3)}
+.cw-gen-step-row{display:flex;align-items:center;gap:var(--sp2);font-size:var(--tx-xs);color:var(--color-text-muted)}
+.cw-gen-step-row.active{color:var(--color-text);font-weight:600}
+.cw-gen-step-row.done{color:var(--color-success)}
+.cw-gen-step-dot{width:8px;height:8px;border-radius:50%;background:var(--color-border);flex-shrink:0}
+.cw-gen-step-row.active .cw-gen-step-dot{background:#2563eb;animation:cwPulse 1s infinite}
+.cw-gen-step-row.done .cw-gen-step-dot{background:#0ea5e9}
+@keyframes cwPulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+/* exam board badge on app cards */
+.community-card-board-badge{display:inline-flex;align-items:center;gap:4px;padding:2px 7px;border-radius:var(--radius-full);font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;background:var(--color-surface-offset);color:var(--color-text-muted);border:1px solid var(--color-border)}
+.community-card-board-badge.cw-logo-aqa,.community-card-board-badge.cw-logo-edexcel,.community-card-board-badge.cw-logo-pearson{background:#003087;border-color:#003087;color:#fff !important}
+.community-card-board-badge.cw-logo-ocr{background:#5a1f6a;border-color:#5a1f6a;color:#fff !important}
+.community-card-board-badge.cw-logo-wjec{background:#2e7d32;border-color:#2e7d32;color:#fff !important}
+.community-card-board-badge.cw-logo-ccea{background:#8b1c1c;border-color:#8b1c1c;color:#fff !important}
+.community-card-board-badge.cw-logo-cambridge,.community-card-board-badge.cw-logo-ib{background:#1b3a6b;border-color:#1b3a6b;color:#fff !important}
+.community-card-board-badge.cw-logo-btec{background:#ff4500;border-color:#ff4500;color:#fff !important}
+.community-card-board-badge.cw-logo-other{background:var(--color-surface-offset);border-color:var(--color-border);color:var(--color-text-muted) !important}
+
+/* Library interaction states */
+.community-card.selected{border-color:var(--color-primary);background:var(--color-primary-highlight);box-shadow:0 0 0 3px oklch(from var(--color-primary) l c h/.1)}
+.community-card.selected .community-card-icon{background:var(--color-surface);border-color:oklch(from var(--color-primary) l c h/.35)}
+.community-library-count{display:inline-flex;align-items:center;justify-content:center;min-width:22px;height:22px;padding:0 7px;border-radius:999px;background:var(--color-surface-offset);font-size:11px;font-weight:700;color:var(--color-text-muted)}
+.community-pinned-section{margin-bottom:var(--sp4);padding-bottom:var(--sp4);border-bottom:1px solid var(--color-border)}
+.community-pinned-head{display:flex;align-items:center;justify-content:space-between;gap:var(--sp2);margin-bottom:var(--sp3)}
+.community-pinned-head strong{font-size:var(--tx-xs);color:var(--color-text)}
+.community-pinned-list{display:grid;gap:var(--sp2)}
+.community-pinned-item{display:flex;align-items:center;gap:var(--sp2);padding:var(--sp2);border:1px solid var(--color-border);border-radius:var(--radius-md);background:var(--color-bg);cursor:pointer;text-align:left;width:100%;font:inherit;color:inherit;transition:background var(--t),border-color var(--t),transform var(--t)}
+.community-pinned-item:hover{background:var(--color-surface);border-color:#eab308;transform:translateX(2px)}
+.community-pinned-icon{width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:8px;background:#fef3c7;flex-shrink:0}
+.community-pinned-copy{min-width:0;display:grid;gap:1px;flex:1}.community-pinned-copy strong{font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.community-pinned-copy span{font-size:10px;color:var(--color-text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.community-pinned-remove{font-size:10px;color:var(--color-text-muted);padding:4px;flex-shrink:0}
+@media (max-width:860px){
+  .community-main{scroll-margin-top:72px}
+  .community-card.selected{box-shadow:inset 3px 0 0 var(--color-primary)}
 }
-</style>
+
+@media(max-width:560px){
+  .cw-picker-grid{grid-template-columns:repeat(auto-fill,minmax(90px,1fr))}
+  .cw-preset-grid{grid-template-columns:1fr}
+}</style>
 <script>
 (function(){
   var isFile = location.protocol === 'file:';
@@ -3862,6 +4040,21 @@ html[data-theme="light"] .community-fab{
     <span id="mobile-profile-label">Profile</span>
   </button>
 </nav>
+
+<div id="community-share-sheet" class="community-share-sheet" role="dialog" aria-modal="true" aria-labelledby="community-share-title">
+  <div class="community-share-panel">
+    <h3 id="community-share-title">Share study app</h3>
+    <p>Send this revision app to a friend, group chat, or teacher.</p>
+    <div id="community-share-preview" class="community-share-preview"></div>
+    <div class="community-share-actions">
+      <button id="community-share-native" class="community-share-action" type="button">↗ Share</button>
+      <button id="community-share-copy" class="community-share-action" type="button">⧉ Copy link</button>
+      <button id="community-share-whatsapp" class="community-share-action" type="button">WhatsApp</button>
+      <button id="community-share-open" class="community-share-action" type="button">Open app</button>
+    </div>
+    <button id="community-share-close" class="community-share-close" type="button" aria-label="Close share popup" title="Close">✕</button>
+  </div>
+</div>
 
 <!-- ============================================================
      MOBILE ADD-TO-HOMESCREEN BANNER
@@ -4442,16 +4635,17 @@ html[data-theme="light"] .community-fab{
           </div>
         </div>
 
-        <!-- Unit 2 -->
-        <div class="unit-card off">
+        <!-- Unit 2 LIVE -->
+        <div class="unit-card click" onclick="go('/revision/btec/level-3/IT-AAQ/unit-2')">
           <div class="unit-num">Unit 02 · 120 GLH</div>
           <div class="unit-title">Cyber Security and Incident Management</div>
-          <div class="unit-desc">Cyber threats, system vulnerabilities, protection methods and forensic incident response. Revision coming soon.</div>
+          <div class="unit-desc">Threat actors, malware, network security, encryption, incident response & digital forensics. Covers Learning Aims A–D with full spec alignment.</div>
           <div class="unit-ft">
             <div style="display:flex;gap:var(--sp2);align-items:center">
               <span class="badge badge-ext">External</span>
-              <span class="pill pill-soon">Coming soon</span>
+              <span class="pill pill-live">Live</span>
             </div>
+            <button class="btn btn-p" onclick="event.stopPropagation();go('/revision/btec/level-3/IT-AAQ/unit-2')">Open →</button>
           </div>
         </div>
 
@@ -4512,6 +4706,37 @@ html[data-theme="light"] .community-fab{
       <iframe
         src="revision/btec/level-3/IT-AAQ/unit-1/index.html"
         title="Unit 1 – Information Technology Systems"
+        loading="lazy"
+        allowfullscreen
+      ></iframe>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     UNIT 2  /revision/btec/level-3/IT-AAQ/unit-2
+============================================================ -->
+<div class="page page-iframe" id="p-unit2">
+  <div class="cd">
+    <nav class="bc">
+      <button class="bc-item" onclick="go('/')">Home</button>
+      <span class="bc-sep">›</span>
+      <button class="bc-item" onclick="go('/revision')">Revision</button>
+      <span class="bc-sep">›</span>
+      <button class="bc-item" onclick="go('/revision/btec')">BTEC</button>
+      <span class="bc-sep">›</span>
+      <button class="bc-item" onclick="go('/revision/btec/level-3')">Level 3</button>
+      <span class="bc-sep">›</span>
+      <button class="bc-item" onclick="go('/revision/btec/level-3/IT-AAQ')">IT (AAQ)</button>
+      <span class="bc-sep">›</span>
+      <span class="bc-item cur">Unit 2</span>
+    </nav>
+  </div>
+  <div class="cf">
+    <div class="iframe-wrap">
+      <iframe
+        src="revision/btec/level-3/IT-AAQ/unit-2/index.html"
+        title="Unit 2 – Cyber Security and Incident Management"
         loading="lazy"
         allowfullscreen
       ></iframe>
@@ -5344,142 +5569,378 @@ html[data-theme="light"] .community-fab{
       <span class="bc-item cur">Community</span>
     </nav>
 
-    <section class="community-shell">
-      <div class="community-social-header">
-        <div class="community-social-title">
-          <div class="hero-label">RA10 AI Workspace</div>
-          <h1>Community Assistant</h1>
-          <p>Chat-style workspace for discovering community study apps, opening AI-powered learning threads, and publishing your own assistant-ready revision packs.</p>
-        </div>
-        <div class="community-social-pills">
-          <span class="pill">Conversation Threads</span>
-          <span class="pill">Assistant Workspace</span>
-          <span class="pill">Prompt Studio</span>
+    <div class="community-page-wrap">
+      <!-- Hero -->
+      <div class="community-hero">
+        <div class="community-hero-inner">
+          <div class="community-hero-text">
+            <div class="hero-label">RA10 Community</div>
+            <h1>Study Apps Library</h1>
+            <p>Discover AI-generated revision apps shared by students. Open any app to study with flashcards, questions, a quiz, and a full revision guide — or create your own from your notes.</p>
+            <div class="community-hero-badges">
+              <span class="pill">📘 Revision Guides</span>
+              <span class="pill">🧠 Question Banks</span>
+              <span class="pill">🃏 Flashcards</span>
+              <span class="pill">✅ Quizzes</span>
+            </div>
+          </div>
+          <div class="community-hero-stats" id="community-hero-stats">
+            <div class="community-hero-stat"><strong id="community-stat-count">—</strong><span>Apps</span></div>
+          </div>
         </div>
       </div>
 
+      <!-- Toolbar -->
+      <div class="community-toolbar">
+        <input id="community-search" class="auth-input" type="search" placeholder="Search apps by title, subject, topic…" autocomplete="off">
+        <select id="community-subject-filter" class="auth-input">
+          <option value="">All subjects</option>
+          <option>Business</option>
+          <option>IT</option>
+          <option>Sport</option>
+          <option>Maths</option>
+          <option>Science</option>
+          <option>English</option>
+          <option>History</option>
+          <option>General</option>
+        </select>
+        <button id="community-refresh-btn" class="btn btn-s" type="button">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="flex-shrink:0"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+          Refresh
+        </button>
+        <button id="community-new-app-btn" class="btn btn-p" type="button">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="flex-shrink:0"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Create app
+        </button>
+      </div>
+
+      <!-- Main layout: library left, viewer right -->
       <div class="community-layout">
+        <!-- LEFT: app library -->
         <aside class="community-left">
-          <article class="community-panel community-feed-panel">
-            <div class="community-head-row">
-              <h3>Threads</h3>
-              <button id="community-refresh-btn" class="btn btn-s" type="button">Refresh</button>
-            </div>
-            <div class="community-filters">
-              <input id="community-search" class="auth-input" type="text" placeholder="Search by title, topic, level...">
-              <select id="community-subject-filter" class="auth-input">
-                <option value="">All subjects</option>
-                <option>Business</option>
-                <option>IT</option>
-                <option>Sport</option>
-                <option>Maths</option>
-                <option>Science</option>
-                <option>English</option>
-                <option>History</option>
-                <option>General</option>
-              </select>
+          <article class="community-panel">
+            <div class="community-panel-head">
+              <div>
+                <h3>Community Apps</h3>
+                <p>Tap any card to open it</p>
+              </div>
             </div>
             <div id="community-library" class="community-library-grid">
-              <div class="credit-log-note">Loading community apps...</div>
+              <div class="credit-log-note">Loading apps…</div>
             </div>
           </article>
         </aside>
 
+        <!-- RIGHT: viewer -->
         <main class="community-main">
-          <article class="community-panel community-viewer-panel">
-            <div class="community-head-row">
-              <h3>Assistant</h3>
-              <span class="pill">1 credit unlock</span>
-            </div>
-            <div id="community-open-app" class="community-open-app">
-              <div class="credit-log-note">Select a thread to open the full AI study workspace.</div>
+          <article class="community-panel community-viewer-panel" id="community-viewer-panel">
+            <div id="community-open-app">
+              <div class="community-viewer-empty">
+                <div class="community-viewer-empty-icon">📚</div>
+                <h4>Select an app to get started</h4>
+                <p>Choose any app from the library to open it and start studying.</p>
+              </div>
             </div>
           </article>
         </main>
-
-        <aside class="community-right">
-          <article class="community-panel community-create-panel" id="community-create-panel">
-          <h3>Prompt Studio</h3>
-          <p class="community-muted">DeepTutor is built in by default. Pro, Ultra, and Education plans are included. Free can still generate for 30 credits per app.</p>
-          <label class="auth-label" for="community-title">App title</label>
-          <input id="community-title" class="auth-input" type="text" maxlength="120" placeholder="e.g. GCSE Biology Cell Division">
-          <label class="auth-label" for="community-subject" style="margin-top:var(--sp2);">Subject</label>
-          <select id="community-subject" class="auth-input">
-            <option value="">Auto-detect from document</option>
-            <option>Business</option>
-            <option>IT</option>
-            <option>Science</option>
-            <option>Maths</option>
-            <option>English</option>
-            <option>History</option>
-            <option>Sport</option>
-            <option>General</option>
-          </select>
-          <label class="auth-label" for="community-desc" style="margin-top:var(--sp2);">Description</label>
-          <textarea id="community-desc" class="auth-input" rows="3" maxlength="320" placeholder="What should this app focus on?"></textarea>
-          <label class="auth-label" for="community-guidance" style="margin-top:var(--sp2);">Extra AI guidance</label>
-          <textarea id="community-guidance" class="auth-input" rows="3" maxlength="480" placeholder="Tell the AI what to prioritise (difficulty, style, must-cover topics, exam wording)."></textarea>
-          <label class="auth-label" for="community-focus" style="margin-top:var(--sp2);">Focus keywords (comma separated)</label>
-          <input id="community-focus" class="auth-input" type="text" maxlength="220" placeholder="e.g. market structure, elasticity, economies of scale">
-          <label class="auth-label" for="community-level" style="margin-top:var(--sp2);">Level</label>
-          <input id="community-level" class="auth-input" type="text" maxlength="60" placeholder="GCSE / A-Level / BTEC">
-          <label class="auth-label" for="community-exam-board" style="margin-top:var(--sp2);">Exam board</label>
-          <input id="community-exam-board" class="auth-input" type="text" maxlength="60" placeholder="AQA / Edexcel / OCR">
-          <label class="auth-label" for="community-file" style="margin-top:var(--sp2);">Document</label>
-          <div class="community-uploader">
-            <input id="community-file" class="community-file-hidden" type="file" accept=".txt,.md,.csv,.json,.html,.xml,.rtf,.pdf,.docx,.doc">
-            <div class="community-upload-row">
-              <label for="community-file" class="community-upload-btn">Upload File</label>
-              <span class="community-upload-status" id="community-file-status">No file selected</span>
-            </div>
-            <div class="community-upload-note">Supports TXT, MD, CSV, JSON, HTML, XML, RTF, PDF, and DOCX.</div>
-          </div>
-          <label class="auth-label" for="community-source" style="margin-top:var(--sp2);">Or paste source text</label>
-          <textarea id="community-source" class="auth-input" rows="8" placeholder="Paste your notes/document text here"></textarea>
-          <label style="display:flex;align-items:center;gap:8px;margin-top:8px;font-size:var(--tx-sm);"><input id="community-lock-title" type="checkbox" checked> Keep my title exactly (do not auto-rename)</label>
-          <div class="community-features">
-            <label><input type="checkbox" class="community-feature" value="revision_guide" checked> Revision guide</label>
-            <label><input type="checkbox" class="community-feature" value="question_bank" checked> Question bank</label>
-            <label><input type="checkbox" class="community-feature" value="flashcards" checked> Flashcards</label>
-            <label><input type="checkbox" class="community-feature" value="quiz" checked> Quiz</label>
-            <label><span class="pill">DeepTutor always on</span></label>
-          </div>
-          <div class="community-target-grid">
-            <div>
-              <label class="auth-label" for="community-target-questions">Question bank count</label>
-              <input id="community-target-questions" class="auth-input" type="number" min="8" max="80" step="1" value="24">
-            </div>
-            <div>
-              <label class="auth-label" for="community-target-flashcards">Flashcards count</label>
-              <input id="community-target-flashcards" class="auth-input" type="number" min="8" max="120" step="1" value="30">
-            </div>
-            <div>
-              <label class="auth-label" for="community-target-quiz">Quiz questions</label>
-              <input id="community-target-quiz" class="auth-input" type="number" min="6" max="60" step="1" value="20">
-            </div>
-            <div>
-              <label class="auth-label" for="community-target-chapters">Guide chapters</label>
-              <input id="community-target-chapters" class="auth-input" type="number" min="3" max="20" step="1" value="8">
-            </div>
-          </div>
-          <div class="community-target-note">Higher counts create richer apps but take longer to generate.</div>
-          <button id="community-create-btn" class="btn btn-p" type="button">Generate community app</button>
-          <div id="community-create-msg" class="auth-success" style="margin-top:var(--sp2);"></div>
-          <div id="community-create-err" class="auth-error" style="margin-top:var(--sp2);"></div>
-        </article>
-
-          <article class="community-panel">
-            <h3>Run Queue</h3>
-            <p class="community-muted">Server-side generation continues even if you close the tab.</p>
-            <div id="community-jobs" class="community-list">
-              <div class="credit-log-note">Sign in to view your jobs.</div>
-            </div>
-          </article>
-        </aside>
       </div>
 
-      <button id="community-fab" class="community-fab" type="button" title="Open Prompt Studio" aria-label="Open prompt studio">+</button>
-    </section>
+      <!-- Create app wizard / drawer -->
+      <div id="community-create-drawer" style="display:none;margin-top:var(--sp5);">
+        <article class="community-create-panel" id="community-create-panel">
+
+          <!-- Header -->
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:var(--sp3);margin-bottom:var(--sp4);">
+            <div>
+              <h3 style="margin:0 0 4px;">Create a Study App</h3>
+              <p class="community-muted" style="margin:0;">AI builds a full revision app from your notes, past papers, and online research. <strong>Pro/Ultra/Education</strong> plans free · Free users: 30 credits.</p>
+            </div>
+            <button id="community-create-close" class="btn btn-s" type="button" style="flex-shrink:0;">✕ Close</button>
+          </div>
+
+          <!-- Step tabs -->
+          <div class="cwiz-steps" id="cwiz-steps">
+            <button class="cwiz-step active" data-step="0" onclick="cwizGo(0)">
+              <span class="cwiz-step-num">1</span> Subject &amp; Board
+            </button>
+            <button class="cwiz-step" data-step="1" onclick="cwizGo(1)">
+              <span class="cwiz-step-num">2</span> Source Material
+            </button>
+            <button class="cwiz-step" data-step="2" onclick="cwizGo(2)">
+              <span class="cwiz-step-num">3</span> Content &amp; Quality
+            </button>
+            <button class="cwiz-step" data-step="3" onclick="cwizGo(3)">
+              <span class="cwiz-step-num">4</span> AI Guidance
+            </button>
+            <button class="cwiz-step" data-step="4" onclick="cwizGo(4)">
+              <span class="cwiz-step-num">5</span> Review &amp; Generate
+            </button>
+          </div>
+
+          <!-- Step 0: Subject & Board -->
+          <div class="cwiz-pane active" id="cwiz-pane-0">
+            <label class="auth-label" for="community-title">App title <span style="font-weight:400;color:var(--color-text-muted);">(AI can auto-generate if left blank)</span></label>
+            <input id="community-title" class="auth-input" type="text" maxlength="120" placeholder="e.g. AQA GCSE Biology — Cell Division">
+
+            <label class="auth-label" style="margin-top:var(--sp4);">Subject</label>
+            <div class="cw-picker-grid" id="cw-subject-grid">
+              <!-- filled by JS -->
+            </div>
+            <!-- hidden input populated by the subject tiles -->
+            <input id="community-subject" type="hidden" value="">
+
+            <label class="auth-label" style="margin-top:var(--sp4);">Level</label>
+            <div class="cw-level-row" id="cw-level-row">
+              <button class="cw-level-btn" data-level="GCSE" onclick="cwizPickLevel(this)">GCSE</button>
+              <button class="cw-level-btn" data-level="A-Level" onclick="cwizPickLevel(this)">A-Level</button>
+              <button class="cw-level-btn" data-level="BTEC Level 2" onclick="cwizPickLevel(this)">BTEC L2</button>
+              <button class="cw-level-btn" data-level="BTEC Level 3" onclick="cwizPickLevel(this)">BTEC L3</button>
+              <button class="cw-level-btn" data-level="IB" onclick="cwizPickLevel(this)">IB</button>
+              <button class="cw-level-btn" data-level="Undergraduate" onclick="cwizPickLevel(this)">Uni</button>
+              <button class="cw-level-btn" data-level="Mixed" onclick="cwizPickLevel(this)">Mixed</button>
+            </div>
+            <input id="community-level" type="hidden" value="">
+
+            <label class="auth-label" style="margin-top:var(--sp4);">Exam board</label>
+            <div class="cw-picker-grid" id="cw-board-grid">
+              <!-- filled by JS -->
+            </div>
+            <!-- hidden input for compatibility -->
+            <input id="community-exam-board" type="hidden" value="">
+
+            <label class="auth-label" style="margin-top:var(--sp4);" for="community-desc">Brief description <span style="font-weight:400;color:var(--color-text-muted);">(optional — helps AI focus)</span></label>
+            <textarea id="community-desc" class="auth-input" rows="2" maxlength="320" placeholder="e.g. Unit 3 Personal and Business Finance — focus on ratios, break-even and cash flow"></textarea>
+          </div>
+
+          <!-- Step 1: Source Material -->
+          <div class="cwiz-pane" id="cwiz-pane-1">
+            <p style="margin:0 0 var(--sp4);font-size:var(--tx-sm);color:var(--color-text-muted);">Give the AI as much source material as possible. You can combine a file upload <em>and</em> pasted text — both will be used.</p>
+
+            <label class="auth-label" for="community-file">Upload document</label>
+            <div class="community-uploader">
+              <input id="community-file" class="community-file-hidden" type="file" accept=".txt,.md,.csv,.json,.html,.xml,.rtf,.pdf,.docx,.doc">
+              <div class="community-upload-row">
+                <label for="community-file" class="community-upload-btn">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                  Choose file
+                </label>
+                <span class="community-upload-status" id="community-file-status">No file selected</span>
+              </div>
+              <p class="community-upload-note">Accepts TXT, MD, CSV, JSON, HTML, XML, RTF, PDF, DOCX · Max recommended 5 MB</p>
+            </div>
+
+            <label class="auth-label" style="margin-top:var(--sp4);" for="community-source">Paste notes or spec content</label>
+            <textarea id="community-source" class="auth-input" rows="8" placeholder="Paste your class notes, textbook extracts, spec bullet points, mark scheme guidance… the more detail the better the app."></textarea>
+
+            <!-- AI online research toggles -->
+            <label class="auth-label" style="margin-top:var(--sp4);">AI research enhancements</label>
+            <p style="margin:0 0 var(--sp2);font-size:11px;color:var(--color-text-muted);">These instruct the AI to enrich the app with additional context beyond your source material.</p>
+
+            <div class="cw-toggle-row">
+              <div class="cw-toggle-label">
+                <strong>Use past paper questions</strong>
+                <span>AI references real exam question styles and command verbs for the board/level you chose</span>
+              </div>
+              <label class="cw-switch" title="Use past paper styles">
+                <input type="checkbox" id="cw-toggle-pastpapers" checked>
+                <span class="cw-switch-track"></span>
+                <span class="cw-switch-thumb"></span>
+              </label>
+            </div>
+
+            <div class="cw-toggle-row">
+              <div class="cw-toggle-label">
+                <strong>Enrich with online research</strong>
+                <span>AI searches for additional context, definitions, and examples relevant to the topic</span>
+              </div>
+              <label class="cw-switch" title="Online research enrichment">
+                <input type="checkbox" id="cw-toggle-research" checked>
+                <span class="cw-switch-track"></span>
+                <span class="cw-switch-thumb"></span>
+              </label>
+            </div>
+
+            <div class="cw-toggle-row">
+              <div class="cw-toggle-label">
+                <strong>Include real-world examples &amp; case studies</strong>
+                <span>AI adds recent business, scientific or current affairs examples relevant to the subject</span>
+              </div>
+              <label class="cw-switch" title="Real-world examples">
+                <input type="checkbox" id="cw-toggle-examples" checked>
+                <span class="cw-switch-track"></span>
+                <span class="cw-switch-thumb"></span>
+              </label>
+            </div>
+
+            <div class="cw-toggle-row">
+              <div class="cw-toggle-label">
+                <strong>Exam technique tips in the guide</strong>
+                <span>Include command verb guidance, timing tips, and mark allocation advice</span>
+              </div>
+              <label class="cw-switch" title="Exam technique">
+                <input type="checkbox" id="cw-toggle-technique" checked>
+                <span class="cw-switch-track"></span>
+                <span class="cw-switch-thumb"></span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Step 2: Content & Quality -->
+          <div class="cwiz-pane" id="cwiz-pane-2">
+            <label class="auth-label">Content to generate</label>
+            <div class="community-features" style="margin-bottom:var(--sp4);">
+              <label><input type="checkbox" class="community-feature" value="revision_guide" checked> 📘 Revision Guide</label>
+              <label><input type="checkbox" class="community-feature" value="question_bank" checked> 🧠 Question Bank</label>
+              <label><input type="checkbox" class="community-feature" value="flashcards" checked> 🃏 Flashcards</label>
+              <label><input type="checkbox" class="community-feature" value="quiz" checked> ✅ Quiz</label>
+            </div>
+
+            <label class="auth-label">Quality preset</label>
+            <div class="cw-preset-grid" id="cw-preset-grid">
+              <div class="cw-preset-card" data-preset="quick" onclick="cwizPickPreset(this)">
+                <div class="cw-preset-icon">⚡</div>
+                <strong>Quick</strong>
+                <p>15 Qs · 20 cards · 10 quiz · 5 chapters<br><em>~2 min</em></p>
+              </div>
+              <div class="cw-preset-card selected" data-preset="standard" onclick="cwizPickPreset(this)">
+                <div class="cw-preset-icon">📘</div>
+                <strong>Standard</strong>
+                <p>24 Qs · 30 cards · 20 quiz · 8 chapters<br><em>~5 min</em></p>
+              </div>
+              <div class="cw-preset-card" data-preset="comprehensive" onclick="cwizPickPreset(this)">
+                <div class="cw-preset-icon">🏆</div>
+                <strong>Comprehensive</strong>
+                <p>50 Qs · 60 cards · 40 quiz · 14 chapters<br><em>~12 min</em></p>
+              </div>
+            </div>
+            <p class="community-target-note" style="margin-top:var(--sp3);">Or set custom counts below — override the preset.</p>
+
+            <div class="community-target-grid" style="margin-top:var(--sp3);">
+              <div>
+                <label class="auth-label" for="community-target-questions" style="margin-top:0;">Questions</label>
+                <input id="community-target-questions" class="auth-input" type="number" min="8" max="80" step="1" value="24">
+              </div>
+              <div>
+                <label class="auth-label" for="community-target-flashcards" style="margin-top:0;">Flashcards</label>
+                <input id="community-target-flashcards" class="auth-input" type="number" min="8" max="120" step="1" value="30">
+              </div>
+              <div>
+                <label class="auth-label" for="community-target-quiz" style="margin-top:0;">Quiz questions</label>
+                <input id="community-target-quiz" class="auth-input" type="number" min="6" max="60" step="1" value="20">
+              </div>
+              <div>
+                <label class="auth-label" for="community-target-chapters" style="margin-top:0;">Guide chapters</label>
+                <input id="community-target-chapters" class="auth-input" type="number" min="3" max="20" step="1" value="8">
+              </div>
+            </div>
+
+            <label class="auth-label" style="margin-top:var(--sp4);">Difficulty level</label>
+            <div class="cw-level-row">
+              <button class="cw-level-btn" data-diff="Foundation" onclick="cwizPickDiff(this)">Foundation</button>
+              <button class="cw-level-btn selected" data-diff="Mixed" onclick="cwizPickDiff(this)">Mixed</button>
+              <button class="cw-level-btn" data-diff="Higher" onclick="cwizPickDiff(this)">Higher</button>
+              <button class="cw-level-btn" data-diff="Challenge" onclick="cwizPickDiff(this)">Challenge</button>
+            </div>
+            <input id="cw-difficulty" type="hidden" value="Mixed">
+
+            <label class="auth-label" style="margin-top:var(--sp4);">Question style</label>
+            <div class="cw-level-row">
+              <button class="cw-level-btn selected" data-qstyle="Exam-style" onclick="cwizPickQStyle(this)">Exam-style</button>
+              <button class="cw-level-btn" data-qstyle="Short answer" onclick="cwizPickQStyle(this)">Short answer</button>
+              <button class="cw-level-btn" data-qstyle="Extended response" onclick="cwizPickQStyle(this)">Extended response</button>
+              <button class="cw-level-btn" data-qstyle="Case study" onclick="cwizPickQStyle(this)">Case study</button>
+            </div>
+            <input id="cw-qstyle" type="hidden" value="Exam-style">
+          </div>
+
+          <!-- Step 3: AI Guidance -->
+          <div class="cwiz-pane" id="cwiz-pane-3">
+            <label class="auth-label" for="community-focus">Key topics &amp; focus keywords <span style="font-weight:400;color:var(--color-text-muted);">(comma separated)</span></label>
+            <input id="community-focus" class="auth-input" type="text" maxlength="320" placeholder="e.g. market structure, break-even analysis, cash flow, GDP, comparative advantage">
+
+            <label class="auth-label" style="margin-top:var(--sp4);" for="community-guidance">Extra AI instructions</label>
+            <textarea id="community-guidance" class="auth-input" rows="4" maxlength="800" placeholder="Tell the AI exactly how to build this app. Examples:&#10;• 'Focus heavily on evaluation and analysis (AO3/AO4) rather than simple recall'&#10;• 'Use the Pearson mark scheme format with indicative content bullet points'&#10;• 'Include calculations for financial ratios and break-even'&#10;• 'Write questions that reference named businesses like Tesco, Apple, Nike'"></textarea>
+
+            <label class="auth-label" style="margin-top:var(--sp4);" for="community-spec-notes">Specification notes <span style="font-weight:400;color:var(--color-text-muted);">(paste spec bullet points or AO weighting)</span></label>
+            <textarea id="community-spec-notes" class="auth-input" rows="4" maxlength="1200" placeholder="Paste the official spec bullet points here so the AI matches exact specification requirements…"></textarea>
+
+            <div class="cw-toggle-row" style="margin-top:var(--sp4);">
+              <div class="cw-toggle-label">
+                <strong>Keep my title exactly as typed</strong>
+                <span>Prevent AI from renaming the app during generation</span>
+              </div>
+              <label class="cw-switch">
+                <input type="checkbox" id="community-lock-title" checked>
+                <span class="cw-switch-track"></span>
+                <span class="cw-switch-thumb"></span>
+              </label>
+            </div>
+
+            <div class="cw-toggle-row">
+              <div class="cw-toggle-label">
+                <strong>Share publicly when complete</strong>
+                <span>Let other students find and use this app in the community library</span>
+              </div>
+              <label class="cw-switch">
+                <input type="checkbox" id="cw-toggle-public" checked>
+                <span class="cw-switch-track"></span>
+                <span class="cw-switch-thumb"></span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Step 4: Review & Generate -->
+          <div class="cwiz-pane" id="cwiz-pane-4">
+            <div id="cwiz-review-summary" style="border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:var(--sp4);background:var(--color-bg);margin-bottom:var(--sp4);display:grid;gap:var(--sp3);">
+              <!-- filled by cwizBuildReview() -->
+            </div>
+
+            <div class="cw-gen-progress" id="cw-gen-progress">
+              <strong style="font-size:var(--tx-sm);color:var(--color-text);">⚡ Generating your app…</strong>
+              <div class="cw-gen-bar"><div class="cw-gen-bar-fill" id="cw-gen-bar-fill"></div></div>
+              <div class="cw-gen-steps" id="cw-gen-steps">
+                <div class="cw-gen-step-row" id="cws-research"><span class="cw-gen-step-dot"></span>Researching subject &amp; board context</div>
+                <div class="cw-gen-step-row" id="cws-guide"><span class="cw-gen-step-dot"></span>Building revision guide chapters</div>
+                <div class="cw-gen-step-row" id="cws-questions"><span class="cw-gen-step-dot"></span>Writing exam-style questions</div>
+                <div class="cw-gen-step-row" id="cws-flashcards"><span class="cw-gen-step-dot"></span>Creating flashcards</div>
+                <div class="cw-gen-step-row" id="cws-quiz"><span class="cw-gen-step-dot"></span>Building quiz</div>
+                <div class="cw-gen-step-row" id="cws-publish"><span class="cw-gen-step-dot"></span>Publishing to community library</div>
+              </div>
+            </div>
+
+            <div id="community-create-msg" class="auth-success" style="display:none;margin-bottom:var(--sp3);"></div>
+            <div id="community-create-err" class="auth-error" style="display:none;margin-bottom:var(--sp3);"></div>
+          </div>
+
+          <!-- Footer nav -->
+          <div class="cwiz-footer">
+            <div class="cwiz-inline-error" id="cwiz-inline-error" role="alert"></div>
+            <div class="cwiz-footer-actions">
+              <button class="btn btn-s" id="cwiz-prev" onclick="cwizStep(-1)" style="display:none;">← Back</button>
+              <button class="btn btn-s" id="cwiz-next" onclick="cwizStep(1)">Next →</button>
+              <button id="community-create-btn" class="btn btn-p" type="button" style="display:none;min-width:180px;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="flex-shrink:0"><path d="M12 3l2.1 4.9L19 10l-4.9 2.1L12 17l-2.1-4.9L5 10l4.9-2.1L12 3z"/></svg>
+                Generate app
+              </button>
+            </div>
+            <span style="font-size:var(--tx-xs);color:var(--color-text-muted);" id="cwiz-step-label">Step 1 of 5</span>
+          </div>
+        </article>
+
+        <!-- Jobs queue below create form -->
+        <article class="community-panel" style="margin-top:var(--sp4);">
+          <div class="community-panel-head">
+            <div>
+              <h3>Generation Queue</h3>
+              <p>Your recent app builds. Generation runs on our servers — close this tab any time.</p>
+            </div>
+          </div>
+          <div id="community-jobs" class="community-list">
+            <div class="credit-log-note">Sign in to view your jobs.</div>
+          </div>
+        </article>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -5773,6 +6234,7 @@ const ROUTES = {
   '/revision/btec/level-3/sport/unit-1': 'p-sport-u1',
   '/revision/btec/level-3/IT-AAQ':       'p-it-aaq',
   '/revision/btec/level-3/IT-AAQ/unit-1':'p-unit1',
+  '/revision/btec/level-3/IT-AAQ/unit-2':'p-unit2',
   '/revision/btec/level-2':              'p-btec-l2',
   '/revision/btec/level-2/it':           'p-btec-l2-it',
   '/revision/btec/level-2/it/unit-2':    'p-it-l2-u2',
@@ -7117,6 +7579,8 @@ async function communityCallFunction(functionName, payload) {
     headers: {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer ' + token,
+      'apikey': COMMUNITY_SB_ANON,
+      'x-client-info': 'ra10-community-web',
     },
     body: JSON.stringify(payload || {}),
   });
@@ -7326,11 +7790,19 @@ function communityRenderGuide(raw) {
   const emojis = ['📘', '🧠', '🧩', '📝', '🎯', '📌', '⚙️', '🔎'];
   const sections = communityParseGuideSections(raw);
   if (!sections.length) return '<div class="community-content-scroll">No revision guide data.</div>';
-  return sections.slice(0, 24).map((section, idx) => {
+  return '<div class="community-guide-wrap">' + sections.slice(0, 24).map((section, idx) => {
     const heading = communityEscape(section.title || ('Chapter ' + (idx + 1)));
     const body = communityEscape(String(section.body || '').replace(/\n{3,}/g, '\n\n'));
-    return '<div class="community-guide-section"><h6>' + emojis[idx % emojis.length] + ' ' + heading + '</h6><div class="community-content-scroll" style="max-height:180px;">' + body + '</div></div>';
-  }).join('');
+    const isFirst = idx === 0;
+    return '<div class="community-guide-section' + (isFirst ? ' open' : '') + '">'
+      + '<div class="community-guide-section-head" onclick="this.parentElement.classList.toggle(\'open\')">'
+      + '<span style="font-size:1.1em;line-height:1;">' + emojis[idx % emojis.length] + '</span>'
+      + '<span style="flex:1;">' + heading + '</span>'
+      + '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="flex-shrink:0;transition:transform .2s;transform:' + (isFirst ? 'rotate(180deg)' : 'none') + '" class="community-guide-chevron"><polyline points="6 9 12 15 18 9"/></svg>'
+      + '</div>'
+      + '<div class="community-guide-section-body"><div class="community-content-scroll">' + body + '</div></div>'
+      + '</div>';
+  }).join('') + '</div>';
 }
 
 function communityBuildQuestionObject(item, idx) {
@@ -7414,19 +7886,18 @@ function communityRenderFlashcards(raw) {
   const back = communityEscape(item.back || item.definition || 'Back');
   const showingBack = !!_communityOpenState.flashcardReveal;
   return ''
-    + '<div class="community-content-box">'
-    +   '<h5>Flashcards</h5>'
-    +   '<div class="community-job-meta">Card ' + (idx + 1) + ' of ' + list.length + '</div>'
-    +   '<div class="community-flash-scene" style="margin-top:10px;">'
+    + '<div>'
+    +   '<p class="community-flash-counter">Card ' + (idx + 1) + ' of ' + list.length + ' — click card to flip</p>'
+    +   '<div class="community-flash-scene" onclick="communityToggleFlashcard()" title="Click to flip">'
     +     '<div class="community-flash-card ' + (showingBack ? 'is-flipped' : '') + '">'
-    +       '<div class="community-flash-face front"><div><div class="community-flash-label">Front</div><div style="font-size:var(--tx-lg);font-weight:700;">' + front + '</div></div></div>'
-    +       '<div class="community-flash-face back"><div><div class="community-flash-label">Back</div><div style="font-size:var(--tx-lg);font-weight:700;">' + back + '</div></div></div>'
+    +       '<div class="community-flash-face front"><div class="community-flash-label">Term</div><div class="community-flash-text">' + front + '</div></div>'
+    +       '<div class="community-flash-face back"><div class="community-flash-label">Definition</div><div class="community-flash-text">' + back + '</div></div>'
     +     '</div>'
     +   '</div>'
-    +   '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;">'
-    +     '<button class="btn btn-s" type="button" onclick="communitySetFlashcardIndex(' + (idx - 1) + ')">Previous</button>'
-    +     '<button class="btn btn-s" type="button" onclick="communityToggleFlashcard()">' + (showingBack ? 'Show front' : 'Flip card') + '</button>'
-    +     '<button class="btn btn-s" type="button" onclick="communitySetFlashcardIndex(' + (idx + 1) + ')">Next</button>'
+    +   '<div class="community-flash-actions">'
+    +     '<button class="btn btn-s" type="button" onclick="communitySetFlashcardIndex(' + (idx - 1) + ')">← Prev</button>'
+    +     '<button class="btn btn-s" type="button" onclick="communityToggleFlashcard()">' + (showingBack ? 'Show term' : 'Flip') + '</button>'
+    +     '<button class="btn btn-s" type="button" onclick="communitySetFlashcardIndex(' + (idx + 1) + ')">Next →</button>'
     +     '<button class="btn btn-s" type="button" onclick="communityShuffleFlashcards()">Shuffle</button>'
     +   '</div>'
     + '</div>';
@@ -7510,44 +7981,86 @@ async function communityReadSourceText() {
 }
 
 async function createCommunityAppJob() {
-  const msg = document.getElementById('community-create-msg');
-  const err = document.getElementById('community-create-err');
-  const btn = document.getElementById('community-create-btn');
-  if (msg) msg.textContent = '';
-  if (err) err.textContent = '';
+  const msgEl = document.getElementById('community-create-msg');
+  const errEl = document.getElementById('community-create-err');
+  const btn   = document.getElementById('community-create-btn');
+
+  const showMsg = (txt) => { if (msgEl) { msgEl.textContent = txt; msgEl.style.display = txt ? '' : 'none'; } };
+  const showErr = (txt) => { if (errEl) { errEl.textContent = txt; errEl.style.display = txt ? '' : 'none'; } };
+
+  showMsg(''); showErr('');
   if (btn) btn.disabled = true;
+
   try {
     if (!RA10 || !RA10.isLoggedIn || !RA10.isLoggedIn()) {
       throw new Error('Sign in to create community apps.');
     }
-    const source = await communityReadSourceText();
-    if (!source.text || source.text.length < 120) {
-      throw new Error('Please provide more source text (at least 120 characters).');
+
+    const required = cwizValidateStep(0) || cwizValidateStep(2);
+    if (required) {
+      cwizShowError(required);
+      cwizGo(required.includes('content') ? 2 : 0);
+      return;
     }
-    const title = String(document.getElementById('community-title')?.value || '').trim();
-    const subject = String(document.getElementById('community-subject')?.value || '').trim();
-    const description = String(document.getElementById('community-desc')?.value || '').trim();
-    const guidance = String(document.getElementById('community-guidance')?.value || '').trim();
-    const focus = String(document.getElementById('community-focus')?.value || '').split(',').map((x) => String(x || '').trim()).filter(Boolean).slice(0, 12);
-    const lockTitle = !!document.getElementById('community-lock-title')?.checked;
-    const level = String(document.getElementById('community-level')?.value || '').trim() || 'Mixed';
-    const examBoard = String(document.getElementById('community-exam-board')?.value || '').trim() || 'Mixed';
-    const features = Array.from(document.querySelectorAll('.community-feature:checked')).map((el) => String(el.value || '').trim()).filter(Boolean);
+
+    const source = await communityReadSourceText();
+    // Source text is now optional — AI uses general knowledge + online research if nothing provided
+    const hasSource = source.text && source.text.length >= 60;
+
+    const subject     = cwizGetVal('community-subject');
+    const description = cwizGetVal('community-desc');
+    const level       = cwizGetVal('community-level') || 'Mixed';
+    const examBoard   = cwizGetVal('community-exam-board') || 'Mixed';
+    // The generation service requires a non-empty title. When users leave it
+    // blank, create a clear starter title that the AI can refine (unless title
+    // locking is enabled) instead of submitting an invalid empty value.
+    const typedTitle = cwizGetVal('community-title');
+    const title = typedTitle.length >= 4
+      ? typedTitle
+      : [examBoard !== 'Mixed' ? examBoard : '', level !== 'Mixed' ? level : '', subject || 'Revision', 'Study App'].filter(Boolean).join(' ');
+    const difficulty  = cwizGetVal('cw-difficulty') || 'Mixed';
+    const qStyle      = cwizGetVal('cw-qstyle') || 'Exam-style';
+    const specNotes   = cwizGetVal('community-spec-notes');
+    const focus       = cwizGetVal('community-focus').split(',').map(x => x.trim()).filter(Boolean).slice(0, 16);
+    const lockTitle   = cwizChecked('community-lock-title');
+
+    // Build rich AI guidance string combining user guidance + toggles
+    const userGuidance   = cwizGetVal('community-guidance');
+    const usePastPapers  = cwizChecked('cw-toggle-pastpapers');
+    const useResearch    = cwizChecked('cw-toggle-research');
+    const useExamples    = cwizChecked('cw-toggle-examples');
+    const useTechnique   = cwizChecked('cw-toggle-technique');
+    const isPublic       = cwizChecked('cw-toggle-public');
+
+    const guidanceParts = [];
+    if (userGuidance) guidanceParts.push(userGuidance);
+    if (usePastPapers) guidanceParts.push('Reference real past paper question styles, command verbs and mark allocation patterns for ' + (examBoard || 'the relevant exam board') + ' at ' + (level || 'this level') + '.');
+    if (useResearch)   guidanceParts.push('Enrich the app with online research: look up current definitions, recent examples, key statistics, and latest developments relevant to this topic.');
+    if (useExamples)   guidanceParts.push('Include real-world case studies and named examples (e.g. specific businesses, scientists, historical events) to make questions more authentic and contextual.');
+    if (useTechnique)  guidanceParts.push('Include exam technique guidance in the revision guide: command verb explanations, mark allocation tips, timing advice, and common mistakes to avoid.');
+    if (specNotes)     guidanceParts.push('SPECIFICATION NOTES — match the following bullet points exactly:\n' + specNotes);
+    if (difficulty !== 'Mixed') guidanceParts.push('Target difficulty: ' + difficulty + '. Calibrate question complexity accordingly.');
+    if (qStyle !== 'Exam-style') guidanceParts.push('Preferred question style: ' + qStyle + '.');
+
+    const guidance = guidanceParts.join('\n\n');
+
+    const features = Array.from(document.querySelectorAll('.community-feature:checked')).map(el => String(el.value || '').trim()).filter(Boolean);
+    if (!features.length) throw new Error('Select at least one content type to generate.');
+
     const generationTargets = {
-      question_count: communityClampInt(document.getElementById('community-target-questions')?.value, 24, 8, 80),
-      flashcard_count: communityClampInt(document.getElementById('community-target-flashcards')?.value, 30, 8, 120),
-      quiz_count: communityClampInt(document.getElementById('community-target-quiz')?.value, 20, 6, 60),
+      question_count:    communityClampInt(document.getElementById('community-target-questions')?.value, 24, 8, 80),
+      flashcard_count:   communityClampInt(document.getElementById('community-target-flashcards')?.value, 30, 8, 120),
+      quiz_count:        communityClampInt(document.getElementById('community-target-quiz')?.value, 20, 6, 60),
       guide_chapter_count: communityClampInt(document.getElementById('community-target-chapters')?.value, 8, 3, 20),
     };
 
     const tier = String((RA10.getTier && RA10.getTier()) || 'free').toLowerCase();
-    const included = tier === 'all_subjects' || tier === 'ultra' || tier === 'school_student' || tier === 'school_teacher' || tier === 'school_admin' || tier === 'owner';
-    if (!included && tier !== 'free') {
-      throw new Error('This tool is included for Pro, Ultra and Education plans. Free can still generate with 30 credits.');
-    }
-    if (tier === 'free' && Number(RA10.getCredits ? RA10.getCredits() : 0) < 30) {
-      throw new Error('Free accounts need 30 credits to generate a community app.');
-    }
+    const included = ['all_subjects','ultra','school_student','school_teacher','school_admin','owner'].includes(tier);
+    if (!included && tier !== 'free') throw new Error('This tool is included for Pro, Ultra and Education plans. Free can still generate with 30 credits.');
+    if (tier === 'free' && Number(RA10.getCredits ? RA10.getCredits() : 0) < 30) throw new Error('Free accounts need 30 credits to generate a community app.');
+
+    // Start progress animation
+    cwizSimulateProgress();
 
     const data = await communityCallFunction('community-create-job', {
       title,
@@ -7560,27 +8073,50 @@ async function createCommunityAppJob() {
       lockTitle,
       features,
       generationTargets,
-      sourceText: source.text,
-      sourceFileName: source.fileName,
+      sourceText: source.text || '',
+      sourceFileName: source.fileName || '',
+      // Extra enrichment flags (server can use if supported)
+      enrichment: { pastPapers: usePastPapers, onlineResearch: useResearch, examples: useExamples, technique: useTechnique },
+      visibility: isPublic ? 'public' : 'private',
     });
 
-    const costText = Number(data?.generationCost || 0) > 0 ? (' Charged ' + Number(data?.generationCost || 0) + ' credits.') : ' Included in your plan.';
-    const effort = Math.round((generationTargets.question_count + generationTargets.flashcard_count + generationTargets.quiz_count) * 1.6);
-    if (msg) msg.textContent = 'Job queued and auto-started. Subject: ' + String(data?.subject || 'General') + '. Target content: ' + generationTargets.question_count + ' questions, ' + generationTargets.flashcard_count + ' flashcards, ' + generationTargets.quiz_count + ' quiz items. Higher counts can take longer (~' + effort + 's).' + costText;
+    const fill = document.getElementById('cw-gen-bar-fill');
+    if (fill) fill.style.width = '100%';
+
+    const costText = Number(data?.generationCost || 0) > 0 ? ' · Charged ' + Number(data?.generationCost || 0) + ' credits.' : ' · Included in your plan.';
+    showMsg('✓ App queued! Subject: ' + String(data?.subject || subject || 'General') + ' · ' + generationTargets.question_count + ' Qs, ' + generationTargets.flashcard_count + ' cards, ' + generationTargets.quiz_count + ' quiz items' + costText + ' Check the queue below for progress.');
+
     if (data && data.jobId) {
       const newJobId = String(data.jobId || '');
       if (newJobId) {
         _communityQueuedKickoff[newJobId] = true;
+        cwizTrackJob(newJobId);
         communityCallFunction('community-process-job', { jobId: newJobId })
-          .catch(() => null)
+          .catch((error) => {
+            delete _communityQueuedKickoff[newJobId];
+            cwizShowProcessorFailure(error);
+          })
           .finally(() => { setTimeout(() => { loadCommunityJobs(); }, 1400); });
       }
     }
-    const panel = document.getElementById('community-create-panel');
-    if (panel) panel.classList.remove('open');
     await Promise.all([loadCommunityJobs(), loadCommunityApps()]);
   } catch (e) {
-    if (err) err.textContent = String((e && e.message) || e || 'Could not create job.');
+    const prog = document.getElementById('cw-gen-progress');
+    const message = String((e && e.message) || e || 'Could not create job.');
+    const setupHint = /404|not found|function/i.test(message)
+      ? ' The Community generator service has not been deployed yet. Deploy the community-create-job and community-process-job Supabase functions, then try again.'
+      : '';
+    const fullMessage = message + setupHint;
+    if (prog) {
+      prog.classList.add('visible', 'failed');
+      const title = prog.querySelector('strong');
+      if (title) title.textContent = 'Generation could not start';
+      const fill = document.getElementById('cw-gen-bar-fill');
+      if (fill) fill.style.width = '100%';
+      const steps = document.getElementById('cw-gen-steps');
+      if (steps) steps.innerHTML = '<div class="cw-gen-step-row"><span class="cw-gen-step-dot"></span><span>' + communityEscape(fullMessage) + '</span></div>';
+    }
+    showErr(fullMessage);
   } finally {
     if (btn) btn.disabled = false;
   }
@@ -7602,22 +8138,26 @@ async function loadCommunityJobs() {
     host.innerHTML = rows.map((row) => {
       const pct = Math.max(0, Math.min(100, Number(row.progress || 0)));
       const title = communityEscape((row.community_apps && row.community_apps.title) || 'Untitled app');
-      const status = communityEscape(String(row.status || 'queued'));
+      const statusRaw = String(row.status || 'queued');
+      const statusLabel = communityEscape(statusRaw);
+      const statusCls = statusRaw === 'running' || statusRaw === 'processing' ? 'running' : (statusRaw === 'completed' ? 'done' : (statusRaw === 'failed' ? 'failed' : ''));
       const note = communityEscape(String(row.status_note || ''));
       const etaRaw = Number(row.eta_seconds);
-      const eta = Number.isFinite(etaRaw) && etaRaw > 0 ? ('ETA ~ ' + etaRaw + 's') : '';
+      const eta = Number.isFinite(etaRaw) && etaRaw > 0 ? ('~' + etaRaw + 's') : '';
       const when = row.created_at ? new Date(row.created_at).toLocaleString() : '';
-      const err = row.error_message ? '<div class="auth-error" style="margin-top:6px;">' + communityEscape(row.error_message) + '</div>' : '';
-      const canRetry = String(row.status || '') === 'failed';
+      const err = row.error_message ? '<div class="auth-error" style="margin-top:var(--sp2);">' + communityEscape(row.error_message) + '</div>' : '';
+      const canRetry = statusRaw === 'failed';
       const retryBtn = canRetry
-        ? '<button class="btn btn-s" type="button" style="margin-top:8px;" onclick="communityStartJob(\'' + String(row.id || '') + '\')">Retry</button>'
+        ? '<button class="btn btn-s" type="button" style="margin-top:var(--sp2);" onclick="communityStartJob(\'' + String(row.id || '') + '\')">Retry</button>'
         : '';
       return ''
         + '<div class="community-job-item">'
-        +   '<div class="community-job-top"><span>' + title + '</span><span>' + status + '</span></div>'
-        +   '<div class="community-job-meta">' + communityEscape(when) + '</div>'
-        +   (note ? '<div class="community-job-meta" style="margin-top:4px;">' + note + (eta ? ' · ' + eta : '') + '</div>' : (eta ? '<div class="community-job-meta" style="margin-top:4px;">' + eta + '</div>' : ''))
-        +   '<div class="community-job-progress"><span style="width:' + pct + '%"></span></div>'
+        +   '<div class="community-job-top">'
+        +     '<span class="community-job-title">' + title + '</span>'
+        +     '<span class="community-job-status ' + statusCls + '">' + statusLabel + '</span>'
+        +   '</div>'
+        +   '<div class="community-job-meta">' + communityEscape(when) + (note ? ' · ' + note : '') + (eta ? ' · ETA ' + eta : '') + '</div>'
+        +   (pct > 0 && pct < 100 ? '<div class="community-job-progress"><span style="width:' + pct + '%"></span></div>' : '')
         +   retryBtn
         +   err
         + '</div>';
@@ -7649,6 +8189,78 @@ async function communityStartJob(jobId) {
   }
 }
 
+function communityPinnedStorageKey() {
+  const userId = RA10 && RA10.isLoggedIn && RA10.isLoggedIn()
+    ? String(RA10.getSession()?.user?.id || 'guest')
+    : 'guest';
+  return 'ra10-community-pinned-apps:' + userId;
+}
+
+function communityGetPinnedIds() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(communityPinnedStorageKey()) || '[]');
+    return Array.isArray(saved) ? saved.map(String) : [];
+  } catch (e) { return []; }
+}
+
+function communitySetPinnedIds(ids) {
+  try { localStorage.setItem(communityPinnedStorageKey(), JSON.stringify(Array.from(new Set(ids.map(String))).slice(0, 12))); } catch (e) {}
+}
+
+function communityAnimatePin(originRect) {
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const target = document.querySelector('.community-pinned-section');
+  if (!originRect || !target) return;
+  const from = originRect;
+  const to = target.getBoundingClientRect();
+  const ghost = document.createElement('div');
+  ghost.className = 'community-pin-flight';
+  ghost.textContent = '📌 Pinned';
+  ghost.style.left = from.left + 'px';
+  ghost.style.top = from.top + 'px';
+  document.body.appendChild(ghost);
+  requestAnimationFrame(() => {
+    ghost.style.transform = 'translate(' + (to.left - from.left + 18) + 'px,' + (to.top - from.top + 18) + 'px) scale(.72)';
+    ghost.style.opacity = '.15';
+  });
+  setTimeout(() => {
+    ghost.remove();
+    target.animate([{ transform: 'scale(.98)' }, { transform: 'scale(1.02)' }, { transform: 'scale(1)' }], { duration: 480, easing: 'cubic-bezier(.16,1,.3,1)' });
+  }, 660);
+}
+
+function communityTogglePin(appId, origin) {
+  const id = String(appId || '');
+  if (!id) return;
+  // Event.currentTarget is cleared by the browser after the click handler;
+  // retain the actual button before the async library re-render happens.
+  const originButton = origin && origin.currentTarget instanceof Element ? origin.currentTarget : null;
+  const originRect = originButton ? originButton.getBoundingClientRect() : null;
+  const pinned = communityGetPinnedIds();
+  const isPinned = pinned.includes(id);
+  communitySetPinnedIds(isPinned ? pinned.filter(x => x !== id) : [id].concat(pinned));
+  loadCommunityApps().then(() => { if (!isPinned) communityAnimatePin(originRect); });
+}
+
+function communityRenderPinnedApps(apps, creatorMap) {
+  const pinnedIds = communityGetPinnedIds();
+  const pinnedApps = pinnedIds.map(id => apps.find(app => String(app.id || '') === id)).filter(Boolean);
+  if (!pinnedApps.length) return '';
+  return '<section class="community-pinned-section">'
+    + '<div class="community-pinned-head"><strong>📌 Pinned for you</strong><span class="community-library-count">' + pinnedApps.length + '</span></div>'
+    + '<div class="community-pinned-list">'
+    + pinnedApps.map(app => {
+      const creator = creatorMap[String(app.creator_id || '')] || communityResolveCreator(app.creator_id);
+      const creatorName = communityUserLabel(creator, app.creator_id);
+      return '<button class="community-pinned-item" type="button" onclick="communityOpenApp(\'' + String(app.id || '') + '\')">'
+        + '<span class="community-pinned-icon">' + communityEscape(String(app.icon_emoji || '📘')) + '</span>'
+        + '<span class="community-pinned-copy"><strong>' + communityEscape(String(app.title || 'Revision App')) + '</strong><span>by ' + communityEscape(creatorName) + '</span></span>'
+        + '<span class="community-pinned-remove" role="button" onclick="event.stopPropagation();communityTogglePin(\'' + String(app.id || '') + '\')" title="Unpin">✕</span>'
+        + '</button>';
+    }).join('')
+    + '</div></section>';
+}
+
 async function loadCommunityApps() {
   const host = document.getElementById('community-library');
   if (!host) return;
@@ -7676,6 +8288,7 @@ async function loadCommunityApps() {
     _communityCreatorsById = creatorsById;
 
     let following = {};
+    let likedApps = {};
     if (RA10 && RA10.isLoggedIn && RA10.isLoggedIn()) {
       try {
         if (creatorIds.length) {
@@ -7684,9 +8297,20 @@ async function loadCommunityApps() {
           (Array.isArray(frows) ? frows : []).forEach((x) => { following[String(x.following_id)] = true; });
         }
       } catch (e) {}
+      try {
+        const appIds = _communityApps.map((x) => String(x.id || '')).filter(Boolean);
+        if (appIds.length) {
+          const inList = appIds.map(encodeURIComponent).join(',');
+          const rows = await communityRest('community_app_likes?select=app_id&user_id=eq.' + encodeURIComponent(RA10.getSession().user.id) + '&app_id=in.(' + inList + ')', 'GET', null, true);
+          (Array.isArray(rows) ? rows : []).forEach((row) => { likedApps[String(row.app_id || '')] = true; });
+        }
+      } catch (e) {}
     }
 
-    host.innerHTML = _communityApps.map((app) => {
+    const appCount = document.getElementById('community-stat-count');
+    if (appCount) appCount.textContent = _communityApps.length;
+    const pinnedIds = communityGetPinnedIds();
+    host.innerHTML = communityRenderPinnedApps(_communityApps, creatorsById) + _communityApps.map((app, index) => {
       const creator = communityResolveCreator(app.creator_id);
       const creatorName = communityUserLabel(creator, app.creator_id);
       const creatorAvatar = String(creator.profile_pic_url || '').trim();
@@ -7694,37 +8318,87 @@ async function loadCommunityApps() {
       const safeDescription = String(app.description || '').trim() || ('AI-generated revision materials for ' + (String(app.subject || '').trim() || 'this subject') + '.');
       const myId = RA10 && RA10.isLoggedIn && RA10.isLoggedIn() ? String(RA10.getSession().user.id || '') : '';
       const canDelete = myId && myId === String(app.creator_id || '');
-      const deleteBtn = canDelete
-        ? '<button class="btn btn-s" type="button" onclick="event.stopPropagation();communityDeleteApp(\'' + String(app.id) + '\')">Delete app</button>'
-        : '';
-      const followBtn = (RA10 && RA10.isLoggedIn && RA10.isLoggedIn() && String(app.creator_id || '') !== String(RA10.getSession().user.id || ''))
-        ? '<button class="btn btn-s" type="button" onclick="event.stopPropagation();communityToggleFollow(\'' + String(app.creator_id) + '\')">' + (following[String(app.creator_id)] ? 'Unfollow' : 'Follow') + ' ' + communityEscape(creatorName) + '</button>'
-        : '';
       const icon = communityEscape(String(app.icon_emoji || '📘'));
-      const tags = Array.isArray(app.tags) ? app.tags.slice(0, 5) : [];
+      const subject = communityEscape(app.subject || 'General');
+      const level = communityEscape(app.level || 'Mixed');
+      const boardRaw = String(app.exam_board || '').trim();
+      const boardKey = boardRaw.toLowerCase().includes('pearson') || boardRaw.toLowerCase().includes('btec') ? 'Pearson'
+        : (boardRaw.toLowerCase().includes('edexcel') ? 'Edexcel'
+          : (boardRaw.toLowerCase().includes('eduqas') ? 'WJEC' : boardRaw));
+      const board = communityEscape(boardRaw);
+      const tags = Array.isArray(app.tags) ? app.tags.slice(0, 3) : [];
+      const likes = Number(app.like_count || 0);
+      const comments = Number(app.comment_count || 0);
+      const isLiked = !!likedApps[String(app.id || '')];
+      const isPinned = pinnedIds.includes(String(app.id || ''));
+      // Board colour mapping
+      const boardCls = { AQA:'cw-logo-aqa', Edexcel:'cw-logo-edexcel', Pearson:'cw-logo-pearson', OCR:'cw-logo-ocr', WJEC:'cw-logo-wjec', Cambridge:'cw-logo-cambridge', IB:'cw-logo-ib', CCEA:'cw-logo-ccea' };
+      const bCls = (boardCls[boardKey] || 'cw-logo-other');
+      const boardBadge = boardRaw && boardRaw !== 'Mixed' && boardRaw !== 'Other'
+        ? '<span class="community-card-board-badge ' + bCls + '" style="color:#fff;">' + board + '</span>'
+        : '';
+      const isOpen = _communityOpenState && String(_communityOpenState.app?.id || '') === String(app.id || '');
       return ''
-        + '<div class="community-card" role="button" tabindex="0" onclick="communityOpenApp(\'' + String(app.id) + '\')" onkeydown="if(event.key===\'Enter\'||event.key===\' \' ){event.preventDefault();communityOpenApp(\'' + String(app.id) + '\');}">'
+        + '<article class="community-card' + (isOpen ? ' selected' : '') + '" style="--card-delay:' + Math.min(index * 45, 360) + 'ms" role="button" tabindex="0" aria-current="' + (isOpen ? 'true' : 'false') + '" onclick="communityOpenApp(\'' + String(app.id) + '\')" onkeydown="if(event.target===this&&(event.key===\'Enter\'||event.key===\' \')){event.preventDefault();communityOpenApp(\'' + String(app.id) + '\');}">'
         +   '<div class="community-card-head">'
-        +     '<div class="community-card-title"><span class="community-card-icon">' + icon + '</span><div class="community-card-summary"><h4>' + communityEscape(safeTitle) + '</h4><div class="community-card-byline"><span>' + communityEscape(app.subject || 'General') + '</span><span>•</span><span>' + communityEscape(app.level || 'Mixed') + '</span><span>•</span><span>DeepTutor ON</span></div></div></div>'
-        +     '<div class="community-creator-avatar">' + (creatorAvatar ? '<img src="' + communityEscape(creatorAvatar) + '" alt="creator" loading="lazy">' : communityEscape(communityInitials(creatorName))) + '</div>'
+        +     '<div class="community-card-icon">' + icon + '</div>'
+        +     '<div class="community-card-summary">'
+        +       '<h4>' + communityEscape(safeTitle) + '</h4>'
+        +       '<div class="community-card-byline">'
+        +         '<span>' + subject + '</span>'
+        +         '<span class="community-card-byline-dot">·</span>'
+        +         '<span>' + level + '</span>'
+        +         (boardBadge ? '<span class="community-card-byline-dot">·</span>' + boardBadge : '')
+        +       '</div>'
+        +     '</div>'
         +   '</div>'
-        +   '<p>' + communityEscape(safeDescription) + '</p>'
-        +   '<div class="community-card-stats"><strong>' + communityEscape(creatorName) + '</strong><span>•</span><span>❤ ' + Number(app.like_count || 0) + '</span><span>💬 ' + Number(app.comment_count || 0) + '</span><span>•</span><span>Cost ' + Number(app.credit_cost || 1) + '</span></div>'
-        +   '<div class="community-meta">' + tags.map((t) => '<span class="pill">#' + communityEscape(t) + '</span>').join('') + '</div>'
-        +   '<div class="community-actions">'
-        +     '<button class="btn btn-p" type="button" onclick="event.stopPropagation();communityOpenApp(\'' + String(app.id) + '\')">Open app</button>'
-        +     '<button class="btn btn-s" type="button" onclick="event.stopPropagation();communityToggleLike(\'' + String(app.id) + '\')">Like</button>'
-        +     followBtn
-        +     deleteBtn
+        +   '<p class="community-card-desc">' + communityEscape(safeDescription) + '</p>'
+        +   (tags.length ? '<div class="community-card-tags">' + tags.map((t) => '<span class="pill">#' + communityEscape(t) + '</span>').join('') + '</div>' : '')
+        +   '<div class="community-card-footer">'
+        +     '<div class="community-card-creator">'
+        +       '<div class="community-card-avatar">' + (creatorAvatar ? '<img src="' + communityEscape(creatorAvatar) + '" alt="" loading="lazy">' : communityEscape(communityInitials(creatorName))) + '</div>'
+        +       '<span>' + communityEscape(creatorName) + '</span>'
+        +     '</div>'
+        +     '<div class="community-card-actions">'
+        +       '<button class="community-card-action like' + (isLiked ? ' is-liked' : '') + '" type="button" data-tooltip="' + (isLiked ? 'Unlike' : 'Like') + ' · ' + likes + '" aria-label="' + (isLiked ? 'Unlike' : 'Like') + ' ' + communityEscape(safeTitle) + '" aria-pressed="' + isLiked + '" onclick="event.stopPropagation();communityToggleLike(\'' + String(app.id) + '\',event)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"/></svg></button>'
+        +       '<button class="community-card-action comment" type="button" data-tooltip="Comment · ' + comments + '" aria-label="Comment on ' + communityEscape(safeTitle) + '" onclick="event.stopPropagation();communityOpenComments(\'' + String(app.id) + '\')"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-9 8.3 9.5 9.5 0 0 1-4.6-1.2L3 20l1.4-4.1A8.5 8.5 0 1 1 21 11.5z"/></svg></button>'
+        +       '<button class="community-card-action pin' + (isPinned ? ' is-pinned' : '') + '" type="button" data-tooltip="' + (isPinned ? 'Unpin app' : 'Pin app') + '" aria-label="' + (isPinned ? 'Unpin' : 'Pin') + ' ' + communityEscape(safeTitle) + '" aria-pressed="' + isPinned + '" onclick="event.stopPropagation();communityTogglePin(\'' + String(app.id) + '\',event)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 17v4"/><path d="M9 3h6l-1 6v4l2 2H8l2-2V9z"/></svg></button>'
+        +       '<button class="community-card-action share" type="button" data-tooltip="Share app" aria-label="Share ' + communityEscape(safeTitle) + '" onclick="event.stopPropagation();communityShareApp(\'' + String(app.id) + '\')"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 10.5 6.8-4"/><path d="m8.6 13.5 6.8 4"/></svg></button>'
+        +       '<span class="community-card-open">Open →</span>'
+        +     '</div>'
         +   '</div>'
-        + '</div>';
+        + '</article>';
     }).join('');
   } catch (e) {
     host.innerHTML = '<div class="credit-log-note">Could not load community apps.</div>';
   }
 }
 
-async function communityToggleLike(appId) {
+function communityCelebrateLike(origin) {
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const button = origin && origin.currentTarget instanceof Element ? origin.currentTarget : null;
+  const rect = button ? button.getBoundingClientRect() : { left: innerWidth / 2, top: innerHeight / 2, width: 0, height: 0 };
+  const layer = document.createElement('div');
+  layer.className = 'community-confetti-layer';
+  document.body.appendChild(layer);
+  const colours = ['#d20000', '#ef4444', '#f59e0b', '#ec4899', '#fb7185'];
+  for (let i = 0; i < 18; i += 1) {
+    const heart = document.createElement('span');
+    heart.className = 'community-confetti-heart';
+    heart.textContent = i % 3 === 0 ? '✦' : '♥';
+    heart.style.left = (rect.left + rect.width / 2) + 'px';
+    heart.style.top = (rect.top + rect.height / 2) + 'px';
+    heart.style.color = colours[i % colours.length];
+    heart.style.setProperty('--x', ((Math.random() - .5) * 180) + 'px');
+    heart.style.setProperty('--y', (-55 - Math.random() * 140) + 'px');
+    heart.style.setProperty('--r', ((Math.random() - .5) * 90) + 'deg');
+    heart.style.animationDelay = (i * 14) + 'ms';
+    layer.appendChild(heart);
+  }
+  setTimeout(() => layer.remove(), 1100);
+}
+
+async function communityToggleLike(appId, origin) {
   if (!RA10 || !RA10.isLoggedIn || !RA10.isLoggedIn()) {
     RA10.showPaywall('login', 'community_like');
     return;
@@ -7732,15 +8406,83 @@ async function communityToggleLike(appId) {
   const userId = RA10.getSession().user.id;
   try {
     const existing = await communityRest('community_app_likes?select=app_id&app_id=eq.' + encodeURIComponent(appId) + '&user_id=eq.' + encodeURIComponent(userId) + '&limit=1', 'GET', null, true);
-    if (Array.isArray(existing) && existing.length) {
+    const isRemoving = Array.isArray(existing) && existing.length;
+    if (isRemoving) {
       await communityRest('community_app_likes?app_id=eq.' + encodeURIComponent(appId) + '&user_id=eq.' + encodeURIComponent(userId), 'DELETE', null, true);
     } else {
       await communityRest('community_app_likes', 'POST', { app_id: appId, user_id: userId }, true);
+      communityCelebrateLike(origin);
     }
     await loadCommunityApps();
   } catch (e) {
     showMiniToast('Could not update like');
   }
+}
+
+async function communityOpenComments(appId) {
+  const currentId = String(_communityOpenState?.app?.id || '');
+  if (currentId !== String(appId || '')) {
+    await communityOpenApp(appId);
+  }
+  requestAnimationFrame(() => {
+    const comments = document.querySelector('.community-comment-section');
+    if (comments) {
+      comments.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      const input = document.getElementById('community-comment-input');
+      if (input) setTimeout(() => input.focus(), 350);
+    }
+  });
+}
+
+let _communityShareApp = null;
+
+function communityShareLink(appId) {
+  const id = encodeURIComponent(String(appId || ''));
+  return 'https://ra10.co.uk/#/community?app=' + id;
+}
+
+function communitySharePreviewLink(appId) {
+  return COMMUNITY_SB_URL + '/functions/v1/community-share-preview?app=' + encodeURIComponent(String(appId || ''));
+}
+
+function communityShareApp(appId) {
+  const app = _communityApps.find(item => String(item.id || '') === String(appId || ''));
+  if (!app) return;
+  _communityShareApp = app;
+  const title = String(app.title || 'RA10 Study App');
+  const subject = String(app.subject || 'Revision');
+  const preview = document.getElementById('community-share-preview');
+  if (preview) preview.innerHTML = '<div class="community-share-preview-icon">' + communityEscape(String(app.icon_emoji || '📘')) + '</div><div><strong>' + communityEscape(title) + '</strong><span>' + communityEscape(subject) + ' · ' + communityEscape(String(app.level || 'Revision app')) + '</span></div>';
+  const sheet = document.getElementById('community-share-sheet');
+  if (sheet) sheet.classList.add('open');
+}
+
+async function communityRunShare(kind) {
+  const app = _communityShareApp;
+  if (!app) return;
+  const appLink = communityShareLink(app.id);
+  // Crawlers used by WhatsApp/iMessage/Discord need the preview endpoint,
+  // which serves Open Graph metadata before redirecting people into the app.
+  const link = communitySharePreviewLink(app.id);
+  const title = String(app.title || 'RA10 Study App');
+  const message = 'Try this RA10 study app: ' + title + '\n' + link;
+  if (kind === 'open') { communityCloseShare(); location.href = appLink; return; }
+  if (kind === 'whatsapp') { window.open('https://wa.me/?text=' + encodeURIComponent(message), '_blank', 'noopener,noreferrer'); return; }
+  if (kind === 'native' && navigator.share) {
+    try { await navigator.share({ title, text: 'Study with this RA10 revision app.', url: link }); } catch (e) {}
+    return;
+  }
+  try {
+    await navigator.clipboard.writeText(link);
+    showMiniToast('Share link copied');
+  } catch (e) {
+    window.prompt('Copy this app link:', link);
+  }
+}
+
+function communityCloseShare() {
+  const sheet = document.getElementById('community-share-sheet');
+  if (sheet) sheet.classList.remove('open');
 }
 
 async function communityToggleFollow(targetUserId) {
@@ -7851,14 +8593,17 @@ async function communityRunAiMark(mode) {
   const answer = String(answerInput.value || '').trim();
   communitySetQuestionDraft(answerInput.value || '');
   if (!answer) {
+    output.style.display = '';
     output.textContent = 'Write your answer first.';
     return;
   }
+  output.style.display = '';
   const list = Array.isArray(_communityOpenState.questionBank) ? _communityOpenState.questionBank : [];
   const idx = Math.max(0, Math.min(list.length - 1, Number(_communityOpenState.activeQuestionIndex || 0)));
   const item = list[idx] || {};
   const question = communityBuildQuestionObject(item, idx);
-  output.textContent = 'Marking answer...';
+  output.style.display = '';
+  output.textContent = 'Marking answer…';
   try {
     const payload = { question, answer };
     const res = mode === 'examiner'
@@ -7887,7 +8632,8 @@ function communityRenderOpenTab() {
   if (!host) return;
   const tab = String(_communityOpenState.activeTab || 'guide');
   if (tab === 'guide') {
-    host.innerHTML = '<div class="community-content-box"><h5>Revision Guide</h5>' + communityRenderGuide(_communityOpenState.byKind.revision_guide || '') + '</div>';
+    const guideHtml = communityRenderGuide(_communityOpenState.byKind.revision_guide || '');
+    host.innerHTML = '<div><h5 style="margin:0 0 var(--sp4);font-size:var(--tx-base);font-weight:700;color:var(--color-text);">Revision Guide</h5>' + guideHtml + '</div>';
     return;
   }
   if (tab === 'questions') {
@@ -7901,27 +8647,27 @@ function communityRenderOpenTab() {
     const draft = String((_communityOpenState.answerDrafts && _communityOpenState.answerDrafts[qIdx]) || '');
     const marks = communityGetQuestionMarks(item);
     host.innerHTML = ''
-      + '<div class="community-content-box community-question-shell">'
-      +   '<div class="community-question-top">'
-      +     '<div><h5>Questions</h5><p class="community-question-sub">Navigate, answer, and mark in one focused workspace.</p></div>'
+      + '<div class="community-question-shell">'
+      +   '<div class="community-question-topbar">'
+      +     '<div><h5 class="community-question-title">Questions</h5><p class="community-question-sub">Navigate, write your answer, then get AI feedback.</p></div>'
       +     '<div class="community-question-nav">'
-      +       '<button class="btn btn-s" type="button" onclick="communitySetActiveQuestion(' + (qIdx - 1) + ')">Previous</button>'
-      +       '<span class="community-question-counter">Question ' + (qIdx + 1) + ' / ' + list.length + '</span>'
-      +       '<button class="btn btn-s" type="button" onclick="communitySetActiveQuestion(' + (qIdx + 1) + ')">Next</button>'
+      +       '<button class="btn btn-s" type="button" onclick="communitySetActiveQuestion(' + (qIdx - 1) + ')">← Prev</button>'
+      +       '<span class="community-question-counter">' + (qIdx + 1) + ' / ' + list.length + '</span>'
+      +       '<button class="btn btn-s" type="button" onclick="communitySetActiveQuestion(' + (qIdx + 1) + ')">Next →</button>'
       +     '</div>'
       +   '</div>'
       +   '<div class="community-question-stem">'
-      +     '<div class="community-question-kicker">Q' + (qIdx + 1) + ' · ' + marks + ' marks</div>'
-      +     '<div class="community-question-text">' + communityEscape(communityGetQuestionText(item, qIdx)) + '</div>'
+      +     '<div class="community-question-kicker">Q' + (qIdx + 1) + ' · ' + marks + ' mark' + (marks !== 1 ? 's' : '') + '</div>'
+      +     '<p class="community-question-text">' + communityEscape(communityGetQuestionText(item, qIdx)) + '</p>'
       +   '</div>'
-      +   '<textarea id="community-answer-input" class="community-answer-box" oninput="communitySetQuestionDraft(this.value)" placeholder="Write your answer here">' + communityEscape(draft) + '</textarea>'
+      +   '<textarea id="community-answer-input" class="community-answer-box" oninput="communitySetQuestionDraft(this.value)" placeholder="Write your answer here…">' + communityEscape(draft) + '</textarea>'
       +   '<div class="community-answer-actions">'
-      +     '<button class="btn btn-s" type="button" onclick="communityRunAiMark(\'marker\')">Auto Marker</button>'
-      +     '<button class="btn btn-s" type="button" onclick="communityRunAiMark(\'examiner\')">AI Examiner</button>'
+      +     '<button class="btn btn-s" type="button" onclick="communityRunAiMark(\'marker\')">⚡ Auto Marker</button>'
+      +     '<button class="btn btn-s" type="button" onclick="communityRunAiMark(\'examiner\')">✨ AI Examiner</button>'
+      +     '<span class="community-answer-note">Auto Marker is faster · AI Examiner gives fuller exam-style feedback</span>'
       +   '</div>'
-      +   '<div class="community-answer-note">Auto Marker gives faster feedback. AI Examiner gives fuller exam-style feedback.</div>'
-      +   '<div id="community-ai-output" class="community-content-scroll" style="max-height:240px;"></div>'
-      +   '<details class="community-question-browser"><summary>Browse all questions</summary><div style="margin-top:8px;">' + communityRenderQuestionBank(_communityOpenState.byKind.question_bank || '[]') + '</div></details>'
+      +   '<div id="community-ai-output" class="community-ai-result" style="display:none;"></div>'
+      +   '<details class="community-question-browser"><summary>Browse all questions</summary><div>' + communityRenderQuestionBank(_communityOpenState.byKind.question_bank || '[]') + '</div></details>'
       + '</div>';
     return;
   }
@@ -7943,29 +8689,29 @@ function communityRenderOpenTab() {
     const reveal = !!(_communityOpenState.quizReveal && _communityOpenState.quizReveal[idx]);
     const score = _communityOpenState.quizScore;
     host.innerHTML = ''
-      + '<div class="community-content-box">'
-      +   '<h5>Quiz</h5>'
-      +   '<div class="community-quiz-card">'
-      +     '<div class="community-job-meta">Question ' + (idx + 1) + ' of ' + list.length + '</div>'
-      +     '<div style="margin-top:6px;">' + communityEscape(q.question || ('Quiz question ' + (idx + 1))) + '</div>'
-      +     '<div class="community-quiz-options">'
-      +       options.map((opt, oIdx) => {
-                const isPicked = picked === oIdx;
-                const isCorrect = correct >= 0 && correct === oIdx;
-                const cls = reveal ? (isCorrect ? 'correct' : (isPicked ? 'wrong' : '')) : (isPicked ? 'active' : '');
-                return '<button class="community-quiz-option ' + cls + '" type="button" onclick="communityPickQuizOption(' + oIdx + ')">' + communityEscape(opt) + '</button>';
-              }).join('')
-      +     '</div>'
-      +     '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;">'
-      +       '<button class="btn btn-s" type="button" onclick="communitySetQuizIndex(' + (idx - 1) + ')">Previous</button>'
-      +       '<button class="btn btn-s" type="button" onclick="communitySetQuizIndex(' + (idx + 1) + ')">Next</button>'
-      +       '<button class="btn btn-s" type="button" onclick="communityCheckQuizAnswer()">Check answer</button>'
-      +       '<button class="btn btn-p" type="button" onclick="communitySubmitQuiz()">Submit quiz</button>'
-      +     '</div>'
-      +     (reveal && correct >= 0 ? '<div style="margin-top:8px;">' + (picked === correct ? '<strong style="color:#166534;">Correct</strong>' : '<strong style="color:#b91c1c;">Not quite</strong> · Correct answer highlighted') + '</div>' : '')
-      +     (reveal && correct < 0 ? '<div style="margin-top:8px;color:var(--color-text-muted);">No answer key stored for this question.</div>' : '')
-      +     (score ? '<div style="margin-top:10px;"><strong>Score:</strong> ' + score.correct + '/' + score.total + (score.unknown ? ' · ' + score.unknown + ' without answer key' : '') + '</div>' : '')
+      + '<div class="community-quiz-card">'
+      +   '<div style="display:flex;justify-content:space-between;align-items:center;gap:var(--sp3);flex-wrap:wrap;">'
+      +     '<h5 style="margin:0;font-size:var(--tx-base);font-weight:700;color:var(--color-text);">Quiz</h5>'
+      +     '<span class="community-quiz-counter">Question ' + (idx + 1) + ' of ' + list.length + '</span>'
       +   '</div>'
+      +   '<p class="community-quiz-question-text">' + communityEscape(q.question || ('Quiz question ' + (idx + 1))) + '</p>'
+      +   '<div class="community-quiz-options">'
+      +     options.map((opt, oIdx) => {
+              const isPicked = picked === oIdx;
+              const isCorrect = correct >= 0 && correct === oIdx;
+              const cls = reveal ? (isCorrect ? 'correct' : (isPicked ? 'wrong' : '')) : (isPicked ? 'active' : '');
+              return '<button class="community-quiz-option ' + cls + '" type="button" onclick="communityPickQuizOption(' + oIdx + ')">' + communityEscape(opt) + '</button>';
+            }).join('')
+      +   '</div>'
+      +   '<div class="community-quiz-actions">'
+      +     '<button class="btn btn-s" type="button" onclick="communitySetQuizIndex(' + (idx - 1) + ')">← Prev</button>'
+      +     '<button class="btn btn-s" type="button" onclick="communitySetQuizIndex(' + (idx + 1) + ')">Next →</button>'
+      +     '<button class="btn btn-s" type="button" onclick="communityCheckQuizAnswer()">Check answer</button>'
+      +     '<button class="btn btn-p" type="button" onclick="communitySubmitQuiz()">Submit all</button>'
+      +   '</div>'
+      +   (reveal && correct >= 0 ? '<p style="margin:var(--sp3) 0 0;font-size:var(--tx-sm);">' + (picked === correct ? '<strong style="color:var(--color-success);">✓ Correct!</strong>' : '<strong style="color:var(--color-error);">✗ Not quite</strong> — correct answer highlighted above') + '</p>' : '')
+      +   (reveal && correct < 0 ? '<p style="margin:var(--sp3) 0 0;font-size:var(--tx-xs);color:var(--color-text-muted);">No answer key for this question.</p>' : '')
+      +   (score ? '<div class="community-quiz-score"><strong>Final score:</strong> ' + score.correct + ' / ' + score.total + (score.unknown ? ' · ' + score.unknown + ' question(s) without answer key' : '') + '</div>' : '')
       + '</div>';
     return;
   }
@@ -8053,24 +8799,39 @@ async function communityOpenApp(appId) {
 
   host.innerHTML = ''
     + '<div class="community-open-head">'
-    +   '<h4 style="margin:0 0 6px 0;">' + communityEscape(String(app.icon_emoji || '📘')) + ' ' + communityEscape(app.title) + '</h4>'
-    +   '<div class="community-meta"><span class="pill">' + communityEscape(app.subject) + '</span><span class="pill">' + communityEscape(app.level) + '</span><span class="pill">' + communityEscape(app.exam_board || 'Mixed') + '</span></div>'
-    +   '<div class="community-creator-widget" style="margin-top:8px;"><div class="community-creator-avatar">' + (creatorAvatar ? '<img src="' + communityEscape(creatorAvatar) + '" alt="creator" loading="lazy">' : communityEscape(communityInitials(creatorName))) + '</div><div><strong>' + communityEscape(creatorName) + '</strong><div style="font-size:var(--tx-xs);color:var(--color-text-muted);">Created this app</div></div>' + (canDelete ? '<button class="btn btn-s" type="button" style="margin-left:auto;" onclick="communityDeleteApp(\'' + String(app.id) + '\')">Delete app</button>' : '') + '</div>'
-    +   '<div class="community-meta" style="margin-top:8px;"><span class="pill">DeepTutor prompt mode: ON</span><span class="pill">Generator: ' + communityEscape(String(metadata.provider || 'ai')) + '</span>' + (previewMode ? '<span class="pill">Preview mode</span>' : '') + '</div>'
+    +   '<div class="community-open-header-row">'
+    +     '<div class="community-open-icon">' + communityEscape(String(app.icon_emoji || '📘')) + '</div>'
+    +     '<div class="community-open-meta">'
+    +       '<h4>' + communityEscape(app.title) + '</h4>'
+    +       '<div class="community-open-pills">'
+    +         '<span class="pill">' + communityEscape(app.subject || 'General') + '</span>'
+    +         '<span class="pill">' + communityEscape(app.level || 'Mixed') + '</span>'
+    +         (() => { const raw = String(app.exam_board || '').trim(); const br = raw.toLowerCase().includes('pearson') || raw.toLowerCase().includes('btec') ? 'Pearson' : (raw.toLowerCase().includes('edexcel') ? 'Edexcel' : (raw.toLowerCase().includes('eduqas') ? 'WJEC' : raw)); const bMap = { AQA:'cw-logo-aqa', Edexcel:'cw-logo-edexcel', Pearson:'cw-logo-pearson', OCR:'cw-logo-ocr', WJEC:'cw-logo-wjec', Cambridge:'cw-logo-cambridge', IB:'cw-logo-ib', CCEA:'cw-logo-ccea' }; return raw && raw !== 'Mixed' ? '<span class="community-card-board-badge ' + (bMap[br]||'cw-logo-other') + '" style="color:#fff;">' + communityEscape(raw) + '</span>' : ''; })()
+    +         (previewMode ? '<span class="pill" style="background:var(--color-warning-highlight);border-color:var(--color-warning);color:var(--color-warning);">Preview mode</span>' : '')
+    +       '</div>'
+    +     '</div>'
+    +     (canDelete ? '<button class="btn btn-s" type="button" style="flex-shrink:0;margin-left:auto;" onclick="communityDeleteApp(\'' + String(app.id) + '\')">Delete</button>' : '')
+    +   '</div>'
+    +   '<div class="community-creator-widget">'
+    +     '<div class="community-creator-avatar">' + (creatorAvatar ? '<img src="' + communityEscape(creatorAvatar) + '" alt="" loading="lazy">' : communityEscape(communityInitials(creatorName))) + '</div>'
+    +     '<span class="community-creator-name">' + communityEscape(creatorName) + '</span>'
+    +     '<span style="color:var(--color-text-faint);">·</span>'
+    +     '<span style="color:var(--color-text-muted);">❤ ' + Number(app.like_count || 0) + '  💬 ' + Number(app.comment_count || 0) + '</span>'
+    +   '</div>'
     + '</div>'
     + '<div class="community-viewer-menu">'
-    +   '<button class="btn btn-s active" id="community-tab-guide" type="button" onclick="communitySetViewerTab(\'guide\')">📘 Guide</button>'
-    +   '<button class="btn btn-s" id="community-tab-questions" type="button" onclick="communitySetViewerTab(\'questions\')">🧠 Questions</button>'
-    +   '<button class="btn btn-s" id="community-tab-flashcards" type="button" onclick="communitySetViewerTab(\'flashcards\')">🃏 Flashcards</button>'
-    +   '<button class="btn btn-s" id="community-tab-quiz" type="button" onclick="communitySetViewerTab(\'quiz\')">✅ Quiz</button>'
-    +   (canDelete ? '<button class="btn btn-s" id="community-tab-refine" type="button" onclick="communitySetViewerTab(\'refine\')">✨ Creator Refine</button>' : '')
+    +   '<button class="btn active" id="community-tab-guide" type="button" onclick="communitySetViewerTab(\'guide\')">📘 Guide</button>'
+    +   '<button class="btn" id="community-tab-questions" type="button" onclick="communitySetViewerTab(\'questions\')">🧠 Questions</button>'
+    +   '<button class="btn" id="community-tab-flashcards" type="button" onclick="communitySetViewerTab(\'flashcards\')">🃏 Cards</button>'
+    +   '<button class="btn" id="community-tab-quiz" type="button" onclick="communitySetViewerTab(\'quiz\')">✅ Quiz</button>'
+    +   (canDelete ? '<button class="btn" id="community-tab-refine" type="button" onclick="communitySetViewerTab(\'refine\')">✨ Refine</button>' : '')
     + '</div>'
     + '<div id="community-open-tab-content" class="community-tab-panel"></div>'
-    + '<div class="community-content-box">'
-    +   '<h5>Comments</h5>'
-    +   '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px;">'
-    +     '<input id="community-comment-input" class="auth-input" type="text" maxlength="320" placeholder="Add a comment" style="flex:1;min-width:220px;">'
-    +     '<button class="btn btn-s" type="button" onclick="communityPostComment(\'' + String(appId) + '\')">Post</button>'
+    + '<div class="community-comment-section">'
+    +   '<h5 style="margin:0 0 var(--sp3);font-size:var(--tx-sm);font-weight:700;color:var(--color-text);">Comments</h5>'
+    +   '<div class="community-comment-input-row">'
+    +     '<input id="community-comment-input" class="auth-input" type="text" maxlength="320" placeholder="Add a comment…">'
+    +     '<button class="btn btn-p" type="button" onclick="communityPostComment(\'' + String(appId) + '\')">Post</button>'
     +   '</div>'
     +   '<div id="community-comments" class="community-comment-list"></div>'
     + '</div>';
@@ -8078,6 +8839,20 @@ async function communityOpenApp(appId) {
   communitySetViewerTab('guide');
 
   await communityLoadComments(appId);
+  // On narrow screens, the library stacks above the viewer. Move the user to
+  // the newly opened app once its content has been painted.
+  if (window.matchMedia && window.matchMedia('(max-width: 860px)').matches) {
+    requestAnimationFrame(() => {
+      const viewer = document.getElementById('community-viewer-panel');
+      if (viewer) viewer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  }
+  // Update the selected state in the library after opening the app.
+  document.querySelectorAll('.community-card').forEach((card) => {
+    const opensApp = String(card.getAttribute('onclick') || '').includes(String(appId));
+    card.classList.toggle('selected', opensApp);
+    card.setAttribute('aria-current', opensApp ? 'true' : 'false');
+  });
   if (window._updateNavAuth) {
     try { await window._updateNavAuth(); } catch (e) {}
   }
@@ -8105,9 +8880,9 @@ async function communityLoadComments(appId) {
       return ''
         + '<div class="community-comment">'
         +   '<div class="community-comment-head">'
-        +     '<div class="community-creator-avatar" style="width:24px;height:24px;">' + (avatar ? '<img src="' + communityEscape(avatar) + '" alt="user" loading="lazy">' : communityEscape(communityInitials(name))) + '</div>'
-        +     '<strong>' + communityEscape(name) + '</strong>'
-        +     '<span style="color:var(--color-text-muted);font-size:var(--tx-xs);">' + communityEscape(when) + '</span>'
+        +     '<div class="community-creator-avatar" style="width:24px;height:24px;font-size:.68rem;">' + (avatar ? '<img src="' + communityEscape(avatar) + '" alt="" loading="lazy">' : communityEscape(communityInitials(name))) + '</div>'
+        +     '<span class="community-comment-name">' + communityEscape(name) + '</span>'
+        +     '<span class="community-comment-time">' + communityEscape(when) + '</span>'
         +   '</div>'
         +   '<div>' + communityEscape(row.body || '') + '</div>'
         + '</div>';
@@ -8175,7 +8950,325 @@ async function communityAskRefine(appId) {
   }
 }
 
+// ============================================================
+//  COMMUNITY WIZARD — subject / board pickers, steps
+// ============================================================
+const CW_SUBJECTS = [
+  { value:'Business',    label:'Business',    icon:'💼', cls:'cw-subj-business' },
+  { value:'IT',          label:'IT',          icon:'💻', cls:'cw-subj-it' },
+  { value:'Science',     label:'Science',     icon:'🔬', cls:'cw-subj-science' },
+  { value:'Maths',       label:'Maths',       icon:'📐', cls:'cw-subj-maths' },
+  { value:'English',     label:'English',     icon:'📖', cls:'cw-subj-english' },
+  { value:'History',     label:'History',     icon:'🏛️', cls:'cw-subj-history' },
+  { value:'Geography',   label:'Geography',   icon:'🌍', cls:'cw-subj-geography' },
+  { value:'Psychology',  label:'Psychology',  icon:'🧠', cls:'cw-subj-psychology' },
+  { value:'Economics',   label:'Economics',   icon:'📈', cls:'cw-subj-economics' },
+  { value:'Sport',       label:'Sport / PE',  icon:'⚽', cls:'cw-subj-sport' },
+  { value:'Art',         label:'Art & Design',icon:'🎨', cls:'cw-subj-art' },
+  { value:'General',     label:'General',     icon:'📚', cls:'cw-subj-general' },
+];
+
+const CW_BOARDS = [
+  { value:'AQA',        label:'AQA',          sub:'GCSE / A-Level',   abbr:'AQA',  cls:'cw-logo-aqa' },
+  { value:'Edexcel',    label:'Edexcel',       sub:'GCSE / A-Level',   abbr:'EDX',  cls:'cw-logo-edexcel' },
+  { value:'Pearson',    label:'Pearson BTEC',  sub:'BTEC / AAQ',       abbr:'PRS',  cls:'cw-logo-pearson' },
+  { value:'OCR',        label:'OCR',           sub:'GCSE / A-Level',   abbr:'OCR',  cls:'cw-logo-ocr' },
+  { value:'WJEC',       label:'WJEC / Eduqas', sub:'Wales',            abbr:'WJC',  cls:'cw-logo-wjec' },
+  { value:'Cambridge',  label:'Cambridge',     sub:'IGCSE / Pre-U',    abbr:'CAM',  cls:'cw-logo-cambridge' },
+  { value:'IB',         label:'IB',            sub:'International Baccalaureate', abbr:'IB', cls:'cw-logo-ib' },
+  { value:'CCEA',       label:'CCEA',          sub:'Northern Ireland',  abbr:'CCE',  cls:'cw-logo-ccea' },
+  { value:'Other',      label:'Other / Mixed', sub:'',                  abbr:'···',  cls:'cw-logo-other' },
+];
+
+let _cwizStep = 0;
+const _cwizTotalSteps = 5;
+
+function cwizInit() {
+  // Build subject picker
+  const sg = document.getElementById('cw-subject-grid');
+  if (sg && !sg.dataset.built) {
+    sg.dataset.built = '1';
+    sg.innerHTML = CW_SUBJECTS.map(s =>
+      `<div class="cw-picker-tile" data-value="${s.value}" onclick="cwizPickSubject(this)">
+        <input type="radio" name="cw-subject" value="${s.value}">
+        <div class="cw-picker-logo ${s.cls}" style="font-size:1.4rem;background:transparent;border:none;">${s.icon}</div>
+        <div class="cw-picker-name">${s.label}</div>
+        <div class="cw-picker-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+      </div>`
+    ).join('');
+  }
+
+  // Build board picker
+  const bg = document.getElementById('cw-board-grid');
+  if (bg && !bg.dataset.built) {
+    bg.dataset.built = '1';
+    bg.innerHTML = CW_BOARDS.map(b =>
+      `<div class="cw-picker-tile" data-value="${b.value}" onclick="cwizPickBoard(this)">
+        <input type="radio" name="cw-board" value="${b.value}">
+        <div class="cw-picker-logo ${b.cls}" style="font-size:.72rem;font-weight:900;width:38px;height:38px;">${b.abbr}</div>
+        <div class="cw-picker-name">${b.label}</div>
+        ${b.sub ? `<div class="cw-picker-sub">${b.sub}</div>` : ''}
+        <div class="cw-picker-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+      </div>`
+    ).join('');
+  }
+
+  cwizUpdateNav();
+}
+
+function cwizPickSubject(tile) {
+  document.querySelectorAll('#cw-subject-grid .cw-picker-tile').forEach(t => t.classList.remove('selected'));
+  tile.classList.add('selected');
+  const sel = document.getElementById('community-subject');
+  if (sel) sel.value = tile.dataset.value || '';
+}
+
+function cwizPickBoard(tile) {
+  document.querySelectorAll('#cw-board-grid .cw-picker-tile').forEach(t => t.classList.remove('selected'));
+  tile.classList.add('selected');
+  const inp = document.getElementById('community-exam-board');
+  if (inp) inp.value = tile.dataset.value || '';
+}
+
+function cwizPickLevel(btn) {
+  document.querySelectorAll('#cw-level-row .cw-level-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  const inp = document.getElementById('community-level');
+  if (inp) inp.value = btn.dataset.level || '';
+}
+
+function cwizPickDiff(btn) {
+  btn.closest('.cw-level-row').querySelectorAll('.cw-level-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  const inp = document.getElementById('cw-difficulty');
+  if (inp) inp.value = btn.dataset.diff || 'Mixed';
+}
+
+function cwizPickQStyle(btn) {
+  btn.closest('.cw-level-row').querySelectorAll('.cw-level-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  const inp = document.getElementById('cw-qstyle');
+  if (inp) inp.value = btn.dataset.qstyle || 'Exam-style';
+}
+
+const _cwizPresets = {
+  quick:         { q:15, f:20, quiz:10, ch:5 },
+  standard:      { q:24, f:30, quiz:20, ch:8 },
+  comprehensive: { q:50, f:60, quiz:40, ch:14 },
+};
+
+function cwizPickPreset(card) {
+  document.querySelectorAll('.cw-preset-card').forEach(c => c.classList.remove('selected'));
+  card.classList.add('selected');
+  const p = _cwizPresets[card.dataset.preset] || _cwizPresets.standard;
+  const set = (id, v) => { const el = document.getElementById(id); if (el) el.value = v; };
+  set('community-target-questions', p.q);
+  set('community-target-flashcards', p.f);
+  set('community-target-quiz', p.quiz);
+  set('community-target-chapters', p.ch);
+}
+
+function cwizGo(stepIdx) {
+  _cwizStep = Math.max(0, Math.min(_cwizTotalSteps - 1, stepIdx));
+  document.querySelectorAll('.cwiz-pane').forEach((p, i) => p.classList.toggle('active', i === _cwizStep));
+  document.querySelectorAll('.cwiz-step').forEach((s, i) => {
+    s.classList.toggle('active', i === _cwizStep);
+    s.classList.toggle('done', i < _cwizStep);
+  });
+  if (_cwizStep === _cwizTotalSteps - 1) cwizBuildReview();
+  cwizUpdateNav();
+}
+
+function cwizShowError(message) {
+  const host = document.getElementById('cwiz-inline-error');
+  if (!host) return;
+  host.textContent = message || '';
+  host.classList.toggle('show', !!message);
+}
+
+function cwizValidateStep(step) {
+  if (step === 0) {
+    if (!cwizGetVal('community-subject')) return 'Choose a subject before continuing.';
+    if (!cwizGetVal('community-level')) return 'Choose a qualification level before continuing.';
+    if (!cwizGetVal('community-exam-board')) return 'Choose an exam board before continuing.';
+  }
+  if (step === 2) {
+    if (!document.querySelector('.community-feature:checked')) return 'Choose at least one type of revision content to generate.';
+  }
+  return '';
+}
+
+function cwizStep(dir) {
+  if (dir > 0) {
+    const error = cwizValidateStep(_cwizStep);
+    if (error) { cwizShowError(error); return; }
+  }
+  cwizShowError('');
+  cwizGo(_cwizStep + dir);
+}
+
+function cwizUpdateNav() {
+  const prev = document.getElementById('cwiz-prev');
+  const next = document.getElementById('cwiz-next');
+  const gen  = document.getElementById('community-create-btn');
+  const lbl  = document.getElementById('cwiz-step-label');
+  const isLast = _cwizStep === _cwizTotalSteps - 1;
+  if (prev) prev.style.display = _cwizStep > 0 ? '' : 'none';
+  if (next) next.style.display = isLast ? 'none' : '';
+  if (gen)  gen.style.display  = isLast ? '' : 'none';
+  if (lbl)  lbl.textContent = 'Step ' + (_cwizStep + 1) + ' of ' + _cwizTotalSteps;
+}
+
+function cwizGetVal(id) { return String(document.getElementById(id)?.value || '').trim(); }
+function cwizChecked(id) { return !!document.getElementById(id)?.checked; }
+
+function cwizBuildReview() {
+  const host = document.getElementById('cwiz-review-summary');
+  if (!host) return;
+  const subject   = cwizGetVal('community-subject') || 'Not selected';
+  const board     = cwizGetVal('community-exam-board') || 'Not selected';
+  const level     = cwizGetVal('community-level') || 'Not selected';
+  const title     = cwizGetVal('community-title') || '(AI will generate a title)';
+  const desc      = cwizGetVal('community-desc') || '—';
+  const diff      = cwizGetVal('cw-difficulty') || 'Mixed';
+  const qstyle    = cwizGetVal('cw-qstyle') || 'Exam-style';
+  const qCount    = cwizGetVal('community-target-questions');
+  const fCount    = cwizGetVal('community-target-flashcards');
+  const qzCount   = cwizGetVal('community-target-quiz');
+  const chCount   = cwizGetVal('community-target-chapters');
+  const pastP     = cwizChecked('cw-toggle-pastpapers');
+  const research  = cwizChecked('cw-toggle-research');
+  const examples  = cwizChecked('cw-toggle-examples');
+  const technique = cwizChecked('cw-toggle-technique');
+  const features  = Array.from(document.querySelectorAll('.community-feature:checked')).map(e => e.value);
+  const fileEl    = document.getElementById('community-source');
+  const hasSource = (fileEl && fileEl.value.trim().length > 0) || (document.getElementById('community-file')?.files?.length > 0);
+
+  const row = (label, val) => `<div style="display:flex;gap:var(--sp3);align-items:baseline;font-size:var(--tx-xs);"><span style="color:var(--color-text-muted);min-width:130px;flex-shrink:0;">${label}</span><span style="font-weight:600;color:var(--color-text);">${val}</span></div>`;
+  const tick = v => v ? '<span style="color:var(--color-success);">✓</span>' : '<span style="color:var(--color-text-faint);">✗</span>';
+
+  host.innerHTML =
+    `<div style="display:grid;gap:var(--sp2);">
+      ${row('Title', communityEscape(title))}
+      ${row('Subject', communityEscape(subject))}
+      ${row('Exam board', communityEscape(board))}
+      ${row('Level', communityEscape(level))}
+      ${row('Difficulty', communityEscape(diff))}
+      ${row('Question style', communityEscape(qstyle))}
+    </div>
+    <div style="border-top:1px solid var(--color-border);padding-top:var(--sp3);display:grid;gap:var(--sp2);">
+      ${row('Content', features.map(f => f.replace('_',' ')).join(', ') || 'None selected')}
+      ${row('Questions', qCount + ' Qs · ' + fCount + ' cards · ' + qzCount + ' quiz · ' + chCount + ' chapters')}
+      ${row('Source material', hasSource ? '✓ Provided' : '⚠ None — AI will use general knowledge only')}
+    </div>
+    <div style="border-top:1px solid var(--color-border);padding-top:var(--sp3);display:grid;gap:var(--sp2);">
+      ${row('Past paper styles', tick(pastP) + (pastP ? ' Yes' : ' No'))}
+      ${row('Online research', tick(research) + (research ? ' Yes' : ' No'))}
+      ${row('Real-world examples', tick(examples) + (examples ? ' Yes' : ' No'))}
+      ${row('Exam technique tips', tick(technique) + (technique ? ' Yes' : ' No'))}
+    </div>`;
+}
+
+function cwizSimulateProgress() {
+  const prog = document.getElementById('cw-gen-progress');
+  const fill = document.getElementById('cw-gen-bar-fill');
+  if (!prog) return;
+  prog.classList.remove('failed');
+  prog.classList.add('visible');
+  const title = prog.querySelector('strong');
+  if (title) title.textContent = '⏳ Your app is queued…';
+  const stepsHost = document.getElementById('cw-gen-steps');
+  if (stepsHost) stepsHost.innerHTML = '<div class="cw-gen-step-row active" id="cws-queued"><span class="cw-gen-step-dot"></span>Waiting for the generator to confirm the job…</div><div class="cw-gen-step-row" id="cws-status"><span class="cw-gen-step-dot"></span>Live progress will appear in Generation Queue below.</div>';
+  if (fill) fill.style.width = '18%';
+}
+
+async function cwizTrackJob(jobId) {
+  const prog = document.getElementById('cw-gen-progress');
+  const fill = document.getElementById('cw-gen-bar-fill');
+  const title = prog?.querySelector('strong');
+  const statusRow = document.getElementById('cws-status');
+  if (!jobId || !prog) return;
+  let attempts = 0;
+  const check = async () => {
+    attempts += 1;
+    try {
+      const rows = await communityRest('community_app_jobs?select=status,progress,status_note,error_message&limit=1&id=eq.' + encodeURIComponent(jobId), 'GET', null, true);
+      const job = Array.isArray(rows) ? rows[0] : null;
+      if (!job) throw new Error('Generation job could not be found.');
+      const status = String(job.status || 'queued');
+      const progress = Math.max(5, Math.min(100, Number(job.progress || 0)));
+      if (fill) fill.style.width = progress + '%';
+      if (statusRow) statusRow.innerHTML = '<span class="cw-gen-step-dot"></span>' + communityEscape(String(job.status_note || status));
+      if (status === 'completed') {
+        if (title) title.textContent = '✓ Your app is published';
+        prog.classList.remove('failed');
+        const row = document.getElementById('cws-queued'); if (row) { row.classList.remove('active'); row.classList.add('done'); }
+        await loadCommunityApps();
+        return;
+      }
+      if (status === 'failed') {
+        prog.classList.add('failed');
+        if (title) title.textContent = 'Generation could not complete';
+        if (statusRow) statusRow.innerHTML = '<span class="cw-gen-step-dot"></span>' + communityEscape(String(job.error_message || job.status_note || 'The generator returned an error.'));
+        return;
+      }
+      if (attempts < 60) {
+        setTimeout(check, 2500);
+      } else {
+        prog.classList.add('failed');
+        if (title) title.textContent = 'Generation is taking longer than expected';
+        if (statusRow) statusRow.innerHTML = '<span class="cw-gen-step-dot"></span>The generator has not confirmed completion. Open Generation Queue below to retry or view the server note.';
+      }
+    } catch (error) {
+      prog.classList.add('failed');
+      if (title) title.textContent = 'Could not check generation status';
+      if (statusRow) statusRow.innerHTML = '<span class="cw-gen-step-dot"></span>' + communityEscape(String((error && error.message) || error));
+    }
+  };
+  check();
+}
+
+function cwizShowProcessorFailure(error) {
+  const prog = document.getElementById('cw-gen-progress');
+  const title = prog?.querySelector('strong');
+  const status = document.getElementById('cws-status');
+  const rawMessage = String((error && error.message) || error || 'The generator could not start.');
+  const message = /unauthorized|401|jwt|sign in/i.test(rawMessage)
+    ? 'Your session has expired. Please sign out and sign back in, then retry generation.'
+    : rawMessage;
+  if (prog) prog.classList.add('visible', 'failed');
+  if (title) title.textContent = 'Generation processor could not start';
+  if (status) status.innerHTML = '<span class="cw-gen-step-dot"></span>' + communityEscape(message) + ' Open Generation Queue below and use Retry after resolving this server error.';
+  const err = document.getElementById('community-create-err');
+  if (err) { err.textContent = message; err.style.display = ''; }
+}
+
+// ============================================================
+//  END COMMUNITY WIZARD
+// ============================================================
+
 function initCommunityBindings() {
+  // Init wizard pickers on first run
+  cwizInit();
+
+  const shareSheet = document.getElementById('community-share-sheet');
+  const bindShare = (id, action) => {
+    const button = document.getElementById(id);
+    if (button && !button.dataset.bound) {
+      button.dataset.bound = '1';
+      button.addEventListener('click', action);
+    }
+  };
+  bindShare('community-share-native', () => communityRunShare('native'));
+  bindShare('community-share-copy', () => communityRunShare('copy'));
+  bindShare('community-share-whatsapp', () => communityRunShare('whatsapp'));
+  bindShare('community-share-open', () => communityRunShare('open'));
+  bindShare('community-share-close', communityCloseShare);
+  if (shareSheet && !shareSheet.dataset.bound) {
+    shareSheet.dataset.bound = '1';
+    shareSheet.addEventListener('click', (event) => { if (event.target === shareSheet) communityCloseShare(); });
+  }
+
   const createBtn = document.getElementById('community-create-btn');
   if (createBtn && !createBtn.dataset.bound) {
     createBtn.dataset.bound = '1';
@@ -8184,7 +9277,17 @@ function initCommunityBindings() {
   const refreshBtn = document.getElementById('community-refresh-btn');
   if (refreshBtn && !refreshBtn.dataset.bound) {
     refreshBtn.dataset.bound = '1';
-    refreshBtn.addEventListener('click', loadCommunityApps);
+    refreshBtn.addEventListener('click', async () => {
+      refreshBtn.classList.add('is-loading');
+      refreshBtn.disabled = true;
+      try {
+        await loadCommunityApps();
+        showMiniToast('Library refreshed');
+      } finally {
+        refreshBtn.classList.remove('is-loading');
+        refreshBtn.disabled = false;
+      }
+    });
   }
   const search = document.getElementById('community-search');
   if (search && !search.dataset.bound) {
@@ -8196,14 +9299,25 @@ function initCommunityBindings() {
     subject.dataset.bound = '1';
     subject.addEventListener('change', () => { loadCommunityApps(); });
   }
-  const fab = document.getElementById('community-fab');
-  const panel = document.getElementById('community-create-panel');
-  if (fab && panel && !fab.dataset.bound) {
-    fab.dataset.bound = '1';
-    fab.addEventListener('click', () => {
-      panel.classList.toggle('open');
-      fab.textContent = panel.classList.contains('open') ? '−' : '+';
-      fab.setAttribute('title', panel.classList.contains('open') ? 'Close create app' : 'Create app');
+  const newAppBtn = document.getElementById('community-new-app-btn');
+  const createDrawer = document.getElementById('community-create-drawer');
+  const createClose = document.getElementById('community-create-close');
+  if (newAppBtn && createDrawer && !newAppBtn.dataset.bound) {
+    newAppBtn.dataset.bound = '1';
+    newAppBtn.addEventListener('click', () => {
+      const isOpen = createDrawer.style.display !== 'none';
+      createDrawer.style.display = isOpen ? 'none' : 'block';
+      if (!isOpen) {
+        cwizInit();
+        cwizGo(0);
+        createDrawer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  }
+  if (createClose && createDrawer && !createClose.dataset.bound) {
+    createClose.dataset.bound = '1';
+    createClose.addEventListener('click', () => {
+      createDrawer.style.display = 'none';
     });
   }
   const fileInput = document.getElementById('community-file');
@@ -8229,11 +9343,27 @@ async function renderCommunityPage() {
     }, 3000);
   }
   await Promise.all([loadCommunityApps(), loadCommunityJobs()]);
+  const query = new URLSearchParams(location.hash.split('?')[1] || '');
+  const sharedAppId = query.get('app');
+  if (sharedAppId && (!_communityOpenState || String(_communityOpenState.app?.id || '') !== String(sharedAppId))) {
+    communityOpenApp(sharedAppId);
+  }
 }
 
 window.communityToggleLike = communityToggleLike;
 window.communityToggleFollow = communityToggleFollow;
 window.communityOpenApp = communityOpenApp;
+window.communityOpenComments = communityOpenComments;
+window.communityTogglePin = communityTogglePin;
+window.communityShareApp = communityShareApp;
+window.cwizGo = cwizGo;
+window.cwizStep = cwizStep;
+window.cwizPickSubject = cwizPickSubject;
+window.cwizPickBoard = cwizPickBoard;
+window.cwizPickLevel = cwizPickLevel;
+window.cwizPickDiff = cwizPickDiff;
+window.cwizPickQStyle = cwizPickQStyle;
+window.cwizPickPreset = cwizPickPreset;
 window.communitySetViewerTab = communitySetViewerTab;
 window.communitySetActiveQuestion = communitySetActiveQuestion;
 window.communitySetQuestionDraft = communitySetQuestionDraft;
@@ -11201,6 +12331,10 @@ async function waitForRA10Sdk(timeoutMs) {
       <aside class="news-sidebar">
         <h3>Contents</h3>
         <ul>
+          <li><a href="#news-community-library">Community App Library</a></li>
+          <li><a href="#news-community-studio">Community Creation Studio</a></li>
+          <li><a href="#news-mobile-shell">Mobile Navigation Refresh</a></li>
+          <li><a href="#news-newsroom-refresh">Newsroom Refresh</a></li>
           <li><a href="#news-home-refresh">Homepage Refresh</a></li>
           <li><a href="#news-nav-stability">Navbar Stability</a></li>
           <li><a href="#news-newsroom-tools">Newsroom Filters + Share</a></li>
@@ -11215,11 +12349,60 @@ async function waitForRA10Sdk(timeoutMs) {
           <div><span>Project</span><strong>RA10</strong></div>
           <div><span>Status</span><strong>Live</strong></div>
           <div><span>Coverage</span><strong>BTEC L2/L3</strong></div>
-          <div><span>Last sync</span><strong>31.05.2026</strong></div>
+          <div><span>Last sync</span><strong>12.08.2026</strong></div>
         </div>
       </aside>
 
       <section class="news-feed">
+        <article class="news-article" id="news-community-library" data-category="revision" data-status="live" data-date="2026-08-12">
+          <div class="news-media" style="background:linear-gradient(120deg,#fff1f2,#fef3c7,#eff6ff)">
+            <svg viewBox="0 0 1200 300" aria-hidden="true">
+              <rect width="1200" height="300" fill="none"/>
+              <rect x="205" y="55" width="790" height="190" rx="24" fill="#fff" opacity=".94"/>
+              <rect x="270" y="95" width="250" height="112" rx="16" fill="#fff1f2" stroke="#fecdd3"/>
+              <rect x="545" y="95" width="170" height="112" rx="16" fill="#eff6ff" stroke="#bfdbfe"/>
+              <rect x="740" y="95" width="190" height="112" rx="16" fill="#fefce8" stroke="#fde68a"/>
+              <path d="M310 150h120M310 176h82" stroke="#e11d48" stroke-width="10" stroke-linecap="round"/>
+              <path d="M586 135h90M586 160h64M586 185h72" stroke="#2563eb" stroke-width="9" stroke-linecap="round"/>
+              <path d="M790 139h90M790 164h65" stroke="#ca8a04" stroke-width="9" stroke-linecap="round"/>
+              <path d="m862 181 12 12 25-30" fill="none" stroke="#16a34a" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="news-content">
+            <div class="news-meta"><span>12.08.2026</span><span>Community</span></div>
+            <h2>Community Library: Saved Pins, Reactions, Comments, and Clearer App Actions</h2>
+            <p>The Community library now makes every action explicit. Students can like an app, jump directly to its comments, or pin it to a personal saved section. Pinned apps retain the creator name, and opening an app on mobile now moves directly to the active study workspace.</p>
+            <div class="news-tags"><span class="news-tag">Live</span><span class="news-tag">Community</span><span class="news-tag">Pins</span><span class="news-tag">Mobile</span></div>
+          </div>
+        </article>
+
+        <article class="news-article" id="news-community-studio" data-category="ai" data-status="live" data-date="2026-08-12">
+          <div class="news-content">
+            <div class="news-meta"><span>12.08.2026</span><span>Creation Studio</span></div>
+            <h2>Community App Builder Now Supports Exam Boards, Research Options, and Comprehensive Guides</h2>
+            <p>The app builder has been rebuilt as a guided creation flow. It now includes visual subject and exam-board selection for AQA, Pearson BTEC, Edexcel, OCR, WJEC/Eduqas, Cambridge, IB, and CCEA; source uploads; specification notes; research preferences; quality presets; and custom generation targets for revision guides, question banks, flashcards, and quizzes.</p>
+            <div class="news-tags"><span class="news-tag">Live</span><span class="news-tag">AI</span><span class="news-tag">Exam Boards</span><span class="news-tag">Revision Guide</span></div>
+          </div>
+        </article>
+
+        <article class="news-article" id="news-mobile-shell" data-category="infrastructure" data-status="live" data-date="2026-08-12">
+          <div class="news-content">
+            <div class="news-meta"><span>12.08.2026</span><span>Mobile Experience</span></div>
+            <h2>Cleaner Mobile Navigation Across the App Shell</h2>
+            <p>The mobile header and bottom navigation have received a visual refresh with lighter glass surfaces, tighter spacing, clearer active states, and improved tap feedback. The result is a simpler app-like shell that stays out of the way while learners revise.</p>
+            <div class="news-tags"><span class="news-tag">Live</span><span class="news-tag">Mobile</span><span class="news-tag">Navigation</span><span class="news-tag">UX</span></div>
+          </div>
+        </article>
+
+        <article class="news-article" id="news-newsroom-refresh" data-category="infrastructure" data-status="live" data-date="2026-08-12">
+          <div class="news-content">
+            <div class="news-meta"><span>12.08.2026</span><span>Newsroom</span></div>
+            <h2>Newsroom Visual Refresh and New Release Note Format</h2>
+            <p>The News page now uses a more focused bulletin layout with elevated release cards, improved category controls, clearer tags, mobile-first spacing, and subtle reading animations. Current changes are grouped as practical release notes so learners can quickly see what changed and why it matters.</p>
+            <div class="news-tags"><span class="news-tag">Live</span><span class="news-tag">Newsroom</span><span class="news-tag">Release Notes</span></div>
+          </div>
+        </article>
+
         <article class="news-article" id="news-home-refresh" data-category="revision" data-status="live" data-date="2026-05-31">
           <div class="news-content">
             <div class="news-meta"><span>31.05.2026</span><span>Homepage Update</span></div>

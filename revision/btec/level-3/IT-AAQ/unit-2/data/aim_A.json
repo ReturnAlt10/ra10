@@ -1,0 +1,759 @@
+[
+  {
+    "id": "A001",
+    "learning_aim": "A",
+    "topic": "A1.1 Threat actors",
+    "command_verb": "State",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "State one type of threat actor that targets organisations for political or social causes.",
+    "guidance": "(1)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark for identifying a correct threat actor type.",
+      "points": [
+        "Hacktivist / hacktivists (1)"
+      ],
+      "additional_guidance": "Accept: activist hackers, cyber activists. Do not accept: hacker (too generic)."
+    }
+  },
+  {
+    "id": "A002",
+    "learning_aim": "A",
+    "topic": "A1.1 Threat actors",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "Identify the term used to describe a prolonged and targeted cyberattack in which an intruder gains access to a network and remains undetected for an extended period.",
+    "guidance": "(1)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark for correct terminology.",
+      "points": [
+        "Advanced Persistent Threat / APT (1)"
+      ],
+      "additional_guidance": "Do not accept: persistent threat (incomplete)."
+    }
+  },
+  {
+    "id": "A003",
+    "learning_aim": "A",
+    "topic": "A1.2 Malware types",
+    "command_verb": "Describe",
+    "marks": 2,
+    "ao": "AO1",
+    "scenario": "An IT services company has discovered that several workstations have been infected with software that encrypts all files and demands payment.",
+    "question": "Describe the type of malware that has infected the workstations.",
+    "guidance": "(2)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award up to two marks.",
+      "points": [
+        "Ransomware \u00e2\u20ac\u201d malware that encrypts the victim's files/data (1)",
+        "The attacker demands a ransom payment (usually cryptocurrency) in exchange for the decryption key (1)"
+      ],
+      "additional_guidance": "Accept any two relevant points. Do not accept: virus (too generic)."
+    }
+  },
+  {
+    "id": "A004",
+    "learning_aim": "A",
+    "topic": "A1.2 Malware types",
+    "command_verb": "Explain",
+    "marks": 3,
+    "ao": "AO2",
+    "scenario": "A financial services company's security team detected that an attacker had installed software that records every keystroke made by employees on the finance systems.",
+    "question": "Explain how this type of malware operates and the risks it poses to the organisation.",
+    "guidance": "(3)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award up to three marks.",
+      "points": [
+        "This is a keylogger \u00e2\u20ac\u201d malware that secretly records every keystroke typed by the user (1)",
+        "It can capture usernames, passwords, bank account details and other sensitive information (1)",
+        "Risk: financial fraud, data breach leading to GDPR fines, reputational damage, loss of customer trust (1)"
+      ],
+      "additional_guidance": "Accept other valid risks linked to the scenario."
+    }
+  },
+  {
+    "id": "A005",
+    "learning_aim": "A",
+    "topic": "A1.2 Malware types",
+    "command_verb": "State",
+    "marks": 1,
+    "ao": "AO1",
+    "question": "State one difference between a virus and a worm.",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark.",
+      "points": [
+        "A virus requires user interaction (opening a file) to spread, whereas a worm can self-replicate and spread automatically across networks without user action (1)"
+      ],
+      "additional_guidance": "Accept any valid distinguishing feature."
+    }
+  },
+  {
+    "id": "A006",
+    "learning_aim": "A",
+    "topic": "A1.3 Social engineering",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "question": "Identify the social engineering technique where an attacker sends fraudulent emails pretending to be a trusted organisation to trick recipients into revealing sensitive information.",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark.",
+      "points": [
+        "Phishing (1)"
+      ],
+      "additional_guidance": "Accept: email phishing."
+    }
+  },
+  {
+    "id": "A007",
+    "learning_aim": "A",
+    "topic": "A1.3 Social engineering",
+    "command_verb": "Describe",
+    "marks": 2,
+    "ao": "AO1",
+    "scenario": "A senior executive at an IT services company received an email that appeared to be from the CEO, urgently requesting a large bank transfer. The email address was subtly different from the CEO's real email.",
+    "question": "Describe the type of social engineering attack being used.",
+    "guidance": "(2)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award up to two marks.",
+      "points": [
+        "Whaling / spear phishing \u00e2\u20ac\u201d a targeted phishing attack aimed at senior executives (1)",
+        "The attacker impersonates a high-level authority figure (CEO) to pressure the victim into taking urgent action without verification (1)"
+      ],
+      "additional_guidance": "Accept spear phishing with explanation. Do not accept: phishing (too generic without targeting context)."
+    }
+  },
+  {
+    "id": "A008",
+    "learning_aim": "A",
+    "topic": "A1.3 Social engineering",
+    "command_verb": "State",
+    "marks": 1,
+    "ao": "AO1",
+    "question": "State what is meant by 'tailgating' in the context of physical security.",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark.",
+      "points": [
+        "Tailgating is when an unauthorised person follows an authorised person through a secured door/entry point without using their own credentials/authentication (1)"
+      ],
+      "additional_guidance": "Accept: piggybacking."
+    }
+  },
+  {
+    "id": "A009",
+    "learning_aim": "A",
+    "topic": "A1.4 Network attacks",
+    "command_verb": "Explain",
+    "marks": 4,
+    "ao": "AO2",
+    "scenario": "An e-commerce website for a retail business was inaccessible for three hours after being flooded with millions of fake requests from compromised devices across the world.",
+    "question": "Explain the type of attack that occurred and the impact on the business.",
+    "guidance": "(4)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award up to four marks.",
+      "points": [
+        "This is a Distributed Denial of Service (DDoS) attack \u00e2\u20ac\u201d multiple compromised devices (botnet) flood the server with traffic (1)",
+        "The server becomes overwhelmed and cannot respond to legitimate customer requests (1)",
+        "Impact: loss of sales revenue during downtime, customer frustration and potential loss of future business (1)",
+        "Reputational damage \u00e2\u20ac\u201d customers may perceive the business as unreliable or insecure and switch to competitors (1)"
+      ]
+    }
+  },
+  {
+    "id": "A010",
+    "learning_aim": "A",
+    "topic": "A1.4 Network attacks",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "question": "Identify the type of network attack where an attacker secretly intercepts and potentially alters communication between two parties who believe they are directly communicating with each other.",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark.",
+      "points": [
+        "Man-in-the-Middle / MITM attack (1)"
+      ],
+      "additional_guidance": "Accept: on-path attack."
+    }
+  },
+  {
+    "id": "A011",
+    "learning_aim": "A",
+    "topic": "A1.5 Web application attacks",
+    "command_verb": "Describe",
+    "marks": 2,
+    "ao": "AO1",
+    "question": "Describe how an SQL injection attack works.",
+    "guidance": "(2)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award up to two marks.",
+      "points": [
+        "An attacker inserts malicious SQL code into a web form input field or URL parameter (1)",
+        "If the application does not properly validate/sanitise input, the database executes the injected code \u00e2\u20ac\u201d this can allow the attacker to view, modify or delete database contents (1)"
+      ]
+    }
+  },
+  {
+    "id": "A012",
+    "learning_aim": "A",
+    "topic": "A1.5 Web application attacks",
+    "command_verb": "State",
+    "marks": 1,
+    "ao": "AO1",
+    "question": "State one method that can be used to prevent SQL injection attacks.",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark for any valid prevention method.",
+      "points": [
+        "Parameterised queries / prepared statements (1)",
+        "Input validation and sanitisation (1)",
+        "Using stored procedures (1)",
+        "Web Application Firewall (WAF) (1)"
+      ],
+      "additional_guidance": "Accept any one valid method."
+    }
+  },
+  {
+    "id": "A013",
+    "learning_aim": "A",
+    "topic": "A2.1 Software vulnerabilities",
+    "command_verb": "Explain",
+    "marks": 3,
+    "ao": "AO2",
+    "scenario": "A healthcare organisation is still running Windows 7 on several workstations that handle patient data.",
+    "question": "Explain the security risks of continuing to use unsupported operating systems.",
+    "guidance": "(3)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award up to three marks.",
+      "points": [
+        "End-of-life operating systems no longer receive security patches/updates from the vendor (1)",
+        "Any newly discovered vulnerabilities remain permanently exploitable as they will never be fixed (1)",
+        "This creates a significant risk of data breaches, which for patient data could result in GDPR fines of up to \u00c2\u00a317.5 million and severe reputational damage (1)"
+      ]
+    }
+  },
+  {
+    "id": "A014",
+    "learning_aim": "A",
+    "topic": "A2.1 Software vulnerabilities",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "question": "Identify the term for a software vulnerability that is unknown to the vendor and for which no patch exists.",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark.",
+      "points": [
+        "Zero-day vulnerability / zero-day exploit (1)"
+      ],
+      "additional_guidance": "Accept: 0-day."
+    }
+  },
+  {
+    "id": "A015",
+    "learning_aim": "A",
+    "topic": "A2.3 Human vulnerabilities",
+    "command_verb": "Describe",
+    "marks": 2,
+    "ao": "AO1",
+    "question": "Describe two poor password practices that create vulnerabilities in an organisation.",
+    "guidance": "(2)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark each for two valid practices described.",
+      "points": [
+        "Using weak/short passwords that are easily guessed or cracked by brute force (1)",
+        "Reusing the same password across multiple systems \u00e2\u20ac\u201d if one system is compromised, all accounts become vulnerable (1)",
+        "Writing passwords down on sticky notes near the workstation \u00e2\u20ac\u201d visible to passers-by (1)",
+        "Sharing passwords with colleagues \u00e2\u20ac\u201d no accountability for actions taken (1)"
+      ]
+    }
+  },
+  {
+    "id": "A016",
+    "learning_aim": "A",
+    "topic": "A3.1 UK Legislation",
+    "command_verb": "State",
+    "marks": 1,
+    "ao": "AO1",
+    "question": "State the maximum penalty under Section 3 of the Computer Misuse Act 1990 for unauthorised modification of computer material.",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark.",
+      "points": [
+        "Up to 10 years imprisonment (1)"
+      ],
+      "additional_guidance": "Also accept: unlimited fine or both."
+    }
+  },
+  {
+    "id": "A017",
+    "learning_aim": "A",
+    "topic": "A3.1 UK Legislation",
+    "command_verb": "Explain",
+    "marks": 4,
+    "ao": "AO2",
+    "scenario": "A retail business suffered a data breach exposing 50,000 customers' personal data including names, email addresses, and payment card details.",
+    "question": "Explain the legal implications under UK GDPR for the organisation.",
+    "guidance": "(4)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award up to four marks.",
+      "points": [
+        "Under UK GDPR, the organisation has a legal obligation to protect personal data with appropriate technical and organisational measures (1)",
+        "The organisation must notify the ICO (Information Commissioner's Office) within 72 hours of becoming aware of the breach (1)",
+        "They must also notify affected individuals without undue delay if the breach poses a high risk to their rights and freedoms (1)",
+        "Maximum penalty: fine of up to \u00c2\u00a317.5 million or 4% of annual global turnover, whichever is higher (1)"
+      ]
+    }
+  },
+  {
+    "id": "A018",
+    "learning_aim": "A",
+    "topic": "A3.3 Organisational policies",
+    "command_verb": "Describe",
+    "marks": 2,
+    "ao": "AO1",
+    "question": "Describe the purpose of an Acceptable Use Policy (AUP) in an organisation.",
+    "guidance": "(2)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award up to two marks.",
+      "points": [
+        "An AUP is a document that sets out the rules and guidelines for how employees may use the organisation's IT systems and network (1)",
+        "It covers permitted activities, prohibited behaviour (e.g. accessing inappropriate websites), data handling requirements, and consequences for breaching the policy (1)"
+      ]
+    }
+  },
+  {
+    "id": "A019",
+    "learning_aim": "A",
+    "topic": "A4.1 Physical security",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "question": "Identify one biometric method used for physical access control to secure areas.",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark for any valid biometric method.",
+      "points": [
+        "Fingerprint recognition / fingerprint scanner (1)",
+        "Iris / retina scanning (1)",
+        "Facial recognition (1)",
+        "Voice recognition (1)",
+        "Hand geometry (1)"
+      ],
+      "additional_guidance": "Accept any one valid biometric method. Do not accept: smart card or PIN (not biometric)."
+    }
+  },
+  {
+    "id": "A020",
+    "learning_aim": "A",
+    "topic": "A4.3 Antivirus/anti-malware",
+    "command_verb": "Explain",
+    "marks": 3,
+    "ao": "AO2",
+    "question": "Explain the difference between signature-based detection and heuristic analysis in antivirus software.",
+    "guidance": "(3)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award up to three marks.",
+      "points": [
+        "Signature-based detection compares files against a database of known malware signatures/patterns \u00e2\u20ac\u201d it can only detect previously identified threats (1)",
+        "Heuristic analysis examines the behaviour and characteristics of files to identify potentially malicious code even if no signature exists (1)",
+        "Heuristic analysis can detect new/unknown malware (zero-day threats), but may produce false positives, while signature-based is more reliable for known threats but ineffective against new variants (1)"
+      ]
+    }
+  },
+  {
+    "id": "A021",
+    "learning_aim": "A",
+    "topic": "A4.4 Firewalls",
+    "command_verb": "Describe",
+    "marks": 2,
+    "ao": "AO1",
+    "question": "Describe the function of a firewall in protecting a network.",
+    "guidance": "(2)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award up to two marks.",
+      "points": [
+        "A firewall monitors and controls incoming and outgoing network traffic based on predetermined security rules (1)",
+        "It acts as a barrier between a trusted internal network and untrusted external networks, blocking unauthorised access while permitting legitimate communication (1)"
+      ]
+    }
+  },
+  {
+    "id": "A022",
+    "learning_aim": "A",
+    "topic": "A4.5 Authentication",
+    "command_verb": "Explain",
+    "marks": 4,
+    "ao": "AO2",
+    "scenario": "A financial services company is implementing Multi-Factor Authentication (MFA) for all employee access to sensitive systems.",
+    "question": "Explain the three categories of authentication factors used in MFA and why using multiple factors improves security.",
+    "guidance": "(4)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award up to four marks.",
+      "points": [
+        "Something you know \u00e2\u20ac\u201d e.g. password, PIN, security question answer (1)",
+        "Something you have \u00e2\u20ac\u201d e.g. smartphone (for authenticator app), security token, smart card (1)",
+        "Something you are \u00e2\u20ac\u201d e.g. fingerprint, facial recognition, iris scan (biometrics) (1)",
+        "Using multiple factors means that even if an attacker obtains one factor (e.g. steals password), they still cannot access the system without the other factor(s) \u00e2\u20ac\u201d defence in depth (1)"
+      ]
+    }
+  },
+  {
+    "id": "A023",
+    "learning_aim": "A",
+    "topic": "A4.6 Access control",
+    "command_verb": "Describe",
+    "marks": 2,
+    "ao": "AO1",
+    "question": "Describe the principle of 'least privilege' in access control.",
+    "guidance": "(2)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award up to two marks.",
+      "points": [
+        "Users are granted only the minimum level of access/permissions necessary to perform their job role (1)",
+        "This limits the potential damage from compromised accounts, accidental changes, or insider threats \u00e2\u20ac\u201d an attacker who gains access to a user account can only access what that user can access (1)"
+      ]
+    }
+  },
+  {
+    "id": "A024",
+    "learning_aim": "A",
+    "topic": "A4.8 Encryption",
+    "command_verb": "Explain",
+    "marks": 3,
+    "ao": "AO2",
+    "question": "Explain the difference between symmetric and asymmetric encryption.",
+    "guidance": "(3)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award up to three marks.",
+      "points": [
+        "Symmetric encryption uses the same key for both encryption and decryption \u00e2\u20ac\u201d it is fast and efficient for bulk data (1)",
+        "Asymmetric encryption uses a key pair: a public key for encryption and a private key for decryption \u00e2\u20ac\u201d it is more secure for key exchange but slower (1)",
+        "In practice, asymmetric encryption (e.g. RSA) is often used to securely exchange a symmetric session key, which is then used for the actual data transfer (e.g. in TLS/HTTPS) (1)"
+      ]
+    }
+  },
+  {
+    "id": "A025",
+    "learning_aim": "A",
+    "topic": "A4.8 Encryption",
+    "command_verb": "State",
+    "marks": 1,
+    "ao": "AO1",
+    "question": "State the purpose of a digital certificate in secure web communications (HTTPS).",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark.",
+      "points": [
+        "A digital certificate verifies the identity/authenticity of a website/server, issued by a trusted Certificate Authority (CA), to prevent man-in-the-middle attacks and phishing (1)"
+      ]
+    }
+  },
+  {
+    "id": "A026",
+    "learning_aim": "A",
+    "topic": "A1.1 Threat actors",
+    "command_verb": "Explain",
+    "marks": 4,
+    "ao": "AO2",
+    "scenario": "A government department has detected unusual network activity consistent with an Advanced Persistent Threat (APT).",
+    "question": "Explain the characteristics of an APT attack and why it poses a greater risk than a typical cyber criminal attack.",
+    "guidance": "(4)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award up to four marks.",
+      "points": [
+        "APTs are prolonged, targeted attacks that remain undetected for months or years \u2014 unlike smash-and-grab criminal attacks (1)",
+        "They are typically state-sponsored with significant resources and advanced capabilities (1)",
+        "APTs aim for long-term data exfiltration/espionage rather than immediate financial gain (1)",
+        "The extended dwell time allows attackers to map the entire network, escalate privileges, and exfiltrate vast amounts of sensitive data before detection (1)"
+      ],
+      "additional_guidance": "Accept other valid distinguishing characteristics."
+    }
+  },
+  {
+    "id": "A027",
+    "learning_aim": "A",
+    "topic": "A1.1 Threat actors",
+    "command_verb": "State",
+    "marks": 2,
+    "ao": "AO1",
+    "question": "State two motivations that drive different types of threat actors.",
+    "guidance": "(2)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark each.",
+      "points": [
+        "Financial gain \u2014 cyber criminals seek money through ransomware, fraud, or selling stolen data (1)",
+        "Political/ideological \u2014 hacktivists aim to promote a political agenda or social cause (1)",
+        "Espionage \u2014 state-sponsored actors seek intelligence or competitive advantage (1)",
+        "Notoriety/thrill \u2014 script kiddies seek recognition among peers (1)"
+      ],
+      "additional_guidance": "Accept any two valid motivations."
+    }
+  },
+  {
+    "id": "A028",
+    "learning_aim": "A",
+    "topic": "A1.2 Malware types",
+    "command_verb": "Describe",
+    "marks": 3,
+    "ao": "AO1",
+    "scenario": "An IT services company discovered that several servers have been recruited into a botnet and are being used to send spam emails.",
+    "question": "Describe what a botnet is and how the servers may have become compromised.",
+    "guidance": "(3)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award up to three marks.",
+      "points": [
+        "A botnet is a network of compromised devices controlled remotely by an attacker (botmaster) via command-and-control (C2) servers (1)",
+        "Devices become part of a botnet when infected with malware \u2014 typically through phishing emails, drive-by downloads, or exploiting unpatched vulnerabilities (1)",
+        "Once compromised, the attacker can use the devices for DDoS attacks, spam distribution, cryptocurrency mining, or data theft without the owner's knowledge (1)"
+      ]
+    }
+  },
+  {
+    "id": "A029",
+    "learning_aim": "A",
+    "topic": "A1.2 Malware types",
+    "command_verb": "Compare",
+    "marks": 4,
+    "ao": "AO3a",
+    "question": "Compare a virus and a worm, explaining how each spreads and the relative threat they pose to an organisation's network.",
+    "guidance": "(4)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award up to four marks \u2014 must include comparison.",
+      "points": [
+        "A virus attaches itself to legitimate files and requires user action (opening a file, running a program) to activate and spread (1)",
+        "A worm self-replicates and spreads automatically across networks by exploiting vulnerabilities \u2014 no user interaction required (1)",
+        "Worms pose a greater threat to network infrastructure because they can spread rapidly without human intervention, potentially infecting hundreds of systems in minutes (1)",
+        "However, viruses can be more targeted and harder to detect initially since they hide within legitimate files (1)"
+      ]
+    }
+  },
+  {
+    "id": "A030",
+    "learning_aim": "A",
+    "topic": "A1.3 Social engineering",
+    "command_verb": "Explain",
+    "marks": 4,
+    "ao": "AO2",
+    "scenario": "An employee at a financial services company received a phone call from someone claiming to be from the IT department, asking for their login credentials to 'fix a server issue'.",
+    "question": "Explain the type of social engineering attack being used and recommend two measures the company should implement to prevent such attacks.",
+    "guidance": "(4)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award up to four marks.",
+      "points": [
+        "This is vishing (voice phishing) \u2014 the attacker impersonates a trusted internal department (IT) to extract credentials (1)",
+        "Measure 1: Implement a policy that IT will NEVER ask for passwords over the phone \u2014 all credential resets must go through an approved self-service portal (1)",
+        "Measure 2: Regular security awareness training including simulated vishing exercises so employees learn to recognise and report suspicious calls (1)",
+        "Additional: Implement MFA so that even if credentials are compromised via vishing, the attacker cannot access systems without the second factor (1)"
+      ]
+    }
+  },
+  {
+    "id": "A031",
+    "learning_aim": "A",
+    "topic": "A1.3 Social engineering",
+    "command_verb": "Describe",
+    "marks": 2,
+    "ao": "AO1",
+    "question": "Describe two physical social engineering techniques and how they bypass security controls.",
+    "guidance": "(2)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark for each technique described.",
+      "points": [
+        "Tailgating: following an authorised person through a secure door without using own credentials \u2014 bypasses access control systems entirely (1)",
+        "Shoulder surfing: watching someone type their password or view sensitive data on screen \u2014 bypasses technical authentication controls (1)",
+        "Baiting: leaving infected USB drives in public areas hoping someone picks them up and plugs them in \u2014 bypasses network perimeter defences (1)"
+      ]
+    }
+  },
+  {
+    "id": "A032",
+    "learning_aim": "A",
+    "topic": "A1.4 Network attacks",
+    "command_verb": "Explain",
+    "marks": 4,
+    "ao": "AO2",
+    "scenario": "An e-commerce website for a retail business was inaccessible for four hours due to a DDoS attack during a major sale event.",
+    "question": "Explain the impact of the DDoS attack on the business, including financial and non-financial consequences.",
+    "guidance": "(4)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award up to four marks.",
+      "points": [
+        "Direct financial loss: the business lost four hours of sales during a peak sale period \u2014 potentially thousands of pounds in lost revenue (1)",
+        "Reputational damage: customers unable to access the site may lose trust and switch to competitors \u2014 long-term loss of customer loyalty (1)",
+        "Operational costs: IT staff must work to mitigate the attack, potentially requiring expensive DDoS mitigation services (1)",
+        "Customer service impact: increased complaints and support tickets, further straining resources after the attack (1)"
+      ]
+    }
+  },
+  {
+    "id": "A033",
+    "learning_aim": "A",
+    "topic": "A3.1 UK Legislation",
+    "command_verb": "Explain",
+    "marks": 4,
+    "ao": "AO2",
+    "scenario": "An employee at a healthcare organisation accessed patient records without authorisation out of curiosity. They did not modify or share the data.",
+    "question": "Explain which UK legislation has been breached and the potential consequences.",
+    "guidance": "(4)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award up to four marks.",
+      "points": [
+        "This breaches Section 1 of the Computer Misuse Act 1990 \u2014 unauthorised access to computer material (1)",
+        "Even though no data was modified or shared, simply accessing the system without authorisation is an offence \u2014 maximum 2 years imprisonment (1)",
+        "This also breaches UK GDPR principles \u2014 personal data must be processed lawfully and only for specified purposes (1)",
+        "Consequences: criminal prosecution under CMA, potential GDPR fine for the organisation, disciplinary action including dismissal, and mandatory reporting to the ICO (1)"
+      ]
+    }
+  },
+  {
+    "id": "A034",
+    "learning_aim": "A",
+    "topic": "A3.1 UK Legislation",
+    "command_verb": "State",
+    "marks": 2,
+    "ao": "AO1",
+    "question": "State two rights that individuals have under UK GDPR.",
+    "guidance": "(2)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award one mark each.",
+      "points": [
+        "Right of access \u2014 individuals can request a copy of all personal data held about them (Subject Access Request) (1)",
+        "Right to erasure ('right to be forgotten') \u2014 individuals can request deletion of their personal data (1)",
+        "Right to data portability \u2014 receive personal data in a machine-readable format (1)",
+        "Right to object \u2014 opt out of direct marketing and automated decision-making (1)"
+      ]
+    }
+  },
+  {
+    "id": "A035",
+    "learning_aim": "A",
+    "topic": "A4.8 Encryption",
+    "command_verb": "Explain",
+    "marks": 4,
+    "ao": "AO2",
+    "scenario": "A financial services company needs to protect customer data both when stored on their servers and when transmitted over the internet for online banking.",
+    "question": "Explain the encryption methods that should be used for data at rest and data in transit, and why both are necessary.",
+    "guidance": "(4)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award up to four marks.",
+      "points": [
+        "Data at rest (stored on servers): use symmetric encryption such as AES-256 for disk/database encryption \u2014 fast and efficient for large volumes of stored data (1)",
+        "Data in transit (online banking): use TLS/HTTPS which employs asymmetric encryption (RSA) to exchange a symmetric session key \u2014 secures the connection between browser and server (1)",
+        "Both are necessary because protecting only data at rest leaves data vulnerable during transmission (MITM attacks), while protecting only data in transit leaves stored data vulnerable to physical theft or server breach (1)",
+        "This is an example of defence in depth \u2014 multiple layers of encryption ensure that if one layer is compromised, data remains protected by the other (1)"
+      ]
+    }
+  },
+  {
+    "id": "A036",
+    "learning_aim": "A",
+    "topic": "A4.4 Firewalls",
+    "command_verb": "Describe",
+    "marks": 3,
+    "ao": "AO1",
+    "question": "Describe how a stateful inspection firewall differs from a packet filtering firewall.",
+    "guidance": "(3)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award up to three marks.",
+      "points": [
+        "Packet filtering inspects each packet in isolation \u2014 only checks headers (IP, port) against static rules without context (1)",
+        "Stateful inspection maintains a state table tracking active connections \u2014 it understands whether a packet is part of an established connection or a new request (1)",
+        "Stateful inspection is more secure because it can detect and block packets that are spoofed or out of sequence, whereas packet filtering might allow them if they match header rules (1)"
+      ]
+    }
+  },
+  {
+    "id": "A037",
+    "learning_aim": "A",
+    "topic": "A4.6 Access control",
+    "command_verb": "Explain",
+    "marks": 3,
+    "ao": "AO2",
+    "scenario": "A large organisation has employees across HR, Finance, IT, and Sales departments who all need access to different systems.",
+    "question": "Explain how Role-Based Access Control (RBAC) would be implemented and why it is more manageable than Discretionary Access Control (DAC) for this organisation.",
+    "guidance": "(3)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award up to three marks.",
+      "points": [
+        "RBAC assigns permissions to roles (HR role, Finance role, etc.) rather than to individual users \u2014 users are assigned to roles based on their job function (1)",
+        "When a new employee joins, they are simply assigned the appropriate role and automatically receive all necessary permissions \u2014 no individual configuration needed (1)",
+        "RBAC is more manageable at scale because changing permissions for a role automatically applies to all users in that role \u2014 with DAC, each user's permissions must be set individually (1)"
+      ]
+    }
+  },
+  {
+    "id": "A038",
+    "learning_aim": "A",
+    "topic": "A4.5 Authentication",
+    "command_verb": "Evaluate",
+    "marks": 6,
+    "ao": "AO3b",
+    "scenario": "A healthcare organisation is considering implementing Multi-Factor Authentication (MFA) for all staff accessing patient record systems. Some staff have raised concerns about convenience.",
+    "question": "Evaluate the benefits and drawbacks of implementing MFA for the healthcare organisation.",
+    "guidance": "(6)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award up to six marks \u2014 must include balanced evaluation.",
+      "points": [
+        "Benefit: MFA significantly reduces the risk of unauthorised access \u2014 even if a password is stolen (phishing, shoulder surfing), the attacker cannot access the system without the second factor (1)",
+        "Benefit: For healthcare data, this is critical \u2014 patient records are highly sensitive and a breach would violate GDPR, potentially resulting in fines up to \u00a317.5 million (1)",
+        "Benefit: MFA can use biometrics (fingerprint) which is fast and convenient for clinical staff who need quick access \u2014 no typing required (1)",
+        "Drawback: Staff may resist the change \u2014 needing a phone/token for every login adds steps and can be perceived as inconvenient, especially in fast-paced clinical environments (1)",
+        "Drawback: Lost or forgotten tokens/phones can lock staff out of systems, potentially delaying patient care \u2014 requires a backup authentication process (1)",
+        "Overall judgement: Despite convenience concerns, the security benefits outweigh the drawbacks given the sensitivity of healthcare data and regulatory requirements \u2014 the organisation should implement MFA with biometric options and a clear backup process (1)"
+      ]
+    }
+  },
+  {
+    "id": "A039",
+    "learning_aim": "A",
+    "topic": "A2.1 Software vulnerabilities",
+    "command_verb": "Describe",
+    "marks": 2,
+    "ao": "AO1",
+    "question": "Describe what is meant by a supply chain vulnerability in cybersecurity.",
+    "guidance": "(2)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award up to two marks.",
+      "points": [
+        "A supply chain vulnerability occurs when a third-party vendor, supplier, or partner has access to an organisation's systems or data \u2014 their security weaknesses become your security weaknesses (1)",
+        "If the vendor is compromised, attackers can use that access to infiltrate the target organisation \u2014 the organisation is only as secure as its weakest supplier (1)"
+      ]
+    }
+  }
+]
