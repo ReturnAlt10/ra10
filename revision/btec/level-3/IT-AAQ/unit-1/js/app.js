@@ -1811,7 +1811,8 @@ function renderPracticeCard() {
 
     btnExamine.disabled = true;
     const _origLabel = btnExamine.textContent;
-    btnExamine.textContent = 'Examining…';
+    btnExamine.dataset.aiExamining = 'true';
+    btnExamine.innerHTML = '<span class="ai-examiner-loading"><span class="ai-examiner-orb"></span><span>Examining your answer<span class="ai-examiner-dots">...</span></span></span>';
     try {
       const response = await RA10.examineAnswer({ question: q, answer });
       automarkHost.innerHTML = '';
@@ -1842,6 +1843,7 @@ function renderPracticeCard() {
         try { window._updateSubjectBanner(); } catch (e) {}
       }
       btnExamine.disabled = false;
+      delete btnExamine.dataset.aiExamining;
       btnExamine.textContent = _origLabel;
     }
   });

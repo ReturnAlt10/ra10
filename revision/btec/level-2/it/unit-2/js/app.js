@@ -856,7 +856,8 @@ function renderPracticeCard() {
 
     btnExamine.disabled = true;
     const origHtml = btnExamine.innerHTML;
-    btnExamine.innerHTML = '<span class="ai-star">✦</span> Examining…';
+    btnExamine.dataset.aiExamining = 'true';
+    btnExamine.innerHTML = '<span class="ai-examiner-loading"><span class="ai-examiner-orb"></span><span>Examining your answer<span class="ai-examiner-dots">...</span></span></span>';
     try {
       const resp = await RA10.examineAnswer({ question: q, answer: ans });
       const aiResult = normaliseAiResult(resp && resp.result ? resp.result : null, q, ans);
@@ -881,6 +882,7 @@ function renderPracticeCard() {
       if (window._ra10RenderUnitCreditChip) { try { await _ra10RenderUnitCreditChip(); } catch(e) {} }
       if (window._updateSubjectBanner) { try { _updateSubjectBanner(); } catch(e) {} }
       btnExamine.disabled = false;
+      delete btnExamine.dataset.aiExamining;
       btnExamine.innerHTML = origHtml;
     }
   });

@@ -58,7 +58,13 @@
 });</script>
 <link rel="preconnect" href="https://api.fontshare.com">
 <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@500,700,900,400&f[]=jetbrains-mono@500&display=swap">
-<link rel="stylesheet" href="css/style.css?v=20260812">
+<link rel="stylesheet" href="css/style.css?v=20260813">
+<style>
+@media (max-width:600px){
+  #u2-progress-sidebar{position:fixed!important;top:auto!important;right:12px!important;left:12px!important;bottom:calc(70px + env(safe-area-inset-bottom,0px))!important;width:auto!important;max-width:none!important;z-index:1000!important;}
+  #u2-sidebar-toggle{position:fixed!important;right:12px!important;bottom:calc(14px + env(safe-area-inset-bottom,0px))!important;z-index:1001!important;}
+}
+</style>
 <style>
 .ra10-cost-label {
   display: inline-block;
@@ -227,6 +233,7 @@
     <a class="site-unit-link" href="/index.html#/tools" target="_top">Tools</a>
     <a class="site-unit-link" href="/index.html#/tasks" target="_top">Tasks</a>
     <a class="site-unit-link" href="/index.html#/leaderboard" target="_top">Leaderboard</a>
+    <a class="site-unit-link site-community-link" href="/index.html#/community" target="_top">Community</a>
   </div>
   <nav class="tabs">
     <button class="tab active" data-tab="dashboard">Dashboard</button>

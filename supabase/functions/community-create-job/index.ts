@@ -70,14 +70,19 @@ serve(async (request) => {
       comment_count: 0,
       uses_deeptutor: true,
       visibility: text(body.visibility, 20) === 'private' ? 'private' : 'public',
-      status: 'processing',
+      status: 'draft',
     }).select('id').single();
     if (appError || !app) throw new Error(appError?.message || 'Could not create the app record.');
 
     const { error: metadataError } = await admin.from('community_app_contents').insert({ app_id: app.id, kind: 'metadata', payload: JSON.stringify(metadata) });
     if (metadataError) throw new Error(metadataError.message);
     const { data: job, error: jobError } = await admin.from('community_app_jobs').insert({
-      app_id: app.id, status: 'queued', progress: 5, status_note: 'Queued for generation', eta_seconds: 120,
+      creator_id: auth.user.id,
+      app_id: app.id,
+      status: 'queued',
+      progress: 5,
+      status_note: 'Queued for generation',
+      eta_seconds: 120,
     }).select('id').single();
     if (jobError || !job) throw new Error(jobError?.message || 'Could not queue generation.');
 

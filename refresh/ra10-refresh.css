@@ -431,3 +431,290 @@
     }
   }
 }
+
+/* ============================================================
+   Unified navigation shell
+   The main site and embedded subject pages use different markup, but
+   share one visual language and interaction model.
+   ============================================================ */
+@media screen and (min-width: 841px) {
+  body.ra10-refresh-enabled .nav-inner {
+    width: 100%;
+    max-width: none;
+    padding-inline: 16px;
+  }
+
+  body.ra10-refresh-enabled .nav-logo { order: 1; }
+  body.ra10-refresh-enabled .nav-links { order: 2; }
+  body.ra10-refresh-enabled .nav-actions { order: 3; }
+
+  body.ra10-refresh-enabled .nav,
+  body.ra10-refresh-enabled .topbar {
+    position: sticky;
+    top: 10px;
+    z-index: 10000;
+    isolation: isolate;
+    overflow: hidden;
+    border: 1px solid color-mix(in srgb, var(--ra10-line-strong) 72%, #ffffff 28%);
+    border-radius: 24px;
+    background:
+      linear-gradient(110deg, rgba(255,255,255,.72), rgba(255,255,255,.28) 42%, rgba(255,255,255,.62)),
+      color-mix(in srgb, var(--ra10-surface) 84%, transparent) !important;
+    box-shadow: 0 10px 0 rgba(32,56,77,.10), 0 18px 38px rgba(17,24,39,.13), inset 0 1px rgba(255,255,255,.9);
+    backdrop-filter: blur(22px) saturate(145%);
+  }
+
+  body.ra10-refresh-enabled .nav::before,
+  body.ra10-refresh-enabled .topbar::before {
+    content: "";
+    position: absolute;
+    inset: -120% 35% -120% -20%;
+    z-index: -1;
+    pointer-events: none;
+    background: linear-gradient(105deg, transparent 35%, rgba(255,255,255,.42) 49%, transparent 63%);
+    transform: rotate(-8deg);
+    animation: ra10-nav-liquid-shine 9s ease-in-out infinite;
+  }
+
+  body.ra10-refresh-enabled .nav {
+    margin: 10px 12px 0;
+  }
+
+  body.ra10-refresh-enabled .nav-inner {
+    gap: 10px;
+    height: 68px;
+  }
+  body.ra10-refresh-enabled .nav-links {
+    min-width: 0;
+    flex: 1 1 auto;
+    gap: 6px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  body.ra10-refresh-enabled .nav-links::-webkit-scrollbar { display: none; }
+  body.ra10-refresh-enabled .nav-actions {
+    flex: 0 0 auto;
+    gap: 8px;
+  }
+
+  body.ra10-refresh-enabled .topbar {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 10px;
+    min-height: 68px;
+    margin: 10px 12px 0;
+    padding: 10px 14px;
+  }
+
+  body.ra10-refresh-enabled .topbar .unit-brand {
+    flex: 0 0 auto;
+    order: 1;
+    white-space: nowrap;
+  }
+  body.ra10-refresh-enabled .topbar .site-unit-nav {
+    flex: 0 1 auto;
+    min-width: 0;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+    overflow-x: auto;
+    order: 2;
+    scrollbar-width: none;
+  }
+  body.ra10-refresh-enabled .topbar .site-unit-nav::-webkit-scrollbar,
+  body.ra10-refresh-enabled .topbar .tabs::-webkit-scrollbar { display: none; }
+  body.ra10-refresh-enabled .topbar .tabs {
+    display: flex;
+    flex: 1 1 auto;
+    min-width: 0;
+    width: auto !important;
+    max-width: none !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding: 5px;
+    order: 3;
+    border: 1px solid color-mix(in srgb, var(--ra10-line-strong) 62%, #fff 38%);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--ra10-surface) 64%, transparent);
+  }
+  body.ra10-refresh-enabled .topbar .tabs .tab {
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+  body.ra10-refresh-enabled .topbar #unit1-credit-chip {
+    flex: 0 0 auto;
+    width: max-content !important;
+    min-width: 0 !important;
+    margin-left: auto !important;
+    white-space: nowrap;
+    order: 4;
+  }
+  body.ra10-refresh-enabled .topbar > div:last-child {
+    flex: 0 0 auto;
+    display: flex !important;
+    align-items: center;
+    gap: 8px;
+    order: 5;
+  }
+
+  body.ra10-refresh-enabled .nav-link,
+  body.ra10-refresh-enabled .site-unit-link,
+  body.ra10-refresh-enabled .tab,
+  body.ra10-refresh-enabled .unit-avatar-btn,
+  body.ra10-refresh-enabled .theme-toggle,
+  body.ra10-refresh-enabled .news-toggle {
+    border: 1px solid color-mix(in srgb, var(--ra10-line-strong) 62%, #fff 38%);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--ra10-surface) 54%, transparent);
+  }
+  body.ra10-refresh-enabled .nav-link.active,
+  body.ra10-refresh-enabled .topbar .tab.active {
+    color: #fff;
+    border-color: transparent;
+    background: linear-gradient(120deg, var(--ra10-accent), var(--ra10-accent-2));
+    box-shadow: 0 4px 0 color-mix(in srgb, var(--ra10-accent-dark) 72%, transparent), 0 8px 18px rgba(31,111,235,.20);
+  }
+}
+
+@keyframes ra10-nav-liquid-shine {
+  0%, 58%, 100% { transform: translateX(-18%) rotate(-8deg); opacity: 0; }
+  68%, 82% { transform: translateX(48%) rotate(-8deg); opacity: 1; }
+}
+
+@media screen and (max-width: 840px) {
+  body.ra10-refresh-enabled .topbar {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) auto !important;
+    grid-template-areas:
+      "brand actions"
+      "tabs tabs" !important;
+    align-items: center !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    overflow: visible !important;
+    gap: 7px 8px !important;
+    padding: 9px 10px 10px !important;
+    border-radius: 0 !important;
+    margin: 0 !important;
+    border-left: 0 !important;
+    border-right: 0 !important;
+  }
+  body.ra10-refresh-enabled .topbar .unit-brand {
+    grid-area: brand;
+    min-width: 0;
+  }
+  body.ra10-refresh-enabled .topbar .site-unit-nav {
+    display: none !important;
+    min-width: 0 !important;
+    width: 100% !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    flex-wrap: nowrap !important;
+    padding: 2px 0 !important;
+  }
+  body.ra10-refresh-enabled .topbar .site-unit-nav .site-unit-link {
+    display: none !important;
+  }
+  body.ra10-refresh-enabled .topbar .site-unit-nav .site-community-link {
+    display: none !important;
+  }
+  body.ra10-refresh-enabled .topbar .tabs {
+    grid-area: tabs;
+    display: flex !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    flex-wrap: nowrap !important;
+    padding: 4px !important;
+  }
+  body.ra10-refresh-enabled .topbar #unit1-credit-chip {
+    display: none !important;
+  }
+  body.ra10-refresh-enabled .topbar > div:last-child {
+    grid-area: actions;
+    display: flex !important;
+    min-width: max-content;
+    gap: 5px !important;
+  }
+  body.ra10-refresh-enabled .topbar .unit-avatar-btn {
+    width: 34px !important;
+    height: 34px !important;
+    min-width: 34px !important;
+    padding: 0 !important;
+  }
+  body.ra10-refresh-enabled .topbar .site-unit-link,
+  body.ra10-refresh-enabled .topbar .tab {
+    flex: 0 0 auto !important;
+    white-space: nowrap !important;
+  }
+
+  body.ra10-refresh-enabled .nav {
+    margin: 0 !important;
+    border-radius: 0 !important;
+    border-left: 0 !important;
+    border-right: 0 !important;
+  }
+
+  body.ra10-refresh-enabled .topbar {
+    gap: 6px;
+    padding: 8px 10px;
+    border-radius: 0;
+    margin: 0;
+    border-left: 0;
+    border-right: 0;
+  }
+  body.ra10-refresh-enabled .topbar .tabs {
+    width: 100% !important;
+    min-width: 100%;
+    overflow-x: auto;
+    flex-wrap: nowrap !important;
+  }
+
+  body.ra10-refresh-enabled .nav-inner {
+    display: flex;
+    width: 100%;
+    min-width: 0;
+    height: 58px;
+    padding: 8px 10px;
+    gap: 7px;
+  }
+  body.ra10-refresh-enabled .nav-logo-text { display: none; }
+  body.ra10-refresh-enabled .nav-logo img { width: 32px; height: 32px; }
+  body.ra10-refresh-enabled .nav-links {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow-x: auto;
+    gap: 4px;
+  }
+  body.ra10-refresh-enabled .nav-links .nav-link {
+    flex: 0 0 auto;
+    min-height: 36px;
+    padding: 7px 10px;
+    white-space: nowrap;
+  }
+  body.ra10-refresh-enabled .nav-actions {
+    gap: 4px;
+  }
+  body.ra10-refresh-enabled .nav-actions .nav-credit-chip,
+  body.ra10-refresh-enabled .nav-actions .nav-user-wrap,
+  body.ra10-refresh-enabled .nav-actions .nav-upgrade-btn {
+    display: none !important;
+  }
+  body.ra10-refresh-enabled .nav-actions .nav-auth-btn {
+    min-height: 36px;
+    padding: 7px 10px;
+    white-space: nowrap;
+  }
+  body.ra10-refresh-enabled .nav-actions .theme-toggle,
+  body.ra10-refresh-enabled .nav-actions .news-toggle {
+    width: 36px;
+    height: 36px;
+    flex: 0 0 36px;
+  }
+}

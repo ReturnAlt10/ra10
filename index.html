@@ -546,141 +546,6 @@ body.unit-shell-mode .site-announcement-bar{
   .news-media{height:125px}
 }
 
-.home-reframe{display:grid;gap:var(--sp4);padding-block:var(--sp1) var(--sp6)}
-.home-reframe-hero{
-  position:relative;
-  overflow:hidden;
-  border:1px solid oklch(from var(--color-text) l c h/.08);
-  border-radius:28px;
-  background:
-    radial-gradient(80% 100% at 100% 0%, rgba(255,159,67,.18) 0%, rgba(255,159,67,0) 55%),
-    radial-gradient(80% 90% at 0% 100%, rgba(17,138,178,.16) 0%, rgba(17,138,178,0) 55%),
-    linear-gradient(155deg,#f7f7f2 0%,#ffffff 44%,#eef7ff 100%);
-  box-shadow:0 24px 64px rgba(15,23,42,.12);
-  padding:clamp(var(--sp4),3vw,var(--sp6));
-}
-[data-theme="dark"] .home-reframe-hero{
-  background:
-    radial-gradient(80% 100% at 100% 0%, rgba(255,159,67,.18) 0%, rgba(255,159,67,0) 55%),
-    radial-gradient(80% 90% at 0% 100%, rgba(17,138,178,.18) 0%, rgba(17,138,178,0) 55%),
-    linear-gradient(155deg,#1f2329 0%,#171b20 44%,#18242d 100%);
-}
-.home-reframe-hero::before,
-.home-reframe-hero::after{
-  content:'';
-  position:absolute;
-  border-radius:999px;
-  pointer-events:none;
-}
-.home-reframe-hero::before{width:320px;height:320px;left:-120px;top:-160px;background:rgba(255,255,255,.35)}
-.home-reframe-hero::after{width:260px;height:260px;right:-90px;bottom:-120px;background:rgba(17,138,178,.12)}
-
-.home-reframe-grid{position:relative;z-index:1;display:grid;grid-template-columns:1fr;gap:var(--sp4);align-items:start}
-.home-reframe-main h1{
-  margin-top:var(--sp3);
-  font-family:var(--font-d);
-  font-size:clamp(1.95rem,5vw,3.2rem);
-  line-height:1;
-  letter-spacing:-.05em;
-  max-width:12ch;
-}
-.home-reframe-main p{
-  margin-top:var(--sp3);
-  max-width:48ch;
-  font-size:var(--tx-sm);
-  line-height:1.65;
-  color:var(--color-text-muted);
-}
-.home-reframe-kicker{
-  display:inline-flex;
-  align-items:center;
-  padding:8px 14px;
-  border-radius:999px;
-  background:#111827;
-  color:#f9fafb;
-  font-size:11px;
-  font-weight:800;
-  letter-spacing:.12em;
-  text-transform:uppercase;
-}
-[data-theme="dark"] .home-reframe-kicker{background:#f3f4f6;color:#111827}
-.home-reframe-cta-row{display:grid;grid-template-columns:1fr;gap:var(--sp2);margin-top:var(--sp4)}
-.home-reframe-cta-row .btn{width:100%;justify-content:center;border-radius:16px;min-height:46px}
-
-.home-reframe-pulse-grid{display:grid;grid-template-columns:1fr;gap:var(--sp2);margin-top:var(--sp4)}
-.home-reframe-pulse-card{
-  padding:14px;
-  border-radius:16px;
-  background:rgba(255,255,255,.72);
-  border:1px solid oklch(from var(--color-text) l c h/.08);
-  box-shadow:var(--shadow-sm);
-}
-[data-theme="dark"] .home-reframe-pulse-card{background:rgba(255,255,255,.06)}
-.home-reframe-pulse-card strong{display:block;font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--color-text-faint)}
-.home-reframe-pulse-card span{display:block;margin-top:8px;font-size:var(--tx-sm);font-weight:700;line-height:1.35}
-.home-reframe-pulse-card b{display:block;margin-top:12px;font-family:var(--font-d);font-size:clamp(1.4rem,2vw,1.8rem);font-weight:400}
-
-.home-reframe-aside{
-  padding:18px;
-  border-radius:22px;
-  border:1px solid oklch(from var(--color-text) l c h/.1);
-  background:linear-gradient(180deg,rgba(255,255,255,.9),rgba(248,250,252,.72));
-  box-shadow:var(--shadow-sm);
-}
-[data-theme="dark"] .home-reframe-aside{background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.04))}
-.home-reframe-aside h3{font-family:var(--font-d);font-size:clamp(1.45rem,2.4vw,2rem);font-weight:400;line-height:1.02}
-.home-reframe-aside p{margin-top:var(--sp2);font-size:var(--tx-sm);line-height:1.58;color:var(--color-text-muted)}
-.home-reframe-launch-list{display:grid;gap:10px;margin-top:var(--sp4)}
-.home-reframe-launch{
-  display:grid;
-  grid-template-columns:auto 1fr;
-  gap:12px;
-  align-items:start;
-  width:100%;
-  padding:14px;
-  border-radius:18px;
-  border:1px solid oklch(from var(--color-text) l c h/.1);
-  background:rgba(255,255,255,.78);
-  text-align:left;
-}
-[data-theme="dark"] .home-reframe-launch{background:rgba(255,255,255,.06)}
-.home-reframe-launch strong{display:block;font-size:var(--tx-sm);line-height:1.3}
-.home-reframe-launch small{display:block;margin-top:3px;font-size:var(--tx-xs);line-height:1.45;color:var(--color-text-muted)}
-.home-reframe-dot{
-  width:38px;
-  height:38px;
-  border-radius:14px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:11px;
-  font-weight:800;
-  color:#fff;
-}
-.home-reframe-dot.it{background:linear-gradient(135deg,#15803d,#0f766e)}
-.home-reframe-dot.business{background:linear-gradient(135deg,#2563eb,#1d4ed8)}
-.home-reframe-dot.sport{background:linear-gradient(135deg,#d97706,#f59e0b)}
-.home-reframe-dot.l2{background:linear-gradient(135deg,#9333ea,#7c3aed)}
-
-.home-reframe-section{
-  padding:clamp(var(--sp4),2.4vw,var(--sp5));
-  border-radius:24px;
-  border:1px solid oklch(from var(--color-text) l c h/.08);
-  background:linear-gradient(180deg,var(--color-surface),var(--color-surface-offset));
-  box-shadow:var(--shadow-sm);
-}
-.home-reframe-head{display:flex;justify-content:space-between;align-items:end;gap:var(--sp4);flex-wrap:wrap;margin-bottom:var(--sp4)}
-.home-reframe-head h2{font-family:var(--font-d);font-size:clamp(1.5rem,3.4vw,2.4rem);font-weight:400;line-height:1.02}
-.home-reframe-head p{max-width:58ch;font-size:var(--tx-sm);line-height:1.6;color:var(--color-text-muted)}
-
-.home-reframe-principles{display:grid;grid-template-columns:1fr;gap:var(--sp3)}
-.home-reframe-principle{
-  padding:18px;
-  border-radius:20px;
-  background:var(--color-surface);
-  border:1px solid oklch(from var(--color-text) l c h/.08);
-}
-.home-reframe-principle .badge,
 .lane-tag{
   display:inline-flex;
   align-items:center;
@@ -692,122 +557,6 @@ body.unit-shell-mode .site-announcement-bar{
   font-weight:800;
   letter-spacing:.08em;
   text-transform:uppercase;
-}
-.home-reframe-principle h3{margin-top:var(--sp3);font-family:var(--font-d);font-size:var(--tx-xl);font-weight:400;line-height:1.06}
-.home-reframe-principle p{margin-top:var(--sp2);font-size:var(--tx-sm);line-height:1.62;color:var(--color-text-muted)}
-
-.home-reframe-principle.ai-feature{
-  position:relative;
-  overflow:hidden;
-  border-color:rgba(14,165,233,.34);
-  background:
-    radial-gradient(130% 110% at 0% 0%, rgba(14,165,233,.2) 0%, rgba(14,165,233,0) 55%),
-    radial-gradient(120% 120% at 100% 100%, rgba(168,85,247,.18) 0%, rgba(168,85,247,0) 58%),
-    linear-gradient(135deg,#e6fbff 0%,#eef7ff 45%,#f5edff 100%);
-  box-shadow:0 14px 28px rgba(14,165,233,.16), inset 0 1px 0 rgba(255,255,255,.75);
-}
-
-.home-reframe-principle.ai-feature::after{
-  content:'';
-  position:absolute;
-  inset:0;
-  pointer-events:none;
-  background:linear-gradient(115deg,transparent 0%,rgba(255,255,255,.42) 46%,transparent 68%);
-  transform:translateX(-130%);
-  animation:priceShine 3s ease-in-out infinite;
-}
-
-.home-reframe-principle.ai-feature .badge{
-  background:linear-gradient(90deg,#c4b5fd,#bfdbfe,#99f6e4);
-  color:#1e1b4b;
-}
-
-[data-theme="dark"] .home-reframe-principle.ai-feature{
-  border-color:rgba(125,211,252,.35);
-  background:
-    radial-gradient(130% 110% at 0% 0%, rgba(14,165,233,.24) 0%, rgba(14,165,233,0) 55%),
-    radial-gradient(120% 120% at 100% 100%, rgba(168,85,247,.22) 0%, rgba(168,85,247,0) 58%),
-    linear-gradient(135deg,#132c3f 0%,#1a2c47 45%,#2a1f45 100%);
-  box-shadow:0 14px 28px rgba(14,165,233,.2), inset 0 1px 0 rgba(255,255,255,.08);
-}
-
-[data-theme="dark"] .home-reframe-principle.ai-feature .badge{
-  background:linear-gradient(90deg,#312e81,#1d4ed8,#0f766e);
-  color:#dbeafe;
-}
-
-.home-reframe-lanes{display:grid;grid-template-columns:1fr;gap:var(--sp3)}
-.home-reframe-lane{
-  position:relative;
-  overflow:hidden;
-  padding:18px;
-  border-radius:20px;
-  border:1px solid oklch(from var(--color-text) l c h/.1);
-  background:linear-gradient(145deg,var(--color-surface),var(--color-surface-offset));
-  box-shadow:var(--shadow-sm);
-  transition:transform var(--t),box-shadow var(--t),border-color var(--t);
-}
-.home-reframe-lane:hover{transform:translateY(-3px);box-shadow:var(--shadow-md)}
-.home-reframe-lane.it{border-color:rgba(21,128,61,.28)}
-.home-reframe-lane.business{border-color:rgba(37,99,235,.26)}
-.home-reframe-lane.sport{border-color:rgba(217,119,6,.28)}
-.home-reframe-lane.l2{border-color:rgba(147,51,234,.26)}
-.home-reframe-lane h3{margin-top:var(--sp3);font-family:var(--font-d);font-size:clamp(1.35rem,2.8vw,1.9rem);font-weight:400;line-height:1.04}
-.home-reframe-lane p{margin-top:var(--sp2);font-size:var(--tx-sm);line-height:1.62;color:var(--color-text-muted);max-width:40ch}
-.home-reframe-lane .btn{margin-top:var(--sp4)}
-
-.home-reframe-strip{
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
-  padding:10px;
-  border:1px solid oklch(from var(--color-text) l c h/.08);
-  border-radius:22px;
-  background:linear-gradient(145deg,var(--color-surface),var(--color-surface-offset));
-}
-.home-reframe-strip span{
-  display:inline-flex;
-  align-items:center;
-  padding:9px 14px;
-  border-radius:999px;
-  background:rgba(17,138,178,.1);
-  color:#0f5f75;
-  font-size:var(--tx-xs);
-  font-weight:700;
-}
-[data-theme="dark"] .home-reframe-strip span{background:rgba(17,138,178,.18);color:#9dd6e5}
-
-.home-reframe-plan-grid{display:grid;grid-template-columns:1fr;gap:var(--sp3)}
-.home-reframe-plan{
-  padding:18px;
-  border-radius:20px;
-  border:1px solid oklch(from var(--color-text) l c h/.08);
-  background:var(--color-surface);
-  box-shadow:var(--shadow-sm);
-}
-.home-reframe-plan.pro{background:linear-gradient(145deg,#effcf6,#eef6ff);border-color:rgba(17,138,178,.18)}
-.home-reframe-plan.ultra{background:linear-gradient(145deg,#fff8eb,#fff2f2);border-color:rgba(217,119,6,.2)}
-[data-theme="dark"] .home-reframe-plan.pro{background:linear-gradient(145deg,#16322f,#162635)}
-[data-theme="dark"] .home-reframe-plan.ultra{background:linear-gradient(145deg,#33251a,#2d1f24)}
-.home-reframe-plan h3{font-family:var(--font-d);font-size:var(--tx-xl);font-weight:400;line-height:1.02}
-.home-reframe-plan .price{margin-top:var(--sp3);font-family:var(--font-d);font-size:clamp(1.8rem,3.2vw,2.4rem);line-height:1}
-.home-reframe-plan p{margin-top:var(--sp2);font-size:var(--tx-sm);line-height:1.6;color:var(--color-text-muted)}
-
-@media (min-width: 700px){
-  .home-reframe-cta-row{grid-template-columns:repeat(3,minmax(0,1fr))}
-  .home-reframe-pulse-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
-}
-@media (min-width: 980px){
-  .home-reframe-grid{grid-template-columns:minmax(0,1.1fr) minmax(320px,.9fr);gap:var(--sp5)}
-  .home-reframe-principles{grid-template-columns:repeat(3,minmax(0,1fr))}
-  .home-reframe-lanes{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .home-reframe-plan-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
-  .home-reframe-main p{font-size:var(--tx-base)}
-}
-@media (max-width: 640px){
-  .home-reframe-banner{padding-right:44px}
-  .home-reframe{gap:var(--sp3);padding-block:var(--sp2) var(--sp4)}
-  .home-reframe-main h1{max-width:100%;font-size:clamp(1.85rem,10vw,2.7rem)}
 }
 
 [data-theme="dark"] #p-account .account-editor{background:rgba(255,255,255,.04)}
@@ -3693,7 +3442,440 @@ html body #community-share-sheet .community-share-panel{
 @media(max-width:560px){
   .cw-picker-grid{grid-template-columns:repeat(auto-fill,minmax(90px,1fr))}
   .cw-preset-grid{grid-template-columns:1fr}
-}</style>
+}
+
+/* ============================================================
+   HOME  /  — hx- design system (ground-up rebuild)
+============================================================ */
+#p-home{--hx-ink:#0b0f19;--hx-ink-2:#141a29;--hx-line:rgba(255,255,255,.12)}
+#p-home .c{max-width:1240px}
+#p-home .home-reframe-banner{display:none}
+
+.hx-home{display:grid;gap:clamp(var(--sp5),4vw,var(--sp8));padding-block:clamp(var(--sp3),2vw,var(--sp5)) clamp(var(--sp8),6vw,var(--sp12))}
+
+/* ---------- HERO ---------- */
+.hx-hero{
+  position:relative;
+  overflow:hidden;
+  border-radius:32px;
+  padding:clamp(var(--sp6),5vw,var(--sp10)) clamp(var(--sp5),4vw,var(--sp9));
+  background:
+    radial-gradient(120% 140% at 8% -10%, rgba(56,189,248,.24) 0%, rgba(56,189,248,0) 46%),
+    radial-gradient(110% 120% at 100% 0%, rgba(168,85,247,.22) 0%, rgba(168,85,247,0) 48%),
+    radial-gradient(90% 90% at 50% 120%, rgba(34,197,94,.2) 0%, rgba(34,197,94,0) 55%),
+    linear-gradient(160deg,var(--hx-ink) 0%,var(--hx-ink-2) 100%);
+  color:#f5f7fb;
+  box-shadow:0 30px 80px rgba(8,10,20,.35);
+  isolation:isolate;
+}
+.hx-hero::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);
+  background-size:34px 34px;
+  mask-image:radial-gradient(60% 60% at 30% 20%,rgba(0,0,0,.9),transparent 75%);
+  z-index:0;
+  pointer-events:none;
+}
+.hx-hero-grain{
+  position:absolute;
+  inset:-40%;
+  z-index:0;
+  pointer-events:none;
+  background:radial-gradient(circle at 20% 20%,rgba(255,255,255,.06),transparent 40%);
+  animation:hxDrift 18s ease-in-out infinite alternate;
+}
+@keyframes hxDrift{
+  from{transform:translate3d(0,0,0) rotate(0deg)}
+  to{transform:translate3d(2%,3%,0) rotate(4deg)}
+}
+.hx-hero-grid{position:relative;z-index:1;display:grid;grid-template-columns:1fr;gap:clamp(var(--sp5),4vw,var(--sp7));align-items:center}
+
+.hx-kicker{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:7px 14px 7px 10px;
+  border-radius:999px;
+  background:rgba(255,255,255,.08);
+  border:1px solid var(--hx-line);
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  color:#dbe4ff;
+  animation:hxFadeUp .7s cubic-bezier(.2,.8,.2,1) both;
+}
+.hx-kicker-dot{width:7px;height:7px;border-radius:50%;background:#4ade80;box-shadow:0 0 0 4px rgba(74,222,128,.22);animation:hxPulse 2.2s ease-in-out infinite}
+@keyframes hxPulse{0%,100%{opacity:1}50%{opacity:.45}}
+
+.hx-hero-title{
+  margin-top:var(--sp4);
+  font-family:var(--font-d);
+  font-size:clamp(2.6rem,6.2vw,5.2rem);
+  line-height:.96;
+  letter-spacing:-.04em;
+  max-width:15ch;
+  animation:hxFadeUp .7s .05s cubic-bezier(.2,.8,.2,1) both;
+}
+.hx-hero-title em{
+  font-style:normal;
+  background:linear-gradient(100deg,#7dd3fc,#c4b5fd 45%,#86efac);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  background-size:200% 100%;
+  animation:hxGradientShift 6s ease-in-out infinite;
+}
+@keyframes hxGradientShift{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+.hx-hero-copy{
+  margin-top:var(--sp4);
+  max-width:52ch;
+  font-size:var(--tx-base);
+  line-height:1.7;
+  color:#c3cad9;
+  animation:hxFadeUp .7s .1s cubic-bezier(.2,.8,.2,1) both;
+}
+.hx-hero-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:var(--sp6);animation:hxFadeUp .7s .15s cubic-bezier(.2,.8,.2,1) both}
+.hx-btn{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:13px 22px;border-radius:14px;
+  font-size:var(--tx-sm);font-weight:700;
+  transition:transform .25s cubic-bezier(.2,.8,.2,1),box-shadow .25s,filter .25s;
+}
+.hx-btn:active{transform:translateY(1px) scale(.99)}
+.hx-btn-primary{
+  background:linear-gradient(135deg,#38bdf8,#818cf8 55%,#c084fc);
+  color:#0b0f19;
+  box-shadow:0 10px 26px rgba(129,140,248,.35);
+}
+.hx-btn-primary:hover{transform:translateY(-2px);box-shadow:0 16px 34px rgba(129,140,248,.45)}
+.hx-btn-ghost{
+  background:rgba(255,255,255,.07);
+  color:#f5f7fb;
+  border:1px solid var(--hx-line);
+}
+.hx-btn-ghost:hover{transform:translateY(-2px);background:rgba(255,255,255,.12)}
+
+.hx-stat-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:clamp(var(--sp5),3vw,var(--sp7));max-width:520px;animation:hxFadeUp .7s .2s cubic-bezier(.2,.8,.2,1) both}
+.hx-stat{padding:14px 4px;border-top:1px solid var(--hx-line)}
+.hx-stat b{display:block;font-family:var(--font-d);font-size:clamp(1.5rem,2.4vw,2.1rem);font-weight:400;color:#fff}
+.hx-stat span{display:block;margin-top:4px;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#8b93a7}
+
+/* ---------- LAUNCH PANEL ---------- */
+.hx-launch{
+  position:relative;
+  z-index:1;
+  border-radius:24px;
+  padding:var(--sp5);
+  background:rgba(255,255,255,.06);
+  border:1px solid var(--hx-line);
+  backdrop-filter:blur(18px);
+  animation:hxFadeUp .7s .1s cubic-bezier(.2,.8,.2,1) both;
+}
+.hx-launch-head{display:flex;align-items:center;justify-content:space-between;gap:var(--sp2);margin-bottom:var(--sp3)}
+.hx-launch-head h3{font-family:var(--font-d);font-size:var(--tx-lg);font-weight:400;color:#fff}
+.hx-launch-head span{font-size:11px;color:#8b93a7;text-transform:uppercase;letter-spacing:.08em}
+.hx-launch-list{display:grid;gap:8px}
+.hx-launch-item{
+  display:grid;
+  grid-template-columns:auto 1fr auto;
+  align-items:center;
+  gap:12px;
+  width:100%;
+  padding:12px;
+  border-radius:16px;
+  border:1px solid transparent;
+  background:rgba(255,255,255,.03);
+  text-align:left;
+  transition:transform .25s cubic-bezier(.2,.8,.2,1),background .25s,border-color .25s;
+}
+.hx-launch-item:hover{transform:translateX(3px);background:rgba(255,255,255,.09);border-color:var(--hx-line)}
+.hx-launch-icon{
+  width:36px;height:36px;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:800;color:#0b0f19;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.35);
+}
+.hx-launch-icon.it{background:linear-gradient(135deg,#4ade80,#22d3ee)}
+.hx-launch-icon.business{background:linear-gradient(135deg,#60a5fa,#818cf8)}
+.hx-launch-icon.sport{background:linear-gradient(135deg,#fb923c,#f472b6)}
+.hx-launch-icon.l2{background:linear-gradient(135deg,#c084fc,#f472b6)}
+.hx-launch-copy{min-width:0}
+.hx-launch-copy strong{display:block;font-size:var(--tx-sm);color:#fff;line-height:1.25}
+.hx-launch-copy small{display:block;margin-top:2px;font-size:11px;color:#9aa2b6;line-height:1.4}
+.hx-launch-arrow{color:#6b7386;font-size:14px;transition:transform .25s,color .25s}
+.hx-launch-item:hover .hx-launch-arrow{transform:translateX(3px);color:#c4b5fd}
+
+/* ---------- MARQUEE ---------- */
+.hx-marquee{
+  position:relative;
+  overflow:hidden;
+  border-radius:999px;
+  border:1px solid oklch(from var(--color-text) l c h/.1);
+  background:linear-gradient(90deg,var(--color-surface),var(--color-surface-offset));
+  padding:6px;
+}
+.hx-marquee-track{display:flex;gap:10px;width:max-content;animation:hxMarquee 26s linear infinite}
+.hx-marquee:hover .hx-marquee-track{animation-play-state:paused}
+.hx-marquee span{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:9px 16px;border-radius:999px;white-space:nowrap;
+  background:rgba(56,189,248,.12);color:#0369a1;
+  font-size:var(--tx-xs);font-weight:700;
+}
+[data-theme="dark"] .hx-marquee span{background:rgba(56,189,248,.16);color:#7dd3fc}
+.hx-marquee span b{width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.6}
+@keyframes hxMarquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ---------- SHARED SECTION SHELL ---------- */
+.hx-section{display:grid;gap:var(--sp5)}
+.hx-section-head{display:flex;justify-content:space-between;align-items:end;gap:var(--sp4);flex-wrap:wrap}
+.hx-eyebrow{font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--color-primary)}
+.hx-section-head h2{margin-top:6px;font-family:var(--font-d);font-size:clamp(1.7rem,3.6vw,2.6rem);font-weight:400;line-height:1.03;letter-spacing:-.02em}
+.hx-section-head p{max-width:56ch;font-size:var(--tx-sm);line-height:1.65;color:var(--color-text-muted)}
+
+/* ---------- TIMELINE (how it works) ---------- */
+.hx-timeline{display:grid;grid-template-columns:1fr;gap:var(--sp3);position:relative}
+.hx-timeline-step{
+  position:relative;
+  display:grid;
+  grid-template-columns:44px 1fr;
+  gap:14px;
+  padding:18px;
+  border-radius:20px;
+  border:1px solid oklch(from var(--color-text) l c h/.08);
+  background:var(--color-surface);
+  transition:transform .3s cubic-bezier(.2,.8,.2,1),box-shadow .3s;
+}
+.hx-timeline-step:hover{transform:translateY(-3px);box-shadow:var(--shadow-md)}
+.hx-timeline-num{
+  width:44px;height:44px;border-radius:14px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-d);font-size:var(--tx-lg);color:#fff;
+  background:linear-gradient(135deg,#38bdf8,#818cf8);
+  box-shadow:0 8px 20px rgba(129,140,248,.35);
+}
+.hx-timeline-step h3{font-family:var(--font-d);font-size:var(--tx-lg);font-weight:400;line-height:1.15}
+.hx-timeline-step p{margin-top:6px;font-size:var(--tx-sm);color:var(--color-text-muted);line-height:1.6}
+
+/* ---------- BENTO (feature highlights) ---------- */
+.hx-bento{display:grid;grid-template-columns:1fr;gap:var(--sp3)}
+.hx-bento-card{
+  position:relative;
+  overflow:hidden;
+  padding:20px;
+  border-radius:22px;
+  border:1px solid oklch(from var(--color-text) l c h/.08);
+  background:var(--color-surface);
+  transition:transform .3s cubic-bezier(.2,.8,.2,1),box-shadow .3s,border-color .3s;
+}
+.hx-bento-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-md)}
+.hx-bento-icon{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:38px;height:38px;border-radius:12px;
+  background:var(--color-surface-offset-2);
+  font-size:15px;
+}
+.hx-bento-card h3{margin-top:14px;font-family:var(--font-d);font-size:var(--tx-lg);font-weight:400;line-height:1.15}
+.hx-bento-card p{margin-top:8px;font-size:var(--tx-sm);color:var(--color-text-muted);line-height:1.62}
+.hx-bento-card.featured{
+  color:#f5f7fb;
+  background:linear-gradient(135deg,#1d2540 0%,#161b2c 60%,#241a37 100%);
+  border-color:rgba(168,181,255,.28);
+  box-shadow:0 20px 44px rgba(24,20,60,.28);
+}
+.hx-bento-card.featured p{color:#c3cad9}
+.hx-bento-card.featured::after{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(120deg,transparent 0%,rgba(255,255,255,.16) 45%,transparent 65%);
+  transform:translateX(-130%);
+  animation:hxShine 3.4s ease-in-out infinite;
+}
+@keyframes hxShine{0%,55%{transform:translateX(-130%)}100%{transform:translateX(130%)}}
+.hx-bento-icon.featured{background:rgba(255,255,255,.12)}
+
+/* ---------- SUBJECT GRID ---------- */
+.hx-subject-grid{display:grid;grid-template-columns:1fr;gap:var(--sp3)}
+.hx-subject-card{
+  position:relative;
+  overflow:hidden;
+  border-radius:22px;
+  border:1px solid oklch(from var(--color-text) l c h/.08);
+  background:var(--color-surface);
+  padding:20px;
+  cursor:pointer;
+  transition:transform .35s cubic-bezier(.2,.8,.2,1),box-shadow .35s,border-color .35s;
+  animation:hxFadeUp .55s cubic-bezier(.2,.8,.2,1) both;
+}
+.hx-subject-card:nth-child(2){animation-delay:.05s}
+.hx-subject-card:nth-child(3){animation-delay:.1s}
+.hx-subject-card:nth-child(4){animation-delay:.15s}
+.hx-subject-card:nth-child(5){animation-delay:.2s}
+.hx-subject-card:nth-child(6){animation-delay:.25s}
+.hx-subject-card:hover{transform:translateY(-6px);box-shadow:0 20px 40px rgba(15,23,42,.14)}
+.hx-subject-glow{
+  position:absolute;top:-40%;right:-30%;width:220px;height:220px;border-radius:50%;
+  filter:blur(10px);opacity:.5;pointer-events:none;transition:opacity .35s;
+}
+.hx-subject-card:hover .hx-subject-glow{opacity:.85}
+.hx-subject-card.it .hx-subject-glow{background:radial-gradient(circle,#4ade80,transparent 70%)}
+.hx-subject-card.business .hx-subject-glow{background:radial-gradient(circle,#60a5fa,transparent 70%)}
+.hx-subject-card.sport .hx-subject-glow{background:radial-gradient(circle,#fb923c,transparent 70%)}
+.hx-subject-card.l2 .hx-subject-glow{background:radial-gradient(circle,#c084fc,transparent 70%)}
+.hx-subject-tag{position:relative;z-index:1;display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:999px;font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;background:var(--color-surface-offset-2);color:var(--color-text-muted)}
+.hx-subject-card h3{position:relative;z-index:1;margin-top:14px;font-family:var(--font-d);font-size:clamp(1.3rem,2.4vw,1.6rem);font-weight:400;line-height:1.1}
+.hx-subject-card p{position:relative;z-index:1;margin-top:8px;font-size:var(--tx-sm);color:var(--color-text-muted);line-height:1.6;max-width:38ch}
+.hx-subject-foot{position:relative;z-index:1;margin-top:16px;display:flex;align-items:center;gap:6px;font-size:var(--tx-sm);font-weight:700;color:var(--color-text)}
+.hx-subject-foot svg{width:15px;height:15px;transition:transform .25s}
+.hx-subject-card:hover .hx-subject-foot svg{transform:translateX(3px)}
+
+/* ---------- PLANS SHELL ---------- */
+.hx-plans-shell{
+  border-radius:28px;
+  padding:clamp(var(--sp5),4vw,var(--sp7));
+  background:linear-gradient(135deg,#f0fdfa 0%,#eff6ff 55%,#fff7ed 100%);
+  border:1px solid oklch(from var(--color-text) l c h/.08);
+}
+[data-theme="dark"] .hx-plans-shell{background:linear-gradient(135deg,#132523 0%,#131c30 55%,#2a1f18 100%)}
+.hx-plan-grid{display:grid;grid-template-columns:1fr;gap:var(--sp3);margin-top:var(--sp4)}
+.hx-plan-card{
+  position:relative;
+  padding:20px;
+  border-radius:20px;
+  border:1px solid oklch(from var(--color-text) l c h/.1);
+  background:var(--color-surface);
+  transition:transform .3s cubic-bezier(.2,.8,.2,1),box-shadow .3s;
+}
+.hx-plan-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-md)}
+.hx-plan-card.pro{border-color:rgba(56,189,248,.4)}
+.hx-plan-card.ultra{background:linear-gradient(145deg,#fff8eb,#fff2f2);border-color:rgba(217,119,6,.24)}
+[data-theme="dark"] .hx-plan-card.ultra{background:linear-gradient(145deg,#33251a,#2d1f24)}
+.hx-plan-ribbon{position:absolute;top:14px;right:14px;font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:4px 9px;border-radius:999px;background:linear-gradient(90deg,#38bdf8,#818cf8);color:#fff}
+.hx-plan-card h3{font-family:var(--font-d);font-size:var(--tx-lg);font-weight:400}
+.hx-plan-card .price{margin-top:10px;font-family:var(--font-d);font-size:clamp(1.7rem,3vw,2.2rem)}
+.hx-plan-card p{margin-top:8px;font-size:var(--tx-sm);color:var(--color-text-muted);line-height:1.55}
+
+@keyframes hxFadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+
+@media (min-width:700px){
+  .hx-stat-row{max-width:none}
+  .hx-timeline{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .hx-plan-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media (min-width:860px){
+  .hx-bento{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .hx-bento-card.featured{grid-column:span 2}
+}
+@media (min-width:980px){
+  .hx-hero-grid{grid-template-columns:minmax(0,1.15fr) minmax(320px,.85fr);gap:var(--sp8)}
+  .hx-subject-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media (max-width:640px){
+  .hx-home{gap:var(--sp5);padding-block:var(--sp2) var(--sp8)}
+  .hx-hero{padding:var(--sp5) var(--sp4);border-radius:24px}
+  .hx-hero-title{font-size:clamp(2.1rem,11vw,2.8rem);max-width:11ch}
+  .hx-hero-copy{font-size:var(--tx-sm)}
+  .hx-hero-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .hx-hero-actions .hx-btn{justify-content:center;padding:12px 10px;font-size:12px}
+  .hx-hero-actions .hx-btn:first-child{grid-column:1 / -1}
+  .hx-stat-row{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .hx-stat b{font-size:1.3rem}
+  .hx-launch{padding:var(--sp3)}
+  .hx-section-head h2{font-size:clamp(1.5rem,7vw,2rem)}
+}
+@media (prefers-reduced-motion:reduce){
+  .hx-hero-grain,.hx-kicker-dot,.hx-hero-title em,.hx-marquee-track,.hx-bento-card.featured::after{animation:none!important}
+  .hx-kicker,.hx-hero-title,.hx-hero-copy,.hx-hero-actions,.hx-stat-row,.hx-launch,.hx-subject-card{animation:none!important}
+}
+
+/* Homepage refinement: quieter surfaces, stronger typography, no glass box */
+#p-home .hx-home{max-width:1160px;margin-inline:auto;gap:clamp(2.25rem,5vw,4rem)}
+#p-home .hx-hero{
+  overflow:visible;
+  border:1px solid #d9d4ca;
+  border-radius:26px;
+  padding:clamp(2rem,5vw,4.5rem);
+  background:
+    radial-gradient(70% 140% at 100% 0%,rgba(210,0,0,.08),transparent 65%),
+    linear-gradient(135deg,#fffdf8 0%,#f3f0e9 100%);
+  color:#28251d;
+  box-shadow:0 18px 50px rgba(63,52,35,.1);
+}
+#p-home .hx-hero::before,#p-home .hx-hero-grain{display:none}
+#p-home .hx-hero-grid{grid-template-columns:minmax(0,1.15fr) minmax(250px,.85fr);gap:clamp(2rem,5vw,5rem)}
+#p-home .hx-kicker{background:#28251d;border-color:#28251d;color:#fff}
+#p-home .hx-kicker-dot{background:#75a34a;box-shadow:0 0 0 4px rgba(117,163,74,.18)}
+#p-home .hx-hero-title{color:#28251d;font-size:clamp(2.8rem,6vw,5rem);max-width:12ch}
+#p-home .hx-hero-title em{background:linear-gradient(100deg,#b43b2f,#d20000 48%,#b66b2c);-webkit-background-clip:text;background-clip:text;color:transparent}
+#p-home .hx-hero-copy{color:#6d6a64;max-width:46ch}
+#p-home .hx-hero-actions .hx-btn-primary{background:#d20000;color:#fff;box-shadow:0 10px 22px rgba(210,0,0,.18)}
+#p-home .hx-hero-actions .hx-btn-primary:hover{box-shadow:0 14px 28px rgba(210,0,0,.26)}
+#p-home .hx-hero-actions .hx-btn-ghost{background:#fff;color:#28251d;border-color:#d8d3ca}
+#p-home .hx-hero-actions .hx-btn-ghost:hover{background:#f1eee8}
+#p-home .hx-stat{border-color:#d8d3ca}
+#p-home .hx-stat b{color:#28251d}
+#p-home .hx-stat span{color:#89857c}
+
+#p-home .hx-launch{
+  padding:0;
+  border:0;
+  border-radius:0;
+  background:transparent;
+  backdrop-filter:none;
+}
+#p-home .hx-launch-head{padding-bottom:12px;border-bottom:1px solid #d8d3ca}
+#p-home .hx-launch-head h3{color:#28251d;font-size:1.55rem}
+#p-home .hx-launch-head span{color:#89857c}
+#p-home .hx-launch-list{gap:7px;margin-top:10px}
+#p-home .hx-launch-item{background:rgba(255,255,255,.68);border:1px solid #ded9d0;padding:10px;border-radius:14px}
+#p-home .hx-launch-item:hover{background:#fff;border-color:#c9c2b7;transform:translateX(4px);box-shadow:0 8px 18px rgba(63,52,35,.08)}
+#p-home .hx-launch-copy strong{color:#28251d}
+#p-home .hx-launch-copy small{color:#89857c}
+#p-home .hx-launch-arrow{color:#aaa49a}
+#p-home .hx-launch-item:hover .hx-launch-arrow{color:#d20000}
+
+#p-home .hx-marquee{border:0;border-top:1px solid #d8d3ca;border-bottom:1px solid #d8d3ca;border-radius:0;background:transparent;padding:8px 0}
+#p-home .hx-marquee span{background:transparent;color:#777269;padding-inline:10px}
+#p-home .hx-marquee span b{color:#d20000}
+#p-home .hx-timeline-step,#p-home .hx-bento-card,#p-home .hx-subject-card{background:#fffefa;border-color:#ded9d0;box-shadow:0 5px 18px rgba(63,52,35,.045)}
+#p-home .hx-timeline-step:hover,#p-home .hx-bento-card:hover,#p-home .hx-subject-card:hover{box-shadow:0 14px 28px rgba(63,52,35,.1)}
+#p-home .hx-timeline-num{background:#28251d;box-shadow:none}
+#p-home .hx-bento-card.featured{color:#28251d;background:#fff4e9;border-color:#e8c9ae;box-shadow:0 10px 25px rgba(169,88,37,.1)}
+#p-home .hx-bento-card.featured p{color:#70665c}
+#p-home .hx-bento-card.featured::after{display:none}
+#p-home .hx-bento-icon.featured{background:#f5d9bd}
+#p-home .hx-subject-glow{opacity:.18;filter:blur(18px)}
+#p-home .hx-subject-card:hover .hx-subject-glow{opacity:.38}
+#p-home .hx-plans-shell{border-radius:26px;padding:clamp(1.25rem,4vw,3rem);background:#f0eee8;border-color:#d8d3ca}
+#p-home .hx-plan-card{background:#fffefa;border-color:#ded9d0}
+#p-home .hx-plan-card.ultra{background:#fff4e9;border-color:#e8c9ae}
+
+[data-theme="dark"] #p-home .hx-hero{border-color:#3d414b;background:linear-gradient(135deg,#20232b,#191c24);color:#f1f2f4;box-shadow:0 20px 55px rgba(0,0,0,.28)}
+[data-theme="dark"] #p-home .hx-hero-title,[data-theme="dark"] #p-home .hx-stat b,[data-theme="dark"] #p-home .hx-launch-head h3{color:#f1f2f4}
+[data-theme="dark"] #p-home .hx-kicker{background:#f1f2f4;color:#20232b;border-color:#f1f2f4}
+[data-theme="dark"] #p-home .hx-hero-copy{color:#adb4c2}
+[data-theme="dark"] #p-home .hx-hero-actions .hx-btn-ghost{background:#282c35;color:#f1f2f4;border-color:#444956}
+[data-theme="dark"] #p-home .hx-stat,[data-theme="dark"] #p-home .hx-launch-head,[data-theme="dark"] #p-home .hx-marquee{border-color:#3d414b}
+[data-theme="dark"] #p-home .hx-stat span,[data-theme="dark"] #p-home .hx-launch-head span,[data-theme="dark"] #p-home .hx-launch-copy small{color:#858d9e}
+[data-theme="dark"] #p-home .hx-launch-item{background:#242831;border-color:#363b47}
+[data-theme="dark"] #p-home .hx-launch-item:hover{background:#2b303a;border-color:#515867}
+[data-theme="dark"] #p-home .hx-launch-copy strong{color:#f1f2f4}
+[data-theme="dark"] #p-home .hx-timeline-step,[data-theme="dark"] #p-home .hx-bento-card,[data-theme="dark"] #p-home .hx-subject-card{background:#20232a;border-color:#383d48;box-shadow:none}
+[data-theme="dark"] #p-home .hx-bento-card.featured{color:#f1f2f4;background:#302a29;border-color:#60443e}
+[data-theme="dark"] #p-home .hx-bento-card.featured p{color:#bdb7b8}
+[data-theme="dark"] #p-home .hx-plans-shell{background:#20232a;border-color:#383d48}
+[data-theme="dark"] #p-home .hx-plan-card{background:#292d35;border-color:#414754}
+
+@media(max-width:979px){#p-home .hx-hero-grid{grid-template-columns:1fr}}
+@media(max-width:640px){
+  #p-home .hx-hero{padding:1.5rem;border-radius:21px}
+  #p-home .hx-hero-title{font-size:clamp(2.4rem,12vw,3.35rem)}
+  #p-home .hx-launch{margin-top:var(--sp2)}
+  #p-home .hx-launch-item{padding:9px}
+}
+</style>
 <script>
 (function(){
   var isFile = location.protocol === 'file:';
@@ -4085,216 +4267,257 @@ html body #community-share-sheet .community-share-panel{
 ============================================================ -->
 <div class="page active" id="p-home">
   <div class="c">
-    <div id="exam-banner" class="home-reframe-banner">
-      Update: AI marking, revision pages and unit navigation have been refreshed across the live courses.
+    <div id="exam-banner" class="home-reframe-banner" style="display:none">
+      A few useful updates are now live across the revision apps.
       <button onclick="this.parentElement.style.display='none';localStorage.setItem('ra10_banner_hidden','1')" aria-label="Dismiss banner">✕</button>
     </div>
 
-    <div class="home-reframe">
-      <section class="home-reframe-hero" aria-label="RA10 homepage hero">
-        <div class="home-reframe-grid">
-          <div class="home-reframe-main">
-            <span class="home-reframe-kicker">Revision platform</span>
-            <h1>Revision tools for everyone, organised by subject and unit.</h1>
-            <p>Open a live unit, practise exam-style questions, use flashcards and quizzes, and track what still needs work.</p>
-            <div class="home-reframe-cta-row">
-              <button class="btn btn-p btn-accent-sun btn-lg" onclick="go('/revision')">Open revision</button>
-              <button class="btn btn-p btn-accent-ocean btn-lg" onclick="go('/tasks')">Open tasks</button>
-              <button class="btn btn-p btn-accent-plum btn-lg" onclick="go('/leaderboard')">Open leaderboard</button>
+    <div class="hx-home">
+      <section class="hx-hero" aria-label="RA10 homepage hero">
+        <div class="hx-hero-grain" aria-hidden="true"></div>
+        <div class="hx-hero-grid">
+          <div>
+            <span class="hx-kicker"><span class="hx-kicker-dot"></span>Live now · 5 subject apps</span>
+            <h1 class="hx-hero-title">Revision that actually <em>clicks</em>.</h1>
+            <p class="hx-hero-copy">Open your subject, work through the unit, and keep every guide, quiz, flashcard set and exam question in the same place. No hunting through folders or old notes.</p>
+            <div class="hx-hero-actions">
+              <button class="hx-btn hx-btn-primary" type="button" onclick="go('/revision')">Start revising →</button>
+              <button class="hx-btn hx-btn-ghost" type="button" onclick="go('/tasks')">Open tasks</button>
+              <button class="hx-btn hx-btn-ghost" type="button" onclick="go('/leaderboard')">Leaderboard</button>
             </div>
-            <div class="home-reframe-pulse-grid" aria-label="Revision flow snapshots">
-              <div class="home-reframe-pulse-card">
-                <strong>Start</strong>
-                <span>Quick recall check</span>
-                <b>5 min</b>
-              </div>
-              <div class="home-reframe-pulse-card">
-                <strong>Practice</strong>
-                <span>Exam-style question set</span>
-                <b>15 min</b>
-              </div>
-              <div class="home-reframe-pulse-card">
-                <strong>Review</strong>
-                <span>Check mistakes and recap</span>
-                <b>7 min</b>
-              </div>
+            <div class="hx-stat-row" aria-label="Platform snapshot">
+              <div class="hx-stat"><b>5</b><span>Live subject apps</span></div>
+              <div class="hx-stat"><b>24/7</b><span>AI Examiner feedback</span></div>
+              <div class="hx-stat"><b>0-cost</b><span>Student plan via school</span></div>
             </div>
           </div>
 
-          <aside class="home-reframe-aside" aria-label="Quick launch">
-            <h3>Available now</h3>
-            <p>These units are live and open directly into the revision app.</p>
-            <div class="home-reframe-launch-list">
-              <button class="home-reframe-launch" type="button" onclick="go('/revision/btec/level-3/IT-AAQ/unit-1')">
-                <span class="home-reframe-dot it">IT</span>
-                <span>
+          <aside class="hx-launch" aria-label="Quick launch">
+            <div class="hx-launch-head">
+              <h3>Jump back in</h3>
+              <span>Live apps</span>
+            </div>
+            <div class="hx-launch-list">
+              <button class="hx-launch-item" type="button" onclick="go('/revision/btec/level-3/IT-AAQ/unit-1')">
+                <span class="hx-launch-icon it">IT</span>
+                <span class="hx-launch-copy">
                   <strong>IT AAQ Unit 1</strong>
                   <small>Systems, exam practice, AI feedback</small>
                 </span>
+                <span class="hx-launch-arrow">→</span>
               </button>
-              <button class="home-reframe-launch" type="button" onclick="go('/revision/btec/level-3/business/unit-3')">
-                <span class="home-reframe-dot business">BU</span>
-                <span>
+              <button class="hx-launch-item" type="button" onclick="go('/revision/btec/level-3/IT-AAQ/unit-2')">
+                <span class="hx-launch-icon it">IT</span>
+                <span class="hx-launch-copy">
+                  <strong>IT AAQ Unit 2</strong>
+                  <small>Cyber security and incident management</small>
+                </span>
+                <span class="hx-launch-arrow">→</span>
+              </button>
+              <button class="hx-launch-item" type="button" onclick="go('/revision/btec/level-3/business/unit-3')">
+                <span class="hx-launch-icon business">BU</span>
+                <span class="hx-launch-copy">
                   <strong>Business Unit 3</strong>
                   <small>Finance confidence and exam control</small>
                 </span>
+                <span class="hx-launch-arrow">→</span>
               </button>
-              <button class="home-reframe-launch" type="button" onclick="go('/revision/a-level/business-2023')">
-                <span class="home-reframe-dot business">AL</span>
-                <span>
+              <button class="hx-launch-item" type="button" onclick="go('/revision/a-level/business-2023')">
+                <span class="hx-launch-icon business">AL</span>
+                <span class="hx-launch-copy">
                   <strong>A-Level Business (7132)</strong>
-                  <small>Topic-by-topic revision with quizzes and exam practice</small>
+                  <small>Topic-by-topic revision, quizzes, exam practice</small>
                 </span>
+                <span class="hx-launch-arrow">→</span>
               </button>
-              <button class="home-reframe-launch" type="button" onclick="go('/revision/btec/level-3/sport/unit-1')">
-                <span class="home-reframe-dot sport">SP</span>
-                <span>
+              <button class="hx-launch-item" type="button" onclick="go('/revision/btec/level-3/sport/unit-1')">
+                <span class="hx-launch-icon sport">SP</span>
+                <span class="hx-launch-copy">
                   <strong>Sport Unit 1</strong>
                   <small>Anatomy recall with timed checks</small>
                 </span>
+                <span class="hx-launch-arrow">→</span>
               </button>
-              <button class="home-reframe-launch" type="button" onclick="go('/revision/btec/level-2/it/unit-2')">
-                <span class="home-reframe-dot l2">L2</span>
-                <span>
+              <button class="hx-launch-item" type="button" onclick="go('/revision/btec/level-2/it/unit-2')">
+                <span class="hx-launch-icon l2">L2</span>
+                <span class="hx-launch-copy">
                   <strong>IT Level 2 Unit 2</strong>
                   <small>Technology systems done properly</small>
                 </span>
+                <span class="hx-launch-arrow">→</span>
               </button>
             </div>
           </aside>
         </div>
       </section>
 
-      <section class="home-reframe-section" aria-label="How RA10 works">
-        <div class="home-reframe-head">
-          <h2>What the platform does</h2>
-          <p>Everything is grouped around the unit so you can move between content, practice and progress without jumping between pages.</p>
+      <div class="hx-marquee" aria-hidden="true">
+        <div class="hx-marquee-track">
+          <span><b></b>IT AAQ Unit 1 &amp; 2 live</span>
+          <span><b></b>Business Unit 3 live</span>
+          <span><b></b>A-Level Business (7132) live</span>
+          <span><b></b>Sport Unit 1 live</span>
+          <span><b></b>IT Level 2 Unit 2 live</span>
+          <span><b></b>AI Examiner feedback</span>
+          <span><b></b>IT AAQ Unit 1 &amp; 2 live</span>
+          <span><b></b>Business Unit 3 live</span>
+          <span><b></b>A-Level Business (7132) live</span>
+          <span><b></b>Sport Unit 1 live</span>
+          <span><b></b>IT Level 2 Unit 2 live</span>
+          <span><b></b>AI Examiner feedback</span>
         </div>
-        <div class="home-reframe-principles">
-          <article class="home-reframe-principle">
-            <span class="badge">Content</span>
-            <h3>Unit-based revision pages</h3>
-            <p>Use guides, topic sections and revision material arranged around the specification.</p>
+      </div>
+
+      <section class="hx-section" aria-label="How RA10 works">
+        <div class="hx-section-head">
+          <div>
+            <span class="hx-eyebrow">How it works</span>
+            <h2>Three steps, every session</h2>
+          </div>
+          <p>Everything is grouped around the unit so you move between content, practice and progress without jumping between pages.</p>
+        </div>
+        <div class="hx-timeline">
+          <article class="hx-timeline-step">
+            <span class="hx-timeline-num">1</span>
+            <div>
+              <h3>Open the unit</h3>
+              <p>Use guides, topic sections and revision material arranged around the specification.</p>
+            </div>
           </article>
-          <article class="home-reframe-principle">
-            <span class="badge">Practice</span>
-            <h3>Questions, quizzes and flashcards</h3>
-            <p>Move from recall to longer responses without leaving the unit you are studying.</p>
+          <article class="hx-timeline-step">
+            <span class="hx-timeline-num">2</span>
+            <div>
+              <h3>Practise properly</h3>
+              <p>Move from quick recall to quizzes, flashcards and full exam-style questions without leaving the unit.</p>
+            </div>
           </article>
-          <article class="home-reframe-principle">
-            <span class="badge">Progress</span>
-            <h3>Tasks, XP and tracking</h3>
-            <p>See what to do next, build consistency, and keep a record of completed work.</p>
+          <article class="hx-timeline-step">
+            <span class="hx-timeline-num">3</span>
+            <div>
+              <h3>Track what's next</h3>
+              <p>See what to revise next, build consistency with tasks and XP, and keep a record of completed work.</p>
+            </div>
           </article>
         </div>
       </section>
 
-      <section class="home-reframe-section" aria-label="RA10 feature highlights">
-        <div class="home-reframe-head">
-          <h2>Everything you can use in RA10</h2>
-          <p>From quick recall to full exam answers, the platform is built to keep revision in one place with tools that are actually useful day to day.</p>
+      <section class="hx-section" aria-label="RA10 feature highlights">
+        <div class="hx-section-head">
+          <div>
+            <span class="hx-eyebrow">What's inside</span>
+            <h2>Everything you can use in RA10</h2>
+          </div>
+          <p>From quick recall to full exam answers, the platform keeps revision in one place with tools that are useful day to day.</p>
         </div>
-        <div class="home-reframe-principles">
-          <article class="home-reframe-principle ai-feature">
-            <span class="badge">AI</span>
+        <div class="hx-bento">
+          <article class="hx-bento-card featured">
+            <span class="hx-bento-icon featured">✦</span>
             <h3>AI Examiner</h3>
             <p>Submit longer exam-style responses and get structured marking-style feedback to improve answer quality, clarity and exam technique.</p>
           </article>
-          <article class="home-reframe-principle">
-            <span class="badge">Practice</span>
-            <h3>Questions, quizzes and flashcards</h3>
-            <p>Use quick recall, mixed quizzes and exam-style questions in the same unit so revision sessions are focused and consistent.</p>
+          <article class="hx-bento-card">
+            <span class="hx-bento-icon">◆</span>
+            <h3>Quizzes &amp; flashcards</h3>
+            <p>Quick recall, mixed quizzes and exam-style questions in the same unit so sessions stay focused.</p>
           </article>
-          <article class="home-reframe-principle">
-            <span class="badge">Mocks</span>
-            <h3>Predicted papers and timed work</h3>
-            <p>Generate and attempt predicted papers to build exam stamina, then review weak spots and return directly to the matching topics.</p>
+          <article class="hx-bento-card">
+            <span class="hx-bento-icon">▤</span>
+            <h3>Predicted papers</h3>
+            <p>Generate and attempt predicted papers to build exam stamina, then jump straight back to weak topics.</p>
           </article>
-          <article class="home-reframe-principle">
-            <span class="badge">Tracking</span>
-            <h3>Tasks, XP and leaderboard</h3>
-            <p>Track daily progress, complete revision tasks and use XP plus the leaderboard to stay accountable through exam season.</p>
+          <article class="hx-bento-card">
+            <span class="hx-bento-icon">▲</span>
+            <h3>Tasks, XP &amp; leaderboard</h3>
+            <p>Track daily progress and stay accountable through exam season with XP and the weekly leaderboard.</p>
           </article>
-          <article class="home-reframe-principle">
-            <span class="badge">Tools</span>
-            <h3>Built-in revision utilities</h3>
-            <p>Use revision tools like exports and study helpers without leaving the platform, so less time is wasted between apps.</p>
-          </article>
-          <article class="home-reframe-principle">
-            <span class="badge">Access</span>
-            <h3>Student and school-ready plans</h3>
-            <p>Start free, upgrade when needed, or unlock school-wide access with Education so students can use the full platform at zero direct cost.</p>
+          <article class="hx-bento-card">
+            <span class="hx-bento-icon">●</span>
+            <h3>Built-in utilities</h3>
+            <p>Exports and study helpers without leaving the platform, so less time is wasted between apps.</p>
           </article>
         </div>
-        <div class="ctas" style="margin-top:var(--sp4)">
+        <div class="ctas" style="margin-top:var(--sp2)">
           <button class="btn btn-p" type="button" onclick="go('/tools')">Explore tools</button>
           <button class="btn btn-s" type="button" onclick="go('/upgrade')">See AI Examiner plans</button>
         </div>
       </section>
 
-      <section class="home-reframe-section" aria-label="Live revision lanes">
-        <div class="home-reframe-head">
-          <h2>Live subjects</h2>
-          <p>Current subjects are available now, with more units added over time.</p>
+      <section class="hx-section" aria-label="Live revision lanes">
+        <div class="hx-section-head">
+          <div>
+            <span class="hx-eyebrow">Subjects</span>
+            <h2>Pick up where you need to</h2>
+          </div>
+          <p>Open a subject to find its guide, recall practice, quizzes and exam questions in one place.</p>
         </div>
-        <div class="home-reframe-lanes">
-          <article class="home-reframe-lane it" onclick="go('/revision/btec/level-3/IT-AAQ/unit-1')">
-            <span class="lane-tag">Live · IT AAQ</span>
+        <div class="hx-subject-grid">
+          <article class="hx-subject-card it" onclick="go('/revision/btec/level-3/IT-AAQ/unit-1')">
+            <div class="hx-subject-glow" aria-hidden="true"></div>
+            <span class="hx-subject-tag">Live · IT AAQ</span>
             <h3>Information Technology</h3>
             <p>Structured learning aims, question practice, flashcards, quizzes and revision tools for Unit 1.</p>
-            <button class="btn btn-p btn-accent-it" type="button" onclick="event.stopPropagation();go('/revision/btec/level-3/IT-AAQ/unit-1')">Open IT</button>
+            <span class="hx-subject-foot">Open IT Unit 1 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
           </article>
-          <article class="home-reframe-lane business" onclick="go('/revision/btec/level-3/business/unit-3')">
-            <span class="lane-tag">Live · Business</span>
+          <article class="hx-subject-card it" onclick="go('/revision/btec/level-3/IT-AAQ/unit-2')">
+            <div class="hx-subject-glow" aria-hidden="true"></div>
+            <span class="hx-subject-tag">Live · IT AAQ</span>
+            <h3>Cyber Security and Incident Management</h3>
+            <p>Threat actors, malware, network security, incident response and digital forensics for Unit 2.</p>
+            <span class="hx-subject-foot">Open IT Unit 2 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+          </article>
+          <article class="hx-subject-card business" onclick="go('/revision/btec/level-3/business/unit-3')">
+            <div class="hx-subject-glow" aria-hidden="true"></div>
+            <span class="hx-subject-tag">Live · Business</span>
             <h3>Personal and Business Finance</h3>
             <p>Finance content and exam-style practice focused on the Unit 3 specification.</p>
-            <button class="btn btn-p btn-accent-business" type="button" onclick="event.stopPropagation();go('/revision/btec/level-3/business/unit-3')">Open Business</button>
+            <span class="hx-subject-foot">Open Business <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
           </article>
-          <article class="home-reframe-lane sport" onclick="go('/revision/btec/level-3/sport/unit-1')">
-            <span class="lane-tag">Live · Sport</span>
+          <article class="hx-subject-card sport" onclick="go('/revision/btec/level-3/sport/unit-1')">
+            <div class="hx-subject-glow" aria-hidden="true"></div>
+            <span class="hx-subject-tag">Live · Sport</span>
             <h3>Anatomy and Physiology</h3>
             <p>Anatomy and physiology revision with recall checks, quizzes and question practice.</p>
-            <button class="btn btn-p btn-accent-sport" type="button" onclick="event.stopPropagation();go('/revision/btec/level-3/sport/unit-1')">Open Sport</button>
+            <span class="hx-subject-foot">Open Sport <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
           </article>
-          <article class="home-reframe-lane l2" onclick="go('/revision/btec/level-2/it/unit-2')">
-            <span class="lane-tag">Live · IT Level 2</span>
+          <article class="hx-subject-card l2" onclick="go('/revision/btec/level-2/it/unit-2')">
+            <div class="hx-subject-glow" aria-hidden="true"></div>
+            <span class="hx-subject-tag">Live · IT Level 2</span>
             <h3>Technology Systems</h3>
             <p>Level 2 technology systems content with practice questions and revision support.</p>
-            <button class="btn btn-p btn-accent-l2" type="button" onclick="event.stopPropagation();go('/revision/btec/level-2/it/unit-2')">Open IT L2</button>
+            <span class="hx-subject-foot">Open IT L2 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
           </article>
-          <article class="home-reframe-lane business" onclick="go('/revision/a-level/business-2023')">
-            <span class="lane-tag">Live · A-Level</span>
+          <article class="hx-subject-card business" onclick="go('/revision/a-level/business-2023')">
+            <div class="hx-subject-glow" aria-hidden="true"></div>
+            <span class="hx-subject-tag">Live · A-Level</span>
             <h3>AQA Business (7132)</h3>
             <p>Topic 1-10 revision app with case-study questions, quizzes, mock papers and AI marking support.</p>
-            <button class="btn btn-p btn-accent-business" type="button" onclick="event.stopPropagation();go('/revision/a-level/business-2023')">Open A-Level Business</button>
+            <span class="hx-subject-foot">Open A-Level Business <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
           </article>
         </div>
       </section>
 
-      <section class="home-reframe-strip" aria-label="Roadmap highlights">
-        <span>More IT units in development</span>
-        <span>Additional Business content planned</span>
-        <span>More Sport content planned</span>
-        <span>Further subjects to follow</span>
-      </section>
-
-      <section class="home-reframe-section" aria-label="Plans">
-        <div class="home-reframe-head">
-          <h2>Plans</h2>
-          <p>Start free, then upgrade if you need more credits or wider access.</p>
+      <section class="hx-section" aria-label="Plans">
+        <div class="hx-plans-shell">
+        <div class="hx-section-head">
+          <div>
+            <span class="hx-eyebrow">Plans</span>
+            <h2>Start free, upgrade when you need to</h2>
+          </div>
+          <p>Small monthly credit allowance to try it, or upgrade for full access and no ads.</p>
         </div>
-        <div class="home-reframe-plan-grid">
-          <article class="home-reframe-plan free">
+        <div class="hx-plan-grid">
+          <article class="hx-plan-card free">
             <h3>Free</h3>
             <div class="price">£0</div>
             <p>Basic access and a small monthly credit allowance.</p>
           </article>
-          <article class="home-reframe-plan pro">
+          <article class="hx-plan-card pro">
+            <span class="hx-plan-ribbon">Popular</span>
             <h3>Pro</h3>
             <div class="price">£1.67/mo</div>
             <p>1,000 monthly credits, no ads and full subject access.</p>
           </article>
-          <article class="home-reframe-plan ultra">
+          <article class="hx-plan-card ultra">
             <h3>Ultra</h3>
             <div class="price">£2.50/mo</div>
             <p>Unlimited credits and access to the full platform.</p>
@@ -4373,6 +4596,7 @@ html body #community-share-sheet .community-share-panel{
             <button class="btn btn-p" type="button" onclick="go('/upgrade')">View Education Plan</button>
             <button class="btn btn-s" type="button" onclick="go('/upgrade')">Compare All Plans</button>
           </div>
+        </div>
         </div>
       </section>
     </div>
