@@ -1,1 +1,484 @@
-[]
+[
+  {
+    "id": "DIA001",
+    "learning_aim": "A",
+    "topic": "A1.4 Network attacks",
+    "command_verb": "Draw",
+    "marks": 4,
+    "ao": "AO2",
+    "scenario": "A technician must explain a DDoS attack to non-technical staff.",
+    "question": "Draw a diagram showing how a DDoS attack works using a botnet to overwhelm a target server by traffic from many compromised devices.",
+    "guidance": "(4)",
+    "type": "diagram",
+    "diagram_kind": "network diagram",
+    "mermaid": "flowchart LR\n  Attacker([Attacker]) --> C2[Command & Control Server] --> Device1[Compromised Device]\n  C2 --> Device2[Compromised Device]\n  C2 --> Device3[Compromised Device]\n  Device1 --> Target[Target Server]\n  Device2 --> Target\n  Device3 --> Target\n  Target --> Down[Server Overwhelmed / Offline]",
+    "mark_scheme": {
+      "instruction": "Award up to 4 marks. Award marks for accurate labelling and clear, correct structure.",
+      "points": [
+        "Correct overall structure and relationships",
+        "Accurate and relevant labels",
+        "Clear, logical presentation"
+      ]
+    }
+  },
+  {
+    "id": "DIA002",
+    "learning_aim": "A",
+    "topic": "A1.4 Network attacks",
+    "command_verb": "Draw",
+    "marks": 4,
+    "ao": "AO2",
+    "scenario": "",
+    "question": "Draw a diagram to illustrate a man-in-the-middle attack, showing where the attacker sits between the client and the server.",
+    "guidance": "(4)",
+    "type": "diagram",
+    "diagram_kind": "network diagram",
+    "mermaid": "flowchart LR\n  Client([Client]) <--> Attacker([Attacker]) <--> Server[Server]\n  Client -. \"believes direct\" .-> Server",
+    "mark_scheme": {
+      "instruction": "Award up to 4 marks. Award marks for accurate labelling and clear, correct structure.",
+      "points": [
+        "Correct overall structure and relationships",
+        "Accurate and relevant labels",
+        "Clear, logical presentation"
+      ]
+    }
+  },
+  {
+    "id": "DIA003",
+    "learning_aim": "B",
+    "topic": "B1.2 Network topologies",
+    "command_verb": "Draw",
+    "marks": 4,
+    "ao": "AO2",
+    "scenario": "A network administrator wants to document the office network.",
+    "question": "Draw a star topology showing a central switch connected to four workstations.",
+    "guidance": "(4)",
+    "type": "diagram",
+    "diagram_kind": "topology diagram",
+    "mermaid": "flowchart TB\n  Switch[Central Switch] --- W1[Workstation 1]\n  Switch --- W2[Workstation 2]\n  Switch --- W3[Workstation 3]\n  Switch --- W4[Workstation 4]",
+    "mark_scheme": {
+      "instruction": "Award up to 4 marks. Award marks for accurate labelling and clear, correct structure.",
+      "points": [
+        "Correct overall structure and relationships",
+        "Accurate and relevant labels",
+        "Clear, logical presentation"
+      ]
+    }
+  },
+  {
+    "id": "DIA004",
+    "learning_aim": "B",
+    "topic": "B1.2 Network topologies",
+    "command_verb": "Draw",
+    "marks": 4,
+    "ao": "AO2",
+    "scenario": "",
+    "question": "Draw a mesh topology showing four devices interconnected with redundant links.",
+    "guidance": "(4)",
+    "type": "diagram",
+    "diagram_kind": "topology diagram",
+    "mermaid": "flowchart LR\n  A([Node A]) --- B([Node B])\n  A --- C([Node C])\n  A --- D([Node D])\n  B --- C\n  B --- D\n  C --- D",
+    "mark_scheme": {
+      "instruction": "Award up to 4 marks. Award marks for accurate labelling and clear, correct structure.",
+      "points": [
+        "Correct overall structure and relationships",
+        "Accurate and relevant labels",
+        "Clear, logical presentation"
+      ]
+    }
+  },
+  {
+    "id": "DIA005",
+    "learning_aim": "B",
+    "topic": "B1.4 Modern trends",
+    "command_verb": "Draw",
+    "marks": 4,
+    "ao": "AO2",
+    "scenario": "A company uses firewalls and a VLAN strategy to isolate servers.",
+    "question": "Draw a network segmentation diagram showing a demilitarised zone (DMZ) between the internet, web server and the internal trusted network.",
+    "guidance": "(4)",
+    "type": "diagram",
+    "diagram_kind": "network diagram",
+    "mermaid": "flowchart LR\n  Internet[Internet] --> FW1{Perimeter Firewall}\n  FW1 --> Web[Web Server in DMZ]\n  FW1 --> FW2{Internal Firewall}\n  FW2 --> Trusted[Trusted Internal Network]\n  DMZ[DMZ] --- Web",
+    "mark_scheme": {
+      "instruction": "Award up to 4 marks. Award marks for accurate labelling and clear, correct structure.",
+      "points": [
+        "Correct overall structure and relationships",
+        "Accurate and relevant labels",
+        "Clear, logical presentation"
+      ]
+    }
+  },
+  {
+    "id": "DIA006",
+    "learning_aim": "B",
+    "topic": "B1.4 Modern trends",
+    "command_verb": "Draw",
+    "marks": 4,
+    "ao": "AO2",
+    "scenario": "",
+    "question": "Draw a diagram showing how VLANs segment traffic between workstations and servers.",
+    "guidance": "(4)",
+    "type": "diagram",
+    "diagram_kind": "logical diagram",
+    "mermaid": "flowchart TB\n  SW[Managed Switch]\n  SW --> VLAN1[VLAN 10 - Staff]\n  SW --> VLAN2[VLAN 20 - Guests]\n  SW --> VLAN3[VLAN 30 - Servers]",
+    "mark_scheme": {
+      "instruction": "Award up to 4 marks. Award marks for accurate labelling and clear, correct structure.",
+      "points": [
+        "Correct overall structure and relationships",
+        "Accurate and relevant labels",
+        "Clear, logical presentation"
+      ]
+    }
+  },
+  {
+    "id": "DIA007",
+    "learning_aim": "B",
+    "topic": "B3.1 TCP/IP model",
+    "command_verb": "Draw",
+    "marks": 4,
+    "ao": "AO2",
+    "scenario": "A student must illustrate the layering of the TCP/IP model.",
+    "question": "Draw the four-layer TCP/IP model and label the position of TCP and IP.",
+    "guidance": "(4)",
+    "type": "diagram",
+    "diagram_kind": "diagram",
+    "mermaid": "flowchart TB\n  L4[Application Layer]\n  L3[Transport Layer - TCP]\n  L2[Internet Layer - IP]\n  L1[Network Access Layer]\n  L4 --> L3 --> L2 --> L1",
+    "mark_scheme": {
+      "instruction": "Award up to 4 marks. Award marks for accurate labelling and clear, correct structure.",
+      "points": [
+        "Correct overall structure and relationships",
+        "Accurate and relevant labels",
+        "Clear, logical presentation"
+      ]
+    }
+  },
+  {
+    "id": "DIA008",
+    "learning_aim": "B",
+    "topic": "B3.4 DNS",
+    "command_verb": "Draw",
+    "marks": 4,
+    "ao": "AO2",
+    "scenario": "",
+    "question": "Draw a diagram showing DNS resolution from a client to a recursive DNS server and onward to an authoritative server.",
+    "guidance": "(4)",
+    "type": "diagram",
+    "diagram_kind": "sequence diagram",
+    "mermaid": "flowchart LR\n  Client([Client]) -->|\"www.example.com\"| Recursive[Recursive DNS Server]\n  Recursive --> Authoritative[Authoritative DNS Server]\n  Authoritative -->|\"IP address\"| Recursive\n  Recursive --> Client",
+    "mark_scheme": {
+      "instruction": "Award up to 4 marks. Award marks for accurate labelling and clear, correct structure.",
+      "points": [
+        "Correct overall structure and relationships",
+        "Accurate and relevant labels",
+        "Clear, logical presentation"
+      ]
+    }
+  },
+  {
+    "id": "DIA009",
+    "learning_aim": "C",
+    "topic": "C1.1 Incident Response Lifecycle",
+    "command_verb": "Draw",
+    "marks": 6,
+    "ao": "AO3",
+    "scenario": "An incident response team must explain the phases of responding to an incident.",
+    "question": "Draw the NIST incident response lifecycle showing preparation, detection/analysis, containment/eradication/recovery and post-incident activity.",
+    "guidance": "(6)",
+    "type": "diagram",
+    "diagram_kind": "lifecycle diagram",
+    "mermaid": "flowchart LR\n  P[Preparation] --> D[Detection & Analysis] --> C[Containment Eradication & Recovery]\n  C --> A[Post-Incident Activity]\n  A --> P",
+    "mark_scheme": {
+      "instruction": "Award up to 6 marks. Award marks for accurate labelling and clear, correct structure.",
+      "points": [
+        "Correct overall structure and relationships",
+        "Accurate and relevant labels",
+        "Clear, logical presentation"
+      ]
+    }
+  },
+  {
+    "id": "DIA010",
+    "learning_aim": "C",
+    "topic": "C1.3 Containment",
+    "command_verb": "Draw",
+    "marks": 4,
+    "ao": "AO2",
+    "scenario": "A network is infected and the team must isolate the affected area.",
+    "question": "Draw a diagram showing how network segmentation/containment isolates an infected server from the rest of the network at the switch/firewall.",
+    "guidance": "(4)",
+    "type": "diagram",
+    "diagram_kind": "network diagram",
+    "mermaid": "flowchart LR\n  Infected[Infected Server] -->|\"isolated\"| Switch\n  Others[Other Devices] --> Switch\n  Switch --> FW{Quarantine}\n  FW -->|\"blocked\"| Rest[Rest of Network]",
+    "mark_scheme": {
+      "instruction": "Award up to 4 marks. Award marks for accurate labelling and clear, correct structure.",
+      "points": [
+        "Correct overall structure and relationships",
+        "Accurate and relevant labels",
+        "Clear, logical presentation"
+      ]
+    }
+  },
+  {
+    "id": "DIA011",
+    "learning_aim": "C",
+    "topic": "C1.7 Business continuity",
+    "command_verb": "Draw",
+    "marks": 4,
+    "ao": "AO2",
+    "scenario": "A business must illustrate its disaster recovery failover.",
+    "question": "Draw a diagram showing primary and secondary (failover) sites with replication between them.",
+    "guidance": "(4)",
+    "type": "diagram",
+    "diagram_kind": "system diagram",
+    "mermaid": "flowchart LR\n  Primary[Primary Site] <-->|\"real-time replication\"| Secondary[Secondary Site / DR Site]\n  Users[Users] --> Primary\n  Users -. \"on failure\" .-> Secondary",
+    "mark_scheme": {
+      "instruction": "Award up to 4 marks. Award marks for accurate labelling and clear, correct structure.",
+      "points": [
+        "Correct overall structure and relationships",
+        "Accurate and relevant labels",
+        "Clear, logical presentation"
+      ]
+    }
+  },
+  {
+    "id": "DIA012",
+    "learning_aim": "D",
+    "topic": "D1.2 Pen testing",
+    "command_verb": "Draw",
+    "marks": 4,
+    "ao": "AO2",
+    "scenario": "",
+    "question": "Draw the phases of a penetration test from reconnaissance to reporting.",
+    "guidance": "(4)",
+    "type": "diagram",
+    "diagram_kind": "process diagram",
+    "mermaid": "flowchart LR\n  R[Reconnaissance] --> S[Scanning]\n  S --> E[Exploitation]\n  E --> PE[Post-Exploitation]\n  PE --> Rep[Reporting]",
+    "mark_scheme": {
+      "instruction": "Award up to 4 marks. Award marks for accurate labelling and clear, correct structure.",
+      "points": [
+        "Correct overall structure and relationships",
+        "Accurate and relevant labels",
+        "Clear, logical presentation"
+      ]
+    }
+  },
+  {
+    "id": "DIA013",
+    "learning_aim": "D",
+    "topic": "D2.1 IDS/IPS",
+    "command_verb": "Draw",
+    "marks": 4,
+    "ao": "AO2",
+    "scenario": "",
+    "question": "Draw where a network-based intrusion detection system is placed on a network and how it monitors traffic.",
+    "guidance": "(4)",
+    "type": "diagram",
+    "diagram_kind": "network diagram",
+    "mermaid": "flowchart LR\n  Internet[Internet] --> FW{Firewall}\n  FW --> NIDS[NIDS - sensor]\n  NIDS --> Switch\n  Switch --> Server[Servers]\n  NIDS -. alerts .-> SIEM[SIEM / Console]",
+    "mark_scheme": {
+      "instruction": "Award up to 4 marks. Award marks for accurate labelling and clear, correct structure.",
+      "points": [
+        "Correct overall structure and relationships",
+        "Accurate and relevant labels",
+        "Clear, logical presentation"
+      ]
+    }
+  },
+  {
+    "id": "DIA101",
+    "learning_aim": "A",
+    "topic": "A1.4 Network attacks",
+    "command_verb": "Identify",
+    "marks": 3,
+    "ao": "AO2",
+    "scenario": "",
+    "question": "The Figure shows a man-in-the-middle attack. Identify the party intercepting the communication.",
+    "guidance": "(3)",
+    "type": "diagram",
+    "diagram_kind": "diagram",
+    "mermaid": null,
+    "mark_scheme": {
+      "instruction": "Award up to 3 marks. Award marks for accurate labelling and clear, correct structure.",
+      "points": [
+        "The attacker between the client and server intercepts and can read/alter the data (3)"
+      ]
+    },
+    "figure": "flowchart LR\n  A([Client]) --> M([Attacker]) --> B[Server]\n  A -. \"intended path\" .-> B"
+  },
+  {
+    "id": "DIA102",
+    "learning_aim": "B",
+    "topic": "B1.2 Network topologies",
+    "command_verb": "Describe",
+    "marks": 4,
+    "ao": "AO2",
+    "scenario": "",
+    "question": "The Figure shows a star topology. Describe its key feature and one advantage for security.",
+    "guidance": "(4)",
+    "type": "diagram",
+    "diagram_kind": "diagram",
+    "mermaid": null,
+    "mark_scheme": {
+      "instruction": "Award up to 4 marks. Award marks for accurate labelling and clear, correct structure.",
+      "points": [
+        "All devices connect to a central switch (1)",
+        "Failure of one device/cable does not affect others (1)",
+        "Central point enables centralised management and monitoring (2)"
+      ]
+    },
+    "figure": "flowchart TB\n  C[Central Switch] --- A[Device A]\n  C --- B[Device B]\n  C --- D[Device D]\n  C --- E[Device E]"
+  },
+  {
+    "id": "DIA103",
+    "learning_aim": "C",
+    "topic": "C1.1 Incident Response Lifecycle",
+    "command_verb": "Identify",
+    "marks": 2,
+    "ao": "AO2",
+    "scenario": "",
+    "question": "The Figure shows the four phases of the NIST incident response lifecycle. Identify the phase that comes immediately after Preparation.",
+    "guidance": "(2)",
+    "type": "diagram",
+    "diagram_kind": "diagram",
+    "mermaid": null,
+    "mark_scheme": {
+      "instruction": "Award up to 2 marks. Award marks for accurate labelling and clear, correct structure.",
+      "points": [
+        "Detection & Analysis is the next phase after Preparation (2)"
+      ]
+    },
+    "figure": "flowchart LR\n  P[Preparation] --> D[Detection & Analysis] --> C[Containment / Eradication / Recovery] --> A[Post-Incident Activity]\n  A --> P"
+  },
+  {
+    "id": "DIA104",
+    "learning_aim": "B",
+    "topic": "B3.1 TCP/IP model",
+    "command_verb": "Label",
+    "marks": 3,
+    "ao": "AO2",
+    "scenario": "",
+    "question": "The Figure shows the four-layer TCP/IP model with one layer missing its label. State the missing layer.",
+    "guidance": "(3)",
+    "type": "diagram",
+    "diagram_kind": "diagram",
+    "mermaid": null,
+    "mark_scheme": {
+      "instruction": "Award up to 3 marks. Award marks for accurate labelling and clear, correct structure.",
+      "points": [
+        "The missing layer is the Transport layer (which carries TCP/UDP) (3)"
+      ]
+    },
+    "figure": "flowchart TB\n  L4[Application]\n  L3[???]\n  L2[Internet]\n  L1[Network Access]\n  L4 --- L3 --- L2 --- L1"
+  },
+  {
+    "id": "DIA105",
+    "learning_aim": "B",
+    "topic": "B1.2 Network topologies",
+    "command_verb": "Draw",
+    "marks": 4,
+    "ao": "AO2",
+    "scenario": "",
+    "question": "Draw an extended-star topology showing a central switch connected to two further switches, each serving workstations.",
+    "guidance": "(4)",
+    "type": "diagram",
+    "diagram_kind": "topology diagram",
+    "mermaid": "flowchart TB\n  Core[Core Switch] --- S1[Switch 1]\n  Core --- S2[Switch 2]\n  S1 --- W1[Workstation]\n  S1 --- W2[Workstation]\n  S2 --- W3[Workstation]\n  S2 --- W4[Workstation]",
+    "mark_scheme": {
+      "instruction": "Award up to 4 marks. Award marks for accurate labelling and clear, correct structure.",
+      "points": [
+        "Correct overall structure and relationships",
+        "Accurate and relevant labels",
+        "Clear, logical presentation"
+      ]
+    }
+  },
+  {
+    "id": "DIA106",
+    "learning_aim": "B",
+    "topic": "B3.5 DHCP",
+    "command_verb": "Draw",
+    "marks": 4,
+    "ao": "AO2",
+    "scenario": "",
+    "question": "Draw the DHCP DORA process showing the four messages between a client and a server.",
+    "guidance": "(4)",
+    "type": "diagram",
+    "diagram_kind": "sequence diagram",
+    "mermaid": "sequenceDiagram\n  Client->>Server: DHCP Discover\n  Server-->>Client: DHCP Offer\n  Client->>Server: DHCP Request\n  Server-->>Client: DHCP Ack",
+    "mark_scheme": {
+      "instruction": "Award up to 4 marks. Award marks for accurate labelling and clear, correct structure.",
+      "points": [
+        "Correct overall structure and relationships",
+        "Accurate and relevant labels",
+        "Clear, logical presentation"
+      ]
+    }
+  },
+  {
+    "id": "DIA107",
+    "learning_aim": "D",
+    "topic": "D2.1 IDS/IPS",
+    "command_verb": "Draw",
+    "marks": 4,
+    "ao": "AO2",
+    "scenario": "A security architect must show where monitoring devices are placed.",
+    "question": "Draw a diagram showing a firewall, a network-based IDS and a SIEM, and how they connect.",
+    "guidance": "(4)",
+    "type": "diagram",
+    "diagram_kind": "network diagram",
+    "mermaid": "flowchart LR\n  Internet[Internet] --> FW{Firewall}\n  FW --> NIDS[NIDS]\n  NIDS --> Switch\n  Switch --> Server[Servers]\n  NIDS -. alerts .-> SIEM[SIEM]",
+    "mark_scheme": {
+      "instruction": "Award up to 4 marks. Award marks for accurate labelling and clear, correct structure.",
+      "points": [
+        "Correct overall structure and relationships",
+        "Accurate and relevant labels",
+        "Clear, logical presentation"
+      ]
+    }
+  },
+  {
+    "id": "DIA108",
+    "learning_aim": "D",
+    "topic": "D1.2 Pen testing",
+    "command_verb": "Draw",
+    "marks": 4,
+    "ao": "AO2",
+    "scenario": "",
+    "question": "Draw the stages of a penetration test as a structured flowchart.",
+    "guidance": "(4)",
+    "type": "diagram",
+    "diagram_kind": "process diagram",
+    "mermaid": "flowchart LR\n  A[Engagement Scope] --> B[Reconnaissance]\n  B --> C[Scanning and Enumeration]\n  C --> D[Exploitation]\n  D --> E[Post-Exploitation]\n  E --> F[Reporting and Debrief]",
+    "mark_scheme": {
+      "instruction": "Award up to 4 marks. Award marks for accurate labelling and clear, correct structure.",
+      "points": [
+        "Correct overall structure and relationships",
+        "Accurate and relevant labels",
+        "Clear, logical presentation"
+      ]
+    }
+  },
+  {
+    "id": "DIA109",
+    "learning_aim": "C",
+    "topic": "C1.3 Containment",
+    "command_verb": "Draw",
+    "marks": 4,
+    "ao": "AO2",
+    "scenario": "A response team must illustrate how a compromised host is isolated.",
+    "question": "Draw a diagram showing a rogue host being quarantined by a switch so it cannot reach the rest of the network.",
+    "guidance": "(4)",
+    "type": "diagram",
+    "diagram_kind": "network diagram",
+    "mermaid": "flowchart LR\n  Host[Compromised Host] -->|\"port shutdown\"| Switch[Managed Switch]\n  Switch -->|\"allowed\"| Legit[Legitimate Devices]\n  Switch -->|\"blocked\"| Rest[Rest of Network]",
+    "mark_scheme": {
+      "instruction": "Award up to 4 marks. Award marks for accurate labelling and clear, correct structure.",
+      "points": [
+        "Correct overall structure and relationships",
+        "Accurate and relevant labels",
+        "Clear, logical presentation"
+      ]
+    }
+  }
+]

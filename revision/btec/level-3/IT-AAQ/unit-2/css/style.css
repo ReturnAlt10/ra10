@@ -1,3 +1,24 @@
+.exam-goal-banner{
+  display:flex;align-items:center;gap:14px;
+  padding:16px 18px;border-radius:14px;
+  background:linear-gradient(135deg,#0a1628 0%,#1a3a6c 58%,#2563eb 100%);
+  color:#fff;border:1px solid rgba(255,255,255,.12);
+  box-shadow:0 8px 20px rgba(26,58,108,.25);
+}
+.exam-goal-icon{font-size:24px;flex-shrink:0}
+.exam-goal-copy{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.exam-goal-copy strong{font-size:15px;font-weight:800}
+.exam-goal-copy span{font-size:13px;color:rgba(255,255,255,.85)}
+.exam-goal-days{
+  flex-shrink:0;font-size:13px;font-weight:800;
+  padding:6px 12px;border-radius:999px;
+  background:rgba(255,255,255,.16);color:#fff;
+}
+@media (max-width:640px){
+  .exam-goal-banner{flex-wrap:wrap}
+  .exam-goal-days{width:100%}
+}
+
 [data-ai-examining="true"] {
   position: relative; overflow: hidden; isolation: isolate;
   background: linear-gradient(120deg,#2563eb,#7c3aed,#ec4899,#06b6d4,#2563eb) !important;
@@ -300,6 +321,20 @@ main {
 .qrow .scenario { color: var(--ink-2); font-size: 14px; margin-top: 6px; line-height: 1.5; font-style: italic;}
 .qrow .question-text { margin: 8px 0 0; }
 .qrow .question-text .marks-bracket { color: var(--ink-2); font-weight: 700; margin-left: 6px;}
+/* Figure shown to the candidate as part of a question */
+.q-figure {
+  margin: 14px 0 4px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  background: var(--surface);
+}
+.q-figure-label {
+  font-size: 11px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.06em; color: var(--accent); margin-bottom: 8px;
+}
+.q-figure-svg { overflow-x: auto; }
+.q-figure-svg svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
 .qrow .markscheme {
   display: none;
   margin-top: 14px; padding-top: 14px;

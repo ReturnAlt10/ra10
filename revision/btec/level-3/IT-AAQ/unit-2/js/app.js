@@ -1080,6 +1080,49 @@ onDataReady(() => {
 });
 
 // ---------- Dashboard ----------
+function renderPinnedExamGoal() {
+  // Show a pinned exam goal banner if the user has pinned an exam for this unit.
+  const host = document.getElementById('dashboard-exam-goal');
+  if (!host) return;
+  let pinned = [];
+  try { pinned = JSON.parse(localStorage.getItem('ra10_pinned_exams_v1') || '[]'); } catch (_) {}
+  if (!Array.isArray(pinned) || !pinned.length) { host.style.display = 'none'; return; }
+  // Map this unit's app path to its exam ids.
+  const unitPath = '/revision/btec/level-3/IT-AAQ/unit-2';
+  const examMap = {
+    '/revision/btec/level-3/IT-AAQ/unit-1': ['btec-it-u1'],
+    '/revision/btec/level-3/IT-AAQ/unit-2': ['btec-it-u2'],
+    '/revision/btec/level-3/business/unit-3': ['btec-bus-u3', 'btec-bus-u2'],
+    '/revision/btec/level-3/sport/unit-1': ['btec-sport-u1', 'btec-sport-u19'],
+    '/revision/btec/level-2/it/unit-2': ['btec-l2-it-u2'],
+    '/revision/a-level/business-2023': ['aqa-bus-al']
+  };
+  const ids = examMap[unitPath] || [];
+  const matched = ids.filter(id => pinned.includes(id));
+  if (!matched.length) { host.style.display = 'none'; return; }
+  // Find the exam data (mirror of the main site's EXAM_DATA for this unit).
+  const examData = {
+    'btec-it-u2': { subject: 'IT AAQ Unit 2', name: 'Cyber Security & Incident Management', dates: ['2027-01-05', '2027-05-11'] }
+  };
+  const exam = examData[matched[0]];
+  if (!exam) { host.style.display = 'none'; return; }
+  const now = new Date();
+  const upcoming = exam.dates.map(d => new Date(d + 'T09:00:00')).filter(d => d.getTime() >= now.getTime()).sort((a, b) => a - b);
+  const next = upcoming[0];
+  if (!next) { host.style.display = 'none'; return; }
+  const days = Math.ceil((next.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+  const dateStr = next.toLocaleDateString(undefined, { weekday: 'short', day: 'numeric', month: 'short' });
+  host.style.display = 'block';
+  host.innerHTML = '<div class="exam-goal-banner">'
+    + '<span class="exam-goal-icon">🎯</span>'
+    + '<div class="exam-goal-copy">'
+    +   '<strong>' + exam.subject + ' exam</strong>'
+    +   '<span>' + exam.name + ' · ' + dateStr + '</span>'
+    + '</div>'
+    + '<span class="exam-goal-days">' + days + ' days to go</span>'
+    + '</div>';
+}
+
 function renderDashboard() {
   // Personalized greeting
   const profile = (window.RA10 && window.RA10.getProfile ? window.RA10.getProfile() : null) || {};
@@ -1094,6 +1137,8 @@ function renderDashboard() {
     }
     greet.innerHTML = `Welcome back, <strong>${escapeHTML(name)}</strong>! Ready to revise?`;
   }
+
+  renderPinnedExamGoal();
 
   const stats = {
     total: QUESTIONS.length,
@@ -1183,6 +1228,25 @@ function applyBrowseFilters() {
   }
 }
 
+// Render a figure (diagram shown TO the candidate as part of the question)
+// using Mermaid. Returns an element, or null if no figure is present.
+function buildQuestionFigure(q) {
+  if (!q || !q.figure) return null;
+  const fig = el('div', { class: 'q-figure' });
+  fig.appendChild(el('div', { class: 'q-figure-label' }, 'Figure 1'));
+  const svgDiv = el('div', { class: 'q-figure-svg' });
+  svgDiv.appendChild(el('p', { class: 'muted', style: 'text-align:center;' }, 'Loading diagram…'));
+  fig.appendChild(svgDiv);
+  const mermaidId = 'mermaid-fig-' + (q.id || '') + '-' + (++_mermaidRenderCount);
+  requestAnimationFrame(() => {
+    if (!window.mermaid) { svgDiv.textContent = 'Figure diagram unavailable.'; return; }
+    window.mermaid.render(mermaidId, q.figure)
+      .then(({ svg }) => { svgDiv.innerHTML = svg; })
+      .catch(() => { svgDiv.innerHTML = '<p class="muted" style="text-align:center;">Figure diagram unavailable.</p>'; });
+  });
+  return fig;
+}
+
 function renderQuestionRow(q) {
   const row = el('div', { class: 'qrow' });
   const head = el('div', { class: 'qrow-head' });
@@ -1197,6 +1261,8 @@ function renderQuestionRow(q) {
 
   const body = el('div', { class: 'qrow-body' });
   if (q.scenario) body.appendChild(el('p', { class: 'scenario' }, q.scenario));
+  const fig = buildQuestionFigure(q);
+  if (fig) body.appendChild(fig);
   body.appendChild(el('p', { class: 'question-text' },
     q.question,
     el('span', { class: 'marks-bracket' }, ` (${q.marks})`)
@@ -1574,6 +1640,8 @@ function renderMock(mock) {
       el('span', { class: 'aim-pill' }, `Aim ${q.learning_aim}`)
     ));
     if (q.scenario) sx.appendChild(el('div', { class: 'scenario' }, q.scenario));
+    const fig = buildQuestionFigure(q);
+    if (fig) sx.appendChild(fig);
     const subQ = el('div', { class: 'paper-question' });
     subQ.appendChild(el('span', { class: 'qtext' },
       q.question,
@@ -1737,6 +1805,8 @@ function renderPracticeCard() {
     el('span', { class: 'tag marks' }, `${q.marks} mark${q.marks===1?'':'s'}`)
   ));
   if (q.scenario) card.appendChild(el('div', { class: 'scenario' }, q.scenario));
+  const fig = buildQuestionFigure(q);
+  if (fig) card.appendChild(fig);
   card.appendChild(el('p', { class: 'question' }, q.question, el('span', { class: 'marks-bracket' }, ` (${q.marks})`)));
 
   // Diagram questions get a sketch canvas; MC gets clickable A–D options;

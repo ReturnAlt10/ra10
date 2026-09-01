@@ -2002,6 +2002,51 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
   }
   .mobile-subject-link em::after{content:'›';font-size:15px;line-height:1}
 
+  .mobile-subject-groups{display:grid;gap:var(--sp4)}
+  .mobile-subject-group{
+    border:1px solid oklch(from var(--color-text) l c h/.08);
+    border-radius:20px;
+    background:var(--color-surface);
+    overflow:hidden;
+  }
+  .mobile-subject-group-head{
+    display:flex;align-items:center;gap:var(--sp3);
+    padding:12px 14px;
+    background:var(--color-surface-offset);
+    border-bottom:1px solid oklch(from var(--color-text) l c h/.07);
+  }
+  .mobile-subject-group-title strong{display:block;font-size:var(--tx-sm);color:var(--color-text);line-height:1.2}
+  .mobile-subject-group-title small{display:block;font-size:11px;color:var(--color-text-muted);margin-top:2px}
+  .mobile-unit-list{display:grid;gap:2px;padding:6px}
+  .mobile-unit-link{
+    display:grid;
+    grid-template-columns:auto minmax(0,1fr) auto;
+    align-items:center;
+    gap:12px;
+    width:100%;
+    padding:11px 12px;
+    border-radius:14px;
+    background:transparent;
+    text-align:left;
+    border:1px solid transparent;
+  }
+  .mobile-unit-link:hover{background:var(--color-surface-offset);border-color:oklch(from var(--color-primary) l c h/.18)}
+  .mobile-unit-badge{
+    display:inline-flex;align-items:center;justify-content:center;
+    min-width:52px;height:30px;padding:0 8px;
+    border-radius:999px;
+    background:var(--color-primary-highlight);
+    color:var(--color-primary);
+    font-size:11px;font-weight:800;letter-spacing:.03em;
+  }
+  .mobile-unit-copy strong{display:block;font-size:var(--tx-sm);color:var(--color-text);line-height:1.25}
+  .mobile-unit-copy small{display:block;font-size:11px;color:var(--color-text-muted);margin-top:2px;line-height:1.35}
+  .mobile-unit-link em{
+    font-style:normal;font-size:11px;font-weight:800;color:var(--color-primary);
+    display:inline-flex;align-items:center;gap:6px;
+  }
+  .mobile-unit-link em::after{content:'›';font-size:15px;line-height:1}
+
   .mobile-nav-btn[data-mobile-nav="subjects"][aria-expanded="true"]{
     color:var(--color-primary);
     background:var(--color-primary-highlight);
@@ -2916,6 +2961,51 @@ body.mobile-ui.mobile-sheet-open .mobile-bottom-nav{display:flex !important;}
   background:var(--color-primary-highlight);
   color:var(--color-primary);
 }
+
+/* Desktop Revision dropdown — grouped subject → unit layout */
+.rev-preview-groups{display:grid;gap:var(--sp3)}
+.rev-preview-group{
+  border:1px solid oklch(from var(--color-text) l c h/.08);
+  border-radius:var(--radius-lg);
+  background:var(--color-surface);
+  overflow:hidden;
+}
+.rev-preview-group-head{
+  display:flex;align-items:center;gap:var(--sp3);
+  padding:10px 12px;
+  background:var(--color-surface-offset);
+  border-bottom:1px solid oklch(from var(--color-text) l c h/.07);
+}
+.rev-preview-group-title strong{display:block;font-size:var(--tx-sm);color:var(--color-text);line-height:1.2}
+.rev-preview-group-title small{display:block;font-size:11px;color:var(--color-text-muted);margin-top:2px}
+.rev-preview-units{display:grid;gap:2px;padding:6px}
+.rev-preview-unit{
+  display:grid;
+  grid-template-columns:auto minmax(0,1fr) auto;
+  align-items:center;
+  gap:12px;
+  padding:10px 12px;
+  border-radius:var(--radius-md);
+  text-decoration:none;
+  border:1px solid transparent;
+}
+.rev-preview-unit:hover{background:var(--color-surface-offset);border-color:oklch(from var(--color-primary) l c h/.18)}
+.rev-preview-badge{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-width:52px;height:28px;padding:0 8px;
+  border-radius:999px;
+  background:var(--color-primary-highlight);
+  color:var(--color-primary);
+  font-size:11px;font-weight:800;letter-spacing:.03em;
+}
+.rev-preview-copy{min-width:0;display:flex;flex-direction:column;gap:2px}
+.rev-preview-copy strong{font-size:var(--tx-sm);font-weight:700;color:var(--color-text);line-height:1.25}
+.rev-preview-copy small{font-size:var(--tx-xs);color:var(--color-text-muted);line-height:1.3}
+.rev-preview-unit em{
+  font-style:normal;font-size:11px;font-weight:800;color:var(--color-primary);
+  display:inline-flex;align-items:center;gap:6px;
+}
+.rev-preview-unit em::after{content:'›';font-size:15px;line-height:1}
 
 @keyframes homeMeterPulse{
   0%,100%{filter:saturate(1)}
@@ -3838,6 +3928,277 @@ html body #community-share-sheet .community-share-panel{
 
 #p-home .hx-marquee{border:0;border-top:1px solid #d8d3ca;border-bottom:1px solid #d8d3ca;border-radius:0;background:transparent;padding:8px 0}
 #p-home .hx-marquee span{background:transparent;color:#777269;padding-inline:10px}
+
+/* Signed-in dashboard */
+.signed-in-dashboard{
+  border:1px solid #d9d4ca;
+  border-radius:26px;
+  padding:clamp(1.5rem,3vw,2.5rem);
+  background:
+    radial-gradient(70% 140% at 100% 0%,rgba(210,0,0,.06),transparent 65%),
+    linear-gradient(135deg,#fffdf8 0%,#f3f0e9 100%);
+  color:#28251d;
+  box-shadow:0 18px 50px rgba(63,52,35,.1);
+}
+.signed-in-dash-hero{
+  position:relative;
+  overflow:hidden;
+  border-radius:20px;
+  padding:clamp(1.25rem,3vw,2rem);
+  margin-bottom:var(--sp6);
+  background:linear-gradient(135deg,#1a1a1a 0%,#3a2a1a 55%,#d20000 130%);
+  color:#fff;
+}
+.signed-in-dash-hero-glow{
+  position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(60% 120% at 100% 0%,rgba(255,255,255,.14),transparent 60%),
+    radial-gradient(50% 100% at 0% 100%,rgba(210,0,0,.35),transparent 60%);
+}
+.signed-in-dash-hero-inner{position:relative;display:flex;align-items:center;gap:var(--sp4);flex-wrap:wrap}
+.signed-in-dash-avatar{
+  width:56px;height:56px;border-radius:18px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.4rem;font-weight:800;color:#fff;
+  background:linear-gradient(135deg,#d20000,#8a1a1a);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 8px 20px rgba(0,0,0,.25);
+}
+.signed-in-dash-hero-copy{flex:1;min-width:200px}
+.signed-in-dash-greeting{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,.75)}
+.signed-in-dash-title{font-size:clamp(1.6rem,3.5vw,2.2rem);color:#fff;margin:2px 0 0;line-height:1.1}
+.signed-in-dash-sub{color:rgba(255,255,255,.8);margin:6px 0 0;font-size:var(--tx-sm)}
+.signed-in-dash-hero-actions{display:flex;gap:var(--sp2);flex-wrap:wrap}
+.signed-in-dash-btn{
+  padding:10px 16px;border-radius:999px;border:1px solid rgba(255,255,255,.25);
+  background:rgba(255,255,255,.14);color:#fff;font-weight:700;font-size:var(--tx-sm);
+  cursor:pointer;transition:background .15s ease,transform .15s ease;
+}
+.signed-in-dash-btn:hover{background:rgba(255,255,255,.24);transform:translateY(-1px)}
+.signed-in-dash-btn-ghost{background:transparent}
+.signed-in-dash-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:var(--sp3);margin-bottom:var(--sp6)}
+.signed-in-dash-stat{
+  border:1px solid #d8d3ca;border-radius:16px;padding:16px;
+  background:rgba(255,255,255,.7);
+  box-shadow:0 4px 14px rgba(63,52,35,.05);
+}
+.signed-in-dash-stat b{display:block;font-size:1.6rem;color:#28251d;line-height:1.1}
+.signed-in-dash-stat span{font-size:12px;color:#89857c;text-transform:uppercase;letter-spacing:.05em;font-weight:700}
+.signed-in-dash-section{margin-bottom:var(--sp6)}
+.signed-in-dash-section-head{display:flex;align-items:baseline;justify-content:space-between;gap:var(--sp3);margin-bottom:var(--sp3)}
+.signed-in-dash-section-head h3{font-size:1.3rem;color:#28251d;margin:0}
+.signed-in-dash-section-head span{font-size:12px;color:#89857c}
+.signed-in-pinned-grid,.signed-in-all-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:var(--sp3)}
+.signed-in-app-card{
+  position:relative;
+  display:flex;flex-direction:column;gap:10px;
+  padding:16px;border-radius:18px;
+  background:rgba(255,255,255,.72);border:1px solid #ded9d0;
+  text-align:left;cursor:pointer;
+  transition:transform .15s ease,box-shadow .15s ease,border-color .15s ease;
+}
+.signed-in-app-card:hover{transform:translateY(-2px);box-shadow:0 10px 22px rgba(63,52,35,.1);border-color:#c9c2b7}
+.signed-in-app-top{display:flex;align-items:center;justify-content:space-between}
+.signed-in-app-icon{width:40px;height:40px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.3)}
+.signed-in-app-icon.it{background:linear-gradient(135deg,#16a34a,#0f766e)}
+.signed-in-app-icon.l2{background:linear-gradient(135deg,#ea580c,#c2410c)}
+.signed-in-app-icon.business{background:linear-gradient(135deg,#2563eb,#1e3a8a)}
+.signed-in-app-icon.sport{background:linear-gradient(135deg,#7c3aed,#c026d3)}
+.signed-in-pin-btn{
+  width:30px;height:30px;border-radius:999px;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--color-surface-offset);color:var(--color-text-muted);
+  border:1px solid #d8d3ca;font-size:14px;line-height:1;
+}
+.signed-in-pin-btn.pinned{background:#d20000;color:#fff;border-color:#d20000}
+.signed-in-app-copy strong{display:block;font-size:var(--tx-sm);color:#28251d;line-height:1.25}
+.signed-in-app-copy small{display:block;font-size:12px;color:#89857c;margin-top:3px;line-height:1.35}
+.signed-in-app-open{font-size:12px;font-weight:800;color:#d20000;display:inline-flex;align-items:center;gap:6px;margin-top:auto}
+.signed-in-app-open::after{content:'›';font-size:15px;line-height:1}
+.signed-in-ai-overview{
+  position:relative;overflow:hidden;
+  border:1px solid #ded9d0;border-radius:18px;padding:20px;
+  background:
+    radial-gradient(80% 120% at 100% 0%,rgba(124,58,237,.08),transparent 60%),
+    radial-gradient(70% 120% at 0% 100%,rgba(14,165,233,.08),transparent 60%),
+    rgba(255,255,255,.72);
+  box-shadow:0 4px 14px rgba(63,52,35,.05);
+}
+.signed-in-ai-loading{color:#89857c;font-size:var(--tx-sm)}
+.signed-in-ai-head{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.signed-in-ai-orb{
+  position:relative;
+  width:40px;height:40px;border-radius:50%;flex-shrink:0;
+  background:radial-gradient(circle at 32% 28%,#fff,#67e8f9 25%,#8b5cf6 58%,#ec4899);
+  box-shadow:0 0 12px #22d3ee,0 0 24px #a855f7;
+  animation:ai-examiner-orb 1.15s ease-in-out infinite alternate;
+}
+.signed-in-ai-orb::after{
+  content:'';position:absolute;inset:-6px;border-radius:50%;
+  border:2px solid rgba(168,85,247,.35);
+  animation:ai-examiner-orbit 2.4s linear infinite;
+}
+.signed-in-ai-head strong{font-size:var(--tx-sm);color:#28251d}
+.signed-in-ai-head .ai-badge{
+  margin-left:auto;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;
+  padding:3px 9px;border-radius:999px;
+  background:linear-gradient(120deg,#7c3aed,#ec4899);color:#fff;
+}
+.signed-in-ai-summary{font-size:var(--tx-sm);color:#4a463e;line-height:1.65;margin:0 0 14px}
+.signed-in-ai-tip{
+  display:flex;gap:12px;align-items:flex-start;
+  padding:14px 16px;border-radius:14px;
+  background:linear-gradient(135deg,rgba(124,58,237,.08),rgba(14,165,233,.06));
+  border:1px solid rgba(124,58,237,.16);
+}
+.signed-in-ai-tip b{color:#7c3aed;font-size:12px;text-transform:uppercase;letter-spacing:.05em}
+.signed-in-ai-tip p{margin:2px 0 0;font-size:var(--tx-sm);color:#4a463e;line-height:1.5}
+.signed-in-exams{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:var(--sp3)}
+.signed-in-exam-card{
+  border:1px solid #ded9d0;border-radius:16px;padding:14px 16px;
+  background:rgba(255,255,255,.72);
+  box-shadow:0 4px 14px rgba(63,52,35,.05);
+}
+.signed-in-exam-card .exam-subject{font-size:var(--tx-sm);font-weight:700;color:#28251d}
+.signed-in-exam-card .exam-date{font-size:12px;color:#89857c;margin-top:2px}
+.signed-in-exam-card .exam-note{font-size:12px;color:#6d6a64;margin-top:2px}
+.signed-in-exam-card .exam-countdown{
+  display:inline-flex;align-items:center;gap:6px;margin-top:8px;
+  padding:4px 10px;border-radius:999px;
+  background:rgba(210,0,0,.08);color:#d20000;font-size:12px;font-weight:800;
+}
+.signed-in-exam-card .exam-countdown.soon{background:#fff4e9;color:#b45309}
+.signed-in-exam-card .exam-countdown.today{background:#dcfce7;color:#166534}
+.signed-in-exam-empty{color:#89857c;font-size:var(--tx-sm);grid-column:1/-1}
+
+/* Exams page */
+.exams-toolbar{display:flex;flex-wrap:wrap;gap:var(--sp3);align-items:center;justify-content:space-between;margin:var(--sp4) 0}
+.exams-filters{display:flex;flex-wrap:wrap;gap:var(--sp2);align-items:center}
+.exams-filter{
+  padding:8px 12px;border-radius:12px;border:1px solid var(--color-border);
+  background:var(--color-surface);color:var(--color-text);font-size:var(--tx-sm);
+}
+.exams-filter-btn{
+  padding:8px 14px;border-radius:999px;border:1px solid var(--color-border);
+  background:var(--color-surface);color:var(--color-text-muted);font-weight:700;font-size:var(--tx-sm);cursor:pointer;
+}
+.exams-filter-btn.active{background:#d20000;color:#fff;border-color:#d20000}
+.exams-search-input{
+  padding:8px 14px;border-radius:12px;border:1px solid var(--color-border);
+  background:var(--color-surface);color:var(--color-text);font-size:var(--tx-sm);min-width:220px;
+}
+.exams-summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:var(--sp3);margin-bottom:var(--sp4)}
+.exams-summary-stat{
+  border:1px solid var(--color-border);border-radius:16px;padding:14px 16px;background:var(--color-surface);
+}
+.exams-summary-stat b{display:block;font-size:1.5rem;color:var(--color-text);line-height:1.1}
+.exams-summary-stat span{font-size:12px;color:var(--color-text-muted);text-transform:uppercase;letter-spacing:.05em;font-weight:700}
+.exams-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:var(--sp3)}
+.exams-card{
+  border:1px solid var(--color-border);border-radius:18px;padding:16px;
+  background:var(--color-surface);display:flex;flex-direction:column;gap:12px;
+  box-shadow:0 4px 14px oklch(0 0 0/.04);
+}
+.exams-card.pinned{border-color:#d20000;box-shadow:0 0 0 1px rgba(210,0,0,.2),0 6px 18px rgba(210,0,0,.08)}
+.exams-card-top{display:flex;align-items:center;gap:8px}
+.exams-board{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;padding:3px 9px;border-radius:999px;background:var(--color-surface-offset);color:var(--color-text-muted)}
+.exams-board.pearson-btec{background:#e8f0fe;color:#1d4ed8}
+.exams-board.aqa{background:#fef3c7;color:#92400e}
+.exams-board.edexcel{background:#dcfce7;color:#166534}
+.exams-board.ocr{background:#f3e8ff;color:#7c3aed}
+.exams-level{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;padding:3px 9px;border-radius:999px;background:var(--color-surface-offset-2);color:var(--color-text-muted)}
+.exams-pin{margin-left:auto;width:30px;height:30px;border-radius:999px;display:flex;align-items:center;justify-content:center;background:var(--color-surface-offset);color:var(--color-text-muted);border:1px solid var(--color-border);font-size:14px;cursor:pointer}
+.exams-pin.pinned{background:#d20000;color:#fff;border-color:#d20000}
+.exams-card-body{display:flex;flex-direction:column;gap:3px}
+.exams-subject{font-size:var(--tx-sm);font-weight:700;color:var(--color-text)}
+.exams-name{font-size:13px;color:var(--color-text-muted)}
+.exams-dates{font-size:12px;color:var(--color-text-faint);margin-top:4px}
+.exams-card-foot{display:flex;align-items:center;gap:10px;margin-top:auto;flex-wrap:wrap}
+.exams-countdown{display:inline-flex;align-items:center;padding:4px 10px;border-radius:999px;background:rgba(210,0,0,.08);color:#d20000;font-size:12px;font-weight:800}
+.exams-countdown.soon{background:#fff4e9;color:#b45309}
+.exams-countdown.today{background:#dcfce7;color:#166534}
+.exams-next-date{font-size:12px;color:var(--color-text-muted)}
+.exams-open-app{margin-left:auto;padding:6px 12px;border-radius:999px;background:#d20000;color:#fff;font-size:12px;font-weight:700;border:none;cursor:pointer}
+.exams-empty{color:var(--color-text-muted);font-size:var(--tx-sm);grid-column:1/-1;text-align:center;padding:var(--sp8) 0}
+.exams-controls{display:flex;align-items:center;gap:var(--sp2)}
+.exams-view-toggle{display:flex;gap:4px;border:1px solid var(--color-border);border-radius:12px;padding:3px;background:var(--color-surface)}
+.exams-view-btn{width:34px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--color-text-muted);background:transparent;border:none;cursor:pointer}
+.exams-view-btn.active{background:#d20000;color:#fff}
+.exams-list{display:grid;gap:var(--sp3)}
+.exams-grid-view{grid-template-columns:repeat(auto-fill,minmax(280px,1fr))}
+.exams-list-view{grid-template-columns:1fr}
+.exams-list-view .exams-card{flex-direction:row;align-items:center;gap:16px}
+.exams-list-view .exams-card-top{flex:0 0 auto}
+.exams-list-view .exams-card-body{flex:1;min-width:0}
+.exams-list-view .exams-progress{flex:0 0 180px}
+.exams-list-view .exams-card-foot{flex:0 0 auto;margin-top:0}
+.exams-progress{margin-top:4px}
+.exams-progress-track{height:8px;border-radius:999px;background:var(--color-surface-offset-2);overflow:hidden}
+.exams-progress-track span{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,#d20000,#ff6b6b)}
+.exams-progress-label{display:block;font-size:11px;color:var(--color-text-muted);margin-top:4px}
+
+/* Home exams grid */
+.hx-exams-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:var(--sp3)}
+.hx-exam-card{
+  border:1px solid #ded9d0;border-radius:18px;padding:16px;cursor:pointer;
+  background:rgba(255,255,255,.72);display:flex;flex-direction:column;gap:8px;
+  box-shadow:0 4px 14px rgba(63,52,35,.05);
+  transition:transform .15s ease,box-shadow .15s ease,border-color .15s ease;
+}
+.hx-exam-card:hover{transform:translateY(-2px);box-shadow:0 10px 22px rgba(63,52,35,.1);border-color:#c9c2b7}
+.hx-exam-card.pinned{border-color:#d20000;box-shadow:0 0 0 1px rgba(210,0,0,.2),0 6px 18px rgba(210,0,0,.08)}
+.hx-exam-top{display:flex;align-items:center;justify-content:space-between}
+.hx-exam-board{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;padding:3px 9px;border-radius:999px;background:var(--color-surface-offset);color:var(--color-text-muted)}
+.hx-exam-board.pearson-btec{background:#e8f0fe;color:#1d4ed8}
+.hx-exam-board.aqa{background:#fef3c7;color:#92400e}
+.hx-exam-board.edexcel{background:#dcfce7;color:#166534}
+.hx-exam-board.ocr{background:#f3e8ff;color:#7c3aed}
+.hx-exam-pin{width:28px;height:28px;border-radius:999px;display:flex;align-items:center;justify-content:center;background:var(--color-surface-offset);color:var(--color-text-muted);border:1px solid var(--color-border);font-size:13px;cursor:pointer}
+.hx-exam-pin.pinned{background:#d20000;color:#fff;border-color:#d20000}
+.hx-exam-subject{font-size:var(--tx-sm);font-weight:700;color:#28251d}
+.hx-exam-name{font-size:12px;color:#89857c}
+.hx-exam-foot{display:flex;align-items:center;justify-content:space-between;margin-top:auto}
+.hx-exam-date{font-size:12px;color:#6d6a64}
+.hx-exam-days{font-size:12px;font-weight:800;color:#d20000}
+.hx-exams-empty{color:#89857c;font-size:var(--tx-sm);grid-column:1/-1;text-align:center;padding:var(--sp6) 0}
+@media (max-width:640px){.hx-exams-grid{grid-template-columns:1fr}}
+@media (max-width:640px){
+  .exams-toolbar{flex-direction:column;align-items:stretch}
+  .exams-filters{width:100%}
+  .exams-filter{flex:1}
+  .exams-controls{width:100%;justify-content:space-between}
+  .exams-search-input{width:100%}
+  .exams-list{grid-template-columns:1fr}
+  .exams-list-view .exams-card{flex-direction:column;align-items:stretch}
+  .exams-list-view .exams-progress{flex:1 1 auto}
+}
+@media (max-width:640px){
+  .signed-in-dashboard{padding:14px;border-radius:20px}
+  .signed-in-dash-hero{padding:16px;border-radius:16px;margin-bottom:14px}
+  .signed-in-dash-hero-inner{flex-direction:row;align-items:center;gap:12px;flex-wrap:wrap}
+  .signed-in-dash-avatar{width:44px;height:44px;border-radius:14px;font-size:1.1rem}
+  .signed-in-dash-hero-copy{min-width:0;flex:1}
+  .signed-in-dash-greeting{font-size:10px}
+  .signed-in-dash-title{font-size:1.25rem}
+  .signed-in-dash-sub{font-size:12px;margin-top:3px}
+  .signed-in-dash-hero-actions{width:100%;flex-direction:row;margin-top:12px;flex-basis:100%}
+  .signed-in-dash-btn{flex:1;justify-content:center;padding:9px 12px;font-size:12px}
+  .signed-in-dash-stats{grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:18px}
+  .signed-in-dash-stat{padding:12px 10px;border-radius:14px}
+  .signed-in-dash-stat b{font-size:1.25rem}
+  .signed-in-dash-stat span{font-size:10px}
+  .signed-in-dash-section{margin-bottom:18px}
+  .signed-in-dash-section-head{margin-bottom:10px}
+  .signed-in-dash-section-head h3{font-size:1.1rem}
+  .signed-in-dash-section-head span{font-size:11px}
+  .signed-in-pinned-grid,.signed-in-all-grid{grid-template-columns:1fr;gap:10px}
+  .signed-in-app-card{padding:14px;border-radius:16px;flex-direction:row;align-items:center;gap:12px}
+  .signed-in-app-top{flex-direction:column;align-items:center;gap:6px}
+  .signed-in-app-icon{width:38px;height:38px;border-radius:12px}
+  .signed-in-app-copy{flex:1;min-width:0}
+  .signed-in-app-copy strong{font-size:var(--tx-sm)}
+  .signed-in-app-copy small{font-size:11px}
+  .signed-in-app-open{margin-top:0}
+}
 #p-home .hx-marquee span b{color:#d20000}
 #p-home .hx-timeline-step,#p-home .hx-bento-card,#p-home .hx-subject-card{background:#fffefa;border-color:#ded9d0;box-shadow:0 5px 18px rgba(63,52,35,.045)}
 #p-home .hx-timeline-step:hover,#p-home .hx-bento-card:hover,#p-home .hx-subject-card:hover{box-shadow:0 14px 28px rgba(63,52,35,.1)}
@@ -3867,6 +4228,86 @@ html body #community-share-sheet .community-share-panel{
 [data-theme="dark"] #p-home .hx-bento-card.featured p{color:#bdb7b8}
 [data-theme="dark"] #p-home .hx-plans-shell{background:#20232a;border-color:#383d48}
 [data-theme="dark"] #p-home .hx-plan-card{background:#292d35;border-color:#414754}
+
+/* Signed-in dashboard — dark mode */
+[data-theme="dark"] .signed-in-dashboard{
+  border-color:#3d414b;
+  background:
+    radial-gradient(70% 140% at 100% 0%,rgba(210,0,0,.10),transparent 65%),
+    linear-gradient(135deg,#20232b,#191c24);
+  color:#f1f2f4;
+  box-shadow:0 20px 55px rgba(0,0,0,.28);
+}
+[data-theme="dark"] .signed-in-dash-hero{
+  background:linear-gradient(135deg,#14161b 0%,#2a1f1a 55%,#7a0f0f 130%);
+}
+[data-theme="dark"] .signed-in-dash-title{color:#f1f2f4}
+[data-theme="dark"] .signed-in-dash-stat{
+  border-color:#3d414b;background:#242831;box-shadow:none;
+}
+[data-theme="dark"] .signed-in-dash-stat b{color:#f1f2f4}
+[data-theme="dark"] .signed-in-dash-stat span{color:#858d9e}
+[data-theme="dark"] .signed-in-dash-section-head h3{color:#f1f2f4}
+[data-theme="dark"] .signed-in-dash-section-head span{color:#858d9e}
+[data-theme="dark"] .signed-in-app-card{
+  background:#242831;border-color:#363b47;
+}
+[data-theme="dark"] .signed-in-app-card:hover{background:#2b303a;border-color:#515867;box-shadow:0 10px 22px rgba(0,0,0,.3)}
+[data-theme="dark"] .signed-in-app-copy strong{color:#f1f2f4}
+[data-theme="dark"] .signed-in-app-copy small{color:#858d9e}
+[data-theme="dark"] .signed-in-pin-btn{background:#2b303a;color:#adb4c2;border-color:#414754}
+[data-theme="dark"] .signed-in-pin-btn.pinned{background:#d20000;color:#fff;border-color:#d20000}
+[data-theme="dark"] .signed-in-app-open{color:#ff6b6b}
+[data-theme="dark"] .signed-in-ai-overview{background:#242831;border-color:#363b47}
+[data-theme="dark"] .signed-in-ai-head strong{color:#f1f2f4}
+[data-theme="dark"] .signed-in-ai-summary{color:#adb4c2}
+[data-theme="dark"] .signed-in-ai-tip{background:rgba(210,0,0,.10);border-color:rgba(210,0,0,.25)}
+[data-theme="dark"] .signed-in-ai-tip p{color:#adb4c2}
+[data-theme="dark"] .signed-in-exam-card{background:#242831;border-color:#363b47}
+[data-theme="dark"] .signed-in-exam-card .exam-subject{color:#f1f2f4}
+[data-theme="dark"] .signed-in-exam-card .exam-date{color:#858d9e}
+[data-theme="dark"] .signed-in-exam-card .exam-note{color:#adb4c2}
+[data-theme="dark"] .signed-in-exam-empty{color:#858d9e}
+[data-theme="dark"] .exams-filter,[data-theme="dark"] .exams-search-input{background:#242831;color:#f1f2f4;border-color:#3d414b}
+[data-theme="dark"] .exams-filter-btn{background:#242831;color:#adb4c2;border-color:#3d414b}
+[data-theme="dark"] .exams-filter-btn.active{background:#d20000;color:#fff;border-color:#d20000}
+[data-theme="dark"] .exams-summary-stat{background:#242831;border-color:#3d414b}
+[data-theme="dark"] .exams-summary-stat b{color:#f1f2f4}
+[data-theme="dark"] .exams-summary-stat span{color:#858d9e}
+[data-theme="dark"] .exams-card{background:#242831;border-color:#363b47}
+[data-theme="dark"] .exams-card.pinned{border-color:#d20000}
+[data-theme="dark"] .exams-subject{color:#f1f2f4}
+[data-theme="dark"] .exams-name{color:#adb4c2}
+[data-theme="dark"] .exams-dates{color:#858d9e}
+[data-theme="dark"] .exams-board{background:#2b303a;color:#adb4c2}
+[data-theme="dark"] .exams-board.pearson-btec{background:#1e2a4a;color:#93c5fd}
+[data-theme="dark"] .exams-board.aqa{background:#3a2f14;color:#fcd34d}
+[data-theme="dark"] .exams-board.edexcel{background:#143a24;color:#86efac}
+[data-theme="dark"] .exams-board.ocr{background:#2e1f4a;color:#d8b4fe}
+[data-theme="dark"] .exams-level{background:#2b303a;color:#adb4c2}
+[data-theme="dark"] .exams-pin{background:#2b303a;color:#adb4c2;border-color:#414754}
+[data-theme="dark"] .exams-pin.pinned{background:#d20000;color:#fff;border-color:#d20000}
+[data-theme="dark"] .exams-next-date{color:#858d9e}
+[data-theme="dark"] .exams-empty{color:#858d9e}
+[data-theme="dark"] .exams-view-toggle{background:#242831;border-color:#3d414b}
+[data-theme="dark"] .exams-view-btn{color:#adb4c2}
+[data-theme="dark"] .exams-view-btn.active{background:#d20000;color:#fff}
+[data-theme="dark"] .exams-progress-track{background:#2b303a}
+[data-theme="dark"] .exams-progress-label{color:#858d9e}
+[data-theme="dark"] .hx-exam-card{background:#242831;border-color:#363b47}
+[data-theme="dark"] .hx-exam-card:hover{background:#2b303a;border-color:#515867}
+[data-theme="dark"] .hx-exam-card.pinned{border-color:#d20000}
+[data-theme="dark"] .hx-exam-subject{color:#f1f2f4}
+[data-theme="dark"] .hx-exam-name{color:#858d9e}
+[data-theme="dark"] .hx-exam-date{color:#adb4c2}
+[data-theme="dark"] .hx-exam-board{background:#2b303a;color:#adb4c2}
+[data-theme="dark"] .hx-exam-board.pearson-btec{background:#1e2a4a;color:#93c5fd}
+[data-theme="dark"] .hx-exam-board.aqa{background:#3a2f14;color:#fcd34d}
+[data-theme="dark"] .hx-exam-board.edexcel{background:#143a24;color:#86efac}
+[data-theme="dark"] .hx-exam-board.ocr{background:#2e1f4a;color:#d8b4fe}
+[data-theme="dark"] .hx-exam-pin{background:#2b303a;color:#adb4c2;border-color:#414754}
+[data-theme="dark"] .hx-exam-pin.pinned{background:#d20000;color:#fff;border-color:#d20000}
+[data-theme="dark"] .hx-exams-empty{color:#858d9e}
 
 @media(max-width:979px){#p-home .hx-hero-grid{grid-template-columns:1fr}}
 @media(max-width:640px){
@@ -3957,72 +4398,107 @@ html body #community-share-sheet .community-share-panel{
       <span class="nav-logo-text">RA10</span>
     </a>
     <div class="nav-links">
+      <button class="nav-link" data-nav="home" onclick="go('/')">Home</button>
       <div style="position:relative;display:inline-flex;" id="nav-rev-wrap">
         <button class="nav-link" data-nav="revision" onclick="go('/revision')">Revision</button>
         <div id="rev-preview" style="display:none;position:absolute;
           top:calc(100% + 8px);left:50%;transform:translateX(-50%);
           background:var(--color-surface);border:1px solid var(--color-border);
           border-radius:var(--radius-xl);box-shadow:var(--shadow-lg);
-          padding:var(--sp4);min-width:260px;z-index:10003;">
-          <div style="font-size:var(--tx-xs);font-weight:700;letter-spacing:.08em;
-            text-transform:uppercase;color:var(--color-text-muted);
-            margin-bottom:var(--sp3)">BTEC Level 2</div>
-          <a class="rev-subject-link" style="display:flex;align-items:center;justify-content:space-between;
-            padding:8px 10px;border-radius:var(--radius-md);cursor:pointer;
-            color:var(--color-text);text-decoration:none;font-size:var(--tx-sm);"
-            onmouseenter="this.style.background='oklch(from var(--color-text) l c h/.06)'"
-            onmouseleave="this.style.background=''"
-            onclick="go('/revision/btec/level-2/it/unit-2');hideRevPreview()">
-            <span class="rev-subject-icon l2">L2</span>
-            <span class="rev-subject-copy"><strong>IT Level 2</strong><small>Unit 2 · Technology Systems</small></span>
-            <span class="rev-subject-live">Live</span>
-          </a>
-          <div style="margin-top:var(--sp2);padding-top:var(--sp2);margin-bottom:var(--sp2);
-            border-top:1px solid var(--color-divider);font-size:var(--tx-xs);font-weight:700;letter-spacing:.08em;
-            text-transform:uppercase;color:var(--color-text-muted);">BTEC Level 3</div>
-          <a class="rev-subject-link" style="display:flex;align-items:center;justify-content:space-between;
-            padding:8px 10px;border-radius:var(--radius-md);cursor:pointer;
-            color:var(--color-text);text-decoration:none;font-size:var(--tx-sm);"
-            onmouseenter="this.style.background='oklch(from var(--color-text) l c h/.06)'"
-            onmouseleave="this.style.background=''"
-            onclick="go('/revision/btec/level-3/IT-AAQ');hideRevPreview()">
-            <span class="rev-subject-icon it">IT</span>
-            <span class="rev-subject-copy"><strong>Information Technology</strong><small>AAQ · Unit 1 live</small></span>
-            <span class="rev-subject-live">Live</span>
-          </a>
-          <a class="rev-subject-link" style="display:flex;align-items:center;justify-content:space-between;
-            padding:8px 10px;border-radius:var(--radius-md);cursor:pointer;
-            color:var(--color-text);text-decoration:none;font-size:var(--tx-sm);"
-            onmouseenter="this.style.background='oklch(from var(--color-text) l c h/.06)'"
-            onmouseleave="this.style.background=''"
-            onclick="go('/revision/btec/level-3/business');hideRevPreview()">
-            <span class="rev-subject-icon business">BU</span>
-            <span class="rev-subject-copy"><strong>Business</strong><small>Level 3 · Unit 3 live</small></span>
-            <span class="rev-subject-live">Live</span>
-          </a>
-          <a class="rev-subject-link" style="display:flex;align-items:center;justify-content:space-between;
-            padding:8px 10px;border-radius:var(--radius-md);cursor:pointer;
-            color:var(--color-text);text-decoration:none;font-size:var(--tx-sm);"
-            onmouseenter="this.style.background='oklch(from var(--color-text) l c h/.06)'"
-            onmouseleave="this.style.background=''"
-            onclick="go('/revision/btec/level-3/sport');hideRevPreview()">
-            <span class="rev-subject-icon sport">SP</span>
-            <span class="rev-subject-copy"><strong>Sport</strong><small>Level 3 · Unit 1 live</small></span>
-            <span class="rev-subject-live">Live</span>
-          </a>
-          <div style="margin-top:var(--sp2);padding-top:var(--sp2);margin-bottom:var(--sp2);
-            border-top:1px solid var(--color-divider);font-size:var(--tx-xs);font-weight:700;letter-spacing:.08em;
-            text-transform:uppercase;color:var(--color-text-muted);">A-Level</div>
-          <a class="rev-subject-link" style="display:flex;align-items:center;justify-content:space-between;
-            padding:8px 10px;border-radius:var(--radius-md);cursor:pointer;
-            color:var(--color-text);text-decoration:none;font-size:var(--tx-sm);"
-            onmouseenter="this.style.background='oklch(from var(--color-text) l c h/.06)'"
-            onmouseleave="this.style.background=''"
-            onclick="go('/revision/a-level/business-2023');hideRevPreview()">
-            <span class="rev-subject-icon business">AL</span>
-            <span class="rev-subject-copy"><strong>AQA Business (2023)</strong><small>A-Level · 7132 live</small></span>
-            <span class="rev-subject-live">Live</span>
-          </a>
+          padding:var(--sp4);min-width:340px;z-index:10003;">
+          <div class="rev-preview-groups">
+
+            <div class="rev-preview-group">
+              <div class="rev-preview-group-head">
+                <span class="rev-subject-icon it">IT</span>
+                <div class="rev-preview-group-title">
+                  <strong>Information Technology</strong>
+                  <small>BTEC Level 3 · AAQ</small>
+                </div>
+              </div>
+              <div class="rev-preview-units">
+                <a class="rev-preview-unit" href="#/revision/btec/level-3/IT-AAQ/unit-1" onclick="go('/revision/btec/level-3/IT-AAQ/unit-1');hideRevPreview()">
+                  <span class="rev-preview-badge">Unit 1</span>
+                  <span class="rev-preview-copy"><strong>IT Systems</strong><small>Devices, networks, security &amp; impact</small></span>
+                  <em>Open</em>
+                </a>
+                <a class="rev-preview-unit" href="#/revision/btec/level-3/IT-AAQ/unit-2" onclick="go('/revision/btec/level-3/IT-AAQ/unit-2');hideRevPreview()">
+                  <span class="rev-preview-badge">Unit 2</span>
+                  <span class="rev-preview-copy"><strong>Cyber Security &amp; Incident Management</strong><small>Threats, protection &amp; response</small></span>
+                  <em>Open</em>
+                </a>
+              </div>
+            </div>
+
+            <div class="rev-preview-group">
+              <div class="rev-preview-group-head">
+                <span class="rev-subject-icon l2">IT</span>
+                <div class="rev-preview-group-title">
+                  <strong>IT Level 2</strong>
+                  <small>BTEC Level 2</small>
+                </div>
+              </div>
+              <div class="rev-preview-units">
+                <a class="rev-preview-unit" href="#/revision/btec/level-2/it/unit-2" onclick="go('/revision/btec/level-2/it/unit-2');hideRevPreview()">
+                  <span class="rev-preview-badge">Unit 2</span>
+                  <span class="rev-preview-copy"><strong>Technology Systems</strong><small>Practice Q&amp;A · AI marking</small></span>
+                  <em>Open</em>
+                </a>
+              </div>
+            </div>
+
+            <div class="rev-preview-group">
+              <div class="rev-preview-group-head">
+                <span class="rev-subject-icon business">BU</span>
+                <div class="rev-preview-group-title">
+                  <strong>Business</strong>
+                  <small>BTEC Level 3</small>
+                </div>
+              </div>
+              <div class="rev-preview-units">
+                <a class="rev-preview-unit" href="#/revision/btec/level-3/business/unit-3" onclick="go('/revision/btec/level-3/business/unit-3');hideRevPreview()">
+                  <span class="rev-preview-badge">Unit 3</span>
+                  <span class="rev-preview-copy"><strong>Business Finance</strong><small>Ratios · Exam tasks</small></span>
+                  <em>Open</em>
+                </a>
+              </div>
+            </div>
+
+            <div class="rev-preview-group">
+              <div class="rev-preview-group-head">
+                <span class="rev-subject-icon sport">SP</span>
+                <div class="rev-preview-group-title">
+                  <strong>Sport</strong>
+                  <small>BTEC Level 3</small>
+                </div>
+              </div>
+              <div class="rev-preview-units">
+                <a class="rev-preview-unit" href="#/revision/btec/level-3/sport/unit-1" onclick="go('/revision/btec/level-3/sport/unit-1');hideRevPreview()">
+                  <span class="rev-preview-badge">Unit 1</span>
+                  <span class="rev-preview-copy"><strong>Anatomy &amp; Physiology</strong><small>Flashcards · Mock papers</small></span>
+                  <em>Open</em>
+                </a>
+              </div>
+            </div>
+
+            <div class="rev-preview-group">
+              <div class="rev-preview-group-head">
+                <span class="rev-subject-icon business">AL</span>
+                <div class="rev-preview-group-title">
+                  <strong>AQA Business</strong>
+                  <small>A-Level · 7132</small>
+                </div>
+              </div>
+              <div class="rev-preview-units">
+                <a class="rev-preview-unit" href="#/revision/a-level/business-2023" onclick="go('/revision/a-level/business-2023');hideRevPreview()">
+                  <span class="rev-preview-badge">2023</span>
+                  <span class="rev-preview-copy"><strong>Full Course</strong><small>Paper 1-3 · AI Examiner</small></span>
+                  <em>Open</em>
+                </a>
+              </div>
+            </div>
+
+          </div>
           <div style="margin-top:var(--sp3);padding-top:var(--sp3);
             border-top:1px solid var(--color-divider);text-align:center;">
             <button class="btn btn-g" style="width:100%;font-size:var(--tx-xs);"
@@ -4033,9 +4509,10 @@ html body #community-share-sheet .community-share-panel{
       <button class="nav-link" data-nav="tools"    onclick="go('/tools')">Tools</button>
       <button class="nav-link" data-nav="community" onclick="go('/community')">Community</button>
       <button class="nav-link" data-nav="tasks"    onclick="go('/tasks')">Tasks</button>
+      <button class="nav-link" data-nav="exams"    onclick="go('/exams')">Exams</button>
       <div style="position:relative;display:inline-flex;" id="nav-lb-wrap">
         <button class="nav-link" data-nav="leaderboard" onclick="go('leaderboard')">
-          🏆 Leaderboard
+          Leaderboard
         </button>
         <div id="lb-preview" style="display:none;position:absolute;
           top:calc(100% + 8px);left:50%;transform:translateX(-50%);
@@ -4118,67 +4595,116 @@ html body #community-share-sheet .community-share-panel{
     <button class="mobile-sheet-close" id="mobile-sheet-close" aria-label="Close subjects">✕</button>
   </div>
   <div class="mobile-sheet-scroll">
-  <div class="mobile-subject-list">
-    <button class="mobile-subject-link" type="button" data-mobile-subject="/revision/btec/level-2/it/unit-2">
-      <span class="mobile-subject-icon l2">IT</span>
-      <span class="mobile-subject-copy">
-        <strong>IT Level 2 — Unit 2</strong>
-        <small>Technology Systems · Live</small>
-        <span class="mobile-subject-meta">
-          <span>Practice Q&amp;A</span>
-          <span>AI marking</span>
-        </span>
-      </span>
-      <em>Open</em>
-    </button>
-    <button class="mobile-subject-link" type="button" data-mobile-subject="/revision/btec/level-3/IT-AAQ/unit-1">
-      <span class="mobile-subject-icon it">IT</span>
-      <span class="mobile-subject-copy">
-        <strong>Information Technology</strong>
-        <small>AAQ · Unit 1 live</small>
-        <span class="mobile-subject-meta">
-          <span>Spec guide</span>
-          <span>AI marking</span>
-        </span>
-      </span>
-      <em>Open</em>
-    </button>
-    <button class="mobile-subject-link" type="button" data-mobile-subject="/revision/btec/level-3/business/unit-3">
-      <span class="mobile-subject-icon business">BU</span>
-      <span class="mobile-subject-copy">
-        <strong>Business</strong>
-        <small>Level 3 · Unit 3 live</small>
-        <span class="mobile-subject-meta">
-          <span>Ratios</span>
-          <span>Exam tasks</span>
-        </span>
-      </span>
-      <em>Open</em>
-    </button>
-    <button class="mobile-subject-link" type="button" data-mobile-subject="/revision/btec/level-3/sport/unit-1">
-      <span class="mobile-subject-icon sport">SP</span>
-      <span class="mobile-subject-copy">
-        <strong>Sport</strong>
-        <small>Level 3 · Unit 1 live</small>
-        <span class="mobile-subject-meta">
-          <span>Flashcards</span>
-          <span>Mock papers</span>
-        </span>
-      </span>
-      <em>Open</em>
-    </button>
-    <button class="mobile-subject-link" type="button" data-mobile-subject="/revision/a-level/business-2023">
-      <span class="mobile-subject-icon business">AL</span>
-      <span class="mobile-subject-copy">
-        <strong>AQA Business (2023)</strong>
-        <small>A-Level · 7132 live</small>
-        <span class="mobile-subject-meta">
-          <span>Paper 1-3</span>
-          <span>AI Examiner</span>
-        </span>
-      </span>
-      <em>Open</em>
-    </button>
+  <div class="mobile-subject-groups">
+
+    <div class="mobile-subject-group">
+      <div class="mobile-subject-group-head">
+        <span class="mobile-subject-icon it">IT</span>
+        <div class="mobile-subject-group-title">
+          <strong>Information Technology</strong>
+          <small>BTEC Level 3 · AAQ</small>
+        </div>
+      </div>
+      <div class="mobile-unit-list">
+        <button class="mobile-unit-link" type="button" data-mobile-subject="/revision/btec/level-3/IT-AAQ/unit-1">
+          <span class="mobile-unit-badge">Unit 1</span>
+          <span class="mobile-unit-copy">
+            <strong>IT Systems</strong>
+            <small>Devices, networks, security &amp; impact</small>
+          </span>
+          <em>Open</em>
+        </button>
+        <button class="mobile-unit-link" type="button" data-mobile-subject="/revision/btec/level-3/IT-AAQ/unit-2">
+          <span class="mobile-unit-badge">Unit 2</span>
+          <span class="mobile-unit-copy">
+            <strong>Cyber Security &amp; Incident Management</strong>
+            <small>Threats, protection &amp; response</small>
+          </span>
+          <em>Open</em>
+        </button>
+      </div>
+    </div>
+
+    <div class="mobile-subject-group">
+      <div class="mobile-subject-group-head">
+        <span class="mobile-subject-icon l2">IT</span>
+        <div class="mobile-subject-group-title">
+          <strong>IT Level 2</strong>
+          <small>BTEC Level 2</small>
+        </div>
+      </div>
+      <div class="mobile-unit-list">
+        <button class="mobile-unit-link" type="button" data-mobile-subject="/revision/btec/level-2/it/unit-2">
+          <span class="mobile-unit-badge">Unit 2</span>
+          <span class="mobile-unit-copy">
+            <strong>Technology Systems</strong>
+            <small>Practice Q&amp;A · AI marking</small>
+          </span>
+          <em>Open</em>
+        </button>
+      </div>
+    </div>
+
+    <div class="mobile-subject-group">
+      <div class="mobile-subject-group-head">
+        <span class="mobile-subject-icon business">BU</span>
+        <div class="mobile-subject-group-title">
+          <strong>Business</strong>
+          <small>BTEC Level 3</small>
+        </div>
+      </div>
+      <div class="mobile-unit-list">
+        <button class="mobile-unit-link" type="button" data-mobile-subject="/revision/btec/level-3/business/unit-3">
+          <span class="mobile-unit-badge">Unit 3</span>
+          <span class="mobile-unit-copy">
+            <strong>Business Finance</strong>
+            <small>Ratios · Exam tasks</small>
+          </span>
+          <em>Open</em>
+        </button>
+      </div>
+    </div>
+
+    <div class="mobile-subject-group">
+      <div class="mobile-subject-group-head">
+        <span class="mobile-subject-icon sport">SP</span>
+        <div class="mobile-subject-group-title">
+          <strong>Sport</strong>
+          <small>BTEC Level 3</small>
+        </div>
+      </div>
+      <div class="mobile-unit-list">
+        <button class="mobile-unit-link" type="button" data-mobile-subject="/revision/btec/level-3/sport/unit-1">
+          <span class="mobile-unit-badge">Unit 1</span>
+          <span class="mobile-unit-copy">
+            <strong>Anatomy &amp; Physiology</strong>
+            <small>Flashcards · Mock papers</small>
+          </span>
+          <em>Open</em>
+        </button>
+      </div>
+    </div>
+
+    <div class="mobile-subject-group">
+      <div class="mobile-subject-group-head">
+        <span class="mobile-subject-icon business">AL</span>
+        <div class="mobile-subject-group-title">
+          <strong>AQA Business</strong>
+          <small>A-Level · 7132</small>
+        </div>
+      </div>
+      <div class="mobile-unit-list">
+        <button class="mobile-unit-link" type="button" data-mobile-subject="/revision/a-level/business-2023">
+          <span class="mobile-unit-badge">2023</span>
+          <span class="mobile-unit-copy">
+            <strong>Full Course</strong>
+            <small>Paper 1-3 · AI Examiner</small>
+          </span>
+          <em>Open</em>
+        </button>
+      </div>
+    </div>
+
   </div>
   </div>
 </div>
@@ -4273,6 +4799,55 @@ html body #community-share-sheet .community-share-panel{
     </div>
 
     <div class="hx-home">
+      <section id="signed-in-dashboard" class="signed-in-dashboard" style="display:none" aria-label="Your dashboard">
+        <div class="signed-in-dash-hero">
+          <div class="signed-in-dash-hero-glow" aria-hidden="true"></div>
+          <div class="signed-in-dash-hero-inner">
+            <div class="signed-in-dash-avatar" id="signed-in-dash-avatar">?</div>
+            <div class="signed-in-dash-hero-copy">
+              <span class="signed-in-dash-greeting">Welcome back</span>
+              <h2 class="signed-in-dash-title" id="signed-in-dash-name">Learner</h2>
+              <p class="signed-in-dash-sub">Pick up where you left off, or jump into a pinned app.</p>
+            </div>
+            <div class="signed-in-dash-hero-actions">
+              <button class="signed-in-dash-btn" type="button" onclick="go('/tasks')">Today's tasks</button>
+              <button class="signed-in-dash-btn signed-in-dash-btn-ghost" type="button" onclick="go('/account')">My account</button>
+            </div>
+          </div>
+        </div>
+        <div class="signed-in-dash-stats" id="signed-in-dash-stats"></div>
+        <div class="signed-in-dash-section">
+          <div class="signed-in-dash-section-head">
+            <h3>AI overview</h3>
+            <span>Your progress at a glance</span>
+          </div>
+          <div class="signed-in-ai-overview" id="signed-in-ai-overview">
+            <div class="signed-in-ai-loading">Analysing your progress…</div>
+          </div>
+        </div>
+        <div class="signed-in-dash-section">
+          <div class="signed-in-dash-section-head">
+            <h3>Upcoming exams</h3>
+            <span>Plan your revision</span>
+          </div>
+          <div class="signed-in-exams" id="signed-in-exams"></div>
+        </div>
+        <div class="signed-in-dash-section">
+          <div class="signed-in-dash-section-head">
+            <h3>Pinned apps</h3>
+            <span>Tap the pin to add or remove</span>
+          </div>
+          <div class="signed-in-pinned-grid" id="signed-in-pinned-grid"></div>
+        </div>
+        <div class="signed-in-dash-section">
+          <div class="signed-in-dash-section-head">
+            <h3>All apps</h3>
+            <span>Pin the ones you use most</span>
+          </div>
+          <div class="signed-in-all-grid" id="signed-in-all-grid"></div>
+        </div>
+      </section>
+
       <section class="hx-hero" aria-label="RA10 homepage hero">
         <div class="hx-hero-grain" aria-hidden="true"></div>
         <div class="hx-hero-grid">
@@ -4367,6 +4942,20 @@ html body #community-share-sheet .community-share-panel{
           <span><b></b>AI Examiner feedback</span>
         </div>
       </div>
+
+      <section class="hx-section" aria-label="Upcoming exams">
+        <div class="hx-section-head">
+          <div>
+            <span class="hx-eyebrow">Exam timetable</span>
+            <h2>Upcoming exams</h2>
+          </div>
+          <p>Your next exam dates at a glance. Pin the ones that matter and they'll appear as goals in your unit apps.</p>
+        </div>
+        <div class="hx-exams-grid" id="home-exams-grid"></div>
+        <div style="text-align:center;margin-top:18px;">
+          <button class="hx-btn hx-btn-ghost" type="button" onclick="go('/exams')">View full timetable →</button>
+        </div>
+      </section>
 
       <section class="hx-section" aria-label="How RA10 works">
         <div class="hx-section-head">
@@ -5731,6 +6320,63 @@ html body #community-share-sheet .community-share-panel{
   </div>
 
 <!-- ============================================================
+     EXAMS  /exams
+============================================================ -->
+<div class="page" id="p-exams">
+  <div class="c">
+    <nav class="bc">
+      <button class="bc-item" onclick="go('/')">Home</button>
+      <span class="bc-sep">›</span>
+      <span class="bc-item cur">Exams</span>
+    </nav>
+    <div class="hero">
+      <div class="hero-label">Exam Timetable</div>
+      <h1>Exams</h1>
+      <p>All your exam dates in one place. Pin the ones that matter and they'll show up as goals in your unit apps.</p>
+    </div>
+    <div class="exams-toolbar">
+      <div class="exams-filters">
+        <select id="exams-filter-board" class="exams-filter">
+          <option value="all">All boards</option>
+          <option value="Pearson BTEC">Pearson BTEC</option>
+          <option value="AQA">AQA</option>
+          <option value="Edexcel">Edexcel</option>
+          <option value="OCR">OCR</option>
+        </select>
+        <select id="exams-filter-level" class="exams-filter">
+          <option value="all">All levels</option>
+          <option value="GCSE">GCSE</option>
+          <option value="AS">AS Level</option>
+          <option value="A-Level">A-Level</option>
+          <option value="BTEC">BTEC</option>
+        </select>
+        <select id="exams-filter-subject" class="exams-filter">
+          <option value="all">All subjects</option>
+        </select>
+        <button id="exams-filter-pinned" class="exams-filter-btn" type="button">★ Pinned only</button>
+      </div>
+      <div class="exams-controls">
+        <select id="exams-sort" class="exams-filter">
+          <option value="date">Sort: Next date</option>
+          <option value="board">Sort: Board</option>
+          <option value="subject">Sort: Subject A–Z</option>
+          <option value="level">Sort: Level</option>
+        </select>
+        <div class="exams-view-toggle" role="group" aria-label="View mode">
+          <button id="exams-view-grid" class="exams-view-btn active" type="button" title="Grid view">▦</button>
+          <button id="exams-view-list" class="exams-view-btn" type="button" title="List view">☰</button>
+        </div>
+      </div>
+      <div class="exams-search">
+        <input id="exams-search-input" type="text" placeholder="Search exams…" class="exams-search-input">
+      </div>
+    </div>
+    <div class="exams-summary" id="exams-summary"></div>
+    <div class="exams-list" id="exams-list"></div>
+  </div>
+</div>
+
+<!-- ============================================================
      WHATSAPP EXPORTER  /tools/whatsapp-exporter
      iframe src: ra10/tools/whatsapp-exporter/index.html
 ============================================================ -->
@@ -6466,11 +7112,12 @@ const ROUTES = {
   '/tools/whatsapp-exporter':            'p-whatsapp',
   '/community':                           'p-community',
   '/tasks':                               'p-tasks',
+  '/exams':                               'p-exams',
   '/auth':                                'p-auth',
   '/upgrade':                             'p-upgrade',
   '/account':                             'p-account',
 };
-const NAV_MAP = {'leaderboard':'leaderboard','/revision':'revision','/tools':'tools','/community':'community','/tasks':'tasks'};
+const NAV_MAP = {'/':'home','leaderboard':'leaderboard','/revision':'revision','/tools':'tools','/community':'community','/tasks':'tasks','/exams':'exams'};
 
 let _lbHideTimeout = null;
 window._lbHideTimeout = null;
@@ -6614,6 +7261,38 @@ function showRevPreview() {
   }
 }
 
+function hideRevPreview() {
+  window._revHideTimeout = setTimeout(() => {
+    const wrap = document.getElementById('nav-rev-wrap');
+    const preview = document.getElementById('rev-preview');
+    if (wrap && (wrap.matches(':hover') || wrap.matches(':focus-within'))) return;
+    if (preview && (preview.matches(':hover') || preview.matches(':focus-within'))) return;
+    const el = document.getElementById('rev-preview');
+    if (el) el.style.display = 'none';
+    if (wrap) wrap.classList.remove('open');
+  }, 300);
+}
+
+function bindRevPreviewHover() {
+  const wrap = document.getElementById('nav-rev-wrap');
+  const preview = document.getElementById('rev-preview');
+  if (!wrap || !preview) return;
+  if (wrap.dataset.revHoverBound) return;
+  wrap.dataset.revHoverBound = '1';
+  // Keep the dropdown open while the pointer is over either the button or the
+  // dropdown itself. Because the dropdown is portalled to <body>, the button's
+  // :hover is lost the instant the pointer crosses the gap, so we track both
+  // elements directly with a shared timer instead of relying on :hover.
+  wrap.addEventListener('mouseenter', showRevPreview);
+  wrap.addEventListener('mouseleave', hideRevPreview);
+  wrap.addEventListener('focusin', showRevPreview);
+  wrap.addEventListener('focusout', hideRevPreview);
+  preview.addEventListener('mouseenter', showRevPreview);
+  preview.addEventListener('mouseleave', hideRevPreview);
+  preview.addEventListener('focusin', showRevPreview);
+  preview.addEventListener('focusout', hideRevPreview);
+}
+
 function ensureNavFlyoutPortal(flyoutId) {
   const flyout = document.getElementById(flyoutId);
   if (!flyout) return;
@@ -6680,28 +7359,9 @@ function positionNavFlyout(anchorId, flyoutId) {
   flyout.style.transform = 'none';
 }
 
-function hideRevPreview() {
-  window._revHideTimeout = setTimeout(() => {
-    const wrap = document.getElementById('nav-rev-wrap');
-    const preview = document.getElementById('rev-preview');
-    if (wrap && (wrap.matches(':hover') || wrap.matches(':focus-within'))) return;
-    if (preview && (preview.matches(':hover') || preview.matches(':focus-within'))) return;
-    const el = document.getElementById('rev-preview');
-    if (el) el.style.display = 'none';
-    if (wrap) wrap.classList.remove('open');
-  }, 300);
-}
-
 function bindDesktopHoverPreviews() {
-  const revWrap = document.getElementById('nav-rev-wrap');
+  bindRevPreviewHover();
   const lbWrap = document.getElementById('nav-lb-wrap');
-  if (revWrap && !revWrap.dataset.previewBound) {
-    revWrap.dataset.previewBound = '1';
-    revWrap.addEventListener('mouseenter', showRevPreview);
-    revWrap.addEventListener('mouseleave', hideRevPreview);
-    revWrap.addEventListener('focusin', showRevPreview);
-    revWrap.addEventListener('focusout', hideRevPreview);
-  }
   if (lbWrap && !lbWrap.dataset.previewBound) {
     lbWrap.dataset.previewBound = '1';
     lbWrap.addEventListener('mouseenter', showLbPreview);
@@ -9605,6 +10265,402 @@ window.communityAskRefine = communityAskRefine;
 window.communityStartJob = communityStartJob;
 window.communityDeleteApp = communityDeleteApp;
 
+const PINNED_APPS_KEY = 'ra10_pinned_apps_v1';
+const ALL_APPS = [
+  { path: '/revision/btec/level-3/IT-AAQ/unit-1', icon: 'it', label: 'IT', name: 'IT AAQ Unit 1', desc: 'Systems, exam practice, AI feedback' },
+  { path: '/revision/btec/level-3/IT-AAQ/unit-2', icon: 'it', label: 'IT', name: 'IT AAQ Unit 2', desc: 'Cyber security & incident management' },
+  { path: '/revision/btec/level-3/business/unit-3', icon: 'business', label: 'BU', name: 'Business Unit 3', desc: 'Finance confidence and exam control' },
+  { path: '/revision/a-level/business-2023', icon: 'business', label: 'AL', name: 'A-Level Business (7132)', desc: 'Topic-by-topic revision, quizzes, exam practice' },
+  { path: '/revision/btec/level-3/sport/unit-1', icon: 'sport', label: 'SP', name: 'Sport Unit 1', desc: 'Anatomy recall with timed checks' },
+  { path: '/revision/btec/level-2/it/unit-2', icon: 'l2', label: 'L2', name: 'IT Level 2 Unit 2', desc: 'Technology systems done properly' }
+];
+
+const PINNED_EXAMS_KEY = 'ra10_pinned_exams_v1';
+
+// Exam timetable data. Sources: Pearson BTEC 2027 timetables (winter + summer),
+// plus standard AQA/Edexcel/OCR GCSE, AS and A-Level exam windows.
+const EXAM_DATA = [
+  // ---- Pearson BTEC Level 3 IT AAQ ----
+  { id: 'btec-it-u1', board: 'Pearson BTEC', level: 'BTEC', subject: 'IT AAQ Unit 1', name: 'Creating Systems to Manage Information', dates: ['2027-01-12', '2027-05-05'], appPath: '/revision/btec/level-3/IT-AAQ/unit-1' },
+  { id: 'btec-it-u2', board: 'Pearson BTEC', level: 'BTEC', subject: 'IT AAQ Unit 2', name: 'Cyber Security & Incident Management', dates: ['2027-01-05', '2027-05-11'], appPath: '/revision/btec/level-3/IT-AAQ/unit-2' },
+  // ---- Pearson BTEC Level 3 Business ----
+  { id: 'btec-bus-u3', board: 'Pearson BTEC', level: 'BTEC', subject: 'Business Unit 3', name: 'Business Decision Making', dates: ['2027-01-18', '2027-05-11'], appPath: '/revision/btec/level-3/business/unit-3' },
+  { id: 'btec-bus-u2', board: 'Pearson BTEC', level: 'BTEC', subject: 'Business Unit 2', name: 'Developing a Marketing Campaign', dates: ['2027-01-07', '2027-05-07'], appPath: '/revision/btec/level-3/business/unit-3' },
+  // ---- Pearson BTEC Level 3 Sport ----
+  { id: 'btec-sport-u1', board: 'Pearson BTEC', level: 'BTEC', subject: 'Sport Unit 1', name: 'Fitness Training & Programming', dates: ['2027-01-06', '2027-04-29'], appPath: '/revision/btec/level-3/sport/unit-1' },
+  { id: 'btec-sport-u19', board: 'Pearson BTEC', level: 'BTEC', subject: 'Sport Unit 19', name: 'Development & Provision of Sport', dates: ['2027-01-14', '2027-05-07'], appPath: '/revision/btec/level-3/sport/unit-1' },
+  // ---- Pearson BTEC Level 2 IT ----
+  { id: 'btec-l2-it-u2', board: 'Pearson BTEC', level: 'BTEC', subject: 'IT Level 2 Unit 2', name: 'IT Service Solutions', dates: ['2027-02-01', '2027-06-07'], appPath: '/revision/btec/level-2/it/unit-2' },
+  // ---- Pearson BTEC Level 3 IT (additional units) ----
+  { id: 'btec-it-u14', board: 'Pearson BTEC', level: 'BTEC', subject: 'IT Unit 14', name: 'IT Service Delivery', dates: ['2027-01-04', '2027-05-11'] },
+  { id: 'btec-it-u2-systems', board: 'Pearson BTEC', level: 'BTEC', subject: 'IT Unit 2', name: 'Creating Systems to Manage Information', dates: ['2027-01-13', '2027-05-06'] },
+  // ---- Pearson BTEC Level 3 Business (additional) ----
+  { id: 'btec-bus-u6', board: 'Pearson BTEC', level: 'BTEC', subject: 'Business Unit 6/12', name: 'Principles of Management', dates: ['2027-01-15', '2027-04-28'] },
+  // ---- Pearson BTEC Level 3 Sport (additional) ----
+  { id: 'btec-sport-u22', board: 'Pearson BTEC', level: 'BTEC', subject: 'Sport Unit 22', name: 'Investigating Business in Sport', dates: ['2027-01-11', '2027-05-14'] },
+  { id: 'btec-sport-u2', board: 'Pearson BTEC', level: 'BTEC', subject: 'Sport Unit 2', name: 'Fitness Training & Programming', dates: ['2027-01-06', '2027-04-29'] },
+  // ---- Pearson BTEC Level 3 Computing ----
+  { id: 'btec-computing-u3', board: 'Pearson BTEC', level: 'BTEC', subject: 'Computing Unit 3', name: 'Planning & Management of Computing Projects', dates: ['2027-04-28', '2027-05-05'] },
+  { id: 'btec-computing-u4', board: 'Pearson BTEC', level: 'BTEC', subject: 'Computing Unit 4', name: 'Software Design & Development Project', dates: ['2027-04-26'] },
+  // ---- Pearson BTEC Level 3 Health & Social Care ----
+  { id: 'btec-hsc-u4', board: 'Pearson BTEC', level: 'BTEC', subject: 'Health & Social Care Unit 4', name: 'Enquiries into Current Research', dates: ['2027-03-22', '2027-05-17'] },
+  // ---- Pearson BTEC Level 3 Applied Science ----
+  { id: 'btec-science-u7', board: 'Pearson BTEC', level: 'BTEC', subject: 'Applied Science Unit 7', name: 'Contemporary Issues in Science', dates: ['2027-04-21', '2027-05-06'] },
+  // ---- Pearson BTEC Level 3 Engineering ----
+  { id: 'btec-eng-u3', board: 'Pearson BTEC', level: 'BTEC', subject: 'Engineering Unit 3', name: 'Engineering Product Design & Manufacture', dates: ['2027-05-04', '2027-05-11'] },
+  // ---- Pearson BTEC Level 3 Travel & Tourism ----
+  { id: 'btec-travel-u2', board: 'Pearson BTEC', level: 'BTEC', subject: 'Travel & Tourism Unit 2', name: 'Global Destinations', dates: ['2027-03-22', '2027-05-04'] },
+  // ---- AQA A-Level Business ----
+  { id: 'aqa-bus-al', board: 'AQA', level: 'A-Level', subject: 'A-Level Business', name: 'Business (7132) Papers 1-3', dates: ['2027-06-02', '2027-06-09', '2027-06-16'], appPath: '/revision/a-level/business-2023' },
+  // ---- AQA GCSE (standard window) ----
+  { id: 'aqa-gcse-maths', board: 'AQA', level: 'GCSE', subject: 'GCSE Maths', name: 'Mathematics (8300)', dates: ['2027-05-18', '2027-05-21', '2027-06-08'] },
+  { id: 'aqa-gcse-english', board: 'AQA', level: 'GCSE', subject: 'GCSE English', name: 'English Language (8700)', dates: ['2027-05-20', '2027-06-04'] },
+  { id: 'aqa-gcse-science', board: 'AQA', level: 'GCSE', subject: 'GCSE Science', name: 'Combined Science (8464)', dates: ['2027-05-17', '2027-05-24', '2027-06-07'] },
+  // ---- AQA AS Level ----
+  { id: 'aqa-as-maths', board: 'AQA', level: 'AS', subject: 'AS Maths', name: 'Mathematics (7356)', dates: ['2027-05-19', '2027-05-26'] },
+  { id: 'aqa-as-biology', board: 'AQA', level: 'AS', subject: 'AS Biology', name: 'Biology (7401)', dates: ['2027-05-18', '2027-05-25'] },
+  // ---- AQA A-Level ----
+  { id: 'aqa-al-maths', board: 'AQA', level: 'A-Level', subject: 'A-Level Maths', name: 'Mathematics (7357)', dates: ['2027-06-03', '2027-06-10', '2027-06-17'] },
+  { id: 'aqa-al-biology', board: 'AQA', level: 'A-Level', subject: 'A-Level Biology', name: 'Biology (7402)', dates: ['2027-06-04', '2027-06-11', '2027-06-18'] },
+  { id: 'aqa-al-chemistry', board: 'AQA', level: 'A-Level', subject: 'A-Level Chemistry', name: 'Chemistry (7405)', dates: ['2027-06-02', '2027-06-09', '2027-06-16'] },
+  { id: 'aqa-al-physics', board: 'AQA', level: 'A-Level', subject: 'A-Level Physics', name: 'Physics (7408)', dates: ['2027-06-03', '2027-06-10', '2027-06-17'] },
+  // ---- Edexcel GCSE ----
+  { id: 'edexcel-gcse-maths', board: 'Edexcel', level: 'GCSE', subject: 'GCSE Maths', name: 'Mathematics (1MA1)', dates: ['2027-05-19', '2027-05-24', '2027-06-09'] },
+  { id: 'edexcel-gcse-english', board: 'Edexcel', level: 'GCSE', subject: 'GCSE English', name: 'English Language (1EN0)', dates: ['2027-05-21', '2027-06-05'] },
+  // ---- Edexcel A-Level ----
+  { id: 'edexcel-al-maths', board: 'Edexcel', level: 'A-Level', subject: 'A-Level Maths', name: 'Mathematics (9MA0)', dates: ['2027-06-04', '2027-06-11', '2027-06-18'] },
+  // ---- OCR GCSE ----
+  { id: 'ocr-gcse-maths', board: 'OCR', level: 'GCSE', subject: 'GCSE Maths', name: 'Mathematics (J560)', dates: ['2027-05-18', '2027-05-25', '2027-06-08'] },
+  { id: 'ocr-gcse-science', board: 'OCR', level: 'GCSE', subject: 'GCSE Science', name: 'Combined Science (J260)', dates: ['2027-05-17', '2027-05-24', '2027-06-07'] }
+];
+
+function getPinnedExams() {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(PINNED_EXAMS_KEY) || '[]');
+    return Array.isArray(parsed) ? parsed.filter(p => typeof p === 'string') : [];
+  } catch (_) { return []; }
+}
+function setPinnedExams(list) {
+  localStorage.setItem(PINNED_EXAMS_KEY, JSON.stringify(Array.from(new Set(list))));
+}
+function togglePinnedExam(id) {
+  const current = getPinnedExams();
+  const next = current.includes(id) ? current.filter(p => p !== id) : current.concat(id);
+  setPinnedExams(next);
+  renderExamsPage();
+  renderSignedInDashboard();
+}
+
+function getPinnedApps() {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(PINNED_APPS_KEY) || '[]');
+    return Array.isArray(parsed) ? parsed.filter(p => typeof p === 'string') : [];
+  } catch (_) { return []; }
+}
+function setPinnedApps(list) {
+  localStorage.setItem(PINNED_APPS_KEY, JSON.stringify(Array.from(new Set(list))));
+}
+function togglePinnedApp(path) {
+  const current = getPinnedApps();
+  const next = current.includes(path) ? current.filter(p => p !== path) : current.concat(path);
+  setPinnedApps(next);
+  renderSignedInDashboard();
+}
+
+function renderSignedInDashboard() {
+  const dash = document.getElementById('signed-in-dashboard');
+  if (!dash) return;
+  const loggedIn = window.RA10 && typeof RA10.isLoggedIn === 'function' && RA10.isLoggedIn();
+  if (!loggedIn) { dash.style.display = 'none'; return; }
+  dash.style.display = 'block';
+
+  const pinned = getPinnedApps();
+  const pinnedApps = ALL_APPS.filter(a => pinned.includes(a.path));
+  const unpinnedApps = ALL_APPS.filter(a => !pinned.includes(a.path));
+
+  const profile = (window.RA10 && typeof RA10.getProfile === 'function') ? (RA10.getProfile() || {}) : {};
+  const displayName = profile.full_name || profile.username || 'Learner';
+  const nameEl = document.getElementById('signed-in-dash-name');
+  if (nameEl) nameEl.textContent = displayName;
+  const avatarEl = document.getElementById('signed-in-dash-avatar');
+  if (avatarEl) {
+    const initial = String(displayName || 'L').trim().charAt(0).toUpperCase();
+    avatarEl.textContent = initial;
+    if (profile.profile_pic_url) {
+      avatarEl.innerHTML = '<img src="' + profile.profile_pic_url + '" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;">';
+    }
+  }
+
+  const statsHost = document.getElementById('signed-in-dash-stats');
+  if (statsHost) {
+    const streak = (window.RA10 && typeof RA10.getStreak === 'function') ? (RA10.getStreak() || 0) : 0;
+    const credits = (window.RA10 && typeof RA10.getCredits === 'function') ? (RA10.getCredits() || 0) : 0;
+    const tier = (window.RA10 && typeof RA10.getTier === 'function') ? (RA10.getTier() || 'free') : 'free';
+    statsHost.innerHTML = [
+      ['Streak', streak + ' days'],
+      ['Credits', credits],
+      ['Plan', tier === 'free' ? 'Free' : tier.replace(/_/g, ' ')]
+    ].map(([k, v]) => '<div class="signed-in-dash-stat"><b>' + v + '</b><span>' + k + '</span></div>').join('');
+  }
+
+  const cardHtml = (app) => {
+    const isPinned = pinned.includes(app.path);
+    return '<div class="signed-in-app-card" onclick="go(\'' + app.path + '\')">'
+      + '<div class="signed-in-app-top">'
+      +   '<span class="signed-in-app-icon ' + app.icon + '">' + app.label + '</span>'
+      +   '<button class="signed-in-pin-btn ' + (isPinned ? 'pinned' : '') + '" type="button" title="' + (isPinned ? 'Unpin' : 'Pin') + '" onclick="event.stopPropagation();togglePinnedApp(\'' + app.path + '\')">' + (isPinned ? '★' : '☆') + '</button>'
+      + '</div>'
+      + '<div class="signed-in-app-copy"><strong>' + app.name + '</strong><small>' + app.desc + '</small></div>'
+      + '<span class="signed-in-app-open">Open</span>'
+      + '</div>';
+  };
+
+  const pinnedHost = document.getElementById('signed-in-pinned-grid');
+  const allHost = document.getElementById('signed-in-all-grid');
+  if (pinnedHost) pinnedHost.innerHTML = pinnedApps.length ? pinnedApps.map(cardHtml).join('') : '<div class="signed-in-dash-sub" style="grid-column:1/-1">No pinned apps yet. Pin the ones you use most below.</div>';
+  if (allHost) allHost.innerHTML = unpinnedApps.map(cardHtml).join('');
+
+  renderAiOverview();
+  renderExamTimes();
+}
+
+let _examsFilter = { board: 'all', level: 'all', subject: 'all', pinnedOnly: false, search: '', sort: 'date', view: 'grid' };
+
+function examsProgressPct(next, now) {
+  // Estimate how close we are to the exam: assume a ~365 day revision window.
+  const total = 365 * 24 * 60 * 60 * 1000;
+  const elapsed = total - (next.getTime() - now.getTime());
+  return Math.max(0, Math.min(100, Math.round((elapsed / total) * 100)));
+}
+
+function renderExamsPage() {
+  const list = document.getElementById('exams-list');
+  if (!list) return;
+
+  // Populate subject filter options once.
+  const subjectSel = document.getElementById('exams-filter-subject');
+  if (subjectSel && subjectSel.options.length <= 1) {
+    const subjects = Array.from(new Set(EXAM_DATA.map(e => e.subject))).sort();
+    subjects.forEach(s => {
+      const opt = document.createElement('option');
+      opt.value = s;
+      opt.textContent = s;
+      subjectSel.appendChild(opt);
+    });
+  }
+
+  const pinned = getPinnedExams();
+  const now = new Date();
+  const search = (_examsFilter.search || '').toLowerCase();
+
+  const filtered = EXAM_DATA.filter((exam) => {
+    if (_examsFilter.board !== 'all' && exam.board !== _examsFilter.board) return false;
+    if (_examsFilter.level !== 'all' && exam.level !== _examsFilter.level) return false;
+    if (_examsFilter.subject !== 'all' && exam.subject !== _examsFilter.subject) return false;
+    if (_examsFilter.pinnedOnly && !pinned.includes(exam.id)) return false;
+    if (search && (exam.subject + ' ' + exam.name + ' ' + exam.board).toLowerCase().indexOf(search) === -1) return false;
+    return true;
+  });
+
+  const withNext = filtered.map((exam) => {
+    const upcoming = (exam.dates || []).map(d => new Date(d + 'T09:00:00')).filter(d => d.getTime() >= now.getTime() - 86400000).sort((a, b) => a - b);
+    const next = upcoming[0] || new Date((exam.dates || [])[0] + 'T09:00:00');
+    return { exam, next };
+  });
+
+  // Sort.
+  const sort = _examsFilter.sort || 'date';
+  withNext.sort((a, b) => {
+    if (sort === 'board') return a.exam.board.localeCompare(b.exam.board) || a.next - b.next;
+    if (sort === 'subject') return a.exam.subject.localeCompare(b.exam.subject) || a.next - b.next;
+    if (sort === 'level') {
+      const order = { 'GCSE': 0, 'AS': 1, 'A-Level': 2, 'BTEC': 3 };
+      return (order[a.exam.level] || 9) - (order[b.exam.level] || 9) || a.next - b.next;
+    }
+    return a.next - b.next;
+  });
+
+  const summary = document.getElementById('exams-summary');
+  if (summary) {
+    const pinnedCount = pinned.length;
+    const upcomingCount = withNext.filter(x => x.next.getTime() >= now.getTime()).length;
+    summary.innerHTML = '<div class="exams-summary-stat"><b>' + EXAM_DATA.length + '</b><span>Total exams</span></div>'
+      + '<div class="exams-summary-stat"><b>' + upcomingCount + '</b><span>Upcoming</span></div>'
+      + '<div class="exams-summary-stat"><b>' + pinnedCount + '</b><span>Pinned</span></div>';
+  }
+
+  if (!withNext.length) {
+    list.innerHTML = '<div class="exams-empty">No exams match your filters.</div>';
+    return;
+  }
+
+  const view = _examsFilter.view || 'grid';
+  list.className = 'exams-list ' + (view === 'list' ? 'exams-list-view' : 'exams-grid-view');
+
+  list.innerHTML = withNext.map(({ exam, next }) => {
+    const isPinned = pinned.includes(exam.id);
+    const diffMs = next.getTime() - now.getTime();
+    const days = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+    let badge, cls;
+    if (days < 0) { badge = 'Done'; cls = ''; }
+    else if (days === 0) { badge = 'Today'; cls = 'today'; }
+    else if (days <= 7) { badge = days + ' day' + (days === 1 ? '' : 's') + ' to go'; cls = 'soon'; }
+    else { badge = days + ' days to go'; cls = ''; }
+    const dateStr = next.toLocaleDateString(undefined, { weekday: 'short', day: 'numeric', month: 'short' });
+    const allDates = (exam.dates || []).map(d => new Date(d + 'T09:00:00').toLocaleDateString(undefined, { day: 'numeric', month: 'short' })).join(', ');
+    const appLink = exam.appPath ? '<button class="exams-open-app" type="button" onclick="go(\'' + exam.appPath + '\')">Open app</button>' : '';
+    const pct = examsProgressPct(next, now);
+    return '<div class="exams-card' + (isPinned ? ' pinned' : '') + '">'
+      + '<div class="exams-card-top">'
+      +   '<span class="exams-board ' + exam.board.toLowerCase().replace(/\s+/g, '-') + '">' + exam.board + '</span>'
+      +   '<span class="exams-level">' + exam.level + '</span>'
+      +   '<button class="exams-pin ' + (isPinned ? 'pinned' : '') + '" type="button" title="' + (isPinned ? 'Unpin' : 'Pin') + '" onclick="togglePinnedExam(\'' + exam.id + '\')">' + (isPinned ? '★' : '☆') + '</button>'
+      + '</div>'
+      + '<div class="exams-card-body">'
+      +   '<div class="exams-subject">' + exam.subject + '</div>'
+      +   '<div class="exams-name">' + exam.name + '</div>'
+      +   '<div class="exams-dates">All sittings: ' + allDates + '</div>'
+      + '</div>'
+      + '<div class="exams-progress"><div class="exams-progress-track"><span style="width:' + pct + '%"></span></div><span class="exams-progress-label">' + pct + '% of the way there</span></div>'
+      + '<div class="exams-card-foot">'
+      +   '<span class="exams-countdown ' + cls + '">' + badge + '</span>'
+      +   '<span class="exams-next-date">Next: ' + dateStr + '</span>'
+      +   appLink
+      + '</div>'
+      + '</div>';
+  }).join('');
+}
+
+function renderHomeExams() {
+  const host = document.getElementById('home-exams-grid');
+  if (!host) return;
+  const now = new Date();
+  const pinned = getPinnedExams();
+  // Show the next 6 upcoming exams, pinned ones first.
+  const withNext = EXAM_DATA.map((exam) => {
+    const upcoming = (exam.dates || []).map(d => new Date(d + 'T09:00:00')).filter(d => d.getTime() >= now.getTime()).sort((a, b) => a - b);
+    return { exam, next: upcoming[0] || null };
+  }).filter(x => x.next).sort((a, b) => {
+    const pa = pinned.includes(a.exam.id) ? 0 : 1;
+    const pb = pinned.includes(b.exam.id) ? 0 : 1;
+    if (pa !== pb) return pa - pb;
+    return a.next - b.next;
+  }).slice(0, 6);
+
+  if (!withNext.length) { host.innerHTML = '<div class="hx-exams-empty">No upcoming exams.</div>'; return; }
+
+  host.innerHTML = withNext.map(({ exam, next }) => {
+    const isPinned = pinned.includes(exam.id);
+    const days = Math.ceil((next.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+    const dateStr = next.toLocaleDateString(undefined, { weekday: 'short', day: 'numeric', month: 'short' });
+    return '<div class="hx-exam-card' + (isPinned ? ' pinned' : '') + '" onclick="go(\'/exams\')">'
+      + '<div class="hx-exam-top">'
+      +   '<span class="hx-exam-board ' + exam.board.toLowerCase().replace(/\s+/g, '-') + '">' + exam.board + '</span>'
+      +   '<button class="hx-exam-pin ' + (isPinned ? 'pinned' : '') + '" type="button" title="' + (isPinned ? 'Unpin' : 'Pin') + '" onclick="event.stopPropagation();togglePinnedExam(\'' + exam.id + '\')">' + (isPinned ? '★' : '☆') + '</button>'
+      + '</div>'
+      + '<div class="hx-exam-subject">' + exam.subject + '</div>'
+      + '<div class="hx-exam-name">' + exam.name + '</div>'
+      + '<div class="hx-exam-foot">'
+      +   '<span class="hx-exam-date">' + dateStr + '</span>'
+      +   '<span class="hx-exam-days">' + days + 'd</span>'
+      + '</div>'
+      + '</div>';
+  }).join('');
+}
+
+function bindExamsFilters() {
+  const board = document.getElementById('exams-filter-board');
+  const level = document.getElementById('exams-filter-level');
+  const subject = document.getElementById('exams-filter-subject');
+  const pinnedBtn = document.getElementById('exams-filter-pinned');
+  const search = document.getElementById('exams-search-input');
+  const sort = document.getElementById('exams-sort');
+  const viewGrid = document.getElementById('exams-view-grid');
+  const viewList = document.getElementById('exams-view-list');
+  if (board) board.addEventListener('change', () => { _examsFilter.board = board.value; renderExamsPage(); });
+  if (level) level.addEventListener('change', () => { _examsFilter.level = level.value; renderExamsPage(); });
+  if (subject) subject.addEventListener('change', () => { _examsFilter.subject = subject.value; renderExamsPage(); });
+  if (pinnedBtn) pinnedBtn.addEventListener('click', () => { _examsFilter.pinnedOnly = !_examsFilter.pinnedOnly; pinnedBtn.classList.toggle('active', _examsFilter.pinnedOnly); renderExamsPage(); });
+  if (search) search.addEventListener('input', () => { _examsFilter.search = search.value; renderExamsPage(); });
+  if (sort) sort.addEventListener('change', () => { _examsFilter.sort = sort.value; renderExamsPage(); });
+  if (viewGrid) viewGrid.addEventListener('click', () => { _examsFilter.view = 'grid'; viewGrid.classList.add('active'); if (viewList) viewList.classList.remove('active'); renderExamsPage(); });
+  if (viewList) viewList.addEventListener('click', () => { _examsFilter.view = 'list'; viewList.classList.add('active'); if (viewGrid) viewGrid.classList.remove('active'); renderExamsPage(); });
+}
+
+// Exam dates from the Pearson BTEC 2027 timetables (winter + summer).
+// Each subject lists its winter and summer sittings; the next upcoming one is shown.
+const EXAM_TIMES = [
+  { subject: 'IT AAQ Unit 1', board: 'Pearson BTEC', dates: ['2027-01-12', '2027-05-05'], note: 'Creating Systems to Manage Information' },
+  { subject: 'IT AAQ Unit 2', board: 'Pearson BTEC', dates: ['2027-01-05', '2027-05-11'], note: 'Cyber Security & Incident Management' },
+  { subject: 'Business Unit 3', board: 'Pearson BTEC', dates: ['2027-01-18', '2027-05-11'], note: 'Business Decision Making' },
+  { subject: 'Sport Unit 1', board: 'Pearson BTEC', dates: ['2027-01-06', '2027-04-29'], note: 'Fitness Training & Programming' },
+  { subject: 'IT Level 2 Unit 2', board: 'Pearson BTEC', dates: ['2027-02-01', '2027-06-07'], note: 'IT Service Solutions' },
+  { subject: 'A-Level Business (7132)', board: 'AQA', dates: ['2027-06-02'], note: 'Paper 1-3' }
+];
+
+function renderExamTimes() {
+  const host = document.getElementById('signed-in-exams');
+  if (!host) return;
+  const now = new Date();
+  const cards = EXAM_TIMES.map((exam) => {
+    // Pick the next upcoming sitting (or the most recent if all are past).
+    const upcoming = (exam.dates || []).map(d => new Date(d + 'T09:00:00')).filter(d => d.getTime() >= now.getTime() - 86400000).sort((a, b) => a - b);
+    const examDate = upcoming[0] || new Date((exam.dates || [])[0] + 'T09:00:00');
+    const diffMs = examDate.getTime() - now.getTime();
+    const days = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+    let badge, cls;
+    if (days < 0) { badge = 'Done'; cls = ''; }
+    else if (days === 0) { badge = 'Today'; cls = 'today'; }
+    else if (days <= 7) { badge = days + ' day' + (days === 1 ? '' : 's') + ' to go'; cls = 'soon'; }
+    else { badge = days + ' days to go'; cls = ''; }
+    const dateStr = examDate.toLocaleDateString(undefined, { weekday: 'short', day: 'numeric', month: 'short' });
+    return '<div class="signed-in-exam-card">'
+      + '<div class="exam-subject">' + exam.subject + '</div>'
+      + '<div class="exam-date">' + exam.board + ' · ' + dateStr + '</div>'
+      + '<div class="exam-note">' + exam.note + '</div>'
+      + '<span class="exam-countdown ' + cls + '">' + badge + '</span>'
+      + '</div>';
+  }).join('');
+  host.innerHTML = cards || '<div class="signed-in-exam-empty">No upcoming exams.</div>';
+}
+
+function renderAiOverview() {
+  const host = document.getElementById('signed-in-ai-overview');
+  if (!host) return;
+  const loggedIn = window.RA10 && typeof RA10.isLoggedIn === 'function' && RA10.isLoggedIn();
+  if (!loggedIn) return;
+
+  // Gather local progress signals from the SDK and localStorage.
+  const streak = (window.RA10 && typeof RA10.getStreak === 'function') ? (RA10.getStreak() || 0) : 0;
+  const credits = (window.RA10 && typeof RA10.getCredits === 'function') ? (RA10.getCredits() || 0) : 0;
+  const tier = (window.RA10 && typeof RA10.getTier === 'function') ? (RA10.getTier() || 'free') : 'free';
+  const pinned = getPinnedApps();
+  const pinnedCount = pinned.length;
+
+  // Build a simple, deterministic AI-style summary from the signals available.
+  const parts = [];
+  if (streak > 0) parts.push('You are on a ' + streak + '-day streak — keep the momentum going.');
+  else parts.push('Start a streak today by completing one practice session.');
+  if (pinnedCount > 0) parts.push('You have ' + pinnedCount + ' pinned app' + (pinnedCount === 1 ? '' : 's') + ' ready to jump into.');
+  else parts.push('Pin your favourite apps below to make them one tap away.');
+  if (tier === 'free') parts.push('You are on the free plan with ' + credits + ' credits available.');
+  else parts.push('Your ' + tier.replace(/_/g, ' ') + ' plan includes AI Examiner access.');
+
+  const summary = parts.join(' ');
+
+  // Pick a focused next-step tip.
+  let tip = 'Open a pinned app and complete one practice session to build your streak.';
+  if (streak > 0 && streak < 3) tip = 'Protect your streak — do at least one question today.';
+  else if (streak >= 3 && streak < 7) tip = 'Great consistency! Try a full quiz to test your recall.';
+  else if (streak >= 7) tip = 'Excellent! Challenge yourself with a mock paper or AI Examiner feedback.';
+  else if (pinnedCount === 0) tip = 'Pin an app below so you can start revising in one tap.';
+
+  host.innerHTML = ''
+    + '<div class="signed-in-ai-head"><span class="signed-in-ai-orb"></span><strong>AI study coach</strong><span class="ai-badge">Live</span></div>'
+    + '<p class="signed-in-ai-summary">' + summary + '</p>'
+    + '<div class="signed-in-ai-tip"><div><b>Suggested next step</b><p>' + tip + '</p></div></div>';
+}
+
 function route(){
   closeMobileSubjectSheet();
   document.body.classList.remove('iframe-fullscreen-mode');
@@ -9615,8 +10671,16 @@ function route(){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   const el = document.getElementById(id);
   if(el){ el.classList.add('active'); window.scrollTo(0,0); }
+  if (id === 'p-home') {
+    renderSignedInDashboard();
+    renderHomeExams();
+  }
   if (id === 'p-tasks') {
     renderGlobalTasksPage();
+  }
+  if (id === 'p-exams') {
+    renderExamsPage();
+    bindExamsFilters();
   }
   if (id === 'p-community') {
     renderCommunityPage();
@@ -9866,7 +10930,7 @@ async function waitForRA10Sdk(timeoutMs) {
 
     _updateNavAuth();
 
-  ra10.on('authchange', () => { _updateNavAuth(); });
+  ra10.on('authchange', () => { _updateNavAuth(); renderSignedInDashboard(); });
   ra10.on('creditschange', _updateNavAuth);
 
     let focusRefreshInFlight = false;

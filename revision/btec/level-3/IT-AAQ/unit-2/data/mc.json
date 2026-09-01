@@ -1,1 +1,3156 @@
-[]
+[
+  {
+    "id": "MC001",
+    "learning_aim": "A",
+    "topic": "A1.1 Threat actors",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "Which type of threat actor is typically motivated by a political or social cause?",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "Hacktivist"
+      },
+      {
+        "label": "B",
+        "text": "Script kiddie"
+      },
+      {
+        "label": "C",
+        "text": "Insider threat"
+      },
+      {
+        "label": "D",
+        "text": "State-sponsored actor"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "Hacktivists are motivated by political, social or ideological causes and often target organisations for publicity.",
+      "points": [
+        "A: Hacktivist (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC002",
+    "learning_aim": "A",
+    "topic": "A1.1 Threat actors",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "Which threat actor is usually the LEAST technically skilled?",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "Script kiddie"
+      },
+      {
+        "label": "B",
+        "text": "APT operator"
+      },
+      {
+        "label": "C",
+        "text": "Cyber criminal"
+      },
+      {
+        "label": "D",
+        "text": "State-sponsored actor"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "Script kiddies use pre-written tools downloaded from the internet and typically have little technical expertise.",
+      "points": [
+        "A: Script kiddie (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC003",
+    "learning_aim": "A",
+    "topic": "A1.1 Threat actors",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "An attacker maintains long-term, undetected access to a network to exfiltrate data. Which term best describes them?",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "Advanced Persistent Threat (APT)"
+      },
+      {
+        "label": "B",
+        "text": "Script kiddie"
+      },
+      {
+        "label": "C",
+        "text": "Vishing attacker"
+      },
+      {
+        "label": "D",
+        "text": "Insider threat"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "An APT is a prolonged, targeted attack, often state-sponsored, that stays undetected to steal data over time.",
+      "points": [
+        "A: Advanced Persistent Threat (APT) (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC004",
+    "learning_aim": "A",
+    "topic": "A1.1 Threat actors",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "Which of the following is an insider threat?",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "An employee selling customer data to a competitor"
+      },
+      {
+        "label": "B",
+        "text": "A hacker using publicly available scripts"
+      },
+      {
+        "label": "C",
+        "text": "A foreign intelligence agency"
+      },
+      {
+        "label": "D",
+        "text": "A malicious website"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "An insider threat originates from within the organisation using legitimate access.",
+      "points": [
+        "A: An employee selling customer data to a competitor (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC005",
+    "learning_aim": "A",
+    "topic": "A1.2 Malware types",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "Which malware self-replicates and spreads automatically across networks without user action?",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "A worm"
+      },
+      {
+        "label": "B",
+        "text": "A Trojan"
+      },
+      {
+        "label": "C",
+        "text": "Adware"
+      },
+      {
+        "label": "D",
+        "text": "Spyware"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "A worm spreads automatically by exploiting vulnerabilities, whereas a Trojan requires user action to run.",
+      "points": [
+        "A: A worm (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC006",
+    "learning_aim": "A",
+    "topic": "A1.2 Malware types",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "Which malware records every keystroke a user types to capture credentials?",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "A keylogger"
+      },
+      {
+        "label": "B",
+        "text": "A logic bomb"
+      },
+      {
+        "label": "C",
+        "text": "A rootkit"
+      },
+      {
+        "label": "D",
+        "text": "Ransomware"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "A keylogger captures keystrokes, revealing usernames and passwords.",
+      "points": [
+        "A: A keylogger (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC007",
+    "learning_aim": "A",
+    "topic": "A1.2 Malware types",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "What is the defining feature of a Trojan horse?",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "It disguises itself as legitimate software"
+      },
+      {
+        "label": "B",
+        "text": "It spreads automatically over a network"
+      },
+      {
+        "label": "C",
+        "text": "It only activates on a specific date"
+      },
+      {
+        "label": "D",
+        "text": "It hides inside the operating system kernel"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "A Trojan masquerades as legitimate software to trick the user into installing it.",
+      "points": [
+        "A: It disguises itself as legitimate software (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC008",
+    "learning_aim": "A",
+    "topic": "A1.2 Malware types",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "Ransomware is best described as malware that:",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "Encrypts files and demands payment for decryption"
+      },
+      {
+        "label": "B",
+        "text": "Displays unwanted adverts"
+      },
+      {
+        "label": "C",
+        "text": "Records keystrokes"
+      },
+      {
+        "label": "D",
+        "text": "Redirects web traffic"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "Ransomware encrypts the victim’s data and demands a ransom for the decryption key.",
+      "points": [
+        "A: Encrypts files and demands payment for decryption (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC009",
+    "learning_aim": "A",
+    "topic": "A1.2 Malware types",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "Which malware gives an attacker covert administrative access while hiding its own presence?",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "A rootkit"
+      },
+      {
+        "label": "B",
+        "text": "A worm"
+      },
+      {
+        "label": "C",
+        "text": "Adware"
+      },
+      {
+        "label": "D",
+        "text": "Spyware"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "A rootkit hides deep in a system and provides covert privileged access.",
+      "points": [
+        "A: A rootkit (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC010",
+    "learning_aim": "A",
+    "topic": "A1.3 Social engineering",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "Which attack uses telephone calls to trick victims into revealing information?",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "Vishing"
+      },
+      {
+        "label": "B",
+        "text": "Smishing"
+      },
+      {
+        "label": "C",
+        "text": "Spear phishing"
+      },
+      {
+        "label": "D",
+        "text": "Baiting"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "Vishing is voice phishing over the telephone.",
+      "points": [
+        "A: Vishing (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC011",
+    "learning_aim": "A",
+    "topic": "A1.3 Social engineering",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "Following an authorised person through a secure door without using your own credentials is called:",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "Tailgating"
+      },
+      {
+        "label": "B",
+        "text": "Shoulder surfing"
+      },
+      {
+        "label": "C",
+        "text": "Pretexting"
+      },
+      {
+        "label": "D",
+        "text": "Whaling"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "Tailgating is gaining physical access by following an authorised user through a controlled entry.",
+      "points": [
+        "A: Tailgating (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC012",
+    "learning_aim": "A",
+    "topic": "A1.3 Social engineering",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "Whaling specifically targets:",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "Senior executives or high-value individuals"
+      },
+      {
+        "label": "B",
+        "text": "Random members of the public"
+      },
+      {
+        "label": "C",
+        "text": "Only mobile phone users"
+      },
+      {
+        "label": "D",
+        "text": "Low-level employees"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "Whaling is spear-phishing aimed at important people such as senior executives.",
+      "points": [
+        "A: Senior executives or high-value individuals (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC013",
+    "learning_aim": "A",
+    "topic": "A1.3 Social engineering",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "Leaving infected USB drives in a car park hoping someone plugs one in is an example of:",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "Baiting"
+      },
+      {
+        "label": "B",
+        "text": "Vishing"
+      },
+      {
+        "label": "C",
+        "text": "Pharming"
+      },
+      {
+        "label": "D",
+        "text": "Spoofing"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "Baiting uses a physical lure (e.g. an infected USB drive) to trick a user into acting.",
+      "points": [
+        "A: Baiting (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC014",
+    "learning_aim": "A",
+    "topic": "A1.4 Network attacks",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "A DDoS attack is most accurately described as:",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "Many devices flooding a target to overwhelm it"
+      },
+      {
+        "label": "B",
+        "text": "One device sending spam emails"
+      },
+      {
+        "label": "C",
+        "text": "Encrypting a hard drive"
+      },
+      {
+        "label": "D",
+        "text": "Scanning for open ports"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "A distributed denial-of-service attack uses many compromised devices (a botnet) to flood and overwhelm a target.",
+      "points": [
+        "A: Many devices flooding a target to overwhelm it (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC015",
+    "learning_aim": "A",
+    "topic": "A1.4 Network attacks",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "In a man-in-the-middle attack, the attacker:",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "Intercepts data between two parties"
+      },
+      {
+        "label": "B",
+        "text": "Locks the user out of their account"
+      },
+      {
+        "label": "C",
+        "text": "Deletes files on a server"
+      },
+      {
+        "label": "D",
+        "text": "Mines cryptocurrency"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "A MITM attacker positions between sender and receiver to intercept or alter data.",
+      "points": [
+        "A: Intercepts data between two parties (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC016",
+    "learning_aim": "A",
+    "topic": "A1.4 Network attacks",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "Corrupting DNS resolution so users are sent to a fake website is called:",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "DNS poisoning"
+      },
+      {
+        "label": "B",
+        "text": "Packet sniffing"
+      },
+      {
+        "label": "C",
+        "text": "Buffer overflow"
+      },
+      {
+        "label": "D",
+        "text": "ARP spoofing"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "DNS poisoning corrupts the DNS cache/records to redirect users to malicious sites.",
+      "points": [
+        "A: DNS poisoning (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC017",
+    "learning_aim": "A",
+    "topic": "A1.5 Web application attacks",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "Which attack inserts malicious code into a database query via unsanitised user input?",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "SQL injection"
+      },
+      {
+        "label": "B",
+        "text": "Cross-site scripting (XSS)"
+      },
+      {
+        "label": "C",
+        "text": "Denial of service"
+      },
+      {
+        "label": "D",
+        "text": "Man-in-the-middle"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "SQL injection injects SQL into user input that is executed against the database.",
+      "points": [
+        "A: SQL injection (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC018",
+    "learning_aim": "A",
+    "topic": "A1.5 Web application attacks",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "Which attack injects client-side script into a webpage viewed by other users?",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "Cross-site scripting (XSS)"
+      },
+      {
+        "label": "B",
+        "text": "SQL injection"
+      },
+      {
+        "label": "C",
+        "text": "Smishing"
+      },
+      {
+        "label": "D",
+        "text": "Rootkit"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "XSS injects malicious JavaScript that runs in other users’ browsers.",
+      "points": [
+        "A: Cross-site scripting (XSS) (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC019",
+    "learning_aim": "A",
+    "topic": "A1.6 Physical threats",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "Which is a physical security control for a server room?",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "Biometric access control"
+      },
+      {
+        "label": "B",
+        "text": "A firewall"
+      },
+      {
+        "label": "C",
+        "text": "Anti-malware software"
+      },
+      {
+        "label": "D",
+        "text": "An intrusion detection system"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "Biometric access control restricts physical entry to a server room.",
+      "points": [
+        "A: Biometric access control (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC020",
+    "learning_aim": "A",
+    "topic": "A2.1 Software vulnerabilities",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "An exploit that is unknown to the vendor and has no patch is called:",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "A zero-day exploit"
+      },
+      {
+        "label": "B",
+        "text": "A logic bomb"
+      },
+      {
+        "label": "C",
+        "text": "A brute-force attack"
+      },
+      {
+        "label": "D",
+        "text": "A denial-of-service attack"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "A zero-day is an unknown vulnerability with no available patch at the time of exploitation.",
+      "points": [
+        "A: A zero-day exploit (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC021",
+    "learning_aim": "A",
+    "topic": "A2.3 Human vulnerabilities",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "Which is a human vulnerability rather than a technical one?",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "Poor password practices"
+      },
+      {
+        "label": "B",
+        "text": "An open network port"
+      },
+      {
+        "label": "C",
+        "text": "Weak encryption"
+      },
+      {
+        "label": "D",
+        "text": "A misconfigured firewall"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "Poor password practices stem from human behaviour, not configuration.",
+      "points": [
+        "A: Poor password practices (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC022",
+    "learning_aim": "A",
+    "topic": "A3.1 UK Legislation",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "Which UK Act makes unauthorised access to computer material an offence?",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "Computer Misuse Act 1990"
+      },
+      {
+        "label": "B",
+        "text": "Data Protection Act 1998 (now 2018)"
+      },
+      {
+        "label": "C",
+        "text": "Copyright Act"
+      },
+      {
+        "label": "D",
+        "text": "Official Secrets Act 1989"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "The Computer Misuse Act 1990 criminalises unauthorised access to computer material.",
+      "points": [
+        "A: Computer Misuse Act 1990 (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC023",
+    "learning_aim": "A",
+    "topic": "A3.1 UK Legislation",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "Which legislation protects personal data and gives individuals rights such as erasure?",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "UK GDPR / Data Protection Act 2018"
+      },
+      {
+        "label": "B",
+        "text": "Computer Misuse Act 1990"
+      },
+      {
+        "label": "C",
+        "text": "RIPA 2000"
+      },
+      {
+        "label": "D",
+        "text": "Copyright, Designs and Patents Act"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "The UK GDPR (via the Data Protection Act 2018) governs personal data rights.",
+      "points": [
+        "A: UK GDPR / Data Protection Act 2018 (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC024",
+    "learning_aim": "A",
+    "topic": "A3.4 Compliance",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "Which standard is internationally recognised for information security management?",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "ISO 27001"
+      },
+      {
+        "label": "B",
+        "text": "PCI DSS"
+      },
+      {
+        "label": "C",
+        "text": "RIPA 2000"
+      },
+      {
+        "label": "D",
+        "text": "Computer Misuse Act 1990"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "ISO 27001 is the international Information Security Management System standard.",
+      "points": [
+        "A: ISO 27001 (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC025",
+    "learning_aim": "A",
+    "topic": "A4.4 Firewalls",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "A firewall that inspects whether packets belong to an established connection uses:",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "Stateful inspection"
+      },
+      {
+        "label": "B",
+        "text": "DNS filtering"
+      },
+      {
+        "label": "C",
+        "text": "Anti-malware signatures"
+      },
+      {
+        "label": "D",
+        "text": "Port forwarding"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "Stateful inspection tracks the state of active connections.",
+      "points": [
+        "A: Stateful inspection (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC026",
+    "learning_aim": "A",
+    "topic": "A4.5 Authentication",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "Multi-factor authentication (MFA) combines:",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "Two or more categories of evidence (e.g. password + token)"
+      },
+      {
+        "label": "B",
+        "text": "Two identical passwords"
+      },
+      {
+        "label": "C",
+        "text": "Encryption and hashing"
+      },
+      {
+        "label": "D",
+        "text": "A VPN and a proxy"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "MFA uses two or more factors: something you know, have, or are.",
+      "points": [
+        "A: Two or more categories of evidence (e.g. password + token) (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC027",
+    "learning_aim": "A",
+    "topic": "A4.6 Access control",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "Giving users only the permissions necessary for their job is the principle of:",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "Least privilege"
+      },
+      {
+        "label": "B",
+        "text": "Defence in depth"
+      },
+      {
+        "label": "C",
+        "text": "Separation of duties"
+      },
+      {
+        "label": "D",
+        "text": "Non-repudiation"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "Least privilege grants the minimum access needed to perform a role.",
+      "points": [
+        "A: Least privilege (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC028",
+    "learning_aim": "A",
+    "topic": "A4.7 Wireless",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "Which is the most secure current Wi-Fi encryption protocol?",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "WPA3"
+      },
+      {
+        "label": "B",
+        "text": "WEP"
+      },
+      {
+        "label": "C",
+        "text": "WPA"
+      },
+      {
+        "label": "D",
+        "text": "WPA2-TKIP"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "WPA3 is the latest, most secure Wi-Fi protocol.",
+      "points": [
+        "A: WPA3 (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC029",
+    "learning_aim": "A",
+    "topic": "A4.8 Encryption",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "Which algorithm is a symmetric encryption standard widely used for data at rest?",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "AES"
+      },
+      {
+        "label": "B",
+        "text": "RSA"
+      },
+      {
+        "label": "C",
+        "text": "SHA-256"
+      },
+      {
+        "label": "D",
+        "text": "Diffie-Hellman"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "AES is a symmetric cipher; RSA and Diffie-Hellman are asymmetric.",
+      "points": [
+        "A: AES (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC030",
+    "learning_aim": "A",
+    "topic": "A4.9 Device security",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "Which technology provides a hardware-rooted platform for secure device functions?",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "Trusted Platform Module (TPM)"
+      },
+      {
+        "label": "B",
+        "text": "A firewall"
+      },
+      {
+        "label": "C",
+        "text": "A UPS"
+      },
+      {
+        "label": "D",
+        "text": "A modem"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "A TPM is a hardware chip providing cryptographic keys for secure boot and device encryption.",
+      "points": [
+        "A: Trusted Platform Module (TPM) (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC031",
+    "learning_aim": "B",
+    "topic": "B1.1 Network types",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "Which network connects devices over a limited area such as one office?",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "LAN"
+      },
+      {
+        "label": "B",
+        "text": "WAN"
+      },
+      {
+        "label": "C",
+        "text": "PAN"
+      },
+      {
+        "label": "D",
+        "text": "SAN"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "A local area network (LAN) covers a limited geographic area.",
+      "points": [
+        "A: LAN (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC032",
+    "learning_aim": "B",
+    "topic": "B1.1 Network types",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "A SAN is best described as:",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "A high-speed network providing block-level access to storage"
+      },
+      {
+        "label": "B",
+        "text": "A small button on a keyboard"
+      },
+      {
+        "label": "C",
+        "text": "A wide-area phone network"
+      },
+      {
+        "label": "D",
+        "text": "A personal area network"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "A Storage Area Network provides high-speed storage access.",
+      "points": [
+        "A: A high-speed network providing block-level access to storage (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC033",
+    "learning_aim": "B",
+    "topic": "B1.2 Network topologies",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "In which topology are all devices connected to a central switch?",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "Star topology"
+      },
+      {
+        "label": "B",
+        "text": "Ring topology"
+      },
+      {
+        "label": "C",
+        "text": "Mesh topology"
+      },
+      {
+        "label": "D",
+        "text": "Bus topology"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "In a star topology every device connects to a central switch/hub.",
+      "points": [
+        "A: Star topology (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC034",
+    "learning_aim": "B",
+    "topic": "B1.2 Network topologies",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "Which topology has the greatest resilience because devices are interconnected?",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "Mesh topology"
+      },
+      {
+        "label": "B",
+        "text": "Star topology"
+      },
+      {
+        "label": "C",
+        "text": "Bus topology"
+      },
+      {
+        "label": "D",
+        "text": "Ring topology"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "A mesh topology provides multiple paths so failure of one link need not isolate devices.",
+      "points": [
+        "A: Mesh topology (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC035",
+    "learning_aim": "B",
+    "topic": "B1.3 Network architecture",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "In a client-server network, the server provides:",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "Centralised resources and services to clients"
+      },
+      {
+        "label": "B",
+        "text": "A wireless access point"
+      },
+      {
+        "label": "C",
+        "text": "A physical cable for each client"
+      },
+      {
+        "label": "D",
+        "text": "Local storage only to itself"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "A client-server model centralises services and resources on servers accessed by clients.",
+      "points": [
+        "A: Centralised resources and services to clients (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC036",
+    "learning_aim": "B",
+    "topic": "B1.4 Modern trends",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "Which is a security concern specific to BYOD?",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "Inconsistent security controls on personal devices"
+      },
+      {
+        "label": "B",
+        "text": "Too many network cables"
+      },
+      {
+        "label": "C",
+        "text": "Lack of Wi-Fi"
+      },
+      {
+        "label": "D",
+        "text": "Slow Ethernet speeds"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "BYOD devices may have inconsistent security, exposing the network.",
+      "points": [
+        "A: Inconsistent security controls on personal devices (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC037",
+    "learning_aim": "B",
+    "topic": "B2.2 Connectivity devices",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "Which device forwards data between different networks based on IP addresses?",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "A router"
+      },
+      {
+        "label": "B",
+        "text": "A switch"
+      },
+      {
+        "label": "C",
+        "text": "A hub"
+      },
+      {
+        "label": "D",
+        "text": "A repeater"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "A router connects networks and routes traffic between them using IP addressing.",
+      "points": [
+        "A: A router (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC038",
+    "learning_aim": "B",
+    "topic": "B2.2 Connectivity devices",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "Which device connects devices within a single network by forwarding frames based on MAC addresses?",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "A switch"
+      },
+      {
+        "label": "B",
+        "text": "A router"
+      },
+      {
+        "label": "C",
+        "text": "A modem"
+      },
+      {
+        "label": "D",
+        "text": "A hub"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "A switch forwards frames at layer 2 within a LAN based on MAC addresses.",
+      "points": [
+        "A: A switch (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC039",
+    "learning_aim": "B",
+    "topic": "B2.3 Connection media",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "Which fibre optic advantage is most relevant to security?",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "It is difficult to tap without detection"
+      },
+      {
+        "label": "B",
+        "text": "It is cheaper than copper"
+      },
+      {
+        "label": "C",
+        "text": "It is easier to bend"
+      },
+      {
+        "label": "D",
+        "text": "It carries electricity to devices"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "Fibre is hard to tap covertly and immune to electromagnetic interference.",
+      "points": [
+        "A: It is difficult to tap without detection (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC040",
+    "learning_aim": "B",
+    "topic": "B3.1 TCP/IP",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "Which layer of the TCP/IP model deals with end-to-end communication and reliability (TCP/UDP)?",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "Transport layer"
+      },
+      {
+        "label": "B",
+        "text": "Application layer"
+      },
+      {
+        "label": "C",
+        "text": "Internet layer"
+      },
+      {
+        "label": "D",
+        "text": "Network Access layer"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "TCP and UDP operate at the Transport layer.",
+      "points": [
+        "A: Transport layer (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC041",
+    "learning_aim": "B",
+    "topic": "B3.2 Ports & protocols",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "Which protocol and port are used for HTTPS?",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "TCP port 443"
+      },
+      {
+        "label": "B",
+        "text": "TCP port 80"
+      },
+      {
+        "label": "C",
+        "text": "UDP port 53"
+      },
+      {
+        "label": "D",
+        "text": "TCP port 22"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "HTTPS uses TCP port 443.",
+      "points": [
+        "A: TCP port 443 (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC042",
+    "learning_aim": "B",
+    "topic": "B3.2 Ports & protocols",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "Which protocol is connectionless and used for DNS queries?",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "UDP"
+      },
+      {
+        "label": "B",
+        "text": "TCP"
+      },
+      {
+        "label": "C",
+        "text": "IPSec"
+      },
+      {
+        "label": "D",
+        "text": "SMTP"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "DNS commonly uses UDP on port 53 for fast, connectionless queries.",
+      "points": [
+        "A: UDP (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC043",
+    "learning_aim": "B",
+    "topic": "B3.3 IP addressing",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "Which IP address is the loopback address?",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "127.0.0.1"
+      },
+      {
+        "label": "B",
+        "text": "192.168.1.1"
+      },
+      {
+        "label": "C",
+        "text": "10.0.0.1"
+      },
+      {
+        "label": "D",
+        "text": "169.254.0.1"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "127.0.0.1 is the loopback address referring to the local machine.",
+      "points": [
+        "A: 127.0.0.1 (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC044",
+    "learning_aim": "B",
+    "topic": "B3.3 IP addressing",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "Which range is used for Automatic Private IP Addressing (APIPA)?",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "169.254.x.x"
+      },
+      {
+        "label": "B",
+        "text": "127.0.0.x"
+      },
+      {
+        "label": "C",
+        "text": "10.0.0.x"
+      },
+      {
+        "label": "D",
+        "text": "192.168.1.x"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "APIPA addresses are in the 169.254.0.0/16 range.",
+      "points": [
+        "A: 169.254.x.x (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC045",
+    "learning_aim": "B",
+    "topic": "B3.4 DNS",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "Which technology adds digital signatures to DNS to prevent poisoning?",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "DNSSEC"
+      },
+      {
+        "label": "B",
+        "text": "DHCP"
+      },
+      {
+        "label": "C",
+        "text": "NAT"
+      },
+      {
+        "label": "D",
+        "text": "RDP"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "DNSSEC signs DNS records to verify authenticity.",
+      "points": [
+        "A: DNSSEC (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC046",
+    "learning_aim": "B",
+    "topic": "B3.5 DHCP",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "Which process describes how a client obtains an IP address from DHCP?",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "Discover, Offer, Request, Ack (DORA)"
+      },
+      {
+        "label": "B",
+        "text": "Sync, Send, Receive"
+      },
+      {
+        "label": "C",
+        "text": "Hello, Hello, Wave"
+      },
+      {
+        "label": "D",
+        "text": "Connect, Authenticate, Authorise"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "DHCP uses the DORA process: Discover, Offer, Request, Acknowledge.",
+      "points": [
+        "A: Discover, Offer, Request, Ack (DORA) (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC047",
+    "learning_aim": "B",
+    "topic": "B3.6 Authentication services",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "Which protocol centralises authentication, authorisation and accounting (AAA) on a network?",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "RADIUS"
+      },
+      {
+        "label": "B",
+        "text": "HTTP"
+      },
+      {
+        "label": "C",
+        "text": "SMTP"
+      },
+      {
+        "label": "D",
+        "text": "DNS"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "RADIUS provides centralised AAA for network access.",
+      "points": [
+        "A: RADIUS (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC048",
+    "learning_aim": "B",
+    "topic": "B3.7 Directory services",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "Which is a directory service that stores user accounts and passwords centrally?",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "Active Directory"
+      },
+      {
+        "label": "B",
+        "text": "A firewall"
+      },
+      {
+        "label": "C",
+        "text": "A load balancer"
+      },
+      {
+        "label": "D",
+        "text": "IPSec"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "Active Directory is a directory service managing authentication and user accounts.",
+      "points": [
+        "A: Active Directory (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC049",
+    "learning_aim": "B",
+    "topic": "B3.8 Routing",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "Which routing protocol is used to route between autonomous systems on the internet (an EGP)?",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "BGP"
+      },
+      {
+        "label": "B",
+        "text": "RIP"
+      },
+      {
+        "label": "C",
+        "text": "OSPF"
+      },
+      {
+        "label": "D",
+        "text": "EIGRP"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "BGP is the exterior gateway protocol used between autonomous systems on the internet.",
+      "points": [
+        "A: BGP (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC050",
+    "learning_aim": "B",
+    "topic": "B3.9 Remote access",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "Which term best describes a secure encrypted tunnel for remote access?",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "VPN"
+      },
+      {
+        "label": "B",
+        "text": "DNS"
+      },
+      {
+        "label": "C",
+        "text": "NAT"
+      },
+      {
+        "label": "D",
+        "text": "ARP"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "A Virtual Private Network encrypts a tunnel for secure remote access.",
+      "points": [
+        "A: VPN (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC051",
+    "learning_aim": "C",
+    "topic": "C1.1 Incident Response Lifecycle",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "Which is the FIRST phase of the NIST incident response lifecycle?",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "Preparation"
+      },
+      {
+        "label": "B",
+        "text": "Containment"
+      },
+      {
+        "label": "C",
+        "text": "Recovery"
+      },
+      {
+        "label": "D",
+        "text": "Detection"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "Preparation comes first; you must be ready before an incident occurs.",
+      "points": [
+        "A: Preparation (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC052",
+    "learning_aim": "C",
+    "topic": "C1.3 Containment",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "Which containment strategy involves isolating an affected system from the network?",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "Network segmentation/quarantine"
+      },
+      {
+        "label": "B",
+        "text": "Deleting the operating system"
+      },
+      {
+        "label": "C",
+        "text": "Increasing CPU speed"
+      },
+      {
+        "label": "D",
+        "text": "Disabling the firewall"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "Isolating (segmenting) the infected device prevents the incident spreading.",
+      "points": [
+        "A: Network segmentation/quarantine (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC053",
+    "learning_aim": "C",
+    "topic": "C1.7 Business continuity",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "Which metric defines the maximum acceptable downtime before business functions must be restored?",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "Recovery Time Objective (RTO)"
+      },
+      {
+        "label": "B",
+        "text": "Recovery Point Objective (RPO)"
+      },
+      {
+        "label": "C",
+        "text": "Mean Time to Detect (MTTD)"
+      },
+      {
+        "label": "D",
+        "text": "Latency"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "RTO is the maximum acceptable time to restore services after disruption.",
+      "points": [
+        "A: Recovery Time Objective (RTO) (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC054",
+    "learning_aim": "C",
+    "topic": "C1.7 Business continuity",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "Which metric defines the maximum age of data that must be recoverable?",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "Recovery Point Objective (RPO)"
+      },
+      {
+        "label": "B",
+        "text": "Recovery Time Objective (RTO)"
+      },
+      {
+        "label": "C",
+        "text": "Throughput"
+      },
+      {
+        "label": "D",
+        "text": "Latency"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "RPO defines the maximum acceptable data loss measured in time.",
+      "points": [
+        "A: Recovery Point Objective (RPO) (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC055",
+    "learning_aim": "C",
+    "topic": "C2.1 Forensic principles",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "To maintain evidence integrity, investigators should:",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "Maintain a documented chain of custody"
+      },
+      {
+        "label": "B",
+        "text": "Work only from the original drive"
+      },
+      {
+        "label": "C",
+        "text": "Power down a server instantly"
+      },
+      {
+        "label": "D",
+        "text": "Ignore hashing"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "A chain of custody documents every transfer and handler of the evidence.",
+      "points": [
+        "A: Maintain a documented chain of custody (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC056",
+    "learning_aim": "C",
+    "topic": "C2.2 Evidence types",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "Which is an example of VOLATILE evidence that is lost on shutdown?",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "Data in RAM / running processes"
+      },
+      {
+        "label": "B",
+        "text": "Hard drive files"
+      },
+      {
+        "label": "C",
+        "text": "DVD content"
+      },
+      {
+        "label": "D",
+        "text": "Log files on disk"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "Volatile evidence in memory (RAM) is lost when the machine powers off.",
+      "points": [
+        "A: Data in RAM / running processes (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC057",
+    "learning_aim": "C",
+    "topic": "C2.3 Forensic acquisition",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "To create a byte-for-byte copy of a drive for analysis, investigators use:",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "Disk imaging"
+      },
+      {
+        "label": "B",
+        "text": "A screenshot"
+      },
+      {
+        "label": "C",
+        "text": "A spreadsheet export"
+      },
+      {
+        "label": "D",
+        "text": "A PDF print"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "Disk imaging creates an exact forensic copy, analysed in place of the original.",
+      "points": [
+        "A: Disk imaging (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC058",
+    "learning_aim": "C",
+    "topic": "C2.3 Forensic acquisition",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "Which device prevents writes to a source drive during imaging?",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "A write blocker"
+      },
+      {
+        "label": "B",
+        "text": "A router"
+      },
+      {
+        "label": "C",
+        "text": "A UPS"
+      },
+      {
+        "label": "D",
+        "text": "A modem"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "A write blocker prevents any modification of the original evidence.",
+      "points": [
+        "A: A write blocker (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC059",
+    "learning_aim": "C",
+    "topic": "C2.4 Analysis techniques",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "Which technique recovers deleted files by extracting them from raw disk data?",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "File carving"
+      },
+      {
+        "label": "B",
+        "text": "Firewall policy"
+      },
+      {
+        "label": "C",
+        "text": "Network switching"
+      },
+      {
+        "label": "D",
+        "text": "Backup rotation"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "File carving reconstructs files from raw blocks without filesystem metadata.",
+      "points": [
+        "A: File carving (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC060",
+    "learning_aim": "C",
+    "topic": "C2.5 Forensic tools",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "Which tool is primarily used for analysis of memory (RAM) dumps?",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "Volatility"
+      },
+      {
+        "label": "B",
+        "text": "Wireshark"
+      },
+      {
+        "label": "C",
+        "text": "Nmap"
+      },
+      {
+        "label": "D",
+        "text": "FTK Imager"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "Volatility is a leading memory forensics framework.",
+      "points": [
+        "A: Volatility (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC061",
+    "learning_aim": "D",
+    "topic": "D1.1 Vulnerability assessment",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "A scan result that flags a vulnerability that does not actually exist is called:",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "A false positive"
+      },
+      {
+        "label": "B",
+        "text": "A false negative"
+      },
+      {
+        "label": "C",
+        "text": "A true positive"
+      },
+      {
+        "label": "D",
+        "text": "A zero-day"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "A false positive is a scan result that wrongly reports a vulnerability.",
+      "points": [
+        "A: A false positive (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC062",
+    "learning_aim": "D",
+    "topic": "D1.1 Vulnerability assessment",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "CVSS is used to:",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "Score the severity of a vulnerability"
+      },
+      {
+        "label": "B",
+        "text": "Block phishing emails"
+      },
+      {
+        "label": "C",
+        "text": "Encrypt hard drives"
+      },
+      {
+        "label": "D",
+        "text": "Route network traffic"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "The Common Vulnerability Scoring System rates vulnerability severity.",
+      "points": [
+        "A: Score the severity of a vulnerability (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC063",
+    "learning_aim": "D",
+    "topic": "D1.2 Penetration testing",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "Which form of penetration test gives the tester full knowledge of the system?",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "White-box testing"
+      },
+      {
+        "label": "B",
+        "text": "Black-box testing"
+      },
+      {
+        "label": "C",
+        "text": "Grey-box testing"
+      },
+      {
+        "label": "D",
+        "text": "Social engineering"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "White-box (known-environment) testing gives full system knowledge.",
+      "points": [
+        "A: White-box testing (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC064",
+    "learning_aim": "D",
+    "topic": "D1.2 Penetration testing",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "A penetration test performed with no prior knowledge of the system is:",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "Black-box testing"
+      },
+      {
+        "label": "B",
+        "text": "White-box testing"
+      },
+      {
+        "label": "C",
+        "text": "Grey-box testing"
+      },
+      {
+        "label": "D",
+        "text": "Unit testing"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "Black-box testing simulates an external attacker with no system knowledge.",
+      "points": [
+        "A: Black-box testing (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC065",
+    "learning_aim": "D",
+    "topic": "D1.3 Testing methodologies",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "Which list documents the top web application security risks?",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "OWASP Top 10"
+      },
+      {
+        "label": "B",
+        "text": "ISO 27001"
+      },
+      {
+        "label": "C",
+        "text": "Cyber Essentials"
+      },
+      {
+        "label": "D",
+        "text": "PTES"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "OWASP publishes the Top 10 web application security risks.",
+      "points": [
+        "A: OWASP Top 10 (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC066",
+    "learning_aim": "D",
+    "topic": "D1.5 Code review",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "Static application security testing (SAST) analyses:",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "Source code without executing it"
+      },
+      {
+        "label": "B",
+        "text": "A running application"
+      },
+      {
+        "label": "C",
+        "text": "Network traffic only"
+      },
+      {
+        "label": "D",
+        "text": "Physical devices"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "SAST inspects source code statically; DAST tests a running application.",
+      "points": [
+        "A: Source code without executing it (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC067",
+    "learning_aim": "D",
+    "topic": "D2.1 Monitoring",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "Which system automatically detects AND blocks malicious traffic in real time?",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "Intrusion Prevention System (IPS)"
+      },
+      {
+        "label": "B",
+        "text": "Intrusion Detection System (IDS) only"
+      },
+      {
+        "label": "C",
+        "text": "A modem"
+      },
+      {
+        "label": "D",
+        "text": "A biometric scanner"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "An IPS detects and actively blocks threats, whereas an IDS only alerts.",
+      "points": [
+        "A: Intrusion Prevention System (IPS) (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC068",
+    "learning_aim": "D",
+    "topic": "D2.2 SIEM",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "What does SIEM primarily do?",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "Aggregates and correlates logs from many sources to detect threats"
+      },
+      {
+        "label": "B",
+        "text": "Scans for open ports"
+      },
+      {
+        "label": "C",
+        "text": "Encrypts emails"
+      },
+      {
+        "label": "D",
+        "text": "Supplies power to servers"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "A SIEM centralises and correlates log data for security monitoring and alerting.",
+      "points": [
+        "A: Aggregates and correlates logs from many sources to detect threats (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC069",
+    "learning_aim": "D",
+    "topic": "D2.4 Network monitoring",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "Which tool captures and analyses individual network packets?",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "Wireshark"
+      },
+      {
+        "label": "B",
+        "text": "Nmap"
+      },
+      {
+        "label": "C",
+        "text": "Antivirus"
+      },
+      {
+        "label": "D",
+        "text": "A firewall"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "Wireshark captures and inspects network packets.",
+      "points": [
+        "A: Wireshark (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC070",
+    "learning_aim": "D",
+    "topic": "D2.6 Security metrics",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "Mean Time to Detect (MTTD) measures:",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "The average time taken to detect a security incident"
+      },
+      {
+        "label": "B",
+        "text": "The average time to respond"
+      },
+      {
+        "label": "C",
+        "text": "The size of a hard drive"
+      },
+      {
+        "label": "D",
+        "text": "The number of employees"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "MTTD is the average time from incident onset to detection.",
+      "points": [
+        "A: The average time taken to detect a security incident (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC071",
+    "learning_aim": "D",
+    "topic": "D2.6 Security metrics",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "Mean Time to Respond (MTTR) measures:",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "The average time to respond to and remediate an incident"
+      },
+      {
+        "label": "B",
+        "text": "The time to detect an incident"
+      },
+      {
+        "label": "C",
+        "text": "The backup window"
+      },
+      {
+        "label": "D",
+        "text": "The latency of a switch"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "MTTR measures the average time taken to respond to and resolve an incident.",
+      "points": [
+        "A: The average time to respond to and remediate an incident (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC072",
+    "learning_aim": "A",
+    "topic": "A4.2 Data protection",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "Which backup type is the fastest to create but requires all previous backups to restore?",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "Incremental backup"
+      },
+      {
+        "label": "B",
+        "text": "Full backup"
+      },
+      {
+        "label": "C",
+        "text": "Differential backup"
+      },
+      {
+        "label": "D",
+        "text": "Image backup"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "Incremental backups store changes since the last backup; restoring needs all prior ones.",
+      "points": [
+        "A: Incremental backup (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC073",
+    "learning_aim": "A",
+    "topic": "A4.2 Data protection",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "Which RAID level mirrors data across two drives for redundancy?",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "RAID 1"
+      },
+      {
+        "label": "B",
+        "text": "RAID 0"
+      },
+      {
+        "label": "C",
+        "text": "RAID 5"
+      },
+      {
+        "label": "D",
+        "text": "RAID 10"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "RAID 1 mirrors data across two drives.",
+      "points": [
+        "A: RAID 1 (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC074",
+    "learning_aim": "B",
+    "topic": "B3.3 IP addressing",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "Which address range is used for Automatic Private IP Addressing (APIPA)?",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "169.254.x.x"
+      },
+      {
+        "label": "B",
+        "text": "10.0.0.x"
+      },
+      {
+        "label": "C",
+        "text": "192.168.1.x"
+      },
+      {
+        "label": "D",
+        "text": "127.0.0.x"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "APIPA addresses fall in the 169.254.0.0/16 range.",
+      "points": [
+        "A: 169.254.x.x (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC075",
+    "learning_aim": "B",
+    "topic": "B3.2 Ports and protocols",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "Which protocol is connectionless and commonly used for DNS queries?",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "UDP"
+      },
+      {
+        "label": "B",
+        "text": "TCP"
+      },
+      {
+        "label": "C",
+        "text": "IPSec"
+      },
+      {
+        "label": "D",
+        "text": "SMTP"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "DNS commonly uses UDP for fast, connectionless queries.",
+      "points": [
+        "A: UDP (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC076",
+    "learning_aim": "D",
+    "topic": "D1.2 Pen testing",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "A penetration test performed with NO prior knowledge of the system is:",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "Black-box testing"
+      },
+      {
+        "label": "B",
+        "text": "White-box testing"
+      },
+      {
+        "label": "C",
+        "text": "Grey-box testing"
+      },
+      {
+        "label": "D",
+        "text": "Unit testing"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "Black-box testing simulates an external attacker with no prior knowledge.",
+      "points": [
+        "A: Black-box testing (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC077",
+    "learning_aim": "D",
+    "topic": "D1.1 Vulnerability assessment",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "A scan result that misses a real vulnerability is called a:",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "False negative"
+      },
+      {
+        "label": "B",
+        "text": "False positive"
+      },
+      {
+        "label": "C",
+        "text": "True positive"
+      },
+      {
+        "label": "D",
+        "text": "True negative"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "A false negative is a real vulnerability that the scanner failed to report.",
+      "points": [
+        "A: False negative (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC078",
+    "learning_aim": "C",
+    "topic": "C1.3 Containment",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "Which is an example of short-term containment?",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "Disconnecting an infected device from the network"
+      },
+      {
+        "label": "B",
+        "text": "Buying a new server"
+      },
+      {
+        "label": "C",
+        "text": "Writing a new policy"
+      },
+      {
+        "label": "D",
+        "text": "Running a penetration test"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "Short-term containment is immediate action such as isolating the affected device.",
+      "points": [
+        "A: Disconnecting an infected device from the network (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC079",
+    "learning_aim": "C",
+    "topic": "C2.3 Forensic acquisition",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "Which device prevents writes to a source drive during imaging?",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "A write blocker"
+      },
+      {
+        "label": "B",
+        "text": "A router"
+      },
+      {
+        "label": "C",
+        "text": "A modem"
+      },
+      {
+        "label": "D",
+        "text": "A UPS"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "A write blocker prevents any modification of the original evidence.",
+      "points": [
+        "A: A write blocker (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC080",
+    "learning_aim": "D",
+    "topic": "D2.1 IDS/IPS",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "Which action distinguishes an IPS from an IDS?",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "It can actively block malicious traffic"
+      },
+      {
+        "label": "B",
+        "text": "It only records logs"
+      },
+      {
+        "label": "C",
+        "text": "It is a physical lock"
+      },
+      {
+        "label": "D",
+        "text": "It encrypts data"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "An IPS is inline and can block traffic; an IDS only detects and alerts.",
+      "points": [
+        "A: It can actively block malicious traffic (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC081",
+    "learning_aim": "D",
+    "topic": "D2.2 SIEM",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "Why is log correlation useful in a SIEM?",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "It spots threats spread across multiple systems"
+      },
+      {
+        "label": "B",
+        "text": "It speeds up the CPU"
+      },
+      {
+        "label": "C",
+        "text": "It encrypts emails"
+      },
+      {
+        "label": "D",
+        "text": "It removes hard drives"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "Correlating logs across systems reveals multi-step attacks.",
+      "points": [
+        "A: It spots threats spread across multiple systems (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC082",
+    "learning_aim": "A",
+    "topic": "A2.1 Software vulnerabilities",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "Which is an example of a zero-day?",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "An unknown vulnerability with no patch at exploitation time"
+      },
+      {
+        "label": "B",
+        "text": "A patched vulnerability"
+      },
+      {
+        "label": "C",
+        "text": "A misconfigured firewall"
+      },
+      {
+        "label": "D",
+        "text": "A weak password"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "A zero-day is unknown to the vendor with no patch when exploited.",
+      "points": [
+        "A: An unknown vulnerability with no patch at exploitation time (1)"
+      ]
+    }
+  },
+  {
+    "id": "MC083",
+    "learning_aim": "B",
+    "topic": "B2.2 Connectivity devices",
+    "command_verb": "Identify",
+    "marks": 1,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "Which device connects devices within a single network by forwarding frames on MAC addresses?",
+    "guidance": "(1)",
+    "type": "multiple_choice",
+    "options": [
+      {
+        "label": "A",
+        "text": "A switch"
+      },
+      {
+        "label": "B",
+        "text": "A router"
+      },
+      {
+        "label": "C",
+        "text": "A modem"
+      },
+      {
+        "label": "D",
+        "text": "A repeater"
+      }
+    ],
+    "mark_scheme": {
+      "instruction": "Award one mark for the correct option.",
+      "answer": "A",
+      "explanation": "A switch forwards frames at layer 2 within a LAN using MAC addresses.",
+      "points": [
+        "A: A switch (1)"
+      ]
+    }
+  }
+]

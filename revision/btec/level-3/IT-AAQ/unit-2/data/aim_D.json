@@ -28,8 +28,8 @@
     "mark_scheme": {
       "instruction": "Award up to three marks.",
       "points": [
-        "A false positive occurs when a vulnerability scanner reports a vulnerability that does not actually exist \u00e2\u20ac\u201d wasting security team time investigating non-issues (1)",
-        "A false negative occurs when a scanner fails to detect a vulnerability that does exist \u00e2\u20ac\u201d creating a false sense of security; this is more dangerous as it leaves real vulnerabilities unaddressed (1)",
+        "A false positive occurs when a vulnerability scanner reports a vulnerability that does not actually exist â€” wasting security team time investigating non-issues (1)",
+        "A false negative occurs when a scanner fails to detect a vulnerability that does exist â€” creating a false sense of security; this is more dangerous as it leaves real vulnerabilities unaddressed (1)",
         "Regular scanning with multiple tools, manual verification of results, and keeping scanners updated with the latest vulnerability signatures helps reduce both types of errors (1)"
       ]
     }
@@ -47,9 +47,9 @@
     "mark_scheme": {
       "instruction": "Award up to two marks.",
       "points": [
-        "Black box: the tester has no prior knowledge of the system \u00e2\u20ac\u201d simulates an external attacker starting from scratch (1)",
-        "White box: the tester has full knowledge including source code, network diagrams, and credentials \u00e2\u20ac\u201d simulates an insider threat or thorough audit (1)",
-        "Grey box: the tester has partial knowledge (e.g. a user account but no admin access) \u00e2\u20ac\u201d simulates an attacker who has gained some level of access (1)"
+        "Black box: the tester has no prior knowledge of the system â€” simulates an external attacker starting from scratch (1)",
+        "White box: the tester has full knowledge including source code, network diagrams, and credentials â€” simulates an insider threat or thorough audit (1)",
+        "Grey box: the tester has partial knowledge (e.g. a user account but no admin access) â€” simulates an attacker who has gained some level of access (1)"
       ],
       "additional_guidance": "Award 2 marks for any two types correctly described."
     }
@@ -66,7 +66,7 @@
     "mark_scheme": {
       "instruction": "Award one mark.",
       "points": [
-        "Open Web Application Security Project \u00e2\u20ac\u201d it publishes the OWASP Top 10, a regularly updated list of the most critical web application security risks, used as a standard for security testing (1)"
+        "Open Web Application Security Project â€” it publishes the OWASP Top 10, a regularly updated list of the most critical web application security risks, used as a standard for security testing (1)"
       ]
     }
   },
@@ -83,9 +83,9 @@
     "mark_scheme": {
       "instruction": "Award up to three marks.",
       "points": [
-        "SAST analyses source code, bytecode or binary code without executing the application \u00e2\u20ac\u201d it is a 'white box' approach that finds vulnerabilities early in development (1)",
-        "DAST tests the application while it is running \u00e2\u20ac\u201d it simulates attacks against the live application from the outside, a 'black box' approach that finds runtime vulnerabilities (1)",
-        "SAST finds issues like SQL injection in code before deployment; DAST finds issues like misconfiguration or authentication flaws that only appear when the application is running. Both are complementary \u00e2\u20ac\u201d SAST early in SDLC, DAST on deployed/staging environments (1)"
+        "SAST analyses source code, bytecode or binary code without executing the application â€” it is a 'white box' approach that finds vulnerabilities early in development (1)",
+        "DAST tests the application while it is running â€” it simulates attacks against the live application from the outside, a 'black box' approach that finds runtime vulnerabilities (1)",
+        "SAST finds issues like SQL injection in code before deployment; DAST finds issues like misconfiguration or authentication flaws that only appear when the application is running. Both are complementary â€” SAST early in SDLC, DAST on deployed/staging environments (1)"
       ]
     }
   },
@@ -102,8 +102,8 @@
     "mark_scheme": {
       "instruction": "Award up to two marks.",
       "points": [
-        "An IDS monitors network traffic and alerts administrators when suspicious activity is detected \u00e2\u20ac\u201d it does not take action to block traffic (passive) (1)",
-        "An IPS also monitors traffic but can actively block or drop malicious traffic in real time \u00e2\u20ac\u201d it sits inline in the network path and can prevent attacks before they reach the target (active) (1)"
+        "An IDS monitors network traffic and alerts administrators when suspicious activity is detected â€” it does not take action to block traffic (passive) (1)",
+        "An IPS also monitors traffic but can actively block or drop malicious traffic in real time â€” it sits inline in the network path and can prevent attacks before they reach the target (active) (1)"
       ]
     }
   },
@@ -121,9 +121,9 @@
     "mark_scheme": {
       "instruction": "Award up to four marks.",
       "points": [
-        "SIEM (Security Information and Event Management) collects and aggregates log data from multiple sources \u00e2\u20ac\u201d firewalls, servers, IDS/IPS, endpoints \u00e2\u20ac\u201d into a central platform (1)",
-        "It applies correlation rules to identify patterns that indicate security incidents \u00e2\u20ac\u201d e.g. multiple failed logins followed by successful login from an unusual location (1)",
-        "It generates real-time alerts for security teams, enabling faster detection and response to threats (reduces MTTD \u00e2\u20ac\u201d Mean Time to Detect) (1)",
+        "SIEM (Security Information and Event Management) collects and aggregates log data from multiple sources â€” firewalls, servers, IDS/IPS, endpoints â€” into a central platform (1)",
+        "It applies correlation rules to identify patterns that indicate security incidents â€” e.g. multiple failed logins followed by successful login from an unusual location (1)",
+        "It generates real-time alerts for security teams, enabling faster detection and response to threats (reduces MTTD â€” Mean Time to Detect) (1)",
         "SIEM dashboards provide visibility across the entire IT estate and support compliance reporting/auditing requirements (e.g. GDPR, PCI DSS log retention) (1)"
       ]
     }
@@ -142,7 +142,7 @@
       "instruction": "Award up to two marks.",
       "points": [
         "Discover: identify all assets and scan them for vulnerabilities using automated tools and manual assessment (1)",
-        "Assess and Prioritise: evaluate each vulnerability's severity (CVSS score) and the risk it poses to the specific organisation \u00e2\u20ac\u201d not all vulnerabilities are equally critical (1)",
+        "Assess and Prioritise: evaluate each vulnerability's severity (CVSS score) and the risk it poses to the specific organisation â€” not all vulnerabilities are equally critical (1)",
         "Remediate: apply patches, configuration changes or compensating controls to fix the highest-priority vulnerabilities (1)",
         "Verify and Report: confirm the fix was effective through rescanning, document actions taken, and report on the organisation's security posture (1)"
       ],
@@ -161,7 +161,7 @@
     "mark_scheme": {
       "instruction": "Award one mark for both.",
       "points": [
-        "MTTD: Mean Time to Detect \u00e2\u20ac\u201d the average time taken to discover a security incident. MTTR: Mean Time to Respond/Remediate \u00e2\u20ac\u201d the average time taken to respond to and resolve an incident once detected (1)"
+        "MTTD: Mean Time to Detect â€” the average time taken to discover a security incident. MTTR: Mean Time to Respond/Remediate â€” the average time taken to respond to and resolve an incident once detected (1)"
       ]
     }
   },
@@ -179,9 +179,9 @@
     "mark_scheme": {
       "instruction": "Award up to three marks.",
       "points": [
-        "Regular audits verify that security controls are implemented correctly and consistently across all systems \u00e2\u20ac\u201d identifying gaps before they can be exploited (1)",
-        "Continuous monitoring provides real-time visibility of the security posture \u00e2\u20ac\u201d detecting configuration drift where systems deviate from the secure baseline (1)",
-        "Both are essential for maintaining compliance certifications (ISO 27001, PCI DSS) \u00e2\u20ac\u201d failure to demonstrate ongoing compliance can result in fines, loss of certification, and inability to process card payments or bid for certain contracts (1)"
+        "Regular audits verify that security controls are implemented correctly and consistently across all systems â€” identifying gaps before they can be exploited (1)",
+        "Continuous monitoring provides real-time visibility of the security posture â€” detecting configuration drift where systems deviate from the secure baseline (1)",
+        "Both are essential for maintaining compliance certifications (ISO 27001, PCI DSS) â€” failure to demonstrate ongoing compliance can result in fines, loss of certification, and inability to process card payments or bid for certain contracts (1)"
       ]
     }
   },
@@ -199,10 +199,10 @@
     "mark_scheme": {
       "instruction": "Award up to four marks.",
       "points": [
-        "Reconnaissance \u2014 gather information about the target (domain names, IP ranges, employee details from OSINT) \u2014 both passive and active (1)",
-        "Scanning and enumeration \u2014 use tools (Nmap, Nessus) to identify open ports, running services, and potential vulnerabilities (1)",
-        "Exploitation \u2014 attempt to exploit identified vulnerabilities to gain access, escalate privileges, or exfiltrate test data (1)",
-        "Reporting \u2014 document all findings with risk ratings, evidence (screenshots/logs), and prioritised remediation recommendations for the client (1)"
+        "Reconnaissance — gather information about the target (domain names, IP ranges, employee details from OSINT) — both passive and active (1)",
+        "Scanning and enumeration — use tools (Nmap, Nessus) to identify open ports, running services, and potential vulnerabilities (1)",
+        "Exploitation — attempt to exploit identified vulnerabilities to gain access, escalate privileges, or exfiltrate test data (1)",
+        "Reporting — document all findings with risk ratings, evidence (screenshots/logs), and prioritised remediation recommendations for the client (1)"
       ]
     }
   },
@@ -220,10 +220,10 @@
     "mark_scheme": {
       "instruction": "Award up to four marks.",
       "points": [
-        "SIEM aggregates logs from ALL sources (firewalls, servers, endpoints, cloud) into one platform \u2014 manual review across hundreds of systems is impossible (1)",
-        "Correlation rules connect seemingly unrelated events \u2014 e.g. 5 failed logins + successful login + large data transfer from same IP = potential breach (1)",
-        "Real-time alerting means incidents are detected in minutes rather than days or weeks \u2014 reduces MTTD (Mean Time to Detect) (1)",
-        "Centralised dashboards provide visibility across all client environments simultaneously \u2014 a single analyst can monitor multiple clients (1)"
+        "SIEM aggregates logs from ALL sources (firewalls, servers, endpoints, cloud) into one platform — manual review across hundreds of systems is impossible (1)",
+        "Correlation rules connect seemingly unrelated events — e.g. 5 failed logins + successful login + large data transfer from same IP = potential breach (1)",
+        "Real-time alerting means incidents are detected in minutes rather than days or weeks — reduces MTTD (Mean Time to Detect) (1)",
+        "Centralised dashboards provide visibility across all client environments simultaneously — a single analyst can monitor multiple clients (1)"
       ]
     }
   },
@@ -240,9 +240,9 @@
     "mark_scheme": {
       "instruction": "Award up to three marks.",
       "points": [
-        "Discover all assets and scan for vulnerabilities \u2014 new vulnerabilities are discovered daily, so scanning must be continuous (1)",
-        "Assess and prioritise based on CVSS severity and organisational risk \u2014 internet-facing critical vulnerabilities must be patched first (1)",
-        "Remediate (patch, reconfigure), verify (rescan to confirm), and report \u2014 the cycle repeats because new vulnerabilities are constantly discovered (1)"
+        "Discover all assets and scan for vulnerabilities — new vulnerabilities are discovered daily, so scanning must be continuous (1)",
+        "Assess and prioritise based on CVSS severity and organisational risk — internet-facing critical vulnerabilities must be patched first (1)",
+        "Remediate (patch, reconfigure), verify (rescan to confirm), and report — the cycle repeats because new vulnerabilities are constantly discovered (1)"
       ]
     }
   },
@@ -259,10 +259,387 @@
     "mark_scheme": {
       "instruction": "Award up to four marks.",
       "points": [
-        "SAST analyses source code without executing the application (white box) \u2014 finds vulnerabilities early in development like SQL injection or buffer overflows (1)",
-        "DAST tests the running application from outside (black box) \u2014 finds runtime vulnerabilities like misconfigurations or authentication flaws (1)",
+        "SAST analyses source code without executing the application (white box) — finds vulnerabilities early in development like SQL injection or buffer overflows (1)",
+        "DAST tests the running application from outside (black box) — finds runtime vulnerabilities like misconfigurations or authentication flaws (1)",
         "SAST provides detailed code-level findings with exact line numbers but may produce false positives (1)",
-        "DAST simulates real attacks and produces fewer false positives but cannot see the code \u2014 the two are complementary and should be used together (1)"
+        "DAST simulates real attacks and produces fewer false positives but cannot see the code — the two are complementary and should be used together (1)"
+      ]
+    }
+  },
+  {
+    "id": "D015",
+    "learning_aim": "D",
+    "topic": "D1.1 Vulnerability assessment",
+    "command_verb": "Explain",
+    "marks": 3,
+    "ao": "AO2",
+    "scenario": "",
+    "question": "Explain what a vulnerability scanner does.",
+    "guidance": "(3)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award up to 3 marks.",
+      "points": [
+        "It automatically scans systems, ports and services for known vulnerabilities (1)",
+        "It compares results against a database of known CVEs and configuration issues (1)",
+        "It reports weaknesses to be prioritised for remediation (1)"
+      ]
+    }
+  },
+  {
+    "id": "D016",
+    "learning_aim": "D",
+    "topic": "D1.1 Vulnerability assessment",
+    "command_verb": "Explain",
+    "marks": 3,
+    "ao": "AO2",
+    "scenario": "A scanner might misreport a vulnerability that does not actually exist.",
+    "question": "Describe what a false positive is and why it is a problem when prioritising findings.",
+    "guidance": "(3)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award up to 3 marks.",
+      "points": [
+        "A false positive is a scan result that wrongly reports a vulnerability that does not really exist (1)",
+        "It wastes time and resources investigating and fixing issues that are not real (1)",
+        "It can mask genuine findings if the team becomes desensitised to unreliable results (1)"
+      ]
+    }
+  },
+  {
+    "id": "D017",
+    "learning_aim": "D",
+    "topic": "D1.1 Vulnerability assessment",
+    "command_verb": "Explain",
+    "marks": 3,
+    "ao": "AO2",
+    "scenario": "",
+    "question": "Describe what CVSS scoring is used for.",
+    "guidance": "(3)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award up to 3 marks.",
+      "points": [
+        "CVSS (Common Vulnerability Scoring System) provides a standard severity score for a vulnerability (1)",
+        "It rates severity from 0 to 10 based on exploitability and impact (1)",
+        "It helps organisations prioritise which vulnerabilities to remediate first (1)"
+      ]
+    }
+  },
+  {
+    "id": "D018",
+    "learning_aim": "D",
+    "topic": "D1.2 Pen testing",
+    "command_verb": "Explain",
+    "marks": 3,
+    "ao": "AO2",
+    "scenario": "An organisation hires a tester who is given no prior knowledge of the systems.",
+    "question": "Explain the difference between black-box and white-box penetration testing.",
+    "guidance": "(3)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award up to 3 marks.",
+      "points": [
+        "Black-box testing gives the tester no prior knowledge, simulating an external attacker (1)",
+        "White-box testing gives full knowledge of the system, allowing a thorough internal review (1)",
+        "White-box usually finds more issues but takes longer; black-box better reflects real external attacks (1)"
+      ]
+    }
+  },
+  {
+    "id": "D019",
+    "learning_aim": "D",
+    "topic": "D1.2 Pen testing",
+    "command_verb": "Describe",
+    "marks": 3,
+    "ao": "AO2",
+    "scenario": "",
+    "question": "Describe the main phases of a penetration test.",
+    "guidance": "(3)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award up to 3 marks.",
+      "points": [
+        "Reconnaissance - gathering information about the target (1)",
+        "Scanning/exploitation - finding and exploiting vulnerabilities to gain access (1)",
+        "Post-exploitation and reporting - documenting findings and recommending fixes (1)"
+      ]
+    }
+  },
+  {
+    "id": "D020",
+    "learning_aim": "D",
+    "topic": "D1.3 Testing methodologies",
+    "command_verb": "Describe",
+    "marks": 2,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "State what OSSTMM and OWASP each provide.",
+    "guidance": "(2)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award up to 2 marks.",
+      "points": [
+        "OSSTMM is a methodology for security testing and analysis (1)",
+        "OWASP provides the Top 10 list of web application security risks and resources (1)"
+      ]
+    }
+  },
+  {
+    "id": "D021",
+    "learning_aim": "D",
+    "topic": "D1.4 Social engineering testing",
+    "command_verb": "Explain",
+    "marks": 3,
+    "ao": "AO2",
+    "scenario": "An organisation wants to test staff awareness without causing real harm.",
+    "question": "Explain what social engineering testing involves.",
+    "guidance": "(3)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award up to 3 marks.",
+      "points": [
+        "It simulates attacks such as phishing emails, USB drops or pretexting to test staff (1)",
+        "It measures how likely staff are to fall for such attacks (1)",
+        "Results inform training; tests must be ethical and controlled (1)"
+      ]
+    }
+  },
+  {
+    "id": "D022",
+    "learning_aim": "D",
+    "topic": "D1.5 Code review",
+    "command_verb": "Explain",
+    "marks": 3,
+    "ao": "AO2",
+    "scenario": "A developer tests a web application for security issues in its source code.",
+    "question": "Describe the difference between static (SAST) and dynamic (DAST) application security testing.",
+    "guidance": "(3)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award up to 3 marks.",
+      "points": [
+        "SAST analyses source code statically without running the application (1)",
+        "DAST tests the running application by sending inputs to find vulnerabilities (1)",
+        "Using both provides broader coverage of security flaws (1)"
+      ]
+    }
+  },
+  {
+    "id": "D023",
+    "learning_aim": "D",
+    "topic": "D1.5 Code review",
+    "command_verb": "Explain",
+    "marks": 3,
+    "ao": "AO2",
+    "scenario": "",
+    "question": "Explain why code review helps identify security defects.",
+    "guidance": "(3)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award up to 3 marks.",
+      "points": [
+        "Manual code review allows a developer to spot insecure coding patterns (1)",
+        "It can detect issues such as unvalidated input, hard-coded credentials or weak logic (1)",
+        "It supplements automated tools and catches flaws automation may miss (1)"
+      ]
+    }
+  },
+  {
+    "id": "D024",
+    "learning_aim": "D",
+    "topic": "D2.1 IDS/IPS",
+    "command_verb": "Explain",
+    "marks": 3,
+    "ao": "AO2",
+    "scenario": "",
+    "question": "Describe the difference between an intrusion detection system (IDS) and an intrusion prevention system (IPS).",
+    "guidance": "(3)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award up to 3 marks.",
+      "points": [
+        "An IDS monitors and alerts on suspicious activity but does not block it (1)",
+        "An IPS detects and automatically blocks/prevents the malicious activity (1)",
+        "An IPS is placed inline so it can act on traffic in real time (1)"
+      ]
+    }
+  },
+  {
+    "id": "D025",
+    "learning_aim": "D",
+    "topic": "D2.1 IDS/IPS",
+    "command_verb": "Explain",
+    "marks": 3,
+    "ao": "AO2",
+    "scenario": "",
+    "question": "Explain what a host-based intrusion detection system (HIDS) monitors.",
+    "guidance": "(3)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award up to 3 marks.",
+      "points": [
+        "A HIDS monitors activity on a single host/endpoint (1)",
+        "It checks logs, file integrity and system calls for suspicious behaviour (1)",
+        "It detects tampering or malware on that specific device (1)"
+      ]
+    }
+  },
+  {
+    "id": "D026",
+    "learning_aim": "D",
+    "topic": "D2.2 SIEM",
+    "command_verb": "Explain",
+    "marks": 3,
+    "ao": "AO2",
+    "scenario": "A SOC must centralise security data from many sources.",
+    "question": "Describe the purpose of a SIEM.",
+    "guidance": "(3)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award up to 3 marks.",
+      "points": [
+        "A SIEM aggregates and correlates logs/security data from many sources (1)",
+        "It applies correlation rules to detect potential threats and suspicious patterns (1)",
+        "It provides dashboards and alerts for the security operations team (1)"
+      ]
+    }
+  },
+  {
+    "id": "D027",
+    "learning_aim": "D",
+    "topic": "D2.3 Log management",
+    "command_verb": "State",
+    "marks": 2,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "State two types of log used in security monitoring.",
+    "guidance": "(2)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award up to 2 marks.",
+      "points": [
+        "System/access logs and application logs (1)",
+        "Also accept: security/audit logs, network/firewall logs, authentication logs (1)"
+      ]
+    }
+  },
+  {
+    "id": "D028",
+    "learning_aim": "D",
+    "topic": "D2.3 Log management",
+    "command_verb": "Explain",
+    "marks": 3,
+    "ao": "AO2",
+    "scenario": "An organisation is deciding how long to keep security logs.",
+    "question": "Explain why log retention is important.",
+    "guidance": "(3)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award up to 3 marks.",
+      "points": [
+        "Logs are needed to investigate incidents after they happen (1)",
+        "Regulatory and compliance requirements may mandate a minimum retention period (1)",
+        "Longer retention supports forensic analysis but must balance storage cost and privacy (1)"
+      ]
+    }
+  },
+  {
+    "id": "D029",
+    "learning_aim": "D",
+    "topic": "D2.4 Network monitoring",
+    "command_verb": "Explain",
+    "marks": 3,
+    "ao": "AO2",
+    "scenario": "A network analyst captures traffic during a suspected breach.",
+    "question": "Describe what packet capture reveals about network traffic.",
+    "guidance": "(3)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award up to 3 marks.",
+      "points": [
+        "It reveals the content and metadata of packets such as source/destination and protocol (1)",
+        "It can show connections to malicious IPs, data exfiltration or unusual activity (1)",
+        "Tools such as Wireshark analyse captured packets (1)"
+      ]
+    }
+  },
+  {
+    "id": "D030",
+    "learning_aim": "D",
+    "topic": "D2.4 Network monitoring",
+    "command_verb": "Explain",
+    "marks": 3,
+    "ao": "AO2",
+    "scenario": "",
+    "question": "Explain what NetFlow is used for.",
+    "guidance": "(3)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award up to 3 marks.",
+      "points": [
+        "NetFlow records metadata about network flows such as who talked to whom (1)",
+        "It supports traffic analysis and bandwidth monitoring without capturing full packets (1)",
+        "It helps detect anomalies and unusual patterns in network usage (1)"
+      ]
+    }
+  },
+  {
+    "id": "D031",
+    "learning_aim": "D",
+    "topic": "D2.5 Vulnerability management",
+    "command_verb": "Describe",
+    "marks": 3,
+    "ao": "AO2",
+    "scenario": "",
+    "question": "Describe the vulnerability management lifecycle.",
+    "guidance": "(3)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award up to 3 marks.",
+      "points": [
+        "Discover - identify assets and scan for vulnerabilities (1)",
+        "Assess/prioritise and remediate - rank by risk and apply fixes (1)",
+        "Verify and report - confirm fixes and document the results (1)"
+      ]
+    }
+  },
+  {
+    "id": "D032",
+    "learning_aim": "D",
+    "topic": "D2.6 Security metrics",
+    "command_verb": "State",
+    "marks": 2,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "State what Mean Time to Detect (MTTD) and Mean Time to Respond (MTTR) each measure.",
+    "guidance": "(2)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award up to 2 marks.",
+      "points": [
+        "MTTD measures the average time to detect a security incident (1)",
+        "MTTR measures the average time to respond to and resolve an incident (1)"
+      ]
+    }
+  },
+  {
+    "id": "D033",
+    "learning_aim": "D",
+    "topic": "D2.7 Auditing and compliance",
+    "command_verb": "Explain",
+    "marks": 3,
+    "ao": "AO2",
+    "scenario": "An auditor reviews whether system configurations match the security baseline.",
+    "question": "Describe how a configuration audit supports security.",
+    "guidance": "(3)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award up to 3 marks.",
+      "points": [
+        "It compares current configurations against a known-secure baseline (1)",
+        "It identifies unapproved changes, misconfigurations and compliance gaps (1)",
+        "Fixing gaps reduces attack surface and maintains a secure baseline (1)"
       ]
     }
   }

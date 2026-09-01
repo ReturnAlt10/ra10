@@ -30,7 +30,7 @@
       "instruction": "Award up to two marks.",
       "points": [
         "Classification ensures that the most critical incidents (e.g. active data breach) receive immediate priority and resources (1)",
-        "It helps determine the appropriate escalation path \u00e2\u20ac\u201d for example, a critical incident may require notifying senior management, legal, PR and regulators immediately (1)"
+        "It helps determine the appropriate escalation path â€” for example, a critical incident may require notifying senior management, legal, PR and regulators immediately (1)"
       ]
     }
   },
@@ -49,7 +49,7 @@
       "instruction": "Award up to three marks.",
       "points": [
         "Immediately isolate/disconnect the affected systems from the network to prevent the ransomware from spreading further (1)",
-        "Disable affected user accounts and change privileged credentials \u00e2\u20ac\u201d the attacker may have obtained admin credentials (1)",
+        "Disable affected user accounts and change privileged credentials â€” the attacker may have obtained admin credentials (1)",
         "Block known malicious IP addresses/domains at the firewall and implement network segmentation to quarantine affected network segments (1)"
       ]
     }
@@ -67,7 +67,7 @@
     "mark_scheme": {
       "instruction": "Award up to two marks.",
       "points": [
-        "Identifying and removing all traces of the malware from affected systems \u00e2\u20ac\u201d including any backdoors or persistence mechanisms the attacker installed (1)",
+        "Identifying and removing all traces of the malware from affected systems â€” including any backdoors or persistence mechanisms the attacker installed (1)",
         "Applying patches to close the vulnerability that was exploited, and rebuilding affected systems from clean/trusted sources before restoring data from clean backups (1)"
       ]
     }
@@ -86,10 +86,10 @@
     "mark_scheme": {
       "instruction": "Award up to four marks.",
       "points": [
-        "Internal IT security team first \u00e2\u20ac\u201d to contain and investigate the breach immediately (1)",
-        "Senior management and legal team \u00e2\u20ac\u201d to assess legal obligations and direct the response (1)",
-        "Regulator (ICO) must be notified within 72 hours under GDPR \u00e2\u20ac\u201d legal requirement (1)",
-        "Affected customers \u00e2\u20ac\u201d they need to take protective action (change passwords, monitor accounts); PR/media statements to manage reputation (1)"
+        "Internal IT security team first â€” to contain and investigate the breach immediately (1)",
+        "Senior management and legal team â€” to assess legal obligations and direct the response (1)",
+        "Regulator (ICO) must be notified within 72 hours under GDPR â€” legal requirement (1)",
+        "Affected customers â€” they need to take protective action (change passwords, monitor accounts); PR/media statements to manage reputation (1)"
       ]
     }
   },
@@ -106,8 +106,8 @@
     "mark_scheme": {
       "instruction": "Award up to three marks.",
       "points": [
-        "RTO is the maximum acceptable time a system can be down after a disaster \u00e2\u20ac\u201d how quickly you need to restore operations (1)",
-        "RPO is the maximum acceptable amount of data loss measured in time \u00e2\u20ac\u201d how much data you can afford to lose (e.g. last 1 hour, last 24 hours) (1)",
+        "RTO is the maximum acceptable time a system can be down after a disaster â€” how quickly you need to restore operations (1)",
+        "RPO is the maximum acceptable amount of data loss measured in time â€” how much data you can afford to lose (e.g. last 1 hour, last 24 hours) (1)",
         "Lower RTO and RPO values require more expensive solutions (real-time replication, hot sites); a bank might need RTO of minutes and RPO of seconds, while a small business might accept RTO of 24 hours and RPO of 24 hours (1)"
       ]
     }
@@ -124,7 +124,7 @@
     "mark_scheme": {
       "instruction": "Award one mark.",
       "points": [
-        "The order of volatility is the sequence in which digital evidence should be collected, starting with the most volatile (easily lost) data first \u00e2\u20ac\u201d typically: CPU registers/cache, RAM, running processes/network connections, temporary files, hard disk data (1)"
+        "The order of volatility is the sequence in which digital evidence should be collected, starting with the most volatile (easily lost) data first â€” typically: CPU registers/cache, RAM, running processes/network connections, temporary files, hard disk data (1)"
       ]
     }
   },
@@ -141,8 +141,8 @@
     "mark_scheme": {
       "instruction": "Award up to two marks.",
       "points": [
-        "Volatile evidence is lost when the device is powered off \u00e2\u20ac\u201d e.g. RAM contents, running processes, active network connections (1)",
-        "Non-volatile evidence persists after power loss \u00e2\u20ac\u201d e.g. files on a hard drive, system logs, registry entries, email archives (1)"
+        "Volatile evidence is lost when the device is powered off â€” e.g. RAM contents, running processes, active network connections (1)",
+        "Non-volatile evidence persists after power loss â€” e.g. files on a hard drive, system logs, registry entries, email archives (1)"
       ]
     }
   },
@@ -160,8 +160,8 @@
       "instruction": "Award up to three marks.",
       "points": [
         "A write blocker prevents any data from being written to or modified on the original evidence drive during the imaging process (1)",
-        "This preserves the integrity of the original evidence \u00e2\u20ac\u201d any modification would make it inadmissible in court (1)",
-        "After imaging, the forensic copy is hashed (MD5/SHA) and compared to the original's hash to prove the copy is identical \u00e2\u20ac\u201d if the original was modified, the hashes would not match, invalidating the evidence (1)"
+        "This preserves the integrity of the original evidence â€” any modification would make it inadmissible in court (1)",
+        "After imaging, the forensic copy is hashed (MD5/SHA) and compared to the original's hash to prove the copy is identical â€” if the original was modified, the hashes would not match, invalidating the evidence (1)"
       ]
     }
   },
@@ -196,10 +196,10 @@
     "mark_scheme": {
       "instruction": "Award up to four marks.",
       "points": [
-        "Identify indicators of compromise (IoCs) \u2014 review SIEM alerts, IDS/IPS logs, and server access logs to determine what happened (1)",
-        "Determine the scope and impact \u2014 which server(s) were accessed, what data may have been viewed/exfiltrated, how many records affected (1)",
-        "Classify severity \u2014 patient data breach is critical given GDPR implications and potential harm to patients (1)",
-        "Document all findings in real time \u2014 create a timeline of events and preserve all log data for forensic analysis and potential regulatory reporting (1)"
+        "Identify indicators of compromise (IoCs) — review SIEM alerts, IDS/IPS logs, and server access logs to determine what happened (1)",
+        "Determine the scope and impact — which server(s) were accessed, what data may have been viewed/exfiltrated, how many records affected (1)",
+        "Classify severity — patient data breach is critical given GDPR implications and potential harm to patients (1)",
+        "Document all findings in real time — create a timeline of events and preserve all log data for forensic analysis and potential regulatory reporting (1)"
       ]
     }
   },
@@ -216,9 +216,9 @@
     "mark_scheme": {
       "instruction": "Award one mark for each strategy described.",
       "points": [
-        "Network isolation \u2014 disconnect affected systems from the network to prevent the threat from spreading to other devices (1)",
-        "Account disablement \u2014 immediately disable compromised user accounts and reset passwords for any accounts that may have been accessed (1)",
-        "IP/host blocking \u2014 block malicious IP addresses and domains at the firewall to cut off attacker communication channels (1)"
+        "Network isolation — disconnect affected systems from the network to prevent the threat from spreading to other devices (1)",
+        "Account disablement — immediately disable compromised user accounts and reset passwords for any accounts that may have been accessed (1)",
+        "IP/host blocking — block malicious IP addresses and domains at the firewall to cut off attacker communication channels (1)"
       ]
     }
   },
@@ -236,10 +236,10 @@
     "mark_scheme": {
       "instruction": "Award up to four marks.",
       "points": [
-        "RTO (Recovery Time Objective) \u2014 maximum acceptable downtime: for this business, RTO should be less than 1 hour given the 24/7 operation requirement (1)",
-        "RPO (Recovery Point Objective) \u2014 maximum acceptable data loss: for online orders, RPO should be near-zero (real-time replication) to avoid losing customer orders (1)",
-        "Meeting these targets requires a hot site with real-time data replication \u2014 fully operational duplicate that can failover within minutes (1)",
-        "Lower RTO/RPO targets require more expensive solutions \u2014 the business must balance the cost of downtime (lost sales + reputation) against the cost of the DR solution (1)"
+        "RTO (Recovery Time Objective) — maximum acceptable downtime: for this business, RTO should be less than 1 hour given the 24/7 operation requirement (1)",
+        "RPO (Recovery Point Objective) — maximum acceptable data loss: for online orders, RPO should be near-zero (real-time replication) to avoid losing customer orders (1)",
+        "Meeting these targets requires a hot site with real-time data replication — fully operational duplicate that can failover within minutes (1)",
+        "Lower RTO/RPO targets require more expensive solutions — the business must balance the cost of downtime (lost sales + reputation) against the cost of the DR solution (1)"
       ]
     }
   },
@@ -257,10 +257,10 @@
     "mark_scheme": {
       "instruction": "Award up to four marks.",
       "points": [
-        "Connect a write blocker between the suspect drive and the forensic workstation \u2014 prevents any modification to the original evidence (1)",
-        "Create a bit-for-bit forensic image of the entire drive using tools such as FTK Imager or DD \u2014 captures all data including deleted files and slack space (1)",
-        "Calculate cryptographic hashes (MD5/SHA-256) of both the original drive and the forensic copy \u2014 if they match, the copy is proven identical (1)",
-        "Document the entire process including date, time, tools used, hashes \u2014 maintain chain of custody throughout for legal admissibility (1)"
+        "Connect a write blocker between the suspect drive and the forensic workstation — prevents any modification to the original evidence (1)",
+        "Create a bit-for-bit forensic image of the entire drive using tools such as FTK Imager or DD — captures all data including deleted files and slack space (1)",
+        "Calculate cryptographic hashes (MD5/SHA-256) of both the original drive and the forensic copy — if they match, the copy is proven identical (1)",
+        "Document the entire process including date, time, tools used, hashes — maintain chain of custody throughout for legal admissibility (1)"
       ]
     }
   },
@@ -277,8 +277,437 @@
     "mark_scheme": {
       "instruction": "Award up to two marks.",
       "points": [
-        "Timeline analysis reconstructs the sequence of events by examining file timestamps \u2014 MAC times (Modified, Accessed, Created) (1)",
-        "Investigators can determine when files were created, last accessed, and modified \u2014 helping establish what the suspect did and when (1)"
+        "Timeline analysis reconstructs the sequence of events by examining file timestamps — MAC times (Modified, Accessed, Created) (1)",
+        "Investigators can determine when files were created, last accessed, and modified — helping establish what the suspect did and when (1)"
+      ]
+    }
+  },
+  {
+    "id": "C016",
+    "learning_aim": "C",
+    "topic": "C1.1 Incident Response Lifecycle",
+    "command_verb": "Describe",
+    "marks": 3,
+    "ao": "AO2",
+    "scenario": "",
+    "question": "Describe the four phases of the NIST incident response lifecycle.",
+    "guidance": "(3)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award up to 3 marks.",
+      "points": [
+        "Preparation - developing the IR plan, team and tools before an incident (1)",
+        "Detection and analysis - identifying that an incident has occurred and assessing it (1)",
+        "Containment, eradication and recovery - limiting spread, removing the cause and restoring services (1)",
+        "Post-incident activity - review, lessons learned and improving future response (1)"
+      ]
+    }
+  },
+  {
+    "id": "C017",
+    "learning_aim": "C",
+    "topic": "C1.1 Incident Response Lifecycle",
+    "command_verb": "Explain",
+    "marks": 4,
+    "ao": "AO2",
+    "scenario": "An incident response team has just discovered a malware infection on a server.",
+    "question": "Explain why the detection and analysis phase is important in incident response.",
+    "guidance": "(4)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award up to 4 marks.",
+      "points": [
+        "It confirms whether an incident has actually occurred, avoiding wasted response (1)",
+        "It gathers key details such as the type of attack, affected systems and severity (1)",
+        "This informs the correct containment and eradication actions (1)",
+        "Accurate analysis enables better escalation and communication to stakeholders (1)"
+      ]
+    }
+  },
+  {
+    "id": "C018",
+    "learning_aim": "C",
+    "topic": "C1.2 Incident classification",
+    "command_verb": "Explain",
+    "marks": 3,
+    "ao": "AO2",
+    "scenario": "An organisation needs to decide how urgently to respond to different security events.",
+    "question": "Explain how incidents are classified by severity.",
+    "guidance": "(3)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award up to 3 marks.",
+      "points": [
+        "Events are scored based on impact (e.g. data loss, downtime) and likelihood (1)",
+        "Each incident is assigned a severity level such as low, medium or high/critical (1)",
+        "Higher severity is escalated and responded to more urgently, guiding prioritisation (1)"
+      ]
+    }
+  },
+  {
+    "id": "C019",
+    "learning_aim": "C",
+    "topic": "C1.3 Containment",
+    "command_verb": "Explain",
+    "marks": 4,
+    "ao": "AO2",
+    "scenario": "A worm is spreading across the network and the response team must act to stop it.",
+    "question": "Explain the purpose of containment and the difference between short-term and long-term containment.",
+    "guidance": "(4)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award up to 4 marks.",
+      "points": [
+        "Containment limits the spread and impact of an incident while a full remedy is prepared (1)",
+        "Short-term containment is immediate action such as disconnecting/quarantining the affected device (1)",
+        "Long-term containment is more sustainable, such as network segmentation of affected areas (1)",
+        "Containment must balance stopping the spread with not disrupting legitimate business (1)"
+      ]
+    }
+  },
+  {
+    "id": "C020",
+    "learning_aim": "C",
+    "topic": "C1.4 Eradication and recovery",
+    "command_verb": "Explain",
+    "marks": 3,
+    "ao": "AO2",
+    "scenario": "After containing a ransomware incident, the team must remove the malware and restore services.",
+    "question": "Explain why eradication is needed after containment and how it is achieved.",
+    "guidance": "(3)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award up to 3 marks.",
+      "points": [
+        "Eradication removes the root cause (e.g. malware) so the incident cannot reoccur (1)",
+        "This may involve deleting malware, closing the vulnerability and patching (1)",
+        "Only after eradication should systems be recovered/restored from clean backups (1)"
+      ]
+    }
+  },
+  {
+    "id": "C021",
+    "learning_aim": "C",
+    "topic": "C1.4 Eradication and recovery",
+    "command_verb": "Describe",
+    "marks": 3,
+    "ao": "AO2",
+    "scenario": "",
+    "question": "Describe the purpose of the recovery phase in incident response.",
+    "guidance": "(3)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award up to 3 marks.",
+      "points": [
+        "Recovery restores affected systems and services to normal operation (1)",
+        "It uses clean backups and reconnects systems after verification (1)",
+        "Systems are monitored to confirm normal, secure operation and that no infection remains (1)"
+      ]
+    }
+  },
+  {
+    "id": "C022",
+    "learning_aim": "C",
+    "topic": "C1.5 Communication plans",
+    "command_verb": "State",
+    "marks": 2,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "State two parties that should be notified during a serious data breach.",
+    "guidance": "(2)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award up to 2 marks.",
+      "points": [
+        "Customers whose data was affected (1)",
+        "The Information Commissioner’s Office (ICO / regulator) (1)",
+        "Also accept: senior management, legal, law enforcement, media (each 1)"
+      ]
+    }
+  },
+  {
+    "id": "C023",
+    "learning_aim": "C",
+    "topic": "C1.5 Communication plans",
+    "command_verb": "Explain",
+    "marks": 4,
+    "ao": "AO2",
+    "scenario": "A company has suffered a ransomware attack that encrypted customer data.",
+    "question": "Explain why a communication plan is important during a cyber incident.",
+    "guidance": "(4)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award up to 4 marks.",
+      "points": [
+        "It provides clear, accurate information to stakeholders such as customers, staff and regulators (1)",
+        "It helps manage reputation and maintain trust by being transparent (1)",
+        "It ensures the right people get the right information at the right time (1)",
+        "It supports legal and regulatory compliance, such as notifying the ICO within 72 hours (1)"
+      ]
+    }
+  },
+  {
+    "id": "C024",
+    "learning_aim": "C",
+    "topic": "C1.7 Business continuity",
+    "command_verb": "Explain",
+    "marks": 4,
+    "ao": "AO2",
+    "scenario": "A business must keep operating if its main office becomes unavailable.",
+    "question": "Explain the purpose of a business continuity plan (BCP).",
+    "guidance": "(4)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award up to 4 marks.",
+      "points": [
+        "A BCP ensures critical business functions continue during a disruption (1)",
+        "It identifies critical activities, priority and the people/resources needed to continue them (1)",
+        "It is tested and updated regularly to remain effective (1)",
+        "It is supported by a disaster recovery plan for restoring IT systems (1)"
+      ]
+    }
+  },
+  {
+    "id": "C025",
+    "learning_aim": "C",
+    "topic": "C1.7 Business continuity",
+    "command_verb": "Explain",
+    "marks": 3,
+    "ao": "AO2",
+    "scenario": "A finance firm is setting recovery targets after an outage.",
+    "question": "Explain what a Recovery Time Objective (RTO) and a Recovery Point Objective (RPO) each measure.",
+    "guidance": "(3)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award up to 3 marks.",
+      "points": [
+        "RTO is the maximum acceptable time to restore services after a disruption (1)",
+        "RPO is the maximum acceptable amount of data loss, measured in time (1)",
+        "Together they define the recovery targets for a disaster recovery plan (1)"
+      ]
+    }
+  },
+  {
+    "id": "C026",
+    "learning_aim": "C",
+    "topic": "C1.7 Business continuity",
+    "command_verb": "Explain",
+    "marks": 4,
+    "ao": "AO2",
+    "scenario": "A company is choosing between two disaster recovery sites.",
+    "question": "Explain the difference between a hot site and a cold site.",
+    "guidance": "(4)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award up to 4 marks.",
+      "points": [
+        "A hot site is a fully equipped, ready-to-run backup site with up-to-date systems (1)",
+        "A cold site provides only the physical space/utilities, with no ready equipment (1)",
+        "A hot site enables fast recovery (low RTO) but costs more (1)",
+        "A cold site is cheaper but has a much longer recovery time (1)"
+      ]
+    }
+  },
+  {
+    "id": "C027",
+    "learning_aim": "C",
+    "topic": "C2.1 Forensic principles",
+    "command_verb": "Describe",
+    "marks": 3,
+    "ao": "AO2",
+    "scenario": "",
+    "question": "Describe what a chain of custody is and why it matters.",
+    "guidance": "(3)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award up to 3 marks.",
+      "points": [
+        "A chain of custody is a documented record of who handled the evidence and when (1)",
+        "It records every transfer, from collection to presentation in court (1)",
+        "It proves the evidence has not been tampered with, supporting admissibility (1)"
+      ]
+    }
+  },
+  {
+    "id": "C028",
+    "learning_aim": "C",
+    "topic": "C2.1 Forensic principles",
+    "command_verb": "Explain",
+    "marks": 4,
+    "ao": "AO2",
+    "scenario": "Investigators arrive at a live system during an incident.",
+    "question": "Explain why volatile evidence must be collected before powering off a system.",
+    "guidance": "(4)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award up to 4 marks.",
+      "points": [
+        "Volatile evidence (e.g. in RAM) is lost when a system is powered off (1)",
+        "It includes running processes, open network connections and in-memory data (1)",
+        "Collecting it first preserves information that would otherwise be gone (1)",
+        "Evidence is collected in order of volatility from most to least volatile (1)"
+      ]
+    }
+  },
+  {
+    "id": "C029",
+    "learning_aim": "C",
+    "topic": "C2.3 Forensic acquisition",
+    "command_verb": "Describe",
+    "marks": 3,
+    "ao": "AO2",
+    "scenario": "",
+    "question": "Describe what disk imaging is used for in digital forensics.",
+    "guidance": "(3)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award up to 3 marks.",
+      "points": [
+        "Disk imaging creates an exact byte-for-byte copy of a storage device (1)",
+        "Analysis is carried out on the copy so the original evidence is not altered (1)",
+        "Imaging tools include DD and FTK Imager; the copy is hashed to verify integrity (1)"
+      ]
+    }
+  },
+  {
+    "id": "C030",
+    "learning_aim": "C",
+    "topic": "C2.3 Forensic acquisition",
+    "command_verb": "Explain",
+    "marks": 3,
+    "ao": "AO2",
+    "scenario": "A forensic analyst must examine a suspect drive without altering it.",
+    "question": "Explain how hashing verifies the integrity of forensic evidence.",
+    "guidance": "(3)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award up to 3 marks.",
+      "points": [
+        "A hash (such as SHA-256) is a fixed fingerprint computed from the data (1)",
+        "If the original and copy produce the same hash, the copy is identical and unchanged (1)",
+        "Any tampering changes the data and therefore the hash, detecting alteration (1)"
+      ]
+    }
+  },
+  {
+    "id": "C031",
+    "learning_aim": "C",
+    "topic": "C2.3 Forensic acquisition",
+    "command_verb": "Explain",
+    "marks": 3,
+    "ao": "AO2",
+    "scenario": "",
+    "question": "Explain why a write blocker is used during forensic analysis.",
+    "guidance": "(3)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award up to 3 marks.",
+      "points": [
+        "A write blocker prevents any data being written to the original drive (1)",
+        "This ensures the original evidence is preserved unaltered (1)",
+        "The examiner works on a copy made through the write blocker instead (1)"
+      ]
+    }
+  },
+  {
+    "id": "C032",
+    "learning_aim": "C",
+    "topic": "C2.2 Evidence types",
+    "command_verb": "Describe",
+    "marks": 3,
+    "ao": "AO2",
+    "scenario": "",
+    "question": "Describe the difference between volatile and non-volatile evidence.",
+    "guidance": "(3)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award up to 3 marks.",
+      "points": [
+        "Volatile evidence is held in memory (RAM) and is lost when the power is off (1)",
+        "Non-volatile evidence is stored on disk/media and persists after shutdown (1)",
+        "Volatile evidence must be collected first in order of volatility (1)"
+      ]
+    }
+  },
+  {
+    "id": "C033",
+    "learning_aim": "C",
+    "topic": "C2.4 Analysis techniques",
+    "command_verb": "Explain",
+    "marks": 3,
+    "ao": "AO2",
+    "scenario": "An analyst has acquired a disk image and must find evidence of malware.",
+    "question": "Describe one technique for analysing digital evidence.",
+    "guidance": "(3)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award up to 3 marks.",
+      "points": [
+        "File carving reconstructs deleted files from raw disk data (1)",
+        "Timeline analysis orders file and log activity to reconstruct the sequence of events (1)",
+        "Memory analysis examines RAM dumps, or log analysis reviews system/network logs (1)"
+      ],
+      "additional_guidance": "Award credit for a clear description of any one valid technique."
+    }
+  },
+  {
+    "id": "C034",
+    "learning_aim": "C",
+    "topic": "C2.4 Analysis techniques",
+    "command_verb": "Explain",
+    "marks": 3,
+    "ao": "AO2",
+    "scenario": "Investigators must understand what malware was running at the time of an incident.",
+    "question": "Explain what memory (RAM) analysis can reveal in a forensic investigation.",
+    "guidance": "(3)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award up to 3 marks.",
+      "points": [
+        "It can recover running processes and services at the time (1)",
+        "It can reveal malware, open network connections and injected code (1)",
+        "Analysis of a memory dump is done with tools such as Volatility (1)"
+      ]
+    }
+  },
+  {
+    "id": "C035",
+    "learning_aim": "C",
+    "topic": "C2.6 Legal admissibility",
+    "command_verb": "Explain",
+    "marks": 4,
+    "ao": "AO2",
+    "scenario": "Evidence gathered during an investigation must be presented in court.",
+    "question": "Explain how digital evidence is made admissible in court.",
+    "guidance": "(4)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award up to 4 marks.",
+      "points": [
+        "It must be relevant, reliable and obtained legally (1)",
+        "A documented chain of custody must show it has not been tampered with (1)",
+        "The analysis must follow recognised forensic principles/methodology (1)",
+        "An expert witness may present the evidence and explain its meaning (1)"
+      ]
+    }
+  },
+  {
+    "id": "C036",
+    "learning_aim": "C",
+    "topic": "C2.5 Forensic tools",
+    "command_verb": "State",
+    "marks": 2,
+    "ao": "AO1",
+    "scenario": "",
+    "question": "State two tools used in digital forensics.",
+    "guidance": "(2)",
+    "type": "short",
+    "mark_scheme": {
+      "instruction": "Award up to 2 marks.",
+      "points": [
+        "FTK Imager / DD for disk imaging (1)",
+        "Volatility for memory analysis (1)",
+        "Also accept: Autopsy/Sleuth Kit, Wireshark, EnCase (each 1)"
       ]
     }
   }
