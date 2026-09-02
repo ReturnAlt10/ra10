@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>
+(function(){
+  var THEME_KEY = 'ra10-theme';
+  function applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme === 'dark' ? 'dark' : 'light');
+  }
+  var saved = localStorage.getItem(THEME_KEY);
+  applyTheme(saved || 'light');
+  window.addEventListener('message', function(event) {
+    if (event.source !== window.parent || !event.data || event.data.type !== 'RA10_THEME') return;
+    applyTheme(event.data.theme);
+  });
+  window.addEventListener('storage', function(event) {
+    if (event.key === THEME_KEY) applyTheme(event.newValue || 'light');
+  });
+
+  window.toggleUnitTheme = function() {
+    var current = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+    var next = current === 'dark' ? 'light' : 'dark';
+    localStorage.setItem(THEME_KEY, next);
+    applyTheme(next);
+    try {
+      if (window.parent && window.parent !== window) {
+        window.parent.postMessage({ type: 'RA10_THEME', theme: next }, '*');
+      }
+    } catch (e) {}
+  };
+
+  window.openUnitNews = function() {
+    try {
+      if (window.top && window.top !== window) {
+        window.top.location.hash = '/news';
+        return;
+      }
+    } catch (e) {}
+    location.href = '/index.html#/news';
+  };
+})();
+
+(function(){
+  var s = document.createElement('script');
+  var isFile = location.protocol === 'file:';
+  var isLocalHost = location.hostname === '127.0.0.1' || location.hostname === 'localhost';
+  s.src = isFile ? 'file:///C:/Users/mistr/Downloads/ra10/ra10-sdk.js?v=20260903' : (isLocalHost ? 'http://127.0.0.1:5500/ra10-sdk.js?v=20260903' : 'https://ra10.co.uk/ra10-sdk.js?v=20260903');
+  document.head.insertBefore(s, document.head.firstChild);
+})();
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BTEC IT Unit 3 — Website Development</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<link rel="preconnect" href="https://api.fontshare.com">
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@500,700,900,400&f[]=jetbrains-mono@500&display=swap">
+<link rel="stylesheet" href="css/style.css?v=20260902">
+<style>
+.ra10-cost-label { display:inline-block; font-size:.68rem; font-weight:600; color:rgba(255,255,255,.75); background:rgba(0,0,0,.15); padding:1px 6px; border-radius:999px; margin-left:6px; vertical-align:middle; letter-spacing:.03em; }
+.btn:not(.primary) .ra10-cost-label { color:var(--accent-ink); background:var(--accent-2); }
+.ra10-subject-banner { display:none; padding:10px 16px; background:linear-gradient(90deg,var(--accent-2),var(--surface)); border-bottom:1px solid var(--line); color:var(--ink); }
+.ra10-subject-banner:not(:empty) { display:block; }
+.hidden { display:none !important; }
+</style>
+</head>
+<body>
+<!-- ra10-refresh-loader -->
+<script>
+(function(){
+  var path = String(location.pathname || '').replace(/\\/g, '/');
+  var lower = path.toLowerCase();
+  var idx = lower.lastIndexOf('/ra10/');
+  var rootFromPath = idx >= 0 ? path.slice(0, idx + 5) : '';
+  var base;
+  if (location.protocol === 'file:') {
+    base = rootFromPath ? ('file://' + rootFromPath) : '';
+  } else {
+    var isLocalHost = location.hostname === '127.0.0.1' || location.hostname === 'localhost';
+    base = isLocalHost ? 'http://127.0.0.1:5500' : 'https://ra10.co.uk';
+  }
+  if (!base) return;
+  var font = document.createElement('link');
+  font.rel = 'stylesheet';
+  font.href = 'https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Sora:wght@500;600;700;800&display=swap';
+  document.head.appendChild(font);
+  var css = document.createElement('link');
+  css.rel = 'stylesheet';
+  css.href = base + '/refresh/ra10-refresh.css?v=20260812';
+  document.head.appendChild(css);
+  var js = document.createElement('script');
+  js.src = base + '/refresh/ra10-refresh.js?v=20260812';
+  document.head.appendChild(js);
+})();
+</script>
+<header class="topbar">
+  <a class="unit-brand" href="/index.html#/" target="_top" aria-label="RA10 home">
+    <img src="/logo.png" alt="RA10">
+    <span>RA10</span>
+  </a>
+  <div class="site-unit-nav" aria-label="RA10 site navigation">
+    <a class="site-unit-link" href="/index.html#/" target="_top">Home</a>
+    <a class="site-unit-link" href="/index.html#/revision" target="_top">Revision</a>
+    <a class="site-unit-link" href="/index.html#/tools" target="_top">Tools</a>
+    <a class="site-unit-link site-community-link" href="/index.html#/community" target="_top">Community</a>
+    <a class="site-unit-link" href="/index.html#/tasks" target="_top">Tasks</a>
+    <a class="site-unit-link" href="/index.html#/exams" target="_top">Exams</a>
+    <a class="site-unit-link" href="/index.html#/leaderboard" target="_top">Leaderboard</a>
+  </div>
+  <nav class="tabs">
+    <button class="tab active" data-tab="dashboard">Dashboard</button>
+    <button class="tab" data-tab="guide">Guide</button>
+    <button class="tab" data-tab="mcq">MCQs</button>
+    <button class="tab" data-tab="quiz">Quiz</button>
+    <button class="tab" data-tab="flash">Flashcards</button>
+    <button class="tab tab-special" data-tab="wireframe">Wireframes</button>
+    <button class="tab tab-special" data-tab="sitemap">Sitemap</button>
+    <button class="tab tab-special" data-tab="editor">Code Editor</button>
+    <button class="tab tab-special" data-tab="assignment">Assignment</button>
+    <button class="tab" data-tab="spec">Spec</button>
+  </nav>
+  <div id="unit3-credit-chip" style="margin-left:auto;display:flex;align-items:center;"></div>
+  <div style="display:flex;align-items:center;gap:8px;">
+    <button class="icon-btn" type="button" onclick="openUnitNews()" aria-label="Open news" title="News">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 8h10"/><path d="M7 12h10"/><path d="M7 16h6"/></svg>
+    </button>
+    <button class="icon-btn" type="button" onclick="toggleUnitTheme()" aria-label="Toggle theme" title="Light or dark mode">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+    <button id="unit-account-avatar" class="unit-avatar-btn" type="button" onclick="if(window.top&&typeof window.top.openAccountOrSignIn==='function'){window.top.openAccountOrSignIn()}else{window.top.location.hash='/account'}" aria-label="Open account" title="Account">?</button>
+  </div>
+</header>
+<div id="ra10-subject-banner" class="ra10-subject-banner"></div>
+
+<main class="wrap">
+
+  <!-- DASHBOARD -->
+  <section id="view-dashboard" class="view active">
+    <div class="hero">
+      <h1>Unit 3 — Website Development</h1>
+      <p>Learn the theory of website design, planning and technologies, then build a real website for your assignment. AI Assigner is on hand for hints whenever you need them.</p>
+      <div class="hero-pills"><span class="hero-pill">Internally assessed</span><span class="hero-pill">60 GLH</span><span class="hero-pill">4 Learning Aims</span></div>
+    </div>
+    <div class="stats" id="dash-stats"></div>
+
+    <div class="section-block">
+      <div class="section-block-head"><h2>Part 1 — Learn the theory</h2><span class="sb-eyebrow">Learning Aims A &amp; B</span></div>
+      <div class="feature-cards grid-2">
+        <div class="card primary-card"><span class="card-tag">Aim A &amp; B</span><h3>Revision Guide</h3><p>Impact of websites, legal/ethical/accessibility considerations, sitemaps, wireframes, HTML/CSS/JS, dev tools, testing and optimisation.</p><div class="card-action-row"><button class="btn primary" data-goto="guide">Open guide</button></div></div>
+        <div class="card"><span class="card-tag">Practice</span><h3>Multiple Choice Questions</h3><p>Test your knowledge with topic-tagged MCQs across both theory learning aims.</p><div class="card-cost-note">1 credit per practice session</div><div class="card-action-row"><button class="btn" data-goto="mcq">Practise MCQs</button></div></div>
+        <div class="card"><span class="card-tag">Quick fire</span><h3>Quiz</h3><p>A fast quiz to check recall of key facts.</p><div class="card-cost-note">1 credit per quiz</div><div class="card-action-row"><button class="btn" data-goto="quiz">Start quiz</button></div></div>
+        <div class="card"><span class="card-tag">Free</span><h3>Flashcards</h3><p>Flip through key term flashcards — always free.</p><div class="card-action-row"><button class="btn" data-goto="flash">Open flashcards</button></div></div>
+      </div>
+    </div>
+
+    <div class="section-block">
+      <div class="section-block-head"><h2>Interactive design tools</h2><span class="sb-eyebrow">For Learning Aim A</span></div>
+      <div class="feature-cards grid-2">
+        <div class="card"><span class="card-tag">Design</span><h3>Wireframe Builder</h3><p>Drag-and-drop shapes to plan page layouts before you code.</p><div class="card-cost-note">Free to use · 1 credit to export as PNG</div><div class="card-action-row"><button class="btn" data-goto="wireframe">Open Wireframe Builder</button></div></div>
+        <div class="card"><span class="card-tag">Design</span><h3>Sitemap Builder</h3><p>Plan your website's structure and navigation visually.</p><div class="card-cost-note">Free to use · 1 credit to export</div><div class="card-action-row"><button class="btn" data-goto="sitemap">Open Sitemap Builder</button></div></div>
+      </div>
+    </div>
+
+    <div class="section-block">
+      <div class="section-block-head"><h2>Part 2 — Build &amp; complete your assignment</h2><span class="sb-eyebrow">Learning Aims B, C &amp; D</span></div>
+      <div class="feature-cards grid-2">
+        <div class="card primary-card"><span class="card-tag">Build</span><h3>Code Editor</h3><p>Full HTML/CSS/JS editor with live preview, cloud autosave, and optional local folder access — like VS Code or Dreamweaver, right in your browser.</p><div class="card-action-row"><button class="btn primary" data-goto="editor">Open Code Editor</button></div></div>
+        <div class="card primary-card"><span class="card-tag">Assignment</span><h3>Assignment Hub</h3><p>Step-by-step guidance to a Distinction on all 3 tasks, sample briefs, and AI Assigner marking of your work.</p><div class="card-action-row"><button class="btn primary" data-goto="assignment">Open Assignment Hub</button></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GUIDE -->
+  <section id="view-guide" class="view">
+    <div class="section-block-head"><h2>Revision Guide</h2><span class="sb-eyebrow">Learning Aims A &amp; B</span></div>
+    <div class="guide-shell">
+      <div class="guide-sidebar"><div id="guide-sidebar-content"></div></div>
+      <div class="guide-main"><div id="guide-content"></div></div>
+    </div>
+  </section>
+
+  <!-- MCQ -->
+  <section id="view-mcq" class="view">
+    <div id="mcq-browse-panel">
+      <div class="section-block-head"><h2>MCQ Practice</h2><span class="sb-eyebrow">Learning Aims A &amp; B</span></div>
+      <div class="filters">
+        <select id="mcq-filter-aim" onchange="renderMcqBrowse()">
+          <option value="">All aims</option>
+          <option value="A">Aim A</option>
+          <option value="B">Aim B</option>
+        </select>
+        <button class="btn primary" onclick="startMcqPractice()">Start practice<span class="ra10-cost-label">1 credit</span></button>
+      </div>
+      <div class="qlist" id="mcq-browse-list"></div>
+    </div>
+    <div id="mcq-play-panel" class="hidden"></div>
+  </section>
+
+  <!-- QUIZ -->
+  <section id="view-quiz" class="view">
+    <div class="section-block-head"><h2>Quick Quiz</h2><span class="sb-eyebrow">Fast recall check</span></div>
+    <div id="quiz-card-host">
+      <div class="mcq-card" style="text-align:center">
+        <p>A fast-fire quiz covering both theory learning aims.</p>
+        <button class="btn primary big" onclick="startQuiz()">Start quiz<span class="ra10-cost-label">1 credit</span></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- FLASHCARDS -->
+  <section id="view-flash" class="view">
+    <div class="section-block-head"><h2>Flashcards</h2><span class="sb-eyebrow">Free · flip to reveal</span></div>
+    <div class="flash-controls" style="justify-content:center">
+      <button class="btn ghost" onclick="flashNav(-1)">← Prev</button>
+      <button class="btn ghost" onclick="flashNav(1)">Next →</button>
+      <button class="btn ghost" onclick="startFlashcards()">Shuffle</button>
+    </div>
+    <div id="flash-stage"></div>
+    <div class="flash-progress" id="flash-progress"></div>
+  </section>
+
+  <!-- WIREFRAME -->
+  <section id="view-wireframe" class="view">
+    <div class="section-block-head"><h2>Wireframe Builder</h2><span class="sb-eyebrow">Learning Aim A · plan your page layouts</span></div>
+    <div class="tool-toolbar">
+      <button class="wf-shape-btn active" data-shape="box" title="Box">▭</button>
+      <button class="wf-shape-btn" data-shape="header" title="Header">H</button>
+      <button class="wf-shape-btn" data-shape="nav" title="Nav">☰</button>
+      <button class="wf-shape-btn" data-shape="image" title="Image">🖼</button>
+      <button class="wf-shape-btn" data-shape="text" title="Text lines">¶</button>
+      <button class="wf-shape-btn" data-shape="button" title="Button">🔘</button>
+      <button class="wf-shape-btn" data-shape="footer" title="Footer">F</button>
+      <span class="sep"></span>
+      <button class="btn ghost" id="wf-delete-selected">Undo last</button>
+      <button class="btn ghost" id="wf-clear">Clear all</button>
+      <button class="btn primary" id="wf-export">Export as PNG<span class="ra10-cost-label">1 credit</span></button>
+    </div>
+    <p style="font-size:12.5px;color:var(--muted);margin-bottom:10px">Click a shape, then click on the canvas to place it. Drag placed shapes to reposition. Your wireframe autosaves in this browser.</p>
+    <div class="wireframe-canvas-wrap"><canvas id="wireframe-canvas"></canvas></div>
+  </section>
+
+  <!-- SITEMAP -->
+  <section id="view-sitemap" class="view">
+    <div class="section-block-head"><h2>Sitemap Builder</h2><span class="sb-eyebrow">Learning Aim A · plan your site structure</span></div>
+    <div class="tool-toolbar">
+      <button class="btn primary" id="sm-add-page">+ Add page</button>
+      <button class="btn ghost" id="sm-clear">Clear all</button>
+      <button class="btn" id="sm-export">Export sitemap<span class="ra10-cost-label">1 credit</span></button>
+    </div>
+    <p style="font-size:12.5px;color:var(--muted);margin-bottom:10px" id="sm-hint"></p>
+    <div class="sitemap-canvas-wrap" id="sitemap-canvas-wrap">
+      <svg id="sitemap-svg"></svg>
+    </div>
+  </section>
+
+  <!-- CODE EDITOR -->
+  <section id="view-editor" class="view">
+    <div class="section-block-head"><h2>Code Editor</h2><span class="sb-eyebrow">HTML · CSS · JS — cloud autosave (Supabase)</span></div>
+    <div class="tool-toolbar">
+      <button class="btn" id="editor-new-file">+ New file</button>
+      <button class="btn ghost" id="editor-reset">Reset to template</button>
+      <button class="btn ghost" id="editor-download">Download files</button>
+      <span class="sep"></span>
+      <button class="btn ghost" id="editor-pick-folder">Open local folder</button>
+      <button class="btn ghost" id="editor-save-folder">Save to local folder</button>
+      <span class="sep"></span>
+      <button class="btn ghost" id="editor-refresh-preview">↻ Refresh preview</button>
+      <span id="editor-save-status" style="font-size:12px;color:var(--muted);margin-left:auto"></span>
+    </div>
+    <div class="editor-shell">
+      <div class="editor-filebar" id="editor-file-list"></div>
+      <div class="editor-main">
+        <div class="editor-split">
+          <div class="editor-code-pane">
+            <div class="editor-tabs-bar"><span class="editor-status" id="editor-status">HTML</span></div>
+            <textarea id="code-editor-textarea" spellcheck="false"></textarea>
+          </div>
+          <div class="editor-preview-pane">
+            <div class="editor-preview-bar">Live preview</div>
+            <iframe id="code-preview-frame" title="Live preview" sandbox="allow-scripts allow-same-origin"></iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p style="font-size:12px;color:var(--muted);margin-top:8px">Cloud autosave stores your files as text (max 1MB per project) in your RA10 account. Use "Open local folder" (Chrome/Edge) to work directly on your own computer, like VS Code.</p>
+  </section>
+
+  <!-- ASSIGNMENT HUB -->
+  <section id="view-assignment" class="view">
+    <div class="section-block-head"><h2>Assignment Hub</h2><span class="sb-eyebrow">Part 2 — step-by-step to a Distinction</span></div>
+    <div class="task-stepper" id="task-stepper"></div>
+    <div id="task-detail"></div>
+    <div class="section-block">
+      <div class="section-block-head"><h2>Upload your own assignment</h2><span class="sb-eyebrow">Optional</span></div>
+      <label class="upload-zone" for="assignment-file-input">
+        <p style="margin:0;font-weight:700">📄 Click to upload a text/HTML file</p>
+        <p style="margin:6px 0 0;font-size:12px;color:var(--muted)">We'll load its text into the box above for AI Assigner to mark against the selected task's criteria.</p>
+      </label>
+      <input type="file" id="assignment-file-input" accept=".txt,.html,.htm,.md" style="display:none">
+    </div>
+  </section>
+
+  <!-- SPEC -->
+  <section id="view-spec" class="view">
+    <div class="section-block-head"><h2>Specification Coverage</h2><span class="sb-eyebrow">See how questions map to the Pearson spec</span></div>
+    <div id="spec-content"></div>
+  </section>
+
+</main>
+
+<!-- AI ASSIGNER WIDGET -->
+<button id="ai-assigner-fab" title="Ask AI Assigner">🤖</button>
+<div id="ai-assigner-panel">
+  <div class="aa-head"><b>AI Assigner</b><button id="aa-close" style="background:none;border:none;color:#fff;font-size:16px;cursor:pointer">✕</button></div>
+  <div class="aa-body" id="aa-body"></div>
+  <div class="aa-input-row">
+    <textarea id="aa-textarea" rows="1" placeholder="Ask for a hint..."></textarea>
+    <button id="aa-send">Send</button>
+  </div>
+</div>
+
+<script src="js/spec.js"></script>
+<script src="js/data-loader.js"></script>
+<script src="js/guide.js"></script>
+<script src="js/wireframe.js"></script>
+<script src="js/sitemap.js"></script>
+<script src="js/editor.js"></script>
+<script src="js/assignment.js"></script>
+<script src="js/ai-assigner.js"></script>
+<script src="js/app.js"></script>
+<script>
+document.getElementById('assignment-file-input')?.addEventListener('change', async (e) => {
+  const file = e.target.files && e.target.files[0];
+  if (!file) return;
+  const text = await file.text();
+  const ta = document.getElementById('task-submission-text');
+  if (ta) ta.value = text.slice(0, 15000);
+});
+</script>
+</body>
+</html>

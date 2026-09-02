@@ -5492,16 +5492,17 @@ html body #community-share-sheet .community-share-panel{
           </div>
         </div>
 
-        <!-- Unit 3 -->
-        <div class="unit-card off">
+        <!-- Unit 3 LIVE -->
+        <div class="unit-card click" onclick="go('/revision/btec/level-3/IT-AAQ/unit-3')">
           <div class="unit-num">Unit 03 · 60 GLH</div>
           <div class="unit-title">Website Development</div>
-          <div class="unit-desc">Principles, design, development and testing of websites using HTML, CSS and JavaScript to meet a client brief. Revision coming soon.</div>
+          <div class="unit-desc">Theory guide, MCQs, wireframe &amp; sitemap builders, a full HTML/CSS/JS code editor, and step-by-step assignment guidance with AI Assigner. Covers Learning Aims A–D.</div>
           <div class="unit-ft">
             <div style="display:flex;gap:var(--sp2);align-items:center">
               <span class="badge badge-int">Internal</span>
-              <span class="pill pill-soon">Coming soon</span>
+              <span class="pill pill-live">Live</span>
             </div>
+            <button class="btn btn-p" onclick="event.stopPropagation();go('/revision/btec/level-3/IT-AAQ/unit-3')">Open →</button>
           </div>
         </div>
 
@@ -5580,6 +5581,37 @@ html body #community-share-sheet .community-share-panel{
       <iframe
         src="revision/btec/level-3/IT-AAQ/unit-2/index.html"
         title="Unit 2 – Cyber Security and Incident Management"
+        loading="lazy"
+        allowfullscreen
+      ></iframe>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     UNIT 3  /revision/btec/level-3/IT-AAQ/unit-3
+============================================================ -->
+<div class="page page-iframe" id="p-unit3">
+  <div class="cd">
+    <nav class="bc">
+      <button class="bc-item" onclick="go('/')">Home</button>
+      <span class="bc-sep">›</span>
+      <button class="bc-item" onclick="go('/revision')">Revision</button>
+      <span class="bc-sep">›</span>
+      <button class="bc-item" onclick="go('/revision/btec')">BTEC</button>
+      <span class="bc-sep">›</span>
+      <button class="bc-item" onclick="go('/revision/btec/level-3')">Level 3</button>
+      <span class="bc-sep">›</span>
+      <button class="bc-item" onclick="go('/revision/btec/level-3/IT-AAQ')">IT (AAQ)</button>
+      <span class="bc-sep">›</span>
+      <span class="bc-item cur">Unit 3</span>
+    </nav>
+  </div>
+  <div class="cf">
+    <div class="iframe-wrap">
+      <iframe
+        src="revision/btec/level-3/IT-AAQ/unit-3/index.html"
+        title="Unit 3 – Website Development"
         loading="lazy"
         allowfullscreen
       ></iframe>
@@ -7135,6 +7167,7 @@ const ROUTES = {
   '/revision/btec/level-3/IT-AAQ':       'p-it-aaq',
   '/revision/btec/level-3/IT-AAQ/unit-1':'p-unit1',
   '/revision/btec/level-3/IT-AAQ/unit-2':'p-unit2',
+  '/revision/btec/level-3/IT-AAQ/unit-3':'p-unit3',
   '/revision/btec/level-2':              'p-btec-l2',
   '/revision/btec/level-2/it':           'p-btec-l2-it',
   '/revision/btec/level-2/it/unit-2':    'p-it-l2-u2',

@@ -83,6 +83,9 @@
     ai_mark: 3,
     whatsapp_export: 2,
     whatsapp_pdf: 3,
+    wireframe_export: 1,
+    sitemap_export: 1,
+    code_editor_cloud_project: 0,
   };
 
   const MONTHLY_TIERS = new Set(['free', 'all_subjects', 'school_student', 'school_teacher', 'school_admin']);
@@ -1700,6 +1703,125 @@
     return result;
   }
 
+  function _tierCost(costMap) {
+    const tier = _normalizeTier(getTier());
+    const isUltra = tier === 'ultra' || tier === 'owner' || UNLIMITED_TIERS.has(tier);
+    const isPro = tier === 'all_subjects';
+    const isSchool = tier === 'school_student' || tier === 'school_teacher' || tier === 'school_admin';
+    if (isUltra) return costMap.ultra;
+    if (isPro) return costMap.pro;
+    if (isSchool) return costMap.school;
+    if (tier === 'subject') return costMap.subject != null ? costMap.subject : costMap.free;
+    return costMap.free;
+  }
+
+  async function _deductTieredCredits(costToDeduct, source, action, note) {
+    if (costToDeduct <= 0) return true;
+    const currentBase = _getStoredCredits();
+    const bonusRemaining = _getExamBonusRemaining();
+    const totalCredit = currentBase + bonusRemaining;
+    if (totalCredit < costToDeduct) {
+      throw new Error('Not enough credits. This action costs ' + costToDeduct + ' credit(s).');
+    }
+    const fromBonus = Math.min(costToDeduct, bonusRemaining);
+    const fromBase = costToDeduct - fromBonus;
+    const newBase = currentBase - fromBase;
+    const newBonus = bonusRemaining - fromBonus;
+    const prevBonusUsed = _getExamBonusUsed();
+    if (fromBonus > 0) _setExamBonusUsed(prevBonusUsed + fromBonus);
+
+    const client = await _ensureSupabaseClient();
+    const updateRes = await client.from('profiles').update({ credits: newBase }).eq('id', _profile.id).select().single();
+    if (updateRes.error || !updateRes.data) {
+      if (fromBonus > 0) _setExamBonusUsed(prevBonusUsed);
+      throw new Error('Could not deduct credits. Please try again.');
+    }
+    _profile = updateRes.data;
+    _writeCreditSnapshot(_profile);
+    if (fromBonus > 0) {
+      _appendCreditActivity({ type: 'spend', source: 'exam_season_bonus', action, amount: -fromBonus, note: note + ' (exam bonus)' });
+    }
+    if (fromBase > 0) {
+      _appendCreditActivity({ type: 'spend', source: 'stored_credits', action, amount: -fromBase, note: note + ' (account credits)' });
+    }
+    _appendCreditActivity({ type: 'spend', source, action, amount: -costToDeduct, note, balanceAfter: newBase + newBonus });
+    _emit('creditschange', _profile);
+    return true;
+  }
+
+  // AI Assigner — Unit 3 Website Development mentor.
+  // "hint" mode: free-form coaching chat, tier-based cost (cheaper than marking).
+  async function askAiAssigner(input) {
+    if (!isLoggedIn()) {
+      throw new Error('You need to sign in before using AI Assigner.');
+    }
+    const message = input && typeof input.message === 'string' ? input.message.trim() : '';
+    if (!message) {
+      throw new Error('A message is required for AI Assigner.');
+    }
+    const costToDeduct = _tierCost({ free: 3, school: 1, pro: 1, ultra: 0, subject: 2 });
+    const session = getSession();
+    const token = session && session.access_token ? session.access_token : '';
+    if (!token) throw new Error('Missing auth session token. Please sign in again.');
+
+    const payload = {
+      mode: 'hint',
+      message,
+      context: input && typeof input.context === 'string' ? input.context.slice(0, 4000) : '',
+      history: Array.isArray(input && input.history) ? input.history.slice(-8) : [],
+    };
+    const response = await fetch(SUPABASE_URL + '/functions/v1/ai-assign', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+      body: JSON.stringify(payload),
+    });
+    const result = await response.json().catch(function () { return {}; });
+    if (!response.ok) {
+      throw new Error(result && result.error ? String(result.error) : 'AI Assigner is unavailable right now.');
+    }
+    if (!result || typeof result.reply !== 'string') {
+      throw new Error('AI Assigner returned an invalid response.');
+    }
+    await _deductTieredCredits(costToDeduct, 'ai_assigner', 'ai_assigner_hint', 'AI Assigner hint used');
+    return result;
+  }
+
+  // "mark" mode: marks an assignment submission against P/M/D criteria for a task.
+  async function markAssignment(input) {
+    if (!isLoggedIn()) {
+      throw new Error('You need to sign in before using AI Assigner marking.');
+    }
+    const submission = input && typeof input.submission === 'string' ? input.submission.trim() : '';
+    if (!submission) {
+      throw new Error('A submission is required for marking.');
+    }
+    const costToDeduct = _tierCost({ free: 8, school: 3, pro: 2, ultra: 0, subject: 5 });
+    const session = getSession();
+    const token = session && session.access_token ? session.access_token : '';
+    if (!token) throw new Error('Missing auth session token. Please sign in again.');
+
+    const payload = {
+      mode: 'mark',
+      submission,
+      taskTitle: input && input.taskTitle ? String(input.taskTitle) : 'Task',
+      criteria: input && input.criteria ? input.criteria : {},
+    };
+    const response = await fetch(SUPABASE_URL + '/functions/v1/ai-assign', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+      body: JSON.stringify(payload),
+    });
+    const result = await response.json().catch(function () { return {}; });
+    if (!response.ok) {
+      throw new Error(result && result.error ? String(result.error) : 'AI Assigner marking is unavailable right now.');
+    }
+    if (!result || !result.result) {
+      throw new Error('AI Assigner marking returned an invalid response.');
+    }
+    await _deductTieredCredits(costToDeduct, 'ai_assigner', 'ai_assigner_mark', 'AI Assigner assignment marking used');
+    return result;
+  }
+
   function on(event, callback) {
     if (!EVENTS[event] || typeof callback !== 'function') {
       return false;
@@ -1753,6 +1875,8 @@
     canUseAiMarking,
     aiMarkAnswer,
     examineAnswer,
+    askAiAssigner,
+    markAssignment,
     refreshProfile: _refreshProfile,
     _appendCreditActivity,
     on,
