@@ -1,143 +1,148 @@
-/* Sitemap Builder — drag-and-drop node/tree builder for planning site structure. */
+/* Sitemap Builder — plan site pages and navigation, with annotations + export. */
 (function () {
-  let nodes = [];
-  let links = [];
-  let dragNode = null;
-  let dragOffset = { x: 0, y: 0 };
-  let linkFrom = null;
-  const STORAGE_KEY = 'ra10_u3_sitemap_v1';
+  'use strict';
 
-  function saveLocal() {
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ nodes, links })); } catch (e) {}
-  }
-  function loadLocal() {
+  const STORE_KEY = 'ra10_u3_sitemap_v2';
+  let state = loadState();
+  let selectedId = null;
+  let dragNode = null;
+
+  function loadState() {
     try {
-      const d = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
-      if (d && Array.isArray(d.nodes)) return d;
+      const d = JSON.parse(localStorage.getItem(STORE_KEY) || 'null');
+      if (d && Array.isArray(d.pages)) return d;
     } catch (e) {}
-    return {
-      nodes: [{ id: 'home', label: 'Home', x: 380, y: 30, home: true }],
-      links: [],
-    };
+    return { pages: [{ id: 'home', label: 'Homepage', home: true, x: 300, y: 20 }], annotations: '' };
   }
+  function saveState() { try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); } catch (e) {} }
 
   function render() {
-    const wrap = document.getElementById('sitemap-canvas-wrap');
-    const svg = document.getElementById('sitemap-svg');
-    if (!wrap || !svg) return;
-    wrap.querySelectorAll('.sitemap-node').forEach((n) => n.remove());
-    svg.innerHTML = '';
+    const host = document.getElementById('sitemap-tool');
+    if (!host) return;
+    host.innerHTML = `
+<div class="sm-controls">
+  <input class="select" id="sm-new-label" placeholder="New page name (e.g. Events)" style="min-width:180px">
+  <button class="btn" id="sm-add">Add page</button>
+  <button class="btn ghost" id="sm-clear">Clear</button>
+  <span class="muted small">Drag pages to arrange them · click a page to delete it</span>
+</div>
+<div class="wf-canvas-wrap sm-canvas-wrap" style="min-height:460px">
+  <div class="wf-canvas sm-canvas" id="sm-canvas" style="height:460px"></div>
+</div>
+<div class="sm-annotations">
+  <label class="muted small" for="sm-annotations"><strong>Annotations</strong> — for each page note its content/features and which client requirement it meets (this is what makes the site map meet A.M2/A.D1).</label>
+  <textarea id="sm-annotations" placeholder="e.g. Homepage — hero + accordion (meets: accordion requirement, responsive nav). Events — form to request content + map (meets: form + modal images requirements)...">${esc(state.annotations)}</textarea>
+</div>
+<div class="wf-actions">
+  <button class="btn primary" id="sm-export">Export as image</button>
+  <button class="btn" id="sm-print">Print</button>
+</div>`;
 
-    links.forEach((l) => {
-      const a = nodes.find((n) => n.id === l.from);
-      const b = nodes.find((n) => n.id === l.to);
-      if (!a || !b) return;
-      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-      line.setAttribute('x1', a.x + 55);
-      line.setAttribute('y1', a.y + 18);
-      line.setAttribute('x2', b.x + 55);
-      line.setAttribute('y2', b.y + 18);
-      line.setAttribute('stroke', '#0f766e');
-      line.setAttribute('stroke-width', '2');
-      svg.appendChild(line);
+    document.getElementById('sm-add').addEventListener('click', addPage);
+    document.getElementById('sm-new-label').addEventListener('keydown', function (e) { if (e.key === 'Enter') addPage(); });
+    document.getElementById('sm-clear').addEventListener('click', function () {
+      if (!confirm('Clear the sitemap?')) return;
+      state.pages = [{ id: 'home', label: 'Homepage', home: true, x: 300, y: 20 }];
+      saveState(); renderCanvas();
+    });
+    document.getElementById('sm-annotations').addEventListener('input', function (e) { state.annotations = e.target.value; saveState(); });
+    document.getElementById('sm-export').addEventListener('click', exportImage);
+    document.getElementById('sm-print').addEventListener('click', function () { window.print(); });
+
+    const canvas = document.getElementById('sm-canvas');
+    canvas.addEventListener('click', function (e) {
+      const node = e.target.closest('.sm-node');
+      if (!node) return;
+      if (e.target.classList.contains('sm-del')) {
+        state.pages = state.pages.filter(function (p) { return p.id !== node.dataset.id; });
+        selectedId = null;
+        saveState(); renderCanvas(); return;
+      }
+      selectedId = node.dataset.id;
+      renderCanvas();
+    });
+    canvas.addEventListener('pointerdown', function (e) {
+      const node = e.target.closest('.sm-node');
+      if (!node || e.target.classList.contains('sm-del')) return;
+      e.preventDefault();
+      dragNode = node;
+      const rect = node.getBoundingClientRect();
+      dragNode._offX = e.clientX - rect.left;
+      dragNode._offY = e.clientY - rect.top;
+    });
+    document.addEventListener('pointermove', function (e) {
+      if (!dragNode) return;
+      const canvas = document.getElementById('sm-canvas');
+      const cRect = canvas.getBoundingClientRect();
+      const x = Math.max(0, Math.min(cRect.width - 130, e.clientX - cRect.left - dragNode._offX));
+      const y = Math.max(0, Math.min(cRect.height - 50, e.clientY - cRect.top - dragNode._offY));
+      dragNode.style.left = x + 'px';
+      dragNode.style.top = y + 'px';
+      dragNode._x = x; dragNode._y = y;
+    });
+    document.addEventListener('pointerup', function () {
+      if (dragNode && dragNode._x != null) {
+        const p = state.pages.find(function (p) { return p.id === dragNode.dataset.id; });
+        if (p) { p.x = Math.round(dragNode._x); p.y = Math.round(dragNode._y); saveState(); }
+      }
+      dragNode = null;
     });
 
-    nodes.forEach((n) => {
-      const el = document.createElement('div');
-      el.className = 'sitemap-node' + (n.home ? ' home' : '');
-      el.style.left = n.x + 'px';
-      el.style.top = n.y + 'px';
-      el.textContent = n.label;
-      el.dataset.id = n.id;
+    renderCanvas();
+  }
+
+  function addPage() {
+    const input = document.getElementById('sm-new-label');
+    const label = (input.value || '').trim();
+    if (!label) return;
+    const id = 'p' + Date.now();
+    state.pages.push({ id: id, label: label, home: false, x: 60 + (state.pages.length * 130) % 600, y: 120 + (state.pages.length * 40) % 300 });
+    input.value = '';
+    saveState();
+    renderCanvas();
+  }
+
+  function renderCanvas() {
+    const canvas = document.getElementById('sm-canvas');
+    if (!canvas) return;
+    canvas.innerHTML = '';
+    state.pages.forEach(function (p) {
+      const node = document.createElement('div');
+      node.className = 'sm-node' + (p.home ? ' home' : '') + (p.id === selectedId ? ' selected' : '');
+      node.dataset.id = p.id;
+      node.style.left = p.x + 'px';
+      node.style.top = p.y + 'px';
+      node.innerHTML = '<div class="sm-label">' + esc(p.label) + '</div>' + (p.home ? '<div class="sm-note">&#9733; start here</div>' : '');
       const del = document.createElement('span');
-      del.className = 'del-btn';
-      del.textContent = '×';
-      del.title = 'Delete page';
-      del.addEventListener('click', (e) => {
-        e.stopPropagation();
-        nodes = nodes.filter((x) => x.id !== n.id);
-        links = links.filter((l) => l.from !== n.id && l.to !== n.id);
-        saveLocal();
-        render();
-      });
-      if (!n.home) el.appendChild(del);
-
-      el.addEventListener('mousedown', (e) => {
-        if (e.shiftKey) {
-          if (!linkFrom) { linkFrom = n.id; el.style.outline = '2px solid #2563eb'; }
-          else if (linkFrom !== n.id) {
-            links.push({ from: linkFrom, to: n.id });
-            linkFrom = null;
-            saveLocal();
-            render();
-          }
-          return;
-        }
-        dragNode = n;
-        const rect = wrap.getBoundingClientRect();
-        dragOffset = { x: e.clientX - rect.left - n.x, y: e.clientY - rect.top - n.y };
-      });
-      wrap.appendChild(el);
+      del.className = 'sm-del';
+      del.textContent = '✕';
+      node.appendChild(del);
+      canvas.appendChild(node);
     });
   }
 
-  function onMove(e) {
-    if (!dragNode) return;
-    const wrap = document.getElementById('sitemap-canvas-wrap');
-    const rect = wrap.getBoundingClientRect();
-    dragNode.x = Math.max(0, e.clientX - rect.left - dragOffset.x);
-    dragNode.y = Math.max(0, e.clientY - rect.top - dragOffset.y);
-    render();
+  function exportImage() {
+    const canvas = document.getElementById('sm-canvas');
+    if (!canvas) return;
+    const rect = canvas.getBoundingClientRect();
+    const svg = '<svg xmlns="http://www.w3.org/2000/svg" width="' + rect.width + '" height="' + rect.height + '">' +
+      '<foreignObject width="100%" height="100%">' +
+      '<div xmlns="http://www.w3.org/1999/xhtml" style="font-family:Satoshi,system-ui,sans-serif;background:#ffffff;color:#101828">' +
+      canvas.innerHTML +
+      '</div></foreignObject></svg>';
+    const blob = new Blob([svg], { type: 'image/svg+xml' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'sitemap.svg';
+    a.click();
+    setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
   }
-  function onUp() {
-    if (dragNode) saveLocal();
-    dragNode = null;
-  }
+
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
 
   window.initSitemapTool = function () {
-    const wrap = document.getElementById('sitemap-canvas-wrap');
-    if (!wrap) return;
-    if (!wrap.dataset.inited) {
-      wrap.dataset.inited = '1';
-      const data = loadLocal();
-      nodes = data.nodes;
-      links = data.links;
-      document.addEventListener('mousemove', onMove);
-      document.addEventListener('mouseup', onUp);
-      document.getElementById('sm-add-page')?.addEventListener('click', () => {
-        const label = prompt('Page name:', 'New Page');
-        if (!label) return;
-        nodes.push({ id: 'p' + Date.now(), label, x: 120 + Math.random() * 400, y: 140 + Math.random() * 260 });
-        saveLocal();
-        render();
-      });
-      document.getElementById('sm-clear')?.addEventListener('click', () => {
-        if (confirm('Clear the whole sitemap (keeps Home)?')) {
-          nodes = nodes.filter((n) => n.home);
-          links = [];
-          saveLocal();
-          render();
-        }
-      });
-      document.getElementById('sm-export')?.addEventListener('click', async () => {
-        const ok = await (window.ra10Gate ? ra10Gate('sitemap_export') : Promise.resolve(true));
-        if (!ok) return;
-        const rows = nodes.map((n) => n.label).join('\n');
-        const linkRows = links.map((l) => {
-          const a = nodes.find((x) => x.id === l.from);
-          const b = nodes.find((x) => x.id === l.to);
-          return (a ? a.label : '?') + ' → ' + (b ? b.label : '?');
-        }).join('\n');
-        const text = 'SITEMAP\n=======\nPages:\n' + rows + '\n\nConnections:\n' + linkRows;
-        const blob = new Blob([text], { type: 'text/plain' });
-        const link = document.createElement('a');
-        link.href = URL.createObjectURL(blob);
-        link.download = 'sitemap.txt';
-        link.click();
-      });
-      const hint = document.getElementById('sm-hint');
-      if (hint) hint.textContent = 'Tip: hold Shift and click two pages to link them. Drag pages to reposition.';
-    }
+    state = loadState();
     render();
   };
 })();

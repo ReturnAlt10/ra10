@@ -1,0 +1,103 @@
+{
+  "unit": "BTEC IT Level 3 Unit 3 - Website Development",
+  "aims": {
+    "A": {
+      "code": "A",
+      "title": "Understand how the principles of website development are used to create effective websites",
+      "topics": [
+        {
+          "code": "A1",
+          "name": "Purpose and principles of websites",
+          "keyPoints": [
+            "Purpose of websites: eCommerce (selling online), providing information, promoting products or services, providing entertainment",
+            "Target audience: demographics (age, gender, income, education, location) and user personas (fictional profiles representing typical users)",
+            "Page layout: F-shaped pattern (users scan left-to-right, then down — good for text-heavy sites), Z-shaped pattern (scan across the top, diagonal, across the bottom — good for simple hero pages), grid layout, visual hierarchy (ordering elements by importance), grouping elements, separating content",
+            "Navigation: fixed/sticky navigation bars, vertical navigation, hamburger menus, logical navigation (predictable structure)",
+            "Content: written content (copy), visual content (images, video), calls-to-action (buttons/links that encourage the user to do something)",
+            "Design: typography (fonts, readability), colour scheme (colour psychology, brand colours, contrast)",
+            "User experience (UX): accessibility (colour contrast, colour combinations, closed captions and transcripts, keyboard-only navigation, breadcrumbs, customisable features), consistency (branding, page layout, design, UI elements), user-friendly (simple, intuitive, engaging, responsive)",
+            "Use of motion and movement: micro-interactions (small feedback animations), animation, parallax scrolling, image sliders; every use of motion must have a purpose",
+            "Dynamic websites: customised user experience (e.g. personal recommendations), controlled access to content (e.g. member-only areas)",
+            "Cross-browser compatibility: reducing discrepancies between browsers; mobile compatibility",
+            "Search Engine Optimisation (SEO): techniques to improve ranking in search results"
+          ]
+        },
+        {
+          "code": "A2",
+          "name": "Planning a website in response to a client brief",
+          "keyPoints": [
+            "Establishing the client's requirements: purpose (the problem to be solved, key messages, user motivations and goals), intended audience, technical requirements",
+            "Research to identify new ideas: existing websites (analyse competitors), content ideas, available resources, legal and ethical constraints (copyright, data protection, digital accessibility, inclusive and diverse content and representations)",
+            "Structuring the website: site map (number of pages, content and features for each page, site navigation between pages)",
+            "Legal and ethical constraints in detail: copyright (don't use others' images/text/music without permission — use Creative Commons, royalty-free stock, or your own assets), data protection (UK GDPR — must have a privacy policy, only collect data you need, ask permission, use forms safely), digital accessibility (WCAG 2.2 guidelines — alt text, contrast, keyboard navigation), inclusive and diverse content (represent different groups positively, avoid stereotypes)"
+          ]
+        }
+      ]
+    },
+    "B": {
+      "code": "B",
+      "title": "Explore website design skills and techniques to meet client requirements",
+      "topics": [
+        {
+          "code": "B1",
+          "name": "Website design",
+          "keyPoints": [
+            "Creating wireframes: wireframing tools (sketching on paper, graphic design software like Photoshop/Illustrator, UX design software like Figma/Adobe XD, dedicated wireframing apps like Balsamiq), wireframing techniques (hierarchy of page elements, balance of content, grouping elements, aligning elements, accurate dimensions)",
+            "Wireframes are low-fidelity layouts: boxes and placeholder text showing where elements go — not final designs. They show structure, not style.",
+            "Design ideas: visual style (colour palette, branding, typography), visual representations/mockups of the web pages (high-fidelity designs showing colours, images, fonts)",
+            "Reviewing fitness for purpose: quality (clarity, detail), user experience, meeting client requirements — review your designs, get feedback, and make improvements"
+          ]
+        },
+        {
+          "code": "B2",
+          "name": "Asset management techniques",
+          "keyPoints": [
+            "Creating assets: writing headlines and copy (short sentences, short paragraphs, avoiding jargon, appropriate mode of address for the target audience); visual assets (image editing techniques like cropping and resizing, image manipulation like colour correction and layers, vector graphic drawing like logos)",
+            "Sourcing assets: written copy (write your own), stock images (e.g. royalty-free sites like Unsplash, Pixabay), icons, video — always check licences and credit sources",
+            "Preparing assets: trimming video (cut to relevant clips), compression (reduce file size for faster loading), file formats (choose the right format: JPG for photos, PNG for graphics with transparency, GIF/WebP for animations, MP4 for video — keep files under 1MB where possible)",
+            "Managing assets: logical folder structure (e.g. images/, css/, js/, video/), naming conventions (descriptive, consistent, no spaces — e.g. hero-banner.jpg, not 'IMG 3421.jpg')",
+            "Asset log: track every asset — name, source (own work or where downloaded from), and where it is used on the site"
+          ]
+        }
+      ]
+    },
+    "C": {
+      "code": "C",
+      "title": "Develop a website to meet client requirements",
+      "topics": [
+        {
+          "code": "C1",
+          "name": "Common tools and techniques",
+          "keyPoints": [
+            "HTML (HyperText Markup Language): the structure of a webpage. Elements include navigation (menus, internal and external links, anchors), adding content (text, images, video, tables of information), and forms (input fields, textareas, buttons, dropdowns). Semantic HTML uses meaningful tags like <header>, <nav>, <main>, <section>, <footer>, <article> for accessibility and SEO.",
+            "CSS (Cascading Style Sheets): the presentation. Styling (colour, web typography, text formatting, links and buttons, tables, forms), page layout (CSS box model — content, padding, border, margin; responsive layouts using CSS media queries and layout tools like Flexbox and Grid)",
+            "JavaScript: adds interactivity. Displaying images (sliders, galleries), displaying information (accordions, tabs, modal boxes, filtering information), animation (hover effects, transitions, animated logos, motion), search functionality, shopping carts, interactive maps, video (controlling video playback, video backgrounds)",
+            "Web development tools: text editors (VS Code), WYSIWYG editors (Adobe Dreamweaver), browser developer tools, version control (Git)",
+            "Development process: plan → design → build → test → review → refine → publish"
+          ]
+        },
+        {
+          "code": "C2",
+          "name": "Website development processes",
+          "keyPoints": [
+            "Accessibility features: alternative text (alt tags) on images, zoom features, text-to-speech",
+            "Accessibility standards: WCAG (Web Content Accessibility Guidelines), W3C standards, HTML5 standards",
+            "Semantic HTML: using meaningful structural tags improves accessibility for screen readers and SEO",
+            "Search Engine Optimisation (SEO): keywords, meta tags (title, description), heading structure, alt text, fast loading, mobile-friendly design, internal links",
+            "Self-review: quality in comparison to similar websites, suitability for audience and purpose, meeting client requirements, legal and ethical constraints, consistency, readability",
+            "Publishing the website: choosing a hosting provider/domain, uploading files via FTP or a hosting dashboard, testing the live site"
+          ]
+        },
+        {
+          "code": "C3",
+          "name": "Testing",
+          "keyPoints": [
+            "Functionality testing: creating a test plan (description, test data, expected outcome, actual outcome, comments), testing areas including links (do all navigation links work?), user interactivity (do buttons, forms, accordions, sliders work?), and responsiveness (does it work at different screen sizes?)",
+            "Usability testing: a user testing audit with real users — asking classmates/friends/family to try the site and give feedback; testing areas include accessibility, logical navigation, clarity of information, user experience",
+            "Refinements: use the outcomes of testing and self-review to make improvements to the final website"
+          ]
+        }
+      ]
+    }
+  }
+}

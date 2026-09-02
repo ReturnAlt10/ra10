@@ -53,10 +53,11 @@
 <title>BTEC IT Unit 3 — Website Development</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <link rel="preconnect" href="https://api.fontshare.com">
-<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@500,700,900,400&f[]=jetbrains-mono@500&display=swap">
-<link rel="stylesheet" href="css/style.css?v=20260902">
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700,900&f[]=jetbrains-mono@400,500&display=swap">
+<link rel="stylesheet" href="css/style.css?v=20260903">
 <style>
-.ra10-cost-label { display:inline-block; font-size:.68rem; font-weight:600; color:rgba(255,255,255,.75); background:rgba(0,0,0,.15); padding:1px 6px; border-radius:999px; margin-left:6px; vertical-align:middle; letter-spacing:.03em; }
+.ra10-cost-label { display:inline-block; font-size:.68rem; font-weight:700; color:rgba(255,255,255,.85); background:rgba(0,0,0,.18); padding:1px 6px; border-radius:999px; margin-left:6px; vertical-align:middle; letter-spacing:.03em; }
+.ra10-cost-label.free-label { color:rgba(255,255,255,.65); background:rgba(255,255,255,.14); }
 .btn:not(.primary) .ra10-cost-label { color:var(--accent-ink); background:var(--accent-2); }
 .ra10-subject-banner { display:none; padding:10px 16px; background:linear-gradient(90deg,var(--accent-2),var(--surface)); border-bottom:1px solid var(--line); color:var(--ink); }
 .ra10-subject-banner:not(:empty) { display:block; }
@@ -106,17 +107,16 @@
     <a class="site-unit-link" href="/index.html#/exams" target="_top">Exams</a>
     <a class="site-unit-link" href="/index.html#/leaderboard" target="_top">Leaderboard</a>
   </div>
-  <nav class="tabs">
-    <button class="tab active" data-tab="dashboard">Dashboard</button>
-    <button class="tab" data-tab="guide">Guide</button>
-    <button class="tab" data-tab="mcq">MCQs</button>
-    <button class="tab" data-tab="quiz">Quiz</button>
-    <button class="tab" data-tab="flash">Flashcards</button>
-    <button class="tab tab-special" data-tab="wireframe">Wireframes</button>
-    <button class="tab tab-special" data-tab="sitemap">Sitemap</button>
-    <button class="tab tab-special" data-tab="editor">Code Editor</button>
-    <button class="tab tab-special" data-tab="assignment">Assignment</button>
-    <button class="tab" data-tab="spec">Spec</button>
+  <nav class="tabs" aria-label="Unit 3 sections">
+    <button class="tab active" data-tab="dashboard" data-tip="Overview of Part 1 and Part 2">Home</button>
+    <button class="tab tab-part1" data-tab="guide" data-tip="Full theory guide for Aims A, B and C">Study Guide</button>
+    <button class="tab tab-part1" data-tab="revise" data-tip="MCQs, quiz and flashcards">Revise</button>
+    <button class="tab tab-part1" data-tab="wireframe" data-tip="Draw wireframes for each page">Wireframe</button>
+    <button class="tab tab-part1" data-tab="sitemap" data-tip="Plan your site structure and navigation">Sitemap</button>
+    <button class="tab tab-part1" data-tab="editor" data-tip="HTML, CSS and JS code editor with live preview">Code Editor</button>
+    <button class="tab tab-part2" data-tab="assignment" data-tip="Step-by-step walkthroughs for all tasks">Assignment</button>
+    <button class="tab" data-tab="ai" data-tip="AI Assigner — hints, coaching and marking">AI Assigner</button>
+    <button class="tab" data-tab="spec" data-tip="Unit specification mapped to the guide">Spec</button>
   </nav>
   <div id="unit3-credit-chip" style="margin-left:auto;display:flex;align-items:center;"></div>
   <div style="display:flex;align-items:center;gap:8px;">
@@ -133,194 +133,171 @@
 
 <main class="wrap">
 
-  <!-- DASHBOARD -->
+  <!-- ═══════════ PART 1 / PART 2 OVERVIEW — HOME ═══════════ -->
   <section id="view-dashboard" class="view active">
-    <div class="hero">
-      <h1>Unit 3 — Website Development</h1>
-      <p>Learn the theory of website design, planning and technologies, then build a real website for your assignment. AI Assigner is on hand for hints whenever you need them.</p>
-      <div class="hero-pills"><span class="hero-pill">Internally assessed</span><span class="hero-pill">60 GLH</span><span class="hero-pill">4 Learning Aims</span></div>
-    </div>
-    <div class="stats" id="dash-stats"></div>
-
-    <div class="section-block">
-      <div class="section-block-head"><h2>Part 1 — Learn the theory</h2><span class="sb-eyebrow">Learning Aims A &amp; B</span></div>
-      <div class="feature-cards grid-2">
-        <div class="card primary-card"><span class="card-tag">Aim A &amp; B</span><h3>Revision Guide</h3><p>Impact of websites, legal/ethical/accessibility considerations, sitemaps, wireframes, HTML/CSS/JS, dev tools, testing and optimisation.</p><div class="card-action-row"><button class="btn primary" data-goto="guide">Open guide</button></div></div>
-        <div class="card"><span class="card-tag">Practice</span><h3>Multiple Choice Questions</h3><p>Test your knowledge with topic-tagged MCQs across both theory learning aims.</p><div class="card-cost-note">1 credit per practice session</div><div class="card-action-row"><button class="btn" data-goto="mcq">Practise MCQs</button></div></div>
-        <div class="card"><span class="card-tag">Quick fire</span><h3>Quiz</h3><p>A fast quiz to check recall of key facts.</p><div class="card-cost-note">1 credit per quiz</div><div class="card-action-row"><button class="btn" data-goto="quiz">Start quiz</button></div></div>
-        <div class="card"><span class="card-tag">Free</span><h3>Flashcards</h3><p>Flip through key term flashcards — always free.</p><div class="card-action-row"><button class="btn" data-goto="flash">Open flashcards</button></div></div>
-      </div>
-    </div>
-
-    <div class="section-block">
-      <div class="section-block-head"><h2>Interactive design tools</h2><span class="sb-eyebrow">For Learning Aim A</span></div>
-      <div class="feature-cards grid-2">
-        <div class="card"><span class="card-tag">Design</span><h3>Wireframe Builder</h3><p>Drag-and-drop shapes to plan page layouts before you code.</p><div class="card-cost-note">Free to use · 1 credit to export as PNG</div><div class="card-action-row"><button class="btn" data-goto="wireframe">Open Wireframe Builder</button></div></div>
-        <div class="card"><span class="card-tag">Design</span><h3>Sitemap Builder</h3><p>Plan your website's structure and navigation visually.</p><div class="card-cost-note">Free to use · 1 credit to export</div><div class="card-action-row"><button class="btn" data-goto="sitemap">Open Sitemap Builder</button></div></div>
-      </div>
-    </div>
-
-    <div class="section-block">
-      <div class="section-block-head"><h2>Part 2 — Build &amp; complete your assignment</h2><span class="sb-eyebrow">Learning Aims B, C &amp; D</span></div>
-      <div class="feature-cards grid-2">
-        <div class="card primary-card"><span class="card-tag">Build</span><h3>Code Editor</h3><p>Full HTML/CSS/JS editor with live preview, cloud autosave, and optional local folder access — like VS Code or Dreamweaver, right in your browser.</p><div class="card-action-row"><button class="btn primary" data-goto="editor">Open Code Editor</button></div></div>
-        <div class="card primary-card"><span class="card-tag">Assignment</span><h3>Assignment Hub</h3><p>Step-by-step guidance to a Distinction on all 3 tasks, sample briefs, and AI Assigner marking of your work.</p><div class="card-action-row"><button class="btn primary" data-goto="assignment">Open Assignment Hub</button></div></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- GUIDE -->
-  <section id="view-guide" class="view">
-    <div class="section-block-head"><h2>Revision Guide</h2><span class="sb-eyebrow">Learning Aims A &amp; B</span></div>
-    <div class="guide-shell">
-      <div class="guide-sidebar"><div id="guide-sidebar-content"></div></div>
-      <div class="guide-main"><div id="guide-content"></div></div>
-    </div>
-  </section>
-
-  <!-- MCQ -->
-  <section id="view-mcq" class="view">
-    <div id="mcq-browse-panel">
-      <div class="section-block-head"><h2>MCQ Practice</h2><span class="sb-eyebrow">Learning Aims A &amp; B</span></div>
-      <div class="filters">
-        <select id="mcq-filter-aim" onchange="renderMcqBrowse()">
-          <option value="">All aims</option>
-          <option value="A">Aim A</option>
-          <option value="B">Aim B</option>
-        </select>
-        <button class="btn primary" onclick="startMcqPractice()">Start practice<span class="ra10-cost-label">1 credit</span></button>
-      </div>
-      <div class="qlist" id="mcq-browse-list"></div>
-    </div>
-    <div id="mcq-play-panel" class="hidden"></div>
-  </section>
-
-  <!-- QUIZ -->
-  <section id="view-quiz" class="view">
-    <div class="section-block-head"><h2>Quick Quiz</h2><span class="sb-eyebrow">Fast recall check</span></div>
-    <div id="quiz-card-host">
-      <div class="mcq-card" style="text-align:center">
-        <p>A fast-fire quiz covering both theory learning aims.</p>
-        <button class="btn primary big" onclick="startQuiz()">Start quiz<span class="ra10-cost-label">1 credit</span></button>
-      </div>
-    </div>
-  </section>
-
-  <!-- FLASHCARDS -->
-  <section id="view-flash" class="view">
-    <div class="section-block-head"><h2>Flashcards</h2><span class="sb-eyebrow">Free · flip to reveal</span></div>
-    <div class="flash-controls" style="justify-content:center">
-      <button class="btn ghost" onclick="flashNav(-1)">← Prev</button>
-      <button class="btn ghost" onclick="flashNav(1)">Next →</button>
-      <button class="btn ghost" onclick="startFlashcards()">Shuffle</button>
-    </div>
-    <div id="flash-stage"></div>
-    <div class="flash-progress" id="flash-progress"></div>
-  </section>
-
-  <!-- WIREFRAME -->
-  <section id="view-wireframe" class="view">
-    <div class="section-block-head"><h2>Wireframe Builder</h2><span class="sb-eyebrow">Learning Aim A · plan your page layouts</span></div>
-    <div class="tool-toolbar">
-      <button class="wf-shape-btn active" data-shape="box" title="Box">▭</button>
-      <button class="wf-shape-btn" data-shape="header" title="Header">H</button>
-      <button class="wf-shape-btn" data-shape="nav" title="Nav">☰</button>
-      <button class="wf-shape-btn" data-shape="image" title="Image">🖼</button>
-      <button class="wf-shape-btn" data-shape="text" title="Text lines">¶</button>
-      <button class="wf-shape-btn" data-shape="button" title="Button">🔘</button>
-      <button class="wf-shape-btn" data-shape="footer" title="Footer">F</button>
-      <span class="sep"></span>
-      <button class="btn ghost" id="wf-delete-selected">Undo last</button>
-      <button class="btn ghost" id="wf-clear">Clear all</button>
-      <button class="btn primary" id="wf-export">Export as PNG<span class="ra10-cost-label">1 credit</span></button>
-    </div>
-    <p style="font-size:12.5px;color:var(--muted);margin-bottom:10px">Click a shape, then click on the canvas to place it. Drag placed shapes to reposition. Your wireframe autosaves in this browser.</p>
-    <div class="wireframe-canvas-wrap"><canvas id="wireframe-canvas"></canvas></div>
-  </section>
-
-  <!-- SITEMAP -->
-  <section id="view-sitemap" class="view">
-    <div class="section-block-head"><h2>Sitemap Builder</h2><span class="sb-eyebrow">Learning Aim A · plan your site structure</span></div>
-    <div class="tool-toolbar">
-      <button class="btn primary" id="sm-add-page">+ Add page</button>
-      <button class="btn ghost" id="sm-clear">Clear all</button>
-      <button class="btn" id="sm-export">Export sitemap<span class="ra10-cost-label">1 credit</span></button>
-    </div>
-    <p style="font-size:12.5px;color:var(--muted);margin-bottom:10px" id="sm-hint"></p>
-    <div class="sitemap-canvas-wrap" id="sitemap-canvas-wrap">
-      <svg id="sitemap-svg"></svg>
-    </div>
-  </section>
-
-  <!-- CODE EDITOR -->
-  <section id="view-editor" class="view">
-    <div class="section-block-head"><h2>Code Editor</h2><span class="sb-eyebrow">HTML · CSS · JS — cloud autosave (Supabase)</span></div>
-    <div class="tool-toolbar">
-      <button class="btn" id="editor-new-file">+ New file</button>
-      <button class="btn ghost" id="editor-reset">Reset to template</button>
-      <button class="btn ghost" id="editor-download">Download files</button>
-      <span class="sep"></span>
-      <button class="btn ghost" id="editor-pick-folder">Open local folder</button>
-      <button class="btn ghost" id="editor-save-folder">Save to local folder</button>
-      <span class="sep"></span>
-      <button class="btn ghost" id="editor-refresh-preview">↻ Refresh preview</button>
-      <span id="editor-save-status" style="font-size:12px;color:var(--muted);margin-left:auto"></span>
-    </div>
-    <div class="editor-shell">
-      <div class="editor-filebar" id="editor-file-list"></div>
-      <div class="editor-main">
-        <div class="editor-split">
-          <div class="editor-code-pane">
-            <div class="editor-tabs-bar"><span class="editor-status" id="editor-status">HTML</span></div>
-            <textarea id="code-editor-textarea" spellcheck="false"></textarea>
-          </div>
-          <div class="editor-preview-pane">
-            <div class="editor-preview-bar">Live preview</div>
-            <iframe id="code-preview-frame" title="Live preview" sandbox="allow-scripts allow-same-origin"></iframe>
-          </div>
+    <div class="part-hero">
+      <div class="part-hero-inner">
+        <p class="eyebrow">Pearson Level 3 AAQ BTEC National in IT · Internal Unit</p>
+        <h1>Unit 3 — Website Development</h1>
+        <p class="lede">Learn how websites are planned, designed and built — then get step-by-step support to score a Distinction in your assignment.</p>
+        <div class="hero-cta-row">
+          <button class="btn primary" type="button" data-goto="guide">Start the study guide</button>
+          <button class="btn" type="button" data-goto="assignment">Go to assignment support</button>
         </div>
       </div>
     </div>
-    <p style="font-size:12px;color:var(--muted);margin-top:8px">Cloud autosave stores your files as text (max 1MB per project) in your RA10 account. Use "Open local folder" (Chrome/Edge) to work directly on your own computer, like VS Code.</p>
-  </section>
 
-  <!-- ASSIGNMENT HUB -->
-  <section id="view-assignment" class="view">
-    <div class="section-block-head"><h2>Assignment Hub</h2><span class="sb-eyebrow">Part 2 — step-by-step to a Distinction</span></div>
-    <div class="task-stepper" id="task-stepper"></div>
-    <div id="task-detail"></div>
+    <div class="part-grid">
+      <!-- PART 1 -->
+      <article class="part-card part-card-theory">
+        <div class="part-card-top">
+          <span class="part-badge">Part 1</span>
+          <span class="part-free-badge">Free to revise</span>
+        </div>
+        <h2>Part 1 · Learn the theory</h2>
+        <p>Everything you need for Learning Aims <strong>A</strong>, <strong>B</strong> and <strong>C</strong> — how websites are planned, designed and coded.</p>
+        <ul class="part-feature-list">
+          <li><strong>Study guide</strong> — every spec topic explained with examples, tables and tips</li>
+          <li><strong>Revise</strong> — knowledge-check MCQs, a quick quiz and flashcards (no exam questions)</li>
+          <li><strong>Wireframe designer</strong> — draw the layout for each page</li>
+          <li><strong>Sitemap builder</strong> — plan the site structure and navigation</li>
+          <li><strong>Code editor</strong> — write real HTML, CSS and JS with a live preview, cloud autosave and local folder support</li>
+        </ul>
+        <div class="part-card-actions">
+          <button class="btn primary" type="button" data-goto="guide">Open study guide</button>
+          <button class="btn" type="button" data-goto="revise">Revise</button>
+          <button class="btn" type="button" data-goto="editor">Code editor</button>
+        </div>
+      </article>
+
+      <!-- PART 2 -->
+      <article class="part-card part-card-assignment">
+        <div class="part-card-top">
+          <span class="part-badge">Part 2</span>
+          <span class="part-free-badge">Assignment support</span>
+        </div>
+        <h2>Part 2 · Win your assignment</h2>
+        <p>Three tasks. One goal: <strong>Distinction</strong>. Work through the walkthroughs, practise on sample briefs, then upload your own work for AI marking.</p>
+        <ul class="part-feature-list">
+          <li><strong>Task-by-task walkthroughs</strong> — exactly what to produce for Pass, Merit and Distinction</li>
+          <li><strong>Sample briefs</strong> — realistic practice scenarios with generated sample documents</li>
+          <li><strong>Upload your assignment</strong> — AI Assigner marks it against the real criteria and shows where to improve</li>
+          <li><strong>Evidence checklists</strong> — make sure you submit everything required</li>
+        </ul>
+        <div class="part-card-actions">
+          <button class="btn primary" type="button" data-goto="assignment">Open assignment hub</button>
+          <button class="btn" type="button" data-goto="ai">Ask AI Assigner</button>
+        </div>
+      </article>
+    </div>
+
     <div class="section-block">
-      <div class="section-block-head"><h2>Upload your own assignment</h2><span class="sb-eyebrow">Optional</span></div>
-      <label class="upload-zone" for="assignment-file-input">
-        <p style="margin:0;font-weight:700">📄 Click to upload a text/HTML file</p>
-        <p style="margin:6px 0 0;font-size:12px;color:var(--muted)">We'll load its text into the box above for AI Assigner to mark against the selected task's criteria.</p>
-      </label>
-      <input type="file" id="assignment-file-input" accept=".txt,.html,.htm,.md" style="display:none">
+      <div class="section-block-head">
+        <span class="sb-eyebrow">How this unit is structured</span>
+        <h3>Learning Aims &amp; assignments</h3>
+        <p>This is an internal unit assessed by a Pearson Set Assignment (3 tasks). The theory in Part 1 feeds directly into the tasks in Part 2.</p>
+      </div>
+      <div class="aim-grid" id="aim-grid"></div>
     </div>
   </section>
 
-  <!-- SPEC -->
+  <!-- ═══════════ GUIDE ═══════════ -->
+  <section id="view-guide" class="view">
+    <div id="guide-comprehensive"></div>
+  </section>
+
+  <!-- ═══════════ REVISE (MCQ + QUIZ + FLASH) ═══════════ -->
+  <section id="view-revise" class="view">
+    <header class="section-head">
+      <h2>Revise</h2>
+      <p>Knowledge-check questions only — not exam questions. Pick a mode below.</p>
+    </header>
+    <div class="revise-pick">
+      <button class="revise-pick-card active" data-mode="mcq">
+        <span class="rp-icon">✓</span>
+        <strong>Multiple choice</strong>
+        <span class="muted">32 questions with instant explanations, filtered by aim</span>
+      </button>
+      <button class="revise-pick-card" data-mode="quiz">
+        <span class="rp-icon">⚡</span>
+        <strong>Quick quiz</strong>
+        <span class="muted">12 mixed questions with a score at the end</span>
+      </button>
+      <button class="revise-pick-card" data-mode="flash">
+        <span class="rp-icon">🃏</span>
+        <strong>Flashcards</strong>
+        <span class="muted">32 key terms — flip, mark known, repeat</span>
+      </button>
+    </div>
+    <div id="revise-controls"></div>
+    <div id="revise-stage"></div>
+  </section>
+
+  <!-- ═══════════ WIREFRAME ═══════════ -->
+  <section id="view-wireframe" class="view">
+    <header class="section-head">
+      <h2>Wireframe Designer</h2>
+      <p>Drag blocks onto the canvas to sketch each page layout. Add annotation notes, then export your wireframe as evidence.</p>
+    </header>
+    <div id="wireframe-tool"></div>
+  </section>
+
+  <!-- ═══════════ SITEMAP ═══════════ -->
+  <section id="view-sitemap" class="view">
+    <header class="section-head">
+      <h2>Sitemap Builder</h2>
+      <p>Plan every page of your site and how they link together. Add annotations to show how the structure meets the client brief.</p>
+    </header>
+    <div id="sitemap-tool"></div>
+  </section>
+
+  <!-- ═══════════ CODE EDITOR ═══════════ -->
+  <section id="view-editor" class="view">
+    <header class="section-head" style="margin-bottom:16px;">
+      <h2>Code Editor</h2>
+      <p>Write real HTML, CSS and JavaScript with a live preview. Cloud autosave keeps your project safe — or connect a local folder (like VS Code / Dreamweaver) to work on files already on your computer.</p>
+    </header>
+    <div id="ed-app"></div>
+  </section>
+
+  <!-- ═══════════ ASSIGNMENT (PART 2) ═══════════ -->
+  <section id="view-assignment" class="view">
+    <header class="section-head">
+      <h2>Assignment Hub</h2>
+      <p>Step-by-step support for all three tasks — walkthroughs, sample briefs, and AI Assigner marking of your own work.</p>
+    </header>
+    <div id="assignment-hub"></div>
+  </section>
+
+  <!-- ═══════════ AI ASSIGNER ═══════════ -->
+  <section id="view-ai" class="view">
+    <header class="section-head">
+      <h2>AI Assigner</h2>
+      <p>Your personal mentor for Unit 3. Ask for hints on theory, help with a task, or upload your assignment for marking. It never writes your work for you — it coaches you to do it yourself.</p>
+    </header>
+    <div id="ai-assigner-panel"></div>
+  </section>
+
+  <!-- ═══════════ SPEC ═══════════ -->
   <section id="view-spec" class="view">
-    <div class="section-block-head"><h2>Specification Coverage</h2><span class="sb-eyebrow">See how questions map to the Pearson spec</span></div>
+    <header class="section-head">
+      <h2>Unit Specification</h2>
+      <p>The published spec content areas mapped to this app. Click any topic to jump to it in the study guide.</p>
+    </header>
     <div id="spec-content"></div>
   </section>
 
 </main>
 
-<!-- AI ASSIGNER WIDGET -->
-<button id="ai-assigner-fab" title="Ask AI Assigner">🤖</button>
-<div id="ai-assigner-panel">
-  <div class="aa-head"><b>AI Assigner</b><button id="aa-close" style="background:none;border:none;color:#fff;font-size:16px;cursor:pointer">✕</button></div>
-  <div class="aa-body" id="aa-body"></div>
-  <div class="aa-input-row">
-    <textarea id="aa-textarea" rows="1" placeholder="Ask for a hint..."></textarea>
-    <button id="aa-send">Send</button>
-  </div>
-</div>
+<footer class="footer">
+  <p>BTEC Level 3 IT Unit 3 (Website Development) — Pearson AAQ 2025. This is a study and assignment-support tool — not an official Pearson product.</p>
+  <p>2026 RA10 (www.ra10.co.uk)</p>
+</footer>
 
-<script src="js/spec.js"></script>
 <script src="js/data-loader.js"></script>
+<script src="js/spec.js"></script>
 <script src="js/guide.js"></script>
+<script src="js/revise.js"></script>
 <script src="js/wireframe.js"></script>
 <script src="js/sitemap.js"></script>
 <script src="js/editor.js"></script>
@@ -328,13 +305,197 @@
 <script src="js/ai-assigner.js"></script>
 <script src="js/app.js"></script>
 <script>
-document.getElementById('assignment-file-input')?.addEventListener('change', async (e) => {
-  const file = e.target.files && e.target.files[0];
-  if (!file) return;
-  const text = await file.text();
-  const ta = document.getElementById('task-submission-text');
-  if (ta) ta.value = text.slice(0, 15000);
-});
+(function () {
+  const RA10_UNIT_SUBJECT = 'IT';
+  const RA10_CREDIT_CHIP_ID = 'unit3-credit-chip';
+  const RA10_SUBJECT_BONUS = 300;
+  const RA10_ACTION_COSTS = {
+    revision_guide_full: 10,
+    quiz_question: 1,
+    wireframe_export: 1,
+    sitemap_export: 1,
+    code_editor_cloud_project: 0,
+    ai_assigner_hint: 3,
+    ai_assigner_mark: 8,
+  };
+
+  function _ra10GetSubjectStateKey(profile) {
+    return 'ra10_subject_state:' + String((profile && (profile.id || profile.email)) || 'anon');
+  }
+  function _ra10ReadSubjectState(profile) {
+    try { const raw = localStorage.getItem(_ra10GetSubjectStateKey(profile)); return raw ? JSON.parse(raw) : null; } catch (e) { return null; }
+  }
+  function _ra10WriteSubjectState(profile, state) {
+    try { localStorage.setItem(_ra10GetSubjectStateKey(profile), JSON.stringify(state)); } catch (e) {}
+  }
+  function _ra10SyncSubjectState(profile, storedCredits, ownedSubjects) {
+    const cleanOwned = Array.isArray(ownedSubjects) ? ownedSubjects.filter(Boolean) : [];
+    const ownedKey = cleanOwned.slice().sort().join('|');
+    const saved = _ra10ReadSubjectState(profile);
+    const prevOwned = (saved && typeof saved.ownedKey === 'string') ? saved.ownedKey.split('|').filter(Boolean) : [];
+    const prevOwnedSet = new Set(prevOwned);
+    const addedSet = new Set(cleanOwned.filter(s => !prevOwnedSet.has(s)));
+    const savedSpent = (saved && saved.subjectSpent && typeof saved.subjectSpent === 'object') ? saved.subjectSpent : {};
+    const subjectSpent = {};
+    cleanOwned.forEach(subj => {
+      const raw = Number(savedSpent[subj] || 0);
+      subjectSpent[subj] = Math.max(0, Math.min(RA10_SUBJECT_BONUS, Math.floor(Number.isFinite(raw) ? raw : 0)));
+    });
+    let totalSubjectRemaining = cleanOwned.reduce((sum, subj) => sum + Math.max(0, RA10_SUBJECT_BONUS - Number(subjectSpent[subj] || 0)), 0);
+    if (totalSubjectRemaining > storedCredits) {
+      let overflow = totalSubjectRemaining - storedCredits;
+      const trimOrder = cleanOwned.filter(subj => !addedSet.has(subj)).concat(cleanOwned.filter(subj => addedSet.has(subj)));
+      trimOrder.forEach(subj => {
+        if (overflow <= 0) return;
+        const spent = Number(subjectSpent[subj] || 0);
+        const remaining = Math.max(0, RA10_SUBJECT_BONUS - spent);
+        const trim = Math.min(remaining, overflow);
+        subjectSpent[subj] = Math.min(RA10_SUBJECT_BONUS, spent + trim);
+        overflow -= trim;
+      });
+      totalSubjectRemaining = cleanOwned.reduce((sum, subj) => sum + Math.max(0, RA10_SUBJECT_BONUS - Number(subjectSpent[subj] || 0)), 0);
+    }
+    const baselineRemaining = Math.max(0, Math.min(storedCredits, Math.floor(storedCredits - totalSubjectRemaining)));
+    const next = { ownedKey, baselineRemaining, storedCreditsAtSync: storedCredits, subjectSpent };
+    _ra10WriteSubjectState(profile, next);
+    return next;
+  }
+  function _ra10GetUnitCreditsContext() {
+    if (!window.RA10 || !RA10.isLoggedIn()) return null;
+    const profile = RA10.getProfile();
+    if (!profile) return null;
+    const tier = RA10.getTier();
+    const breakdown = (typeof RA10.getCreditBreakdown === 'function') ? RA10.getCreditBreakdown() : null;
+    const totalCredits = breakdown ? Number(breakdown.totalCredits || 0) : (Number(RA10.getCredits()) || 0);
+    const storedCredits = breakdown ? Number(breakdown.storedCredits || 0) : totalCredits;
+    const examBonusRemaining = breakdown ? Number(breakdown.examBonusRemaining || 0) : 0;
+    if (tier !== 'subject') return { isSubjectTier: false, ownsCurrentSubject: true, usableCredits: totalCredits, totalCredits, storedCredits, examBonusRemaining, ownedSubjects: [], baselineRemaining: totalCredits };
+    const ownedSubjects = Array.isArray(profile.unlocked_subjects) ? profile.unlocked_subjects.filter(Boolean) : [];
+    const state = _ra10SyncSubjectState(profile, storedCredits, ownedSubjects);
+    const ownsCurrentSubject = ownedSubjects.includes(RA10_UNIT_SUBJECT);
+    const subjectSpent = (state && state.subjectSpent) ? Number(state.subjectSpent[RA10_UNIT_SUBJECT] || 0) : 0;
+    const subjectCreditsRemaining = ownsCurrentSubject ? Math.max(0, RA10_SUBJECT_BONUS - Math.max(0, Math.min(RA10_SUBJECT_BONUS, subjectSpent))) : 0;
+    const usableCredits = (ownsCurrentSubject ? subjectCreditsRemaining : 0) + Number(state ? state.baselineRemaining : 0) + examBonusRemaining;
+    return { isSubjectTier: true, ownsCurrentSubject, usableCredits, totalCredits, storedCredits, examBonusRemaining, ownedSubjects, baselineRemaining: state ? state.baselineRemaining : 0, subjectCreditsRemaining };
+  }
+  async function _ra10RenderUnitCreditChip() {
+    if (!window.RA10) return;
+    try { await RA10.renderCreditChip(RA10_CREDIT_CHIP_ID); } catch (e) {}
+    const ctx = _ra10GetUnitCreditsContext();
+    if (!ctx || !ctx.isSubjectTier) return;
+    const container = document.getElementById(RA10_CREDIT_CHIP_ID);
+    if (!container) return;
+    const chip = container.firstElementChild;
+    if (!chip) return;
+    const spans = chip.querySelectorAll('span');
+    const creditsEl = spans.length > 1 ? spans[1] : null;
+    if (creditsEl) creditsEl.textContent = ctx.usableCredits + ' usable credits';
+  }
+  function _ra10RenderUnitAvatar() {
+    const btn = document.getElementById('unit-account-avatar');
+    if (!btn || !window.RA10) return;
+    btn.innerHTML = '';
+    if (!RA10.isLoggedIn()) { btn.textContent = '?'; btn.setAttribute('title', 'Sign in'); return; }
+    const profile = RA10.getProfile() || {};
+    const rawName = String(profile.display_name || profile.full_name || profile.email || 'User').trim();
+    const initials = rawName.split(/\s+/).filter(Boolean).map(p => p.charAt(0)).join('').slice(0, 2).toUpperCase() || 'U';
+    const imageUrl = String(profile.profile_pic_url || profile.avatar_url || '').trim();
+    if (imageUrl) {
+      const img = document.createElement('img');
+      img.src = imageUrl; img.alt = ''; img.loading = 'lazy';
+      img.onerror = function () { btn.innerHTML = ''; btn.textContent = initials; };
+      btn.appendChild(img);
+    } else { btn.textContent = initials; }
+    btn.setAttribute('title', rawName);
+  }
+  function _ra10GetActionCost(action) { return Number(RA10_ACTION_COSTS[action] || 0); }
+
+  window._updateSubjectBanner = function () {
+    const el = document.getElementById('ra10-subject-banner');
+    if (!el || !window.RA10) return;
+    if (!RA10.isLoggedIn()) { el.innerHTML = ''; return; }
+    const ctx = _ra10GetUnitCreditsContext();
+    if (!ctx) { el.innerHTML = ''; return; }
+    const tier = RA10.getTier();
+    if (tier !== 'subject') { el.innerHTML = ''; return; }
+    const ownedText = ctx.ownsCurrentSubject ? 'You own IT — your subject credits are usable here.' : 'You own ' + (ctx.ownedSubjects.join(', ') || 'other subjects') + ' — only universal credits can be spent on this unit.';
+    const line2 = ctx.ownsCurrentSubject
+      ? '<div class="line-sub">Usable now on Website Development: ' + ctx.usableCredits + ' credits</div>'
+      : '<div class="line-sub">You purchased ' + (ctx.ownedSubjects.join(', ') || 'other subjects') + '. Only universal credits can be spent here.</div>';
+    el.innerHTML = '<div class="line-main">' + (ctx.ownsCurrentSubject ? 'IT subject credits active ✓' : 'IT not unlocked') + '</div>' + line2;
+  };
+
+  async function ra10Gate(action) {
+    try {
+      if (!window.RA10) return true;
+      if (RA10.isOwner()) return true;
+      if (!RA10.isLoggedIn()) {
+        const result = await RA10.guestGate(action, 3, RA10.showPaywall);
+        if (window.RA10) await _ra10RenderUnitCreditChip();
+        return result === true;
+      }
+      const ctx = _ra10GetUnitCreditsContext();
+      if (ctx && ctx.isSubjectTier) {
+        const cost = _ra10GetActionCost(action);
+        if (ctx.usableCredits < cost) { RA10.showPaywall('credits', action); return false; }
+        const beforeStored = Number(ctx.storedCredits || 0);
+        const spent = await RA10.gate(action, RA10.showPaywall);
+        if (spent) {
+          const profile = RA10.getProfile();
+          const state = _ra10ReadSubjectState(profile);
+          if (state && Number.isFinite(state.baselineRemaining)) {
+            let deductedFromStored = cost;
+            if (typeof RA10.getCreditBreakdown === 'function') {
+              const afterStored = Number((RA10.getCreditBreakdown() || {}).storedCredits || 0);
+              deductedFromStored = Math.max(0, beforeStored - afterStored);
+            }
+            if (ctx.ownsCurrentSubject) {
+              state.subjectSpent = state.subjectSpent || {};
+              const currentSpent = Math.max(0, Math.min(RA10_SUBJECT_BONUS, Number(state.subjectSpent[RA10_UNIT_SUBJECT] || 0)));
+              const subjectRemaining = Math.max(0, RA10_SUBJECT_BONUS - currentSpent);
+              const fromSubject = Math.min(subjectRemaining, deductedFromStored);
+              const fromBaseline = Math.max(0, deductedFromStored - fromSubject);
+              state.subjectSpent[RA10_UNIT_SUBJECT] = Math.min(RA10_SUBJECT_BONUS, currentSpent + fromSubject);
+              state.baselineRemaining = Math.max(0, state.baselineRemaining - fromBaseline);
+            } else {
+              state.baselineRemaining = Math.max(0, state.baselineRemaining - deductedFromStored);
+            }
+            _ra10WriteSubjectState(profile, state);
+          }
+          await _ra10RenderUnitCreditChip();
+          window._updateSubjectBanner();
+        }
+        return spent;
+      }
+      const result = await RA10.gate(action, RA10.showPaywall);
+      await _ra10RenderUnitCreditChip();
+      window._updateSubjectBanner();
+      return result;
+    } catch (e) { console.warn('ra10Gate error', e); return false; }
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    function waitForRA10(cb, tries) {
+      tries = tries || 0;
+      if (window.RA10 && typeof RA10.init === 'function') { cb(); }
+      else if (tries < 50) { setTimeout(function () { waitForRA10(cb, tries + 1); }, 100); }
+    }
+    waitForRA10(async function () {
+      await RA10.init();
+      function updateCostLabels() {
+        const hide = RA10.isPaid() || RA10.isOwner();
+        document.querySelectorAll('.ra10-cost-label').forEach(function (el) { el.style.display = hide ? 'none' : ''; });
+      }
+      updateCostLabels();
+      RA10.on('authchange', updateCostLabels);
+      RA10.on('authchange', function () { _ra10RenderUnitCreditChip(); _ra10RenderUnitAvatar(); window._updateSubjectBanner(); });
+      RA10.on('creditschange', function () { _ra10RenderUnitCreditChip(); window._updateSubjectBanner(); });
+      _ra10RenderUnitCreditChip();
+      _ra10RenderUnitAvatar();
+      window._updateSubjectBanner();
+    });
+  });
+})();
 </script>
 </body>
 </html>
