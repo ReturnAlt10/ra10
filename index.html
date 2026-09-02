@@ -10993,6 +10993,16 @@ async function waitForRA10Sdk(timeoutMs) {
     const cbToken = hashParams.get('access_token');
     const cbType = hashParams.get('type');
     if (cbToken && (cbType === 'invite' || cbType === 'recovery')) {
+      // Establish the recovery/invite session from the URL tokens BEFORE
+      // clearing the URL, so updateUser has a valid session.
+      try {
+        const rec = await RA10.handleRecoveryTokens();
+        if (!rec.ok) {
+          console.warn('Recovery session exchange failed', rec.error || rec.reason);
+        }
+      } catch (e) {
+        console.warn('Recovery session exchange error', e);
+      }
       history.replaceState(null, '', window.location.pathname);
       setTimeout(() => {
         document.getElementById('set-password-overlay').classList.add('open');

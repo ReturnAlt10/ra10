@@ -840,6 +840,38 @@
     return { error: result.error || null };
   }
 
+  // Establish a session from a recovery/invite link's tokens in the URL hash.
+  // Supabase appends tokens as a second hash fragment (e.g. #/auth#access_token=...),
+  // which detectSessionInUrl can miss. We parse them explicitly and call setSession.
+  async function handleRecoveryTokens() {
+    const client = await _ensureSupabaseClient();
+    const fullHash = window.location.hash || '';
+    const lastHashIdx = fullHash.lastIndexOf('#');
+    const tokenFragment = lastHashIdx > 0 ? fullHash.slice(lastHashIdx + 1) : fullHash.slice(1);
+    const params = new URLSearchParams(tokenFragment);
+    const accessToken = params.get('access_token');
+    const refreshToken = params.get('refresh_token');
+    const type = params.get('type');
+    if (!accessToken || (type !== 'recovery' && type !== 'invite')) {
+      return { ok: false, reason: 'no_tokens' };
+    }
+    try {
+      const { data, error } = await client.auth.setSession({
+        access_token: accessToken,
+        refresh_token: refreshToken || '',
+      });
+      if (error) {
+        return { ok: false, error };
+      }
+      _session = data.session || null;
+      _profile = _session ? await _loadProfileFromSession(_session) : null;
+      _emit('authchange', { event: 'PASSWORD_RECOVERY', session: _session, profile: _profile });
+      return { ok: true, session: _session };
+    } catch (e) {
+      return { ok: false, error: e };
+    }
+  }
+
   function getSession() {
     return _session;
   }
@@ -1495,6 +1527,7 @@
     signOut,
     resetPassword,
     updatePassword,
+    handleRecoveryTokens,
     getSession,
     getProfile,
     isLoggedIn,
