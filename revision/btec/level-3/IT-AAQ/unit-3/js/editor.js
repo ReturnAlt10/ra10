@@ -405,7 +405,7 @@
       '  <div class="ed-template-picker-hd"><strong>Insert a learning component</strong><button class="ed-x" id="ed-tpl-close">✕</button></div>' +
       '  <div class="ed-template-buttons" id="ed-template-buttons"></div>' +
       '</div>' +
-      '<div class="ed-ai-bubble" id="ed-ai-bubble" title="Ask AI Assigner for help">🤖</div>' +
+      '<div class="ed-ai-bubble" id="ed-ai-bubble" title="Ask AI Assigner for help"><img class="ed-bubble-logo" src="/logo.png" alt="AI Assigner" onerror="this.parentElement.textContent=\'🤖\'"></div>' +
       '<div class="ed-ai-panel hidden" id="ed-ai-panel">' +
       '  <div class="ed-ai-hd"><img class="ed-logo-img" src="/logo.png" alt="" style="width:20px;height:20px;border-radius:5px"> <strong>AI Assigner</strong> <button class="ed-x" id="ed-ai-close">✕</button></div>' +
       '  <div class="ed-ai-msgs" id="ed-ai-msgs"></div>' +
@@ -434,6 +434,42 @@
   };
 
   /* ── AI Assigner integration ────────────────────────────── */
+  function _edEsc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]; }); }
+  function _edMd(s) {
+    var input = _edEsc(String(s == null ? '' : s).replace(/\r\n/g, '\n'));
+    var blocks = [];
+    input = input.replace(/```([\s\S]*?)```/g, function (_, c) { blocks.push(c.replace(/^[a-zA-Z0-9]+\n/, '')); return '\u0000B' + (blocks.length - 1) + '\u0000'; });
+    input = input.replace(/`([^`\n]+)`/g, '<code>$1</code>');
+    input = input.replace(/\*\*\*([^*]+)\*\*\*/g, '<strong><em>$1</em></strong>');
+    input = input.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+    input = input.replace(/__([^_]+)__/g, '<strong>$1</strong>');
+    input = input.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, function (_, t, u) { return /^(javascript|data|vbscript):/i.test(u) ? _ : '<a href="' + u + '" target="_blank" rel="noopener">' + t + '</a>'; });
+    input = input.replace(/^#### (.*)$/gm, '<h4>$1</h4>');
+    input = input.replace(/^### (.*)$/gm, '<h3>$1</h3>');
+    input = input.replace(/^## (.*)$/gm, '<h2>$1</h2>');
+    input = input.replace(/^# (.*)$/gm, '<h1>$1</h1>');
+    input = input.replace(/((?:^.*\|\s*\n)+)/gm, function (block) {
+      var rows = block.trim().split('\n').filter(function (r) { return /\|/.test(r.trim()); });
+      var h = '<div style="overflow-x:auto"><table>';
+      rows.forEach(function (line, i) {
+        if (/^\s*\|?\s*:?-{2,}.*-{2,}/.test(line)) return;
+        var cells = line.replace(/^\s*\|/, '').replace(/\|\s*$/, '').split('|').map(function (c) { return c.trim(); });
+        var tag = i === 0 ? 'th' : 'td';
+        h += '<tr>' + cells.map(function (c) { return '<' + tag + '>' + c + '</' + tag + '>'; }).join('') + '</tr>';
+      });
+      return h + '</table></div>';
+    });
+    input = input.replace(/(?:^[\t ]*(?:[-*+]|\d+\.)[\t ]+.*\n?)+/gm, function (m) {
+      var ordered = /^\s*\d+\./.test(m);
+      var items = [];
+      var re = /^[\t ]*(?:[-*+]|\d+\.)[\t ]+(.*)$/gm, mm;
+      while ((mm = re.exec(m)) !== null) items.push(mm[1]);
+      return (ordered ? '<ol>' : '<ul>') + items.map(function (i) { return '<li>' + i + '</li>'; }).join('') + (ordered ? '</ol>' : '</ul>');
+    });
+    input = input.replace(/\u0000B(\d+)\u0000/g, function (_m, i) { return '<pre><code>' + _edEsc(blocks[+i] || '') + '</code></pre>'; });
+    return input;
+  }
+
   function aiSend(message) {
     const panel = document.getElementById('ed-ai-msgs');
     const host = document.getElementById('ed-ai-panel');
@@ -447,7 +483,8 @@
       return div;
     };
     add('user', message);
-    const thinking = add('bot', '…thinking…');
+    const thinking = add('bot', '', '<span class="ed-examiner-orb"></span><span class="ed-examiner-dots">thinking</span>');
+    thinking.classList.add('ed-thinking');
     if (!window.RA10 || !RA10.isLoggedIn()) {
       thinking.remove();
       add('bot', 'Sign in to use AI Assigner from here. (It uses credits for each ask.)');
@@ -463,7 +500,7 @@
           context: 'The user is writing code in the Web Studio code editor for the Unit 3 website assignment. Current file: ' + activeFile + '. They selected this code for context:\n\n' + sel.slice(0, 1500) + '\n\nIf they ask you to write the code for them, coach them instead with hints, examples and the steps to write it themselves — do NOT just vomit the finished code.'
         });
         thinking.remove();
-        add('bot', res.reply);
+        add('bot', res.reply, _edMd(res.reply));
       } catch (e) {
         thinking.remove();
         add('bot', 'Sorry — ' + (e && e.message ? e.message : 'something went wrong') + '');

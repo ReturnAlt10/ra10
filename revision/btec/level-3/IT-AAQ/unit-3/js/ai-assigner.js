@@ -7,6 +7,84 @@
 
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]; }); }
 
+  /* Minimal, safe Markdown renderer for AI Assigner replies.
+     Supports bold, italics, inline code, code blocks, headings,
+     unordered/ordered lists, tables and links — enough to make the
+     AI's coaching readable. Input is escaped first, then the tokens
+     are replaced, so user text can't inject raw HTML. */
+  function md(s) {
+    var input = String(s == null ? '' : s);
+    // Normalise line endings
+    input = input.replace(/\r\n/g, '\n');
+    // Escape first
+    input = esc(input);
+    // Code blocks (```lang ... ```) — protect content from later steps
+    var codeBlocks = [];
+    input = input.replace(/```([\s\S]*?)```/g, function (_, c) {
+      codeBlocks.push(c.replace(/^[a-zA-Z0-9]+\n/, '').replace(/&gt;/g, '>').replace(/&lt;/g, '<').replace(/&amp;/g, '&'));
+      return '\u0000CB' + (codeBlocks.length - 1) + '\u0000';
+    });
+    // Inline code
+    input = input.replace(/`([^`\n]+)`/g, '<code>$1</code>');
+    // Bold + italic
+    input = input.replace(/\*\*\*([^*]+)\*\*\*/g, '<strong><em>$1</em></strong>');
+    input = input.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+    input = input.replace(/(^|[^*])\*([^*\n]+)\*/g, '$1<em>$2</em>');
+    input = input.replace(/__([^_]+)__/g, '<strong>$1</strong>');
+    // Links [text](url)
+    input = input.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, function (_, t, u) {
+      if (/^(javascript|data|vbscript):/i.test(u)) return _;
+      return '<a href="' + u + '" target="_blank" rel="noopener">' + t + '</a>';
+    });
+    // Headings
+    input = input.replace(/^###### (.*)$/gm, '<h6>$1</h6>');
+    input = input.replace(/^##### (.*)$/gm, '<h5>$1</h5>');
+    input = input.replace(/^#### (.*)$/gm, '<h4>$1</h4>');
+    input = input.replace(/^### (.*)$/gm, '<h3>$1</h3>');
+    input = input.replace(/^## (.*)$/gm, '<h2>$1</h2>');
+    input = input.replace(/^# (.*)$/gm, '<h1>$1</h1>');
+    // Tables: capture contiguous lines starting with | and render as <table>
+    input = input.replace(/((?:^\|.*\|\s*\n)+)/gm, function (block) {
+      var rows = block.trim().split('\n').filter(function (r) { return /\|/.test(r.trim()); });
+      var html = '<div class="md-table-wrap"><table>';
+      rows.forEach(function (line, idx) {
+        var isSep = /^\s*\|?\s*:?-{2,}.*-{2,}\s*\|?\s*$/.test(line.replace(/\|/g, ''));
+        if (isSep) return;
+        var cells = line.replace(/^\s*\|/, '').replace(/\|\s*$/, '').split('|').map(function (c) { return c.trim(); });
+        var tag = idx === 0 && !isSep ? 'th' : 'td';
+        html += '<tr>' + cells.map(function (c) { return '<' + tag + '>' + (c || '') + '</' + tag + '>'; }).join('') + '</tr>';
+      });
+      return html + '</table></div>';
+    });
+    // Lists: ordered + unordered
+    var listBlocks = [];
+    input = input.replace(/((?:^[\t ]*(?:[-*+]|\d+\.)[\t ]+.*\n?)+)/gm, function (block, m) {
+      var liRe = /^[\t ]*([-*+]|\d+\.)[\t ]+(.*)$/gm;
+      var ordered = /^\s*\d+\./.test(m);
+      var items = [];
+      var mm;
+      while ((mm = liRe.exec(m)) !== null) items.push(mm[2]);
+      return (ordered ? '<ol>' : '<ul>') + items.map(function (i) { return '<li>' + i + '</li>'; }).join('') + (ordered ? '</ol>' : '</ul>');
+    });
+    // Replace code block placeholders
+    input = input.replace(/\u0000CB(\d+)\u0000/g, function (_m, i) {
+      return '<pre><code>' + esc(codeBlocks[+i] || '') + '</code></pre>';
+    });
+    // Paragraphs: wrap non-empty, non-list, non-heading, non-table, non-pre lines
+    var hasMarkup = /<(?:h[1-6]|ul|ol|table|pre|div)/.test(input);
+    if (!hasMarkup) {
+      input = input.split(/\n{2,}/).map(function (para) {
+        return para.trim() ? '<p>' + para.replace(/\n/g, '<br>') + '</p>' : '';
+      }).join('');
+    } else {
+      // Wrap stray paragraphs (blank-separated runs not already part of a block)
+      input = input.replace(/(^|\n\n)([^<][^\n]*(?:\n[^<][^\n]*)*)(?=\n\n|$)/g, function (_m, pre, para) {
+        return pre + '<p>' + para.replace(/\n/g, '<br>') + '</p>';
+      });
+    }
+    return input;
+  }
+
   function getTask(code) {
     if (CRITERIA && CRITERIA.tasks) return CRITERIA.tasks.find(function (t) { return t.code === code; });
     return null;
@@ -20,7 +98,7 @@
 <div class="ai-panel">
   <div class="ai-chat">
     <div class="ai-chat-head">
-      <div class="ai-head-ico">💬</div>
+      <img class="ai-head-logo" src="/logo.png" alt="RA10 AI Assigner" onerror="this.style.display='none'">
       <div>
         <b>Chat with AI Assigner</b>
         <span class="muted">Hints, coaching and guidance — it never writes your work for you.</span>
@@ -34,7 +112,7 @@
   </div>
   <div class="ai-mark">
     <div class="ai-mark-head">
-      <div class="ai-head-ico">📋</div>
+      <img class="ai-head-logo" src="/logo.png" alt="RA10 AI Assigner" onerror="this.style.display='none'">
       <div>
         <b>Mark my assignment</b>
         <span class="muted">Upload a document or paste your work — AI Assessor marks it against the criteria.</span>
@@ -265,11 +343,26 @@
     if (!host) return;
     const div = document.createElement('div');
     div.className = 'ai-msg ' + role;
-    div.textContent = text;
+    if (role === 'bot' && typeof md === 'function') {
+      div.innerHTML = md(text);
+    } else {
+      div.textContent = text;
+    }
     host.appendChild(div);
     host.scrollTop = host.scrollHeight;
     chatHistory.push({ role: role, content: text });
     if (chatHistory.length > 20) chatHistory = chatHistory.slice(-20);
+  }
+
+  function addThinking() {
+    const host = document.getElementById('ai-msgs');
+    if (!host) return;
+    const div = document.createElement('div');
+    div.className = 'ai-msg bot ai-thinking';
+    div.innerHTML = '<span class="ai-examiner-orb"></span><span class="ai-examiner-dots">thinking</span>';
+    host.appendChild(div);
+    host.scrollTop = host.scrollHeight;
+    return div;
   }
 
   async function sendChat() {
@@ -285,19 +378,17 @@
 
     input.value = '';
     addMsg('user', message);
-    addMsg('bot', '…thinking…');
+    const think = addThinking();
     try {
       const res = await RA10.askAiAssigner({
         message: message,
         history: chatHistory.slice(-8),
         context: 'Unit 3 Website Development. Learning aims: A (principles + planning), B (design + assets), C (build + test). Assignment has 3 tasks. Encourage the student to work things out themselves.'
       });
-      const msgs = document.getElementById('ai-msgs');
-      if (msgs) { const last = msgs.lastElementChild; if (last && last.textContent === '…thinking…') last.remove(); }
+      if (think && think.remove) think.remove();
       addMsg('bot', res.reply);
     } catch (e) {
-      const msgs = document.getElementById('ai-msgs');
-      if (msgs) { const last = msgs.lastElementChild; if (last && last.textContent === '…thinking…') last.remove(); }
+      if (think && think.remove) think.remove();
       addMsg('bot', 'Sorry — ' + (e && e.message ? e.message : 'something went wrong') + '');
     }
   }
@@ -314,7 +405,7 @@
     }
     if (typeof ra10Gate === 'function' && !(await ra10Gate(hintOnly ? 'ai_assigner_hint' : 'ai_assigner_mark'))) return;
 
-    result.innerHTML = '<p class="muted">AI Assigner is assessing your work…</p>';
+    result.innerHTML = '<div class="ai-assessing"><span class="ai-examiner-orb"></span><span class="ai-examiner-dots">Assessing your work against the criteria</span></div>';
     const task = currentTask();
     const criteriaMap = {};
     if (task && task.criteria) task.criteria.forEach(function (c) { criteriaMap[c.code] = c.level + ': ' + c.text; });
@@ -325,7 +416,7 @@
           message: 'I am working on ' + (task ? task.title : 'a task') + '. Here is my draft — give me hints to lift it towards the next grade without writing it for me:\n\n' + text.slice(0, 4000),
           context: 'Assignment task: ' + (task ? task.title : '') + '. Criteria: ' + Object.keys(criteriaMap).join(', ')
         });
-        result.innerHTML = '<div class="ai-msg bot" style="max-width:100%;background:var(--surface-2)">' + esc(res.reply) + '</div>';
+        result.innerHTML = '<div class="ai-msg bot ai-mark-hint" style="max-width:100%">' + md(res.reply) + '</div>';
       } else {
         const res = await RA10.markAssignment({ submission: text, taskTitle: task ? task.title : 'Task', criteria: criteriaMap });
         renderMarkResult(result, res.result, task);

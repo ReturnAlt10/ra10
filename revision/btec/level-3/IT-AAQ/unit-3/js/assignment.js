@@ -138,10 +138,86 @@
     });
     host.querySelectorAll('[data-brief]').forEach(function (b) { b.addEventListener('click', function () {
       const brief = SAMPLE_BRIEFS[+b.dataset.brief];
-      if (brief && typeof window._openBrief === 'function') window._openBrief(brief);
-      else if (typeof switchTab === 'function') switchTab(activeTask === 'task2' ? 'wireframe' : activeTask === 'task3' ? 'editor' : 'guide');
+      if (brief && typeof window._openBrief === 'function') { window._openBrief(brief, activeTask); }
     }); });
   }
+
+  /* ── Practice brief viewer ──
+     Opens the full client brief in a modal: scenario, purpose,
+     target audience, must-include features + hints. From here the
+     student can jump straight into the matching tool. */
+  window._openBrief = function (brief, taskCode) {
+    const t = taskCode || activeTask || 'task1';
+    const dest = t === 'task2' ? 'wireframe' : t === 'task3' ? 'editor' : 'guide';
+    const destLabel = t === 'task2' ? 'Open the Wireframe tool' : t === 'task3' ? 'Open the Code Editor' : 'Open the Study Guide';
+    const tabs = ['details', 'must-haves', 'hints', 'start'];
+    let tab = 'details';
+
+    const modal = document.createElement('div');
+    modal.className = 'brief-modal';
+    modal.innerHTML =
+      '<div class="brief-modal-backdrop"></div>' +
+      '<div class="brief-modal-card" role="dialog" aria-modal="true" aria-label="Practice brief: ' + esc(brief.title) + '">' +
+        '<div class="brief-m-head">' +
+          '<img class="brief-m-logo" src="/logo.png" alt="" onerror="this.style.display=\'none\'">' +
+          '<div class="brief-m-titles"><b>Practice brief</b><span>' + esc(brief.title) + ' · ' + esc(brief.audience) + '</span></div>' +
+          '<button class="brief-m-x" aria-label="Close">✕</button>' +
+        '</div>' +
+        '<div class="brief-m-tabs">' +
+          tabs.map(function (tt) {
+            return '<button class="brief-m-tab' + (tt === tab ? ' active' : '') + '" data-btab="' + tt + '">' +
+              ({ details: 'The Brief', 'must-haves': 'Must-includes', hints: 'Design hints', start: 'Start' })[tt] + '</button>';
+          }).join('') +
+        '</div>' +
+        '<div class="brief-m-body" id="brief-m-body"></div>' +
+        '<div class="brief-m-foot">' +
+          '<button class="btn" data-bdict="archive">Save for later</button>' +
+          '<button class="btn primary" data-bstart="1">' + destLabel + ' →</button>' +
+        '</div>' +
+      '</div>';
+
+    function renderBody() {
+      const body = modal.querySelector('#brief-m-body');
+      let h = '';
+      if (tab === 'details') {
+        h += '<h4>Scenario</h4><p>' + esc(brief.scenario) + '</p>';
+        h += '<h4>Purpose</h4><p>' + esc(brief.purpose) + '</p>';
+        h += '<h4>Target audience</h4><p>' + esc(brief.targetAudience) + '</p>';
+      } else if (tab === 'must-haves') {
+        h += '<h4>Must-include features</h4><ul class="brief-m-list">' +
+          (Array.isArray(brief.mustIncludes) ? brief.mustIncludes.map(function (mi) { return '<li>' + esc(mi) + '</li>'; }).join('') : '') +
+          '</ul>';
+      } else if (tab === 'hints') {
+        if (brief.typographyHint) h += '<h4>Typography</h4><p>' + esc(brief.typographyHint) + '</p>';
+        if (brief.colourHint) h += '<h4>Colour palette</h4><p>' + esc(brief.colourHint) + '</p>';
+        if (!brief.typographyHint && !brief.colourHint) h += '<p class="muted">No design hints given — decide these yourself.</p>';
+      } else if (tab === 'start') {
+        h += '<div class="brief-m-start">';
+        h += '<p>You\u2019re on <b>' + (t === 'task2' ? 'Task 2 — design' : t === 'task3' ? 'Task 3 — build' : 'Task 1 — planning') + '</b>. Jump straight in, or ask AI Assigner to coach you through this brief.</p>';
+        h += '</div>';
+      }
+      body.innerHTML = h;
+    }
+
+    function close() {
+      modal.remove();
+      document.removeEventListener('keydown', escHandler);
+    }
+    function escHandler(e) { if (e.key === 'Escape' || e.key === 'Esc') close(); }
+
+    modal.addEventListener('click', function (e) {
+      const tabBtn = e.target.closest('.brief-m-tab');
+      if (tabBtn) { tab = tabBtn.dataset.btab; renderBody(); return; }
+      if (e.target.closest('.brief-m-x')) { close(); return; }
+      if (e.target.closest('[data-bstart]')) { close(); if (typeof switchTab === 'function') switchTab(dest); return; }
+      if (e.target.closest('[data-bdict]')) { try { localStorage.setItem('ra10_u3_last_brief', JSON.stringify({ title: brief.title, audience: brief.audience, at: Date.now() })); } catch (e2) {} close(); return; }
+      if (e.target.classList.contains('brief-modal-backdrop')) { close(); }
+    });
+    document.addEventListener('keydown', escHandler);
+
+    renderBody();
+    document.body.appendChild(modal);
+  };
 
   window.initAssignmentHub = function () {
     const host = document.getElementById('assignment-hub');
