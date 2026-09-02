@@ -147,6 +147,10 @@
     const host = document.getElementById('assignment-hub');
     if (!host) return;
     render();
+    // If data hasn't finished loading yet, re-render the moment it arrives
+    if (typeof onDataReady === 'function' && !(typeof DATA_READY === 'boolean' && DATA_READY)) {
+      onDataReady(function () { render(); });
+    }
   };
 
   const WALKTHROUGHS = {

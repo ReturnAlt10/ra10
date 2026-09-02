@@ -44,7 +44,7 @@
   var s = document.createElement('script');
   var isFile = location.protocol === 'file:';
   var isLocalHost = location.hostname === '127.0.0.1' || location.hostname === 'localhost';
-  s.src = isFile ? 'file:///C:/Users/mistr/Downloads/ra10/ra10-sdk.js?v=20260903' : (isLocalHost ? 'http://127.0.0.1:5500/ra10-sdk.js?v=20260903' : 'https://ra10.co.uk/ra10-sdk.js?v=20260903');
+  s.src = isFile ? 'file:///C:/Users/mistr/Downloads/ra10/ra10-sdk.js?v=20260904' : (isLocalHost ? 'http://127.0.0.1:5500/ra10-sdk.js?v=20260904' : 'https://ra10.co.uk/ra10-sdk.js?v=20260904');
   document.head.insertBefore(s, document.head.firstChild);
 })();
 </script>
@@ -53,9 +53,11 @@
 <title>BTEC IT Unit 3 — Website Development</title>
 <link rel="icon" href="/logo.png" type="image/png">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mammoth@1.6.0/mammoth.browser.min.js"></script>
 <link rel="preconnect" href="https://api.fontshare.com">
 <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700,900&f[]=jetbrains-mono@400,500&display=swap">
-<link rel="stylesheet" href="css/style.css?v=20260903">
+<link rel="stylesheet" href="css/style.css?v=20260904">
 <style>
 .ra10-cost-label { display:inline-block; font-size:.68rem; font-weight:700; color:rgba(255,255,255,.85); background:rgba(0,0,0,.18); padding:1px 6px; border-radius:999px; margin-left:6px; vertical-align:middle; letter-spacing:.03em; }
 .ra10-cost-label.free-label { color:rgba(255,255,255,.65); background:rgba(255,255,255,.14); }
@@ -511,9 +513,9 @@ body.ra10-refresh-enabled .topbar .tab {
   background: transparent;
 }
 body.ra10-refresh-enabled .topbar .tab.active {
-  background: color-mix(in srgb, var(--ra10-accent-2, #d0dff0) 88%, #fff) !important;
-  border-color: color-mix(in srgb, var(--ra10-accent, #1a3a6c) 62%, #fff) !important;
-  color: var(--ra10-accent-ink, #0a1f3c) !important;
+  background: #d0dff0 !important;
+  border-color: #5b8abf !important;
+  color: #0a1f3c !important;
   box-shadow: none !important;
 }
 body.ra10-refresh-enabled .topbar .tabs {
@@ -521,8 +523,9 @@ body.ra10-refresh-enabled .topbar .tabs {
   border: 1px solid color-mix(in srgb, var(--ra10-line-strong) 62%, #fff 38%);
 }
 [data-theme="dark"] body.ra10-refresh-enabled .topbar .tab.active {
-  background: color-mix(in srgb, var(--ra10-accent-2, #0f2240) 88%, #000) !important;
-  color: var(--ra10-accent-ink, #d0e0ff) !important;
+  background: #0f2240 !important;
+  border-color: #2a4a7a !important;
+  color: #d0e0ff !important;
 }
 /* Editor fullscreen hides the whole topbar */
 body.ed-fullscreen .topbar,
