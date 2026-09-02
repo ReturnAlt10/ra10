@@ -1,91 +1,206 @@
-/* Sitemap Builder — plan site pages and navigation, with annotations + export. */
+/* Sitemap Builder — draw.io-style site structure planner.
+   Pages on a canvas; draw links between pages (SVG lines); hierarchical
+   auto-arrange; annotations per page; export SVG/PNG + print. */
 (function () {
   'use strict';
 
-  const STORE_KEY = 'ra10_u3_sitemap_v2';
+  const STORE_KEY = 'ra10_u3_sitemap_v3';
+
   let state = loadState();
   let selectedId = null;
-  let dragNode = null;
+  let dragPage = null;
+  let linkStart = null; // page id while drawing a link
+  let linkPreview = null;
 
   function loadState() {
     try {
       const d = JSON.parse(localStorage.getItem(STORE_KEY) || 'null');
       if (d && Array.isArray(d.pages)) return d;
     } catch (e) {}
-    return { pages: [{ id: 'home', label: 'Homepage', home: true, x: 300, y: 20 }], annotations: '' };
+    return {
+      pages: [{ id: 'home', label: 'Homepage', home: true, x: 400, y: 40 }],
+      links: [],
+      annotations: ''
+    };
   }
-  function saveState() { try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); } catch (e) {} }
+  function saveState() {
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); } catch (e) {}
+  }
+
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]; }); }
+
+  function pageCenter(p) {
+    return { x: p.x + 95, y: p.y + 32 };
+  }
+
+  function renderLinks(canvas) {
+    // remove old svg lines
+    canvas.querySelectorAll('.sm-link-line').forEach(function (n) { n.remove(); });
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('class', 'sm-links');
+    svg.setAttribute('width', canvas.clientWidth);
+    svg.setAttribute('height', canvas.clientHeight);
+    svg.style.cssText = 'position:absolute;inset:0;pointer-events:none;z-index:1;width:100%;height:100%;overflow:visible';
+
+    state.links.forEach(function (l) {
+      const a = state.pages.find(function (p) { return p.id === l.from; });
+      const b = state.pages.find(function (p) { return p.id === l.to; });
+      if (!a || !b) return;
+      const ca = pageCenter(a), cb = pageCenter(b);
+      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      line.setAttribute('class', 'sm-link-line');
+      line.setAttribute('x1', ca.x); line.setAttribute('y1', ca.y);
+      line.setAttribute('x2', cb.x); line.setAttribute('y2', cb.y);
+      line.setAttribute('stroke', '#4a7de0');
+      line.setAttribute('stroke-width', '2');
+      line.setAttribute('stroke-dasharray', '6 4');
+      svg.appendChild(line);
+      // arrow
+      const angle = Math.atan2(cb.y - ca.y, cb.x - ca.x);
+      const ax = cb.x - 18 * Math.cos(angle), ay = cb.y - 18 * Math.sin(angle);
+      const arrow = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+      arrow.setAttribute('points', [
+        (ax + 8 * Math.cos(angle + Math.PI * 0.85)) + ',' + (ay + 8 * Math.sin(angle + Math.PI * 0.85)),
+        (ax + 8 * Math.cos(angle - Math.PI * 0.85)) + ',' + (ay + 8 * Math.sin(angle - Math.PI * 0.85)),
+        (cb.x) + ',' + (cb.y)
+      ].join(' '));
+      arrow.setAttribute('fill', '#4a7de0');
+      svg.appendChild(arrow);
+    });
+    if (linkPreview && linkStart) {
+      const a = state.pages.find(function (p) { return p.id === linkStart; });
+      if (a) {
+        const ca = pageCenter(a);
+        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        line.setAttribute('class', 'sm-link-line');
+        line.setAttribute('x1', ca.x); line.setAttribute('y1', ca.y);
+        line.setAttribute('x2', linkPreview.x); line.setAttribute('y2', linkPreview.y);
+        line.setAttribute('stroke', '#f59e0b');
+        line.setAttribute('stroke-width', '2');
+        line.setAttribute('stroke-dasharray', '4 4');
+        svg.appendChild(line);
+      }
+    }
+    canvas.appendChild(svg);
+  }
 
   function render() {
     const host = document.getElementById('sitemap-tool');
     if (!host) return;
     host.innerHTML = `
-<div class="sm-controls">
-  <input class="select" id="sm-new-label" placeholder="New page name (e.g. Events)" style="min-width:180px">
-  <button class="btn" id="sm-add">Add page</button>
-  <button class="btn ghost" id="sm-clear">Clear</button>
-  <span class="muted small">Drag pages to arrange them · click a page to delete it</span>
-</div>
-<div class="wf-canvas-wrap sm-canvas-wrap" style="min-height:460px">
-  <div class="wf-canvas sm-canvas" id="sm-canvas" style="height:460px"></div>
-</div>
-<div class="sm-annotations">
-  <label class="muted small" for="sm-annotations"><strong>Annotations</strong> — for each page note its content/features and which client requirement it meets (this is what makes the site map meet A.M2/A.D1).</label>
-  <textarea id="sm-annotations" placeholder="e.g. Homepage — hero + accordion (meets: accordion requirement, responsive nav). Events — form to request content + map (meets: form + modal images requirements)...">${esc(state.annotations)}</textarea>
-</div>
-<div class="wf-actions">
-  <button class="btn primary" id="sm-export">Export as image</button>
-  <button class="btn" id="sm-print">Print</button>
-</div>`;
+      <div class="sm-toolbar">
+        <input class="select" id="sm-new-label" placeholder="New page (e.g. Events)" style="min-width:150px" aria-label="New page name">
+        <button class="btn" id="sm-add">Add page</button>
+        <button class="btn" id="sm-auto">Auto-arrange</button>
+        <button class="btn ghost" id="sm-links-help" title="Toggle linking mode">✏️ Link mode</button>
+        <span class="muted small" id="sm-hint">Click a page, then click another to link them. Drag to move. Double-click to rename. Delete removes.</span>
+      </div>
+      <div class="wf-canvas-outer sm-canvas-outer" id="sm-canvas-outer">
+        <div class="wf-canvas sm-canvas" id="sm-canvas"></div>
+      </div>
+      <div class="sm-annotations">
+        <label class="muted small" for="sm-annotations"><strong>Annotations</strong> — for each page note its content/features and which client requirement it meets (this makes the site map meet A.M2/A.D1).</label>
+        <textarea id="sm-annotations" placeholder="e.g. Homepage — hero + accordion (meets: accordion, responsive nav). Events — form + map (meets: form, modal images)...">${esc(state.annotations || '')}</textarea>
+      </div>
+      <div class="wf-actions">
+        <button class="btn primary" id="sm-export-svg">Export SVG</button>
+        <button class="btn" id="sm-export-png">Export PNG</button>
+        <button class="btn" id="sm-print">Print</button>
+        <button class="btn ghost" id="sm-clear">Clear</button>
+      </div>
+    `;
 
     document.getElementById('sm-add').addEventListener('click', addPage);
     document.getElementById('sm-new-label').addEventListener('keydown', function (e) { if (e.key === 'Enter') addPage(); });
-    document.getElementById('sm-clear').addEventListener('click', function () {
-      if (!confirm('Clear the sitemap?')) return;
-      state.pages = [{ id: 'home', label: 'Homepage', home: true, x: 300, y: 20 }];
-      saveState(); renderCanvas();
+    document.getElementById('sm-auto').addEventListener('click', autoArrange);
+    document.getElementById('sm-links-help').addEventListener('click', function () {
+      window._smLinkMode = !window._smLinkMode;
+      this.textContent = window._smLinkMode ? '🔗 Linking… (click 2 pages)' : '✏️ Link mode';
+      const hint = document.getElementById('sm-hint');
+      if (hint) hint.textContent = window._smLinkMode ? 'Link mode: click a page, then click the page to link to it.' : 'Click a page, then click another to link them. Drag to move. Double-click to rename. Delete removes.';
     });
     document.getElementById('sm-annotations').addEventListener('input', function (e) { state.annotations = e.target.value; saveState(); });
-    document.getElementById('sm-export').addEventListener('click', exportImage);
+    document.getElementById('sm-export-svg').addEventListener('click', function () { exportSvg(); });
+    document.getElementById('sm-export-png').addEventListener('click', function () { exportPng(); });
     document.getElementById('sm-print').addEventListener('click', function () { window.print(); });
+    document.getElementById('sm-clear').addEventListener('click', function () {
+      if (!confirm('Clear the sitemap?')) return;
+      state.pages = [{ id: 'home', label: 'Homepage', home: true, x: 400, y: 40 }];
+      state.links = [];
+      saveState(); renderCanvas();
+    });
 
     const canvas = document.getElementById('sm-canvas');
     canvas.addEventListener('click', function (e) {
       const node = e.target.closest('.sm-node');
       if (!node) return;
       if (e.target.classList.contains('sm-del')) {
-        state.pages = state.pages.filter(function (p) { return p.id !== node.dataset.id; });
+        const id = node.dataset.id;
+        if (state.pages.filter(function (p) { return p.home; }).length === 1 && state.pages.find(function (p) { return p.id === id; }).home) { alert('The homepage cannot be deleted — rename it instead.'); return; }
+        state.pages = state.pages.filter(function (p) { return p.id !== id; });
+        state.links = state.links.filter(function (l) { return l.from !== id && l.to !== id; });
         selectedId = null;
         saveState(); renderCanvas(); return;
       }
+      if (window._smLinkMode && linkStart && linkStart !== node.dataset.id) {
+        state.links.push({ from: linkStart, to: node.dataset.id });
+        linkStart = null; window._smLinkMode = false;
+        document.getElementById('sm-links-help').textContent = '✏️ Link mode';
+        const hint = document.getElementById('sm-hint');
+        if (hint) hint.textContent = 'Click a page, then click another to link them. Drag to move. Double-click to rename. Delete removes.';
+        saveState(); renderCanvas(); return;
+      }
+      if (window._smLinkMode && !linkStart) {
+        linkStart = node.dataset.id;
+        return;
+      }
       selectedId = node.dataset.id;
       renderCanvas();
+    });
+    canvas.addEventListener('pointermove', function (e) {
+      if (linkStart) {
+        const rect = canvas.getBoundingClientRect();
+        linkPreview = { x: e.clientX - rect.left, y: e.clientY - rect.top };
+        renderLinks(canvas);
+      }
     });
     canvas.addEventListener('pointerdown', function (e) {
       const node = e.target.closest('.sm-node');
       if (!node || e.target.classList.contains('sm-del')) return;
       e.preventDefault();
-      dragNode = node;
+      dragPage = node;
       const rect = node.getBoundingClientRect();
-      dragNode._offX = e.clientX - rect.left;
-      dragNode._offY = e.clientY - rect.top;
+      dragPage._offX = e.clientX - rect.left;
+      dragPage._offY = e.clientY - rect.top;
+      dragPage._startX = Number(node.style.left.replace('px', ''));
+      dragPage._startY = Number(node.style.top.replace('px', ''));
+      dragPage._mx = e.clientX;
+      dragPage._my = e.clientY;
+    });
+    canvas.addEventListener('dblclick', function (e) {
+      const node = e.target.closest('.sm-node');
+      if (!node) return;
+      const page = state.pages.find(function (p) { return p.id === node.dataset.id; });
+      if (!page) return;
+      const label = prompt('Page label:', page.label);
+      if (label != null) {
+        page.label = label.trim() || page.label;
+        saveState(); renderCanvas();
+      }
     });
     document.addEventListener('pointermove', function (e) {
-      if (!dragNode) return;
-      const canvas = document.getElementById('sm-canvas');
-      const cRect = canvas.getBoundingClientRect();
-      const x = Math.max(0, Math.min(cRect.width - 130, e.clientX - cRect.left - dragNode._offX));
-      const y = Math.max(0, Math.min(cRect.height - 50, e.clientY - cRect.top - dragNode._offY));
-      dragNode.style.left = x + 'px';
-      dragNode.style.top = y + 'px';
-      dragNode._x = x; dragNode._y = y;
+      if (!dragPage) return;
+      const page = state.pages.find(function (p) { return p.id === dragPage.dataset.id; });
+      if (!page) return;
+      const dx = e.clientX - dragPage._mx, dy = e.clientY - dragPage._my;
+      const nx = Math.max(10, Math.round((dragPage._startX + dx) / 10) * 10);
+      const ny = Math.max(10, Math.round((dragPage._startY + dy) / 10) * 10);
+      page.x = nx; page.y = ny;
+      saveState();
+      renderCanvas();
     });
     document.addEventListener('pointerup', function () {
-      if (dragNode && dragNode._x != null) {
-        const p = state.pages.find(function (p) { return p.id === dragNode.dataset.id; });
-        if (p) { p.x = Math.round(dragNode._x); p.y = Math.round(dragNode._y); saveState(); }
-      }
-      dragNode = null;
+      dragPage = null;
     });
 
     renderCanvas();
@@ -95,9 +210,30 @@
     const input = document.getElementById('sm-new-label');
     const label = (input.value || '').trim();
     if (!label) return;
-    const id = 'p' + Date.now();
-    state.pages.push({ id: id, label: label, home: false, x: 60 + (state.pages.length * 130) % 600, y: 120 + (state.pages.length * 40) % 300 });
+    const id = 'p' + Date.now() + Math.random().toString(36).slice(2, 5);
+    const nx = 60 + (state.pages.length % 5) * 180;
+    const ny = 140 + Math.floor(state.pages.length / 5) * 120;
+    state.pages.push({ id: id, label: label, home: false, x: nx, y: ny });
     input.value = '';
+    saveState();
+    renderCanvas();
+  }
+
+  function autoArrange() {
+    const home = state.pages.find(function (p) { return p.home; });
+    const others = state.pages.filter(function (p) { return !p.home; });
+    if (home) { home.x = 400; home.y = 40; }
+    others.forEach(function (p, i) {
+      const col = i % 3, row = Math.floor(i / 3);
+      p.x = 40 + col * 240;
+      p.y = 170 + row * 140;
+    });
+    // rebuild links as a tree from home
+    const newLinks = [];
+    if (home) {
+      others.forEach(function (p) { newLinks.push({ from: home.id, to: p.id }); });
+    }
+    state.links = newLinks;
     saveState();
     renderCanvas();
   }
@@ -106,40 +242,118 @@
     const canvas = document.getElementById('sm-canvas');
     if (!canvas) return;
     canvas.innerHTML = '';
+    canvas.style.minHeight = '460px';
     state.pages.forEach(function (p) {
       const node = document.createElement('div');
       node.className = 'sm-node' + (p.home ? ' home' : '') + (p.id === selectedId ? ' selected' : '');
       node.dataset.id = p.id;
       node.style.left = p.x + 'px';
       node.style.top = p.y + 'px';
-      node.innerHTML = '<div class="sm-label">' + esc(p.label) + '</div>' + (p.home ? '<div class="sm-note">&#9733; start here</div>' : '');
-      const del = document.createElement('span');
-      del.className = 'sm-del';
-      del.textContent = '✕';
-      node.appendChild(del);
+      node.innerHTML = '<div class="sm-label">' + esc(p.label) + '</div>' + (p.home ? '<div class="sm-note">&#9733; start here</div>' : '') +
+        '<span class="sm-del" title="Delete">✕</span>';
       canvas.appendChild(node);
     });
+    if (!state.pages.length) {
+      const hint = document.createElement('div');
+      hint.className = 'wf-empty-hint';
+      hint.textContent = 'Add pages to begin. Use Link mode to draw navigation between pages.';
+      canvas.appendChild(hint);
+    }
+    renderLinks(canvas);
   }
 
-  function exportImage() {
-    const canvas = document.getElementById('sm-canvas');
-    if (!canvas) return;
-    const rect = canvas.getBoundingClientRect();
-    const svg = '<svg xmlns="http://www.w3.org/2000/svg" width="' + rect.width + '" height="' + rect.height + '">' +
-      '<foreignObject width="100%" height="100%">' +
-      '<div xmlns="http://www.w3.org/1999/xhtml" style="font-family:Satoshi,system-ui,sans-serif;background:#ffffff;color:#101828">' +
-      canvas.innerHTML +
-      '</div></foreignObject></svg>';
-    const blob = new Blob([svg], { type: 'image/svg+xml' });
+  function exportSvg() {
+    const w = 960, h = 620;
+    let svg = '<svg xmlns="http://www.w3.org/2000/svg" width="' + w + '" height="' + h + '" viewBox="0 0 ' + w + ' ' + h + '">';
+    svg += '<rect width="' + w + '" height="' + h + '" fill="#ffffff"/>';
+    state.links.forEach(function (l) {
+      const a = state.pages.find(function (p) { return p.id === l.from; });
+      const b = state.pages.find(function (p) { return p.id === l.to; });
+      if (!a || !b) return;
+      const ca = pageCenter(a), cb = pageCenter(b);
+      const angle = Math.atan2(cb.y - ca.y, cb.x - ca.x);
+      const ax = cb.x - 18 * Math.cos(angle), ay = cb.y - 18 * Math.sin(angle);
+      svg += '<line x1="' + ca.x + '" y1="' + ca.y + '" x2="' + cb.x + '" y2="' + cb.y + '" stroke="#4a7de0" stroke-width="2" stroke-dasharray="6 4"/>';
+      svg += '<polygon points="' + [
+        (ax + 8 * Math.cos(angle + Math.PI * 0.85)) + ',' + (ay + 8 * Math.sin(angle + Math.PI * 0.85)),
+        (ax + 8 * Math.cos(angle - Math.PI * 0.85)) + ',' + (ay + 8 * Math.sin(angle - Math.PI * 0.85)),
+        cb.x + ',' + cb.y
+      ].join(' ') + '" fill="#4a7de0"/>';
+    });
+    state.pages.forEach(function (p) {
+      svg += '<rect x="' + p.x + '" y="' + p.y + '" width="190" height="64" rx="10" fill="' + (p.home ? '#ccf2ee' : '#eef4ff') + '" stroke="' + (p.home ? '#0f766e' : '#4a7de0') + '" stroke-width="2"/>';
+      svg += '<text x="' + (p.x + 95) + '" y="' + (p.y + 30) + '" text-anchor="middle" font-family="Satoshi,sans-serif" font-size="13" font-weight="700" fill="#101828">' + esc(p.label) + '</text>';
+      if (p.home) svg += '<text x="' + (p.x + 95) + '" y="' + (p.y + 50) + '" text-anchor="middle" font-family="Satoshi,sans-serif" font-size="10" fill="#0f766e">★ start here</text>';
+    });
+    svg += '</svg>';
+    downloadBlob(svg, 'image/svg+xml;charset=utf-8', 'sitemap.svg');
+  }
+
+  function exportPng() {
+    const svgString = (function () {
+      const w = 960, h = 620;
+      let svg = '<svg xmlns="http://www.w3.org/2000/svg" width="' + w + '" height="' + h + '" viewBox="0 0 ' + w + ' ' + h + '">';
+      svg += '<rect width="' + w + '" height="' + h + '" fill="#ffffff"/>';
+      state.links.forEach(function (l) {
+        const a = state.pages.find(function (p) { return p.id === l.from; });
+        const b = state.pages.find(function (p) { return p.id === l.to; });
+        if (!a || !b) return;
+        const ca = pageCenter(a), cb = pageCenter(b);
+        const angle = Math.atan2(cb.y - ca.y, cb.x - ca.x);
+        const ax = cb.x - 18 * Math.cos(angle), ay = cb.y - 18 * Math.sin(angle);
+        svg += '<line x1="' + ca.x + '" y1="' + ca.y + '" x2="' + cb.x + '" y2="' + cb.y + '" stroke="#4a7de0" stroke-width="2" stroke-dasharray="6 4"/>';
+        svg += '<polygon points="' + [
+          (ax + 8 * Math.cos(angle + Math.PI * 0.85)) + ',' + (ay + 8 * Math.sin(angle + Math.PI * 0.85)),
+          (ax + 8 * Math.cos(angle - Math.PI * 0.85)) + ',' + (ay + 8 * Math.sin(angle - Math.PI * 0.85)),
+          cb.x + ',' + cb.y
+        ].join(' ') + '" fill="#4a7de0"/>';
+      });
+      state.pages.forEach(function (p) {
+        svg += '<rect x="' + p.x + '" y="' + p.y + '" width="190" height="64" rx="10" fill="' + (p.home ? '#ccf2ee' : '#eef4ff') + '" stroke="' + (p.home ? '#0f766e' : '#4a7de0') + '" stroke-width="2"/>';
+        svg += '<text x="' + (p.x + 95) + '" y="' + (p.y + 30) + '" text-anchor="middle" font-family="Satoshi,sans-serif" font-size="13" font-weight="700" fill="#101828">' + esc(p.label) + '</text>';
+        if (p.home) svg += '<text x="' + (p.x + 95) + '" y="' + (p.y + 50) + '" text-anchor="middle" font-family="Satoshi,sans-serif" font-size="10" fill="#0f766e">★ start here</text>';
+      });
+      svg += '</svg>';
+      return svg;
+    })();
+    const url = URL.createObjectURL(new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' }));
+    const img = new Image();
+    img.onload = function () {
+      const c = document.createElement('canvas');
+      c.width = 1920; c.height = 1240;
+      const ctx = c.getContext('2d');
+      ctx.drawImage(img, 0, 0, 1920, 1240);
+      const a = document.createElement('a');
+      a.href = c.toDataURL('image/png');
+      a.download = 'sitemap.png';
+      a.click();
+      URL.revokeObjectURL(url);
+    };
+    img.src = url;
+  }
+
+  function downloadBlob(content, mime, filename) {
+    const blob = new Blob([content], { type: mime });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
-    a.href = url;
-    a.download = 'sitemap.svg';
-    a.click();
+    a.href = url; a.download = filename; a.click();
     setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
   }
 
-  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
+  document.addEventListener('keydown', function (e) {
+    if (!selectedId) return;
+    if (e.key === 'Delete' || e.key === 'Backspace') {
+      const t = e.target;
+      if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA')) return;
+      e.preventDefault();
+      const page = state.pages.find(function (p) { return p.id === selectedId; });
+      if (page && page.home) { alert('The homepage cannot be deleted.'); return; }
+      state.pages = state.pages.filter(function (p) { return p.id !== selectedId; });
+      state.links = state.links.filter(function (l) { return l.from !== selectedId && l.to !== selectedId; });
+      selectedId = null;
+      saveState(); renderCanvas();
+    }
+  });
 
   window.initSitemapTool = function () {
     state = loadState();
