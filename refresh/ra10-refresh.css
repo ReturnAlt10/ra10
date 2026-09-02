@@ -540,6 +540,7 @@
     width: 100% !important;
     max-width: none !important;
     flex-wrap: wrap !important;
+    justify-content: center;
     overflow: visible;
     scrollbar-width: none;
     padding: 5px;
@@ -586,6 +587,22 @@
     color: var(--ra10-ink);
     background: color-mix(in srgb, var(--ra10-surface) 90%, transparent);
   }
+  /* Site nav links render as flex pills with inline SVG icons */
+  body.ra10-refresh-enabled .nav-link,
+  body.ra10-refresh-enabled .site-unit-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    white-space: nowrap;
+  }
+  body.ra10-refresh-enabled .site-unit-link svg.nu,
+  body.ra10-refresh-enabled .nav-link svg.nu {
+    width: 15px;
+    height: 15px;
+    flex: 0 0 15px;
+    opacity: .9;
+  }
   /* Unit tabs get their own grouped, accent-topped look on the second row */
   body.ra10-refresh-enabled .topbar .tab {
     border: 1px solid transparent;
@@ -602,6 +619,34 @@
     background: linear-gradient(120deg, var(--ra10-accent), var(--ra10-accent-2));
     box-shadow: 0 4px 0 color-mix(in srgb, var(--ra10-accent-dark) 72%, transparent), 0 8px 18px rgba(31,111,235,.20);
   }
+
+  /* Hover tooltips clarify what each action does */
+  body.ra10-refresh-enabled .topbar .tab {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+  }
+  body.ra10-refresh-enabled .topbar .tab::after {
+    content: attr(data-tip);
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%) translateY(-4px);
+    background: var(--ra10-surface);
+    color: var(--ra10-ink);
+    border: 1px solid var(--ra10-line-strong);
+    border-radius: 10px;
+    padding: 6px 10px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    box-shadow: 0 8px 20px rgba(0,0,0,.18);
+    z-index: 30;
+    transition: opacity 140ms ease, transform 140ms ease;
+  }
+  body.ra10-refresh-enabled .topbar .tab:hover::after { opacity: 1; transform: translateX(-50%) translateY(0); }
 
   /* Dark-mode navbar: remove the light white-glass overlay and use a dark glass surface */
   [data-theme="dark"] body.ra10-refresh-enabled .nav,
@@ -690,6 +735,7 @@
     max-width: none !important;
     overflow: visible !important;
     flex-wrap: wrap !important;
+    justify-content: center;
     padding: 4px !important;
   }
   body.ra10-refresh-enabled .topbar #unit1-credit-chip {
@@ -733,6 +779,7 @@
     min-width: 100%;
     overflow: visible;
     flex-wrap: wrap !important;
+    justify-content: center;
   }
 
   body.ra10-refresh-enabled .nav-inner {

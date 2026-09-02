@@ -502,7 +502,7 @@
     const email = String(user.email).trim().toLowerCase();
     const memberResult = await client
       .from('school_members')
-      .select('id, school_id, role, status, subjects')
+      .select('id, school_id, role, status, subjects, group_name')
       .ilike('email', email)
       .in('status', ['invited', 'active'])
       .in('role', ['student', 'teacher'])
@@ -526,6 +526,8 @@
     const schoolTier = role === 'teacher' ? 'school_teacher' : 'school_student';
     const schoolCredits = role === 'teacher' ? 600 : 300;
     const mappedSubjects = _normalizeSubjectsList(member.subjects);
+    // Attach group info to the in-memory profile (group lives on school_members).
+    profile.group_name = member.group_name || null;
     let schoolName = profile.school_name || null;
     if (!schoolName && member.school_id) {
       const schoolResult = await client
@@ -577,7 +579,10 @@
         .eq('id', member.id);
     }
 
-    return updateResult.data || profile;
+    const updatedProfile = updateResult.data || profile;
+    // group_name lives on school_members, not profiles — re-attach it.
+    if (updatedProfile) updatedProfile.group_name = member.group_name || null;
+    return updatedProfile;
   }
 
   async function _ensureProfileRow(user) {
@@ -823,6 +828,15 @@
     const result = await client.auth.resetPasswordForEmail(String(email).trim(), {
       redirectTo: window.location.origin + '/#/auth',
     });
+    return { error: result.error || null };
+  }
+
+  async function updatePassword(newPassword) {
+    const client = await _ensureSupabaseClient();
+    if (!client.auth.updateUser) {
+      return { error: new Error('Supabase update password method not available') };
+    }
+    const result = await client.auth.updateUser({ password: String(newPassword) });
     return { error: result.error || null };
   }
 
@@ -1480,6 +1494,7 @@
     signIn,
     signOut,
     resetPassword,
+    updatePassword,
     getSession,
     getProfile,
     isLoggedIn,

@@ -18,6 +18,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script>
 <script src="invite.js"></script>
 <style>
 /* ── Design tokens ─────────────────────────────── */
@@ -221,6 +222,78 @@ th{font-size:var(--tx-xs);text-transform:uppercase;letter-spacing:.08em;color:va
 .modal-close{width:32px;height:32px;border-radius:var(--r-md);display:flex;align-items:center;justify-content:center;color:var(--ink-2)}
 .modal-close:hover{background:var(--surface-off);color:var(--ink)}
 .modal-actions{display:flex;gap:var(--sp2);margin-top:var(--sp5);flex-wrap:wrap}
+/* ── Dialog modal (replaces native prompt/confirm/alert) ── */
+.dialog-overlay{
+  position:fixed;inset:0;z-index:10020;background:rgba(0,0,0,.5);
+  display:flex;align-items:center;justify-content:center;padding:var(--sp4);
+}
+.dialog{
+  width:min(460px,100%);background:var(--surface);border-radius:var(--r-xl);
+  box-shadow:var(--sh-lg);border:1px solid var(--border);padding:var(--sp6);
+}
+.dialog-icon{
+  width:44px;height:44px;border-radius:var(--r-lg);
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:var(--sp4);flex-shrink:0;
+}
+.dialog-icon.warn{background:var(--amber-hi);color:var(--amber)}
+.dialog-icon.danger{background:var(--red-hi);color:var(--red)}
+.dialog-icon.info{background:var(--green-hi);color:var(--green)}
+.dialog-title{font-family:var(--fd);font-size:var(--tx-lg);font-weight:400;margin-bottom:var(--sp2)}
+.dialog-msg{color:var(--ink-2);font-size:var(--tx-sm);margin-bottom:var(--sp5);line-height:1.6}
+.dialog-input{
+  width:100%;padding:var(--sp3) var(--sp4);
+  border:1px solid var(--border);background:var(--surface-off);
+  border-radius:var(--r-md);font-size:var(--tx-sm);margin-bottom:var(--sp5);
+}
+.dialog-input:focus{outline:2px solid var(--red);outline-offset:1px;border-color:var(--red)}
+.dialog-actions{display:flex;gap:var(--sp2);justify-content:flex-end;flex-wrap:wrap}
+/* ── Search box ───────────────────────────────── */
+.search-wrap{position:relative;flex-shrink:0}
+.search-wrap svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--ink-3);pointer-events:none}
+.search-input{
+  padding:var(--sp2) var(--sp3) var(--sp2) 32px;
+  border:1px solid var(--border);background:var(--surface-off);
+  border-radius:var(--r-md);font-size:var(--tx-sm);width:200px;
+}
+.search-input:focus{outline:2px solid var(--red);outline-offset:1px;border-color:var(--red)}
+/* ── Stat icon ────────────────────────────────── */
+.stat{display:flex;align-items:center;gap:var(--sp3)}
+.stat-icon{
+  width:42px;height:42px;border-radius:var(--r-md);flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+}
+.stat-icon.students{background:var(--green-hi);color:var(--green)}
+.stat-icon.teachers{background:var(--amber-hi);color:var(--amber)}
+.stat-icon.active{background:var(--red-hi);color:var(--red)}
+.stat-icon.invited{background:var(--surface-off2);color:var(--ink-2)}
+.stat-body{min-width:0}
+.stat-label{font-size:var(--tx-xs);color:var(--ink-2);text-transform:uppercase;letter-spacing:.08em;font-weight:700}
+.stat-value{font-family:var(--fd);font-size:var(--tx-xl);line-height:1.1;margin-top:var(--sp1)}
+/* ── Toolbar ──────────────────────────────────── */
+.toolbar{display:flex;gap:var(--sp2);align-items:center;flex-wrap:wrap}
+/* ── Bulk selection ───────────────────────────── */
+.bulk-bar{
+  display:flex;align-items:center;gap:var(--sp3);flex-wrap:wrap;
+  background:var(--surface-off);border:1px solid var(--border);
+  border-radius:var(--r-lg);padding:var(--sp3) var(--sp4);
+  margin-bottom:var(--sp4);
+}
+.bulk-count{font-size:var(--tx-sm);font-weight:700;color:var(--ink)}
+.bulk-count span{color:var(--red)}
+.bulk-actions{display:flex;gap:var(--sp2);flex-wrap:wrap;margin-left:auto}
+.bulk-select-all{display:flex;align-items:center;gap:var(--sp2);font-size:var(--tx-sm);color:var(--ink-2);cursor:pointer}
+.bulk-select-all input{accent-color:var(--red);width:16px;height:16px;cursor:pointer}
+.row-check{width:16px;height:16px;accent-color:var(--red);cursor:pointer;vertical-align:middle}
+th.check-col{width:40px}
+td.check-col{width:40px;text-align:center}
+tr.bulk-selected{background:var(--red-hi)}
+tr.bulk-selected:hover{background:var(--red-hi)}
+.bulk-group-select{
+  padding:var(--sp1) var(--sp2);font-size:var(--tx-xs);
+  border:1px solid var(--border);background:var(--surface);
+  border-radius:var(--r-md);color:var(--ink);
+}
 /* ── Subject checkboxes ────────────────────────── */
 .subject-checks{display:grid;grid-template-columns:1fr 1fr;gap:var(--sp2)}
 .check-row{
@@ -380,20 +453,40 @@ th{font-size:var(--tx-xs);text-transform:uppercase;letter-spacing:.08em;color:va
 
   <div class="stats-bar">
     <div class="stat">
-      <div class="stat-label">Total Students</div>
-      <div class="stat-value" id="stat-students">0</div>
+      <div class="stat-icon students">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      </div>
+      <div class="stat-body">
+        <div class="stat-label">Total Students</div>
+        <div class="stat-value" id="stat-students">0</div>
+      </div>
     </div>
     <div class="stat">
-      <div class="stat-label">Total Teachers</div>
-      <div class="stat-value" id="stat-teachers">0</div>
+      <div class="stat-icon teachers">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+      </div>
+      <div class="stat-body">
+        <div class="stat-label">Total Teachers</div>
+        <div class="stat-value" id="stat-teachers">0</div>
+      </div>
     </div>
     <div class="stat">
-      <div class="stat-label">Active Members</div>
-      <div class="stat-value" id="stat-active">0</div>
+      <div class="stat-icon active">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      </div>
+      <div class="stat-body">
+        <div class="stat-label">Active Members</div>
+        <div class="stat-value" id="stat-active">0</div>
+      </div>
     </div>
     <div class="stat">
-      <div class="stat-label">Invited Pending</div>
-      <div class="stat-value" id="stat-invited">0</div>
+      <div class="stat-icon invited">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      </div>
+      <div class="stat-body">
+        <div class="stat-label">Invited Pending</div>
+        <div class="stat-value" id="stat-invited">0</div>
+      </div>
     </div>
   </div>
 
@@ -410,19 +503,37 @@ th{font-size:var(--tx-xs);text-transform:uppercase;letter-spacing:.08em;color:va
     <div class="card">
       <div class="section-head">
         <h2>Students</h2>
-        <div style="display:flex;gap:var(--sp2);align-items:center;flex-wrap:wrap">
+        <div class="toolbar">
+          <div class="search-wrap">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input class="search-input" id="search-students" type="text" placeholder="Search students&hellip;">
+          </div>
           <select id="filter-student-group" class="field-input" style="width:auto;padding:var(--sp2) var(--sp3);font-size:var(--tx-sm)">
             <option value="">All groups</option>
           </select>
-          <button class="btn btn-g" id="btn-download-csv-template">CSV template</button>
-          <button class="btn btn-g" id="btn-import-members-csv">Import CSV</button>
-          <input id="members-csv-input" type="file" accept=".csv,text/csv" style="display:none">
-          <button class="btn btn-p" id="btn-add-student">Add Student</button>
+          <button class="btn btn-g" id="btn-download-csv-template">Download template</button>
+          <button class="btn btn-g" id="btn-import-members-csv">Import</button>
+          <input id="members-csv-input" type="file" accept=".csv,.xlsx,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" style="display:none">
+          <button class="btn btn-p" id="btn-add-student">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Add Student
+          </button>
+        </div>
+      </div>
+      <div class="bulk-bar hidden" id="bulk-bar-students">
+        <span class="bulk-count"><span id="bulk-count-students">0</span> selected</span>
+        <div class="bulk-actions">
+          <select class="bulk-group-select" id="bulk-group-students">
+            <option value="">Move to group&hellip;</option>
+          </select>
+          <button class="btn btn-g" id="bulk-resend-students">Resend invites</button>
+          <button class="btn btn-danger" id="bulk-remove-students">Remove selected</button>
+          <button class="btn btn-g" id="bulk-clear-students">Clear</button>
         </div>
       </div>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>Email</th><th>Status</th><th>Group</th><th>Access</th><th>Actions</th></tr></thead>
+          <thead><tr><th class="check-col"><input type="checkbox" class="row-check" id="check-all-students" aria-label="Select all"></th><th>Email</th><th>Status</th><th>Group</th><th>Access</th><th>Actions</th></tr></thead>
           <tbody id="students-body"></tbody>
         </table>
       </div>
@@ -434,16 +545,34 @@ th{font-size:var(--tx-xs);text-transform:uppercase;letter-spacing:.08em;color:va
     <div class="card">
       <div class="section-head">
         <h2>Teachers</h2>
-        <div style="display:flex;gap:var(--sp2);align-items:center;flex-wrap:wrap">
+        <div class="toolbar">
+          <div class="search-wrap">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input class="search-input" id="search-teachers" type="text" placeholder="Search teachers&hellip;">
+          </div>
           <select id="filter-teacher-group" class="field-input" style="width:auto;padding:var(--sp2) var(--sp3);font-size:var(--tx-sm)">
             <option value="">All groups</option>
           </select>
-          <button class="btn btn-p" id="btn-add-teacher">Add Teacher</button>
+          <button class="btn btn-p" id="btn-add-teacher">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Add Teacher
+          </button>
+        </div>
+      </div>
+      <div class="bulk-bar hidden" id="bulk-bar-teachers">
+        <span class="bulk-count"><span id="bulk-count-teachers">0</span> selected</span>
+        <div class="bulk-actions">
+          <select class="bulk-group-select" id="bulk-group-teachers">
+            <option value="">Move to group&hellip;</option>
+          </select>
+          <button class="btn btn-g" id="bulk-resend-teachers">Resend invites</button>
+          <button class="btn btn-danger" id="bulk-remove-teachers">Remove selected</button>
+          <button class="btn btn-g" id="bulk-clear-teachers">Clear</button>
         </div>
       </div>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>Email</th><th>Status</th><th>Group</th><th>Access</th><th>Actions</th></tr></thead>
+          <thead><tr><th class="check-col"><input type="checkbox" class="row-check" id="check-all-teachers" aria-label="Select all"></th><th>Email</th><th>Status</th><th>Group</th><th>Access</th><th>Actions</th></tr></thead>
           <tbody id="teachers-body"></tbody>
         </table>
       </div>
@@ -455,7 +584,10 @@ th{font-size:var(--tx-xs);text-transform:uppercase;letter-spacing:.08em;color:va
     <div class="card">
       <div class="section-head">
         <h2>Groups</h2>
-        <button class="btn btn-p" id="btn-create-group">+ New Group</button>
+        <button class="btn btn-p" id="btn-create-group">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          New Group
+        </button>
       </div>
       <div id="groups-list" class="groups-list"></div>
     </div>
@@ -520,6 +652,20 @@ th{font-size:var(--tx-xs);text-transform:uppercase;letter-spacing:.08em;color:va
   </div>
 </div>
 
+<!-- ── Dialog modal (replaces native prompt/confirm/alert) ── -->
+<div class="dialog-overlay hidden" id="dialog-overlay" role="dialog" aria-modal="true" aria-labelledby="dialog-title">
+  <div class="dialog">
+    <div class="dialog-icon" id="dialog-icon"></div>
+    <h3 class="dialog-title" id="dialog-title"></h3>
+    <p class="dialog-msg" id="dialog-msg"></p>
+    <input class="dialog-input hidden" id="dialog-input" type="text" autocomplete="off">
+    <div class="dialog-actions">
+      <button class="btn btn-g" id="dialog-cancel">Cancel</button>
+      <button class="btn btn-p" id="dialog-ok">OK</button>
+    </div>
+  </div>
+</div>
+
 <!-- ── Toast ─────────────────────────────────────── -->
 <div id="toast-host"></div>
 
@@ -550,7 +696,8 @@ var state = {
   members: [],
   groups: [],   // array of group name strings
   activeTab: 'students',
-  modalRole: 'student'
+  modalRole: 'student',
+  selected: {}  // role -> Set of member ids
 };
 
 /* ═══════════════════════════════════════════════
@@ -619,6 +766,105 @@ function toast(msg, ms) {
   t.textContent = msg;
   dom.toastHost.appendChild(t);
   _toastTimer = setTimeout(function() { t.remove(); }, typeof ms === 'number' ? ms : 4000);
+}
+
+/* ═══════════════════════════════════════════════
+   DIALOG (replaces native prompt/confirm/alert)
+═══════════════════════════════════════════════ */
+var _dialogResolve = null;
+var _dialogEls = {
+  overlay: document.getElementById('dialog-overlay'),
+  icon:    document.getElementById('dialog-icon'),
+  title:   document.getElementById('dialog-title'),
+  msg:     document.getElementById('dialog-msg'),
+  input:   document.getElementById('dialog-input'),
+  ok:      document.getElementById('dialog-ok'),
+  cancel:  document.getElementById('dialog-cancel')
+};
+
+var DIALOG_ICONS = {
+  warn:   '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',
+  danger: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>',
+  info:   '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>'
+};
+
+function showDialog(opts) {
+  return new Promise(function(resolve) {
+    _dialogResolve = resolve;
+    _dialogEls.icon.className = 'dialog-icon ' + (opts.icon || 'info');
+    _dialogEls.icon.innerHTML = DIALOG_ICONS[opts.icon || 'info'] || DIALOG_ICONS.info;
+    _dialogEls.title.textContent = opts.title || '';
+    _dialogEls.msg.textContent = opts.message || '';
+    _dialogEls.msg.classList.toggle('hidden', !opts.message);
+    _dialogEls.input.classList.toggle('hidden', !opts.input);
+    _dialogEls.input.value = opts.value || '';
+    _dialogEls.ok.textContent = opts.okText || 'OK';
+    _dialogEls.cancel.classList.toggle('hidden', opts.hideCancel === true);
+    _dialogEls.ok.classList.toggle('btn-danger', opts.danger === true);
+    _dialogEls.ok.classList.toggle('btn-p', opts.danger !== true);
+    _dialogEls.overlay.classList.remove('hidden');
+    if (opts.input) setTimeout(function() { _dialogEls.input.focus(); _dialogEls.input.select(); }, 50);
+    else _dialogEls.ok.focus();
+  });
+}
+
+function closeDialog(value) {
+  _dialogEls.overlay.classList.add('hidden');
+  if (_dialogResolve) { _dialogResolve(value); _dialogResolve = null; }
+}
+
+_dialogEls.ok.addEventListener('click', function() {
+  if (!_dialogEls.input.classList.contains('hidden')) {
+    closeDialog(_dialogEls.input.value);
+  } else {
+    closeDialog(true);
+  }
+});
+_dialogEls.cancel.addEventListener('click', function() { closeDialog(false); });
+_dialogEls.overlay.addEventListener('click', function(e) { if (e.target === _dialogEls.overlay) closeDialog(false); });
+_dialogEls.input.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') closeDialog(_dialogEls.input.value);
+  if (e.key === 'Escape') closeDialog(false);
+});
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape' && !_dialogEls.overlay.classList.contains('hidden')) closeDialog(false);
+});
+
+async function confirmDialog(message, opts) {
+  opts = opts || {};
+  return await showDialog({
+    title: opts.title || 'Are you sure?',
+    message: message,
+    icon: opts.icon || 'warn',
+    okText: opts.okText || 'Confirm',
+    danger: opts.danger !== false,
+    hideCancel: false
+  });
+}
+
+async function promptDialog(message, opts) {
+  opts = opts || {};
+  return await showDialog({
+    title: opts.title || 'Enter a value',
+    message: message,
+    icon: opts.icon || 'info',
+    okText: opts.okText || 'OK',
+    input: true,
+    value: opts.value || '',
+    danger: false
+  });
+}
+
+async function alertDialog(message, opts) {
+  opts = opts || {};
+  return await showDialog({
+    title: opts.title || 'Notice',
+    message: message,
+    icon: opts.icon || 'info',
+    okText: opts.okText || 'OK',
+    hideCancel: true,
+    danger: false
+  });
 }
 
 function statusBadge(status) {
@@ -761,22 +1007,29 @@ function renderTable(role) {
   var tbody = role === 'teacher' ? dom.teachersBody : dom.studentsBody;
   var filterEl = document.getElementById('filter-' + role + '-group');
   var filterGroup = filterEl ? filterEl.value : '';
+  var searchEl = document.getElementById('search-' + role + 's');
+  var searchTerm = searchEl ? String(searchEl.value || '').trim().toLowerCase() : '';
   var rows = state.members.filter(function(m) { return m.role === role; });
   if (filterGroup) rows = rows.filter(function(m) { return (m.group_name || '') === filterGroup; });
+  if (searchTerm) rows = rows.filter(function(m) {
+    return String(m.email || '').toLowerCase().indexOf(searchTerm) !== -1
+      || String(m.group_name || '').toLowerCase().indexOf(searchTerm) !== -1;
+  });
   if (!rows.length) {
-    tbody.innerHTML = '<tr class="empty-row"><td colspan="5">No ' + role + 's' + (filterGroup ? ' in this group' : '') + '.</td></tr>';
+    tbody.innerHTML = '<tr class="empty-row"><td colspan="6">No ' + role + 's' + (filterGroup ? ' in this group' : '') + (searchTerm ? ' matching "' + esc(searchTerm) + '"' : '') + '.</td></tr>';
+    updateBulkBar(role);
     return;
   }
   var groupOptions = state.groups.map(function(g) {
     return '<option value="' + esc(g) + '">' + esc(g) + '</option>';
   }).join('');
+  var sel = state.selected[role] || (state.selected[role] = new Set());
   tbody.innerHTML = rows.map(function(m) {
     var safeId = esc(String(m.id));
     var gName = m.group_name || '';
-    var groupPill = gName
-      ? '<span class="group-pill has-group">' + esc(gName) + '</span>'
-      : '<span class="group-pill">No group</span>';
-    return '<tr>' +
+    var checked = sel.has(String(m.id)) ? ' checked' : '';
+    return '<tr class="' + (sel.has(String(m.id)) ? 'bulk-selected' : '') + '">' +
+      '<td class="check-col"><input type="checkbox" class="row-check" data-check="' + safeId + '"' + checked + ' aria-label="Select ' + esc(m.email) + '"></td>' +
       '<td>' + esc(m.email) + '</td>' +
       '<td>' + statusBadge(m.status) + '</td>' +
       '<td>' +
@@ -793,6 +1046,66 @@ function renderTable(role) {
       '</td>' +
       '</tr>';
   }).join('');
+  updateBulkBar(role);
+}
+
+/* ── Bulk selection helpers ───────────────────── */
+function getSelectedSet(role) {
+  if (!state.selected[role]) state.selected[role] = new Set();
+  return state.selected[role];
+}
+
+function getSelectedMembers(role) {
+  var sel = getSelectedSet(role);
+  return state.members.filter(function(m) { return m.role === role && sel.has(String(m.id)); });
+}
+
+function updateBulkBar(role) {
+  var sel = getSelectedSet(role);
+  var bar = document.getElementById('bulk-bar-' + role + 's');
+  var countEl = document.getElementById('bulk-count-' + role + 's');
+  var checkAll = document.getElementById('check-all-' + role + 's');
+  if (!bar || !countEl) return;
+  var count = sel.size;
+  countEl.textContent = count;
+  bar.classList.toggle('hidden', count === 0);
+  // update select-all checkbox state
+  var rows = state.members.filter(function(m) { return m.role === role; });
+  if (checkAll) {
+    checkAll.checked = rows.length > 0 && rows.every(function(m) { return sel.has(String(m.id)); });
+    checkAll.indeterminate = rows.length > 0 && !checkAll.checked && rows.some(function(m) { return sel.has(String(m.id)); });
+  }
+  // populate group dropdown
+  var groupSel = document.getElementById('bulk-group-' + role + 's');
+  if (groupSel) {
+    var cur = groupSel.value;
+    groupSel.innerHTML = '<option value="">Move to group&hellip;</option>' +
+      state.groups.map(function(g) { return '<option value="' + esc(g) + '">' + esc(g) + '</option>'; }).join('') +
+      '<option value="__none__">No group</option>';
+    if (cur) groupSel.value = cur;
+  }
+}
+
+function toggleMemberSelected(role, id) {
+  var sel = getSelectedSet(role);
+  var key = String(id);
+  if (sel.has(key)) sel.delete(key); else sel.add(key);
+  renderTable(role);
+}
+
+function clearSelection(role) {
+  getSelectedSet(role).clear();
+  renderTable(role);
+}
+
+function selectAllVisible(role) {
+  var sel = getSelectedSet(role);
+  var rows = state.members.filter(function(m) { return m.role === role; });
+  var allSelected = rows.length > 0 && rows.every(function(m) { return sel.has(String(m.id)); });
+  rows.forEach(function(m) {
+    if (allSelected) sel.delete(String(m.id)); else sel.add(String(m.id));
+  });
+  renderTable(role);
 }
 
 function renderSubjects() {
@@ -826,7 +1139,7 @@ function renderGroups() {
   }
   // render groups tab
   if (!state.groups.length) {
-    dom.groupsList.innerHTML = '<p style="color:var(--ink-2);padding:var(--sp5) 0">No groups yet. Click &ldquo;+ New Group&rdquo; to create one.</p>';
+    dom.groupsList.innerHTML = '<div class="group-empty" style="border:1px dashed var(--border);border-radius:var(--r-lg);padding:var(--sp8);text-align:center;display:flex;flex-direction:column;align-items:center;gap:var(--sp2)"><div class="stat-icon invited" style="width:52px;height:52px;border-radius:var(--r-lg)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><p>No groups yet.</p><p class="muted" style="font-size:var(--tx-sm)">Click &ldquo;New Group&rdquo; to create one and start organising your members.</p></div>';
     return;
   }
   dom.groupsList.innerHTML = state.groups.map(function(g) {
@@ -840,8 +1153,8 @@ function renderGroups() {
       '<div class="group-block-head">' +
         '<input class="group-name-input" data-oldname="' + esc(g) + '" value="' + esc(g) + '" aria-label="Group name">' +
         '<span class="group-count">' + gMembers.length + ' member' + (gMembers.length === 1 ? '' : 's') + '</span>' +
-        '<button class="btn btn-g" style="font-size:var(--tx-xs)" data-rename-group="' + esc(g) + '">Rename</button>' +
-        '<button class="btn btn-g" style="font-size:var(--tx-xs);color:var(--red)" data-delete-group="' + esc(g) + '">Delete</button>' +
+        '<button class="btn btn-g" style="font-size:var(--tx-xs)" data-rename-group="' + esc(g) + '"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Rename</button>' +
+        '<button class="btn btn-g" style="font-size:var(--tx-xs);color:var(--red)" data-delete-group="' + esc(g) + '"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg> Delete</button>' +
       '</div>' +
       '<div class="group-members-list">' + memberTags + '</div>' +
     '</div>';
@@ -897,11 +1210,11 @@ async function editMemberSubjects(memberId) {
   if (!allowed.length) { toast('No selectable subjects configured.'); return; }
 
   var current = normSubjects(m.subjects);
-  var input = prompt(
+  var input = await promptDialog(
     'Enter subjects separated by commas.\nAvailable: ' + allowed.join(', ') + '\n\nCurrent: ' + (current.length ? current.join(', ') : 'None'),
-    current.join(', ')
+    { title: 'Edit subjects for ' + m.email, value: current.join(', ') }
   );
-  if (input == null) return;
+  if (input === false || input == null) return;
 
   var byLower = {};
   allowed.forEach(function(name) { byLower[String(name).toLowerCase()] = name; });
@@ -932,7 +1245,7 @@ async function saveGroups() {
 }
 
 async function createGroup() {
-  var name = prompt('Group name:');
+  var name = await promptDialog('Enter a name for the new group.', { title: 'Create group' });
   if (!name || !name.trim()) return;
   name = name.trim();
   if (state.groups.includes(name)) { toast('A group with that name already exists.'); return; }
@@ -962,7 +1275,8 @@ async function renameGroup(oldName, newName) {
 }
 
 async function deleteGroup(groupName) {
-  if (!confirm('Delete group "' + groupName + '"? Members will be unassigned but not removed.')) return;
+  var ok = await confirmDialog('Delete group "' + groupName + '"? Members will be unassigned but not removed.', { title: 'Delete group', okText: 'Delete', icon: 'danger' });
+  if (!ok) return;
   var ids = state.members.filter(function(m) { return m.group_name === groupName; }).map(function(m) { return m.id; });
   if (ids.length) {
     await state.sb.from('school_members').update({ group_name: null }).in('id', ids);
@@ -1146,20 +1460,137 @@ async function addMember() {
 }
 
 function downloadMembersCsvTemplate() {
-  var rows = [
-    'email,role,group',
-    'student1@school.edu,student,Year 12',
-    'teacher1@school.edu,teacher,Staff',
+  // Branded Excel template with logo, styled header, dropdowns and example rows.
+  var wb = new ExcelJS.Workbook();
+  wb.creator = 'RA10';
+  wb.created = new Date();
+  var ws = wb.addWorksheet('Members', {
+    views: [{ state: 'frozen', ySplit: 5 }]
+  });
+
+  // ── Column widths ──
+  ws.columns = [
+    { key: 'email',  width: 34 },
+    { key: 'role',   width: 14 },
+    { key: 'group',  width: 22 },
   ];
-  var blob = new Blob([rows.join('\n')], { type: 'text/csv;charset=utf-8;' });
-  var url = URL.createObjectURL(blob);
-  var a = document.createElement('a');
-  a.href = url;
-  a.download = 'ra10-members-template.csv';
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
+
+  // ── Branding banner (rows 1-3) ──
+  ws.mergeCells('A1:C1');
+  ws.mergeCells('A2:C2');
+  ws.mergeCells('A3:C3');
+
+  var banner = ws.getCell('A1');
+  banner.value = 'RA10  ·  EDU Admin  ·  Member Import Template';
+  banner.font = { name: 'Arial', size: 16, bold: true, color: { argb: 'FFFFFFFF' } };
+  banner.alignment = { vertical: 'middle', horizontal: 'left' };
+  banner.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF1F2937' } };
+
+  var sub = ws.getCell('A2');
+  sub.value = 'Fill in the rows below, then save and import this file back into the EDU dashboard.';
+  sub.font = { name: 'Arial', size: 10, color: { argb: 'FFD1D5DB' } };
+  sub.alignment = { vertical: 'middle', horizontal: 'left' };
+  sub.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF1F2937' } };
+
+  var hint = ws.getCell('A3');
+  hint.value = 'Role must be "student" or "teacher". Group is optional — leave blank for no group.';
+  hint.font = { name: 'Arial', size: 9, italic: true, color: { argb: 'FF9CA3AF' } };
+  hint.alignment = { vertical: 'middle', horizontal: 'left' };
+  hint.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF1F2937' } };
+
+  ws.getRow(1).height = 26;
+  ws.getRow(2).height = 18;
+  ws.getRow(3).height = 18;
+
+  // ── Header row (row 5) ──
+  var headerRow = ws.getRow(5);
+  headerRow.height = 22;
+  ['email', 'role', 'group'].forEach(function(key, i) {
+    var cell = headerRow.getCell(i + 1);
+    cell.value = key.charAt(0).toUpperCase() + key.slice(1);
+    cell.font = { name: 'Arial', size: 11, bold: true, color: { argb: 'FFFFFFFF' } };
+    cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF4FBF2A' } };
+    cell.alignment = { vertical: 'middle', horizontal: 'left' };
+    cell.border = {
+      top:    { style: 'thin', color: { argb: 'FF2F7E1F' } },
+      bottom: { style: 'thin', color: { argb: 'FF2F7E1F' } },
+      left:   { style: 'thin', color: { argb: 'FF2F7E1F' } },
+      right:  { style: 'thin', color: { argb: 'FF2F7E1F' } },
+    };
+  });
+
+  // ── Example rows ──
+  var examples = [
+    ['student1@school.edu', 'student', 'Year 12'],
+    ['teacher1@school.edu', 'teacher', 'Staff'],
+    ['student2@school.edu', 'student', ''],
+  ];
+  examples.forEach(function(row, i) {
+    var r = ws.getRow(6 + i);
+    r.height = 20;
+    row.forEach(function(val, j) {
+      var cell = r.getCell(j + 1);
+      cell.value = val;
+      cell.font = { name: 'Arial', size: 10, color: { argb: 'FF374151' } };
+      cell.alignment = { vertical: 'middle', horizontal: 'left' };
+      cell.border = {
+        bottom: { style: 'hair', color: { argb: 'FFE5E7EB' } },
+      };
+    });
+  });
+
+  // ── Role dropdown (data validation) for rows 6-105 ──
+  ws.getCell('B6').dataValidation = {
+    type: 'list',
+    allowBlank: true,
+    formulae: ['"student,teacher"'],
+    showErrorMessage: true,
+    errorTitle: 'Invalid role',
+    error: 'Role must be either "student" or "teacher".',
+    errorStyle: 'stop'
+  };
+  // Copy validation down
+  for (var i = 7; i <= 105; i++) {
+    ws.getCell('B' + i).dataValidation = ws.getCell('B6').dataValidation;
+  }
+
+  // ── Logo image (top-right of banner) ──
+  try {
+    var img = new Image();
+    img.src = '../logo.png';
+    img.onload = function() {
+      try {
+        var canvas = document.createElement('canvas');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        var ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0);
+        var dataUrl = canvas.toDataURL('image/png');
+        var base64 = dataUrl.split(',')[1];
+        var imageId = wb.addImage({ base64: base64, extension: 'png' });
+        ws.addImage(imageId, {
+          tl: { col: 2.6, row: 0.2 },
+          ext: { width: 40, height: 40 }
+        });
+      } catch (e) { console.warn('Logo embed failed', e); }
+    };
+  } catch (e) { console.warn('Logo load failed', e); }
+
+  // ── Export ──
+  wb.xlsx.writeBuffer().then(function(buffer) {
+    var blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = 'ra10-members-template.xlsx';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  }).catch(function(err) {
+    console.error('Template export failed', err);
+    toast('Could not generate the template. Please try again.');
+  });
 }
 
 function parseCsvRow(line) {
@@ -1189,27 +1620,63 @@ function parseCsvRow(line) {
 
 async function importMembersCsvFile(file) {
   if (!file) return;
-  var text = await file.text();
-  var lines = String(text || '').replace(/^\uFEFF/, '').split(/\r?\n/).filter(function(l) { return l.trim(); });
-  if (!lines.length) {
-    toast('CSV is empty.');
-    return;
+  var name = String(file.name || '').toLowerCase();
+  var isXlsx = name.endsWith('.xlsx');
+  var rows = [];
+
+  if (isXlsx) {
+    try {
+      var buf = await file.arrayBuffer();
+      var wb = new ExcelJS.Workbook();
+      await wb.xlsx.load(buf);
+      var ws = wb.worksheets[0];
+      if (!ws) { toast('The workbook has no sheets.'); return; }
+      ws.eachRow({ includeEmpty: false }, function(row, rowNumber) {
+        var vals = [];
+        row.eachCell({ includeEmpty: true }, function(cell) {
+          vals.push(cell.value == null ? '' : String(cell.value));
+        });
+        rows.push(vals);
+      });
+    } catch (e) {
+      console.error('XLSX parse failed', e);
+      toast('Could not read that Excel file. Please use the template.');
+      return;
+    }
+  } else {
+    var text = await file.text();
+    var lines = String(text || '').replace(/^\uFEFF/, '').split(/\r?\n/).filter(function(l) { return l.trim(); });
+    if (!lines.length) { toast('CSV is empty.'); return; }
+    rows = lines.map(parseCsvRow);
   }
 
-  var headers = parseCsvRow(lines[0]).map(function(h) { return String(h || '').trim().toLowerCase(); });
-  var emailIdx = headers.indexOf('email');
-  var roleIdx = headers.indexOf('role');
-  var groupIdx = headers.indexOf('group');
-  if (emailIdx < 0 || roleIdx < 0) {
-    toast('CSV must include headers: email, role, group');
+  if (!rows.length) { toast('The file is empty.'); return; }
+
+  // Find header row: first row containing an "email" column.
+  var headerIdx = -1;
+  var emailIdx = -1, roleIdx = -1, groupIdx = -1;
+  for (var h = 0; h < rows.length; h++) {
+    var headers = rows[h].map(function(x) { return String(x || '').trim().toLowerCase(); });
+    var eIdx = headers.indexOf('email');
+    var rIdx = headers.indexOf('role');
+    if (eIdx >= 0 && rIdx >= 0) {
+      headerIdx = h;
+      emailIdx = eIdx;
+      roleIdx = rIdx;
+      groupIdx = headers.indexOf('group');
+      break;
+    }
+  }
+  if (headerIdx < 0) {
+    toast('The file must include headers: email, role, group');
     return;
   }
 
   var imported = 0;
   var failed = 0;
   var failedRows = [];
-  for (var i = 1; i < lines.length; i++) {
-    var cols = parseCsvRow(lines[i]);
+  for (var i = headerIdx + 1; i < rows.length; i++) {
+    var cols = rows[i];
     var email = String(cols[emailIdx] || '').trim().toLowerCase();
     var role = normalizeMemberRole(cols[roleIdx]);
     var groupName = groupIdx >= 0 ? String(cols[groupIdx] || '').trim() : '';
@@ -1247,7 +1714,8 @@ async function importMembersCsvFile(file) {
 async function removeMember(memberId) {
   var m = state.members.find(function(x) { return String(x.id) === String(memberId); });
   if (!m) return;
-  if (!confirm('Remove ' + m.email + '? Their account will be reverted to free tier.')) return;
+  var ok = await confirmDialog('Remove ' + m.email + '? Their account will be reverted to free tier.', { title: 'Remove member', okText: 'Remove', icon: 'danger' });
+  if (!ok) return;
 
   var res = await state.sb.from('school_members').update({ status: 'removed' }).eq('id', m.id);
   if (res.error) { toast('Could not remove member.'); return; }
@@ -1269,15 +1737,86 @@ async function removeMember(memberId) {
   await loadMembers();
 }
 
+/* ═══════════════════════════════════════════════
+   BULK OPERATIONS
+═══════════════════════════════════════════════ */
+async function bulkRemoveMembers(role) {
+  var members = getSelectedMembers(role);
+  if (!members.length) { toast('No members selected.'); return; }
+  var label = role === 'teacher' ? 'teachers' : 'students';
+  var ok = await confirmDialog(
+    'Remove ' + members.length + ' selected ' + label + '? Their accounts will be reverted to free tier. This cannot be undone.',
+    { title: 'Remove ' + members.length + ' ' + label, okText: 'Remove all', icon: 'danger' }
+  );
+  if (!ok) return;
+
+  var ids = members.map(function(m) { return m.id; });
+  var emails = members.map(function(m) { return String(m.email || '').toLowerCase(); });
+
+  var res = await state.sb.from('school_members').update({ status: 'removed' }).in('id', ids);
+  if (res.error) { toast('Could not remove members: ' + (res.error.message || 'unknown error')); return; }
+
+  if (emails.length) {
+    await state.sb.from('profiles').update({
+      tier: 'free',
+      credits: 10,
+      credits_reset_at: new Date().toISOString(),
+      school_id: null,
+      school_name: null,
+      unlocked_subjects: [],
+      unlimited_credits: false
+    }).in('email', emails);
+  }
+
+  clearSelection(role);
+  toast(members.length + ' ' + label + ' removed and reverted to free tier.');
+  await loadMembers();
+}
+
+async function bulkSetGroup(role, groupName) {
+  var members = getSelectedMembers(role);
+  if (!members.length) { toast('No members selected.'); return; }
+  var target = groupName === '__none__' ? null : groupName;
+  var ids = members.map(function(m) { return m.id; });
+  var res = await state.sb.from('school_members').update({ group_name: target }).in('id', ids);
+  if (res.error) { toast('Could not update groups: ' + (res.error.message || 'unknown error')); return; }
+
+  members.forEach(function(m) { m.group_name = target; });
+  // re-derive groups
+  var groupSet = new Set();
+  state.members.forEach(function(x) { if (x.group_name) groupSet.add(x.group_name); });
+  state.groups = Array.from(groupSet).sort();
+  clearSelection(role);
+  toast(members.length + ' member(s) moved to ' + (target || 'no group') + '.');
+  renderAll();
+}
+
+async function bulkResendInvites(role) {
+  var members = getSelectedMembers(role);
+  if (!members.length) { toast('No members selected.'); return; }
+  var label = role === 'teacher' ? 'teachers' : 'students';
+  toast('Sending invites to ' + members.length + ' ' + label + '…');
+  var sent = 0, skipped = 0, failed = 0;
+  for (var i = 0; i < members.length; i++) {
+    var m = members[i];
+    var result = await window.RA10_INVITE(m.email, m.role, state.schoolId, state.schoolName);
+    if (result.ok && result.skipped) { skipped++; }
+    else if (result.ok) { sent++; }
+    else { failed++; }
+  }
+  clearSelection(role);
+  toast('Invites: ' + sent + ' sent, ' + skipped + ' already active, ' + failed + ' failed.');
+}
+
 async function setOrResetMemberUsername(memberId) {
   var m = state.members.find(function(x) { return String(x.id) === String(memberId); });
   if (!m) return;
 
-  var input = prompt(
+  var input = await promptDialog(
     'Set a new username for ' + m.email + '. Leave empty to reset/remove their username.',
-    ''
+    { title: 'Set / reset username' }
   );
-  if (input === null) return;
+  if (input === false || input == null) return;
 
   var normalized = normalizeUsername(input);
   if (!normalized) {
@@ -1331,7 +1870,8 @@ document.getElementById('btn-save-school').addEventListener('click', async funct
 
 document.getElementById('btn-remove-all').addEventListener('click', async function() {
   if (!state.schoolId) return;
-  if (!confirm('Remove ALL members? This will revert every student and teacher to free tier. This cannot be undone.')) return;
+  var ok = await confirmDialog('Remove ALL members? This will revert every student and teacher to free tier. This cannot be undone.', { title: 'Remove all members', okText: 'Remove all', icon: 'danger' });
+  if (!ok) return;
   if (!state.members.length) { toast('No members to remove.'); return; }
 
   var ids = state.members.map(function(m) { return m.id; });
@@ -1368,7 +1908,7 @@ async function resendInvite(memberId) {
     if (copied) {
       toast('⚠️ Invite emails are rate-limited. A one-time signup link has been copied to your clipboard — paste it into a message to ' + m.email + '.');
     } else {
-      var userLink = prompt('Invite emails are rate-limited. Copy this link and send it to ' + m.email + ':', result.link);
+      await alertDialog('Invite emails are rate-limited. Copy this link and send it to ' + m.email + ':\n\n' + result.link, { title: 'One-time signup link', okText: 'OK' });
     }
   } else if (result.ok) {
     toast('✅ Invite resent to ' + m.email + '.');
@@ -1381,6 +1921,12 @@ async function resendInvite(memberId) {
 
 [dom.studentsBody, dom.teachersBody].forEach(function(tbody) {
   tbody.addEventListener('click', async function(e) {
+    var check = e.target.closest('[data-check]');
+    if (check) {
+      var role = tbody === dom.teachersBody ? 'teacher' : 'student';
+      toggleMemberSelected(role, check.dataset.check);
+      return;
+    }
     var resendBtn = e.target.closest('[data-resend]');
     if (resendBtn) { await resendInvite(resendBtn.dataset.resend); return; }
     var userBtn = e.target.closest('[data-fixusername]');
@@ -1391,6 +1937,28 @@ async function resendInvite(memberId) {
   tbody.addEventListener('change', async function(e) {
     var sel = e.target.closest('[data-setgroup]');
     if (sel) await setMemberGroup(sel.dataset.setgroup, sel.value);
+  });
+});
+
+// Bulk bar wiring
+['student', 'teacher'].forEach(function(role) {
+  var checkAll = document.getElementById('check-all-' + role + 's');
+  if (checkAll) checkAll.addEventListener('change', function() { selectAllVisible(role); });
+
+  var clearBtn = document.getElementById('bulk-clear-' + role + 's');
+  if (clearBtn) clearBtn.addEventListener('click', function() { clearSelection(role); });
+
+  var removeBtn = document.getElementById('bulk-remove-' + role + 's');
+  if (removeBtn) removeBtn.addEventListener('click', function() { bulkRemoveMembers(role); });
+
+  var resendBtn = document.getElementById('bulk-resend-' + role + 's');
+  if (resendBtn) resendBtn.addEventListener('click', function() { bulkResendInvites(role); });
+
+  var groupSel = document.getElementById('bulk-group-' + role + 's');
+  if (groupSel) groupSel.addEventListener('change', function() {
+    if (groupSel.value === '') return;
+    bulkSetGroup(role, groupSel.value);
+    groupSel.value = '';
   });
 });
 
@@ -1408,9 +1976,10 @@ document.getElementById('groups-list').addEventListener('click', async function(
 
 document.getElementById('btn-create-group').addEventListener('click', createGroup);
 
-document.getElementById('btn-add-student').addEventListener('click', function() {
+document.getElementById('btn-add-student').addEventListener('click', async function() {
   if (!state.groups.length) {
-    if (confirm('No groups exist yet. It\'s recommended to create a group first so you can organise your students. Create a group now?')) {
+    var ok = await confirmDialog('No groups exist yet. It\'s recommended to create a group first so you can organise your students. Create a group now?', { title: 'Create a group first?', okText: 'Create group', icon: 'info' });
+    if (ok) {
       setTab('groups');
       createGroup();
       return;
@@ -1419,9 +1988,10 @@ document.getElementById('btn-add-student').addEventListener('click', function() 
   openModal('student');
 });
 
-document.getElementById('btn-add-teacher').addEventListener('click', function() {
+document.getElementById('btn-add-teacher').addEventListener('click', async function() {
   if (!state.groups.length) {
-    if (confirm('No groups exist yet. It\'s recommended to create a group first so you can organise your teachers. Create a group now?')) {
+    var ok = await confirmDialog('No groups exist yet. It\'s recommended to create a group first so you can organise your teachers. Create a group now?', { title: 'Create a group first?', okText: 'Create group', icon: 'info' });
+    if (ok) {
       setTab('groups');
       createGroup();
       return;
@@ -1454,6 +2024,8 @@ dom.csvInput?.addEventListener('change', async function(e) {
 ['student','teacher'].forEach(function(role) {
   var sel = document.getElementById('filter-' + role + '-group');
   if (sel) sel.addEventListener('change', function() { renderTable(role); });
+  var searchEl = document.getElementById('search-' + role + 's');
+  if (searchEl) searchEl.addEventListener('input', function() { renderTable(role); });
 });
 document.getElementById('btn-member-save').addEventListener('click', addMember);
 document.getElementById('btn-member-cancel').addEventListener('click', closeModal);
@@ -1633,7 +2205,7 @@ async function initAccess() {
           var alreadyShown = false;
           try { alreadyShown = localStorage.getItem(noticeKey) === '1'; } catch(e) {}
           if (!alreadyShown) {
-            alert('Your school subscription will end on ' + schoolEndText + '.');
+            alertDialog('Your school subscription will end on ' + schoolEndText + '.', { title: 'Subscription ending', icon: 'warn' });
             try { localStorage.setItem(noticeKey, '1'); } catch(e) {}
           }
         }

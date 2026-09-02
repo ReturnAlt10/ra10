@@ -3967,6 +3967,16 @@ html body #community-share-sheet .community-share-panel{
 .signed-in-dash-greeting{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,.75)}
 .signed-in-dash-title{font-size:clamp(1.6rem,3.5vw,2.2rem);color:#fff;margin:2px 0 0;line-height:1.1}
 .signed-in-dash-sub{color:rgba(255,255,255,.8);margin:6px 0 0;font-size:var(--tx-sm)}
+.signed-in-dash-school{display:flex;align-items:center;gap:var(--sp2);flex-wrap:wrap;margin-top:10px}
+.signed-in-dash-school-chip{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.28);
+  color:#fff;border-radius:999px;padding:4px 12px;font-size:12px;font-weight:600;
+  backdrop-filter:blur(6px);
+}
+.signed-in-dash-school-chip.group-chip{
+  background:rgba(100,200,255,.22);border-color:rgba(180,230,255,.45);
+}
 .signed-in-dash-hero-actions{display:flex;gap:var(--sp2);flex-wrap:wrap}
 .signed-in-dash-btn{
   padding:10px 16px;border-radius:999px;border:1px solid rgba(255,255,255,.25);
@@ -4137,28 +4147,40 @@ html body #community-share-sheet .community-share-panel{
 .exams-progress-label{display:block;font-size:11px;color:var(--color-text-muted);margin-top:4px}
 
 /* Home exams grid */
-.hx-exams-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:var(--sp3)}
+.hx-exams-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:var(--sp3)}
 .hx-exam-card{
-  border:1px solid #ded9d0;border-radius:18px;padding:16px;cursor:pointer;
-  background:rgba(255,255,255,.72);display:flex;flex-direction:column;gap:8px;
-  box-shadow:0 4px 14px rgba(63,52,35,.05);
-  transition:transform .15s ease,box-shadow .15s ease,border-color .15s ease;
+  position:relative;border:1px solid #ded9d0;border-radius:20px;padding:18px;cursor:pointer;
+  background:linear-gradient(160deg,rgba(255,255,255,.9),rgba(255,255,255,.6));
+  display:flex;flex-direction:column;gap:8px;overflow:hidden;
+  box-shadow:0 4px 16px rgba(63,52,35,.06),inset 0 1px rgba(255,255,255,.6);
+  transition:transform .16s ease,box-shadow .16s ease,border-color .16s ease;
 }
-.hx-exam-card:hover{transform:translateY(-2px);box-shadow:0 10px 22px rgba(63,52,35,.1);border-color:#c9c2b7}
-.hx-exam-card.pinned{border-color:#d20000;box-shadow:0 0 0 1px rgba(210,0,0,.2),0 6px 18px rgba(210,0,0,.08)}
-.hx-exam-top{display:flex;align-items:center;justify-content:space-between}
-.hx-exam-board{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;padding:3px 9px;border-radius:999px;background:var(--color-surface-offset);color:var(--color-text-muted)}
+.hx-exam-card::after{
+  content:'';position:absolute;left:0;right:0;bottom:0;height:3px;
+  background:linear-gradient(90deg,var(--color-primary),#ff6b3d,var(--color-primary));
+  opacity:.85;
+}
+.hx-exam-card:hover{transform:translateY(-3px);box-shadow:0 14px 30px rgba(63,52,35,.12),inset 0 1px rgba(255,255,255,.6);border-color:#c9c2b7}
+.hx-exam-card.pinned{border-color:#d20000;box-shadow:0 0 0 1px rgba(210,0,0,.18),0 6px 20px rgba(210,0,0,.1)}
+.hx-exam-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.hx-exam-board{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;padding:4px 10px;border-radius:999px;background:var(--color-surface-offset);color:var(--color-text-muted);white-space:nowrap}
 .hx-exam-board.pearson-btec{background:#e8f0fe;color:#1d4ed8}
 .hx-exam-board.aqa{background:#fef3c7;color:#92400e}
 .hx-exam-board.edexcel{background:#dcfce7;color:#166534}
 .hx-exam-board.ocr{background:#f3e8ff;color:#7c3aed}
-.hx-exam-pin{width:28px;height:28px;border-radius:999px;display:flex;align-items:center;justify-content:center;background:var(--color-surface-offset);color:var(--color-text-muted);border:1px solid var(--color-border);font-size:13px;cursor:pointer}
+.hx-exam-pin{width:30px;height:30px;border-radius:999px;display:flex;align-items:center;justify-content:center;background:var(--color-surface-offset);color:var(--color-text-muted);border:1px solid var(--color-border);font-size:14px;cursor:pointer;transition:transform .12s ease,background .12s ease,color .12s ease}
+.hx-exam-pin:hover{transform:scale(1.1)}
 .hx-exam-pin.pinned{background:#d20000;color:#fff;border-color:#d20000}
-.hx-exam-subject{font-size:var(--tx-sm);font-weight:700;color:#28251d}
+.hx-exam-subject{font-size:var(--tx-sm);font-weight:800;color:#28251d;letter-spacing:-.01em;line-height:1.25}
 .hx-exam-name{font-size:12px;color:#89857c}
-.hx-exam-foot{display:flex;align-items:center;justify-content:space-between;margin-top:auto}
-.hx-exam-date{font-size:12px;color:#6d6a64}
-.hx-exam-days{font-size:12px;font-weight:800;color:#d20000}
+.hx-exam-count{display:flex;align-items:baseline;gap:6px;margin-top:4px;padding:10px 14px;border-radius:14px;background:linear-gradient(135deg,var(--color-primary),#ff6b3d);color:#fff;box-shadow:0 6px 16px rgba(210,0,0,.22)}
+.hx-exam-count-num{font-family:var(--font-d);font-size:2rem;line-height:1;font-weight:700}
+.hx-exam-count-txt{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.03em;opacity:.95}
+.hx-exam-count.soon{background:linear-gradient(135deg,#ff8a00,#ff4d00)}
+.hx-exam-foot{display:flex;align-items:center;gap:6px;margin-top:auto}
+.hx-exam-dot{width:7px;height:7px;border-radius:50%;background:var(--color-primary);box-shadow:0 0 0 3px rgba(210,0,0,.15)}
+.hx-exam-date{font-size:12.5px;font-weight:700;color:#6d6a64}
+.hx-exam-pinned-tag{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:#d20000;margin-left:auto}
 .hx-exams-empty{color:#89857c;font-size:var(--tx-sm);grid-column:1/-1;text-align:center;padding:var(--sp6) 0}
 @media (max-width:640px){.hx-exams-grid{grid-template-columns:1fr}}
 @media (max-width:640px){
@@ -4294,12 +4316,13 @@ html body #community-share-sheet .community-share-panel{
 [data-theme="dark"] .exams-view-btn.active{background:#d20000;color:#fff}
 [data-theme="dark"] .exams-progress-track{background:#2b303a}
 [data-theme="dark"] .exams-progress-label{color:#858d9e}
-[data-theme="dark"] .hx-exam-card{background:#242831;border-color:#363b47}
+[data-theme="dark"] .hx-exam-card{background:linear-gradient(160deg,#242831,#1e2129);border-color:#363b47;box-shadow:0 6px 20px rgba(0,0,0,.3),inset 0 1px rgba(255,255,255,.04)}
 [data-theme="dark"] .hx-exam-card:hover{background:#2b303a;border-color:#515867}
 [data-theme="dark"] .hx-exam-card.pinned{border-color:#d20000}
 [data-theme="dark"] .hx-exam-subject{color:#f1f2f4}
 [data-theme="dark"] .hx-exam-name{color:#858d9e}
 [data-theme="dark"] .hx-exam-date{color:#adb4c2}
+[data-theme="dark"] .hx-exam-dot{background:#ff5a5a;box-shadow:0 0 0 3px rgba(255,90,90,.18)}
 [data-theme="dark"] .hx-exam-board{background:#2b303a;color:#adb4c2}
 [data-theme="dark"] .hx-exam-board.pearson-btec{background:#1e2a4a;color:#93c5fd}
 [data-theme="dark"] .hx-exam-board.aqa{background:#3a2f14;color:#fcd34d}
@@ -4307,6 +4330,7 @@ html body #community-share-sheet .community-share-panel{
 [data-theme="dark"] .hx-exam-board.ocr{background:#2e1f4a;color:#d8b4fe}
 [data-theme="dark"] .hx-exam-pin{background:#2b303a;color:#adb4c2;border-color:#414754}
 [data-theme="dark"] .hx-exam-pin.pinned{background:#d20000;color:#fff;border-color:#d20000}
+[data-theme="dark"] .hx-exam-pinned-tag{color:#ff6b6b}
 [data-theme="dark"] .hx-exams-empty{color:#858d9e}
 
 @media(max-width:979px){#p-home .hx-hero-grid{grid-template-columns:1fr}}
@@ -4398,9 +4422,9 @@ html body #community-share-sheet .community-share-panel{
       <span class="nav-logo-text">RA10</span>
     </a>
     <div class="nav-links">
-      <button class="nav-link" data-nav="home" onclick="go('/')">Home</button>
+      <button class="nav-link" data-nav="home" onclick="go('/')"><svg class="nu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l9-9 9 9"/><path d="M5 10v10a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V10"/></svg>Home</button>
       <div style="position:relative;display:inline-flex;" id="nav-rev-wrap">
-        <button class="nav-link" data-nav="revision" onclick="go('/revision')">Revision</button>
+        <button class="nav-link" data-nav="revision" onclick="go('/revision')"><svg class="nu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Revision</button>
         <div id="rev-preview" style="display:none;position:absolute;
           top:calc(100% + 8px);left:50%;transform:translateX(-50%);
           background:var(--color-surface);border:1px solid var(--color-border);
@@ -4506,12 +4530,13 @@ html body #community-share-sheet .community-share-panel{
           </div>
         </div>
       </div>
-      <button class="nav-link" data-nav="tools"    onclick="go('/tools')">Tools</button>
-      <button class="nav-link" data-nav="community" onclick="go('/community')">Community</button>
-      <button class="nav-link" data-nav="tasks"    onclick="go('/tasks')">Tasks</button>
-      <button class="nav-link" data-nav="exams"    onclick="go('/exams')">Exams</button>
+      <button class="nav-link" data-nav="tools"    onclick="go('/tools')"><svg class="nu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a6 6 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>Tools</button>
+      <button class="nav-link" data-nav="community" onclick="go('/community')"><svg class="nu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>Community</button>
+      <button class="nav-link" data-nav="tasks"    onclick="go('/tasks')"><svg class="nu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3 8-8"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Tasks</button>
+      <button class="nav-link" data-nav="exams"    onclick="go('/exams')"><svg class="nu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13"/><path d="M8 12h13"/><path d="M8 18h13"/><path d="M3 6h.01M3 12h.01M3 18h.01"/></svg>Exams</button>
       <div style="position:relative;display:inline-flex;" id="nav-lb-wrap">
         <button class="nav-link" data-nav="leaderboard" onclick="go('leaderboard')">
+          <svg class="nu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v4a5 5 0 0 1-10 0z"/><path d="M7 6H4a2 2 0 0 0 2 3M17 6h3a2 2 0 0 1-2 3"/></svg>
           Leaderboard
         </button>
         <div id="lb-preview" style="display:none;position:absolute;
@@ -4808,6 +4833,10 @@ html body #community-share-sheet .community-share-panel{
               <span class="signed-in-dash-greeting">Welcome back</span>
               <h2 class="signed-in-dash-title" id="signed-in-dash-name">Learner</h2>
               <p class="signed-in-dash-sub">Pick up where you left off, or jump into a pinned app.</p>
+              <div class="signed-in-dash-school" id="signed-in-dash-school" style="display:none">
+                <span class="signed-in-dash-school-chip school-chip" id="signed-in-dash-school-chip"></span>
+                <span class="signed-in-dash-school-chip group-chip" id="signed-in-dash-group-chip" style="display:none"></span>
+              </div>
             </div>
             <div class="signed-in-dash-hero-actions">
               <button class="signed-in-dash-btn" type="button" onclick="go('/tasks')">Today's tasks</button>
@@ -10391,6 +10420,33 @@ function renderSignedInDashboard() {
     }
   }
 
+  // School + group badges
+  const schoolRow = document.getElementById('signed-in-dash-school');
+  if (schoolRow) {
+    const schoolName = profile.school_name || '';
+    const groupName = profile.group_name || '';
+    const hasSchool = !!schoolName.trim();
+    const hasGroup = !!groupName.trim();
+    const schoolChip = document.getElementById('signed-in-dash-school-chip');
+    const groupChip = document.getElementById('signed-in-dash-group-chip');
+    if (schoolChip) {
+      if (hasSchool) {
+        schoolChip.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>' + escapeHtmlAttr(profile.school_name);
+      } else {
+        schoolChip.classList.add('hidden');
+      }
+    }
+    if (groupChip) {
+      if (hasGroup) {
+        groupChip.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>' + escapeHtmlAttr(profile.group_name);
+        groupChip.style.display = '';
+      } else {
+        groupChip.style.display = 'none';
+      }
+    }
+    schoolRow.style.display = (hasSchool || hasGroup) ? '' : 'none';
+  }
+
   const statsHost = document.getElementById('signed-in-dash-stats');
   if (statsHost) {
     const streak = (window.RA10 && typeof RA10.getStreak === 'function') ? (RA10.getStreak() || 0) : 0;
@@ -10553,6 +10609,10 @@ function renderHomeExams() {
     const isPinned = pinned.includes(exam.id);
     const days = Math.ceil((next.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
     const dateStr = next.toLocaleDateString(undefined, { weekday: 'short', day: 'numeric', month: 'short' });
+    let dayLabel, countCls;
+    if (days === 0) { dayLabel = 'Today'; countCls = 'soon'; }
+    else if (days === 1) { dayLabel = '1 day'; countCls = 'soon'; }
+    else { dayLabel = days + ' days'; countCls = ''; }
     return '<div class="hx-exam-card' + (isPinned ? ' pinned' : '') + '" onclick="go(\'/exams\')">'
       + '<div class="hx-exam-top">'
       +   '<span class="hx-exam-board ' + exam.board.toLowerCase().replace(/\s+/g, '-') + '">' + exam.board + '</span>'
@@ -10560,9 +10620,13 @@ function renderHomeExams() {
       + '</div>'
       + '<div class="hx-exam-subject">' + exam.subject + '</div>'
       + '<div class="hx-exam-name">' + exam.name + '</div>'
+      + '<div class="hx-exam-count ' + countCls + '">'
+      +   '<span class="hx-exam-count-num">' + days + '</span>'
+      +   '<span class="hx-exam-count-txt">' + (days === 1 ? 'day to go' : 'days to go') + '</span>'
+      + '</div>'
       + '<div class="hx-exam-foot">'
-      +   '<span class="hx-exam-date">' + dateStr + '</span>'
-      +   '<span class="hx-exam-days">' + days + 'd</span>'
+      +   '<span class="hx-exam-dot"></span><span class="hx-exam-date">' + dateStr + '</span>'
+      + (isPinned ? '<span class="hx-exam-pinned-tag">Pinned</span>' : '')
       + '</div>'
       + '</div>';
   }).join('');
@@ -10918,7 +10982,13 @@ async function waitForRA10Sdk(timeoutMs) {
     }
 
     // Handle Supabase email callback (invite or password reset)
-    const hashParams = new URLSearchParams(window.location.hash.slice(1));
+    // Supabase appends tokens as a second hash fragment, e.g.
+    //   https://ra10.co.uk/#/auth#access_token=...&type=recovery
+    // so we must parse the LAST hash fragment, not the route hash.
+    const fullHash = window.location.hash || '';
+    const lastHashIdx = fullHash.lastIndexOf('#');
+    const tokenFragment = lastHashIdx > 0 ? fullHash.slice(lastHashIdx + 1) : fullHash.slice(1);
+    const hashParams = new URLSearchParams(tokenFragment);
     const cbToken = hashParams.get('access_token');
     const cbType = hashParams.get('type');
     if (cbToken && (cbType === 'invite' || cbType === 'recovery')) {
@@ -12620,14 +12690,8 @@ async function waitForRA10Sdk(timeoutMs) {
       btn.disabled = true;
       btn.textContent = 'Saving...';
       try {
-        const { error } = await RA10.getSession()?._supabase?.auth.updateUser({ password: pw })
-          || await (async () => {
-            const sb = window.supabase.createClient(
-              'https://tcrrgsylxbyyrmnouihl.supabase.co',
-              'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRjcnJnc3lseGJ5eXJtbm91aWhsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4ODUyMTEsImV4cCI6MjA5MzQ2MTIxMX0.eOp6ma-mfgh8F20nM7E2OaBW28LlZlwuEEWr6k2zDWw'
-            );
-            return sb.auth.updateUser({ password: pw });
-          })();
+        const ra10 = await waitForRA10Sdk(8000);
+        const { error } = await RA10.updatePassword(pw);
         if (error) {
           err.textContent = error.message;
           err.classList.add('show');
@@ -13619,6 +13683,10 @@ async function waitForRA10Sdk(timeoutMs) {
       <aside class="news-sidebar">
         <h3>Contents</h3>
         <ul>
+          <li><a href="#news-unit2-bank">Unit 2 Question Bank Expansion</a></li>
+          <li><a href="#news-exam-cards">Homepage Exam Countdown Cards</a></li>
+          <li><a href="#news-unit-tabs">Unit Dashboard Tabs Refresh</a></li>
+          <li><a href="#news-unified-nav">Unified Site Navigation</a></li>
           <li><a href="#news-community-library">Community App Library</a></li>
           <li><a href="#news-community-studio">Community Creation Studio</a></li>
           <li><a href="#news-mobile-shell">Mobile Navigation Refresh</a></li>
@@ -13637,11 +13705,62 @@ async function waitForRA10Sdk(timeoutMs) {
           <div><span>Project</span><strong>RA10</strong></div>
           <div><span>Status</span><strong>Live</strong></div>
           <div><span>Coverage</span><strong>BTEC L2/L3</strong></div>
-          <div><span>Last sync</span><strong>12.08.2026</strong></div>
+          <div><span>Last sync</span><strong>02.09.2026</strong></div>
         </div>
       </aside>
 
       <section class="news-feed">
+        <article class="news-article" id="news-unit2-bank" data-category="revision" data-status="live" data-date="2026-09-02">
+          <div class="news-media" style="background:linear-gradient(120deg,#ecfeff,#e0f2fe,#f0fdf4)">
+            <svg viewBox="0 0 1200 300" aria-hidden="true">
+              <rect width="1200" height="300" fill="none"/>
+              <rect x="180" y="60" width="840" height="180" rx="22" fill="#fff" opacity=".94"/>
+              <rect x="240" y="100" width="300" height="100" rx="14" fill="#e0f2fe" stroke="#bae6fd"/>
+              <rect x="570" y="100" width="180" height="100" rx="14" fill="#f0fdf4" stroke="#bbf7d0"/>
+              <rect x="780" y="100" width="180" height="100" rx="14" fill="#fefce8" stroke="#fde68a"/>
+              <text x="390" y="160" text-anchor="middle" font-size="44" font-family="Arial" font-weight="bold" fill="#0284c7">700+</text>
+              <text x="660" y="160" text-anchor="middle" font-size="34" font-family="Arial" font-weight="bold" fill="#16a34a">172</text>
+              <text x="870" y="160" text-anchor="middle" font-size="34" font-family="Arial" font-weight="bold" fill="#ca8a04">22</text>
+              <text x="390" y="188" text-anchor="middle" font-size="16" font-family="Arial" fill="#64748b">Questions</text>
+              <text x="660" y="188" text-anchor="middle" font-size="16" font-family="Arial" fill="#64748b">MCQs</text>
+              <text x="870" y="188" text-anchor="middle" font-size="16" font-family="Arial" fill="#64748b">Diagrams</text>
+            </svg>
+          </div>
+          <div class="news-content">
+            <div class="news-meta"><span>02.09.2026</span><span>Revision Engine</span></div>
+            <h2>IT Unit 2 Question Bank Grows to 700+ Questions</h2>
+            <p>BTEC IT Unit 2 now holds over 700 exam-style questions across all four learning aims. The bank adds 172 multiple-choice questions with shuffled answer positions, plus 22 diagram questions — including new "figure" questions that show a diagram to the candidate as part of the question. Mark schemes and explanations are included throughout.</p>
+            <div class="news-tags"><span class="news-tag">Live</span><span class="news-tag">Question Bank</span><span class="news-tag">MCQs</span><span class="news-tag">Diagrams</span></div>
+          </div>
+        </article>
+
+        <article class="news-article" id="news-exam-cards" data-category="revision" data-status="live" data-date="2026-09-02">
+          <div class="news-content">
+            <div class="news-meta"><span>02.09.2026</span><span>Homepage Update</span></div>
+            <h2>Bolder Exam Countdown Cards on the Homepage</h2>
+            <p>The homepage "Upcoming exams" section has been redesigned with bolder, more visual countdown cards. Each card now shows a large gradient countdown pill with the days remaining, a stronger subject title, a pinned-exam tag, and a cleaner date row — making it easier to see at a glance what is coming up.</p>
+            <div class="news-tags"><span class="news-tag">Live</span><span class="news-tag">Homepage</span><span class="news-tag">Exams</span><span class="news-tag">UX</span></div>
+          </div>
+        </article>
+
+        <article class="news-article" id="news-unit-tabs" data-category="revision" data-status="live" data-date="2026-09-02">
+          <div class="news-content">
+            <div class="news-meta"><span>02.09.2026</span><span>Unit Experience</span></div>
+            <h2>Unit Dashboard Tabs Refreshed with Icons and Tooltips</h2>
+            <p>The Dashboard, Questions, Revise, Predicted Papers, and Progress tabs on every unit app are now centred, carry custom SVG icons, and show a short hover tooltip explaining what each action does. This makes it clearer what each button leads to, especially for new learners.</p>
+            <div class="news-tags"><span class="news-tag">Live</span><span class="news-tag">Unit Apps</span><span class="news-tag">Navigation</span><span class="news-tag">UX</span></div>
+          </div>
+        </article>
+
+        <article class="news-article" id="news-unified-nav" data-category="infrastructure" data-status="live" data-date="2026-09-02">
+          <div class="news-content">
+            <div class="news-meta"><span>02.09.2026</span><span>Navigation</span></div>
+            <h2>Unified Site Navigation Across Homepage and Unit Apps</h2>
+            <p>The main site navbar and every unit app navbar now share one consistent structure and link order — Home, Revision, Tools, Community, Tasks, Exams, Leaderboard — with matching SVG icons on each link. The unit top bar merges the site links and unit tabs into a single connected glass bar, so moving between pages feels seamless.</p>
+            <div class="news-tags"><span class="news-tag">Live</span><span class="news-tag">Navbar</span><span class="news-tag">Consistency</span><span class="news-tag">Icons</span></div>
+          </div>
+        </article>
+
         <article class="news-article" id="news-community-library" data-category="revision" data-status="live" data-date="2026-08-12">
           <div class="news-media" style="background:linear-gradient(120deg,#fff1f2,#fef3c7,#eff6ff)">
             <svg viewBox="0 0 1200 300" aria-hidden="true">
