@@ -357,7 +357,8 @@
     host.className = 'ed-app ed-theme-' + theme;
     host.innerHTML =
       '<div class="ed-topbar">' +
-      '  <span class="ed-logo">λ</span><span class="ed-title">RA10 Web Studio</span>' +
+      '  <img class="ed-logo-img" src="' + (window.location.protocol === 'file:' ? '/logo.png' : '/logo.png') + '" alt="RA10" onerror="this.style.display=\'none\'">' +
+      '  <span class="ed-logo">λ</span><span class="ed-title">Web Studio</span>' +
       '  <span class="ed-spacer"></span>' +
       '  <button class="ed-btn" id="ed-btn-folder" title="Open local folder">📁 Folder</button>' +
       '  <button class="ed-btn" id="ed-btn-cloud" title="Cloud autosave (sign in)">☁ Cloud</button>' +
@@ -376,10 +377,10 @@
       '  <span class="ed-sep"></span>' +
       '  <span class="ed-label">Style</span>' +
       '  <button class="ed-theme-btn' + (theme === 'vscode' ? ' active' : '') + '" data-theme="vscode">VS Code</button>' +
-      '  <button class="ed-theme-btn' + (theme === 'dreamweaver' ? ' active' : '') + '" data-theme="dreamweaver">Dreamweaver</button>' +
+      '  <button class="ed-theme-btn' + (theme === 'dreamweaver' ? ' active' : '') + '" data-theme="dreamweaver">DW</button>' +
       '</div>' +
       '<div class="ed-body">' +
-      '  <div class="ed-sidebar">' +
+      '  <div class="ed-sidebar" id="ed-sidebar">' +
       '    <div class="ed-sidebar-title">EXPLORER</div>' +
       '    <div class="ed-files" id="ed-files"></div>' +
       '    <div class="ed-new-file">' +
@@ -403,12 +404,26 @@
       '<div class="ed-template-picker hidden" id="ed-template-picker">' +
       '  <div class="ed-template-picker-hd"><strong>Insert a learning component</strong><button class="ed-x" id="ed-tpl-close">✕</button></div>' +
       '  <div class="ed-template-buttons" id="ed-template-buttons"></div>' +
+      '</div>' +
+      '<div class="ed-ai-bubble" id="ed-ai-bubble" title="Ask AI Assigner for help">🤖</div>' +
+      '<div class="ed-ai-panel hidden" id="ed-ai-panel">' +
+      '  <div class="ed-ai-hd"><img class="ed-logo-img" src="/logo.png" alt="" style="width:20px;height:20px;border-radius:5px"> <strong>AI Assigner</strong> <button class="ed-x" id="ed-ai-close">✕</button></div>' +
+      '  <div class="ed-ai-msgs" id="ed-ai-msgs"></div>' +
+      '  <div class="ed-ai-input"><textarea id="ed-ai-text" placeholder="Ask about your code — e.g. \'How do I make this responsive?\'" rows="2"></textarea><button id="ed-ai-send">Send</button></div>' +
+      '  <div class="ed-ai-footer">Asked about your code — AI Assigner coaches, never writes for you.</div>' +
+      '</div>' +
+      '<div class="ed-selection-pop hidden" id="ed-selection-pop">' +
+      '  <button id="ed-sel-ask">🤖 Ask AI</button>' +
+      '  <button id="ed-sel-explain">Explain this</button>' +
+      '  <button id="ed-sel-improve">Improve this</button>' +
       '</div>';
 
     // fix any broken glyphs from escaping
     host.innerHTML = host.innerHTML.replace(/✕/g, '✕');
 
     bindTop();
+    bindAi();
+    bindSelection();
     renderTemplates();
     renderAll();
 
@@ -417,6 +432,135 @@
       if (!loaded) { cloudEnabled = true; await cloudSave(); renderStatus(); }
     }
   };
+
+  /* ── AI Assigner integration ────────────────────────────── */
+  function aiSend(message) {
+    const panel = document.getElementById('ed-ai-msgs');
+    const host = document.getElementById('ed-ai-panel');
+    if (!panel || !host) return;
+    const add = function (role, text, html) {
+      const div = document.createElement('div');
+      div.className = 'ed-ai-msg ' + role;
+      if (html) div.innerHTML = html; else div.textContent = text;
+      panel.appendChild(div);
+      panel.scrollTop = panel.scrollHeight;
+      return div;
+    };
+    add('user', message);
+    const thinking = add('bot', '…thinking…');
+    if (!window.RA10 || !RA10.isLoggedIn()) {
+      thinking.remove();
+      add('bot', 'Sign in to use AI Assigner from here. (It uses credits for each ask.)');
+      if (typeof RA10.showPaywall === 'function') RA10.showPaywall('account', 'ai_assigner_hint');
+      return;
+    }
+    (async function () {
+      try {
+        if (typeof ra10Gate === 'function' && !(await ra10Gate('ai_assigner_hint'))) { thinking.remove(); return; }
+        const sel = window._edSelection || '';
+        const res = await RA10.askAiAssigner({
+          message: message,
+          context: 'The user is writing code in the Web Studio code editor for the Unit 3 website assignment. Current file: ' + activeFile + '. They selected this code for context:\n\n' + sel.slice(0, 1500) + '\n\nIf they ask you to write the code for them, coach them instead with hints, examples and the steps to write it themselves — do NOT just vomit the finished code.'
+        });
+        thinking.remove();
+        add('bot', res.reply);
+      } catch (e) {
+        thinking.remove();
+        add('bot', 'Sorry — ' + (e && e.message ? e.message : 'something went wrong') + '');
+      }
+    })();
+  }
+
+  function bindAi() {
+    const host = document.getElementById('ed-app');
+    if (!host) return;
+    const bubble = document.getElementById('ed-ai-bubble');
+    const panel = document.getElementById('ed-ai-panel');
+    const open = function () {
+      panel && panel.classList.remove('hidden');
+      bubble && bubble.classList.add('hidden');
+      const t = document.getElementById('ed-ai-text');
+      if (t) t.focus();
+    };
+    bubble && bubble.addEventListener('click', open);
+    const close = document.getElementById('ed-ai-close');
+    close && close.addEventListener('click', function () {
+      panel && panel.classList.add('hidden');
+      bubble && bubble.classList.remove('hidden');
+    });
+    const send = document.getElementById('ed-ai-send');
+    const input = document.getElementById('ed-ai-text');
+    const go = function () {
+      const v = (input.value || '').trim();
+      if (!v) return;
+      input.value = '';
+      aiSend(v);
+    };
+    send && send.addEventListener('click', go);
+    input && input.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); go(); }
+    });
+    // welcome message
+    const msgs = document.getElementById('ed-ai-msgs');
+    if (msgs && !msgs.children.length) {
+      msgs.innerHTML = '<div class="ed-ai-msg bot">Hi! I\'m AI Assigner — I can explain your code, help fix a bug, or coach you to build the required features (accordions, modals, forms, responsive layout…). I\'ll guide you — you do the typing! 😊</div>';
+    }
+  }
+
+  function bindSelection() {
+    const host = document.getElementById('ed-app');
+    if (!host) return;
+    const pop = document.getElementById('ed-selection-pop');
+    const ta = function () { return document.getElementById('ed-code'); };
+    const showPop = function (x, y) {
+      if (!pop) return;
+      pop.classList.remove('hidden');
+      pop.style.left = Math.min(x, window.innerWidth - 200) + 'px';
+      pop.style.top = Math.max(8, y - 44) + 'px';
+    };
+    const hidePop = function () { if (pop) pop.classList.add('hidden'); };
+
+    // listen on the code area for mouseup events (the textarea's parent)
+    document.getElementById('ed-code-area').addEventListener('mouseup', function (e) {
+      const t = ta(); if (!t) return;
+      const sel = String(t.value.slice(t.selectionStart, t.selectionEnd) || '');
+      if (sel.trim().length > 1) {
+        window._edSelection = sel;
+        const r = t.getBoundingClientRect();
+        showPop(e.clientX, e.clientY);
+      } else {
+        hidePop();
+      }
+    });
+    document.getElementById('ed-code-area').addEventListener('mousedown', function (e) {
+      if (e.target.closest('#ed-selection-pop')) return;
+      // don't hide immediately; hide on next tick unless clicking popup
+      setTimeout(function () {
+        if (!e.target.closest('#ed-selection-pop')) hidePop();
+      }, 50);
+    });
+
+    const ask = function (mode) {
+      if (!window._edSelection) return;
+      hidePop();
+      let msg;
+      if (mode === 'explain') msg = 'Explain this part of my code in simple terms:\n\n```\n' + window._edSelection.slice(0, 1200) + '\n```';
+      else if (mode === 'improve') msg = 'How can I improve this code (quality, accessibility, responsiveness)? Give me hints, not the finished answer:\n\n```\n' + window._edSelection.slice(0, 1200) + '\n```';
+      else msg = 'I selected this code — what should I know about it, and how could it be better for my assignment?\n\n```\n' + window._edSelection.slice(0, 1200) + '\n```';
+      openAiPanelWith(msg);
+    };
+    document.getElementById('ed-sel-ask') && document.getElementById('ed-sel-ask').addEventListener('click', function () { ask('ask'); });
+    document.getElementById('ed-sel-explain') && document.getElementById('ed-sel-explain').addEventListener('click', function () { ask('explain'); });
+    document.getElementById('ed-sel-improve') && document.getElementById('ed-sel-improve').addEventListener('click', function () { ask('improve'); });
+  }
+
+  function openAiPanelWith(msg) {
+    const panel = document.getElementById('ed-ai-panel');
+    const bubble = document.getElementById('ed-ai-bubble');
+    if (panel) panel.classList.remove('hidden');
+    if (bubble) bubble.classList.add('hidden');
+    aiSend(msg);
+  }
 
   function bindTop() {
     document.getElementById('ed-btn-folder').addEventListener('click', connectLocalFolder);
@@ -476,7 +620,4 @@
     if (code) code.style.display = layout === 'preview' ? 'none' : 'flex';
     if (prev) prev.style.display = layout === 'editor' ? 'none' : 'flex';
   }
-
-  // NOTE: window.initCodeEditor assigned above inside initCodeEditor assignment
-  // Keep function references stable:
 })();

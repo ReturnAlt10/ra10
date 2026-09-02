@@ -51,6 +51,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>BTEC IT Unit 3 — Website Development</title>
+<link rel="icon" href="/logo.png" type="image/png">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <link rel="preconnect" href="https://api.fontshare.com">
 <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700,900&f[]=jetbrains-mono@400,500&display=swap">
@@ -497,5 +498,38 @@
   });
 })();
 </script>
+<style>
+/* Topbar must match the other unit apps exactly — this inline style loads AFTER
+   the injected refresh stylesheet, so these rules win. */
+body.ra10-refresh-enabled .topbar .tabs .tab,
+body.ra10-refresh-enabled .topbar .tab {
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 8px 16px;
+  border-width: 1.25px;
+  background: transparent;
+}
+body.ra10-refresh-enabled .topbar .tab.active {
+  background: color-mix(in srgb, var(--ra10-accent-2, #d0dff0) 88%, #fff) !important;
+  border-color: color-mix(in srgb, var(--ra10-accent, #1a3a6c) 62%, #fff) !important;
+  color: var(--ra10-accent-ink, #0a1f3c) !important;
+  box-shadow: none !important;
+}
+body.ra10-refresh-enabled .topbar .tabs {
+  background: color-mix(in srgb, var(--ra10-surface) 64%, transparent);
+  border: 1px solid color-mix(in srgb, var(--ra10-line-strong) 62%, #fff 38%);
+}
+[data-theme="dark"] body.ra10-refresh-enabled .topbar .tab.active {
+  background: color-mix(in srgb, var(--ra10-accent-2, #0f2240) 88%, #000) !important;
+  color: var(--ra10-accent-ink, #d0e0ff) !important;
+}
+/* Editor fullscreen hides the whole topbar */
+body.ed-fullscreen .topbar,
+body.ra10-refresh-enabled.ed-fullscreen .topbar,
+body.ed-fullscreen.ra10-refresh-enabled .topbar {
+  display: none !important;
+}
+</style>
 </body>
 </html>

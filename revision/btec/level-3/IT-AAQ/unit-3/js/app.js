@@ -9,6 +9,9 @@ function switchTab(name) {
     const el = document.getElementById('view-' + id);
     if (el) el.classList.toggle('active', id === name);
   });
+  // Fullscreen the code editor when it is open
+  if (name === 'editor') document.body.classList.add('ed-fullscreen');
+  else document.body.classList.remove('ed-fullscreen');
   if (name === 'guide' && window.initComprehensiveGuide) window.initComprehensiveGuide();
   if (name === 'revise' && window.initRevise) window.initRevise();
   if (name === 'wireframe' && window.initWireframeTool) window.initWireframeTool();

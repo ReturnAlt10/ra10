@@ -1,5 +1,7 @@
-/* Part 2 — Assignment Hub: task-by-task walkthroughs, sample briefs,
-   evidence checklists, and AI Assigner marking of uploaded submissions. */
+/* Part 2 — Assignment Hub (redesigned, calm & simple).
+   One big "where am I?" view: 3 task cards → pick a task → see
+   "what to make" (short), "steps" (collapsible), "checklist", and
+   big buttons for the tools. No walls of text. */
 (function () {
   'use strict';
 
@@ -12,326 +14,192 @@
     if (!CRITERIA || !CRITERIA.tasks) return null;
     return CRITERIA.tasks.find(function (t) { return t.code === code; });
   }
+  function getWalkthrough(code) { return WALKTHROUGHS[code] || null; }
 
-  function getWalkthrough(code) {
-    return WALKTHROUGHS[code] || null;
-  }
-
-  function checklistState() {
-    try { return JSON.parse(localStorage.getItem(CHECKLIST_KEY) || '{}'); } catch (e) { return {}; }
-  }
-  function saveChecklist(state) { try { localStorage.setItem(CHECKLIST_KEY, JSON.stringify(state)); } catch (e) {} }
-
-  function criteriaGroup(task, level) {
-    const list = task.criteria.filter(function (c) { return c.level === level; });
-    return '<ul>' + list.map(function (c) { return '<li><strong>' + esc(c.code) + '</strong> — ' + esc(c.text) + '</li>'; }).join('') + '</ul>';
-  }
-
-  function renderStepper() {
-    const host = document.getElementById('task-stepper');
-    if (!host) return;
-    const tasks = CRITERIA && CRITERIA.tasks ? CRITERIA.tasks : [];
-    host.innerHTML = tasks.map(function (t) {
-      return '<button class="task-step-btn' + (t.code === activeTask ? ' active' : '') + '" data-task="' + esc(t.code) + '">' +
-        '<b>Task ' + esc(t.code.slice(-1)) + '</b>' +
-        '<span>Learning Aim ' + esc(t.aim) + ' · ' + esc(t.title) + '</span>' +
-        '</button>';
-    }).join('');
-    host.querySelectorAll('.task-step-btn').forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        activeTask = btn.dataset.task;
-        renderStepper();
-        renderTaskDetail();
-      });
-    });
-  }
-
-  function renderTaskDetail() {
-    const task = getTask(activeTask);
-    const wt = getWalkthrough(activeTask);
-    const host = document.getElementById('task-detail');
-    if (!host || !task) return;
-
-    let html = '';
-    html += '<div class="card primary-card" style="background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow)">';
-    html += '<div class="mc-meta"><span class="chip">Task ' + esc(task.code.slice(-1)) + '</span><span class="chip">Learning Aim ' + esc(task.aim) + '</span><span class="muted small" style="margin-left:auto">' + esc(task.title) + '</span></div>';
-
-    if (wt) {
-      html += '<h3 style="margin-top:8px">' + esc(wt.title) + '</h3>';
-      html += '<p>' + esc(wt.summary) + '</p>';
-      html += '<div class="section-block"><div class="section-block-head"><span class="sb-eyebrow">What you must produce</span></div><ul class="task-checklist" id="checklist-' + esc(task.code) + '">' +
-        wt.evidence.map(function (item, i) {
-          const done = checklistState()[task.code + '_' + i];
-          return '<li data-i="' + i + '" class="' + (done ? 'done' : '') + '"><input type="checkbox" ' + (done ? 'checked' : '') + ' aria-label="Mark done"><span>' + esc(item) + '</span></li>';
-        }).join('') +
-        '</ul></div>';
-      html += '<div class="section-block"><div class="section-block-head"><span class="sb-eyebrow">Grade ladder</span></div><div class="grade-ladder">' +
-        '<div class="grade-pill pass"><b>Pass (P)</b>' + criteriaGroup(task, 'Pass') + '</div>' +
-        '<div class="grade-pill merit"><b>Merit (M) — includes Pass</b>' + criteriaGroup(task, 'Merit') + '</div>' +
-        '<div class="grade-pill dist"><b>Distinction (D) — includes P + M</b>' + criteriaGroup(task, 'Distinction') + '</div>' +
-        '</div>';
-      const gd = CRITERIA && CRITERIA.gradeDescriptions && CRITERIA.gradeDescriptions[task.code];
-      if (gd) {
-        html += '<div class="grade-ladder" style="grid-template-columns:1fr 1fr 1fr">' +
-          '<div class="grade-pill pass"><b>Pass looks like</b><p class="small">' + esc(gd.Pass) + '</p></div>' +
-          '<div class="grade-pill merit"><b>Merit looks like</b><p class="small">' + esc(gd.Merit) + '</p></div>' +
-          '<div class="grade-pill dist"><b>Distinction looks like</b><p class="small">' + esc(gd.Distinction) + '</p></div>' +
-          '</div>';
-      }
-      html += '</div>';
-
-      if (wt.steps && wt.steps.length) {
-        html += '<div class="section-block"><div class="section-block-head"><span class="sb-eyebrow">Step by step</span></div><ol class="wt-steps" style="padding-left:20px">' +
-          wt.steps.map(function (s) { return '<li style="margin-bottom:10px;font-size:.94rem">' + s + '</li>'; }).join('') +
-          '</ol></div>';
-      }
-    }
-
-    html += '<div class="card-action-row">' +
-      '<button class="btn ghost" id="task-sample">View sample brief</button>' +
-      '<button class="btn ghost" data-goto="editor">Open code editor</button>' +
-      '<button class="btn primary" id="task-ai" data-task="' + esc(task.code) + '">Ask AI Assigner about this task</button>' +
-      '</div>';
-    html += '</div>';
-
-    // Upload + mark panel
-    html += '<div class="section-block">' +
-      '<div class="section-block-head"><span class="sb-eyebrow">Get it marked</span><h3>Upload your work for this task</h3>' +
-      '<p class="muted">Paste your written answer (research, sitemap annotations, testing tables, etc.) and AI Assigner will mark it against the criteria for this task. Text and small images only.</p></div>' +
-      '<div class="upload-panel" id="upload-panel">' +
-      '<textarea id="upload-text" placeholder="Paste or type your assignment evidence for this task here..."></textarea>' +
-      '<div class="card-action-row" style="justify-content:center">' +
-      '<button class="btn primary" id="btn-mark">Mark my work<span class="ra10-cost-label">' + costLabel('ai_assigner_mark') + '</span></button>' +
-      '<button class="btn" id="btn-hint">Ask for a hint first<span class="ra10-cost-label">' + costLabel('ai_assigner_hint') + '</span></button>' +
-      '</div>' +
-      '<div class="ai-upload-hint" style="font-size:.82rem;color:var(--ink-3);margin-top:10px">Tip: paste your draft in your own words — AI Assigner coaches you to improve it, it never writes it for you.</div>' +
-      '</div>' +
-      '<div id="mark-result"></div>' +
-      '</div>';
-
-    // Sample briefs
-    html += '<div class="section-block" id="sample-briefs-block"></div>';
-
-    host.innerHTML = html;
-
-    // Checkboxes
-    const cl = document.getElementById('checklist-' + task.code);
-    if (cl) {
-      cl.querySelectorAll('li').forEach(function (li) {
-        li.querySelector('input').addEventListener('change', function () {
-          const state = checklistState();
-          state[task.code + '_' + li.dataset.i] = li.querySelector('input').checked;
-          saveChecklist(state);
-          li.classList.toggle('done', li.querySelector('input').checked);
-        });
-      });
-    }
-    document.getElementById('task-sample').addEventListener('click', renderSampleBriefs);
-    document.getElementById('task-ai').addEventListener('click', function () {
-      if (typeof switchTab === 'function') switchTab('ai');
-      if (window.openAiAssigner) window.openAiAssigner('task:' + this.dataset.task);
-    });
-    document.querySelectorAll('[data-goto="editor"]').forEach(function (b) {
-      b.addEventListener('click', function () { if (typeof switchTab === 'function') switchTab('editor'); });
-    });
-    document.getElementById('btn-mark').addEventListener('click', function () { markSubmission(task, false); });
-    document.getElementById('btn-hint').addEventListener('click', function () { markSubmission(task, true); });
-
-    wireUploadDrag();
-    renderSampleBriefs();
-  }
+  function checklistState() { try { return JSON.parse(localStorage.getItem(CHECKLIST_KEY) || '{}'); } catch (e) { return {}; } }
+  function saveChecklist(s) { try { localStorage.setItem(CHECKLIST_KEY, JSON.stringify(s)); } catch (e) {} }
 
   function costLabel(action) {
-    const cost = (typeof window._ra10GetActionCost === 'function') ? window._ra10GetActionCost(action) : 0;
-    return cost + ' credits';
+    const c = (typeof window._ra10GetActionCost === 'function') ? window._ra10GetActionCost(action) : 0;
+    return c + ' credits';
   }
 
-  function wireUploadDrag() {
-    const panel = document.getElementById('upload-panel');
-    if (!panel) return;
-    ['dragenter', 'dragover'].forEach(function (ev) {
-      panel.addEventListener(ev, function (e) { e.preventDefault(); panel.classList.add('dragover'); });
-    });
-    ['dragleave', 'drop'].forEach(function (ev) {
-      panel.addEventListener(ev, function (e) { e.preventDefault(); panel.classList.remove('dragover'); });
-    });
-    panel.addEventListener('drop', function (e) {
-      const files = e.dataTransfer.files;
-      if (!files || !files.length) return;
-      const f = files[0];
-      if (f.size > 1024 * 1024) { alert('Max file size for upload is 1MB.'); return; }
-      const reader = new FileReader();
-      reader.onload = function () {
-        const ta = document.getElementById('upload-text');
-        if (ta) ta.value = String(reader.result || '').slice(0, 12000);
-      };
-      reader.readAsText(f);
-    });
+  function taskIcon(code) {
+    return code === 'task2' ? '🎨' : code === 'task3' ? '🛠️' : '🗺️';
+  }
+  function taskShort(code) {
+    return code === 'task1' ? 'Research + plan the site' : code === 'task2' ? 'Design the look + assets' : 'Build + test the site';
+  }
+  function taskVerb(code) {
+    return code === 'task1' ? 'Start planning' : code === 'task2' ? 'Start designing' : 'Start building';
   }
 
-  async function markSubmission(task, hintOnly) {
-    const ta = document.getElementById('upload-text');
-    const text = ta ? (ta.value || '').trim() : '';
-    if (!text) { alert('Paste your work into the box first.'); return; }
-    const result = document.getElementById('mark-result');
-    if (!result) return;
-    if (typeof ra10Gate !== 'function' || !(await ra10Gate(hintOnly ? 'ai_assigner_hint' : 'ai_assigner_mark'))) return;
-
-    result.innerHTML = '<p class="muted">AI Assigner is reading your work against the criteria…</p>';
-    try {
-      if (hintOnly) {
-        const res = await RA10.askAiAssigner({
-          message: 'I am working on task ' + task.code.replace('task', '') + ' (' + task.title + '). Here is my draft so far — please give me hints on how to improve it towards the next grade without writing it for me:\n\n' + text.slice(0, 4000),
-          context: 'Assignment task: ' + task.title + '. Criteria: ' + (task.criteria || []).map(function (c) { return c.code + ' ' + c.text; }).join('; ').slice(0, 2000)
-        });
-        result.innerHTML = '<div class="ai-msg bot">' + esc(res.reply) + '</div>';
-      } else {
-        const criteriaMap = {};
-        (task.criteria || []).forEach(function (c) { criteriaMap[c.code] = c.level + ': ' + c.text; });
-        const res = await RA10.markAssignment({
-          submission: text,
-          taskTitle: task.title,
-          criteria: criteriaMap
-        });
-        renderMarkResult(result, res.result, task);
-      }
-    } catch (e) {
-      result.innerHTML = '<div class="mark-result" style="color:var(--bad)"><strong>Could not mark:</strong> ' + esc(e && e.message ? e.message : String(e)) + '</div>';
-    }
-  }
-
-  function renderMarkResult(host, r, task) {
-    const grade = r.grade || 'Not yet met';
-    const cls = 'g-' + grade.replace(/[^A-Za-z]/g, '');
-    const criteriaSet = new Set((task.criteria || []).map(function (c) { return c.code; }));
-    const met = Array.isArray(r.criteriaMet) ? r.criteriaMet.filter(function (c) { return criteriaSet.has(c.code); }) : [];
-    let html = '<div class="mark-result">';
-    html += '<div class="mark-grade-badge ' + cls + '">' + esc(grade) + '</div>';
-    if (met.length) {
-      html += '<h4 style="margin:6px 0">Criteria</h4><ul class="mark-criteria">' +
-        met.map(function (c) {
-          return '<li><span class="' + (c.met ? 'tick' : 'cross') + '">' + (c.met ? '✓' : '✗') + '</span><span><strong>' + esc(c.code) + '</strong> — ' + esc(c.comment || (c.met ? 'Met' : 'Not yet met')) + '</span></li>';
-        }).join('') +
-        '</ul>';
-    }
-    if (Array.isArray(r.strengths) && r.strengths.length) {
-      html += '<h4 style="margin:10px 0 4px">Strengths</h4><ul>' + r.strengths.map(function (s) { return '<li>' + esc(s) + '</li>'; }).join('') + '</ul>';
-    }
-    if (Array.isArray(r.improvements) && r.improvements.length) {
-      html += '<h4 style="margin:10px 0 4px">To reach the next grade</h4><ul>' + r.improvements.map(function (s) { return '<li>' + esc(s) + '</li>'; }).join('') + '</ul>';
-    }
-    if (r.nextGradeFocus) html += '<p class="small" style="margin-top:10px"><strong>Focus:</strong> ' + esc(r.nextGradeFocus) + '</p>';
-    if (r.feedback) html += '<p style="margin-top:10px">' + esc(r.feedback) + '</p>';
-    html += '</div>';
-    host.innerHTML = html;
-  }
-
-  function renderSampleBriefs() {
-    const host = document.getElementById('sample-briefs-block');
+  function render() {
+    const host = document.getElementById('assignment-hub');
     if (!host) return;
-    const briefs = SAMPLE_BRIEFS || [];
-    if (!briefs.length) { host.innerHTML = ''; return; }
-    host.innerHTML =
-      '<div class="section-block-head"><span class="sb-eyebrow">Practice scenarios</span><h3>Sample briefs to practise on</h3>' +
-      '<p class="muted">These are original practice briefs built in the same style as a Pearson assignment. Use one to rehearse any task — your teacher sets the real brief.</p></div>' +
-      '<div style="display:grid;gap:12px;margin-top:12px">' +
-      briefs.map(function (b, i) {
-        return '<details class="sample-brief" ' + (i === 0 ? 'open' : '') + '>' +
-          '<summary style="cursor:pointer;font-weight:800">' + esc(b.title) + ' <span class="muted small">— audience: ' + esc(b.audience) + '</span></summary>' +
-          '<div class="sb-meta" style="margin-top:10px"><span class="chip">' + esc(b.scenario.slice(0, 90)) + '…</span></div>' +
-          '<p><strong>Scenario:</strong> ' + esc(b.scenario) + '</p>' +
-          '<p><strong>Purpose:</strong> ' + esc(b.purpose) + '</p>' +
-          '<p><strong>Target audience:</strong> ' + esc(b.targetAudience) + '</p>' +
-          '<p><strong>Must include:</strong></p><ul>' + b.mustIncludes.map(function (m) { return '<li>' + esc(m) + '</li>'; }).join('') + '</ul>' +
-          '<p class="muted small"><strong>Style hints:</strong> ' + esc((b.typographyHint || '') + ' ' + (b.colourHint || '')) + '</p>' +
-          '<div class="card-action-row">' +
-          '<button class="btn" data-brief-open-editor="' + i + '">Practice in the code editor</button>' +
-          '<button class="btn ghost" data-brief-open-wireframe="' + i + '">Plan a wireframe</button>' +
-          '</div>' +
-          '</details>';
-      }).join('') +
+    const tasks = (CRITERIA && CRITERIA.tasks) || [];
+    const t = getTask(activeTask) || tasks[0];
+    const wt = getWalkthrough(activeTask);
+
+    if (!tasks.length) { host.innerHTML = '<p class="muted">Assignment data is still loading…</p>'; return; }
+
+    let html = '';
+
+    // 1. Big friendly picker
+    html += '<div class="assign-pick">' +
+      '<p class="assign-eyebrow">Your assignment has 3 tasks — tap one to see exactly what to do.</p>' +
+      '<div class="assign-task-cards">' + tasks.map(function (task) {
+        const wt2 = getWalkthrough(task.code);
+        const done = (wt2 && wt2.evidence ? wt2.evidence.length : 0);
+        const checked = wt2 ? wt2.evidence.filter(function (_, i) { return checklistState()[task.code + '_' + i]; }).length : 0;
+        return '<button class="assign-card' + (task.code === activeTask ? ' active' : '') + '" data-task="' + esc(task.code) + '">' +
+          '<span class="assign-card-ico">' + taskIcon(task.code) + '</span>' +
+          '<span class="assign-card-tx"><b>Task ' + task.code.slice(-1) + ' · ' + taskShort(task.code) + '</b>' +
+          '<small>' + esc(task.title) + '</small></span>' +
+          (wt2 ? '<span class="assign-card-prog"><span class="p-bar"><i style="width:' + (done ? Math.round(checked / done * 100) : 0) + '%"></i></span><em>' + checked + '/' + done + '</em></span>' : '') +
+          '</button>';
+      }).join('') + '</div>' +
       '</div>';
-    host.querySelectorAll('[data-brief-open-editor]').forEach(function (b) {
-      b.addEventListener('click', function () { if (typeof switchTab === 'function') switchTab('editor'); });
+
+    // 2. The action panel for the active task
+    html += '<div class="assign-panel" id="assign-panel">';
+
+    // What you'll make
+    html += '<div class="assign-what">' +
+      '<div class="aw-hd"><span class="aw-ico">' + taskIcon(activeTask) + '</span><div><b>What you\'ll make</b><small>One short paragraph — no essay.</small></div></div>' +
+      '<p>' + esc(wt ? wt.summary : '') + '</p>' +
+      '</div>';
+
+    // Big action buttons
+    html += '<div class="assign-cta">' +
+      '<button class="btn primary big assign-go" data-goto="' + (activeTask === 'task2' ? 'wireframe' : activeTask === 'task3' ? 'editor' : 'guide') + '">' +
+        taskVerb(activeTask) +
+        '<small>' + (activeTask === 'task2' ? 'open the wireframe tool' : activeTask === 'task3' ? 'open the code editor' : 'open the study guide') + '</small></button>' +
+      '<button class="btn big assign-ai" data-goto="ai">Ask AI Assigner<small>hints · ' + costLabel('ai_assigner_hint') + '</small></button>' +
+      '</div>';
+
+    // Step-by-step, collapsible (default open)
+    html += '<div class="assign-steps open">' +
+      '<button class="as-toggle" data-target="as-steps"><span>👣 Step-by-step</span><span class="as-cherr">▾</span></button>' +
+      '<div class="as-body open" id="as-steps">' +
+      (wt && wt.steps ? wt.steps.map(function (s) { return '<div class="as-step">' + s + '</div>'; }).join('') : '') +
+      '</div></div>';
+
+    // Checklist
+    html += '<div class="assign-chck" id="assign-checklist">' +
+      '<div class="ach-hd"><b>✅ Submission checklist</b><span class="small muted">' + (wt ? wt.evidence.length : 0) + ' things to tick off</span></div>' +
+      '<ul class="assign-check-lst">' + (wt ? wt.evidence.map(function (item, i) {
+        const done = checklistState()[activeTask + '_' + i];
+        return '<li class="' + (done ? 'done' : '') + '" data-i="' + i + '"><input type="checkbox" ' + (done ? 'checked' : '') + '><span>' + esc(item) + '</span></li>';
+      }).join('') : '') + '</ul></div>';
+
+    // Grade ladder — short
+    html += '<div class="assign-grades">' +
+      '<div class="ag-hd"><b>How you\'re graded</b><small>Pass → Merit → Distinction — each builds on the last.</small></div>' +
+      '<div class="ag-rows">' + (CRITERIA && CRITERIA.gradeDescriptions && CRITERIA.gradeDescriptions[activeTask] ? ['Pass', 'Merit', 'Distinction'].map(function (g) {
+        return '<div class="ag-row ' + g.toLowerCase() + '"><span class="ag-badge">' + g + '</span><p class="small">' + esc(CRITERIA.gradeDescriptions[activeTask][g]) + '</p></div>';
+      }).join('') : '') + '</div></div>';
+
+    // Sample briefs (collapsible, closed)
+    const briefs = SAMPLE_BRIEFS || [];
+    if (briefs.length) {
+      html += '<div class="assign-bref">' +
+        '<button class="as-toggle" data-target="as-briefs"><span>📄 Try a practice brief</span><span class="as-cherr">▾</span></button>' +
+        '<div class="as-body" id="as-briefs"><div class="brief-grid">' + briefs.map(function (b, i) {
+          return '<button class="brief-card" data-brief="' + i + '"><b>' + esc(b.title) + '</b><small>' + esc(b.audience) + '</small></button>';
+        }).join('') + '</div></div></div>';
+    }
+
+    html += '</div>'; // assign-panel
+
+    host.innerHTML = html;
+
+    // Wire events
+    host.querySelectorAll('.assign-card').forEach(function (card) { card.addEventListener('click', function () { activeTask = card.dataset.task; render(); }); });
+    host.querySelectorAll('[data-goto]').forEach(function (b) { b.addEventListener('click', function () { if (typeof switchTab === 'function') switchTab(b.dataset.goto); }); });
+    host.querySelectorAll('.as-toggle').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var body = document.getElementById(b.dataset.target);
+        var wrap = b.parentElement;
+        if (body) body.classList.toggle('open');
+        if (wrap) wrap.classList.toggle('open');
+      });
     });
-    host.querySelectorAll('[data-brief-open-wireframe]').forEach(function (b) {
-      b.addEventListener('click', function () { if (typeof switchTab === 'function') switchTab('wireframe'); });
+    const cl = host.querySelector('.assign-check-lst');
+    if (cl) cl.querySelectorAll('li').forEach(function (li) {
+      li.querySelector('input').addEventListener('change', function () {
+        const st = checklistState();
+        st[activeTask + '_' + li.dataset.i] = li.querySelector('input').checked;
+        saveChecklist(st); li.classList.toggle('done', li.querySelector('input').checked);
+        const card = host.querySelector('[data-task="' + activeTask + '"]');
+        const bar = host.querySelector('[data-task="' + activeTask + '"] .p-bar i');
+        if (bar && wt) { const n = wt.evidence.filter(function (_, i) { return checklistState()[activeTask + '_' + i]; }).length; bar.style.width = Math.round(n / wt.evidence.length * 100) + '%'; const em = card ? card.querySelector('em') : null; if (em) em.textContent = n + '/' + wt.evidence.length; }
+      });
     });
-    if (typeof window.aiHintContext === 'function') window.aiHintContext('sample-brief', briefs[0]);
+    host.querySelectorAll('[data-brief]').forEach(function (b) { b.addEventListener('click', function () {
+      const brief = SAMPLE_BRIEFS[+b.dataset.brief];
+      if (brief && typeof window._openBrief === 'function') window._openBrief(brief);
+      else if (typeof switchTab === 'function') switchTab(activeTask === 'task2' ? 'wireframe' : activeTask === 'task3' ? 'editor' : 'guide');
+    }); });
   }
+
+  window.initAssignmentHub = function () {
+    const host = document.getElementById('assignment-hub');
+    if (!host) return;
+    render();
+  };
 
   const WALKTHROUGHS = {
     task1: {
-      title: 'Explore the purposes and principles of website development',
-      summary: 'Research how existing websites use website development principles, develop content ideas that meet the client brief (including legal and ethical constraints), and produce an annotated site map.',
+      summary: 'Research how real websites are planned and designed, write down what the client needs, then draw a site map that shows every page — annotated so it clearly meets the brief.',
       evidence: [
-        'Requirements established from the client brief (purpose, audience, technical requirements — as a bulleted list or diagram)',
-        'Research into at least 3 existing websites serving the same purpose, analysed against the principles (layout, navigation, content, design, UX, accessibility, mobile)',
-        'Research into legal and ethical constraints (copyright, data protection/GDPR, digital accessibility, inclusive content)',
-        'Ideas for content that meets the client\'s requirements, with legal/ethical notes',
-        'A detailed, annotated site map showing how the proposed website meets the client\'s requirements',
-        'One of: a written response with supporting images, an edited audio/video recording, or a slide deck with speaker notes'
+        'Client needs as a clean list (purpose, audience, tech)',
+        '3 example websites — why their layout/nav works',
+        'Law & ethics notes (copyright, privacy, accessibility)',
+        'Content ideas you\'d add',
+        'Annotated site map (use the Sitemap tool!)'
       ],
       steps: [
-        '<strong>Extract every requirement</strong> from the brief into a checklist — purpose, audience, pages, features, technical needs.',
-        '<strong>Research 3-4 existing websites</strong> serving a similar purpose. Use the spec\'s principles as your headings: page layout (F/Z patterns, grid, hierarchy), navigation (sticky, hamburger), content and CTAs, design (typography, colour), UX (accessibility, consistency, mobile), SEO.',
-        '<strong>For each site, say what works and what doesn\'t</strong> — and then "applying this to my site, I will…". This is where Pass becomes Merit/Distinction: it\'s the application of research, not just description.',
-        '<strong>Research legal and ethical constraints</strong>: copyright (can\'t copy assets), GDPR (forms + privacy), accessibility (WCAG), inclusive content. Reference them for YOUR site\'s content choices.',
-        '<strong>Produce the annotated site map</strong> — every page, its content/features, and how pages link. Annotate each page with the client requirement it meets.',
-        '<strong>Proofread for spec vocabulary</strong> — accurate use of technical terms lifts the grade band. Re-read and refine before submitting.'
+        '<b>1 · Read the brief like a detective</b> — highlight every "must" (pages, features, audience, tone).',
+        '<b>2 · Research 3 similar sites</b> — screenshot + one line on what works/doesn\'t.',
+        '<b>3 · Note the rules</b> — copyright, GDPR (no forms without privacy), accessibility.',
+        '<b>4 · Plan the pages</b> — use the Sitemap tool so every requirement has a page.',
+        '<b>5 · Annotate</b> — for each page add "meets: accordion, search…" so it scores D.'
       ]
     },
     task2: {
-      title: 'Use web design skills and techniques to plan a website',
-      summary: 'Create wireframes for each web page, visual designs (the visual style) and visual representations of the pages. Review fitness for purpose and improve your designs, and manage your assets professionally.',
+      summary: 'Sketch every page as a wireframe, pick a colour scheme + fonts, then gather and organise your images and other assets neatly.',
       evidence: [
-        'A wireframe for each web page',
-        'Visual designs for the website (the visual style: colour palette, branding, typography)',
-        'Visual representations of the web pages (high-fidelity mockups of how each page will look)',
-        'Original and sourced assets (with sources recorded)',
-        'Evidence of asset management (folder structure, naming conventions, asset log)',
-        'Evidence of reviewing fitness for purpose and improvements made'
+        'A wireframe for every page (use the Wireframe tool!)',
+        'Design style: colours, fonts, logo placement',
+        'High-fidelity mockups of how pages look',
+        'Assets with sources noted',
+        'Asset log (names + where used)'
       ],
       steps: [
-        '<strong>Start with the wireframes</strong> — one per page. Keep them low-fi: boxes for header, nav, content, images, forms. Show hierarchy, grouping and alignment.',
-        '<strong>Define the visual style</strong> — pick 2-3 brand colours (check contrast!), 1-2 fonts (a display + a body font), logo placement, tone of voice. Write it down as a mini house style.',
-        '<strong>Create visual representations (mockups)</strong> — apply the style to each wireframe so you can see the real page. Tools: Penpot/Figma/Canva/or the built-in editor.',
-        '<strong>Review fitness for purpose</strong> — quality, user experience, and meeting every client requirement. Get feedback from classmates/family, then improve the designs. Record the before → after.',
-        '<strong>Asset management</strong> — create or source your assets legally (stock images with credit, your own photos, vector logos). Prepare them (crop, compress, right format, < 1MB). Organise into <code>images/</code>, <code>css/</code>, <code>js/</code> with consistent names.',
-        '<strong>Keep an asset log</strong> — asset name, source, where used. It is direct evidence for B.P4/M4/D2.'
+        '<b>1 · Wireframes first</b> — one per page, boxes only (header, nav, hero, forms).',
+        '<b>2 · Pick a vibe</b> — 2-3 colours + 1 display / 1 body font. Contrast must pass!',
+        '<b>3 · Mockups</b> — apply the style to your wireframes (Canva/Figma/editor).',
+        '<b>4 · Source assets legally</b> — stock images with credit, or your own photos.',
+        '<b>5 · Organise</b> — images/, css/, js/ folders, tidy names, keep files under 1MB.'
       ]
     },
     task3: {
-      title: 'Develop a website in response to a client brief',
-      summary: 'Use your site map, designs and assets to build the website with HTML/CSS/JS, then run functionality and usability testing, review, and refine until every client requirement is met.',
+      summary: 'Build the real website from your plan using HTML/CSS/JS, make it accessible and responsive, then test it properly and fix what you find.',
       evidence: [
-        'The finished website — every page viewable in a common web browser',
-        'Evidence of using website development tools, techniques and processes (screenshots of your code/editor, version history)',
-        'Functionality testing evidence (a test plan with expected vs actual outcomes)',
-        'Usability testing evidence (user audit with real users; feedback quotes)',
-        'Outcomes of your self-review and the refinements you made'
+        'The finished, working website (every page)',
+        'Evidence you used tools (editor screenshots)',
+        'Test plan: what you tested + result',
+        'Usability test with a friend (their feedback)',
+        'Self-review + the improvements you made'
       ],
       steps: [
-        '<strong>Build from your plan</strong> — one page at a time (home first), wiring up navigation as you go. Each page needs: nav menu, content, footer.',
-        '<strong>Implement every required interaction</strong> — accordion, modal images, video with controls, search/filter, drop-down menus, form. Use the editor templates to learn each one.',
-        '<strong>Make it accessible</strong> — alt text everywhere, semantic HTML (<code>&lt;header&gt;</code>, <code>&lt;nav&gt;</code>, <code>&lt;main&gt;</code>), keyboard navigation, contrast ≥ 4.5:1, transcripts/captions for video.',
-        '<strong>Make it responsive</strong> — media queries + flexbox/grid. Test on phone, tablet, desktop widths in the browser dev tools.',
-        '<strong>Cross-browser test</strong> — Chrome, Edge, Firefox, Safari if you can. Fix discrepancies.',
-        '<strong>Functionality testing</strong> — build a test plan table (description, test data, expected, actual, comments). Click every link, submit the form, open/close accordion and modals, resize the window.',
-        '<strong>Usability testing</strong> — give classmates/friends tasks and collect their feedback. Then act on it: "before → after" screenshots.',
-        '<strong>Self-review</strong> — quality vs similar sites, suitability for audience/purpose, client requirements met?, legal/ethical, consistency, readability. Write it up and submit with the site.'
+        '<b>1 · Build page by page</b> — home first, then wire up navigation.',
+        '<b>2 · Nail the features</b> — accordion, modal images, video with controls, form, search. Use the editor components!',
+        '<b>3 · Accessible</b> — alt text, semantic tags, keyboard works, readable contrast.',
+        '<b>4 · Responsive</b> — test phone / tablet / desktop widths.',
+        '<b>5 · Test + fix</b> — make a test plan, click everything, fix what breaks, ask a friend to try it.'
       ]
     }
-  };
-
-  window.initAssignmentHub = function () {
-    if (!CRITERIA) return;
-    const host = document.getElementById('assignment-hub');
-    if (!host) return;
-    host.innerHTML =
-      '<div id="task-stepper" class="task-stepper"></div>' +
-      '<div id="task-detail"></div>';
-    renderStepper();
-    renderTaskDetail();
   };
 })();
