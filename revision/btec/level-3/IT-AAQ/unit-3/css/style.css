@@ -916,6 +916,10 @@ body.ed-fullscreen .ra10-refresh-loader, body.ed-fullscreen .ra10-subject-banner
 
 /* ── Assignment hub (redesigned, calm) ──────────────────── */
 .assign-eyebrow { font-size: .86rem; color: var(--ink-2); margin-bottom: 12px; }
+.assign-pick-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
+.assign-pick-top .assign-eyebrow { margin-bottom: 0; }
+.assign-pdf-btn { display: inline-flex; align-items: center; gap: 8px; font-weight: 800; }
+.assign-pdf-btn .pdf-ico { font-size: 1.05rem; }
 .assign-task-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
 @media (max-width: 760px) { .assign-task-cards { grid-template-columns: 1fr; } }
 
@@ -1004,6 +1008,7 @@ body.ed-fullscreen .ra10-refresh-loader, body.ed-fullscreen .ra10-subject-banner
 
 /* ── Practice brief modal ─────────────────────────────────── */
 .brief-modal { position: fixed; inset: 0; z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 20px; }
+body.ra10-refresh-enabled .brief-modal, body.ra10-refresh-enabled > .brief-modal { position: fixed !important; }
 .brief-modal-backdrop { position: absolute; inset: 0; background: rgba(10, 6, 8, .5); backdrop-filter: blur(3px); animation: fadeIn .15s ease; }
 .brief-modal-card {
   position: relative; width: 100%; max-width: 620px; max-height: 82vh; overflow: auto;

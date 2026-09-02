@@ -60,9 +60,14 @@
     z-index: 0;
   }
 
-  body.ra10-refresh-enabled > :not(.mobile-top-nav):not(.mobile-bottom-nav):not(.mobile-sheet-backdrop):not(.mobile-subject-sheet):not(.auth-overlay):not(.nav-user-dropdown):not(.nav):not(.navbar):not(.topbar):not(.viewer-topbar) {
+  body.ra10-refresh-enabled > :not(.mobile-top-nav):not(.mobile-bottom-nav):not(.mobile-sheet-backdrop):not(.mobile-subject-sheet):not(.auth-overlay):not(.nav-user-dropdown):not(.nav):not(.navbar):not(.topbar):not(.viewer-topbar):not(.brief-modal):not(.ed-fullscreen-overlay) {
     position: relative;
     z-index: 1;
+  }
+
+  body.ra10-refresh-enabled > .brief-modal,
+  body.ra10-refresh-enabled > .ed-fullscreen-overlay {
+    position: fixed !important;
   }
 
   body.ra10-refresh-enabled .mobile-top-nav,
