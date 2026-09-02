@@ -11362,8 +11362,19 @@ async function waitForRA10Sdk(timeoutMs) {
           : (Number.isFinite(credits) ? Number(credits) : 0);
         const examBonusRemaining = creditBreakdown ? Number(creditBreakdown.examBonusRemaining || 0) : 0;
         const creditsText = credits === Infinity ? '∞ credits' : credits + ' credits';
-        document.getElementById('nav-credit-chip').textContent = creditsText;
-        if (mobileCreditChip) mobileCreditChip.textContent = creditsText;
+        const openCreditsClick = (e) => {
+          e && e.stopPropagation();
+          const openFn = (window.RA10 && typeof RA10.openCreditsPanel === 'function') ? RA10.openCreditsPanel : null;
+          if (openFn) openFn();
+        };
+        ['nav-credit-chip', 'mobile-credit-chip'].forEach((idVal) => {
+          const el = document.getElementById(idVal);
+          if (!el) return;
+          el.textContent = creditsText;
+          el.style.cursor = 'pointer';
+          el.title = 'View your credits';
+          el.onclick = openCreditsClick;
+        });
         const eduLink = document.getElementById('dropdown-edu-admin');
         if (eduLink) {
           const t = RA10.getTier();

@@ -1244,8 +1244,13 @@
     const creditText = credits === Infinity ? 'Unlimited' : credits + ' credits';
 
     container.innerHTML = '';
-    const chip = document.createElement('div');
-    chip.style.cssText = 'display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:999px;background:#f3f4f6;border:1px solid #d1d5db;font-family:sans-serif;font-size:0.85rem;color:#111;cursor:default;';
+    const chip = document.createElement('button');
+    chip.type = 'button';
+    chip.title = 'View your credits';
+    chip.setAttribute('aria-label', 'View credits: ' + creditText);
+    chip.style.cssText = 'display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:999px;background:#f3f4f6;border:1px solid #d1d5db;font-family:sans-serif;font-size:0.85rem;color:#111;cursor:pointer;transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease;';
+    chip.onmouseenter = () => { chip.style.transform = 'translateY(-1px)'; chip.style.boxShadow = '0 4px 10px rgba(0,0,0,.12)'; chip.style.borderColor = '#9ca3af'; };
+    chip.onmouseleave = () => { chip.style.transform = 'none'; chip.style.boxShadow = 'none'; chip.style.borderColor = '#d1d5db'; };
 
     const badge = document.createElement('span');
     badge.textContent = tierLabel;
@@ -1254,11 +1259,206 @@
     const creditsEl = document.createElement('span');
     creditsEl.textContent = creditText;
 
+    const chevron = document.createElement('span');
+    chevron.textContent = '▾';
+    chevron.style.cssText = 'font-size:0.7rem;color:#6b7280;';
+
     chip.appendChild(badge);
     chip.appendChild(creditsEl);
+    chip.appendChild(chevron);
+
+    chip.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openCreditsPanel();
+    });
 
     container.appendChild(chip);
+
+    // Mark a data attribute so unit pages can style the injected chip.
+    container.setAttribute('data-ra10-credit-chip', '1');
     return true;
+  }
+
+  async function openCreditsPanel() {
+    // Remove any existing panel
+    const existing = document.getElementById('ra10-credit-panel-host');
+    if (existing) existing.remove();
+    const loggedIn = isLoggedIn();
+    const credits = loggedIn ? getCredits() : await getGuestCredits();
+
+    const host = document.createElement('div');
+    host.id = 'ra10-credit-panel-host';
+    host.style.cssText = 'position:fixed;inset:0;z-index:999999;display:flex;align-items:center;justify-content:center;padding:20px;font-family:sans-serif;';
+
+    const backdrop = document.createElement('div');
+    backdrop.style.cssText = 'position:absolute;inset:0;background:rgba(0,0,0,.55);backdrop-filter:blur(3px);';
+    backdrop.addEventListener('click', () => host.remove());
+
+    const panel = document.createElement('div');
+    panel.style.cssText = 'position:relative;width:min(480px,100%);max-height:86vh;overflow:auto;background:#ffffff;border-radius:20px;box-shadow:0 24px 70px rgba(0,0,0,.3);z-index:1;transform:translateY(10px);animation:ra10PanelIn .22s ease forwards;';
+
+    // Inject keyframes
+    if (!document.getElementById('ra10-panel-keyframes')) {
+      const kf = document.createElement('style');
+      kf.id = 'ra10-panel-keyframes';
+      kf.textContent = '@keyframes ra10PanelIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}';
+      document.head.appendChild(kf);
+    }
+
+    // ── Header ──
+    const header = document.createElement('div');
+    header.style.cssText = 'padding:22px 22px 16px;border-bottom:1px solid #eef0f2;display:flex;align-items:center;justify-content:space-between;';
+    const headerLeft = document.createElement('div');
+    headerLeft.innerHTML = '<div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#8b8f98;">Credits</div><div style="font-size:15px;font-weight:700;color:#1a1d24;margin-top:2px;">' + (loggedIn ? (getTierInfo().label || 'Account') : 'Guest mode') + '</div>';
+    const closeBtn = document.createElement('button');
+    closeBtn.textContent = '✕';
+    closeBtn.setAttribute('aria-label', 'Close');
+    closeBtn.style.cssText = 'width:34px;height:34px;border:none;border-radius:10px;background:#f3f4f6;color:#555;font-size:15px;cursor:pointer;';
+    closeBtn.addEventListener('click', () => host.remove());
+    header.appendChild(headerLeft);
+    header.appendChild(closeBtn);
+
+    // ── Balance ──
+    const body = document.createElement('div');
+    body.style.cssText = 'padding:20px 22px;';
+
+    if (!loggedIn) {
+      body.innerHTML = ''
+        + '<div style="border:1.5px dashed #d1d5db;border-radius:14px;padding:18px;text-align:center;margin-bottom:16px;">'
+        +   '<div style="font-size:30px;font-weight:800;color:#1a1d24;">' + Math.max(0, Math.floor(Number(credits) || 0)) + '</div>'
+        +   '<div style="font-size:12px;color:#8b8f98;margin-top:2px;">guest credits</div>'
+        + '</div>'
+        + '<p style="font-size:13px;color:#5b5f6a;line-height:1.5;margin:0 0 16px;">Sign in to earn and spend credits across practice, quizzes, mock papers and more.</p>'
+        + '<button data-ra10-signin-btn style="width:100%;padding:12px;border:none;border-radius:12px;background:#111;color:#fff;font-size:14px;font-weight:700;cursor:pointer;">Sign in / Register</button>';
+      body.querySelector('[data-ra10-signin-btn]').addEventListener('click', () => {
+        host.remove();
+        if (window.top && window.top !== window) {
+          window.top.postMessage({ type: 'RA10_OPEN_AUTH' }, '*');
+        } else {
+          try { document.getElementById('auth-overlay')?.classList.add('open'); } catch(e) {}
+          if (!document.getElementById('auth-overlay')) window.location.hash = '#/auth';
+        }
+      });
+    } else {
+      const breakdown = (typeof getCreditBreakdown === 'function') ? getCreditBreakdown() : null;
+      const totalCredits = (breakdown && Number.isFinite(breakdown.totalCredits)) ? Number(breakdown.totalCredits) : (Number(getCredits()) || 0);
+      const storedCredits = (breakdown && Number.isFinite(breakdown.storedCredits)) ? Number(breakdown.storedCredits) : totalCredits;
+      const examBonus = (breakdown && Number.isFinite(breakdown.examBonusRemaining)) ? Number(breakdown.examBonusRemaining) : 0;
+      const isUnlimited = !Number.isFinite(totalCredits) || (breakdown && breakdown.unlimited) || getTierInfo().credits === Infinity;
+
+      // Big balance card
+      const big = document.createElement('div');
+      big.style.cssText = 'background:linear-gradient(135deg,#1a1d24,#2b3450);border-radius:16px;padding:20px;color:#fff;margin-bottom:16px;';
+      big.innerHTML = ''
+        + '<div style="font-size:12px;opacity:.7;text-transform:uppercase;letter-spacing:.06em;font-weight:700;">Available balance</div>'
+        + '<div style="font-size:34px;font-weight:800;line-height:1.1;margin-top:4px;">' + (isUnlimited ? '∞' : Math.max(0, Math.floor(totalCredits))) + (isUnlimited ? '' : '<span style="font-size:16px;font-weight:600;opacity:.7;margin-left:6px;">credits</span>') + '</div>'
+        + (isUnlimited ? '<div style="font-size:12px;opacity:.7;margin-top:2px;">Unlimited</div>' : '');
+
+      body.appendChild(big);
+
+      // Breakdown
+      if (!isUnlimited) {
+        const rows = [];
+        if (examBonus > 0) {
+          rows.push(['Exam season bonus', Math.floor(examBonus)]);
+        }
+        rows.push(['Account credits', Math.floor(storedCredits)]);
+        const rowHtml = rows.map(([label, val]) =>
+          '<div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;">'
+          +   '<span style="font-size:13px;color:#5b5f6a;">' + label + '</span>'
+          +   '<span style="font-size:13px;font-weight:700;color:#1a1d24;">' + val + '</span>'
+          + '</div>').join('');
+        const bd = document.createElement('div');
+        bd.style.cssText = 'background:#f8f9fb;border:1px solid #eef0f2;border-radius:12px;padding:8px 14px;margin-bottom:16px;';
+        bd.innerHTML = rowHtml;
+        body.appendChild(bd);
+      }
+
+      // Renewal info
+      const profile = getProfile();
+      const resetAt = profile && profile.credits_reset_at;
+      let renewalText = null;
+      const tier = _normalizeTier(getTier());
+      const MONTHLY = ['free', 'all_subjects', 'school_student', 'school_teacher', 'school_admin'];
+      if (MONTHLY.indexOf(tier) !== -1 && resetAt) {
+        const d = new Date(resetAt);
+        if (!Number.isNaN(d.getTime())) {
+          renewalText = 'Resets ' + d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long' });
+        }
+      }
+      if (tier === 'subject') renewalText = 'One-time credits — no monthly reset';
+      if (tier === 'ultra' || tier === 'owner') renewalText = 'Unlimited credits';
+
+      if (renewalText) {
+        const r = document.createElement('div');
+        r.style.cssText = 'display:flex;align-items:center;gap:10px;background:#eef7ff;border:1px solid #d8ecff;border-radius:12px;padding:11px 14px;margin-bottom:16px;';
+        r.innerHTML = '<span style="font-size:16px;">&#128197;</span><span style="font-size:13px;color:#1c4e7a;font-weight:600;">' + renewalText + '</span>';
+        body.appendChild(r);
+      }
+
+      // Activity log
+      const actHeader = document.createElement('div');
+      actHeader.style.cssText = 'font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#8b8f98;margin:4px 0 8px;display:flex;justify-content:space-between;align-items:center;';
+      actHeader.innerHTML = '<span>Recent activity</span>';
+      body.appendChild(actHeader);
+
+      let entries = [];
+      if (typeof getCreditActivity === 'function') {
+        entries = (getCreditActivity(20) || []).slice(0, 20);
+      }
+      if (!entries.length) {
+        const empty = document.createElement('div');
+        empty.textContent = 'No recent credit activity yet.';
+        empty.style.cssText = 'color:#9aa0aa;font-size:13px;padding:14px 0;';
+        body.appendChild(empty);
+      } else {
+        const list = document.createElement('div');
+        list.style.cssText = 'display:flex;flex-direction:column;';
+        entries.forEach((entry) => {
+          const amount = Number(entry.amount || 0);
+          const pos = amount >= 0;
+          const label = _creditActivityLabel(entry);
+          const d = new Date(Number(entry.ts || Date.now()));
+          const timeText = Number.isNaN(d.getTime()) ? 'Just now' : d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
+          const item = document.createElement('div');
+          item.style.cssText = 'display:flex;justify-content:space-between;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid #f3f4f6;';
+          item.innerHTML = ''
+            + '<div style="min-width:0;flex:1;">'
+            +   '<div style="font-size:13px;color:#2a2d34;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + label + '</div>'
+            +   '<div style="font-size:11px;color:#9aa0aa;">' + timeText + '</div>'
+            + '</div>'
+            + '<div style="font-size:14px;font-weight:800;' + (pos ? 'color:#16a34a;' : 'color:#dc2626;') + '">' + (pos ? '+' : '') + Math.floor(amount) + '</div>';
+          list.appendChild(item);
+        });
+        body.appendChild(list);
+      }
+    }
+
+    panel.appendChild(header);
+    panel.appendChild(body);
+    host.appendChild(backdrop);
+    host.appendChild(panel);
+    document.body.appendChild(host);
+  }
+
+  function _creditActivityLabel(entry) {
+    const src = String(entry && entry.source || '').toLowerCase();
+    const action = String(entry && entry.action || '');
+    if (src === 'exam_season_bonus') return 'Exam season bonus';
+    if (src === 'plan_renewal') return 'Monthly renewal';
+    if (src === 'plan_credits') return 'Plan credits';
+    if (src === 'subject_purchase') return 'Subject purchase';
+    if (src === 'credit_award') return 'Credits awarded';
+    if (src === 'stored_credits') {
+      if (action === 'ai_examiner_use') return 'AI Examiner';
+      if (action === 'quiz_question' || action === 'quiz') return 'Quiz';
+      if (action === 'practice_question' || action === 'practice') return 'Practice';
+      if (action === 'mock_paper_gen' || action === 'mock') return 'Mock paper';
+      if (action === 'whatsapp_pdf' || action === 'whatsapp') return 'WhatsApp export';
+      return 'Spend';
+    }
+    if (action) return action.replace(/_/g, ' ').replace(/\b\w/g, function(c){return c.toUpperCase();});
+    return String(entry && entry.note || 'Activity');
   }
 
   async function startCheckout(input) {
@@ -1547,6 +1747,7 @@
     guestGate,
     showPaywall,
     renderCreditChip,
+    openCreditsPanel,
     startCheckout,
     startBillingPortal,
     canUseAiMarking,
