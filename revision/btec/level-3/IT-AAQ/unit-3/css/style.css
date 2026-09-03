@@ -1558,13 +1558,13 @@ body.pv-open { overflow: hidden !important; }
   background: var(--surface); border: 1px solid var(--line-2); border-radius: 999px;
   box-shadow: var(--shadow-lg); padding: 6px 8px 6px 10px; max-width: 240px;
 }
-.ai-mode-hint-arrow { color: var(--accent); display: inline-flex; line-height: 0; }
+.ai-mode-hint-arrow { color: var(--accent); display: inline-flex; line-height: 0; transform: rotate(90deg); order: 3; }
 .ai-mode-hint-arrow-svg { display: block; }
-.ai-mode-hint-text { font-size: .78rem; font-weight: 700; color: var(--ink); white-space: nowrap; }
+.ai-mode-hint-text { font-size: .78rem; font-weight: 700; color: var(--ink); white-space: nowrap; order: 1; }
 .ai-mode-hint-close {
   border: none; background: var(--surface-2); color: var(--ink-2);
   width: 20px; height: 20px; border-radius: 50%; font-size: .66rem; cursor: pointer;
-  display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto;
+  display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto; order: 2;
 }
 .ai-mode-hint-close:hover { background: var(--accent-2); color: var(--accent-ink); }
 

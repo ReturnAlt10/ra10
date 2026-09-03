@@ -63,12 +63,12 @@
     var s = size || 18;
     return '<svg class="ai-ico-svg" width="' + s + '" height="' + s + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2"/><path d="M9 13l2 2 4-4"/></svg>';
   }
-  // Hand-drawn style arrow pointing at the mode button.
+  // Hand-drawn style arrow pointing down at the mode button.
   function modeHintArrowSvg(size) {
     var s = size || 26;
     return '<svg class="ai-mode-hint-arrow-svg" width="' + s + '" height="' + s + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
-      '<path d="M4 4c6 2 10 6 12 12"/>' +
-      '<path d="M12 12l4 4 1-6"/>' +
+      '<path d="M5 4c6 1 10 5 12 12"/>' +
+      '<path d="M13 12l4 4 1-6"/>' +
       '</svg>';
   }
 
