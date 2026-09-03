@@ -66,7 +66,7 @@
           '<div class="as-pdf-ico">' + icon(0x1F4C4) + '</div>' +
           '<div class="as-pdf-info"><b>' + esc(b.title) + '</b><small>' + esc(b.audience) + '</small></div>' +
           '<div class="as-pdf-actions">' +
-            '<button class="btn primary assign-sample-dl" data-brief="' + i + '">' + icon(0x2B07) + icon(0xFE0F) + ' Download PDF</button>' +
+            '<button class="btn primary assign-sample-dl" data-brief="' + i + '">' + icon(0x1F4C4) + ' Open PDF</button>' +
             '<button class="btn assign-sample-view" data-brief="' + i + '">View</button>' +
           '</div>' +
           '</div>';
@@ -309,7 +309,7 @@
       (Array.isArray(task.criteria) ? task.criteria : []).forEach(function (c) { if (byGrade[c.level]) byGrade[c.level].push(c); });
       var cols = ['Pass', 'Merit', 'Distinction'];
       var maxRows = Math.max.apply(null, cols.map(function (g) { return byGrade[g].length; }));
-      var h = '<table class="crit"><thead><tr>';
+      var h = '<table class="pv-crit"><thead><tr>';
       cols.forEach(function (g) { h += '<th>' + g + '</th>'; });
       h += '</tr></thead><tbody>';
       for (var i = 0; i < maxRows; i++) {
@@ -330,79 +330,140 @@
       ? brief.mustIncludes
       : ['three pages', 'drop-down menus', 'information about your selected entertainment from the past', 'an accordion', 'external links to relevant websites', 'a form to request specific content', 'modal images', 'video content with controls', 'search functionality', 'accessibility features'];
 
-    var h = '<!DOCTYPE html><html lang="en"><head><meta charset="utf-8" />';
-    h += '<title>Pearson BTEC Level 3 AAQ in IT \u2014 Unit 3: Website Development \u2014 Assignment Brief</title>';
-    h += '<style>'
-      + '@page { size: A4; margin: 16mm 15mm; }'
-      + '* { box-sizing: border-box; }'
-      + 'body { font-family: Arial, Helvetica, sans-serif; font-size: 10.5pt; color: #111; line-height: 1.45; margin: 0; }'
-      + '.paper { max-width: 100%; }'
-      + '.masthead { border-top: 5px solid #00247d; padding-top: 8px; margin-bottom: 4px; overflow: hidden; }'
-      + '.masthead h1 { font-size: 15pt; margin: 2px 0; color: #00247d; }'
-      + '.masthead .sub { font-size: 10pt; color: #333; }'
-      + '.paper-code { float: right; font-weight: 700; letter-spacing: .5px; font-size: 12pt; color: #00247d; border: 1px solid #00247d; padding: 4px 8px; }'
-      + '.meta { font-size: 10pt; color: #333; border-bottom: 1px solid #bbb; padding: 2px 0 8px; margin-bottom: 6px; }'
-      + 'h2 { font-size: 12.5pt; margin: 16px 0 4px; color: #00247d; border-bottom: 1px solid #00247d; padding-bottom: 2px; }'
-      + 'h3 { font-size: 11.5pt; margin: 12px 0 4px; }'
-      + 'p { margin: 5px 0; } ul, ol { margin: 4px 0 4px 20px; padding: 0; } li { margin: 2px 0; }'
-      + '.task { border: 1.2px solid #aab4c4; border-top: 3px solid #00247d; padding: 10px 14px; margin: 12px 0; page-break-inside: avoid; }'
-      + '.task h3 { margin-top: 0; }'
-      + '.crit { width: 100%; border-collapse: collapse; margin: 6px 0; font-size: 8.8pt; table-layout: fixed; }'
-      + '.crit th { background: #00247d; color: #fff; padding: 5px 7px; text-align: left; font-size: 9.5pt; }'
-      + '.crit td { border: 1px solid #aab4c4; padding: 5px 7px; vertical-align: top; }'
-      + '.evid { border: 1px solid #aab4c4; border-left: 4px solid #00247d; background: #f4f6fa; padding: 7px 10px; margin: 6px 0; }'
-      + '.evid b { font-size: 10pt; display: block; margin-bottom: 4px; }'
-      + '.btnrow { text-align: right; margin: 0 0 12px; }'
-      + '.screen-btn { font: inherit; font-weight: 700; padding: 8px 16px; cursor: pointer; background: #00247d; color: #fff; border: none; border-radius: 6px; }'
-      + '.screen-btn.sec { background: #fff; color: #00247d; border: 1px solid #00247d; margin-right: 8px; }'
-      + '@media print { .btnrow { display: none; } }'
-      + '</style></head><body><div class="paper">';
+    var pagesHtml = '';
 
-    h += '<div class="btnrow"><button class="screen-btn sec" onclick="window.close()">Close</button><button class="screen-btn" onclick="window.print()">Print / Save as PDF</button></div>';
+    // Cover page — instructions + introductory context
+    pagesHtml += '<div class="pv-page">' +
+      '<div class="pv-masthead"><span class="pv-paper-code">W80502A</span>' +
+      '<h1>Pearson BTEC Level 3 AAQ BTEC National in IT</h1>' +
+      '<div class="pv-sub">Unit 3: Website Development \u2014 Pearson Set Assignment Brief</div>' +
+      '</div>' +
+      '<div class="pv-meta">Internal unit \u00B7 estimated 15 hours \u00B7 Practice replica \u2014 not the live Pearson paper.</div>' +
+      '<h2>Instructions for students</h2>' +
+      '<p><b>Read the brief carefully.</b> This Pearson Set Assignment Brief consists of 3 tasks. You must submit evidence for each task.</p>' +
+      '<ul>' +
+      '<li>Work independently and do not share your work with other students. All evidence must be your own.</li>' +
+      '<li>Clearly identify and reference any material created by others, including the source. Using others\u2019 work without acknowledgement is plagiarism and can result in disqualification.</li>' +
+      '<li>You may ask your teacher for support about the requirements of the tasks and what evidence to produce, but teachers cannot give you feedback on how to improve your work.</li>' +
+      '</ul>' +
+      '<h2>Introductory context</h2>' +
+      '<p><strong>Produce a website for:</strong> ' + escp(contextTitle) + '.</p>' +
+      '<p>' + escp(contextBlurb) + '</p>' +
+      '<div class="pv-evid"><b>The website must be responsive to mobile devices and include:</b><ul>' +
+      mustIncludes.map(function (mi) { return '<li>' + escp(mi) + '</li>'; }).join('') +
+      '</ul></div>' +
+      '<div class="pv-footer"><span>RA10 \u00B7 Unit 3 Assignment Brief</span><span class="pv-pagenum">Page 1</span></div>' +
+      '</div>';
 
-    h += '<div class="masthead"><span class="paper-code">W80502A</span>'
-      + '<h1>Pearson BTEC Level 3 AAQ BTEC National in IT</h1>'
-      + '<div class="sub">Unit 3: Website Development \u2014 Pearson Set Assignment Brief</div>'
-      + '</div>';
-    h += '<div class="meta">Internal unit \u00B7 estimated 15 hours \u00B7 Practice replica \u2014 not the live Pearson paper.</div>';
-
-    h += '<h2>Instructions for students</h2>'
-      + '<p><b>Read the brief carefully.</b> This Pearson Set Assignment Brief consists of 3 tasks. You must submit evidence for each task.</p>'
-      + '<ul>'
-      + '<li>Work independently and do not share your work with other students. All evidence must be your own.</li>'
-      + '<li>Clearly identify and reference any material created by others, including the source. Using others\u2019 work without acknowledgement is plagiarism and can result in disqualification.</li>'
-      + '<li>You may ask your teacher for support about the requirements of the tasks and what evidence to produce, but teachers cannot give you feedback on how to improve your work.</li>'
-      + '</ul>';
-
-    h += '<h2>Introductory context</h2>';
-    h += '<p><strong>Produce a website for:</strong> ' + escp(contextTitle) + '.</p>';
-    h += '<p>' + escp(contextBlurb) + '</p>';
-    h += '<div class="evid"><b>The website must be responsive to mobile devices and include:</b><ul>'
-      + mustIncludes.map(function (mi) { return '<li>' + escp(mi) + '</li>'; }).join('')
-      + '</ul></div>';
-
-    h += '<h2>Tasks</h2>';
-    tasks.forEach(function (task) {
+    // One page per task
+    tasks.forEach(function (task, idx) {
       var code = task.code;
       var num = String(code).replace('task', '');
-      h += '<div class="task">';
-      h += '<h3>Task ' + num + ' \u2014 ' + escp(task.title) + '</h3>';
-      h += '<p>' + escp(scenarioFor(code)) + '</p>';
-      h += '<div class="evid"><b>Evidence required</b><ul>'
-        + evidenceFor(code).map(function (e) { return '<li>' + escp(e) + '</li>'; }).join('')
-        + '</ul></div>';
-      h += '<b>Assessment criteria for this task</b>' + criteriaTable(task);
-      h += '</div>';
+      pagesHtml += '<div class="pv-page">' +
+        '<div class="pv-task">' +
+        '<h3>Task ' + num + ' \u2014 ' + escp(task.title) + '</h3>' +
+        '<p>' + escp(scenarioFor(code)) + '</p>' +
+        '<div class="pv-evid"><b>Evidence required</b><ul>' +
+        evidenceFor(code).map(function (e) { return '<li>' + escp(e) + '</li>'; }).join('') +
+        '</ul></div>' +
+        '<b>Assessment criteria for this task</b>' + criteriaTable(task) +
+        '</div>' +
+        '<div class="pv-footer"><span>RA10 \u00B7 Unit 3 Assignment Brief</span><span class="pv-pagenum">Page ' + (2 + idx) + '</span></div>' +
+        '</div>';
     });
 
-    h += '<div class="meta" style="margin-top:14px">This is a practice replica produced by RA10 for revision. It mirrors the format of the real Pearson Set Assignment Brief (W80502A) but is not an official Pearson document.</div>';
-    h += '</div></body></html>';
+    // Closing note
+    pagesHtml += '<div class="pv-page">' +
+      '<h2>About this document</h2>' +
+      '<p>This is a practice replica produced by RA10 for revision. It mirrors the format of the real Pearson Set Assignment Brief (W80502A) but is not an official Pearson document.</p>' +
+      '<div class="pv-footer"><span>RA10 \u00B7 Unit 3 Assignment Brief</span><span class="pv-pagenum">Page ' + (2 + tasks.length) + '</span></div>' +
+      '</div>';
 
-    try {
-      var w2 = window.open('', '_blank');
-      if (w2) { w2.document.open(); w2.document.write(h); w2.document.close(); }
-      else alert('Please allow pop-ups to view the assignment brief as a PDF.');
-    } catch (e) { alert('Could not open the assignment brief. ' + (e && e.message ? e.message : '')); }
+    var overlay = document.createElement('div');
+    overlay.className = 'pdf-viewer';
+    overlay.setAttribute('role', 'dialog');
+    overlay.setAttribute('aria-modal', 'true');
+    overlay.setAttribute('aria-label', 'Assignment brief: ' + esc(contextTitle));
+    overlay.innerHTML =
+      '<div class="pv-topbar">' +
+        '<div class="pv-group pv-group-nav"><span class="pv-title">' + esc(contextTitle) + '</span></div>' +
+        '<div class="pv-group pv-group-actions">' +
+          '<button class="pv-btn" id="pv-zo" type="button" title="Zoom out">\u2212</button>' +
+          '<span class="pv-zoom" id="pv-zoom">100%</span>' +
+          '<button class="pv-btn" id="pv-zi" type="button" title="Zoom in">+</button>' +
+          '<button class="pv-btn" id="pv-zr" type="button">Reset</button>' +
+          '<span class="pv-counter" id="pv-counter">1 / ' + (tasks.length + 2) + '</span>' +
+          '<button class="pv-btn pv-btn-primary" id="pv-print" type="button">Print / Save PDF</button>' +
+          '<button class="pv-btn" id="pv-close" type="button">Close</button>' +
+        '</div>' +
+      '</div>' +
+      '<div class="pv-stage" id="pv-stage">' + pagesHtml + '</div>';
+
+    document.body.appendChild(overlay);
+    document.body.classList.add('pv-open');
+
+    var stage = overlay.querySelector('#pv-stage');
+    var pages = stage.querySelectorAll('.pv-page');
+    var counter = overlay.querySelector('#pv-counter');
+    var zoomLabel = overlay.querySelector('#pv-zoom');
+    var zoom = 1;
+
+    function getMinZoom() {
+      if (!pages.length) return 0.8;
+      if (window.innerWidth > 720) return 0.8;
+      var baseWidth = pages[0].offsetWidth || 1;
+      var availableWidth = Math.max(300, window.innerWidth - 12);
+      return Math.min(1, Math.max(0.55, availableWidth / baseWidth));
+    }
+
+    function applyZoom() {
+      pages.forEach(function (page) {
+        if (!page.dataset.baseHeight) page.dataset.baseHeight = String(page.offsetHeight);
+        var baseHeight = Number(page.dataset.baseHeight) || page.offsetHeight;
+        var extra = Math.max(0, (baseHeight * zoom) - baseHeight);
+        page.style.transformOrigin = 'top center';
+        page.style.transform = 'scale(' + zoom + ')';
+        page.style.marginBottom = (18 + extra) + 'px';
+      });
+      if (zoomLabel) zoomLabel.textContent = Math.round(zoom * 100) + '%';
+    }
+
+    function setZoom(z) { zoom = Math.min(1.6, Math.max(getMinZoom(), z)); applyZoom(); }
+
+    function currentPage() {
+      var best = 0, bestDist = Infinity;
+      pages.forEach(function (p, i) {
+        var r = p.getBoundingClientRect();
+        var mid = r.top + r.height / 2;
+        var d = Math.abs(mid - window.innerHeight * 0.45);
+        if (d < bestDist) { bestDist = d; best = i; }
+      });
+      return best;
+    }
+
+    function updateCounter() { if (counter) counter.textContent = (currentPage() + 1) + ' / ' + pages.length; }
+
+    function close() {
+      overlay.remove();
+      document.body.classList.remove('pv-open');
+      document.removeEventListener('keydown', escHandler);
+      window.removeEventListener('resize', resizeHandler);
+    }
+    function escHandler(e) { if (e.key === 'Escape' || e.key === 'Esc') close(); }
+    function resizeHandler() { zoom = Math.min(1.6, Math.max(getMinZoom(), zoom)); applyZoom(); updateCounter(); }
+
+    overlay.querySelector('#pv-zo').addEventListener('click', function () { setZoom(zoom - 0.1); });
+    overlay.querySelector('#pv-zi').addEventListener('click', function () { setZoom(zoom + 0.1); });
+    overlay.querySelector('#pv-zr').addEventListener('click', function () { setZoom(1); });
+    overlay.querySelector('#pv-print').addEventListener('click', function () { window.print(); });
+    overlay.querySelector('#pv-close').addEventListener('click', close);
+    document.addEventListener('keydown', escHandler);
+    window.addEventListener('resize', resizeHandler);
+    stage.addEventListener('scroll', function () { updateCounter(); }, { passive: true });
+
+    zoom = getMinZoom();
+    applyZoom();
+    updateCounter();
   };
 
   window.initAssignmentHub = function () {

@@ -12,6 +12,10 @@
 
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]; }); }
   function icon(cp) { return String.fromCodePoint(cp); }
+  function sparkleSvg(size) {
+    var s = size || 22;
+    return '<svg class="ai-sparkle-svg" width="' + s + '" height="' + s + '" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2c.7 4.9 4.1 8.3 9 9-4.9.7-8.3 4.1-9 9-.7-4.9-4.1-8.3-9-9 4.9-.7 8.3-4.1 9-9z"/></svg>';
+  }
 
   var STATUSES = [
     'Connecting with RA10 AI',
@@ -63,19 +67,16 @@
     if (!host) return;
     host.innerHTML =
       '<div class="ai-client">' +
-      // Header with animated globe logo
-      '<div class="ai-client-head">' +
-        '<div class="ai-globe"><span class="ai-globe-orb"></span></div>' +
-        '<div class="ai-client-title"><h3>AI Assigner</h3><p>Chat, get hints, or have your work examined \u2014 your Unit 3 mentor.</p></div>' +
-        '<button class="ai-newchat" id="ai-newchat" title="Start a new chat">' + icon(0x2795) + ' New chat</button>' +
-      '</div>' +
-      // Mode bar
+      // Gemini-style header
+      '<header class="ai-head">' +
+        '<div class="ai-head-brand"><span class="ai-sparkle">' + sparkleSvg(24) + '</span><span class="ai-brand-name">AI Assigner</span></div>' +
+        '<button class="ai-newchat" id="ai-newchat" title="Start a new chat">' + icon(0x2B) + ' New chat</button>' +
+      '</header>' +
       '<div class="ai-modes" id="ai-modes">' +
-        '<button class="ai-mode active" data-mode="chat">' + icon(0x1F4AC) + ' Chat</button>' +
-        '<button class="ai-mode" data-mode="hints">' + icon(0x1F4A1) + ' Hints</button>' +
-        '<button class="ai-mode" data-mode="examiner">' + icon(0x1F4CB) + ' Examiner</button>' +
+        '<button class="ai-mode active" data-mode="chat">Chat</button>' +
+        '<button class="ai-mode" data-mode="hints">Hints</button>' +
+        '<button class="ai-mode" data-mode="examiner">Examiner</button>' +
       '</div>' +
-      // Examiner panel (hidden unless examiner mode)
       '<div class="ai-examiner hidden" id="ai-examiner">' +
         '<div class="ai-examiner-row">' +
           '<div class="ai-upload-zone" id="ai-upload-zone" tabindex="0">' +
@@ -87,20 +88,20 @@
         '<div class="ai-file-chip hidden" id="ai-file-chip"><span id="ai-file-name"></span><button type="button" id="ai-file-remove" aria-label="Remove">\u2715</button></div>' +
         '<div class="ai-examiner-actions"><button class="btn primary" id="ai-mark-btn">Examine my work<span class="ra10-cost-label">8 credits</span></button></div>' +
       '</div>' +
-      // Messages
       '<div class="ai-msgs" id="ai-msgs"></div>' +
       '<div class="ai-suggestions hidden" id="ai-suggestions"></div>' +
-      // Input box
-      '<div class="ai-input-row">' +
-        '<button class="ai-plus" id="ai-plus" title="Upload document or start a new chat">' + icon(0x2B) + '</button>' +
-        '<div class="ai-plus-menu hidden" id="ai-plus-menu">' +
-          '<button data-plus="upload">' + icon(0x1F4C2) + ' Upload document</button>' +
-          '<button data-plus="newchat">' + icon(0x2795) + ' New chat</button>' +
+      '<div class="ai-composer">' +
+        '<div class="ai-input-row">' +
+          '<button class="ai-plus" id="ai-plus" title="Upload document or start a new chat">' + icon(0x2B) + '</button>' +
+          '<div class="ai-plus-menu hidden" id="ai-plus-menu">' +
+            '<button data-plus="upload">' + icon(0x1F4C2) + ' Upload document</button>' +
+            '<button data-plus="newchat">' + icon(0x2795) + ' New chat</button>' +
+          '</div>' +
+          '<textarea id="ai-input" placeholder="Ask AI Assigner\u2026" rows="1"></textarea>' +
+          '<button class="ai-send" id="ai-send" title="Send">' + icon(0x2191) + '</button>' +
         '</div>' +
-        '<textarea id="ai-input" placeholder="Ask anything about Unit 3\u2026" rows="1"></textarea>' +
-        '<button class="ai-send" id="ai-send" title="Send">' + icon(0x2191) + '</button>' +
+        '<div class="ai-disclaimer">AI Assigner can make mistakes, so double-check the spec. It coaches you \u2014 it never writes your work for you.</div>' +
       '</div>' +
-      '<div class="ai-disclaimer">AI Assigner coaches you \u2014 it never writes your work for you. Responses can be wrong, so always check the spec.</div>' +
       '</div>';
 
     // Mode switching
@@ -179,7 +180,7 @@
       'How do I make my website accessible?',
       'Give me hints to reach Distinction in Task 2'
     ];
-    host.innerHTML = '<div class="ai-suggestions-label">Try asking</div>' +
+    host.innerHTML = '<div class="ai-suggestions-label">Try these prompts</div>' +
       suggestions.map(function (s) {
         return '<button class="ai-suggestion" data-q="' + esc(s) + '">' + esc(s) + '</button>';
       }).join('');
@@ -210,6 +211,10 @@
     else if (role === 'bot') div.innerHTML = md(text);
     else div.textContent = text;
     if (role === 'bot' && !html) {
+      var avatar = document.createElement('span');
+      avatar.className = 'ai-avatar';
+      avatar.innerHTML = sparkleSvg(18);
+      div.insertBefore(avatar, div.firstChild);
       var copyBtn = document.createElement('button');
       copyBtn.className = 'ai-msg-copy';
       copyBtn.title = 'Copy response';
@@ -233,7 +238,7 @@
     if (!host) return null;
     var div = document.createElement('div');
     div.className = 'ai-msg bot ai-thinking';
-    div.innerHTML = '<span class="ai-globe-orb small"></span><span class="ai-thinking-status">' + STATUSES[0] + '</span><span class="ai-thinking-dots"></span>';
+    div.innerHTML = '<span class="ai-avatar ai-avatar-small">' + sparkleSvg(16) + '</span><span class="ai-thinking-status">' + STATUSES[0] + '</span><span class="ai-thinking-dots"></span>';
     host.appendChild(div);
     host.scrollTop = host.scrollHeight;
     var i = 0;
