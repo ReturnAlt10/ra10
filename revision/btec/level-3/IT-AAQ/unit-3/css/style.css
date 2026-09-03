@@ -1633,6 +1633,34 @@ body.pv-open { overflow: hidden !important; }
   text-decoration: underline; text-underline-offset: 2px;
 }
 
+/* ── Progress view ───────────────────────────────────────── */
+.prog-mini-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px; margin-bottom: 18px;
+}
+.prog-mini-card {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 12px;
+  padding: 14px; text-align: center; box-shadow: var(--shadow);
+}
+.prog-mini-card .v { font-size: 1.3rem; font-weight: 900; color: var(--accent); }
+.prog-mini-card .k { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-2); margin-top: 2px; }
+.prog-aim-accuracy {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 14px;
+  padding: 16px; margin-bottom: 14px; box-shadow: var(--shadow);
+}
+.prog-aim-accuracy h3 { margin: 0 0 12px; }
+.prog-aim-row { margin-bottom: 10px; }
+.prog-aim-row .meta { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 4px; }
+.prog-aim-row .bar { height: 10px; border-radius: 999px; background: var(--surface-2); overflow: hidden; }
+.prog-aim-row .bar > span { display: block; height: 100%; }
+.prog-aim-row .bar.good > span { background: var(--ok); }
+.prog-aim-row .bar.mid > span { background: var(--warn); }
+.prog-aim-row .bar.bad > span { background: var(--bad); }
+.prog-empty {
+  background: var(--surface); border: 1px dashed var(--line-2); border-radius: 12px;
+  padding: 18px; color: var(--ink-2); text-align: center; box-shadow: var(--shadow);
+}
+
 /* ── Footer ───────────────────────────────────────────────── */
 .footer { border-top: 1px solid var(--line); padding: 22px 20px 34px; text-align: center; }
 .footer p { font-size: .82rem; color: var(--ink-3); margin: 3px 0; }

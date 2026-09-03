@@ -924,6 +924,28 @@
     return _getStoredCredits() + _getExamBonusRemaining();
   }
 
+  // Current study streak (consecutive days with a recorded visit), read from
+  // the shared localStorage key used by every unit app. Returns 0 if none.
+  function getStreak() {
+    const key = 'ra10_streak_dates';
+    let dates = [];
+    try {
+      const parsed = JSON.parse(localStorage.getItem(key) || '[]');
+      dates = Array.isArray(parsed) ? parsed.filter(d => /^\d{4}-\d{2}-\d{2}$/.test(d)) : [];
+    } catch (e) {
+      dates = [];
+    }
+    const set = new Set(dates);
+    let streak = 0;
+    const cursor = new Date();
+    cursor.setHours(0, 0, 0, 0);
+    while (set.has(cursor.toISOString().slice(0, 10))) {
+      streak++;
+      cursor.setDate(cursor.getDate() - 1);
+    }
+    return streak;
+  }
+
   function getCreditBreakdown() {
     if (!_profile) {
       return {
@@ -1861,6 +1883,7 @@
     getTier,
     getTierInfo,
     getCredits,
+    getStreak,
     getCreditBreakdown,
     getCreditActivity,
     getGuestCredits,

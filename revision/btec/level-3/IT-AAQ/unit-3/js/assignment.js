@@ -195,6 +195,15 @@
           var em = card ? card.querySelector('em') : null;
           if (em) em.textContent = n + '/' + wt.evidence.length;
         }
+        // Record which tasks have all evidence checked (for the Progress tab).
+        try {
+          var doneTasks = [];
+          ['task1', 'task2', 'task3'].forEach(function (tc) {
+            var wtc = getWalkthrough(tc);
+            if (wtc && wtc.evidence.length && wtc.evidence.every(function (_, i) { return checklistState()[tc + '_' + i]; })) doneTasks.push(tc);
+          });
+          localStorage.setItem('ra10_u3_assignment_tasks', JSON.stringify(doneTasks));
+        } catch (e) {}
       });
     });
     host.querySelectorAll('.assign-sample-dl').forEach(function (btn) {

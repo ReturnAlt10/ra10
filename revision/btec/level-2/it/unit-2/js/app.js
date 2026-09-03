@@ -48,6 +48,30 @@ function todayKey() {
   return new Date().toISOString().slice(0, 10);
 }
 
+function getStreakDates() {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(STREAK_DATES_KEY) || '[]');
+    return Array.isArray(parsed) ? parsed.filter(d => /^\d{4}-\d{2}-\d{2}$/.test(d)) : [];
+  } catch (e) { return []; }
+}
+function saveStreakDates(dates) {
+  const unique = Array.from(new Set((dates || []).filter(Boolean))).sort();
+  localStorage.setItem(STREAK_DATES_KEY, JSON.stringify(unique.slice(-90)));
+}
+function markTodayVisitForStreak() {
+  if (!window.RA10 || !RA10.isLoggedIn || !RA10.isLoggedIn()) return;
+  const today = todayKey();
+  const dates = getStreakDates();
+  if (!dates.includes(today)) { dates.push(today); saveStreakDates(dates); }
+}
+function calcLocalStreak() {
+  const dates = new Set(getStreakDates());
+  let streak = 0;
+  const cursor = new Date(todayKey() + 'T00:00:00');
+  while (dates.has(cursor.toISOString().slice(0, 10))) { streak++; cursor.setDate(cursor.getDate() - 1); }
+  return streak;
+}
+
 function counterKey(prefix, date) {
   return prefix + '_' + (date || todayKey());
 }
@@ -181,6 +205,13 @@ function renderHome() {
           <div class="stat-body">
             <div class="stat-value">${knownCards}</div>
             <div class="stat-label">Cards Known</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🔥</div>
+          <div class="stat-body">
+            <div class="stat-value">${calcLocalStreak()}</div>
+            <div class="stat-label">Day Streak</div>
           </div>
         </div>
         <div class="stat-card">
@@ -1637,6 +1668,7 @@ async function init() {
   loadFlashcardData().catch(() => {});
   renderHome();
   setupNavigation();
+  markTodayVisitForStreak();
 }
 
 function setupNavigation() {

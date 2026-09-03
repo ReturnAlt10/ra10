@@ -87,7 +87,7 @@
 <script src="https://cdn.jsdelivr.net/npm/mammoth@1.6.0/mammoth.browser.min.js"></script>
 <link rel="preconnect" href="https://api.fontshare.com">
 <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700,900&f[]=jetbrains-mono@400,500&display=swap">
-  <link rel="stylesheet" href="css/style.css?v=20260920">
+  <link rel="stylesheet" href="css/style.css?v=20260921">
 <style>
 .ra10-cost-label { display:inline-block; font-size:.68rem; font-weight:700; color:rgba(255,255,255,.85); background:rgba(0,0,0,.18); padding:1px 6px; border-radius:999px; margin-left:6px; vertical-align:middle; letter-spacing:.03em; }
 .ra10-cost-label.free-label { color:rgba(255,255,255,.65); background:rgba(255,255,255,.14); }
@@ -145,6 +145,7 @@
     <button class="tab" data-tab="revise" data-tip="Flashcards, quizzes &amp; the revision guide">Revise</button>
     <button class="tab" data-tab="tools" data-tip="Wireframe, sitemap &amp; code editor">Creation Tools</button>
     <button class="tab" data-tab="assignment" data-tip="Sample assignments &amp; step-by-step support">Assignment</button>
+    <button class="tab tab-special" data-tab="progress" data-tip="Track your streak &amp; progress">Progress</button>
     <button class="tab tab-special" data-tab="ai" data-tip="AI Assigner &mdash; chat, hints &amp; marking">AI Assigner</button>
   </nav>
   <div id="unit1-credit-chip" style="margin-left:auto;display:flex;align-items:center;"></div>
@@ -470,6 +471,19 @@
     <div id="ai-assigner-panel"></div>
   </section>
 
+  <!-- ═══════════ PROGRESS ═══════════ -->
+  <section id="view-progress" class="view">
+    <header class="section-head">
+      <h2>Your Progress</h2>
+      <p>Track your revision streak, study guide aims, flashcards and quiz scores.</p>
+    </header>
+    <div id="progress-gate" style="display:none;text-align:center;padding:40px;">
+      <p style="margin-bottom:16px;color:var(--ink-2);">Sign in to save and view your progress.</p>
+      <button class="btn primary" id="btn-progress-signin">Sign in</button>
+    </div>
+    <div id="progress-content" style="display:none;"></div>
+  </section>
+
 </main>
 
 <footer class="footer">
@@ -480,14 +494,14 @@
 <script src="js/data-loader.js?v=20260906"></script>
 <script src="js/spec.js?v=20260906"></script>
 <script src="js/guide.js?v=20260906"></script>
-<script src="js/revise.js?v=20260906"></script>
+  <script src="js/revise.js?v=20260921"></script>
 <script src="js/wireframe.js?v=20260910"></script>
 <script src="js/sitemap.js?v=20260909"></script>
 <script src="js/snippets.js?v=20260909"></script>
 <script src="js/editor.js?v=20260909"></script>
-<script src="js/assignment.js?v=20260910"></script>
+  <script src="js/assignment.js?v=20260921"></script>
   <script src="js/ai-assigner.js?v=20260920"></script>
-  <script src="js/app.js?v=20260916"></script>
+  <script src="js/app.js?v=20260921"></script>
 <script>
 (function () {
   const RA10_UNIT_SUBJECT = 'IT';

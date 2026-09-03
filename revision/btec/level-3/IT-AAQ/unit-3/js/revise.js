@@ -166,6 +166,11 @@
     const total = quizState.pool.length;
     const correct = quizState.correct;
     const pct = Math.round(correct / total * 100);
+    // Save best quiz score for the Progress tab.
+    try {
+      const prev = Number(localStorage.getItem('ra10_u3_best_quiz') || 0);
+      if (pct > prev) localStorage.setItem('ra10_u3_best_quiz', String(pct));
+    } catch (e) {}
     const msg = pct === 100 ? 'Perfect — every question right! 🎉' : pct >= 75 ? 'Great work — you know your stuff!' : pct >= 50 ? 'Good start — review the guide for the ones you missed.' : 'Keep going — re-read the study guide, then retry.';
     host.innerHTML = `
 <div class="quiz-stage quiz-results">
