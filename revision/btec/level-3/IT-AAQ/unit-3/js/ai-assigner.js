@@ -33,6 +33,82 @@
       '<path d="M9 2v2M15 2v2M9 20v2M15 20v2M2 9h2M2 15h2M20 9h2M20 15h2"/>' +
       '</svg>';
   }
+  // Plus icon for the + button.
+  function plusSvg(size) {
+    var s = size || 20;
+    return '<svg class="ai-plus-svg" width="' + s + '" height="' + s + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>';
+  }
+  // Upload document icon.
+  function uploadSvg(size) {
+    var s = size || 18;
+    return '<svg class="ai-ico-svg" width="' + s + '" height="' + s + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V4M8 8l4-4 4 4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>';
+  }
+  // New chat icon (chat bubble with +).
+  function newchatSvg(size) {
+    var s = size || 18;
+    return '<svg class="ai-ico-svg" width="' + s + '" height="' + s + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.5 8.5 0 0 1-8.5 8.5H4l-1 1V11.5A8.5 8.5 0 0 1 11.5 3h1A8.5 8.5 0 0 1 21 11.5z"/><path d="M12 8v6M9 11h6"/></svg>';
+  }
+  // Chat bubble icon.
+  function chatSvg(size) {
+    var s = size || 18;
+    return '<svg class="ai-ico-svg" width="' + s + '" height="' + s + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.5 8.5 0 0 1-8.5 8.5H4l-1 1V11.5A8.5 8.5 0 0 1 11.5 3h1A8.5 8.5 0 0 1 21 11.5z"/></svg>';
+  }
+  // Lightbulb (hints) icon.
+  function hintsSvg(size) {
+    var s = size || 18;
+    return '<svg class="ai-ico-svg" width="' + s + '" height="' + s + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-4 10.5c.6.6 1 1.5 1 2.5h6c0-1 .4-1.9 1-2.5A6 6 0 0 0 12 3z"/></svg>';
+  }
+  // Examiner (clipboard with check) icon.
+  function examinerSvg(size) {
+    var s = size || 18;
+    return '<svg class="ai-ico-svg" width="' + s + '" height="' + s + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2"/><path d="M9 13l2 2 4-4"/></svg>';
+  }
+
+  // Credit cost per tier (mirrors the SDK's _tierCost).
+  function actionCost(action) {
+    var tier = (window.RA10 && typeof RA10.getTier === 'function') ? RA10.getTier() : 'free';
+    var isUltra = tier === 'ultra' || tier === 'owner';
+    var isPro = tier === 'all_subjects';
+    var isSchool = tier === 'school_student' || tier === 'school_teacher' || tier === 'school_admin';
+    var map = action === 'ai_assigner_mark'
+      ? { free: 8, school: 3, pro: 2, ultra: 0, subject: 5 }
+      : { free: 3, school: 1, pro: 1, ultra: 0, subject: 2 };
+    if (isUltra) return map.ultra;
+    if (isPro) return map.pro;
+    if (isSchool) return map.school;
+    if (tier === 'subject') return map.subject != null ? map.subject : map.free;
+    return map.free;
+  }
+
+  // Confirmation modal before spending credits. Resolves true/false.
+  function confirmCredit(action, label) {
+    return new Promise(function (resolve) {
+      var cost = actionCost(action);
+      if (cost <= 0) { resolve(true); return; }
+      var host = document.getElementById('ai-assigner-panel');
+      if (!host) { resolve(true); return; }
+      var overlay = document.createElement('div');
+      overlay.className = 'ai-confirm-overlay';
+      overlay.innerHTML =
+        '<div class="ai-confirm-card" role="dialog" aria-modal="true" aria-label="Confirm credit use">' +
+          '<div class="ai-confirm-ico">' + cpuSvg(22) + '</div>' +
+          '<h3>Use ' + cost + ' credit' + (cost === 1 ? '' : 's') + '?</h3>' +
+          '<p>' + esc(label) + ' This will use <b>' + cost + ' credit' + (cost === 1 ? '' : 's') + '</b> from your balance.</p>' +
+          '<div class="ai-confirm-actions">' +
+            '<button class="ai-confirm-cancel" type="button">Cancel</button>' +
+            '<button class="ai-confirm-ok" type="button">Use ' + cost + ' credit' + (cost === 1 ? '' : 's') + '</button>' +
+          '</div>' +
+        '</div>';
+      host.appendChild(overlay);
+      function close(val) { overlay.remove(); resolve(val); }
+      overlay.querySelector('.ai-confirm-cancel').addEventListener('click', function () { close(false); });
+      overlay.querySelector('.ai-confirm-ok').addEventListener('click', function () { close(true); });
+      overlay.addEventListener('click', function (e) { if (e.target === overlay) close(false); });
+      document.addEventListener('keydown', function escKey(e) {
+        if (e.key === 'Escape') { document.removeEventListener('keydown', escKey); close(false); }
+      });
+    });
+  }
 
   var STATUSES = [
     'Connecting with RA10 AI',
@@ -177,7 +253,7 @@
       // Header with robot AI logo
       '<header class="ai-head">' +
         '<div class="ai-head-brand"><span class="ai-logo">' + aiLogoSvg(24) + '</span><span class="ai-brand-name">AI Assigner</span></div>' +
-        '<button class="ai-newchat" id="ai-newchat" title="Start a new chat">' + icon(0x2B) + ' New chat</button>' +
+        '<button class="ai-newchat" id="ai-newchat" title="Start a new chat">' + newchatSvg(16) + ' New chat</button>' +
       '</header>' +
       '<div class="ai-msgs" id="ai-msgs"></div>' +
       '<div class="ai-suggestions hidden" id="ai-suggestions"></div>' +
@@ -194,10 +270,10 @@
           '<div class="ai-examiner-actions"><button class="btn primary" id="ai-mark-btn">Examine my work<span class="ra10-cost-label">8 credits</span></button></div>' +
         '</div>' +
         '<div class="ai-input-row">' +
-          '<button class="ai-plus" id="ai-plus" title="Upload or new chat">' + icon(0x2B) + '</button>' +
+          '<button class="ai-plus" id="ai-plus" title="Upload or new chat">' + plusSvg(20) + '</button>' +
           '<div class="ai-plus-menu hidden" id="ai-plus-menu">' +
-            '<button data-plus="upload">' + icon(0x1F4C2) + ' Upload document</button>' +
-            '<button data-plus="newchat">' + icon(0x2795) + ' New chat</button>' +
+            '<button data-plus="upload">' + uploadSvg(18) + ' Upload document</button>' +
+            '<button data-plus="newchat">' + newchatSvg(18) + ' New chat</button>' +
           '</div>' +
           '<textarea id="ai-input" placeholder="Ask AI Assigner\u2026" rows="1"></textarea>' +
           '<button class="ai-mode-btn" id="ai-mode-btn" title="Switch mode (Chat / Hints / Examiner)">' + cpuSvg(20) + '</button>' +
@@ -224,9 +300,9 @@
     modeMenu.className = 'ai-mode-menu hidden';
     modeMenu.id = 'ai-mode-menu';
     modeMenu.innerHTML =
-      '<button data-mode="chat">' + icon(0x1F4AC) + ' Chat</button>' +
-      '<button data-mode="hints">' + icon(0x1F4A1) + ' Hints</button>' +
-      '<button data-mode="examiner">' + icon(0x1F4CB) + ' Examiner</button>';
+      '<button data-mode="chat">' + chatSvg(18) + ' Chat</button>' +
+      '<button data-mode="hints">' + hintsSvg(18) + ' Hints</button>' +
+      '<button data-mode="examiner">' + examinerSvg(18) + ' Examiner</button>';
     modeBtn.parentNode.insertBefore(modeMenu, modeBtn.nextSibling);
     modeBtn.addEventListener('click', function (e) {
       e.stopPropagation();
@@ -403,6 +479,8 @@
 
     (async function () {
       try {
+        var ok = await confirmCredit('ai_assigner_hint', 'Ask AI Assigner a question.');
+        if (!ok) { removeThinking(think); busy = false; return; }
         if (typeof ra10Gate === 'function' && !(await ra10Gate('ai_assigner_hint'))) { removeThinking(think); busy = false; return; }
         var res = await RA10.askAiAssigner({
           message: text,
@@ -433,6 +511,8 @@
     addMsg('user', 'Please examine my work for this assignment task.');
     var think = addThinking();
     try {
+      var ok = await confirmCredit('ai_assigner_mark', 'Examine your assignment against the Pass/Merit/Distinction criteria.');
+      if (!ok) { removeThinking(think); busy = false; return; }
       if (typeof ra10Gate === 'function' && !(await ra10Gate('ai_assigner_mark'))) { removeThinking(think); busy = false; return; }
       var criteriaMap = {};
       if (CRITERIA && CRITERIA.tasks) CRITERIA.tasks.forEach(function (task) { task.criteria.forEach(function (c) { criteriaMap[c.code] = c.level + ': ' + c.text; }); });
