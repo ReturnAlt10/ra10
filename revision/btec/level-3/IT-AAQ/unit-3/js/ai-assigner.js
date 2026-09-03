@@ -26,40 +26,130 @@
     'Writing your response'
   ];
 
-  /* Minimal safe Markdown renderer */
+  /* Markdown renderer — code blocks, tables, task lists, headings, quotes */
   function md(s) {
-    var input = esc(String(s == null ? '' : s).replace(/\r\n/g, '\n'));
-    var blocks = [];
-    input = input.replace(/```([\s\S]*?)```/g, function (_, c) { blocks.push(c.replace(/^[a-zA-Z0-9]+\n/, '')); return '\u0000B' + (blocks.length - 1) + '\u0000'; });
-    input = input.replace(/`([^`\n]+)`/g, '<code>$1</code>');
-    input = input.replace(/\*\*\*([^*]+)\*\*\*/g, '<strong><em>$1</em></strong>');
-    input = input.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
-    input = input.replace(/__([^_]+)__/g, '<strong>$1</strong>');
-    input = input.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, function (_, t, u) { return /^(javascript|data|vbscript):/i.test(u) ? _ : '<a href="' + u + '" target="_blank" rel="noopener">' + t + '</a>'; });
-    input = input.replace(/^#### (.*)$/gm, '<h4>$1</h4>');
-    input = input.replace(/^### (.*)$/gm, '<h3>$1</h3>');
-    input = input.replace(/^## (.*)$/gm, '<h2>$1</h2>');
-    input = input.replace(/^# (.*)$/gm, '<h1>$1</h1>');
-    input = input.replace(/((?:^.*\|\s*\n)+)/gm, function (block) {
-      var rows = block.trim().split('\n').filter(function (r) { return /\|/.test(r.trim()); });
-      var h = '<div style="overflow-x:auto"><table>';
-      rows.forEach(function (line, i) {
-        if (/^\s*\|?\s*:?-{2,}.*-{2,}/.test(line)) return;
-        var cells = line.replace(/^\s*\|/, '').replace(/\|\s*$/, '').split('|').map(function (c) { return c.trim(); });
-        var tag = i === 0 ? 'th' : 'td';
-        h += '<tr>' + cells.map(function (c) { return '<' + tag + '>' + c + '</' + tag + '>'; }).join('') + '</tr>';
+    var raw = String(s == null ? '' : s).replace(/\r\n/g, '\n');
+    var codeBlocks = [];
+    raw = raw.replace(/```([a-zA-Z0-9+#-]*)[ \t]*\n?([\s\S]*?)```/g, function (_, lang, code) {
+      codeBlocks.push({ lang: lang || '', code: code.replace(/\n+$/, '') });
+      return '\u0000B' + (codeBlocks.length - 1) + '\u0000';
+    });
+
+    function inline(t) {
+      t = esc(t);
+      t = t.replace(/`([^`\n]+)`/g, '<code>$1</code>');
+      t = t.replace(/\*\*\*([^*]+)\*\*\*/g, '<strong><em>$1</em></strong>');
+      t = t.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+      t = t.replace(/__([^_]+)__/g, '<strong>$1</strong>');
+      t = t.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, function (_, tx, u) {
+        return /^(javascript|data|vbscript):/i.test(u) ? _ : '<a href="' + u + '" target="_blank" rel="noopener">' + tx + '</a>';
       });
-      return h + '</table></div>';
+      return t;
+    }
+
+    function isSepRow(r) {
+      var cells = r.replace(/^\s*\|/, '').replace(/\|\s*$/, '').split('|').map(function (c) { return c.trim(); });
+      return cells.length > 0 && cells.every(function (c) { return /^:?-{2,}:?$/.test(c); });
+    }
+
+    function renderTable(rows) {
+      var html = '<div class="ai-table-wrap"><table>';
+      rows.forEach(function (r, i) {
+        if (isSepRow(r)) return;
+        var cells = r.replace(/^\s*\|/, '').replace(/\|\s*$/, '').split('|').map(function (c) { return c.trim(); });
+        var tag = i === 0 ? 'th' : 'td';
+        html += '<tr>' + cells.map(function (c) { return '<' + tag + '>' + inline(c) + '</' + tag + '>'; }).join('') + '</tr>';
+      });
+      return html + '</table></div>';
+    }
+
+    function renderTask(line) {
+      var m = /^\s*[-*+]\s+\[([ xX])\]\s+([\s\S]*)$/.exec(line);
+      if (!m) return '<li>' + inline(line.replace(/^\s*[-*+]\s+/, '')) + '</li>';
+      var checked = m[1].toLowerCase() === 'x';
+      return '<li class="ai-task">' +
+        '<span class="ai-check' + (checked ? ' checked' : '') + '"></span>' +
+        '<span>' + inline(m[2]) + '</span></li>';
+    }
+
+    function startsTableAt(idx) {
+      return !!(lines[idx] && /\|/.test(lines[idx]) && idx + 1 < lines.length && /\|/.test(lines[idx + 1]) && isSepRow(lines[idx + 1]));
+    }
+
+    var lines = raw.split('\n');
+    var out = [];
+    for (var i = 0; i < lines.length; i++) {
+      var line = lines[i];
+      if (!line.trim()) continue;
+
+      if (/^\u0000B\d+\u0000$/.test(line.trim())) { out.push(line.trim()); continue; }
+
+      if (/\|/.test(line) && startsTableAt(i)) {
+        var tbl = [line, lines[i + 1]];
+        i += 2;
+        while (i < lines.length && /\|/.test(lines[i]) && lines[i].trim()) { tbl.push(lines[i]); i++; }
+        i--;
+        out.push(renderTable(tbl));
+        continue;
+      }
+
+      if (/^\s*[-*+]\s+\[[ xX]\]\s/.test(line)) {
+        var tasks = [];
+        while (i < lines.length && /^\s*[-*+]\s+\[[ xX]\]\s/.test(lines[i])) { tasks.push(lines[i]); i++; }
+        i--;
+        out.push('<ul class="ai-tasks">' + tasks.map(renderTask).join('') + '</ul>');
+        continue;
+      }
+
+      if (/^\s*[-*+]\s+/.test(line)) {
+        var items = [];
+        while (i < lines.length && /^\s*[-*+]\s+/.test(lines[i])) { items.push(lines[i]); i++; }
+        i--;
+        out.push('<ul>' + items.map(function (it) { return '<li>' + inline(it.replace(/^\s*[-*+]\s+/, '')) + '</li>'; }).join('') + '</ul>');
+        continue;
+      }
+
+      if (/^\s*\d+\.\s+/.test(line)) {
+        var oitems = [];
+        while (i < lines.length && /^\s*\d+\.\s+/.test(lines[i])) { oitems.push(lines[i]); i++; }
+        i--;
+        out.push('<ol>' + oitems.map(function (it) { return '<li>' + inline(it.replace(/^\s*\d+\.\s+/, '')) + '</li>'; }).join('') + '</ol>');
+        continue;
+      }
+
+      if (/^####\s+/.test(line)) { out.push('<h4>' + inline(line.replace(/^####\s+/, '')) + '</h4>'); continue; }
+      if (/^###\s+/.test(line)) { out.push('<h3>' + inline(line.replace(/^###\s+/, '')) + '</h3>'); continue; }
+      if (/^##\s+/.test(line)) { out.push('<h2>' + inline(line.replace(/^##\s+/, '')) + '</h2>'); continue; }
+      if (/^#\s+/.test(line)) { out.push('<h1>' + inline(line.replace(/^#\s+/, '')) + '</h1>'); continue; }
+
+      if (/^\s*>/.test(line)) {
+        var q = [];
+        while (i < lines.length && /^\s*>/.test(lines[i])) { q.push(lines[i].replace(/^\s*>\s?/, '')); i++; }
+        i--;
+        out.push('<blockquote>' + q.map(inline).join('<br>') + '</blockquote>');
+        continue;
+      }
+
+      var para = [line];
+      while (i + 1 < lines.length && lines[i + 1].trim() &&
+             !/^\s*[-*+]\s+/.test(lines[i + 1]) &&
+             !/^\s*\d+\.\s+/.test(lines[i + 1]) &&
+             !/^#+\s+/.test(lines[i + 1]) &&
+             !/^\s*>/.test(lines[i + 1]) &&
+             !startsTableAt(i + 1)) {
+        i++;
+        para.push(lines[i]);
+      }
+      out.push('<p>' + inline(para.join(' ')) + '</p>');
+    }
+
+    var html = out.join('\n');
+    html = html.replace(/\u0000B(\d+)\u0000/g, function (_m, idx) {
+      var b = codeBlocks[+idx] || { lang: '', code: '' };
+      var lang = b.lang ? '<span class="ai-code-lang">' + esc(b.lang) + '</span>' : '';
+      return '<pre>' + lang + '<code>' + esc(b.code) + '</code></pre>';
     });
-    input = input.replace(/(?:^[\t ]*(?:[-*+]|\d+\.)[\t ]+.*\n?)+/gm, function (m) {
-      var ordered = /^\s*\d+\./.test(m);
-      var items = [];
-      var re = /^[\t ]*(?:[-*+]|\d+\.)[\t ]+(.*)$/gm, mm;
-      while ((mm = re.exec(m)) !== null) items.push(mm[1]);
-      return (ordered ? '<ol>' : '<ul>') + items.map(function (i) { return '<li>' + i + '</li>'; }).join('') + (ordered ? '</ol>' : '</ul>');
-    });
-    input = input.replace(/\u0000B(\d+)\u0000/g, function (_m, i) { return '<pre><code>' + esc(blocks[+i] || '') + '</code></pre>'; });
-    return input;
+    return html;
   }
 
   function render() {
@@ -72,28 +162,28 @@
         '<div class="ai-head-brand"><span class="ai-sparkle">' + sparkleSvg(24) + '</span><span class="ai-brand-name">AI Assigner</span></div>' +
         '<button class="ai-newchat" id="ai-newchat" title="Start a new chat">' + icon(0x2B) + ' New chat</button>' +
       '</header>' +
-      '<div class="ai-modes" id="ai-modes">' +
-        '<button class="ai-mode active" data-mode="chat">Chat</button>' +
-        '<button class="ai-mode" data-mode="hints">Hints</button>' +
-        '<button class="ai-mode" data-mode="examiner">Examiner</button>' +
-      '</div>' +
-      '<div class="ai-examiner hidden" id="ai-examiner">' +
-        '<div class="ai-examiner-row">' +
-          '<div class="ai-upload-zone" id="ai-upload-zone" tabindex="0">' +
-            '<input type="file" id="ai-file-input" accept=".pdf,.docx,.doc,.txt,.md,.rtf" hidden>' +
-            '<div class="ai-upload-inner"><span class="ai-upload-ico">' + icon(0x1F4E4) + '</span><b>Upload your work</b><small>PDF, Word (.docx), text or markdown \u00B7 up to 4 MB</small></div>' +
-          '</div>' +
-          '<div class="ai-examiner-txt"><textarea id="ai-examiner-text" placeholder="Or paste your assignment evidence here (research, sitemap annotations, test plans, reflections...)."></textarea></div>' +
-        '</div>' +
-        '<div class="ai-file-chip hidden" id="ai-file-chip"><span id="ai-file-name"></span><button type="button" id="ai-file-remove" aria-label="Remove">\u2715</button></div>' +
-        '<div class="ai-examiner-actions"><button class="btn primary" id="ai-mark-btn">Examine my work<span class="ra10-cost-label">8 credits</span></button></div>' +
-      '</div>' +
       '<div class="ai-msgs" id="ai-msgs"></div>' +
       '<div class="ai-suggestions hidden" id="ai-suggestions"></div>' +
       '<div class="ai-composer">' +
+        '<div class="ai-examiner hidden" id="ai-examiner">' +
+          '<div class="ai-examiner-row">' +
+            '<div class="ai-upload-zone" id="ai-upload-zone" tabindex="0">' +
+              '<input type="file" id="ai-file-input" accept=".pdf,.docx,.doc,.txt,.md,.rtf" hidden>' +
+              '<div class="ai-upload-inner"><span class="ai-upload-ico">' + icon(0x1F4E4) + '</span><b>Upload your work</b><small>PDF, Word (.docx), text or markdown \u00B7 up to 4 MB</small></div>' +
+            '</div>' +
+            '<div class="ai-examiner-txt"><textarea id="ai-examiner-text" placeholder="Or paste your assignment evidence here (research, sitemap annotations, test plans, reflections...)."></textarea></div>' +
+          '</div>' +
+          '<div class="ai-file-chip hidden" id="ai-file-chip"><span id="ai-file-name"></span><button type="button" id="ai-file-remove" aria-label="Remove">\u2715</button></div>' +
+          '<div class="ai-examiner-actions"><button class="btn primary" id="ai-mark-btn">Examine my work<span class="ra10-cost-label">8 credits</span></button></div>' +
+        '</div>' +
         '<div class="ai-input-row">' +
-          '<button class="ai-plus" id="ai-plus" title="Upload document or start a new chat">' + icon(0x2B) + '</button>' +
+          '<button class="ai-plus" id="ai-plus" title="Options">' + icon(0x2B) + '</button>' +
           '<div class="ai-plus-menu hidden" id="ai-plus-menu">' +
+            '<div class="ai-plus-menu-label">Mode</div>' +
+            '<button data-plus="chat">' + icon(0x1F4AC) + ' Chat</button>' +
+            '<button data-plus="hints">' + icon(0x1F4A1) + ' Hints</button>' +
+            '<button data-plus="examiner">' + icon(0x1F4CB) + ' Examiner</button>' +
+            '<div class="ai-plus-menu-sep"></div>' +
             '<button data-plus="upload">' + icon(0x1F4C2) + ' Upload document</button>' +
             '<button data-plus="newchat">' + icon(0x2795) + ' New chat</button>' +
           '</div>' +
@@ -104,17 +194,14 @@
       '</div>' +
       '</div>';
 
-    // Mode switching
-    host.querySelectorAll('.ai-mode').forEach(function (b) {
-      b.addEventListener('click', function () {
-        mode = b.dataset.mode;
-        host.querySelectorAll('.ai-mode').forEach(function (x) { x.classList.toggle('active', x === b); });
-        var exam = document.getElementById('ai-examiner');
-        if (exam) exam.classList.toggle('hidden', mode !== 'examiner');
-        var input = document.getElementById('ai-input');
-        if (input) input.placeholder = mode === 'hints' ? 'Describe what you\u2019re stuck on and I\u2019ll coach you\u2026' : mode === 'examiner' ? 'Add a note about your work before examining\u2026' : 'Ask anything about Unit 3\u2026';
-      });
-    });
+    // Mode switching helper (modes live in the + menu)
+    function setMode(next) {
+      mode = next;
+      var exam = document.getElementById('ai-examiner');
+      if (exam) exam.classList.toggle('hidden', mode !== 'examiner');
+      var input = document.getElementById('ai-input');
+      if (input) input.placeholder = mode === 'hints' ? 'Describe what you\u2019re stuck on and I\u2019ll coach you\u2026' : mode === 'examiner' ? 'Add a note about your work before examining\u2026' : 'Ask AI Assigner\u2026';
+    }
 
     // Send
     document.getElementById('ai-send').addEventListener('click', send);
@@ -139,8 +226,10 @@
     host.querySelectorAll('#ai-plus-menu [data-plus]').forEach(function (b) {
       b.addEventListener('click', function () {
         document.getElementById('ai-plus-menu').classList.add('hidden');
-        if (b.dataset.plus === 'upload') document.getElementById('ai-file-input').click();
-        else newChat();
+        var action = b.dataset.plus;
+        if (action === 'upload') document.getElementById('ai-file-input').click();
+        else if (action === 'newchat') newChat();
+        else if (action === 'chat' || action === 'hints' || action === 'examiner') setMode(action);
       });
     });
 
@@ -280,7 +369,7 @@
         var res = await RA10.askAiAssigner({
           message: text,
           history: chatHistory.slice(-8),
-          context: 'Unit 3 Website Development. Modes: chat (ask anything), hints (coach toward next grade), examiner (mark work against criteria). Learning aims: A (principles + planning), B (design + assets), C (build + test). Assignment has 3 tasks. Encourage the student to work things out themselves \u2014 never write their work for them.'
+          context: 'Unit 3 Website Development. Current mode: ' + mode + '. Modes: chat (ask anything), hints (coach toward next grade), examiner (mark work against criteria). Learning aims: A (principles + planning), B (design + assets), C (build + test). Assignment has 3 tasks. Encourage the student to work things out themselves \u2014 never write their work for them. Use markdown in your answer: **bold**, lists, - [ ] task lists, tables and fenced code blocks.'
         });
         removeThinking(think);
         addMsg('bot', res.reply);
