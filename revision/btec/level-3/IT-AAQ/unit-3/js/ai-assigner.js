@@ -63,6 +63,14 @@
     var s = size || 18;
     return '<svg class="ai-ico-svg" width="' + s + '" height="' + s + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2"/><path d="M9 13l2 2 4-4"/></svg>';
   }
+  // Hand-drawn style arrow pointing at the mode button.
+  function modeHintArrowSvg(size) {
+    var s = size || 26;
+    return '<svg class="ai-mode-hint-arrow-svg" width="' + s + '" height="' + s + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+      '<path d="M4 4c6 2 10 6 12 12"/>' +
+      '<path d="M12 12l4 4 1-6"/>' +
+      '</svg>';
+  }
 
   // Credit cost per tier (mirrors the SDK's _tierCost).
   function actionCost(action) {
@@ -278,6 +286,11 @@
           '<textarea id="ai-input" placeholder="Ask AI Assigner\u2026" rows="1"></textarea>' +
           '<button class="ai-mode-btn" id="ai-mode-btn" title="Switch mode (Chat / Hints / Examiner)">' + cpuSvg(20) + '</button>' +
           '<button class="ai-send" id="ai-send" title="Send">' + icon(0x2191) + '</button>' +
+          '<div class="ai-mode-hint hidden" id="ai-mode-hint">' +
+            '<span class="ai-mode-hint-arrow">' + modeHintArrowSvg(26) + '</span>' +
+            '<span class="ai-mode-hint-text">Tap to change the mode</span>' +
+            '<button class="ai-mode-hint-close" id="ai-mode-hint-close" type="button" aria-label="Dismiss">\u2715</button>' +
+          '</div>' +
         '</div>' +
         '<div class="ai-disclaimer">AI Assigner can make mistakes, so double-check the spec. It coaches you \u2014 it never writes your work for you.</div>' +
       '</div>' +
@@ -308,6 +321,20 @@
       e.stopPropagation();
       modeMenu.classList.toggle('hidden');
     });
+    // Show the "tap to change mode" hint once, unless the user dismissed it.
+    var hint = document.getElementById('ai-mode-hint');
+    var hintClose = document.getElementById('ai-mode-hint-close');
+    if (hint && hintClose) {
+      var hintKey = 'ra10_ai_mode_hint_dismissed';
+      var dismissed = false;
+      try { dismissed = localStorage.getItem(hintKey) === '1'; } catch (e) {}
+      if (!dismissed) hint.classList.remove('hidden');
+      hintClose.addEventListener('click', function (e) {
+        e.stopPropagation();
+        hint.classList.add('hidden');
+        try { localStorage.setItem(hintKey, '1'); } catch (e) {}
+      });
+    }
     modeMenu.querySelectorAll('button').forEach(function (b) {
       b.addEventListener('click', function () {
         modeMenu.classList.add('hidden');

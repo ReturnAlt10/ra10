@@ -1551,6 +1551,23 @@ body.pv-open { overflow: hidden !important; }
 .ai-plus-menu button svg, .ai-mode-menu button svg { color: var(--ink-2); }
 .ai-plus-menu button:hover svg, .ai-mode-menu button:hover svg { color: var(--accent); }
 
+/* "Tap to change mode" hint with a drawn arrow */
+.ai-mode-hint {
+  position: absolute; bottom: 50px; right: 52px; z-index: 25;
+  display: flex; align-items: center; gap: 6px;
+  background: var(--surface); border: 1px solid var(--line-2); border-radius: 999px;
+  box-shadow: var(--shadow-lg); padding: 6px 8px 6px 10px; max-width: 240px;
+}
+.ai-mode-hint-arrow { color: var(--accent); display: inline-flex; line-height: 0; }
+.ai-mode-hint-arrow-svg { display: block; }
+.ai-mode-hint-text { font-size: .78rem; font-weight: 700; color: var(--ink); white-space: nowrap; }
+.ai-mode-hint-close {
+  border: none; background: var(--surface-2); color: var(--ink-2);
+  width: 20px; height: 20px; border-radius: 50%; font-size: .66rem; cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto;
+}
+.ai-mode-hint-close:hover { background: var(--accent-2); color: var(--accent-ink); }
+
 /* Credit confirmation modal */
 .ai-confirm-overlay {
   position: fixed; inset: 0; z-index: 200; background: rgba(0,0,0,.45);
