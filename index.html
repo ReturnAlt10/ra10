@@ -1,20 +1,20 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RA10 — BTEC &amp; A-Level Revision, Past Papers &amp; Study Tools</title>
+<title>RA10 — Advanced Revision Site (BTEC, GCSE, A-LEVEL)</title>
 <meta name="description" content="Free BTEC IT, Business and Sport revision for Level 3 AAQ and A-Level. Flashcards, quizzes, predicted papers, study guides, wireframe and code tools, and AI assignment marking — all in one place.">
 <meta name="keywords" content="BTEC IT revision, BTEC Level 3 AAQ, BTEC Business revision, BTEC Sport revision, A-Level Business revision, predicted papers, flashcards, quizzes, study guide, RA10">
 <link rel="canonical" href="https://ra10.co.uk/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="RA10">
-<meta property="og:title" content="RA10 — BTEC &amp; A-Level Revision, Past Papers &amp; Study Tools">
+<meta property="og:title" content="RA10 — Advanced Revision Site (BTEC, GCSE, A-LEVEL)">
 <meta property="og:description" content="Free BTEC IT, Business and Sport revision for Level 3 AAQ and A-Level. Flashcards, quizzes, predicted papers, study guides and AI assignment marking.">
 <meta property="og:url" content="https://ra10.co.uk/">
 <meta property="og:image" content="https://ra10.co.uk/logo.png">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="RA10 — BTEC &amp; A-Level Revision, Past Papers &amp; Study Tools">
+<meta name="twitter:title" content="RA10 — Advanced Revision Site (BTEC, GCSE, A-LEVEL)">
 <meta name="twitter:description" content="Free BTEC IT, Business and Sport revision for Level 3 AAQ and A-Level. Flashcards, quizzes, predicted papers, study guides and AI assignment marking.">
 <meta name="twitter:image" content="https://ra10.co.uk/logo.png">
 <link rel="icon" href="logo.png" type="image/png">
@@ -11763,25 +11763,35 @@ async function waitForRA10Sdk(timeoutMs) {
       const metaEl = document.getElementById('site-announcement-meta');
       if (!bar || !emojiEl || !textEl || !metaEl) return;
 
+      // Fallback announcement shown when no live Supabase announcement is set.
+      const fallback = {
+        emoji: '🎉',
+        message: 'BTEC IT Unit 3 (Website Development) is now live — study guide, wireframe & sitemap builders, code editor, sample assignments and AI Assigner.',
+        duration_hours: 168,
+        created_at: new Date().toISOString(),
+        expires_at: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+      };
+      const effective = (ann && ann.message) ? ann : fallback;
+
       const now = Date.now();
-      const expiresAtMs = ann && ann.expires_at ? Date.parse(String(ann.expires_at)) : NaN;
-      if (!ann || !ann.message || Number.isNaN(expiresAtMs) || expiresAtMs <= now) {
+      const expiresAtMs = effective && effective.expires_at ? Date.parse(String(effective.expires_at)) : NaN;
+      if (!effective || !effective.message || Number.isNaN(expiresAtMs) || expiresAtMs <= now) {
         bar.style.display = 'none';
         textEl.textContent = '';
         metaEl.textContent = '';
         return;
       }
-      if (isAnnouncementDismissed(ann)) {
+      if (isAnnouncementDismissed(effective)) {
         bar.style.display = 'none';
         return;
       }
 
-      emojiEl.textContent = String(ann.emoji || '📣').slice(0, 4);
-      textEl.textContent = String(ann.message || '').trim();
+      emojiEl.textContent = String(effective.emoji || '📣').slice(0, 4);
+      textEl.textContent = String(effective.message || '').trim();
 
-      const createdLabel = formatAnnouncementDate(ann.created_at);
-      const expiresLabel = formatAnnouncementDate(ann.expires_at);
-      const durationHours = Number(ann.duration_hours || 0);
+      const createdLabel = formatAnnouncementDate(effective.created_at);
+      const expiresLabel = formatAnnouncementDate(effective.expires_at);
+      const durationHours = Number(effective.duration_hours || 0);
       const durationLabel = Number.isFinite(durationHours) && durationHours > 0 ? (durationHours + 'h') : '';
       const parts = [];
       if (createdLabel) parts.push('Posted ' + createdLabel);
@@ -13751,6 +13761,7 @@ async function waitForRA10Sdk(timeoutMs) {
       <aside class="news-sidebar">
         <h3>Contents</h3>
         <ul>
+          <li><a href="#news-unit3-live">IT Unit 3 Website Development Live</a></li>
           <li><a href="#news-unit2-bank">Unit 2 Question Bank Expansion</a></li>
           <li><a href="#news-exam-cards">Homepage Exam Countdown Cards</a></li>
           <li><a href="#news-unit-tabs">Unit Dashboard Tabs Refresh</a></li>
@@ -13773,11 +13784,33 @@ async function waitForRA10Sdk(timeoutMs) {
           <div><span>Project</span><strong>RA10</strong></div>
           <div><span>Status</span><strong>Live</strong></div>
           <div><span>Coverage</span><strong>BTEC L2/L3</strong></div>
-          <div><span>Last sync</span><strong>02.09.2026</strong></div>
+          <div><span>Last sync</span><strong>03.09.2026</strong></div>
         </div>
       </aside>
 
       <section class="news-feed">
+        <article class="news-article" id="news-unit3-live" data-category="revision" data-status="live" data-date="2026-09-03">
+          <div class="news-media" style="background:linear-gradient(120deg,#fff1f2,#ffe4e6,#fef3c7)">
+            <svg viewBox="0 0 1200 300" aria-hidden="true">
+              <rect width="1200" height="300" fill="none"/>
+              <rect x="180" y="55" width="840" height="190" rx="24" fill="#fff" opacity=".94"/>
+              <rect x="240" y="95" width="200" height="112" rx="16" fill="#fff1f2" stroke="#fecdd3"/>
+              <rect x="470" y="95" width="200" height="112" rx="16" fill="#eff6ff" stroke="#bfdbfe"/>
+              <rect x="700" y="95" width="260" height="112" rx="16" fill="#fefce8" stroke="#fde68a"/>
+              <path d="M270 140h140M270 168h96" stroke="#e11d48" stroke-width="10" stroke-linecap="round"/>
+              <path d="M500 140h140M500 168h96" stroke="#2563eb" stroke-width="9" stroke-linecap="round"/>
+              <path d="M740 132h180M740 160h150M740 188h120" stroke="#ca8a04" stroke-width="9" stroke-linecap="round"/>
+              <text x="830" y="120" text-anchor="middle" font-size="26" font-family="Arial" font-weight="bold" fill="#ca8a04">Unit 3</text>
+            </svg>
+          </div>
+          <div class="news-content">
+            <div class="news-meta"><span>03.09.2026</span><span>Revision Engine</span></div>
+            <h2>IT Unit 3 Website Development is Now Live</h2>
+            <p>BTEC IT Unit 3 (Website Development) has launched with a full two-part app. Learn the theory for Aims A, B and C with a comprehensive study guide, knowledge-check MCQs, flashcards and quizzes. Then build real skills with the wireframe designer (powered by draw.io), annotated sitemap builder, and a full HTML/CSS/JS code editor with live preview and cloud autosave. For the assignment, get step-by-step Distinction support across all three tasks, sample Pearson-style briefs, and the AI Assigner for hints and marking.</p>
+            <div class="news-tags"><span class="news-tag">Live</span><span class="news-tag">Unit 3</span><span class="news-tag">Website Development</span><span class="news-tag">AI Assigner</span></div>
+          </div>
+        </article>
+
         <article class="news-article" id="news-unit2-bank" data-category="revision" data-status="live" data-date="2026-09-02">
           <div class="news-media" style="background:linear-gradient(120deg,#ecfeff,#e0f2fe,#f0fdf4)">
             <svg viewBox="0 0 1200 300" aria-hidden="true">
