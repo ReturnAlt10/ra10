@@ -60,7 +60,7 @@
     z-index: 0;
   }
 
-  body.ra10-refresh-enabled > :not(.mobile-top-nav):not(.mobile-bottom-nav):not(.mobile-sheet-backdrop):not(.mobile-subject-sheet):not(.auth-overlay):not(.nav-user-dropdown):not(.nav):not(.navbar):not(.topbar):not(.viewer-topbar):not(.brief-modal):not(.ed-fullscreen-overlay) {
+  body.ra10-refresh-enabled > :not(.mobile-top-nav):not(.mobile-bottom-nav):not(.mobile-sheet-backdrop):not(.mobile-subject-sheet):not(.auth-overlay):not(.nav-user-dropdown):not(.nav):not(.navbar):not(.topbar):not(.viewer-topbar):not(.brief-modal):not(.ed-fullscreen-overlay):not(.mobile-tool-notice-overlay) {
     position: relative;
     z-index: 1;
   }

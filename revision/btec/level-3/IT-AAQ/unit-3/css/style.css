@@ -300,17 +300,23 @@ img { max-width: 100%; }
   .feature-section { padding: 20px; }
 }
 
-/* Desktop-only tool notice (shown on phones) */
+/* Desktop-only tool notice (shown on phones) — centered popup */
+.mobile-tool-notice-overlay {
+  position: fixed; inset: 0; z-index: 1000;
+  background: rgba(0, 0, 0, .5);
+  display: flex; align-items: center; justify-content: center; padding: 20px;
+}
 .mobile-tool-notice {
   display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
   background: var(--surface); border: 1px solid var(--line-2); border-radius: var(--radius);
-  padding: 18px 20px; margin: 18px 0; box-shadow: var(--shadow);
+  padding: 20px 22px; box-shadow: var(--shadow-lg); max-width: 420px; width: 100%;
 }
 .mobile-tool-notice-ico { font-size: 2rem; line-height: 1; flex-shrink: 0; }
 .mobile-tool-notice-body { flex: 1; min-width: 200px; }
 .mobile-tool-notice-body b { display: block; font-size: .98rem; margin-bottom: 3px; }
 .mobile-tool-notice-body p { margin: 0; font-size: .84rem; color: var(--ink-2); line-height: 1.5; }
-.mobile-tool-notice .btn { flex: 0 0 auto; }
+.mobile-tool-notice-actions { display: flex; gap: 8px; width: 100%; margin-top: 4px; }
+.mobile-tool-notice-actions .btn { flex: 1; }
 
 .section-block {
   background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);

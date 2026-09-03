@@ -47,23 +47,34 @@ function isMobileDevice() {
   return window.matchMedia && window.matchMedia('(max-width: 767px)').matches;
 }
 function showMobileToolNotice(toolName) {
-  var host = document.getElementById('view-tools');
-  if (!host) return;
   var existing = document.getElementById('mobile-tool-notice');
   if (existing) existing.remove();
-  var notice = document.createElement('div');
-  notice.id = 'mobile-tool-notice';
-  notice.className = 'mobile-tool-notice';
-  notice.innerHTML =
-    '<div class="mobile-tool-notice-ico">&#x1F4F1;</div>' +
-    '<div class="mobile-tool-notice-body">' +
-      '<b>' + toolName + ' is available on desktop and tablet</b>' +
-      '<p>This tool needs a larger screen to work properly. Open RA10 on a computer or tablet to use it.</p>' +
-    '</div>' +
-    '<button class="btn" type="button" data-goto="tools">Back to tools</button>';
-  host.appendChild(notice);
-  notice.querySelector('[data-goto="tools"]').addEventListener('click', function () { switchTab('tools'); });
-  notice.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  var overlay = document.createElement('div');
+  overlay.id = 'mobile-tool-notice';
+  overlay.className = 'mobile-tool-notice-overlay';
+  overlay.setAttribute('role', 'dialog');
+  overlay.setAttribute('aria-modal', 'true');
+  overlay.setAttribute('aria-label', toolName + ' not available on mobile');
+  overlay.innerHTML =
+    '<div class="mobile-tool-notice">' +
+      '<div class="mobile-tool-notice-ico">&#x1F4F1;</div>' +
+      '<div class="mobile-tool-notice-body">' +
+        '<b>' + toolName + ' is available on desktop and tablet</b>' +
+        '<p>This tool needs a larger screen to work properly. Open RA10 on a computer or tablet to use it.</p>' +
+      '</div>' +
+      '<div class="mobile-tool-notice-actions">' +
+        '<button class="btn" type="button" data-goto="tools">Back to tools</button>' +
+        '<button class="btn ghost" type="button" data-close="1">Close</button>' +
+      '</div>' +
+    '</div>';
+  document.body.appendChild(overlay);
+  function close() { overlay.remove(); }
+  overlay.querySelector('[data-goto="tools"]').addEventListener('click', function () { close(); switchTab('tools'); });
+  overlay.querySelector('[data-close="1"]').addEventListener('click', close);
+  overlay.addEventListener('click', function (e) { if (e.target === overlay) close(); });
+  document.addEventListener('keydown', function esc(e) {
+    if (e.key === 'Escape') { document.removeEventListener('keydown', esc); close(); }
+  });
 }
 // Intercept the desktop-only tools before they open.
 document.addEventListener('click', function (e) {
