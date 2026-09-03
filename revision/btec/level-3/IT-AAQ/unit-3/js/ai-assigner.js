@@ -63,12 +63,12 @@
     var s = size || 18;
     return '<svg class="ai-ico-svg" width="' + s + '" height="' + s + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2"/><path d="M9 13l2 2 4-4"/></svg>';
   }
-  // Hand-drawn style arrow pointing down at the mode button.
+  // Hand-drawn style arrow pointing left at the mode button.
   function modeHintArrowSvg(size) {
     var s = size || 26;
     return '<svg class="ai-mode-hint-arrow-svg" width="' + s + '" height="' + s + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
-      '<path d="M5 4c6 1 10 5 12 12"/>' +
-      '<path d="M13 12l4 4 1-6"/>' +
+      '<path d="M20 4c-2 6-6 10-12 12"/>' +
+      '<path d="M12 12l-4 4 6 1"/>' +
       '</svg>';
   }
 
@@ -277,20 +277,23 @@
           '<div class="ai-file-chip hidden" id="ai-file-chip"><span id="ai-file-name"></span><button type="button" id="ai-file-remove" aria-label="Remove">\u2715</button></div>' +
           '<div class="ai-examiner-actions"><button class="btn primary" id="ai-mark-btn">Examine my work<span class="ra10-cost-label">8 credits</span></button></div>' +
         '</div>' +
-        '<div class="ai-input-row">' +
+        '<div class="ai-mode-bar">' +
+          '<button class="ai-mode-btn" id="ai-mode-btn" title="Switch mode (Chat / Hints / Examiner)">' + cpuSvg(20) + '</button>' +
+          '<span class="ai-mode-label" id="ai-mode-label">Chat</span>' +
+          '<div class="ai-mode-hint hidden" id="ai-mode-hint">' +
+            '<span class="ai-mode-hint-arrow">' + modeHintArrowSvg(26) + '</span>' +
+            '<span class="ai-mode-hint-text">Tap to change the mode</span>' +
+            '<button class="ai-mode-hint-close" id="ai-mode-hint-close" type="button" aria-label="Dismiss">\u2715</button>' +
+          '</div>' +
+        '</div>' +
+        '<div class="ai-input-row" id="ai-input-row">' +
           '<button class="ai-plus" id="ai-plus" title="Upload or new chat">' + plusSvg(20) + '</button>' +
           '<div class="ai-plus-menu hidden" id="ai-plus-menu">' +
             '<button data-plus="upload">' + uploadSvg(18) + ' Upload document</button>' +
             '<button data-plus="newchat">' + newchatSvg(18) + ' New chat</button>' +
           '</div>' +
           '<textarea id="ai-input" placeholder="Ask AI Assigner\u2026" rows="1"></textarea>' +
-          '<button class="ai-mode-btn" id="ai-mode-btn" title="Switch mode (Chat / Hints / Examiner)">' + cpuSvg(20) + '</button>' +
           '<button class="ai-send" id="ai-send" title="Send">' + icon(0x2191) + '</button>' +
-          '<div class="ai-mode-hint hidden" id="ai-mode-hint">' +
-            '<span class="ai-mode-hint-arrow">' + modeHintArrowSvg(26) + '</span>' +
-            '<span class="ai-mode-hint-text">Tap to change the mode</span>' +
-            '<button class="ai-mode-hint-close" id="ai-mode-hint-close" type="button" aria-label="Dismiss">\u2715</button>' +
-          '</div>' +
         '</div>' +
         '<div class="ai-disclaimer">AI Assigner can make mistakes, so double-check the spec. It coaches you \u2014 it never writes your work for you.</div>' +
       '</div>' +
@@ -301,10 +304,16 @@
       mode = next;
       var exam = document.getElementById('ai-examiner');
       if (exam) exam.classList.toggle('hidden', mode !== 'examiner');
+      // In Examiner mode the examiner panel is the single input, so hide the
+      // chat composer row to avoid two competing send buttons / text boxes.
+      var inputRow = document.getElementById('ai-input-row');
+      if (inputRow) inputRow.classList.toggle('hidden', mode === 'examiner');
       var input = document.getElementById('ai-input');
       if (input) input.placeholder = mode === 'hints' ? 'Describe what you\u2019re stuck on and I\u2019ll coach you\u2026' : mode === 'examiner' ? 'Add a note about your work before examining\u2026' : 'Ask AI Assigner\u2026';
       var btn = document.getElementById('ai-mode-btn');
       if (btn) btn.setAttribute('data-mode', mode);
+      var label = document.getElementById('ai-mode-label');
+      if (label) label.textContent = mode.charAt(0).toUpperCase() + mode.slice(1);
     }
 
     // CPU mode button opens a small popup with the three modes

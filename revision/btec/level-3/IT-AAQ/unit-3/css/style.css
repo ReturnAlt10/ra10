@@ -1532,6 +1532,11 @@ body.pv-open { overflow: hidden !important; }
   box-shadow: var(--shadow);
 }
 .ai-input-row textarea:focus { outline: none; border-color: var(--accent); }
+.ai-mode-bar {
+  position: relative; display: flex; align-items: center; gap: 10px;
+  padding: 8px 16px 2px; max-width: 820px; margin: 0 auto; width: 100%;
+}
+.ai-mode-label { font-size: .8rem; font-weight: 800; color: var(--ink-2); text-transform: capitalize; }
 .ai-mode-btn {
   width: 42px; height: 42px; border: 1px solid var(--line-2); border-radius: 50%;
   background: var(--surface); color: var(--accent); cursor: pointer; flex-shrink: 0;
@@ -1541,7 +1546,7 @@ body.pv-open { overflow: hidden !important; }
 .ai-mode-btn[data-mode="hints"] { color: var(--part2); }
 .ai-mode-btn[data-mode="examiner"] { color: var(--part1); }
 .ai-mode-menu {
-  position: absolute; bottom: 58px; right: 60px; background: var(--surface);
+  position: absolute; bottom: 52px; left: 16px; background: var(--surface);
   border: 1px solid var(--line); border-radius: 12px; box-shadow: var(--shadow-lg);
   padding: 6px; z-index: 30; min-width: 170px;
 }
@@ -1553,18 +1558,18 @@ body.pv-open { overflow: hidden !important; }
 
 /* "Tap to change mode" hint with a drawn arrow */
 .ai-mode-hint {
-  position: absolute; bottom: 50px; right: 52px; z-index: 25;
+  position: absolute; bottom: 46px; left: 52px; z-index: 25;
   display: flex; align-items: center; gap: 6px;
   background: var(--surface); border: 1px solid var(--line-2); border-radius: 999px;
   box-shadow: var(--shadow-lg); padding: 6px 8px 6px 10px; max-width: 240px;
 }
-.ai-mode-hint-arrow { color: var(--accent); display: inline-flex; line-height: 0; transform: rotate(90deg); order: 3; }
+.ai-mode-hint-arrow { color: var(--accent); display: inline-flex; line-height: 0; order: 1; }
 .ai-mode-hint-arrow-svg { display: block; }
-.ai-mode-hint-text { font-size: .78rem; font-weight: 700; color: var(--ink); white-space: nowrap; order: 1; }
+.ai-mode-hint-text { font-size: .78rem; font-weight: 700; color: var(--ink); white-space: nowrap; order: 2; }
 .ai-mode-hint-close {
   border: none; background: var(--surface-2); color: var(--ink-2);
   width: 20px; height: 20px; border-radius: 50%; font-size: .66rem; cursor: pointer;
-  display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto; order: 2;
+  display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto; order: 3;
 }
 .ai-mode-hint-close:hover { background: var(--accent-2); color: var(--accent-ink); }
 
