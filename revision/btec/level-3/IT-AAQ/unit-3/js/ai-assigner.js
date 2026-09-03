@@ -12,9 +12,26 @@
 
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]; }); }
   function icon(cp) { return String.fromCodePoint(cp); }
-  function sparkleSvg(size) {
-    var s = size || 22;
-    return '<svg class="ai-sparkle-svg" width="' + s + '" height="' + s + '" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2c.7 4.9 4.1 8.3 9 9-4.9.7-8.3 4.1-9 9-.7-4.9-4.1-8.3-9-9 4.9-.7 8.3-4.1 9-9z"/></svg>';
+  // Robot-head AI logo (distinct from Gemini's sparkle).
+  function aiLogoSvg(size) {
+    var s = size || 24;
+    return '<svg class="ai-logo-svg" width="' + s + '" height="' + s + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+      '<rect x="4" y="7" width="16" height="12" rx="3"/>' +
+      '<path d="M12 7V4"/><circle cx="12" cy="3" r="1"/>' +
+      '<circle cx="9" cy="13" r="1.4" fill="currentColor" stroke="none"/>' +
+      '<circle cx="15" cy="13" r="1.4" fill="currentColor" stroke="none"/>' +
+      '<path d="M9 17h6"/>' +
+      '<path d="M2 11v4M22 11v4"/>' +
+      '</svg>';
+  }
+  // CPU / chip icon for the mode selector button.
+  function cpuSvg(size) {
+    var s = size || 20;
+    return '<svg class="ai-cpu-svg" width="' + s + '" height="' + s + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+      '<rect x="6" y="6" width="12" height="12" rx="2"/>' +
+      '<rect x="10" y="10" width="4" height="4"/>' +
+      '<path d="M9 2v2M15 2v2M9 20v2M15 20v2M2 9h2M2 15h2M20 9h2M20 15h2"/>' +
+      '</svg>';
   }
 
   var STATUSES = [
@@ -157,9 +174,9 @@
     if (!host) return;
     host.innerHTML =
       '<div class="ai-client">' +
-      // Gemini-style header
+      // Header with robot AI logo
       '<header class="ai-head">' +
-        '<div class="ai-head-brand"><span class="ai-sparkle">' + sparkleSvg(24) + '</span><span class="ai-brand-name">AI Assigner</span></div>' +
+        '<div class="ai-head-brand"><span class="ai-logo">' + aiLogoSvg(24) + '</span><span class="ai-brand-name">AI Assigner</span></div>' +
         '<button class="ai-newchat" id="ai-newchat" title="Start a new chat">' + icon(0x2B) + ' New chat</button>' +
       '</header>' +
       '<div class="ai-msgs" id="ai-msgs"></div>' +
@@ -177,31 +194,53 @@
           '<div class="ai-examiner-actions"><button class="btn primary" id="ai-mark-btn">Examine my work<span class="ra10-cost-label">8 credits</span></button></div>' +
         '</div>' +
         '<div class="ai-input-row">' +
-          '<button class="ai-plus" id="ai-plus" title="Options">' + icon(0x2B) + '</button>' +
+          '<button class="ai-plus" id="ai-plus" title="Upload or new chat">' + icon(0x2B) + '</button>' +
           '<div class="ai-plus-menu hidden" id="ai-plus-menu">' +
-            '<div class="ai-plus-menu-label">Mode</div>' +
-            '<button data-plus="chat">' + icon(0x1F4AC) + ' Chat</button>' +
-            '<button data-plus="hints">' + icon(0x1F4A1) + ' Hints</button>' +
-            '<button data-plus="examiner">' + icon(0x1F4CB) + ' Examiner</button>' +
-            '<div class="ai-plus-menu-sep"></div>' +
             '<button data-plus="upload">' + icon(0x1F4C2) + ' Upload document</button>' +
             '<button data-plus="newchat">' + icon(0x2795) + ' New chat</button>' +
           '</div>' +
           '<textarea id="ai-input" placeholder="Ask AI Assigner\u2026" rows="1"></textarea>' +
+          '<button class="ai-mode-btn" id="ai-mode-btn" title="Switch mode (Chat / Hints / Examiner)">' + cpuSvg(20) + '</button>' +
           '<button class="ai-send" id="ai-send" title="Send">' + icon(0x2191) + '</button>' +
         '</div>' +
         '<div class="ai-disclaimer">AI Assigner can make mistakes, so double-check the spec. It coaches you \u2014 it never writes your work for you.</div>' +
       '</div>' +
       '</div>';
 
-    // Mode switching helper (modes live in the + menu)
+    // Mode switching via the CPU button (Chat / Hints / Examiner)
     function setMode(next) {
       mode = next;
       var exam = document.getElementById('ai-examiner');
       if (exam) exam.classList.toggle('hidden', mode !== 'examiner');
       var input = document.getElementById('ai-input');
       if (input) input.placeholder = mode === 'hints' ? 'Describe what you\u2019re stuck on and I\u2019ll coach you\u2026' : mode === 'examiner' ? 'Add a note about your work before examining\u2026' : 'Ask AI Assigner\u2026';
+      var btn = document.getElementById('ai-mode-btn');
+      if (btn) btn.setAttribute('data-mode', mode);
     }
+
+    // CPU mode button opens a small popup with the three modes
+    var modeBtn = document.getElementById('ai-mode-btn');
+    var modeMenu = document.createElement('div');
+    modeMenu.className = 'ai-mode-menu hidden';
+    modeMenu.id = 'ai-mode-menu';
+    modeMenu.innerHTML =
+      '<button data-mode="chat">' + icon(0x1F4AC) + ' Chat</button>' +
+      '<button data-mode="hints">' + icon(0x1F4A1) + ' Hints</button>' +
+      '<button data-mode="examiner">' + icon(0x1F4CB) + ' Examiner</button>';
+    modeBtn.parentNode.insertBefore(modeMenu, modeBtn.nextSibling);
+    modeBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      modeMenu.classList.toggle('hidden');
+    });
+    modeMenu.querySelectorAll('button').forEach(function (b) {
+      b.addEventListener('click', function () {
+        modeMenu.classList.add('hidden');
+        setMode(b.dataset.mode);
+      });
+    });
+    document.addEventListener('click', function (e) {
+      if (!modeMenu.classList.contains('hidden') && !e.target.closest('#ai-mode-btn') && !e.target.closest('#ai-mode-menu')) modeMenu.classList.add('hidden');
+    });
 
     // Send
     document.getElementById('ai-send').addEventListener('click', send);
@@ -214,7 +253,7 @@
       input.style.height = Math.min(input.scrollHeight, 160) + 'px';
     });
 
-    // + button
+    // + button (upload / new chat only)
     document.getElementById('ai-plus').addEventListener('click', function (e) {
       e.stopPropagation();
       document.getElementById('ai-plus-menu').classList.toggle('hidden');
@@ -229,7 +268,6 @@
         var action = b.dataset.plus;
         if (action === 'upload') document.getElementById('ai-file-input').click();
         else if (action === 'newchat') newChat();
-        else if (action === 'chat' || action === 'hints' || action === 'examiner') setMode(action);
       });
     });
 
@@ -302,7 +340,7 @@
     if (role === 'bot' && !html) {
       var avatar = document.createElement('span');
       avatar.className = 'ai-avatar';
-      avatar.innerHTML = sparkleSvg(18);
+      avatar.innerHTML = aiLogoSvg(18);
       div.insertBefore(avatar, div.firstChild);
       var copyBtn = document.createElement('button');
       copyBtn.className = 'ai-msg-copy';
@@ -327,7 +365,7 @@
     if (!host) return null;
     var div = document.createElement('div');
     div.className = 'ai-msg bot ai-thinking';
-    div.innerHTML = '<span class="ai-avatar ai-avatar-small">' + sparkleSvg(16) + '</span><span class="ai-thinking-status">' + STATUSES[0] + '</span><span class="ai-thinking-dots"></span>';
+    div.innerHTML = '<span class="ai-avatar ai-avatar-small">' + aiLogoSvg(16) + '</span><span class="ai-thinking-status">' + STATUSES[0] + '</span><span class="ai-thinking-dots"></span>';
     host.appendChild(div);
     host.scrollTop = host.scrollHeight;
     var i = 0;
