@@ -276,6 +276,12 @@
           '</div>' +
           '<div class="ai-file-chip hidden" id="ai-file-chip"><span id="ai-file-name"></span><button type="button" id="ai-file-remove" aria-label="Remove">\u2715</button></div>' +
           '<div class="ai-examiner-actions"><button class="btn primary" id="ai-mark-btn">Examine my work<span class="ra10-cost-label">8 credits</span></button></div>' +
+          '<div class="ai-examiner-min hidden" id="ai-examiner-min">' +
+            '<span class="ai-examiner-min-ico">' + icon(0x1F4C4) + '</span>' +
+            '<span class="ai-examiner-min-name" id="ai-examiner-min-name">Work loaded</span>' +
+            '<button class="btn primary" id="ai-mark-btn-min">Examine</button>' +
+            '<button class="btn" id="ai-examiner-expand">Edit work</button>' +
+          '</div>' +
         '</div>' +
         '<div class="ai-mode-bar">' +
           '<button class="ai-mode-btn" id="ai-mode-btn" title="Switch mode (Chat / Hints / Examiner)">' + cpuSvg(20) + '</button>' +
@@ -314,6 +320,9 @@
       if (btn) btn.setAttribute('data-mode', mode);
       var label = document.getElementById('ai-mode-label');
       if (label) label.textContent = mode.charAt(0).toUpperCase() + mode.slice(1);
+      // Hide the "Try these prompts" suggestions in Examiner mode (no chat box).
+      var sug = document.getElementById('ai-suggestions');
+      if (sug && mode === 'examiner') sug.classList.add('hidden');
     }
 
     // CPU mode button opens a small popup with the three modes
@@ -363,6 +372,9 @@
     input.addEventListener('input', function () {
       input.style.height = 'auto';
       input.style.height = Math.min(input.scrollHeight, 160) + 'px';
+      // Once the user starts typing, hide the "Try these prompts" suggestions.
+      var sug = document.getElementById('ai-suggestions');
+      if (sug && !sug.classList.contains('hidden')) sug.classList.add('hidden');
     });
 
     // + button (upload / new chat only)
@@ -401,7 +413,20 @@
       document.getElementById('ai-file-chip').classList.add('hidden');
       document.getElementById('ai-examiner-text').value = '';
       fileInput.value = '';
+      minimizeExaminer(false);
     });
+
+    // Examiner minimize / expand: after work is loaded, collapse the big
+    // upload + textarea panel into a compact bar so the chat stays roomy.
+    function minimizeExaminer(min) {
+      var exam = document.getElementById('ai-examiner');
+      if (!exam) return;
+      exam.classList.toggle('min', !!min);
+      var minBar = document.getElementById('ai-examiner-min');
+      if (minBar) minBar.classList.toggle('hidden', !min);
+    }
+    document.getElementById('ai-mark-btn-min').addEventListener('click', doExamine);
+    document.getElementById('ai-examiner-expand').addEventListener('click', function () { minimizeExaminer(false); });
 
     // Welcome
     if (!chatHistory.length) {
@@ -608,6 +633,10 @@
       if (text.length > 12000) text = text.slice(0, 12000) + '\n\u2026[truncated]';
       document.getElementById('ai-examiner-text').value = text;
       chipName.textContent = 'Loaded ' + file.name;
+      // Collapse the big panel into a compact bar so the chat stays roomy.
+      var minName = document.getElementById('ai-examiner-min-name');
+      if (minName) minName.textContent = file.name;
+      minimizeExaminer(true);
     } catch (e) {
       chipName.textContent = e && e.message ? e.message : 'Could not read that file.';
     } finally {
