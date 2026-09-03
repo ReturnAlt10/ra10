@@ -89,8 +89,7 @@
 </head>
 <body>
 
-<nav class="navbar">
-  <div class="navbar-content">
+  <header class="topbar">
     <a class="unit-brand" href="/index.html#/" target="_top" aria-label="RA10 home">
       <img src="/logo.png" alt="RA10">
       <span>RA10</span>
@@ -104,26 +103,25 @@
       <a class="site-unit-link" href="/index.html#/exams" target="_top"><svg class="nu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13"/><path d="M8 12h13"/><path d="M8 18h13"/><path d="M3 6h.01M3 12h.01M3 18h.01"/></svg>Exams</a>
       <a class="site-unit-link" href="/index.html#/leaderboard" target="_top"><svg class="nu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v4a5 5 0 0 1-10 0z"/><path d="M7 6H4a2 2 0 0 0 2 3M17 6h3a2 2 0 0 1-2 3"/></svg>Leaderboard</a>
     </div>
-    <ul class="navbar-nav">
-      <li><a href="#" class="nav-link active" data-tab="home" onclick="event.preventDefault(); switchTab('home');">Dashboard</a></li>
-      <li><a href="#" class="nav-link" data-tab="practice" onclick="event.preventDefault(); switchTab('practice');">Practice</a></li>
-      <li><a href="#" class="nav-link" data-tab="quiz" onclick="event.preventDefault(); switchTab('quiz');">Quiz</a></li>
-      <li><a href="#" class="nav-link" data-tab="flash" onclick="event.preventDefault(); switchTab('flash');">Flashcards</a></li>
-      <li><a href="#" class="nav-link" data-tab="browse" onclick="event.preventDefault(); switchTab('browse');">All Questions</a></li>
-      <li><a href="#" class="nav-link" data-tab="guide" onclick="event.preventDefault(); switchTab('guide');">Guide</a></li>
-    </ul>
-    <div id="unit2-credit-chip" style="margin-left:auto;display:flex;align-items:center;"></div>
-    <div style="display:flex;align-items:center;gap:8px;">
-      <button class="unit-avatar-btn" type="button" onclick="openUnitNews()" aria-label="Open news" title="News" style="background:var(--surface);color:var(--ink-2);border:1px solid var(--line-2);">
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 8h10"/><path d="M7 12h10"/><path d="M7 16h6"/></svg>
-      </button>
-      <button class="unit-avatar-btn" type="button" onclick="toggleUnitTheme()" aria-label="Toggle theme" title="Light or dark mode" style="background:var(--surface);color:var(--ink-2);border:1px solid var(--line-2);">
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-      </button>
-      <button id="unit-account-avatar" class="unit-avatar-btn" type="button" onclick="if(window.top&&typeof window.top.openAccountOrSignIn==='function'){window.top.openAccountOrSignIn()}else{window.top.location.hash='/account'}" aria-label="Open account" title="Account">?</button>
-    </div>
+  <nav class="tabs">
+    <button class="tab active" data-tab="home" data-tip="Overview &amp; quick links">Dashboard</button>
+    <button class="tab" data-tab="practice" data-tip="Practise &amp; browse exam questions">Practice</button>
+    <button class="tab" data-tab="quiz" data-tip="Auto-marked multiple-choice quiz">Quiz</button>
+    <button class="tab" data-tab="flash" data-tip="Flip &amp; track flashcards">Flashcards</button>
+    <button class="tab" data-tab="browse" data-tip="Browse all questions">All Questions</button>
+    <button class="tab" data-tab="guide" data-tip="Full revision guide">Guide</button>
+  </nav>
+  <div id="unit2-credit-chip" style="margin-left:auto;display:flex;align-items:center;"></div>
+  <div style="display:flex;align-items:center;gap:8px;">
+    <button class="unit-avatar-btn" type="button" onclick="openUnitNews()" aria-label="Open news" title="News" style="background:var(--surface);color:var(--ink-2);border:1px solid var(--line-2);">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 8h10"/><path d="M7 12h10"/><path d="M7 16h6"/></svg>
+    </button>
+    <button class="unit-avatar-btn" type="button" onclick="toggleUnitTheme()" aria-label="Toggle theme" title="Light or dark mode" style="background:var(--surface);color:var(--ink-2);border:1px solid var(--line-2);">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+    <button id="unit-account-avatar" class="unit-avatar-btn" type="button" onclick="if(window.top&&typeof window.top.openAccountOrSignIn==='function'){window.top.openAccountOrSignIn()}else{window.top.location.hash='/account'}" aria-label="Open account" title="Account">?</button>
   </div>
-</nav>
+</header>
 <div id="ra10-subject-banner" class="ra10-subject-banner" style="display:none"></div>
 
 <div class="page-content">
@@ -136,7 +134,7 @@
 
 <script src="js/spec.js"></script>
 <script src="js/guide.js"></script>
-<script src="js/app.js?v=20260921"></script>
+<script src="js/app.js?v=20260924"></script>
 
 <script>
 // ====== RA10 CREDIT SYSTEM (mirrors IT Level 3 Unit 1) ======

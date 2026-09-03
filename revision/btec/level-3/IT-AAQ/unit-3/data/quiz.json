@@ -1,14 +1,170 @@
-[
-  { "id": "Q01", "aim": "A", "topic": "Purpose", "q": "A restaurant chain wants a site where customers can book tables and order food for collection. What is the site's purpose?", "options": ["eCommerce and promoting services", "Providing entertainment", "Only providing information", "Cross-browser compatibility"], "answer": 0, "why": "Taking orders and bookings makes it eCommerce plus promotion — serving a clear business purpose." },
-  { "id": "Q02", "aim": "A", "topic": "Layout", "q": "Which layout principle means putting important content where the eye lands first?", "options": ["Visual hierarchy", "Parallax scrolling", "Border radius", "CSS grid"], "answer": 0, "why": "Visual hierarchy arranges elements by importance so users notice key content (headlines, CTAs) first." },
-  { "id": "Q03", "aim": "A", "topic": "Navigation", "q": "When is a hamburger menu most appropriate?", "options": ["Mobile-first designs where space is limited", "Desktop banking sites", "When the site has one page", "Never"], "answer": 0, "why": "Hamburger menus hide navigation behind an icon — ideal on small screens where space is tight." },
-  { "id": "Q04", "aim": "A", "topic": "UX", "q": "Which colour pair would NOT be acceptable for WCAG colour contrast?", "options": ["Light grey text on white", "Navy text on cream", "Black text on white", "Dark green on yellow"], "answer": 0, "why": "Light grey on white fails contrast guidelines — poor contrast makes text unreadable for many users. Check contrast with tools like WebAIM." },
-  { "id": "Q05", "aim": "A", "topic": "Audience", "q": "A client brief targets 'teenagers interested in gaming'. Which is the correct demographic approach?", "options": ["Design for 13-19 year olds with personas for casual and hardcore gamers", "Assume every user is the same age", "Design only for adults", "Ignore the audience"], "answer": 0, "why": "Demographics plus personas let you design content, tone and visuals that actually appeal to the target users." },
-  { "id": "Q06", "aim": "B", "topic": "Wireframes", "q": "Which order should you follow when planning a new site?", "options": ["Requirements → sitemap → wireframes → visual design → build → test", "Visual design → code → sitemap", "Build → test → plan", "Wireframes → requirements → design"], "answer": 0, "why": "Understand requirements first, then structure (sitemap), then layout (wireframes), then style (visual design), then build and test." },
-  { "id": "Q07", "aim": "B", "topic": "Assets", "q": "You created a logo in Illustrator. Which format preserves it as a scalable vector?", "options": ["SVG", "MP4", "WAV", "JPG"], "answer": 0, "why": "SVG is a vector format — it scales to any size without losing quality, perfect for logos and icons." },
-  { "id": "Q08", "aim": "C", "topic": "HTML", "q": "Which HTML tag creates an internal link to another page of the same site?", "options": ["<a href=\"about.html\">About</a>", "<link href=\"about.html\">", "<nav>About</nav>", "<img src=\"about.html\">"], "answer": 0, "why": "Internal links use <a> with a relative href to another file in the site (about.html). <link> is for stylesheets." },
-  { "id": "Q09", "aim": "C", "topic": "CSS", "q": "Which CSS rule makes a website adapt to a small phone screen?", "options": ["@media (max-width: 600px) { ... }", "@import phones", "@responsive true", "@screen small"], "answer": 0, "why": "Media queries apply specific styles when the viewport matches, e.g. max-width: 600px for phones." },
-  { "id": "Q10", "aim": "C", "topic": "Testing", "q": "A tester clicks every nav link and records which work. This is:", "options": ["Functionality testing", "Usability testing", "SEO auditing", "Accessibility auditing"], "answer": 0, "why": "Functionality testing verifies features work — links, buttons, forms. Usability testing asks real users about the experience." },
-  { "id": "Q11", "aim": "C", "topic": "Publishing", "q": "Which is an example of publishing a website?", "options": ["Uploading files to a web host so they are live on the internet", "Saving files to a USB stick", "Printing the code", "Screenshotting the homepage"], "answer": 0, "why": "Publishing means making the site publicly accessible — uploading to hosting (e.g. GitHub Pages, Netlify) with a domain." },
-  { "id": "Q12", "aim": "B", "topic": "Design review", "q": "After designing wireframes, why should you review them against the client brief?", "options": ["To check they meet client requirements and improve the designs", "Because the validator requires it", "To make them more complicated", "To add more colours"], "answer": 0, "why": "The spec requires reviewing fitness for purpose — checking quality, user experience and that the designs meet the client's requirements, then improving." }
+﻿[
+  {
+    "id": "Q01",
+    "aim": "A",
+    "topic": "Purpose",
+    "q": "A restaurant chain wants a site where customers can book tables and order food for collection. What is the site's purpose?",
+    "options": [
+      "Only providing information",
+      "Providing entertainment",
+      "eCommerce and promoting services",
+      "Cross-browser compatibility"
+    ],
+    "answer": 2,
+    "why": "Taking orders and bookings makes it eCommerce plus promotion — serving a clear business purpose."
+  },
+  {
+    "id": "Q02",
+    "aim": "A",
+    "topic": "Layout",
+    "q": "Which layout principle means putting important content where the eye lands first?",
+    "options": [
+      "Parallax scrolling",
+      "Border radius",
+      "Visual hierarchy",
+      "CSS grid"
+    ],
+    "answer": 2,
+    "why": "Visual hierarchy arranges elements by importance so users notice key content (headlines, CTAs) first."
+  },
+  {
+    "id": "Q03",
+    "aim": "A",
+    "topic": "Navigation",
+    "q": "When is a hamburger menu most appropriate?",
+    "options": [
+      "Mobile-first designs where space is limited",
+      "When the site has one page",
+      "Desktop banking sites",
+      "Never"
+    ],
+    "answer": 0,
+    "why": "Hamburger menus hide navigation behind an icon — ideal on small screens where space is tight."
+  },
+  {
+    "id": "Q04",
+    "aim": "A",
+    "topic": "UX",
+    "q": "Which colour pair would NOT be acceptable for WCAG colour contrast?",
+    "options": [
+      "Dark green on yellow",
+      "Black text on white",
+      "Navy text on cream",
+      "Light grey text on white"
+    ],
+    "answer": 3,
+    "why": "Light grey on white fails contrast guidelines — poor contrast makes text unreadable for many users. Check contrast with tools like WebAIM."
+  },
+  {
+    "id": "Q05",
+    "aim": "A",
+    "topic": "Audience",
+    "q": "A client brief targets 'teenagers interested in gaming'. Which is the correct demographic approach?",
+    "options": [
+      "Design only for adults",
+      "Ignore the audience",
+      "Assume every user is the same age",
+      "Design for 13-19 year olds with personas for casual and hardcore gamers"
+    ],
+    "answer": 3,
+    "why": "Demographics plus personas let you design content, tone and visuals that actually appeal to the target users."
+  },
+  {
+    "id": "Q06",
+    "aim": "B",
+    "topic": "Wireframes",
+    "q": "Which order should you follow when planning a new site?",
+    "options": [
+      "Build → test → plan",
+      "Wireframes → requirements → design",
+      "Visual design → code → sitemap",
+      "Requirements → sitemap → wireframes → visual design → build → test"
+    ],
+    "answer": 3,
+    "why": "Understand requirements first, then structure (sitemap), then layout (wireframes), then style (visual design), then build and test."
+  },
+  {
+    "id": "Q07",
+    "aim": "B",
+    "topic": "Assets",
+    "q": "You created a logo in Illustrator. Which format preserves it as a scalable vector?",
+    "options": [
+      "JPG",
+      "MP4",
+      "WAV",
+      "SVG"
+    ],
+    "answer": 3,
+    "why": "SVG is a vector format — it scales to any size without losing quality, perfect for logos and icons."
+  },
+  {
+    "id": "Q08",
+    "aim": "C",
+    "topic": "HTML",
+    "q": "Which HTML tag creates an internal link to another page of the same site?",
+    "options": [
+      "<link href=\"about.html\">",
+      "<img src=\"about.html\">",
+      "<nav>About</nav>",
+      "<a href=\"about.html\">About</a>"
+    ],
+    "answer": 3,
+    "why": "Internal links use <a> with a relative href to another file in the site (about.html). <link> is for stylesheets."
+  },
+  {
+    "id": "Q09",
+    "aim": "C",
+    "topic": "CSS",
+    "q": "Which CSS rule makes a website adapt to a small phone screen?",
+    "options": [
+      "@import phones",
+      "@screen small",
+      "@responsive true",
+      "@media (max-width: 600px) { ... }"
+    ],
+    "answer": 3,
+    "why": "Media queries apply specific styles when the viewport matches, e.g. max-width: 600px for phones."
+  },
+  {
+    "id": "Q10",
+    "aim": "C",
+    "topic": "Testing",
+    "q": "A tester clicks every nav link and records which work. This is:",
+    "options": [
+      "Usability testing",
+      "Accessibility auditing",
+      "SEO auditing",
+      "Functionality testing"
+    ],
+    "answer": 3,
+    "why": "Functionality testing verifies features work — links, buttons, forms. Usability testing asks real users about the experience."
+  },
+  {
+    "id": "Q11",
+    "aim": "C",
+    "topic": "Publishing",
+    "q": "Which is an example of publishing a website?",
+    "options": [
+      "Screenshotting the homepage",
+      "Saving files to a USB stick",
+      "Printing the code",
+      "Uploading files to a web host so they are live on the internet"
+    ],
+    "answer": 3,
+    "why": "Publishing means making the site publicly accessible — uploading to hosting (e.g. GitHub Pages, Netlify) with a domain."
+  },
+  {
+    "id": "Q12",
+    "aim": "B",
+    "topic": "Design review",
+    "q": "After designing wireframes, why should you review them against the client brief?",
+    "options": [
+      "To make them more complicated",
+      "Because the validator requires it",
+      "To add more colours",
+      "To check they meet client requirements and improve the designs"
+    ],
+    "answer": 3,
+    "why": "The spec requires reviewing fitness for purpose — checking quality, user experience and that the designs meet the client's requirements, then improving."
+  }
 ]

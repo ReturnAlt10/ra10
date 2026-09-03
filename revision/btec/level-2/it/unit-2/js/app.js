@@ -1635,8 +1635,8 @@ function formatGuideContent(text) {
 // ====== NAVIGATION ======
 function switchTab(tab) {
   // Update nav links
-  $$('.nav-link').forEach(l => l.classList.remove('active'));
-  const activeLink = $$(`.nav-link`).find(l => l.dataset.tab === tab);
+  $$('.tab').forEach(l => l.classList.remove('active'));
+  const activeLink = $$(`.tab`).find(l => l.dataset.tab === tab);
   if (activeLink) activeLink.classList.add('active');
   
   switch(tab) {
@@ -1672,7 +1672,7 @@ async function init() {
 }
 
 function setupNavigation() {
-  $$('.nav-link').forEach(link => {
+  $$('.tab').forEach(link => {
     link.addEventListener('click', function(e) {
       e.preventDefault();
       const tab = this.dataset.tab;

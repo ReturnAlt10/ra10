@@ -1,1570 +1,1570 @@
 ﻿[
     {
-        "id":  "MC01",
-        "aim":  "A",
-        "topic":  "A1 Purpose",
-        "q":  "Which of these is a common purpose of a website?",
-        "options":  [
-                        "eCommerce and selling products",
-                        "All of these",
-                        "Providing information",
-                        "Promoting products or services"
-                    ],
-        "answer":  1,
-        "why":  "Websites commonly exist for eCommerce, to provide information, to promote products/services, or for entertainment â€” all are valid purposes."
-    },
-    {
-        "id":  "MC02",
-        "aim":  "A",
-        "topic":  "A1 Audience",
-        "q":  "What is a user persona?",
-        "options":  [
-                        "A real customer\u0027s login details",
-                        "A fictional profile representing a typical user",
-                        "A type of website security test",
-                        "A browser extension"
-                    ],
-        "answer":  1,
-        "why":  "A user persona is a made-up but realistic profile of a typical user â€” their age, goals, habits and frustrations â€” used to design for real people."
-    },
-    {
-        "id":  "MC03",
-        "aim":  "A",
-        "topic":  "A1 Layout",
-        "q":  "Which reading pattern do users most commonly follow on text-heavy websites?",
-        "options":  [
-                        "Z-shaped",
-                        "Circular",
-                        "F-shaped",
-                        "Diagonal"
-                    ],
-        "answer":  2,
-        "why":  "Eye-tracking shows users scan in an F-shape: horizontal lines across the top, then down the left edge. Put key info where eyes go first."
-    },
-    {
-        "id":  "MC04",
-        "aim":  "A",
-        "topic":  "A1 Layout",
-        "q":  "Which layout pattern is best suited to a simple homepage with a strong headline and a call to action?",
-        "options":  [
-                        "F-shaped pattern",
-                        "Z-shaped pattern",
-                        "Tabular grid",
-                        "None of these"
-                    ],
-        "answer":  1,
-        "why":  "The Z-pattern suits hero pages: the eye moves top-left, then top-right, then diagonally to the bottom-right where the call to action sits."
-    },
-    {
-        "id":  "MC05",
-        "aim":  "A",
-        "topic":  "A1 Navigation",
-        "q":  "What is a benefit of a fixed/sticky navigation bar?",
-        "options":  [
-                        "It makes the page load faster",
-                        "Navigation is always visible while scrolling",
-                        "It removes the need for a sitemap",
-                        "It automatically translates the page"
-                    ],
-        "answer":  1,
-        "why":  "A sticky nav stays visible as the user scrolls, so they can always find their way around without scrolling back to the top."
-    },
-    {
-        "id":  "MC06",
-        "aim":  "A",
-        "topic":  "A1 Design",
-        "q":  "Which describes \u0027visual hierarchy\u0027 in page design?",
-        "options":  [
-                        "Placing elements in order of importance so users notice key things first",
-                        "Making every element the same size",
-                        "Using only one font",
-                        "Listing content alphabetically"
-                    ],
-        "answer":  0,
-        "why":  "Visual hierarchy uses size, colour, spacing and position to guide the eye from the most to the least important content."
-    },
-    {
-        "id":  "MC07",
-        "aim":  "A",
-        "topic":  "A1 UX",
-        "q":  "Why is sufficient colour contrast between text and background important?",
-        "options":  [
-                        "It makes the site look more colourful",
-                        "It helps users with visual impairments read the content",
-                        "It reduces file size",
-                        "It is only for aesthetic appeal"
-                    ],
-        "answer":  1,
-        "why":  "Good contrast (WCAG recommends at least 4.5:1 for normal text) makes text readable for everyone, including users with low vision."
-    },
-    {
-        "id":  "MC08",
-        "aim":  "A",
-        "topic":  "A1 UX",
-        "q":  "Which of these is an accessibility feature?",
-        "options":  [
-                        "Keyboard-only navigation",
-                        "All of these",
-                        "Alt text on images",
-                        "Providing transcripts for video content"
-                    ],
-        "answer":  1,
-        "why":  "Accessibility includes keyboard navigation, alt text, transcripts and captions, breadcrumbs, customisable features and more."
-    },
-    {
-        "id":  "MC09",
-        "aim":  "A",
-        "topic":  "A1 Motion",
-        "q":  "What is a micro-interaction?",
-        "options":  [
-                        "A short feedback animation, like a button changing colour when clicked",
-                        "A requirement to enable JavaScript",
-                        "A type of malware",
-                        "A very small image file"
-                    ],
-        "answer":  0,
-        "why":  "Micro-interactions are small animations that give feedback â€” like a button press effect. Every use of motion should have a purpose."
-    },
-    {
-        "id":  "MC10",
-        "aim":  "A",
-        "topic":  "A1 Dynamic",
-        "q":  "What makes a website \u0027dynamic\u0027?",
-        "options":  [
-                        "It uses animated GIFs",
-                        "It customises the user experience or controls access to content, often using server-side processing",
-                        "It changes colours automatically each day",
-                        "It loads images on scroll"
-                    ],
-        "answer":  1,
-        "why":  "Dynamic sites serve customised experiences (recommendations, member areas) â€” usually powered by a server and database, not fixed static pages."
-    },
-    {
-        "id":  "MC11",
-        "aim":  "A",
-        "topic":  "A1 Compatibility",
-        "q":  "Why must a website be tested across different browsers and devices?",
-        "options":  [
-                        "Because browsers render HTML, CSS and JS with slight differences",
-                        "It is a legal requirement in the UK",
-                        "To increase the number of users",
-                        "To make file sizes smaller"
-                    ],
-        "answer":  0,
-        "why":  "Browsers (Chrome, Safari, Firefox, Edge) and devices (phone, tablet, desktop) can render the same code slightly differently, so cross-browser testing catches discrepancies."
-    },
-    {
-        "id":  "MC12",
-        "aim":  "A",
-        "topic":  "A1 SEO",
-        "q":  "Which of these helps with search engine optimisation (SEO)?",
-        "options":  [
-                        "Using descriptive page titles and meta descriptions",
-                        "Using only images (no text) on the page",
-                        "Hiding keywords in the page background",
-                        "Disabling the viewport meta tag"
-                    ],
-        "answer":  0,
-        "why":  "SEO uses keywords, descriptive titles, meta descriptions, headings, alt text and fast, mobile-friendly pages to help search engines rank your site."
-    },
-    {
-        "id":  "MC13",
-        "aim":  "A",
-        "topic":  "A2 Requirements",
-        "q":  "Which of these should you establish first when planning from a client brief?",
-        "options":  [
-                        "The colour palette",
-                        "The client\u0027s requirements: purpose, audience and technical needs",
-                        "The domain name",
-                        "The hosting provider"
-                    ],
-        "answer":  1,
-        "why":  "Everything else â€” structure, design, content â€” flows from understanding the purpose, the intended audience and the technical requirements of the brief."
-    },
-    {
-        "id":  "MC14",
-        "aim":  "A",
-        "topic":  "A2 Legal",
-        "q":  "You find a great photo on Google Images for your client\u0027s website. What should you do?",
-        "options":  [
-                        "Use it â€” everything online is free to use",
-                        "Check the licence and credit the source, or use royalty-free images",
-                        "Crop it so the owner won\u0027t recognise it",
-                        "Only use it if the site is not making money"
-                    ],
-        "answer":  1,
-        "why":  "Most images are protected by copyright. Check the licence, credit the source, use Creative Commons or royalty-free stock, or create your own assets."
-    },
-    {
-        "id":  "MC15",
-        "aim":  "A",
-        "topic":  "A2 Legal",
-        "q":  "Your site has a form where users enter their email. Under UK GDPR, what must you provide?",
-        "options":  [
-                        "A privacy policy explaining what you collect and why, plus consent",
-                        "A password on every page",
-                        "A captcha only",
-                        "Nothing â€” small sites are exempt"
-                    ],
-        "answer":  0,
-        "why":  "GDPR applies to any site processing personal data. You must be transparent about what data you collect, why, and get consent where needed."
-    },
-    {
-        "id":  "MC16",
-        "aim":  "B",
-        "topic":  "B1 Wireframes",
-        "q":  "What is a wireframe?",
-        "options":  [
-                        "The final finished design with colours and images",
-                        "A low-fidelity layout of a page showing the structure and placement of elements",
-                        "The site\u0027s HTML code",
-                        "A network connection diagram"
-                    ],
-        "answer":  1,
-        "why":  "Wireframes are simple boxes and placeholders showing where elements go â€” structure first, style later."
-    },
-    {
-        "id":  "MC17",
-        "aim":  "B",
-        "topic":  "B1 Wireframes",
-        "q":  "Which is a wireframing tool or technique?",
-        "options":  [
-                        "Sketching on paper",
-                        "All of these",
-                        "UX design software like Figma",
-                        "Dedicated wireframing apps"
-                    ],
-        "answer":  1,
-        "why":  "Wireframes can be sketched on paper, drawn in graphic design software, built in UX tools like Figma, or made in dedicated apps."
-    },
-    {
-        "id":  "MC18",
-        "aim":  "B",
-        "topic":  "B2 Assets",
-        "q":  "Which file format is usually best for a photographic image on a website?",
-        "options":  [
-                        "SVG",
-                        "JPG",
-                        "PNG",
-                        "MP4"
-                    ],
-        "answer":  1,
-        "why":  "JPG compresses photographs well. PNG suits graphics with transparency, SVG suits logos and icons, MP4 is for video."
-    },
-    {
-        "id":  "MC19",
-        "aim":  "B",
-        "topic":  "B2 Assets",
-        "q":  "Why compress and resize images before adding them to a website?",
-        "options":  [
-                        "Large files slow the page down, hurting user experience and SEO",
-                        "Because the HTML standard requires it",
-                        "To prevent copyright claims",
-                        "To make them look better"
-                    ],
-        "answer":  0,
-        "why":  "Large images increase loading time, which frustrates users (especially on mobile) and hurts search ranking. Compress to the size you actually use."
-    },
-    {
-        "id":  "MC20",
-        "aim":  "B",
-        "topic":  "B2 Assets",
-        "q":  "What is good practice for naming asset files?",
-        "options":  [
-                        "Use consistent, descriptive names with no spaces (e.g. hero-banner.jpg)",
-                        "Name everything \u0027img1\u0027, \u0027img2\u0027",
-                        "Use the person who downloaded it as the name",
-                        "Use random characters so they cannot clash"
-                    ],
-        "answer":  0,
-        "why":  "Descriptive names with dashes (hero-banner.jpg) are readable, consistent and don\u0027t break URLs â€” unlike \u0027IMG 3421.JPG\u0027."
-    },
-    {
-        "id":  "MC21",
-        "aim":  "B",
-        "topic":  "B2 Assets",
-        "q":  "What is an asset log used for?",
-        "options":  [
-                        "Tracking each asset â€” its name, source and where it appears on the site",
-                        "Counting page views",
-                        "Managing user accounts",
-                        "Recording test results only"
-                    ],
-        "answer":  0,
-        "why":  "An asset log shows where each asset came from (original work vs sourced, with credit) and how it\u0027s used â€” great evidence for the assignment."
-    },
-    {
-        "id":  "MC22",
-        "aim":  "C",
-        "topic":  "C1 HTML",
-        "q":  "Which HTML element is semantic (has meaning for accessibility and SEO)?",
-        "options":  [
-                        "\u003cdiv\u003e",
-                        "\u003cheader\u003e",
-                        "\u003cspan\u003e",
-                        "\u003cbr\u003e"
-                    ],
-        "answer":  1,
-        "why":  "Semantic elements like \u003cheader\u003e, \u003cnav\u003e, \u003cmain\u003e, \u003csection\u003e and \u003cfooter\u003e describe their meaning, helping screen readers and search engines."
-    },
-    {
-        "id":  "MC23",
-        "aim":  "C",
-        "topic":  "C1 CSS",
-        "q":  "Which describes the CSS box model?",
-        "options":  [
-                        "Content, padding, border and margin",
-                        "HTML, CSS and JavaScript",
-                        "Header, nav and footer",
-                        "Row, column, cell"
-                    ],
-        "answer":  0,
-        "why":  "Every element is a box: content in the middle, then padding (space inside), border, and margin (space outside)."
-    },
-    {
-        "id":  "MC24",
-        "aim":  "C",
-        "topic":  "C1 CSS",
-        "q":  "How do you make a layout responsive to different screen sizes?",
-        "options":  [
-                        "Media queries and responsive layout tools like Flexbox and Grid",
-                        "Using only fixed pixel widths",
-                        "Disabling CSS on mobile",
-                        "Using more images"
-                    ],
-        "answer":  0,
-        "why":  "Media queries apply different styles at different screen widths, and Flexbox/Grid layouts flex to fit. Never rely on fixed widths alone."
-    },
-    {
-        "id":  "MC25",
-        "aim":  "C",
-        "topic":  "C1 JS",
-        "q":  "Which JavaScript-powered component reveals and hides content in a collapsible section?",
-        "options":  [
-                        "Accordion",
-                        "Breadcrumb",
-                        "Carousel",
-                        "Modal"
-                    ],
-        "answer":  0,
-        "why":  "An accordion lets users expand and collapse sections â€” great for FAQs. Modals overlay the page; carousels slide images."
-    },
-    {
-        "id":  "MC26",
-        "aim":  "C",
-        "topic":  "C1 JS",
-        "q":  "What does a modal box do?",
-        "options":  [
-                        "Opens an overlay on top of the page (e.g. an enlarged image or a sign-in dialog)",
-                        "Closes the browser window",
-                        "Redirects to another site",
-                        "Plays a video automatically"
-                    ],
-        "answer":  0,
-        "why":  "A modal displays content in an overlay. Clicking a thumbnail to view a larger image in a modal is a common assignment requirement."
-    },
-    {
-        "id":  "MC27",
-        "aim":  "C",
-        "topic":  "C2 Access",
-        "q":  "Which organisation publishes the WCAG accessibility guidelines?",
-        "options":  [
-                        "W3C",
-                        "ISO",
-                        "Ofcom",
-                        "NASA"
-                    ],
-        "answer":  0,
-        "why":  "The World Wide Web Consortium (W3C) publishes the Web Content Accessibility Guidelines (WCAG)."
-    },
-    {
-        "id":  "MC28",
-        "aim":  "C",
-        "topic":  "C2 Access",
-        "q":  "What is the purpose of alt text on an image?",
-        "options":  [
-                        "Describes the image for screen readers and shows if the image fails to load",
-                        "Makes the image load faster",
-                        "Adds a border around the image",
-                        "Stores the image copyright"
-                    ],
-        "answer":  0,
-        "why":  "Alt text gives a text description of the image for screen readers and appears when the image can\u0027t load."
-    },
-    {
-        "id":  "MC29",
-        "aim":  "C",
-        "topic":  "C3 Testing",
-        "q":  "Which of these would you check during functionality testing?",
-        "options":  [
-                        "Whether all navigation links work",
-                        "Whether users find the site intuitive",
-                        "Whether the colour scheme is \u0027nice\u0027",
-                        "Whether the brand name is memorable"
-                    ],
-        "answer":  0,
-        "why":  "Functionality testing checks that things WORK â€” links, buttons, forms, interactions and responsiveness. Usability testing checks how real users experience the site."
-    },
-    {
-        "id":  "MC30",
-        "aim":  "C",
-        "topic":  "C3 Testing",
-        "q":  "What is usability testing?",
-        "options":  [
-                        "Asking real users to try the site and give feedback on navigation, clarity and experience",
-                        "Running the site through a code validator",
-                        "Testing the server uptime",
-                        "Checking the site loads on one computer"
-                    ],
-        "answer":  0,
-        "why":  "Usability testing uses real users (classmates, friends, family) to audit the experience â€” accessibility, logical navigation, clarity and overall UX."
-    },
-    {
-        "id":  "MC31",
-        "aim":  "C",
-        "topic":  "C3 Testing",
-        "q":  "What is a test plan?",
-        "options":  [
-                        "A table of tests listing description, test data, expected outcome, actual outcome and comments",
-                        "A list of page names",
-                        "A schedule of when to write code",
-                        "A wireframe of the final site"
-                    ],
-        "answer":  0,
-        "why":  "A formal test plan documents each test so you can compare expected vs actual outcomes â€” essential evidence for the assignment."
-    },
-    {
-        "id":  "MC32",
-        "aim":  "C",
-        "topic":  "C2 Review",
-        "q":  "What should your self-review of the finished website consider?",
-        "options":  [
-                        "Quality vs similar sites, suitability for the audience, meeting client requirements, consistency and readability",
-                        "Only the page count",
-                        "Only the number of images",
-                        "Whether you enjoyed building it"
-                    ],
-        "answer":  0,
-        "why":  "The spec\u0027s self-review covers comparison with similar websites, audience and purpose suitability, client requirements, legal/ethical constraints, consistency and readability."
-    },
-    {
-        "id":  "MC33",
-        "aim":  "A",
-        "topic":  "A1 Purpose",
-        "q":  "Which of these is an example of an entertainment website?",
-        "options":  [
-                        "A streaming service showing films and series",
-                        "A bank\u0027s online banking portal",
-                        "A school\u0027s homework portal",
-                        "A government tax website"
-                    ],
-        "answer":  0,
-        "why":  "Entertainment sites exist to amuse or engage users â€” streaming, gaming, music and video platforms are classic examples."
-    },
-    {
-        "id":  "MC34",
-        "aim":  "A",
-        "topic":  "A1 Purpose",
-        "q":  "What is the main purpose of an eCommerce website?",
-        "options":  [
-                        "To sell products or services online",
-                        "To provide free information",
-                        "To host a blog",
-                        "To display a company\u0027s contact details only"
-                    ],
-        "answer":  0,
-        "why":  "eCommerce sites are built to sell â€” they include product listings, a shopping basket, checkout and payment processing."
-    },
-    {
-        "id":  "MC35",
-        "aim":  "A",
-        "topic":  "A1 Audience",
-        "q":  "Why is it important to identify the target audience before designing a website?",
-        "options":  [
-                        "So the design, content and tone match what the audience expects",
-                        "Because all websites must have an audience",
-                        "To decide the hosting provider",
-                        "To set the price of the website"
-                    ],
-        "answer":  0,
-        "why":  "Knowing the audience (age, interests, technical ability) shapes everything â€” layout, colour, language, features and content."
-    },
-    {
-        "id":  "MC36",
-        "aim":  "A",
-        "topic":  "A1 Audience",
-        "q":  "Which of these is a demographic factor used to define a target audience?",
-        "options":  [
-                        "Age",
-                        "All of these",
-                        "Income",
-                        "Location"
-                    ],
-        "answer":  1,
-        "why":  "Demographics include age, gender, income, education, location and occupation â€” all used to build a picture of the audience."
-    },
-    {
-        "id":  "MC37",
-        "aim":  "A",
-        "topic":  "A1 Layout",
-        "q":  "What is the purpose of grouping related content together on a page?",
-        "options":  [
-                        "To make the page easier to scan and understand",
-                        "To make the page load faster",
-                        "To reduce the number of images",
-                        "To improve the domain name"
-                    ],
-        "answer":  0,
-        "why":  "Grouping related items (e.g. all navigation together, all product cards together) helps users find what they need quickly."
-    },
-    {
-        "id":  "MC38",
-        "aim":  "A",
-        "topic":  "A1 Layout",
-        "q":  "What is a grid layout in web design?",
-        "options":  [
-                        "A system of columns and rows used to align content consistently",
-                        "A type of image file",
-                        "A network topology",
-                        "A CSS colour value"
-                    ],
-        "answer":  0,
-        "why":  "A grid divides the page into columns and rows so elements align neatly â€” the basis of most professional layouts."
-    },
-    {
-        "id":  "MC39",
-        "aim":  "A",
-        "topic":  "A1 Navigation",
-        "q":  "What is a hamburger menu?",
-        "options":  [
-                        "A navigation icon (three lines) that expands a menu, common on mobile",
-                        "A type of food website",
-                        "A browser bookmark",
-                        "A CSS animation"
-                    ],
-        "answer":  0,
-        "why":  "The hamburger icon (â˜°) collapses navigation into a button, saving space on small screens â€” a common responsive pattern."
-    },
-    {
-        "id":  "MC40",
-        "aim":  "A",
-        "topic":  "A1 Navigation",
-        "q":  "What is logical navigation?",
-        "options":  [
-                        "Organising pages in a way that makes sense to the user, matching how they think",
-                        "Alphabetical ordering of all pages",
-                        "Random page order",
-                        "Using only one page"
-                    ],
-        "answer":  0,
-        "why":  "Logical navigation groups pages by meaning (e.g. all \u0027About\u0027 pages together) so users can predict where to find things."
-    },
-    {
-        "id":  "MC41",
-        "aim":  "A",
-        "topic":  "A1 Content",
-        "q":  "What is a call to action (CTA)?",
-        "options":  [
-                        "A button or link that prompts the user to take a specific action, like \u0027Buy now\u0027",
-                        "A legal disclaimer",
-                        "A type of image",
-                        "A server request"
-                    ],
-        "answer":  0,
-        "why":  "A CTA guides the user toward a goal â€” \u0027Sign up\u0027, \u0027Buy now\u0027, \u0027Contact us\u0027 â€” and should be visually prominent."
-    },
-    {
-        "id":  "MC42",
-        "aim":  "A",
-        "topic":  "A1 Design",
-        "q":  "Why is typography important in web design?",
-        "options":  [
-                        "It affects readability and the overall feel of the site",
-                        "It determines the site\u0027s colour",
-                        "It controls the server",
-                        "It is only decorative"
-                    ],
-        "answer":  0,
-        "why":  "Font choice, size, spacing and weight affect how easily users read and how professional the site looks."
-    },
-    {
-        "id":  "MC43",
-        "aim":  "A",
-        "topic":  "A1 Design",
-        "q":  "What is a colour scheme?",
-        "options":  [
-                        "The set of colours used consistently across a website",
-                        "A type of image filter",
-                        "A CSS media query",
-                        "A browser setting"
-                    ],
-        "answer":  0,
-        "why":  "A colour scheme is a deliberate palette used for backgrounds, text, buttons and accents to create a consistent brand feel."
-    },
-    {
-        "id":  "MC44",
-        "aim":  "A",
-        "topic":  "A1 UX",
-        "q":  "What does \u0027consistency\u0027 mean in user experience design?",
-        "options":  [
-                        "Using the same layout, colours and patterns throughout the site",
-                        "Making every page identical",
-                        "Using only one page",
-                        "Removing all animations"
-                    ],
-        "answer":  0,
-        "why":  "Consistency means users learn how the site works once and can apply it everywhere â€” reducing confusion and frustration."
-    },
-    {
-        "id":  "MC45",
-        "aim":  "A",
-        "topic":  "A1 UX",
-        "q":  "Why should a website be \u0027user-friendly\u0027?",
-        "options":  [
-                        "So users can achieve their goals easily without frustration",
-                        "Because it is a legal requirement",
-                        "To increase the file size",
-                        "To make it harder to use"
-                    ],
-        "answer":  0,
-        "why":  "A user-friendly site is intuitive, fast and accessible, so visitors stay longer and are more likely to return or convert."
-    },
-    {
-        "id":  "MC46",
-        "aim":  "A",
-        "topic":  "A1 Motion",
-        "q":  "Why should motion on a website be used sparingly?",
-        "options":  [
-                        "Too much motion distracts users and can hurt accessibility and performance",
-                        "Motion is always bad",
-                        "Motion is only for games",
-                        "Motion makes text unreadable always"
-                    ],
-        "answer":  0,
-        "why":  "Motion should have a purpose (feedback, guidance). Excessive animation distracts, slows the page and can trigger accessibility issues."
-    },
-    {
-        "id":  "MC47",
-        "aim":  "A",
-        "topic":  "A1 Dynamic",
-        "q":  "Which of these is an example of dynamic content?",
-        "options":  [
-                        "A personalised \u0027recommended for you\u0027 section",
-                        "A static \u0027About us\u0027 page",
-                        "A fixed footer",
-                        "A plain text paragraph"
-                    ],
-        "answer":  0,
-        "why":  "Dynamic content changes based on the user or data â€” recommendations, member dashboards, live scores and search results."
-    },
-    {
-        "id":  "MC48",
-        "aim":  "A",
-        "topic":  "A1 Compatibility",
-        "q":  "What is cross-browser compatibility?",
-        "options":  [
-                        "A website working correctly across different browsers",
-                        "A site that only works in one browser",
-                        "A browser extension",
-                        "A type of malware"
-                    ],
-        "answer":  0,
-        "why":  "Cross-browser compatibility means the site renders and functions correctly in Chrome, Safari, Firefox, Edge and others."
-    },
-    {
-        "id":  "MC49",
-        "aim":  "A",
-        "topic":  "A1 SEO",
-        "q":  "What is a meta description?",
-        "options":  [
-                        "A short summary of a page shown in search results",
-                        "A hidden password",
-                        "A type of image",
-                        "A CSS rule"
-                    ],
-        "answer":  0,
-        "why":  "A meta description is a brief snippet that appears under the page title in search results, helping users decide whether to click."
-    },
-    {
-        "id":  "MC50",
-        "aim":  "A",
-        "topic":  "A1 SEO",
-        "q":  "Why is a mobile-friendly (responsive) website important for SEO?",
-        "options":  [
-                        "Google prioritises mobile-friendly sites in search rankings",
-                        "It is only for aesthetics",
-                        "It reduces the number of pages",
-                        "It is not important"
-                    ],
-        "answer":  0,
-        "why":  "Google uses mobile-first indexing, so a responsive site ranks better and provides a better experience for mobile users."
-    },
-    {
-        "id":  "MC51",
-        "aim":  "A",
-        "topic":  "A2 Requirements",
-        "q":  "What is a client brief?",
-        "options":  [
-                        "A document describing what the client wants the website to achieve",
-                        "A list of server specifications",
-                        "A type of contract for hosting",
-                        "A design template"
-                    ],
-        "answer":  0,
-        "why":  "The brief sets out the purpose, audience, features, tone and constraints â€” the starting point for all planning."
-    },
-    {
-        "id":  "MC52",
-        "aim":  "A",
-        "topic":  "A2 Requirements",
-        "q":  "Which of these is a technical requirement you might establish from a brief?",
-        "options":  [
-                        "The hosting and domain requirements",
-                        "The client\u0027s favourite colour",
-                        "The number of employees",
-                        "The company\u0027s logo design"
-                    ],
-        "answer":  0,
-        "why":  "Technical requirements include hosting, domain, platform, performance, security and compatibility needs."
-    },
-    {
-        "id":  "MC53",
-        "aim":  "A",
-        "topic":  "A2 Research",
-        "q":  "Why research existing websites before designing a new one?",
-        "options":  [
-                        "To learn what works well and what to avoid",
-                        "To copy them exactly",
-                        "To find free hosting",
-                        "To get a domain name"
-                    ],
-        "answer":  0,
-        "why":  "Researching similar sites reveals best practice, common features and gaps you can improve on â€” evidence for the assignment."
-    },
-    {
-        "id":  "MC54",
-        "aim":  "A",
-        "topic":  "A2 Legal",
-        "q":  "What is copyright?",
-        "options":  [
-                        "The legal right of the creator to control how their work is used",
-                        "A type of hosting",
-                        "A browser feature",
-                        "A CSS property"
-                    ],
-        "answer":  0,
-        "why":  "Copyright protects original work (text, images, music, code). You need permission or a licence to use someone else\u0027s work."
-    },
-    {
-        "id":  "MC55",
-        "aim":  "A",
-        "topic":  "A2 Legal",
-        "q":  "What is a Creative Commons licence?",
-        "options":  [
-                        "A licence that lets creators share their work with certain conditions",
-                        "A type of malware",
-                        "A hosting plan",
-                        "A browser extension"
-                    ],
-        "answer":  0,
-        "why":  "Creative Commons licences allow reuse under set conditions (e.g. attribution, non-commercial) â€” a safe source of assets."
-    },
-    {
-        "id":  "MC56",
-        "aim":  "A",
-        "topic":  "A2 Legal",
-        "q":  "Why must a website be accessible to users with disabilities?",
-        "options":  [
-                        "It is a legal requirement under the Equality Act and improves the experience for everyone",
-                        "Because it is cheaper",
-                        "To reduce file size",
-                        "It is optional"
-                    ],
-        "answer":  0,
-        "why":  "The Equality Act 2010 requires websites to be accessible, and accessibility also benefits all users (e.g. captions, keyboard nav)."
-    },
-    {
-        "id":  "MC57",
-        "aim":  "B",
-        "topic":  "B1 Wireframes",
-        "q":  "What is the difference between a wireframe and a mockup?",
-        "options":  [
-                        "A wireframe is low-fidelity structure; a mockup is a high-fidelity visual design",
-                        "They are the same thing",
-                        "A mockup is a wireframe with no text",
-                        "A wireframe is the final code"
-                    ],
-        "answer":  0,
-        "why":  "Wireframes show structure and layout in simple boxes; mockups add colour, images and typography to show the final look."
-    },
-    {
-        "id":  "MC58",
-        "aim":  "B",
-        "topic":  "B1 Wireframes",
-        "q":  "Why annotate a wireframe?",
-        "options":  [
-                        "To explain the purpose of each element and how it meets the brief",
-                        "To make it look prettier",
-                        "To add colour",
-                        "To make it load faster"
-                    ],
-        "answer":  0,
-        "why":  "Annotations show your thinking â€” why each element is there and how it meets client requirements â€” key evidence for the assignment."
-    },
-    {
-        "id":  "MC59",
-        "aim":  "B",
-        "topic":  "B1 Design",
-        "q":  "What is a visual style?",
-        "options":  [
-                        "The consistent look created by colour palette, typography, imagery and layout",
-                        "A type of CSS",
-                        "A wireframe",
-                        "A server setting"
-                    ],
-        "answer":  0,
-        "why":  "The visual style ties together colour, fonts, images and spacing to create a cohesive, recognisable brand."
-    },
-    {
-        "id":  "MC60",
-        "aim":  "B",
-        "topic":  "B1 Design",
-        "q":  "What is a brand identity?",
-        "options":  [
-                        "The visual and verbal elements that represent a company (logo, colours, tone)",
-                        "The company\u0027s bank details",
-                        "A type of hosting",
-                        "A database"
-                    ],
-        "answer":  0,
-        "why":  "Brand identity includes the logo, colour palette, typography and tone of voice that make a company recognisable."
-    },
-    {
-        "id":  "MC61",
-        "aim":  "B",
-        "topic":  "B1 Review",
-        "q":  "What does \u0027fitness for purpose\u0027 mean when reviewing a design?",
-        "options":  [
-                        "Whether the design meets the client\u0027s requirements and works for the audience",
-                        "Whether the design is colourful",
-                        "Whether the design uses images",
-                        "Whether the design is new"
-                    ],
-        "answer":  0,
-        "why":  "Fitness for purpose asks: does this design actually do what the client and audience need? Review it against the brief."
-    },
-    {
-        "id":  "MC62",
-        "aim":  "B",
-        "topic":  "B2 Assets",
-        "q":  "Which file format is best for a logo with a transparent background?",
-        "options":  [
-                        "PNG",
-                        "JPG",
-                        "GIF",
-                        "MP3"
-                    ],
-        "answer":  0,
-        "why":  "PNG supports transparency, so a logo can sit on any background. SVG is even better for logos as it scales without losing quality."
-    },
-    {
-        "id":  "MC63",
-        "aim":  "B",
-        "topic":  "B2 Assets",
-        "q":  "What is a vector graphic?",
-        "options":  [
-                        "An image made of paths that scales without losing quality (e.g. SVG)",
-                        "A photograph",
-                        "A video file",
-                        "A bitmap image"
-                    ],
-        "answer":  0,
-        "why":  "Vector graphics use mathematical paths, so they stay sharp at any size â€” ideal for logos, icons and diagrams."
-    },
-    {
-        "id":  "MC64",
-        "aim":  "B",
-        "topic":  "B2 Assets",
-        "q":  "Why trim a video before adding it to a website?",
-        "options":  [
-                        "To remove unnecessary footage and reduce file size",
-                        "To change its colour",
-                        "To add subtitles",
-                        "To make it loop"
-                    ],
-        "answer":  0,
-        "why":  "Trimming removes unwanted parts, reducing file size and loading time while keeping the content focused."
-    },
-    {
-        "id":  "MC65",
-        "aim":  "B",
-        "topic":  "B2 Assets",
-        "q":  "What is a folder structure for assets?",
-        "options":  [
-                        "An organised set of folders (e.g. images/, css/, js/) to keep files tidy",
-                        "A random collection of files",
-                        "A single folder with everything",
-                        "A database"
-                    ],
-        "answer":  0,
-        "why":  "A clear folder structure makes assets easy to find, maintain and reference â€” good practice and good evidence."
-    },
-    {
-        "id":  "MC66",
-        "aim":  "B",
-        "topic":  "B2 Assets",
-        "q":  "What is the difference between original and sourced assets?",
-        "options":  [
-                        "Original assets you create yourself; sourced assets you obtain from elsewhere (with credit)",
-                        "Original assets are free; sourced are paid",
-                        "There is no difference",
-                        "Sourced assets are always better"
-                    ],
-        "answer":  0,
-        "why":  "Creating your own assets shows skill; sourcing others requires credit and licence checks. Both are valid if managed properly."
-    },
-    {
-        "id":  "MC67",
-        "aim":  "C",
-        "topic":  "C1 HTML",
-        "q":  "Which HTML tag is used to create a hyperlink?",
-        "options":  [
-                        "\u003ca\u003e",
-                        "\u003clink\u003e",
-                        "\u003chref\u003e",
-                        "\u003curl\u003e"
-                    ],
-        "answer":  0,
-        "why":  "The \u003ca\u003e (anchor) tag creates links using the href attribute, e.g. \u003ca href=\"page.html\"\u003eLink\u003c/a\u003e."
-    },
-    {
-        "id":  "MC68",
-        "aim":  "C",
-        "topic":  "C1 HTML",
-        "q":  "Which HTML element is used for a form?",
-        "options":  [
-                        "\u003cform\u003e",
-                        "\u003cinput\u003e",
-                        "\u003cbutton\u003e",
-                        "\u003cfield\u003e"
-                    ],
-        "answer":  0,
-        "why":  "The \u003cform\u003e element wraps form controls like inputs, selects and buttons, and defines how data is submitted."
-    },
-    {
-        "id":  "MC69",
-        "aim":  "C",
-        "topic":  "C1 HTML",
-        "q":  "Which HTML tag embeds a video?",
-        "options":  [
-                        "\u003cvideo\u003e",
-                        "\u003cimg\u003e",
-                        "\u003caudio\u003e",
-                        "\u003cembed\u003e"
-                    ],
-        "answer":  0,
-        "why":  "The \u003cvideo\u003e element embeds video with controls, e.g. \u003cvideo controls src=\"clip.mp4\"\u003e\u003c/video\u003e."
-    },
-    {
-        "id":  "MC70",
-        "aim":  "C",
-        "topic":  "C1 HTML",
-        "q":  "What is the purpose of the \u003cnav\u003e element?",
-        "options":  [
-                        "To mark up a block of navigation links",
-                        "To create a table",
-                        "To embed an image",
-                        "To style text"
-                    ],
-        "answer":  0,
-        "why":  "\u003cnav\u003e is a semantic element that identifies navigation links, helping screen readers and SEO understand the structure."
-    },
-    {
-        "id":  "MC71",
-        "aim":  "C",
-        "topic":  "C1 CSS",
-        "q":  "What does CSS stand for?",
-        "options":  [
-                        "Cascading Style Sheets",
-                        "Computer Style System",
-                        "Creative Style Sheets",
-                        "Cascading Script Syntax"
-                    ],
-        "answer":  0,
-        "why":  "CSS (Cascading Style Sheets) controls the presentation â€” layout, colours, fonts and spacing â€” of HTML content."
-    },
-    {
-        "id":  "MC72",
-        "aim":  "C",
-        "topic":  "C1 CSS",
-        "q":  "Which CSS property changes the text colour?",
-        "options":  [
-                        "color",
-                        "background",
-                        "font-size",
-                        "text-align"
-                    ],
-        "answer":  0,
-        "why":  "The color property sets text colour; background sets the background; font-size sets size; text-align aligns text."
-    },
-    {
-        "id":  "MC73",
-        "aim":  "C",
-        "topic":  "C1 CSS",
-        "q":  "What is a media query used for?",
-        "options":  [
-                        "Applying different styles based on screen size or device",
-                        "Playing media files",
-                        "Querying a database",
-                        "Loading images"
-                    ],
-        "answer":  0,
-        "why":  "Media queries (e.g. @media (max-width: 600px)) apply CSS only under certain conditions â€” the basis of responsive design."
-    },
-    {
-        "id":  "MC74",
-        "aim":  "C",
-        "topic":  "C1 CSS",
-        "q":  "What is Flexbox used for?",
-        "options":  [
-                        "Laying out elements in a flexible row or column",
-                        "Styling text",
-                        "Embedding video",
-                        "Creating forms"
-                    ],
-        "answer":  0,
-        "why":  "Flexbox arranges items in one dimension (row or column) and handles spacing, alignment and wrapping â€” great for nav bars and cards."
-    },
-    {
-        "id":  "MC75",
-        "aim":  "C",
-        "topic":  "C1 JS",
-        "q":  "What is JavaScript used for on a website?",
-        "options":  [
-                        "Adding interactivity like sliders, forms and dynamic content",
-                        "Styling the page",
-                        "Structuring the page",
-                        "Hosting the site"
-                    ],
-        "answer":  0,
-        "why":  "JavaScript adds behaviour and interactivity â€” responding to clicks, validating forms, animating and updating content."
-    },
-    {
-        "id":  "MC76",
-        "aim":  "C",
-        "topic":  "C1 JS",
-        "q":  "What does a carousel/slider do?",
-        "options":  [
-                        "Cycles through a set of images or slides",
-                        "Closes the page",
-                        "Plays audio",
-                        "Validates a form"
-                    ],
-        "answer":  0,
-        "why":  "A carousel automatically or manually cycles through slides â€” common for galleries, testimonials and featured content."
-    },
-    {
-        "id":  "MC77",
-        "aim":  "C",
-        "topic":  "C1 JS",
-        "q":  "What is a tab component?",
-        "options":  [
-                        "A set of buttons that switch between different content panels",
-                        "A browser tab",
-                        "A type of image",
-                        "A CSS grid"
-                    ],
-        "answer":  0,
-        "why":  "Tabs let users switch between sections of content without leaving the page â€” a common interactive component."
-    },
-    {
-        "id":  "MC78",
-        "aim":  "C",
-        "topic":  "C1 JS",
-        "q":  "What is a filter/search feature?",
-        "options":  [
-                        "Lets users narrow down a list by typing or selecting criteria",
-                        "A type of image",
-                        "A CSS animation",
-                        "A server log"
-                    ],
-        "answer":  0,
-        "why":  "Search/filter functionality lets users find items quickly â€” a common assignment requirement (e.g. filtering a product list)."
-    },
-    {
-        "id":  "MC79",
-        "aim":  "C",
-        "topic":  "C2 Access",
-        "q":  "What is a skip link?",
-        "options":  [
-                        "A link that lets keyboard users jump straight to the main content",
-                        "A link to skip ads",
-                        "A broken link",
-                        "A type of image"
-                    ],
-        "answer":  0,
-        "why":  "A skip link (\u0027Skip to main content\u0027) lets keyboard and screen-reader users bypass repeated navigation â€” an accessibility best practice."
-    },
-    {
-        "id":  "MC80",
-        "aim":  "C",
-        "topic":  "C2 Access",
-        "q":  "What is semantic HTML?",
-        "options":  [
-                        "Using elements that describe their meaning (e.g. \u003cheader\u003e, \u003cmain\u003e)",
-                        "HTML with lots of \u003cdiv\u003e tags",
-                        "HTML with inline styles",
-                        "HTML that only works in one browser"
-                    ],
-        "answer":  0,
-        "why":  "Semantic HTML uses meaningful tags, improving accessibility, SEO and code readability compared to generic \u003cdiv\u003es."
-    },
-    {
-        "id":  "MC81",
-        "aim":  "C",
-        "topic":  "C2 Access",
-        "q":  "Why is the lang attribute important on the \u003chtml\u003e element?",
-        "options":  [
-                        "It tells screen readers and search engines the page language",
-                        "It sets the font",
-                        "It sets the background colour",
-                        "It is decorative"
-                    ],
-        "answer":  0,
-        "why":  "The lang attribute (e.g. lang=\"en\") helps screen readers pronounce content correctly and helps search engines index the language."
-    },
-    {
-        "id":  "MC82",
-        "aim":  "C",
-        "topic":  "C2 SEO",
-        "q":  "What is a heading hierarchy?",
-        "options":  [
-                        "Using h1, h2, h3 in a logical order to structure content",
-                        "Using only h1 tags",
-                        "Random heading sizes",
-                        "No headings at all"
-                    ],
-        "answer":  0,
-        "why":  "A logical heading hierarchy (one h1, then h2/h3 for subsections) helps screen readers and search engines understand structure."
-    },
-    {
-        "id":  "MC83",
-        "aim":  "C",
-        "topic":  "C2 SEO",
-        "q":  "What is a sitemap in the context of SEO?",
-        "options":  [
-                        "A file listing all pages of a site to help search engines index it",
-                        "A wireframe",
-                        "A type of image",
-                        "A CSS file"
-                    ],
-        "answer":  0,
-        "why":  "An XML sitemap lists all URLs so search engines can discover and index pages efficiently."
-    },
-    {
-        "id":  "MC84",
-        "aim":  "C",
-        "topic":  "C3 Testing",
-        "q":  "What is a test plan\u0027s \u0027expected outcome\u0027?",
-        "options":  [
-                        "What the site should do if the feature works correctly",
-                        "What the user thinks",
-                        "The test data",
-                        "The page name"
-                    ],
-        "answer":  0,
-        "why":  "The expected outcome is the correct result you predict; comparing it to the actual outcome reveals whether the feature works."
-    },
-    {
-        "id":  "MC85",
-        "aim":  "C",
-        "topic":  "C3 Testing",
-        "q":  "What is a test plan\u0027s \u0027actual outcome\u0027?",
-        "options":  [
-                        "What the site actually did when tested",
-                        "What the site should do",
-                        "The test description",
-                        "The tester\u0027s name"
-                    ],
-        "answer":  0,
-        "why":  "The actual outcome records what really happened, so you can compare it to the expected outcome and note any defects."
-    },
-    {
-        "id":  "MC86",
-        "aim":  "C",
-        "topic":  "C3 Testing",
-        "q":  "What is a defect/bug?",
-        "options":  [
-                        "An error or fault in the website that stops it working as intended",
-                        "A feature request",
-                        "A design choice",
-                        "A type of image"
-                    ],
-        "answer":  0,
-        "why":  "A defect is any flaw â€” a broken link, a form that won\u0027t submit, a layout that breaks on mobile â€” that needs fixing."
-    },
-    {
-        "id":  "MC87",
-        "aim":  "C",
-        "topic":  "C3 Testing",
-        "q":  "Why test a website on a mobile device?",
-        "options":  [
-                        "To check the responsive layout works and content is usable on small screens",
-                        "Because it is faster",
-                        "To reduce file size",
-                        "It is not necessary"
-                    ],
-        "answer":  0,
-        "why":  "Most users browse on mobile, so you must verify the responsive layout, touch targets and readability on small screens."
-    },
-    {
-        "id":  "MC88",
-        "aim":  "C",
-        "topic":  "C3 Testing",
-        "q":  "What is a usability audit?",
-        "options":  [
-                        "A structured review of how easy and pleasant the site is to use",
-                        "A code validator",
-                        "A server check",
-                        "A colour test"
-                    ],
-        "answer":  0,
-        "why":  "A usability audit assesses navigation, clarity, accessibility and overall user experience â€” often with real users."
-    },
-    {
-        "id":  "MC89",
-        "aim":  "C",
-        "topic":  "C2 Review",
-        "q":  "What is a refinement?",
-        "options":  [
-                        "A change made to improve the website after testing or review",
-                        "A type of image",
-                        "A CSS property",
-                        "A hosting plan"
-                    ],
-        "answer":  0,
-        "why":  "Refinements are improvements made in response to testing and feedback â€” showing the review cycle is key evidence."
-    },
-    {
-        "id":  "MC90",
-        "aim":  "C",
-        "topic":  "C2 Review",
-        "q":  "Why document the improvements you made after testing?",
-        "options":  [
-                        "To show the examiner you reviewed and refined your work",
-                        "Because it is required by law",
-                        "To make the site bigger",
-                        "It is optional"
-                    ],
-        "answer":  0,
-        "why":  "Documenting before â†’ feedback â†’ after shows the review cycle, which is essential for higher grades in the assignment."
-    },
-    {
-        "id":  "MC91",
-        "aim":  "A",
-        "topic":  "A1 Purpose",
-        "q":  "Which of these is a purpose of a promotional website?",
-        "options":  [
-                        "To advertise a product or service and encourage action",
-                        "To store a database",
-                        "To host a game",
-                        "To provide a login system"
-                    ],
-        "answer":  0,
-        "why":  "Promotional sites market a product/service, using CTAs and persuasive content to drive sales or enquiries."
-    },
-    {
-        "id":  "MC92",
-        "aim":  "A",
-        "topic":  "A1 Purpose",
-        "q":  "What is an informational website?",
-        "options":  [
-                        "A site whose main purpose is to provide facts and details",
-                        "A site that sells products",
-                        "A site that streams video",
-                        "A site that hosts games"
-                    ],
-        "answer":  0,
-        "why":  "Informational sites (news, encyclopaedias, company \u0027about\u0027 pages) exist to deliver facts and knowledge."
-    },
-    {
-        "id":  "MC93",
-        "aim":  "A",
-        "topic":  "A1 Audience",
-        "q":  "What is a user journey?",
-        "options":  [
-                        "The path a user takes through a website to reach a goal",
-                        "A type of image",
-                        "A CSS animation",
-                        "A server route"
-                    ],
-        "answer":  0,
-        "why":  "A user journey maps the steps a visitor takes â€” from landing to completing a task â€” helping you spot friction points."
-    },
-    {
-        "id":  "MC94",
-        "aim":  "A",
-        "topic":  "A1 Layout",
-        "q":  "What is whitespace (negative space) in design?",
-        "options":  [
-                        "The empty space between elements that improves readability and focus",
-                        "A white background",
-                        "A type of image",
-                        "A CSS colour"
-                    ],
-        "answer":  0,
-        "why":  "Whitespace gives content room to breathe, making layouts cleaner and easier to scan â€” a key design principle."
-    },
-    {
-        "id":  "MC95",
-        "aim":  "A",
-        "topic":  "A1 Navigation",
-        "q":  "What is a breadcrumb?",
-        "options":  [
-                        "A navigation trail showing the user\u0027s location in the site hierarchy",
-                        "A type of cookie",
-                        "A CSS property",
-                        "A browser history"
-                    ],
-        "answer":  0,
-        "why":  "Breadcrumbs (e.g. Home â€º Products â€º Laptops) show where you are and let users jump back up the hierarchy."
-    },
-    {
-        "id":  "MC96",
-        "aim":  "A",
-        "topic":  "A1 Content",
-        "q":  "What is a hero section?",
-        "options":  [
-                        "The large prominent area at the top of a homepage with the main headline and CTA",
-                        "A type of image",
-                        "A footer",
-                        "A navigation bar"
-                    ],
-        "answer":  0,
-        "why":  "The hero is the first thing users see â€” a big headline, supporting text and a call to action that sets the tone."
-    },
-    {
-        "id":  "MC97",
-        "aim":  "A",
-        "topic":  "A1 Design",
-        "q":  "What is a logo?",
-        "options":  [
-                        "A symbol or design that identifies a brand",
-                        "A type of image file",
-                        "A CSS class",
-                        "A hosting plan"
-                    ],
-        "answer":  0,
-        "why":  "A logo is a recognisable mark that represents a company â€” a key part of brand identity."
-    },
-    {
-        "id":  "MC98",
-        "aim":  "A",
-        "topic":  "A1 UX",
-        "q":  "What is a loading time and why does it matter?",
-        "options":  [
-                        "How long a page takes to load; slow pages frustrate users and hurt SEO",
-                        "A type of animation",
-                        "A server setting",
-                        "It does not matter"
-                    ],
-        "answer":  0,
-        "why":  "Fast loading improves user experience and search ranking; slow sites lose visitors. Optimise images and code."
-    },
-    {
-        "id":  "MC99",
-        "aim":  "A",
-        "topic":  "A1 Dynamic",
-        "q":  "What is a static website?",
-        "options":  [
-                        "A site with fixed content that doesn\u0027t change based on the user",
-                        "A site that always changes",
-                        "A site with no images",
-                        "A site with no CSS"
-                    ],
-        "answer":  0,
-        "why":  "Static sites serve the same content to everyone (e.g. a simple brochure site) â€” simpler but less personalised."
-    },
-    {
-        "id":  "MC100",
-        "aim":  "A",
-        "topic":  "A1 SEO",
-        "q":  "What is a keyword?",
-        "options":  [
-                        "A word or phrase users type into a search engine",
-                        "A CSS property",
-                        "A type of image",
-                        "A server variable"
-                    ],
-        "answer":  0,
-        "why":  "Keywords are the terms people search for; using them naturally in titles, headings and content helps SEO."
-    },
-    {
-        "id":  "MC101",
-        "aim":  "A",
-        "topic":  "A2 Requirements",
-        "q":  "What is a constraint in a client brief?",
-        "options":  [
-                        "A limitation or requirement the design must work within (e.g. budget, deadline, brand rules)",
-                        "A type of image",
-                        "A CSS rule",
-                        "A hosting plan"
-                    ],
-        "answer":  0,
-        "why":  "Constraints are boundaries â€” budget, time, brand colours, accessibility, legal rules â€” that shape the design."
-    },
-    {
-        "id":  "MC102",
-        "aim":  "A",
-        "topic":  "A2 Research",
-        "q":  "What is a competitor analysis?",
-        "options":  [
-                        "Reviewing similar websites to see what they do well and poorly",
-                        "A type of malware",
-                        "A server check",
-                        "A CSS test"
-                    ],
-        "answer":  0,
-        "why":  "Analysing competitors reveals best practice, gaps and opportunities â€” strong evidence for the planning task."
-    },
-    {
-        "id":  "MC103",
-        "aim":  "A",
-        "topic":  "A2 Legal",
-        "q":  "What is a privacy policy?",
-        "options":  [
-                        "A statement explaining what personal data a site collects and how it\u0027s used",
-                        "A type of image",
-                        "A CSS file",
-                        "A hosting contract"
-                    ],
-        "answer":  0,
-        "why":  "A privacy policy is required under GDPR to be transparent about data collection, use and user rights."
-    },
-    {
-        "id":  "MC104",
-        "aim":  "A",
-        "topic":  "A2 Legal",
-        "q":  "What is GDPR?",
-        "options":  [
-                        "The General Data Protection Regulation governing personal data",
-                        "A type of image",
-                        "A CSS framework",
-                        "A hosting provider"
-                    ],
-        "answer":  0,
-        "why":  "GDPR is EU/UK law protecting personal data â€” sites must be transparent, get consent and protect user data."
-    },
-    {
-        "id":  "MC105",
-        "aim":  "B",
-        "topic":  "B1 Wireframes",
-        "q":  "What is a low-fidelity wireframe?",
-        "options":  [
-                        "A rough, simple sketch showing basic structure without detail",
-                        "A finished design with colours",
-                        "A code file",
-                        "A database"
-                    ],
-        "answer":  0,
-        "why":  "Low-fidelity wireframes are quick, rough sketches (often on paper) to explore layout before investing in detail."
-    },
-    {
-        "id":  "MC106",
-        "aim":  "B",
-        "topic":  "B1 Design",
-        "q":  "What is a high-fidelity mockup?",
-        "options":  [
-                        "A detailed, polished design showing colours, fonts and images",
-                        "A rough sketch",
-                        "A wireframe",
-                        "A code file"
-                    ],
-        "answer":  0,
-        "why":  "High-fidelity mockups look close to the final site, showing the visual style in detail before coding."
-    },
-    {
-        "id":  "MC107",
-        "aim":  "B",
-        "topic":  "B1 Review",
-        "q":  "What is a design review?",
-        "options":  [
-                        "Assessing the design against the brief and audience to identify improvements",
-                        "A code test",
-                        "A server check",
-                        "A colour picker"
-                    ],
-        "answer":  0,
-        "why":  "A design review compares the design to the brief and audience needs, identifying what to improve â€” key for the assignment."
-    },
-    {
-        "id":  "MC108",
-        "aim":  "B",
-        "topic":  "B2 Assets",
-        "q":  "What is image compression?",
-        "options":  [
-                        "Reducing an image\u0027s file size while keeping acceptable quality",
-                        "Adding a border",
-                        "Changing the colour",
-                        "Resizing the browser"
-                    ],
-        "answer":  0,
-        "why":  "Compression reduces file size (faster loading) with minimal quality loss â€” essential for web performance."
-    },
-    {
-        "id":  "MC109",
-        "aim":  "B",
-        "topic":  "B2 Assets",
-        "q":  "What is a royalty-free image?",
-        "options":  [
-                        "An image you can use without paying ongoing royalties, usually with a licence",
-                        "An image that is always free with no conditions",
-                        "A copyrighted image",
-                        "A vector graphic"
-                    ],
-        "answer":  0,
-        "why":  "Royalty-free means you pay once (or it\u0027s free) and can use it, but you should still check the licence terms."
-    },
-    {
-        "id":  "MC110",
-        "aim":  "C",
-        "topic":  "C1 HTML",
-        "q":  "Which HTML element is used for a table?",
-        "options":  [
-                        "\u003ctable\u003e",
-                        "\u003clist\u003e",
-                        "\u003cgrid\u003e",
-                        "\u003crow\u003e"
-                    ],
-        "answer":  0,
-        "why":  "The \u003ctable\u003e element creates tables, with \u003ctr\u003e for rows, \u003cth\u003e for headers and \u003ctd\u003e for cells."
-    },
-    {
-        "id":  "MC111",
-        "aim":  "C",
-        "topic":  "C1 CSS",
-        "q":  "What is the purpose of the CSS \u0027margin\u0027 property?",
-        "options":  [
-                        "To add space outside an element, pushing it away from neighbours",
-                        "To add space inside an element",
-                        "To set the border",
-                        "To change the font"
-                    ],
-        "answer":  0,
-        "why":  "Margin adds space outside the border; padding adds space inside. Both control spacing in the box model."
-    },
-    {
-        "id":  "MC112",
-        "aim":  "C",
-        "topic":  "C1 JS",
-        "q":  "What is an event listener in JavaScript?",
-        "options":  [
-                        "Code that waits for an action (like a click) and runs a function in response",
-                        "A type of image",
-                        "A CSS rule",
-                        "A server log"
-                    ],
-        "answer":  0,
-        "why":  "Event listeners (e.g. addEventListener(\u0027click\u0027, ...)) make elements interactive by responding to user actions."
+        "id": "MC01",
+        "aim": "A",
+        "topic": "A1 Purpose",
+        "q": "Which of these is a common purpose of a website?",
+        "options": [
+            "eCommerce and selling products",
+            "All of these",
+            "Providing information",
+            "Promoting products or services"
+        ],
+        "answer": 1,
+        "why": "Websites commonly exist for eCommerce, to provide information, to promote products/services, or for entertainment â€” all are valid purposes."
+    },
+    {
+        "id": "MC02",
+        "aim": "A",
+        "topic": "A1 Audience",
+        "q": "What is a user persona?",
+        "options": [
+            "A fictional profile representing a typical user",
+            "A real customer's login details",
+            "A type of website security test",
+            "A browser extension"
+        ],
+        "answer": 0,
+        "why": "A user persona is a made-up but realistic profile of a typical user â€” their age, goals, habits and frustrations â€” used to design for real people."
+    },
+    {
+        "id": "MC03",
+        "aim": "A",
+        "topic": "A1 Layout",
+        "q": "Which reading pattern do users most commonly follow on text-heavy websites?",
+        "options": [
+            "F-shaped",
+            "Circular",
+            "Z-shaped",
+            "Diagonal"
+        ],
+        "answer": 0,
+        "why": "Eye-tracking shows users scan in an F-shape: horizontal lines across the top, then down the left edge. Put key info where eyes go first."
+    },
+    {
+        "id": "MC04",
+        "aim": "A",
+        "topic": "A1 Layout",
+        "q": "Which layout pattern is best suited to a simple homepage with a strong headline and a call to action?",
+        "options": [
+            "Tabular grid",
+            "Z-shaped pattern",
+            "F-shaped pattern",
+            "None of these"
+        ],
+        "answer": 1,
+        "why": "The Z-pattern suits hero pages: the eye moves top-left, then top-right, then diagonally to the bottom-right where the call to action sits."
+    },
+    {
+        "id": "MC05",
+        "aim": "A",
+        "topic": "A1 Navigation",
+        "q": "What is a benefit of a fixed/sticky navigation bar?",
+        "options": [
+            "Navigation is always visible while scrolling",
+            "It removes the need for a sitemap",
+            "It makes the page load faster",
+            "It automatically translates the page"
+        ],
+        "answer": 0,
+        "why": "A sticky nav stays visible as the user scrolls, so they can always find their way around without scrolling back to the top."
+    },
+    {
+        "id": "MC06",
+        "aim": "A",
+        "topic": "A1 Design",
+        "q": "Which describes 'visual hierarchy' in page design?",
+        "options": [
+            "Making every element the same size",
+            "Using only one font",
+            "Placing elements in order of importance so users notice key things first",
+            "Listing content alphabetically"
+        ],
+        "answer": 2,
+        "why": "Visual hierarchy uses size, colour, spacing and position to guide the eye from the most to the least important content."
+    },
+    {
+        "id": "MC07",
+        "aim": "A",
+        "topic": "A1 UX",
+        "q": "Why is sufficient colour contrast between text and background important?",
+        "options": [
+            "It makes the site look more colourful",
+            "It reduces file size",
+            "It helps users with visual impairments read the content",
+            "It is only for aesthetic appeal"
+        ],
+        "answer": 2,
+        "why": "Good contrast (WCAG recommends at least 4.5:1 for normal text) makes text readable for everyone, including users with low vision."
+    },
+    {
+        "id": "MC08",
+        "aim": "A",
+        "topic": "A1 UX",
+        "q": "Which of these is an accessibility feature?",
+        "options": [
+            "Alt text on images",
+            "Keyboard-only navigation",
+            "All of these",
+            "Providing transcripts for video content"
+        ],
+        "answer": 2,
+        "why": "Accessibility includes keyboard navigation, alt text, transcripts and captions, breadcrumbs, customisable features and more."
+    },
+    {
+        "id": "MC09",
+        "aim": "A",
+        "topic": "A1 Motion",
+        "q": "What is a micro-interaction?",
+        "options": [
+            "A type of malware",
+            "A short feedback animation, like a button changing colour when clicked",
+            "A requirement to enable JavaScript",
+            "A very small image file"
+        ],
+        "answer": 1,
+        "why": "Micro-interactions are small animations that give feedback â€” like a button press effect. Every use of motion should have a purpose."
+    },
+    {
+        "id": "MC10",
+        "aim": "A",
+        "topic": "A1 Dynamic",
+        "q": "What makes a website 'dynamic'?",
+        "options": [
+            "It changes colours automatically each day",
+            "It uses animated GIFs",
+            "It customises the user experience or controls access to content, often using server-side processing",
+            "It loads images on scroll"
+        ],
+        "answer": 2,
+        "why": "Dynamic sites serve customised experiences (recommendations, member areas) â€” usually powered by a server and database, not fixed static pages."
+    },
+    {
+        "id": "MC11",
+        "aim": "A",
+        "topic": "A1 Compatibility",
+        "q": "Why must a website be tested across different browsers and devices?",
+        "options": [
+            "Because browsers render HTML, CSS and JS with slight differences",
+            "To increase the number of users",
+            "It is a legal requirement in the UK",
+            "To make file sizes smaller"
+        ],
+        "answer": 0,
+        "why": "Browsers (Chrome, Safari, Firefox, Edge) and devices (phone, tablet, desktop) can render the same code slightly differently, so cross-browser testing catches discrepancies."
+    },
+    {
+        "id": "MC12",
+        "aim": "A",
+        "topic": "A1 SEO",
+        "q": "Which of these helps with search engine optimisation (SEO)?",
+        "options": [
+            "Using descriptive page titles and meta descriptions",
+            "Using only images (no text) on the page",
+            "Hiding keywords in the page background",
+            "Disabling the viewport meta tag"
+        ],
+        "answer": 0,
+        "why": "SEO uses keywords, descriptive titles, meta descriptions, headings, alt text and fast, mobile-friendly pages to help search engines rank your site."
+    },
+    {
+        "id": "MC13",
+        "aim": "A",
+        "topic": "A2 Requirements",
+        "q": "Which of these should you establish first when planning from a client brief?",
+        "options": [
+            "The client's requirements: purpose, audience and technical needs",
+            "The colour palette",
+            "The domain name",
+            "The hosting provider"
+        ],
+        "answer": 0,
+        "why": "Everything else â€” structure, design, content â€” flows from understanding the purpose, the intended audience and the technical requirements of the brief."
+    },
+    {
+        "id": "MC14",
+        "aim": "A",
+        "topic": "A2 Legal",
+        "q": "You find a great photo on Google Images for your client's website. What should you do?",
+        "options": [
+            "Use it â€” everything online is free to use",
+            "Check the licence and credit the source, or use royalty-free images",
+            "Crop it so the owner won't recognise it",
+            "Only use it if the site is not making money"
+        ],
+        "answer": 1,
+        "why": "Most images are protected by copyright. Check the licence, credit the source, use Creative Commons or royalty-free stock, or create your own assets."
+    },
+    {
+        "id": "MC15",
+        "aim": "A",
+        "topic": "A2 Legal",
+        "q": "Your site has a form where users enter their email. Under UK GDPR, what must you provide?",
+        "options": [
+            "A captcha only",
+            "A password on every page",
+            "A privacy policy explaining what you collect and why, plus consent",
+            "Nothing â€” small sites are exempt"
+        ],
+        "answer": 2,
+        "why": "GDPR applies to any site processing personal data. You must be transparent about what data you collect, why, and get consent where needed."
+    },
+    {
+        "id": "MC16",
+        "aim": "B",
+        "topic": "B1 Wireframes",
+        "q": "What is a wireframe?",
+        "options": [
+            "A low-fidelity layout of a page showing the structure and placement of elements",
+            "The site's HTML code",
+            "The final finished design with colours and images",
+            "A network connection diagram"
+        ],
+        "answer": 0,
+        "why": "Wireframes are simple boxes and placeholders showing where elements go â€” structure first, style later."
+    },
+    {
+        "id": "MC17",
+        "aim": "B",
+        "topic": "B1 Wireframes",
+        "q": "Which is a wireframing tool or technique?",
+        "options": [
+            "UX design software like Figma",
+            "All of these",
+            "Sketching on paper",
+            "Dedicated wireframing apps"
+        ],
+        "answer": 1,
+        "why": "Wireframes can be sketched on paper, drawn in graphic design software, built in UX tools like Figma, or made in dedicated apps."
+    },
+    {
+        "id": "MC18",
+        "aim": "B",
+        "topic": "B2 Assets",
+        "q": "Which file format is usually best for a photographic image on a website?",
+        "options": [
+            "PNG",
+            "JPG",
+            "SVG",
+            "MP4"
+        ],
+        "answer": 1,
+        "why": "JPG compresses photographs well. PNG suits graphics with transparency, SVG suits logos and icons, MP4 is for video."
+    },
+    {
+        "id": "MC19",
+        "aim": "B",
+        "topic": "B2 Assets",
+        "q": "Why compress and resize images before adding them to a website?",
+        "options": [
+            "To prevent copyright claims",
+            "Large files slow the page down, hurting user experience and SEO",
+            "Because the HTML standard requires it",
+            "To make them look better"
+        ],
+        "answer": 1,
+        "why": "Large images increase loading time, which frustrates users (especially on mobile) and hurts search ranking. Compress to the size you actually use."
+    },
+    {
+        "id": "MC20",
+        "aim": "B",
+        "topic": "B2 Assets",
+        "q": "What is good practice for naming asset files?",
+        "options": [
+            "Use the person who downloaded it as the name",
+            "Use consistent, descriptive names with no spaces (e.g. hero-banner.jpg)",
+            "Name everything 'img1', 'img2'",
+            "Use random characters so they cannot clash"
+        ],
+        "answer": 1,
+        "why": "Descriptive names with dashes (hero-banner.jpg) are readable, consistent and don't break URLs â€” unlike 'IMG 3421.JPG'."
+    },
+    {
+        "id": "MC21",
+        "aim": "B",
+        "topic": "B2 Assets",
+        "q": "What is an asset log used for?",
+        "options": [
+            "Managing user accounts",
+            "Tracking each asset â€” its name, source and where it appears on the site",
+            "Counting page views",
+            "Recording test results only"
+        ],
+        "answer": 1,
+        "why": "An asset log shows where each asset came from (original work vs sourced, with credit) and how it's used â€” great evidence for the assignment."
+    },
+    {
+        "id": "MC22",
+        "aim": "C",
+        "topic": "C1 HTML",
+        "q": "Which HTML element is semantic (has meaning for accessibility and SEO)?",
+        "options": [
+            "<div>",
+            "<span>",
+            "<header>",
+            "<br>"
+        ],
+        "answer": 2,
+        "why": "Semantic elements like <header>, <nav>, <main>, <section> and <footer> describe their meaning, helping screen readers and search engines."
+    },
+    {
+        "id": "MC23",
+        "aim": "C",
+        "topic": "C1 CSS",
+        "q": "Which describes the CSS box model?",
+        "options": [
+            "Header, nav and footer",
+            "Content, padding, border and margin",
+            "HTML, CSS and JavaScript",
+            "Row, column, cell"
+        ],
+        "answer": 1,
+        "why": "Every element is a box: content in the middle, then padding (space inside), border, and margin (space outside)."
+    },
+    {
+        "id": "MC24",
+        "aim": "C",
+        "topic": "C1 CSS",
+        "q": "How do you make a layout responsive to different screen sizes?",
+        "options": [
+            "Using only fixed pixel widths",
+            "Media queries and responsive layout tools like Flexbox and Grid",
+            "Disabling CSS on mobile",
+            "Using more images"
+        ],
+        "answer": 1,
+        "why": "Media queries apply different styles at different screen widths, and Flexbox/Grid layouts flex to fit. Never rely on fixed widths alone."
+    },
+    {
+        "id": "MC25",
+        "aim": "C",
+        "topic": "C1 JS",
+        "q": "Which JavaScript-powered component reveals and hides content in a collapsible section?",
+        "options": [
+            "Accordion",
+            "Breadcrumb",
+            "Carousel",
+            "Modal"
+        ],
+        "answer": 0,
+        "why": "An accordion lets users expand and collapse sections â€” great for FAQs. Modals overlay the page; carousels slide images."
+    },
+    {
+        "id": "MC26",
+        "aim": "C",
+        "topic": "C1 JS",
+        "q": "What does a modal box do?",
+        "options": [
+            "Opens an overlay on top of the page (e.g. an enlarged image or a sign-in dialog)",
+            "Closes the browser window",
+            "Redirects to another site",
+            "Plays a video automatically"
+        ],
+        "answer": 0,
+        "why": "A modal displays content in an overlay. Clicking a thumbnail to view a larger image in a modal is a common assignment requirement."
+    },
+    {
+        "id": "MC27",
+        "aim": "C",
+        "topic": "C2 Access",
+        "q": "Which organisation publishes the WCAG accessibility guidelines?",
+        "options": [
+            "ISO",
+            "Ofcom",
+            "W3C",
+            "NASA"
+        ],
+        "answer": 2,
+        "why": "The World Wide Web Consortium (W3C) publishes the Web Content Accessibility Guidelines (WCAG)."
+    },
+    {
+        "id": "MC28",
+        "aim": "C",
+        "topic": "C2 Access",
+        "q": "What is the purpose of alt text on an image?",
+        "options": [
+            "Adds a border around the image",
+            "Makes the image load faster",
+            "Describes the image for screen readers and shows if the image fails to load",
+            "Stores the image copyright"
+        ],
+        "answer": 2,
+        "why": "Alt text gives a text description of the image for screen readers and appears when the image can't load."
+    },
+    {
+        "id": "MC29",
+        "aim": "C",
+        "topic": "C3 Testing",
+        "q": "Which of these would you check during functionality testing?",
+        "options": [
+            "Whether the colour scheme is 'nice'",
+            "Whether users find the site intuitive",
+            "Whether all navigation links work",
+            "Whether the brand name is memorable"
+        ],
+        "answer": 2,
+        "why": "Functionality testing checks that things WORK â€” links, buttons, forms, interactions and responsiveness. Usability testing checks how real users experience the site."
+    },
+    {
+        "id": "MC30",
+        "aim": "C",
+        "topic": "C3 Testing",
+        "q": "What is usability testing?",
+        "options": [
+            "Testing the server uptime",
+            "Running the site through a code validator",
+            "Asking real users to try the site and give feedback on navigation, clarity and experience",
+            "Checking the site loads on one computer"
+        ],
+        "answer": 2,
+        "why": "Usability testing uses real users (classmates, friends, family) to audit the experience â€” accessibility, logical navigation, clarity and overall UX."
+    },
+    {
+        "id": "MC31",
+        "aim": "C",
+        "topic": "C3 Testing",
+        "q": "What is a test plan?",
+        "options": [
+            "A list of page names",
+            "A schedule of when to write code",
+            "A table of tests listing description, test data, expected outcome, actual outcome and comments",
+            "A wireframe of the final site"
+        ],
+        "answer": 2,
+        "why": "A formal test plan documents each test so you can compare expected vs actual outcomes â€” essential evidence for the assignment."
+    },
+    {
+        "id": "MC32",
+        "aim": "C",
+        "topic": "C2 Review",
+        "q": "What should your self-review of the finished website consider?",
+        "options": [
+            "Quality vs similar sites, suitability for the audience, meeting client requirements, consistency and readability",
+            "Only the number of images",
+            "Only the page count",
+            "Whether you enjoyed building it"
+        ],
+        "answer": 0,
+        "why": "The spec's self-review covers comparison with similar websites, audience and purpose suitability, client requirements, legal/ethical constraints, consistency and readability."
+    },
+    {
+        "id": "MC33",
+        "aim": "A",
+        "topic": "A1 Purpose",
+        "q": "Which of these is an example of an entertainment website?",
+        "options": [
+            "A streaming service showing films and series",
+            "A school's homework portal",
+            "A bank's online banking portal",
+            "A government tax website"
+        ],
+        "answer": 0,
+        "why": "Entertainment sites exist to amuse or engage users â€” streaming, gaming, music and video platforms are classic examples."
+    },
+    {
+        "id": "MC34",
+        "aim": "A",
+        "topic": "A1 Purpose",
+        "q": "What is the main purpose of an eCommerce website?",
+        "options": [
+            "To host a blog",
+            "To sell products or services online",
+            "To provide free information",
+            "To display a company's contact details only"
+        ],
+        "answer": 1,
+        "why": "eCommerce sites are built to sell â€” they include product listings, a shopping basket, checkout and payment processing."
+    },
+    {
+        "id": "MC35",
+        "aim": "A",
+        "topic": "A1 Audience",
+        "q": "Why is it important to identify the target audience before designing a website?",
+        "options": [
+            "To decide the hosting provider",
+            "So the design, content and tone match what the audience expects",
+            "Because all websites must have an audience",
+            "To set the price of the website"
+        ],
+        "answer": 1,
+        "why": "Knowing the audience (age, interests, technical ability) shapes everything â€” layout, colour, language, features and content."
+    },
+    {
+        "id": "MC36",
+        "aim": "A",
+        "topic": "A1 Audience",
+        "q": "Which of these is a demographic factor used to define a target audience?",
+        "options": [
+            "Age",
+            "All of these",
+            "Income",
+            "Location"
+        ],
+        "answer": 1,
+        "why": "Demographics include age, gender, income, education, location and occupation â€” all used to build a picture of the audience."
+    },
+    {
+        "id": "MC37",
+        "aim": "A",
+        "topic": "A1 Layout",
+        "q": "What is the purpose of grouping related content together on a page?",
+        "options": [
+            "To make the page load faster",
+            "To make the page easier to scan and understand",
+            "To reduce the number of images",
+            "To improve the domain name"
+        ],
+        "answer": 1,
+        "why": "Grouping related items (e.g. all navigation together, all product cards together) helps users find what they need quickly."
+    },
+    {
+        "id": "MC38",
+        "aim": "A",
+        "topic": "A1 Layout",
+        "q": "What is a grid layout in web design?",
+        "options": [
+            "A type of image file",
+            "A system of columns and rows used to align content consistently",
+            "A network topology",
+            "A CSS colour value"
+        ],
+        "answer": 1,
+        "why": "A grid divides the page into columns and rows so elements align neatly â€” the basis of most professional layouts."
+    },
+    {
+        "id": "MC39",
+        "aim": "A",
+        "topic": "A1 Navigation",
+        "q": "What is a hamburger menu?",
+        "options": [
+            "A navigation icon (three lines) that expands a menu, common on mobile",
+            "A type of food website",
+            "A browser bookmark",
+            "A CSS animation"
+        ],
+        "answer": 0,
+        "why": "The hamburger icon (â˜°) collapses navigation into a button, saving space on small screens â€” a common responsive pattern."
+    },
+    {
+        "id": "MC40",
+        "aim": "A",
+        "topic": "A1 Navigation",
+        "q": "What is logical navigation?",
+        "options": [
+            "Organising pages in a way that makes sense to the user, matching how they think",
+            "Alphabetical ordering of all pages",
+            "Random page order",
+            "Using only one page"
+        ],
+        "answer": 0,
+        "why": "Logical navigation groups pages by meaning (e.g. all 'About' pages together) so users can predict where to find things."
+    },
+    {
+        "id": "MC41",
+        "aim": "A",
+        "topic": "A1 Content",
+        "q": "What is a call to action (CTA)?",
+        "options": [
+            "A type of image",
+            "A legal disclaimer",
+            "A button or link that prompts the user to take a specific action, like 'Buy now'",
+            "A server request"
+        ],
+        "answer": 2,
+        "why": "A CTA guides the user toward a goal â€” 'Sign up', 'Buy now', 'Contact us' â€” and should be visually prominent."
+    },
+    {
+        "id": "MC42",
+        "aim": "A",
+        "topic": "A1 Design",
+        "q": "Why is typography important in web design?",
+        "options": [
+            "It determines the site's colour",
+            "It controls the server",
+            "It affects readability and the overall feel of the site",
+            "It is only decorative"
+        ],
+        "answer": 2,
+        "why": "Font choice, size, spacing and weight affect how easily users read and how professional the site looks."
+    },
+    {
+        "id": "MC43",
+        "aim": "A",
+        "topic": "A1 Design",
+        "q": "What is a colour scheme?",
+        "options": [
+            "A CSS media query",
+            "A type of image filter",
+            "The set of colours used consistently across a website",
+            "A browser setting"
+        ],
+        "answer": 2,
+        "why": "A colour scheme is a deliberate palette used for backgrounds, text, buttons and accents to create a consistent brand feel."
+    },
+    {
+        "id": "MC44",
+        "aim": "A",
+        "topic": "A1 UX",
+        "q": "What does 'consistency' mean in user experience design?",
+        "options": [
+            "Using the same layout, colours and patterns throughout the site",
+            "Using only one page",
+            "Making every page identical",
+            "Removing all animations"
+        ],
+        "answer": 0,
+        "why": "Consistency means users learn how the site works once and can apply it everywhere â€” reducing confusion and frustration."
+    },
+    {
+        "id": "MC45",
+        "aim": "A",
+        "topic": "A1 UX",
+        "q": "Why should a website be 'user-friendly'?",
+        "options": [
+            "To increase the file size",
+            "So users can achieve their goals easily without frustration",
+            "Because it is a legal requirement",
+            "To make it harder to use"
+        ],
+        "answer": 1,
+        "why": "A user-friendly site is intuitive, fast and accessible, so visitors stay longer and are more likely to return or convert."
+    },
+    {
+        "id": "MC46",
+        "aim": "A",
+        "topic": "A1 Motion",
+        "q": "Why should motion on a website be used sparingly?",
+        "options": [
+            "Too much motion distracts users and can hurt accessibility and performance",
+            "Motion is only for games",
+            "Motion is always bad",
+            "Motion makes text unreadable always"
+        ],
+        "answer": 0,
+        "why": "Motion should have a purpose (feedback, guidance). Excessive animation distracts, slows the page and can trigger accessibility issues."
+    },
+    {
+        "id": "MC47",
+        "aim": "A",
+        "topic": "A1 Dynamic",
+        "q": "Which of these is an example of dynamic content?",
+        "options": [
+            "A personalised 'recommended for you' section",
+            "A fixed footer",
+            "A static 'About us' page",
+            "A plain text paragraph"
+        ],
+        "answer": 0,
+        "why": "Dynamic content changes based on the user or data â€” recommendations, member dashboards, live scores and search results."
+    },
+    {
+        "id": "MC48",
+        "aim": "A",
+        "topic": "A1 Compatibility",
+        "q": "What is cross-browser compatibility?",
+        "options": [
+            "A site that only works in one browser",
+            "A website working correctly across different browsers",
+            "A browser extension",
+            "A type of malware"
+        ],
+        "answer": 1,
+        "why": "Cross-browser compatibility means the site renders and functions correctly in Chrome, Safari, Firefox, Edge and others."
+    },
+    {
+        "id": "MC49",
+        "aim": "A",
+        "topic": "A1 SEO",
+        "q": "What is a meta description?",
+        "options": [
+            "A hidden password",
+            "A short summary of a page shown in search results",
+            "A type of image",
+            "A CSS rule"
+        ],
+        "answer": 1,
+        "why": "A meta description is a brief snippet that appears under the page title in search results, helping users decide whether to click."
+    },
+    {
+        "id": "MC50",
+        "aim": "A",
+        "topic": "A1 SEO",
+        "q": "Why is a mobile-friendly (responsive) website important for SEO?",
+        "options": [
+            "It is only for aesthetics",
+            "Google prioritises mobile-friendly sites in search rankings",
+            "It reduces the number of pages",
+            "It is not important"
+        ],
+        "answer": 1,
+        "why": "Google uses mobile-first indexing, so a responsive site ranks better and provides a better experience for mobile users."
+    },
+    {
+        "id": "MC51",
+        "aim": "A",
+        "topic": "A2 Requirements",
+        "q": "What is a client brief?",
+        "options": [
+            "A document describing what the client wants the website to achieve",
+            "A list of server specifications",
+            "A type of contract for hosting",
+            "A design template"
+        ],
+        "answer": 0,
+        "why": "The brief sets out the purpose, audience, features, tone and constraints â€” the starting point for all planning."
+    },
+    {
+        "id": "MC52",
+        "aim": "A",
+        "topic": "A2 Requirements",
+        "q": "Which of these is a technical requirement you might establish from a brief?",
+        "options": [
+            "The client's favourite colour",
+            "The hosting and domain requirements",
+            "The number of employees",
+            "The company's logo design"
+        ],
+        "answer": 1,
+        "why": "Technical requirements include hosting, domain, platform, performance, security and compatibility needs."
+    },
+    {
+        "id": "MC53",
+        "aim": "A",
+        "topic": "A2 Research",
+        "q": "Why research existing websites before designing a new one?",
+        "options": [
+            "To copy them exactly",
+            "To find free hosting",
+            "To learn what works well and what to avoid",
+            "To get a domain name"
+        ],
+        "answer": 2,
+        "why": "Researching similar sites reveals best practice, common features and gaps you can improve on â€” evidence for the assignment."
+    },
+    {
+        "id": "MC54",
+        "aim": "A",
+        "topic": "A2 Legal",
+        "q": "What is copyright?",
+        "options": [
+            "A browser feature",
+            "A type of hosting",
+            "The legal right of the creator to control how their work is used",
+            "A CSS property"
+        ],
+        "answer": 2,
+        "why": "Copyright protects original work (text, images, music, code). You need permission or a licence to use someone else's work."
+    },
+    {
+        "id": "MC55",
+        "aim": "A",
+        "topic": "A2 Legal",
+        "q": "What is a Creative Commons licence?",
+        "options": [
+            "A type of malware",
+            "A hosting plan",
+            "A licence that lets creators share their work with certain conditions",
+            "A browser extension"
+        ],
+        "answer": 2,
+        "why": "Creative Commons licences allow reuse under set conditions (e.g. attribution, non-commercial) â€” a safe source of assets."
+    },
+    {
+        "id": "MC56",
+        "aim": "A",
+        "topic": "A2 Legal",
+        "q": "Why must a website be accessible to users with disabilities?",
+        "options": [
+            "To reduce file size",
+            "It is a legal requirement under the Equality Act and improves the experience for everyone",
+            "Because it is cheaper",
+            "It is optional"
+        ],
+        "answer": 1,
+        "why": "The Equality Act 2010 requires websites to be accessible, and accessibility also benefits all users (e.g. captions, keyboard nav)."
+    },
+    {
+        "id": "MC57",
+        "aim": "B",
+        "topic": "B1 Wireframes",
+        "q": "What is the difference between a wireframe and a mockup?",
+        "options": [
+            "A wireframe is low-fidelity structure; a mockup is a high-fidelity visual design",
+            "A mockup is a wireframe with no text",
+            "They are the same thing",
+            "A wireframe is the final code"
+        ],
+        "answer": 0,
+        "why": "Wireframes show structure and layout in simple boxes; mockups add colour, images and typography to show the final look."
+    },
+    {
+        "id": "MC58",
+        "aim": "B",
+        "topic": "B1 Wireframes",
+        "q": "Why annotate a wireframe?",
+        "options": [
+            "To explain the purpose of each element and how it meets the brief",
+            "To add colour",
+            "To make it look prettier",
+            "To make it load faster"
+        ],
+        "answer": 0,
+        "why": "Annotations show your thinking â€” why each element is there and how it meets client requirements â€” key evidence for the assignment."
+    },
+    {
+        "id": "MC59",
+        "aim": "B",
+        "topic": "B1 Design",
+        "q": "What is a visual style?",
+        "options": [
+            "A wireframe",
+            "The consistent look created by colour palette, typography, imagery and layout",
+            "A type of CSS",
+            "A server setting"
+        ],
+        "answer": 1,
+        "why": "The visual style ties together colour, fonts, images and spacing to create a cohesive, recognisable brand."
+    },
+    {
+        "id": "MC60",
+        "aim": "B",
+        "topic": "B1 Design",
+        "q": "What is a brand identity?",
+        "options": [
+            "A type of hosting",
+            "The visual and verbal elements that represent a company (logo, colours, tone)",
+            "The company's bank details",
+            "A database"
+        ],
+        "answer": 1,
+        "why": "Brand identity includes the logo, colour palette, typography and tone of voice that make a company recognisable."
+    },
+    {
+        "id": "MC61",
+        "aim": "B",
+        "topic": "B1 Review",
+        "q": "What does 'fitness for purpose' mean when reviewing a design?",
+        "options": [
+            "Whether the design meets the client's requirements and works for the audience",
+            "Whether the design is colourful",
+            "Whether the design uses images",
+            "Whether the design is new"
+        ],
+        "answer": 0,
+        "why": "Fitness for purpose asks: does this design actually do what the client and audience need? Review it against the brief."
+    },
+    {
+        "id": "MC62",
+        "aim": "B",
+        "topic": "B2 Assets",
+        "q": "Which file format is best for a logo with a transparent background?",
+        "options": [
+            "PNG",
+            "JPG",
+            "GIF",
+            "MP3"
+        ],
+        "answer": 0,
+        "why": "PNG supports transparency, so a logo can sit on any background. SVG is even better for logos as it scales without losing quality."
+    },
+    {
+        "id": "MC63",
+        "aim": "B",
+        "topic": "B2 Assets",
+        "q": "What is a vector graphic?",
+        "options": [
+            "A photograph",
+            "An image made of paths that scales without losing quality (e.g. SVG)",
+            "A video file",
+            "A bitmap image"
+        ],
+        "answer": 1,
+        "why": "Vector graphics use mathematical paths, so they stay sharp at any size â€” ideal for logos, icons and diagrams."
+    },
+    {
+        "id": "MC64",
+        "aim": "B",
+        "topic": "B2 Assets",
+        "q": "Why trim a video before adding it to a website?",
+        "options": [
+            "To change its colour",
+            "To remove unnecessary footage and reduce file size",
+            "To add subtitles",
+            "To make it loop"
+        ],
+        "answer": 1,
+        "why": "Trimming removes unwanted parts, reducing file size and loading time while keeping the content focused."
+    },
+    {
+        "id": "MC65",
+        "aim": "B",
+        "topic": "B2 Assets",
+        "q": "What is a folder structure for assets?",
+        "options": [
+            "A single folder with everything",
+            "A random collection of files",
+            "An organised set of folders (e.g. images/, css/, js/) to keep files tidy",
+            "A database"
+        ],
+        "answer": 2,
+        "why": "A clear folder structure makes assets easy to find, maintain and reference â€” good practice and good evidence."
+    },
+    {
+        "id": "MC66",
+        "aim": "B",
+        "topic": "B2 Assets",
+        "q": "What is the difference between original and sourced assets?",
+        "options": [
+            "Original assets are free; sourced are paid",
+            "There is no difference",
+            "Original assets you create yourself; sourced assets you obtain from elsewhere (with credit)",
+            "Sourced assets are always better"
+        ],
+        "answer": 2,
+        "why": "Creating your own assets shows skill; sourcing others requires credit and licence checks. Both are valid if managed properly."
+    },
+    {
+        "id": "MC67",
+        "aim": "C",
+        "topic": "C1 HTML",
+        "q": "Which HTML tag is used to create a hyperlink?",
+        "options": [
+            "<link>",
+            "<href>",
+            "<a>",
+            "<url>"
+        ],
+        "answer": 2,
+        "why": "The <a> (anchor) tag creates links using the href attribute, e.g. <a href=\"page.html\">Link</a>."
+    },
+    {
+        "id": "MC68",
+        "aim": "C",
+        "topic": "C1 HTML",
+        "q": "Which HTML element is used for a form?",
+        "options": [
+            "<form>",
+            "<button>",
+            "<input>",
+            "<field>"
+        ],
+        "answer": 0,
+        "why": "The <form> element wraps form controls like inputs, selects and buttons, and defines how data is submitted."
+    },
+    {
+        "id": "MC69",
+        "aim": "C",
+        "topic": "C1 HTML",
+        "q": "Which HTML tag embeds a video?",
+        "options": [
+            "<audio>",
+            "<video>",
+            "<img>",
+            "<embed>"
+        ],
+        "answer": 1,
+        "why": "The <video> element embeds video with controls, e.g. <video controls src=\"clip.mp4\"></video>."
+    },
+    {
+        "id": "MC70",
+        "aim": "C",
+        "topic": "C1 HTML",
+        "q": "What is the purpose of the <nav> element?",
+        "options": [
+            "To mark up a block of navigation links",
+            "To embed an image",
+            "To create a table",
+            "To style text"
+        ],
+        "answer": 0,
+        "why": "<nav> is a semantic element that identifies navigation links, helping screen readers and SEO understand the structure."
+    },
+    {
+        "id": "MC71",
+        "aim": "C",
+        "topic": "C1 CSS",
+        "q": "What does CSS stand for?",
+        "options": [
+            "Creative Style Sheets",
+            "Cascading Style Sheets",
+            "Computer Style System",
+            "Cascading Script Syntax"
+        ],
+        "answer": 1,
+        "why": "CSS (Cascading Style Sheets) controls the presentation â€” layout, colours, fonts and spacing â€” of HTML content."
+    },
+    {
+        "id": "MC72",
+        "aim": "C",
+        "topic": "C1 CSS",
+        "q": "Which CSS property changes the text colour?",
+        "options": [
+            "color",
+            "font-size",
+            "background",
+            "text-align"
+        ],
+        "answer": 0,
+        "why": "The color property sets text colour; background sets the background; font-size sets size; text-align aligns text."
+    },
+    {
+        "id": "MC73",
+        "aim": "C",
+        "topic": "C1 CSS",
+        "q": "What is a media query used for?",
+        "options": [
+            "Applying different styles based on screen size or device",
+            "Playing media files",
+            "Querying a database",
+            "Loading images"
+        ],
+        "answer": 0,
+        "why": "Media queries (e.g. @media (max-width: 600px)) apply CSS only under certain conditions â€” the basis of responsive design."
+    },
+    {
+        "id": "MC74",
+        "aim": "C",
+        "topic": "C1 CSS",
+        "q": "What is Flexbox used for?",
+        "options": [
+            "Styling text",
+            "Laying out elements in a flexible row or column",
+            "Embedding video",
+            "Creating forms"
+        ],
+        "answer": 1,
+        "why": "Flexbox arranges items in one dimension (row or column) and handles spacing, alignment and wrapping â€” great for nav bars and cards."
+    },
+    {
+        "id": "MC75",
+        "aim": "C",
+        "topic": "C1 JS",
+        "q": "What is JavaScript used for on a website?",
+        "options": [
+            "Adding interactivity like sliders, forms and dynamic content",
+            "Styling the page",
+            "Structuring the page",
+            "Hosting the site"
+        ],
+        "answer": 0,
+        "why": "JavaScript adds behaviour and interactivity â€” responding to clicks, validating forms, animating and updating content."
+    },
+    {
+        "id": "MC76",
+        "aim": "C",
+        "topic": "C1 JS",
+        "q": "What does a carousel/slider do?",
+        "options": [
+            "Cycles through a set of images or slides",
+            "Closes the page",
+            "Plays audio",
+            "Validates a form"
+        ],
+        "answer": 0,
+        "why": "A carousel automatically or manually cycles through slides â€” common for galleries, testimonials and featured content."
+    },
+    {
+        "id": "MC77",
+        "aim": "C",
+        "topic": "C1 JS",
+        "q": "What is a tab component?",
+        "options": [
+            "A browser tab",
+            "A type of image",
+            "A set of buttons that switch between different content panels",
+            "A CSS grid"
+        ],
+        "answer": 2,
+        "why": "Tabs let users switch between sections of content without leaving the page â€” a common interactive component."
+    },
+    {
+        "id": "MC78",
+        "aim": "C",
+        "topic": "C1 JS",
+        "q": "What is a filter/search feature?",
+        "options": [
+            "A type of image",
+            "A CSS animation",
+            "Lets users narrow down a list by typing or selecting criteria",
+            "A server log"
+        ],
+        "answer": 2,
+        "why": "Search/filter functionality lets users find items quickly â€” a common assignment requirement (e.g. filtering a product list)."
+    },
+    {
+        "id": "MC79",
+        "aim": "C",
+        "topic": "C2 Access",
+        "q": "What is a skip link?",
+        "options": [
+            "A broken link",
+            "A link to skip ads",
+            "A link that lets keyboard users jump straight to the main content",
+            "A type of image"
+        ],
+        "answer": 2,
+        "why": "A skip link ('Skip to main content') lets keyboard and screen-reader users bypass repeated navigation â€” an accessibility best practice."
+    },
+    {
+        "id": "MC80",
+        "aim": "C",
+        "topic": "C2 Access",
+        "q": "What is semantic HTML?",
+        "options": [
+            "HTML with inline styles",
+            "HTML with lots of <div> tags",
+            "Using elements that describe their meaning (e.g. <header>, <main>)",
+            "HTML that only works in one browser"
+        ],
+        "answer": 2,
+        "why": "Semantic HTML uses meaningful tags, improving accessibility, SEO and code readability compared to generic <div>s."
+    },
+    {
+        "id": "MC81",
+        "aim": "C",
+        "topic": "C2 Access",
+        "q": "Why is the lang attribute important on the <html> element?",
+        "options": [
+            "It sets the font",
+            "It sets the background colour",
+            "It tells screen readers and search engines the page language",
+            "It is decorative"
+        ],
+        "answer": 2,
+        "why": "The lang attribute (e.g. lang=\"en\") helps screen readers pronounce content correctly and helps search engines index the language."
+    },
+    {
+        "id": "MC82",
+        "aim": "C",
+        "topic": "C2 SEO",
+        "q": "What is a heading hierarchy?",
+        "options": [
+            "Random heading sizes",
+            "Using h1, h2, h3 in a logical order to structure content",
+            "Using only h1 tags",
+            "No headings at all"
+        ],
+        "answer": 1,
+        "why": "A logical heading hierarchy (one h1, then h2/h3 for subsections) helps screen readers and search engines understand structure."
+    },
+    {
+        "id": "MC83",
+        "aim": "C",
+        "topic": "C2 SEO",
+        "q": "What is a sitemap in the context of SEO?",
+        "options": [
+            "A file listing all pages of a site to help search engines index it",
+            "A type of image",
+            "A wireframe",
+            "A CSS file"
+        ],
+        "answer": 0,
+        "why": "An XML sitemap lists all URLs so search engines can discover and index pages efficiently."
+    },
+    {
+        "id": "MC84",
+        "aim": "C",
+        "topic": "C3 Testing",
+        "q": "What is a test plan's 'expected outcome'?",
+        "options": [
+            "The test data",
+            "What the site should do if the feature works correctly",
+            "What the user thinks",
+            "The page name"
+        ],
+        "answer": 1,
+        "why": "The expected outcome is the correct result you predict; comparing it to the actual outcome reveals whether the feature works."
+    },
+    {
+        "id": "MC85",
+        "aim": "C",
+        "topic": "C3 Testing",
+        "q": "What is a test plan's 'actual outcome'?",
+        "options": [
+            "What the site should do",
+            "What the site actually did when tested",
+            "The test description",
+            "The tester's name"
+        ],
+        "answer": 1,
+        "why": "The actual outcome records what really happened, so you can compare it to the expected outcome and note any defects."
+    },
+    {
+        "id": "MC86",
+        "aim": "C",
+        "topic": "C3 Testing",
+        "q": "What is a defect/bug?",
+        "options": [
+            "An error or fault in the website that stops it working as intended",
+            "A feature request",
+            "A design choice",
+            "A type of image"
+        ],
+        "answer": 0,
+        "why": "A defect is any flaw â€” a broken link, a form that won't submit, a layout that breaks on mobile â€” that needs fixing."
+    },
+    {
+        "id": "MC87",
+        "aim": "C",
+        "topic": "C3 Testing",
+        "q": "Why test a website on a mobile device?",
+        "options": [
+            "To check the responsive layout works and content is usable on small screens",
+            "Because it is faster",
+            "To reduce file size",
+            "It is not necessary"
+        ],
+        "answer": 0,
+        "why": "Most users browse on mobile, so you must verify the responsive layout, touch targets and readability on small screens."
+    },
+    {
+        "id": "MC88",
+        "aim": "C",
+        "topic": "C3 Testing",
+        "q": "What is a usability audit?",
+        "options": [
+            "A code validator",
+            "A structured review of how easy and pleasant the site is to use",
+            "A server check",
+            "A colour test"
+        ],
+        "answer": 1,
+        "why": "A usability audit assesses navigation, clarity, accessibility and overall user experience â€” often with real users."
+    },
+    {
+        "id": "MC89",
+        "aim": "C",
+        "topic": "C2 Review",
+        "q": "What is a refinement?",
+        "options": [
+            "A CSS property",
+            "A type of image",
+            "A change made to improve the website after testing or review",
+            "A hosting plan"
+        ],
+        "answer": 2,
+        "why": "Refinements are improvements made in response to testing and feedback â€” showing the review cycle is key evidence."
+    },
+    {
+        "id": "MC90",
+        "aim": "C",
+        "topic": "C2 Review",
+        "q": "Why document the improvements you made after testing?",
+        "options": [
+            "To make the site bigger",
+            "Because it is required by law",
+            "To show the examiner you reviewed and refined your work",
+            "It is optional"
+        ],
+        "answer": 2,
+        "why": "Documenting before â†’ feedback â†’ after shows the review cycle, which is essential for higher grades in the assignment."
+    },
+    {
+        "id": "MC91",
+        "aim": "A",
+        "topic": "A1 Purpose",
+        "q": "Which of these is a purpose of a promotional website?",
+        "options": [
+            "To host a game",
+            "To store a database",
+            "To advertise a product or service and encourage action",
+            "To provide a login system"
+        ],
+        "answer": 2,
+        "why": "Promotional sites market a product/service, using CTAs and persuasive content to drive sales or enquiries."
+    },
+    {
+        "id": "MC92",
+        "aim": "A",
+        "topic": "A1 Purpose",
+        "q": "What is an informational website?",
+        "options": [
+            "A site that sells products",
+            "A site that streams video",
+            "A site whose main purpose is to provide facts and details",
+            "A site that hosts games"
+        ],
+        "answer": 2,
+        "why": "Informational sites (news, encyclopaedias, company 'about' pages) exist to deliver facts and knowledge."
+    },
+    {
+        "id": "MC93",
+        "aim": "A",
+        "topic": "A1 Audience",
+        "q": "What is a user journey?",
+        "options": [
+            "A type of image",
+            "A CSS animation",
+            "The path a user takes through a website to reach a goal",
+            "A server route"
+        ],
+        "answer": 2,
+        "why": "A user journey maps the steps a visitor takes â€” from landing to completing a task â€” helping you spot friction points."
+    },
+    {
+        "id": "MC94",
+        "aim": "A",
+        "topic": "A1 Layout",
+        "q": "What is whitespace (negative space) in design?",
+        "options": [
+            "The empty space between elements that improves readability and focus",
+            "A type of image",
+            "A white background",
+            "A CSS colour"
+        ],
+        "answer": 0,
+        "why": "Whitespace gives content room to breathe, making layouts cleaner and easier to scan â€” a key design principle."
+    },
+    {
+        "id": "MC95",
+        "aim": "A",
+        "topic": "A1 Navigation",
+        "q": "What is a breadcrumb?",
+        "options": [
+            "A CSS property",
+            "A navigation trail showing the user's location in the site hierarchy",
+            "A type of cookie",
+            "A browser history"
+        ],
+        "answer": 1,
+        "why": "Breadcrumbs (e.g. Home â€º Products â€º Laptops) show where you are and let users jump back up the hierarchy."
+    },
+    {
+        "id": "MC96",
+        "aim": "A",
+        "topic": "A1 Content",
+        "q": "What is a hero section?",
+        "options": [
+            "A footer",
+            "The large prominent area at the top of a homepage with the main headline and CTA",
+            "A type of image",
+            "A navigation bar"
+        ],
+        "answer": 1,
+        "why": "The hero is the first thing users see â€” a big headline, supporting text and a call to action that sets the tone."
+    },
+    {
+        "id": "MC97",
+        "aim": "A",
+        "topic": "A1 Design",
+        "q": "What is a logo?",
+        "options": [
+            "A symbol or design that identifies a brand",
+            "A type of image file",
+            "A CSS class",
+            "A hosting plan"
+        ],
+        "answer": 0,
+        "why": "A logo is a recognisable mark that represents a company â€” a key part of brand identity."
+    },
+    {
+        "id": "MC98",
+        "aim": "A",
+        "topic": "A1 UX",
+        "q": "What is a loading time and why does it matter?",
+        "options": [
+            "A type of animation",
+            "How long a page takes to load; slow pages frustrate users and hurt SEO",
+            "A server setting",
+            "It does not matter"
+        ],
+        "answer": 1,
+        "why": "Fast loading improves user experience and search ranking; slow sites lose visitors. Optimise images and code."
+    },
+    {
+        "id": "MC99",
+        "aim": "A",
+        "topic": "A1 Dynamic",
+        "q": "What is a static website?",
+        "options": [
+            "A site that always changes",
+            "A site with fixed content that doesn't change based on the user",
+            "A site with no images",
+            "A site with no CSS"
+        ],
+        "answer": 1,
+        "why": "Static sites serve the same content to everyone (e.g. a simple brochure site) â€” simpler but less personalised."
+    },
+    {
+        "id": "MC100",
+        "aim": "A",
+        "topic": "A1 SEO",
+        "q": "What is a keyword?",
+        "options": [
+            "A CSS property",
+            "A type of image",
+            "A word or phrase users type into a search engine",
+            "A server variable"
+        ],
+        "answer": 2,
+        "why": "Keywords are the terms people search for; using them naturally in titles, headings and content helps SEO."
+    },
+    {
+        "id": "MC101",
+        "aim": "A",
+        "topic": "A2 Requirements",
+        "q": "What is a constraint in a client brief?",
+        "options": [
+            "A CSS rule",
+            "A limitation or requirement the design must work within (e.g. budget, deadline, brand rules)",
+            "A type of image",
+            "A hosting plan"
+        ],
+        "answer": 1,
+        "why": "Constraints are boundaries â€” budget, time, brand colours, accessibility, legal rules â€” that shape the design."
+    },
+    {
+        "id": "MC102",
+        "aim": "A",
+        "topic": "A2 Research",
+        "q": "What is a competitor analysis?",
+        "options": [
+            "Reviewing similar websites to see what they do well and poorly",
+            "A server check",
+            "A type of malware",
+            "A CSS test"
+        ],
+        "answer": 0,
+        "why": "Analysing competitors reveals best practice, gaps and opportunities â€” strong evidence for the planning task."
+    },
+    {
+        "id": "MC103",
+        "aim": "A",
+        "topic": "A2 Legal",
+        "q": "What is a privacy policy?",
+        "options": [
+            "A statement explaining what personal data a site collects and how it's used",
+            "A CSS file",
+            "A type of image",
+            "A hosting contract"
+        ],
+        "answer": 0,
+        "why": "A privacy policy is required under GDPR to be transparent about data collection, use and user rights."
+    },
+    {
+        "id": "MC104",
+        "aim": "A",
+        "topic": "A2 Legal",
+        "q": "What is GDPR?",
+        "options": [
+            "A CSS framework",
+            "The General Data Protection Regulation governing personal data",
+            "A type of image",
+            "A hosting provider"
+        ],
+        "answer": 1,
+        "why": "GDPR is EU/UK law protecting personal data â€” sites must be transparent, get consent and protect user data."
+    },
+    {
+        "id": "MC105",
+        "aim": "B",
+        "topic": "B1 Wireframes",
+        "q": "What is a low-fidelity wireframe?",
+        "options": [
+            "A rough, simple sketch showing basic structure without detail",
+            "A finished design with colours",
+            "A code file",
+            "A database"
+        ],
+        "answer": 0,
+        "why": "Low-fidelity wireframes are quick, rough sketches (often on paper) to explore layout before investing in detail."
+    },
+    {
+        "id": "MC106",
+        "aim": "B",
+        "topic": "B1 Design",
+        "q": "What is a high-fidelity mockup?",
+        "options": [
+            "A detailed, polished design showing colours, fonts and images",
+            "A rough sketch",
+            "A wireframe",
+            "A code file"
+        ],
+        "answer": 0,
+        "why": "High-fidelity mockups look close to the final site, showing the visual style in detail before coding."
+    },
+    {
+        "id": "MC107",
+        "aim": "B",
+        "topic": "B1 Review",
+        "q": "What is a design review?",
+        "options": [
+            "A code test",
+            "Assessing the design against the brief and audience to identify improvements",
+            "A server check",
+            "A colour picker"
+        ],
+        "answer": 1,
+        "why": "A design review compares the design to the brief and audience needs, identifying what to improve â€” key for the assignment."
+    },
+    {
+        "id": "MC108",
+        "aim": "B",
+        "topic": "B2 Assets",
+        "q": "What is image compression?",
+        "options": [
+            "Reducing an image's file size while keeping acceptable quality",
+            "Adding a border",
+            "Changing the colour",
+            "Resizing the browser"
+        ],
+        "answer": 0,
+        "why": "Compression reduces file size (faster loading) with minimal quality loss â€” essential for web performance."
+    },
+    {
+        "id": "MC109",
+        "aim": "B",
+        "topic": "B2 Assets",
+        "q": "What is a royalty-free image?",
+        "options": [
+            "A copyrighted image",
+            "An image that is always free with no conditions",
+            "An image you can use without paying ongoing royalties, usually with a licence",
+            "A vector graphic"
+        ],
+        "answer": 2,
+        "why": "Royalty-free means you pay once (or it's free) and can use it, but you should still check the licence terms."
+    },
+    {
+        "id": "MC110",
+        "aim": "C",
+        "topic": "C1 HTML",
+        "q": "Which HTML element is used for a table?",
+        "options": [
+            "<grid>",
+            "<list>",
+            "<table>",
+            "<row>"
+        ],
+        "answer": 2,
+        "why": "The <table> element creates tables, with <tr> for rows, <th> for headers and <td> for cells."
+    },
+    {
+        "id": "MC111",
+        "aim": "C",
+        "topic": "C1 CSS",
+        "q": "What is the purpose of the CSS 'margin' property?",
+        "options": [
+            "To add space inside an element",
+            "To set the border",
+            "To add space outside an element, pushing it away from neighbours",
+            "To change the font"
+        ],
+        "answer": 2,
+        "why": "Margin adds space outside the border; padding adds space inside. Both control spacing in the box model."
+    },
+    {
+        "id": "MC112",
+        "aim": "C",
+        "topic": "C1 JS",
+        "q": "What is an event listener in JavaScript?",
+        "options": [
+            "A type of image",
+            "A CSS rule",
+            "Code that waits for an action (like a click) and runs a function in response",
+            "A server log"
+        ],
+        "answer": 2,
+        "why": "Event listeners (e.g. addEventListener('click', ...)) make elements interactive by responding to user actions."
     }
 ]
