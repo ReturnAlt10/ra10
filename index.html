@@ -17,6 +17,17 @@
 <meta name="twitter:title" content="RA10 — Advanced Revision Site (BTEC, GCSE, A-LEVEL)">
 <meta name="twitter:description" content="Free BTEC IT, Business and Sport revision for Level 3 AAQ and A-Level. Flashcards, quizzes, predicted papers, study guides and AI assignment marking.">
 <meta name="twitter:image" content="https://ra10.co.uk/logo.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "RA10",
+  "alternateName": "RA10 Advanced Revision Site",
+  "url": "https://ra10.co.uk/",
+  "description": "Free BTEC IT, Business and Sport revision for Level 3 AAQ and A-Level. Flashcards, quizzes, predicted papers, study guides, wireframe and code tools, and AI assignment marking.",
+  "publisher": { "@type": "Organization", "name": "RA10", "url": "https://ra10.co.uk" }
+}
+</script>
 <link rel="icon" href="logo.png" type="image/png">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#d20000">
@@ -402,9 +413,9 @@ body.auth-popup-open{overflow:hidden}
 [data-theme="dark"] .site-announcement-close:hover{background:rgba(191,219,254,.2);color:#eff6ff}
 
 body.unit-shell-mode .site-announcement-bar{
-  position:sticky;
-  top:0;
-  z-index:1200;
+  position:relative;
+  top:auto;
+  z-index:1;
 }
 
 .news-page{
@@ -4465,6 +4476,11 @@ html body #community-share-sheet .community-share-panel{
                   <span class="rev-preview-copy"><strong>Cyber Security &amp; Incident Management</strong><small>Threats, protection &amp; response</small></span>
                   <em>Open</em>
                 </a>
+                <a class="rev-preview-unit" href="#/revision/btec/level-3/IT-AAQ/unit-3" onclick="go('/revision/btec/level-3/IT-AAQ/unit-3');hideRevPreview()">
+                  <span class="rev-preview-badge">Unit 3</span>
+                  <span class="rev-preview-copy"><strong>Website Development</strong><small>Wireframes, code &amp; AI marking</small></span>
+                  <em>Open</em>
+                </a>
               </div>
             </div>
 
@@ -4627,7 +4643,7 @@ html body #community-share-sheet .community-share-panel{
       <div class="mobile-sheet-title">Subjects</div>
       <div class="mobile-sheet-copy">Jump straight into live revision apps, including A-Level Business.</div>
       <div class="mobile-sheet-meta">
-        <span>5 live apps</span>
+        <span>7 live apps</span>
         <span>BTEC + A-Level</span>
       </div>
     </div>
