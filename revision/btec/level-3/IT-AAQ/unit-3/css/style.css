@@ -573,11 +573,47 @@ img { max-width: 100%; }
 }
 .wf-embed-hint-ico { font-size: 1.4rem; line-height: 1.2; }
 .wf-embed-hint strong { color: var(--accent-ink); }
+.wf-embed-hint-text { flex: 1; min-width: 0; }
+.wf-open-btn {
+  flex: 0 0 auto; white-space: nowrap; align-self: center;
+  border: 1px solid var(--accent-2); background: var(--accent); color: #fff;
+  font: inherit; font-size: .8rem; font-weight: 700; text-decoration: none;
+  padding: 7px 12px; border-radius: 8px;
+}
+.wf-open-btn:hover { background: var(--accent-ink); }
 .wf-iframe {
   width: 100%; height: 72vh; min-height: 520px;
   border: 1px solid var(--line); border-radius: 12px; background: #fff;
   box-shadow: var(--shadow);
 }
+
+/* ── Full-bleed tools (wireframe, code editor, AI Assigner) ──
+   When one of these tools is open it fills the whole area below
+   the top navigation bar, so learners get a real app experience. */
+body.tool-full { display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+body.tool-full .topbar { position: static; flex: 0 0 auto; }
+body.tool-full .ra10-subject-banner { flex: 0 0 auto; }
+body.tool-full main.wrap { flex: 1 1 auto; min-height: 0; max-width: none; margin: 0; padding: 0; overflow: hidden; }
+body.tool-full footer.footer { display: none; }
+body.tool-full .view.active { height: 100%; display: flex; flex-direction: column; }
+body.tool-full .view.active .section-head { display: none; }
+
+/* Wireframe fills below the hint bar */
+body.tool-full #view-wireframe #wireframe-tool { flex: 1; min-height: 0; display: flex; }
+body.tool-full .wf-embed { flex: 1; min-height: 0; width: 100%; gap: 0; }
+body.tool-full .wf-embed-hint { flex: 0 0 auto; border-radius: 0; border-width: 0 0 1px 0; }
+body.tool-full .wf-iframe { flex: 1; min-height: 0; height: auto; border: none; border-radius: 0; box-shadow: none; }
+
+/* Code editor fills below its own toolbar */
+body.tool-full #view-editor #ed-app { flex: 1; min-height: 0; }
+body.tool-full .ed-app { display: flex; flex-direction: column; border: none; border-radius: 0; box-shadow: none; }
+body.tool-full .ed-body { flex: 1; min-height: 0; }
+body.tool-full .ed-panes { min-height: 0; }
+body.tool-full .ed-topbar, body.tool-full .ed-status { border-radius: 0; }
+
+/* AI Assigner fills the screen */
+body.tool-full #view-ai #ai-assigner-panel { flex: 1; min-height: 0; display: flex; }
+body.tool-full .ai-client { max-width: none; max-height: none; min-height: 0; height: 100%; width: 100%; margin: 0; border: none; border-radius: 0; box-shadow: none; }
 
 /* ── Code Snippets ───────────────────────────────────────── */
 .snip-layout { display: grid; grid-template-columns: 280px minmax(0, 1fr); gap: 16px; align-items: start; }

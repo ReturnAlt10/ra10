@@ -15,8 +15,10 @@ function switchTab(name) {
     const el = document.getElementById('view-' + id);
     if (el) el.classList.toggle('active', id === name);
   });
-  // The code editor keeps the top navbar visible so the app stays navigable.
+  // Full-bleed tools (wireframe, code editor, AI Assigner) fill the screen below the topbar.
   document.body.classList.remove('ed-fullscreen');
+  var FULL_VIEWS = ['wireframe', 'editor', 'ai'];
+  document.body.classList.toggle('tool-full', FULL_VIEWS.indexOf(name) !== -1);
   if (name === 'revise' && window.initRevise) window.initRevise();
   if (name === 'guide' && window.initComprehensiveGuide) window.initComprehensiveGuide();
   if (name === 'quiz' && window.initQuiz) window.initQuiz();

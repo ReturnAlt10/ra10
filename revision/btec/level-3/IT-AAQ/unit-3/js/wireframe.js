@@ -16,12 +16,13 @@
       '<div class="wf-embed">' +
         '<div class="wf-embed-hint">' +
           '<span class="wf-embed-hint-ico">' + icon(0x1F4A1) + '</span>' +
-          '<span><strong>Wireframing, powered by draw.io</strong> &mdash; an open-source editor. ' +
+          '<span class="wf-embed-hint-text"><strong>Wireframing, powered by draw.io</strong> &mdash; an open-source editor. ' +
           'Drag shapes from the left <b>Shapes</b> panel onto the page. For wireframe-specific boxes open ' +
           '<b>+ More shapes &rarr; Wireframes</b> (or search "wireframe" in the shape picker). ' +
           'When finished, use <b>File &rarr; Export as</b> &rarr; SVG or PNG to save your wireframe as assignment evidence.</span>' +
+          '<a class="wf-open-btn" href="https://app.diagrams.net/" target="_blank" rel="noopener">Open in new tab ' + icon(0x2197) + '</a>' +
         '</div>' +
-        '<iframe class="wf-iframe" src="https://embed.diagrams.net/?embed=1&ui=min&spin=1&proto=json" title="Wireframe editor (draw.io)" allowfullscreen></iframe>' +
+        '<iframe class="wf-iframe" src="https://embed.diagrams.net/?embed=1&ui=min" title="Wireframe editor (draw.io)" allowfullscreen></iframe>' +
       '</div>';
   };
 })();
