@@ -57,7 +57,7 @@
 <script src="https://cdn.jsdelivr.net/npm/mammoth@1.6.0/mammoth.browser.min.js"></script>
 <link rel="preconnect" href="https://api.fontshare.com">
 <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700,900&f[]=jetbrains-mono@400,500&display=swap">
-<link rel="stylesheet" href="css/style.css?v=20260906">
+<link rel="stylesheet" href="css/style.css?v=20260907">
 <style>
 .ra10-cost-label { display:inline-block; font-size:.68rem; font-weight:700; color:rgba(255,255,255,.85); background:rgba(0,0,0,.18); padding:1px 6px; border-radius:999px; margin-left:6px; vertical-align:middle; letter-spacing:.03em; }
 .ra10-cost-label.free-label { color:rgba(255,255,255,.65); background:rgba(255,255,255,.14); }
@@ -112,14 +112,10 @@
   </div>
   <nav class="tabs">
     <button class="tab active" data-tab="dashboard" data-tip="Overview of Part 1 and Part 2">Home</button>
-    <button class="tab tab-special" data-tab="guide" data-tip="Full theory guide for Aims A, B and C">Study Guide</button>
-    <button class="tab" data-tab="revise" data-tip="MCQs, quiz and flashcards">Revise</button>
-    <button class="tab tab-special" data-tab="wireframe" data-tip="Draw wireframes for each page">Wireframe</button>
-    <button class="tab tab-special" data-tab="sitemap" data-tip="Plan your site structure and navigation">Sitemap</button>
-    <button class="tab tab-special" data-tab="editor" data-tip="HTML, CSS and JS code editor with live preview">Code Editor</button>
-    <button class="tab tab-special" data-tab="assignment" data-tip="Step-by-step walkthroughs for all tasks">Assignment</button>
-    <button class="tab tab-special" data-tab="ai" data-tip="AI Assigner — hints, coaching and marking">AI Assigner</button>
-    <button class="tab" data-tab="spec" data-tip="Unit specification mapped to the guide">Spec</button>
+    <button class="tab" data-tab="revise" data-tip="Flashcards, quizzes &amp; the revision guide">Revise</button>
+    <button class="tab" data-tab="tools" data-tip="Wireframe, sitemap &amp; code editor">Creation Tools</button>
+    <button class="tab" data-tab="assignment" data-tip="Sample assignments &amp; step-by-step support">Assignment</button>
+    <button class="tab tab-special" data-tab="ai" data-tip="AI Assigner &mdash; chat, hints &amp; marking">AI Assigner</button>
   </nav>
   <div id="unit1-credit-chip" style="margin-left:auto;display:flex;align-items:center;"></div>
   <div style="display:flex;align-items:center;gap:8px;">
@@ -204,39 +200,177 @@
     </div>
   </section>
 
-  <!-- ═══════════ GUIDE ═══════════ -->
+  <!-- ═══════════ REVISE MENU (same as other IT unit apps) ═══════════ -->
+  <section id="view-revise" class="view">
+    <header class="section-head">
+      <h2>Revise</h2>
+      <p style="font-size:1.15rem;color:var(--accent);font-weight:700;">Choose a fun way to revise! <span style="font-size:1.5em;">&#x1F4A1;</span></p>
+    </header>
+    <div class="dashboard-grid">
+      <div class="feature-section">
+        <div class="feature-header">
+          <div class="feature-icon">&#x1F0CF;</div>
+          <div>
+            <h3>Flashcards</h3>
+            <p>Flip through cards for rapid recall and spaced repetition.</p>
+          </div>
+        </div>
+        <div class="feature-cards grid-1">
+          <article class="card">
+            <h4>Open flashcards</h4>
+            <p>Key terms and concepts across Aims A, B and C &mdash; track your progress!</p>
+            <button class="btn" data-goto="flash">Open</button>
+          </article>
+        </div>
+      </div>
+      <div class="feature-section">
+        <div class="feature-header">
+          <div class="feature-icon">&#x2753;</div>
+          <div>
+            <h3>Quiz</h3>
+            <p>Multiple-choice questions with instant feedback.</p>
+          </div>
+        </div>
+        <div class="feature-cards grid-1">
+          <article class="card">
+            <h4>Start quiz</h4>
+            <p>Test your knowledge and get explanations for every answer.</p>
+            <button class="btn" data-goto="quiz">Open</button>
+          </article>
+        </div>
+      </div>
+      <div class="feature-section">
+        <div class="feature-header">
+          <div class="feature-icon">&#x1F4D6;</div>
+          <div>
+            <h3>Revision Guide</h3>
+            <p>Full topic-by-topic breakdown with worked examples and diagrams.</p>
+          </div>
+        </div>
+        <div class="feature-cards grid-1">
+          <article class="card">
+            <h4>Open revision guide</h4>
+            <p>Every spec topic explained for Aims A, B and C.</p>
+            <div class="card-action-row">
+              <button class="btn" data-goto="guide">Open</button>
+              <button class="btn btn-spec-mini" data-goto="spec">View spec <span style="font-size:1.1em;">&#x1F4C4;</span></button>
+            </div>
+          </article>
+        </div>
+      </div>
+      <div class="feature-section">
+        <div class="feature-header">
+          <div class="feature-icon">&#x1F4C4;</div>
+          <div>
+            <h3>Learning Aims Reference</h3>
+            <p>Clean, readable guides for each learning aim.</p>
+          </div>
+        </div>
+        <div class="feature-cards grid-1">
+          <article class="card">
+            <h4>View Learning Aims</h4>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;">
+              <button class="btn revise-focus-btn" data-goto="guide" data-aim="A">Aim A</button>
+              <button class="btn revise-focus-btn" data-goto="guide" data-aim="B">Aim B</button>
+              <button class="btn revise-focus-btn" data-goto="guide" data-aim="C">Aim C</button>
+            </div>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ GUIDE (sub-view of Revise) ═══════════ -->
   <section id="view-guide" class="view">
     <div id="guide-comprehensive"></div>
   </section>
 
-  <!-- ═══════════ REVISE (MCQ + QUIZ + FLASH) ═══════════ -->
-  <section id="view-revise" class="view">
+  <!-- ═══════════ QUIZ (sub-view of Revise) ═══════════ -->
+  <section id="view-quiz" class="view">
     <header class="section-head">
-      <h2>Revise</h2>
-      <p>Knowledge-check questions only — not exam questions. Pick a mode below.</p>
+      <h2>Quick Quiz</h2>
+      <p>12 mixed questions across Aims A, B and C with a score at the end.</p>
     </header>
-    <div class="revise-pick">
-      <button class="revise-pick-card active" data-mode="mcq">
-        <span class="rp-icon">✓</span>
-        <strong>Multiple choice</strong>
-        <span class="muted">32 questions with instant explanations, filtered by aim</span>
-      </button>
-      <button class="revise-pick-card" data-mode="quiz">
-        <span class="rp-icon">⚡</span>
-        <strong>Quick quiz</strong>
-        <span class="muted">12 mixed questions with a score at the end</span>
-      </button>
-      <button class="revise-pick-card" data-mode="flash">
-        <span class="rp-icon">🃏</span>
-        <strong>Flashcards</strong>
-        <span class="muted">32 key terms — flip, mark known, repeat</span>
-      </button>
-    </div>
-    <div id="revise-controls"></div>
-    <div id="revise-stage"></div>
+    <div id="quiz-stage"></div>
   </section>
 
-  <!-- ═══════════ WIREFRAME ═══════════ -->
+  <!-- ═══════════ FLASH (sub-view of Revise) ═══════════ -->
+  <section id="view-flash" class="view">
+    <header class="section-head">
+      <h2>Flashcards</h2>
+      <p>Flip through cards for rapid recall.</p>
+    </header>
+    <div id="flash-stage"></div>
+  </section>
+
+  <!-- ═══════════ SPEC (sub-view of Revise) ═══════════ -->
+  <section id="view-spec" class="view">
+    <header class="section-head">
+      <h2>Unit Specification</h2>
+      <p>The published spec content areas mapped to this app. Click any topic to jump to it in the study guide.</p>
+    </header>
+    <div id="spec-content"></div>
+  </section>
+
+  <!-- ═══════════ CREATION TOOLS MENU ═══════════ -->
+  <section id="view-tools" class="view">
+    <header class="section-head">
+      <h2>Creation Tools</h2>
+      <p>Plan, design and build your website &mdash; wireframes, sitemaps and the code editor.</p>
+    </header>
+    <div class="dashboard-grid">
+      <div class="feature-section">
+        <div class="feature-header">
+          <div class="feature-icon">&#x1F5BC;&#xFE0F;</div>
+          <div>
+            <h3>Wireframe Designer</h3>
+            <p>Draw the layout for each page.</p>
+          </div>
+        </div>
+        <div class="feature-cards grid-1">
+          <article class="card">
+            <h4>Open wireframe tool</h4>
+            <p>Drag blocks onto the canvas to sketch each page layout, add annotations, then export as evidence.</p>
+            <button class="btn" data-goto="wireframe">Open</button>
+          </article>
+        </div>
+      </div>
+      <div class="feature-section">
+        <div class="feature-header">
+          <div class="feature-icon">&#x1F5FA;&#xFE0F;</div>
+          <div>
+            <h3>Sitemap Builder</h3>
+            <p>Plan your site structure and navigation.</p>
+          </div>
+        </div>
+        <div class="feature-cards grid-1">
+          <article class="card">
+            <h4>Open sitemap tool</h4>
+            <p>Plan every page and how they link together, with annotations to show how the structure meets the brief.</p>
+            <button class="btn" data-goto="sitemap">Open</button>
+          </article>
+        </div>
+      </div>
+      <div class="feature-section">
+        <div class="feature-header">
+          <div class="feature-icon">&#x1F4BB;</div>
+          <div>
+            <h3>Code Editor</h3>
+            <p>Write real HTML, CSS and JS with a live preview.</p>
+          </div>
+        </div>
+        <div class="feature-cards grid-1">
+          <article class="card">
+            <h4>Open code editor</h4>
+            <p>VS Code / Dreamweaver-style editor with live preview, cloud autosave and local folder support.</p>
+            <button class="btn" data-goto="editor">Open</button>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ WIREFRAME (sub-view of Creation Tools) ═══════════ -->
   <section id="view-wireframe" class="view">
     <header class="section-head">
       <h2>Wireframe Designer</h2>
@@ -245,7 +379,7 @@
     <div id="wireframe-tool"></div>
   </section>
 
-  <!-- ═══════════ SITEMAP ═══════════ -->
+  <!-- ═══════════ SITEMAP (sub-view of Creation Tools) ═══════════ -->
   <section id="view-sitemap" class="view">
     <header class="section-head">
       <h2>Sitemap Builder</h2>
@@ -254,11 +388,11 @@
     <div id="sitemap-tool"></div>
   </section>
 
-  <!-- ═══════════ CODE EDITOR ═══════════ -->
+  <!-- ═══════════ CODE EDITOR (sub-view of Creation Tools) ═══════════ -->
   <section id="view-editor" class="view">
     <header class="section-head" style="margin-bottom:16px;">
       <h2>Code Editor</h2>
-      <p>Write real HTML, CSS and JavaScript with a live preview. Cloud autosave keeps your project safe — or connect a local folder (like VS Code / Dreamweaver) to work on files already on your computer.</p>
+      <p>Write real HTML, CSS and JavaScript with a live preview. Cloud autosave keeps your project safe &mdash; or connect a local folder (like VS Code / Dreamweaver) to work on files already on your computer.</p>
     </header>
     <div id="ed-app"></div>
   </section>
@@ -266,8 +400,8 @@
   <!-- ═══════════ ASSIGNMENT (PART 2) ═══════════ -->
   <section id="view-assignment" class="view">
     <header class="section-head">
-      <h2>Assignment Hub</h2>
-      <p>Step-by-step support for all three tasks — walkthroughs, sample briefs, and AI Assigner marking of your own work.</p>
+      <h2>Assignment</h2>
+      <p>Download a sample assignment to work on, then follow the step-by-step guide to meet exactly what Pearson wants to see for Pass, Merit and Distinction.</p>
     </header>
     <div id="assignment-hub"></div>
   </section>
@@ -276,18 +410,9 @@
   <section id="view-ai" class="view">
     <header class="section-head">
       <h2>AI Assigner</h2>
-      <p>Your personal mentor for Unit 3. Ask for hints on theory, help with a task, or upload your assignment for marking. It never writes your work for you — it coaches you to do it yourself.</p>
+      <p>Your personal Unit 3 mentor &mdash; chat, get hints, or upload your work for marking. It coaches you to do the work yourself.</p>
     </header>
     <div id="ai-assigner-panel"></div>
-  </section>
-
-  <!-- ═══════════ SPEC ═══════════ -->
-  <section id="view-spec" class="view">
-    <header class="section-head">
-      <h2>Unit Specification</h2>
-      <p>The published spec content areas mapped to this app. Click any topic to jump to it in the study guide.</p>
-    </header>
-    <div id="spec-content"></div>
   </section>
 
 </main>
@@ -297,16 +422,16 @@
   <p>2026 RA10 (www.ra10.co.uk)</p>
 </footer>
 
-<script src="js/data-loader.js"></script>
-<script src="js/spec.js"></script>
-<script src="js/guide.js"></script>
-<script src="js/revise.js"></script>
-<script src="js/wireframe.js"></script>
-<script src="js/sitemap.js"></script>
-<script src="js/editor.js"></script>
-<script src="js/assignment.js"></script>
-<script src="js/ai-assigner.js"></script>
-<script src="js/app.js"></script>
+<script src="js/data-loader.js?v=20260906"></script>
+<script src="js/spec.js?v=20260906"></script>
+<script src="js/guide.js?v=20260906"></script>
+<script src="js/revise.js?v=20260906"></script>
+<script src="js/wireframe.js?v=20260906"></script>
+<script src="js/sitemap.js?v=20260906"></script>
+<script src="js/editor.js?v=20260906"></script>
+<script src="js/assignment.js?v=20260906"></script>
+<script src="js/ai-assigner.js?v=20260906"></script>
+<script src="js/app.js?v=20260906"></script>
 <script>
 (function () {
   const RA10_UNIT_SUBJECT = 'IT';

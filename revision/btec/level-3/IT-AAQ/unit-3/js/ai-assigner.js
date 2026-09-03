@@ -1,455 +1,351 @@
-/* AI Assigner — Unit 3 mentor chat + assignment marking panel. */
+/* AI Assigner — ChatGPT / Perplexity-style client.
+   Modes: Chat, Hints, Examiner. Animated globe logo, status preview
+   messages while generating ("Connecting with RA10 AI", "Reviewing
+   work"...), and a + button for upload / new chat. */
 (function () {
   'use strict';
 
-  let chatHistory = [];
-  let markTask = 'task1';
+  var mode = 'chat';
+  var chatHistory = [];
+  var busy = false;
+  var statusTimer = null;
 
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]; }); }
+  function icon(cp) { return String.fromCodePoint(cp); }
 
-  /* Minimal, safe Markdown renderer for AI Assigner replies.
-     Supports bold, italics, inline code, code blocks, headings,
-     unordered/ordered lists, tables and links — enough to make the
-     AI's coaching readable. Input is escaped first, then the tokens
-     are replaced, so user text can't inject raw HTML. */
+  var STATUSES = [
+    'Connecting with RA10 AI',
+    'Reading the specification',
+    'Reviewing your work',
+    'Checking the criteria',
+    'Thinking it through',
+    'Writing your response'
+  ];
+
+  /* Minimal safe Markdown renderer */
   function md(s) {
-    var input = String(s == null ? '' : s);
-    // Normalise line endings
-    input = input.replace(/\r\n/g, '\n');
-    // Escape first
-    input = esc(input);
-    // Code blocks (```lang ... ```) — protect content from later steps
-    var codeBlocks = [];
-    input = input.replace(/```([\s\S]*?)```/g, function (_, c) {
-      codeBlocks.push(c.replace(/^[a-zA-Z0-9]+\n/, '').replace(/&gt;/g, '>').replace(/&lt;/g, '<').replace(/&amp;/g, '&'));
-      return '\u0000CB' + (codeBlocks.length - 1) + '\u0000';
-    });
-    // Inline code
+    var input = esc(String(s == null ? '' : s).replace(/\r\n/g, '\n'));
+    var blocks = [];
+    input = input.replace(/```([\s\S]*?)```/g, function (_, c) { blocks.push(c.replace(/^[a-zA-Z0-9]+\n/, '')); return '\u0000B' + (blocks.length - 1) + '\u0000'; });
     input = input.replace(/`([^`\n]+)`/g, '<code>$1</code>');
-    // Bold + italic
     input = input.replace(/\*\*\*([^*]+)\*\*\*/g, '<strong><em>$1</em></strong>');
     input = input.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
-    input = input.replace(/(^|[^*])\*([^*\n]+)\*/g, '$1<em>$2</em>');
     input = input.replace(/__([^_]+)__/g, '<strong>$1</strong>');
-    // Links [text](url)
-    input = input.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, function (_, t, u) {
-      if (/^(javascript|data|vbscript):/i.test(u)) return _;
-      return '<a href="' + u + '" target="_blank" rel="noopener">' + t + '</a>';
-    });
-    // Headings
-    input = input.replace(/^###### (.*)$/gm, '<h6>$1</h6>');
-    input = input.replace(/^##### (.*)$/gm, '<h5>$1</h5>');
+    input = input.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, function (_, t, u) { return /^(javascript|data|vbscript):/i.test(u) ? _ : '<a href="' + u + '" target="_blank" rel="noopener">' + t + '</a>'; });
     input = input.replace(/^#### (.*)$/gm, '<h4>$1</h4>');
     input = input.replace(/^### (.*)$/gm, '<h3>$1</h3>');
     input = input.replace(/^## (.*)$/gm, '<h2>$1</h2>');
     input = input.replace(/^# (.*)$/gm, '<h1>$1</h1>');
-    // Tables: capture contiguous lines starting with | and render as <table>
-    input = input.replace(/((?:^\|.*\|\s*\n)+)/gm, function (block) {
+    input = input.replace(/((?:^.*\|\s*\n)+)/gm, function (block) {
       var rows = block.trim().split('\n').filter(function (r) { return /\|/.test(r.trim()); });
-      var html = '<div class="md-table-wrap"><table>';
-      rows.forEach(function (line, idx) {
-        var isSep = /^\s*\|?\s*:?-{2,}.*-{2,}\s*\|?\s*$/.test(line.replace(/\|/g, ''));
-        if (isSep) return;
+      var h = '<div style="overflow-x:auto"><table>';
+      rows.forEach(function (line, i) {
+        if (/^\s*\|?\s*:?-{2,}.*-{2,}/.test(line)) return;
         var cells = line.replace(/^\s*\|/, '').replace(/\|\s*$/, '').split('|').map(function (c) { return c.trim(); });
-        var tag = idx === 0 && !isSep ? 'th' : 'td';
-        html += '<tr>' + cells.map(function (c) { return '<' + tag + '>' + (c || '') + '</' + tag + '>'; }).join('') + '</tr>';
+        var tag = i === 0 ? 'th' : 'td';
+        h += '<tr>' + cells.map(function (c) { return '<' + tag + '>' + c + '</' + tag + '>'; }).join('') + '</tr>';
       });
-      return html + '</table></div>';
+      return h + '</table></div>';
     });
-    // Lists: ordered + unordered
-    var listBlocks = [];
-    input = input.replace(/((?:^[\t ]*(?:[-*+]|\d+\.)[\t ]+.*\n?)+)/gm, function (block, m) {
-      var liRe = /^[\t ]*([-*+]|\d+\.)[\t ]+(.*)$/gm;
+    input = input.replace(/(?:^[\t ]*(?:[-*+]|\d+\.)[\t ]+.*\n?)+/gm, function (m) {
       var ordered = /^\s*\d+\./.test(m);
       var items = [];
-      var mm;
-      while ((mm = liRe.exec(m)) !== null) items.push(mm[2]);
+      var re = /^[\t ]*(?:[-*+]|\d+\.)[\t ]+(.*)$/gm, mm;
+      while ((mm = re.exec(m)) !== null) items.push(mm[1]);
       return (ordered ? '<ol>' : '<ul>') + items.map(function (i) { return '<li>' + i + '</li>'; }).join('') + (ordered ? '</ol>' : '</ul>');
     });
-    // Replace code block placeholders
-    input = input.replace(/\u0000CB(\d+)\u0000/g, function (_m, i) {
-      return '<pre><code>' + esc(codeBlocks[+i] || '') + '</code></pre>';
-    });
-    // Paragraphs: wrap non-empty, non-list, non-heading, non-table, non-pre lines
-    var hasMarkup = /<(?:h[1-6]|ul|ol|table|pre|div)/.test(input);
-    if (!hasMarkup) {
-      input = input.split(/\n{2,}/).map(function (para) {
-        return para.trim() ? '<p>' + para.replace(/\n/g, '<br>') + '</p>' : '';
-      }).join('');
-    } else {
-      // Wrap stray paragraphs (blank-separated runs not already part of a block)
-      input = input.replace(/(^|\n\n)([^<][^\n]*(?:\n[^<][^\n]*)*)(?=\n\n|$)/g, function (_m, pre, para) {
-        return pre + '<p>' + para.replace(/\n/g, '<br>') + '</p>';
-      });
-    }
+    input = input.replace(/\u0000B(\d+)\u0000/g, function (_m, i) { return '<pre><code>' + esc(blocks[+i] || '') + '</code></pre>'; });
     return input;
   }
 
-  function getTask(code) {
-    if (CRITERIA && CRITERIA.tasks) return CRITERIA.tasks.find(function (t) { return t.code === code; });
-    return null;
-  }
-  function currentTask() { return getTask(markTask) || getTask('task1'); }
-
   function render() {
-    const host = document.getElementById('ai-assigner-panel');
+    var host = document.getElementById('ai-assigner-panel');
     if (!host) return;
-    host.innerHTML = `
-<div class="ai-panel">
-  <div class="ai-chat">
-    <div class="ai-chat-head">
-      <img class="ai-head-logo" src="/logo.png" alt="RA10 AI Assigner" onerror="this.style.display='none'">
-      <div>
-        <b>Chat with AI Assigner</b>
-        <span class="muted">Hints, coaching and guidance — it never writes your work for you.</span>
-      </div>
-    </div>
-    <div class="ai-msgs" id="ai-msgs"></div>
-    <div class="ai-input-row">
-      <textarea id="ai-input" placeholder="Ask anything about Unit 3 — theory, a task, or your draft..." rows="2"></textarea>
-      <button id="ai-send" type="button" aria-label="Send message">➤</button>
-    </div>
-  </div>
-  <div class="ai-mark">
-    <div class="ai-mark-head">
-      <img class="ai-head-logo" src="/logo.png" alt="RA10 AI Assigner" onerror="this.style.display='none'">
-      <div>
-        <b>Mark my assignment</b>
-        <span class="muted">Upload a document or paste your work — AI Assessor marks it against the criteria.</span>
-      </div>
-    </div>
-    <div class="ai-mark-body">
-      <label class="muted small" for="ai-mark-task">Which task is this evidence for?</label>
-      <select id="ai-mark-task" class="select" style="width:100%;margin:6px 0 10px">
-        ${(CRITERIA && CRITERIA.tasks ? CRITERIA.tasks : []).map(function (t) {
-          return '<option value="' + esc(t.code) + '">Task ' + esc(t.code.slice(-1)) + ' — Learning Aim ' + esc(t.aim) + ': ' + esc(t.title) + '</option>';
-        }).join('')}
-      </select>
+    host.innerHTML =
+      '<div class="ai-client">' +
+      // Header with animated globe logo
+      '<div class="ai-client-head">' +
+        '<div class="ai-globe"><span class="ai-globe-orb"></span></div>' +
+        '<div class="ai-client-title"><h3>AI Assigner</h3><p>Chat, get hints, or have your work examined \u2014 your Unit 3 mentor.</p></div>' +
+        '<button class="ai-newchat" id="ai-newchat" title="Start a new chat">' + icon(0x2795) + ' New chat</button>' +
+      '</div>' +
+      // Mode bar
+      '<div class="ai-modes" id="ai-modes">' +
+        '<button class="ai-mode active" data-mode="chat">' + icon(0x1F4AC) + ' Chat</button>' +
+        '<button class="ai-mode" data-mode="hints">' + icon(0x1F4A1) + ' Hints</button>' +
+        '<button class="ai-mode" data-mode="examiner">' + icon(0x1F4CB) + ' Examiner</button>' +
+      '</div>' +
+      // Examiner panel (hidden unless examiner mode)
+      '<div class="ai-examiner hidden" id="ai-examiner">' +
+        '<div class="ai-examiner-row">' +
+          '<div class="ai-upload-zone" id="ai-upload-zone" tabindex="0">' +
+            '<input type="file" id="ai-file-input" accept=".pdf,.docx,.doc,.txt,.md,.rtf" hidden>' +
+            '<div class="ai-upload-inner"><span class="ai-upload-ico">' + icon(0x1F4E4) + '</span><b>Upload your work</b><small>PDF, Word (.docx), text or markdown \u00B7 up to 4 MB</small></div>' +
+          '</div>' +
+          '<div class="ai-examiner-txt"><textarea id="ai-examiner-text" placeholder="Or paste your assignment evidence here (research, sitemap annotations, test plans, reflections...)."></textarea></div>' +
+        '</div>' +
+        '<div class="ai-file-chip hidden" id="ai-file-chip"><span id="ai-file-name"></span><button type="button" id="ai-file-remove" aria-label="Remove">\u2715</button></div>' +
+        '<div class="ai-examiner-actions"><button class="btn primary" id="ai-mark-btn">Examine my work<span class="ra10-cost-label">8 credits</span></button></div>' +
+      '</div>' +
+      // Messages
+      '<div class="ai-msgs" id="ai-msgs"></div>' +
+      // Input box
+      '<div class="ai-input-row">' +
+        '<button class="ai-plus" id="ai-plus" title="Upload document or start a new chat">' + icon(0x2B) + '</button>' +
+        '<div class="ai-plus-menu hidden" id="ai-plus-menu">' +
+          '<button data-plus="upload">' + icon(0x1F4C2) + ' Upload document</button>' +
+          '<button data-plus="newchat">' + icon(0x2795) + ' New chat</button>' +
+        '</div>' +
+        '<textarea id="ai-input" placeholder="Ask anything about Unit 3\u2026" rows="1"></textarea>' +
+        '<button class="ai-send" id="ai-send" title="Send">' + icon(0x2191) + '</button>' +
+      '</div>' +
+      '<div class="ai-disclaimer">AI Assigner coaches you \u2014 it never writes your work for you. Responses can be wrong, so always check the spec.</div>' +
+      '</div>';
 
-      <div class="ai-upload-zone" id="ai-upload-zone" tabindex="0">
-        <input type="file" id="ai-file-input" accept=".pdf,.docx,.doc,.txt,.md,.rtf" hidden>
-        <div class="ai-upload-inner">
-          <span class="ai-upload-ico">📤</span>
-          <b>Drag &amp; drop a file here</b>
-          <small>or click to browse — PDF, Word (.docx), text or markdown · up to 4 MB</small>
-        </div>
-      </div>
-      <div class="ai-file-chip hidden" id="ai-file-chip">
-        <span id="ai-file-name"></span>
-        <button type="button" id="ai-file-remove" aria-label="Remove file">✕</button>
-      </div>
-
-      <div class="upload-panel" id="ai-upload-panel" style="text-align:left">
-        <textarea id="ai-mark-text" placeholder="Your extracted text appears here automatically — you can also paste or type your assignment evidence (research, sitemap annotations, test plans, reflections...). Text only, up to ~12,000 characters."></textarea>
-      </div>
-      <div class="ai-mark-actions" style="justify-content:center">
-        <button class="btn primary" id="ai-mark-btn">Mark my work<span class="ra10-cost-label">8 credits</span></button>
-        <button class="btn" id="ai-hint-btn">Just give me hints<span class="ra10-cost-label">3 credits</span></button>
-      </div>
-      <div id="ai-mark-result"></div>
-    </div>
-  </div>
-</div>`;
-
-    document.getElementById('ai-mark-task').addEventListener('change', function () {
-      markTask = this.value;
-      const task = currentTask();
-      const hintBtn = document.getElementById('ai-hint-btn');
-      if (task && hintBtn) hintBtn.innerHTML = 'Just give me hints — ' + task.title.slice(0, 40) + '…';
+    // Mode switching
+    host.querySelectorAll('.ai-mode').forEach(function (b) {
+      b.addEventListener('click', function () {
+        mode = b.dataset.mode;
+        host.querySelectorAll('.ai-mode').forEach(function (x) { x.classList.toggle('active', x === b); });
+        var exam = document.getElementById('ai-examiner');
+        if (exam) exam.classList.toggle('hidden', mode !== 'examiner');
+        var input = document.getElementById('ai-input');
+        if (input) input.placeholder = mode === 'hints' ? 'Describe what you\u2019re stuck on and I\u2019ll coach you\u2026' : mode === 'examiner' ? 'Add a note about your work before examining\u2026' : 'Ask anything about Unit 3\u2026';
+      });
     });
-    document.getElementById('ai-send').addEventListener('click', sendChat);
-    document.getElementById('ai-input').addEventListener('keydown', function (e) {
-      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChat(); }
+
+    // Send
+    document.getElementById('ai-send').addEventListener('click', send);
+    var input = document.getElementById('ai-input');
+    input.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); }
     });
-    document.getElementById('ai-mark-btn').addEventListener('click', function () { doMark(false); });
-    document.getElementById('ai-hint-btn').addEventListener('click', function () { doMark(true); });
+    input.addEventListener('input', function () {
+      input.style.height = 'auto';
+      input.style.height = Math.min(input.scrollHeight, 160) + 'px';
+    });
 
-    // File upload wiring
-    const zone = document.getElementById('ai-upload-zone');
-    const fileInput = document.getElementById('ai-file-input');
-    const chip = document.getElementById('ai-file-chip');
-    const chipName = document.getElementById('ai-file-name');
-    const chipRemove = document.getElementById('ai-file-remove');
-    const ta = document.getElementById('ai-mark-text');
+    // + button
+    document.getElementById('ai-plus').addEventListener('click', function (e) {
+      e.stopPropagation();
+      document.getElementById('ai-plus-menu').classList.toggle('hidden');
+    });
+    document.addEventListener('click', function (e) {
+      var menu = document.getElementById('ai-plus-menu');
+      if (menu && !menu.classList.contains('hidden') && !e.target.closest('#ai-plus') && !e.target.closest('#ai-plus-menu')) menu.classList.add('hidden');
+    });
+    host.querySelectorAll('#ai-plus-menu [data-plus]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        document.getElementById('ai-plus-menu').classList.add('hidden');
+        if (b.dataset.plus === 'upload') document.getElementById('ai-file-input').click();
+        else newChat();
+      });
+    });
 
+    document.getElementById('ai-newchat').addEventListener('click', newChat);
+    document.getElementById('ai-mark-btn').addEventListener('click', doExamine);
+
+    // Upload wiring
+    var zone = document.getElementById('ai-upload-zone');
+    var fileInput = document.getElementById('ai-file-input');
     zone.addEventListener('click', function () { fileInput.click(); });
     zone.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fileInput.click(); } });
     fileInput.addEventListener('change', function () { if (fileInput.files && fileInput.files[0]) handleFile(fileInput.files[0]); });
-
-    const dragState = {
-      counter: 0,
-      dragenter: function () { dragState.counter++; zone.classList.add('drag'); },
-      dragleave: function () { if (--dragState.counter <= 0) { dragState.counter = 0; zone.classList.remove('drag'); } },
-      drop: function (e) {
-        e.preventDefault(); dragState.counter = 0; zone.classList.remove('drag');
-        if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]);
-      },
-      dragover: function (e) { e.preventDefault(); }
-    };
-    zone.addEventListener('dragenter', dragState.dragenter);
-    zone.addEventListener('dragover', dragState.dragover);
-    zone.addEventListener('dragleave', dragState.dragleave);
-    zone.addEventListener('drop', dragState.drop);
-
-    chipRemove.addEventListener('click', function () {
-      chip.classList.add('hidden');
-      ta.value = '';
+    var drag = 0;
+    zone.addEventListener('dragenter', function () { drag++; zone.classList.add('drag'); });
+    zone.addEventListener('dragover', function (e) { e.preventDefault(); });
+    zone.addEventListener('dragleave', function () { if (--drag <= 0) { drag = 0; zone.classList.remove('drag'); } });
+    zone.addEventListener('drop', function (e) { e.preventDefault(); drag = 0; zone.classList.remove('drag'); if (e.dataTransfer.files && e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]); });
+    document.getElementById('ai-file-remove').addEventListener('click', function () {
+      document.getElementById('ai-file-chip').classList.add('hidden');
+      document.getElementById('ai-examiner-text').value = '';
       fileInput.value = '';
-      updateCharCount();
     });
 
-    // Show the loaded filename when extraction finishes
-    window._aiFileDone = function (name, text) {
-      chipName.textContent = '✓ ' + name + ' — loaded';
-      chip.classList.remove('hidden');
-      ta.value = text;
-      updateCharCount();
-      zone.classList.remove('loading');
-    };
-    window._aiFileFail = function (msg) {
-      chipName.textContent = '⚠ ' + msg;
-      chip.classList.remove('hidden');
-      zone.classList.remove('loading');
-    };
-    zone.classList.remove('loading');
-
-    addMsg('bot', 'Hi! I\'m AI Assigner, your Unit 3 mentor. Ask me about website development theory, wireframes, sitemaps, HTML/CSS/JS, or how to hit the criteria for any task — or upload/paste your draft in the marking panel and I\'ll show you where to improve. I\'ll coach you, but you do the work. 😊');
-    // apply pending task focus
-    if (window._pendingAiFocus) {
-      const focus = window._pendingAiFocus;
-      window._pendingAiFocus = null;
-      if (typeof focus === 'string' && focus.indexOf('task:') === 0) {
-        const code = focus.slice(5);
-        addMsg('bot', 'You\'re on Task ' + code.replace('task', '') + ' — tell me what you\'ve done so far and what you\'re stuck on, and I\'ll point you in the right direction.');
-      }
+    // Welcome
+    if (!chatHistory.length) {
+      addMsg('bot', 'Hi! I\u2019m **AI Assigner**, your Unit 3 mentor. Ask me about website development theory, get **hints** on a task, or switch to **Examiner** to upload your work and have it checked against the real Pass/Merit/Distinction criteria.');
     }
   }
 
-  function updateCharCount() {
-    const ta = document.getElementById('ai-mark-text');
-    if (!ta) return;
-    const count = ta.value.length;
-    const max = 12000;
-    const chip = document.getElementById('ai-file-chip');
-    if (chip) {
-      const span = chip.querySelector('span');
-      if (span && !chip.classList.contains('hidden')) span.textContent = span.textContent.replace(/\s*\(\d+\/\d+\)$/, '') + ' (' + count + '/' + max + ')';
+  function newChat() {
+    chatHistory = [];
+    var msgs = document.getElementById('ai-msgs');
+    if (msgs) msgs.innerHTML = '';
+    addMsg('bot', 'New chat started. What would you like to work on?');
+  }
+
+  function addMsg(role, text, html) {
+    var host = document.getElementById('ai-msgs');
+    if (!host) return;
+    var div = document.createElement('div');
+    div.className = 'ai-msg ' + role;
+    if (html) div.innerHTML = html;
+    else if (role === 'bot') div.innerHTML = md(text);
+    else div.textContent = text;
+    host.appendChild(div);
+    host.scrollTop = host.scrollHeight;
+    if (role !== 'thinking') chatHistory.push({ role: role, content: text });
+    if (chatHistory.length > 30) chatHistory = chatHistory.slice(-30);
+  }
+
+  function addThinking() {
+    var host = document.getElementById('ai-msgs');
+    if (!host) return null;
+    var div = document.createElement('div');
+    div.className = 'ai-msg bot ai-thinking';
+    div.innerHTML = '<span class="ai-globe-orb small"></span><span class="ai-thinking-status">' + STATUSES[0] + '</span><span class="ai-thinking-dots"></span>';
+    host.appendChild(div);
+    host.scrollTop = host.scrollHeight;
+    var i = 0;
+    statusTimer = setInterval(function () {
+      i = (i + 1) % STATUSES.length;
+      var s = div.querySelector('.ai-thinking-status');
+      if (s) s.textContent = STATUSES[i];
+      host.scrollTop = host.scrollHeight;
+    }, 1600);
+    return div;
+  }
+
+  function removeThinking(div) {
+    if (statusTimer) { clearInterval(statusTimer); statusTimer = null; }
+    if (div && div.remove) div.remove();
+  }
+
+  function send() {
+    if (busy) return;
+    var input = document.getElementById('ai-input');
+    var text = (input.value || '').trim();
+    if (!text) return;
+    if (!window.RA10 || !RA10.isLoggedIn()) {
+      addMsg('bot', 'You need to sign in first \u2014 then I can help you (this uses credits).');
+      RA10.showPaywall('account', 'ai_assigner_hint');
+      return;
     }
+    input.value = '';
+    input.style.height = 'auto';
+    busy = true;
+    addMsg('user', text);
+    var think = addThinking();
+
+    (async function () {
+      try {
+        if (typeof ra10Gate === 'function' && !(await ra10Gate('ai_assigner_hint'))) { removeThinking(think); busy = false; return; }
+        var res = await RA10.askAiAssigner({
+          message: text,
+          history: chatHistory.slice(-8),
+          context: 'Unit 3 Website Development. Modes: chat (ask anything), hints (coach toward next grade), examiner (mark work against criteria). Learning aims: A (principles + planning), B (design + assets), C (build + test). Assignment has 3 tasks. Encourage the student to work things out themselves \u2014 never write their work for them.'
+        });
+        removeThinking(think);
+        addMsg('bot', res.reply);
+      } catch (e) {
+        removeThinking(think);
+        addMsg('bot', 'Sorry \u2014 ' + (e && e.message ? e.message : 'something went wrong'));
+      } finally {
+        busy = false;
+      }
+    })();
+  }
+
+  async function doExamine() {
+    if (busy) return;
+    var text = (document.getElementById('ai-examiner-text').value || '').trim();
+    if (!text) { alert('Upload or paste your work first.'); return; }
+    if (!window.RA10 || !RA10.isLoggedIn()) {
+      addMsg('bot', 'Sign in to use AI Assigner marking.');
+      RA10.showPaywall('account', 'ai_assigner_mark');
+      return;
+    }
+    busy = true;
+    addMsg('user', 'Please examine my work for this assignment task.');
+    var think = addThinking();
+    try {
+      if (typeof ra10Gate === 'function' && !(await ra10Gate('ai_assigner_mark'))) { removeThinking(think); busy = false; return; }
+      var criteriaMap = {};
+      if (CRITERIA && CRITERIA.tasks) CRITERIA.tasks.forEach(function (task) { task.criteria.forEach(function (c) { criteriaMap[c.code] = c.level + ': ' + c.text; }); });
+      var res = await RA10.markAssignment({ submission: text, taskTitle: 'Unit 3 assignment', criteria: criteriaMap });
+      removeThinking(think);
+      renderMarkResult(res.result);
+    } catch (e) {
+      removeThinking(think);
+      addMsg('bot', 'Sorry \u2014 ' + (e && e.message ? e.message : 'could not examine your work'));
+    } finally {
+      busy = false;
+    }
+  }
+
+  function renderMarkResult(r) {
+    var host = document.getElementById('ai-msgs');
+    if (!host) return;
+    var grade = r.grade || 'Not yet met';
+    var cls = 'g-' + grade.replace(/[^A-Za-z]/g, '');
+    var html = '<div class="ai-mark-card"><div class="mark-grade-badge ' + cls + '">' + esc(grade) + '</div>';
+    if (Array.isArray(r.criteriaMet) && r.criteriaMet.length) {
+      html += '<div class="ai-mark-criteria">' + r.criteriaMet.map(function (c) {
+        return '<div class="ai-mark-crit"><span class="' + (c.met ? 'tick' : 'cross') + '">' + (c.met ? '\u2713' : '\u2717') + '</span><span><b>' + esc(c.code) + '</b> \u2014 ' + esc(c.comment || (c.met ? 'Met' : 'Not yet met')) + '</span></div>';
+      }).join('') + '</div>';
+    }
+    if (Array.isArray(r.strengths) && r.strengths.length) {
+      html += '<h4>Strengths</h4><ul>' + r.strengths.map(function (s) { return '<li>' + esc(s) + '</li>'; }).join('') + '</ul>';
+    }
+    if (Array.isArray(r.improvements) && r.improvements.length) {
+      html += '<h4>To reach the next grade</h4><ul>' + r.improvements.map(function (s) { return '<li>' + esc(s) + '</li>'; }).join('') + '</ul>';
+    }
+    if (r.nextGradeFocus) html += '<p class="small"><b>Focus:</b> ' + esc(r.nextGradeFocus) + '</p>';
+    if (r.feedback) html += '<p>' + esc(r.feedback) + '</p>';
+    html += '</div>';
+    addMsg('bot', '', html);
   }
 
   async function handleFile(file) {
-    const zone = document.getElementById('ai-upload-zone');
-    const chipName = document.getElementById('ai-file-name');
-    const chip = document.getElementById('ai-file-chip');
-    if (!zone || !chipName) return;
-
-    const MAX_BYTES = 4 * 1024 * 1024; // 4 MB
-    if (file.size > MAX_BYTES) {
-      chipName.textContent = '⚠ File is too large (max 4 MB)';
-      chip.classList.remove('hidden');
-      return;
-    }
-
-    const name = file.name || 'document';
-    const ext = (name.split('.').pop() || '').toLowerCase();
-    if (['pdf', 'docx', 'doc', 'txt', 'md', 'rtf'].indexOf(ext) === -1) {
-      chipName.textContent = '⚠ Unsupported file type — use PDF, Word (.docx), text or markdown';
-      chip.classList.remove('hidden');
-      return;
-    }
-
+    var chip = document.getElementById('ai-file-chip');
+    var chipName = document.getElementById('ai-file-name');
+    var zone = document.getElementById('ai-upload-zone');
+    var MAX = 4 * 1024 * 1024;
+    if (file.size > MAX) { chipName.textContent = 'File too large (max 4 MB)'; chip.classList.remove('hidden'); return; }
+    var ext = (file.name.split('.').pop() || '').toLowerCase();
+    if (['pdf', 'docx', 'doc', 'txt', 'md', 'rtf'].indexOf(ext) === -1) { chipName.textContent = 'Unsupported type \u2014 use PDF, Word (.docx), text or markdown'; chip.classList.remove('hidden'); return; }
     zone.classList.add('loading');
-    chipName.textContent = '⏳ Reading ' + name + '…';
+    chipName.textContent = 'Reading ' + file.name + '\u2026';
     chip.classList.remove('hidden');
-
     try {
-      let text = '';
-      if (ext === 'pdf') {
-        text = await extractPdf(file);
-      } else if (ext === 'docx') {
-        text = await extractDocx(file);
-      } else if (ext === 'doc') {
-        // Legacy .doc is a binary format; we can't reliably parse it client-side
-        throw new Error('This looks like an old .doc file. Please open it in Word and "Save As" → .docx (or copy-paste the text), then try again.');
-      } else {
-        // txt, md, rtf — read as plain text; strip RTF artifacts
-        text = await new Promise(function (resolve, reject) {
-          const reader = new FileReader();
-          reader.onload = function () { resolve(String(reader.result || '')); };
-          reader.onerror = function () { reject(new Error('Could not read the file.')); };
-          reader.readAsText(file);
-        });
-      }
-
+      var text = '';
+      if (ext === 'pdf') text = await extractPdf(file);
+      else if (ext === 'docx') text = await extractDocx(file);
+      else if (ext === 'doc') throw new Error('Old .doc format \u2014 please save as .docx and try again.');
+      else text = await new Promise(function (res, rej) { var r = new FileReader(); r.onload = function () { res(String(r.result || '')); }; r.onerror = function () { rej(new Error('Could not read the file.')); }; r.readAsText(file); });
       text = (text || '').replace(/\r\n/g, '\n').replace(/\u0000/g, '').trim();
-      if (ext === 'rtf' && /\{\\rtf/.test(text)) {
-        // crude RTF tag strip
-        text = text.replace(/\\[a-zA-Z]+\d?(-?\d+)? ?/g, ' ').replace(/[{}]/g, ' ').replace(/\s+/g, ' ').trim();
-      }
-      if (!text || !text.length) throw new Error('No text found in the file — it may be scanned images or empty.');
-      if (text.length > 12000) text = text.slice(0, 12000) + '\n…[truncated — the rest was cut to keep within the 12,000 character limit]';
-
-      // Record for the marking flow
-      window._aiUploadedText = text;
-      window._aiUploadedName = name;
-
-      if (window._aiFileDone) window._aiFileDone(name, text);
-      else {
-        chipName.textContent = '✓ ' + name + ' — loaded';
-        chip.classList.remove('hidden');
-        const ta = document.getElementById('ai-mark-text');
-        if (ta) ta.value = text;
-      }
+      if (!text) throw new Error('No text found \u2014 the file may be scanned images.');
+      if (text.length > 12000) text = text.slice(0, 12000) + '\n\u2026[truncated]';
+      document.getElementById('ai-examiner-text').value = text;
+      chipName.textContent = 'Loaded ' + file.name;
     } catch (e) {
-      if (window._aiFileFail) window._aiFileFail(e && e.message || 'Could not read that file.');
-      else { chipName.textContent = '⚠ ' + (e && e.message || 'Could not read that file.'); chip.classList.remove('hidden'); }
+      chipName.textContent = e && e.message ? e.message : 'Could not read that file.';
     } finally {
       zone.classList.remove('loading');
     }
   }
 
   async function extractPdf(file) {
-    // pdf.js — parse text content from every page
-    const pdfjsLib = (typeof window !== 'undefined' && (window.pdfjsLib || (window['pdfjs-dist'] && window['pdfjs-dist']['build'] && window['pdfjs-dist']['build']['pdf']))) || null;
-    if (!pdfjsLib || !pdfjsLib.getDocument) {
-      throw new Error('PDF reader not loaded yet — please check your connection and try again.');
-    }
-    try { pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js'; } catch (e) {}
-    const data = await file.arrayBuffer();
-    const pdf = await pdfjsLib.getDocument({ data: data }).promise;
-    const parts = [];
-    for (let i = 1; i <= pdf.numPages; i++) {
-      const p = await pdf.getPage(i);
-      const content = await p.getTextContent();
-      const line = content.items.map(function (it) { return (it && it.str) || ''; }).join(' ');
+    var lib = window.pdfjsLib;
+    if (!lib || !lib.getDocument) throw new Error('PDF reader not loaded.');
+    try { lib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js'; } catch (e) {}
+    var pdf = await lib.getDocument({ data: await file.arrayBuffer() }).promise;
+    var parts = [];
+    for (var i = 1; i <= pdf.numPages; i++) {
+      var page = await pdf.getPage(i);
+      var content = await page.getTextContent();
+      var line = content.items.map(function (it) { return (it && it.str) || ''; }).join(' ');
       if (line) parts.push(line);
     }
     return parts.join('\n\n');
   }
 
   async function extractDocx(file) {
-    // mammoth — extract raw text from .docx
-    const mammoth = (typeof window !== 'undefined' && (window.mammoth || window['Mammoth'])) || null;
-    if (!mammoth || !mammoth.extractRawText) {
-      throw new Error('Word reader not loaded yet — please check your connection and try again.');
-    }
-    const arrayBuffer = await file.arrayBuffer();
-    const res = await mammoth.extractRawText({ arrayBuffer: arrayBuffer });
+    var m = window.mammoth;
+    if (!m || !m.extractRawText) throw new Error('Word reader not loaded.');
+    var res = await m.extractRawText({ arrayBuffer: await file.arrayBuffer() });
     return res && res.value ? res.value : '';
-  }
-
-  function addMsg(role, text) {
-    const host = document.getElementById('ai-msgs');
-    if (!host) return;
-    const div = document.createElement('div');
-    div.className = 'ai-msg ' + role;
-    if (role === 'bot' && typeof md === 'function') {
-      div.innerHTML = md(text);
-    } else {
-      div.textContent = text;
-    }
-    host.appendChild(div);
-    host.scrollTop = host.scrollHeight;
-    chatHistory.push({ role: role, content: text });
-    if (chatHistory.length > 20) chatHistory = chatHistory.slice(-20);
-  }
-
-  function addThinking() {
-    const host = document.getElementById('ai-msgs');
-    if (!host) return;
-    const div = document.createElement('div');
-    div.className = 'ai-msg bot ai-thinking';
-    div.innerHTML = '<span class="ai-examiner-orb"></span><span class="ai-examiner-dots">thinking</span>';
-    host.appendChild(div);
-    host.scrollTop = host.scrollHeight;
-    return div;
-  }
-
-  async function sendChat() {
-    const input = document.getElementById('ai-input');
-    const message = (input.value || '').trim();
-    if (!message) return;
-    if (!window.RA10 || !RA10.isLoggedIn()) {
-      addMsg('bot', 'You need to sign in first — then I can help you (this uses credits).');
-      RA10.showPaywall('account', 'ai_assigner_hint');
-      return;
-    }
-    if (typeof ra10Gate === 'function' && !(await ra10Gate('ai_assigner_hint'))) return;
-
-    input.value = '';
-    addMsg('user', message);
-    const think = addThinking();
-    try {
-      const res = await RA10.askAiAssigner({
-        message: message,
-        history: chatHistory.slice(-8),
-        context: 'Unit 3 Website Development. Learning aims: A (principles + planning), B (design + assets), C (build + test). Assignment has 3 tasks. Encourage the student to work things out themselves.'
-      });
-      if (think && think.remove) think.remove();
-      addMsg('bot', res.reply);
-    } catch (e) {
-      if (think && think.remove) think.remove();
-      addMsg('bot', 'Sorry — ' + (e && e.message ? e.message : 'something went wrong') + '');
-    }
-  }
-
-  async function doMark(hintOnly) {
-    const ta = document.getElementById('ai-mark-text');
-    const text = (ta ? ta.value : '').trim();
-    if (!text) { alert('Paste your work into the box first.'); return; }
-    const result = document.getElementById('ai-mark-result');
-    if (!window.RA10 || !RA10.isLoggedIn()) {
-      if (result) result.innerHTML = '<p class="muted">Sign in to use AI Assigner marking.</p>';
-      RA10.showPaywall('account', 'ai_assigner_mark');
-      return;
-    }
-    if (typeof ra10Gate === 'function' && !(await ra10Gate(hintOnly ? 'ai_assigner_hint' : 'ai_assigner_mark'))) return;
-
-    result.innerHTML = '<div class="ai-assessing"><span class="ai-examiner-orb"></span><span class="ai-examiner-dots">Assessing your work against the criteria</span></div>';
-    const task = currentTask();
-    const criteriaMap = {};
-    if (task && task.criteria) task.criteria.forEach(function (c) { criteriaMap[c.code] = c.level + ': ' + c.text; });
-
-    try {
-      if (hintOnly) {
-        const res = await RA10.askAiAssigner({
-          message: 'I am working on ' + (task ? task.title : 'a task') + '. Here is my draft — give me hints to lift it towards the next grade without writing it for me:\n\n' + text.slice(0, 4000),
-          context: 'Assignment task: ' + (task ? task.title : '') + '. Criteria: ' + Object.keys(criteriaMap).join(', ')
-        });
-        result.innerHTML = '<div class="ai-msg bot ai-mark-hint" style="max-width:100%">' + md(res.reply) + '</div>';
-      } else {
-        const res = await RA10.markAssignment({ submission: text, taskTitle: task ? task.title : 'Task', criteria: criteriaMap });
-        renderMarkResult(result, res.result, task);
-      }
-    } catch (e) {
-      result.innerHTML = '<div style="color:var(--bad)"><strong>Could not mark:</strong> ' + esc(e && e.message ? e.message : String(e)) + '</div>';
-    }
-  }
-
-  function renderMarkResult(host, r, task) {
-    const grade = r.grade || 'Not yet met';
-    const cls = 'g-' + grade.replace(/[^A-Za-z]/g, '');
-    const criteriaSet = new Set((task && task.criteria ? task.criteria : []).map(function (c) { return c.code; }));
-    const met = Array.isArray(r.criteriaMet) ? r.criteriaMet.filter(function (c) { return criteriaSet.has(c.code); }) : [];
-    let html = '<div class="mark-result">';
-    html += '<div class="mark-grade-badge ' + cls + '">' + esc(grade) + '</div>';
-    if (met.length) {
-      html += '<h4 style="margin:6px 0">Criteria</h4><ul class="mark-criteria">' +
-        met.map(function (c) {
-          return '<li><span class="' + (c.met ? 'tick' : 'cross') + '">' + (c.met ? '✓' : '✗') + '</span><span><strong>' + esc(c.code) + '</strong> — ' + esc(c.comment || (c.met ? 'Met' : 'Not yet met')) + '</span></li>';
-        }).join('') +
-        '</ul>';
-    }
-    if (Array.isArray(r.strengths) && r.strengths.length) {
-      html += '<h4 style="margin:10px 0 4px">Strengths</h4><ul>' + r.strengths.map(function (s) { return '<li>' + esc(s) + '</li>'; }).join('') + '</ul>';
-    }
-    if (Array.isArray(r.improvements) && r.improvements.length) {
-      html += '<h4 style="margin:10px 0 4px">To reach the next grade</h4><ul>' + r.improvements.map(function (s) { return '<li>' + esc(s) + '</li>'; }).join('') + '</ul>';
-    }
-    if (r.nextGradeFocus) html += '<p class="small" style="margin-top:10px"><strong>Focus:</strong> ' + esc(r.nextGradeFocus) + '</p>';
-    if (r.feedback) html += '<p style="margin-top:10px">' + esc(r.feedback) + '</p>';
-    html += '</div>';
-    host.innerHTML = html;
   }
 
   window.openAiAssigner = function (focus) {
@@ -459,7 +355,11 @@
   };
 
   window.initAiAssigner = function () {
-    chatHistory = [];
-    render();
+    if (!document.getElementById('ai-msgs')) { chatHistory = []; render(); }
+    var pending = window._pendingAiFocus;
+    window._pendingAiFocus = null;
+    if (pending && typeof pending === 'string' && pending.indexOf('task:') === 0) {
+      addMsg('bot', 'You\u2019re on Task ' + pending.replace('task', '') + ' \u2014 tell me what you\u2019ve done so far and what you\u2019re stuck on.');
+    }
   };
 })();

@@ -119,7 +119,7 @@
   }
 
   function renderQuizCard() {
-    const host = document.getElementById('revise-stage');
+    const host = document.getElementById('quiz-stage');
     if (!host || !quizState) return;
     if (quizState.done) { renderQuizResults(host); return; }
     const q = quizState.pool[quizState.idx];
@@ -232,15 +232,42 @@
   }
 
   window.initRevise = function () {
+    // The Revise menu is static HTML — nothing to render here.
+  };
+
+  window.initQuiz = function () {
+    const host = document.getElementById('quiz-stage');
+    if (!host) return;
+    if (!quizState) {
+      host.innerHTML =
+        '<div class="quiz-stage">' +
+        '<p class="muted" style="margin:0">12 mixed knowledge-check questions across Aims A, B and C. Choose an answer &mdash; you get instant feedback and a score at the end.</p>' +
+        '<div style="margin-top:16px"><button class="btn primary" id="quiz-start">Start 12-question quiz<span class="ra10-cost-label">1 credit per session</span></button></div>' +
+        '</div>';
+      const start = document.getElementById('quiz-start');
+      if (start) start.addEventListener('click', startQuiz);
+    } else {
+      renderQuizCard();
+    }
+  };
+
+  window.initFlash = function () {
     loadKnown();
-    bindPicker();
-    renderControls();
-    renderStage();
+    const host = document.getElementById('flash-stage');
+    if (!host) return;
+    host.innerHTML =
+      '<div class="flash-toolbar">' +
+      '<span class="muted">' + flashKnownCount() + ' / ' + FLASHCARDS.length + ' known</span>' +
+      '<button class="btn" id="flash-shuffle">Shuffle</button>' +
+      '<button class="btn ghost" id="flash-reset">Reset progress</button>' +
+      '</div>' +
+      '<div id="flash-render"></div>';
+    document.getElementById('flash-shuffle').addEventListener('click', function () { shuffleFlash(); renderFlash(document.getElementById('flash-render')); });
+    document.getElementById('flash-reset').addEventListener('click', function () { flashKnown = {}; saveKnown(); flashIdx = 0; window.initFlash(); });
+    renderFlash(document.getElementById('flash-render'));
   };
 
   window.u3ReviseReinit = function () {
     loadKnown();
-    renderControls();
-    renderStage();
   };
 })();

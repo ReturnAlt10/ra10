@@ -1,25 +1,32 @@
 /* BTEC IT Unit 3 — Website Development — App controller */
 'use strict';
 
-const VIEW_IDS = ['dashboard', 'guide', 'revise', 'wireframe', 'sitemap', 'editor', 'assignment', 'ai', 'spec'];
+const VIEW_IDS = ['dashboard', 'revise', 'guide', 'quiz', 'flash', 'spec', 'tools', 'wireframe', 'sitemap', 'editor', 'assignment', 'ai'];
+// Sub-views keep their parent topbar tab highlighted.
+const PARENT_TAB = {
+  guide: 'revise', spec: 'revise', quiz: 'revise', flash: 'revise',
+  wireframe: 'tools', sitemap: 'tools', editor: 'tools'
+};
 
 function switchTab(name) {
-  document.querySelectorAll('.tab').forEach(function (t) { t.classList.toggle('active', t.dataset.tab === name); });
+  const parent = PARENT_TAB[name] || name;
+  document.querySelectorAll('.tab').forEach(function (t) { t.classList.toggle('active', t.dataset.tab === parent); });
   VIEW_IDS.forEach(function (id) {
     const el = document.getElementById('view-' + id);
     if (el) el.classList.toggle('active', id === name);
   });
-  // Fullscreen the code editor when it is open
-  if (name === 'editor') document.body.classList.add('ed-fullscreen');
-  else document.body.classList.remove('ed-fullscreen');
-  if (name === 'guide' && window.initComprehensiveGuide) window.initComprehensiveGuide();
+  // The code editor keeps the top navbar visible so the app stays navigable.
+  document.body.classList.remove('ed-fullscreen');
   if (name === 'revise' && window.initRevise) window.initRevise();
+  if (name === 'guide' && window.initComprehensiveGuide) window.initComprehensiveGuide();
+  if (name === 'quiz' && window.initQuiz) window.initQuiz();
+  if (name === 'flash' && window.initFlash) window.initFlash();
+  if (name === 'spec' && window.renderUnit3Spec) window.renderUnit3Spec();
   if (name === 'wireframe' && window.initWireframeTool) window.initWireframeTool();
   if (name === 'sitemap' && window.initSitemapTool) window.initSitemapTool();
   if (name === 'editor' && window.initCodeEditor) window.initCodeEditor();
   if (name === 'assignment' && window.initAssignmentHub) window.initAssignmentHub();
   if (name === 'ai' && window.initAiAssigner) window.initAiAssigner();
-  if (name === 'spec' && window.renderUnit3Spec) window.renderUnit3Spec();
   if (name === 'dashboard') renderAimGrid();
   window.scrollTo({ top: 0, behavior: 'auto' });
 }
@@ -60,7 +67,17 @@ function renderAimGrid() {
 /* ── Wire up data-goto buttons ────────────────────────────── */
 function bindGoto() {
   document.querySelectorAll('[data-goto]').forEach(function (b) {
-    b.addEventListener('click', function () { switchTab(b.dataset.goto); });
+    b.addEventListener('click', function () {
+      const aim = b.getAttribute('data-aim');
+      if (aim) {
+        switchTab('guide');
+        setTimeout(function () {
+          if (typeof window.guideScrollTo === 'function') window.guideScrollTo('guide-aim-' + aim);
+        }, 120);
+        return;
+      }
+      switchTab(b.dataset.goto);
+    });
   });
 }
 
