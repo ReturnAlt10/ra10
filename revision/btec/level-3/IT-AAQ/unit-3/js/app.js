@@ -1,11 +1,11 @@
 /* BTEC IT Unit 3 — Website Development — App controller */
 'use strict';
 
-const VIEW_IDS = ['dashboard', 'revise', 'guide', 'quiz', 'flash', 'spec', 'tools', 'wireframe', 'sitemap', 'editor', 'assignment', 'ai'];
+const VIEW_IDS = ['dashboard', 'revise', 'guide', 'quiz', 'flash', 'spec', 'tools', 'wireframe', 'sitemap', 'snippets', 'editor', 'assignment', 'ai'];
 // Sub-views keep their parent topbar tab highlighted.
 const PARENT_TAB = {
   guide: 'revise', spec: 'revise', quiz: 'revise', flash: 'revise',
-  wireframe: 'tools', sitemap: 'tools', editor: 'tools'
+  wireframe: 'tools', sitemap: 'tools', snippets: 'tools', editor: 'tools'
 };
 
 function switchTab(name) {
@@ -24,6 +24,7 @@ function switchTab(name) {
   if (name === 'spec' && window.renderUnit3Spec) window.renderUnit3Spec();
   if (name === 'wireframe' && window.initWireframeTool) window.initWireframeTool();
   if (name === 'sitemap' && window.initSitemapTool) window.initSitemapTool();
+  if (name === 'snippets' && window.initSnippets) window.initSnippets();
   if (name === 'editor' && window.initCodeEditor) window.initCodeEditor();
   if (name === 'assignment' && window.initAssignmentHub) window.initAssignmentHub();
   if (name === 'ai' && window.initAiAssigner) window.initAiAssigner();

@@ -34,6 +34,16 @@
     return code === 'task1' ? 'Start planning' : code === 'task2' ? 'Start designing' : 'Start building';
   }
 
+  function structureTip(code) {
+    if (code === 'task1') {
+      return 'Write it in four clear sections with headings: 1) Client requirements (purpose, audience, features), 2) Research on 3 similar websites (what works and why), 3) Legal &amp; ethical constraints (copyright, GDPR, accessibility), 4) Your content ideas and an annotated site map that maps every page to a requirement.';
+    }
+    if (code === 'task2') {
+      return 'Produce, in order: 1) a wireframe for every page, 2) the visual style (colour palette, fonts, logo) with justification, 3) high-fidelity mockups, 4) an asset log listing every asset, its source and where it is used. Then review the designs against the brief and show the improvements you made.';
+    }
+    return 'Build the site page by page from your plan, then document: 1) the tools and techniques you used (with screenshots), 2) a functionality test plan (expected vs actual result for every feature), 3) a usability test (ask someone to try it and record their feedback), 4) a self-review listing the refinements you then made.';
+  }
+
   function render() {
     var host = document.getElementById('assignment-hub');
     if (!host) return;
@@ -121,6 +131,35 @@
         var done = checklistState()[activeTask + '_' + i];
         return '<li class="' + (done ? 'done' : '') + '" data-i="' + i + '"><input type="checkbox" ' + (done ? 'checked' : '') + '><span>' + esc(item) + '</span></li>';
       }).join('') : '') + '</ul></div>';
+
+    // How to write & improve this task
+    html += '<div class="assign-guide">' +
+      '<div class="asg-hd"><b>' + icon(0x1F4D8) + ' How to write &amp; improve this task</b><span class="small muted">Read this before you start \u2014 it turns a Pass into a Distinction</span></div>' +
+      '<div class="asg-grid">' +
+        '<div class="asg-card asg-structure">' +
+          '<h4>' + icon(0x1F4CB) + ' How to structure it</h4>' +
+          '<p>' + structureTip(activeTask) + '</p>' +
+        '</div>' +
+        '<div class="asg-card asg-distinction">' +
+          '<h4>' + icon(0x1F3C6) + ' How to reach Distinction</h4>' +
+          '<ul>' +
+            '<li><b>Cover every requirement</b> \u2014 Distinction means comprehensive, not just good. Tick the brief off one by one.</li>' +
+            '<li><b>Justify every decision</b> \u2014 say why (with reference to the brief and the target audience), don\u2019t just describe what.</li>' +
+            '<li><b>Use accurate technical vocabulary</b> \u2014 e.g. \u201Cresponsive layout\u201D, \u201Csemantic HTML\u201D, \u201CWCAG\u201D, \u201Ccontrast ratio\u201D.</li>' +
+            '<li><b>Show the review cycle</b> \u2014 before \u2192 feedback \u2192 after, so the examiner sees you improved it.</li>' +
+          '</ul>' +
+        '</div>' +
+        '<div class="asg-card asg-mistakes">' +
+          '<h4>' + icon(0x26A0) + icon(0xFE0F) + ' Common mistakes to avoid</h4>' +
+          '<ul>' +
+            '<li>An un-annotated sitemap (you need annotations for A.M2 / A.D1).</li>' +
+            '<li>No test plan with <b>expected vs actual</b> results in Task 3.</li>' +
+            '<li>Using images or text without referencing the source (plagiarism).</li>' +
+            '<li>Describing what you did without evaluating whether it worked.</li>' +
+          '</ul>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
 
     html += '</div>'; // assign-panel
 

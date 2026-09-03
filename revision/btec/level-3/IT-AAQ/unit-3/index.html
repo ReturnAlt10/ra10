@@ -57,7 +57,7 @@
 <script src="https://cdn.jsdelivr.net/npm/mammoth@1.6.0/mammoth.browser.min.js"></script>
 <link rel="preconnect" href="https://api.fontshare.com">
 <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700,900&f[]=jetbrains-mono@400,500&display=swap">
-<link rel="stylesheet" href="css/style.css?v=20260907">
+<link rel="stylesheet" href="css/style.css?v=20260908">
 <style>
 .ra10-cost-label { display:inline-block; font-size:.68rem; font-weight:700; color:rgba(255,255,255,.85); background:rgba(0,0,0,.18); padding:1px 6px; border-radius:999px; margin-left:6px; vertical-align:middle; letter-spacing:.03em; }
 .ra10-cost-label.free-label { color:rgba(255,255,255,.65); background:rgba(255,255,255,.14); }
@@ -353,6 +353,22 @@
       </div>
       <div class="feature-section">
         <div class="feature-header">
+          <div class="feature-icon">&#x1F4CB;</div>
+          <div>
+            <h3>Code Snippets</h3>
+            <p>Ready-made components with a live preview.</p>
+          </div>
+        </div>
+        <div class="feature-cards grid-1">
+          <article class="card">
+            <h4>Browse code snippets</h4>
+            <p>Copy-and-paste accordions, modals, forms, nav and more &mdash; each with a live preview.</p>
+            <button class="btn" data-goto="snippets">Open</button>
+          </article>
+        </div>
+      </div>
+      <div class="feature-section">
+        <div class="feature-header">
           <div class="feature-icon">&#x1F4BB;</div>
           <div>
             <h3>Code Editor</h3>
@@ -370,11 +386,20 @@
     </div>
   </section>
 
+  <!-- ═══════════ CODE SNIPPETS (sub-view of Creation Tools) ═══════════ -->
+  <section id="view-snippets" class="view">
+    <header class="section-head">
+      <h2>Code Snippets</h2>
+      <p>Ready-made components for every assignment requirement &mdash; copy the code and watch it work live.</p>
+    </header>
+    <div id="snippets-root"></div>
+  </section>
+
   <!-- ═══════════ WIREFRAME (sub-view of Creation Tools) ═══════════ -->
   <section id="view-wireframe" class="view">
     <header class="section-head">
       <h2>Wireframe Designer</h2>
-      <p>Drag blocks onto the canvas to sketch each page layout. Add annotation notes, then export your wireframe as evidence.</p>
+      <p>Draw professional wireframes with the open-source draw.io editor &mdash; drag shapes onto the page, then export as SVG or PNG for your evidence.</p>
     </header>
     <div id="wireframe-tool"></div>
   </section>
@@ -426,12 +451,13 @@
 <script src="js/spec.js?v=20260906"></script>
 <script src="js/guide.js?v=20260906"></script>
 <script src="js/revise.js?v=20260906"></script>
-<script src="js/wireframe.js?v=20260906"></script>
-<script src="js/sitemap.js?v=20260906"></script>
-<script src="js/editor.js?v=20260906"></script>
-<script src="js/assignment.js?v=20260906"></script>
-<script src="js/ai-assigner.js?v=20260906"></script>
-<script src="js/app.js?v=20260906"></script>
+<script src="js/wireframe.js?v=20260908"></script>
+<script src="js/sitemap.js?v=20260908"></script>
+<script src="js/snippets.js?v=20260908"></script>
+<script src="js/editor.js?v=20260908"></script>
+<script src="js/assignment.js?v=20260908"></script>
+<script src="js/ai-assigner.js?v=20260908"></script>
+<script src="js/app.js?v=20260908"></script>
 <script>
 (function () {
   const RA10_UNIT_SUBJECT = 'IT';

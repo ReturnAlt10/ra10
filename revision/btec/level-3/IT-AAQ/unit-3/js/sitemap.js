@@ -92,8 +92,9 @@
         <input class="select" id="sm-new-label" placeholder="New page (e.g. Events)" style="min-width:150px" aria-label="New page name">
         <button class="btn" id="sm-add">Add page</button>
         <button class="btn" id="sm-auto">Auto-arrange</button>
-        <button class="btn ghost" id="sm-links-help" title="Toggle linking mode">✏️ Link mode</button>
-        <span class="muted small" id="sm-hint">Click a page, then click another to link them. Drag to move. Double-click to rename. Delete removes.</span>
+        <button class="btn" id="sm-example" title="Load a typical site structure">&#9733; Load example</button>
+        <button class="btn ghost" id="sm-links-help" title="Toggle linking mode">&#9998;&#65039; Link mode</button>
+        <span class="muted small" id="sm-hint">Click a page, then click another to link them. Drag to move. Double-click to rename and add a note. Delete removes.</span>
       </div>
       <div class="wf-canvas-outer sm-canvas-outer" id="sm-canvas-outer">
         <div class="wf-canvas sm-canvas" id="sm-canvas"></div>
@@ -113,6 +114,7 @@
     document.getElementById('sm-add').addEventListener('click', addPage);
     document.getElementById('sm-new-label').addEventListener('keydown', function (e) { if (e.key === 'Enter') addPage(); });
     document.getElementById('sm-auto').addEventListener('click', autoArrange);
+    document.getElementById('sm-example').addEventListener('click', loadExample);
     document.getElementById('sm-links-help').addEventListener('click', function () {
       window._smLinkMode = !window._smLinkMode;
       this.textContent = window._smLinkMode ? '🔗 Linking… (click 2 pages)' : '✏️ Link mode';
@@ -183,10 +185,11 @@
       const page = state.pages.find(function (p) { return p.id === node.dataset.id; });
       if (!page) return;
       const label = prompt('Page label:', page.label);
-      if (label != null) {
-        page.label = label.trim() || page.label;
-        saveState(); renderCanvas();
-      }
+      if (label == null) return;
+      page.label = label.trim() || page.label;
+      const note = prompt('Page note (what this page includes / which requirement it meets):', page.note || '');
+      if (note != null) page.note = note.trim();
+      saveState(); renderCanvas();
     });
     document.addEventListener('pointermove', function (e) {
       if (!dragPage) return;
@@ -213,26 +216,76 @@
     const id = 'p' + Date.now() + Math.random().toString(36).slice(2, 5);
     const nx = 60 + (state.pages.length % 5) * 180;
     const ny = 140 + Math.floor(state.pages.length / 5) * 120;
-    state.pages.push({ id: id, label: label, home: false, x: nx, y: ny });
+    state.pages.push({ id: id, label: label, note: '', home: false, x: nx, y: ny });
     input.value = '';
     saveState();
     renderCanvas();
   }
 
+  /* Load a typical site structure so learners can see what a full,
+     annotated site map looks like (and use it as a starting point). */
+  function loadExample() {
+    if (state.pages.length > 1 && !confirm('Replace the current sitemap with the example?')) return;
+    var pages = [
+      { id: 'home', label: 'Homepage', note: 'Hero banner + featured sections', home: true },
+      { id: 'about', label: 'About us', note: 'Who the organisation is' },
+      { id: 'services', label: 'Products / Services', note: 'Card grid + search' },
+      { id: 'gallery', label: 'Gallery', note: 'Modal images + video' },
+      { id: 'events', label: 'Events & News', note: 'Upcoming events list' },
+      { id: 'contact', label: 'Contact us', note: 'Enquiry form + map' },
+      { id: 'legal', label: 'Legal / Privacy', note: 'Privacy policy (GDPR)' }
+    ];
+    var links = [
+      { from: 'home', to: 'about' }, { from: 'home', to: 'services' },
+      { from: 'home', to: 'gallery' }, { from: 'home', to: 'events' },
+      { from: 'home', to: 'contact' }, { from: 'contact', to: 'legal' }
+    ];
+    state.pages = pages;
+    state.links = links;
+    state.annotations = 'Homepage \u2014 hero + accordion (meets: accordion, responsive nav). About us \u2014 image + text (meets: client tone). Products / Services \u2014 card grid + search (meets: search, accordion). Gallery \u2014 modal images (meets: modal images, video). Events & News \u2014 events list (meets: content updates). Contact us \u2014 form + map (meets: form, map). Legal / Privacy \u2014 privacy policy (meets: GDPR / legal).';
+    saveState();
+    autoArrange();
+  }
+
   function autoArrange() {
-    const home = state.pages.find(function (p) { return p.home; });
-    const others = state.pages.filter(function (p) { return !p.home; });
-    if (home) { home.x = 400; home.y = 40; }
-    others.forEach(function (p, i) {
-      const col = i % 3, row = Math.floor(i / 3);
-      p.x = 40 + col * 240;
-      p.y = 170 + row * 140;
-    });
-    // rebuild links as a tree from home
-    const newLinks = [];
-    if (home) {
-      others.forEach(function (p) { newLinks.push({ from: home.id, to: p.id }); });
+    // Hierarchical tree layout: homepage at the top, then levels by
+    // distance from the homepage following the links.
+    var home = state.pages.find(function (p) { return p.home; }) || state.pages[0];
+    if (!home) return;
+    var level = {}; level[home.id] = 0;
+    var queue = [home.id];
+    while (queue.length) {
+      var cur = queue.shift();
+      state.links.forEach(function (l) {
+        if (l.from === cur && level[l.to] === undefined) { level[l.to] = level[cur] + 1; queue.push(l.to); }
+        if (l.to === cur && level[l.from] === undefined) { level[l.from] = level[cur] + 1; queue.push(l.from); }
+      });
     }
+    state.pages.forEach(function (p) { if (level[p.id] === undefined) level[p.id] = 1; });
+    var byLevel = {};
+    state.pages.forEach(function (p) { (byLevel[level[p.id]] = byLevel[level[p.id]] || []).push(p); });
+    var rowH = 130, colW = 220, maxLevel = Math.max.apply(null, Object.keys(byLevel).map(Number));
+    Object.keys(byLevel).forEach(function (lv) {
+      var items = byLevel[lv];
+      var l = Number(lv);
+      var totalW = items.length * colW;
+      var startX = Math.max(20, (960 - totalW) / 2);
+      items.forEach(function (p, i) {
+        p.x = startX + i * colW;
+        p.y = 40 + l * rowH;
+      });
+    });
+    // Reposition home centred above its children
+    if (home) { home.x = 40 + ((byLevel[1] ? byLevel[1].length : 1) * colW) / 2 - 95; home.y = 30; }
+    // Rebuild links as a tree from home to every other page
+    var newLinks = [];
+    var others = state.pages.filter(function (p) { return p.id !== home.id; });
+    others.forEach(function (p) {
+      // Link each page to the nearest page already linked at a higher level
+      var parents = state.pages.filter(function (q) { return q.id !== p.id && (level[q.id] === level[p.id] - 1); });
+      var parent = parents[0] || home;
+      newLinks.push({ from: parent.id, to: p.id });
+    });
     state.links = newLinks;
     saveState();
     renderCanvas();
@@ -249,8 +302,10 @@
       node.dataset.id = p.id;
       node.style.left = p.x + 'px';
       node.style.top = p.y + 'px';
-      node.innerHTML = '<div class="sm-label">' + esc(p.label) + '</div>' + (p.home ? '<div class="sm-note">&#9733; start here</div>' : '') +
-        '<span class="sm-del" title="Delete">✕</span>';
+      node.innerHTML = '<div class="sm-label">' + esc(p.label) + '</div>' +
+        (p.note ? '<div class="sm-page-note">' + esc(p.note) + '</div>' : '') +
+        (p.home ? '<div class="sm-note">&#9733; start here</div>' : '') +
+        '<span class="sm-del" title="Delete">&#10005;</span>';
       canvas.appendChild(node);
     });
     if (!state.pages.length) {
@@ -281,9 +336,11 @@
       ].join(' ') + '" fill="#4a7de0"/>';
     });
     state.pages.forEach(function (p) {
-      svg += '<rect x="' + p.x + '" y="' + p.y + '" width="190" height="64" rx="10" fill="' + (p.home ? '#ccf2ee' : '#eef4ff') + '" stroke="' + (p.home ? '#0f766e' : '#4a7de0') + '" stroke-width="2"/>';
-      svg += '<text x="' + (p.x + 95) + '" y="' + (p.y + 30) + '" text-anchor="middle" font-family="Satoshi,sans-serif" font-size="13" font-weight="700" fill="#101828">' + esc(p.label) + '</text>';
-      if (p.home) svg += '<text x="' + (p.x + 95) + '" y="' + (p.y + 50) + '" text-anchor="middle" font-family="Satoshi,sans-serif" font-size="10" fill="#0f766e">★ start here</text>';
+      const h = p.note ? 78 : 64;
+      svg += '<rect x="' + p.x + '" y="' + p.y + '" width="190" height="' + h + '" rx="10" fill="' + (p.home ? '#ccf2ee' : '#eef4ff') + '" stroke="' + (p.home ? '#0f766e' : '#4a7de0') + '" stroke-width="2"/>';
+      svg += '<text x="' + (p.x + 95) + '" y="' + (p.y + 26) + '" text-anchor="middle" font-family="Satoshi,sans-serif" font-size="13" font-weight="700" fill="#101828">' + esc(p.label) + '</text>';
+      if (p.note) svg += '<text x="' + (p.x + 95) + '" y="' + (p.y + 44) + '" text-anchor="middle" font-family="Satoshi,sans-serif" font-size="10" fill="#475569">' + esc(p.note) + '</text>';
+      if (p.home) svg += '<text x="' + (p.x + 95) + '" y="' + (p.y + (p.note ? 60 : 50)) + '" text-anchor="middle" font-family="Satoshi,sans-serif" font-size="10" fill="#0f766e">&#9733; start here</text>';
     });
     svg += '</svg>';
     downloadBlob(svg, 'image/svg+xml;charset=utf-8', 'sitemap.svg');
@@ -309,9 +366,11 @@
         ].join(' ') + '" fill="#4a7de0"/>';
       });
       state.pages.forEach(function (p) {
-        svg += '<rect x="' + p.x + '" y="' + p.y + '" width="190" height="64" rx="10" fill="' + (p.home ? '#ccf2ee' : '#eef4ff') + '" stroke="' + (p.home ? '#0f766e' : '#4a7de0') + '" stroke-width="2"/>';
-        svg += '<text x="' + (p.x + 95) + '" y="' + (p.y + 30) + '" text-anchor="middle" font-family="Satoshi,sans-serif" font-size="13" font-weight="700" fill="#101828">' + esc(p.label) + '</text>';
-        if (p.home) svg += '<text x="' + (p.x + 95) + '" y="' + (p.y + 50) + '" text-anchor="middle" font-family="Satoshi,sans-serif" font-size="10" fill="#0f766e">★ start here</text>';
+        const h = p.note ? 78 : 64;
+        svg += '<rect x="' + p.x + '" y="' + p.y + '" width="190" height="' + h + '" rx="10" fill="' + (p.home ? '#ccf2ee' : '#eef4ff') + '" stroke="' + (p.home ? '#0f766e' : '#4a7de0') + '" stroke-width="2"/>';
+        svg += '<text x="' + (p.x + 95) + '" y="' + (p.y + 26) + '" text-anchor="middle" font-family="Satoshi,sans-serif" font-size="13" font-weight="700" fill="#101828">' + esc(p.label) + '</text>';
+        if (p.note) svg += '<text x="' + (p.x + 95) + '" y="' + (p.y + 44) + '" text-anchor="middle" font-family="Satoshi,sans-serif" font-size="10" fill="#475569">' + esc(p.note) + '</text>';
+        if (p.home) svg += '<text x="' + (p.x + 95) + '" y="' + (p.y + (p.note ? 60 : 50)) + '" text-anchor="middle" font-family="Satoshi,sans-serif" font-size="10" fill="#0f766e">&#9733; start here</text>';
       });
       svg += '</svg>';
       return svg;

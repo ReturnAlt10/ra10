@@ -89,6 +89,7 @@
       '</div>' +
       // Messages
       '<div class="ai-msgs" id="ai-msgs"></div>' +
+      '<div class="ai-suggestions hidden" id="ai-suggestions"></div>' +
       // Input box
       '<div class="ai-input-row">' +
         '<button class="ai-plus" id="ai-plus" title="Upload document or start a new chat">' + icon(0x2B) + '</button>' +
@@ -165,7 +166,32 @@
     // Welcome
     if (!chatHistory.length) {
       addMsg('bot', 'Hi! I\u2019m **AI Assigner**, your Unit 3 mentor. Ask me about website development theory, get **hints** on a task, or switch to **Examiner** to upload your work and have it checked against the real Pass/Merit/Distinction criteria.');
+      renderSuggestions();
     }
+  }
+
+  function renderSuggestions() {
+    var host = document.getElementById('ai-suggestions');
+    if (!host) return;
+    var suggestions = [
+      'Explain the difference between a wireframe and a mockup',
+      'What should go on my annotated sitemap?',
+      'How do I make my website accessible?',
+      'Give me hints to reach Distinction in Task 2'
+    ];
+    host.innerHTML = '<div class="ai-suggestions-label">Try asking</div>' +
+      suggestions.map(function (s) {
+        return '<button class="ai-suggestion" data-q="' + esc(s) + '">' + esc(s) + '</button>';
+      }).join('');
+    host.classList.remove('hidden');
+    host.querySelectorAll('.ai-suggestion').forEach(function (b) {
+      b.addEventListener('click', function () {
+        host.classList.add('hidden');
+        var input = document.getElementById('ai-input');
+        if (input) { input.value = b.dataset.q; input.focus(); }
+        send();
+      });
+    });
   }
 
   function newChat() {
@@ -183,6 +209,19 @@
     if (html) div.innerHTML = html;
     else if (role === 'bot') div.innerHTML = md(text);
     else div.textContent = text;
+    if (role === 'bot' && !html) {
+      var copyBtn = document.createElement('button');
+      copyBtn.className = 'ai-msg-copy';
+      copyBtn.title = 'Copy response';
+      copyBtn.textContent = 'Copy';
+      copyBtn.addEventListener('click', function () {
+        var t = div.textContent;
+        if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t);
+        copyBtn.textContent = 'Copied \u2713';
+        setTimeout(function () { copyBtn.textContent = 'Copy'; }, 1400);
+      });
+      div.appendChild(copyBtn);
+    }
     host.appendChild(div);
     host.scrollTop = host.scrollHeight;
     if (role !== 'thinking') chatHistory.push({ role: role, content: text });
@@ -224,6 +263,8 @@
     }
     input.value = '';
     input.style.height = 'auto';
+    var sug = document.getElementById('ai-suggestions');
+    if (sug) sug.classList.add('hidden');
     busy = true;
     addMsg('user', text);
     var think = addThinking();
