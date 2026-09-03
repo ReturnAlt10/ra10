@@ -9,6 +9,11 @@ const PARENT_TAB = {
 };
 
 function switchTab(name) {
+  // Block desktop-only tools on phones (also guards direct navigation).
+  if (DESKTOP_TOOLS[name] && isMobileDevice()) {
+    showMobileToolNotice(DESKTOP_TOOLS[name]);
+    name = 'tools';
+  }
   const parent = PARENT_TAB[name] || name;
   document.querySelectorAll('.tab').forEach(function (t) { t.classList.toggle('active', t.dataset.tab === parent); });
   VIEW_IDS.forEach(function (id) {
@@ -33,6 +38,43 @@ function switchTab(name) {
   if (name === 'dashboard') renderAimGrid();
   window.scrollTo({ top: 0, behavior: 'auto' });
 }
+
+/* ── Desktop-only tools: wireframe, sitemap & code editor ──
+   These need a large screen (drag-and-drop canvas, split panes).
+   On phones we block them and show a friendly notice instead. */
+var DESKTOP_TOOLS = { wireframe: 'Wireframe Designer', sitemap: 'Sitemap Builder', editor: 'Code Editor' };
+function isMobileDevice() {
+  return window.matchMedia && window.matchMedia('(max-width: 767px)').matches;
+}
+function showMobileToolNotice(toolName) {
+  var host = document.getElementById('view-tools');
+  if (!host) return;
+  var existing = document.getElementById('mobile-tool-notice');
+  if (existing) existing.remove();
+  var notice = document.createElement('div');
+  notice.id = 'mobile-tool-notice';
+  notice.className = 'mobile-tool-notice';
+  notice.innerHTML =
+    '<div class="mobile-tool-notice-ico">&#x1F4F1;</div>' +
+    '<div class="mobile-tool-notice-body">' +
+      '<b>' + toolName + ' is available on desktop and tablet</b>' +
+      '<p>This tool needs a larger screen to work properly. Open RA10 on a computer or tablet to use it.</p>' +
+    '</div>' +
+    '<button class="btn" type="button" data-goto="tools">Back to tools</button>';
+  host.appendChild(notice);
+  notice.querySelector('[data-goto="tools"]').addEventListener('click', function () { switchTab('tools'); });
+  notice.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+// Intercept the desktop-only tools before they open.
+document.addEventListener('click', function (e) {
+  var btn = e.target.closest('[data-goto="wireframe"], [data-goto="sitemap"], [data-goto="editor"]');
+  if (!btn) return;
+  if (isMobileDevice()) {
+    e.preventDefault();
+    e.stopPropagation();
+    showMobileToolNotice(DESKTOP_TOOLS[btn.dataset.goto]);
+  }
+}, true);
 
 /* ── Raise an action cost label for gates */
 function ra10GateCheck(action) {

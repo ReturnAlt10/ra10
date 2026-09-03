@@ -75,6 +75,11 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* Buttons don't inherit text colour by default (browsers use black).
+   This keeps every button readable in dark mode unless a rule overrides it. */
+button, input, select, textarea { font-family: inherit; }
+button { color: inherit; }
+
 .wrap { max-width: 1180px; margin: 0 auto; padding: 22px 20px 60px; }
 
 h1, h2, h3, h4 { line-height: 1.25; margin: 0 0 .5em; font-weight: 800; }
@@ -294,6 +299,18 @@ img { max-width: 100%; }
   #view-revise .dashboard-grid, #view-tools .dashboard-grid { grid-template-columns: 1fr; }
   .feature-section { padding: 20px; }
 }
+
+/* Desktop-only tool notice (shown on phones) */
+.mobile-tool-notice {
+  display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+  background: var(--surface); border: 1px solid var(--line-2); border-radius: var(--radius);
+  padding: 18px 20px; margin: 18px 0; box-shadow: var(--shadow);
+}
+.mobile-tool-notice-ico { font-size: 2rem; line-height: 1; flex-shrink: 0; }
+.mobile-tool-notice-body { flex: 1; min-width: 200px; }
+.mobile-tool-notice-body b { display: block; font-size: .98rem; margin-bottom: 3px; }
+.mobile-tool-notice-body p { margin: 0; font-size: .84rem; color: var(--ink-2); line-height: 1.5; }
+.mobile-tool-notice .btn { flex: 0 0 auto; }
 
 .section-block {
   background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
@@ -1324,6 +1341,16 @@ body.pv-open { overflow: hidden !important; }
   .pv-stage { padding: 12px 6px 30px; }
   .pv-page { width: calc(100vw - 12px); min-height: auto; padding: 14px 14px 48px; border-radius: 12px; font-size: 9.5pt; }
   .pv-footer { left: 14px; right: 14px; bottom: 14px; }
+  /* Compact, single-row toolbar on phones */
+  .pv-topbar { padding: 6px 8px; gap: 6px; }
+  .pv-group { gap: 6px; }
+  .pv-title { max-width: 150px; font-size: .74rem; padding: 6px 9px; }
+  .pv-btn { font-size: .74rem; padding: 6px 9px; }
+  .pv-zoom, .pv-counter { min-width: 44px; font-size: .74rem; padding: 6px 6px; }
+  .pv-btn-primary { white-space: nowrap; }
+  /* Make the criteria table scroll horizontally instead of squashing */
+  .pv-page .pv-crit { font-size: 8pt; }
+  .pv-page .pv-crit th, .pv-page .pv-crit td { padding: 4px 5px; }
 }
 
 @media print {
