@@ -25,7 +25,7 @@ MS_HEAD, MS_TAIL = read_chunks("mark-scheme-1.html")
 
 def paper_topbar(n):
     N = str(n)
-    return f"""\n<body>
+    return f"""\n<body class="paper-viewer">
 
 <div class="viewer-topbar no-print">
   <div class="viewer-group viewer-group-nav">
@@ -187,7 +187,7 @@ def paper_question_pages(paper, n):
 
 def ms_topbar(n):
     N = str(n)
-    return f"""\n<body>
+    return f"""\n<body class="paper-viewer">
 
 <div class="viewer-topbar no-print">
   <div class="viewer-group viewer-group-nav">

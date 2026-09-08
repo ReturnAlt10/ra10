@@ -189,6 +189,21 @@
     box-shadow: none !important;
   }
 
+  /* Predicted/mock paper A4 sheets must keep their white paper background */
+  body.ra10-refresh-enabled.paper-viewer .page {
+    background: #fff !important;
+    border: 1px solid #d8dce8 !important;
+    border-radius: 18px !important;
+    box-shadow: 0 20px 48px rgba(26, 26, 46, 0.14) !important;
+  }
+  @media print {
+    body.ra10-refresh-enabled.paper-viewer .page {
+      border: none !important;
+      border-radius: 0 !important;
+      box-shadow: none !important;
+    }
+  }
+
   body.ra10-refresh-enabled p,
   body.ra10-refresh-enabled li {
     line-height: 1.68;
