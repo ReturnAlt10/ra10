@@ -4191,8 +4191,8 @@ html body #community-share-sheet .community-share-panel{
 .exams-cal-day .cal-more{font-size:10px;color:var(--color-text-muted);margin-top:2px}
 
 /* Exam modal */
-.exam-modal-overlay{position:fixed;inset:0;z-index:2147483500;background:rgba(15,23,42,.55);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;padding:var(--sp4)}
-.exam-modal-overlay.open{display:flex}
+.exam-modal-overlay{position:fixed !important;inset:0;z-index:2147483500;background:rgba(15,23,42,.55);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;padding:var(--sp4)}
+.exam-modal-overlay.open{display:flex !important}
 .exam-modal{background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-xl);box-shadow:0 28px 80px rgba(2,6,23,.35);max-width:520px;width:100%;padding:var(--sp6);position:relative;max-height:min(88vh,760px);overflow:auto}
 .exam-modal-close{position:absolute;top:12px;right:12px;width:34px;height:34px;border-radius:999px;border:none;background:var(--color-surface-offset);color:var(--color-text-muted);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center}
 .exam-modal-close:hover{background:var(--color-surface-offset-2);color:var(--color-text)}
@@ -6643,7 +6643,7 @@ html body #community-share-sheet .community-share-panel{
           <option value="level">Sort: Level</option>
         </select>
         <div class="exams-view-toggle" role="group" aria-label="View mode">
-          <button id="exams-view-calendar" class="exams-view-btn active" type="button" title="Calendar view">📅</button>
+          <button id="exams-view-calendar" class="exams-view-btn active" type="button" title="Calendar view"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></button>
           <button id="exams-view-grid" class="exams-view-btn" type="button" title="Grid view">▦</button>
           <button id="exams-view-list" class="exams-view-btn" type="button" title="List view">☰</button>
         </div>
