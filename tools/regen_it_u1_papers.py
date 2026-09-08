@@ -542,111 +542,445 @@ P = {
             "Connection over the internet to the office server shown with annotations (1)",
         ],
     },
+    "storage_dev": {
+        "instruction": "Award one mark for each correct storage device, up to a maximum of two marks.",
+        "points": ["External hard drive (1)", "USB memory stick (1)", "Memory/SD card (1)", "Network-attached storage (NAS) (1)", "Cloud storage (1)"],
+        "accept": "Accept any other appropriate storage device",
+    },
+    "os_types": {
+        "instruction": "Award one mark for each correct type of operating system, up to a maximum of two marks.",
+        "points": ["Network operating system (NOS) (1)", "Multi-tasking OS (1)", "Real-time OS (1)", "Mobile OS (1)", "Multi-user OS (1)", "Single-user OS (1)"],
+        "accept": "Accept any other appropriate operating system type",
+    },
+    "vpn_benefit": {
+        "instruction": "Award one mark for identification and one mark for a linked justification/expansion, up to a maximum of four marks.",
+        "points": [
+            "Secure remote access (1) — employees connect to the office network safely from anywhere (1)",
+            "Encrypted connection (1) — data is protected from interception while in transit (1)",
+            "Private tunnel over the internet (1) — traffic is hidden from unauthorised users (1)",
+            "Cost-effective (1) — uses the public internet rather than dedicated leased lines (1)",
+        ],
+        "accept": "Accept any other appropriate/alternative response",
+    },
+    "software_choice": {
+        "instruction": "Award one mark for identification and one mark for a linked justification/expansion, up to a maximum of four marks.",
+        "points": [
+            "Cost (1) — the software must fit the organisation's budget (1)",
+            "Compatibility (1) — it must work with the existing hardware/systems (1)",
+            "Features/functionality (1) — it must meet the specific needs of the work (1)",
+            "Security (1) — it must protect sensitive data (1)",
+        ],
+        "accept": "Accept any other appropriate factor",
+    },
+    "encryption_transit": {
+        "instruction": "Award one mark for identification and one mark for a linked justification/expansion, up to a maximum of four marks.",
+        "points": [
+            "Data is scrambled into ciphertext (1) so it cannot be read if intercepted (1)",
+            "Only authorised parties with the key can decrypt it (1) protecting it during transmission (1)",
+            "Uses protocols such as HTTPS/SSL/TLS (1) securing data over the internet (1)",
+        ],
+        "accept": "Accept any other appropriate/alternative response",
+    },
+    "cloud_storage_benefit": {
+        "instruction": "Award one mark for identification and one mark for a linked justification/expansion, up to a maximum of four marks.",
+        "points": [
+            "Accessible anywhere (1) — staff can reach files from any device with an internet connection (1)",
+            "Automatic backup (1) — data is preserved if local devices fail (1)",
+            "Scalable (1) — storage can grow or shrink to meet demand (1)",
+            "Reduces local hardware cost (1) — no need to buy/maintain on-site servers (1)",
+        ],
+        "accept": "Accept any other appropriate/alternative response",
+    },
+    "cloud_storage_drawback": {
+        "instruction": "Award one mark for identification and one mark for a linked justification/expansion, up to a maximum of four marks.",
+        "points": [
+            "Requires reliable internet (1) — no connection means no access to data (1)",
+            "Ongoing subscription cost (1) — fees continue over time (1)",
+            "Security/privacy concerns (1) — data is held by a third party (1)",
+            "Speed of transfer (1) — large files depend on connection bandwidth (1)",
+        ],
+        "accept": "Accept any other appropriate/alternative response",
+    },
+    "backup_recovery": {
+        "instruction": "Award one mark for identification and one mark for a linked justification/expansion, up to a maximum of four marks.",
+        "points": [
+            "Regular backups copy data (1) so it can be recovered if the original is lost/corrupted (1)",
+            "Backups are stored separately/off-site (1) so they survive hardware failure or disaster (1)",
+            "Recovery procedures restore data (1) minimising downtime (1)",
+            "Automated/scheduled backups (1) reduce the risk of human error (1)",
+        ],
+        "accept": "Accept any other appropriate/alternative response",
+    },
+    "physical_access": {
+        "instruction": "Award up to six marks using the levels-based approach.",
+        "indicative": [
+            "Locks on server room doors (key/code/badge) — restrict physical access to hardware",
+            "CCTV / security cameras — deter and record unauthorised entry",
+            "Biometric door entry (fingerprint) — only authorised staff can enter",
+            "Security guards / reception sign-in — control visitors",
+            "Locked cabinets/cages for servers and storage devices",
+            "Alarms — alert to unauthorised access attempts",
+        ],
+        "levels": [
+            [0, "0", "No rewardable material."],
+            [1, "1–3", "Identifies one or two physical measures with limited explanation. (AO2)"],
+            [2, "4–5", "Explains several physical access controls and how they prevent unauthorised access to hardware/data. (AO2/AO3a)"],
+            [3, "6", "Thoroughly discusses a range of physical controls (locks, CCTV, biometrics, sign-in, alarms) with clear explanation of how each protects the system, contextualised. (AO2/AO3a)"],
+        ],
+    },
+    "wifi_security": {
+        "instruction": "Award one mark for identification and one mark for a linked justification/expansion, up to a maximum of four marks.",
+        "points": [
+            "Unauthorised access (1) — an open network lets others join and misuse it (1)",
+            "Eavesdropping/interception (1) — data sent over Wi-Fi can be intercepted (1)",
+            "Weak/no encryption (1) — unprotected traffic is readable by attackers (1)",
+            "Rogue access points (1) — attackers can set up fake hotspots (1)",
+        ],
+        "accept": "Accept any other appropriate security issue",
+    },
+    "data_accuracy": {
+        "instruction": "Award one mark for identification and one mark for a linked justification/expansion, up to a maximum of four marks.",
+        "points": [
+            "Validation (1) — checks data is sensible/valid before it is accepted (1)",
+            "Verification (1) — checks data matches the original (e.g. double entry, confirmation) (1)",
+            "Drop-down lists / input masks (1) — restrict what can be entered (1)",
+            "Proofreading (1) — a person checks for mistakes (1)",
+        ],
+        "accept": "Accept any other appropriate method",
+    },
+    "connection_factor": {
+        "instruction": "Award one mark for identification and one mark for a linked justification/expansion, up to a maximum of two marks.",
+        "points": [
+            "Performance/speed (1) — the connection must be fast enough for the work (1)",
+            "Cost (1) — wired vs wireless and setup costs must suit the budget (1)",
+            "Mobility (1) — wireless suits staff who move around (1)",
+            "Reliability (1) — wired connections are usually more stable (1)",
+            "Security (1) — wired is harder to intercept than wireless (1)",
+        ],
+        "accept": "Accept any other appropriate factor",
+    },
+    "external_threats": {
+        "instruction": "Award one mark for each correct external threat, up to a maximum of two marks.",
+        "points": ["Viruses/malware (1)", "Hackers/unauthorised access (1)", "Social engineering/phishing (1)", "Natural disaster (1)", "Denial-of-service attack (1)"],
+        "accept": "Accept any other appropriate external threat",
+    },
+    "internal_threats": {
+        "instruction": "Award one mark for each correct internal threat, up to a maximum of two marks.",
+        "points": ["Accidental disclosure/deletion (1)", "Stealing/leaking data (1)", "Visiting inappropriate websites (1)", "Lost/portable devices (1)", "Disgruntled staff (1)"],
+        "accept": "Accept any other appropriate internal threat",
+    },
+    "antivirus_benefit": {
+        "instruction": "Award one mark for identification and one mark for a linked justification/expansion, up to a maximum of four marks.",
+        "points": [
+            "Detects malware (1) by scanning files for known threats (1)",
+            "Removes/quarantines infected files (1) preventing damage or spread (1)",
+            "Real-time protection (1) monitors the system continuously (1)",
+            "Regular updates (1) keep it effective against new viruses (1)",
+        ],
+        "accept": "Accept any other appropriate/alternative response",
+    },
+    "backup_benefit": {
+        "instruction": "Award one mark for identification and one mark for a linked justification/expansion, up to a maximum of four marks.",
+        "points": [
+            "Protects against data loss (1) — data can be restored if lost or corrupted (1)",
+            "Quick recovery (1) — minimises downtime after an incident (1)",
+            "Off-site copies (1) — survive physical damage to the building (1)",
+            "Version history (1) — earlier versions can be recovered (1)",
+        ],
+        "accept": "Accept any other appropriate/alternative response",
+    },
+    "encryption_benefit": {
+        "instruction": "Award one mark for identification and one mark for a linked justification/expansion, up to a maximum of four marks.",
+        "points": [
+            "Scrambles data (1) so it is unreadable without the key (1)",
+            "Protects data at rest (1) — stored data is secure if a device is stolen (1)",
+            "Protects data in transit (1) — intercepted traffic cannot be read (1)",
+            "Builds customer trust (1) — sensitive data is kept confidential (1)",
+        ],
+        "accept": "Accept any other appropriate/alternative response",
+    },
+    "emerging_tech": {
+        "instruction": "Award up to three marks for an accurate description of how the organisation can use one emerging technology.",
+        "points": [
+            "Identifies a technology (e.g. AI, IoT, augmented reality, voice assistants) (1)",
+            "Describes how it is applied in the organisation (1)",
+            "Explains the intended benefit to the organisation (1)",
+        ],
+        "accept": "Accept any appropriate emerging technology correctly described",
+    },
+    "emerging_tech_eval": {
+        "instruction": "Award up to nine marks using the levels-based approach.",
+        "indicative": [
+            "Artificial intelligence — automate tasks, analyse data, improve decisions",
+            "Internet of Things (IoT) — connected sensors for monitoring and automation",
+            "Closed-loop, sensor-driven systems — gather real-time data",
+            "Augmented/virtual reality — training, design, marketing",
+            "Voice assistants — hands-free control and customer service",
+            "Cost and implementation considerations",
+            "Impact on staff, customers and working practices",
+            "Security and privacy implications",
+        ],
+        "levels": [
+            [0, "0", "No rewardable material."],
+            [1, "1–3", "Basic understanding. Names one or two emerging technologies with limited application. (AO2)"],
+            [2, "4–6", "Good evaluation. Describes several emerging technologies and how they could benefit the organisation, with some development. (AO2/AO3a)"],
+            [3, "7–9", "Comprehensive evaluation. Thorough discussion of a range of emerging technologies weighing benefits against cost, security and workforce impact, with a justified view. (AO2/AO3a/AO3b)"],
+        ],
+    },
+    "data_protection_legal": {
+        "instruction": "Award up to nine marks using the levels-based approach.",
+        "indicative": [
+            "Must comply with UK GDPR / Data Protection Act",
+            "Lawful basis for processing and client consent",
+            "Data kept secure, accurate and up to date",
+            "Client rights: access, rectification, erasure, portability",
+            "Computer Misuse Act — protection against unauthorised access",
+            "Consequences of breach — fines, legal action, reputational damage",
+            "Staff training and clear data policies",
+        ],
+        "levels": [
+            [0, "0", "No rewardable material."],
+            [1, "1–3", "Basic understanding. Names legislation with limited application to the organisation's data. (AO2)"],
+            [2, "4–6", "Good application. Discusses several legal requirements and how they apply to client data with some development. (AO2/AO3a)"],
+            [3, "7–9", "Comprehensive evaluation. Thorough discussion of legal obligations (GDPR, Computer Misuse Act), client rights and consequences of breach, with a balanced judgement. (AO2/AO3a/AO3b)"],
+        ],
+    },
+    "remote_vpn": {
+        "instruction": "Award up to twelve marks using the levels-based approach.",
+        "indicative": [
+            "Remote working with VPN — secure, flexible, encrypted access from anywhere",
+            "On-site working — direct access to the office network",
+            "VPN benefits: flexibility, reduced travel, security via encryption",
+            "VPN drawbacks: dependent on internet speed/reliability, needs training",
+            "On-site benefits: reliable fast network, direct supervision, secure local data",
+            "On-site drawbacks: less flexibility, higher premises/travel costs",
+            "Performance and efficiency comparison",
+            "Suitability depends on the organisation's needs",
+        ],
+        "levels": [
+            [0, "0", "No rewardable material."],
+            [1, "1–4", "Basic understanding of remote vs on-site working. Limited comparison, mostly descriptive. (AO2)"],
+            [2, "5–8", "Good evaluation comparing VPN remote working with on-site, with several points developed in context. (AO2/AO3a)"],
+            [3, "9–12", "Comprehensive evaluation. Thorough, balanced comparison covering security, performance, flexibility, cost and suitability, clearly contextualised, with a justified conclusion. (AO2/AO3a/AO3b)"],
+        ],
+    },
+    "payment_benefit_variation": {
+        "instruction": "Award one mark for identification and one mark for a linked justification/expansion, up to a maximum of four marks.",
+        "points": [
+            "Convenient for customers (1) — payments can be made 24/7 from any device (1)",
+            "Faster processing (1) — transactions are completed instantly online (1)",
+            "Fewer errors (1) — details entered directly reduce transcription mistakes (1)",
+            "Secure encryption (1) — card details are protected during transmission (1)",
+        ],
+        "accept": "Accept any other appropriate/alternative response",
+    },
+    "open_source_eval": {
+        "instruction": "Award up to nine marks using the levels-based approach.",
+        "indicative": [
+            "Open source — source code is freely available, can be modified; often free to use",
+            "Proprietary — owned by a vendor; paid licence; support and updates provided",
+            "Open source benefits: lower cost, community support, customisable",
+            "Open source drawbacks: variable support, potential security concerns if not maintained",
+            "Proprietary benefits: vendor support, reliability, regular updates",
+            "Proprietary drawbacks: licence cost, locked into a vendor",
+            "Suitability depends on the organisation's needs and budget",
+        ],
+        "levels": [
+            [0, "0", "No rewardable material."],
+            [1, "1–3", "Basic understanding of open source vs proprietary. Limited comparison. (AO2)"],
+            [2, "4–6", "Good evaluation. Compares open source and proprietary with several points developed in context. (AO2/AO3a)"],
+            [3, "7–9", "Comprehensive evaluation. Thorough, balanced comparison covering cost, support, security, customisation and suitability, with a justified recommendation. (AO2/AO3a/AO3b)"],
+        ],
+    },
+    "breach_impact_variation": {
+        "instruction": "Award one mark for identification and one mark for a linked justification/expansion, up to a maximum of four marks.",
+        "points": [
+            "Financial loss (1) — fines or compensation following a breach (1)",
+            "Reputational damage (1) — patients lose trust in the clinic (1)",
+            "Legal action (1) — breach of data protection law risks penalties (1)",
+            "Operational disruption (1) — staff cannot access records to treat patients (1)",
+        ],
+        "accept": "Accept any other appropriate impact",
+    },
+    "protect_tech_encryption": {
+        "instruction": "Award up to six marks using the levels-based approach.",
+        "indicative": [
+            "Encryption — data is scrambled so it cannot be read if intercepted",
+            "Multi-factor authentication / 2FA — a second factor blocks access if a password is stolen",
+            "Biometric authentication — unique physical feature restricts logins to authorised staff",
+            "Firewalls — block unauthorised network traffic",
+            "Access control/permissions — restrict data access to authorised staff",
+        ],
+        "levels": [
+            [0, "0", "No rewardable material."],
+            [1, "1–3", "Identifies one technique with limited explanation of how it protects data. (AO2)"],
+            [2, "4–5", "Identifies two or more techniques with developed explanation of how each protects patient data. (AO2/AO3a)"],
+            [3, "6", "Thoroughly discusses several techniques (e.g. encryption, MFA, biometrics, firewalls) with clear explanation of how each protects data, contextualised. (AO2/AO3a)"],
+        ],
+    },
 }
 
 
 def make_papers():
-    def Q1(title, scenario):
+    def Q1(title, scenario, a1i, a1i_ms, bi_text, bi_ms, bii_text, bii_ms, c_text, c_ms, d_text, d_ms):
         return {
             "title": title, "scenario": scenario, "marks": 22,
-            "topics": "Input/output devices, online systems benefits & drawbacks, firewall, data protection techniques",
+            "topics": "Devices/peripherals, online/software benefits & drawbacks, protection, data security",
             "aims": "A1, A2, C1, D2",
             "parts": [
-                {"label": "(a)(i)", "text": "Give two input devices that will be needed.", "marks": 2, "kind": "short", "ms": P["input_dev"]},
+                {"label": "(a)(i)", "text": a1i, "marks": 2, "kind": "short", "ms": a1i_ms},
                 {"label": "(a)(ii)", "text": "Give two output devices that will be needed.", "marks": 2, "kind": "short", "ms": P["output_dev"]},
-                {"label": "(b)(i)", "text": "Explain two benefits of using an online booking/ordering system.", "marks": 4, "kind": "points", "ms": P["online_benefit"]},
-                {"label": "(b)(ii)", "text": "Explain two drawbacks of using an online booking/ordering system.", "marks": 4, "kind": "points", "ms": P["online_drawback"]},
-                {"label": "(c)", "text": "Describe how a firewall protects the data stored on the computer system.", "marks": 4, "kind": "short", "ms": P["firewall"]},
-                {"label": "(d)", "text": "Discuss techniques, other than usernames and passwords, that can be used to protect customer/patient data.", "marks": 6, "kind": "levels", "ms": P["protect_tech"]},
+                {"label": "(b)(i)", "text": bi_text, "marks": 4, "kind": "points", "ms": bi_ms},
+                {"label": "(b)(ii)", "text": bii_text, "marks": 4, "kind": "points", "ms": bii_ms},
+                {"label": "(c)", "text": c_text, "marks": 4, "kind": "short", "ms": c_ms},
+                {"label": "(d)", "text": d_text, "marks": 6, "kind": "levels", "ms": d_ms},
             ],
         }
 
-    def Q2(title, scenario, diagram_flowchart=False):
+    def Q2(title, scenario, a_text, a_ms, bi_text, bi_ms, bii_text, bii_ms, c_text, c_ms, d_kind, d_text, d_ms, d_diagram=None):
         parts = [
-            {"label": "(a)", "text": "Give two types of application software that might be installed.", "marks": 2, "kind": "short", "ms": P["app_sw"]},
-            {"label": "(b)(i)", "text": "Explain two benefits of using a LAN in each office.", "marks": 4, "kind": "points", "ms": P["lan_benefit"]},
-            {"label": "(b)(ii)", "text": "Explain two benefits of connecting the branches to the main office using a WAN.", "marks": 4, "kind": "points", "ms": P["wan_benefit"]},
-            {"label": "(c)", "text": "Explain two acceptable behaviours that should be included in the Acceptable Use Policy.", "marks": 4, "kind": "points", "ms": P["aup"]},
+            {"label": "(a)", "text": a_text, "marks": 2, "kind": "short", "ms": a_ms},
+            {"label": "(b)(i)", "text": bi_text, "marks": 4, "kind": "points", "ms": bi_ms},
+            {"label": "(b)(ii)", "text": bii_text, "marks": 4, "kind": "points", "ms": bii_ms},
+            {"label": "(c)", "text": c_text, "marks": 4, "kind": "points", "ms": c_ms},
         ]
-        if diagram_flowchart:
+        if d_kind == "diagram":
             parts.append({
-                "label": "(d)", "text": "Draw a flowchart to show the process for logging into the system securely. Include: start, entering a username, entering a password, a security check, access to the system, and logout.",
-                "marks": 9, "kind": "diagram", "diagram_kind": "flowchart",
-                "guide": ["start: opening the login screen", "entering a username", "entering a password (shown as a security step)", "a check that the details are correct", "access granted to the system", "logout / session end", "arrows and annotations showing the flow"],
-                "ms": P["login_flowchart"],
+                "label": "(d)", "text": d_text, "marks": 9, "kind": "diagram", "diagram_kind": "flowchart",
+                "guide": d_diagram, "ms": d_ms,
             })
         else:
-            parts.append({"label": "(d)", "text": "Evaluate the features of utility software that can be used to maintain, manage and optimise the computer systems.", "marks": 9, "kind": "levels", "ms": P["utility"]})
+            parts.append({"label": "(d)", "text": d_text, "marks": 9, "kind": "levels", "ms": d_ms})
         return {
             "title": title, "scenario": scenario, "marks": 23,
-            "topics": "Application software, LAN/WAN benefits, Acceptable Use Policy" + (", flowchart" if diagram_flowchart else ", utility software"),
-            "aims": "A1, B1, C1",
+            "topics": "Software & OS, networks (LAN/WAN/VPN), policy, protection",
+            "aims": "A1, A3, B2, F1",
             "parts": parts,
         }
 
-    def Q3(title, scenario, worker_name):
+    def Q3(title, scenario, worker_name, a_diagram_kind, a_ms, b_text, b_ms, c_text, c_ms, d_text, d_ms):
+        a_text = f"Draw a diagram to show how the network is set up and how {worker_name} connects when working remotely. The diagram must include devices and systems that are used, connection types and annotations."
         return {
             "title": title, "scenario": scenario, "marks": 21,
-            "topics": "Network diagram, PAN, online systems factor, data loss, privacy",
-            "aims": "A1, B1, C1, F1",
+            "topics": "Diagram, networks/PAN, online systems, data accuracy/impacts, legal/ethical",
+            "aims": "A1, B1, C1, E2, F1",
             "parts": [
-                {"label": "(a)", "text": f"Draw a diagram to show how the company network is set up and how {worker_name} connects when working remotely. The diagram must include devices and systems that are used, connection types and annotations.",
-                 "marks": 6, "kind": "diagram", "diagram_kind": "network diagram",
+                {"label": "(a)", "text": a_text, "marks": 6, "kind": "diagram", "diagram_kind": a_diagram_kind,
                  "guide": ["all devices and systems that are used", "connection types (e.g. LAN, PAN, internet/WAN)", "annotations labelling each device and connection"],
-                 "ms": {"instruction": "Award up to six marks for a correct annotated network diagram.", "points": P["network_diagram"]["points"]}},
-                {"label": "(b)", "text": "Explain one factor that affects the use and selection of online systems.", "marks": 2, "kind": "short", "ms": P["online_factor"]},
-                {"label": "(c)", "text": "Loss of data is one impact on the company. Explain two other impacts of the loss of data.", "marks": 4, "kind": "points", "ms": P["data_loss"]},
-                {"label": "(d)", "text": "Evaluate the privacy implications for the company when working with client data.", "marks": 9, "kind": "levels", "ms": P["privacy"]},
+                 "ms": {"instruction": "Award up to six marks for a correct annotated diagram.", "points": a_ms["points"]}},
+                {"label": "(b)", "text": b_text, "marks": 2, "kind": "short", "ms": b_ms},
+                {"label": "(c)", "text": c_text, "marks": 4, "kind": "points", "ms": c_ms},
+                {"label": "(d)", "text": d_text, "marks": 9, "kind": "levels", "ms": d_ms},
             ],
         }
 
-    def Q4(title, scenario):
+    def Q4(title, scenario, a_text, a_ms, b_text, b_ms, c_text, c_ms):
         return {
             "title": title, "scenario": scenario, "marks": 24,
-            "topics": "Cloud computing models, web server vs file server",
-            "aims": "A1, C1, D1",
+            "topics": "Cloud/emerging tech, servers, remote working",
+            "aims": "A1, A5, C1, D1",
             "parts": [
-                {"label": "(a)", "text": "Describe how the company can use one cloud computing model.", "marks": 3, "kind": "short", "ms": P["cloud_model"]},
-                {"label": "(b)", "text": "Evaluate how different cloud computing models could fit the needs of the company.", "marks": 9, "kind": "levels", "ms": P["cloud_models"]},
-                {"label": "(c)", "text": "Evaluate the performance and efficiency of a web server compared to a file server.", "marks": 12, "kind": "levels", "ms": P["web_vs_file"]},
+                {"label": "(a)", "text": a_text, "marks": 3, "kind": "short", "ms": a_ms},
+                {"label": "(b)", "text": b_text, "marks": 9, "kind": "levels", "ms": b_ms},
+                {"label": "(c)", "text": c_text, "marks": 12, "kind": "levels", "ms": c_ms},
             ],
         }
 
+    flowchart_guide = [
+        "start: opening the login screen", "entering a username", "entering a password (shown as a security step)",
+        "a check that the details are correct", "access granted to the system", "logout / session end",
+        "arrows and annotations showing the flow",
+    ]
+
     return [
+        # ---- Paper 1: broad trend mix (online services + encryption + open source) ----
         {
             "questions": [
-                Q1("Brightwell Dental Practice — Online Booking",
-                   "A small dental practice currently takes patient appointments and reminders over the telephone using a paper diary. The practice manager is planning to move to an online booking system, with patient details stored on a new computer system in the reception."),
-                Q2("Meridian Estate Agents — Branches",
-                   "Meridian Estate Agents has its main office in Birmingham with several branches around the West Midlands. Application software has been installed on the branches' computer systems so staff can carry out day-to-day tasks such as preparing property details and managing client records."),
+                Q1("Hartley Academy — Online Enrolment",
+                   "Hartley Academy is introducing an online enrolment system so parents can register their children for the school year. Candidate details will be stored on a new computer system in the school office.",
+                   "Give two input devices that will be needed.", P["input_dev"],
+                   "Explain two benefits of using a secure online payment system for enrolment.", P["payment_benefit_variation"],
+                   "Explain two drawbacks of relying on online services.", P["online_drawback"],
+                   "Describe how encryption protects the data while it is being transmitted.", P["encryption_transit"],
+                   "Discuss techniques, other than usernames and passwords, that can be used to protect candidate data.", P["protect_tech"]),
+                Q2("Premier Payroll — Branch Network",
+                   "Premier Payroll has its main office in Leeds with branches in Manchester and Sheffield. The branches hold sensitive payroll data and connect to the main office. Staff use a range of software on their computer systems.",
+                   "Give two types of operating systems that could be used.", P["os_types"],
+                   "Explain two benefits of using a LAN in each office.", P["lan_benefit"],
+                   "Explain two benefits of using a VPN to connect the branches to head office.", P["vpn_benefit"],
+                   "Explain two factors to consider when choosing software for the payroll team.", P["software_choice"],
+                   "levels", "Evaluate the use of open source software compared to proprietary software for the business.", P["open_source_eval"]),
                 Q3("Priya the Surveyor — Remote Working",
-                   "Priya is a property surveyor working for a company based in Leeds. She works remotely, visiting clients to inspect properties. Priya uses a laptop and creates a personal area network (PAN) between her laptop and smartphone to connect to the company server. The office has a central server storing all survey data, managers' offices, a printer, and desktop computers for staff.", "Priya"),
-                Q4("PixelForge Games — Cloud & Servers",
-                   "PixelForge Games is an online gaming platform. It currently stores all the data it collects on a file server on site. PixelForge is considering how it can use cloud computing to back up this data, and whether to install a web server to publish content instead of relying solely on the file server."),
+                   "Priya is a property surveyor who visits clients to inspect buildings. She uses a laptop and creates a personal area network (PAN) between her laptop and smartphone to connect to the office server. The office has a central server, desktop computers and a printer.", "Priya",
+                   "network diagram", P["network_diagram"],
+                   "Explain one factor that affects the choice of connection type for a remote worker.", P["connection_factor"],
+                   "Explain two security issues of connecting over public Wi-Fi.", P["wifi_security"],
+                   "Evaluate the data protection (GDPR) obligations when handling client survey data.", P["data_protection_legal"]),
+                Q4("PixelForge Games — Cloud & Remote",
+                   "PixelForge Games is an online gaming platform. It stores all its data on an on-site file server and is considering how it can use cloud computing. It also allows some staff to work from home.",
+                   "Describe how the company can use one cloud computing model.", P["cloud_model"],
+                   "Evaluate how different cloud computing models could fit the needs of the company.", P["cloud_models"],
+                   "Evaluate the use of a VPN for remote working compared to working on site.", P["remote_vpn"]),
             ]
         },
+        # ---- Paper 2: flowchart paper (user prediction) + storage/backup ----
         {
             "questions": [
-                Q1("Greenfield Farm Shop — Online Ordering",
-                   "A farm shop currently sells produce in-store using a till and a paper order book. The owners are considering adding an online ordering service for local delivery, with customer details stored on a new computer system in the shop office."),
+                Q1("Greenfield Farm Shop — Storage & Online",
+                   "A farm shop is expanding into online ordering for local delivery. It currently stores records on paper and a single till, and is worried about losing customer data.",
+                   "Give two storage devices that could be used.", P["storage_dev"],
+                   "Explain two benefits of storing records in the cloud.", P["cloud_storage_benefit"],
+                   "Explain two drawbacks of storing records in the cloud.", P["cloud_storage_drawback"],
+                   "Describe how backup and recovery procedures protect the shop's data.", P["backup_recovery"],
+                   "Discuss physical access control techniques that can protect the shop's computer equipment and data.", P["physical_access"]),
                 Q2("Halcyon Solicitors — Branch Network",
-                   "Halcyon Solicitors has its main office in Manchester with two branch offices nearby. Application software is installed on the offices' computer systems so staff can carry out their work. Each office has a LAN and the branches connect to the main office over a WAN.", diagram_flowchart=True),
-                Q3("Felix the Accountant — Remote Working",
-                   "Felix is an accountant who works for a firm based in Bristol. He travels to client sites and uses a laptop, connecting to the office over the internet through a personal area network (PAN) between his laptop and phone. The office has a central server, desktop computers and a printer.", "Felix"),
-                Q4("SkyStream Media — Cloud & Servers",
-                   "SkyStream Media runs an online streaming platform. It stores all its data on an on-site file server and is considering cloud computing for backup. It is also deciding whether to deploy a web server to serve content to customers."),
+                   "Halcyon Solicitors has its main office in Manchester with two branch offices nearby. Each office has a LAN and the branches connect to the main office over a WAN. Staff must log in securely to access client case files.",
+                   "Give two types of application software that might be installed.", P["app_sw"],
+                   "Explain two benefits of using a WAN to connect the branches.", P["wan_benefit"],
+                   "Explain two benefits of using a VPN.", P["vpn_benefit"],
+                   "Explain two acceptable behaviours that should be included in the Acceptable Use Policy.", P["aup"],
+                   "diagram", "Draw a flowchart to show the process for logging into the system securely. Include: start, entering a username, entering a password, a security check, access to the system, and logout.", P["login_flowchart"], flowchart_guide),
+                Q3("Felix the Accountant — Systems & Data",
+                   "Felix is an accountant who travels to client sites. He uses a laptop and creates a personal area network (PAN) between his laptop and phone. The office has a central server, desktop computers and a printer, and recently integrated a new accounting system.", "Felix",
+                   "network diagram", P["network_diagram"],
+                   "Explain one factor that affects the use and selection of online systems.", P["online_factor"],
+                   "Explain two methods of ensuring the accuracy of the data entered into the accounting system.", P["data_accuracy"],
+                   "Evaluate the privacy implications for the firm when working with client financial data.", P["privacy"]),
+                Q4("SkyStream Media — Emerging Tech",
+                   "SkyStream Media is a growing online streaming company. It stores data on an on-site file server and is exploring new technologies to improve its service and reduce costs.",
+                   "Describe how the company can use one emerging technology.", P["emerging_tech"],
+                   "Evaluate how different emerging technologies could benefit the company.", P["emerging_tech_eval"],
+                   "Evaluate the performance and efficiency of a web server compared to a file server.", P["web_vs_file"]),
             ]
         },
+        # ---- Paper 3: protection-heavy + accuracy/legal ----
         {
             "questions": [
-                Q1("Riverside Dental Clinic — Online Booking",
-                   "A dental clinic currently books appointments over the phone in a paper diary. It plans to introduce an online booking system, with patient details stored on a new computer system in reception."),
-                Q2("Trent & Co Accountants — Branches",
-                   "Trent & Co Accountants has its main office in Nottingham with branch offices across the East Midlands. Application software is installed on the branch systems so staff can complete their work. Each office has a LAN, connected to the main office over a WAN."),
-                Q3("Ravi the Architect — Remote Working",
-                   "Ravi is an architect who works for a practice based in London. He visits client sites and uses a laptop to record measurements, creating a personal area network (PAN) between his laptop and phone to connect to the office server. The office has a central server, desktop computers for staff, and a large-format printer.", "Ravi"),
+                Q1("Riverside Dental Clinic — Threats & Protection",
+                   "Riverside Dental Clinic stores patient records on its computer system and is concerned about unauthorised access to this sensitive data.",
+                   "Give two external threats to the clinic's data.", P["external_threats"],
+                   "Explain two benefits of using antivirus software.", P["antivirus_benefit"],
+                   "Explain two drawbacks of a breach of patient data for the clinic.", P["breach_impact_variation"],
+                   "Describe how a firewall protects the data stored on the system.", P["firewall"],
+                   "Discuss techniques to protect patient data, including encryption.", P["protect_tech_encryption"]),
+                Q2("Trent & Co Accountants — Backup & Software",
+                   "Trent & Co Accountants has a main office in Nottingham with branch offices. The firm relies heavily on its client data and uses a range of software. Each office has a LAN connected to the main office over a WAN.",
+                   "Give two types of application software used by the firm.", P["app_sw"],
+                   "Explain two benefits of regularly backing up client data.", P["backup_benefit"],
+                   "Explain two benefits of encrypting client data.", P["encryption_benefit"],
+                   "Explain two acceptable behaviours that should be included in the Acceptable Use Policy.", P["aup"],
+                   "levels", "Evaluate the features of utility software that can be used to maintain, manage and optimise the computer systems.", P["utility"]),
+                Q3("Ravi the Architect — Remote & Legal",
+                   "Ravi is an architect who visits client sites and uses a laptop to record measurements, creating a personal area network (PAN) between his laptop and phone to connect to the office server. The office has a central server, desktop computers and a large-format printer.", "Ravi",
+                   "network diagram", P["network_diagram"],
+                   "Explain one factor that affects the choice of connection type.", P["connection_factor"],
+                   "Explain two other impacts of the loss of the firm's client data.", P["data_loss"],
+                   "Evaluate the legal and ethical issues when the firm transfers client drawings and data between sites.", P["data_protection_legal"]),
                 Q4("NovaWare Studios — Cloud & Servers",
-                   "NovaWare Studios is a software company that stores all its project data on a file server on site. It is considering cloud computing for backup, and whether to deploy a web server to host its customer portal."),
+                   "NovaWare Studios is a software company that stores all its project data on a file server on site. It is considering cloud computing for backup and remote access, and whether to deploy a web server for its customer portal.",
+                   "Describe how the company can use one cloud computing model.", P["cloud_model"],
+                   "Evaluate how different cloud computing models could fit the needs of the company.", P["cloud_models"],
+                   "Evaluate the performance and efficiency of a web server compared to a file server.", P["web_vs_file"]),
             ]
         },
     ]
