@@ -1,0 +1,142 @@
+[
+  {
+    "id": "Q01", "aim": "A", "topic": "Data structures",
+    "q": "A library database stores members. Each member's complete record (one row) is best described as a…",
+    "options": ["Tuple", "Attribute", "Domain", "Relation"],
+    "answer": 0,
+    "why": "A tuple is one complete row/record. The whole members table is the relation; each column is an attribute."
+  },
+  {
+    "id": "Q02", "aim": "A", "topic": "Keys",
+    "q": "A film-rental database has a Movie table. Which field is the best primary key?",
+    "options": ["MovieID (unique per film)", "Title (can repeat)", "Genre (many films share it)", "Rating"],
+    "answer": 0,
+    "why": "A primary key must be unique and non-null. MovieID is unique; titles and genres can repeat."
+  },
+  {
+    "id": "Q03", "aim": "A", "topic": "Relationships",
+    "q": "One author writes many books. Which key links the Book table back to the Author table?",
+    "options": ["A foreign key (AuthorID) in Book", "A primary key in Book", "A composite key", "No key needed"],
+    "answer": 0,
+    "why": "The 'many' side (Book) holds a foreign key referencing the 'one' side (Author) primary key."
+  },
+  {
+    "id": "Q04", "aim": "A", "topic": "Normalisation",
+    "q": "A table stores customer name, address and a repeating list of phone numbers in one cell. What's wrong?",
+    "options": ["It's not in 1NF — cells must be atomic", "It's not in 2NF", "It's over-normalised", "Nothing is wrong"],
+    "answer": 0,
+    "why": "Repeating groups / multiple values in one cell violate 1NF. Split phone numbers into separate rows (or a Phone table)."
+  },
+  {
+    "id": "Q05", "aim": "A", "topic": "Normalisation",
+    "q": "In a composite-key table OrderDetail(OrderID, ProductID, ProductName), ProductName depends only on ProductID. Which normal form is violated?",
+    "options": ["2NF (partial dependency)", "1NF", "3NF", "No violation"],
+    "answer": 0,
+    "why": "ProductName depends on part of the composite key (ProductID) only — a partial dependency, so it must move to a Product table (2NF)."
+  },
+  {
+    "id": "Q06", "aim": "A", "topic": "Normalisation",
+    "q": "A Student table stores (StudentID, TutorID, TutorName). TutorName depends on TutorID, not StudentID. What should be done?",
+    "options": ["Move TutorName to a Tutor table (3NF)", "Delete TutorName", "Merge into StudentID", "Nothing"],
+    "answer": 0,
+    "why": "TutorName is transitively dependent on StudentID via TutorID. Move it to a Tutor table to reach 3NF."
+  },
+  {
+    "id": "Q07", "aim": "A", "topic": "Integrity",
+    "q": "You try to add an Order with CustomerID 999, but no customer 999 exists. The DBMS should reject it because of…",
+    "options": ["Referential integrity", "Entity integrity", "Domain integrity", "Formatting"],
+    "answer": 0,
+    "why": "Referential integrity requires a foreign key to match an existing primary key."
+  },
+  {
+    "id": "Q08", "aim": "A", "topic": "RDBMS",
+    "q": "A small charity needs a single-user database on one office PC. Which is the most suitable choice?",
+    "options": ["Microsoft Access (desktop)", "Oracle (server)", "A large server cluster", "A spreadsheet is always better"],
+    "answer": 0,
+    "why": "Access is a desktop RDBMS ideal for small, single-user needs. Server databases suit many concurrent users."
+  },
+  {
+    "id": "Q09", "aim": "B", "topic": "ERD",
+    "q": "You're designing a school database. In the conceptual ERD you would include…",
+    "options": ["Entity names and relationships only", "Full data types", "Validation rules", "SQL code"],
+    "answer": 0,
+    "why": "Conceptual = high level (entities + relationships). Attributes, keys and types come in the logical model."
+  },
+  {
+    "id": "Q10", "aim": "B", "topic": "Documentation",
+    "q": "Which field would you make the primary key in an Employee table?",
+    "options": ["EmployeeID (AutoNumber)", "Surname", "JobTitle", "DateOfBirth"],
+    "answer": 0,
+    "why": "EmployeeID is unique and stable. Names, job titles and DOB can repeat or change."
+  },
+  {
+    "id": "Q11", "aim": "B", "topic": "Forms",
+    "q": "On an order form, you want the user to pick a customer from a drop-down rather than type an ID. Use a…",
+    "options": ["Combo box", "Plain text box", "Label", "Command button"],
+    "answer": 0,
+    "why": "A combo box lets users select from a list (often a lookup table), preventing invalid IDs."
+  },
+  {
+    "id": "Q12", "aim": "B", "topic": "Queries",
+    "q": "You need a query that asks 'Enter minimum price:' and then lists products above it. This is a…",
+    "options": ["Parameter query", "Action query", "Crosstab query", "Report"],
+    "answer": 0,
+    "why": "A parameter query prompts for a value at run time, making it reusable."
+  },
+  {
+    "id": "Q13", "aim": "C", "topic": "Testing",
+    "q": "Testing an Age field with -5, 999 and 'abc' checks…",
+    "options": ["Erroneous + extreme data handling", "Normal data only", "Report formatting", "Print layout"],
+    "answer": 0,
+    "why": "These invalid/edge values confirm validation rules reject bad input and boundary cases."
+  },
+  {
+    "id": "Q14", "aim": "C", "topic": "Testing",
+    "q": "You ask three classmates to enter a new customer and give feedback. This is…",
+    "options": ["Usability testing", "Functionality testing", "Normalisation", "Optimisation"],
+    "answer": 0,
+    "why": "Usability testing gathers real-user feedback on how easy the forms/menus are to use."
+  },
+  {
+    "id": "Q15", "aim": "C", "topic": "Review",
+    "q": "Before submitting, you check the database still meets every point in the client's brief. This is…",
+    "options": ["Fitness-for-purpose review", "Backup", "Compilation", "Data entry"],
+    "answer": 0,
+    "why": "Fitness for purpose verifies the solution against the original requirements — a C3 criterion."
+  },
+  {
+    "id": "Q16", "aim": "A", "topic": "Relational algebra",
+    "q": "Returning only the rows two tables have in common is the ______ operation.",
+    "options": ["Intersect", "Union", "Join", "Select"],
+    "answer": 0,
+    "why": "Intersect returns common rows; union combines all rows; join merges on a shared attribute."
+  },
+  {
+    "id": "Q17", "aim": "B", "topic": "Validation",
+    "q": "You set a rule that a Product's Price must be > 0. This is a…",
+    "options": ["Validation rule", "Input mask", "Data type", "Index"],
+    "answer": 0,
+    "why": "A validation rule enforces a condition (Price > 0) before data is accepted."
+  },
+  {
+    "id": "Q18", "aim": "C", "topic": "SQL",
+    "q": "Write the SQL to fetch every column from a table called Movie.",
+    "options": ["SELECT * FROM Movie;", "INSERT INTO Movie;", "GET ALL Movie;", "FETCH Movie;"],
+    "answer": 0,
+    "why": "SELECT * FROM Movie retrieves all columns and rows. (Note: selecting only needed columns is better for optimisation.)"
+  },
+  {
+    "id": "Q19", "aim": "C", "topic": "Optimisation",
+    "q": "A query is slow. Which change is most likely to help?",
+    "options": ["Select only needed columns and index the join key", "Use SELECT * everywhere", "Add more sub-queries", "Store results in the same table"],
+    "answer": 0,
+    "why": "Selecting specific columns and indexing join keys reduce work — core query optimisation."
+  },
+  {
+    "id": "Q20", "aim": "A", "topic": "Anomalies",
+    "q": "You can't add a new course until at least one student enrols on it. This design flaw is…",
+    "options": ["An insertion anomaly", "A deletion anomaly", "An update anomaly", "Referential integrity"],
+    "answer": 0,
+    "why": "Insertion anomaly — unrelated data (a student) is required before you can insert the course."
+  }
+]

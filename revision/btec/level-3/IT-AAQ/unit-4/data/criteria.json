@@ -1,0 +1,55 @@
+{
+  "unit": "Unit 4: Relational Database Development",
+  "note": "Assessment criteria summary — written in own words from the published unit specification. The live assignment task wording is distributed in class by your teacher.",
+  "tasks": [
+    {
+      "code": "task1",
+      "aim": "A",
+      "title": "Research and scoping for the client brief",
+      "criteria": [
+        { "code": "A.P1", "level": "Pass", "text": "Demonstrate an adequate understanding of how relational database models, data storage and normalisation provide reliable data structures, using partially relevant examples." },
+        { "code": "A.P2", "level": "Pass", "text": "Carry out adequate research to produce a preliminary scoping document that partially meets the client's requirements." },
+        { "code": "A.M1", "level": "Merit", "text": "Demonstrate a good understanding of relational database models, data storage and normalisation, using mostly relevant examples." },
+        { "code": "A.M2", "level": "Merit", "text": "Carry out mostly detailed research to produce a scoping document that considers most of the client's requirements." },
+        { "code": "A.D1", "level": "Distinction", "text": "Carry out effective research demonstrating thorough understanding of database principles, normalisation and how to comprehensively meet the client's requirements, using pertinent examples." }
+      ]
+    },
+    {
+      "code": "task2",
+      "aim": "B",
+      "title": "Design a relational database solution",
+      "criteria": [
+        { "code": "B.P3", "level": "Pass", "text": "Produce a design and documentation that meets some of the client's requirements." },
+        { "code": "B.M3", "level": "Merit", "text": "Produce a design and documentation that meets most of the client's requirements." },
+        { "code": "B.D2", "level": "Distinction", "text": "Produce a design and documentation that comprehensively meets the client's requirements." }
+      ]
+    },
+    {
+      "code": "task3",
+      "aim": "C",
+      "title": "Develop, test and optimise the database",
+      "criteria": [
+        { "code": "C.P4", "level": "Pass", "text": "Use tools, techniques, processes and testing to produce a database that meets some of the client's requirements." },
+        { "code": "C.M4", "level": "Merit", "text": "Use tools, techniques, processes and testing to produce a database that meets most of the client's requirements." },
+        { "code": "C.D3", "level": "Distinction", "text": "Use tools, techniques, processes and testing to produce a database that comprehensively meets the client's requirements." }
+      ]
+    }
+  ],
+  "gradeDescriptions": {
+    "task1": {
+      "Pass": "Adequate understanding of database principles with partially relevant examples; a scoping document with some technical inaccuracies.",
+      "Merit": "In-depth analysis with mostly appropriate diagrams and relevant examples; a mostly technically accurate, well-communicated scoping document.",
+      "Distinction": "Clear, balanced evaluation of database principles and normalisation with pertinent examples; a scoping document with fluent, accurate technical vocabulary and well-structured reasoning."
+    },
+    "task2": {
+      "Pass": "Basic use of design skills; a design specification, timescale and test plan that partially meet requirements.",
+      "Merit": "Good use of design skills; a design specification, timescale and test plan that meet most requirements.",
+      "Distinction": "Accomplished use of design skills; a design specification, timescale and test plan that comprehensively meet requirements."
+    },
+    "task3": {
+      "Pass": "Basic use of tools and techniques to build a database that partially works; some object and usability testing.",
+      "Merit": "Good use of tools and techniques to build a functional database; appropriate object and usability testing.",
+      "Distinction": "Effective use of tools and techniques to build a fully functional database; effective testing and a thorough self-review leading to considered refinements."
+    }
+  }
+}

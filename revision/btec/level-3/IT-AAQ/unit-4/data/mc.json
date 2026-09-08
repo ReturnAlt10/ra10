@@ -1,0 +1,282 @@
+[
+  {
+    "id": "MC01", "aim": "A", "topic": "A1 Data structures",
+    "q": "In a relational database, a single row of a table is called a…",
+    "options": ["Attribute", "Tuple", "Domain", "Relation"],
+    "answer": 1,
+    "why": "A tuple is a single row (record). An attribute is a column, a domain is the set of allowed values, and a relation is the whole table."
+  },
+  {
+    "id": "MC02", "aim": "A", "topic": "A1 Data structures",
+    "q": "The number of columns (attributes) in a relation is its…",
+    "options": ["Cardinality", "Degree", "Domain", "Depth"],
+    "answer": 1,
+    "why": "Degree = number of columns; cardinality = number of rows. Don't confuse the two."
+  },
+  {
+    "id": "MC03", "aim": "A", "topic": "A1 Keys",
+    "q": "Which key uniquely identifies every row and can never be null?",
+    "options": ["Foreign key", "Super key", "Primary key", "Composite key"],
+    "answer": 2,
+    "why": "The primary key uniquely identifies each tuple and cannot be null or duplicated. A foreign key references another table's primary key."
+  },
+  {
+    "id": "MC04", "aim": "A", "topic": "A1 Integrity",
+    "q": "A foreign key value must match an existing primary key (or be null). This is…",
+    "options": ["Entity integrity", "Referential integrity", "Domain integrity", "Data integrity"],
+    "answer": 1,
+    "why": "Referential integrity ensures relationships stay valid — a foreign key can't point at a non-existent record."
+  },
+  {
+    "id": "MC05", "aim": "A", "topic": "A1 Relationships",
+    "q": "One customer can place many orders. This is a…",
+    "options": ["One-to-one relationship", "One-to-many relationship", "Many-to-many relationship", "Recursive relationship"],
+    "answer": 1,
+    "why": "One customer (one) → many orders (many). The primary key of Customer becomes a foreign key in Order."
+  },
+  {
+    "id": "MC06", "aim": "A", "topic": "A1 Relationships",
+    "q": "Students can enrol on many courses, and each course has many students. How is this modelled?",
+    "options": ["One-to-many", "One-to-one", "Many-to-many via a linking table", "It can't be modelled"],
+    "answer": 2,
+    "why": "Many-to-many is resolved with a linking (junction) table holding the two foreign keys, e.g. Enrolment(StudentID, CourseID)."
+  },
+  {
+    "id": "MC07", "aim": "A", "topic": "A1 RDBMS",
+    "q": "Which of these is a desktop (single-file) RDBMS commonly used in this unit?",
+    "options": ["Microsoft Access", "Oracle", "MySQL", "PostgreSQL"],
+    "answer": 0,
+    "why": "Access is a desktop database — stored locally as a single file. Oracle and MySQL are server databases."
+  },
+  {
+    "id": "MC08", "aim": "A", "topic": "A1 RDBMS",
+    "q": "MySQL and Oracle are examples of…",
+    "options": ["Desktop databases", "Server databases", "Spreadsheets", "Word processors"],
+    "answer": 1,
+    "why": "They are server databases — running centrally and serving many concurrent users over a network."
+  },
+  {
+    "id": "MC09", "aim": "A", "topic": "A2 SQL",
+    "q": "Which SQL keyword retrieves data from a table?",
+    "options": ["INSERT", "SELECT", "UPDATE", "DELETE"],
+    "answer": 1,
+    "why": "SELECT retrieves data. INSERT adds rows, UPDATE modifies, DELETE removes."
+  },
+  {
+    "id": "MC10", "aim": "A", "topic": "A2 SQL",
+    "q": "Which SQL statement adds a new record to a table?",
+    "options": ["INSERT INTO", "SELECT FROM", "UPDATE SET", "DELETE FROM"],
+    "answer": 0,
+    "why": "INSERT INTO adds a new tuple, e.g. INSERT INTO Customer VALUES (...)."
+  },
+  {
+    "id": "MC11", "aim": "A", "topic": "A3 Normalisation",
+    "q": "Repeating groups must be removed so each cell holds a single value. Which normal form is this?",
+    "options": ["UNF", "1NF", "2NF", "3NF"],
+    "answer": 1,
+    "why": "First Normal Form (1NF) removes repeating groups — every attribute is atomic."
+  },
+  {
+    "id": "MC12", "aim": "A", "topic": "A3 Normalisation",
+    "q": "Removing partial-key dependencies (non-key attrs depending on only part of a composite key) achieves…",
+    "options": ["1NF", "2NF", "3NF", "BCNF"],
+    "answer": 1,
+    "why": "Second Normal Form removes partial dependencies — non-key attributes must depend on the whole primary key."
+  },
+  {
+    "id": "MC13", "aim": "A", "topic": "A3 Normalisation",
+    "q": "Removing transitive dependencies (non-key attr depending on another non-key attr) achieves…",
+    "options": ["1NF", "2NF", "3NF", "UNF"],
+    "answer": 2,
+    "why": "Third Normal Form removes transitive dependencies — non-key attributes depend only on the key."
+  },
+  {
+    "id": "MC14", "aim": "A", "topic": "A3 Anomalies",
+    "q": "Updating a duplicated phone number in one row but not another causes…",
+    "options": ["An insertion anomaly", "An update anomaly", "A deletion anomaly", "No problem"],
+    "answer": 1,
+    "why": "Update anomaly — the same data stored in multiple places becomes inconsistent when changed in only one place."
+  },
+  {
+    "id": "MC15", "aim": "A", "topic": "A3 Anomalies",
+    "q": "Deleting the last student on a course accidentally deletes the course details too. This is…",
+    "options": ["An update anomaly", "An insertion anomaly", "A deletion anomaly", "Referential integrity"],
+    "answer": 2,
+    "why": "Deletion anomaly — losing related data when removing a record, caused by bad table design."
+  },
+  {
+    "id": "MC16", "aim": "B", "topic": "B1 ERD",
+    "q": "A diagram showing entities, their attributes and relationships is an…",
+    "options": ["ERD (Entity Relationship Diagram)", "Flowchart", "Sitemap", "Wireframe"],
+    "answer": 0,
+    "why": "An Entity Relationship Diagram models the database design — the core of Aim B."
+  },
+  {
+    "id": "MC17", "aim": "B", "topic": "B1 ERD",
+    "q": "Which ERD shows only entity names and relationships (no attributes)?",
+    "options": ["Conceptual model", "Logical model", "Physical model", "Data dictionary"],
+    "answer": 0,
+    "why": "Conceptual model = high-level (entities + relationships only). Logical adds attributes and keys."
+  },
+  {
+    "id": "MC18", "aim": "B", "topic": "B2 Documentation",
+    "q": "A table listing field names, data types, lengths and validation rules is a…",
+    "options": ["Data dictionary", "Query", "Report", "Macro"],
+    "answer": 0,
+    "why": "The data dictionary documents every field's name, type, length and validation — required design evidence."
+  },
+  {
+    "id": "MC19", "aim": "B", "topic": "B2 Forms",
+    "q": "Which form control lets users pick one value from a drop-down list (often linked to another table)?",
+    "options": ["Combo box", "Text box", "Label", "Check box"],
+    "answer": 0,
+    "why": "A combo box restricts input to valid choices, often drawing from a lookup table."
+  },
+  {
+    "id": "MC20", "aim": "B", "topic": "B2 Validation",
+    "q": "An input mask is used to…",
+    "options": ["Format and control data entry", "Delete records", "Sort data", "Back up the database"],
+    "answer": 0,
+    "why": "An input mask guides consistent entry (e.g. postcode LL00 0LL) — part of good form design."
+  },
+  {
+    "id": "MC21", "aim": "B", "topic": "B2 Queries",
+    "q": "A query that prompts the user for a value each time it runs is a…",
+    "options": ["Parameter query", "Action query", "Select query", "Crosstab query"],
+    "answer": 0,
+    "why": "Parameter query asks for input (e.g. 'Enter customer ID') so one query serves many uses."
+  },
+  {
+    "id": "MC22", "aim": "B", "topic": "B2 Queries",
+    "q": "Which query type changes data rather than just displaying it?",
+    "options": ["Action query", "Select query", "Parameter query", "Report"],
+    "answer": 0,
+    "why": "Action queries (append/update/delete/make-table) modify data. Use with care."
+  },
+  {
+    "id": "MC23", "aim": "B", "topic": "B2 Reports",
+    "q": "A formatted, printable output that can group records and show totals is a…",
+    "options": ["Report", "Query", "Form", "Table"],
+    "answer": 0,
+    "why": "Reports present data for printing — with grouping, calculated fields and conditional formatting."
+  },
+  {
+    "id": "MC24", "aim": "B", "topic": "B3 Review",
+    "q": "Reviewing a design against 'meeting client requirements, legal/ethical constraints, consistency' is…",
+    "options": ["Self-review", "Normalisation", "Testing", "Compilation"],
+    "answer": 0,
+    "why": "Self-review checks suitability for user, requirements, legal/ethical constraints and consistency — then refines."
+  },
+  {
+    "id": "MC25", "aim": "C", "topic": "C1 SQL",
+    "q": "Which SQL statement creates a new table?",
+    "options": ["CREATE TABLE", "INSERT TABLE", "MAKE TABLE", "NEW TABLE"],
+    "answer": 0,
+    "why": "CREATE TABLE defines a new relation with its columns and data types."
+  },
+  {
+    "id": "MC26", "aim": "C", "topic": "C1 Relationships",
+    "q": "Enforcing that a child record can't exist without its parent is done through…",
+    "options": ["Relationships with referential integrity", "Formatting", "Sorting", "Indexing"],
+    "answer": 0,
+    "why": "Defining table relationships with referential integrity ensures child records always have a valid parent."
+  },
+  {
+    "id": "MC27", "aim": "C", "topic": "C2 Testing",
+    "q": "Testing with age = -5, or letters in a number field, uses…",
+    "options": ["Erroneous test data", "Normal test data", "Extreme test data", "Random data"],
+    "answer": 0,
+    "why": "Erroneous (invalid) data confirms validation rules correctly reject bad input."
+  },
+  {
+    "id": "MC28", "aim": "C", "topic": "C2 Testing",
+    "q": "Testing with values at the very edge of allowed ranges (0, 120) is…",
+    "options": ["Extreme / boundary testing", "Normal testing", "Erroneous testing", "Usability testing"],
+    "answer": 0,
+    "why": "Extreme/boundary data checks the limits of ranges and field lengths — catches overflow and off-by-one bugs."
+  },
+  {
+    "id": "MC29", "aim": "C", "topic": "C4 Optimisation",
+    "q": "To make a query run faster you should…",
+    "options": ["Select only the columns you need and use efficient joins", "Always use SELECT *", "Add more sub-queries", "Store calculated results"],
+    "answer": 0,
+    "why": "Selecting specific columns and efficient joins (over slow sub-queries) are key query optimisations."
+  },
+  {
+    "id": "MC30", "aim": "C", "topic": "C3 Review",
+    "q": "Assessing whether the database meets the client's original requirements is…",
+    "options": ["Fitness for purpose review", "Normalisation", "Backup", "Compilation"],
+    "answer": 0,
+    "why": "Fitness for purpose checks the solution against the brief — quality, suitability, legal/ethical constraints."
+  },
+  {
+    "id": "MC31", "aim": "A", "topic": "A1 Keys",
+    "q": "A primary key made from two or more attributes combined is a…",
+    "options": ["Composite key", "Foreign key", "Super key", "Surrogate key"],
+    "answer": 0,
+    "why": "Composite key = two+ attributes together uniquely identify a row (e.g. OrderID + ProductID)."
+  },
+  {
+    "id": "MC32", "aim": "A", "topic": "A1 Relational algebra",
+    "q": "Combining two relations to produce a single result without duplicates is…",
+    "options": ["Union", "Intersect", "Join", "Select"],
+    "answer": 0,
+    "why": "Union combines rows from two compatible relations. Intersect returns common rows; join combines on a shared attribute."
+  },
+  {
+    "id": "MC33", "aim": "B", "topic": "B2 Queries",
+    "q": "The wildcard * in a query criterion means…",
+    "options": ["Match any number of characters", "Match exactly one character", "End of query", "Comment"],
+    "answer": 0,
+    "why": "* matches any characters (Access); ? matches a single character. 'S*' finds all values starting with S."
+  },
+  {
+    "id": "MC34", "aim": "B", "topic": "B2 Forms",
+    "q": "A main form containing a related 'child' form showing matching records is…",
+    "options": ["A form + subform", "A report", "A macro", "A query"],
+    "answer": 0,
+    "why": "Form + subform shows one parent record with its many children (e.g. an order and its order lines)."
+  },
+  {
+    "id": "MC35", "aim": "C", "topic": "C2 Testing",
+    "q": "Checking that links between tables stay valid when records are added/deleted is…",
+    "options": ["Referential integrity testing", "Usability testing", "Formatting", "Indexing"],
+    "answer": 0,
+    "why": "Referential integrity testing verifies relationships hold — no orphans, blocked deletes of parents with children."
+  },
+  {
+    "id": "MC36", "aim": "A", "topic": "A4 Scoping",
+    "q": "The first step when scoping a database solution to a brief is…",
+    "options": ["Establish purpose and technical requirements", "Write SQL", "Design forms", "Test the database"],
+    "answer": 0,
+    "why": "Preliminary scoping starts with the problem to be solved and technical requirements, then research existing databases."
+  },
+  {
+    "id": "MC37", "aim": "A", "topic": "A1 Integrity",
+    "q": "Every table must have a primary key that is never null or duplicated. This is…",
+    "options": ["Entity integrity", "Referential integrity", "Domain integrity", "User integrity"],
+    "answer": 0,
+    "why": "Entity integrity guarantees each row is uniquely identifiable via its primary key."
+  },
+  {
+    "id": "MC38", "aim": "C", "topic": "C4 Optimisation",
+    "q": "Storing images directly inside a table can bloat the file. A better approach is…",
+    "options": ["Store image paths, not the images themselves", "Always embed base64", "Duplicate the table", "Use bigger data types"],
+    "answer": 0,
+    "why": "Storing paths/references keeps the database small and fast — part of optimising data storage."
+  },
+  {
+    "id": "MC39", "aim": "B", "topic": "B1 Techniques",
+    "q": "Building and testing a basic working version early, then refining it, is…",
+    "options": ["Prototyping", "Normalisation", "Backup", "Compilation"],
+    "answer": 0,
+    "why": "Prototyping builds an early version to test ideas and get feedback before full development."
+  },
+  {
+    "id": "MC40", "aim": "B", "topic": "B2 Documentation",
+    "q": "Which document lists the steps and timescales for building the database?",
+    "options": ["Implementation plan", "Data dictionary", "ERD", "Report"],
+    "answer": 0,
+    "why": "The implementation plan sets out steps and timescales — part of the design specification."
+  }
+]

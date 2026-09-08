@@ -706,6 +706,7 @@
     if (name === 'guide') renderRevisionGuide();
     if (name === 'progress') renderProgress();
     if (name === 'you') renderYou();
+    if (name === 'calculator' && window.initFinanceCalculator) window.initFinanceCalculator();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
@@ -1181,10 +1182,10 @@
 
     const wrap = $('#question-list');
     wrap.innerHTML = '';
-    const display = list.slice(0, 250);
+    const display = list.slice(0, 500);
     display.forEach(qq => wrap.appendChild(renderQuestionRow(qq)));
-    if (list.length > 250) {
-      wrap.appendChild(el('p', { class: 'muted', style: 'text-align:center;padding:14px;' }, `Showing first 250 of ${list.length}. Refine filters to narrow further.`));
+    if (list.length > 500) {
+      wrap.appendChild(el('p', { class: 'muted', style: 'text-align:center;padding:14px;' }, `Showing first 500 of ${list.length}. Refine filters to narrow further.`));
     }
   }
 

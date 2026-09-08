@@ -1,0 +1,115 @@
+{
+  "briefs": [
+    {
+      "id": "college-enrolment",
+      "accdb": "CollegeCourseEnrolment.accdb",
+      "title": "College Course Enrolment",
+      "audience": "Enrolment team & tutors (Newman College-style)",
+      "scenario": "A sixth-form college needs a database to manage its learners, courses, subjects and staff, and to track which learner is enrolled on which course. Enrolment data is currently held across spreadsheets and paper, making it hard to see who is on each course and how learners are progressing against their target grades.",
+      "purpose": "To replace the spreadsheets with a relational database that stores learners, courses, subjects and staff, records every learner's enrolments, and produces reports on course enrolment and learner progress.",
+      "targetAudience": "Enrolment staff enter and update enrolments; tutors run queries and reports on their courses; managers review enrolment numbers and completion rates.",
+      "mustIncludes": [
+        "Tables for Learner, Course, Subject, Staff and a linking Enrolment table",
+        "Primary and foreign keys with one-to-many relationships (and a many-to-many resolved via Enrolment)",
+        "A data dictionary documenting every field name, data type, size and validation",
+        "Data validation (e.g. dates, target/actual grades, required fields)",
+        "Lookup fields / combo boxes so users pick Learners, Courses and Staff from drop-downs",
+        "Queries using multiple criteria and wildcards (e.g. learners on one course, surnames starting with a letter)",
+        "A parameter query to find a learner's enrolments",
+        "A report grouping enrolments by course with totals",
+        "A form with a subform showing a learner's (or course's) enrolments",
+        "Task automation using a macro or button",
+        "A test plan covering normal, erroneous and extreme data"
+      ],
+      "assignmentStyle": "original"
+    },
+    {
+      "id": "cinema-bookings",
+      "accdb": "RetroCinemaBooking.accdb",
+      "title": "Retro Cinema Booking System",
+      "audience": "Cinema manager & box-office staff",
+      "scenario": "A small independent cinema (Retro Reel) shows classic and cult films across three screens. Screenings are planned on a whiteboard and bookings taken over the phone, causing double-bookings and lost sales.",
+      "purpose": "To manage films, screens, screenings and bookings, prevent double-selling seats and produce daily sales reports.",
+      "targetAudience": "Box-office staff create bookings; the manager checks screening attendance and revenue.",
+      "mustIncludes": [
+        "Tables for Film, Screen, Screening, Member (or Customer) and a linking Booking table",
+        "One-to-many relationships with enforced referential integrity",
+        "A data dictionary for every field and validation rule",
+        "Lookup/combo boxes so staff pick a film and screen from a list",
+        "A query with criteria and wildcards (e.g. films of one genre, titles starting with a letter)",
+        "A parameter query to show all screenings on a chosen date",
+        "A report grouping bookings by screening with seat totals",
+        "A form with a subform for a screening's bookings",
+        "A macro or button to open the booking form",
+        "A test plan with normal, erroneous and extreme data"
+      ],
+      "assignmentStyle": "original"
+    },
+    {
+      "id": "garage-repairs",
+      "accdb": "GarageRepairs.accdb",
+      "title": "Garage Repairs & MOT Booking",
+      "audience": "Garage receptionist & mechanics",
+      "scenario": "A local garage (Precision Motors) keeps job cards in a filing cabinet. Customers, vehicles, jobs and parts are recorded on paper, so it's hard to see what work is outstanding and which parts were used.",
+      "purpose": "To manage customers, vehicles, jobs and parts, track each repair and produce invoices and workload reports.",
+      "targetAudience": "Receptionists book in vehicles; mechanics see outstanding jobs; owners review parts usage and invoicing.",
+      "mustIncludes": [
+        "Tables for Customer, Vehicle, Mechanic, Part and a linking Job table",
+        "Primary/foreign keys with a many-to-many resolved via a JobPart linking table",
+        "A data dictionary documenting field names, types, sizes and validation",
+        "Validation (e.g. date completed after date booked, valid registration format)",
+        "Lookup/combo boxes for customer, vehicle and mechanic",
+        "Queries using multiple criteria and wildcards",
+        "A parameter query to list jobs for a customer",
+        "A report grouping jobs by mechanic or customer with totals",
+        "A form with a subform showing a customer's vehicles",
+        "A macro used to automate opening a form/report",
+        "A test plan covering normal, erroneous and extreme data"
+      ],
+      "assignmentStyle": "original"
+    },
+    {
+      "id": "library-loans",
+      "accdb": "SchoolLibraryLoans.accdb",
+      "title": "School Library Loans",
+      "audience": "Librarian & students",
+      "scenario": "A secondary school library wants a database to manage its books, students and loans. Books are logged in a paper register, so it is hard to know which books are on loan and which are overdue.",
+      "purpose": "To manage books, students and loans, track which books are out on loan and generate overdue reports.",
+      "targetAudience": "The librarian issues and returns books; students are recorded as borrowers.",
+      "mustIncludes": [
+        "Tables for Student, Book and a linking Loan table",
+        "A many-to-many relationship resolved via the Loan table",
+        "A data dictionary documenting all fields and validation",
+        "Conceptual and logical ERDs",
+        "A loan form with a subform for a student's loans",
+        "A query with a calculated field (e.g. days overdue)",
+        "A report of overdue books grouped by student",
+        "Validation (e.g. loan date before return date)",
+        "Usability testing with real users and documented feedback"
+      ],
+      "assignmentStyle": "original"
+    },
+    {
+      "id": "travel-agency",
+      "accdb": "HolidayBookingAgency.accdb",
+      "title": "Holiday Booking Agency",
+      "audience": "Travel agents & customers",
+      "scenario": "A high-street travel agency (Sunrise Travel) arranges package holidays. Agents record bookings in paper folders and a shared spreadsheet, leading to duplicate bookings and errors in customer details.",
+      "purpose": "To manage customers, holidays, hotels and bookings, prevent double-booking and produce commission and passenger-list reports.",
+      "targetAudience": "Agents create and amend bookings; managers review sales and passenger manifests.",
+      "mustIncludes": [
+        "Tables for Customer, Holiday, Hotel (or Destination) and a linking Booking table",
+        "One-to-many relationships with referential integrity",
+        "A data dictionary with validation rules and input masks (e.g. date, price)",
+        "Lookup/combo boxes for customer, holiday and hotel",
+        "Queries with multiple criteria and wildcards (e.g. holidays under a price)",
+        "A parameter query for all customers on one holiday",
+        "Reports with grouping and totals (e.g. commission by agent)",
+        "A booking form with a subform for extra passengers",
+        "A macro to open the booking or report from a menu",
+        "A full test plan with normal, erroneous and extreme data"
+      ],
+      "assignmentStyle": "original"
+    }
+  ]
+}

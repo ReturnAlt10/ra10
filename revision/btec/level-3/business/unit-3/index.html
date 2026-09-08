@@ -895,6 +895,7 @@
     <button class="tab active" data-tab="dashboard" data-tip="Overview & quick links">Dashboard</button>
     <button class="tab" data-tab="questions" data-tip="Practise & browse exam questions">Questions</button>
     <button class="tab" data-tab="revise" data-tip="Flashcards, quizzes & the guide">Revise</button>
+    <button class="tab" data-tab="calculator" data-tip="Work out break-even, ratios and cash flow">Calculator</button>
     <button class="tab tab-special" data-tab="papers" data-tip="Full-length predicted papers">Predicted Papers</button>
     <button class="tab tab-special" data-tab="progress" data-tip="Track your scores & streak">Progress</button>
   </nav>
@@ -918,7 +919,7 @@
     <div class="hero">
       <div>
         <p class="eyebrow">Pearson BTEC Level 3 National — Personal and Business Finance</p>
-        <h2>Unit 3 with 228 Exam Style Questions</h2>
+        <h2>Unit 3 with 300 Exam Style Questions</h2>
         <p class="lede">Exam-style questions across all six learning aims (A–F), written to match the Pearson mark scheme format — including extended-response, short-answer, and calculation questions.</p>
       </div>
       <div class="stats" id="dashboard-stats"></div>
@@ -973,7 +974,7 @@
           </article>
           <article class="card">
             <h4>Quick-fire quiz</h4>
-            <p>254 multiple-choice and true/false questions with explanations and per-aim scoring across all topics.</p>
+            <p>101 multiple-choice and true/false questions with explanations and per-aim scoring across all topics.</p>
             <button class="btn" data-goto="quiz">Start quiz<span class="ra10-cost-label">1 credit per session</span></button>
           </article>
         </div>
@@ -1001,7 +1002,7 @@
           <div class="feature-icon">🔎</div>
           <div>
             <h3>Browse Questions</h3>
-            <p>Search all 228 exam-style questions</p>
+            <p>Search all 300 exam-style questions</p>
           </div>
         </div>
         <div class="feature-cards grid-1">
@@ -1114,7 +1115,7 @@
           <div class="feature-icon">❓</div>
           <div>
             <h3>Quiz</h3>
-            <p>254 multiple-choice and true/false questions with instant feedback.</p>
+            <p>101 multiple-choice and true/false questions with instant feedback.</p>
           </div>
         </div>
         <div class="feature-cards grid-1">
@@ -1310,6 +1311,11 @@
     <div id="flash-stage"></div>
   </section>
 
+  <!-- FINANCE CALCULATOR SECTION -->
+  <section id="view-calculator" class="view" style="margin-top:24px;margin-bottom:24px;">
+    <div id="calc-root"></div>
+  </section>
+
   <!-- PREDICTED PAPERS SECTION -->
   <section id="view-papers" class="view" style="margin-top:24px;margin-bottom:24px;">
       <!-- Quick Access Predicted Papers Navigation -->
@@ -1439,6 +1445,7 @@
 
 <script src="js/data-loader.js"></script>
 <script src="js/guide.js"></script>
+<script src="js/calculator.js?v=20260906"></script>
 <script src="js/app.js"></script>
 <script>
 const RA10_UNIT_SUBJECT = 'Business';

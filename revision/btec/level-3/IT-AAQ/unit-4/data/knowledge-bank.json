@@ -1,0 +1,133 @@
+{
+  "unit": "BTEC IT Level 3 Unit 4 - Relational Database Development",
+  "aims": {
+    "A": {
+      "code": "A",
+      "title": "Understand how the principles of relational database models, data storage and normalisation are used to create effective relational database solutions",
+      "topics": [
+        {
+          "code": "A1",
+          "name": "Relational database management systems",
+          "keyPoints": [
+            "Types of RDBMS: desktop databases (e.g. Microsoft Access — single file, local, one user at a time) and server databases (MySQL, Oracle — central server, many concurrent users)",
+            "Relational data structure concepts: relation (table), attribute (column), domain (allowed values), tuple (row), degree (number of columns), cardinality (number of rows)",
+            "Relational algebra operations: union, intersect, join and select",
+            "Relational keys: super key, candidate key, primary key, foreign key",
+            "Integrity constraints: entity integrity (PK never null/duplicate) and referential integrity (FK must match an existing PK or be null)",
+            "Entity relationship types: one-to-one, one-to-many, many-to-many"
+          ]
+        },
+        {
+          "code": "A2",
+          "name": "Manipulating data structures and data",
+          "keyPoints": [
+            "Defining, modifying and removing data structures and data (CREATE, ALTER, DROP)",
+            "Updating, inserting, modifying and deleting data (INSERT, UPDATE, DELETE)",
+            "Retrieval of data for queries and reports (SELECT with criteria, sorting, grouping)"
+          ]
+        },
+        {
+          "code": "A3",
+          "name": "Normalisation",
+          "keyPoints": [
+            "Purpose: develop efficient data structures free of redundancy and dependency problems",
+            "Anomalies: update, insertion and deletion anomalies caused by poor table design",
+            "Keys: primary, foreign and composite keys",
+            "Referential integrity and the data dictionary",
+            "Stages: un-normalised form (UNF) → first (1NF) → second (2NF) → third normal form (3NF)",
+            "1NF removes repeating groups (atomic values); 2NF removes partial dependencies; 3NF removes transitive dependencies"
+          ]
+        },
+        {
+          "code": "A4",
+          "name": "Preliminary scoping of a solution in response to a client brief",
+          "keyPoints": [
+            "Purpose: the problem to be solved and the technical requirements",
+            "Research: existing databases, structuring data into tables and keys, available resources",
+            "Use accurate technical vocabulary and plan the logical structure"
+          ]
+        }
+      ]
+    },
+    "B": {
+      "code": "B",
+      "title": "Design a relational database solution to meet client requirements",
+      "topics": [
+        {
+          "code": "B1",
+          "name": "Relational database design techniques and processes",
+          "keyPoints": [
+            "Entity relationship modelling: conceptual (entities + relationships) and logical (adds attributes, primary keys, foreign keys)",
+            "Relational algebra: one-to-many, one-to-one, many-to-many; AND, OR, NOT, >, <, >=, <=",
+            "DBMS selection: desktop software vs cloud/server-based",
+            "Database implementation techniques: prototyping and testing",
+            "Quality and appropriateness: correctness of data, relationships, data integrity, normalisation"
+          ]
+        },
+        {
+          "code": "B2",
+          "name": "Design documentation",
+          "keyPoints": [
+            "Design specification: requirements of the brief, audience, purpose, client requirements, legal and ethical considerations (data protection legislation, regulations)",
+            "Data structure designs: data dictionaries (tables, field names, lengths, data types, validation), ERDs, normalisation",
+            "User interface design: forms (input/calculated/disabled fields, combo boxes, list boxes, radio buttons, validation, masks, user help), menus (action buttons), queries (multiple criteria, form values, wildcards, action queries, calculated queries), reports (calculated fields, grouping, layouts, conditional formatting), task automation (macros, scripts, code)",
+            "Test plans: data integrity, functionality, accessibility, usability",
+            "Implementation plan and timescales"
+          ]
+        },
+        {
+          "code": "B3",
+          "name": "Reviewing and refining designs",
+          "keyPoints": [
+            "Self-review against: suitability for user, meeting client requirements, legal and ethical constraints, consistency",
+            "Refine ideas and solutions, then update the design specification documentation"
+          ]
+        }
+      ]
+    },
+    "C": {
+      "code": "C",
+      "title": "Develop a relational database solution to meet client requirements",
+      "topics": [
+        {
+          "code": "C1",
+          "name": "Producing a database solution",
+          "keyPoints": [
+            "Use an appropriate DBMS and SQL to create, set up and maintain data tables",
+            "Create links/relationships between tables and apply validation rules",
+            "Generate outputs: user-generated queries, automated queries, reports",
+            "Build the user interface: navigation, data entry forms, child (sub) forms",
+            "Task automation, and populating the database by importing, adding and manipulating data"
+          ]
+        },
+        {
+          "code": "C2",
+          "name": "Testing the database solution",
+          "keyPoints": [
+            "Testing types: referential integrity and functionality",
+            "Test data: erroneous, extreme and normal",
+            "Object testing: tables, queries, reports, forms, menus",
+            "Usability testing: selecting suitable test users and devising suitable tests",
+            "Gather feedback, produce test documentation, and use outcomes to refine the solution"
+          ]
+        },
+        {
+          "code": "C3",
+          "name": "Reviewing the database solution",
+          "keyPoints": [
+            "Review against: quality of the database, fitness for purpose, suitability against original requirements, legal and ethical constraints, strengths and improvements"
+          ]
+        },
+        {
+          "code": "C4",
+          "name": "Optimising the database solution",
+          "keyPoints": [
+            "Data types and data sizes (size on disk, image storage requirements)",
+            "Many tables: overheads and query complexity",
+            "Query optimisation: select specific columns, efficient joins/sub-queries"
+          ]
+        }
+      ]
+    }
+  }
+}

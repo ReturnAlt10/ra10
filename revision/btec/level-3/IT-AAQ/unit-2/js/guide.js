@@ -7,16 +7,16 @@
   const STORE_KEY = 'ra10-guide-revised-IT-u2';
   const AIMS = ['A','B','C','D'];
   const AIM_TITLES = {
-    A: 'Cyber Hygiene — Threats, Vulnerabilities & Protection',
-    B: 'Networking Architectures & Principles for Security',
-    C: 'Incident Response & Digital Forensics',
-    D: 'Testing, Monitoring & Evaluating Systems'
+    A: 'Cyber security threats, vulnerabilities & protection',
+    B: 'Networking architectures & principles for security',
+    C: 'Cyber security documentation',
+    D: 'Forensic procedures'
   };
   const AIM_SUBTITLES = {
-    A: 'Threat actors, malware types, social engineering, network attacks, legislation, encryption, firewalls, authentication, access control',
-    B: 'Network types, topologies, TCP/IP, DNS, DHCP, routing, VPNs, cloud security, IoT, BYOD',
-    C: 'NIST incident response lifecycle, containment, eradication, digital forensics, chain of custody, evidence handling',
-    D: 'Vulnerability assessment, penetration testing, IDS/IPS, SIEM, log management, security metrics, auditing'
+    A: 'Internal/external threats, system vulnerabilities, legal responsibilities, protection measures',
+    B: 'Network types, topologies, components, infrastructure services, modern trends',
+    C: 'Internal IT security policies: cyber security, audits, backups, data protection, disaster recovery',
+    D: 'Forensic collection of evidence and systematic analysis of a suspect system'
   };
 
   function getRevised() {
@@ -26,10 +26,10 @@
 
   function buildSidebar() {
     const items = [
-      { aim:'A', topics:[['A1','Threats & Malware'],['A2','Vulnerabilities'],['A3','Legal & Ethical'],['A4','Protection Measures']] },
-      { aim:'B', topics:[['B1','Networks & Topologies'],['B2','Components & Media'],['B3','Infrastructure Services']] },
-      { aim:'C', topics:[['C1','Incident Response'],['C2','Digital Forensics']] },
-      { aim:'D', topics:[['D1','Security Testing'],['D2','Monitoring & Evaluation']] }
+      { aim:'A', topics:[['A1','Threats'],['A2','Vulnerabilities'],['A3','Legal responsibilities'],['A4','Protection measures']] },
+      { aim:'B', topics:[['B1','Network types & topologies'],['B2','Components & media'],['B3','Infrastructure services']] },
+      { aim:'C', topics:[['C1','Internal security policies'],['C1.2','Audits, backups & data protection'],['C1.5','Incident & disaster recovery policies']] },
+      { aim:'D', topics:[['D1','Forensic collection of evidence'],['D2','Analysis & security reports']] }
     ];
     return `
 <button class="guide-sb-toggle" onclick="this.closest('.guide-sidebar').classList.toggle('sb-open')">
@@ -82,8 +82,8 @@
 
   const GUIDE_GALLERY = [
     { aim:'A', kicker:'Defence', title:'Threats, vulnerabilities and protection', copy:'Malware, social engineering, encryption, firewalls and authentication — the core of cyber hygiene.', image:'https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?auto=format&fit=crop&w=1200&q=80' },
-    { aim:'C', kicker:'Response', title:'Incident response and digital forensics', copy:'NIST lifecycle, containment strategies, evidence handling and chain of custody.', image:'https://images.unsplash.com/photo-1563986768609-322da13575f2?auto=format&fit=crop&w=1200&q=80' },
-    { aim:'D', kicker:'Testing', title:'Testing, monitoring and evaluation', copy:'Penetration testing, vulnerability assessment, SIEM and continuous security monitoring.', image:'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1200&q=80' }
+    { aim:'C', kicker:'Governance', title:'Cyber security documentation', copy:'Policies, audits, backups, data protection and disaster recovery.', image:'https://images.unsplash.com/photo-1563986768609-322da13575f2?auto=format&fit=crop&w=1200&q=80' },
+    { aim:'D', kicker:'Investigation', title:'Forensic procedures', copy:'Evidence collection, systematic analysis, chain of custody and reporting.', image:'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1200&q=80' }
   ];
 
   function buildGuideGallery() {
@@ -176,24 +176,44 @@ Students confuse phishing and spear phishing. Remember: phishing is <strong>gene
 
 <div class="exam-tip"><div class="tip-label">&#128161; Exam tip</div>The spec explicitly mentions supply chain risks. If a question asks about vulnerabilities in a large organisation, always mention that third-party vendors, cloud providers and software suppliers create additional attack surfaces beyond the organisation's direct control.</div>`,true),
 
-    topic('A3','Legal and Ethical Considerations — UK law and compliance', `
-<p>Cyber security professionals must operate within a legal and ethical framework. You must know the key UK legislation and what each covers.</p>
+    topic('A3','Legal Responsibilities — GDPR and the Computer Misuse Act', `
+<p>Cyber security professionals must operate within the law. The AAQ Unit 2 spec covers two key pieces of legislation:</p>
 
-<table class="g-table"><thead><tr><th>Legislation</th><th>Year</th><th>What it covers</th><th>Key points for the exam</th></tr></thead><tbody>
-<tr><td><strong>Computer Misuse Act</strong></td><td>1990</td><td>Unauthorised access/modification of computers</td><td>S1: unauthorised access (2yr). S2: with intent to commit crime (5yr). S3: unauthorised modification — viruses, deleting files (10yr). S3A: making/supplying hacking tools (2yr).</td></tr>
-<tr><td><strong>UK GDPR / DPA 2018</strong></td><td>2018</td><td>Collection, storage and processing of personal data</td><td>Data principles: lawful, purpose-limited, accurate, secure. Individual rights: access, erasure, portability. Max fine: £17.5m or 4% global turnover.</td></tr>
-<tr><td><strong>RIPA</strong></td><td>2000</td><td>Regulation of Investigatory Powers</td><td>Governs lawful interception of communications by authorities. Requires warrants for surveillance.</td></tr>
-<tr><td><strong>Official Secrets Act</strong></td><td>1989</td><td>Protection of state secrets</td><td>Criminalises disclosure of government information relating to security, defence, international relations.</td></tr>
+<table class="g-table"><thead><tr><th>Legislation</th><th>What it covers</th><th>Key points for the exam</th></tr></thead><tbody>
+<tr><td><strong>General Data Protection Regulation (GDPR)</strong></td><td>Requirements for the protection of data and privacy rights</td><td>Seven principles; legal reasons for processing; individual rights; protects personal data from unauthorised access and modification</td></tr>
+<tr><td><strong>Computer Misuse Act 1990</strong></td><td>Protects personal data held by organisations from unauthorised access and modification</td><td>Makes unauthorised access to computers/devices and unauthorised access to/modification of data illegal</td></tr>
 </tbody></table>
 
-<p><strong>Ethical responsibilities of cyber security professionals:</strong></p>
+<p><strong>Areas the legislation applies to:</strong></p>
 <ul>
-<li><strong>Responsible disclosure:</strong> if you discover a vulnerability, notify the vendor privately first; give them reasonable time to patch before going public</li>
-<li><strong>Professional codes of conduct:</strong> BCS (British Computer Society) and CIISec (Chartered Institute of Information Security) Codes require members to act with integrity, competence and in the public interest</li>
-<li><strong>Ethical hacking:</strong> penetration testing must be authorised in writing with clearly defined scope — testing without permission is illegal under the Computer Misuse Act</li>
+<li>Protection of data — in storage and when transferred</li>
+<li>Privacy and personally identifying information (PII)</li>
+<li>Unauthorised access to computers/devices</li>
+<li>Unauthorised access to and modification of data</li>
 </ul>
 
-<div class="exam-tip"><div class="tip-label">&#128161; Exam tip — GDPR breach scenario</div>Always work through GDPR consequences in order: (1) contain the breach, (2) notify ICO within 72 hours, (3) notify affected individuals, (4) assess fine risk (up to £17.5m or 4% turnover), (5) reputational damage and loss of customer trust.</div>`,true),
+<p><strong>GDPR principles</strong> — data must be processed:</p>
+<ul>
+<li>Lawfully, fairly and transparently</li>
+<li>For limited, stated purposes</li>
+<li>Accurately, and kept for the minimum amount of time</li>
+<li>With only the minimum amount of data collected</li>
+<li>With confidentiality and integrity maintained</li>
+</ul>
+
+<p><strong>Legal reasons for data processing:</strong> consent, contractual obligation, legitimate interest, vital interest, legal requirement, and public interest.</p>
+
+<p><strong>Personal rights under GDPR</strong> — people have the right to:</p>
+<ul>
+<li>Access their own personal data</li>
+<li>Be informed about how and why their data is used</li>
+<li>Have their data corrected, removed or restricted</li>
+<li>Object to their data being used</li>
+<li>Data portability (data supplied in a machine-readable format)</li>
+<li>Not be subject to decisions based solely on automated processing</li>
+</ul>
+
+<div class="exam-tip"><div class="tip-label">&#128161; Exam tip — legislation</div>The Computer Misuse Act 1990 requires organisations to exercise due care to comply with their security obligations under GDPR. Link the two: a data breach can be both a Computer Misuse Act offence (unauthorised access) and a GDPR failure (failure to protect personal data).</div>`,true),
 
     topic('A4','Protection Measures — firewalls, encryption, authentication, access control', `
 <p>Cyber security uses a <strong>defence-in-depth</strong> approach — multiple layers of protection so that if one fails, others still provide security. No single measure is enough.</p>
@@ -389,210 +409,123 @@ Students confuse phishing and spear phishing. Remember: phishing is <strong>gene
   ]);
 
   /* ============================================================
-     AIM C — Incident Response & Forensics
+     AIM C — Cyber security documentation
   ============================================================ */
   const aimC = aim('C', [
-    topic('C1','Incident Response — the NIST Lifecycle', `
+    topic('C1','Internal security policies — the Plan-Do-Check-Act approach', `
 <div class="def-box"><div class="def-label">Key definition</div>
-<span class="def-term">Security incident</span> — an event that threatens the confidentiality, integrity or availability of an information system or the data it processes. Not all security events are incidents — an incident is a confirmed breach of security policy.</div>
+<span class="def-term">Cyber security policy</span> — a documented set of rules and practices that establish and maintain security on an ongoing basis across an organisation.</div>
 
-<p><strong>The NIST Incident Response Lifecycle — 4 phases:</strong></p>
-
-<table class="g-table"><thead><tr><th>Phase</th><th>Key activities</th><th>Critical considerations</th></tr></thead><tbody>
-<tr><td><strong>1. Preparation</strong></td><td>Develop IR plan and procedures; establish IR team with defined roles; acquire tools (forensic software, communication channels); train team; conduct tabletop exercises; create jump kits</td><td>Preparation determines response quality. Without a plan, teams waste precious time deciding what to do during an active incident.</td></tr>
-<tr><td><strong>2. Detection & Analysis</strong></td><td>Monitor SIEM alerts, IDS/IPS, logs; identify indicators of compromise (IoCs); determine scope and impact; classify severity; document all findings</td><td>False positives waste time; false negatives are dangerous. Use multiple detection sources and correlate events for accuracy.</td></tr>
-<tr><td><strong>3. Containment, Eradication & Recovery</strong></td><td>Contain: isolate affected systems, block malicious IPs, disable accounts. Eradicate: remove malware, close vulnerabilities, patch. Recover: restore from clean backups, rebuild systems, verify integrity</td><td>Containment strategy depends on incident type. For ransomware, immediate isolation is critical. For espionage, you might monitor first to gather evidence.</td></tr>
-<tr><td><strong>4. Post-Incident Activity</strong></td><td>Conduct lessons learned meeting; document what happened, what worked, what didn't; update IR plan and procedures; implement preventive measures; create final report for stakeholders</td><td>Without this phase, the same incident will happen again. Blame-free culture encourages honest reporting.</td></tr>
-</tbody></table>
-
-<p><strong>Incident classification — determining priority:</strong></p>
+<p><strong>The Plan-Do-Check-Act (PDCA) loop</strong>, derived from ISO 27001:2013, underpins an effective cyber security policy:</p>
 <ul>
-<li><strong>Severity levels</strong> typically range from P1 (critical — active data breach, ransomware in progress) to P4 (low — policy violation, suspicious but unconfirmed activity)</li>
-<li><strong>Factors:</strong> data sensitivity (PII? financial?), scope (how many systems/users affected?), business impact (revenue loss?), regulatory implications (GDPR notifiable?)</li>
-<li><strong>Escalation paths:</strong> define who must be notified at each severity level — IT manager, CISO, legal counsel, PR, board, regulators</li>
+<li><strong>Plan</strong> — establish the security objectives, identify risks and asset requirements</li>
+<li><strong>Do</strong> — implement the controls and operate them</li>
+<li><strong>Check</strong> — monitor, audit and review results against the objectives</li>
+<li><strong>Act</strong> — take corrective action and continually improve</li>
 </ul>
 
-<p><strong>Communication during incidents — who to tell and when:</strong></p>
-<ol>
-<li><strong>Internal IT/security team</strong> — immediate, for containment</li>
-<li><strong>Senior management / CISO</strong> — within first hour for critical incidents</li>
-<li><strong>Legal team</strong> — to assess regulatory obligations</li>
-<li><strong>ICO (regulator)</strong> — within 72 hours if personal data breach under GDPR</li>
-<li><strong>Affected individuals</strong> — without undue delay if high risk to their rights</li>
-<li><strong>PR / media</strong> — prepared statement to manage reputation; timing depends on situation</li>
-<li><strong>Law enforcement</strong> — if criminal activity (NCSC, Action Fraud, NCA)</li>
-</ol>
-
-<div class="exam-tip"><div class="tip-label">&#128161; Exam tip — Containment strategies</div>Match containment to the threat: ransomware → isolate immediately to prevent spread; data exfiltration → may need to monitor before blocking to identify what was taken; DDoS → traffic filtering/scrubbing, not isolation. Always explain <em>why</em> you chose that strategy.</div>
-
-<p><strong>Business Continuity & Disaster Recovery:</strong></p>
+<p>General IT policies that organisations put in place include:</p>
 <ul>
-<li><strong>RTO (Recovery Time Objective):</strong> maximum acceptable downtime — how quickly must systems be back online? Minutes for critical banking, hours/days for less critical.</li>
-<li><strong>RPO (Recovery Point Objective):</strong> maximum acceptable data loss measured in time — how much data can you afford to lose? Real-time replication for zero RPO, daily backups for 24-hour RPO.</li>
-<li><strong>Hot site:</strong> fully operational duplicate, real-time replication, failover in minutes — most expensive</li>
-<li><strong>Warm site:</strong> partially equipped, some data — recovery in hours to days</li>
-<li><strong>Cold site:</strong> empty facility with power/connectivity — recovery in days to weeks — cheapest</li>
-<li><strong>BCP vs DRP:</strong> BCP (Business Continuity Plan) covers keeping the business running during disruption; DRP (Disaster Recovery Plan) specifically covers IT system recovery</li>
+<li><strong>Internet and email use policy</strong> — rules on inappropriate, offensive or illegal material; not sending confidential information; privacy; uploading/downloading copyrighted material; downloading executable files; visiting potentially dangerous websites</li>
+<li><strong>Security and password procedures</strong> — length/strength policy, deny lists of weak/common passwords, monitoring password attempts, lockout policy for inactivity or failed attempts, using technology to reduce reliance on passwords</li>
+<li><strong>Staff responsibilities</strong> — completing required security training, following procedures and reporting problems, responding to suspicious activity, maintaining security in their own workspace</li>
+<li><strong>Staff IT security training</strong> — funded and resourced by leadership, flexible to include everyone, using a range of resources/learning styles, progress tracking, incentives rather than punishment, ongoing reinforcement for new threats</li>
+</ul>
+
+<div class="exam-tip"><div class="tip-label">&#128161; Exam tip</div>The PDCA loop is the exam's framing for "how policies are continually improved" — always link a policy to <em>regular review and improvement</em>, not a one-off document.</div>`,true),
+
+    topic('C1.2','Security audits, backup policy and data protection', `
+<p><strong>Security audits</strong> check compliance against policies and regulations:</p>
+<ul>
+<li>Audit goals and scope are defined up front</li>
+<li>Identify problems, gaps and weaknesses</li>
+<li>Check against internal policies <em>and</em> external regulations/laws</li>
+<li>Report results and any required improvements/changes</li>
+</ul>
+
+<p><strong>Backup policy</strong> sets out how data is protected:</p>
+<ul>
+<li>Selection of data to be backed up; backup methods and type (full/differential/incremental)</li>
+<li>Frequency/scheduling; storage strategy (onsite/offsite/cloud)</li>
+<li>Responsibility and accountability; a backup testing strategy</li>
+<li>Legal/regulatory compliance; emergency/recovery procedures</li>
+</ul>
+
+<p><strong>Data protection policy</strong> ensures organisational compliance:</p>
+<ul>
+<li>Appointing a <strong>Data Protection Officer</strong></li>
+<li>Following data protection principles; protecting rights and privacy</li>
+<li>Staff training; system security procedures</li>
+<li>Applying the policy to external contractors, consultants and vendors</li>
+<li>Responsibility and accountability of staff and the organisation</li>
 </ul>`,true),
 
-    topic('C2','Digital Forensics — principles, acquisition and analysis', `
-<div class="def-box"><div class="def-label">Key definition</div>
-<span class="def-term">Digital forensics</span> — the process of identifying, preserving, analysing and presenting digital evidence in a manner that is legally admissible. The goal is to reconstruct events and determine what happened, when, how, and by whom.</div>
-
-<p><strong>ACPO Guidelines — the 4 principles of digital evidence:</strong></p>
-<ol>
-<li>No action taken should change data held on a computer or storage media which may subsequently be relied upon in court.</li>
-<li>In exceptional circumstances where a person finds it necessary to access original data, that person must be competent to do so and be able to give evidence explaining the relevance and implications of their actions.</li>
-<li>An audit trail of all processes applied to computer-based electronic evidence should be created and preserved.</li>
-<li>The person in charge of the investigation has overall responsibility for ensuring the law and these principles are adhered to.</li>
-</ol>
-
-<p><strong>Chain of Custody — proving evidence integrity:</strong></p>
+    topic('C1.5','Incident response and disaster recovery policies', `
+<p><strong>Cyber security incident response policy</strong> — sets out how to react to a security incident:</p>
 <ul>
-<li>Documents every person who handled the evidence, when, why, and what they did</li>
-<li>Must be unbroken — any gap or inconsistency renders evidence inadmissible</li>
-<li>Includes: date/time of collection, who collected it, where it was stored, who accessed it, any analysis performed</li>
-<li>Each transfer must be signed and witnessed</li>
+<li><strong>Contacts</strong>: incident response team leader/provider, IT team leader, senior management, legal, public relations, human resources, insurance</li>
+<li><strong>Procedures / flowcharts / checklists</strong> for: initial decisions/triage/escalation; the main response (analysis, containment, mitigation, recovery); reviewing, reporting and closing the incident</li>
+<li><strong>Communications</strong>: a contact telephone plus an alternative/backup, and a conference call facility</li>
 </ul>
 
-<p><strong>Order of Volatility — collect the most fragile evidence first:</strong></p>
-<ol>
-<li>CPU registers and cache (milliseconds)</li>
-<li>RAM / memory contents (lost when power off)</li>
-<li>Running processes and network connections</li>
-<li>Temporary file systems / swap</li>
-<li>Hard disk data (persistent)</li>
-<li>Remote logs and monitoring data</li>
-<li>Backup tapes and archival media</li>
-</ol>
-
-<p><strong>Forensic Acquisition — creating an exact copy:</strong></p>
+<p><strong>Disaster recovery policy</strong> — sets out how to recover from a major disruption:</p>
 <ul>
-<li><strong>Write blocker:</strong> hardware/software device that prevents any data being written to the original evidence drive during imaging — essential for evidence integrity</li>
-<li><strong>Disk imaging:</strong> creates a bit-for-bit copy of the entire drive, including deleted files, slack space and unallocated space</li>
-<li><strong>Hashing:</strong> MD5, SHA-1 or SHA-256 hash calculated for both original and copy — if hashes match, the copy is proven to be identical</li>
-<li><strong>Forensic copy vs original:</strong> all analysis is performed on the forensic copy, never the original (which is preserved unchanged)</li>
+<li>Purpose and scope</li>
+<li><strong>Triage</strong> — a list of possible events, their severity and the appropriate response (activate incident response / business continuity / disaster recovery plan)</li>
+<li>Roles and responsibilities; contact lists</li>
+<li>Monitoring and reporting requirements</li>
 </ul>
 
-<p><strong>Analysis techniques:</strong></p>
+<p><strong>External services policy</strong> — governs third parties such as cloud providers, hardware and software vendors:</p>
 <ul>
-<li><strong>File carving:</strong> recovering deleted files by searching raw disk data for known file headers and footers (magic numbers)</li>
-<li><strong>Timeline analysis:</strong> reconstructing the sequence of events using file timestamps (MAC times — Modified, Accessed, Created)</li>
-<li><strong>Registry analysis:</strong> Windows registry contains wealth of information about installed software, user activity, connected devices</li>
-<li><strong>Log analysis:</strong> correlating events across system logs, application logs, security logs, firewall logs</li>
-<li><strong>Memory analysis:</strong> examining RAM dumps for running processes, network connections, encryption keys, malware that only exists in memory</li>
-<li><strong>Network forensics:</strong> analysing captured packets (PCAP files) to trace attacker activity, data exfiltration, C2 communications</li>
-</ul>
-
-<div class="exam-tip"><div class="tip-label">&#128161; Legal admissibility checklist</div>For evidence to be admissible: (1) Relevant — relates to the case, (2) Reliable — integrity maintained, no tampering, (3) Legally obtained — collected with proper authorisation under relevant laws (RIPA, CMA). A failure on any point means evidence can be excluded.</div>`,true)
+<li>Authorisation and access control; management, responsibility and accountability</li>
+<li>Contact details; regulatory compliance; incident response procedures</li>
+<li>Service agreements; licensing; service time/availability and escalation procedures</li>
+</ul>`,true)
   ]);
 
   /* ============================================================
-     AIM D — Testing, Monitoring & Evaluation
+     AIM D — Forensic procedures
   ============================================================ */
   const aimD = aim('D', [
-    topic('D1','Security Testing — vulnerability assessment and penetration testing', `
-<div class="def-box"><div class="def-label">Key definitions</div>
-<span class="def-term">Vulnerability assessment</span> — systematic review of security weaknesses. Identifies and classifies vulnerabilities.<br><br>
-<span class="def-term">Penetration test</span> — simulated attack on a system to identify exploitable vulnerabilities. Goes beyond assessment by actually attempting exploitation.</div>
+    topic('D1','Forensic collection of evidence', `
+<div class="def-box"><div class="def-label">Key definition</div>
+<span class="def-term">Digital forensics</span> — the methods used to collect and analyse evidence following a security incident, in a way that keeps it reliable and admissible.</div>
 
-<p><strong>Penetration testing approaches:</strong></p>
-<table class="g-table"><thead><tr><th>Type</th><th>Tester knowledge</th><th>Simulates</th><th>Advantages</th></tr></thead><tbody>
-<tr><td><strong>Black box</strong></td><td>Zero prior knowledge</td><td>External attacker</td><td>Most realistic external threat simulation</td></tr>
-<tr><td><strong>White box</strong></td><td>Full access (source code, diagrams, credentials)</td><td>Insider threat or thorough audit</td><td>Most comprehensive — finds more vulnerabilities</td></tr>
-<tr><td><strong>Grey box</strong></td><td>Limited knowledge (e.g. user-level credentials)</td><td>Attacker who has gained some access</td><td>Balanced approach — more realistic than white box, more thorough than black box</td></tr>
-</tbody></table>
-
-<p><strong>Penetration testing phases:</strong></p>
-<ol>
-<li><strong>Reconnaissance:</strong> gather information — passive (OSINT, WHOIS, social media) and active (port scanning, banner grabbing)</li>
-<li><strong>Scanning & Enumeration:</strong> use tools (Nmap, Nessus) to identify open ports, services, OS versions, potential vulnerabilities</li>
-<li><strong>Exploitation:</strong> attempt to exploit identified vulnerabilities to gain access — use Metasploit, manual exploitation, social engineering</li>
-<li><strong>Post-exploitation:</strong> maintain access (backdoors), escalate privileges, pivot to other systems, exfiltrate test data</li>
-<li><strong>Reporting:</strong> document all findings with risk ratings, evidence (screenshots/logs), and prioritised remediation recommendations</li>
-</ol>
-
-<div class="exam-tip"><div class="tip-label">&#128161; Key distinction — VA vs PT</div>Vulnerability Assessment = "What weaknesses exist?" Penetration Testing = "Can these weaknesses actually be exploited, and what is the impact?" A VA tells you about the holes; a PT shows you how deep they go. Organisations need both.</div>
-
-<p><strong>Testing methodologies:</strong></p>
+<p><strong>Forensics on devices (servers, PCs and mobile devices)</strong> — meeting the requirements:</p>
 <ul>
-<li><strong>OWASP Top 10:</strong> the definitive list of most critical web application security risks (injection, broken authentication, sensitive data exposure, XXE, broken access control, security misconfiguration, XSS, insecure deserialization, using vulnerable components, insufficient logging)</li>
-<li><strong>OSSTMM:</strong> Open Source Security Testing Methodology Manual — comprehensive framework for security testing</li>
-<li><strong>PTES:</strong> Penetration Testing Execution Standard — industry-standard methodology covering all phases</li>
-<li><strong>NIST SP 800-115:</strong> Technical Guide to Information Security Testing and Assessment</li>
+<li><strong>Confiscation of devices</strong> — prior planning for a range of devices; passwords/codes/PINs; chargers and cables for mobile devices; retain the current power state if possible</li>
+<li><strong>Isolation from the network</strong> — photograph the screen, turn off the device, remove battery/power cable, use airplane mode, disable wireless, use a Faraday bag/cage</li>
+<li><strong>Appropriate packaging</strong>, documenting the <strong>chain of custody</strong> and establishing legal permissions</li>
+<li>Taking an image of the system, using a forensic analysis tool, reviewing files/settings, system logs and user activity, and malware analysis and alerts</li>
 </ul>
 
-<p><strong>Code review — finding vulnerabilities before deployment:</strong></p>
+<p><strong>Challenges of live forensics:</strong> changing data in situ, recovering corrupted data, capturing data in active memory, capturing remote data, not losing temporary files.</p>
+
+<p><strong>Network forensics:</strong> agree a testing methodology with the authorities; scan local infrastructure (with permission, without disrupting a live system, using passive and active analysis tools); review firewalls, switches, routers, WAPs and client/server logs; analyse malware activity and alerts.</p>
+
+<p><strong>Documenting the scene:</strong> prior planning, securing the scene, plans/photos/diagrams, contemporaneous notes and witness statements.</p>
+
+<div class="exam-tip"><div class="tip-label">&#128161; Exam tip</div>For forensics questions always mention <strong>not changing the data</strong>, working from a <strong>copy/image</strong> and keeping a <strong>chain of custody</strong> — these are the core "admissibility" requirements.</div>`,true),
+
+    topic('D2','Systematic forensic analysis of a suspect system', `
+<p><strong>Requirements for maintaining an accurate record</strong>, made at or as soon as possible after the incident:</p>
 <ul>
-<li><strong>SAST (Static Analysis):</strong> analyses source code without executing — finds SQL injection, buffer overflows, hardcoded credentials early in SDLC. Tools: SonarQube, Fortify, Checkmarx.</li>
-<li><strong>DAST (Dynamic Analysis):</strong> tests running application from outside — finds runtime vulnerabilities like misconfigurations, authentication flaws. Tools: OWASP ZAP, Burp Suite, Acunetix.</li>
-<li><strong>SAST + DAST = complementary:</strong> SAST finds code-level issues early; DAST finds deployment/runtime issues. Use both.</li>
-</ul>`,true),
-
-    topic('D2','Monitoring, Logging and Evaluation — SIEM, IDS/IPS and metrics', `
-<p>Continuous monitoring is essential — attackers work 24/7, and a vulnerability can be exploited within hours of disclosure.</p>
-
-<p><strong>IDS vs IPS — detection vs prevention:</strong></p>
-<table class="g-table"><thead><tr><th></th><th>IDS (Detection)</th><th>IPS (Prevention)</th></tr></thead><tbody>
-<tr><td>Position</td><td>Out-of-band (copies of traffic)</td><td>Inline (traffic passes through it)</td></tr>
-<tr><td>Action</td><td>Alerts only — does not block</td><td>Can block/drop malicious traffic in real time</td></tr>
-<tr><td>Impact on traffic</td><td>No latency impact</td><td>Adds some latency (processing)</td></tr>
-<tr><td>Failure mode</td><td>Fails silently (misses attacks)</td><td>Can fail open (lets traffic through) or fail closed (blocks all traffic)</td></tr>
-<tr><td>Best for</td><td>Monitoring, forensics, compliance</td><td>Real-time attack prevention</td></tr>
-</tbody></table>
-
-<ul>
-<li><strong>HIDS/HIPS:</strong> Host-based — installed on individual servers/endpoints. Monitors file integrity, registry changes, process behaviour on that specific host.</li>
-<li><strong>NIDS/NIPS:</strong> Network-based — monitors network traffic at strategic points. Can see attacks targeting multiple hosts but cannot see encrypted traffic content.</li>
+<li><strong>Retain snapshots of the system</strong> — originals/clean system for comparison, generate a hash/checksum for copies, whole disk/machine, files/folders, memory (RAM, BIOS, memory cards/SIM), virtual discs, process activity, network information (open ports, IP addresses, user logins), temporary and deleted data, and system-generated data (System Volume Information, hibernation files, shadow copies, crash dumps, page files)</li>
+<li><strong>Record all findings</strong> — no action that could change data, collection by a competent person, a trail of all actions, documentation of responsibility</li>
+<li><strong>Record alterations</strong> — document all actions from initial seizure, working with copies rather than the original</li>
+<li><strong>Create visual evidence</strong> — photos, videos, screenshots, date-time stamps and metadata</li>
+<li><strong>Ensure relevance, not false positives</strong> — define file signatures and search criteria, know error rates, feed back false positives, manually review positives</li>
 </ul>
 
-<p><strong>SIEM — the security nerve centre:</strong></p>
-<div class="def-box"><div class="def-label">SIEM functions</div>
-<span class="def-term">SIEM</span> (Security Information and Event Management) aggregates logs from across the entire IT estate, applies correlation rules to identify security incidents, and provides real-time dashboards and alerting.</div>
-
-<p><strong>SIEM workflow:</strong></p>
-<ol>
-<li><strong>Collect:</strong> logs from firewalls, servers, endpoints, IDS/IPS, applications, cloud services — everything</li>
-<li><strong>Normalise:</strong> convert diverse log formats into a common schema</li>
-<li><strong>Correlate:</strong> apply rules to connect events — e.g. "5 failed logins from same IP within 1 minute → alert"</li>
-<li><strong>Alert:</strong> generate real-time notifications for security team based on correlation rules matching</li>
-<li><strong>Dashboard:</strong> visualise security posture, open incidents, trends over time</li>
-<li><strong>Retain:</strong> store logs for compliance (GDPR, PCI DSS require specific retention periods) and forensic investigation</li>
-</ol>
-
-<p><strong>Log management best practices:</strong></p>
+<p><strong>Assessing the findings</strong> — determine whether they provide evidence of a crime and/or incident (criminal, regulatory breach, civil liability, non-compliance, cyber attack, negligence) and whether the system has been externally/internally compromised:</p>
 <ul>
-<li><strong>What to log:</strong> authentication events (success/failure), privileged account usage, configuration changes, data access/modification, network connections, security alerts</li>
-<li><strong>Centralised logging:</strong> all logs sent to central syslog/SIEM server — prevents attackers from deleting local logs to cover tracks</li>
-<li><strong>Log integrity:</strong> use write-once storage or append-only logs; hash logs to detect tampering</li>
-<li><strong>Retention:</strong> balance storage cost against compliance requirements and investigation needs (typically 90 days to 1 year for security logs)</li>
-<li><strong>Time synchronisation:</strong> all systems must use NTP — without synchronised timestamps, correlation is impossible</li>
+<li>Unusual traffic (inbound/outbound, unusual regions, DoS/DDoS signs)</li>
+<li>Unusual login attempts or DNS requests; increased file/data reads or requests</li>
+<li>Unusual port usage; suspicious changes to or access to files/data</li>
 </ul>
 
-<p><strong>Security Metrics and KPIs:</strong></p>
-<table class="g-table"><thead><tr><th>Metric</th><th>What it measures</th><th>Target</th></tr></thead><tbody>
-<tr><td><strong>MTTD</strong></td><td>Mean Time to Detect — how long from incident occurring to detection</td><td>As low as possible (hours, not days)</td></tr>
-<tr><td><strong>MTTR</strong></td><td>Mean Time to Respond/Remediate — how long from detection to resolution</td><td>Minutes for critical, hours for high</td></tr>
-<tr><td><strong>Patch compliance</strong></td><td>% of systems with latest security patches applied</td><td>>95% for critical patches</td></tr>
-<tr><td><strong>Open vulnerabilities</strong></td><td>Number and severity of unpatched vulnerabilities</td><td>Zero critical, declining trend</td></tr>
-<tr><td><strong>Incident trend</strong></td><td>Number and type of incidents over time</td><td>Decreasing trend (more prevention)</td></tr>
-<tr><td><strong>Phishing click rate</strong></td><td>% of users who click simulated phishing links</td><td><5% (improving with training)</td></tr>
-</tbody></table>
-
-<div class="exam-tip"><div class="tip-label">&#128161; Exam tip — Why SIEM matters</div>Manual log review across hundreds of systems is impossible. SIEM automates detection through correlation — a single failed login means nothing; 500 failed logins from one IP over 5 minutes is an active brute-force attack. The value is in connecting the dots automatically.</div>
-
-<p><strong>Vulnerability Management Lifecycle:</strong></p>
-<ol>
-<li><strong>Discover:</strong> identify all assets (hardware, software, cloud) — you cannot protect what you don't know exists</li>
-<li><strong>Assess:</strong> scan for vulnerabilities using automated tools (Nessus, Qualys) and manual assessment</li>
-<li><strong>Prioritise:</strong> use CVSS scores and business context — a critical vulnerability on an internet-facing system is more urgent than on an isolated internal system</li>
-<li><strong>Remediate:</strong> apply patches, change configurations, implement compensating controls</li>
-<li><strong>Verify:</strong> rescan to confirm the fix is effective — never assume</li>
-<li><strong>Report:</strong> document the organisation's security posture, trends, and compliance status for stakeholders</li>
-</ol>
-
-<div class="mistake-box"><div class="mistake-label">&#9888; Common mistake</div>
-Students often focus only on patching and forget the human element. Security awareness training, phishing simulations, and a blame-free reporting culture are equally important controls. Technical controls alone cannot protect against a well-crafted social engineering attack.</div>`,true)
+<p><strong>Writing security reports</strong> — a clear structure (title, contents, introduction, headings, numbered/bulleted points, conclusions, footnotes, citations) that analyses the incident to identify errors/omissions in procedures and preventative measures, delays in detection, and remedial actions, plus improvements to IT policies and security protection measures (physical, software, hardware, processes, training).</p>`,true)
   ]);
 
   /* ---- Key Terms Glossary ---- */

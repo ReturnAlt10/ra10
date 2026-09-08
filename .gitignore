@@ -1,3 +1,11 @@
 # Keep Pearson Set Assignment Briefs (PSAB) OUT of the repo — they must not be published.
 training-data/btec/level-3/it/unit-3/*.pdf
 training-data/btec/level-3/it/unit-3/EXTRACTED.txt
+
+# Extracted spec / SAM text (copyrighted Pearson source material)
+training-data/btec/level-3/it/unit-2/spec_extracted.txt
+training-data/btec/level-3/it/unit-2/sam_extracted.txt
+
+# Python bytecode caches
+__pycache__/
+*.pyc

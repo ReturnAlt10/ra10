@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BTEC IT Unit 4 Relational Database Development — Revision &amp; Assignment Help | RA10</title>
+<meta name="description" content="Free BTEC Level 3 AAQ IT Unit 4 (Relational Database Development) revision. Study guide, flashcards, quizzes, SQL Lab, normalisation Lab, Microsoft Access tutorials, sample assignments and AI marking for Pass, Merit and Distinction.">
+<meta name="keywords" content="BTEC IT Unit 4, Relational Database Development, BTEC Level 3 AAQ IT, database revision, Microsoft Access tutorial, SQL, normalisation, ERD, BTEC IT assignment help, AI marking">
+<link rel="canonical" href="https://ra10.co.uk/revision/btec/level-3/IT-AAQ/unit-4/index.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="RA10">
+<meta property="og:title" content="BTEC IT Unit 4 Relational Database Development — Revision &amp; Assignment Help | RA10">
+<meta property="og:description" content="Free BTEC Level 3 AAQ IT Unit 4 revision. Study guide, flashcards, quizzes, SQL Lab, normalisation lab, Microsoft Access tutorials and AI assignment marking.">
+<meta property="og:url" content="https://ra10.co.uk/revision/btec/level-3/IT-AAQ/unit-4/index.html">
+<meta property="og:image" content="https://ra10.co.uk/logo.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="BTEC IT Unit 4 Relational Database Development — Revision &amp; Assignment Help | RA10">
+<meta name="twitter:description" content="Free BTEC Level 3 AAQ IT Unit 4 revision. Study guide, flashcards, quizzes, SQL Lab, normalisation lab, Microsoft Access tutorials and AI assignment marking.">
+<meta name="twitter:image" content="https://ra10.co.uk/logo.png">  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "BTEC IT Unit 4 Relational Database Development — Revision & Assignment Help",
+    "description": "Free BTEC Level 3 AAQ IT Unit 4 (Relational Database Development) revision. Study guide, flashcards, quizzes, SQL Lab, normalisation lab, Microsoft Access tutorials, sample assignments and AI marking for Pass, Merit and Distinction.",
+    "url": "https://ra10.co.uk/revision/btec/level-3/IT-AAQ/unit-4/index.html",
+    "publisher": { "@type": "Organization", "name": "RA10", "url": "https://ra10.co.uk" },
+    "about": {
+      "@type": "Course",
+      "name": "BTEC Level 3 AAQ IT Unit 4: Relational Database Development",
+      "description": "Relational database development revision and assignment support for BTEC Level 3 IT AAQ Unit 4.",
+      "provider": { "@type": "Organization", "name": "RA10", "url": "https://ra10.co.uk" }
+    }
+  }
+  </script><script>
+(function(){
+  var THEME_KEY = 'ra10-theme';
+  function applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme === 'dark' ? 'dark' : 'light');
+  }
+  var saved = localStorage.getItem(THEME_KEY);
+  applyTheme(saved || 'light');
+  window.addEventListener('message', function(event) {
+    if (event.source !== window.parent || !event.data || event.data.type !== 'RA10_THEME') return;
+    applyTheme(event.data.theme);
+  });
+  window.addEventListener('storage', function(event) {
+    if (event.key === THEME_KEY) applyTheme(event.newValue || 'light');
+  });
+
+  window.toggleUnitTheme = function() {
+    var current = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+    var next = current === 'dark' ? 'light' : 'dark';
+    localStorage.setItem(THEME_KEY, next);
+    applyTheme(next);
+    try {
+      if (window.parent && window.parent !== window) {
+        window.parent.postMessage({ type: 'RA10_THEME', theme: next }, '*');
+      }
+    } catch (e) {}
+  };
+
+  window.openUnitNews = function() {
+    try {
+      if (window.top && window.top !== window) {
+        window.top.location.hash = '/news';
+        return;
+      }
+    } catch (e) {}
+    location.href = '/index.html#/news';
+  };
+})();
+
+(function(){
+  var s = document.createElement('script');
+  var isFile = location.protocol === 'file:';
+  var isLocalHost = location.hostname === '127.0.0.1' || location.hostname === 'localhost';
+  s.src = isFile ? 'file:///C:/Users/mistr/Downloads/ra10/ra10-sdk.js?v=20260906' : (isLocalHost ? 'http://127.0.0.1:5500/ra10-sdk.js?v=20260906' : 'https://ra10.co.uk/ra10-sdk.js?v=20260906');
+  document.head.insertBefore(s, document.head.firstChild);
+})();
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BTEC IT Unit 4 — Relational Database Development</title>
+<link rel="icon" href="/logo.png" type="image/png">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mammoth@1.6.0/mammoth.browser.min.js"></script>
+<link rel="preconnect" href="https://api.fontshare.com">
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700,900&f[]=jetbrains-mono@400,500&display=swap">
+  <link rel="stylesheet" href="css/style.css?v=20260922">
+<style>
+.ra10-cost-label { display:inline-block; font-size:.68rem; font-weight:700; color:rgba(255,255,255,.85); background:rgba(0,0,0,.18); padding:1px 6px; border-radius:999px; margin-left:6px; vertical-align:middle; letter-spacing:.03em; }
+.ra10-cost-label.free-label { color:rgba(255,255,255,.65); background:rgba(255,255,255,.14); }
+.btn:not(.primary) .ra10-cost-label { color:var(--accent-ink); background:var(--accent-2); }
+.ra10-subject-banner { display:none; padding:10px 16px; background:linear-gradient(90deg,var(--accent-2),var(--surface)); border-bottom:1px solid var(--line); color:var(--ink); }
+.ra10-subject-banner:not(:empty) { display:block; }
+.hidden { display:none !important; }
+</style>
+</head>
+<body>
+<!-- ra10-refresh-loader -->
+<script>
+(function(){
+  var path = String(location.pathname || '').replace(/\\/g, '/');
+  var lower = path.toLowerCase();
+  var idx = lower.lastIndexOf('/ra10/');
+  var rootFromPath = idx >= 0 ? path.slice(0, idx + 5) : '';
+  var base;
+  if (location.protocol === 'file:') {
+    base = rootFromPath ? ('file://' + rootFromPath) : '';
+  } else {
+    var isLocalHost = location.hostname === '127.0.0.1' || location.hostname === 'localhost';
+    base = isLocalHost ? 'http://127.0.0.1:5500' : 'https://ra10.co.uk';
+  }
+  if (!base) return;
+  var font = document.createElement('link');
+  font.rel = 'stylesheet';
+  font.href = 'https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Sora:wght@500;600;700;800&display=swap';
+  document.head.appendChild(font);
+  var css = document.createElement('link');
+  css.rel = 'stylesheet';
+  css.href = base + '/refresh/ra10-refresh.css?v=20260916';
+  document.head.appendChild(css);
+  var js = document.createElement('script');
+  js.src = base + '/refresh/ra10-refresh.js?v=20260916';
+  document.head.appendChild(js);
+})();
+</script>
+<header class="topbar">
+  <a class="unit-brand" href="/index.html#/" target="_top" aria-label="RA10 home">
+    <img src="/logo.png" alt="RA10">
+    <span>RA10</span>
+  </a>
+  <div class="site-unit-nav" aria-label="RA10 site navigation">
+    <a class="site-unit-link" href="/index.html#/" target="_top"><svg class="nu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l9-9 9 9"/><path d="M5 10v10a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V10"/></svg>Home</a>
+    <a class="site-unit-link" href="/index.html#/revision" target="_top"><svg class="nu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Revision</a>
+    <a class="site-unit-link" href="/index.html#/tools" target="_top"><svg class="nu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>Tools</a>
+    <a class="site-unit-link site-community-link" href="/index.html#/community" target="_top"><svg class="nu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>Community</a>
+    <a class="site-unit-link" href="/index.html#/tasks" target="_top"><svg class="nu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3 8-8"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Tasks</a>
+    <a class="site-unit-link" href="/index.html#/exams" target="_top"><svg class="nu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13"/><path d="M8 12h13"/><path d="M8 18h13"/><path d="M3 6h.01M3 12h.01M3 18h.01"/></svg>Exams</a>
+    <a class="site-unit-link" href="/index.html#/leaderboard" target="_top"><svg class="nu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v4a5 5 0 0 1-10 0z"/><path d="M7 6H4a2 2 0 0 0 2 3M17 6h3a2 2 0 0 1-2 3"/></svg>Leaderboard</a>
+  </div>
+  <nav class="tabs">
+    <button class="tab active" data-tab="dashboard" data-tip="Overview of the unit">Dashboard</button>
+    <button class="tab" data-tab="revise" data-tip="Flashcards, quizzes &amp; the revision guide">Revise</button>
+    <button class="tab" data-tab="tools" data-tip="SQL Lab, normalisation lab, MS Access tutorials &amp; Access Lab">Tools</button>
+    <button class="tab" data-tab="assignment" data-tip="Sample assignments &amp; step-by-step support">Assignment</button>
+    <button class="tab tab-special" data-tab="progress" data-tip="Track your streak &amp; progress">Progress</button>
+    <button class="tab tab-special" data-tab="ai" data-tip="AI Assigner &mdash; chat, hints &amp; marking">AI Assigner</button>
+  </nav>
+  <div id="unit1-credit-chip" style="margin-left:auto;display:flex;align-items:center;"></div>
+  <div style="display:flex;align-items:center;gap:8px;">
+    <button class="unit-avatar-btn" type="button" onclick="openUnitNews()" aria-label="Open news" title="News" style="background:var(--surface);color:var(--ink-2);border:1px solid var(--line-2);">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 8h10"/><path d="M7 12h10"/><path d="M7 16h6"/></svg>
+    </button>
+    <button class="unit-avatar-btn" type="button" onclick="toggleUnitTheme()" aria-label="Toggle theme" title="Light or dark mode" style="background:var(--surface);color:var(--ink-2);border:1px solid var(--line-2);">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+    <button id="unit-account-avatar" class="unit-avatar-btn" type="button" onclick="if(window.top&&typeof window.top.openAccountOrSignIn==='function'){window.top.openAccountOrSignIn()}else{window.top.location.hash='/account'}" aria-label="Open account" title="Account">?</button>
+  </div>
+</header>
+<div id="ra10-subject-banner" class="ra10-subject-banner"></div>
+
+<main class="wrap">
+
+  <!-- ═══════════ PART 1 / PART 2 OVERVIEW — HOME ═══════════ -->
+  <section id="view-dashboard" class="view active">
+    <div class="part-hero">
+      <div class="part-hero-inner">
+        <p class="eyebrow">Pearson Level 3 AAQ BTEC National in IT · Internal Unit</p>
+        <h1>Unit 4 — Relational Database Development</h1>
+        <p class="lede">Learn how relational databases are modelled, normalised and built — then get step-by-step support to score a Distinction in your assignment.</p>
+        <div class="hero-cta-row">
+          <button class="btn primary" type="button" data-goto="guide">Start the study guide</button>
+          <button class="btn" type="button" data-goto="assignment">Go to assignment support</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="part-grid">
+      <!-- PART 1 -->
+      <article class="part-card part-card-theory">
+        <div class="part-card-top">
+          <span class="part-badge">Part 1</span>
+          <span class="part-free-badge">Free to revise</span>
+        </div>
+        <h2>Part 1 · Learn the theory</h2>
+        <p>Everything you need for Learning Aims <strong>A</strong>, <strong>B</strong> and <strong>C</strong> — how databases are modelled, normalised and built.</p>
+        <ul class="part-feature-list">
+          <li><strong>Study guide</strong> — every spec topic explained with examples, tables and tips</li>
+          <li><strong>Revise</strong> — knowledge-check MCQs, a quick quiz and flashcards</li>
+          <li><strong>SQL Lab</strong> — write real SQL against a sample database and see the results</li>
+          <li><strong>Normalisation Lab</strong> — practise splitting tables from UNF to 3NF</li>
+          <li><strong>MS Access tutorials</strong> — step-by-step, click-by-click guides to building your database in Access</li>
+        </ul>
+        <div class="part-card-actions">
+          <button class="btn primary" type="button" data-goto="guide">Open study guide</button>
+          <button class="btn" type="button" data-goto="revise">Revise</button>
+          <button class="btn" type="button" data-goto="sql-lab">SQL Lab</button>
+        </div>
+      </article>
+
+      <!-- PART 2 -->
+      <article class="part-card part-card-assignment">
+        <div class="part-card-top">
+          <span class="part-badge">Part 2</span>
+          <span class="part-free-badge">Assignment support</span>
+        </div>
+        <h2>Part 2 · Win your assignment</h2>
+        <p>Three tasks. One goal: <strong>Distinction</strong>. Work through the walkthroughs, practise on sample briefs, then upload your own work for AI marking.</p>
+        <ul class="part-feature-list">
+          <li><strong>Task-by-task walkthroughs</strong> — exactly what to produce for Pass, Merit and Distinction</li>
+          <li><strong>Sample briefs</strong> — realistic practice scenarios with full design documentation</li>
+          <li><strong>Upload your assignment</strong> — AI Assigner marks it against the real criteria and shows where to improve</li>
+          <li><strong>Evidence checklists</strong> — make sure you submit everything required</li>
+        </ul>
+        <div class="part-card-actions">
+          <button class="btn primary" type="button" data-goto="assignment">Open assignment hub</button>
+          <button class="btn" type="button" data-goto="ai">Ask AI Assigner</button>
+        </div>
+      </article>
+    </div>
+
+    <div class="section-block">
+      <div class="section-block-head">
+        <span class="sb-eyebrow">How this unit is structured</span>
+        <h3>Learning Aims &amp; assignments</h3>
+        <p>This is an internal unit assessed by a Pearson Set Assignment (3 tasks). The theory in Part 1 feeds directly into the tasks in Part 2.</p>
+      </div>
+      <div class="aim-grid" id="aim-grid"></div>
+    </div>
+  </section>
+
+  <!-- ═══════════ REVISE MENU (same as other IT unit apps) ═══════════ -->
+  <section id="view-revise" class="view">
+    <header class="section-head">
+      <h2>Revise</h2>
+      <p style="font-size:1.15rem;color:var(--accent);font-weight:700;">Choose a fun way to revise! <span style="font-size:1.5em;">&#x1F4A1;</span></p>
+    </header>
+    <div class="dashboard-grid">
+      <div class="feature-section">
+        <div class="feature-header">
+          <div class="feature-icon">&#x1F0CF;</div>
+          <div>
+            <h3>Flashcards</h3>
+            <p>Flip through cards for rapid recall and spaced repetition.</p>
+          </div>
+        </div>
+        <div class="feature-cards grid-1">
+          <article class="card">
+            <h4>Open flashcards</h4>
+            <p>Key terms and concepts across Aims A, B and C &mdash; track your progress!</p>
+            <button class="btn" data-goto="flash">Open</button>
+          </article>
+        </div>
+      </div>
+      <div class="feature-section">
+        <div class="feature-header">
+          <div class="feature-icon">&#x2753;</div>
+          <div>
+            <h3>Quiz</h3>
+            <p>Multiple-choice questions with instant feedback.</p>
+          </div>
+        </div>
+        <div class="feature-cards grid-1">
+          <article class="card">
+            <h4>Start quiz</h4>
+            <p>Test your knowledge and get explanations for every answer.</p>
+            <button class="btn" data-goto="quiz">Open</button>
+          </article>
+        </div>
+      </div>
+      <div class="feature-section">
+        <div class="feature-header">
+          <div class="feature-icon">&#x1F4D6;</div>
+          <div>
+            <h3>Revision Guide</h3>
+            <p>Full topic-by-topic breakdown with worked examples and diagrams.</p>
+          </div>
+        </div>
+        <div class="feature-cards grid-1">
+          <article class="card">
+            <h4>Open revision guide</h4>
+            <p>Every spec topic explained for Aims A, B and C.</p>
+            <div class="card-action-row">
+              <button class="btn" data-goto="guide">Open</button>
+              <button class="btn btn-spec-mini" data-goto="spec">View spec <span style="font-size:1.1em;">&#x1F4C4;</span></button>
+            </div>
+          </article>
+        </div>
+      </div>
+      <div class="feature-section">
+        <div class="feature-header">
+          <div class="feature-icon">&#x1F4C4;</div>
+          <div>
+            <h3>Learning Aims Reference</h3>
+            <p>Clean, readable guides for each learning aim.</p>
+          </div>
+        </div>
+        <div class="feature-cards grid-1">
+          <article class="card">
+            <h4>View Learning Aims</h4>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;">
+              <button class="btn revise-focus-btn" data-goto="guide" data-aim="A">Aim A</button>
+              <button class="btn revise-focus-btn" data-goto="guide" data-aim="B">Aim B</button>
+              <button class="btn revise-focus-btn" data-goto="guide" data-aim="C">Aim C</button>
+            </div>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ GUIDE (sub-view of Revise) ═══════════ -->
+  <section id="view-guide" class="view">
+    <div id="guide-comprehensive"></div>
+  </section>
+
+  <!-- ═══════════ QUIZ (sub-view of Revise) ═══════════ -->
+  <section id="view-quiz" class="view">
+    <header class="section-head">
+      <h2>Quick Quiz</h2>
+      <p>12 mixed questions across Aims A, B and C with a score at the end.</p>
+    </header>
+    <div id="quiz-stage"></div>
+  </section>
+
+  <!-- ═══════════ FLASH (sub-view of Revise) ═══════════ -->
+  <section id="view-flash" class="view">
+    <header class="section-head">
+      <h2>Flashcards</h2>
+      <p>Flip through cards for rapid recall.</p>
+    </header>
+    <div id="flash-stage"></div>
+  </section>
+
+  <!-- ═══════════ SPEC (sub-view of Revise) ═══════════ -->
+  <section id="view-spec" class="view">
+    <header class="section-head">
+      <h2>Unit Specification</h2>
+      <p>The published spec content areas mapped to this app. Click any topic to jump to it in the study guide.</p>
+    </header>
+    <div id="spec-content"></div>
+  </section>
+
+  <!-- ═══════════ TOOLS MENU ═══════════ -->
+  <section id="view-tools" class="view">
+    <header class="section-head">
+      <h2>Tools</h2>
+      <p>Practise SQL, normalisation and Microsoft Access &mdash; the hands-on skills behind Aim B and Aim C.</p>
+    </header>
+    <div class="dashboard-grid">
+      <div class="feature-section">
+        <div class="feature-header">
+          <div class="feature-icon">&#x1F4BB;</div>
+          <div>
+            <h3>SQL Lab</h3>
+            <p>Write real SQL and see the results.</p>
+          </div>
+        </div>
+        <div class="feature-cards grid-1">
+          <article class="card">
+            <h4>Open the SQL Lab</h4>
+            <p>Run SELECT / INSERT / UPDATE / DELETE against a sample college-enrolment database and watch the result table update live.</p>
+            <button class="btn" data-goto="sql-lab">Open</button>
+          </article>
+        </div>
+      </div>
+      <div class="feature-section">
+        <div class="feature-header">
+          <div class="feature-icon">&#x1F5C2;&#xFE0F;</div>
+          <div>
+            <h3>Normalisation Lab</h3>
+            <p>Practise UNF &rarr; 3NF.</p>
+          </div>
+        </div>
+        <div class="feature-cards grid-1">
+          <article class="card">
+            <h4>Open the Normalisation Lab</h4>
+            <p>Work through interactive examples that split a flat table into 1NF, 2NF and 3NF with instant checking.</p>
+            <button class="btn" data-goto="norm-lab">Open</button>
+          </article>
+        </div>
+      </div>
+      <div class="feature-section">
+        <div class="feature-header">
+          <div class="feature-icon">&#x1F4D8;</div>
+          <div>
+            <h3>Microsoft Access Tutorials</h3>
+            <p>Click-by-click guides.</p>
+          </div>
+        </div>
+        <div class="feature-cards grid-1">
+          <article class="card">
+            <h4>Master Access step-by-step</h4>
+            <p>Tables, relationships, queries, forms, reports and macros &mdash; clear numbered steps for every assignment task.</p>
+            <button class="btn" data-goto="access">Open</button>
+          </article>
+        </div>
+      </div>
+      <div class="feature-section">
+        <div class="feature-header">
+          <div class="feature-icon">&#x1F5A5;&#xFE0F;</div>
+          <div>
+            <h3>Access Lab</h3>
+            <p>Fake MS Access — build your own database.</p>
+          </div>
+        </div>
+        <div class="feature-cards grid-1">
+          <article class="card">
+            <h4>Practise with real GUI tools</h4>
+            <p>A simulated Access with tables, Design View, relationships, query design, forms and reports &mdash; create your own database from scratch or load a template.</p>
+            <button class="btn" data-goto="access-lab">Open</button>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ SQL LAB ═══════════ -->
+  <section id="view-sql-lab" class="view">
+    <header class="section-head">
+      <h2>SQL Lab</h2>
+      <p>Write real SQL against a sample college-enrolment database. Type a query, run it, and see the result table update instantly.</p>
+    </header>
+    <div id="sql-lab-root"></div>
+  </section>
+
+  <!-- ═══════════ NORMALISATION LAB ═══════════ -->
+  <section id="view-norm-lab" class="view">
+    <header class="section-head">
+      <h2>Normalisation Lab</h2>
+      <p>Interactive walkthroughs that split a flat table into 1NF, 2NF and 3NF — the exact skill Aim A tests.</p>
+    </header>
+    <div id="norm-lab-root"></div>
+  </section>
+
+  <!-- ═══════════ MICROSOFT ACCESS TUTORIALS ═══════════ -->
+  <section id="view-access" class="view">
+    <header class="section-head">
+      <h2>Microsoft Access Tutorials</h2>
+      <p>Step-by-step, click-by-click guides to building your assignment database in Microsoft Access.</p>
+    </header>
+    <div id="access-root"></div>
+  </section>
+
+  <!-- ═══════════ ACCESS LAB (fake MS Access simulator) ═══════════ -->
+  <section id="view-access-lab" class="view">
+    <header class="section-head">
+      <h2>Access Lab</h2>
+      <p>A simulated Microsoft Access &mdash; build your own database with tables, relationships, queries, forms and reports using the real GUI tools. No software install needed.</p>
+    </header>
+    <div id="access-sim-root"></div>
+  </section>
+
+  <!-- ═══════════ ASSIGNMENT (PART 2) ═══════════ -->
+  <section id="view-assignment" class="view">
+    <header class="section-head">
+      <h2>Assignment</h2>
+      <p>Download a sample assignment to work on, then follow the step-by-step guide to meet exactly what Pearson wants to see for Pass, Merit and Distinction.</p>
+    </header>
+    <div id="assignment-hub"></div>
+  </section>
+
+  <!-- ═══════════ AI ASSIGNER ═══════════ -->
+  <section id="view-ai" class="view">
+    <header class="section-head">
+      <h2>AI Assigner</h2>
+      <p>Your personal Unit 4 mentor &mdash; chat, get hints on normalisation/SQL/design, or upload your work for marking. It coaches you to do the work yourself.</p>
+    </header>
+    <div id="ai-assigner-panel"></div>
+  </section>
+
+  <!-- ═══════════ PROGRESS ═══════════ -->
+  <section id="view-progress" class="view">
+    <header class="section-head">
+      <h2>Your Progress</h2>
+      <p>Track your revision streak, study guide aims, flashcards and quiz scores.</p>
+    </header>
+    <div id="progress-gate" style="display:none;text-align:center;padding:40px;">
+      <p style="margin-bottom:16px;color:var(--ink-2);">Sign in to save and view your progress.</p>
+      <button class="btn primary" id="btn-progress-signin">Sign in</button>
+    </div>
+    <div id="progress-content" style="display:none;"></div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <p>BTEC Level 3 IT Unit 4 (Relational Database Development) — Pearson AAQ 2025. This is a study and assignment-support tool — not an official Pearson product.</p>
+  <p>2026 RA10 (www.ra10.co.uk)</p>
+</footer>
+
+<script src="js/data-loader.js?v=20260906"></script>
+<script src="js/spec.js?v=20260906"></script>
+<script src="js/guide.js?v=20260906"></script>
+  <script src="js/revise.js?v=20260921"></script>
+<script src="js/sql-lab.js?v=20260907"></script>
+<script src="js/norm-lab.js?v=20260906"></script>
+<script src="js/access.js?v=20260907"></script>
+<script src="js/access-simulator.js?v=20260908"></script>
+  <script src="js/assignment.js?v=20260921"></script>
+  <script src="js/ai-assigner.js?v=20260923"></script>
+  <script src="js/app.js?v=20260921"></script>
+<script>
+(function () {
+  const RA10_UNIT_SUBJECT = 'IT';
+  const RA10_CREDIT_CHIP_ID = 'unit1-credit-chip';
+  const RA10_SUBJECT_BONUS = 300;
+  const RA10_ACTION_COSTS = {
+    revision_guide_full: 10,
+    quiz_question: 1,
+    wireframe_export: 1,
+    sitemap_export: 1,
+    code_editor_cloud_project: 0,
+    ai_assigner_hint: 3,
+    ai_assigner_mark: 8,
+  };
+
+  function _ra10GetSubjectStateKey(profile) {
+    return 'ra10_subject_state:' + String((profile && (profile.id || profile.email)) || 'anon');
+  }
+  function _ra10ReadSubjectState(profile) {
+    try { const raw = localStorage.getItem(_ra10GetSubjectStateKey(profile)); return raw ? JSON.parse(raw) : null; } catch (e) { return null; }
+  }
+  function _ra10WriteSubjectState(profile, state) {
+    try { localStorage.setItem(_ra10GetSubjectStateKey(profile), JSON.stringify(state)); } catch (e) {}
+  }
+  function _ra10SyncSubjectState(profile, storedCredits, ownedSubjects) {
+    const cleanOwned = Array.isArray(ownedSubjects) ? ownedSubjects.filter(Boolean) : [];
+    const ownedKey = cleanOwned.slice().sort().join('|');
+    const saved = _ra10ReadSubjectState(profile);
+    const prevOwned = (saved && typeof saved.ownedKey === 'string') ? saved.ownedKey.split('|').filter(Boolean) : [];
+    const prevOwnedSet = new Set(prevOwned);
+    const addedSet = new Set(cleanOwned.filter(s => !prevOwnedSet.has(s)));
+    const savedSpent = (saved && saved.subjectSpent && typeof saved.subjectSpent === 'object') ? saved.subjectSpent : {};
+    const subjectSpent = {};
+    cleanOwned.forEach(subj => {
+      const raw = Number(savedSpent[subj] || 0);
+      subjectSpent[subj] = Math.max(0, Math.min(RA10_SUBJECT_BONUS, Math.floor(Number.isFinite(raw) ? raw : 0)));
+    });
+    let totalSubjectRemaining = cleanOwned.reduce((sum, subj) => sum + Math.max(0, RA10_SUBJECT_BONUS - Number(subjectSpent[subj] || 0)), 0);
+    if (totalSubjectRemaining > storedCredits) {
+      let overflow = totalSubjectRemaining - storedCredits;
+      const trimOrder = cleanOwned.filter(subj => !addedSet.has(subj)).concat(cleanOwned.filter(subj => addedSet.has(subj)));
+      trimOrder.forEach(subj => {
+        if (overflow <= 0) return;
+        const spent = Number(subjectSpent[subj] || 0);
+        const remaining = Math.max(0, RA10_SUBJECT_BONUS - spent);
+        const trim = Math.min(remaining, overflow);
+        subjectSpent[subj] = Math.min(RA10_SUBJECT_BONUS, spent + trim);
+        overflow -= trim;
+      });
+      totalSubjectRemaining = cleanOwned.reduce((sum, subj) => sum + Math.max(0, RA10_SUBJECT_BONUS - Number(subjectSpent[subj] || 0)), 0);
+    }
+    const baselineRemaining = Math.max(0, Math.min(storedCredits, Math.floor(storedCredits - totalSubjectRemaining)));
+    const next = { ownedKey, baselineRemaining, storedCreditsAtSync: storedCredits, subjectSpent };
+    _ra10WriteSubjectState(profile, next);
+    return next;
+  }
+  function _ra10GetUnitCreditsContext() {
+    if (!window.RA10 || !RA10.isLoggedIn()) return null;
+    const profile = RA10.getProfile();
+    if (!profile) return null;
+    const tier = RA10.getTier();
+    const breakdown = (typeof RA10.getCreditBreakdown === 'function') ? RA10.getCreditBreakdown() : null;
+    const totalCredits = breakdown ? Number(breakdown.totalCredits || 0) : (Number(RA10.getCredits()) || 0);
+    const storedCredits = breakdown ? Number(breakdown.storedCredits || 0) : totalCredits;
+    const examBonusRemaining = breakdown ? Number(breakdown.examBonusRemaining || 0) : 0;
+    if (tier !== 'subject') return { isSubjectTier: false, ownsCurrentSubject: true, usableCredits: totalCredits, totalCredits, storedCredits, examBonusRemaining, ownedSubjects: [], baselineRemaining: totalCredits };
+    const ownedSubjects = Array.isArray(profile.unlocked_subjects) ? profile.unlocked_subjects.filter(Boolean) : [];
+    const state = _ra10SyncSubjectState(profile, storedCredits, ownedSubjects);
+    const ownsCurrentSubject = ownedSubjects.includes(RA10_UNIT_SUBJECT);
+    const subjectSpent = (state && state.subjectSpent) ? Number(state.subjectSpent[RA10_UNIT_SUBJECT] || 0) : 0;
+    const subjectCreditsRemaining = ownsCurrentSubject ? Math.max(0, RA10_SUBJECT_BONUS - Math.max(0, Math.min(RA10_SUBJECT_BONUS, subjectSpent))) : 0;
+    const usableCredits = (ownsCurrentSubject ? subjectCreditsRemaining : 0) + Number(state ? state.baselineRemaining : 0) + examBonusRemaining;
+    return { isSubjectTier: true, ownsCurrentSubject, usableCredits, totalCredits, storedCredits, examBonusRemaining, ownedSubjects, baselineRemaining: state ? state.baselineRemaining : 0, subjectCreditsRemaining };
+  }
+  async function _ra10RenderUnitCreditChip() {
+    if (!window.RA10) return;
+    try { await RA10.renderCreditChip(RA10_CREDIT_CHIP_ID); } catch (e) {}
+    const ctx = _ra10GetUnitCreditsContext();
+    if (!ctx || !ctx.isSubjectTier) return;
+    const container = document.getElementById(RA10_CREDIT_CHIP_ID);
+    if (!container) return;
+    const chip = container.firstElementChild;
+    if (!chip) return;
+    const spans = chip.querySelectorAll('span');
+    const creditsEl = spans.length > 1 ? spans[1] : null;
+    if (creditsEl) creditsEl.textContent = ctx.usableCredits + ' usable credits';
+  }
+  function _ra10RenderUnitAvatar() {
+    const btn = document.getElementById('unit-account-avatar');
+    if (!btn || !window.RA10) return;
+    btn.innerHTML = '';
+    if (!RA10.isLoggedIn()) { btn.textContent = '?'; btn.setAttribute('title', 'Sign in'); return; }
+    const profile = RA10.getProfile() || {};
+    const rawName = String(profile.display_name || profile.full_name || profile.email || 'User').trim();
+    const initials = rawName.split(/\s+/).filter(Boolean).map(p => p.charAt(0)).join('').slice(0, 2).toUpperCase() || 'U';
+    const imageUrl = String(profile.profile_pic_url || profile.avatar_url || '').trim();
+    if (imageUrl) {
+      const img = document.createElement('img');
+      img.src = imageUrl; img.alt = ''; img.loading = 'lazy';
+      img.onerror = function () { btn.innerHTML = ''; btn.textContent = initials; };
+      btn.appendChild(img);
+    } else { btn.textContent = initials; }
+    btn.setAttribute('title', rawName);
+  }
+  function _ra10GetActionCost(action) { return Number(RA10_ACTION_COSTS[action] || 0); }
+
+  window._updateSubjectBanner = function () {
+    const el = document.getElementById('ra10-subject-banner');
+    if (!el || !window.RA10) return;
+    if (!RA10.isLoggedIn()) { el.innerHTML = ''; return; }
+    const ctx = _ra10GetUnitCreditsContext();
+    if (!ctx) { el.innerHTML = ''; return; }
+    const tier = RA10.getTier();
+    if (tier !== 'subject') { el.innerHTML = ''; return; }
+    const ownedText = ctx.ownsCurrentSubject ? 'You own IT — your subject credits are usable here.' : 'You own ' + (ctx.ownedSubjects.join(', ') || 'other subjects') + ' — only universal credits can be spent on this unit.';
+    const line2 = ctx.ownsCurrentSubject
+      ? '<div class="line-sub">Usable now on Relational Database Development: ' + ctx.usableCredits + ' credits</div>'
+      : '<div class="line-sub">You purchased ' + (ctx.ownedSubjects.join(', ') || 'other subjects') + '. Only universal credits can be spent here.</div>';
+    el.innerHTML = '<div class="line-main">' + (ctx.ownsCurrentSubject ? 'IT subject credits active ✓' : 'IT not unlocked') + '</div>' + line2;
+  };
+
+  async function ra10Gate(action) {
+    try {
+      if (!window.RA10) return true;
+      if (RA10.isOwner()) return true;
+      if (!RA10.isLoggedIn()) {
+        const result = await RA10.guestGate(action, 3, RA10.showPaywall);
+        if (window.RA10) await _ra10RenderUnitCreditChip();
+        return result === true;
+      }
+      const ctx = _ra10GetUnitCreditsContext();
+      if (ctx && ctx.isSubjectTier) {
+        const cost = _ra10GetActionCost(action);
+        if (ctx.usableCredits < cost) { RA10.showPaywall('credits', action); return false; }
+        const beforeStored = Number(ctx.storedCredits || 0);
+        const spent = await RA10.gate(action, RA10.showPaywall);
+        if (spent) {
+          const profile = RA10.getProfile();
+          const state = _ra10ReadSubjectState(profile);
+          if (state && Number.isFinite(state.baselineRemaining)) {
+            let deductedFromStored = cost;
+            if (typeof RA10.getCreditBreakdown === 'function') {
+              const afterStored = Number((RA10.getCreditBreakdown() || {}).storedCredits || 0);
+              deductedFromStored = Math.max(0, beforeStored - afterStored);
+            }
+            if (ctx.ownsCurrentSubject) {
+              state.subjectSpent = state.subjectSpent || {};
+              const currentSpent = Math.max(0, Math.min(RA10_SUBJECT_BONUS, Number(state.subjectSpent[RA10_UNIT_SUBJECT] || 0)));
+              const subjectRemaining = Math.max(0, RA10_SUBJECT_BONUS - currentSpent);
+              const fromSubject = Math.min(subjectRemaining, deductedFromStored);
+              const fromBaseline = Math.max(0, deductedFromStored - fromSubject);
+              state.subjectSpent[RA10_UNIT_SUBJECT] = Math.min(RA10_SUBJECT_BONUS, currentSpent + fromSubject);
+              state.baselineRemaining = Math.max(0, state.baselineRemaining - fromBaseline);
+            } else {
+              state.baselineRemaining = Math.max(0, state.baselineRemaining - deductedFromStored);
+            }
+            _ra10WriteSubjectState(profile, state);
+          }
+          await _ra10RenderUnitCreditChip();
+          window._updateSubjectBanner();
+        }
+        return spent;
+      }
+      const result = await RA10.gate(action, RA10.showPaywall);
+      await _ra10RenderUnitCreditChip();
+      window._updateSubjectBanner();
+      return result;
+    } catch (e) { console.warn('ra10Gate error', e); return false; }
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    function waitForRA10(cb, tries) {
+      tries = tries || 0;
+      if (window.RA10 && typeof RA10.init === 'function') { cb(); }
+      else if (tries < 50) { setTimeout(function () { waitForRA10(cb, tries + 1); }, 100); }
+    }
+    waitForRA10(async function () {
+      await RA10.init();
+      function updateCostLabels() {
+        const hide = RA10.isPaid() || RA10.isOwner();
+        document.querySelectorAll('.ra10-cost-label').forEach(function (el) { el.style.display = hide ? 'none' : ''; });
+      }
+      updateCostLabels();
+      RA10.on('authchange', updateCostLabels);
+      RA10.on('authchange', function () { _ra10RenderUnitCreditChip(); _ra10RenderUnitAvatar(); window._updateSubjectBanner(); });
+      RA10.on('creditschange', function () { _ra10RenderUnitCreditChip(); window._updateSubjectBanner(); });
+      _ra10RenderUnitCreditChip();
+      _ra10RenderUnitAvatar();
+      window._updateSubjectBanner();
+    });
+  });
+})();
+</script>
+<style>
+/* Topbar must match the other unit apps exactly — this inline style loads AFTER
+   the injected refresh stylesheet, so these rules win. */
+body.ra10-refresh-enabled .topbar .tabs .tab,
+body.ra10-refresh-enabled .topbar .tab {
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 8px 16px;
+  border-width: 1.25px;
+  background: transparent;
+}
+body.ra10-refresh-enabled .topbar .tab.active {
+  background: #d0dff0 !important;
+  border-color: #5b8abf !important;
+  color: #0a1f3c !important;
+  box-shadow: none !important;
+}
+body.ra10-refresh-enabled .topbar .tabs {
+  background: color-mix(in srgb, var(--ra10-surface) 64%, transparent);
+  border: 1px solid color-mix(in srgb, var(--ra10-line-strong) 62%, #fff 38%);
+}
+[data-theme="dark"] body.ra10-refresh-enabled .topbar .tab.active {
+  background: #0f2240 !important;
+  border-color: #2a4a7a !important;
+  color: #d0e0ff !important;
+}
+/* Unit 4 has no fullscreen tools — the topbar is always visible. */
+</style>
+</body>
+</html>

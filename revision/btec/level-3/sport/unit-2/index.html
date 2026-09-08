@@ -1,0 +1,1610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>
+(function(){
+  var THEME_KEY = 'ra10-theme';
+  function applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme === 'dark' ? 'dark' : 'light');
+  }
+  var saved = localStorage.getItem(THEME_KEY);
+  applyTheme(saved || 'light');
+  window.addEventListener('message', function(event) {
+    if (event.source !== window.parent || !event.data || event.data.type !== 'RA10_THEME') return;
+    applyTheme(event.data.theme);
+  });
+  window.addEventListener('storage', function(event) {
+    if (event.key === THEME_KEY) applyTheme(event.newValue || 'light');
+  });
+
+  window.toggleUnitTheme = function() {
+    var current = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+    var next = current === 'dark' ? 'light' : 'dark';
+    localStorage.setItem(THEME_KEY, next);
+    applyTheme(next);
+    try {
+      if (window.parent && window.parent !== window) {
+        window.parent.postMessage({ type: 'RA10_THEME', theme: next }, '*');
+      }
+    } catch (e) {}
+  };
+
+  window.openUnitNews = function() {
+    try {
+      if (window.top && window.top !== window) {
+        window.top.location.hash = '/news';
+        return;
+      }
+    } catch (e) {}
+    location.href = '/index.html#/news';
+  };
+})();
+
+(function(){
+  var s = document.createElement('script');
+  var isFile = location.protocol === 'file:';
+  var isLocalHost = location.hostname === '127.0.0.1' || location.hostname === 'localhost';
+  s.src = isFile ? 'file:///C:/Users/mistr/Downloads/ra10/ra10-sdk.js?v=20260903' : (isLocalHost ? 'http://127.0.0.1:5500/ra10-sdk.js?v=20260903' : 'https://ra10.co.uk/ra10-sdk.js?v=20260903');
+  document.head.insertBefore(s, document.head.firstChild);
+})();
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BTEC Sport Unit 2 — Fitness Training and Programming</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<link rel="preconnect" href="https://api.fontshare.com">
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@500,700,900,400&f[]=jetbrains-mono@500&display=swap">
+<link rel="stylesheet" href="css/style.css?v=20260507c">
+<script>
+  // Subject-credit banner updater
+  window._updateSubjectBanner = function() {
+    const banner = document.getElementById('ra10-subject-banner');
+    if (!banner || !window.RA10 || typeof window._ra10GetUnitCreditsContext !== 'function') {
+      banner.style.display = 'none';
+      return;
+    }
+    const ctx = window._ra10GetUnitCreditsContext();
+    if (!ctx || !ctx.isSubjectTier) {
+      banner.style.display = 'none';
+      return;
+    }
+    if (ctx.ownsCurrentSubject) {
+      banner.innerHTML = '<div class="line-main">Usable now on Sport Unit 2: ' + ctx.usableCredits + ' credits</div><div class="line-sub">Includes your Sport subject credits and universal credits.</div>';
+    } else {
+      const ownedText = ctx.ownedSubjects.length ? ctx.ownedSubjects.join(', ') : 'another subject';
+      banner.innerHTML = '<div class="line-main">Usable now on Sport Unit 2: ' + ctx.usableCredits + ' credits</div><div class="line-sub">You purchased ' + ownedText + '. Only universal credits can be spent on this unit.</div>';
+    }
+    banner.style.display = '';
+  };
+  document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(function() {
+      if (window.RA10 && typeof RA10.on === 'function') {
+        RA10.on('authchange', window._updateSubjectBanner);
+        RA10.on('creditschange', window._updateSubjectBanner);
+        window._updateSubjectBanner();
+      }
+    }, 100);
+  });
+</script>
+<style>
+.ra10-cost-label {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.75);
+  background: rgba(0,0,0,0.15);
+  padding: 1px 6px;
+  border-radius: 999px;
+  margin-left: 6px;
+  vertical-align: middle;
+  letter-spacing: 0.03em;
+}
+
+.ra10-cost-label.free-label {
+  color: rgba(255,255,255,0.6);
+  background: rgba(255,255,255,0.12);
+}
+
+.ra10-subject-banner {
+  display: none;
+  padding: 12px 16px;
+  background: linear-gradient(90deg, var(--accent-2), var(--surface));
+  border-bottom: 1px solid var(--line);
+  color: var(--ink);
+}
+
+.ra10-subject-banner .line-main {
+  font-size: 14px;
+  font-weight: 800;
+  margin-bottom: 2px;
+}
+
+.ra10-subject-banner .line-sub {
+  font-size: 12px;
+  color: var(--ink-2);
+}
+
+[data-theme="dark"] .ra10-subject-banner {
+  background: linear-gradient(90deg, #193126, #1a2520);
+}
+
+.tabs .tab.tab-special {
+  background: #f3e8ff;
+  border-color: #d8b4fe;
+  color: #6b21a8;
+}
+
+.tabs .tab.tab-special.active {
+  background: #e9d5ff;
+  border-color: #a855f7;
+  color: #581c87;
+}
+
+.you-hero {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 18px;
+  border-radius: 18px;
+  padding: 22px;
+  margin-bottom: 16px;
+  color: #fff;
+  background: linear-gradient(130deg, #064e3b 0%, #047857 58%, #059669 100%);
+}
+
+.you-hero-title {
+  margin: 0;
+  font-size: clamp(1.35rem, 2.5vw, 2rem);
+  font-weight: 900;
+}
+
+.you-hero-streak {
+  margin: 10px 0 0 0;
+  font-size: 1.08rem;
+}
+
+.you-hero-xp-label {
+  font-size: 0.86rem;
+  opacity: 0.9;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.you-hero-xp-val {
+  font-size: 1.25rem;
+  font-weight: 800;
+  margin: 6px 0 8px;
+}
+
+.you-hero-xp-bar {
+  height: 11px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.25);
+  overflow: hidden;
+}
+
+.you-hero-xp-bar span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #f2ff7e 0%, #ffd84c 100%);
+}
+
+.you-tasks-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.you-task-card {
+  border: 1px solid var(--line-2);
+  border-radius: 14px;
+  padding: 14px;
+  background: #fff;
+}
+
+.you-task-card.done {
+  border-color: #4bbf88;
+  background: linear-gradient(145deg, #e7fff1 0%, #d6f8ea 100%);
+}
+
+.you-task-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.you-xp-pill {
+  background: linear-gradient(120deg, #ffe96b 0%, #ffbe2f 100%);
+  color: #5a3b00;
+  font-weight: 800;
+  border-radius: 999px;
+  padding: 4px 10px;
+  white-space: nowrap;
+}
+
+.you-task-foot {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.you-task-progress {
+  margin-top: 10px;
+  height: 8px;
+  border-radius: 999px;
+  background: #edf0ef;
+  overflow: hidden;
+}
+
+.you-task-progress span {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, #208e62 0%, #28c07d 100%);
+}
+
+.you-stats-mini {
+  margin-top: 14px;
+  border: 1px solid var(--line-2);
+  border-radius: 14px;
+  padding: 14px;
+  background: #fff;
+}
+
+.you-stats-mini h4 {
+  margin: 0 0 10px 0;
+}
+
+.you-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.you-stats-grid div {
+  border: 1px solid var(--line-2);
+  border-radius: 10px;
+  padding: 10px;
+  display: grid;
+  gap: 4px;
+}
+
+.you-stats-grid strong {
+  font-size: 1.15rem;
+}
+
+.you-quote {
+  margin-top: 12px;
+  border-radius: 12px;
+  padding: 12px;
+  background: #f7f9ff;
+  border-left: 4px solid #059669;
+  color: #233;
+  font-style: italic;
+}
+
+[data-theme="dark"] .you-task-card,
+[data-theme="dark"] .you-stats-mini,
+[data-theme="dark"] .you-quote,
+[data-theme="dark"] .you-stats-grid div {
+  background: var(--surface) !important;
+  color: var(--ink) !important;
+  border-color: var(--line) !important;
+}
+
+[data-theme="dark"] .you-task-card.done {
+  background: color-mix(in oklab, var(--accent-2) 36%, var(--surface)) !important;
+  border-color: var(--accent) !important;
+}
+
+[data-theme="dark"] .you-task-progress {
+  background: var(--line) !important;
+}
+
+[data-theme="dark"] select,
+[data-theme="dark"] option,
+[data-theme="dark"] input,
+[data-theme="dark"] textarea {
+  background: var(--surface) !important;
+  color: var(--ink) !important;
+}
+
+[data-theme="dark"] .diagram-builder-panel,
+[data-theme="dark"] .diagram-color-input,
+[data-theme="dark"] .diagram-builder-panel .field-input,
+[data-theme="dark"] .diagram-builder-canvas-wrap,
+[data-theme="dark"] .diagram-inline-editor {
+  background: var(--surface) !important;
+  color: var(--ink) !important;
+  border-color: var(--line) !important;
+}
+
+@media (max-width: 880px) {
+  .you-hero {
+    grid-template-columns: 1fr;
+  }
+
+  .you-tasks-grid,
+  .you-stats-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.diagram-tool-wrap {
+  margin-top: 16px;
+  border: 1px solid var(--line-2);
+  border-radius: var(--r-md);
+  background: var(--bg);
+  padding: 12px;
+}
+
+.diagram-mode-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.diagram-pane {
+  display: none;
+}
+
+.diagram-pane.diagram-pane-active {
+  display: block;
+}
+
+.diagram-builder-layout {
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr);
+  gap: 12px;
+}
+
+.diagram-builder-panel {
+  background: #ffffff;
+  border: 1px solid var(--line-2);
+  border-radius: var(--r-sm);
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.diagram-panel-title {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-2);
+}
+
+.diagram-tool-buttons {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 6px;
+}
+
+.diagram-color-input,
+.diagram-builder-panel .field-input {
+  width: 100%;
+  border: 1px solid var(--line-2);
+  border-radius: var(--r-sm);
+  padding: 8px;
+  font-family: inherit;
+  font-size: 14px;
+  background: #fff;
+}
+
+.diagram-builder-canvas-wrap {
+  border: 1px solid var(--line-2);
+  border-radius: var(--r-sm);
+  background: #ffffff;
+  overflow: auto;
+  position: relative;
+  min-height: 500px;
+}
+
+.diagram-builder-canvas {
+  display: block;
+  min-width: 800px;
+  min-height: 500px;
+  width: 1000px;
+  height: 560px;
+  cursor: crosshair;
+}
+
+.diagram-inline-editor {
+  position: absolute;
+  z-index: 2;
+  border: 1px solid var(--line-2);
+  border-radius: 6px;
+  padding: 4px 6px;
+  font-size: 14px;
+  font-family: inherit;
+}
+
+@media (max-width: 900px) {
+  .diagram-builder-layout {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23059669'/%3E%3Ctext x='16' y='22' text-anchor='middle' font-family='sans-serif' font-weight='900' font-size='18' fill='%23E8F1EE'%3EU1%3C/text%3E%3C/svg%3E">
+<!-- ra10-refresh-loader -->
+<script>
+(function(){
+  var path = String(location.pathname || '').replace(/\\/g, '/');
+  var lower = path.toLowerCase();
+  var idx = lower.lastIndexOf('/ra10/');
+  var rootFromPath = idx >= 0 ? path.slice(0, idx + 5) : '';
+  var base;
+  if (location.protocol === 'file:') {
+    base = rootFromPath ? ('file://' + rootFromPath) : '';
+  } else {
+    var isLocalHost = location.hostname === '127.0.0.1' || location.hostname === 'localhost';
+    base = isLocalHost ? 'http://127.0.0.1:5500' : 'https://ra10.co.uk';
+  }
+  if (!base) return;
+
+  var font = document.createElement('link');
+  font.rel = 'stylesheet';
+  font.href = 'https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Sora:wght@500;600;700;800&display=swap';
+  document.head.appendChild(font);
+
+  var css = document.createElement('link');
+  css.rel = 'stylesheet';
+  css.href = base + '/refresh/ra10-refresh.css?v=20260912';
+  document.head.appendChild(css);
+
+  var js = document.createElement('script');
+  js.src = base + '/refresh/ra10-refresh.js?v=20260525';
+  document.head.appendChild(js);
+})();
+</script>
+</head>
+<body>
+<header class="topbar">
+  <a class="unit-brand" href="/index.html#/" target="_top" aria-label="RA10 home">
+    <img src="/logo.png" alt="RA10">
+    <span>RA10</span>
+  </a>
+  <div class="site-unit-nav" aria-label="RA10 site navigation">
+    <a class="site-unit-link" href="/index.html#/" target="_top"><svg class="nu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l9-9 9 9"/><path d="M5 10v10a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V10"/></svg>Home</a>
+    <a class="site-unit-link" href="/index.html#/revision" target="_top"><svg class="nu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Revision</a>
+    <a class="site-unit-link" href="/index.html#/tools" target="_top"><svg class="nu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a6 6 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>Tools</a>
+    <a class="site-unit-link site-community-link" href="/index.html#/community" target="_top"><svg class="nu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>Community</a>
+    <a class="site-unit-link" href="/index.html#/tasks" target="_top"><svg class="nu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3 8-8"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Tasks</a>
+    <a class="site-unit-link" href="/index.html#/exams" target="_top"><svg class="nu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13"/><path d="M8 12h13"/><path d="M8 18h13"/><path d="M3 6h.01M3 12h.01M3 18h.01"/></svg>Exams</a>
+    <a class="site-unit-link" href="/index.html#/leaderboard" target="_top"><svg class="nu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v4a5 5 0 0 1-10 0z"/><path d="M7 6H4a2 2 0 0 0 2 3M17 6h3a2 2 0 0 1-2 3"/></svg>Leaderboard</a>
+  </div>
+  <nav class="tabs">
+    <button class="tab active" data-tab="dashboard" data-tip="Overview & quick links">Dashboard</button>
+    <button class="tab" data-tab="questions" data-tip="Practise & browse exam questions">Questions</button>
+    <button class="tab" data-tab="revise" data-tip="Flashcards, quizzes & the guide">Revise</button>
+    <button class="tab tab-special" data-tab="progress" data-tip="Track your scores & streak">Progress</button>
+  </nav>
+  <div id="unit1-credit-chip" style="margin-left:auto;display:flex;align-items:center;"></div>
+  <div style="display:flex;align-items:center;gap:8px;">
+    <button class="unit-avatar-btn" type="button" onclick="openUnitNews()" aria-label="Open news" title="News" style="background:var(--surface);color:var(--ink-2);border:1px solid var(--line-2);">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 8h10"/><path d="M7 12h10"/><path d="M7 16h6"/></svg>
+    </button>
+    <button class="unit-avatar-btn" type="button" onclick="toggleUnitTheme()" aria-label="Toggle theme" title="Light or dark mode" style="background:var(--surface);color:var(--ink-2);border:1px solid var(--line-2);">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+    <button id="unit-account-avatar" class="unit-avatar-btn" type="button" onclick="if(window.top&&typeof window.top.openAccountOrSignIn==='function'){window.top.openAccountOrSignIn()}else{window.top.location.hash='/account'}" aria-label="Open account" title="Account">?</button>
+  </div>
+</header>
+<div id="ra10-subject-banner" class="ra10-subject-banner"></div>
+
+<main id="app">
+
+  <!-- DASHBOARD -->
+  <section id="view-dashboard" class="view active">
+    <div class="hero">
+      <div>
+        <p class="eyebrow">Pearson BTEC Level 3 Sport — External Set Task</p>
+        <h2>Unit 2 Fitness Training and Programming with 510 Exam Questions</h2>
+        <p class="lede">Coverage across Learning Aims A-E: lifestyle factors, screening, nutrition, training methods and programme design, with named athlete scenarios in every question.</p>
+      </div>
+      <div class="stats" id="dashboard-stats"></div>
+    </div>
+
+    <div class="section-block" style="background:linear-gradient(135deg,#5b21b6 0%,#a855f7 58%,#d8b4fe 100%);border:none;border-radius:12px;padding:20px;margin-bottom:30px;position:relative;overflow:hidden;">
+      <div style="position:absolute;top:-40px;right:-40px;width:120px;height:120px;background:rgba(255,255,255,.05);border-radius:50%;"></div>
+      <div style="position:absolute;bottom:-30px;left:-30px;width:100px;height:100px;background:rgba(255,255,255,.03);border-radius:50%;"></div>
+      <div style="position:relative;z-index:1;max-width:800px;">
+        <h3 style="margin-top:0;color:#ffffff;font-size:1.1rem;margin-bottom:8px;">Why some features cost credits 🤍</h3>
+        <p style="margin:0;font-size:0.95rem;color:rgba(255,255,255,.95);line-height:1.65;">This website is built and funded by a student who knows how hard it is to find reliable, high-quality revision resources. Hosting, content updates, and ongoing support all have real costs. We're keeping subscriptions cheap and straightforward to make revision better and more accessible while keeping the site sustainable.</p>
+      </div>
+    </div>
+
+    <div class="dashboard-grid">
+      <div class="feature-section">
+        <div class="feature-header">
+          <div class="feature-icon">📝</div>
+          <div>
+            <h3>Practice Papers</h3>
+            <p>Build and solve full exam papers</p>
+          </div>
+        </div>
+        <div class="feature-cards grid-2">
+          <article class="card primary-card">
+            <span class="card-tag">Recommended</span>
+            <h4>Build a mock paper</h4>
+            <p>Randomised 80-, 40- or 30-mark paper with Pearson-style answer lines and one-click print.</p>
+            <button class="btn primary" data-goto="mock">Build mock paper<span class="ra10-cost-label">5 credits</span></button>
+          </article>
+          <article class="card">
+            <h4>Practice by topic</h4>
+            <p>Single questions filtered by aim, command verb, or marks. Self-mark or get auto-marked feedback.</p>
+            <button class="btn" data-goto="practice">Start practising<span class="ra10-cost-label">1 credit per question</span></button>
+          </article>
+        </div>
+      </div>
+
+      <div class="feature-section">
+        <div class="feature-header">
+          <div class="feature-icon">🧠</div>
+          <div>
+            <h3>Quick Revision</h3>
+            <p>Memorise key facts and concepts</p>
+          </div>
+        </div>
+        <div class="feature-cards grid-2">
+          <article class="card">
+            <h4>Flashcards</h4>
+            <p>70+ flippable cards covering lifestyle, screening, nutrition, training methods and programme design.</p>
+            <button class="btn" data-goto="flash">Open flashcards</button>
+          </article>
+          <article class="card">
+            <h4>Quick-fire quiz</h4>
+            <p>200 multiple-choice and true/false questions with explanations and per-section scoring.</p>
+            <button class="btn" data-goto="quiz">Start quiz<span class="ra10-cost-label">1 credit per session</span></button>
+          </article>
+        </div>
+      </div>
+
+      <div class="feature-section">
+        <div class="feature-header">
+          <div class="feature-icon">📖</div>
+          <div>
+            <h3>Comprehensive Guide</h3>
+            <p>Full topic breakdown with examples</p>
+          </div>
+        </div>
+        <div class="feature-cards grid-1">
+          <article class="card">
+            <h4>Complete revision guide</h4>
+            <p>Full topic guide covering all learning aims with detailed explanations, diagrams, illustrations, and key facts. Preview Aim A free, unlock Aims B-E for 10 credits.</p>
+            <button class="btn" data-goto="guide">Open revision guide<span class="ra10-cost-label">10 credits to unlock</span></button>
+          </article>
+        </div>
+      </div>
+
+      <div class="feature-section">
+        <div class="feature-header">
+          <div class="feature-icon">🔎</div>
+          <div>
+            <h3>Browse Questions</h3>
+            <p>Search all 510 exam-style questions</p>
+          </div>
+        </div>
+        <div class="feature-cards grid-1">
+          <article class="card">
+            <h4>Full question bank</h4>
+            <p>Read every question and full mark scheme. Search and filter all items by aim, topic, command verb, or marks.</p>
+            <button class="btn" data-goto="browse">Browse questions</button>
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-block">
+      <div class="section-block-head">
+        <span class="sb-eyebrow">Learning Aims Coverage</span>
+        <h3>See question distribution</h3>
+        <p>All aims covered with question counts. Click any card to focus practice on that aim.</p>
+      </div>
+      <div class="aim-grid" id="aim-grid"></div>
+      <div style="text-align:center;margin-top:18px;">
+        <button class="btn" data-goto="spec">View specification breakdown</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="view-questions" class="view">
+    <header class="section-head">
+      <h2>Questions</h2>
+      <p style="font-size:1.15rem;color:var(--accent);font-weight:700;">How do you want to practise? <span style="font-size:1.5em;">📝</span></p>
+    </header>
+    <div class="dashboard-grid">
+      <div class="feature-section">
+        <div class="feature-header">
+          <div class="feature-icon">📝</div>
+          <div>
+            <h3>Mock Paper</h3>
+            <p>Build a randomised exam paper with answer lines and print options.</p>
+          </div>
+        </div>
+        <div class="feature-cards grid-1">
+          <article class="card primary-card">
+            <span class="card-tag">Recommended</span>
+            <h4>Build a mock paper</h4>
+            <p>Simulate a real exam with a full-length paper.</p>
+            <button class="btn primary" data-goto="mock">Open</button>
+            <p class="card-cost-note">Uses 5 credits per mock paper.</p>
+          </article>
+        </div>
+      </div>
+      <div class="feature-section">
+        <div class="feature-header">
+          <div class="feature-icon">🎯</div>
+          <div>
+            <h3>Practice Mode</h3>
+            <p>Answer one question at a time with instant feedback.</p>
+          </div>
+        </div>
+        <div class="feature-cards grid-1">
+          <article class="card">
+            <h4>Practice by topic</h4>
+            <p>Target your weakest areas or focus on specific aims.</p>
+            <button class="btn" data-goto="practice">Open</button>
+            <p class="card-cost-note">Uses 1 credit per question.</p>
+          </article>
+        </div>
+      </div>
+      <div class="feature-section">
+        <div class="feature-header">
+          <div class="feature-icon">🔎</div>
+          <div>
+            <h3>Browse Questions</h3>
+            <p>Search and filter all questions and mark schemes.</p>
+          </div>
+        </div>
+        <div class="feature-cards grid-1">
+          <article class="card">
+            <h4>Full question browser</h4>
+            <p>See every question and mark scheme in the bank.</p>
+            <button class="btn" data-goto="browse">Open</button>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="view-revise" class="view">
+    <header class="section-head">
+      <h2>Revise</h2>
+      <p style="font-size:1.15rem;color:var(--accent);font-weight:700;">Choose a fun way to revise! <span style="font-size:1.5em;">💡</span></p>
+    </header>
+    <div class="dashboard-grid">
+      <div class="feature-section">
+        <div class="feature-header">
+          <div class="feature-icon">🃏</div>
+          <div>
+            <h3>Flashcards</h3>
+            <p>Flip through 70+ cards for rapid recall and spaced repetition.</p>
+          </div>
+        </div>
+        <div class="feature-cards grid-1">
+          <article class="card">
+            <h4>Open flashcards</h4>
+            <p>Definitions, acronyms, and key facts—track your progress!</p>
+            <button class="btn" data-goto="flash">Open</button>
+          </article>
+        </div>
+      </div>
+      <div class="feature-section">
+        <div class="feature-header">
+          <div class="feature-icon">❓</div>
+          <div>
+            <h3>Quiz</h3>
+            <p>200 multiple-choice and true/false questions with instant feedback.</p>
+          </div>
+        </div>
+        <div class="feature-cards grid-1">
+          <article class="card">
+            <h4>Start quiz</h4>
+            <p>Test your knowledge and get explanations for every answer.</p>
+            <button class="btn" data-goto="quiz">Open</button>
+          </article>
+        </div>
+      </div>
+      <div class="feature-section">
+        <div class="feature-header">
+          <div class="feature-icon">📖</div>
+          <div>
+            <h3>Revision Guide</h3>
+            <p>Full topic-by-topic breakdown with worked examples and diagrams.</p>
+          </div>
+        </div>
+        <div class="feature-cards grid-1">
+          <article class="card">
+            <h4>Open revision guide</h4>
+            <p>Preview Aim A free, unlock Aims B-E for 10 credits.</p>
+            <div class="card-action-row">
+              <button class="btn" data-goto="guide">Open</button>
+              <button class="btn btn-spec-mini" data-goto="spec">View spec <span style="font-size:1.1em;">📄</span></button>
+            </div>
+            <p class="card-cost-note">Unlock Aims B-E for a one-time 10 credits.</p>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="view-guide" class="view">
+    <div id="guide-comprehensive"></div>
+  </section>
+
+  <!-- BROWSE -->
+  <section id="view-browse" class="view">
+    <header class="section-head">
+      <h2>Browse questions</h2>
+      <p>Search and filter all 500+ questions. Click a question to expand the mark scheme.</p>
+    </header>
+    <div class="filters">
+      <input type="search" id="search" placeholder="Search question, scenario or topic...">
+      <select id="filter-aim"><option value="">All learning aims</option></select>
+      <select id="filter-marks"><option value="">All marks</option></select>
+      <select id="filter-verb"><option value="">All command verbs</option></select>
+      <button id="btn-clear" class="btn ghost">Clear</button>
+      <span id="result-count" class="muted"></span>
+    </div>
+    <div id="question-list" class="qlist"></div>
+  </section>
+
+  <!-- MOCK PAPER -->
+  <section id="view-mock" class="view">
+    <header class="section-head">
+      <h2>Mock paper builder</h2>
+      <p>Generate a random mock paper using real exam structure. Add a candidate header, choose how many answer lines to print, then attempt the paper or hand it to a teacher.</p>
+    </header>
+    <div class="mock-controls">
+      <div class="mock-row">
+        <div class="control">
+          <label>Total marks</label>
+          <select id="mock-total"><option value="80" selected>80 (full paper)</option><option value="40">40 (half paper)</option><option value="30">30 (quick test)</option></select>
+        </div>
+        <div class="control">
+          <label>Focus aims</label>
+          <div id="mock-aims" class="chip-row"></div>
+        </div>
+        <div class="control">
+          <label>Seed (optional)</label>
+          <input type="text" id="mock-seed" placeholder="e.g. mock-1">
+        </div>
+      </div>
+      <div class="mock-row">
+        <div class="control wide">
+          <label>Question styles <span class="label-hint">(tap to toggle — at least one must stay on)</span></label>
+          <div id="mock-styles" class="chip-row"></div>
+        </div>
+      </div>
+      <details class="mock-options" open>
+        <summary>Paper header &amp; print options</summary>
+        <div class="mock-row">
+          <div class="control checkbox">
+            <label><input type="checkbox" id="opt-header-name" checked> Name line</label>
+          </div>
+          <div class="control checkbox">
+            <label><input type="checkbox" id="opt-header-class"> Class line</label>
+          </div>
+          <div class="control checkbox">
+            <label><input type="checkbox" id="opt-header-date" checked> Date line</label>
+          </div>
+          <div class="control checkbox">
+            <label><input type="checkbox" id="opt-header-centre"> Centre / candidate number</label>
+          </div>
+          <div class="control checkbox">
+            <label><input type="checkbox" id="opt-header-teacher"> Teacher line</label>
+          </div>
+        </div>
+        <div class="mock-row">
+          <div class="control">
+            <label>Custom header text (optional)</label>
+            <input type="text" id="opt-header-custom" placeholder="e.g. Year 13 Mock 2 — Wycombe High School">
+          </div>
+          <div class="control">
+            <label>Answer lines</label>
+            <select id="opt-line-density">
+              <option value="normal" selected>Normal (Pearson-style)</option>
+              <option value="extra">Extra (more space)</option>
+              <option value="compact">Compact (less paper)</option>
+              <option value="none">None</option>
+            </select>
+          </div>
+        </div>
+      </details>
+      <div class="mock-actions">
+        <button id="btn-generate" class="btn primary big">Generate mock paper<span class="ra10-cost-label">5 credits</span></button>
+        <button id="btn-toggle-ms" class="btn ghost">Show mark scheme</button>
+        <button id="btn-print" class="btn">Print question paper</button>
+        <button id="btn-print-ms" class="btn">Print mark scheme only</button>
+      </div>
+    </div>
+    <div id="mock-paper" class="paper"></div>
+  </section>
+
+  <!-- PRACTICE -->
+  <section id="view-practice" class="view">
+    <header class="section-head">
+      <h2>Practice mode</h2>
+      <p>Work through questions one at a time, write your answer, then reveal the mark scheme to self-mark.</p>
+    </header>
+    <div class="practice-controls">
+      <select id="practice-aim"><option value="">All aims</option></select>
+      <select id="practice-marks"><option value="">All marks</option></select>
+      <button id="btn-practice-start" class="btn primary">Start session<span class="ra10-cost-label">1 credit per question</span></button>
+      <span id="practice-progress" class="muted"></span>
+    </div>
+    <div id="practice-card"></div>
+  </section>
+
+  <!-- QUIZ -->
+  <section id="view-quiz" class="view">
+    <header class="section-head">
+      <h2>Quick-fire quiz</h2>
+      <p>Multiple-choice and true/false questions to test recall of facts, definitions, and terminology across the spec.</p>
+    </header>
+    <div class="quiz-controls">
+      <select id="quiz-aim"><option value="">All aims</option></select>
+      <select id="quiz-length">
+        <option value="10">10 questions</option>
+        <option value="20" selected>20 questions</option>
+        <option value="40">40 questions</option>
+        <option value="all">All questions</option>
+      </select>
+      <button id="btn-quiz-start" class="btn primary">Start quiz<span class="ra10-cost-label">1 credit per session</span></button>
+      <span id="quiz-progress" class="muted"></span>
+    </div>
+    <div id="quiz-card"></div>
+    <div id="quiz-results" style="display:none;"></div>
+  </section>
+
+  <section id="view-progress" class="view">
+    <header class="section-head">
+      <h2>Your Progress</h2>
+      <p>Track your revision sessions over the last 30 days.</p>
+    </header>
+    <div id="progress-gate" style="display:none;text-align:center;padding:40px;">
+      <p style="margin-bottom:16px;color:var(--ink-2);">Sign in to save and view your progress.</p>
+      <button class="btn primary" id="btn-progress-signin">Sign in</button>
+    </div>
+    <div id="progress-content" style="display:none;">
+      <div id="progress-stats" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:16px;margin-bottom:24px;"></div>
+      <div id="weak-aims-section" style="margin-bottom:24px;"></div>
+      <div id="sessions-list"></div>
+    </div>
+  </section>
+
+  <!-- FLASHCARDS -->
+  <section id="view-flash" class="view">
+    <header class="section-head">
+      <h2>Flashcards</h2>
+      <p>Tap or click any card to flip. Mark cards as known or still learning to track progress.</p>
+    </header>
+    <div class="flash-controls">
+      <select id="flash-aim"><option value="">All aims</option></select>
+      <button id="btn-flash-start" class="btn primary">Start session<span class="ra10-cost-label free-label">Free</span></button>
+      <button id="btn-flash-shuffle" class="btn">Shuffle</button>
+      <button id="btn-flash-reset" class="btn ghost">Reset progress</button>
+      <span id="flash-progress" class="muted"></span>
+    </div>
+    <div id="flash-stage"></div>
+  </section>
+
+  <!-- SPEC -->
+  <section id="view-spec" class="view">
+    <header class="section-head">
+      <h2>Sport Unit 2 specification</h2>
+      <p>The full fitness training and programming content mapped to the question bank. Click any section card to jump to its questions.</p>
+      <button class="btn" onclick="window.open('https://qualifications.pearson.com/', '_blank')">Open Pearson qualifications</button>
+    </header>
+    <div id="spec-jump" class="spec-jump"></div>
+    <div id="spec-content"></div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <p>BTEC Level 3 Sport Unit 2 (Fitness Training and Programming for Health, Sport and Well-being) — Pearson. This is a study tool — not an official Pearson product.</p>
+  <p>2026 RA10 (www.ra10.co.uk)</p>
+</footer>
+
+<script src="js/data-loader.js"></script>
+<script src="js/guide.js"></script>
+<script src="js/app.js"></script>
+
+<script data-pplx-inline-edit>
+(function () {
+  if (window === window.top) return;
+
+  const allowedParentOrigins = ["https://www.perplexity.ai","https://perplexity.ai","https://testing.perplexity.ai","https://staging.perplexity.ai","https://*.preview.i.perplexity.ai","http://localhost:3000","http://127.0.0.1:3000","http://localhost:5173","http://127.0.0.1:5173"];
+  const MAX_FONT_BYTES = 500 * 1024;
+  const MAX_TOTAL_FONT_BYTES = 2 * 1024 * 1024;
+  let scrollForwarding = false;
+  let scrollRaf = 0;
+  let trustedTopOrigin = null;
+
+  // Allow entries like "https://*.preview.i.perplexity.ai" — the wildcard
+  // matches a single DNS label (no dots), so "https://*.foo" cannot stretch
+  // across multiple labels.
+  function matchesAllowedOrigin(origin) {
+    if (!origin) return false;
+    for (const entry of allowedParentOrigins) {
+      if (!entry.includes("*")) {
+        if (entry === origin) return true;
+        continue;
+      }
+      const pattern = new RegExp(
+        "^" +
+          entry.replace(/[.+?^${}()|[\]\\]/g, "\\$&").replace(/\*/g, "[^.]+") +
+          "$",
+      );
+      if (pattern.test(origin)) return true;
+    }
+    return false;
+  }
+
+  // Trust decision: when the sender is same-origin-visible (event.origin is a
+  // real origin like https://www.perplexity.ai) we trust event.origin directly.
+  // When event.origin is "null" (opaque broker srcdoc), we fall back to the
+  // broker's stamped `parentOrigin` to identify the top window. The fallback
+  // is claim-only — we rely on the browser's native `targetOrigin` enforcement
+  // on the response path (see postToTrustedTop) to ensure replies can't be
+  // delivered to anyone but the actual top window of that claimed origin.
+  function getTrustedParentOrigin(event) {
+    const forwardedParentOrigin =
+      typeof event.data.parentOrigin === "string" ? event.data.parentOrigin : null;
+    const parentOrigin = event.origin === "null" ? forwardedParentOrigin : event.origin;
+    return matchesAllowedOrigin(parentOrigin) ? parentOrigin : null;
+  }
+
+  // All responses go to window.top with targetOrigin = the allowlisted origin.
+  // An attacker that iframes us inside their own null-origin broker can claim
+  // any parentOrigin they like, but the browser will drop the reply whenever
+  // the real top's origin doesn't match — so the screenshot never leaves.
+  function postToTrustedTop(message) {
+    if (!trustedTopOrigin) return;
+    try {
+      window.top.postMessage(message, trustedTopOrigin);
+    } catch (_error) {}
+  }
+
+  function inlineAll(original, clone) {
+    if (original.nodeType !== 1 || clone.nodeType !== 1) return;
+
+    try {
+      const computedStyle = getComputedStyle(original);
+      // cssText on a computed style is the serialized declaration in modern
+      // Chromium/Safari — a single read beats enumerating ~400 longhand
+      // properties. Firefox returns "" here, so we fall back on empty.
+      const serialized = computedStyle.cssText;
+      if (serialized) {
+        clone.style.cssText = serialized;
+      } else {
+        const parts = new Array(computedStyle.length);
+        for (let index = 0; index < computedStyle.length; index += 1) {
+          const property = computedStyle[index];
+          parts[index] = `${property}:${computedStyle.getPropertyValue(property)};`;
+        }
+        clone.style.cssText = parts.join("");
+      }
+    } catch (_error) {}
+
+    const originalChildren = original.children;
+    const clonedChildren = clone.children;
+    for (
+      let index = 0;
+      index < originalChildren.length && index < clonedChildren.length;
+      index += 1
+    ) {
+      inlineAll(originalChildren[index], clonedChildren[index]);
+    }
+  }
+
+  function extractFontUrl(srcValue) {
+    const matches = [
+      ...srcValue.matchAll(
+        /url\(["']?([^"')]+)["']?\)(?:\s*format\(["']?([^"')]+)["']?\))?/gi,
+      ),
+    ];
+    if (matches.length === 0) return null;
+    const woff2 = matches.find((m) => m[2] && m[2].toLowerCase().includes("woff2"));
+    if (woff2) return woff2[1];
+    const woff = matches.find((m) => m[2] && m[2].toLowerCase().includes("woff"));
+    if (woff) return woff[1];
+    return matches[0][1];
+  }
+
+  // Cache resolved font URL -> data URI across captures. Fonts on a page
+  // essentially never change, and a batch run emits multiple captures back to
+  // back — without this we'd refetch + re-base64 every time.
+  const fontDataUriCache = new Map();
+  const SRC_DECLARATION_RE = /src\s*:\s*[^;}]+/i;
+
+  async function fetchAsDataUri(url) {
+    if (fontDataUriCache.has(url)) return fontDataUriCache.get(url);
+    let dataUri = null;
+    try {
+      const response = await fetch(url, { mode: "cors", credentials: "omit" });
+      if (response.ok) {
+        const blob = await response.blob();
+        if (blob.size <= MAX_FONT_BYTES) {
+          dataUri = await new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onloadend = () =>
+              resolve(typeof reader.result === "string" ? reader.result : null);
+            reader.onerror = () => resolve(null);
+            reader.readAsDataURL(blob);
+          });
+        }
+      }
+    } catch (_error) {
+      dataUri = null;
+    }
+    fontDataUriCache.set(url, dataUri);
+    return dataUri;
+  }
+
+  function collectFontFaceRuleTexts() {
+    const rules = [];
+    for (const sheet of document.styleSheets) {
+      let cssRules;
+      try {
+        cssRules = sheet.cssRules;
+      } catch (_error) {
+        continue;
+      }
+      if (!cssRules) continue;
+      for (const rule of cssRules) {
+        const cssText = rule.cssText || "";
+        if (cssText.startsWith("@font-face")) rules.push(cssText);
+      }
+    }
+    return rules;
+  }
+
+  async function buildInlinedFontCss() {
+    const ruleTexts = collectFontFaceRuleTexts();
+    if (ruleTexts.length === 0) return null;
+
+    const resolved = ruleTexts.map((cssText) => {
+      if (!SRC_DECLARATION_RE.test(cssText)) return null;
+      const srcMatch = cssText.match(/src\s*:\s*([^;}]+)[;}]/i);
+      if (!srcMatch) return null;
+      const url = extractFontUrl(srcMatch[1]);
+      if (!url) return null;
+      try {
+        return { cssText, url: new URL(url, document.baseURI).href };
+      } catch (_error) {
+        return null;
+      }
+    });
+
+    const dataUris = await Promise.all(
+      resolved.map((entry) => (entry ? fetchAsDataUri(entry.url) : Promise.resolve(null))),
+    );
+
+    const inlined = [];
+    let totalBytes = 0;
+    for (let index = 0; index < resolved.length; index += 1) {
+      const entry = resolved[index];
+      const dataUri = dataUris[index];
+      if (!entry || !dataUri) continue;
+      const approxBytes = dataUri.length * 0.75;
+      if (totalBytes + approxBytes > MAX_TOTAL_FONT_BYTES) break;
+      totalBytes += approxBytes;
+      inlined.push(entry.cssText.replace(SRC_DECLARATION_RE, `src: url("${dataUri}")`));
+    }
+    return inlined.length > 0 ? inlined.join("\n") : null;
+  }
+
+  function stripExternal(clone) {
+    const images = clone.querySelectorAll("img");
+    for (let index = 0; index < images.length; index += 1) {
+      const src = images[index].getAttribute("src");
+      if (src && !src.startsWith("data:")) images[index].removeAttribute("src");
+    }
+
+    const elements = clone.querySelectorAll("*");
+    for (let index = 0; index < elements.length; index += 1) {
+      const style = elements[index].style.cssText;
+      if (style && style.includes("url(")) {
+        elements[index].style.cssText = style.replace(
+          /url\(["']?(?!data:)[^)"']*["']?\)/gi,
+          "none",
+        );
+      }
+    }
+  }
+
+  function emitScroll() {
+    scrollRaf = 0;
+    if (!scrollForwarding) return;
+    postToTrustedTop({
+      type: "INLINE_EDIT_SCROLL",
+      scrollX: window.scrollX,
+      scrollY: window.scrollY,
+    });
+  }
+
+  window.addEventListener(
+    "scroll",
+    function () {
+      if (!scrollForwarding || scrollRaf) return;
+      scrollRaf = requestAnimationFrame(emitScroll);
+    },
+    { passive: true, capture: true },
+  );
+
+  async function handleCaptureRequest(event) {
+    const requestId = event.data.requestId;
+    const scrollX = window.scrollX;
+    const scrollY = window.scrollY;
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+
+    function postResult(dataUrl) {
+      postToTrustedTop({
+        type: "INLINE_EDIT_SCREENSHOT_RESULT",
+        requestId,
+        dataUrl,
+        scrollX,
+        scrollY,
+      });
+    }
+
+    try {
+      // Wait for any pending web fonts to resolve so both inline metrics and
+      // the @font-face inlining below see the same loaded faces.
+      if (document.fonts && document.fonts.ready) {
+        try {
+          await document.fonts.ready;
+        } catch (_error) {}
+      }
+
+      const clone = document.documentElement.cloneNode(true);
+      inlineAll(document.documentElement, clone);
+
+      const removedNodes = clone.querySelectorAll("script,link[rel=\"stylesheet\"],style");
+      for (let index = 0; index < removedNodes.length; index += 1) {
+        removedNodes[index].remove();
+      }
+
+      stripExternal(clone);
+
+      // Re-embed web fonts as data-URI @font-face rules so the SVG rasterizer
+      // can resolve them — external font URLs aren't fetched during
+      // foreignObject rendering, which would otherwise force a fallback face
+      // and change text metrics.
+      const inlinedFontCss = await buildInlinedFontCss();
+      if (inlinedFontCss) {
+        const styleEl = document.createElement("style");
+        styleEl.textContent = inlinedFontCss;
+        const head = clone.querySelector("head");
+        if (head) head.appendChild(styleEl);
+        else clone.insertBefore(styleEl, clone.firstChild);
+      }
+
+      const html = new XMLSerializer().serializeToString(clone);
+      const svg =
+        `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}">` +
+        '<foreignObject width="100%" height="100%">' +
+        `<div xmlns="http://www.w3.org/1999/xhtml" style="width:${width}px;height:${height}px;overflow:hidden">` +
+        `<div style="transform:translate(-${scrollX}px,-${scrollY}px);transform-origin:top left">` +
+        html +
+        "</div></div></foreignObject></svg>";
+      const svgUrl = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+      const image = new Image();
+      image.onload = function () {
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        canvas.getContext("2d").drawImage(image, 0, 0);
+        postResult(canvas.toDataURL("image/png"));
+      };
+      image.onerror = function () {
+        postResult(null);
+      };
+      image.src = svgUrl;
+    } catch (_error) {
+      postResult(null);
+    }
+  }
+
+  window.addEventListener("message", function (event) {
+    if (!event.data) return;
+    // Only accept messages from the direct parent frame. Blocks sibling /
+    // unrelated-window postMessage senders that could otherwise reach us.
+    if (event.source !== window.parent) return;
+
+    const trustedParentOrigin = getTrustedParentOrigin(event);
+    if (!trustedParentOrigin) return;
+    trustedTopOrigin = trustedParentOrigin;
+
+    if (event.data.type === "INLINE_EDIT_SCROLL_START") {
+      scrollForwarding = true;
+      emitScroll();
+      return;
+    }
+
+    if (event.data.type === "INLINE_EDIT_SCROLL_STOP") {
+      scrollForwarding = false;
+      if (scrollRaf) cancelAnimationFrame(scrollRaf);
+      scrollRaf = 0;
+      return;
+    }
+
+    if (event.data.type !== "INLINE_EDIT_CAPTURE_REQUEST") return;
+
+    handleCaptureRequest(event);
+  });
+})();
+
+</script>
+<script>
+const RA10_UNIT_SUBJECT = 'Sport';
+const RA10_CREDIT_CHIP_ID = 'unit1-credit-chip';
+const RA10_SUBJECT_BONUS = 300;
+const RA10_ACTION_COSTS = {
+  practice_question: 1,
+  quiz_question: 1,
+  revision_guide_full: 10,
+  flashcard_flip: 0,
+  mock_paper_gen: 5,
+  ai_mark: 3,
+  whatsapp_export: 2,
+  whatsapp_pdf: 3,
+};
+
+function _ra10GetSubjectStateKey(profile) {
+  const id = String(profile?.id || profile?.email || 'anon');
+  return 'ra10_subject_credit_state:' + id;
+}
+
+function _ra10ReadSubjectState(profile) {
+  try {
+    const raw = localStorage.getItem(_ra10GetSubjectStateKey(profile));
+    return raw ? JSON.parse(raw) : null;
+  } catch (e) {
+    return null;
+  }
+}
+
+function _ra10WriteSubjectState(profile, state) {
+  try {
+    localStorage.setItem(_ra10GetSubjectStateKey(profile), JSON.stringify(state));
+  } catch (e) {
+    // no-op
+  }
+}
+
+function _ra10SyncSubjectState(profile, totalCredits, ownedSubjects) {
+  const cleanOwned = Array.isArray(ownedSubjects) ? ownedSubjects.filter(Boolean) : [];
+  const ownedKey = cleanOwned.slice().sort().join('|');
+  const saved = _ra10ReadSubjectState(profile);
+  const prevOwned = (saved && typeof saved.ownedKey === 'string')
+    ? saved.ownedKey.split('|').filter(Boolean)
+    : [];
+  const prevOwnedSet = new Set(prevOwned);
+  const addedSubjects = cleanOwned.filter(subj => !prevOwnedSet.has(subj));
+  const addedSet = new Set(addedSubjects);
+
+  // Track per-subject spending so one subject purchase does not unlock all subjects.
+  const savedSpent = (saved && saved.subjectSpent && typeof saved.subjectSpent === 'object')
+    ? saved.subjectSpent
+    : {};
+  const hasSavedSpent = Object.keys(savedSpent).length > 0;
+  const subjectSpent = {};
+  const prevSubjectRemainingBySubject = {};
+  if (!hasSavedSpent && saved && Number.isFinite(saved.baselineRemaining) && Number.isFinite(saved.storedCreditsAtSync)) {
+    let budget = Math.max(0, Math.min(
+      Number(saved.storedCreditsAtSync) - Number(saved.baselineRemaining),
+      prevOwned.length * RA10_SUBJECT_BONUS,
+    ));
+    prevOwned.forEach((subj) => {
+      const alloc = Math.max(0, Math.min(RA10_SUBJECT_BONUS, budget));
+      prevSubjectRemainingBySubject[subj] = alloc;
+      budget -= alloc;
+    });
+  }
+  cleanOwned.forEach((subj) => {
+    let spent = 0;
+    if (hasSavedSpent) {
+      const raw = Number(savedSpent[subj] || 0);
+      spent = Math.max(0, Math.min(RA10_SUBJECT_BONUS, Math.floor(Number.isFinite(raw) ? raw : 0)));
+    } else if (Object.prototype.hasOwnProperty.call(prevSubjectRemainingBySubject, subj)) {
+      const prevRemaining = Number(prevSubjectRemainingBySubject[subj] || 0);
+      spent = Math.max(0, RA10_SUBJECT_BONUS - Math.max(0, Math.min(RA10_SUBJECT_BONUS, prevRemaining)));
+    }
+    subjectSpent[subj] = spent;
+  });
+
+  if (addedSubjects.length && window.RA10 && typeof RA10._appendCreditActivity === 'function') {
+    addedSubjects.forEach((subj) => {
+      RA10._appendCreditActivity({
+        type: 'gain',
+        source: 'subject_purchase',
+        amount: RA10_SUBJECT_BONUS,
+        note: 'Subject purchased: ' + subj,
+      });
+    });
+  }
+
+  let totalSubjectRemaining = cleanOwned.reduce((sum, subj) => {
+    const spent = Number(subjectSpent[subj] || 0);
+    return sum + Math.max(0, RA10_SUBJECT_BONUS - spent);
+  }, 0);
+
+  if (totalSubjectRemaining > totalCredits) {
+    let overflow = totalSubjectRemaining - totalCredits;
+    const trimOrder = cleanOwned
+      .filter(subj => !addedSet.has(subj))
+      .concat(cleanOwned.filter(subj => addedSet.has(subj)));
+    trimOrder.forEach((subj) => {
+      if (overflow <= 0) return;
+      const spent = Number(subjectSpent[subj] || 0);
+      const remaining = Math.max(0, RA10_SUBJECT_BONUS - spent);
+      const trim = Math.min(remaining, overflow);
+      subjectSpent[subj] = Math.min(RA10_SUBJECT_BONUS, spent + trim);
+      overflow -= trim;
+    });
+    totalSubjectRemaining = cleanOwned.reduce((sum, subj) => {
+      const spent = Number(subjectSpent[subj] || 0);
+      return sum + Math.max(0, RA10_SUBJECT_BONUS - spent);
+    }, 0);
+  }
+
+  const baselineRemaining = Math.max(0, Math.min(totalCredits, Math.floor(totalCredits - totalSubjectRemaining)));
+  const next = { ownedKey, baselineRemaining, storedCreditsAtSync: totalCredits, subjectSpent };
+  _ra10WriteSubjectState(profile, next);
+  return next;
+}
+
+function _ra10GetUnitCreditsContext() {
+  if (!window.RA10 || !RA10.isLoggedIn()) {
+    return null;
+  }
+  const profile = RA10.getProfile();
+  if (!profile) {
+    return null;
+  }
+
+  const tier = RA10.getTier();
+  const breakdown = (typeof RA10.getCreditBreakdown === 'function') ? RA10.getCreditBreakdown() : null;
+  const totalCredits = breakdown ? Number(breakdown.totalCredits || 0) : (Number(RA10.getCredits()) || 0);
+  const storedCredits = breakdown ? Number(breakdown.storedCredits || 0) : totalCredits;
+  const examBonusRemaining = breakdown ? Number(breakdown.examBonusRemaining || 0) : 0;
+  if (tier !== 'subject') {
+    return {
+      isSubjectTier: false,
+      ownsCurrentSubject: true,
+      usableCredits: totalCredits,
+      totalCredits,
+      storedCredits,
+      examBonusRemaining,
+      ownedSubjects: [],
+      baselineRemaining: totalCredits,
+    };
+  }
+
+  const ownedSubjects = Array.isArray(profile.unlocked_subjects)
+    ? profile.unlocked_subjects.filter(Boolean)
+    : [];
+  const state = _ra10SyncSubjectState(profile, storedCredits, ownedSubjects);
+  const ownsCurrentSubject = ownedSubjects.includes(RA10_UNIT_SUBJECT);
+  const subjectSpent = (state && state.subjectSpent && typeof state.subjectSpent === 'object')
+    ? Number(state.subjectSpent[RA10_UNIT_SUBJECT] || 0)
+    : 0;
+  const subjectCreditsRemaining = ownsCurrentSubject
+    ? Math.max(0, RA10_SUBJECT_BONUS - Math.max(0, Math.min(RA10_SUBJECT_BONUS, subjectSpent)))
+    : 0;
+  const usableCredits = (ownsCurrentSubject ? subjectCreditsRemaining : 0) + state.baselineRemaining + examBonusRemaining;
+
+  return {
+    isSubjectTier: true,
+    ownsCurrentSubject,
+    usableCredits,
+    totalCredits,
+    storedCredits,
+    examBonusRemaining,
+    ownedSubjects,
+    baselineRemaining: state.baselineRemaining,
+    subjectCreditsRemaining,
+  };
+}
+
+window._ra10GetUnitCreditsContext = _ra10GetUnitCreditsContext;
+
+async function _ra10RenderUnitCreditChip() {
+  if (!window.RA10) {
+    return;
+  }
+  await RA10.renderCreditChip(RA10_CREDIT_CHIP_ID);
+
+  const container = document.getElementById(RA10_CREDIT_CHIP_ID);
+  if (!container) {
+    return;
+  }
+
+  const ctx = _ra10GetUnitCreditsContext();
+  if (!ctx || !ctx.isSubjectTier) {
+    return;
+  }
+
+  const chip = container.firstElementChild;
+  if (!chip) {
+    return;
+  }
+  const spans = chip.querySelectorAll('span');
+  const creditsEl = spans.length > 1 ? spans[1] : null;
+  if (creditsEl) {
+    creditsEl.textContent = ctx.usableCredits + ' usable credits';
+  }
+}
+
+function _ra10RenderUnitAvatar() {
+  const btn = document.getElementById('unit-account-avatar');
+  if (!btn || !window.RA10) {
+    return;
+  }
+
+  btn.innerHTML = '';
+
+  if (!RA10.isLoggedIn()) {
+    btn.textContent = '?';
+    btn.setAttribute('title', 'Sign in');
+    btn.setAttribute('aria-label', 'Sign in');
+    return;
+  }
+
+  const profile = RA10.getProfile() || {};
+  const rawName = String(profile.display_name || profile.full_name || profile.email || 'User').trim();
+  const initials = rawName
+    .split(/\s+/)
+    .filter(Boolean)
+    .map(part => part.charAt(0))
+    .join('')
+    .slice(0, 2)
+    .toUpperCase() || 'U';
+  const imageUrl = String(profile.profile_pic_url || profile.avatar_url || '').trim();
+
+  if (imageUrl) {
+    const img = document.createElement('img');
+    img.src = imageUrl;
+    img.alt = '';
+    img.loading = 'lazy';
+    img.onerror = function() {
+      btn.innerHTML = '';
+      btn.textContent = initials;
+    };
+    btn.appendChild(img);
+  } else {
+    btn.textContent = initials;
+  }
+
+  btn.setAttribute('title', rawName);
+  btn.setAttribute('aria-label', 'Open account');
+}
+
+function _ra10GetActionCost(action) {
+  return Number(RA10_ACTION_COSTS[action] || 0);
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  function waitForRA10(cb, tries) {
+    tries = tries || 0;
+    if (window.RA10 && typeof RA10.init === 'function') {
+      cb();
+    } else if (tries < 50) {
+      setTimeout(function() { waitForRA10(cb, tries + 1); }, 100);
+    }
+  }
+
+  waitForRA10(async function() {
+    await RA10.init();
+
+    function updateCostLabels() {
+      const hide = RA10.isPaid() || RA10.isOwner();
+      document.querySelectorAll('.ra10-cost-label').forEach(el => {
+        el.style.display = hide ? 'none' : '';
+      });
+    }
+
+    updateCostLabels();
+    RA10.on('authchange', updateCostLabels);
+    RA10.on('authchange', function() {
+      _ra10RenderUnitCreditChip();
+      _ra10RenderUnitAvatar();
+      window._updateSubjectBanner();
+    });
+    RA10.on('creditschange', function() {
+      _ra10RenderUnitCreditChip();
+      window._updateSubjectBanner();
+    });
+    _ra10RenderUnitCreditChip();
+    _ra10RenderUnitAvatar();
+    window._updateSubjectBanner();
+  });
+});
+
+// Credit gate helper — returns true if action is allowed, false if blocked
+async function ra10Gate(action) {
+  try {
+    if (!window.RA10) return true;
+    if (RA10.isOwner()) return true;
+    if (!RA10.isLoggedIn()) {
+      const result = await RA10.guestGate(action, 3, RA10.showPaywall);
+      if (window.RA10) await _ra10RenderUnitCreditChip();
+      return result === true;
+    }
+
+    const ctx = _ra10GetUnitCreditsContext();
+    if (ctx && ctx.isSubjectTier) {
+      const cost = _ra10GetActionCost(action);
+      if (ctx.usableCredits < cost) {
+        RA10.showPaywall('credits', action);
+        return false;
+      }
+      const beforeStored = Number(ctx.storedCredits || 0);
+      const spent = await RA10.gate(action, RA10.showPaywall);
+      if (spent) {
+        const profile = RA10.getProfile();
+        const state = _ra10ReadSubjectState(profile);
+        if (state && Number.isFinite(state.baselineRemaining)) {
+          let deductedFromStored = cost;
+          let afterStored = NaN;
+          if (typeof RA10.getCreditBreakdown === 'function') {
+            afterStored = Number((RA10.getCreditBreakdown() || {}).storedCredits || 0);
+            deductedFromStored = Math.max(0, beforeStored - afterStored);
+          }
+          if (ctx.ownsCurrentSubject) {
+            state.subjectSpent = (state.subjectSpent && typeof state.subjectSpent === 'object') ? state.subjectSpent : {};
+            const currentSpent = Math.max(0, Math.min(RA10_SUBJECT_BONUS, Number(state.subjectSpent[RA10_UNIT_SUBJECT] || 0)));
+            const subjectRemaining = Math.max(0, RA10_SUBJECT_BONUS - currentSpent);
+            const fromSubject = Math.min(subjectRemaining, deductedFromStored);
+            const fromBaseline = Math.max(0, deductedFromStored - fromSubject);
+            state.subjectSpent[RA10_UNIT_SUBJECT] = Math.min(RA10_SUBJECT_BONUS, currentSpent + fromSubject);
+            state.baselineRemaining = Math.max(0, state.baselineRemaining - fromBaseline);
+          } else {
+            state.baselineRemaining = Math.max(0, state.baselineRemaining - deductedFromStored);
+          }
+          if (Number.isFinite(afterStored)) {
+            state.storedCreditsAtSync = afterStored;
+          }
+          _ra10WriteSubjectState(profile, state);
+        }
+        await _ra10RenderUnitCreditChip();
+        window._updateSubjectBanner();
+      }
+      return spent;
+    }
+
+    const result = await RA10.gate(action, RA10.showPaywall);
+    await _ra10RenderUnitCreditChip();
+    window._updateSubjectBanner();
+    return result;
+  } catch(e) {
+    console.warn('ra10Gate error', e);
+    return true;
+  }
+}
+
+async function _updateGuestChip() {
+  if (window.RA10) {
+    await _ra10RenderUnitCreditChip();
+    window._updateSubjectBanner();
+  }
+}
+
+// Clear sidebar cache when this iframe becomes visible so XP syncs across units
+document.addEventListener('visibilitychange', function() {
+  if (document.visibilityState === 'visible') {
+    window._sidebarCache = null;
+    if (typeof refreshProgressSidebar === 'function') refreshProgressSidebar(true);
+  }
+});
+</script></body>
+</html>

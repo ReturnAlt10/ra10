@@ -1970,6 +1970,40 @@ main {
   opacity: 0.6;
 }
 
+/* ── Finance Calculator ─────────────────────────────────── */
+.calc-shell { max-width: 860px; margin: 0 auto; }
+.calc-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
+.calc-tab {
+  border: 1px solid var(--line-2); background: var(--surface); color: var(--ink-2);
+  font: inherit; font-weight: 700; font-size: .88rem; padding: 10px 18px; border-radius: 999px; cursor: pointer;
+}
+.calc-tab:hover { border-color: #1a56db; color: #1a56db; }
+.calc-tab.active { background: #1a56db; border-color: #1a56db; color: #fff; }
+.calc-panel { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 22px; box-shadow: var(--shadow); }
+.calc-h { margin: 0 0 4px; font-size: 1.25rem; color: #1a56db; }
+.calc-sub { margin: 0 0 16px; color: var(--ink-2); font-size: .9rem; }
+.calc-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin-bottom: 16px; }
+.calc-field { display: flex; flex-direction: column; gap: 4px; }
+.calc-fld-label { font-size: .82rem; font-weight: 700; color: var(--ink-2); }
+.calc-fld-hint { font-size: .72rem; color: var(--ink-3); }
+.calc-input {
+  border: 1px solid var(--line-2); border-radius: 10px; background: var(--surface);
+  color: var(--ink); font: inherit; font-size: .95rem; padding: 10px 12px;
+}
+.calc-input:focus { outline: none; border-color: #1a56db; }
+.calc-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; }
+.calc-results { border-top: 1px solid var(--line); padding-top: 14px; }
+.calc-steps p { margin: 6px 0; font-size: .92rem; }
+.calc-steps b { color: #1a56db; }
+.calc-warn { color: #b54708; font-weight: 700; }
+.calc-ai-note { color: var(--ink-3); font-style: italic; font-size: .88rem; margin-top: 12px; }
+.calc-ai-card { background: #ecf1ff; border: 1px solid #dbe4ff; border-left: 4px solid #1a56db; border-radius: 10px; padding: 12px 14px; margin-top: 12px; }
+.calc-ai-card b { display: block; color: #1a3a8f; margin-bottom: 4px; }
+.calc-ai-card p { margin: 0; font-size: .9rem; }
+[data-theme="dark"] .calc-ai-card { background: #1a2231; border-color: #2a3550; }
+[data-theme="dark"] .calc-h { color: #6b9bff; }
+[data-theme="dark"] .calc-steps b { color: #6b9bff; }
+
 #view-questions .feature-section:nth-child(1)::before,
 #view-revise .feature-section:nth-child(1)::before {
   top: -70px;
