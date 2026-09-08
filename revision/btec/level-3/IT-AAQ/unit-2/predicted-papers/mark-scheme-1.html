@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BTEC IT Unit 2 — Mark Scheme Paper 1</title>
+<style>
+:root{--ink:#12213a;--muted:#5a6b82;--line:#d6deea;--paper:#fff;--accent:#1a56c4}
+body{font-family:"Segoe UI",Arial,sans-serif;max-width:960px;margin:24px auto;padding:0 16px;color:var(--ink);background:#eef2f7;line-height:1.55}
+h1,h2,h3{margin:.2rem 0}
+.meta{color:var(--muted);margin:0 0 14px;font-size:.92rem}
+.box{border:1px solid var(--line);background:var(--paper);border-radius:12px;padding:16px;margin:16px 0}
+.ans{margin:12px 0;padding:10px 0;border-bottom:1px dashed var(--line)}
+.ans:last-child{border-bottom:none}
+.qno{font-weight:700;color:var(--accent)}
+ul{margin:8px 0 0 18px}
+.levels{border-left:3px solid var(--accent);padding-left:12px;margin:10px 0;background:#f7fafe;border-radius:0 8px 8px 0;padding:10px 12px}
+table{width:100%;border-collapse:collapse;margin:10px 0}
+th,td{border:1px solid var(--line);padding:6px 8px;font-size:.88rem;vertical-align:top}
+th{background:#f2f6fb}
+.ao{color:var(--muted);font-size:.8rem;font-style:italic}
+</style>
+</head>
+<body>
+<h1>Mark Scheme — Predicted Paper 1</h1>
+<p class="meta">BTEC Level 3 AAQ IT Unit 2: Cyber Security &amp; Incident Management &bull; Total 90 marks</p>
+
+<section class="box">
+<h2>General marking guidance</h2>
+<ul>
+  <li>Apply marks positively; reward what the student has shown.</li>
+  <li>Accept incorrect/phonetic spelling if the term is recognisable.</li>
+  <li>Accept any other appropriate/alternative response unless stated otherwise.</li>
+  <li>For 9-mark &ldquo;Evaluate&rdquo; questions, use the Levels-Based Mark Scheme at the end of this document.</li>
+</ul>
+</section>
+
+<section class="box">
+<h2>Question 1</h2>
+<div class="ans"><p><span class="qno">1(a)(i)</span> State what is meant by phishing. <span class="ao">(2 marks)</span></p>
+<p>Award marks for a definition with linked expansion:</p>
+<ul>
+  <li>Fraudulent/emails that appear to come from a trusted source (1)</li>
+  <li>intended to trick the recipient into revealing personal information or opening a malicious link/attachment (1)</li>
+</ul></div>
+
+<div class="ans"><p><span class="qno">1(a)(ii)</span> Explain one difference between phishing and spear phishing. <span class="ao">(3 marks)</span></p>
+<ul>
+  <li>Phishing is mass/generic, sent to many people (1)</li>
+  <li>Spear phishing is targeted at a specific individual using personal research about them (1)</li>
+  <li>link to increased chance of success / harder to detect (1)</li>
+</ul></div>
+
+<div class="ans"><p><span class="qno">1(b)(i)</span> Identify the type of malware. <span class="ao">(1 mark)</span></p>
+<ul><li>Ransomware (1)</li></ul></div>
+
+<div class="ans"><p><span class="qno">1(b)(ii)</span> Explain one countermeasure to reduce spread. <span class="ao">(3 marks)</span></p>
+<ul>
+  <li>Staff training/phishing awareness (1)</li>
+  <li>so staff recognise and do not open suspicious attachments (1)</li>
+  <li>reducing the chance of infection at source (1)</li>
+</ul>
+<p>Accept: email filtering, antivirus/antimalware, network segmentation, backups.</p></div>
+
+<div class="ans"><p><span class="qno">1(c)</span> Describe one security risk of BYOD. <span class="ao">(4 marks)</span></p>
+<ul>
+  <li>Personal devices may not be patched/updated (1)</li>
+  <li>so they carry known vulnerabilities (1)</li>
+  <li>organisational data stored on a private device may be exposed if the device is lost/stolen (1)</li>
+  <li>and it is harder for the organisation to enforce its own security policy (1)</li>
+</ul></div>
+
+<div class="ans"><p><span class="qno">1(d)</span> Evaluate the effectiveness of the backup strategy. <span class="ao">(9 marks)</span></p>
+<div class="levels">
+<p><strong>Indicative content:</strong></p>
+<ul>
+  <li><strong>Strengths:</strong> RAID 1 provides redundancy against single drive failure; daily backup provides some recoverability.</li>
+  <li><strong>Weaknesses:</strong> single USB drive rotated daily means only one copy and it may be overwritten before ransomware is detected; RAID 1 is not a backup (mirrors corruption/deletion too); no off-site/cloud backup; no testing of restore process; USB drive kept onsite is vulnerable to theft/fire/ransomware.</li>
+  <li><strong>Judgement:</strong> strategy is inadequate &mdash; does not follow the 3-2-1 rule, lacks off-site storage and restore testing.</li>
+</ul>
+</div></div>
+</section>
+
+<section class="box">
+<h2>Question 2</h2>
+<div class="ans"><p><span class="qno">2(a)</span> Explain the risk of a shared switch and the change needed. <span class="ao">(6 marks)</span></p>
+<ul>
+  <li>Guest traffic shares hardware with the internal network (1)</li>
+  <li>guests could access/scan internal devices (1)</li>
+  <li>malware on guest devices could spread to internal systems (1)</li>
+  <li>use a second switch / VLANs to segment the network (1)</li>
+  <li>so guest traffic only reaches the internet (1)</li>
+  <li>and cannot reach internal servers/staff systems (1)</li>
+</ul></div>
+
+<div class="ans"><p><span class="qno">2(b)(i)</span> State the purpose of an SSID. <span class="ao">(1 mark)</span></p>
+<ul><li>To identify/name the wireless network (1)</li></ul></div>
+
+<div class="ans"><p><span class="qno">2(b)(ii)</span> Explain one consequence for guests if the SSID is hidden. <span class="ao">(3 marks)</span></p>
+<ul>
+  <li>Guests cannot see the network listed on their device (1)</li>
+  <li>so they must ask staff for the network details (1)</li>
+  <li>which is inconvenient / slows the connection process (1)</li>
+</ul></div>
+
+<div class="ans"><p><span class="qno">2(c)</span> Evaluate the use of MAC address filtering. <span class="ao">(9 marks)</span></p>
+<div class="levels">
+<p><strong>Indicative content:</strong></p>
+<ul>
+  <li><strong>Staff network:</strong> set list once; only update for new devices; blocks unlisted devices.</li>
+  <li><strong>Guest network:</strong> need to add each new guest device; time/resource overhead; WAPs have limited MAC list sizes; inconvenient for new guests who must find their MAC address.</li>
+  <li><strong>General:</strong> MAC addresses can be spoofed so only medium security; cost-benefit differs between staff and guest networks.</li>
+</ul>
+</div></div>
+
+<div class="ans"><p><span class="qno">2(d)</span> Describe how the VPN functions and one drawback. <span class="ao">(4 marks)</span></p>
+<ul>
+  <li>Establishes an encrypted/protected connection over the internet (1)</li>
+  <li>data is encrypted so it cannot be read if intercepted (1)</li>
+  <li>reduces risk of man-in-the-middle attack (1)</li>
+  <li>Drawback: cost of running the server, or slower speed, or higher data usage (1)</li>
+</ul></div>
+</section>
+
+<section class="box">
+<h2>Question 3</h2>
+<div class="ans"><p><span class="qno">3(a)</span> State the four stages of Plan-Do-Check-Act. <span class="ao">(2 marks)</span></p>
+<ul><li>Plan, Do, Check, Act &mdash; award &frac12; per stage, any two correct stages for 1 mark (2 marks for all four)</li></ul></div>
+
+<div class="ans"><p><span class="qno">3(b)</span> Give two other sections of a password policy. <span class="ao">(2 marks)</span></p>
+<ul>
+  <li>Frequency of password reuse / minimum password age (1)</li>
+  <li>Prevent password sharing / disallow personal names and birthdays (1)</li>
+</ul>
+<p>Accept: lockout policy, deny lists of common passwords.</p></div>
+
+<div class="ans"><p><span class="qno">3(c)</span> Role of DPO and importance of data protection policy. <span class="ao">(6 marks)</span></p>
+<ul>
+  <li>DPO monitors compliance with GDPR/data protection principles (1)</li>
+  <li>advises on data protection obligations and staff training (1)</li>
+  <li>acts as contact point for the regulator and data subjects (1)</li>
+  <li>policy protects rights/privacy of data subjects (1)</li>
+  <li>ensures system security procedures are followed (1)</li>
+  <li>applies to external contractors/vendors who handle data (1)</li>
+</ul></div>
+
+<div class="ans"><p><span class="qno">3(d)</span> Three contacts in an incident response policy. <span class="ao">(6 marks)</span></p>
+<ul>
+  <li>Incident response team leader/provider &mdash; coordinates the response (2)</li>
+  <li>Senior management &mdash; authorises decisions and resources (2)</li>
+  <li>Legal / public relations / HR / insurance &mdash; manages legal, reputational and staff implications (2)</li>
+</ul></div>
+
+<div class="ans"><p><span class="qno">3(e)</span> Purpose of disaster recovery policy and three triage plans. <span class="ao">(6 marks)</span></p>
+<ul>
+  <li>Purpose: defines how the organisation recovers IT/operations after a major incident (2)</li>
+  <li>Triage activates: cyber security incident response plan (1)</li>
+  <li>business continuity plan (1)</li>
+  <li>disaster recovery plan (1)</li>
+  <li>plus linked expansion of purpose (1)</li>
+</ul></div>
+</section>
+
+<section class="box">
+<h2>Question 4</h2>
+<div class="ans"><p><span class="qno">4(a)</span> Two actions to preserve a seized device. <span class="ao">(2 marks)</span></p>
+<ul>
+  <li>Isolate from network/communications (1)</li>
+  <li>Retain current power state / photograph the screen (1)</li>
+</ul>
+<p>Accept: use Faraday bag, document chain of custody, appropriate packaging.</p></div>
+
+<div class="ans"><p><span class="qno">4(b)</span> Importance of chain of custody. <span class="ao">(5 marks)</span></p>
+<ul>
+  <li>Records who has handled the evidence at every stage (1)</li>
+  <li>proves the evidence has not been altered/tampered with (1)</li>
+  <li>so evidence remains admissible in legal proceedings (1)</li>
+  <li>documents responsibility for collection/decisions (1)</li>
+  <li>creates an unbroken trail from seizure to court (1)</li>
+</ul></div>
+
+<div class="ans"><p><span class="qno">4(c)</span> Why a hash is generated for a forensic copy. <span class="ao">(4 marks)</span></p>
+<ul>
+  <li>A hash/checksum is a unique digital fingerprint of the data (1)</li>
+  <li>comparing hashes verifies the copy is identical to the original (1)</li>
+  <li>any change to the data produces a different hash (1)</li>
+  <li>so integrity of the evidence can be proven (1)</li>
+</ul></div>
+
+<div class="ans"><p><span class="qno">4(d)</span> Three indicators of compromise. <span class="ao">(8 marks)</span></p>
+<ul>
+  <li>Unusual inbound/outbound traffic or traffic from unusual geographical regions (2)</li>
+  <li>Unusual login attempts / unusual DNS requests (2)</li>
+  <li>Increase in file/data reads or requests / unusual port usage (2)</li>
+  <li>Suspicious changes to files or system data (2)</li>
+</ul></div>
+
+<div class="ans"><p><span class="qno">4(e)</span> Report structure and improvements. <span class="ao">(4 marks)</span></p>
+<ul>
+  <li>Structure: title, contents, introduction, headings/sub-headings, conclusions (2)</li>
+  <li>Improvements: improvements to IT policies; improvements to security protection measures (physical, software, hardware, processes, training) (2)</li>
+</ul></div>
+</section>
+
+<section class="box">
+<h2>Levels-Based Mark Scheme (for 9-mark Evaluate questions)</h2>
+<table>
+  <tr><th>Level</th><th>Mark</th><th>Descriptor</th></tr>
+  <tr><td>0</td><td>0</td><td>No rewardable material</td></tr>
+  <tr><td>1</td><td>1&ndash;3</td><td>Basic application, one side only; superficial analysis; superficial/unsupported conclusion (AO2, AO3a, AO3b)</td></tr>
+  <tr><td>2</td><td>4&ndash;6</td><td>Good application, both sides; good analysis; partially supported conclusion</td></tr>
+  <tr><td>3</td><td>7&ndash;9</td><td>Comprehensive balanced application; thorough analysis; well-supported conclusion</td></tr>
+</table>
+</section>
+</body>
+</html>

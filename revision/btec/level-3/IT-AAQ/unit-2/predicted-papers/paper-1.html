@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BTEC IT Unit 2 — Predicted Paper 1</title>
+<style>
+:root{--ink:#12213a;--muted:#5a6b82;--line:#d6deea;--paper:#fff;--accent:#1a56c4;--scenario:#f2f6fb}
+body{font-family:"Segoe UI",Arial,sans-serif;max-width:960px;margin:24px auto;padding:0 16px;color:var(--ink);background:#eef2f7;line-height:1.55}
+h1,h2,h3{margin:.2rem 0}
+.meta{color:var(--muted);margin:0 0 14px;font-size:.92rem}
+.box{border:1px solid var(--line);background:var(--paper);border-radius:12px;padding:16px;margin:16px 0}
+.scenario{background:var(--scenario)}
+.m{float:right;font-weight:700;color:var(--accent)}
+.q{margin:14px 0;padding:10px 0;border-bottom:1px dashed var(--line)}
+.q:last-child{border-bottom:none}
+.sub{margin:10px 0 10px 14px}
+.marks-label{color:var(--muted);font-size:.85rem}
+hr{border:none;border-top:1px dashed var(--line);margin:12px 0}
+ul{margin:8px 0 0 18px}
+.print-hint{background:#fff7e6;border:1px solid #f0d9a8;border-radius:8px;padding:10px 14px;margin:16px 0;font-size:.88rem;color:#7a5a00}
+@media print{.box{break-inside:avoid}}
+</style>
+</head>
+<body>
+<h1>BTEC Level 3 AAQ IT — Unit 2: Cyber Security &amp; Incident Management</h1>
+<p class="meta">Predicted Paper 1 &bull; Time: 2 hours 15 minutes &bull; Total marks: 90 &bull; First assessment May/June 2026</p>
+<p class="print-hint">&#128203; Practice tip: aim for roughly 1.5 minutes per mark. This is a predicted paper &mdash; not an official Pearson paper.</p>
+
+<section class="box scenario">
+  <h2>SECTION A</h2>
+  <p>Read the scenario below carefully. Answer <strong>ALL</strong> questions.</p>
+
+  <h3>Greenfield Logistics Ltd</h3>
+  <p>Greenfield Logistics Ltd is a UK distribution company with 14 warehouses and a central head office. It recently adopted a hybrid working policy: office staff connect from home using personal laptops, while warehouse staff use handheld scanners connected over Wi-Fi.</p>
+  <p>The network has been flagged with several weaknesses after a recent audit. Staff connect personal mobile devices to a guest Wi-Fi network that shares a single switch with the main office network. The guest network has no MAC address filtering and broadcasts a default SSID. Remote workers connect over a VPN run from a Greenfield server.</p>
+  <p>Last month a warehouse computer was infected after an employee opened a phishing email and downloaded an attachment. The malware encrypted several shared folders and a ransom demanded payment in cryptocurrency. Greenfield's backup strategy currently relies on a single USB drive rotated daily and RAID 1 on the file server.</p>
+</section>
+
+<section class="box">
+<h2>Question 1</h2>
+<p class="marks-label">Threats, vulnerabilities and protection methods</p>
+
+<div class="q">
+  <p><strong>1 (a)</strong> Greenfield was attacked after an employee opened a phishing email.</p>
+  <div class="sub">
+    <p><strong>(i)</strong> State what is meant by <em>phishing</em>. <span class="m">(2)</span></p>
+    <p><strong>(ii)</strong> Explain one difference between phishing and <em>spear phishing</em>. <span class="m">(3)</span></p>
+  </div>
+</div>
+
+<div class="q">
+  <p><strong>1 (b)</strong> The malware that infected the warehouse computer encrypted shared folders and demanded a ransom.</p>
+  <div class="sub">
+    <p><strong>(i)</strong> Identify the type of malware described. <span class="m">(1)</span></p>
+    <p><strong>(ii)</strong> Explain one countermeasure that would reduce the risk of this malware spreading. <span class="m">(3)</span></p>
+  </div>
+</div>
+
+<div class="q">
+  <p><strong>1 (c)</strong> Remote workers use personal laptops to connect over a VPN.</p>
+  <p>Describe one security risk of allowing staff to use personal devices for work (BYOD). <span class="m">(4)</span></p>
+</div>
+
+<div class="q">
+  <p><strong>1 (d)</strong> Greenfield's backup strategy uses a single daily USB drive and RAID 1 on the file server.</p>
+  <p>Evaluate the effectiveness of Greenfield's current backup strategy. <span class="m">(9)</span></p>
+</div>
+
+<hr><p><strong>(Total for Question 1 = 22 marks)</strong></p>
+</section>
+
+<section class="box">
+<h2>Question 2</h2>
+<p class="marks-label">Networking architectures and principles for security</p>
+
+<div class="q">
+  <p><strong>2 (a)</strong> The guest Wi-Fi shares a single switch with the main office network.</p>
+  <p>Explain how this is a security risk and how the network should be changed to reduce it. <span class="m">(6)</span></p>
+</div>
+
+<div class="q">
+  <p><strong>2 (b)</strong> The guest Wi-Fi broadcasts a default SSID and has no MAC address filtering.</p>
+  <div class="sub">
+    <p><strong>(i)</strong> State the purpose of an SSID. <span class="m">(1)</span></p>
+    <p><strong>(ii)</strong> Explain one consequence for guests if the SSID is hidden. <span class="m">(3)</span></p>
+  </div>
+</div>
+
+<div class="q">
+  <p><strong>2 (c)</strong> Greenfield is considering using MAC address filtering on the guest and staff Wi-Fi.</p>
+  <p>Evaluate the use of MAC address filtering on Greenfield's Wi-Fi. <span class="m">(9)</span></p>
+</div>
+
+<div class="q">
+  <p><strong>2 (d)</strong> Greenfield's remote workers connect using a VPN run from a Greenfield server.</p>
+  <p>Describe how this VPN functions and state one drawback of using it. <span class="m">(4)</span></p>
+</div>
+
+<hr><p><strong>(Total for Question 2 = 23 marks)</strong></p>
+</section>
+
+<section class="box">
+<h2>Question 3</h2>
+<p class="marks-label">Cyber security documentation</p>
+
+<div class="q">
+  <p><strong>3 (a)</strong> Following the ransomware incident, Greenfield is reviewing its internal IT security policies.</p>
+  <p>State the four stages of the Plan-Do-Check-Act loop used in a cyber security policy. <span class="m">(2)</span></p>
+</div>
+
+<div class="q">
+  <p><strong>3 (b)</strong> Greenfield's staff password policy currently only specifies length and complexity.</p>
+  <p>Give two other sections that a password policy should contain. <span class="m">(2)</span></p>
+</div>
+
+<div class="q">
+  <p><strong>3 (c)</strong> Explain the role of a Data Protection Officer and why a data protection policy is important to Greenfield. <span class="m">(6)</span></p>
+</div>
+
+<div class="q">
+  <p><strong>3 (d)</strong> Greenfield is producing a cyber security incident response policy.</p>
+  <p>Describe three contacts that should be listed in the policy and explain why each is needed. <span class="m">(6)</span></p>
+</div>
+
+<div class="q">
+  <p><strong>3 (e)</strong> Explain the purpose of a disaster recovery policy and state the three plans its triage process may activate. <span class="m">(6)</span></p>
+</div>
+
+<hr><p><strong>(Total for Question 3 = 22 marks)</strong></p>
+</section>
+
+<section class="box">
+<h2>Question 4</h2>
+<p class="marks-label">Forensic procedures</p>
+
+<div class="q">
+  <p><strong>4 (a)</strong> Following the ransomware attack, a forensic investigator seizes the infected warehouse computer.</p>
+  <p>State two actions the investigator should take to preserve the device for forensic analysis. <span class="m">(2)</span></p>
+</div>
+
+<div class="q">
+  <p><strong>4 (b)</strong> Explain the importance of documenting the chain of custody when collecting forensic evidence. <span class="m">(5)</span></p>
+</div>
+
+<div class="q">
+  <p><strong>4 (c)</strong> The investigator creates a forensic image of the computer's drive and generates a hash of the image.</p>
+  <p>Explain why a hash (checksum) is generated for a forensic copy. <span class="m">(4)</span></p>
+</div>
+
+<div class="q">
+  <p><strong>4 (d)</strong> The investigator must assess network logs for evidence that the system was compromised externally.</p>
+  <p>Describe three indicators of compromise the investigator may look for. <span class="m">(8)</span></p>
+</div>
+
+<div class="q">
+  <p><strong>4 (e)</strong> The investigator writes a security report for Greenfield's management.</p>
+  <p>Explain the structure of the report and state two categories of improvement it should recommend. <span class="m">(4)</span></p>
+</div>
+
+<hr><p><strong>(Total for Question 4 = 23 marks)</strong></p>
+<p><strong>TOTAL FOR SECTION A = 90 MARKS</strong></p>
+</section>
+
+<section class="box">
+<h2>Examiner reminders</h2>
+<ul>
+  <li>For &ldquo;Explain&rdquo; questions, give a point <strong>and</strong> a linked justification/expansion.</li>
+  <li>For 9-mark &ldquo;Evaluate&rdquo; questions, consider both sides and finish with a supported judgement; use the Levels-Based Mark Scheme (Level 1&ndash;3).</li>
+  <li>Use the scenario context &mdash; mention Greenfield, its staff, guests and remote workers where relevant.</li>
+</ul>
+</section>
+</body>
+</html>

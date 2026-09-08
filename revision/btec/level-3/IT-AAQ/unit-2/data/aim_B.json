@@ -1,540 +1,540 @@
 [
-  {
-    "id": "B001",
-    "learning_aim": "B",
-    "topic": "B1.1 Network types",
-    "command_verb": "State",
-    "marks": 1,
-    "ao": "AO1",
-    "question": "State what WLAN stands for.",
-    "type": "short",
-    "mark_scheme": {
-      "instruction": "Award one mark.",
-      "points": [
-        "Wireless Local Area Network (1)"
-      ]
-    }
-  },
-  {
-    "id": "B002",
-    "learning_aim": "B",
-    "topic": "B1.1 Network types",
-    "command_verb": "Describe",
-    "marks": 2,
-    "ao": "AO1",
-    "question": "Describe the difference between an intranet and an extranet.",
-    "guidance": "(2)",
-    "type": "short",
-    "mark_scheme": {
-      "instruction": "Award up to two marks.",
-      "points": [
-        "An intranet is a private network accessible only to an organisation's internal employees/members (1)",
-        "An extranet extends the intranet to authorised external parties such as suppliers, partners or customers, typically via secure login over the internet (1)"
-      ]
-    }
-  },
-  {
-    "id": "B003",
-    "learning_aim": "B",
-    "topic": "B1.2 Network topologies",
-    "command_verb": "Explain",
-    "marks": 3,
-    "ao": "AO2",
-    "scenario": "An IT services company is designing a network where reliability is critical.",
-    "question": "Explain the advantages and disadvantages of a star topology for this network.",
-    "guidance": "(3)",
-    "type": "short",
-    "mark_scheme": {
-      "instruction": "Award up to three marks.",
-      "points": [
-        "Advantage: if one device/cable fails, only that device is affected â€” the rest of the network continues to function (1)",
-        "Advantage: easy to add or remove devices without disrupting the network (1)",
-        "Disadvantage: the central switch/hub is a single point of failure â€” if it fails, the entire network goes down (1)"
-      ]
-    }
-  },
-  {
-    "id": "B004",
-    "learning_aim": "B",
-    "topic": "B1.3 Network architecture",
-    "command_verb": "State",
-    "marks": 1,
-    "ao": "AO1",
-    "question": "State one advantage of a client-server network over a peer-to-peer network.",
-    "type": "short",
-    "mark_scheme": {
-      "instruction": "Award one mark.",
-      "points": [
-        "Centralised management of users, files and security policies (1)",
-        "Centralised backup of all data on the server (1)",
-        "Better scalability â€” can support many more users (1)",
-        "Stronger security through centralised access control (1)"
-      ],
-      "additional_guidance": "Accept any one valid advantage."
-    }
-  },
-  {
-    "id": "B005",
-    "learning_aim": "B",
-    "topic": "B1.4 Modern trends",
-    "command_verb": "Explain",
-    "marks": 4,
-    "ao": "AO2",
-    "scenario": "A manufacturing company allows employees to use their personal smartphones and laptops for work (BYOD).",
-    "question": "Explain the security issues associated with a BYOD policy and how they can be mitigated.",
-    "guidance": "(4)",
-    "type": "short",
-    "mark_scheme": {
-      "instruction": "Award up to four marks.",
-      "points": [
-        "Issue: organisational data stored on personal devices may be accessed by family members or others â€” risk of data breach (1)",
-        "Issue: personal devices may not have up-to-date security patches or antivirus, increasing vulnerability (1)",
-        "Mitigation: implement Mobile Device Management (MDM) to enforce security policies, remote wipe capability, and separate work/personal profiles (1)",
-        "Mitigation: require VPN for all work connections and encrypt all organisational data on the device (1)"
-      ]
-    }
-  },
-  {
-    "id": "B006",
-    "learning_aim": "B",
-    "topic": "B1.4 Modern trends",
-    "command_verb": "Describe",
-    "marks": 2,
-    "ao": "AO1",
-    "question": "Describe one security concern associated with Internet of Things (IoT) devices.",
-    "guidance": "(2)",
-    "type": "short",
-    "mark_scheme": {
-      "instruction": "Award up to two marks.",
-      "points": [
-        "Many IoT devices ship with default passwords/security settings that users never change, making them easy targets for attackers (1)",
-        "IoT devices often lack regular security updates/patches, leaving known vulnerabilities permanently exploitable â€” compromised devices can be recruited into botnets for DDoS attacks (1)"
-      ]
-    }
-  },
-  {
-    "id": "B007",
-    "learning_aim": "B",
-    "topic": "B2.2 Connectivity devices",
-    "command_verb": "Identify",
-    "marks": 1,
-    "ao": "AO1",
-    "question": "Identify the network device that connects multiple networks together and forwards data packets between them based on IP addresses.",
-    "type": "short",
-    "mark_scheme": {
-      "instruction": "Award one mark.",
-      "points": [
-        "Router (1)"
-      ]
-    }
-  },
-  {
-    "id": "B008",
-    "learning_aim": "B",
-    "topic": "B2.2 Connectivity devices",
-    "command_verb": "Explain",
-    "marks": 3,
-    "ao": "AO2",
-    "question": "Explain the difference between a managed and an unmanaged switch.",
-    "guidance": "(3)",
-    "type": "short",
-    "mark_scheme": {
-      "instruction": "Award up to three marks.",
-      "points": [
-        "An unmanaged switch is plug-and-play â€” it simply connects devices and forwards data automatically without any configuration (1)",
-        "A managed switch allows administrators to configure settings such as VLANs, port security, bandwidth control, and Quality of Service (QoS) (1)",
-        "Managed switches provide greater security (e.g. MAC address filtering, disabling unused ports) and monitoring (SNMP) but cost more and require skilled administration (1)"
-      ]
-    }
-  },
-  {
-    "id": "B009",
-    "learning_aim": "B",
-    "topic": "B2.3 Connection media",
-    "command_verb": "Compare",
-    "marks": 4,
-    "ao": "AO3a",
-    "question": "Compare and contrast Wi-Fi (802.11) and Ethernet (wired) connections for a business network, including security considerations.",
-    "guidance": "(4)",
-    "type": "short",
-    "mark_scheme": {
-      "instruction": "Award up to four marks â€” must include at least one security point.",
-      "points": [
-        "Ethernet is faster and more reliable â€” less susceptible to interference, consistent speeds up to 10 Gbps on Cat 6a (1)",
-        "Wi-Fi offers mobility and flexibility â€” no cabling required, supports BYOD, but speeds are variable and affected by distance/walls/interference (1)",
-        "Ethernet is inherently more secure â€” physical access to the network is required to intercept data (1)",
-        "Wi-Fi is more vulnerable â€” signals broadcast through the air can be intercepted; requires encryption (WPA3), strong passwords, MAC filtering and hidden SSID to mitigate (1)"
-      ]
-    }
-  },
-  {
-    "id": "B010",
-    "learning_aim": "B",
-    "topic": "B2.3 Connection media",
-    "command_verb": "State",
-    "marks": 1,
-    "ao": "AO1",
-    "question": "State the typical maximum range of a Bluetooth 5.0 connection.",
-    "type": "short",
-    "mark_scheme": {
-      "instruction": "Award one mark.",
-      "points": [
-        "Approximately 10â€“40 metres, depending on conditions and device class (1)"
-      ],
-      "additional_guidance": "Accept: 10m to 40m, or within this range."
-    }
-  },
-  {
-    "id": "B011",
-    "learning_aim": "B",
-    "topic": "B3.2 Ports and protocols",
-    "command_verb": "Identify",
-    "marks": 1,
-    "ao": "AO1",
-    "question": "Identify the default port number used by HTTPS.",
-    "type": "short",
-    "mark_scheme": {
-      "instruction": "Award one mark.",
-      "points": [
-        "Port 443 (1)"
-      ]
-    }
-  },
-  {
-    "id": "B012",
-    "learning_aim": "B",
-    "topic": "B3.2 Ports and protocols",
-    "command_verb": "Describe",
-    "marks": 2,
-    "ao": "AO1",
-    "question": "Describe the difference between TCP and UDP transport protocols.",
-    "guidance": "(2)",
-    "type": "short",
-    "mark_scheme": {
-      "instruction": "Award up to two marks.",
-      "points": [
-        "TCP is connection-oriented â€” it establishes a connection, guarantees delivery, and reorders packets if they arrive out of sequence (reliable) (1)",
-        "UDP is connectionless â€” it sends data without establishing a connection first, no guarantee of delivery, no reordering; it is faster but less reliable, suitable for streaming/voice/video where some packet loss is acceptable (1)"
-      ]
-    }
-  },
-  {
-    "id": "B013",
-    "learning_aim": "B",
-    "topic": "B3.3 IP addressing",
-    "command_verb": "State",
-    "marks": 1,
-    "ao": "AO1",
-    "question": "State the purpose of Network Address Translation (NAT).",
-    "type": "short",
-    "mark_scheme": {
-      "instruction": "Award one mark.",
-      "points": [
-        "NAT translates private/internal IP addresses to a public IP address (and vice versa), allowing multiple devices on a private network to share a single public IP address for internet access, while hiding the internal network structure for security (1)"
-      ]
-    }
-  },
-  {
-    "id": "B014",
-    "learning_aim": "B",
-    "topic": "B3.4 DNS",
-    "command_verb": "Explain",
-    "marks": 3,
-    "ao": "AO2",
-    "question": "Explain the DNS resolution process when a user types www.example.com into their browser.",
-    "guidance": "(3)",
-    "type": "short",
-    "mark_scheme": {
-      "instruction": "Award up to three marks.",
-      "points": [
-        "The browser checks its local DNS cache; if not found, the query is sent to the configured DNS resolver/recursive server (1)",
-        "The DNS resolver queries the root server, then the TLD (.com) server, then the authoritative name server for example.com (1)",
-        "The authoritative server returns the IP address, which is cached by the resolver and returned to the browser â€” the browser then connects to that IP address (1)"
-      ]
-    }
-  },
-  {
-    "id": "B015",
-    "learning_aim": "B",
-    "topic": "B3.5 DHCP",
-    "command_verb": "Describe",
-    "marks": 2,
-    "ao": "AO1",
-    "question": "Describe the DORA process in DHCP.",
-    "guidance": "(2)",
-    "type": "short",
-    "mark_scheme": {
-      "instruction": "Award up to two marks.",
-      "points": [
-        "Discover: the client broadcasts a DHCPDISCOVER message to find available DHCP servers (1)",
-        "Offer: the DHCP server responds with a DHCPOFFER containing a proposed IP address (1)",
-        "Request: the client sends a DHCPREQUEST to accept the offered address (1)",
-        "Acknowledge: the server confirms with a DHCPACK, and the client can now use the IP address for the lease duration (1)"
-      ],
-      "additional_guidance": "Award 2 marks for any two of the four stages correctly described."
-    }
-  },
-  {
-    "id": "B016",
-    "learning_aim": "B",
-    "topic": "B1.2 Network topologies",
-    "command_verb": "Explain",
-    "marks": 4,
-    "ao": "AO2",
-    "scenario": "A secondary school is designing a new network for 200 workstations across 10 classrooms.",
-    "question": "Explain why a star topology would be the most appropriate choice for the school network.",
-    "guidance": "(4)",
-    "type": "short",
-    "mark_scheme": {
-      "instruction": "Award up to four marks.",
-      "points": [
-        "Each classroom can have its own switch, and if one cable fails only that device is affected — the rest of the network continues to function (1)",
-        "Easy to add new devices without disrupting the network — important as the school expands its IT provision (1)",
-        "Fault isolation is simple — a faulty device or cable can be quickly identified and replaced without affecting others (1)",
-        "The central switch in each room can implement port security, VLANs for different user groups (staff vs students), which enhances security (1)"
-      ]
-    }
-  },
-  {
-    "id": "B017",
-    "learning_aim": "B",
-    "topic": "B1.4 IoT security",
-    "command_verb": "Explain",
-    "marks": 4,
-    "ao": "AO2",
-    "scenario": "A manufacturing company has installed IoT sensors on all production equipment to monitor performance in real time.",
-    "question": "Explain the security risks associated with connecting IoT sensors to the company network and recommend two mitigation measures.",
-    "guidance": "(4)",
-    "type": "short",
-    "mark_scheme": {
-      "instruction": "Award up to four marks.",
-      "points": [
-        "Risk: IoT devices often ship with default passwords and lack regular security updates — they become easy entry points for attackers (1)",
-        "Risk: Once compromised, IoT devices can be recruited into botnets or used as a pivot point to access the main corporate network (1)",
-        "Mitigation: Segment IoT devices onto a separate VLAN isolated from the main corporate network — limits lateral movement if compromised (1)",
-        "Mitigation: Change all default credentials immediately, implement network access control (802.1X), and maintain a regular patching schedule for all IoT firmware (1)"
-      ]
-    }
-  },
-  {
-    "id": "B018",
-    "learning_aim": "B",
-    "topic": "B3.4 DNS",
-    "command_verb": "Describe",
-    "marks": 3,
-    "ao": "AO1",
-    "question": "Describe the DNS resolution process when a user enters www.bank.com into their browser.",
-    "guidance": "(3)",
-    "type": "short",
-    "mark_scheme": {
-      "instruction": "Award up to three marks.",
-      "points": [
-        "Browser checks local DNS cache; if not found, query is sent to the configured DNS recursive resolver (1)",
-        "The resolver queries the root server, then the .com TLD server, then the authoritative name server for bank.com (1)",
-        "The authoritative server returns the IP address which is cached at each level and returned to the browser, which then connects to that IP (1)"
-      ]
-    }
-  },
-  {
-    "id": "B019",
-    "learning_aim": "B",
-    "topic": "B3.9 VPN",
-    "command_verb": "Explain",
-    "marks": 4,
-    "ao": "AO2",
-    "scenario": "A financial services company has employees working remotely who need secure access to internal financial systems.",
-    "question": "Explain how a VPN provides secure remote access and why it is necessary for this scenario.",
-    "guidance": "(4)",
-    "type": "short",
-    "mark_scheme": {
-      "instruction": "Award up to four marks.",
-      "points": [
-        "A VPN creates an encrypted tunnel between the remote employee device and the company network — all data is encrypted in transit (1)",
-        "Without a VPN, data transmitted over the public internet could be intercepted (MITM attack) — financial data is highly sensitive (1)",
-        "The VPN authenticates the user before granting access — ensures only authorised employees can reach internal systems (1)",
-        "Additional: VPN allows the employee to access internal resources (file servers, databases) as if they were physically in the office, maintaining productivity with security (1)"
-      ]
-    }
-  },
-  {
-    "id": "B020",
-    "learning_aim": "B",
-    "topic": "B1.4 BYOD",
-    "command_verb": "Evaluate",
-    "marks": 6,
-    "ao": "AO3b",
-    "scenario": "A large organisation is considering implementing a BYOD policy to reduce hardware costs.",
-    "question": "Evaluate the security implications of implementing BYOD and recommend how the risks can be managed.",
-    "guidance": "(6)",
-    "type": "short",
-    "mark_scheme": {
-      "instruction": "Award up to six marks.",
-      "points": [
-        "Risk: Organisational data stored on personal devices may be accessed by family members, friends, or anyone who borrows the device (1)",
-        "Risk: Personal devices may not have up-to-date security patches, antivirus, or encryption — they may already be compromised before connecting (1)",
-        "Risk: Difficult to enforce password policies and screen lock timeouts on personal devices — inconsistent security posture (1)",
-        "Mitigation: Implement Mobile Device Management (MDM) to enforce security policies, require encryption, and enable remote wipe of organisational data (1)",
-        "Mitigation: Use containerisation to separate work apps/data from personal — if the employee leaves, only the work container is wiped (1)",
-        "Mitigation: Require VPN for all work connections and implement Network Access Control to check device compliance before allowing network access (1)"
-      ]
-    }
-  },
-  {
-    "id": "B021",
-    "learning_aim": "B",
-    "topic": "B2.3 Connection media",
-    "command_verb": "Compare",
-    "marks": 4,
-    "ao": "AO3a",
-    "question": "Compare wired (Ethernet) and wireless (Wi-Fi) connections for a business network, considering both performance and security.",
-    "guidance": "(4)",
-    "type": "short",
-    "mark_scheme": {
-      "instruction": "Award up to four marks.",
-      "points": [
-        "Ethernet is faster and more reliable — consistent speeds up to 10 Gbps, no interference from walls or other devices (1)",
-        "Wi-Fi offers mobility and flexibility — no cabling needed, supports BYOD and mobile devices, but speeds vary with distance and interference (1)",
-        "Ethernet is inherently more secure — physical access to the network required to intercept data, making eavesdropping very difficult (1)",
-        "Wi-Fi broadcasts through the air — must be secured with WPA3 encryption, strong passwords, and ideally 802.1X enterprise authentication to mitigate interception risk (1)"
-      ]
-    }
-  },
-  {
-    "id": "B022",
-    "learning_aim": "B",
-    "topic": "B1.1 Network types",
-    "command_verb": "Explain",
-    "marks": 3,
-    "ao": "AO2",
-    "scenario": "A company has offices in London and Manchester that need to share data.",
-    "question": "Explain the difference between a LAN and a WAN.",
-    "guidance": "(3)",
-    "type": "short",
-    "mark_scheme": {
-      "instruction": "Award up to 3 marks.",
-      "points": [
-        "A LAN covers a limited area such as one office or building (1)",
-        "A WAN spans a large geographic area and connects multiple LANs (1)",
-        "WANs often use leased lines or the internet; LANs use local media such as Ethernet or Wi-Fi (1)"
-      ]
-    }
-  },
-  {
-    "id": "B023",
-    "learning_aim": "B",
-    "topic": "B1.1 Network types",
-    "command_verb": "Describe",
-    "marks": 2,
-    "ao": "AO1",
-    "scenario": "",
-    "question": "State what a SAN and a PAN each are.",
-    "guidance": "(2)",
-    "type": "short",
-    "mark_scheme": {
-      "instruction": "Award up to 2 marks.",
-      "points": [
-        "SAN (Storage Area Network) is a high-speed network providing block-level storage access (1)",
-        "PAN (Personal Area Network) connects personal devices over short distances such as Bluetooth (1)"
-      ]
-    }
-  },
-  {
-    "id": "B024",
-    "learning_aim": "B",
-    "topic": "B1.2 Network topologies",
-    "command_verb": "Explain",
-    "marks": 3,
-    "ao": "AO2",
-    "scenario": "A firm is choosing a topology that stays working if one cable fails.",
-    "question": "Explain the advantage of a mesh topology over a star topology.",
-    "guidance": "(3)",
-    "type": "short",
-    "mark_scheme": {
-      "instruction": "Award up to 3 marks.",
-      "points": [
-        "Mesh topology provides multiple redundant paths between devices (1)",
-        "If one link fails, traffic can re-route around it (1)",
-        "Star topology has a single point of failure at the central switch (1)"
-      ]
-    }
-  },
-  {
-    "id": "B025",
-    "learning_aim": "B",
-    "topic": "B1.2 Network topologies",
-    "command_verb": "Describe",
-    "marks": 2,
-    "ao": "AO1",
-    "scenario": "",
-    "question": "Describe a star topology.",
-    "guidance": "(2)",
-    "type": "short",
-    "mark_scheme": {
-      "instruction": "Award up to 2 marks.",
-      "points": [
-        "All devices connect to a central switch or hub (1)",
-        "Each device has its own connection, so a failure of one cable affects only that device (1)"
-      ]
-    }
-  },
-  {
-    "id": "B026",
-    "learning_aim": "B",
-    "topic": "B1.3 Network architecture",
-    "command_verb": "Describe",
-    "marks": 3,
-    "ao": "AO2",
-    "scenario": "",
-    "question": "Describe the difference between client/server and peer-to-peer architecture.",
-    "guidance": "(3)",
-    "type": "short",
-    "mark_scheme": {
-      "instruction": "Award up to 3 marks.",
-      "points": [
-        "Client/server centralises services and resources on servers accessed by clients (1)",
-        "Peer-to-peer treats all devices as equal and shares directly without a central server (1)",
-        "Client/server offers centralised security and management; peer-to-peer is simpler but less controlled (1)"
-      ]
-    }
-  },
-  {
-    "id": "B027",
-    "learning_aim": "B",
-    "topic": "B1.4 Modern trends",
-    "command_verb": "Explain",
-    "marks": 3,
-    "ao": "AO2",
-    "scenario": "A firm allows employees to use personal devices for work (BYOD).",
-    "question": "Explain one security benefit and one risk of BYOD.",
-    "guidance": "(3)",
-    "type": "short",
-    "mark_scheme": {
-      "instruction": "Award up to 3 marks.",
-      "points": [
-        "Benefit: flexibility and productivity for the user, and can reduce hardware costs (1)",
-        "Risk: inconsistent security on personal devices, and lost or stolen devices containing work data (1)",
-        "Mitigations: mobile device management, containerisation, and access control policies (1)"
-      ]
-    }
-  },
-  {
-    "id": "B028",
-    "learning_aim": "B",
-    "topic": "B1.4 Modern trends",
-    "command_verb": "Explain",
-    "marks": 3,
-    "ao": "AO2",
-    "scenario": "A company is migrating systems to the cloud and wants to assess the security implications.",
-    "question": "Explain one security benefit and one risk of using cloud services.",
-    "guidance": "(3)",
-    "type": "short",
-    "mark_scheme": {
-      "instruction": "Award up to 3 marks.",
-      "points": [
-        "Benefit: providers often offer strong security features, encryption, backup and scalable resources (1)",
-        "Risk: data is held by a third party and depends on their security, with shared responsibility (1)",
-        "Mitigations: strong authentication, encryption, and clear contracts around data handling (1)"
-      ]
-    }
+ {
+  "id": "B001",
+  "learning_aim": "B",
+  "topic": "B1.1 Network types",
+  "command_verb": "State",
+  "marks": 1,
+  "ao": "AO1",
+  "question": "State what WLAN stands for.",
+  "type": "short",
+  "mark_scheme": {
+   "instruction": "Award one mark.",
+   "points": [
+    "Wireless Local Area Network (1)"
+   ]
   }
+ },
+ {
+  "id": "B002",
+  "learning_aim": "B",
+  "topic": "B1.1 Network types",
+  "command_verb": "Describe",
+  "marks": 2,
+  "ao": "AO1",
+  "question": "Describe the difference between an intranet and an extranet.",
+  "guidance": "(2)",
+  "type": "short",
+  "mark_scheme": {
+   "instruction": "Award up to two marks.",
+   "points": [
+    "An intranet is a private network accessible only to an organisation's internal employees/members (1)",
+    "An extranet extends the intranet to authorised external parties such as suppliers, partners or customers, typically via secure login over the internet (1)"
+   ]
+  }
+ },
+ {
+  "id": "B003",
+  "learning_aim": "B",
+  "topic": "B1.2 Network topologies",
+  "command_verb": "Explain",
+  "marks": 3,
+  "ao": "AO2",
+  "scenario": "An IT services company is designing a network where reliability is critical.",
+  "question": "Explain the advantages and disadvantages of a star topology for this network.",
+  "guidance": "(3)",
+  "type": "short",
+  "mark_scheme": {
+   "instruction": "Award up to three marks.",
+   "points": [
+    "Advantage: if one device/cable fails, only that device is affected â€” the rest of the network continues to function (1)",
+    "Advantage: easy to add or remove devices without disrupting the network (1)",
+    "Disadvantage: the central switch/hub is a single point of failure â€” if it fails, the entire network goes down (1)"
+   ]
+  }
+ },
+ {
+  "id": "B004",
+  "learning_aim": "B",
+  "topic": "B1.3 Network architecture",
+  "command_verb": "State",
+  "marks": 1,
+  "ao": "AO1",
+  "question": "State one advantage of a client-server network over a peer-to-peer network.",
+  "type": "short",
+  "mark_scheme": {
+   "instruction": "Award one mark.",
+   "points": [
+    "Centralised management of users, files and security policies (1)",
+    "Centralised backup of all data on the server (1)",
+    "Better scalability â€” can support many more users (1)",
+    "Stronger security through centralised access control (1)"
+   ],
+   "additional_guidance": "Accept any one valid advantage."
+  }
+ },
+ {
+  "id": "B005",
+  "learning_aim": "B",
+  "topic": "B1.4 Modern trends",
+  "command_verb": "Explain",
+  "marks": 4,
+  "ao": "AO2",
+  "scenario": "A manufacturing company allows employees to use their personal smartphones and laptops for work (BYOD).",
+  "question": "Explain the security issues associated with a BYOD policy and how they can be mitigated.",
+  "guidance": "(4)",
+  "type": "short",
+  "mark_scheme": {
+   "instruction": "Award up to four marks.",
+   "points": [
+    "Issue: organisational data stored on personal devices may be accessed by family members or others â€” risk of data breach (1)",
+    "Issue: personal devices may not have up-to-date security patches or antivirus, increasing vulnerability (1)",
+    "Mitigation: implement Mobile Device Management (MDM) to enforce security policies, remote wipe capability, and separate work/personal profiles (1)",
+    "Mitigation: require VPN for all work connections and encrypt all organisational data on the device (1)"
+   ]
+  }
+ },
+ {
+  "id": "B006",
+  "learning_aim": "B",
+  "topic": "B1.4 Modern trends",
+  "command_verb": "Describe",
+  "marks": 2,
+  "ao": "AO1",
+  "question": "Describe one security concern associated with Internet of Things (IoT) devices.",
+  "guidance": "(2)",
+  "type": "short",
+  "mark_scheme": {
+   "instruction": "Award up to two marks.",
+   "points": [
+    "Many IoT devices ship with default passwords/security settings that users never change, making them easy targets for attackers (1)",
+    "IoT devices often lack regular security updates/patches, leaving known vulnerabilities permanently exploitable â€” compromised devices can be recruited into botnets for DDoS attacks (1)"
+   ]
+  }
+ },
+ {
+  "id": "B007",
+  "learning_aim": "B",
+  "topic": "B2.1 Hardware components — connectivity devices",
+  "command_verb": "Identify",
+  "marks": 1,
+  "ao": "AO1",
+  "question": "Identify the network device that connects multiple networks together and forwards data packets between them based on IP addresses.",
+  "type": "short",
+  "mark_scheme": {
+   "instruction": "Award one mark.",
+   "points": [
+    "Router (1)"
+   ]
+  }
+ },
+ {
+  "id": "B008",
+  "learning_aim": "B",
+  "topic": "B2.1 Hardware components — connectivity devices",
+  "command_verb": "Explain",
+  "marks": 3,
+  "ao": "AO2",
+  "question": "Explain the difference between a managed and an unmanaged switch.",
+  "guidance": "(3)",
+  "type": "short",
+  "mark_scheme": {
+   "instruction": "Award up to three marks.",
+   "points": [
+    "An unmanaged switch is plug-and-play â€” it simply connects devices and forwards data automatically without any configuration (1)",
+    "A managed switch allows administrators to configure settings such as VLANs, port security, bandwidth control, and Quality of Service (QoS) (1)",
+    "Managed switches provide greater security (e.g. MAC address filtering, disabling unused ports) and monitoring (SNMP) but cost more and require skilled administration (1)"
+   ]
+  }
+ },
+ {
+  "id": "B009",
+  "learning_aim": "B",
+  "topic": "B2.1 Hardware components — connection media",
+  "command_verb": "Compare",
+  "marks": 4,
+  "ao": "AO3a",
+  "question": "Compare and contrast Wi-Fi (802.11) and Ethernet (wired) connections for a business network, including security considerations.",
+  "guidance": "(4)",
+  "type": "short",
+  "mark_scheme": {
+   "instruction": "Award up to four marks â€” must include at least one security point.",
+   "points": [
+    "Ethernet is faster and more reliable â€” less susceptible to interference, consistent speeds up to 10 Gbps on Cat 6a (1)",
+    "Wi-Fi offers mobility and flexibility â€” no cabling required, supports BYOD, but speeds are variable and affected by distance/walls/interference (1)",
+    "Ethernet is inherently more secure â€” physical access to the network is required to intercept data (1)",
+    "Wi-Fi is more vulnerable â€” signals broadcast through the air can be intercepted; requires encryption (WPA3), strong passwords, MAC filtering and hidden SSID to mitigate (1)"
+   ]
+  }
+ },
+ {
+  "id": "B010",
+  "learning_aim": "B",
+  "topic": "B2.1 Hardware components — connection media",
+  "command_verb": "State",
+  "marks": 1,
+  "ao": "AO1",
+  "question": "State the typical maximum range of a Bluetooth 5.0 connection.",
+  "type": "short",
+  "mark_scheme": {
+   "instruction": "Award one mark.",
+   "points": [
+    "Approximately 10â€“40 metres, depending on conditions and device class (1)"
+   ],
+   "additional_guidance": "Accept: 10m to 40m, or within this range."
+  }
+ },
+ {
+  "id": "B011",
+  "learning_aim": "B",
+  "topic": "B3.1 TCP/IP — ports",
+  "command_verb": "Identify",
+  "marks": 1,
+  "ao": "AO1",
+  "question": "Identify the default port number used by HTTPS.",
+  "type": "short",
+  "mark_scheme": {
+   "instruction": "Award one mark.",
+   "points": [
+    "Port 443 (1)"
+   ]
+  }
+ },
+ {
+  "id": "B012",
+  "learning_aim": "B",
+  "topic": "B3.1 TCP/IP — ports",
+  "command_verb": "Describe",
+  "marks": 2,
+  "ao": "AO1",
+  "question": "Describe the difference between TCP and UDP transport protocols.",
+  "guidance": "(2)",
+  "type": "short",
+  "mark_scheme": {
+   "instruction": "Award up to two marks.",
+   "points": [
+    "TCP is connection-oriented â€” it establishes a connection, guarantees delivery, and reorders packets if they arrive out of sequence (reliable) (1)",
+    "UDP is connectionless â€” it sends data without establishing a connection first, no guarantee of delivery, no reordering; it is faster but less reliable, suitable for streaming/voice/video where some packet loss is acceptable (1)"
+   ]
+  }
+ },
+ {
+  "id": "B013",
+  "learning_aim": "B",
+  "topic": "B3.1 TCP/IP — NAT and addressing",
+  "command_verb": "State",
+  "marks": 1,
+  "ao": "AO1",
+  "question": "State the purpose of Network Address Translation (NAT).",
+  "type": "short",
+  "mark_scheme": {
+   "instruction": "Award one mark.",
+   "points": [
+    "NAT translates private/internal IP addresses to a public IP address (and vice versa), allowing multiple devices on a private network to share a single public IP address for internet access, while hiding the internal network structure for security (1)"
+   ]
+  }
+ },
+ {
+  "id": "B014",
+  "learning_aim": "B",
+  "topic": "B3.4 Network infrastructure services — DNS",
+  "command_verb": "Explain",
+  "marks": 3,
+  "ao": "AO2",
+  "question": "Explain the DNS resolution process when a user types www.example.com into their browser.",
+  "guidance": "(3)",
+  "type": "short",
+  "mark_scheme": {
+   "instruction": "Award up to three marks.",
+   "points": [
+    "The browser checks its local DNS cache; if not found, the query is sent to the configured DNS resolver/recursive server (1)",
+    "The DNS resolver queries the root server, then the TLD (.com) server, then the authoritative name server for example.com (1)",
+    "The authoritative server returns the IP address, which is cached by the resolver and returned to the browser â€” the browser then connects to that IP address (1)"
+   ]
+  }
+ },
+ {
+  "id": "B015",
+  "learning_aim": "B",
+  "topic": "B3.4 Network infrastructure services — DHCP",
+  "command_verb": "Describe",
+  "marks": 2,
+  "ao": "AO1",
+  "question": "Describe the DORA process in DHCP.",
+  "guidance": "(2)",
+  "type": "short",
+  "mark_scheme": {
+   "instruction": "Award up to two marks.",
+   "points": [
+    "Discover: the client broadcasts a DHCPDISCOVER message to find available DHCP servers (1)",
+    "Offer: the DHCP server responds with a DHCPOFFER containing a proposed IP address (1)",
+    "Request: the client sends a DHCPREQUEST to accept the offered address (1)",
+    "Acknowledge: the server confirms with a DHCPACK, and the client can now use the IP address for the lease duration (1)"
+   ],
+   "additional_guidance": "Award 2 marks for any two of the four stages correctly described."
+  }
+ },
+ {
+  "id": "B016",
+  "learning_aim": "B",
+  "topic": "B1.2 Network topologies",
+  "command_verb": "Explain",
+  "marks": 4,
+  "ao": "AO2",
+  "scenario": "A secondary school is designing a new network for 200 workstations across 10 classrooms.",
+  "question": "Explain why a star topology would be the most appropriate choice for the school network.",
+  "guidance": "(4)",
+  "type": "short",
+  "mark_scheme": {
+   "instruction": "Award up to four marks.",
+   "points": [
+    "Each classroom can have its own switch, and if one cable fails only that device is affected — the rest of the network continues to function (1)",
+    "Easy to add new devices without disrupting the network — important as the school expands its IT provision (1)",
+    "Fault isolation is simple — a faulty device or cable can be quickly identified and replaced without affecting others (1)",
+    "The central switch in each room can implement port security, VLANs for different user groups (staff vs students), which enhances security (1)"
+   ]
+  }
+ },
+ {
+  "id": "B017",
+  "learning_aim": "B",
+  "topic": "B1.4 Modern trends — IoT",
+  "command_verb": "Explain",
+  "marks": 4,
+  "ao": "AO2",
+  "scenario": "A manufacturing company has installed IoT sensors on all production equipment to monitor performance in real time.",
+  "question": "Explain the security risks associated with connecting IoT sensors to the company network and recommend two mitigation measures.",
+  "guidance": "(4)",
+  "type": "short",
+  "mark_scheme": {
+   "instruction": "Award up to four marks.",
+   "points": [
+    "Risk: IoT devices often ship with default passwords and lack regular security updates — they become easy entry points for attackers (1)",
+    "Risk: Once compromised, IoT devices can be recruited into botnets or used as a pivot point to access the main corporate network (1)",
+    "Mitigation: Segment IoT devices onto a separate VLAN isolated from the main corporate network — limits lateral movement if compromised (1)",
+    "Mitigation: Change all default credentials immediately, implement network access control (802.1X), and maintain a regular patching schedule for all IoT firmware (1)"
+   ]
+  }
+ },
+ {
+  "id": "B018",
+  "learning_aim": "B",
+  "topic": "B3.4 Network infrastructure services — DNS",
+  "command_verb": "Describe",
+  "marks": 3,
+  "ao": "AO1",
+  "question": "Describe the DNS resolution process when a user enters www.bank.com into their browser.",
+  "guidance": "(3)",
+  "type": "short",
+  "mark_scheme": {
+   "instruction": "Award up to three marks.",
+   "points": [
+    "Browser checks local DNS cache; if not found, query is sent to the configured DNS recursive resolver (1)",
+    "The resolver queries the root server, then the .com TLD server, then the authoritative name server for bank.com (1)",
+    "The authoritative server returns the IP address which is cached at each level and returned to the browser, which then connects to that IP (1)"
+   ]
+  }
+ },
+ {
+  "id": "B019",
+  "learning_aim": "B",
+  "topic": "B3.4 Network infrastructure services — remote access",
+  "command_verb": "Explain",
+  "marks": 4,
+  "ao": "AO2",
+  "scenario": "A financial services company has employees working remotely who need secure access to internal financial systems.",
+  "question": "Explain how a VPN provides secure remote access and why it is necessary for this scenario.",
+  "guidance": "(4)",
+  "type": "short",
+  "mark_scheme": {
+   "instruction": "Award up to four marks.",
+   "points": [
+    "A VPN creates an encrypted tunnel between the remote employee device and the company network — all data is encrypted in transit (1)",
+    "Without a VPN, data transmitted over the public internet could be intercepted (MITM attack) — financial data is highly sensitive (1)",
+    "The VPN authenticates the user before granting access — ensures only authorised employees can reach internal systems (1)",
+    "Additional: VPN allows the employee to access internal resources (file servers, databases) as if they were physically in the office, maintaining productivity with security (1)"
+   ]
+  }
+ },
+ {
+  "id": "B020",
+  "learning_aim": "B",
+  "topic": "B1.4 Modern trends — BYOD",
+  "command_verb": "Evaluate",
+  "marks": 6,
+  "ao": "AO3b",
+  "scenario": "A large organisation is considering implementing a BYOD policy to reduce hardware costs.",
+  "question": "Evaluate the security implications of implementing BYOD and recommend how the risks can be managed.",
+  "guidance": "(6)",
+  "type": "short",
+  "mark_scheme": {
+   "instruction": "Award up to six marks.",
+   "points": [
+    "Risk: Organisational data stored on personal devices may be accessed by family members, friends, or anyone who borrows the device (1)",
+    "Risk: Personal devices may not have up-to-date security patches, antivirus, or encryption — they may already be compromised before connecting (1)",
+    "Risk: Difficult to enforce password policies and screen lock timeouts on personal devices — inconsistent security posture (1)",
+    "Mitigation: Implement Mobile Device Management (MDM) to enforce security policies, require encryption, and enable remote wipe of organisational data (1)",
+    "Mitigation: Use containerisation to separate work apps/data from personal — if the employee leaves, only the work container is wiped (1)",
+    "Mitigation: Require VPN for all work connections and implement Network Access Control to check device compliance before allowing network access (1)"
+   ]
+  }
+ },
+ {
+  "id": "B021",
+  "learning_aim": "B",
+  "topic": "B2.1 Hardware components — connection media",
+  "command_verb": "Compare",
+  "marks": 4,
+  "ao": "AO3a",
+  "question": "Compare wired (Ethernet) and wireless (Wi-Fi) connections for a business network, considering both performance and security.",
+  "guidance": "(4)",
+  "type": "short",
+  "mark_scheme": {
+   "instruction": "Award up to four marks.",
+   "points": [
+    "Ethernet is faster and more reliable — consistent speeds up to 10 Gbps, no interference from walls or other devices (1)",
+    "Wi-Fi offers mobility and flexibility — no cabling needed, supports BYOD and mobile devices, but speeds vary with distance and interference (1)",
+    "Ethernet is inherently more secure — physical access to the network required to intercept data, making eavesdropping very difficult (1)",
+    "Wi-Fi broadcasts through the air — must be secured with WPA3 encryption, strong passwords, and ideally 802.1X enterprise authentication to mitigate interception risk (1)"
+   ]
+  }
+ },
+ {
+  "id": "B022",
+  "learning_aim": "B",
+  "topic": "B1.1 Network types",
+  "command_verb": "Explain",
+  "marks": 3,
+  "ao": "AO2",
+  "scenario": "A company has offices in London and Manchester that need to share data.",
+  "question": "Explain the difference between a LAN and a WAN.",
+  "guidance": "(3)",
+  "type": "short",
+  "mark_scheme": {
+   "instruction": "Award up to 3 marks.",
+   "points": [
+    "A LAN covers a limited area such as one office or building (1)",
+    "A WAN spans a large geographic area and connects multiple LANs (1)",
+    "WANs often use leased lines or the internet; LANs use local media such as Ethernet or Wi-Fi (1)"
+   ]
+  }
+ },
+ {
+  "id": "B023",
+  "learning_aim": "B",
+  "topic": "B1.1 Network types",
+  "command_verb": "Describe",
+  "marks": 2,
+  "ao": "AO1",
+  "scenario": "",
+  "question": "State what a SAN and a PAN each are.",
+  "guidance": "(2)",
+  "type": "short",
+  "mark_scheme": {
+   "instruction": "Award up to 2 marks.",
+   "points": [
+    "SAN (Storage Area Network) is a high-speed network providing block-level storage access (1)",
+    "PAN (Personal Area Network) connects personal devices over short distances such as Bluetooth (1)"
+   ]
+  }
+ },
+ {
+  "id": "B024",
+  "learning_aim": "B",
+  "topic": "B1.2 Network topologies",
+  "command_verb": "Explain",
+  "marks": 3,
+  "ao": "AO2",
+  "scenario": "A firm is choosing a topology that stays working if one cable fails.",
+  "question": "Explain the advantage of a mesh topology over a star topology.",
+  "guidance": "(3)",
+  "type": "short",
+  "mark_scheme": {
+   "instruction": "Award up to 3 marks.",
+   "points": [
+    "Mesh topology provides multiple redundant paths between devices (1)",
+    "If one link fails, traffic can re-route around it (1)",
+    "Star topology has a single point of failure at the central switch (1)"
+   ]
+  }
+ },
+ {
+  "id": "B025",
+  "learning_aim": "B",
+  "topic": "B1.2 Network topologies",
+  "command_verb": "Describe",
+  "marks": 2,
+  "ao": "AO1",
+  "scenario": "",
+  "question": "Describe a star topology.",
+  "guidance": "(2)",
+  "type": "short",
+  "mark_scheme": {
+   "instruction": "Award up to 2 marks.",
+   "points": [
+    "All devices connect to a central switch or hub (1)",
+    "Each device has its own connection, so a failure of one cable affects only that device (1)"
+   ]
+  }
+ },
+ {
+  "id": "B026",
+  "learning_aim": "B",
+  "topic": "B1.3 Network architecture",
+  "command_verb": "Describe",
+  "marks": 3,
+  "ao": "AO2",
+  "scenario": "",
+  "question": "Describe the difference between client/server and peer-to-peer architecture.",
+  "guidance": "(3)",
+  "type": "short",
+  "mark_scheme": {
+   "instruction": "Award up to 3 marks.",
+   "points": [
+    "Client/server centralises services and resources on servers accessed by clients (1)",
+    "Peer-to-peer treats all devices as equal and shares directly without a central server (1)",
+    "Client/server offers centralised security and management; peer-to-peer is simpler but less controlled (1)"
+   ]
+  }
+ },
+ {
+  "id": "B027",
+  "learning_aim": "B",
+  "topic": "B1.4 Modern trends",
+  "command_verb": "Explain",
+  "marks": 3,
+  "ao": "AO2",
+  "scenario": "A firm allows employees to use personal devices for work (BYOD).",
+  "question": "Explain one security benefit and one risk of BYOD.",
+  "guidance": "(3)",
+  "type": "short",
+  "mark_scheme": {
+   "instruction": "Award up to 3 marks.",
+   "points": [
+    "Benefit: flexibility and productivity for the user, and can reduce hardware costs (1)",
+    "Risk: inconsistent security on personal devices, and lost or stolen devices containing work data (1)",
+    "Mitigations: mobile device management, containerisation, and access control policies (1)"
+   ]
+  }
+ },
+ {
+  "id": "B028",
+  "learning_aim": "B",
+  "topic": "B1.4 Modern trends",
+  "command_verb": "Explain",
+  "marks": 3,
+  "ao": "AO2",
+  "scenario": "A company is migrating systems to the cloud and wants to assess the security implications.",
+  "question": "Explain one security benefit and one risk of using cloud services.",
+  "guidance": "(3)",
+  "type": "short",
+  "mark_scheme": {
+   "instruction": "Award up to 3 marks.",
+   "points": [
+    "Benefit: providers often offer strong security features, encryption, backup and scalable resources (1)",
+    "Risk: data is held by a third party and depends on their security, with shared responsibility (1)",
+    "Mitigations: strong authentication, encryption, and clear contracts around data handling (1)"
+   ]
+  }
+ }
 ]

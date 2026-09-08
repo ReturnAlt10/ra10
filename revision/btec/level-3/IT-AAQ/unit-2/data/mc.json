@@ -2,121 +2,121 @@
  {
   "id": "MC001",
   "learning_aim": "A",
-  "topic": "A1.1 Threat actors",
+  "topic": "A1.2 External threats — malware",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
   "scenario": "",
-  "question": "Which type of threat actor is typically motivated by a political or social cause?",
+  "question": "Which category of external threat includes viruses, worms, trojans and ransomware?",
   "guidance": "(1)",
   "type": "multiple_choice",
   "options": [
    {
     "label": "A",
-    "text": "Script kiddie"
+    "text": "Malware"
    },
    {
     "label": "B",
-    "text": "Insider threat"
+    "text": "Phishing"
    },
    {
     "label": "C",
-    "text": "State-sponsored actor"
+    "text": "Tailgating"
    },
    {
     "label": "D",
-    "text": "Hacktivist"
+    "text": "SQL injection"
    }
   ],
   "mark_scheme": {
    "instruction": "Award one mark for the correct option.",
-   "answer": "D",
-   "explanation": "Hacktivists are motivated by political, social or ideological causes and often target organisations for publicity.",
+   "answer": "A",
+   "explanation": "Malware is the broad term for malicious software, including viruses, worms, trojans, ransomware, spyware and adware.",
    "points": [
-    "D: Hacktivist (1)"
+    "A: Malware (1)"
    ]
   }
  },
  {
   "id": "MC002",
   "learning_aim": "A",
-  "topic": "A1.1 Threat actors",
+  "topic": "A1.2 External threats — social engineering",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
   "scenario": "",
-  "question": "Which threat actor is usually the LEAST technically skilled?",
+  "question": "Which social-engineering technique uses fraudulent emails that appear to come from a trusted organisation?",
   "guidance": "(1)",
   "type": "multiple_choice",
   "options": [
    {
     "label": "A",
-    "text": "Cyber criminal"
+    "text": "Phishing"
    },
    {
     "label": "B",
-    "text": "State-sponsored actor"
+    "text": "Tailgating"
    },
    {
     "label": "C",
-    "text": "Script kiddie"
+    "text": "Shoulder surfing"
    },
    {
     "label": "D",
-    "text": "APT operator"
+    "text": "DoS attack"
    }
   ],
   "mark_scheme": {
    "instruction": "Award one mark for the correct option.",
-   "answer": "C",
-   "explanation": "Script kiddies use pre-written tools downloaded from the internet and typically have little technical expertise.",
+   "answer": "A",
+   "explanation": "Phishing uses mass fraudulent emails to trick recipients into revealing credentials or opening malicious links.",
    "points": [
-    "C: Script kiddie (1)"
+    "A: Phishing (1)"
    ]
   }
  },
  {
   "id": "MC003",
   "learning_aim": "A",
-  "topic": "A1.1 Threat actors",
+  "topic": "A1.2 External threats — hacking",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
   "scenario": "",
-  "question": "An attacker maintains long-term, undetected access to a network to exfiltrate data. Which term best describes them?",
+  "question": "Which attack uses many compromised devices to flood a target and deny service to legitimate users?",
   "guidance": "(1)",
   "type": "multiple_choice",
   "options": [
    {
     "label": "A",
-    "text": "Insider threat"
+    "text": "SQL injection"
    },
    {
     "label": "B",
-    "text": "Advanced Persistent Threat (APT)"
+    "text": "Distributed Denial of Service (DDoS)"
    },
    {
     "label": "C",
-    "text": "Script kiddie"
+    "text": "Phishing"
    },
    {
     "label": "D",
-    "text": "Vishing attacker"
+    "text": "Keylogger"
    }
   ],
   "mark_scheme": {
    "instruction": "Award one mark for the correct option.",
    "answer": "B",
-   "explanation": "An APT is a prolonged, targeted attack, often state-sponsored, that stays undetected to steal data over time.",
+   "explanation": "A DDoS attack uses a botnet of compromised devices to flood a target from many sources, overwhelming it.",
    "points": [
-    "B: Advanced Persistent Threat (APT) (1)"
+    "B: Distributed Denial of Service (DDoS) (1)"
    ]
   }
  },
  {
   "id": "MC004",
   "learning_aim": "A",
-  "topic": "A1.1 Threat actors",
+  "topic": "A1.2 External threats",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -154,7 +154,7 @@
  {
   "id": "MC005",
   "learning_aim": "A",
-  "topic": "A1.2 Malware types",
+  "topic": "A1.2 External threats — malware",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -192,7 +192,7 @@
  {
   "id": "MC006",
   "learning_aim": "A",
-  "topic": "A1.2 Malware types",
+  "topic": "A1.2 External threats — malware",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -230,7 +230,7 @@
  {
   "id": "MC007",
   "learning_aim": "A",
-  "topic": "A1.2 Malware types",
+  "topic": "A1.2 External threats — malware",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -268,7 +268,7 @@
  {
   "id": "MC008",
   "learning_aim": "A",
-  "topic": "A1.2 Malware types",
+  "topic": "A1.2 External threats — malware",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -306,7 +306,7 @@
  {
   "id": "MC009",
   "learning_aim": "A",
-  "topic": "A1.2 Malware types",
+  "topic": "A1.2 External threats — malware",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -344,7 +344,7 @@
  {
   "id": "MC010",
   "learning_aim": "A",
-  "topic": "A1.3 Social engineering",
+  "topic": "A1.2 External threats — social engineering",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -382,7 +382,7 @@
  {
   "id": "MC011",
   "learning_aim": "A",
-  "topic": "A1.3 Social engineering",
+  "topic": "A1.2 External threats — social engineering",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -420,7 +420,7 @@
  {
   "id": "MC012",
   "learning_aim": "A",
-  "topic": "A1.3 Social engineering",
+  "topic": "A1.2 External threats — social engineering",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -458,7 +458,7 @@
  {
   "id": "MC013",
   "learning_aim": "A",
-  "topic": "A1.3 Social engineering",
+  "topic": "A1.2 External threats — social engineering",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -496,7 +496,7 @@
  {
   "id": "MC014",
   "learning_aim": "A",
-  "topic": "A1.4 Network attacks",
+  "topic": "A1.2 External threats — hacking (DoS/DDoS)",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -534,7 +534,7 @@
  {
   "id": "MC015",
   "learning_aim": "A",
-  "topic": "A1.4 Network attacks",
+  "topic": "A1.2 External threats — hacking (DoS/DDoS)",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -572,7 +572,7 @@
  {
   "id": "MC016",
   "learning_aim": "A",
-  "topic": "A1.4 Network attacks",
+  "topic": "A1.2 External threats — hacking (DoS/DDoS)",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -610,7 +610,7 @@
  {
   "id": "MC017",
   "learning_aim": "A",
-  "topic": "A1.5 Web application attacks",
+  "topic": "A1.2 External threats — hacking",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -648,7 +648,7 @@
  {
   "id": "MC018",
   "learning_aim": "A",
-  "topic": "A1.5 Web application attacks",
+  "topic": "A1.2 External threats — hacking",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -686,7 +686,7 @@
  {
   "id": "MC019",
   "learning_aim": "A",
-  "topic": "A1.6 Physical threats",
+  "topic": "A1.1 Internal threats — accidental/deliberate damage",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -724,7 +724,7 @@
  {
   "id": "MC020",
   "learning_aim": "A",
-  "topic": "A2.1 Software vulnerabilities",
+  "topic": "A2.1 System vulnerabilities — software",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -762,7 +762,7 @@
  {
   "id": "MC021",
   "learning_aim": "A",
-  "topic": "A2.3 Human vulnerabilities",
+  "topic": "A2.1 System vulnerabilities — people/process",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -800,7 +800,7 @@
  {
   "id": "MC022",
   "learning_aim": "A",
-  "topic": "A3.1 UK Legislation",
+  "topic": "A3.1 Current legislation",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -811,11 +811,11 @@
   "options": [
    {
     "label": "A",
-    "text": "Copyright Act"
+    "text": "Copyright, Designs and Patents Act 1988"
    },
    {
     "label": "B",
-    "text": "Official Secrets Act 1989"
+    "text": "Consumer Rights Act 2015"
    },
    {
     "label": "C",
@@ -823,7 +823,7 @@
    },
    {
     "label": "D",
-    "text": "Data Protection Act 1998 (now 2018)"
+    "text": "Freedom of Information Act 2000"
    }
   ],
   "mark_scheme": {
@@ -838,7 +838,7 @@
  {
   "id": "MC023",
   "learning_aim": "A",
-  "topic": "A3.1 UK Legislation",
+  "topic": "A3.1 Current legislation",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -849,11 +849,11 @@
   "options": [
    {
     "label": "A",
-    "text": "Copyright, Designs and Patents Act"
+    "text": "Copyright, Designs and Patents Act 1988"
    },
    {
     "label": "B",
-    "text": "UK GDPR / Data Protection Act 2018"
+    "text": "UK General Data Protection Regulation (GDPR)"
    },
    {
     "label": "C",
@@ -861,22 +861,22 @@
    },
    {
     "label": "D",
-    "text": "RIPA 2000"
+    "text": "Consumer Rights Act 2015"
    }
   ],
   "mark_scheme": {
    "instruction": "Award one mark for the correct option.",
    "answer": "B",
-   "explanation": "The UK GDPR (via the Data Protection Act 2018) governs personal data rights.",
+   "explanation": "The UK GDPR sets out how personal data must be processed and gives individuals rights such as access and erasure.",
    "points": [
-    "B: UK GDPR / Data Protection Act 2018 (1)"
+    "B: UK General Data Protection Regulation (GDPR) (1)"
    ]
   }
  },
  {
   "id": "MC024",
   "learning_aim": "A",
-  "topic": "A3.4 Compliance",
+  "topic": "A4.4 Security by design (ISO 27000)",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -891,15 +891,15 @@
    },
    {
     "label": "B",
-    "text": "PCI DSS"
+    "text": "IEEE 802.11"
    },
    {
     "label": "C",
-    "text": "RIPA 2000"
+    "text": "OWASP Top 10"
    },
    {
     "label": "D",
-    "text": "Computer Misuse Act 1990"
+    "text": "RFC 1918"
    }
   ],
   "mark_scheme": {
@@ -914,7 +914,7 @@
  {
   "id": "MC025",
   "learning_aim": "A",
-  "topic": "A4.4 Firewalls",
+  "topic": "A4.1 Software and hardware security — firewalls",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -952,7 +952,7 @@
  {
   "id": "MC026",
   "learning_aim": "A",
-  "topic": "A4.5 Authentication",
+  "topic": "A4.1 Software and hardware security — authentication",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -990,7 +990,7 @@
  {
   "id": "MC027",
   "learning_aim": "A",
-  "topic": "A4.6 Access control",
+  "topic": "A4.1 Software and hardware security — access controls",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -1028,7 +1028,7 @@
  {
   "id": "MC028",
   "learning_aim": "A",
-  "topic": "A4.7 Wireless",
+  "topic": "A4.3 WLAN protection",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -1066,7 +1066,7 @@
  {
   "id": "MC029",
   "learning_aim": "A",
-  "topic": "A4.8 Encryption",
+  "topic": "A4.2 Encryption",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -1104,7 +1104,7 @@
  {
   "id": "MC030",
   "learning_aim": "A",
-  "topic": "A4.9 Device security",
+  "topic": "A4.1 Software and hardware security — device-based security",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -1370,7 +1370,7 @@
  {
   "id": "MC037",
   "learning_aim": "B",
-  "topic": "B2.2 Connectivity devices",
+  "topic": "B2.1 Hardware components — connectivity devices",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -1408,7 +1408,7 @@
  {
   "id": "MC038",
   "learning_aim": "B",
-  "topic": "B2.2 Connectivity devices",
+  "topic": "B2.1 Hardware components — connectivity devices",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -1446,7 +1446,7 @@
  {
   "id": "MC039",
   "learning_aim": "B",
-  "topic": "B2.3 Connection media",
+  "topic": "B2.1 Hardware components — connection media",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -1522,7 +1522,7 @@
  {
   "id": "MC041",
   "learning_aim": "B",
-  "topic": "B3.2 Ports & protocols",
+  "topic": "B3.1 TCP/IP — ports",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -1560,7 +1560,7 @@
  {
   "id": "MC042",
   "learning_aim": "B",
-  "topic": "B3.2 Ports & protocols",
+  "topic": "B3.1 TCP/IP — ports",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -1598,7 +1598,7 @@
  {
   "id": "MC043",
   "learning_aim": "B",
-  "topic": "B3.3 IP addressing",
+  "topic": "B3.1 TCP/IP — NAT and addressing",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -1636,7 +1636,7 @@
  {
   "id": "MC044",
   "learning_aim": "B",
-  "topic": "B3.3 IP addressing",
+  "topic": "B3.1 TCP/IP — NAT and addressing",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -1674,7 +1674,7 @@
  {
   "id": "MC045",
   "learning_aim": "B",
-  "topic": "B3.4 DNS",
+  "topic": "B3.4 Network infrastructure services — DNS",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -1712,7 +1712,7 @@
  {
   "id": "MC046",
   "learning_aim": "B",
-  "topic": "B3.5 DHCP",
+  "topic": "B3.4 Network infrastructure services — DHCP",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -1750,7 +1750,7 @@
  {
   "id": "MC047",
   "learning_aim": "B",
-  "topic": "B3.6 Authentication services",
+  "topic": "B3.4 Network infrastructure services — authentication",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -1788,7 +1788,7 @@
  {
   "id": "MC048",
   "learning_aim": "B",
-  "topic": "B3.7 Directory services",
+  "topic": "B3.4 Network infrastructure services — directory services",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -1826,7 +1826,7 @@
  {
   "id": "MC049",
   "learning_aim": "B",
-  "topic": "B3.8 Routing",
+  "topic": "B3.4 Network infrastructure services — routing",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -1864,7 +1864,7 @@
  {
   "id": "MC050",
   "learning_aim": "B",
-  "topic": "B3.9 Remote access",
+  "topic": "B3.4 Network infrastructure services — remote access",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -1902,7 +1902,7 @@
  {
   "id": "MC051",
   "learning_aim": "A",
-  "topic": "A4.2 Data protection",
+  "topic": "A4.1 Software and hardware security — backup/recovery",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -1940,7 +1940,7 @@
  {
   "id": "MC052",
   "learning_aim": "A",
-  "topic": "A4.2 Data protection",
+  "topic": "A4.1 Software and hardware security — backup/recovery",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -1978,7 +1978,7 @@
  {
   "id": "MC053",
   "learning_aim": "B",
-  "topic": "B3.3 IP addressing",
+  "topic": "B3.1 TCP/IP — NAT and addressing",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -2016,7 +2016,7 @@
  {
   "id": "MC054",
   "learning_aim": "B",
-  "topic": "B3.2 Ports and protocols",
+  "topic": "B3.1 TCP/IP — ports",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -2054,7 +2054,7 @@
  {
   "id": "MC055",
   "learning_aim": "A",
-  "topic": "A2.1 Software vulnerabilities",
+  "topic": "A2.1 System vulnerabilities — software",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -2092,7 +2092,7 @@
  {
   "id": "MC056",
   "learning_aim": "B",
-  "topic": "B2.2 Connectivity devices",
+  "topic": "B2.1 Hardware components — connectivity devices",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -2130,83 +2130,83 @@
  {
   "id": "MC057",
   "learning_aim": "A",
-  "topic": "A1.1 Threat actors",
+  "topic": "A1.1 Internal threats",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
   "scenario": "",
-  "question": "Which threat actor is MOST likely to use the latest zero-day exploits to steal industrial secrets for a government?",
+  "question": "Which of the following is an example of an internal threat?",
   "guidance": "(1)",
   "type": "multiple_choice",
   "options": [
    {
     "label": "A",
-    "text": "State-sponsored actor"
+    "text": "A phishing email from an external attacker"
    },
    {
     "label": "B",
-    "text": "Script kiddie"
+    "text": "An employee accidentally sending a confidential file to the wrong recipient"
    },
    {
     "label": "C",
-    "text": "Cyber criminal"
+    "text": "A DDoS attack from a botnet"
    },
    {
     "label": "D",
-    "text": "Insider threat"
+    "text": "A rogue access point outside the building"
    }
   ],
   "mark_scheme": {
    "instruction": "Award one mark for the correct option.",
-   "answer": "A",
-   "explanation": "State-sponsored actors have the resources and motivation for sophisticated espionage.",
+   "answer": "B",
+   "explanation": "Internal threats arise from within the organisation, such as employee negligence or deliberate sabotage.",
    "points": [
-    "A: State-sponsored actor (1)"
+    "B: An employee accidentally sending a confidential file to the wrong recipient (1)"
    ]
   }
  },
  {
   "id": "MC058",
   "learning_aim": "A",
-  "topic": "A1.1 Threat actors",
+  "topic": "A1.1 Internal threats",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
   "scenario": "",
-  "question": "A disgruntled employee leaking client data for revenge is best described as:",
+  "question": "An employee deliberately deletes company data before leaving. This is an example of:",
   "guidance": "(1)",
   "type": "multiple_choice",
   "options": [
    {
     "label": "A",
-    "text": "A hacktivist"
+    "text": "Employee sabotage"
    },
    {
     "label": "B",
-    "text": "An APT"
+    "text": "A DDoS attack"
    },
    {
     "label": "C",
-    "text": "A script kiddie"
+    "text": "Phishing"
    },
    {
     "label": "D",
-    "text": "An insider threat"
+    "text": "Tailgating"
    }
   ],
   "mark_scheme": {
    "instruction": "Award one mark for the correct option.",
-   "answer": "D",
-   "explanation": "An insider threat comes from within the organisation.",
+   "answer": "A",
+   "explanation": "Deliberate employee sabotage is an internal threat — employee sabotage can be deliberate or accidental.",
    "points": [
-    "D: An insider threat (1)"
+    "A: Employee sabotage (1)"
    ]
   }
  },
  {
   "id": "MC059",
   "learning_aim": "A",
-  "topic": "A1.2 Malware types",
+  "topic": "A1.2 External threats — malware",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -2244,7 +2244,7 @@
  {
   "id": "MC060",
   "learning_aim": "A",
-  "topic": "A1.2 Malware types",
+  "topic": "A1.2 External threats — malware",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -2282,7 +2282,7 @@
  {
   "id": "MC061",
   "learning_aim": "A",
-  "topic": "A1.2 Malware types",
+  "topic": "A1.2 External threats — malware",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -2320,7 +2320,7 @@
  {
   "id": "MC062",
   "learning_aim": "A",
-  "topic": "A1.2 Malware types",
+  "topic": "A1.2 External threats — malware",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -2358,7 +2358,7 @@
  {
   "id": "MC063",
   "learning_aim": "A",
-  "topic": "A1.3 Social engineering",
+  "topic": "A1.2 External threats — social engineering",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -2396,7 +2396,7 @@
  {
   "id": "MC064",
   "learning_aim": "A",
-  "topic": "A1.3 Social engineering",
+  "topic": "A1.2 External threats — social engineering",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -2434,7 +2434,7 @@
  {
   "id": "MC065",
   "learning_aim": "A",
-  "topic": "A1.3 Social engineering",
+  "topic": "A1.2 External threats — social engineering",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -2472,7 +2472,7 @@
  {
   "id": "MC066",
   "learning_aim": "A",
-  "topic": "A1.3 Social engineering",
+  "topic": "A1.2 External threats — social engineering",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -2510,7 +2510,7 @@
  {
   "id": "MC067",
   "learning_aim": "A",
-  "topic": "A1.4 Network attacks",
+  "topic": "A1.2 External threats — hacking (DoS/DDoS)",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -2548,7 +2548,7 @@
  {
   "id": "MC068",
   "learning_aim": "A",
-  "topic": "A1.4 Network attacks",
+  "topic": "A1.2 External threats — hacking (DoS/DDoS)",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -2586,7 +2586,7 @@
  {
   "id": "MC069",
   "learning_aim": "A",
-  "topic": "A1.4 Network attacks",
+  "topic": "A1.2 External threats — hacking (DoS/DDoS)",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -2624,7 +2624,7 @@
  {
   "id": "MC070",
   "learning_aim": "A",
-  "topic": "A1.5 Web application attacks",
+  "topic": "A1.2 External threats — hacking",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -2662,7 +2662,7 @@
  {
   "id": "MC071",
   "learning_aim": "A",
-  "topic": "A1.5 Web application attacks",
+  "topic": "A1.2 External threats — hacking",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -2700,7 +2700,7 @@
  {
   "id": "MC072",
   "learning_aim": "A",
-  "topic": "A1.6 Physical threats",
+  "topic": "A1.1 Internal threats — accidental/deliberate damage",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -2738,7 +2738,7 @@
  {
   "id": "MC073",
   "learning_aim": "A",
-  "topic": "A2.1 Software vulnerabilities",
+  "topic": "A2.1 System vulnerabilities — software",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -2776,7 +2776,7 @@
  {
   "id": "MC074",
   "learning_aim": "A",
-  "topic": "A2.1 Software vulnerabilities",
+  "topic": "A2.1 System vulnerabilities — software",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -2814,7 +2814,7 @@
  {
   "id": "MC075",
   "learning_aim": "A",
-  "topic": "A2.2 Network vulnerabilities",
+  "topic": "A2.1 System vulnerabilities — network",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -2852,7 +2852,7 @@
  {
   "id": "MC076",
   "learning_aim": "A",
-  "topic": "A2.4 Supply chain risks",
+  "topic": "A2.5 Independent third-party review",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -2890,7 +2890,7 @@
  {
   "id": "MC077",
   "learning_aim": "A",
-  "topic": "A3.1 UK Legislation",
+  "topic": "A3.1 Current legislation",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -2905,15 +2905,15 @@
    },
    {
     "label": "B",
-    "text": "Data Protection Act 1998"
+    "text": "Copyright, Designs and Patents Act 1988"
    },
    {
     "label": "C",
-    "text": "RIPA 2000"
+    "text": "Consumer Rights Act 2015"
    },
    {
     "label": "D",
-    "text": "Consumer Rights Act"
+    "text": "Freedom of Information Act 2000"
    }
   ],
   "mark_scheme": {
@@ -2928,7 +2928,7 @@
  {
   "id": "MC078",
   "learning_aim": "A",
-  "topic": "A3.1 UK Legislation",
+  "topic": "A3.1 Current legislation",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -2943,68 +2943,68 @@
    },
    {
     "label": "B",
-    "text": "Copyright Act 1988"
+    "text": "Copyright, Designs and Patents Act 1988"
    },
    {
     "label": "C",
-    "text": "Freedom of Information Act"
+    "text": "Consumer Rights Act 2015"
    },
    {
     "label": "D",
-    "text": "UK GDPR / Data Protection Act 2018"
+    "text": "UK General Data Protection Regulation (GDPR)"
    }
   ],
   "mark_scheme": {
    "instruction": "Award one mark for the correct option.",
    "answer": "D",
-   "explanation": "The UK GDPR/DPA 2018 governs personal data processing.",
+   "explanation": "The UK GDPR governs how personal data is processed, stored and transferred in the UK.",
    "points": [
-    "D: UK GDPR / Data Protection Act 2018 (1)"
+    "D: UK General Data Protection Regulation (GDPR) (1)"
    ]
   }
  },
  {
   "id": "MC079",
   "learning_aim": "A",
-  "topic": "A3.2 Ethical responsibilities",
+  "topic": "A3.1 Current legislation",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
   "scenario": "",
-  "question": "Reporting a bug to a vendor so they can fix it before it goes public is:",
+  "question": "Under the Computer Misuse Act 1990, which of the following is an offence?",
   "guidance": "(1)",
   "type": "multiple_choice",
   "options": [
    {
     "label": "A",
-    "text": "Dumpster diving"
+    "text": "Unauthorised access to computer material"
    },
    {
     "label": "B",
-    "text": "Social engineering"
+    "text": "Buying software under a licence"
    },
    {
     "label": "C",
-    "text": "Responsible disclosure"
+    "text": "Backing up personal files"
    },
    {
     "label": "D",
-    "text": "Black hat hacking"
+    "text": "Using an approved password manager"
    }
   ],
   "mark_scheme": {
    "instruction": "Award one mark for the correct option.",
-   "answer": "C",
-   "explanation": "Responsible disclosure gives the vendor time to fix a flaw.",
+   "answer": "A",
+   "explanation": "The Computer Misuse Act 1990 makes unauthorised access to computer material, unauthorised access with intent, and unauthorised modification all criminal offences.",
    "points": [
-    "C: Responsible disclosure (1)"
+    "A: Unauthorised access to computer material (1)"
    ]
   }
  },
  {
   "id": "MC080",
   "learning_aim": "A",
-  "topic": "A3.4 Compliance and standards",
+  "topic": "A4.4 Security by design (ISO 27000)",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -3023,11 +3023,11 @@
    },
    {
     "label": "C",
-    "text": "PCI DSS"
+    "text": "OWASP Top 10"
    },
    {
     "label": "D",
-    "text": "OWASP Top 10"
+    "text": "RFC 1918"
    }
   ],
   "mark_scheme": {
@@ -3042,7 +3042,7 @@
  {
   "id": "MC081",
   "learning_aim": "A",
-  "topic": "A4.1 Physical security",
+  "topic": "A4.1 Software and hardware security — physical",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -3080,7 +3080,7 @@
  {
   "id": "MC082",
   "learning_aim": "A",
-  "topic": "A4.2 Data protection",
+  "topic": "A4.1 Software and hardware security — backup/recovery",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -3118,7 +3118,7 @@
  {
   "id": "MC083",
   "learning_aim": "A",
-  "topic": "A4.2 Data protection",
+  "topic": "A4.1 Software and hardware security — backup/recovery",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -3156,7 +3156,7 @@
  {
   "id": "MC084",
   "learning_aim": "A",
-  "topic": "A4.3 Antivirus",
+  "topic": "A4.1 Software and hardware security — antivirus",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -3194,7 +3194,7 @@
  {
   "id": "MC085",
   "learning_aim": "A",
-  "topic": "A4.4 Firewalls",
+  "topic": "A4.1 Software and hardware security — firewalls",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -3232,7 +3232,7 @@
  {
   "id": "MC086",
   "learning_aim": "A",
-  "topic": "A4.5 Authentication",
+  "topic": "A4.1 Software and hardware security — authentication",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -3270,7 +3270,7 @@
  {
   "id": "MC087",
   "learning_aim": "A",
-  "topic": "A4.6 Access control",
+  "topic": "A4.1 Software and hardware security — access controls",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -3308,7 +3308,7 @@
  {
   "id": "MC088",
   "learning_aim": "A",
-  "topic": "A4.7 Wireless security",
+  "topic": "A4.3 WLAN protection",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -3346,7 +3346,7 @@
  {
   "id": "MC089",
   "learning_aim": "A",
-  "topic": "A4.8 Encryption",
+  "topic": "A4.2 Encryption",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -3384,7 +3384,7 @@
  {
   "id": "MC090",
   "learning_aim": "A",
-  "topic": "A4.8 Encryption",
+  "topic": "A4.2 Encryption",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -3422,7 +3422,7 @@
  {
   "id": "MC091",
   "learning_aim": "A",
-  "topic": "A4.9 Device security",
+  "topic": "A4.1 Software and hardware security — device-based security",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -3460,7 +3460,7 @@
  {
   "id": "MC092",
   "learning_aim": "A",
-  "topic": "A4.10 Security by design",
+  "topic": "A4.4 Security by design",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -3764,7 +3764,7 @@
  {
   "id": "MC100",
   "learning_aim": "B",
-  "topic": "B2.2 Connectivity devices",
+  "topic": "B2.1 Hardware components — connectivity devices",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -3802,7 +3802,7 @@
  {
   "id": "MC101",
   "learning_aim": "B",
-  "topic": "B2.2 Connectivity devices",
+  "topic": "B2.1 Hardware components — connectivity devices",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -3840,7 +3840,7 @@
  {
   "id": "MC102",
   "learning_aim": "B",
-  "topic": "B2.3 Connection media",
+  "topic": "B2.1 Hardware components — connection media",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -3878,7 +3878,7 @@
  {
   "id": "MC103",
   "learning_aim": "B",
-  "topic": "B2.3 Connection media",
+  "topic": "B2.1 Hardware components — connection media",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -3916,7 +3916,7 @@
  {
   "id": "MC104",
   "learning_aim": "B",
-  "topic": "B2.4 External media security",
+  "topic": "B2.2 External media and storage security",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -3954,7 +3954,7 @@
  {
   "id": "MC105",
   "learning_aim": "B",
-  "topic": "B3.1 TCP/IP model",
+  "topic": "B3.1 TCP/IP",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -3992,7 +3992,7 @@
  {
   "id": "MC106",
   "learning_aim": "B",
-  "topic": "B3.1 TCP/IP model",
+  "topic": "B3.1 TCP/IP",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -4030,7 +4030,7 @@
  {
   "id": "MC107",
   "learning_aim": "B",
-  "topic": "B3.2 Ports and protocols",
+  "topic": "B3.1 TCP/IP — ports",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -4068,7 +4068,7 @@
  {
   "id": "MC108",
   "learning_aim": "B",
-  "topic": "B3.2 Ports and protocols",
+  "topic": "B3.1 TCP/IP — ports",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -4106,7 +4106,7 @@
  {
   "id": "MC109",
   "learning_aim": "B",
-  "topic": "B3.2 Ports and protocols",
+  "topic": "B3.1 TCP/IP — ports",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -4144,7 +4144,7 @@
  {
   "id": "MC110",
   "learning_aim": "B",
-  "topic": "B3.3 IP addressing",
+  "topic": "B3.1 TCP/IP — NAT and addressing",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -4182,7 +4182,7 @@
  {
   "id": "MC111",
   "learning_aim": "B",
-  "topic": "B3.3 IP addressing",
+  "topic": "B3.1 TCP/IP — NAT and addressing",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -4220,7 +4220,7 @@
  {
   "id": "MC112",
   "learning_aim": "B",
-  "topic": "B3.4 DNS",
+  "topic": "B3.4 Network infrastructure services — DNS",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -4258,7 +4258,7 @@
  {
   "id": "MC113",
   "learning_aim": "B",
-  "topic": "B3.5 DHCP",
+  "topic": "B3.4 Network infrastructure services — DHCP",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -4296,7 +4296,7 @@
  {
   "id": "MC114",
   "learning_aim": "B",
-  "topic": "B3.6 Auth services",
+  "topic": "B3.4 Network infrastructure services — authentication",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -4334,7 +4334,7 @@
  {
   "id": "MC115",
   "learning_aim": "B",
-  "topic": "B3.7 Directory services",
+  "topic": "B3.4 Network infrastructure services — directory services",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -4372,7 +4372,7 @@
  {
   "id": "MC116",
   "learning_aim": "B",
-  "topic": "B3.8 Routing",
+  "topic": "B3.4 Network infrastructure services — routing",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -4410,7 +4410,7 @@
  {
   "id": "MC117",
   "learning_aim": "B",
-  "topic": "B3.9 VPN",
+  "topic": "B3.4 Network infrastructure services — remote access",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -4448,7 +4448,7 @@
  {
   "id": "MC118",
   "learning_aim": "C",
-  "topic": "C1 Internal policies",
+  "topic": "C1.1 Internal policies",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -4486,7 +4486,7 @@
  {
   "id": "MC119",
   "learning_aim": "C",
-  "topic": "C1 Internal policies",
+  "topic": "C1.1 Internal policies",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -4524,7 +4524,7 @@
  {
   "id": "MC120",
   "learning_aim": "C",
-  "topic": "C1 Internal policies",
+  "topic": "C1.1 Internal policies",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -4562,7 +4562,7 @@
  {
   "id": "MC121",
   "learning_aim": "C",
-  "topic": "C1 Internal policies",
+  "topic": "C1.1 Internal policies",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -4600,7 +4600,7 @@
  {
   "id": "MC122",
   "learning_aim": "C",
-  "topic": "C1 Internal policies",
+  "topic": "C1.1 Internal policies",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -4638,7 +4638,7 @@
  {
   "id": "MC123",
   "learning_aim": "C",
-  "topic": "C1 Internal policies",
+  "topic": "C1.1 Internal policies",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -4676,7 +4676,7 @@
  {
   "id": "MC124",
   "learning_aim": "C",
-  "topic": "C1 Internal policies",
+  "topic": "C1.1 Internal policies",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -4714,7 +4714,7 @@
  {
   "id": "MC125",
   "learning_aim": "C",
-  "topic": "C1 Internal policies",
+  "topic": "C1.1 Internal policies",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -4752,7 +4752,7 @@
  {
   "id": "MC126",
   "learning_aim": "C",
-  "topic": "C1 Internal policies",
+  "topic": "C1.1 Internal policies",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -4790,7 +4790,7 @@
  {
   "id": "MC127",
   "learning_aim": "C",
-  "topic": "C1 Internal policies",
+  "topic": "C1.1 Internal policies",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -4828,7 +4828,7 @@
  {
   "id": "MC128",
   "learning_aim": "C",
-  "topic": "C1 Internal policies",
+  "topic": "C1.1 Internal policies",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -4866,7 +4866,7 @@
  {
   "id": "MC129",
   "learning_aim": "C",
-  "topic": "C1 Internal policies",
+  "topic": "C1.1 Internal policies",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -4904,7 +4904,7 @@
  {
   "id": "MC130",
   "learning_aim": "D",
-  "topic": "D1/D2 Forensic procedures",
+  "topic": "D1.1 Forensic collection of evidence",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -4942,7 +4942,7 @@
  {
   "id": "MC131",
   "learning_aim": "D",
-  "topic": "D1/D2 Forensic procedures",
+  "topic": "D1.1 Forensic collection of evidence",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -4980,7 +4980,7 @@
  {
   "id": "MC132",
   "learning_aim": "D",
-  "topic": "D1/D2 Forensic procedures",
+  "topic": "D1.1 Forensic collection of evidence",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -5018,7 +5018,7 @@
  {
   "id": "MC133",
   "learning_aim": "D",
-  "topic": "D1/D2 Forensic procedures",
+  "topic": "D1.1 Forensic collection of evidence",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -5056,7 +5056,7 @@
  {
   "id": "MC134",
   "learning_aim": "D",
-  "topic": "D1/D2 Forensic procedures",
+  "topic": "D1.1 Forensic collection of evidence",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -5094,7 +5094,7 @@
  {
   "id": "MC135",
   "learning_aim": "D",
-  "topic": "D1/D2 Forensic procedures",
+  "topic": "D1.1 Forensic collection of evidence",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -5132,7 +5132,7 @@
  {
   "id": "MC136",
   "learning_aim": "D",
-  "topic": "D1/D2 Forensic procedures",
+  "topic": "D1.1 Forensic collection of evidence",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -5170,7 +5170,7 @@
  {
   "id": "MC137",
   "learning_aim": "D",
-  "topic": "D1/D2 Forensic procedures",
+  "topic": "D1.1 Forensic collection of evidence",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -5208,7 +5208,7 @@
  {
   "id": "MC138",
   "learning_aim": "D",
-  "topic": "D1/D2 Forensic procedures",
+  "topic": "D1.1 Forensic collection of evidence",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",
@@ -5246,7 +5246,7 @@
  {
   "id": "MC139",
   "learning_aim": "D",
-  "topic": "D1/D2 Forensic procedures",
+  "topic": "D1.1 Forensic collection of evidence",
   "command_verb": "Identify",
   "marks": 1,
   "ao": "AO1",

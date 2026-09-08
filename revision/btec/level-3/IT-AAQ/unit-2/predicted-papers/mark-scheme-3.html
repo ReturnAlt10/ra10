@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BTEC IT Unit 2 — Mark Scheme Paper 3</title>
+<style>
+:root{--ink:#12213a;--muted:#5a6b82;--line:#d6deea;--paper:#fff;--accent:#1a56c4}
+body{font-family:"Segoe UI",Arial,sans-serif;max-width:960px;margin:24px auto;padding:0 16px;color:var(--ink);background:#eef2f7;line-height:1.55}
+h1,h2,h3{margin:.2rem 0}
+.meta{color:var(--muted);margin:0 0 14px;font-size:.92rem}
+.box{border:1px solid var(--line);background:var(--paper);border-radius:12px;padding:16px;margin:16px 0}
+.ans{margin:12px 0;padding:10px 0;border-bottom:1px dashed var(--line)}
+.ans:last-child{border-bottom:none}
+.qno{font-weight:700;color:var(--accent)}
+ul{margin:8px 0 0 18px}
+.levels{border-left:3px solid var(--accent);padding:10px 12px;margin:10px 0;background:#f7fafe;border-radius:0 8px 8px 0}
+table{width:100%;border-collapse:collapse;margin:10px 0}
+th,td{border:1px solid var(--line);padding:6px 8px;font-size:.88rem;vertical-align:top}
+th{background:#f2f6fb}
+.ao{color:var(--muted);font-size:.8rem;font-style:italic}
+</style>
+</head>
+<body>
+<h1>Mark Scheme — Predicted Paper 3</h1>
+<p class="meta">BTEC Level 3 AAQ IT Unit 2: Cyber Security &amp; Incident Management &bull; Total 90 marks</p>
+
+<section class="box">
+<h2>General marking guidance</h2>
+<ul>
+  <li>Apply marks positively; reward what the student has shown.</li>
+  <li>Accept incorrect/phonetic spelling if the term is recognisable.</li>
+  <li>Accept any other appropriate/alternative response unless stated otherwise.</li>
+  <li>For 9-mark &ldquo;Evaluate&rdquo; questions, use the Levels-Based Mark Scheme at the end.</li>
+</ul>
+</section>
+
+<section class="box">
+<h2>Question 1</h2>
+<div class="ans"><p><span class="qno">1(a)</span> Why unseparated guest Wi-Fi is a risk. <span class="ao">(4 marks)</span></p>
+<ul>
+  <li>Guest devices share the network with internal systems (1)</li>
+  <li>guests could access/scan internal servers holding patient records (1)</li>
+  <li>malware on a guest device could spread to internal systems (1)</li>
+  <li>confidential patient data could be exposed or stolen (1)</li>
+</ul></div>
+
+<div class="ans"><p><span class="qno">1(b)</span> How a USB security key works. <span class="ao">(4 marks)</span></p>
+<ul>
+  <li>The USB key contains a cryptographic code/certificate (1)</li>
+  <li>when plugged in, the system reads/checks the code (1)</li>
+  <li>to verify the identity of the user (1)</li>
+  <li>providing a second &ldquo;possession&rdquo; factor alongside the password (1)</li>
+</ul></div>
+
+<div class="ans"><p><span class="qno">1(c)(i)</span> Device-based security for a lost/stolen tablet. <span class="ao">(4 marks)</span></p>
+<ul>
+  <li>Remote wipe/lock &mdash; erase data remotely when reported lost (2)</li>
+  <li>Full-disk encryption &mdash; data unreadable without the key (2)</li>
+  <li>Timed lockout/screen lock &mdash; prevents access without credentials (2)</li>
+  <li>plus linked expansion of how it protects the data (2)</li>
+</ul></div>
+
+<div class="ans"><p><span class="qno">1(c)(ii)</span> Technology to locate a lost device. <span class="ao">(1 mark)</span></p>
+<ul><li>GPS / Global Positioning System (or &ldquo;phone home&rdquo;/device tracking software) (1)</li></ul></div>
+
+<div class="ans"><p><span class="qno">1(d)</span> Impact of a data breach under GDPR. <span class="ao">(9 marks)</span></p>
+<div class="levels">
+<p><strong>Indicative content:</strong></p>
+<ul>
+  <li><strong>Legal/financial:</strong> fines up to &pound;17.5m or 4% of annual turnover; notification to the ICO within 72 hours; compensation claims from affected patients.</li>
+  <li><strong>Reputational:</strong> loss of patient trust; negative reviews; reduced reputation.</li>
+  <li><strong>Operational:</strong> disruption to services; cost of remedial action and investigation.</li>
+  <li><strong>Judgement:</strong> sensitive health data is a special category so consequences are especially severe.</li>
+</ul>
+</div></div>
+</section>
+
+<section class="box">
+<h2>Question 2</h2>
+<div class="ans"><p><span class="qno">2(a)</span> How to change the network to reduce risk. <span class="ao">(6 marks)</span></p>
+<ul>
+  <li>Use a second switch or VLANs to segment the network (1)</li>
+  <li>place guest Wi-Fi on a separate segment (1)</li>
+  <li>so guest traffic only reaches the internet (1)</li>
+  <li>and cannot reach internal servers/staff systems (1)</li>
+  <li>apply access controls/firewall rules between segments (1)</li>
+  <li>reducing the attack surface for patient data (1)</li>
+</ul></div>
+
+<div class="ans"><p><span class="qno">2(b)(i)</span> One vulnerability of a WAP. <span class="ao">(2 marks)</span></p>
+<ul>
+  <li>Wi-Fi radio signals can pass outside the building (1)</li>
+  <li>so the network can be accessed from public areas (1)</li>
+</ul>
+<p>Accept: default credentials, Evil Twin attack, wireless sniffing.</p></div>
+
+<div class="ans"><p><span class="qno">2(b)(ii)</span> One way to secure a WLAN. <span class="ao">(4 marks)</span></p>
+<ul>
+  <li>Use WPA2/WPA3 encryption (1)</li>
+  <li>so data transmitted over Wi-Fi is encrypted (1)</li>
+  <li>change default passwords/SSID (1)</li>
+  <li>use MAC filtering/block and allow lists (1)</li>
+</ul></div>
+
+<div class="ans"><p><span class="qno">2(c)</span> Evaluate MAC address filtering. <span class="ao">(9 marks)</span></p>
+<div class="levels">
+<p><strong>Indicative content:</strong></p>
+<ul>
+  <li><strong>Staff:</strong> set list once; only update for new devices; blocks unlisted devices.</li>
+  <li><strong>Guests:</strong> need to add each new device; time/resource overhead; limited MAC list size; inconvenient for patients.</li>
+  <li><strong>General:</strong> MAC addresses can be spoofed so only medium security.</li>
+</ul>
+</div></div>
+
+<div class="ans"><p><span class="qno">2(d)</span> VPN function and drawback. <span class="ao">(4 marks)</span></p>
+<ul>
+  <li>Establishes an encrypted tunnel over the internet (1)</li>
+  <li>protects data in transit from interception (1)</li>
+  <li>reduces risk of man-in-the-middle attack (1)</li>
+  <li>Drawback: cost of running the server, or slower speed (1)</li>
+</ul></div>
+</section>
+
+<section class="box">
+<h2>Question 3</h2>
+<div class="ans"><p><span class="qno">3(a)</span> Two rules in an internet/email use policy. <span class="ao">(2 marks)</span></p>
+<ul>
+  <li>No inappropriate/offensive/illegal material (1)</li>
+  <li>No downloading of executable files / no visiting dangerous websites (1)</li>
+</ul>
+<p>Accept: no sending confidential information without authorisation, no upload of copyrighted material.</p></div>
+
+<div class="ans"><p><span class="qno">3(b)</span> Staff responsibilities and training. <span class="ao">(6 marks)</span></p>
+<ul>
+  <li>Complete required security training (1)</li>
+  <li>follow security procedures and report problems (1)</li>
+  <li>respond to/report suspicious activity (1)</li>
+  <li>maintain security in own workspace/behaviour (1)</li>
+  <li>Training: flexible, range of resources/learning styles (1)</li>
+  <li>ongoing for reinforcement and new threats, with progress tracking (1)</li>
+</ul></div>
+
+<div class="ans"><p><span class="qno">3(c)</span> Procedures in an incident response policy. <span class="ao">(6 marks)</span></p>
+<ul>
+  <li>Procedures for initial decisions/triage/escalation (2)</li>
+  <li>main response: analysis, containment, mitigation, recovery (2)</li>
+  <li>reviewing, reporting and closing the incident (2)</li>
+</ul></div>
+
+<div class="ans"><p><span class="qno">3(d)</span> Disaster recovery purpose and triage plans. <span class="ao">(6 marks)</span></p>
+<ul>
+  <li>Purpose: define how to recover IT/operations after a major incident (2)</li>
+  <li>Triage activates: cyber security incident response plan (1)</li>
+  <li>business continuity plan (1)</li>
+  <li>disaster recovery plan (1)</li>
+  <li>plus linked expansion (1)</li>
+</ul></div>
+</section>
+
+<section class="box">
+<h2>Question 4</h2>
+<div class="ans"><p><span class="qno">4(a)</span> Isolating a device to preserve evidence. <span class="ao">(4 marks)</span></p>
+<ul>
+  <li>Isolate from network/communications (1)</li>
+  <li>disable wireless / use airplane mode (1)</li>
+  <li>use a Faraday bag/cage to block signals (1)</li>
+  <li>retain current power state and photograph the screen (1)</li>
+</ul></div>
+
+<div class="ans"><p><span class="qno">4(b)</span> Two challenges of live forensics. <span class="ao">(4 marks)</span></p>
+<ul>
+  <li>Data is changing in situ, so evidence may be lost (2)</li>
+  <li>capturing data in active memory/RAM before power loss (2)</li>
+</ul>
+<p>Accept: recovering corrupted data, capturing remote data, not losing temporary files.</p></div>
+
+<div class="ans"><p><span class="qno">4(c)</span> Infrastructure reviewed during network forensics. <span class="ao">(6 marks)</span></p>
+<ul>
+  <li>Firewalls and infrastructure devices (1)</li>
+  <li>switch (1), router (1), wireless access point (1)</li>
+  <li>client/server logs (1)</li>
+  <li>malware activity and alerts (1)</li>
+</ul></div>
+
+<div class="ans"><p><span class="qno">4(d)</span> Two requirements for recording findings. <span class="ao">(4 marks)</span></p>
+<ul>
+  <li>No action that could change data on the device (2)</li>
+  <li>Creation of a trail/record of all actions (chain of custody) (2)</li>
+  <li>Documentation of who is responsible for collection/decisions (2)</li>
+</ul></div>
+
+<div class="ans"><p><span class="qno">4(e)</span> How the report prevents recurrence and improvements. <span class="ao">(5 marks)</span></p>
+<ul>
+  <li>Report analyses the incident to identify errors/omissions in procedures (1)</li>
+  <li>identifies errors in preventative measures and delays in detection (1)</li>
+  <li>recommends remedial actions to prevent recurrence (1)</li>
+  <li>Improvements: IT policies (1) and security protection measures (physical, software, hardware, processes, training) (1)</li>
+</ul></div>
+</section>
+
+<section class="box">
+<h2>Levels-Based Mark Scheme (for 9-mark Evaluate questions)</h2>
+<table>
+  <tr><th>Level</th><th>Mark</th><th>Descriptor</th></tr>
+  <tr><td>0</td><td>0</td><td>No rewardable material</td></tr>
+  <tr><td>1</td><td>1&ndash;3</td><td>Basic application, one side only; superficial analysis; superficial/unsupported conclusion</td></tr>
+  <tr><td>2</td><td>4&ndash;6</td><td>Good application, both sides; good analysis; partially supported conclusion</td></tr>
+  <tr><td>3</td><td>7&ndash;9</td><td>Comprehensive balanced application; thorough analysis; well-supported conclusion</td></tr>
+</table>
+</section>
+</body>
+</html>

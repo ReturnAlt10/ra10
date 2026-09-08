@@ -103,21 +103,28 @@
      AIM A — Cyber Hygiene
   ============================================================ */
   const aimA = aim('A', [
-    topic('A1','Cyber Security Threats — threat actors, malware and social engineering', `
+    topic('A1','Cyber Security Threats — internal and external threats', `
 <div class="def-box"><div class="def-label">Key definition</div>
-<span class="def-term">Threat actor</span> — an individual, group or organisation that poses a threat to cyber security. Threat actors vary in motivation (financial, political, ideological), capability and resources.</div>
+<span class="def-term">Cyber security threat</span> — anything that could harm an organisation's systems or data. The spec splits threats into <strong>internal</strong> threats (from inside the organisation) and <strong>external</strong> threats (from outside).</div>
 
-<p><strong>Threat actor types — from least to most sophisticated:</strong></p>
-<table class="g-table"><thead><tr><th>Type</th><th>Motivation</th><th>Capability</th><th>Typical targets</th></tr></thead><tbody>
-<tr><td><strong>Script kiddies</strong></td><td>Thrill, notoriety</td><td>Low — uses pre-built tools</td><td>Unpatched systems, easy targets</td></tr>
-<tr><td><strong>Hacktivists</strong></td><td>Political/social change</td><td>Low–Medium</td><td>Government websites, corporations</td></tr>
-<tr><td><strong>Cyber criminals</strong></td><td>Financial gain</td><td>Medium–High</td><td>Businesses, individuals (ransomware, fraud)</td></tr>
-<tr><td><strong>Insider threats</strong></td><td>Revenge, financial, negligence</td><td>Variable</td><td>Their own organisation</td></tr>
-<tr><td><strong>State-sponsored</strong></td><td>Espionage, sabotage</td><td>Very High</td><td>Government, critical infrastructure</td></tr>
-<tr><td><strong>APTs</strong></td><td>Long-term espionage</td><td>Very High</td><td>Specific high-value targets, undetected for months/years</td></tr>
+<p><strong>A1.1 Internal threats</strong> — arise from within the organisation:</p>
+<table class="g-table"><thead><tr><th>Category</th><th>Examples</th></tr></thead><tbody>
+<tr><td><strong>Employee sabotage (deliberate/accidental)</strong></td><td>Theft or loss of physical equipment, data or software/licences; use of unauthorised software (licence/legal liability, compatibility issues, interference with the network, spying/harassment, avoiding monitoring)</td></tr>
+<tr><td><strong>Accidental or deliberate damage</strong></td><td>Fire, flood, power loss, terrorism, other disasters</td></tr>
+<tr><td><strong>Weak cyber security measures and unsafe practices</strong></td><td>Poor security of equipment and storage devices, no vetting of visitors, visiting untrustworthy websites</td></tr>
+<tr><td><strong>Accidental loss or disclosure of data/credentials</strong></td><td>Human factors (negligence, poor training, not following procedures); inadequate monitoring and reporting; weak security culture</td></tr>
 </tbody></table>
 
-<p><strong>Malware types — the six you must know for the exam:</strong></p>
+<p><strong>A1.2 External threats</strong> — come from outside the organisation, and are grouped into five categories:</p>
+<ul>
+<li><strong>Malicious software (malware):</strong> viruses (boot sector, web script, macro, worm, rootkit, trojan, browser hijack, polymorphic), spyware (keyloggers, system monitors, stalkerware, tracking cookies), adware, ransomware (encryptors, lockers, scareware, leakware/doxware), and bots.</li>
+<li><strong>Hacking:</strong> DoS/DDoS, browser hijack, cyberwarfare, data theft and data tampering (back-end databases, front-end web pages).</li>
+<li><strong>Sabotage:</strong> data poisoning, tampering, destruction, fakes (images/video/audio/documents, made manually or with AI), and damage to machinery, vehicles, IoT devices and critical infrastructure.</li>
+<li><strong>Social engineering:</strong> phishing, vishing, smishing, whaling, spear phishing, DNS spoofing, and pretexting/impersonation.</li>
+<li><strong>Physical security:</strong> unauthorised access to secure areas (tailgating, forced entry, impersonation, coercion) and to devices (unattended devices, shoulder surfing, theft, lost devices, public-area devices).</li>
+</ul>
+
+<p><strong>Malware types — the key ones for the exam:</strong></p>
 <table class="g-table"><thead><tr><th>Type</th><th>How it works</th><th>Spreads via</th><th>Real-world example</th></tr></thead><tbody>
 <tr><td><strong>Virus</strong></td><td>Attaches to files; activates when file opened</td><td>Infected files, email attachments, USB drives</td><td>ILOVEYOU (2000)</td></tr>
 <tr><td><strong>Worm</strong></td><td>Self-replicates across networks — no user action needed</td><td>Network vulnerabilities, email</td><td>WannaCry (2017) — NHS</td></tr>
@@ -168,10 +175,10 @@ Students confuse phishing and spear phishing. Remember: phishing is <strong>gene
 <tr><td rowspan="3"><strong>Network</strong></td><td>Open/unnecessary ports</td><td>Attack surface for scanning and exploitation</td><td>Close unused ports, firewall rules, regular port scans</td></tr>
 <tr><td>Weak/misconfigured encryption</td><td>Data can be intercepted and read</td><td>Use strong protocols (WPA3, TLS 1.3), disable legacy</td></tr>
 <tr><td>Default credentials on devices</td><td>Attackers can access using publicly known defaults</td><td>Change all default passwords on installation</td></tr>
-<tr><td rowspan="3"><strong>Human</strong></td><td>Poor password practices</td><td>Accounts easily compromised</td><td>Password policy, MFA, password managers</td></tr>
+<tr><td rowspan="3"><strong>People/process</strong></td><td>Poor password practices</td><td>Accounts easily compromised</td><td>Password policy, MFA, password managers</td></tr>
 <tr><td>Lack of security training</td><td>Staff fall for phishing, social engineering</td><td>Regular training, phishing simulations, reporting culture</td></tr>
-<tr><td>Insider threats</td><td>Authorised users abuse access</td><td>Least privilege, monitoring, separation of duties</td></tr>
-<tr><td><strong>Supply chain</strong></td><td>Third-party software/vendor access</td><td>Compromised vendor compromises you</td><td>Vendor security assessments, least privilege for third parties</td></tr>
+<tr><td>Leaks (intentional/accidental) and sharing security details</td><td>Confidential data exposed</td><td>Least privilege, monitoring, clear security processes</td></tr>
+<tr><td><strong>Cloud &amp; IoT</strong></td><td>Default settings, weak encryption, lack of patches</td><td>Third-party/cloud provider access increases exposure</td><td>Change defaults, patch regularly, vet cloud providers</td></tr>
 </tbody></table>
 
 <div class="exam-tip"><div class="tip-label">&#128161; Exam tip</div>The spec explicitly mentions supply chain risks. If a question asks about vulnerabilities in a large organisation, always mention that third-party vendors, cloud providers and software suppliers create additional attack surfaces beyond the organisation's direct control.</div>`,true),
@@ -546,24 +553,23 @@ Students confuse phishing and spear phishing. Remember: phishing is <strong>gene
     </div>
     <div class="guide-topic-body">
       <table class="g-table"><thead><tr><th>Term</th><th>Definition</th></tr></thead><tbody>
-      <tr><td>APT</td><td>Advanced Persistent Threat — prolonged, targeted cyberattack, often state-sponsored</td></tr>
+      <tr><td>Tailgating</td><td>Following an authorised person through a secure door before it closes</td></tr>
       <tr><td>Botnet</td><td>Network of compromised devices controlled remotely for DDoS, spam, or data theft</td></tr>
       <tr><td>DDoS</td><td>Distributed Denial of Service — multiple devices flood a target, overwhelming it</td></tr>
       <tr><td>Encryption</td><td>Scrambling data using a key so it is unreadable without the correct decryption key</td></tr>
       <tr><td>Firewall</td><td>Hardware/software that filters network traffic based on security rules</td></tr>
       <tr><td>GDPR</td><td>General Data Protection Regulation — governs personal data, fines up to £17.5m or 4% turnover</td></tr>
-      <tr><td>IDS/IPS</td><td>Intrusion Detection/Prevention System — monitors (IDS) or blocks (IPS) malicious activity</td></tr>
+      <tr><td>Computer Misuse Act 1990</td><td>Makes unauthorised access to computers/devices, and unauthorised access to/modification of data, a criminal offence</td></tr>
       <tr><td>MFA</td><td>Multi-Factor Authentication — requires 2+ factors from different categories</td></tr>
       <tr><td>MITM</td><td>Man-in-the-Middle — attacker intercepts communication between two parties</td></tr>
-      <tr><td>NIST IR</td><td>NIST Incident Response Lifecycle: Preparation, Detection, Containment/Recovery, Post-Incident</td></tr>
+      <tr><td>Plan-Do-Check-Act</td><td>Continual-improvement cycle (from ISO 27001) that underpins an effective cyber security policy</td></tr>
       <tr><td>Phishing</td><td>Fraudulent emails/websites designed to steal credentials or install malware</td></tr>
       <tr><td>Ransomware</td><td>Malware that encrypts files and demands payment for the decryption key</td></tr>
-      <tr><td>RPO</td><td>Recovery Point Objective — maximum acceptable data loss measured in time</td></tr>
-      <tr><td>RTO</td><td>Recovery Time Objective — maximum acceptable downtime before systems must be restored</td></tr>
-      <tr><td>SIEM</td><td>Security Information and Event Management — aggregates and correlates logs for security monitoring</td></tr>
+      <tr><td>RAID 1</td><td>Redundant Array of Independent Disks — mirroring; provides redundancy but is not a substitute for backup</td></tr>
       <tr><td>SQL Injection</td><td>Inserting malicious SQL code via input fields to manipulate databases</td></tr>
       <tr><td>Zero-day</td><td>Vulnerability unknown to vendor — no patch exists, maximum danger</td></tr>
       <tr><td>VPN</td><td>Virtual Private Network — encrypted tunnel through untrusted networks</td></tr>
+      <tr><td>WPA2/WPA3</td><td>Wi-Fi Protected Access — wireless encryption; WPA3 uses SAE and is more resistant to offline attacks than WPA2</td></tr>
       <tr><td>AUP</td><td>Acceptable Use Policy — document defining allowed use of organisational IT systems</td></tr>
       <tr><td>Chain of Custody</td><td>Documented record of everyone who handled evidence, when, and what they did</td></tr>
       </tbody></table>

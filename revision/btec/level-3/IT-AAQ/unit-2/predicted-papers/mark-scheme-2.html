@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BTEC IT Unit 2 — Mark Scheme Paper 2</title>
+<style>
+:root{--ink:#12213a;--muted:#5a6b82;--line:#d6deea;--paper:#fff;--accent:#1a56c4}
+body{font-family:"Segoe UI",Arial,sans-serif;max-width:960px;margin:24px auto;padding:0 16px;color:var(--ink);background:#eef2f7;line-height:1.55}
+h1,h2,h3{margin:.2rem 0}
+.meta{color:var(--muted);margin:0 0 14px;font-size:.92rem}
+.box{border:1px solid var(--line);background:var(--paper);border-radius:12px;padding:16px;margin:16px 0}
+.ans{margin:12px 0;padding:10px 0;border-bottom:1px dashed var(--line)}
+.ans:last-child{border-bottom:none}
+.qno{font-weight:700;color:var(--accent)}
+ul{margin:8px 0 0 18px}
+.levels{border-left:3px solid var(--accent);padding:10px 12px;margin:10px 0;background:#f7fafe;border-radius:0 8px 8px 0}
+table{width:100%;border-collapse:collapse;margin:10px 0}
+th,td{border:1px solid var(--line);padding:6px 8px;font-size:.88rem;vertical-align:top}
+th{background:#f2f6fb}
+.ao{color:var(--muted);font-size:.8rem;font-style:italic}
+</style>
+</head>
+<body>
+<h1>Mark Scheme — Predicted Paper 2</h1>
+<p class="meta">BTEC Level 3 AAQ IT Unit 2: Cyber Security &amp; Incident Management &bull; Total 90 marks</p>
+
+<section class="box">
+<h2>General marking guidance</h2>
+<ul>
+  <li>Apply marks positively; reward what the student has shown.</li>
+  <li>Accept incorrect/phonetic spelling if the term is recognisable.</li>
+  <li>Accept any other appropriate/alternative response unless stated otherwise.</li>
+  <li>For 9-mark &ldquo;Evaluate&rdquo; questions, use the Levels-Based Mark Scheme at the end.</li>
+</ul>
+</section>
+
+<section class="box">
+<h2>Question 1</h2>
+<div class="ans"><p><span class="qno">1(a)(i)</span> Describe how an SQL injection attack works. <span class="ao">(4 marks)</span></p>
+<ul>
+  <li>Attacker enters a malicious SQL query into an input field (1)</li>
+  <li>the query is passed to the back-end database (1)</li>
+  <li>it is executed as a database instruction (1)</li>
+  <li>to reveal/alter/delete data or bypass authentication (1)</li>
+</ul></div>
+
+<div class="ans"><p><span class="qno">1(a)(ii)</span> Explain one method of preventing SQL injection. <span class="ao">(3 marks)</span></p>
+<ul>
+  <li>Use parameterised queries/prepared statements (1)</li>
+  <li>so user input is treated as data, not executable code (1)</li>
+  <li>preventing rogue SQL statements from running (1)</li>
+</ul>
+<p>Accept: input validation/sanitisation, web application firewall.</p></div>
+
+<div class="ans"><p><span class="qno">1(b)</span> Difference between DoS and DDoS. <span class="ao">(4 marks)</span></p>
+<ul>
+  <li>DoS comes from a single device/source/IP address (1)</li>
+  <li>DDoS comes from multiple devices/sources (often a botnet) (1)</li>
+  <li>DDoS is harder to block because traffic comes from many sources (1)</li>
+  <li>both aim to overwhelm the target so legitimate users are denied service (1)</li>
+</ul></div>
+
+<div class="ans"><p><span class="qno">1(c)</span> Explain two security risks of BYOD. <span class="ao">(6 marks)</span></p>
+<ul>
+  <li>Personal devices may not be patched/updated &rarr; vulnerabilities (2)</li>
+  <li>Organisational data on a private device may be exposed if lost/stolen (2)</li>
+  <li>Harder to enforce password policy and data security on private devices (2)</li>
+</ul></div>
+
+<div class="ans"><p><span class="qno">1(d)</span> Two GDPR responsibilities. <span class="ao">(6 marks)</span></p>
+<ul>
+  <li>Process data lawfully, fairly and transparently (2)</li>
+  <li>Keep data accurate and up to date, only for the stated purpose (2)</li>
+  <li>Maintain confidentiality/integrity of data &mdash; appropriate security (2)</li>
+  <li>Respect data subjects' rights (access, correction, erasure, objection) (2)</li>
+</ul></div>
+</section>
+
+<section class="box">
+<h2>Question 2</h2>
+<div class="ans"><p><span class="qno">2(a)</span> Why default passwords should be changed. <span class="ao">(4 marks)</span></p>
+<ul>
+  <li>Default passwords are publicly known/documented (1)</li>
+  <li>so an attacker can gain admin access easily (1)</li>
+  <li>changing them prevents unauthorised configuration changes (1)</li>
+  <li>reduces the risk of device compromise (1)</li>
+</ul></div>
+
+<div class="ans"><p><span class="qno">2(b)</span> Evaluate WPA2 vs WPA3. <span class="ao">(9 marks)</span></p>
+<div class="levels">
+<p><strong>Indicative content:</strong></p>
+<ul>
+  <li><strong>Handshake:</strong> WPA2 uses Pre-Shared Key (PSK); WPA3 uses Simultaneous Authentication of Equals (SAE).</li>
+  <li><strong>Encryption:</strong> both use AES; WPA3 can use longer keys (up to AES-256); WPA3 more resistant to offline/dictionary attacks.</li>
+  <li><strong>Compatibility:</strong> WPA3 is newer (2018); older devices/OSs may not support it; guest devices may only support WPA2.</li>
+  <li><strong>Judgement:</strong> WPA3 is more secure but compatibility with older devices must be considered.</li>
+</ul>
+</div></div>
+
+<div class="ans"><p><span class="qno">2(c)</span> Benefit of network segmentation. <span class="ao">(4 marks)</span></p>
+<ul>
+  <li>Limits access to devices, data and applications (1)</li>
+  <li>restricts lateral movement of an attack/malware (1)</li>
+  <li>smaller attack surface (1)</li>
+  <li>simpler damage control/containment (1)</li>
+</ul></div>
+
+<div class="ans"><p><span class="qno">2(d)(i)</span> Two DHCP configuration items. <span class="ao">(2 marks)</span></p>
+<ul>
+  <li>Range of available IP addresses (1)</li>
+  <li>Lease length / fixed (reserved) IP addresses (1)</li>
+</ul></div>
+
+<div class="ans"><p><span class="qno">2(d)(ii)</span> One method of attacking via DHCP. <span class="ao">(4 marks)</span></p>
+<ul>
+  <li>Spoofing/using a rogue DHCP server (1)</li>
+  <li>to supply clients with fake configuration information (1)</li>
+  <li>enabling a man-in-the-middle attack (1)</li>
+  <li>or to disrupt/prevent network traffic (1)</li>
+</ul>
+<p>Accept: DHCP starvation &mdash; rogue client makes repeated requests to exhaust the address pool.</p></div>
+</section>
+
+<section class="box">
+<h2>Question 3</h2>
+<div class="ans"><p><span class="qno">3(a)</span> How Plan-Do-Check-Act supports improvement. <span class="ao">(6 marks)</span></p>
+<ul>
+  <li>Plan: establish objectives and plan security measures (1)</li>
+  <li>Do: implement the plan (1)</li>
+  <li>Check: monitor/audit and evaluate results against the plan (1)</li>
+  <li>Act: take corrective action to improve (1)</li>
+  <li>continuous cycle so security is reviewed and improved over time (1)</li>
+  <li>derived from ISO 27001 (1)</li>
+</ul></div>
+
+<div class="ans"><p><span class="qno">3(b)(i)</span> One advantage of a password manager. <span class="ao">(3 marks)</span></p>
+<ul>
+  <li>Stores all passwords securely (1)</li>
+  <li>allows use of long, unique random passwords for each account (1)</li>
+  <li>reduces password reuse / only one master password to remember (1)</li>
+</ul></div>
+
+<div class="ans"><p><span class="qno">3(b)(ii)</span> One disadvantage of a password manager. <span class="ao">(3 marks)</span></p>
+<ul>
+  <li>Single point of failure &mdash; if the master password is compromised all accounts are at risk (1)</li>
+  <li>dependency on the provider's security (1)</li>
+  <li>loss of access if the vault is corrupted or the provider is unavailable (1)</li>
+</ul></div>
+
+<div class="ans"><p><span class="qno">3(c)</span> DPO responsibilities and external contractors. <span class="ao">(6 marks)</span></p>
+<ul>
+  <li>DPO monitors compliance with data protection principles (1)</li>
+  <li>advises on obligations and staff training (1)</li>
+  <li>acts as contact for the regulator and data subjects (1)</li>
+  <li>policy applied to external contractors/consultants/vendors (1)</li>
+  <li>who must also comply with data protection requirements (1)</li>
+  <li>responsibility and accountability rest with the organisation (1)</li>
+</ul></div>
+
+<div class="ans"><p><span class="qno">3(d)</span> Backup policy testing and storage strategy. <span class="ao">(6 marks)</span></p>
+<ul>
+  <li>Testing strategy verifies backups can actually be restored (2)</li>
+  <li>so the organisation knows recovery works before it is needed (1)</li>
+  <li>Storage strategy determines where backups are kept (onsite/offsite/cloud) (2)</li>
+  <li>off-site/cloud protects against fire, theft and ransomware at the primary site (1)</li>
+</ul></div>
+</section>
+
+<section class="box">
+<h2>Question 4</h2>
+<div class="ans"><p><span class="qno">4(a)</span> Why a physical image rather than a targeted image. <span class="ao">(4 marks)</span></p>
+<ul>
+  <li>A physical image captures the entire drive (1)</li>
+  <li>including deleted/temporary/unallocated data (1)</li>
+  <li>a targeted image may miss relevant evidence elsewhere on the drive (1)</li>
+  <li>the full image preserves all potential evidence of the compromise (1)</li>
+</ul></div>
+
+<div class="ans"><p><span class="qno">4(b)</span> Process for creating a forensic image. <span class="ao">(4 marks)</span></p>
+<ul>
+  <li>Use a write-blocker to prevent changes to the original (1)</li>
+  <li>connect the tablet drive to a forensic workstation (1)</li>
+  <li>use a forensic imaging tool to create a bit-for-bit copy (1)</li>
+  <li>generate and record a hash to verify integrity (1)</li>
+</ul></div>
+
+<div class="ans"><p><span class="qno">4(c)</span> Which log file contains evidence. <span class="ao">(4 marks)</span></p>
+<ul>
+  <li>Application/event logs (1)</li>
+  <li>record application launches, logins and errors (1)</li>
+  <li>would show unusual access/authentication to the password manager (1)</li>
+  <li>or system/security logs showing unauthorised login attempts (1)</li>
+</ul></div>
+
+<div class="ans"><p><span class="qno">4(d)</span> Avoiding false positives. <span class="ao">(4 marks)</span></p>
+<ul>
+  <li>Define file signatures and search criteria precisely (1)</li>
+  <li>be aware of known/estimated error rates of tools (1)</li>
+  <li>manually review all positives to filter obvious false ones (1)</li>
+  <li>investigate/check filtered positives further (1)</li>
+</ul></div>
+
+<div class="ans"><p><span class="qno">4(e)</span> Report structure and improvements. <span class="ao">(4 marks)</span></p>
+<ul>
+  <li>Structure: title, contents, introduction, headings/sub-headings, conclusions (2)</li>
+  <li>Improvements: IT policies and security protection measures (physical, software, hardware, processes, training) (2)</li>
+</ul></div>
+</section>
+
+<section class="box">
+<h2>Levels-Based Mark Scheme (for 9-mark Evaluate questions)</h2>
+<table>
+  <tr><th>Level</th><th>Mark</th><th>Descriptor</th></tr>
+  <tr><td>0</td><td>0</td><td>No rewardable material</td></tr>
+  <tr><td>1</td><td>1&ndash;3</td><td>Basic application, one side only; superficial analysis; superficial/unsupported conclusion</td></tr>
+  <tr><td>2</td><td>4&ndash;6</td><td>Good application, both sides; good analysis; partially supported conclusion</td></tr>
+  <tr><td>3</td><td>7&ndash;9</td><td>Comprehensive balanced application; thorough analysis; well-supported conclusion</td></tr>
+</table>
+</section>
+</body>
+</html>

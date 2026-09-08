@@ -2,47 +2,47 @@
  {
   "id": "Q001",
   "learning_aim": "A",
-  "topic": "A1.1 Threat actors",
+  "topic": "A1.2 External threats — malware",
   "type": "mcq",
-  "question": "Which threat actor is typically motivated by political or social causes?",
+  "question": "Which category of external threat includes viruses, worms, trojans and ransomware?",
   "choices": [
-   "Script kiddies",
-   "Hacktivists",
-   "Cyber criminals",
-   "Insider threats"
+   "Malware",
+   "Phishing",
+   "Tailgating",
+   "SQL injection"
   ],
-  "correct_index": 1,
-  "explanation": "Hacktivists are motivated by political or social change. They target organisations they disagree with ideologically, unlike cyber criminals who seek financial gain."
+  "correct_index": 0,
+  "explanation": "Malware is the broad term for malicious software, including viruses, worms, trojans, ransomware, spyware and adware."
  },
  {
   "id": "Q002",
   "learning_aim": "A",
-  "topic": "A1.1 Threat actors",
+  "topic": "A1.2 External threats — malware",
   "type": "mcq",
-  "question": "What does APT stand for in cybersecurity?",
+  "question": "What type of malware encrypts files and demands a payment to restore access?",
   "choices": [
-   "Automated Penetration Test",
-   "Advanced Persistent Threat",
-   "Active Protection Technology",
-   "Automated Protocol Transfer"
+   "Worm",
+   "Trojan",
+   "Ransomware",
+   "Adware"
   ],
-  "correct_index": 1,
-  "explanation": "APT = Advanced Persistent Threat. These are prolonged, targeted attacks often sponsored by nation-states, remaining undetected for months or years."
+  "correct_index": 2,
+  "explanation": "Ransomware encrypts the victim's files (encryptors) or locks the device (lockers) and demands payment for the decryption key."
  },
  {
   "id": "Q003",
   "learning_aim": "A",
-  "topic": "A1.1 Threat actors",
+  "topic": "A1.1 Internal threats",
   "type": "mcq",
-  "question": "Which threat actor poses the highest risk from WITHIN an organisation?",
+  "question": "Which of the following is an example of an internal threat?",
   "choices": [
-   "Hacktivists",
-   "State-sponsored groups",
-   "Insider threats",
-   "Script kiddies"
+   "A phishing email",
+   "An employee leaking confidential data",
+   "A DDoS attack",
+   "A rogue access point"
   ],
-  "correct_index": 2,
-  "explanation": "Insider threats are employees or contractors who already have authorised access, making them particularly dangerous as they bypass external security controls."
+  "correct_index": 1,
+  "explanation": "Internal threats arise from within the organisation, such as employee sabotage, accidental damage, or the accidental disclosure of data."
  },
  {
   "id": "Q004",
