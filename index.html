@@ -4170,6 +4170,56 @@ html body #community-share-sheet .community-share-panel{
 .exams-progress-track span{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,#d20000,#ff6b6b)}
 .exams-progress-label{display:block;font-size:11px;color:var(--color-text-muted);margin-top:4px}
 
+/* Exams calendar */
+.exams-calendar{background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:var(--sp4);margin-bottom:var(--sp4)}
+.exams-cal-head{display:flex;align-items:center;justify-content:space-between;gap:var(--sp3);margin-bottom:var(--sp4);flex-wrap:wrap}
+.exams-cal-nav{display:flex;align-items:center;gap:var(--sp2)}
+.exams-cal-nav button{width:36px;height:36px;border-radius:var(--radius-md);border:1px solid var(--color-border);background:var(--color-surface-2);color:var(--color-text);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.exams-cal-nav button:hover{background:var(--color-surface-offset)}
+.exams-cal-title{font-family:var(--font-d);font-size:var(--tx-lg);font-weight:400}
+.exams-cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.exams-cal-dow{text-align:center;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--color-text-muted);padding:6px 0}
+.exams-cal-day{position:relative;min-height:72px;border:1px solid var(--color-border);border-radius:var(--radius-sm);background:var(--color-surface-2);padding:4px;display:flex;flex-direction:column;cursor:pointer;transition:border-color var(--t)}
+.exams-cal-day:hover{border-color:var(--color-primary)}
+.exams-cal-day.other-month{opacity:.35;background:var(--color-surface-offset)}
+.exams-cal-day.today{border-color:var(--color-primary);box-shadow:inset 0 0 0 1px var(--color-primary)}
+.exams-cal-day .cal-num{font-size:12px;font-weight:700;color:var(--color-text)}
+.exams-cal-day.today .cal-num{color:var(--color-primary)}
+.exams-cal-day .cal-dots{display:flex;flex-wrap:wrap;gap:3px;margin-top:4px}
+.exams-cal-dot{width:7px;height:7px;border-radius:999px;background:var(--color-primary);box-shadow:0 0 0 2px rgba(210,0,0,.18)}
+.exams-cal-dot.pinned{background:#ff8a00}
+.exams-cal-day .cal-more{font-size:10px;color:var(--color-text-muted);margin-top:2px}
+
+/* Exam modal */
+.exam-modal-overlay{position:fixed;inset:0;z-index:2147483500;background:rgba(15,23,42,.55);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;padding:var(--sp4)}
+.exam-modal-overlay.open{display:flex}
+.exam-modal{background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-xl);box-shadow:0 28px 80px rgba(2,6,23,.35);max-width:520px;width:100%;padding:var(--sp6);position:relative;max-height:min(88vh,760px);overflow:auto}
+.exam-modal-close{position:absolute;top:12px;right:12px;width:34px;height:34px;border-radius:999px;border:none;background:var(--color-surface-offset);color:var(--color-text-muted);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.exam-modal-close:hover{background:var(--color-surface-offset-2);color:var(--color-text)}
+.exam-modal-board{display:inline-block;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;padding:4px 10px;border-radius:999px;background:var(--color-surface-offset);color:var(--color-text-muted);margin-bottom:var(--sp3)}
+.exam-modal-board.pearson-btec{background:#e8f0fe;color:#1d4ed8}
+.exam-modal-board.aqa{background:#fef3c7;color:#92400e}
+.exam-modal-board.edexcel{background:#dcfce7;color:#166534}
+.exam-modal-board.ocr{background:#f3e8ff;color:#7c3aed}
+.exam-modal h3{font-family:var(--font-d);font-size:var(--tx-lg);font-weight:400;margin:0 0 2px}
+.exam-modal .exam-modal-name{color:var(--color-text-muted);font-size:var(--tx-sm);margin:0 0 var(--sp3)}
+.exam-modal .exam-modal-dates{margin:0 0 var(--sp4)}
+.exam-modal .exam-modal-dates li{display:flex;gap:var(--sp3);align-items:baseline;font-size:var(--tx-sm);padding:2px 0}
+.exam-modal .exam-modal-dates li b{color:var(--color-text);min-width:110px}
+.exam-modal-actions{display:flex;flex-wrap:wrap;gap:var(--sp2);margin-top:var(--sp4)}
+.exam-modal-actions a,.exam-modal-actions button{display:inline-flex;align-items:center;gap:6px;font-size:var(--tx-sm);font-weight:700;padding:9px 14px;border-radius:999px;text-decoration:none;cursor:pointer;border:1px solid var(--color-primary);background:var(--color-primary);color:#fff}
+.exam-modal-actions a.ghost,.exam-modal-actions button.ghost{background:transparent;color:var(--color-primary)}
+.exam-modal-actions a:disabled,.exam-modal-actions button:disabled{opacity:.4;pointer-events:none}
+[data-theme="dark"] .exams-calendar{background:#242831;border-color:#3d414b}
+[data-theme="dark"] .exams-cal-nav button{background:#1e2129;border-color:#3d414b;color:#e6e6e6}
+[data-theme="dark"] .exams-cal-day{background:#1e2129;border-color:#363b47}
+[data-theme="dark"] .exams-cal-day.other-month{background:#17191f}
+[data-theme="dark"] .exams-cal-day .cal-num{color:#e6e6e6}
+[data-theme="dark"] .exam-modal{background:#242831;border-color:#3d414b}
+[data-theme="dark"] .exam-modal-close{background:#2b303a;color:#adb4c2}
+[data-theme="dark"] .exam-modal h3{color:#f1f2f4}
+[data-theme="dark"] .exam-modal .exam-modal-name{color:#adb4c2}
+
 /* Home exams grid */
 .hx-exams-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:var(--sp3)}
 .hx-exam-card{
@@ -6593,7 +6643,8 @@ html body #community-share-sheet .community-share-panel{
           <option value="level">Sort: Level</option>
         </select>
         <div class="exams-view-toggle" role="group" aria-label="View mode">
-          <button id="exams-view-grid" class="exams-view-btn active" type="button" title="Grid view">▦</button>
+          <button id="exams-view-calendar" class="exams-view-btn active" type="button" title="Calendar view">📅</button>
+          <button id="exams-view-grid" class="exams-view-btn" type="button" title="Grid view">▦</button>
           <button id="exams-view-list" class="exams-view-btn" type="button" title="List view">☰</button>
         </div>
       </div>
@@ -6602,7 +6653,15 @@ html body #community-share-sheet .community-share-panel{
       </div>
     </div>
     <div class="exams-summary" id="exams-summary"></div>
+    <div class="exams-calendar" id="exams-calendar" style="display:none;"></div>
     <div class="exams-list" id="exams-list"></div>
+  </div>
+</div>
+
+<div class="exam-modal-overlay" id="exam-modal-overlay" role="dialog" aria-modal="true">
+  <div class="exam-modal">
+    <button class="exam-modal-close" id="exam-modal-close" aria-label="Close">✕</button>
+    <div id="exam-modal-content"></div>
   </div>
 </div>
 
@@ -10669,8 +10728,8 @@ const PINNED_EXAMS_KEY = 'ra10_pinned_exams_v1';
 // plus standard AQA/Edexcel/OCR GCSE, AS and A-Level exam windows.
 const EXAM_DATA = [
   // ---- Pearson BTEC Level 3 IT AAQ ----
-  { id: 'btec-it-u1', board: 'Pearson BTEC', level: 'BTEC', subject: 'IT AAQ Unit 1', name: 'Creating Systems to Manage Information', dates: ['2027-01-12', '2027-05-05'], appPath: '/revision/btec/level-3/IT-AAQ/unit-1' },
-  { id: 'btec-it-u2', board: 'Pearson BTEC', level: 'BTEC', subject: 'IT AAQ Unit 2', name: 'Cyber Security & Incident Management', dates: ['2027-01-05', '2027-05-11'], appPath: '/revision/btec/level-3/IT-AAQ/unit-2' },
+  { id: 'btec-it-u1', board: 'Pearson BTEC', level: 'BTEC', subject: 'IT AAQ Unit 1', name: 'Creating Systems to Manage Information', dates: ['2027-01-12', '2027-05-05'], appPath: '/revision/btec/level-3/IT-AAQ/unit-1', specUrl: 'https://qualifications.pearson.com/content/dam/pdf/btec-aaqs/information-technology/2025/specification-and-sample-assessments/btec-level-3-national-ext-cert-in-it-aaq-spec.pdf' },
+  { id: 'btec-it-u2', board: 'Pearson BTEC', level: 'BTEC', subject: 'IT AAQ Unit 2', name: 'Cyber Security & Incident Management', dates: ['2027-01-05', '2027-05-11'], appPath: '/revision/btec/level-3/IT-AAQ/unit-2', specUrl: 'https://qualifications.pearson.com/content/dam/pdf/btec-aaqs/information-technology/2025/specification-and-sample-assessments/btec-level-3-national-ext-cert-in-it-aaq-spec.pdf' },
   // ---- Pearson BTEC Level 3 Business ----
   { id: 'btec-bus-u3', board: 'Pearson BTEC', level: 'BTEC', subject: 'Business Unit 3', name: 'Business Decision Making', dates: ['2027-01-18', '2027-05-11'], appPath: '/revision/btec/level-3/business/unit-3' },
   { id: 'btec-bus-u2', board: 'Pearson BTEC', level: 'BTEC', subject: 'Business Unit 2', name: 'Developing a Marketing Campaign', dates: ['2027-01-07', '2027-05-07'], appPath: '/revision/btec/level-3/business/unit-3' },
@@ -10839,7 +10898,8 @@ function renderSignedInDashboard() {
   renderExamTimes();
 }
 
-let _examsFilter = { board: 'all', level: 'all', subject: 'all', pinnedOnly: false, search: '', sort: 'date', view: 'grid' };
+let _examsFilter = { board: 'all', level: 'all', subject: 'all', pinnedOnly: false, search: '', sort: 'date', view: 'calendar' };
+let _examsCalState = { year: null, month: null };
 
 function examsProgressPct(next, now) {
   // Estimate how close we are to the exam: assume a ~365 day revision window.
@@ -10909,7 +10969,18 @@ function renderExamsPage() {
     return;
   }
 
-  const view = _examsFilter.view || 'grid';
+  const view = _examsFilter.view || 'calendar';
+  const calEl = document.getElementById('exams-calendar');
+
+  if (view === 'calendar') {
+    if (calEl) calEl.style.display = '';
+    list.style.display = 'none';
+    renderExamsCalendar();
+    return;
+  }
+
+  if (calEl) calEl.style.display = 'none';
+  list.style.display = '';
   list.className = 'exams-list ' + (view === 'list' ? 'exams-list-view' : 'exams-grid-view');
 
   list.innerHTML = withNext.map(({ exam, next }) => {
@@ -10944,6 +11015,162 @@ function renderExamsPage() {
       + '</div>'
       + '</div>';
   }).join('');
+}
+
+// ---------- Exams calendar ----------
+function examsFiltered() {
+  const pinned = getPinnedExams();
+  const search = (_examsFilter.search || '').toLowerCase();
+  return EXAM_DATA.filter((exam) => {
+    if (_examsFilter.board !== 'all' && exam.board !== _examsFilter.board) return false;
+    if (_examsFilter.level !== 'all' && exam.level !== _examsFilter.level) return false;
+    if (_examsFilter.subject !== 'all' && exam.subject !== _examsFilter.subject) return false;
+    if (_examsFilter.pinnedOnly && !pinned.includes(exam.id)) return false;
+    if (search && (exam.subject + ' ' + exam.name + ' ' + exam.board).toLowerCase().indexOf(search) === -1) return false;
+    return true;
+  });
+}
+
+function examsForDate(ymd) {
+  return examsFiltered().filter(exam => (exam.dates || []).includes(ymd));
+}
+
+function ymdLocal(dt) {
+  const y = dt.getFullYear();
+  const m = String(dt.getMonth() + 1).padStart(2, '0');
+  const day = String(dt.getDate()).padStart(2, '0');
+  return y + '-' + m + '-' + day;
+}
+
+function renderExamsCalendar() {
+  const cal = document.getElementById('exams-calendar');
+  if (!cal) return;
+  const pinned = getPinnedExams();
+  const now = new Date();
+  const baseYear = _examsCalState.year != null ? _examsCalState.year : now.getFullYear();
+  const baseMonth = _examsCalState.month != null ? _examsCalState.month : now.getMonth();
+  const first = new Date(baseYear, baseMonth, 1);
+  const startDow = first.getDay(); // 0 = Sunday
+  const daysInMonth = new Date(baseYear, baseMonth + 1, 0).getDate();
+  const daysInPrev = new Date(baseYear, baseMonth, 0).getDate();
+
+  const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+  const cells = [];
+  // Leading days from previous month
+  for (let i = startDow - 1; i >= 0; i--) {
+    const d = daysInPrev - i;
+    const ymd = ymdLocal(new Date(baseYear, baseMonth - 1, d));
+    cells.push({ ymd, day: d, other: true });
+  }
+  // Current month
+  for (let d = 1; d <= daysInMonth; d++) {
+    const ymd = ymdLocal(new Date(baseYear, baseMonth, d));
+    cells.push({ ymd, day: d, other: false });
+  }
+  // Trailing days to complete the grid (multiple of 7)
+  let trailing = 1;
+  while (cells.length % 7 !== 0) {
+    const ymd = ymdLocal(new Date(baseYear, baseMonth + 1, trailing));
+    cells.push({ ymd, day: trailing, other: true });
+    trailing++;
+  }
+
+  const todayYmd = ymdLocal(now);
+
+  const dow = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  let html = '<div class="exams-cal-head">'
+    + '<div class="exams-cal-nav">'
+    +   '<button type="button" onclick="examsCalShift(-1)" aria-label="Previous month">‹</button>'
+    +   '<span class="exams-cal-title">' + monthNames[baseMonth] + ' ' + baseYear + '</span>'
+    +   '<button type="button" onclick="examsCalShift(1)" aria-label="Next month">›</button>'
+    +   '<button type="button" onclick="examsCalToday()" style="width:auto;padding:0 12px;font-size:12px;font-weight:700;">Today</button>'
+    + '</div>'
+    + '</div>'
+    + '<div class="exams-cal-grid">';
+
+  dow.forEach(d => { html += '<div class="exams-cal-dow">' + d + '</div>'; });
+
+  cells.forEach(cell => {
+    const exams = examsForDate(cell.ymd);
+    const isToday = cell.ymd === todayYmd;
+    const dots = exams.slice(0, 4).map(e => {
+      const p = pinned.includes(e.id) ? ' pinned' : '';
+      return '<span class="exams-cal-dot' + p + '" title="' + e.subject.replace(/"/g, '&quot;') + '"></span>';
+    }).join('');
+    const more = exams.length > 4 ? '<div class="cal-more">+' + (exams.length - 4) + ' more</div>' : '';
+    html += '<div class="exams-cal-day' + (cell.other ? ' other-month' : '') + (isToday ? ' today' : '') + '" data-ymd="' + cell.ymd + '" onclick="openExamDay(\'' + cell.ymd + '\')">'
+      +   '<span class="cal-num">' + cell.day + '</span>'
+      +   (exams.length ? '<div class="cal-dots">' + dots + '</div>' + more : '')
+      + '</div>';
+  });
+
+  html += '</div>';
+  cal.innerHTML = html;
+}
+
+function examsCalShift(delta) {
+  const now = new Date();
+  const year = _examsCalState.year != null ? _examsCalState.year : now.getFullYear();
+  const month = _examsCalState.month != null ? _examsCalState.month : now.getMonth();
+  const d = new Date(year, month + delta, 1);
+  _examsCalState.year = d.getFullYear();
+  _examsCalState.month = d.getMonth();
+  renderExamsCalendar();
+}
+
+function examsCalToday() {
+  const now = new Date();
+  _examsCalState.year = now.getFullYear();
+  _examsCalState.month = now.getMonth();
+  renderExamsCalendar();
+}
+
+function openExamDay(ymd) {
+  const exams = examsForDate(ymd);
+  if (!exams.length) return;
+  const overlay = document.getElementById('exam-modal-overlay');
+  const content = document.getElementById('exam-modal-content');
+  if (!overlay || !content) return;
+  const pinned = getPinnedExams();
+  const pretty = new Date(ymd + 'T09:00:00').toLocaleDateString(undefined, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+
+  const boardSpecBase = {
+    'Pearson BTEC': 'https://qualifications.pearson.com/en/qualifications/btec-nationals.html',
+    'Edexcel': 'https://qualifications.pearson.com/en/qualifications/edexcel-a-levels.html',
+    'AQA': 'https://www.aqa.org.uk/subjects',
+    'OCR': 'https://www.ocr.org.uk/qualifications/'
+  };
+
+  content.innerHTML = '<div style="margin-bottom:var(--sp3);color:var(--color-text-muted);font-size:var(--tx-sm);">' + pretty + '</div>'
+    + exams.map(exam => {
+      const boardCls = exam.board.toLowerCase().replace(/\s+/g, '-');
+      const isPinned = pinned.includes(exam.id);
+      const datesHtml = (exam.dates || []).map(d => {
+        const dp = new Date(d + 'T09:00:00').toLocaleDateString(undefined, { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
+        return '<li><b>' + dp + '</b>' + (d === ymd ? ' <span style="color:var(--color-primary);font-weight:800;">&larr; this sitting</span>' : '') + '</li>';
+      }).join('');
+      const specUrl = exam.specUrl || boardSpecBase[exam.board] || 'https://qualifications.pearson.com/';
+      const specBtn = '<a class="ghost" href="' + specUrl + '" target="_blank" rel="noopener">View exam spec &#8599;</a>';
+      const appBtn = exam.appPath ? '<a href="javascript:void(0)" onclick="closeExamModal();go(\'' + exam.appPath + '\')">Open RA10 course</a>' : '';
+      const pinBtn = '<button class="ghost" type="button" onclick="togglePinnedExam(\'' + exam.id + '\')">' + (isPinned ? '★ Unpin' : '☆ Pin') + '</button>';
+      return '<div style="margin-bottom:var(--sp6);padding-bottom:var(--sp6);border-bottom:1px solid var(--color-border);">'
+        + '<span class="exam-modal-board ' + boardCls + '">' + exam.board + '</span>'
+        + '<h3>' + exam.subject + '</h3>'
+        + '<p class="exam-modal-name">' + exam.name + '</p>'
+        + '<ul class="exam-modal-dates">' + datesHtml + '</ul>'
+        + '<div class="exam-modal-actions">' + appBtn + specBtn + pinBtn + '</div>'
+        + '</div>';
+    }).join('');
+
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeExamModal() {
+  const overlay = document.getElementById('exam-modal-overlay');
+  if (overlay) overlay.classList.remove('open');
+  document.body.style.overflow = '';
 }
 
 function renderHomeExams() {
@@ -11000,14 +11227,32 @@ function bindExamsFilters() {
   const sort = document.getElementById('exams-sort');
   const viewGrid = document.getElementById('exams-view-grid');
   const viewList = document.getElementById('exams-view-list');
+  const viewCalendar = document.getElementById('exams-view-calendar');
   if (board) board.addEventListener('change', () => { _examsFilter.board = board.value; renderExamsPage(); });
   if (level) level.addEventListener('change', () => { _examsFilter.level = level.value; renderExamsPage(); });
   if (subject) subject.addEventListener('change', () => { _examsFilter.subject = subject.value; renderExamsPage(); });
   if (pinnedBtn) pinnedBtn.addEventListener('click', () => { _examsFilter.pinnedOnly = !_examsFilter.pinnedOnly; pinnedBtn.classList.toggle('active', _examsFilter.pinnedOnly); renderExamsPage(); });
   if (search) search.addEventListener('input', () => { _examsFilter.search = search.value; renderExamsPage(); });
   if (sort) sort.addEventListener('change', () => { _examsFilter.sort = sort.value; renderExamsPage(); });
-  if (viewGrid) viewGrid.addEventListener('click', () => { _examsFilter.view = 'grid'; viewGrid.classList.add('active'); if (viewList) viewList.classList.remove('active'); renderExamsPage(); });
-  if (viewList) viewList.addEventListener('click', () => { _examsFilter.view = 'list'; viewList.classList.add('active'); if (viewGrid) viewGrid.classList.remove('active'); renderExamsPage(); });
+  const viewBtns = [viewCalendar, viewGrid, viewList].filter(Boolean);
+  function setView(v) {
+    _examsFilter.view = v;
+    viewBtns.forEach(b => b.classList.toggle('active', b.dataset.view === v));
+    renderExamsPage();
+  }
+  if (viewCalendar) viewCalendar.addEventListener('click', () => setView('calendar'));
+  if (viewGrid) viewGrid.addEventListener('click', () => setView('grid'));
+  if (viewList) viewList.addEventListener('click', () => setView('list'));
+  // Mark data-view attributes on buttons for toggling.
+  if (viewCalendar) viewCalendar.dataset.view = 'calendar';
+  if (viewGrid) viewGrid.dataset.view = 'grid';
+  if (viewList) viewList.dataset.view = 'list';
+
+  const modalOverlay = document.getElementById('exam-modal-overlay');
+  const modalClose = document.getElementById('exam-modal-close');
+  if (modalClose) modalClose.addEventListener('click', closeExamModal);
+  if (modalOverlay) modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) closeExamModal(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeExamModal(); });
 }
 
 // Exam dates from the Pearson BTEC 2027 timetables (winter + summer).

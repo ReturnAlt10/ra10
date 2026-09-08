@@ -19,13 +19,89 @@ h1,h2,h3{margin:.2rem 0}
 hr{border:none;border-top:1px dashed var(--line);margin:12px 0}
 ul{margin:8px 0 0 18px}
 .print-hint{background:#fff7e6;border:1px solid #f0d9a8;border-radius:8px;padding:10px 14px;margin:16px 0;font-size:.88rem;color:#7a5a00}
-@media print{.box{break-inside:avoid}}
+
+.pp-toolbar{position:sticky;top:0;z-index:50;display:flex;gap:10px;align-items:center;justify-content:space-between;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin:0 0 16px;box-shadow:0 4px 16px rgba(18,33,58,.08)}
+.pp-toolbar .pp-brand{font-weight:800;font-size:.9rem;color:var(--ink);letter-spacing:.02em}
+.pp-toolbar .pp-actions{display:flex;gap:8px}
+.pp-btn{font:inherit;font-size:.82rem;font-weight:700;padding:8px 14px;border-radius:999px;border:1px solid var(--accent);background:var(--accent);color:#fff;cursor:pointer}
+.pp-btn.ghost{background:#fff;color:var(--accent)}
+.pp-btn:hover{filter:brightness(1.06)}
+
+.pp-cover{border:1px solid var(--line);background:var(--paper);border-radius:12px;padding:20px;margin:16px 0}
+.pp-cover .pc-candidate{display:grid;grid-template-columns:1fr 1fr;gap:12px 28px;margin-bottom:20px}
+.pp-cover .pc-row{display:flex;align-items:flex-end;gap:10px;font-size:.88rem}
+.pp-cover .pc-row.full{grid-column:1 / -1}
+.pp-cover .pc-label{font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.pp-cover .pc-underline{flex:1;border-bottom:1px solid var(--ink);height:15px}
+.pp-cover .pc-underline.short{flex:0 1 140px}
+.pp-cover .pc-title-block{border:1px solid var(--line);padding:16px 18px;margin-bottom:16px}
+.pp-cover .pc-eyebrow{margin:0 0 4px;font-size:.85rem}
+.pp-cover .pc-sam{margin:0 0 2px;font-size:.85rem;font-weight:700}
+.pp-cover .pc-time{margin:0 0 10px;font-size:.85rem}
+.pp-cover .pc-meta-row{display:flex;justify-content:space-between;font-size:.85rem;font-weight:700;border-top:1px solid var(--line);padding-top:8px;margin-bottom:10px}
+.pp-cover .pc-unit{margin:0 0 2px;font-size:.85rem}
+.pp-cover .pc-unit-title{margin:0 0 8px;font-size:.95rem;font-weight:900}
+.pp-cover .pc-nomats{margin:0;font-size:.85rem;color:var(--muted)}
+.pp-cover .pc-advice{font-size:.8rem}
+.pp-cover .pc-advice-h{margin:12px 0 2px;font-weight:800}
+.pp-cover .pc-advice-list{margin:0 0 0 18px;padding:0}
+
+.answer-lines{display:flex;flex-direction:column;gap:22px;margin:8px 0 0;padding:4px 0}
+.answer-lines .al{height:0;border-bottom:1.5px dotted #9aa4b0}
+
+@media print{
+  .pp-toolbar,.print-hint{display:none !important}
+  body{background:#fff;max-width:none;margin:0;padding:0}
+  .box,.pp-cover{break-inside:avoid;box-shadow:none;border-radius:0}
+  .answer-lines .al{border-bottom-color:#000}
+}
 </style>
 </head>
 <body>
-<h1>BTEC Level 3 AAQ IT — Unit 2: Cyber Security &amp; Incident Management</h1>
-<p class="meta">Predicted Paper 2 &bull; Time: 2 hours 15 minutes &bull; Total marks: 90 &bull; First assessment May/June 2026</p>
-<p class="print-hint">&#128203; Practice tip: aim for roughly 1.5 minutes per mark. This is a predicted paper &mdash; not an official Pearson paper.</p>
+<div class="pp-toolbar">
+  <span class="pp-brand">Predicted Paper 2 &mdash; BTEC IT Unit 2</span>
+  <div class="pp-actions">
+    <button class="pp-btn ghost" type="button" onclick="window.print()">Print / Save as PDF</button>
+    <a class="pp-btn" href="mark-scheme-2.html">Mark Scheme</a>
+  </div>
+</div>
+
+<div class="pp-cover">
+  <div class="pc-candidate">
+    <div class="pc-row"><span class="pc-label">Candidate surname</span><span class="pc-underline"></span></div>
+    <div class="pc-row"><span class="pc-label">Other names</span><span class="pc-underline"></span></div>
+    <div class="pc-row full"><span class="pc-label">Centre Number</span><span class="pc-underline short"></span><span class="pc-label">Learner Registration Number</span><span class="pc-underline short"></span></div>
+  </div>
+  <div class="pc-title-block">
+    <p class="pc-eyebrow">Pearson Level 3 Alternative Academic Qualification BTEC National (Extended Certificate)</p>
+    <p class="pc-sam">Predicted assessment material</p>
+    <p class="pc-time">Time 2 hours 15 minutes</p>
+    <div class="pc-meta-row"><span>Paper reference</span><span>Total Marks &nbsp; 90</span></div>
+    <p class="pc-unit">Information Technology</p>
+    <p class="pc-unit-title">UNIT 2: Cyber Security and Incident Management</p>
+    <p class="pc-nomats">You do not need any other materials.</p>
+  </div>
+  <div class="pc-advice">
+    <p class="pc-advice-h">Instructions</p>
+    <ul class="pc-advice-list">
+      <li>Use black ink or ball-point pen.</li>
+      <li>Fill in the boxes at the top of this page with your name, centre number and learner registration number.</li>
+      <li>Answer all questions.</li>
+      <li>Answer the questions in the spaces provided &mdash; there may be more space than you need.</li>
+    </ul>
+    <p class="pc-advice-h">Information</p>
+    <ul class="pc-advice-list">
+      <li>The total mark for this paper is 90.</li>
+      <li>The marks for each question are shown in brackets &mdash; use this as a guide as to how much time to spend on each question.</li>
+    </ul>
+    <p class="pc-advice-h">Advice</p>
+    <ul class="pc-advice-list">
+      <li>Read each question carefully before you start to answer it.</li>
+      <li>Try to answer every question.</li>
+      <li>Check your answers if you have time at the end.</li>
+    </ul>
+  </div>
+</div>
 
 <section class="box scenario">
   <h2>SECTION A</h2>
@@ -167,5 +243,27 @@ ul{margin:8px 0 0 18px}
   <li>Use the scenario context &mdash; mention Bluewater College, its students, staff and campuses.</li>
 </ul>
 </section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var linesByMark = { 1: 2, 2: 4, 3: 6, 4: 8, 5: 10, 6: 12, 8: 16, 9: 20 };
+  document.querySelectorAll('.q').forEach(function (qEl) {
+    var marks = 0;
+    qEl.querySelectorAll('.m').forEach(function (s) {
+      var v = parseInt((s.textContent || '').replace(/[^0-9]/g, ''), 10);
+      if (!isNaN(v)) marks += v;
+    });
+    var lines = linesByMark[marks] || Math.max(2, marks * 2);
+    var box = document.createElement('div');
+    box.className = 'answer-lines';
+    for (var i = 0; i < lines; i++) {
+      var line = document.createElement('div');
+      line.className = 'al';
+      box.appendChild(line);
+    }
+    qEl.appendChild(box);
+  });
+});
+</script>
 </body>
 </html>

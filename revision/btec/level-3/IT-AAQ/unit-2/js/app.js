@@ -1606,37 +1606,54 @@ function renderMock(mock) {
   };
   const lineDensity = $('#opt-line-density') ? $('#opt-line-density').value : 'normal';
 
-  wrap.appendChild(el('div', { class: 'paper-header' },
-    el('h3', null, 'BTEC Level 3 IT — Unit 1: Information Technology Systems'),
-    el('p', null, `Mock paper · ${totalMarks} marks · Time allowed: ${Math.round(totalMarks * 4 / 3)} minutes · Seed: ${mock.seed}`),
-    el('p', { class: 'paper-instructions' }, 'Answer ALL questions. Write your answers in the space provided. The marks for each question are shown in brackets.')
+  // Pearson SAM-style front cover: candidate details, then the unit header block.
+  const cover = el('div', { class: 'paper-cover' });
+  cover.appendChild(el('div', { class: 'pc-candidate' },
+    el('div', { class: 'pc-row' }, el('span', { class: 'pc-label' }, 'Candidate surname'), el('span', { class: 'pc-underline' })),
+    el('div', { class: 'pc-row' }, el('span', { class: 'pc-label' }, 'Other names'), el('span', { class: 'pc-underline' })),
+    el('div', { class: 'pc-row' }, el('span', { class: 'pc-label' }, 'Centre Number'), el('span', { class: 'pc-underline short' }), el('span', { class: 'pc-label' }, 'Learner Registration Number'), el('span', { class: 'pc-underline short' }))
   ));
+  cover.appendChild(el('div', { class: 'pc-title-block' },
+    el('p', { class: 'pc-eyebrow' }, 'Pearson Level 3 Alternative Academic Qualification BTEC National (Extended Certificate)'),
+    el('p', { class: 'pc-sam' }, 'Sample assessment material'),
+    el('p', { class: 'pc-time' }, `Time ${Math.round(totalMarks * 4 / 3)} minutes`),
+    el('div', { class: 'pc-meta-row' }, el('span', null, 'Paper reference'), el('span', null, `Total Marks  ${totalMarks}`)),
+    el('p', { class: 'pc-unit' }, 'Information Technology'),
+    el('p', { class: 'pc-unit-title' }, 'UNIT 2: Cyber Security and Incident Management'),
+    el('p', { class: 'pc-nomats' }, 'You do not need any other materials.')
+  ));
+  cover.appendChild(el('div', { class: 'pc-advice' },
+    el('p', { class: 'pc-advice-h' }, 'Instructions'),
+    el('ul', { class: 'pc-advice-list' },
+      el('li', null, 'Use black ink or ball-point pen.'),
+      el('li', null, 'Fill in the boxes at the top of this page with your name, centre number and learner registration number.'),
+      el('li', null, 'Answer all questions.'),
+      el('li', null, 'Answer the questions in the spaces provided — there may be more space than you need.')
+    ),
+    el('p', { class: 'pc-advice-h' }, 'Information'),
+    el('ul', { class: 'pc-advice-list' },
+      el('li', null, `The total mark for this paper is ${totalMarks}.`),
+      el('li', null, 'The marks for each question are shown in brackets — use this as a guide as to how much time to spend on each question.')
+    ),
+    el('p', { class: 'pc-advice-h' }, 'Advice'),
+    el('ul', { class: 'pc-advice-list' },
+      el('li', null, 'Read each question carefully before you start to answer it.'),
+      el('li', null, 'Try to answer every question.'),
+      el('li', null, 'Check your answers if you have time at the end.')
+    )
+  ));
+  cover.appendChild(el('p', { class: 'pc-seed' }, `Mock paper · Seed: ${mock.seed}`));
+  wrap.appendChild(cover);
 
-  // Candidate header lines (Name / Class / Date / Centre / Teacher / Custom)
-  const candidateRows = [];
-  if (headerOpts.name)    candidateRows.push(['Name', 'name']);
-  if (headerOpts.cls)     candidateRows.push(['Class', 'cls']);
-  if (headerOpts.date)    candidateRows.push(['Date', 'date']);
-  if (headerOpts.centre)  candidateRows.push(['Centre / Candidate №', 'centre']);
-  if (headerOpts.teacher) candidateRows.push(['Teacher', 'teacher']);
-  if (candidateRows.length || headerOpts.custom) {
-    const ch = el('div', { class: 'candidate-header' });
-    candidateRows.forEach(([label]) => {
-      ch.appendChild(el('div', { class: 'ch-line' },
-        el('span', { class: 'ch-label' }, label + ':'),
-        el('span', { class: 'ch-fill' })
-      ));
-    });
-    if (headerOpts.custom) {
-      ch.appendChild(el('div', { class: 'ch-custom' }, headerOpts.custom));
-    }
-    wrap.appendChild(ch);
-  }
+  // SECTION A heading + scenario.
+  wrap.appendChild(el('div', { class: 'paper-section-heading' }, 'SECTION A'));
+  wrap.appendChild(el('p', { class: 'paper-scenario-intro' }, 'Read the following scenario carefully. The questions in this section relate to this scenario.'));
+  wrap.appendChild(el('p', { class: 'paper-scenario-intro' }, el('strong', null, 'Answer ALL questions. Write your answers in the spaces provided.')));
 
   mock.items.forEach((q, i) => {
     const sx = el('div', { class: 'paper-section' });
     sx.appendChild(el('div', { class: 'section-tag' },
-      `Question ${i + 1}`,
+      `${i + 1}`,
       el('span', { class: 'aim-pill' }, `Aim ${q.learning_aim}`)
     ));
     if (q.scenario) sx.appendChild(el('div', { class: 'scenario' }, q.scenario));
@@ -1687,7 +1704,7 @@ function renderMock(mock) {
     sx.appendChild(el('div', { class: 'paper-totals' }, `(Total for Question ${i + 1} = ${q.marks} mark${q.marks===1?'':'s'})`));
     wrap.appendChild(sx);
   });
-  wrap.appendChild(el('div', { class: 'paper-totals', style: 'text-align:right;font-size:16px;margin-top:24px;border-top:2px solid #14201E;padding-top:12px;' }, `TOTAL FOR PAPER = ${totalMarks} MARKS`));
+  wrap.appendChild(el('div', { class: 'paper-totals', style: 'text-align:right;font-size:16px;margin-top:24px;border-top:2px solid #14201E;padding-top:12px;' }, `TOTAL FOR SECTION A = ${totalMarks} MARKS`));
 }
 
 // ---------- Practice mode ----------
