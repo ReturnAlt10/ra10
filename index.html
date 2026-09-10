@@ -15292,7 +15292,17 @@ function bindContactModal() {
           if (fileName) { fileName.textContent = ''; fileName.style.display = 'none'; }
           if (errorEl) errorEl.classList.remove('show');
         } else {
-          if (errorEl) { errorEl.textContent = 'Sorry, something went wrong. Please try again.'; errorEl.classList.add('show'); }
+          let msg = 'Sorry, something went wrong. Please try again.';
+          try {
+            const data = await response.json();
+            if (data && data.error && /File Uploads Not Permitted/i.test(data.error)) {
+              msg = "We couldn't attach that file. Please remove the attachment and try again, or email it to contact@ra10studios.co.uk.";
+            } else if (data && data.errors && data.errors.length) {
+              const first = data.errors[0];
+              if (first && first.message) msg = first.message;
+            }
+          } catch (_jsonErr) { /* keep default msg */ }
+          if (errorEl) { errorEl.textContent = msg; errorEl.classList.add('show'); }
         }
       } catch (_e) {
         if (errorEl) { errorEl.textContent = 'Network error — please check your connection and try again.'; errorEl.classList.add('show'); }
