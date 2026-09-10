@@ -330,6 +330,55 @@ body.auth-popup-open{overflow:hidden}
   .auth-modal{padding:var(--sp5);border-radius:18px;max-height:min(90vh,760px)}
   .auth-tabs{gap:6px;padding:5px}
 }
+
+/* Contact modal */
+.contact-modal.auth-modal{max-width:520px;width:min(520px,calc(100vw - 24px))}
+.contact-modal .contact-head{display:flex;align-items:center;gap:12px;margin-bottom:var(--sp1)}
+.contact-modal .contact-head-mark{
+  width:44px;height:44px;border-radius:14px;flex-shrink:0;
+  background:linear-gradient(135deg,#d20000,#8a1a1a);
+  display:flex;align-items:center;justify-content:center;color:#fff;
+}
+.contact-modal .contact-head .contact-title{font-family:var(--font-d);font-size:var(--tx-xl);font-weight:400;line-height:1.1}
+.contact-modal .contact-subtitle{font-size:var(--tx-sm);color:var(--color-text-muted);margin-bottom:var(--sp4)}
+.contact-select{
+  width:100%;min-height:42px;padding:10px 12px;
+  border:1px solid var(--color-border);border-radius:12px;
+  background:var(--color-surface);color:var(--color-text);
+  font-family:var(--font-b);font-size:var(--tx-sm);
+  appearance:none;cursor:pointer;
+  background-image:linear-gradient(45deg,transparent 50%,var(--color-text-muted) 50%),linear-gradient(135deg,var(--color-text-muted) 50%,transparent 50%);
+  background-position:calc(100% - 18px) 50%,calc(100% - 13px) 50%;
+  background-size:5px 5px,5px 5px;background-repeat:no-repeat;
+}
+.contact-select:focus{outline:none;border-color:var(--color-primary);box-shadow:0 0 0 3px oklch(from var(--color-primary) l c h/.16)}
+.contact-textarea{
+  width:100%;min-height:120px;padding:10px 12px;resize:vertical;
+  border:1px solid var(--color-border);border-radius:12px;background:var(--color-surface);
+  font-family:var(--font-b);font-size:var(--tx-sm);color:var(--color-text);
+}
+.contact-textarea:focus{outline:none;border-color:var(--color-primary);box-shadow:0 0 0 3px oklch(from var(--color-primary) l c h/.16)}
+.contact-file-drop{
+  display:flex;align-items:center;gap:10px;
+  border:1.5px dashed var(--color-border);border-radius:12px;padding:14px;
+  cursor:pointer;transition:border-color .15s,background .15s;
+  background:var(--color-surface-offset);
+}
+.contact-file-drop:hover{border-color:var(--color-primary);background:var(--color-surface)}
+.contact-file-drop input[type="file"]{display:none}
+.contact-file-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:var(--color-surface);border:1px solid var(--color-border);color:var(--color-text-muted);flex-shrink:0}
+.contact-file-copy{min-width:0}
+.contact-file-copy b{display:block;font-size:var(--tx-sm);color:var(--color-text);line-height:1.2}
+.contact-file-copy span{display:block;font-size:var(--tx-xs);color:var(--color-text-muted);margin-top:2px}
+.contact-file-name{display:block;font-size:var(--tx-xs);color:var(--color-primary);font-weight:700;margin-top:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.contact-submit-btn{
+  width:100%;min-height:46px;border-radius:999px;
+  background:linear-gradient(120deg,#d20000,#a70000);color:#fff;font-weight:800;font-size:var(--tx-sm);
+  border:1px solid rgba(120,0,0,.4);box-shadow:0 4px 0 rgba(120,0,0,.4),0 10px 20px rgba(210,0,0,.22);
+  transition:filter .15s ease,transform .15s ease;
+}
+.contact-submit-btn:hover{filter:brightness(1.06)}
+.contact-submit-btn:disabled{opacity:.6;cursor:not-allowed;filter:grayscale(.3)}
 .auth-overlay.open .auth-modal{transform:translateY(0) scale(1)}
 .home-reframe-banner{
   position:relative;
@@ -11486,6 +11535,7 @@ async function waitForRA10Sdk(timeoutMs) {
     refreshSiteAnnouncement({ silent: true });
     startSiteAnnouncementRefreshLoop();
     bindDesktopHoverPreviews();
+    bindContactModal();
     setPriceSnapshotView('all');
     updateLeaderboardCountdown();
     setInterval(updateLeaderboardCountdown, 1000);
@@ -14845,6 +14895,69 @@ async function waitForRA10Sdk(timeoutMs) {
     </div>
   </div>
 </div>
+<div class="auth-overlay" id="contact-overlay" role="dialog" aria-modal="true" aria-labelledby="contact-title">
+  <div class="auth-modal contact-modal">
+    <button class="auth-close" id="contact-close" type="button" aria-label="Close contact form">✕</button>
+    <div class="contact-head">
+      <div class="contact-head-mark">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><path d="m22 6-10 7L2 6"/></svg>
+      </div>
+      <div>
+        <div class="contact-title" id="contact-title">Contact us</div>
+        <div class="contact-subtitle" style="margin-bottom:0">We usually reply within a day or two.</div>
+      </div>
+    </div>
+    <p class="contact-subtitle" style="margin-top:var(--sp3)">Tell us how we can help. Fields marked * are required.</p>
+    <form id="contact-form" novalidate>
+      <div class="auth-field">
+        <label class="auth-label" for="contact-category">Topic *</label>
+        <select class="contact-select" id="contact-category" required>
+          <option value="">Choose a topic…</option>
+          <option>Subscriptions &amp; billing</option>
+          <option>Bug report</option>
+          <option>Content error / correction</option>
+          <option>Feature request</option>
+          <option>Account / sign-in issue</option>
+          <option>Schools &amp; teachers</option>
+          <option>Something else</option>
+        </select>
+      </div>
+      <div class="auth-field">
+        <label class="auth-label" for="contact-name">Name *</label>
+        <input class="auth-input" type="text" id="contact-name" placeholder="Your name" required>
+      </div>
+      <div class="auth-field">
+        <label class="auth-label" for="contact-email">Email *</label>
+        <input class="auth-input" type="email" id="contact-email" placeholder="you@example.com" required>
+      </div>
+      <div class="auth-field">
+        <label class="auth-label" for="contact-username">Username <span style="text-transform:none;font-weight:600;opacity:.7">(optional)</span></label>
+        <input class="auth-input" type="text" id="contact-username" placeholder="Your RA10 username, if you have one">
+      </div>
+      <div class="auth-field">
+        <label class="auth-label" for="contact-message">Message *</label>
+        <textarea class="contact-textarea" id="contact-message" placeholder="Describe the issue or question…" required></textarea>
+      </div>
+      <div class="auth-field">
+        <label class="auth-label">Attachment <span style="text-transform:none;font-weight:600;opacity:.7">(optional)</span></label>
+        <label class="contact-file-drop" for="contact-file-input">
+          <span class="contact-file-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>
+          </span>
+          <span class="contact-file-copy">
+            <b>Attach a file</b>
+            <span>Screenshot or document (max ~10 MB)</span>
+          </span>
+        </label>
+        <input type="file" id="contact-file-input" accept="image/*,.png,.jpg,.jpeg,.gif,.webp,.pdf,.doc,.docx,.txt,.csv,.xlsx,.zip">
+        <span class="contact-file-name" id="contact-file-name" style="display:none"></span>
+      </div>
+      <div class="auth-error" id="contact-error"></div>
+      <div class="auth-success" id="contact-success"></div>
+      <button class="contact-submit-btn" id="contact-submit" type="submit">Send message</button>
+    </form>
+  </div>
+</div>
 <div class="auth-overlay" id="set-password-overlay">
   <div class="auth-modal">
     <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:1.5rem">
@@ -15063,28 +15176,131 @@ function dismissA2HS() {
 }
 
 function contactSupportFromFooter() {
-  const issue = window.prompt('Tell us what issue you are having:');
-  if (issue === null) return;
-  const message = (issue || '').trim();
-  if (!message) {
-    window.alert('Please add a short message before sending.');
-    return;
+  openContactModal();
+}
+
+const CONTACT_FORM_ID = 'xppzbror';
+
+function openContactModal() {
+  const overlay = document.getElementById('contact-overlay');
+  if (!overlay) return;
+  overlay.classList.add('open');
+  overlay.removeAttribute('hidden');
+  document.body.classList.add('auth-popup-open');
+  const emailInput = document.getElementById('contact-email');
+  if (emailInput && window.RA10 && typeof RA10.getProfile === 'function') {
+    const p = RA10.getProfile() || {};
+    if (p.email && !emailInput.value) emailInput.value = p.email;
+    const uname = document.getElementById('contact-username');
+    if (uname && (p.username || p.full_name) && !uname.value) uname.value = p.username || p.full_name;
+    const name = document.getElementById('contact-name');
+    if (name && p.full_name && !name.value) name.value = p.full_name;
+  }
+  const nameInput = document.getElementById('contact-name');
+  if (nameInput) nameInput.focus();
+}
+
+function closeContactModal() {
+  const overlay = document.getElementById('contact-overlay');
+  if (!overlay) return;
+  overlay.classList.remove('open');
+  overlay.setAttribute('hidden', '');
+  document.body.classList.remove('auth-popup-open');
+}
+
+function bindContactModal() {
+  const overlay = document.getElementById('contact-overlay');
+  if (!overlay || overlay.dataset.bound) return;
+  overlay.dataset.bound = '1';
+
+  const closeBtn = document.getElementById('contact-close');
+  const form = document.getElementById('contact-form');
+  const submitBtn = document.getElementById('contact-submit');
+  const errorEl = document.getElementById('contact-error');
+  const successEl = document.getElementById('contact-success');
+  const fileInput = document.getElementById('contact-file-input');
+  const fileName = document.getElementById('contact-file-name');
+
+  if (closeBtn) closeBtn.addEventListener('click', closeContactModal);
+  if (overlay) overlay.addEventListener('click', (e) => { if (e.target === overlay) closeContactModal(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && overlay.classList.contains('open')) closeContactModal(); });
+
+  if (fileInput && fileName) {
+    fileInput.addEventListener('change', () => {
+      if (fileInput.files && fileInput.files[0]) {
+        fileName.textContent = fileInput.files[0].name;
+        fileName.style.display = 'block';
+      } else {
+        fileName.textContent = '';
+        fileName.style.display = 'none';
+      }
+    });
   }
 
-  const pageRef = location.hash || location.pathname || '/';
-  const body = [
-    'Issue details:',
-    message,
-    '',
-    'Page:',
-    pageRef,
-    '',
-    'User agent:',
-    navigator.userAgent
-  ].join('\n');
+  if (form) {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (errorEl) errorEl.classList.remove('show');
+      if (successEl) successEl.classList.remove('show');
 
-  const subject = 'RA10 Support Request';
-  window.location.href = 'mailto:contact@ra10studios.co.uk?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+      const category = document.getElementById('contact-category').value;
+      const name = document.getElementById('contact-name').value.trim();
+      const email = document.getElementById('contact-email').value.trim();
+      const username = document.getElementById('contact-username').value.trim();
+      const message = document.getElementById('contact-message').value.trim();
+
+      if (!category || !name || !email || !message) {
+        if (errorEl) { errorEl.textContent = 'Please fill in all required fields (topic, name, email and message).'; errorEl.classList.add('show'); }
+        return;
+      }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        if (errorEl) { errorEl.textContent = 'Please enter a valid email address.'; errorEl.classList.add('show'); }
+        return;
+      }
+
+      const file = fileInput && fileInput.files && fileInput.files[0] ? fileInput.files[0] : null;
+      const MAX_SIZE = 10 * 1024 * 1024;
+      if (file && file.size > MAX_SIZE) {
+        if (errorEl) { errorEl.textContent = 'That file is too large. Please attach a file under 10 MB.'; errorEl.classList.add('show'); }
+        return;
+      }
+
+      if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Sending…'; }
+
+      try {
+        let response;
+        if (file) {
+          const fd = new FormData();
+          fd.append('topic', category);
+          fd.append('name', name);
+          fd.append('email', email);
+          fd.append('username', username);
+          fd.append('message', message);
+          fd.append('page', location.hash || location.pathname || '/');
+          fd.append('file', file);
+          response = await fetch('https://formspree.io/f/' + CONTACT_FORM_ID, { method: 'POST', body: fd, headers: { 'Accept': 'application/json' } });
+        } else {
+          response = await fetch('https://formspree.io/f/' + CONTACT_FORM_ID, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+            body: JSON.stringify({ topic: category, name, email, username, message, page: location.hash || location.pathname || '/' })
+          });
+        }
+        if (response.ok) {
+          if (successEl) { successEl.textContent = 'Thanks! Your message has been sent — we will get back to you soon.'; successEl.classList.add('show'); }
+          form.reset();
+          if (fileName) { fileName.textContent = ''; fileName.style.display = 'none'; }
+          if (errorEl) errorEl.classList.remove('show');
+        } else {
+          if (errorEl) { errorEl.textContent = 'Sorry, something went wrong. Please try again.'; errorEl.classList.add('show'); }
+        }
+      } catch (_e) {
+        if (errorEl) { errorEl.textContent = 'Network error — please check your connection and try again.'; errorEl.classList.add('show'); }
+      } finally {
+        if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Send message'; }
+      }
+    });
+  }
 }
 </script>
 
