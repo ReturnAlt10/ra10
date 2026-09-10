@@ -39,6 +39,16 @@
   function injectStyles() {
     if (document.getElementById('ra10-ai-helper-css')) return;
     var css = [
+      // Top hint banner
+      '.ra10-ai-hint{position:relative;z-index:2147483200;display:flex;align-items:center;gap:10px;width:min(760px,calc(100% - 32px));margin:14px auto 0;padding:11px 14px;border-radius:14px;background:linear-gradient(135deg,#eef2ff,#f5f0ff);border:1px solid #c7d2fe;color:#3730a3;font-size:.82rem;line-height:1.4;box-shadow:0 8px 24px rgba(99,102,241,.18);animation:ra10AiHintIn .4s cubic-bezier(.2,.8,.2,1) both;}',
+      '[data-theme="dark"] .ra10-ai-hint{background:linear-gradient(135deg,#21233a,#2a2140);border-color:#4c4f8f;color:#c7d2fe;}',
+      '@keyframes ra10AiHintIn{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:none}}',
+      '.ra10-ai-hint-icon{flex-shrink:0;width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,#1f6feb,#7c3aed);display:flex;align-items:center;justify-content:center;color:#fff;box-shadow:0 4px 10px rgba(31,111,235,.3);}',
+      '.ra10-ai-hint-body{flex:1;min-width:0;}',
+      '.ra10-ai-hint-body b{font-weight:800;}',
+      '.ra10-ai-hint-close{flex-shrink:0;border:none;cursor:pointer;background:transparent;color:#6d28d9;font-size:1rem;font-weight:800;line-height:1;padding:6px;border-radius:8px;transition:background .15s,color .15s;}',
+      '[data-theme="dark"] .ra10-ai-hint-close{color:#a78bfa;}',
+      '.ra10-ai-hint-close:hover{background:rgba(124,58,237,.12);}',
       '.ra10-ai-fab{position:fixed;right:18px;bottom:18px;z-index:2147483300;width:56px;height:56px;border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#fff;background:linear-gradient(135deg,#1f6feb,#7c3aed);box-shadow:0 12px 30px rgba(31,111,235,.4);transition:transform .18s ease,box-shadow .18s ease;}',
       '.ra10-ai-fab:hover{transform:translateY(-3px) scale(1.04);box-shadow:0 16px 36px rgba(31,111,235,.5);}',
       '.ra10-ai-fab::after{content:"";position:absolute;inset:0;border-radius:50%;box-shadow:0 0 0 0 rgba(124,58,237,.45);animation:ra10AifabPulse 2.4s ease-out infinite;}',
@@ -177,7 +187,33 @@
     wireSelection(pop);
     renderSuggestions();
     updateCost();
+    showHintBanner();
     addMsg('bot', 'Hi! I\u2019m your **AI Helper**. Ask me anything about this topic, or select any text on the page and tap **Ask AI** to get an instant explanation. Your first questions use credits from your balance.');
+  }
+
+  function showHintBanner() {
+    if (document.getElementById('ra10-ai-hint')) return;
+    try { if (localStorage.getItem('ra10_ai_hint_dismissed') === '1') return; } catch (e) {}
+
+    var banner = document.createElement('div');
+    banner.className = 'ra10-ai-hint';
+    banner.id = 'ra10-ai-hint';
+    banner.innerHTML =
+      '<span class="ra10-ai-hint-icon">' + aiLogoSvg(18) + '</span>' +
+      '<span class="ra10-ai-hint-body"><b>Tip:</b> select any text on this page and tap <b>Ask AI</b> to get an instant explanation of it.</span>' +
+      '<button class="ra10-ai-hint-close" type="button" aria-label="Dismiss tip">&#10005;</button>';
+
+    // Insert at the very top of the body so it appears above the page content.
+    var first = document.body.firstChild;
+    document.body.insertBefore(banner, first);
+
+    banner.querySelector('.ra10-ai-hint-close').addEventListener('click', function () {
+      banner.style.opacity = '0';
+      banner.style.transform = 'translateY(-6px)';
+      banner.style.transition = 'opacity .2s ease, transform .2s ease';
+      try { localStorage.setItem('ra10_ai_hint_dismissed', '1'); } catch (e) {}
+      setTimeout(function () { if (banner && banner.remove) banner.remove(); }, 220);
+    });
   }
 
   function updateCost() {
