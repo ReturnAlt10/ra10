@@ -352,8 +352,13 @@
         if (!rect || (rect.top === 0 && rect.left === 0 && rect.height === 0)) { hideSelectPop(); return; }
         panelSelectionText = text;
         pendingContext = text;
-        pop.style.top = (window.scrollY + rect.top - 46) + 'px';
-        pop.style.left = Math.max(8, Math.min(rect.left + (rect.width / 2) - 40, window.innerWidth - 90)) + 'px';
+        // Position the popup just above the selection: tiny 4px gap above the
+        // selected text, horizontally centred on the first selection line.
+        var popH = pop.offsetHeight || 32;
+        pop.style.top = (window.scrollY + rect.top - popH - 4) + 'px';
+        var cx = rect.left + Math.min(rect.width, 120) / 2;
+        var popW = pop.offsetWidth || 92;
+        pop.style.left = Math.max(8, Math.min(cx - popW / 2, window.innerWidth - popW - 8)) + 'px';
         pop.classList.add('show');
       }, 10);
     });
