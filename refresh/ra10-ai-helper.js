@@ -131,6 +131,24 @@
     return parts.join('\n').slice(0, 2500);
   }
 
+  // Detect the qualification/unit from the URL so the AI is profiled correctly.
+  function detectUnit() {
+    var p = String(location.pathname || '').toLowerCase();
+    if (/\/revision\/btec\/level-3\/it-aaq\/unit-1/.test(p)) return 'it-aaq-unit-1';
+    if (/\/revision\/btec\/level-3\/it-aaq\/unit-2/.test(p)) return 'it-aaq-unit-2';
+    if (/\/revision\/btec\/level-3\/it-aaq\/unit-3/.test(p)) return 'it-aaq-unit-3';
+    if (/\/revision\/btec\/level-3\/it-aaq\/unit-4/.test(p)) return 'it-aaq-unit-4';
+    if (/\/revision\/btec\/level-3\/business\/unit-1/.test(p)) return 'business-unit-1';
+    if (/\/revision\/btec\/level-3\/business\/unit-2/.test(p)) return 'business-unit-2';
+    if (/\/revision\/btec\/level-3\/business\/unit-3/.test(p)) return 'business-unit-3';
+    if (/\/revision\/btec\/level-3\/business\/unit-4/.test(p)) return 'business-unit-4';
+    if (/\/revision\/btec\/level-3\/sport\/unit-1/.test(p)) return 'sport-unit-1';
+    if (/\/revision\/btec\/level-3\/sport\/unit-2/.test(p)) return 'sport-unit-2';
+    if (/\/revision\/btec\/level-2\/it\/unit-2/.test(p)) return 'it-l2-unit-2';
+    if (/\/revision\/a-level\/business/.test(p)) return 'a-level-business';
+    return '';
+  }
+
   function buildSuggestions() {
     return [
       'Summarise this topic in a few bullet points',
@@ -367,7 +385,8 @@
         var res = await RA10.askAiAssigner({
           message: text,
           history: chatHistory.slice(-8),
-          context: ctx
+          context: ctx,
+          unit: detectUnit()
         });
         if (think && think.remove) think.remove();
         addMsg('bot', res.reply);

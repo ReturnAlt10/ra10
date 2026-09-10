@@ -1792,6 +1792,7 @@
       mode: 'hint',
       message,
       context: input && typeof input.context === 'string' ? input.context.slice(0, 4000) : '',
+      unit: input && typeof input.unit === 'string' ? input.unit.slice(0, 64) : '',
       history: Array.isArray(input && input.history) ? input.history.slice(-8) : [],
     };
     const response = await fetch(SUPABASE_URL + '/functions/v1/ai-assign', {

@@ -546,6 +546,7 @@
         var res = await RA10.askAiAssigner({
           message: text,
           history: chatHistory.slice(-8),
+          unit: 'it-aaq-unit-3',
           context: 'Unit 3 Website Development. Current mode: ' + mode + '. Modes: chat (ask anything), hints (coach toward next grade), examiner (mark work against criteria). Learning aims: A (principles + planning), B (design + assets), C (build + test). Assignment has 3 tasks. Encourage the student to work things out themselves \u2014 never write their work for them. Use markdown in your answer: **bold**, lists, - [ ] task lists, tables and fenced code blocks.'
         });
         removeThinking(think);

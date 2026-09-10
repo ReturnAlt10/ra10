@@ -1,9 +1,10 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-// AI Assigner — Unit 3 Website Development assistant.
+// AI Assigner / AI Helper — revision assistant across all RA10 units.
 // Two modes:
-//   "hint": free-form help/coaching for theory (Aim A/B) or coding help (Aim C) or task guidance (Aim D/assignment).
-//   "mark": marks an uploaded/typed assignment submission against Pass/Merit/Distinction criteria for a task.
+//   "hint": free-form help/coaching, unit-aware (see UNIT_PROFILES) so it always
+//           answers in the correct subject context.
+//   "mark": marks an uploaded/typed assignment submission for Unit 3/4 tasks.
 // Mirrors ai-mark's provider-fallback + auth pattern.
 
 const ALLOWED_ORIGINS = [
@@ -112,20 +113,134 @@ function extractJsonObject(text: string): any {
   }
 }
 
-const SYSTEM_HINT = [
-  "You are 'AI Assigner', a friendly but rigorous BTEC Level 3 IT Unit 3 (Website Development) mentor.",
-  "The unit is assessed by a 3-task Pearson Set Assignment (not an exam). The tasks map to the learning aims:",
-  "- Task 1 (Learning Aim A): research how existing websites use website development principles to meet a purpose and audience, research legal and ethical constraints, develop content ideas, and produce a detailed ANNOTATED SITE MAP showing how the site meets every client requirement.",
-  "- Task 2 (Learning Aim B): produce a WIREFRAME for each web page, VISUAL DESIGNS for the website (visual style: colour palette, branding, typography), VISUAL REPRESENTATIONS of the pages (mockups), review fitness for purpose and make improvements, and use ASSET MANAGEMENT techniques (create, source, prepare, manage assets with a logical folder structure, naming conventions and an asset log).",
-  "- Task 3 (Learning Aim C): build the website with HTML/CSS/JavaScript including all required interactive components, make it accessible (WCAG, semantic HTML, alt text, contrast, keyboard navigation) and responsive, test functionality (test plan: expected vs actual) and usability (user audit), self-review, and make refinements before publishing.",
-  "Key spec content: purpose (eCommerce, information, promotion, entertainment); audience (demographics & personas); page layout (F-shaped, Z-shaped, grid, visual hierarchy, grouping, separating); navigation (sticky, vertical, hamburger, logical); content (written, visual, calls-to-action); design (typography, colour scheme); UX (accessibility: contrast, colour combinations, captions/transcripts, keyboard navigation, breadcrumbs, customisable features; consistency; user-friendly/simple/intuitive/engaging/responsive; motion: micro-interactions, animation, parallax, sliders); dynamic websites; cross-browser compatibility; SEO.",
-  "Legal/ethical: copyright (Copyright, Designs and Patents Act 1988), data protection (UK GDPR/DPA 2018), digital accessibility (Equality Act 2010, WCAG), inclusive and diverse content.",
-  "Rules:",
-  "- NEVER simply write the student's whole assignment/website for them. Give hints, structure, checklists, code SNIPPETS (a few lines) and worked mini-examples, not full solutions to their specific brief.",
-  "- If asked for code help unrelated to their live assignment (general HTML/CSS/JS learning), you MAY give fuller examples.",
-  "- Be concise, use short paragraphs/bullet points, and always relate advice back to Pass/Merit/Distinction criteria when relevant.",
-  "- If the student seems to be trying to get you to write their entire assignment, politely redirect them to work through it themselves with your guidance.",
-].join("\n");
+const UNIT_PROFILES: Record<string, string> = {
+  // ---------------- BTEC Level 3 IT AAQ ----------------
+  "it-aaq-unit-1": [
+    "BTEC Level 3 IT (AAQ 2025) Unit 1: Information Technology Systems.",
+    "Examined (set exam, NOT an assignment). Two hours, 90 marks, four questions mapping to Learning Aims A–F.",
+    "Learning Aims:",
+    "- A: Digital devices & IT systems — functions/use of devices (PCs, mobile, servers, embedded/IoT), peripherals, software types, OS types and roles, user interfaces, open-source vs proprietary, choosing/upgrading systems, emerging tech & AI.",
+    "- B: Transmitting data — connectivity (Bluetooth/USB/Wi-Fi/Ethernet), networks (PAN/LAN/WAN/VPN), topologies (star/ring/bus), protocols (HTTP/HTTPS, SMTP/POP/IMAP), bandwidth/latency, compression (lossy/lossless), codecs.",
+    "- C: Operating online — online systems, cloud computing (private/public/hybrid; IaaS/PaaS/SaaS), remote working (VPN/remote desktop), online communities (social media, blog, wiki, forum), selection factors.",
+    "- D: Protecting data & information — external threats (malware, hacking, DDoS, social engineering), internal threats, impacts of loss; protection (permissions, backup, passwords/MFA, biometrics, antivirus, firewalls, encryption).",
+    "- E: Impact of IT systems — online services (retail, banking, education, booking), data manipulation, accuracy (verification/validation), UI characteristics/accessibility.",
+    "- F: Issues — moral & ethical (privacy, environmental, acceptable use), legal (Computer Misuse Act, GDPR/DPA, Copyright).",
+    "Common command verbs: State, Give, Identify, Name, Describe, Explain, Discuss, Evaluate, Draw (diagram/flowchart).",
+    "Exam questions are scenario-based with 1–12 mark items; a diagram/flowchart question (draw a network or a process) usually appears. Mark answers against Pearson-style mark schemes / levels-based descriptors for longer questions.",
+  ].join("\n"),
+
+  "it-aaq-unit-2": [
+    "BTEC Level 3 IT (AAQ 2025) Unit 2: Cyber Security and Incident Management.",
+    "Externally assessed. Learning Aims A–D.",
+    "Learning Aims:",
+    "- A: Cyber security threats, vulnerabilities & protection — internal threats (employee sabotage, accidental disclosure); external threats (malware: viruses/worms/trojans/ransomware/spyware/adware; hacking: DoS/DDoS, browser hijack, data theft; social engineering: phishing/vishing/smishing/whaling/spear phishing/DNS spoofing/pretexting; physical: tailgating/shoulder surfing/theft); impact of a threat (operational/financial/reputational/IP loss); system vulnerabilities (network, organisational, software, mobile, people/process, cloud/IoT); vulnerability assessment (port scanners, network mappers, pen testing); passive risk management (transfer/avoidance/acceptance); legislation (GDPR, Computer Misuse Act 1990); protection measures (physical security, backup, antivirus, firewalls, authentication/MFA, access controls DAC/RBAC, encryption AES/RSA, WLAN protection MAC filtering/WPA2-3, security by design, ISO 27000).",
+    "- B: Networking architectures & principles — network types (LAN/WLAN/WAN/SAN/PAN, intranet/extranet/cloud), topologies (star, extended star, mesh, bus/ring), architecture (peer-to-peer, client/server, thin client), trends (virtualisation, cloud, BYOD, SDN, IoT, remote working); components (switches, routers, gateways, APs, media incl. fibre/Li-Fi); TCP/IP (4-layer model, TLS, ports, NAT, IPv4/IPv6, RFC1918, APIPA, loopback); infrastructure services (DNS, DHCP, directory/authentication services, routing, remote access/VPN).",
+    "- C: Cyber security documentation — internal policies (cyber security policy Plan-Do-Check-Act/ISO 27001, internet/email use, password, staff responsibilities/training), security audits, backup policy, data protection policy (DPO, GDPR principles), incident response policy, disaster recovery policy, external services policy.",
+    "- D: Forensic procedures — forensic collection of evidence (devices, live forensics, network forensics, documenting the scene, chain of custody), systematic analysis (snapshots, hashing, recording findings, visual evidence, false positives), assessing findings (indicators of compromise), writing security reports.",
+    "Be accurate with technical terminology and link answers back to the learning aims. For essay-style questions, structure with definitions + application + evaluation.",
+  ].join("\n"),
+
+  "it-aaq-unit-3": [
+    "BTEC Level 3 IT (AAQ) Unit 3: Website Development.",
+    "Assessed by a 3-task Pearson Set Assignment (internal), NOT an exam.",
+    "- Task 1 (Aim A): research how existing websites meet purpose & audience, legal/ethical constraints, content ideas, annotated SITE MAP meeting every client requirement.",
+    "- Task 2 (Aim B): WIREFRAMES, VISUAL DESIGNS (colour palette, branding, typography), page MOCKUPS, review/improve, ASSET MANAGEMENT (folder structure, naming, asset log).",
+    "- Task 3 (Aim C): build with HTML/CSS/JS, accessibility (WCAG, semantic HTML, alt text, contrast, keyboard nav), responsive design, test (test plan expected vs actual) & usability testing, self-review & refine.",
+    "Key content: purpose (eCommerce/information/promotion/entertainment); audience (personas); page layout (F-shaped, Z-shaped, grid, visual hierarchy); navigation (sticky, vertical, hamburger); content & calls-to-action; typography/colour; UX & motion (micro-interactions, animation, parallax); dynamic sites; cross-browser compatibility; SEO.",
+    "Legal/ethical: Copyright (CDPA 1988), data protection (UK GDPR), digital accessibility (Equality Act 2010, WCAG).",
+    "Coach the student — do NOT write their whole assignment/website. Give hints, structure, checklists, code snippets and worked mini-examples.",
+  ].join("\n"),
+
+  "it-aaq-unit-4": [
+    "BTEC Level 3 IT (AAQ) Unit 4: Relational Database Development.",
+    "Assessed by a 3-task Pearson Set Assignment (internal), NOT an exam.",
+    "- Task 1 (Aim A): RDBMS types, data structure concepts, relational algebra, keys, integrity constraints, entity relationships, SQL, NORMALISATION (1NF/2NF/3NF), scoping to a brief.",
+    "- Task 2 (Aim B): ERDs (entities, relationships, cardinality, crow's-foot notation), DATA DICTIONARY, design documentation, UI design, review & refine designs, test plan.",
+    "- Task 3 (Aim C): build the database (create tables, keys, relationships), SQL (SELECT/INSERT/UPDATE/DELETE, joins, aggregate queries), TEST, REVIEW & OPTIMISE.",
+    "Coach the student — do NOT write their whole assignment. Give hints, structure, checklists, SQL snippets and worked examples, linked to Pass/Merit/Distinction.",
+  ].join("\n"),
+
+  // ---------------- BTEC Level 3 Business ----------------
+  "business-unit-1": [
+    "BTEC Level 3 Business Unit 1: Exploring Business (National Extended Certificate).",
+    "Learning Aims: A — features of businesses (ownership, sectors, size, scope), stakeholders & communication; B — organisational structure, functional areas, aims & SMART objectives; C — external environment (PESTLE), internal & competitive environment, situational analysis (SWOT); D — market structures, demand/supply/price, pricing & output decisions; E — innovation & enterprise, benefits & risks.",
+    "Scenario-based examined unit. Answer in the context of the business in the question, link to stakeholders and use business terminology.",
+  ].join("\n"),
+
+  "business-unit-2": [
+    "BTEC Level 3 Business Unit 2: Developing a Marketing Campaign.",
+    "Learning Aims: A — Principles & purposes of marketing (role, aims, markets, branding, influences); B — Information for the rationale (market research methods, data, product life cycle, market size/share/structure); C — Planning the campaign (situational analysis, marketing mix 7Ps, campaign content, budget, timescale); D — Developing the campaign (marketing mix, appropriateness, legal/ethical, evaluation & flexibility).",
+    "Externally assessed with a controlled scenario. Apply the 7Ps and research to the scenario; justify decisions and relate to aims/objectives.",
+  ].join("\n"),
+
+  "business-unit-3": [
+    "BTEC Level 3 Business Unit 3: Personal and Business Finance.",
+    "Learning Aims: A — Personal finance (life stages, payment methods, borrowing, saving, insurance, budgeting); B — Personal finance sector (institutions, banking, roles); C — Government & personal finance (taxation, benefits, FCA/FOS/FSCS); D — Sources of business finance (internal & external, short/long-term, suitability); E — Financial planning (break-even, cash flow forecasts, variance analysis, budgets); F — Financial statements (income statement, statement of financial position, depreciation, profitability & liquidity ratios).",
+    "Externally assessed with calculations. Show working for numeric questions and interpret results in context.",
+  ].join("\n"),
+
+  "business-unit-4": [
+    "BTEC Level 3 Business Unit 4: Managing an Event.",
+    "Learning Aims: A — Role of an event organiser (tasks, skills, skills audit); B — Feasibility of an event (types, factors, feasibility); C — Planning the event (planning tools, Gantt charts, budgets, risk); D — Staging & managing the event (problem solving, contingency); E — Evaluation & reflection.",
+    "Internally assessed (coursework). Support planning, budgeting, risk assessment and evaluation with practical, structured guidance.",
+  ].join("\n"),
+
+  // ---------------- BTEC Level 3 Sport ----------------
+  "sport-unit-1": [
+    "BTEC Level 3 Sport Unit 1: Anatomy and Physiology.",
+    "Learning Aims: A — Skeletal system (bones, joints, cartilage, ligaments, movement); B — Muscular system (major muscles, fibre types, contractions, adaptations); C — Respiratory system (mechanics, gas exchange, adaptations); D — Cardiovascular system (heart, vessels, blood, adaptations); E — Energy systems (ATP-PC, lactate, aerobic).",
+    "Externally assessed exam. Be precise with anatomical terminology and link structure to sport performance.",
+  ].join("\n"),
+
+  "sport-unit-2": [
+    "BTEC Level 3 Sport Unit 2: Fitness Training and Programming for Health, Sport and Well-being.",
+    "Learning Aims: A — Lifestyle factors & health; B — Screening processes (health/physiological tests, consent, safety); C — Nutritional needs (nutrients, energy balance, hydration); D — Training methods & fitness (components of fitness); E — Training programme design (principles, periodisation, review).",
+    "Externally assessed with a scenario. Apply training/nutrition knowledge to the athlete or client in the scenario.",
+  ].join("\n"),
+
+  // ---------------- BTEC Level 2 IT ----------------
+  "it-l2-unit-2": [
+    "BTEC Level 2 IT Unit 2: Technology Systems.",
+    "Learning Aims: A — Applications & issues (hardware/software in applications, cloud services, data security/privacy, backup/recovery, networking in organisations); B — Hardware & software (CPU, memory, storage, I/O devices, system vs application software, licensing); C — Programming basics (languages, structure, variables/data types, control flow, functions).",
+    "Digital exam. Keep explanations clear and Level-2 appropriate; relate to how technology is used in organisations.",
+  ].join("\n"),
+
+  // ---------------- A-Level ---------------
+  "a-level-business": [
+    "AQA A-Level Business (7132).",
+    "Topics 1–10: What is business; managers/leadership/decision making; marketing; operations; finance; human resources; strategic position; strategic direction; strategic methods; managing strategic change.",
+    "Examined (Papers 1–3) with data-response and case-study questions requiring application, analysis and evaluation (chains of reasoning). Use case data, build arguments (cause → effect → consequence) and support judgement.",
+  ].join("\n"),
+};
+
+function resolveUnitProfile(unit: string): string | null {
+  const key = String(unit || "").trim().toLowerCase();
+  if (!key) return null;
+  if (UNIT_PROFILES[key]) return UNIT_PROFILES[key];
+  // Accept looser matches (e.g. "unit-1", "it unit 2")
+  for (const k of Object.keys(UNIT_PROFILES)) {
+    if (key.includes(k) || k.includes(key)) return UNIT_PROFILES[k];
+  }
+  return null;
+}
+
+function buildSystemHint(unit: string): string {
+  const profile = resolveUnitProfile(unit);
+  const base = [
+    "You are 'AI Helper', a friendly, rigorous RA10 revision assistant for a UK qualification.",
+    "Answer in the SPECIFIC subject context provided. Never drift into a different BTEC unit or subject.",
+    profile
+      ? "CURRENT UNIT PROFILE (you are answering ONLY about this):\n" + profile
+      : "No specific unit was detected. Ask the student which qualification/unit they are studying if it matters, and stay generic and safe.",
+    "Rules:",
+    "- Be concise: short paragraphs and bullet points.",
+    "- If the unit is exam-based, relate answers to mark schemes, command verbs and levels-based descriptors where relevant.",
+    "- If the unit is assignment/coursework-based, coach (give hints, structure, checklists and short examples) — NEVER write the student's whole assignment for them.",
+    "- Use correct technical terminology.",
+    "- Use markdown: **bold**, lists, - [ ] task lists, tables and fenced code blocks where helpful.",
+  ].join("\n");
+  return base;
+}
 
 function buildHintPrompt(input: any) {
   const context = String(input?.context || "").slice(0, 4000);
@@ -316,7 +431,7 @@ export default Deno.serve(async (req: Request) => {
       "\n\nStudent's question/message:\n" + message,
     ].filter(Boolean).join("\n");
 
-    const aiResponse = await callAnyProvider(SYSTEM_HINT, userMsg, false);
+    const aiResponse = await callAnyProvider(buildSystemHint(body?.unit), userMsg, false);
     return new Response(JSON.stringify({ ok: true, reply: aiResponse.content.trim(), provider: aiResponse.provider }), { status: 200, headers: corsHeaders });
   } catch (error) {
     console.error("ai-assign error:", error);

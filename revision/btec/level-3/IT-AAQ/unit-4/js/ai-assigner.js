@@ -546,6 +546,7 @@
         var res = await RA10.askAiAssigner({
           message: text,
           history: chatHistory.slice(-8),
+          unit: 'it-aaq-unit-4',
           context: 'Unit 4 Relational Database Development. Current mode: ' + mode + '. Modes: chat (ask anything), hints (coach toward next grade), examiner (mark work against criteria). Learning aims: A (database principles + normalisation), B (design the database), C (build, test and optimise). Assignment has 3 tasks. Encourage the student to work things out themselves \u2014 never write their work for them. Use markdown in your answer: **bold**, lists, - [ ] task lists, tables and fenced code blocks.'
         });
         removeThinking(think);
