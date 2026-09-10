@@ -111,7 +111,7 @@
       '@keyframes ra10AiPopIn{from{opacity:0;transform:translateY(-4px) scale(.85)}to{opacity:1;transform:translateY(-4px) scale(1)}}',
       '.ra10-ai-select-pop:hover{background:linear-gradient(135deg,#2563eb,#a855f7);box-shadow:0 12px 32px rgba(31,111,235,.65),0 0 0 1px rgba(255,255,255,.4) inset,0 0 22px rgba(168,85,247,.6);transform:translateY(-5px);}',
       '.ra10-ai-select-pop svg{filter:drop-shadow(0 1px 2px rgba(0,0,0,.3));}',
-      '@media (max-width:520px){.ra10-ai-panel{right:10px;bottom:80px;width:calc(100vw - 20px);height:min(520px,calc(100vh - 110px));}.ra10-ai-fab{right:12px;bottom:12px;}}'
+      '@media (max-width:640px){.ra10-ai-panel{right:10px;bottom:calc(152px + env(safe-area-inset-bottom,0px));width:calc(100vw - 20px);height:min(520px,calc(100vh - 210px));}.ra10-ai-fab{right:12px;bottom:calc(84px + env(safe-area-inset-bottom,0px));}}'
     ].join('\n');
     var style = document.createElement('style');
     style.id = 'ra10-ai-helper-css';
@@ -221,9 +221,14 @@
       '<span class="ra10-ai-hint-body"><b>Tip:</b> select any text on this page and tap <b>Ask AI</b> to get an instant explanation of it.</span>' +
       '<button class="ra10-ai-hint-close" type="button" aria-label="Dismiss tip">&#10005;</button>';
 
-    // Insert at the very top of the body so it appears above the page content.
-    var first = document.body.firstChild;
-    document.body.insertBefore(banner, first);
+    // Insert right after the top nav so it sits below the navigation bar.
+    var topbar = document.querySelector('header.topbar, .nav, .navbar, .mobile-top-nav');
+    if (topbar && topbar.parentNode) {
+      topbar.parentNode.insertBefore(banner, topbar.nextSibling);
+    } else {
+      var first = document.body.firstChild;
+      document.body.insertBefore(banner, first);
+    }
 
     banner.querySelector('.ra10-ai-hint-close').addEventListener('click', function () {
       banner.style.opacity = '0';

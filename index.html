@@ -383,7 +383,7 @@ body.auth-popup-open{overflow:hidden}
 #ra10-help-fab:hover{transform:translateY(-2px);box-shadow:0 14px 32px rgba(210,0,0,.5)}
 #ra10-help-fab:active{transform:translateY(0) scale(.98)}
 @media (max-width:640px){
-  #ra10-help-fab{padding:0 12px;height:44px}
+  #ra10-help-fab{padding:0 12px;height:44px;bottom:calc(84px + env(safe-area-inset-bottom,0px))}
   #ra10-help-fab span{display:none}
 }
 .auth-overlay.open .auth-modal{transform:translateY(0) scale(1)}
