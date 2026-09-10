@@ -89,10 +89,12 @@
       '.ra10-ai-selected-chip b{margin-right:auto;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}',
       '.ra10-ai-selected-chip button{border:none;background:transparent;color:#94a3b8;cursor:pointer;font-weight:800;}',
       // Selection popup
-      '.ra10-ai-select-pop{position:absolute;z-index:2147483500;display:none;align-items:center;gap:6px;background:#1a1a2e;color:#fff;border-radius:10px;padding:6px 10px;font-size:.78rem;font-weight:700;cursor:pointer;box-shadow:0 8px 22px rgba(0,0,0,.28);transform:translateY(-4px);}',
-      '.ra10-ai-select-pop.show{display:flex;}',
-      '.ra10-ai-select-pop:hover{background:#2d3561;}',
-      '.ra10-ai-select-pop svg{margin-left:-1px;}',
+      '.ra10-ai-select-pop{position:absolute;z-index:2147483500;display:none;align-items:center;gap:7px;background:linear-gradient(135deg,#1f6feb,#7c3aed);color:#fff;border-radius:999px;padding:9px 15px 9px 12px;font-size:.82rem;font-weight:800;letter-spacing:.01em;cursor:pointer;box-shadow:0 10px 28px rgba(31,111,235,.55),0 0 0 1px rgba(255,255,255,.28) inset,0 0 18px rgba(124,58,237,.5);transform:translateY(-4px);}',
+      '.ra10-ai-select-pop::after{content:"";position:absolute;left:50%;bottom:-5px;width:10px;height:10px;background:#7c3aed;border-radius:2px;transform:translateX(-50%) rotate(45deg);}',
+      '.ra10-ai-select-pop.show{display:flex;animation:ra10AiPopIn .16s cubic-bezier(.2,.9,.3,1.2);}',
+      '@keyframes ra10AiPopIn{from{opacity:0;transform:translateY(-4px) scale(.85)}to{opacity:1;transform:translateY(-4px) scale(1)}}',
+      '.ra10-ai-select-pop:hover{background:linear-gradient(135deg,#2563eb,#a855f7);box-shadow:0 12px 32px rgba(31,111,235,.65),0 0 0 1px rgba(255,255,255,.4) inset,0 0 22px rgba(168,85,247,.6);transform:translateY(-5px);}',
+      '.ra10-ai-select-pop svg{filter:drop-shadow(0 1px 2px rgba(0,0,0,.3));}',
       '@media (max-width:520px){.ra10-ai-panel{right:10px;bottom:80px;width:calc(100vw - 20px);height:min(520px,calc(100vh - 110px));}.ra10-ai-fab{right:12px;bottom:12px;}}'
     ].join('\n');
     var style = document.createElement('style');
