@@ -3688,39 +3688,30 @@ html body #community-share-sheet .community-share-panel{
   backdrop-filter:blur(18px);
   animation:hxFadeUp .7s .1s cubic-bezier(.2,.8,.2,1) both;
 }
-.hx-launch-head{display:flex;align-items:center;justify-content:space-between;gap:var(--sp2);margin-bottom:var(--sp3)}
+.hx-launch-head{display:flex;align-items:center;justify-content:space-between;gap:var(--sp2);margin-bottom:var(--sp4)}
 .hx-launch-head h3{font-family:var(--font-d);font-size:var(--tx-lg);font-weight:400;color:#fff}
-.hx-launch-head span{font-size:11px;color:#8b93a7;text-transform:uppercase;letter-spacing:.08em}
-.hx-launch-list{display:grid;gap:8px}
-.hx-launch-item{
-  display:grid;
-  grid-template-columns:auto 1fr auto;
-  align-items:center;
-  gap:12px;
-  width:100%;
-  padding:12px;
-  border-radius:16px;
-  border:1px solid transparent;
-  background:rgba(255,255,255,.03);
-  text-align:left;
-  transition:transform .25s cubic-bezier(.2,.8,.2,1),background .25s,border-color .25s;
+.hx-launch-all{font-size:12px;font-weight:700;color:#9aa2b6;text-decoration:none;padding:6px 10px;border-radius:999px;transition:background .2s,color .2s}
+.hx-launch-all:hover{background:rgba(255,255,255,.1);color:#fff}
+.hx-launch-groups{display:grid;gap:var(--sp4)}
+.hx-launch-group{display:grid;gap:10px}
+.hx-launch-group-label{font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#7c86a0}
+.hx-launch-tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:8px}
+.hx-launch-tile{
+  display:flex;flex-direction:column;align-items:flex-start;gap:8px;
+  padding:11px 11px 12px;border-radius:14px;
+  border:1px solid transparent;background:rgba(255,255,255,.045);
+  text-align:left;cursor:pointer;
+  transition:transform .22s cubic-bezier(.2,.8,.2,1),background .22s,border-color .22s;
 }
-.hx-launch-item:hover{transform:translateX(3px);background:rgba(255,255,255,.09);border-color:var(--hx-line)}
-.hx-launch-icon{
-  width:36px;height:36px;border-radius:12px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:11px;font-weight:800;color:#0b0f19;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.35);
-}
-.hx-launch-icon.it{background:linear-gradient(135deg,#4ade80,#22d3ee)}
-.hx-launch-icon.business{background:linear-gradient(135deg,#60a5fa,#818cf8)}
-.hx-launch-icon.sport{background:linear-gradient(135deg,#fb923c,#f472b6)}
-.hx-launch-icon.l2{background:linear-gradient(135deg,#c084fc,#f472b6)}
-.hx-launch-copy{min-width:0}
-.hx-launch-copy strong{display:block;font-size:var(--tx-sm);color:#fff;line-height:1.25}
-.hx-launch-copy small{display:block;margin-top:2px;font-size:11px;color:#9aa2b6;line-height:1.4}
-.hx-launch-arrow{color:#6b7386;font-size:14px;transition:transform .25s,color .25s}
-.hx-launch-item:hover .hx-launch-arrow{transform:translateX(3px);color:#c4b5fd}
+.hx-launch-tile:hover{transform:translateY(-2px);background:rgba(255,255,255,.1);border-color:var(--hx-line)}
+.hx-launch-dot{width:10px;height:10px;border-radius:50%;box-shadow:0 0 0 4px rgba(255,255,255,.06)}
+.hx-launch-dot.it{background:linear-gradient(135deg,#4ade80,#22d3ee)}
+.hx-launch-dot.business{background:linear-gradient(135deg,#60a5fa,#818cf8)}
+.hx-launch-dot.sport{background:linear-gradient(135deg,#fb923c,#f472b6)}
+.hx-launch-dot.l2{background:linear-gradient(135deg,#c084fc,#f472b6)}
+.hx-launch-tile-name{display:flex;flex-direction:column;line-height:1.2}
+.hx-launch-tile-name b{font-size:12px;color:#e8ebf4;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.hx-launch-tile-name em{font-style:normal;font-size:11px;color:#8b93a7;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
 
 /* ---------- MARQUEE ---------- */
 .hx-marquee{
@@ -3886,8 +3877,8 @@ html body #community-share-sheet .community-share-panel{
 @keyframes hxcardFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
 .hx-bento-card.featured:hover .hx-bento-icon.featured{transform:rotate(-8deg) scale(1.08)}
 .hx-timeline-step:hover .hx-timeline-num{transform:scale(1.12);box-shadow:0 10px 26px rgba(129,140,248,.5)}
-.hx-launch-item{animation:hxlaunchGlow 2.4s ease-in-out infinite}
-.hx-launch-item:nth-child(2n){animation-delay:.4s}
+.hx-launch-tile{animation:hxlaunchGlow 2.4s ease-in-out infinite}
+.hx-launch-tile:nth-child(2n){animation-delay:.4s}
 @keyframes hxlaunchGlow{0%,100%{box-shadow:0 0 0 rgba(56,189,248,0)}50%{box-shadow:0 0 0 rgba(56,189,248,.07)}}
 
 @media (min-width:700px){
@@ -3972,64 +3963,69 @@ html body #community-share-sheet .community-share-panel{
 
 /* Signed-in dashboard */
 .signed-in-dashboard{
-  border:1px solid #d9d4ca;
+  border:1px solid rgba(210,0,0,.12);
   border-radius:26px;
-  padding:clamp(1.5rem,3vw,2.5rem);
+  padding:clamp(1.25rem,3vw,2rem);
   background:
-    radial-gradient(70% 140% at 100% 0%,rgba(210,0,0,.06),transparent 65%),
-    linear-gradient(135deg,#fffdf8 0%,#f3f0e9 100%);
+    radial-gradient(70% 140% at 100% 0%,rgba(210,0,0,.05),transparent 65%),
+    linear-gradient(135deg,#fffdf8 0%,#faf7f2 100%);
   color:#28251d;
-  box-shadow:0 18px 50px rgba(63,52,35,.1);
+  box-shadow:0 12px 36px rgba(63,52,35,.08);
 }
 .signed-in-dash-hero{
   position:relative;
   overflow:hidden;
   border-radius:20px;
-  padding:clamp(1.25rem,3vw,2rem);
-  margin-bottom:var(--sp6);
-  background:linear-gradient(135deg,#1a1a1a 0%,#3a2a1a 55%,#d20000 130%);
-  color:#fff;
+  padding:clamp(1.1rem,2.5vw,1.6rem);
+  margin-bottom:var(--sp5);
+  background:
+    radial-gradient(90% 160% at 100% 0%,rgba(210,0,0,.13),transparent 58%),
+    radial-gradient(70% 120% at 0% 100%,rgba(255,140,80,.10),transparent 60%),
+    linear-gradient(135deg,#fff6f2 0%,#fde9e6 100%);
+  border:1px solid rgba(210,0,0,.12);
+  color:#28251d;
 }
 .signed-in-dash-hero-glow{
   position:absolute;inset:0;pointer-events:none;
   background:
-    radial-gradient(60% 120% at 100% 0%,rgba(255,255,255,.14),transparent 60%),
-    radial-gradient(50% 100% at 0% 100%,rgba(210,0,0,.35),transparent 60%);
+    radial-gradient(60% 120% at 100% 0%,rgba(255,255,255,.55),transparent 60%),
+    radial-gradient(50% 100% at 0% 100%,rgba(210,0,0,.10),transparent 60%);
 }
 .signed-in-dash-hero-inner{position:relative;display:flex;align-items:center;gap:var(--sp4);flex-wrap:wrap}
 .signed-in-dash-avatar{
-  width:56px;height:56px;border-radius:18px;flex-shrink:0;
+  width:52px;height:52px;border-radius:16px;flex-shrink:0;
   display:flex;align-items:center;justify-content:center;
-  font-size:1.4rem;font-weight:800;color:#fff;
+  font-size:1.35rem;font-weight:800;color:#fff;
   background:linear-gradient(135deg,#d20000,#8a1a1a);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 8px 20px rgba(0,0,0,.25);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 8px 20px rgba(210,0,0,.28);
 }
 .signed-in-dash-hero-copy{flex:1;min-width:200px}
-.signed-in-dash-greeting{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,.75)}
-.signed-in-dash-title{font-size:clamp(1.6rem,3.5vw,2.2rem);color:#fff;margin:2px 0 0;line-height:1.1}
-.signed-in-dash-sub{color:rgba(255,255,255,.8);margin:6px 0 0;font-size:var(--tx-sm)}
+.signed-in-dash-greeting{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.09em;color:#d20000}
+.signed-in-dash-title{font-size:clamp(1.5rem,3vw,2rem);color:#28251d;margin:2px 0 0;line-height:1.1}
+.signed-in-dash-sub{color:#6d6a64;margin:6px 0 0;font-size:var(--tx-sm)}
 .signed-in-dash-school{display:flex;align-items:center;gap:var(--sp2);flex-wrap:wrap;margin-top:10px}
 .signed-in-dash-school-chip{
   display:inline-flex;align-items:center;gap:6px;
-  background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.28);
-  color:#fff;border-radius:999px;padding:4px 12px;font-size:12px;font-weight:600;
-  backdrop-filter:blur(6px);
+  background:#fff;border:1px solid rgba(210,0,0,.16);
+  color:#a31d1d;border-radius:999px;padding:4px 12px;font-size:12px;font-weight:600;
 }
 .signed-in-dash-school-chip.group-chip{
-  background:rgba(100,200,255,.22);border-color:rgba(180,230,255,.45);
+  background:rgba(14,165,233,.09);border-color:rgba(14,165,233,.28);color:#0e7490;
 }
 .signed-in-dash-hero-actions{display:flex;gap:var(--sp2);flex-wrap:wrap}
 .signed-in-dash-btn{
-  padding:10px 16px;border-radius:999px;border:1px solid rgba(255,255,255,.25);
-  background:rgba(255,255,255,.14);color:#fff;font-weight:700;font-size:var(--tx-sm);
-  cursor:pointer;transition:background .15s ease,transform .15s ease;
+  padding:10px 16px;border-radius:999px;border:1px solid rgba(210,0,0,.3);
+  background:linear-gradient(135deg,#d20000,#a70000);color:#fff;font-weight:700;font-size:var(--tx-sm);
+  cursor:pointer;transition:background .15s ease,transform .15s ease,box-shadow .15s;
+  box-shadow:0 6px 16px rgba(210,0,0,.22);
 }
-.signed-in-dash-btn:hover{background:rgba(255,255,255,.24);transform:translateY(-1px)}
-.signed-in-dash-btn-ghost{background:transparent}
+.signed-in-dash-btn:hover{background:linear-gradient(135deg,#e00,#b80000);transform:translateY(-1px);box-shadow:0 9px 22px rgba(210,0,0,.3)}
+.signed-in-dash-btn-ghost{background:#fff;color:#a31d1d;box-shadow:none}
+.signed-in-dash-btn-ghost:hover{background:#fff5f5}
 .signed-in-dash-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:var(--sp3);margin-bottom:var(--sp6)}
 .signed-in-dash-stat{
-  border:1px solid #d8d3ca;border-radius:16px;padding:16px;
-  background:rgba(255,255,255,.7);
+  border:1px solid rgba(210,0,0,.12);border-radius:16px;padding:16px;
+  background:#fff;
   box-shadow:0 4px 14px rgba(63,52,35,.05);
 }
 .signed-in-dash-stat b{display:block;font-size:1.6rem;color:#28251d;line-height:1.1}
@@ -4043,11 +4039,11 @@ html body #community-share-sheet .community-share-panel{
   position:relative;
   display:flex;flex-direction:column;gap:10px;
   padding:16px;border-radius:18px;
-  background:rgba(255,255,255,.72);border:1px solid #ded9d0;
+  background:#fff;border:1px solid rgba(210,0,0,.1);
   text-align:left;cursor:pointer;
   transition:transform .15s ease,box-shadow .15s ease,border-color .15s ease;
 }
-.signed-in-app-card:hover{transform:translateY(-2px);box-shadow:0 10px 22px rgba(63,52,35,.1);border-color:#c9c2b7}
+.signed-in-app-card:hover{transform:translateY(-2px);box-shadow:0 10px 22px rgba(63,52,35,.1);border-color:rgba(210,0,0,.22)}
 .signed-in-app-top{display:flex;align-items:center;justify-content:space-between}
 .signed-in-app-icon{width:40px;height:40px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.3)}
 .signed-in-app-icon.it{background:linear-gradient(135deg,#16a34a,#0f766e)}
@@ -4057,8 +4053,8 @@ html body #community-share-sheet .community-share-panel{
 .signed-in-pin-btn{
   width:30px;height:30px;border-radius:999px;
   display:flex;align-items:center;justify-content:center;
-  background:var(--color-surface-offset);color:var(--color-text-muted);
-  border:1px solid #d8d3ca;font-size:14px;line-height:1;
+  background:#f5f3ef;color:#89857c;
+  border:1px solid #e3ded5;font-size:14px;line-height:1;
 }
 .signed-in-pin-btn.pinned{background:#d20000;color:#fff;border-color:#d20000}
 .signed-in-app-copy strong{display:block;font-size:var(--tx-sm);color:#28251d;line-height:1.25}
@@ -4067,11 +4063,11 @@ html body #community-share-sheet .community-share-panel{
 .signed-in-app-open::after{content:'›';font-size:15px;line-height:1}
 .signed-in-ai-overview{
   position:relative;overflow:hidden;
-  border:1px solid #ded9d0;border-radius:18px;padding:20px;
+  border:1px solid rgba(210,0,0,.1);border-radius:18px;padding:20px;
   background:
     radial-gradient(80% 120% at 100% 0%,rgba(124,58,237,.08),transparent 60%),
     radial-gradient(70% 120% at 0% 100%,rgba(14,165,233,.08),transparent 60%),
-    rgba(255,255,255,.72);
+    #fff;
   box-shadow:0 4px 14px rgba(63,52,35,.05);
 }
 .signed-in-ai-loading{color:#89857c;font-size:var(--tx-sm)}
@@ -4105,8 +4101,8 @@ html body #community-share-sheet .community-share-panel{
 .signed-in-ai-tip p{margin:2px 0 0;font-size:var(--tx-sm);color:#4a463e;line-height:1.5}
 .signed-in-exams{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:var(--sp3)}
 .signed-in-exam-card{
-  border:1px solid #ded9d0;border-radius:16px;padding:14px 16px;
-  background:rgba(255,255,255,.72);
+  border:1px solid rgba(210,0,0,.1);border-radius:16px;padding:14px 16px;
+  background:#fff;
   box-shadow:0 4px 14px rgba(63,52,35,.05);
 }
 .signed-in-exam-card .exam-subject{font-size:var(--tx-sm);font-weight:700;color:#28251d}
@@ -4266,14 +4262,16 @@ html body #community-share-sheet .community-share-panel{
 .hx-exam-pin.pinned{background:#d20000;color:#fff;border-color:#d20000}
 .hx-exam-subject{font-size:var(--tx-sm);font-weight:800;color:#28251d;letter-spacing:-.01em;line-height:1.25}
 .hx-exam-name{font-size:12px;color:#89857c}
-.hx-exam-count{position:relative;display:flex;align-items:center;justify-content:flex-start;height:84px;margin-top:4px;padding:0 16px;border-radius:16px;overflow:hidden;color:#fff;box-shadow:inset 0 2px 6px rgba(0,0,0,.18),0 6px 16px rgba(30,64,255,.20)}
-.hx-exam-water{position:absolute;left:0;bottom:0;width:100%;background:linear-gradient(180deg,rgba(64,146,255,.62),rgba(30,91,255,.92) 70%,rgba(12,64,214,.95));transition:height .9s cubic-bezier(.4,1.4,.4,1)}
+.hx-exam-count{position:relative;display:flex;align-items:center;justify-content:flex-start;height:84px;margin-top:4px;padding:0 16px;border-radius:16px;overflow:hidden;background:linear-gradient(180deg,#fff4f4,#ffe3e3);border:1px solid rgba(210,0,0,.14)}
+.hx-exam-water{position:absolute;left:0;bottom:0;width:100%;background:linear-gradient(180deg,rgba(255,92,92,.68),rgba(210,0,0,.94) 70%,rgba(150,0,0,.98));transition:height .9s cubic-bezier(.4,1.4,.4,1)}
 .hx-exam-water::before{content:'';position:absolute;top:-14px;left:-25%;width:150%;height:16px;border-radius:42%;background:rgba(255,255,255,.30);animation:hxwaterwave 5s linear infinite}
 .hx-exam-water::after{content:'';position:absolute;top:-20px;left:-50%;width:200%;height:16px;border-radius:42%;background:rgba(255,255,255,.18);animation:hxwaterwave 7s linear infinite reverse}
-.hx-exam-count-inner{position:relative;z-index:1;display:flex;align-items:baseline;gap:8px;text-shadow:0 1px 3px rgba(0,0,0,.35)}
+.hx-exam-count-inner{position:relative;z-index:1;display:flex;align-items:baseline;gap:8px;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.35);transition:color .3s ease}
+/* when the water line sits below the text, text turns dark so it stays legible on the pale background */
+.hx-exam-count.water-low .hx-exam-count-inner{color:#a31d1d;text-shadow:none}
 .hx-exam-count-num{font-family:var(--font-d);font-size:2.1rem;line-height:1;font-weight:700}
 .hx-exam-count-txt{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.04em}
-.hx-exam-count.soon::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,180,60,.3),transparent);animation:hxshimmer 2.2s linear infinite}
+.hx-exam-count.soon::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,180,60,.28),transparent);animation:hxshimmer 2.2s linear infinite}
 @keyframes hxwaterwave{from{transform:translateX(0)}to{transform:translateX(50px)}}
 @keyframes hxshimmer{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
 .hx-exam-foot{display:flex;align-items:center;gap:6px;margin-top:auto}
@@ -4360,9 +4358,18 @@ html body #community-share-sheet .community-share-panel{
   box-shadow:0 20px 55px rgba(0,0,0,.28);
 }
 [data-theme="dark"] .signed-in-dash-hero{
-  background:linear-gradient(135deg,#14161b 0%,#2a1f1a 55%,#7a0f0f 130%);
+  background:
+    radial-gradient(90% 160% at 100% 0%,rgba(210,0,0,.16),transparent 58%),
+    radial-gradient(70% 120% at 0% 100%,rgba(255,140,80,.12),transparent 60%),
+    linear-gradient(135deg,#2a2020 0%,#241b1b 100%);
+  border-color:rgba(210,0,0,.22);
 }
+[data-theme="dark"] .signed-in-dash-greeting{color:#ff8a80}
 [data-theme="dark"] .signed-in-dash-title{color:#f1f2f4}
+[data-theme="dark"] .signed-in-dash-sub{color:#adb4c2}
+[data-theme="dark"] .signed-in-dash-school-chip{background:#2b303a;border-color:rgba(210,0,0,.28);color:#ff8a80}
+[data-theme="dark"] .signed-in-dash-school-chip.group-chip{background:rgba(14,165,233,.14);border-color:rgba(14,165,233,.32);color:#7dd3fc}
+[data-theme="dark"] .signed-in-dash-btn-ghost{background:#2b303a;color:#ff8a80;box-shadow:none}
 [data-theme="dark"] .signed-in-dash-stat{
   border-color:#3d414b;background:#242831;box-shadow:none;
 }
@@ -5064,97 +5071,35 @@ html body #community-share-sheet .community-share-panel{
           <aside class="hx-launch" aria-label="Quick launch">
             <div class="hx-launch-head">
               <h3>Jump back in</h3>
-              <span>Live apps</span>
+              <a class="hx-launch-all" href="javascript:void(0)" onclick="go('/revision')">See all →</a>
             </div>
-            <div class="hx-launch-list">
-              <button class="hx-launch-item" type="button" onclick="go('/revision/btec/level-3/IT-AAQ/unit-1')">
-                <span class="hx-launch-icon it">IT</span>
-                <span class="hx-launch-copy">
-                  <strong>IT AAQ Unit 1</strong>
-                  <small>Systems, exam practice, AI feedback</small>
-                </span>
-                <span class="hx-launch-arrow">→</span>
-              </button>
-              <button class="hx-launch-item" type="button" onclick="go('/revision/btec/level-3/IT-AAQ/unit-2')">
-                <span class="hx-launch-icon it">IT</span>
-                <span class="hx-launch-copy">
-                  <strong>IT AAQ Unit 2</strong>
-                  <small>Cyber security and incident management</small>
-                </span>
-                <span class="hx-launch-arrow">→</span>
-              </button>
-              <button class="hx-launch-item" type="button" onclick="go('/revision/btec/level-3/IT-AAQ/unit-3')">
-                <span class="hx-launch-icon it">IT</span>
-                <span class="hx-launch-copy">
-                  <strong>IT AAQ Unit 3</strong>
-                  <small>Website development and AI marking</small>
-                </span>
-                <span class="hx-launch-arrow">→</span>
-              </button>
-              <button class="hx-launch-item" type="button" onclick="go('/revision/btec/level-3/IT-AAQ/unit-4')">
-                <span class="hx-launch-icon it">IT</span>
-                <span class="hx-launch-copy">
-                  <strong>IT AAQ Unit 4</strong>
-                  <small>Relational databases, SQL &amp; MS Access</small>
-                </span>
-                <span class="hx-launch-arrow">→</span>
-              </button>
-              <button class="hx-launch-item" type="button" onclick="go('/revision/btec/level-3/business/unit-1')">
-                <span class="hx-launch-icon business">BU</span>
-                <span class="hx-launch-copy">
-                  <strong>Business Unit 1</strong>
-                  <small>Exploring business, environment and markets</small>
-                </span>
-                <span class="hx-launch-arrow">→</span>
-              </button>
-              <button class="hx-launch-item" type="button" onclick="go('/revision/btec/level-3/business/unit-2')">
-                <span class="hx-launch-icon business">BU</span>
-                <span class="hx-launch-copy">
-                  <strong>Business Unit 2</strong>
-                  <small>Developing a marketing campaign</small>
-                </span>
-                <span class="hx-launch-arrow">→</span>
-              </button>
-              <button class="hx-launch-item" type="button" onclick="go('/revision/btec/level-3/business/unit-3')">
-                <span class="hx-launch-icon business">BU</span>
-                <span class="hx-launch-copy">
-                  <strong>Business Unit 3</strong>
-                  <small>Finance confidence and exam control</small>
-                </span>
-                <span class="hx-launch-arrow">→</span>
-              </button>
-              <button class="hx-launch-item" type="button" onclick="go('/revision/btec/level-3/business/unit-4')">
-                <span class="hx-launch-icon business">BU</span>
-                <span class="hx-launch-copy">
-                  <strong>Business Unit 4</strong>
-                  <small>Managing an event</small>
-                </span>
-                <span class="hx-launch-arrow">→</span>
-              </button>
-              <button class="hx-launch-item" type="button" onclick="go('/revision/a-level/business-2023')">
-                <span class="hx-launch-icon business">AL</span>
-                <span class="hx-launch-copy">
-                  <strong>A-Level Business (7132)</strong>
-                  <small>Topic-by-topic revision, quizzes, exam practice</small>
-                </span>
-                <span class="hx-launch-arrow">→</span>
-              </button>
-              <button class="hx-launch-item" type="button" onclick="go('/revision/btec/level-3/sport/unit-1')">
-                <span class="hx-launch-icon sport">SP</span>
-                <span class="hx-launch-copy">
-                  <strong>Sport Unit 1</strong>
-                  <small>Anatomy recall with timed checks</small>
-                </span>
-                <span class="hx-launch-arrow">→</span>
-              </button>
-              <button class="hx-launch-item" type="button" onclick="go('/revision/btec/level-2/it/unit-2')">
-                <span class="hx-launch-icon l2">L2</span>
-                <span class="hx-launch-copy">
-                  <strong>IT Level 2 Unit 2</strong>
-                  <small>Technology systems done properly</small>
-                </span>
-                <span class="hx-launch-arrow">→</span>
-              </button>
+            <div class="hx-launch-groups">
+              <div class="hx-launch-group">
+                <span class="hx-launch-group-label">IT &amp; Digital</span>
+                <div class="hx-launch-tiles">
+                  <button class="hx-launch-tile" type="button" onclick="go('/revision/btec/level-3/IT-AAQ/unit-1')"><span class="hx-launch-dot it"></span><span class="hx-launch-tile-name"><b>IT AAQ</b><em>Unit 1</em></span></button>
+                  <button class="hx-launch-tile" type="button" onclick="go('/revision/btec/level-3/IT-AAQ/unit-2')"><span class="hx-launch-dot it"></span><span class="hx-launch-tile-name"><b>IT AAQ</b><em>Unit 2</em></span></button>
+                  <button class="hx-launch-tile" type="button" onclick="go('/revision/btec/level-3/IT-AAQ/unit-3')"><span class="hx-launch-dot it"></span><span class="hx-launch-tile-name"><b>IT AAQ</b><em>Unit 3</em></span></button>
+                  <button class="hx-launch-tile" type="button" onclick="go('/revision/btec/level-3/IT-AAQ/unit-4')"><span class="hx-launch-dot it"></span><span class="hx-launch-tile-name"><b>IT AAQ</b><em>Unit 4</em></span></button>
+                  <button class="hx-launch-tile" type="button" onclick="go('/revision/btec/level-2/it/unit-2')"><span class="hx-launch-dot l2"></span><span class="hx-launch-tile-name"><b>IT L2</b><em>Unit 2</em></span></button>
+                </div>
+              </div>
+              <div class="hx-launch-group">
+                <span class="hx-launch-group-label">Business</span>
+                <div class="hx-launch-tiles">
+                  <button class="hx-launch-tile" type="button" onclick="go('/revision/btec/level-3/business/unit-1')"><span class="hx-launch-dot business"></span><span class="hx-launch-tile-name"><b>Business</b><em>Unit 1</em></span></button>
+                  <button class="hx-launch-tile" type="button" onclick="go('/revision/btec/level-3/business/unit-2')"><span class="hx-launch-dot business"></span><span class="hx-launch-tile-name"><b>Business</b><em>Unit 2</em></span></button>
+                  <button class="hx-launch-tile" type="button" onclick="go('/revision/btec/level-3/business/unit-3')"><span class="hx-launch-dot business"></span><span class="hx-launch-tile-name"><b>Business</b><em>Unit 3</em></span></button>
+                  <button class="hx-launch-tile" type="button" onclick="go('/revision/btec/level-3/business/unit-4')"><span class="hx-launch-dot business"></span><span class="hx-launch-tile-name"><b>Business</b><em>Unit 4</em></span></button>
+                  <button class="hx-launch-tile" type="button" onclick="go('/revision/a-level/business-2023')"><span class="hx-launch-dot business"></span><span class="hx-launch-tile-name"><b>A-Level</b><em>Business</em></span></button>
+                </div>
+              </div>
+              <div class="hx-launch-group">
+                <span class="hx-launch-group-label">Sport</span>
+                <div class="hx-launch-tiles">
+                  <button class="hx-launch-tile" type="button" onclick="go('/revision/btec/level-3/sport/unit-1')"><span class="hx-launch-dot sport"></span><span class="hx-launch-tile-name"><b>Sport</b><em>Unit 1</em></span></button>
+                </div>
+              </div>
             </div>
           </aside>
         </div>
@@ -11254,6 +11199,7 @@ function renderHomeExams() {
     let countCls = '';
     if (days === 0) countCls = 'soon';
     else if (days <= 7) countCls = 'soon';
+    const waterLow = pct < 42 ? ' water-low' : '';
     const dayTxt = (days === 0 ? 'Today' : (days === 1 ? '1 day to go' : days + ' days to go'));
     return '<div class="hx-exam-card' + (isPinned ? ' pinned' : '') + '" onclick="go(\'/exams\')">'
       + '<div class="hx-exam-top">'
@@ -11262,7 +11208,7 @@ function renderHomeExams() {
       + '</div>'
       + '<div class="hx-exam-subject">' + exam.subject + '</div>'
       + '<div class="hx-exam-name">' + exam.name + '</div>'
-      + '<div class="hx-exam-count ' + countCls + '">'
+      + '<div class="hx-exam-count ' + countCls + waterLow + '">'
       +   '<div class="hx-exam-water" style="height:' + pct + '%"></div>'
       +   '<div class="hx-exam-count-inner">'
       +     '<span class="hx-exam-count-num">' + days + '</span>'
