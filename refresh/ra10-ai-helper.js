@@ -83,11 +83,17 @@
       '.ra10-ai-foot{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:7px 14px;border-top:1px solid #e2e8f0;font-size:.68rem;color:#94a3b8;}',
       '[data-theme="dark"] .ra10-ai-foot{border-color:#3d414b;}',
       '.ra10-ai-cost{font-weight:800;color:#7c3aed;}',
-      '.ra10-ai-selected-chip{display:none;align-items:center;gap:7px;margin:0 12px 8px;padding:7px 10px;background:#f1f5ff;border:1px solid #c7d8ff;border-radius:10px;font-size:.74rem;color:#334155;}',
-      '[data-theme="dark"] .ra10-ai-selected-chip{background:#242b3a;border-color:#3a4660;color:#cbd5e1;}',
+      // Visible highlight for text the user selects
+      '::selection{background:#c7d2fe;color:#1a1a2e;}',
+      // Selected-text chip shown inside the AI Helper panel
+      '.ra10-ai-selected-chip{display:none;align-items:flex-start;gap:8px;margin:0 12px 10px;padding:10px 12px;background:#eef2ff;border:1px solid #c7d2fe;border-left:4px solid #7c3aed;border-radius:10px;font-size:.74rem;color:#334155;}',
+      '[data-theme="dark"] .ra10-ai-selected-chip{background:#2b2f4a;border-color:#4c4f8f;border-left-color:#a78bfa;color:#dbe1f4;}',
       '.ra10-ai-selected-chip.visible{display:flex;}',
-      '.ra10-ai-selected-chip b{margin-right:auto;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}',
-      '.ra10-ai-selected-chip button{border:none;background:transparent;color:#94a3b8;cursor:pointer;font-weight:800;}',
+      '.ra10-ai-selected-chip .ra10-ai-selected-label{display:inline-flex;align-items:center;gap:5px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;font-size:.62rem;color:#6d28d9;flex-shrink:0;margin-top:1px;}',
+      '[data-theme="dark"] .ra10-ai-selected-chip .ra10-ai-selected-label{color:#c4b5fd;}',
+      '.ra10-ai-selected-chip b{margin:0;font-weight:600;line-height:1.4;word-break:break-word;overflow:hidden;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;}',
+      '.ra10-ai-selected-chip button{border:none;background:transparent;color:#94a3b8;cursor:pointer;font-weight:800;flex-shrink:0;font-size:.8rem;line-height:1;padding:1px;margin-top:-1px;}',
+      '.ra10-ai-selected-chip button:hover{color:#7c3aed;}',
       // Selection popup
       '.ra10-ai-select-pop{position:absolute;z-index:2147483500;display:none;align-items:center;gap:7px;background:linear-gradient(135deg,#1f6feb,#7c3aed);color:#fff;border-radius:999px;padding:9px 15px 9px 12px;font-size:.82rem;font-weight:800;letter-spacing:.01em;cursor:pointer;box-shadow:0 10px 28px rgba(31,111,235,.55),0 0 0 1px rgba(255,255,255,.28) inset,0 0 18px rgba(124,58,237,.5);transform:translateY(-4px);}',
       '.ra10-ai-select-pop::after{content:"";position:absolute;left:50%;bottom:-5px;width:10px;height:10px;background:#7c3aed;border-radius:2px;transform:translateX(-50%) rotate(45deg);}',
@@ -148,7 +154,7 @@
           '<button class="ra10-ai-head-btn" id="ra10-ai-close" type="button" aria-label="Close">&#10005;</button>' +
         '</div>' +
       '</div>' +
-      '<div class="ra10-ai-selected-chip" id="ra10-ai-selected-chip"><span>Selected:</span><b id="ra10-ai-selected-text"></b><button type="button" id="ra10-ai-selected-clear" aria-label="Remove selection">&#10005;</button></div>' +
+      '<div class="ra10-ai-selected-chip" id="ra10-ai-selected-chip"><span class="ra10-ai-selected-label">&#9889; Selected text</span><b id="ra10-ai-selected-text"></b><button type="button" id="ra10-ai-selected-clear" aria-label="Remove selection">&#10005;</button></div>' +
       '<div class="ra10-ai-msgs" id="ra10-ai-msgs"></div>' +
       '<div class="ra10-ai-suggestions" id="ra10-ai-suggestions"></div>' +
       '<div class="ra10-ai-composer">' +
@@ -378,7 +384,7 @@
         pendingContext = t;
         var chip = document.getElementById('ra10-ai-selected-chip');
         var chipText = document.getElementById('ra10-ai-selected-text');
-        if (chip && chipText) { chipText.textContent = t.length > 60 ? t.slice(0, 60) + '\u2026' : t; chip.classList.add('visible'); }
+        if (chip && chipText) { chipText.textContent = t; chip.classList.add('visible'); }
         var input = document.getElementById('ra10-ai-input');
         if (input) { input.value = 'Explain this to me'; input.focus(); }
       }
