@@ -3873,6 +3873,23 @@ html body #community-share-sheet .community-share-panel{
 
 @keyframes hxFadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
 
+/* Homepage scroll reveal + micro-interactions */
+#p-home .hx-reveal{opacity:0;transform:translateY(24px);transition:opacity .6s cubic-bezier(.2,.8,.2,1),transform .6s cubic-bezier(.2,.8,.2,1)}
+#p-home .hx-reveal.is-visible{opacity:1;transform:none}
+#p-home .hx-reveal[data-reveal-delay="1"]{transition-delay:.08s}
+#p-home .hx-reveal[data-reveal-delay="2"]{transition-delay:.16s}
+#p-home .hx-reveal[data-reveal-delay="3"]{transition-delay:.24s}
+#p-home .hx-reveal[data-reveal-delay="4"]{transition-delay:.32s}
+.hx-exam-card{animation:hxcardFloat 5s ease-in-out infinite}
+.hx-exam-card:nth-child(2n){animation-delay:.6s}
+.hx-exam-card:nth-child(3n){animation-delay:1.2s}
+@keyframes hxcardFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+.hx-bento-card.featured:hover .hx-bento-icon.featured{transform:rotate(-8deg) scale(1.08)}
+.hx-timeline-step:hover .hx-timeline-num{transform:scale(1.12);box-shadow:0 10px 26px rgba(129,140,248,.5)}
+.hx-launch-item{animation:hxlaunchGlow 2.4s ease-in-out infinite}
+.hx-launch-item:nth-child(2n){animation-delay:.4s}
+@keyframes hxlaunchGlow{0%,100%{box-shadow:0 0 0 rgba(56,189,248,0)}50%{box-shadow:0 0 0 rgba(56,189,248,.07)}}
+
 @media (min-width:700px){
   .hx-stat-row{max-width:none}
   .hx-timeline{grid-template-columns:repeat(3,minmax(0,1fr))}
@@ -4249,10 +4266,16 @@ html body #community-share-sheet .community-share-panel{
 .hx-exam-pin.pinned{background:#d20000;color:#fff;border-color:#d20000}
 .hx-exam-subject{font-size:var(--tx-sm);font-weight:800;color:#28251d;letter-spacing:-.01em;line-height:1.25}
 .hx-exam-name{font-size:12px;color:#89857c}
-.hx-exam-count{display:flex;align-items:baseline;gap:6px;margin-top:4px;padding:10px 14px;border-radius:14px;background:linear-gradient(135deg,var(--color-primary),#ff6b3d);color:#fff;box-shadow:0 6px 16px rgba(210,0,0,.22)}
-.hx-exam-count-num{font-family:var(--font-d);font-size:2rem;line-height:1;font-weight:700}
-.hx-exam-count-txt{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.03em;opacity:.95}
-.hx-exam-count.soon{background:linear-gradient(135deg,#ff8a00,#ff4d00)}
+.hx-exam-count{position:relative;display:flex;align-items:center;justify-content:flex-start;height:84px;margin-top:4px;padding:0 16px;border-radius:16px;overflow:hidden;color:#fff;box-shadow:inset 0 2px 6px rgba(0,0,0,.18),0 6px 16px rgba(30,64,255,.20)}
+.hx-exam-water{position:absolute;left:0;bottom:0;width:100%;background:linear-gradient(180deg,rgba(64,146,255,.62),rgba(30,91,255,.92) 70%,rgba(12,64,214,.95));transition:height .9s cubic-bezier(.4,1.4,.4,1)}
+.hx-exam-water::before{content:'';position:absolute;top:-14px;left:-25%;width:150%;height:16px;border-radius:42%;background:rgba(255,255,255,.30);animation:hxwaterwave 5s linear infinite}
+.hx-exam-water::after{content:'';position:absolute;top:-20px;left:-50%;width:200%;height:16px;border-radius:42%;background:rgba(255,255,255,.18);animation:hxwaterwave 7s linear infinite reverse}
+.hx-exam-count-inner{position:relative;z-index:1;display:flex;align-items:baseline;gap:8px;text-shadow:0 1px 3px rgba(0,0,0,.35)}
+.hx-exam-count-num{font-family:var(--font-d);font-size:2.1rem;line-height:1;font-weight:700}
+.hx-exam-count-txt{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.04em}
+.hx-exam-count.soon::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,180,60,.3),transparent);animation:hxshimmer 2.2s linear infinite}
+@keyframes hxwaterwave{from{transform:translateX(0)}to{transform:translateX(50px)}}
+@keyframes hxshimmer{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
 .hx-exam-foot{display:flex;align-items:center;gap:6px;margin-top:auto}
 .hx-exam-dot{width:7px;height:7px;border-radius:50%;background:var(--color-primary);box-shadow:0 0 0 3px rgba(210,0,0,.15)}
 .hx-exam-date{font-size:12.5px;font-weight:700;color:#6d6a64}
@@ -10729,9 +10752,9 @@ const PINNED_EXAMS_KEY = 'ra10_pinned_exams_v1';
 // Exam timetable data. Sources: Pearson BTEC 2027 timetables (winter + summer),
 // plus standard AQA/Edexcel/OCR GCSE, AS and A-Level exam windows.
 const EXAM_DATA = [
-  // ---- Pearson BTEC Level 3 IT AAQ ----
-  { id: 'btec-it-u1', board: 'Pearson BTEC', level: 'BTEC', subject: 'IT AAQ Unit 1', name: 'Creating Systems to Manage Information', dates: ['2027-01-12', '2027-05-05'], appPath: '/revision/btec/level-3/IT-AAQ/unit-1', specUrl: 'https://qualifications.pearson.com/content/dam/pdf/btec-aaqs/information-technology/2025/specification-and-sample-assessments/btec-level-3-national-ext-cert-in-it-aaq-spec.pdf' },
-  { id: 'btec-it-u2', board: 'Pearson BTEC', level: 'BTEC', subject: 'IT AAQ Unit 2', name: 'Cyber Security & Incident Management', dates: ['2027-01-05', '2027-05-11'], appPath: '/revision/btec/level-3/IT-AAQ/unit-2', specUrl: 'https://qualifications.pearson.com/content/dam/pdf/btec-aaqs/information-technology/2025/specification-and-sample-assessments/btec-level-3-national-ext-cert-in-it-aaq-spec.pdf' },
+  // ---- Pearson BTEC Level 3 IT AAQ (source: Pearson table builder xlsx) ----
+  { id: 'btec-it-u1', board: 'Pearson BTEC', level: 'BTEC', subject: 'IT AAQ Unit 1', name: 'Information Technology Systems', dates: ['2027-01-08', '2027-05-14'], appPath: '/revision/btec/level-3/IT-AAQ/unit-1', specUrl: 'https://qualifications.pearson.com/content/dam/pdf/btec-aaqs/information-technology/2025/specification-and-sample-assessments/btec-level-3-national-ext-cert-in-it-aaq-spec.pdf' },
+  { id: 'btec-it-u2', board: 'Pearson BTEC', level: 'BTEC', subject: 'IT AAQ Unit 2', name: 'Cyber Security & Incident Management', dates: ['2027-01-12', '2027-05-05'], appPath: '/revision/btec/level-3/IT-AAQ/unit-2', specUrl: 'https://qualifications.pearson.com/content/dam/pdf/btec-aaqs/information-technology/2025/specification-and-sample-assessments/btec-level-3-national-ext-cert-in-it-aaq-spec.pdf' },
   // ---- Pearson BTEC Level 3 Business ----
   { id: 'btec-bus-u3', board: 'Pearson BTEC', level: 'BTEC', subject: 'Business Unit 3', name: 'Business Decision Making', dates: ['2027-01-18', '2027-05-11'], appPath: '/revision/btec/level-3/business/unit-3' },
   { id: 'btec-bus-u2', board: 'Pearson BTEC', level: 'BTEC', subject: 'Business Unit 2', name: 'Developing a Marketing Campaign', dates: ['2027-01-07', '2027-05-07'], appPath: '/revision/btec/level-3/business/unit-3' },
@@ -10741,7 +10764,7 @@ const EXAM_DATA = [
   // ---- Pearson BTEC Level 2 IT ----
   { id: 'btec-l2-it-u2', board: 'Pearson BTEC', level: 'BTEC', subject: 'IT Level 2 Unit 2', name: 'IT Service Solutions', dates: ['2027-02-01', '2027-06-07'], appPath: '/revision/btec/level-2/it/unit-2' },
   // ---- Pearson BTEC Level 3 IT (additional units) ----
-  { id: 'btec-it-u14', board: 'Pearson BTEC', level: 'BTEC', subject: 'IT Unit 14', name: 'IT Service Delivery', dates: ['2027-01-04', '2027-05-11'] },
+  { id: 'btec-it-u14', board: 'Pearson BTEC', level: 'BTEC', subject: 'IT Unit 14', name: 'IT Service Delivery', dates: ['2027-01-05', '2027-04-19'] },
   { id: 'btec-it-u2-systems', board: 'Pearson BTEC', level: 'BTEC', subject: 'IT Unit 2', name: 'Creating Systems to Manage Information', dates: ['2027-01-13', '2027-05-06'] },
   // ---- Pearson BTEC Level 3 Business (additional) ----
   { id: 'btec-bus-u6', board: 'Pearson BTEC', level: 'BTEC', subject: 'Business Unit 6/12', name: 'Principles of Management', dates: ['2027-01-15', '2027-04-28'] },
@@ -10752,20 +10775,27 @@ const EXAM_DATA = [
   { id: 'btec-computing-u3', board: 'Pearson BTEC', level: 'BTEC', subject: 'Computing Unit 3', name: 'Planning & Management of Computing Projects', dates: ['2027-04-28', '2027-05-05'] },
   { id: 'btec-computing-u4', board: 'Pearson BTEC', level: 'BTEC', subject: 'Computing Unit 4', name: 'Software Design & Development Project', dates: ['2027-04-26'] },
   // ---- Pearson BTEC Level 3 Health & Social Care ----
-  { id: 'btec-hsc-u4', board: 'Pearson BTEC', level: 'BTEC', subject: 'Health & Social Care Unit 4', name: 'Enquiries into Current Research', dates: ['2027-03-22', '2027-05-17'] },
+  { id: 'btec-hsc-u4', board: 'Pearson BTEC', level: 'BTEC', subject: 'Health & Social Care Unit 4', name: 'Enquiries into Current Research', dates: ['2027-05-10'] },
   // ---- Pearson BTEC Level 3 Applied Science ----
-  { id: 'btec-science-u7', board: 'Pearson BTEC', level: 'BTEC', subject: 'Applied Science Unit 7', name: 'Contemporary Issues in Science', dates: ['2027-04-21', '2027-05-06'] },
+  { id: 'btec-science-u7', board: 'Pearson BTEC', level: 'BTEC', subject: 'Applied Science Unit 7', name: 'Contemporary Issues in Science', dates: ['2027-05-18'] },
   // ---- Pearson BTEC Level 3 Engineering ----
-  { id: 'btec-eng-u3', board: 'Pearson BTEC', level: 'BTEC', subject: 'Engineering Unit 3', name: 'Engineering Product Design & Manufacture', dates: ['2027-05-04', '2027-05-11'] },
+  { id: 'btec-eng-u3', board: 'Pearson BTEC', level: 'BTEC', subject: 'Engineering Unit 3', name: 'Engineering Product Design & Manufacture', dates: ['2027-05-20'] },
   // ---- Pearson BTEC Level 3 Travel & Tourism ----
-  { id: 'btec-travel-u2', board: 'Pearson BTEC', level: 'BTEC', subject: 'Travel & Tourism Unit 2', name: 'Global Destinations', dates: ['2027-03-22', '2027-05-04'] },
+  { id: 'btec-travel-u2', board: 'Pearson BTEC', level: 'BTEC', subject: 'Travel & Tourism Unit 2', name: 'Global Destinations', dates: ['2027-05-04'] },
   // ---- AQA A-Level Business ----
   { id: 'aqa-bus-al', board: 'AQA', level: 'A-Level', subject: 'A-Level Business', name: 'Business (7132) Papers 1-3', dates: ['2027-06-02', '2027-06-09', '2027-06-16'], appPath: '/revision/a-level/business-2023' },
-  // ---- AQA GCSE (standard window) ----
-  { id: 'aqa-gcse-maths', board: 'AQA', level: 'GCSE', subject: 'GCSE Maths', name: 'Mathematics (8300)', dates: ['2027-05-18', '2027-05-21', '2027-06-08'] },
-  { id: 'aqa-gcse-english', board: 'AQA', level: 'GCSE', subject: 'GCSE English', name: 'English Language (8700)', dates: ['2027-05-20', '2027-06-04'] },
-  { id: 'aqa-gcse-science', board: 'AQA', level: 'GCSE', subject: 'GCSE Science', name: 'Combined Science (8464)', dates: ['2027-05-17', '2027-05-24', '2027-06-07'] },
-  // ---- AQA AS Level ----
+  // ---- GCSE (source: BBC Bitesize 2027 timetable, morning unless noted) ----
+  { id: 'gcse-compsci', board: 'AQA', level: 'GCSE', subject: 'GCSE Computer Science', name: 'Computer Science (8525)', dates: ['2027-05-10', '2027-05-19'] },
+  { id: 'gcse-maths', board: 'AQA', level: 'GCSE', subject: 'GCSE Maths', name: 'Mathematics (8300)', dates: ['2027-05-14', '2027-05-27', '2027-06-14'] },
+  { id: 'gcse-english-lit', board: 'AQA', level: 'GCSE', subject: 'GCSE English Literature', name: 'English Literature (8702)', dates: ['2027-05-12', '2027-05-19'] },
+  { id: 'gcse-biology', board: 'AQA', level: 'GCSE', subject: 'GCSE Biology', name: 'Biology (8461)', dates: ['2027-05-11', '2027-06-10'] },
+  { id: 'gcse-chemistry', board: 'AQA', level: 'GCSE', subject: 'GCSE Chemistry', name: 'Chemistry (8462)', dates: ['2027-05-17', '2027-06-15'] },
+  { id: 'gcse-physics', board: 'AQA', level: 'GCSE', subject: 'GCSE Physics', name: 'Physics (8463)', dates: ['2027-05-25', '2027-06-18'] },
+  { id: 'gcse-english-lang', board: 'AQA', level: 'GCSE', subject: 'GCSE English Language', name: 'English Language (8700)', dates: ['2027-05-24', '2027-06-08'] },
+  { id: 'gcse-history', board: 'AQA', level: 'GCSE', subject: 'GCSE History', name: 'History (8145)', dates: ['2027-05-20', '2027-05-28'] },
+  { id: 'gcse-geography', board: 'AQA', level: 'GCSE', subject: 'GCSE Geography', name: 'Geography (8035)', dates: ['2027-05-18', '2027-05-26', '2027-06-10'] },
+  { id: 'gcse-science-combined', board: 'AQA', level: 'GCSE', subject: 'GCSE Combined Science', name: 'Combined Science: Trilogy (8464)', dates: ['2027-05-11', '2027-05-17', '2027-05-25', '2027-06-10', '2027-06-15', '2027-06-18'] },
+  // ---- AS Level ----
   { id: 'aqa-as-maths', board: 'AQA', level: 'AS', subject: 'AS Maths', name: 'Mathematics (7356)', dates: ['2027-05-19', '2027-05-26'] },
   { id: 'aqa-as-biology', board: 'AQA', level: 'AS', subject: 'AS Biology', name: 'Biology (7401)', dates: ['2027-05-18', '2027-05-25'] },
   // ---- AQA A-Level ----
@@ -10774,13 +10804,13 @@ const EXAM_DATA = [
   { id: 'aqa-al-chemistry', board: 'AQA', level: 'A-Level', subject: 'A-Level Chemistry', name: 'Chemistry (7405)', dates: ['2027-06-02', '2027-06-09', '2027-06-16'] },
   { id: 'aqa-al-physics', board: 'AQA', level: 'A-Level', subject: 'A-Level Physics', name: 'Physics (7408)', dates: ['2027-06-03', '2027-06-10', '2027-06-17'] },
   // ---- Edexcel GCSE ----
-  { id: 'edexcel-gcse-maths', board: 'Edexcel', level: 'GCSE', subject: 'GCSE Maths', name: 'Mathematics (1MA1)', dates: ['2027-05-19', '2027-05-24', '2027-06-09'] },
-  { id: 'edexcel-gcse-english', board: 'Edexcel', level: 'GCSE', subject: 'GCSE English', name: 'English Language (1EN0)', dates: ['2027-05-21', '2027-06-05'] },
+  { id: 'edexcel-gcse-maths', board: 'Edexcel', level: 'GCSE', subject: 'GCSE Maths', name: 'Mathematics (1MA1)', dates: ['2027-05-14', '2027-05-27', '2027-06-14'] },
+  { id: 'edexcel-gcse-english', board: 'Edexcel', level: 'GCSE', subject: 'GCSE English', name: 'English Language (1EN0)', dates: ['2027-05-24', '2027-06-08'] },
   // ---- Edexcel A-Level ----
   { id: 'edexcel-al-maths', board: 'Edexcel', level: 'A-Level', subject: 'A-Level Maths', name: 'Mathematics (9MA0)', dates: ['2027-06-04', '2027-06-11', '2027-06-18'] },
   // ---- OCR GCSE ----
-  { id: 'ocr-gcse-maths', board: 'OCR', level: 'GCSE', subject: 'GCSE Maths', name: 'Mathematics (J560)', dates: ['2027-05-18', '2027-05-25', '2027-06-08'] },
-  { id: 'ocr-gcse-science', board: 'OCR', level: 'GCSE', subject: 'GCSE Science', name: 'Combined Science (J260)', dates: ['2027-05-17', '2027-05-24', '2027-06-07'] }
+  { id: 'ocr-gcse-maths', board: 'OCR', level: 'GCSE', subject: 'GCSE Maths', name: 'Mathematics (J560)', dates: ['2027-05-14', '2027-05-27', '2027-06-14'] },
+  { id: 'ocr-gcse-science', board: 'OCR', level: 'GCSE', subject: 'GCSE Science', name: 'Combined Science (J260)', dates: ['2027-05-11', '2027-05-17', '2027-05-25', '2027-06-10', '2027-06-15', '2027-06-18'] }
 ];
 
 function getPinnedExams() {
@@ -11175,6 +11205,29 @@ function closeExamModal() {
   document.body.style.overflow = '';
 }
 
+function initHomeReveal() {
+  const home = document.getElementById('p-home');
+  if (!home) return;
+  const targets = home.querySelectorAll('.hx-section, .hx-marquee, .hx-timeline-step, .hx-bento-card, .hx-subject-card, .hx-plan-card');
+  targets.forEach((el, i) => {
+    el.classList.add('hx-reveal');
+    if (i % 4) el.setAttribute('data-reveal-delay', String(i % 4));
+  });
+  if (!('IntersectionObserver' in window)) {
+    targets.forEach(el => el.classList.add('is-visible'));
+    return;
+  }
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -6% 0px' });
+  targets.forEach(el => io.observe(el));
+}
+
 function renderHomeExams() {
   const host = document.getElementById('home-exams-grid');
   if (!host) return;
@@ -11196,11 +11249,12 @@ function renderHomeExams() {
   host.innerHTML = withNext.map(({ exam, next }) => {
     const isPinned = pinned.includes(exam.id);
     const days = Math.ceil((next.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+    const pct = examsProgressPct(next, now);
     const dateStr = next.toLocaleDateString(undefined, { weekday: 'short', day: 'numeric', month: 'short' });
-    let dayLabel, countCls;
-    if (days === 0) { dayLabel = 'Today'; countCls = 'soon'; }
-    else if (days === 1) { dayLabel = '1 day'; countCls = 'soon'; }
-    else { dayLabel = days + ' days'; countCls = ''; }
+    let countCls = '';
+    if (days === 0) countCls = 'soon';
+    else if (days <= 7) countCls = 'soon';
+    const dayTxt = (days === 0 ? 'Today' : (days === 1 ? '1 day to go' : days + ' days to go'));
     return '<div class="hx-exam-card' + (isPinned ? ' pinned' : '') + '" onclick="go(\'/exams\')">'
       + '<div class="hx-exam-top">'
       +   '<span class="hx-exam-board ' + exam.board.toLowerCase().replace(/\s+/g, '-') + '">' + exam.board + '</span>'
@@ -11209,8 +11263,11 @@ function renderHomeExams() {
       + '<div class="hx-exam-subject">' + exam.subject + '</div>'
       + '<div class="hx-exam-name">' + exam.name + '</div>'
       + '<div class="hx-exam-count ' + countCls + '">'
-      +   '<span class="hx-exam-count-num">' + days + '</span>'
-      +   '<span class="hx-exam-count-txt">' + (days === 1 ? 'day to go' : 'days to go') + '</span>'
+      +   '<div class="hx-exam-water" style="height:' + pct + '%"></div>'
+      +   '<div class="hx-exam-count-inner">'
+      +     '<span class="hx-exam-count-num">' + days + '</span>'
+      +     '<span class="hx-exam-count-txt">' + dayTxt + '</span>'
+      +   '</div>'
       + '</div>'
       + '<div class="hx-exam-foot">'
       +   '<span class="hx-exam-dot"></span><span class="hx-exam-date">' + dateStr + '</span>'
@@ -11260,11 +11317,12 @@ function bindExamsFilters() {
 // Exam dates from the Pearson BTEC 2027 timetables (winter + summer).
 // Each subject lists its winter and summer sittings; the next upcoming one is shown.
 const EXAM_TIMES = [
-  { subject: 'IT AAQ Unit 1', board: 'Pearson BTEC', dates: ['2027-01-12', '2027-05-05'], note: 'Creating Systems to Manage Information' },
-  { subject: 'IT AAQ Unit 2', board: 'Pearson BTEC', dates: ['2027-01-05', '2027-05-11'], note: 'Cyber Security & Incident Management' },
+  { subject: 'IT AAQ Unit 1', board: 'Pearson BTEC', dates: ['2027-01-08', '2027-05-14'], note: 'Information Technology Systems' },
+  { subject: 'IT AAQ Unit 2', board: 'Pearson BTEC', dates: ['2027-01-12', '2027-05-05'], note: 'Cyber Security & Incident Management' },
   { subject: 'Business Unit 3', board: 'Pearson BTEC', dates: ['2027-01-18', '2027-05-11'], note: 'Business Decision Making' },
   { subject: 'Sport Unit 1', board: 'Pearson BTEC', dates: ['2027-01-06', '2027-04-29'], note: 'Fitness Training & Programming' },
   { subject: 'IT Level 2 Unit 2', board: 'Pearson BTEC', dates: ['2027-02-01', '2027-06-07'], note: 'IT Service Solutions' },
+  { subject: 'GCSE Maths', board: 'AQA', dates: ['2027-05-14', '2027-05-27', '2027-06-14'], note: 'Mathematics (8300)' },
   { subject: 'A-Level Business (7132)', board: 'AQA', dates: ['2027-06-02'], note: 'Paper 1-3' }
 ];
 
@@ -11475,6 +11533,7 @@ async function waitForRA10Sdk(timeoutMs) {
     setPriceSnapshotView('all');
     updateLeaderboardCountdown();
     setInterval(updateLeaderboardCountdown, 1000);
+    initHomeReveal();
 
     let uiHandlersBound = false;
     function bindUiEventHandlers() {
