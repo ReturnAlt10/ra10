@@ -110,8 +110,22 @@
     setupReveal();
     syncStreakChipByRoute();
     syncActiveNavFromScroll();
+    loadAiHelper();
     window.addEventListener("hashchange", syncStreakChipByRoute);
     window.addEventListener("popstate", syncStreakChipByRoute);
+  }
+
+  function loadAiHelper() {
+    // Only inject the AI helper on revision/unit pages — it self-guards too.
+    if (!/\/revision\//i.test(location.pathname)) return;
+    if (document.getElementById("ra10-ai-helper-script")) return;
+    var base = location.protocol === "file:" ? "" : (location.hostname === "127.0.0.1" || location.hostname === "localhost" ? "http://" + location.host : (location.protocol + "//" + location.host));
+    var s = document.createElement("script");
+    s.id = "ra10-ai-helper-script";
+    var path = location.pathname;
+    // Resolve the site root: the helper lives at /refresh/ra10-ai-helper.js
+    s.src = base + "/refresh/ra10-ai-helper.js";
+    document.body.appendChild(s);
   }
 
   if (document.readyState === "loading") {

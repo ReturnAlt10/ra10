@@ -366,6 +366,26 @@ body.auth-popup-open{overflow:hidden}
 }
 .contact-submit-btn:hover{filter:brightness(1.06)}
 .contact-submit-btn:disabled{opacity:.6;cursor:not-allowed;filter:grayscale(.3)}
+
+/* Floating help button (bottom-left) */
+#ra10-help-fab{
+  position:fixed;left:18px;bottom:18px;z-index:2147483400;
+  display:inline-flex;align-items:center;gap:8px;
+  padding:0 18px 0 14px;height:50px;border-radius:999px;
+  border:1px solid rgba(0,0,0,.08);
+  background:linear-gradient(135deg,#d20000,#8a1a1a);color:#fff;
+  font-weight:800;font-size:var(--tx-sm);cursor:pointer;
+  box-shadow:0 10px 26px rgba(210,0,0,.4);
+  transition:transform .18s ease,box-shadow .18s ease;
+}
+#ra10-help-fab svg{flex-shrink:0}
+#ra10-help-fab span{letter-spacing:.01em}
+#ra10-help-fab:hover{transform:translateY(-2px);box-shadow:0 14px 32px rgba(210,0,0,.5)}
+#ra10-help-fab:active{transform:translateY(0) scale(.98)}
+@media (max-width:640px){
+  #ra10-help-fab{padding:0 12px;height:44px}
+  #ra10-help-fab span{display:none}
+}
 .auth-overlay.open .auth-modal{transform:translateY(0) scale(1)}
 .home-reframe-banner{
   position:relative;
@@ -15251,6 +15271,12 @@ function bindContactModal() {
   }
 }
 </script>
+
+<!-- Floating help button (bottom-left) -->
+<button id="ra10-help-fab" type="button" onclick="openContactModal()" aria-label="Help and contact">
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+  <span>Help</span>
+</button>
 
 <!-- ============================================================
      FOOTER

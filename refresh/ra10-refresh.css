@@ -60,7 +60,7 @@
     z-index: 0;
   }
 
-  body.ra10-refresh-enabled > :not(.mobile-top-nav):not(.mobile-bottom-nav):not(.mobile-sheet-backdrop):not(.mobile-subject-sheet):not(.auth-overlay):not(.nav-user-dropdown):not(.nav):not(.navbar):not(.topbar):not(.viewer-topbar):not(.brief-modal):not(.ed-fullscreen-overlay):not(.mobile-tool-notice-overlay):not(.exam-modal-overlay) {
+  body.ra10-refresh-enabled > :not(.mobile-top-nav):not(.mobile-bottom-nav):not(.mobile-sheet-backdrop):not(.mobile-subject-sheet):not(.auth-overlay):not(.nav-user-dropdown):not(.nav):not(.navbar):not(.topbar):not(.viewer-topbar):not(.brief-modal):not(.ed-fullscreen-overlay):not(.mobile-tool-notice-overlay):not(.exam-modal-overlay):not(.ra10-ai-fab):not(.ra10-ai-panel):not(.ra10-ai-select-pop):not(#ra10-help-fab) {
     position: relative;
     z-index: 1;
   }
@@ -76,7 +76,11 @@
   body.ra10-refresh-enabled .mobile-subject-sheet,
   body.ra10-refresh-enabled .auth-overlay,
   body.ra10-refresh-enabled .nav-user-dropdown,
-  body.ra10-refresh-enabled .exam-modal-overlay {
+  body.ra10-refresh-enabled .exam-modal-overlay,
+  body.ra10-refresh-enabled .ra10-ai-fab,
+  body.ra10-refresh-enabled .ra10-ai-panel,
+  body.ra10-refresh-enabled .ra10-ai-select-pop,
+  body.ra10-refresh-enabled #ra10-help-fab {
     position: fixed !important;
   }
 
