@@ -21,20 +21,6 @@
   "back": "Phishing = mass, generic emails pretending to be trusted organisations. Spear phishing = targeted at specific individuals using personal information. Whaling = spear phishing aimed at senior executives (CEOs, CFOs) — higher stakes."
  },
  {
-  "id": "F004",
-  "learning_aim": "A",
-  "topic": "A1.2 External threats — hacking (DoS/DDoS)",
-  "front": "How does a Man-in-the-Middle (MITM) attack work?",
-  "back": "The attacker secretly intercepts and potentially alters communication between two parties who believe they are directly communicating. Common on unsecured Wi-Fi. Can be mitigated by using HTTPS/TLS encryption which authenticates the server and encrypts the data."
- },
- {
-  "id": "F005",
-  "learning_aim": "A",
-  "topic": "A1.2 External threats — hacking",
-  "front": "What is SQL injection and how can it be prevented?",
-  "back": "SQL injection inserts malicious SQL code into input fields to manipulate a database. Prevention: parameterised queries/prepared statements, input validation and sanitisation, least privilege database accounts, Web Application Firewall (WAF)."
- },
- {
   "id": "F006",
   "learning_aim": "A",
   "topic": "A3.1 Current legislation",

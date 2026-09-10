@@ -192,44 +192,6 @@
   }
  },
  {
-  "id": "A011",
-  "learning_aim": "A",
-  "topic": "A1.2 External threats — hacking",
-  "command_verb": "Describe",
-  "marks": 2,
-  "ao": "AO1",
-  "question": "Describe how an SQL injection attack works.",
-  "guidance": "(2)",
-  "type": "short",
-  "mark_scheme": {
-   "instruction": "Award up to two marks.",
-   "points": [
-    "An attacker inserts malicious SQL code into a web form input field or URL parameter (1)",
-    "If the application does not properly validate/sanitise input, the database executes the injected code â€” this can allow the attacker to view, modify or delete database contents (1)"
-   ]
-  }
- },
- {
-  "id": "A012",
-  "learning_aim": "A",
-  "topic": "A1.2 External threats — hacking",
-  "command_verb": "State",
-  "marks": 1,
-  "ao": "AO1",
-  "question": "State one method that can be used to prevent SQL injection attacks.",
-  "type": "short",
-  "mark_scheme": {
-   "instruction": "Award one mark for any valid prevention method.",
-   "points": [
-    "Parameterised queries / prepared statements (1)",
-    "Input validation and sanitisation (1)",
-    "Using stored procedures (1)",
-    "Web Application Firewall (WAF) (1)"
-   ],
-   "additional_guidance": "Accept any one valid method."
-  }
- },
- {
   "id": "A013",
   "learning_aim": "A",
   "topic": "A2.1 System vulnerabilities — software",
@@ -284,23 +246,6 @@
     "Writing passwords down on sticky notes near the workstation â€” visible to passers-by (1)",
     "Sharing passwords with colleagues â€” no accountability for actions taken (1)"
    ]
-  }
- },
- {
-  "id": "A016",
-  "learning_aim": "A",
-  "topic": "A3.1 Current legislation",
-  "command_verb": "State",
-  "marks": 1,
-  "ao": "AO1",
-  "question": "State the maximum penalty under Section 3 of the Computer Misuse Act 1990 for unauthorised modification of computer material.",
-  "type": "short",
-  "mark_scheme": {
-   "instruction": "Award one mark.",
-   "points": [
-    "Up to 10 years imprisonment (1)"
-   ],
-   "additional_guidance": "Also accept: unlimited fine or both."
   }
  },
  {
@@ -967,126 +912,6 @@
   }
  },
  {
-  "id": "A050",
-  "learning_aim": "A",
-  "topic": "A1.2 External threats — hacking (DoS/DDoS)",
-  "command_verb": "Explain",
-  "marks": 3,
-  "ao": "AO2",
-  "scenario": "An attacker redirects users typing a legitimate web address to a fake site by corrupting domain-name resolution.",
-  "question": "Explain what is happening and how DNSSEC helps protect against it.",
-  "guidance": "(3)",
-  "type": "short",
-  "mark_scheme": {
-   "instruction": "Award up to 3 marks.",
-   "points": [
-    "This is DNS poisoning, corrupting DNS resolution so requests go to a malicious IP address (1)",
-    "Users are directed to a fake site where their credentials may be stolen (1)",
-    "DNSSEC uses digital signatures to verify DNS responses are authentic, preventing such tampering (1)"
-   ]
-  }
- },
- {
-  "id": "A051",
-  "learning_aim": "A",
-  "topic": "A1.2 External threats — hacking (DoS/DDoS)",
-  "command_verb": "Describe",
-  "marks": 3,
-  "ao": "AO2",
-  "scenario": "",
-  "question": "Describe how a man-in-the-middle (MITM) attack can intercept data.",
-  "guidance": "(3)",
-  "type": "short",
-  "mark_scheme": {
-   "instruction": "Award up to 3 marks.",
-   "points": [
-    "The attacker positions themselves between the sender and receiver, often on an insecure network (1)",
-    "They intercept and may read or alter data flowing between the two parties without them knowing (1)",
-    "This breaks confidentiality and integrity; encrypted connections such as HTTPS/TLS help prevent it (1)"
-   ]
-  }
- },
- {
-  "id": "A052",
-  "learning_aim": "A",
-  "topic": "A1.2 External threats — hacking (DoS/DDoS)",
-  "command_verb": "Describe",
-  "marks": 2,
-  "ao": "AO1",
-  "scenario": "",
-  "question": "Describe what packet sniffing is on a network.",
-  "guidance": "(2)",
-  "type": "short",
-  "mark_scheme": {
-   "instruction": "Award up to 2 marks.",
-   "points": [
-    "Packet sniffing is capturing and inspecting data packets travelling across a network (1)",
-    "On an unencrypted network it can reveal credentials and other data; encryption mitigates the risk (1)"
-   ]
-  }
- },
- {
-  "id": "A053",
-  "learning_aim": "A",
-  "topic": "A1.2 External threats — hacking",
-  "command_verb": "Explain",
-  "marks": 4,
-  "ao": "AO2",
-  "scenario": "An attacker retrieves entire customer records by typing malicious input into a website search box.",
-  "question": "Explain how SQL injection works and why it is dangerous.",
-  "guidance": "(4)",
-  "type": "short",
-  "mark_scheme": {
-   "instruction": "Award up to 4 marks.",
-   "points": [
-    "SQL injection inserts malicious SQL into user input that is appended to a database query (1)",
-    "If the input is not validated or sanitised, the database executes the malicious commands (1)",
-    "This can let the attacker read, alter or delete entire tables such as customer records (1)",
-    "Defences include input validation, parameterised queries and least-privilege database accounts (1)"
-   ]
-  }
- },
- {
-  "id": "A054",
-  "learning_aim": "A",
-  "topic": "A1.2 External threats — hacking",
-  "command_verb": "Describe",
-  "marks": 3,
-  "ao": "AO2",
-  "scenario": "",
-  "question": "Describe how cross-site scripting (XSS) can be used to steal a user session.",
-  "guidance": "(3)",
-  "type": "short",
-  "mark_scheme": {
-   "instruction": "Award up to 3 marks.",
-   "points": [
-    "XSS injects malicious client-side script (such as JavaScript) into a page viewed by other users (1)",
-    "The script can read cookies or session tokens in the victim browser (1)",
-    "Stolen tokens can be used to impersonate the victim, known as session hijacking (1)"
-   ]
-  }
- },
- {
-  "id": "A055",
-  "learning_aim": "A",
-  "topic": "A1.2 External threats — hacking",
-  "command_verb": "Describe",
-  "marks": 3,
-  "ao": "AO2",
-  "scenario": "",
-  "question": "Describe how cross-site request forgery (CSRF) works.",
-  "guidance": "(3)",
-  "type": "short",
-  "mark_scheme": {
-   "instruction": "Award up to 3 marks.",
-   "points": [
-    "CSRF tricks a logged-in user browser into sending an unwanted request to a trusted site (1)",
-    "It relies on the user already being authenticated through a valid session cookie (1)",
-    "Actions such as changing a password or transferring money can be triggered without the user knowing (1)"
-   ]
-  }
- },
- {
   "id": "A056",
   "learning_aim": "A",
   "topic": "A1.1 Internal threats — accidental/deliberate damage",
@@ -1348,25 +1173,6 @@
     "A differential backup stores all changes since the last full backup (1)",
     "An incremental backup stores changes since the last backup of any type, being faster to make but requiring all previous ones to restore (1)",
     "Trade-off: full backups restore fastest but are slow to create; incremental backups are fast to create but slower and more complex to restore (1)"
-   ]
-  }
- },
- {
-  "id": "A069",
-  "learning_aim": "A",
-  "topic": "A4.1 Software and hardware security — backup/recovery",
-  "command_verb": "Describe",
-  "marks": 2,
-  "ao": "AO1",
-  "scenario": "",
-  "question": "State what RAID 1 provides and one limitation.",
-  "guidance": "(2)",
-  "type": "short",
-  "mark_scheme": {
-   "instruction": "Award up to 2 marks.",
-   "points": [
-    "RAID 1 mirrors data across two drives, providing redundancy so a single drive failure does not lose data (1)",
-    "Limitation: it uses twice the storage capacity and does not replace the need for backups (1)"
    ]
   }
  },
