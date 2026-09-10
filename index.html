@@ -3949,14 +3949,14 @@ html body #community-share-sheet .community-share-panel{
 }
 #p-home .hx-launch-head{padding-bottom:12px;border-bottom:1px solid #d8d3ca}
 #p-home .hx-launch-head h3{color:#28251d;font-size:1.55rem}
-#p-home .hx-launch-head span{color:#89857c}
-#p-home .hx-launch-list{gap:7px;margin-top:10px}
-#p-home .hx-launch-item{background:rgba(255,255,255,.68);border:1px solid #ded9d0;padding:10px;border-radius:14px}
-#p-home .hx-launch-item:hover{background:#fff;border-color:#c9c2b7;transform:translateX(4px);box-shadow:0 8px 18px rgba(63,52,35,.08)}
-#p-home .hx-launch-copy strong{color:#28251d}
-#p-home .hx-launch-copy small{color:#89857c}
-#p-home .hx-launch-arrow{color:#aaa49a}
-#p-home .hx-launch-item:hover .hx-launch-arrow{color:#d20000}
+#p-home .hx-launch-all{color:#89857c}
+#p-home .hx-launch-all:hover{background:rgba(0,0,0,.05);color:#28251d}
+#p-home .hx-launch-group-label{color:#89857c}
+#p-home .hx-launch-tiles{gap:8px}
+#p-home .hx-launch-tile{background:rgba(255,255,255,.68);border:1px solid #ded9d0;border-radius:14px}
+#p-home .hx-launch-tile:hover{background:#fff;border-color:#c9c2b7;transform:translateY(-2px);box-shadow:0 8px 18px rgba(63,52,35,.08)}
+#p-home .hx-launch-tile-name b{color:#28251d}
+#p-home .hx-launch-tile-name em{color:#89857c;font-style:normal}
 
 #p-home .hx-marquee{border:0;border-top:1px solid #d8d3ca;border-bottom:1px solid #d8d3ca;border-radius:0;background:transparent;padding:8px 0}
 #p-home .hx-marquee span{background:transparent;color:#777269;padding-inline:10px}
@@ -4338,10 +4338,12 @@ html body #community-share-sheet .community-share-panel{
 [data-theme="dark"] #p-home .hx-hero-copy{color:#adb4c2}
 [data-theme="dark"] #p-home .hx-hero-actions .hx-btn-ghost{background:#282c35;color:#f1f2f4;border-color:#444956}
 [data-theme="dark"] #p-home .hx-stat,[data-theme="dark"] #p-home .hx-launch-head,[data-theme="dark"] #p-home .hx-marquee{border-color:#3d414b}
-[data-theme="dark"] #p-home .hx-stat span,[data-theme="dark"] #p-home .hx-launch-head span,[data-theme="dark"] #p-home .hx-launch-copy small{color:#858d9e}
-[data-theme="dark"] #p-home .hx-launch-item{background:#242831;border-color:#363b47}
-[data-theme="dark"] #p-home .hx-launch-item:hover{background:#2b303a;border-color:#515867}
-[data-theme="dark"] #p-home .hx-launch-copy strong{color:#f1f2f4}
+[data-theme="dark"] #p-home .hx-stat span,[data-theme="dark"] #p-home .hx-launch-head span,[data-theme="dark"] #p-home .hx-launch-copy small,[data-theme="dark"] #p-home .hx-launch-group-label{color:#858d9e}
+[data-theme="dark"] #p-home .hx-launch-tile{background:#242831;border-color:#363b47}
+[data-theme="dark"] #p-home .hx-launch-tile:hover{background:#2b303a;border-color:#515867;box-shadow:none}
+[data-theme="dark"] #p-home .hx-launch-tile-name b{color:#f1f2f4}
+[data-theme="dark"] #p-home .hx-launch-tile-name em{color:#858d9e}
+[data-theme="dark"] #p-home .hx-launch-all{color:#858d9e}
 [data-theme="dark"] #p-home .hx-timeline-step,[data-theme="dark"] #p-home .hx-bento-card,[data-theme="dark"] #p-home .hx-subject-card{background:#20232a;border-color:#383d48;box-shadow:none}
 [data-theme="dark"] #p-home .hx-bento-card.featured{color:#f1f2f4;background:#302a29;border-color:#60443e}
 [data-theme="dark"] #p-home .hx-bento-card.featured p{color:#bdb7b8}
@@ -4444,7 +4446,6 @@ html body #community-share-sheet .community-share-panel{
   #p-home .hx-hero{padding:1.5rem;border-radius:21px}
   #p-home .hx-hero-title{font-size:clamp(2.4rem,12vw,3.35rem)}
   #p-home .hx-launch{margin-top:var(--sp2)}
-  #p-home .hx-launch-item{padding:9px}
 }
 </style>
 <script>
@@ -10795,8 +10796,17 @@ function renderSignedInDashboard() {
   const dash = document.getElementById('signed-in-dashboard');
   if (!dash) return;
   const loggedIn = window.RA10 && typeof RA10.isLoggedIn === 'function' && RA10.isLoggedIn();
-  if (!loggedIn) { dash.style.display = 'none'; return; }
+  const hero = document.getElementById('p-home') ? document.getElementById('p-home').querySelector('.hx-hero') : null;
+  if (!loggedIn) {
+    dash.style.display = 'none';
+    if (hero) hero.style.display = '';
+    document.body.classList.remove('home-signed-in');
+    return;
+  }
   dash.style.display = 'block';
+  // When signed in, hide the standalone hero so the dashboard is the single intro widget.
+  if (hero) hero.style.display = 'none';
+  document.body.classList.add('home-signed-in');
 
   const pinned = getPinnedApps();
   const pinnedApps = ALL_APPS.filter(a => pinned.includes(a.path));
