@@ -352,10 +352,10 @@
         if (!rect || (rect.top === 0 && rect.left === 0 && rect.height === 0)) { hideSelectPop(); return; }
         panelSelectionText = text;
         pendingContext = text;
-        // Position the popup just above the selection: tiny 4px gap above the
-        // selected text, horizontally centred on the first selection line.
+        // Popup is position:fixed (viewport-relative), so use rect directly
+        // (no scrollY) with a tiny 4px gap above the selected text.
         var popH = pop.offsetHeight || 32;
-        pop.style.top = (window.scrollY + rect.top - popH - 4) + 'px';
+        pop.style.top = (rect.top - popH - 4) + 'px';
         var cx = rect.left + Math.min(rect.width, 120) / 2;
         var popW = pop.offsetWidth || 92;
         pop.style.left = Math.max(8, Math.min(cx - popW / 2, window.innerWidth - popW - 8)) + 'px';
