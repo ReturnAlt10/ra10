@@ -2242,13 +2242,34 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
   }
   body.mobile-dock-edit .mobile-you-item .mobile-you-remove{display:inline-flex}
   body.mobile-dock-edit .mobile-you-item em{display:none}
-  .mobile-you-item.dock-missing .mobile-you-copy strong,
-  .mobile-you-item.dock-missing .mobile-you-copy small{opacity:.4}
+  /* Items already in the dock (which can be removed) are dimmed; items not in
+     the dock (which can be added) stay full-colour. */
+  body.mobile-dock-edit .mobile-you-item:not(.dock-missing) .mobile-you-copy strong,
+  body.mobile-dock-edit .mobile-you-item:not(.dock-missing) .mobile-you-copy small{opacity:.45}
+  body.mobile-dock-edit .mobile-you-item:not(.dock-missing) .mobile-you-icon{opacity:.55}
   .mobile-you-item .mobile-you-add{
     display:none;font-style:normal;font-size:11px;font-weight:800;color:var(--color-primary);
   }
   body.mobile-dock-edit .mobile-you-item.dock-missing .mobile-you-add{display:inline-flex}
   body.mobile-dock-edit .mobile-you-item.dock-missing em{display:none}
+  /* Home button cannot be removed — hide its remove control. */
+  body.mobile-dock-edit .mobile-you-item[data-dock-item="home"] .mobile-you-remove{display:none !important}
+  body.mobile-dock-edit .mobile-you-item[data-dock-item="home"]{opacity:1}
+
+  /* Dock toast / popup */
+  .mobile-dock-toast{
+    position:fixed;left:50%;bottom:calc(150px + env(safe-area-inset-bottom,0px));
+    transform:translateX(-50%) translateY(10px);
+    z-index:10060;max-width:calc(100vw - 40px);width:max-content;
+    padding:12px 18px;border-radius:14px;
+    background:var(--color-surface);color:var(--color-text);
+    border:1px solid oklch(from var(--color-text) l c h/.12);
+    box-shadow:0 14px 36px oklch(0 0 0/.22);
+    font-size:var(--tx-sm);font-weight:700;line-height:1.4;text-align:center;
+    opacity:0;pointer-events:none;
+    transition:opacity .22s ease,transform .22s ease;
+  }
+  .mobile-dock-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
   body.mobile-you-open{overflow:hidden}
   body.mobile-you-open .mobile-sheet-backdrop{
     display:block;
@@ -8108,6 +8129,7 @@ const MOBILE_DOCK_POOL = [
 ];
 
 function getMobileDockOrder() {
+  let order = null;
   try {
     const raw = localStorage.getItem(MOBILE_DOCK_KEY);
     if (raw) {
@@ -8116,12 +8138,14 @@ function getMobileDockOrder() {
         // Filter to valid ids, preserve order, dedupe.
         const valid = arr.filter(id => MOBILE_DOCK_POOL.some(p => p.id === id));
         const seen = new Set();
-        const unique = valid.filter(id => { if (seen.has(id)) return false; seen.add(id); return true; });
-        return unique;
+        order = valid.filter(id => { if (seen.has(id)) return false; seen.add(id); return true; });
       }
     }
   } catch (e) {}
-  return MOBILE_DOCK_DEFAULT.slice();
+  if (!order) order = MOBILE_DOCK_DEFAULT.slice();
+  // Home is always present and always first.
+  if (!order.includes('home')) order.unshift('home');
+  return order;
 }
 
 function saveMobileDockOrder(order) {
@@ -8301,7 +8325,14 @@ function ensureDockPoolControls() {
   });
 }
 
+// The dock holds the fixed Home button plus a limited number of extra items.
+const MOBILE_DOCK_MAX_EXTRA = 3; // Home + 3 others = 4 total dock buttons.
+
 function removeFromDock(id) {
+  if (id === 'home') {
+    showDockToast('The Home button can&rsquo;t be removed.');
+    return;
+  }
   let order = getMobileDockOrder();
   if (order.length <= 1) return; // keep at least one item
   order = order.filter(x => x !== id);
@@ -8313,11 +8344,33 @@ function removeFromDock(id) {
 function addToDock(id) {
   const order = getMobileDockOrder();
   if (order.includes(id)) return;
-  if (order.length >= 5) return; // max 5 dock items
+  // Home is always present; limit the number of extra items.
+  const extras = order.filter(x => x !== 'home').length;
+  if (extras >= MOBILE_DOCK_MAX_EXTRA) {
+    showDockToast('You can add up to ' + MOBILE_DOCK_MAX_EXTRA + ' extra buttons. Remove one first.');
+    return;
+  }
   order.push(id);
   saveMobileDockOrder(order);
   applyMobileDockOrder();
   refreshDockEditUI();
+}
+
+let _dockToastTimer = null;
+function showDockToast(html) {
+  let toast = document.getElementById('mobile-dock-toast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'mobile-dock-toast';
+    toast.className = 'mobile-dock-toast';
+    document.body.appendChild(toast);
+  }
+  toast.innerHTML = html;
+  // Force reflow then show.
+  void toast.offsetWidth;
+  toast.classList.add('show');
+  clearTimeout(_dockToastTimer);
+  _dockToastTimer = setTimeout(() => toast.classList.remove('show'), 2200);
 }
 
 function initDockReorder() {
