@@ -2229,12 +2229,6 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
     75%{transform:rotate(2.2deg)}
     100%{transform:rotate(0)}
   }
-  .mobile-dock-done{
-    position:fixed;right:14px;bottom:calc(78px + env(safe-area-inset-bottom,0px));
-    z-index:10040;height:40px;padding:0 18px;border-radius:999px;
-    background:var(--color-primary);color:#fff;border:none;cursor:pointer;
-    font-size:var(--tx-sm);font-weight:800;box-shadow:0 10px 26px rgba(210,0,0,.4);
-  }
   .mobile-you-item .mobile-you-remove{
     display:none;width:26px;height:26px;border-radius:999px;
     background:var(--color-primary);color:#fff;border:none;cursor:pointer;
@@ -5217,8 +5211,6 @@ html body #community-share-sheet .community-share-panel{
     <span id="mobile-profile-label">More</span>
   </button>
 </nav>
-
-<button class="mobile-dock-done" id="mobile-dock-done" type="button" style="display:none">Done</button>
 
 <div id="community-share-sheet" class="community-share-sheet" role="dialog" aria-modal="true" aria-labelledby="community-share-title">
   <div class="community-share-panel">
@@ -8236,8 +8228,6 @@ function refreshDockEditUI() {
   const editing = document.body.classList.contains('mobile-dock-edit');
   const order = getMobileDockOrder();
   const list = document.querySelector('.mobile-you-list');
-  const doneBtn = document.getElementById('mobile-dock-done');
-  if (doneBtn) doneBtn.style.display = editing ? '' : 'none';
 
   // Toggle the Edit dock button into a Done button (vice versa).
   const editBtn = document.getElementById('mobile-you-edit');
@@ -12227,10 +12217,6 @@ async function waitForRA10Sdk(timeoutMs) {
         e.stopPropagation();
         if (document.body.classList.contains('mobile-dock-edit')) exitDockEdit();
         else enterDockEdit();
-      });
-      document.getElementById('mobile-dock-done')?.addEventListener('click', () => {
-        exitDockEdit();
-        closeMobileYouSheet();
       });
       document.getElementById('auth-close')?.addEventListener('click', closeAuthModal);
       document.getElementById('auth-overlay')?.addEventListener('click', e => { if (e.target === document.getElementById('auth-overlay')) closeAuthModal(); });
