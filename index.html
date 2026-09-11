@@ -191,6 +191,7 @@ a,button,[role="button"],input,select,textarea{
 .mobile-bottom-nav{display:none}
 .mobile-top-nav{display:none}
 .mobile-subject-sheet{display:none}
+.mobile-you-sheet{display:none}
 .mobile-sheet-backdrop{display:none}
 .auth-overlay{
   position:fixed;
@@ -5102,7 +5103,7 @@ html body #community-share-sheet .community-share-panel{
     <span>Subjects</span>
   </button>
   <button class="mobile-nav-btn" type="button" data-mobile-nav="exams" onclick="go('/exams')">
-    <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M8 6h13"></path><path d="M8 12h13"></path><path d="M8 18h13"></path><path d="M3 6h.01M3 12h.01M3 18h.01"></path></svg>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 7V3h8v4"/><path d="M4 21V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v15l-2-1.5L16 21l-2-1.5L12 21l-2-1.5L8 21l-2-1.5L4 21z"/><path d="M9 11h6"/><path d="M9 15h4"/></svg>
     <span>Exams</span>
   </button>
   <button class="mobile-nav-btn" type="button" data-mobile-nav="tasks" onclick="go('/tasks')">
@@ -5110,8 +5111,8 @@ html body #community-share-sheet .community-share-panel{
     <span>Tasks</span>
   </button>
   <button class="mobile-nav-btn" type="button" id="mobile-you-btn" data-mobile-nav="you" aria-expanded="false">
-    <div class="mobile-nav-avatar" id="mobile-nav-avatar">?</div>
-    <span id="mobile-profile-label">You</span>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+    <span id="mobile-profile-label">More</span>
   </button>
 </nav>
 
@@ -12111,7 +12112,7 @@ async function waitForRA10Sdk(timeoutMs) {
           navAuthBtn.disabled = false;
         }
         if (navUserWrap) navUserWrap.style.display = 'none';
-        if (mobileProfileLabel) mobileProfileLabel.textContent = 'You';
+        if (mobileProfileLabel) mobileProfileLabel.textContent = 'More';
         const mobileYouSignout = document.getElementById('mobile-you-signout');
         if (mobileYouSignout) mobileYouSignout.style.display = 'none';
         if (navCreditChip) navCreditChip.style.display = 'none';
@@ -12128,7 +12129,7 @@ async function waitForRA10Sdk(timeoutMs) {
           navAuthBtn.disabled = false;
         }
         if (navUserWrap) navUserWrap.style.display = 'none';
-        if (mobileProfileLabel) mobileProfileLabel.textContent = 'You';
+        if (mobileProfileLabel) mobileProfileLabel.textContent = 'More';
         const mobileYouSignout2 = document.getElementById('mobile-you-signout');
         if (mobileYouSignout2) mobileYouSignout2.style.display = 'none';
         if (navCreditChip) navCreditChip.style.display = 'none';
@@ -12156,19 +12157,15 @@ async function waitForRA10Sdk(timeoutMs) {
       }
       if (navCreditChip) navCreditChip.style.display = loggedIn ? '' : 'none';
       if (mobileCreditChip) mobileCreditChip.style.display = loggedIn ? '' : 'none';
-      const mobileNavAvatar = document.getElementById('mobile-nav-avatar');
-      if (mobileProfileLabel) mobileProfileLabel.textContent = 'You';
       const mobileYouSignout = document.getElementById('mobile-you-signout');
       if (mobileYouSignout) mobileYouSignout.style.display = loggedIn ? '' : 'none';
       const mobileYouAccountLabel = document.getElementById('mobile-you-account-label');
       if (mobileYouAccountLabel) mobileYouAccountLabel.textContent = loggedIn ? 'My Account' : 'Sign in';
       renderCircleAvatar(document.getElementById('nav-avatar-initials'), '', '?');
-      if (mobileNavAvatar) renderCircleAvatar(mobileNavAvatar, '', '?');
       if (loggedIn && profile) {
         const initials = (profile.display_name || profile.email || '?').slice(0,2).toUpperCase();
         const profilePicUrl = getProfilePictureUrl(profile);
         renderCircleAvatar(document.getElementById('nav-avatar-initials'), profilePicUrl, initials);
-        if (mobileNavAvatar) renderCircleAvatar(mobileNavAvatar, profilePicUrl, initials);
         document.getElementById('nav-display-name').textContent = profile.display_name || profile.email;
         document.getElementById('dropdown-email').textContent = profile.email;
         const badge = document.getElementById('nav-tier-badge');
