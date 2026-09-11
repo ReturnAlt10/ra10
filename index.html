@@ -2192,6 +2192,19 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
   .mobile-you-item.signout .mobile-you-icon{color:var(--color-primary);background:var(--color-primary-highlight)}
 
   body.mobile-you-open .mobile-you-sheet{opacity:1;pointer-events:auto;transform:translateY(0)}
+  body.mobile-you-open{overflow:hidden}
+  body.mobile-you-open .mobile-sheet-backdrop{
+    display:block;
+    opacity:1;
+    pointer-events:auto;
+    bottom:calc(68px + env(safe-area-inset-bottom, 0px));
+  }
+  body.mobile-you-open .mobile-bottom-nav{
+    border-top-color:transparent;
+    box-shadow:none;
+    background:oklch(from var(--color-surface) l c h/.98);
+  }
+  body.mobile-you-open .mobile-nav-btn:not([data-mobile-nav="you"]){opacity:.84}
 
   @media (max-width: 400px) {
     .mobile-subject-list{grid-template-columns:1fr}
