@@ -1935,7 +1935,8 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
       0 18px 44px oklch(0 0 0/.5),
       0 4px 12px oklch(0 0 0/.3);
   }
-  /* Gooey morph layer: blurred blob + pebbles merged via the SVG filter. */
+  /* Gooey morph layer: a single frosted blob that slides + stretches toward
+     subtle neutral anchors, merged via the SVG filter for a liquid feel. */
   .mobile-dock-goo{
     position:absolute;
     inset:0;
@@ -1946,31 +1947,43 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
   }
   .mobile-dock-blob{
     position:absolute;
-    left:7px;
-    top:7px;
-    bottom:7px;
+    left:6px;
+    top:6px;
+    bottom:6px;
     width:0;
-    border-radius:18px;
-    background:color-mix(in srgb,var(--color-primary) 16%,rgba(255,255,255,.5));
-    box-shadow:0 2px 8px color-mix(in srgb,var(--color-primary) 20%,transparent);
-    transition:transform .32s cubic-bezier(.34,1.4,.34,1), width .32s cubic-bezier(.34,1.4,.34,1);
+    border-radius:20px;
+    background:
+      linear-gradient(180deg, rgba(255,255,255,.62), rgba(255,255,255,.16)),
+      color-mix(in srgb,var(--color-primary) 10%,rgba(255,255,255,.35));
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.7),
+      0 4px 14px color-mix(in srgb,var(--color-primary) 18%,transparent);
+    transition:transform .34s cubic-bezier(.34,1.35,.34,1), width .34s cubic-bezier(.34,1.35,.34,1);
     will-change:transform,width;
   }
   [data-theme="dark"] .mobile-dock-blob{
-    background:color-mix(in srgb,var(--color-primary) 26%,rgba(255,255,255,.08));
+    background:
+      linear-gradient(180deg, rgba(255,255,255,.16), rgba(255,255,255,.03)),
+      color-mix(in srgb,var(--color-primary) 22%,rgba(255,255,255,.05));
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.18),
+      0 4px 14px color-mix(in srgb,var(--color-primary) 22%,transparent);
   }
+  /* Anchors are near-invisible neutral dots the blob stretches toward. */
   .mobile-dock-pebble{
     position:absolute;
     left:0;
-    top:7px;
-    bottom:7px;
-    width:14px;
+    top:50%;
+    width:8px;
+    height:8px;
+    margin-top:-4px;
     border-radius:999px;
-    background:color-mix(in srgb,var(--color-primary) 34%,transparent);
-    opacity:.9;
-    transition:transform .32s cubic-bezier(.34,1.4,.34,1);
+    background:rgba(120,120,120,.22);
+    opacity:0;
+    transition:transform .34s cubic-bezier(.34,1.35,.34,1), opacity .3s ease;
     will-change:transform;
   }
+  [data-theme="dark"] .mobile-dock-pebble{background:rgba(255,255,255,.16)}
   .mobile-nav-btn{
     position:relative;
     z-index:1;
@@ -2025,36 +2038,39 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
   }
   .mobile-subject-sheet{
     position:fixed;
-    left:0;
-    right:0;
-    bottom:calc(68px + env(safe-area-inset-bottom, 0px));
-    max-height:calc(100dvh - 132px - env(safe-area-inset-top, 0px));
+    left:12px;
+    right:12px;
+    bottom:calc(84px + env(safe-area-inset-bottom, 0px));
+    max-height:calc(100dvh - 150px - env(safe-area-inset-top, 0px));
     z-index:10032;
-    background:var(--color-surface);
-    border-radius:24px 24px 0 0;
-    border:1px solid oklch(from var(--color-text) l c h/.08);
-    border-bottom:none;
-    box-shadow:0 -20px 42px oklch(0 0 0/.18);
-    padding:var(--sp4) var(--sp4) calc(var(--sp4) + env(safe-area-inset-bottom, 0px));
-    background-image:linear-gradient(180deg,oklch(from var(--color-surface-2) l c h/.98),oklch(from var(--color-surface) l c h/.98));
+    background:
+      linear-gradient(180deg, color-mix(in srgb,var(--color-surface) 82%,transparent), color-mix(in srgb,var(--color-surface) 92%,transparent));
+    backdrop-filter:blur(28px) saturate(180%);
+    -webkit-backdrop-filter:blur(28px) saturate(180%);
+    border-radius:26px;
+    border:1px solid rgba(255,255,255,.30);
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.45),
+      0 24px 56px oklch(0 0 0/.22),
+      0 6px 16px oklch(0 0 0/.10);
+    padding:var(--sp4);
     display:flex;
-    transform:translateY(104%);
+    transform:translateY(calc(100% + 24px));
     opacity:0;
     pointer-events:none;
-    transition:transform .24s cubic-bezier(.2,.8,.2,1), opacity .2s ease;
+    transition:transform .28s cubic-bezier(.2,.9,.2,1), opacity .22s ease;
     flex-direction:column;
     min-height:0;
     overflow:hidden;
   }
-  .mobile-subject-sheet::after{
-    content:'';
-    position:absolute;
-    left:0;
-    right:0;
-    bottom:-1px;
-    height:14px;
-    background:oklch(from var(--color-surface) l c h/.98);
-    pointer-events:none;
+  [data-theme="dark"] .mobile-subject-sheet{
+    background:
+      linear-gradient(180deg, color-mix(in srgb,var(--color-surface) 74%,transparent), color-mix(in srgb,var(--color-surface) 86%,transparent));
+    border-color:rgba(255,255,255,.12);
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.16),
+      0 24px 56px oklch(0 0 0/.5),
+      0 6px 16px oklch(0 0 0/.3);
   }
   .mobile-sheet-handle{
     display:block;
@@ -2195,31 +2211,44 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
   .mobile-nav-btn[data-mobile-nav="subjects"][aria-expanded="true"],
   .mobile-nav-btn[data-mobile-nav="you"][aria-expanded="true"]{
     color:var(--color-primary);
-    background:var(--color-primary-highlight);
+    background:transparent;
   }
 
   .mobile-you-sheet{
     position:fixed;
-    left:0;
-    right:0;
-    bottom:calc(68px + env(safe-area-inset-bottom, 0px));
-    max-height:calc(100dvh - 132px - env(safe-area-inset-top, 0px));
+    left:12px;
+    right:12px;
+    bottom:calc(84px + env(safe-area-inset-bottom, 0px));
+    max-height:calc(100dvh - 150px - env(safe-area-inset-top, 0px));
     z-index:10033;
-    background:var(--color-surface);
-    border-radius:24px 24px 0 0;
-    border:1px solid oklch(from var(--color-text) l c h/.08);
-    border-bottom:none;
-    box-shadow:0 -20px 42px oklch(0 0 0/.18);
-    padding:var(--sp4) var(--sp4) calc(var(--sp4) + env(safe-area-inset-bottom, 0px));
-    background-image:linear-gradient(180deg,oklch(from var(--color-surface-2) l c h/.98),oklch(from var(--color-surface) l c h/.98));
+    background:
+      linear-gradient(180deg, color-mix(in srgb,var(--color-surface) 82%,transparent), color-mix(in srgb,var(--color-surface) 92%,transparent));
+    backdrop-filter:blur(28px) saturate(180%);
+    -webkit-backdrop-filter:blur(28px) saturate(180%);
+    border-radius:26px;
+    border:1px solid rgba(255,255,255,.30);
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.45),
+      0 24px 56px oklch(0 0 0/.22),
+      0 6px 16px oklch(0 0 0/.10);
+    padding:var(--sp4);
     display:flex;
-    transform:translateY(104%);
+    transform:translateY(calc(100% + 24px));
     opacity:0;
     pointer-events:none;
-    transition:transform .24s cubic-bezier(.2,.8,.2,1), opacity .2s ease;
+    transition:transform .28s cubic-bezier(.2,.9,.2,1), opacity .22s ease;
     flex-direction:column;
     min-height:0;
     overflow:hidden;
+  }
+  [data-theme="dark"] .mobile-you-sheet{
+    background:
+      linear-gradient(180deg, color-mix(in srgb,var(--color-surface) 74%,transparent), color-mix(in srgb,var(--color-surface) 86%,transparent));
+    border-color:rgba(255,255,255,.12);
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.16),
+      0 24px 56px oklch(0 0 0/.5),
+      0 6px 16px oklch(0 0 0/.3);
   }
   .mobile-you-scroll{overflow:auto;padding-bottom:var(--sp4);-webkit-overflow-scrolling:touch;min-height:0}
   .mobile-you-list{display:grid;gap:4px}
@@ -2255,8 +2284,6 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
   .mobile-you-item em::after{content:'›';font-size:15px;line-height:1}
   .mobile-you-divider{height:1px;background:var(--color-divider);margin:var(--sp3) 0}
   .mobile-you-item.signout .mobile-you-icon{color:var(--color-primary);background:var(--color-primary-highlight)}
-
-  body.mobile-you-open .mobile-you-sheet{opacity:1;pointer-events:auto;transform:translateY(0)}
 
   /* More chevron: points up when closed, animates to down when open */
   .mobile-nav-btn .dock-more-chevron{transition:transform .28s cubic-bezier(.2,.8,.2,1)}
@@ -2333,14 +2360,10 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
     display:block;
     opacity:1;
     pointer-events:auto;
-    bottom:calc(68px + env(safe-area-inset-bottom, 0px));
+    inset:0;
   }
-  body.mobile-you-open .mobile-bottom-nav{
-    border-top-color:transparent;
-    box-shadow:none;
-    background:oklch(from var(--color-surface) l c h/.98);
-  }
-  body.mobile-you-open .mobile-nav-btn:not([data-mobile-nav="you"]){opacity:.84}
+  body.mobile-you-open .mobile-you-sheet{opacity:1;pointer-events:auto;transform:translateY(0)}
+  body.mobile-you-open .mobile-nav-btn:not([data-mobile-nav="you"]){opacity:.55}
 
   @media (max-width: 400px) {
     .mobile-subject-list{grid-template-columns:1fr}
@@ -2359,15 +2382,10 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
     display:block;
     opacity:1;
     pointer-events:auto;
-    bottom:calc(68px + env(safe-area-inset-bottom, 0px));
+    inset:0;
   }
   body.mobile-sheet-open .mobile-subject-sheet{opacity:1;pointer-events:auto;transform:translateY(0)}
-  body.mobile-sheet-open .mobile-bottom-nav{
-    border-top-color:transparent;
-    box-shadow:none;
-    background:oklch(from var(--color-surface) l c h/.98);
-  }
-  body.mobile-sheet-open .mobile-nav-btn:not([data-mobile-nav="subjects"]){opacity:.84}
+  body.mobile-sheet-open .mobile-nav-btn:not([data-mobile-nav="subjects"]){opacity:.55}
   .upgrade-compare-wrap{
     padding:var(--sp4);
     border-radius:22px;
@@ -8460,16 +8478,14 @@ function positionMobileDockBlob() {
   }
   const navRect = nav.getBoundingClientRect();
   const btnRect = active.getBoundingClientRect();
-  // Blob is positioned inside the goo layer (inset:0 of the nav). Convert the
-  // button's position to be relative to the nav.
-  const left = btnRect.left - navRect.left + 7;
-  const width = btnRect.width - 14;
+  // Blob sits inside the goo layer (inset:0 of the nav) with its own 6px inset.
+  const left = btnRect.left - navRect.left + 6;
+  const width = btnRect.width - 12;
   blob.style.transform = 'translateX(' + left + 'px)';
   blob.style.width = width + 'px';
 }
 
-// Reposition the gooey pebbles so they sit under each dock button (they are
-// the "anchors" the blob stretches toward). Hidden when a button is absent.
+// Reposition the gooey pebbles so each sits at the centre of a dock button.
 function syncDockPebbles() {
   const nav = document.querySelector('.mobile-bottom-nav');
   if (!nav) return;
@@ -8482,7 +8498,7 @@ function syncDockPebbles() {
     if (!id) return;
     const btnRect = btn.getBoundingClientRect();
     const centerX = (btnRect.left - navRect.left) + btnRect.width / 2;
-    pebble.style.transform = 'translateX(' + (centerX - 7) + 'px)';
+    pebble.style.transform = 'translateX(' + (centerX - 4) + 'px)';
   });
 }
 
@@ -13110,8 +13126,7 @@ async function waitForRA10Sdk(timeoutMs) {
         }
         renderAccountCreditLog();
         maybeShowPlanWelcome();
-      } else if (mobileNavAvatar) {
-        mobileNavAvatar.textContent = '?';
+      } else {
         renderAccountCreditLog();
       }
     }
