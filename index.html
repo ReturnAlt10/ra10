@@ -8218,9 +8218,13 @@ function refreshDockEditUI() {
     const add = item.querySelector('.mobile-you-add');
     const remove = item.querySelector('.mobile-you-remove');
     if (editing) {
+      // In edit mode show everything so users can add/remove/reorder.
+      item.style.display = '';
       if (inDock) { if (add) add.style.display = 'none'; if (remove) remove.style.display = 'inline-flex'; }
       else { if (add) add.style.display = 'inline-flex'; if (remove) remove.style.display = 'none'; }
     } else {
+      // Outside edit mode, hide items that are already in the dock.
+      item.style.display = inDock ? 'none' : '';
       if (add) add.style.display = 'none';
       if (remove) remove.style.display = 'none';
     }
