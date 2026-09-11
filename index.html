@@ -2127,10 +2127,71 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
   }
   .mobile-unit-link em::after{content:'›';font-size:15px;line-height:1}
 
-  .mobile-nav-btn[data-mobile-nav="subjects"][aria-expanded="true"]{
+  .mobile-nav-btn[data-mobile-nav="subjects"][aria-expanded="true"],
+  .mobile-nav-btn[data-mobile-nav="you"][aria-expanded="true"]{
     color:var(--color-primary);
     background:var(--color-primary-highlight);
   }
+
+  .mobile-you-sheet{
+    position:fixed;
+    left:0;
+    right:0;
+    bottom:calc(68px + env(safe-area-inset-bottom, 0px));
+    max-height:calc(100dvh - 132px - env(safe-area-inset-top, 0px));
+    z-index:10033;
+    background:var(--color-surface);
+    border-radius:24px 24px 0 0;
+    border:1px solid oklch(from var(--color-text) l c h/.08);
+    border-bottom:none;
+    box-shadow:0 -20px 42px oklch(0 0 0/.18);
+    padding:var(--sp4) var(--sp4) calc(var(--sp4) + env(safe-area-inset-bottom, 0px));
+    background-image:linear-gradient(180deg,oklch(from var(--color-surface-2) l c h/.98),oklch(from var(--color-surface) l c h/.98));
+    display:flex;
+    transform:translateY(104%);
+    opacity:0;
+    pointer-events:none;
+    transition:transform .24s cubic-bezier(.2,.8,.2,1), opacity .2s ease;
+    flex-direction:column;
+    min-height:0;
+    overflow:hidden;
+  }
+  .mobile-you-scroll{overflow:auto;padding-bottom:var(--sp4);-webkit-overflow-scrolling:touch;min-height:0}
+  .mobile-you-list{display:grid;gap:4px}
+  .mobile-you-item{
+    display:grid;
+    grid-template-columns:auto minmax(0,1fr) auto;
+    align-items:center;
+    gap:12px;
+    width:100%;
+    padding:12px 14px;
+    border-radius:16px;
+    background:transparent;
+    text-align:left;
+    border:1px solid transparent;
+    color:var(--color-text);
+  }
+  .mobile-you-item:hover{background:var(--color-surface-offset);border-color:oklch(from var(--color-primary) l c h/.18)}
+  .mobile-you-icon{
+    width:42px;
+    height:42px;
+    border-radius:14px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:var(--color-surface-offset);
+    color:var(--color-text-muted);
+  }
+  .mobile-you-icon svg{width:20px;height:20px;stroke:currentColor}
+  .mobile-you-icon.upgrade{background:linear-gradient(135deg,#8b5cf6,#7c3aed);color:#fff}
+  .mobile-you-copy strong{display:block;font-size:var(--tx-sm);color:var(--color-text);line-height:1.25}
+  .mobile-you-copy small{display:block;font-size:11px;color:var(--color-text-muted);margin-top:2px;line-height:1.35}
+  .mobile-you-item em{font-style:normal;font-size:11px;font-weight:800;color:var(--color-primary);display:inline-flex;align-items:center;gap:6px}
+  .mobile-you-item em::after{content:'›';font-size:15px;line-height:1}
+  .mobile-you-divider{height:1px;background:var(--color-divider);margin:var(--sp3) 0}
+  .mobile-you-item.signout .mobile-you-icon{color:var(--color-primary);background:var(--color-primary-highlight)}
+
+  body.mobile-you-open .mobile-you-sheet{opacity:1;pointer-events:auto;transform:translateY(0)}
 
   @media (max-width: 400px) {
     .mobile-subject-list{grid-template-columns:1fr}
@@ -4963,14 +5024,56 @@ html body #community-share-sheet .community-share-panel{
   </div>
 </div>
 
+<div class="mobile-you-sheet" id="mobile-you-sheet" aria-hidden="true" role="dialog" aria-modal="true" aria-label="You menu">
+  <div class="mobile-sheet-handle"></div>
+  <div class="mobile-sheet-head">
+    <div>
+      <div class="mobile-sheet-title">You</div>
+      <div class="mobile-sheet-copy">Your account, progress, and community shortcuts.</div>
+    </div>
+    <button class="mobile-sheet-close" id="mobile-you-close" aria-label="Close menu">✕</button>
+  </div>
+  <div class="mobile-you-scroll">
+    <div class="mobile-you-list">
+      <button class="mobile-you-item" type="button" data-mobile-you="/account">
+        <span class="mobile-you-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"></circle><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1"></path></svg></span>
+        <span class="mobile-you-copy"><strong id="mobile-you-account-label">My Account</strong><small>Profile, credits &amp; settings</small></span>
+        <em>Open</em>
+      </button>
+      <button class="mobile-you-item" type="button" data-mobile-you="leaderboard">
+        <span class="mobile-you-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 21h8"></path><path d="M12 17v4"></path><path d="M7 4h10v3a5 5 0 0 1-10 0z"></path><path d="M7 6H4a2 2 0 0 0 2 3M17 6h3a2 2 0 0 1-2 3"></path></svg></span>
+        <span class="mobile-you-copy"><strong>Leaderboard</strong><small>See this week&rsquo;s top learners</small></span>
+        <em>Open</em>
+      </button>
+      <button class="mobile-you-item" type="button" data-mobile-you="/community">
+        <span class="mobile-you-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"></path></svg></span>
+        <span class="mobile-you-copy"><strong>Community</strong><small>Ask questions &amp; share resources</small></span>
+        <em>Open</em>
+      </button>
+      <button class="mobile-you-item" type="button" data-mobile-you="/upgrade">
+        <span class="mobile-you-icon upgrade"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z"></path></svg></span>
+        <span class="mobile-you-copy"><strong>Upgrade</strong><small>Unlock more credits &amp; features</small></span>
+        <em>Open</em>
+      </button>
+      <button class="mobile-you-item" type="button" data-mobile-you="/news">
+        <span class="mobile-you-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"></rect><path d="M7 7h10"></path><path d="M7 12h10"></path><path d="M7 17h4"></path></svg></span>
+        <span class="mobile-you-copy"><strong>News</strong><small>What&rsquo;s new on RA10</small></span>
+        <em>Open</em>
+      </button>
+      <div class="mobile-you-divider"></div>
+      <button class="mobile-you-item signout" type="button" id="mobile-you-signout" style="display:none">
+        <span class="mobile-you-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><path d="M16 17l5-5-5-5"></path><path d="M21 12H9"></path></svg></span>
+        <span class="mobile-you-copy"><strong>Sign out</strong><small>Log out of this device</small></span>
+      </button>
+    </div>
+  </div>
+</div>
+
 <div class="mobile-top-nav" aria-label="Mobile header">
   <img src="logo.png" alt="RA10 logo" width="26" height="26">
   <span class="brand">RA10</span>
   <div id="mobile-credit-chip" class="mobile-credit-chip" style="display:none"></div>
   <button id="mobile-upgrade-btn" class="mobile-upgrade-btn" type="button" onclick="go('/upgrade')">Upgrade</button>
-  <button class="news-toggle mobile-theme-toggle" id="mobile-news-toggle" onclick="go('/news')" aria-label="View news" title="Latest news">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 7h10"/><path d="M7 12h10"/><path d="M7 17h4"/></svg>
-  </button>
   <button class="theme-toggle mobile-theme-toggle" id="mobile-theme-toggle" aria-label="Toggle dark mode">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
   </button>
@@ -4985,21 +5088,17 @@ html body #community-share-sheet .community-share-panel{
     <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v17.5a.5.5 0 0 1-.77.42L16 19l-3.23 1.92A.5.5 0 0 1 12 20.5V5.5A2.5 2.5 0 0 0 9.5 3H6.5A2.5 2.5 0 0 0 4 5.5V20"></path></svg>
     <span>Subjects</span>
   </button>
+  <button class="mobile-nav-btn" type="button" data-mobile-nav="exams" onclick="go('/exams')">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M8 6h13"></path><path d="M8 12h13"></path><path d="M8 18h13"></path><path d="M3 6h.01M3 12h.01M3 18h.01"></path></svg>
+    <span>Exams</span>
+  </button>
   <button class="mobile-nav-btn" type="button" data-mobile-nav="tasks" onclick="go('/tasks')">
     <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M9 6h11"></path><path d="M9 12h11"></path><path d="M9 18h11"></path><path d="M4 6l1.5 1.5L7.5 5.5"></path><path d="M4 12l1.5 1.5L7.5 11.5"></path><path d="M4 18l1.5 1.5L7.5 17.5"></path></svg>
     <span>Tasks</span>
   </button>
-  <button class="mobile-nav-btn" type="button" data-mobile-nav="community" onclick="go('/community')">
-    <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M4 6h16v12H4z"></path><path d="M8 10h8"></path><path d="M8 14h5"></path></svg>
-    <span>Community</span>
-  </button>
-  <button class="mobile-nav-btn" type="button" data-mobile-nav="leaderboard" onclick="go('leaderboard')">
-    <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M8 21h8"></path><path d="M12 17v4"></path><path d="M7 4h10v3a5 5 0 0 1-10 0z"></path></svg>
-    <span>Leaders</span>
-  </button>
-  <button class="mobile-nav-btn" type="button" id="mobile-profile-btn" data-mobile-nav="profile" onclick="openAccountOrSignIn()">
+  <button class="mobile-nav-btn" type="button" id="mobile-you-btn" data-mobile-nav="you" aria-expanded="false">
     <div class="mobile-nav-avatar" id="mobile-nav-avatar">?</div>
-    <span id="mobile-profile-label">Profile</span>
+    <span id="mobile-profile-label">You</span>
   </button>
 </nav>
 
@@ -7854,6 +7953,12 @@ window.addEventListener('scroll', () => {
 }, { passive:true });
 
 function openMobileSubjectSheet() {
+  document.body.classList.remove('mobile-you-open');
+  const youBtn = document.getElementById('mobile-you-btn');
+  if (youBtn) youBtn.setAttribute('aria-expanded', 'false');
+  const youSheet = document.getElementById('mobile-you-sheet');
+  if (youSheet) youSheet.setAttribute('aria-hidden', 'true');
+
   document.body.classList.add('mobile-sheet-open');
   const btn = document.getElementById('mobile-subjects-btn');
   if (btn) btn.setAttribute('aria-expanded', 'true');
@@ -7866,6 +7971,28 @@ function closeMobileSubjectSheet() {
   const btn = document.getElementById('mobile-subjects-btn');
   if (btn) btn.setAttribute('aria-expanded', 'false');
   const sheet = document.getElementById('mobile-subject-sheet');
+  if (sheet) sheet.setAttribute('aria-hidden', 'true');
+}
+
+function openMobileYouSheet() {
+  document.body.classList.remove('mobile-sheet-open');
+  const subjectsBtn = document.getElementById('mobile-subjects-btn');
+  if (subjectsBtn) subjectsBtn.setAttribute('aria-expanded', 'false');
+  const subjectsSheet = document.getElementById('mobile-subject-sheet');
+  if (subjectsSheet) subjectsSheet.setAttribute('aria-hidden', 'true');
+
+  document.body.classList.add('mobile-you-open');
+  const btn = document.getElementById('mobile-you-btn');
+  if (btn) btn.setAttribute('aria-expanded', 'true');
+  const sheet = document.getElementById('mobile-you-sheet');
+  if (sheet) sheet.setAttribute('aria-hidden', 'false');
+}
+
+function closeMobileYouSheet() {
+  document.body.classList.remove('mobile-you-open');
+  const btn = document.getElementById('mobile-you-btn');
+  if (btn) btn.setAttribute('aria-expanded', 'false');
+  const sheet = document.getElementById('mobile-you-sheet');
   if (sheet) sheet.setAttribute('aria-hidden', 'true');
 }
 
@@ -7894,6 +8021,9 @@ function syncMobileNavChrome() {
   }
   if (!isMobile && document.body.classList.contains('mobile-sheet-open')) {
     closeMobileSubjectSheet();
+  }
+  if (!isMobile && document.body.classList.contains('mobile-you-open')) {
+    closeMobileYouSheet();
   }
   if (isMobile && sheet && sheet.getAttribute('aria-hidden') === 'true') {
     document.body.classList.remove('mobile-sheet-open');
@@ -8580,6 +8710,7 @@ function go(path){
   document.querySelectorAll('.iframe-wrap.full-screen').forEach(w=>w.classList.remove('full-screen'));
   document.body.classList.remove('iframe-fullscreen-mode');
   closeMobileSubjectSheet();
+  closeMobileYouSheet();
   location.hash = path;
 }
 
@@ -11078,6 +11209,35 @@ function examsForDate(ymd) {
   return examsFiltered().filter(exam => (exam.dates || []).includes(ymd));
 }
 
+// When the user searches, jump the calendar to the month of the best-matching
+// exam's next sitting — even if it's in a different month/year.
+function jumpCalendarToSearchMatch() {
+  const search = (_examsFilter.search || '').trim().toLowerCase();
+  if (!search) {
+    // Reset the calendar back to the current month when the search is cleared.
+    const now = new Date();
+    _examsCalState.year = now.getFullYear();
+    _examsCalState.month = now.getMonth();
+    return;
+  }
+  const matches = examsFiltered();
+  if (!matches.length) return;
+  const now = new Date();
+  // Prefer the earliest upcoming sitting among the matches.
+  let bestDate = null;
+  for (const exam of matches) {
+    const upcoming = (exam.dates || [])
+      .map(d => new Date(d + 'T09:00:00'))
+      .filter(d => d.getTime() >= now.getTime() - 86400000)
+      .sort((a, b) => a - b);
+    const next = upcoming[0] || new Date((exam.dates || [])[0] + 'T09:00:00');
+    if (!bestDate || next < bestDate) bestDate = next;
+  }
+  if (!bestDate || Number.isNaN(bestDate.getTime())) return;
+  _examsCalState.year = bestDate.getFullYear();
+  _examsCalState.month = bestDate.getMonth();
+}
+
 function ymdLocal(dt) {
   const y = dt.getFullYear();
   const m = String(dt.getMonth() + 1).padStart(2, '0');
@@ -11303,7 +11463,11 @@ function bindExamsFilters() {
   if (level) level.addEventListener('change', () => { _examsFilter.level = level.value; renderExamsPage(); });
   if (subject) subject.addEventListener('change', () => { _examsFilter.subject = subject.value; renderExamsPage(); });
   if (pinnedBtn) pinnedBtn.addEventListener('click', () => { _examsFilter.pinnedOnly = !_examsFilter.pinnedOnly; pinnedBtn.classList.toggle('active', _examsFilter.pinnedOnly); renderExamsPage(); });
-  if (search) search.addEventListener('input', () => { _examsFilter.search = search.value; renderExamsPage(); });
+  if (search) search.addEventListener('input', () => {
+    _examsFilter.search = search.value;
+    jumpCalendarToSearchMatch();
+    renderExamsPage();
+  });
   if (sort) sort.addEventListener('change', () => { _examsFilter.sort = sort.value; renderExamsPage(); });
   const viewBtns = [viewCalendar, viewGrid, viewList].filter(Boolean);
   function setView(v) {
@@ -11458,11 +11622,10 @@ function route(){
     }
   }
   const mobileKey = path === '/' || path === '' ? 'home'
-    : path.startsWith('leaderboard') ? 'leaderboard'
-    : path.startsWith('/community') ? 'community'
+    : path.startsWith('/exams') ? 'exams'
     : path.startsWith('/tasks') ? 'tasks'
-    : path.startsWith('/account') ? 'profile'
-    : path.startsWith('/revision/btec/level-3/') ? 'subjects'
+    : path.startsWith('/revision') || path.startsWith('/tools') || path.startsWith('/revision/btec/level-3/') ? 'subjects'
+    : path.startsWith('leaderboard') || path.startsWith('/community') || path.startsWith('/account') || path.startsWith('/upgrade') || path.startsWith('/news') ? 'you'
     : '';
   if (mobileKey) {
     const mobileBtn = document.querySelector(`[data-mobile-nav="${mobileKey}"]`);
@@ -11561,20 +11724,30 @@ async function waitForRA10Sdk(timeoutMs) {
         if (window.RA10 && RA10.isLoggedIn()) go('/account');
         else openAuthModal('signin');
       });
+      document.getElementById('mobile-you-btn')?.addEventListener('click', (event) => {
+        event.preventDefault();
+        if (document.body.classList.contains('mobile-you-open')) closeMobileYouSheet();
+        else openMobileYouSheet();
+      });
       document.getElementById('mobile-subjects-btn')?.addEventListener('click', (event) => {
         event.preventDefault();
         if (document.body.classList.contains('mobile-sheet-open')) closeMobileSubjectSheet();
         else openMobileSubjectSheet();
       });
-      document.getElementById('mobile-sheet-backdrop')?.addEventListener('click', closeMobileSubjectSheet);
+      document.getElementById('mobile-sheet-backdrop')?.addEventListener('click', () => {
+        closeMobileSubjectSheet();
+        closeMobileYouSheet();
+      });
       document.getElementById('mobile-sheet-close')?.addEventListener('click', closeMobileSubjectSheet);
+      document.getElementById('mobile-you-close')?.addEventListener('click', closeMobileYouSheet);
       document.getElementById('site-announcement-close')?.addEventListener('click', () => {
         dismissAnnouncement(_siteAnnouncementData);
         renderSiteAnnouncement(null);
       });
       document.addEventListener('keydown', (event) => {
-        if (event.key === 'Escape' && document.body.classList.contains('mobile-sheet-open')) {
-          closeMobileSubjectSheet();
+        if (event.key === 'Escape') {
+          if (document.body.classList.contains('mobile-sheet-open')) closeMobileSubjectSheet();
+          if (document.body.classList.contains('mobile-you-open')) closeMobileYouSheet();
         }
       });
 
@@ -11583,6 +11756,19 @@ async function waitForRA10Sdk(timeoutMs) {
           closeMobileSubjectSheet();
           go(button.dataset.mobileSubject);
         });
+      });
+      document.querySelectorAll('[data-mobile-you]').forEach(button => {
+        button.addEventListener('click', () => {
+          closeMobileYouSheet();
+          const path = button.dataset.mobileYou;
+          if (path === '/account') { openAccountOrSignIn(); return; }
+          go(path);
+        });
+      });
+      document.getElementById('mobile-you-signout')?.addEventListener('click', async () => {
+        closeMobileYouSheet();
+        if (window.RA10 && RA10.signOut) await RA10.signOut();
+        go('/');
       });
       document.getElementById('auth-close')?.addEventListener('click', closeAuthModal);
       document.getElementById('auth-overlay')?.addEventListener('click', e => { if (e.target === document.getElementById('auth-overlay')) closeAuthModal(); });
@@ -11912,7 +12098,9 @@ async function waitForRA10Sdk(timeoutMs) {
           navAuthBtn.disabled = false;
         }
         if (navUserWrap) navUserWrap.style.display = 'none';
-        if (mobileProfileLabel) mobileProfileLabel.textContent = 'Sign in';
+        if (mobileProfileLabel) mobileProfileLabel.textContent = 'You';
+        const mobileYouSignout = document.getElementById('mobile-you-signout');
+        if (mobileYouSignout) mobileYouSignout.style.display = 'none';
         if (navCreditChip) navCreditChip.style.display = 'none';
         if (mobileCreditChip) mobileCreditChip.style.display = 'none';
         if (mobileUpgradeBtn) mobileUpgradeBtn.style.display = 'inline-flex';
@@ -11927,7 +12115,9 @@ async function waitForRA10Sdk(timeoutMs) {
           navAuthBtn.disabled = false;
         }
         if (navUserWrap) navUserWrap.style.display = 'none';
-        if (mobileProfileLabel) mobileProfileLabel.textContent = 'Sign in';
+        if (mobileProfileLabel) mobileProfileLabel.textContent = 'You';
+        const mobileYouSignout2 = document.getElementById('mobile-you-signout');
+        if (mobileYouSignout2) mobileYouSignout2.style.display = 'none';
         if (navCreditChip) navCreditChip.style.display = 'none';
         if (mobileCreditChip) mobileCreditChip.style.display = 'none';
         if (mobileUpgradeBtn) mobileUpgradeBtn.style.display = 'inline-flex';
@@ -11954,7 +12144,11 @@ async function waitForRA10Sdk(timeoutMs) {
       if (navCreditChip) navCreditChip.style.display = loggedIn ? '' : 'none';
       if (mobileCreditChip) mobileCreditChip.style.display = loggedIn ? '' : 'none';
       const mobileNavAvatar = document.getElementById('mobile-nav-avatar');
-      if (mobileProfileLabel) mobileProfileLabel.textContent = loggedIn ? 'Profile' : 'Sign in';
+      if (mobileProfileLabel) mobileProfileLabel.textContent = 'You';
+      const mobileYouSignout = document.getElementById('mobile-you-signout');
+      if (mobileYouSignout) mobileYouSignout.style.display = loggedIn ? '' : 'none';
+      const mobileYouAccountLabel = document.getElementById('mobile-you-account-label');
+      if (mobileYouAccountLabel) mobileYouAccountLabel.textContent = loggedIn ? 'My Account' : 'Sign in';
       renderCircleAvatar(document.getElementById('nav-avatar-initials'), '', '?');
       if (mobileNavAvatar) renderCircleAvatar(mobileNavAvatar, '', '?');
       if (loggedIn && profile) {
