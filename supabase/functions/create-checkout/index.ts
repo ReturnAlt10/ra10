@@ -16,6 +16,7 @@ type CheckoutTarget = {
   priceId: string;
   plan: string;
   subject: string;
+  credits: number;
 };
 
 function envPriceMap() {
@@ -24,8 +25,11 @@ function envPriceMap() {
     BUSINESS: Deno.env.get("STRIPE_PRICE_BUSINESS") || "",
     SPORT: Deno.env.get("STRIPE_PRICE_SPORT") || "",
     PRO: Deno.env.get("STRIPE_PRICE_PRO") || "",
+    PRO_MONTHLY: Deno.env.get("STRIPE_PRICE_PRO_MONTHLY") || "",
     ULTRA: Deno.env.get("STRIPE_PRICE_ULTRA") || "",
+    ULTRA_MONTHLY: Deno.env.get("STRIPE_PRICE_ULTRA_MONTHLY") || "",
     EDU: Deno.env.get("STRIPE_PRICE_EDU") || "",
+    CREDITS: Deno.env.get("STRIPE_PRICE_CREDITS") || "",
   };
 }
 
@@ -45,28 +49,47 @@ function getBaseReturnUrl(inputUrl: string | undefined): string {
   }
 }
 
-function resolveTarget(planRaw: string, subjectRaw: string): CheckoutTarget | null {
+function resolveTarget(
+  planRaw: string,
+  subjectRaw: string,
+  creditsRaw: string | number,
+  billingInterval: string,
+): CheckoutTarget | null {
   const prices = envPriceMap();
   const plan = String(planRaw || "").trim().toUpperCase();
   const subject = String(subjectRaw || "").trim().toUpperCase();
+  const credits = Number(creditsRaw || 0);
+  const interval = String(billingInterval || "").trim().toLowerCase();
+
+  // One-time credits purchase (dynamic quantity is applied later).
+  if (plan === "CREDITS" && credits > 0 && prices.CREDITS) {
+    return { mode: "payment", priceId: prices.CREDITS, plan: "CREDITS", subject: "", credits };
+  }
 
   if (subject === "IT" && prices.IT) {
-    return { mode: "payment", priceId: prices.IT, plan: "IT", subject: "IT" };
+    return { mode: "payment", priceId: prices.IT, plan: "IT", subject: "IT", credits: 0 };
   }
   if (subject === "BUSINESS" && prices.BUSINESS) {
-    return { mode: "payment", priceId: prices.BUSINESS, plan: "BUSINESS", subject: "BUSINESS" };
+    return { mode: "payment", priceId: prices.BUSINESS, plan: "BUSINESS", subject: "BUSINESS", credits: 0 };
   }
   if (subject === "SPORT" && prices.SPORT) {
-    return { mode: "payment", priceId: prices.SPORT, plan: "SPORT", subject: "SPORT" };
+    return { mode: "payment", priceId: prices.SPORT, plan: "SPORT", subject: "SPORT", credits: 0 };
+  }
+  // Monthly (interval=month) variants fall back to yearly if not configured.
+  if (plan === "PRO" && interval === "month" && prices.PRO_MONTHLY) {
+    return { mode: "subscription", priceId: prices.PRO_MONTHLY, plan: "PRO", subject: "", credits: 0 };
+  }
+  if (plan === "ULTRA" && interval === "month" && prices.ULTRA_MONTHLY) {
+    return { mode: "subscription", priceId: prices.ULTRA_MONTHLY, plan: "ULTRA", subject: "", credits: 0 };
   }
   if (plan === "PRO" && prices.PRO) {
-    return { mode: "subscription", priceId: prices.PRO, plan: "PRO", subject: "" };
+    return { mode: "subscription", priceId: prices.PRO, plan: "PRO", subject: "", credits: 0 };
   }
   if (plan === "ULTRA" && prices.ULTRA) {
-    return { mode: "subscription", priceId: prices.ULTRA, plan: "ULTRA", subject: "" };
+    return { mode: "subscription", priceId: prices.ULTRA, plan: "ULTRA", subject: "", credits: 0 };
   }
   if (plan === "EDU" && prices.EDU) {
-    return { mode: "subscription", priceId: prices.EDU, plan: "EDU", subject: "" };
+    return { mode: "subscription", priceId: prices.EDU, plan: "EDU", subject: "", credits: 0 };
   }
   return null;
 }
@@ -118,6 +141,8 @@ export default Deno.serve(async (req: Request) => {
     const body = await req.json();
     const plan = String(body?.plan || "").toUpperCase();
     const subject = String(body?.subject || "").toUpperCase();
+    const credits = Number(body?.credits || 0);
+    const billingInterval = String(body?.billingInterval || "");
     const returnUrl = String(body?.returnUrl || "");
 
     if (!plan && !subject) {
@@ -174,7 +199,7 @@ export default Deno.serve(async (req: Request) => {
     }
 
     const user = userData.user;
-    const target = resolveTarget(plan, subject);
+    const target = resolveTarget(plan, subject, credits, billingInterval);
     if (!target) {
       return new Response(
         JSON.stringify({ error: "Stripe price is not configured for this plan/subject" }),
@@ -203,7 +228,7 @@ export default Deno.serve(async (req: Request) => {
     const params = new URLSearchParams();
     params.set("mode", target.mode);
     params.set("line_items[0][price]", target.priceId);
-    params.set("line_items[0][quantity]", "1");
+    params.set("line_items[0][quantity]", String(target.credits > 0 ? target.credits : 1));
     params.set("success_url", successUrl);
     params.set("cancel_url", cancelUrl);
     params.set("customer_email", String(user.email || ""));
@@ -213,11 +238,13 @@ export default Deno.serve(async (req: Request) => {
     params.set("metadata[email]", String(user.email || ""));
     params.set("metadata[plan]", String(target.plan || ""));
     params.set("metadata[subject]", String(target.subject || ""));
+    if (target.credits > 0) params.set("metadata[credits]", String(target.credits));
     if (target.mode === "payment") {
       params.set("payment_intent_data[metadata][user_id]", String(user.id || ""));
       params.set("payment_intent_data[metadata][email]", String(user.email || ""));
       params.set("payment_intent_data[metadata][plan]", String(target.plan || ""));
       params.set("payment_intent_data[metadata][subject]", String(target.subject || ""));
+      if (target.credits > 0) params.set("payment_intent_data[metadata][credits]", String(target.credits));
     } else {
       params.set("subscription_data[metadata][user_id]", String(user.id || ""));
       params.set("subscription_data[metadata][email]", String(user.email || ""));

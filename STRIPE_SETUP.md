@@ -25,9 +25,27 @@ Create these prices and copy the `price_...` IDs:
 - IT one-time: `GBP 5`, one-time
 - Business one-time: `GBP 5`, one-time
 - Sport one-time: `GBP 5`, one-time
-- Pro: `GBP 20`, recurring yearly
-- Ultra: `GBP 30`, recurring yearly
+- Pro (annual): `GBP 20`, recurring **yearly**
+- Pro (monthly): `GBP 2`, recurring **monthly**
+- Ultra (annual): `GBP 30`, recurring **yearly**
+- Ultra (monthly): `GBP 3`, recurring **monthly**
 - EDU Admin: `GBP 100`, recurring yearly
+- Credits top-up: `GBP 0.01`, one-time (quantity = number of credits, so 200 credits = £2.00)
+
+> Tip: put the monthly + yearly prices on the **same product** (Pro / Ultra) so Stripe groups them under one product — you can still point different environment vars at each price.
+
+## 1b) Create the RA10 10% promo code
+
+In Stripe → **Product catalog → Promotions → Coupons**:
+
+- Name: `RA10 launch`
+- Type: **Percentage** — 10%
+- Duration: **Forever** (or set an expiry if you prefer)
+- Applies to: **All products** (or specific ones)
+
+Then create a **Promotion code** from that coupon with code `RA10`.
+
+The checkout already sends `allow_promotion_codes=true`, so users can type `RA10` at checkout to get 10% off any plan.
 
 ## 2) Set Supabase Edge Function secrets
 
@@ -38,9 +56,12 @@ Set these in Supabase (project secrets / function env):
 - `STRIPE_PRICE_IT` = `price_...`
 - `STRIPE_PRICE_BUSINESS` = `price_...`
 - `STRIPE_PRICE_SPORT` = `price_...`
-- `STRIPE_PRICE_PRO` = `price_...`
-- `STRIPE_PRICE_ULTRA` = `price_...`
+- `STRIPE_PRICE_PRO` = `price_...` (annual)
+- `STRIPE_PRICE_PRO_MONTHLY` = `price_...` (monthly)
+- `STRIPE_PRICE_ULTRA` = `price_...` (annual)
+- `STRIPE_PRICE_ULTRA_MONTHLY` = `price_...` (monthly)
 - `STRIPE_PRICE_EDU` = `price_...`
+- `STRIPE_PRICE_CREDITS` = `price_...` (the £0.01 per-credit price)
 - `PAYMENTS_ENABLED` = `true`
 - `SITE_URL` = `https://ra10.co.uk`
 
@@ -54,6 +75,7 @@ Required existing secrets:
 Deploy these edge functions:
 
 - `create-checkout`
+- `confirm-checkout`
 - `stripe-webhook`
 
 ## 4) Configure Stripe webhook endpoint

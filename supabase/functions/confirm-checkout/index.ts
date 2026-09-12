@@ -11,7 +11,8 @@ type RecurringTier = {
 
 type PriceAction =
   | { type: "subject"; subject: SubjectName }
-  | { type: "recurring"; recurring: RecurringTier };
+  | { type: "recurring"; recurring: RecurringTier }
+  | { type: "credits"; credits: number };
 
 const SUBJECTS_ALL: SubjectName[] = ["IT", "Business", "Sport"];
 const ALLOWED_ORIGINS = [
@@ -71,10 +72,12 @@ function getPriceMap(): Record<string, PriceAction> {
   const stripePricePro = Deno.env.get("STRIPE_PRICE_PRO") || "";
   const stripePriceUltra = Deno.env.get("STRIPE_PRICE_ULTRA") || "";
   const stripePriceEdu = Deno.env.get("STRIPE_PRICE_EDU") || "";
+  const stripePriceCredits = Deno.env.get("STRIPE_PRICE_CREDITS") || "";
 
   if (stripePriceIt) map[stripePriceIt] = { type: "subject", subject: "IT" };
   if (stripePriceBusiness) map[stripePriceBusiness] = { type: "subject", subject: "Business" };
   if (stripePriceSport) map[stripePriceSport] = { type: "subject", subject: "Sport" };
+  if (stripePriceCredits) map[stripePriceCredits] = { type: "credits", credits: 0 };
   if (stripePricePro) {
     map[stripePricePro] = {
       type: "recurring",
@@ -206,6 +209,23 @@ async function applyRecurringTier(
   }
 }
 
+async function addCredits(
+  supabase: ReturnType<typeof createClient>,
+  profileId: string,
+  credits: number,
+): Promise<void> {
+  const profileRes = await supabase.from("profiles").select("credits").eq("id", profileId).single();
+  if (profileRes.error || !profileRes.data) {
+    throw new Error("Profile not found when adding credits");
+  }
+  const current = Number(profileRes.data.credits || 0);
+  const next = current + credits;
+  const update = await supabase.from("profiles").update({ credits: next }).eq("id", profileId);
+  if (update.error) {
+    throw new Error(update.error.message || "Could not add credits");
+  }
+}
+
 async function applyAction(
   supabase: ReturnType<typeof createClient>,
   profileId: string,
@@ -215,6 +235,10 @@ async function applyAction(
     await appendSubjectUnlock(supabase, profileId, action.subject);
     return;
   }
+  if (action.type === "credits") {
+    if (action.credits > 0) await addCredits(supabase, profileId, action.credits);
+    return;
+  }
   await applyRecurringTier(supabase, profileId, action.recurring);
 }
 
@@ -222,6 +246,11 @@ function resolveActionFromMetadata(metadata: any): PriceAction | null {
   const subject = getSubjectByAny(metadata?.subject);
   if (subject) {
     return { type: "subject", subject };
+  }
+  const plan = toUpper(metadata?.plan);
+  const creditsNumber = Number(metadata?.credits || 0);
+  if (plan === "CREDITS" && creditsNumber > 0) {
+    return { type: "credits", credits: creditsNumber };
   }
   const recurring = getRecurringByPlan(metadata?.plan);
   if (recurring) {

@@ -1502,6 +1502,9 @@
     const payload = {
       plan: String((input && input.plan) || '').toUpperCase(),
       subject: String((input && input.subject) || '').toUpperCase(),
+      credits: Number((input && input.credits) || 0),
+      amountPence: Number((input && input.amountPence) || 0),
+      billingInterval: String((input && input.billingInterval) || ''),
       returnUrl: window.location && window.location.origin ? window.location.origin : '',
     };
 

@@ -11,7 +11,8 @@ type RecurringTier = {
 
 type PriceAction =
   | { type: "subject"; subject: SubjectName }
-  | { type: "recurring"; recurring: RecurringTier };
+  | { type: "recurring"; recurring: RecurringTier }
+  | { type: "credits"; credits: number };
 
 type StripeEvent = {
   id?: string;
@@ -69,10 +70,12 @@ function getPriceMap(): Record<string, PriceAction> {
   const stripePricePro = Deno.env.get("STRIPE_PRICE_PRO") || "";
   const stripePriceUltra = Deno.env.get("STRIPE_PRICE_ULTRA") || "";
   const stripePriceEdu = Deno.env.get("STRIPE_PRICE_EDU") || "";
+  const stripePriceCredits = Deno.env.get("STRIPE_PRICE_CREDITS") || "";
 
   if (stripePriceIt) map[stripePriceIt] = { type: "subject", subject: "IT" };
   if (stripePriceBusiness) map[stripePriceBusiness] = { type: "subject", subject: "Business" };
   if (stripePriceSport) map[stripePriceSport] = { type: "subject", subject: "Sport" };
+  if (stripePriceCredits) map[stripePriceCredits] = { type: "credits", credits: 0 };
   if (stripePricePro) {
     map[stripePricePro] = {
       type: "recurring",
@@ -287,10 +290,33 @@ async function downgradeToFree(supabase: ReturnType<typeof createClient>, profil
   }
 }
 
-function resolveActionFromMetadata(metadata: any): PriceAction | null {
+async function addCredits(
+  supabase: ReturnType<typeof createClient>,
+  profileId: string,
+  credits: number,
+): Promise<void> {
+  const profileRes = await supabase.from("profiles").select("credits").eq("id", profileId).single();
+  if (profileRes.error || !profileRes.data) {
+    throw new Error("Profile not found when adding credits");
+  }
+  const current = Number(profileRes.data.credits || 0);
+  const next = current + credits;
+  const update = await supabase.from("profiles").update({ credits: next }).eq("id", profileId);
+  if (update.error) {
+    throw new Error(update.error.message || "Could not add credits");
+  }
+}
+
+function resolveActionFromMetadata(metadata: any, creditsOverride: number): PriceAction | null {
   const subject = getSubjectByAny(metadata?.subject);
   if (subject) {
     return { type: "subject", subject };
+  }
+
+  const plan = toUpper(metadata?.plan);
+  const creditsNumber = Number(creditsOverride || metadata?.credits || 0);
+  if (plan === "CREDITS") {
+    return { type: "credits", credits: creditsNumber };
   }
 
   const recurring = getRecurringByPlan(metadata?.plan);
@@ -346,6 +372,10 @@ async function applyAction(
 ): Promise<void> {
   if (action.type === "subject") {
     await appendSubjectUnlock(supabase, profileId, action.subject);
+    return;
+  }
+  if (action.type === "credits") {
+    if (action.credits > 0) await addCredits(supabase, profileId, action.credits);
     return;
   }
   await applyRecurringTier(supabase, profileId, action.recurring);
@@ -411,15 +441,23 @@ export default Deno.serve(async (req: Request) => {
     }
 
     if (eventType === "checkout.session.completed") {
-      let action = resolveActionFromMetadata(metadata);
-      if (!action) {
-        let priceId = extractPriceIdFromObject(object);
-        if (!priceId) {
-          priceId = await getCheckoutSessionLineItemPriceId(String(object?.id || "").trim());
-        }
-        action = priceMap[priceId] || null;
+      let priceId = extractPriceIdFromObject(object);
+      if (!priceId) {
+        priceId = await getCheckoutSessionLineItemPriceId(String(object?.id || "").trim());
       }
-
+      // Derive credits quantity from line items for credits purchases.
+      let creditsQty = Number(metadata?.credits || 0);
+      if (!creditsQty && priceId && priceMap[priceId]?.type === "credits") {
+        const lineItems = await stripeGet(`checkout/sessions/${encodeURIComponent(String(object?.id || "").trim())}/line_items?limit=1`);
+        creditsQty = Number(lineItems?.data?.[0]?.quantity || 0);
+      }
+      let action = resolveActionFromMetadata(metadata, creditsQty);
+      if (!action) {
+        action = priceMap[priceId] || null;
+        if (action && action.type === "credits") {
+          action = { type: "credits", credits: creditsQty };
+        }
+      }
       if (action) {
         await applyAction(supabase, profileId, action);
       }

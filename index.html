@@ -1935,14 +1935,12 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
       0 18px 44px oklch(0 0 0/.5),
       0 4px 12px oklch(0 0 0/.3);
   }
-  /* Gooey morph layer: a single frosted blob that slides + stretches toward
-     subtle neutral anchors, merged via the SVG filter for a liquid feel. */
+  /* Morph layer: a single clear frosted pill that slides + stretches to the
+     active button. No blur filter — the pill stays crisp. */
   .mobile-dock-goo{
     position:absolute;
     inset:0;
     pointer-events:none;
-    filter:url(#ra10-dock-goo);
-    -webkit-filter:url(#ra10-dock-goo);
     z-index:0;
   }
   .mobile-dock-blob{
@@ -1953,23 +1951,23 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
     width:0;
     border-radius:20px;
     background:
-      linear-gradient(180deg, rgba(255,255,255,.62), rgba(255,255,255,.16)),
-      color-mix(in srgb,var(--color-primary) 10%,rgba(255,255,255,.35));
+      linear-gradient(180deg, color-mix(in srgb,var(--color-primary) 16%,rgba(255,255,255,.55)), color-mix(in srgb,var(--color-primary) 8%,rgba(255,255,255,.3)));
     box-shadow:
-      inset 0 1px 0 rgba(255,255,255,.7),
-      0 4px 14px color-mix(in srgb,var(--color-primary) 18%,transparent);
+      inset 0 1px 0 rgba(255,255,255,.65),
+      inset 0 -1px 0 color-mix(in srgb,var(--color-primary) 14%,transparent),
+      0 3px 12px color-mix(in srgb,var(--color-primary) 26%,transparent);
     transition:transform .34s cubic-bezier(.34,1.35,.34,1), width .34s cubic-bezier(.34,1.35,.34,1);
     will-change:transform,width;
   }
   [data-theme="dark"] .mobile-dock-blob{
     background:
-      linear-gradient(180deg, rgba(255,255,255,.16), rgba(255,255,255,.03)),
-      color-mix(in srgb,var(--color-primary) 22%,rgba(255,255,255,.05));
+      linear-gradient(180deg, color-mix(in srgb,var(--color-primary) 28%,rgba(255,255,255,.10)), color-mix(in srgb,var(--color-primary) 16%,rgba(255,255,255,.04)));
     box-shadow:
-      inset 0 1px 0 rgba(255,255,255,.18),
-      0 4px 14px color-mix(in srgb,var(--color-primary) 22%,transparent);
+      inset 0 1px 0 rgba(255,255,255,.20),
+      inset 0 -1px 0 color-mix(in srgb,var(--color-primary) 20%,transparent),
+      0 3px 14px color-mix(in srgb,var(--color-primary) 30%,transparent);
   }
-  /* Anchors are near-invisible neutral dots the blob stretches toward. */
+  /* Anchors are neutral dots kept only for layout; not rendered via filter. */
   .mobile-dock-pebble{
     position:absolute;
     left:0;
@@ -6391,7 +6389,16 @@ html body #community-share-sheet .community-share-panel{
   <div style="display:flex;justify-content:center;gap:var(--sp2);flex-wrap:wrap;margin-bottom:var(--sp6);" id="upgrade-filter" role="tablist" aria-label="Plan categories">
     <button class="btn btn-p" type="button" data-upgrade-group="personal" aria-selected="true" onclick="setUpgradeGroup('personal')">Personal subscriptions</button>
     <button class="btn btn-g" type="button" data-upgrade-group="onetime" aria-selected="false" onclick="setUpgradeGroup('onetime')">One-time subject payments</button>
+    <button class="btn btn-g" type="button" data-upgrade-group="credits" aria-selected="false" onclick="setUpgradeGroup('credits')">Credits</button>
     <button class="btn btn-g" type="button" data-upgrade-group="education" aria-selected="false" onclick="setUpgradeGroup('education')">Education</button>
+  </div>
+
+  <div id="upgrade-billing-toggle" style="display:flex;justify-content:center;gap:var(--sp2);flex-wrap:wrap;margin-bottom:var(--sp6);">
+    <div style="display:inline-flex;align-items:center;gap:8px;padding:4px;border-radius:999px;border:1px solid var(--color-border);background:var(--color-surface);">
+      <button class="btn btn-p" type="button" id="billing-yearly-btn" onclick="setBillingInterval('year')">Yearly</button>
+      <button class="btn btn-g" type="button" id="billing-monthly-btn" onclick="setBillingInterval('month')">Monthly</button>
+    </div>
+    <span id="billing-savings-note" style="align-self:center;font-size:var(--tx-xs);color:var(--color-primary);font-weight:700;">Save ~17% with yearly</span>
   </div>
 
   <div style="display:flex;flex-wrap:wrap;justify-content:center;align-items:stretch;gap:var(--sp5);padding-bottom:var(--sp16);" id="upgrade-cards">
@@ -6420,9 +6427,9 @@ html body #community-share-sheet .community-share-panel{
         <span style="font-size:var(--tx-xs);font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--color-primary);">Pro</span>
         <span id="badge-pro" style="display:none;font-size:.65rem;font-weight:700;padding:.15rem .5rem;border-radius:var(--radius-full);background:var(--color-primary-highlight);color:var(--color-primary);">Current plan</span>
       </div>
-      <div style="font-size:var(--tx-2xl);font-weight:400;font-family:var(--font-d);margin-bottom:var(--sp1);">£20</div>
-      <div style="font-size:var(--tx-xs);color:var(--color-text-muted);margin-bottom:var(--sp5);">per year</div>
-      <div style="font-size:var(--tx-xs);color:var(--color-primary);font-weight:700;margin-top:calc(var(--sp5) * -1);margin-bottom:var(--sp5);">£1.67/month equivalent (billed yearly)</div>
+      <div style="font-size:var(--tx-2xl);font-weight:400;font-family:var(--font-d);margin-bottom:var(--sp1);" id="pro-price">£20</div>
+      <div style="font-size:var(--tx-xs);color:var(--color-text-muted);margin-bottom:var(--sp5);" id="pro-price-period">per year</div>
+      <div style="font-size:var(--tx-xs);color:var(--color-primary);font-weight:700;margin-top:calc(var(--sp5) * -1);margin-bottom:var(--sp5);" id="pro-price-equiv">£1.67/month equivalent (billed yearly)</div>
       <ul class="feat" style="margin-bottom:var(--sp6);">
         <li>1,000 credits per month</li>
         <li>All subjects unlocked</li>
@@ -6437,9 +6444,9 @@ html body #community-share-sheet .community-share-panel{
         <span style="font-size:var(--tx-xs);font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#7c3aed;">Ultra</span>
         <span id="badge-ultra" style="display:none;font-size:.65rem;font-weight:700;padding:.15rem .5rem;border-radius:var(--radius-full);background:#ede9fe;color:#7c3aed;">Current plan</span>
       </div>
-      <div style="font-size:var(--tx-2xl);font-weight:400;font-family:var(--font-d);margin-bottom:var(--sp1);">£30</div>
-      <div style="font-size:var(--tx-xs);color:var(--color-text-muted);margin-bottom:var(--sp5);">per year</div>
-      <div style="font-size:var(--tx-xs);color:#7c3aed;font-weight:700;margin-top:calc(var(--sp5) * -1);margin-bottom:var(--sp5);">£2.50/month equivalent (billed yearly)</div>
+      <div style="font-size:var(--tx-2xl);font-weight:400;font-family:var(--font-d);margin-bottom:var(--sp1);" id="ultra-price">£30</div>
+      <div style="font-size:var(--tx-xs);color:var(--color-text-muted);margin-bottom:var(--sp5);" id="ultra-price-period">per year</div>
+      <div style="font-size:var(--tx-xs);color:#7c3aed;font-weight:700;margin-top:calc(var(--sp5) * -1);margin-bottom:var(--sp5);" id="ultra-price-equiv">£2.50/month equivalent (billed yearly)</div>
       <ul class="feat" style="margin-bottom:var(--sp6);">
         <li>Unlimited credits</li>
         <li>All subjects + all tools</li>
@@ -6448,6 +6455,20 @@ html body #community-share-sheet .community-share-panel{
         <li>Priority access to new features</li>
       </ul>
       <button class="btn btn-s" id="btn-buy-ultra" style="width:100%;justify-content:center;border-color:#7c3aed;color:#7c3aed;">Buy Ultra</button>
+    </div>
+
+    <div class="card" id="plan-credits" data-upgrade-card="credits" style="display:none;width:min(360px,100%);">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp2);">
+        <span style="font-size:var(--tx-xs);font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--color-primary);">Credits top-up</span>
+      </div>
+      <p style="color:var(--color-text-muted);font-size:var(--tx-sm);line-height:1.6;margin-bottom:var(--sp4);">Buy extra credits one-off. £1 per 100 credits. Keep your balance topped up without a subscription.</p>
+      <div style="margin-bottom:var(--sp4);">
+        <label for="credits-amount" style="font-size:var(--tx-xs);font-weight:700;color:var(--color-text-muted);display:block;margin-bottom:var(--sp2);">Amount of credits</label>
+        <input id="credits-amount" type="number" min="100" step="100" value="200" style="width:100%;padding:10px 12px;border-radius:var(--radius-md);border:1px solid var(--color-border);background:var(--color-surface-2);color:var(--color-text);font-size:var(--tx-base);">
+        <div id="credits-cost-preview" style="margin-top:var(--sp2);font-size:var(--tx-sm);color:var(--color-text-muted);">£2.00 for 200 credits</div>
+      </div>
+      <button class="btn btn-p" id="btn-buy-credits" style="width:100%;justify-content:center;">Buy credits</button>
+      <p id="credits-ultra-hint" style="display:none;margin:var(--sp3) 0 0 0;font-size:var(--tx-xs);color:#7c3aed;line-height:1.5;">✨ <strong>Ultra has unlimited credits</strong> for the year — bigger orders may be cheaper on Ultra.</p>
     </div>
 
     <div class="card" id="plan-one-time-it" data-upgrade-card="onetime" style="display:none;width:min(320px,100%);border-color:#16a34a;">
@@ -6553,8 +6574,8 @@ html body #community-share-sheet .community-share-panel{
       <p>Compare Free, Pro and Ultra side-by-side to choose the best fit for your revision style.</p>
     </div>
     <div style="margin-bottom:var(--sp4);padding:var(--sp4);border:1px solid oklch(from var(--color-primary) l c h/.12);border-radius:var(--radius-lg);background:linear-gradient(135deg,rgba(210,0,0,.06),rgba(245,158,11,.08));">
-      <strong style="display:block;font-size:var(--tx-sm);margin-bottom:4px;color:var(--color-primary);text-transform:uppercase;letter-spacing:.08em;">Exam period offer</strong>
-      <p style="margin:0;font-size:var(--tx-sm);color:var(--color-text-muted);line-height:1.6;">Use code <strong>EXAM5</strong> for 5% off during exam season, available until 1st August.</p>
+      <strong style="display:block;font-size:var(--tx-sm);margin-bottom:4px;color:var(--color-primary);text-transform:uppercase;letter-spacing:.08em;">Launch offer</strong>
+      <p style="margin:0;font-size:var(--tx-sm);color:var(--color-text-muted);line-height:1.6;">Use code <strong>RA10</strong> for <strong>10% off</strong> any plan — applied at checkout.</p>
     </div>
     <div class="upgrade-compare-scroll">
       <table class="upgrade-compare-table" aria-label="RA10 plans comparison">
@@ -6569,11 +6590,18 @@ html body #community-share-sheet .community-share-panel{
         </thead>
         <tbody>
           <tr>
-            <td>Price</td>
+            <td>Price (annual)</td>
             <td>£0</td>
             <td>£20/year<br><small>£1.67/month equivalent</small></td>
             <td>£30/year<br><small>£2.50/month equivalent</small></td>
             <td>£100/year</td>
+          </tr>
+          <tr>
+            <td>Price (monthly)</td>
+            <td>£0</td>
+            <td>£2/month</td>
+            <td>£3/month</td>
+            <td>—</td>
           </tr>
           <tr>
             <td>Monthly credits</td>
@@ -14274,7 +14302,7 @@ async function waitForRA10Sdk(timeoutMs) {
       document.getElementById('purchase-paused-close')?.addEventListener('click', close);
     }
 
-    async function lsBuy(plan, subject) {
+    async function lsBuy(plan, subject, extra) {
       if (PURCHASES_TEMPORARILY_DISABLED) {
         showPurchasesPausedPopup();
         return;
@@ -14287,6 +14315,9 @@ async function waitForRA10Sdk(timeoutMs) {
         const result = await RA10.startCheckout({
           plan: String(plan || '').toUpperCase(),
           subject: subject ? String(subject).toUpperCase() : '',
+          credits: Number((extra && extra.credits) || 0),
+          amountPence: Number((extra && extra.amountPence) || 0),
+          billingInterval: String((extra && extra.billingInterval) || ''),
         });
         window.location.href = result.url;
       } catch (err) {
@@ -14298,9 +14329,72 @@ async function waitForRA10Sdk(timeoutMs) {
     document.getElementById('btn-buy-it')?.addEventListener('click', () => lsBuy('it', 'it'));
     document.getElementById('btn-buy-business')?.addEventListener('click', () => lsBuy('business', 'business'));
     document.getElementById('btn-buy-sport')?.addEventListener('click', () => lsBuy('sport', 'sport'));
-    document.getElementById('btn-buy-pro')?.addEventListener('click', () => lsBuy('pro'));
-    document.getElementById('btn-buy-ultra')?.addEventListener('click', () => lsBuy('ultra'));
+    document.getElementById('btn-buy-pro')?.addEventListener('click', () => lsBuy('pro', '', { billingInterval: _billingInterval }));
+    document.getElementById('btn-buy-ultra')?.addEventListener('click', () => lsBuy('ultra', '', { billingInterval: _billingInterval }));
     document.getElementById('btn-buy-edu')?.addEventListener('click', () => lsBuy('edu'));
+
+    // ---- Billing interval (monthly vs yearly) ----
+    let _billingInterval = 'year';
+    window.setBillingInterval = function (interval) {
+      _billingInterval = String(interval || 'year');
+      const yearly = _billingInterval === 'year';
+      const yearlyBtn = document.getElementById('billing-yearly-btn');
+      const monthlyBtn = document.getElementById('billing-monthly-btn');
+      if (yearlyBtn) { yearlyBtn.classList.toggle('btn-p', yearly); yearlyBtn.classList.toggle('btn-g', !yearly); }
+      if (monthlyBtn) { monthlyBtn.classList.toggle('btn-p', !yearly); monthlyBtn.classList.toggle('btn-g', yearly); }
+      const proPrice = document.getElementById('pro-price');
+      const proPeriod = document.getElementById('pro-price-period');
+      const proEquiv = document.getElementById('pro-price-equiv');
+      const ultraPrice = document.getElementById('ultra-price');
+      const ultraPeriod = document.getElementById('ultra-price-period');
+      const ultraEquiv = document.getElementById('ultra-price-equiv');
+      const savingsNote = document.getElementById('billing-savings-note');
+      if (yearly) {
+        if (proPrice) proPrice.textContent = '£20';
+        if (proPeriod) proPeriod.textContent = 'per year';
+        if (proEquiv) proEquiv.textContent = '£1.67/month equivalent (billed yearly)';
+        if (ultraPrice) ultraPrice.textContent = '£30';
+        if (ultraPeriod) ultraPeriod.textContent = 'per year';
+        if (ultraEquiv) ultraEquiv.textContent = '£2.50/month equivalent (billed yearly)';
+        if (savingsNote) savingsNote.textContent = 'Save ~17% with yearly';
+      } else {
+        if (proPrice) proPrice.textContent = '£2';
+        if (proPeriod) proPeriod.textContent = 'per month';
+        if (proEquiv) proEquiv.textContent = 'Billed monthly — cancel anytime';
+        if (ultraPrice) ultraPrice.textContent = '£3';
+        if (ultraPeriod) ultraPeriod.textContent = 'per month';
+        if (ultraEquiv) ultraEquiv.textContent = 'Billed monthly — cancel anytime';
+        if (savingsNote) savingsNote.textContent = 'Switch to yearly and save ~17%';
+      }
+    };
+    setBillingInterval('year');
+
+    // ---- Credits top-up ----
+    const CREDITS_PENCE_PER_CREDIT = 1; // £1 per 100 credits => 1p per credit
+    function creditsCostPreview() {
+      const input = document.getElementById('credits-amount');
+      const preview = document.getElementById('credits-cost-preview');
+      const hint = document.getElementById('credits-ultra-hint');
+      if (!input) return;
+      let amount = Math.max(0, Math.round(Number(input.value || 0) / 100) * 100);
+      const costPounds = (amount * CREDITS_PENCE_PER_CREDIT) / 100;
+      if (preview) preview.textContent = '£' + costPounds.toFixed(2) + ' for ' + amount + ' credits';
+      // Nudge Ultra for larger orders (>= £10 equivalent).
+      if (hint) hint.style.display = costPounds >= 10 ? '' : 'none';
+    }
+    document.getElementById('credits-amount')?.addEventListener('input', creditsCostPreview);
+    creditsCostPreview();
+    document.getElementById('btn-buy-credits')?.addEventListener('click', () => {
+      const input = document.getElementById('credits-amount');
+      const amount = Math.max(100, Math.round(Number(input.value || 0) / 100) * 100);
+      if (!amount || amount < 100) { alert('Please choose at least 100 credits.'); return; }
+      const costPounds = (amount * CREDITS_PENCE_PER_CREDIT) / 100;
+      if (costPounds >= 10) {
+        const goUltra = confirm('💡 Ultra has unlimited credits for the whole year.\n\nA top-up of ' + amount + ' credits costs £' + costPounds.toFixed(2) + '. Ultra is £30/year with unlimited credits.\n\nContinue with the one-off top-up anyway?');
+        if (!goUltra) return;
+      }
+      lsBuy('credits', '', { credits: amount, amountPence: Math.round(costPounds * 100) });
+    });
 
     function setUpgradeGroup(group) {
       const selected = String(group || 'personal');
@@ -14314,6 +14408,9 @@ async function waitForRA10Sdk(timeoutMs) {
         const show = card.getAttribute('data-upgrade-card') === selected;
         card.style.display = show ? '' : 'none';
       });
+      // Only show the billing (yearly/monthly) toggle on personal subscriptions.
+      const billingToggle = document.getElementById('upgrade-billing-toggle');
+      if (billingToggle) billingToggle.style.display = selected === 'personal' ? '' : 'none';
     }
     window.setUpgradeGroup = setUpgradeGroup;
 
