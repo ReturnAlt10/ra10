@@ -982,21 +982,23 @@
    "id": "DIA010",
    "learning_aim": "C",
    "topic": "C1.3 Containment",
-   "command_verb": "Draw",
+   "command_verb": "Complete",
    "marks": 4,
    "ao": "AO2",
    "scenario": "A network is infected and the team must isolate the affected area.",
-   "question": "Draw a diagram showing how network segmentation/containment isolates an infected server from the rest of the network at the switch/firewall.",
+   "question": "Figure 12 shows an infected server and other devices connected to a switch. Complete the diagram by adding the quarantine/block applied at the switch to isolate the infected server.",
    "guidance": "(4)",
    "type": "diagram",
-   "diagram_kind": "network diagram",
-   "mermaid": "flowchart LR\n  Infected[Infected Server] -->|\"isolated\"| Switch\n  Others[Other Devices] --> Switch\n  Switch --> FW{Quarantine}\n  FW -->|\"blocked\"| Rest[Rest of Network]",
+   "diagram_kind": "diagram",
+   "figure": "flowchart LR\n  Infected[Infected Server] --> Switch[Switch]\n  Others[Other Devices] --> Switch",
+   "mermaid": "flowchart LR\n  Infected[Infected Server] -->|\"isolated\"| Switch[Switch]\n  Others[Other Devices] --> Switch\n  Switch -->|\"blocked\"| Rest[Rest of Network]",
    "mark_scheme": {
-    "instruction": "Award up to 4 marks. Award marks for accurate labelling and clear, correct structure.",
+    "instruction": "Award up to 4 marks. Award marks for correctly completing/adding the required element(s) to the given diagram.",
     "points": [
-     "Correct overall structure and relationships",
-     "Accurate and relevant labels",
-     "Clear, logical presentation"
+     "Infected server marked as isolated (1)",
+     "Block applied at the switch for the infected server (1)",
+     "Legitimate devices still able to reach rest of network (1)",
+     "Clear containment of the infected host (1)"
     ]
    }
   },
@@ -1004,21 +1006,23 @@
    "id": "DIA011",
    "learning_aim": "C",
    "topic": "C1.7 Business continuity",
-   "command_verb": "Draw",
+   "command_verb": "Complete",
    "marks": 4,
    "ao": "AO2",
    "scenario": "A business must illustrate its disaster recovery failover.",
-   "question": "Draw a diagram showing primary and secondary (failover) sites with replication between them.",
+   "question": "Figure 13 shows a primary site and a secondary (DR) site. Complete the diagram by adding the replication link between the two sites and the failover path on failure.",
    "guidance": "(4)",
    "type": "diagram",
-   "diagram_kind": "system diagram",
+   "diagram_kind": "diagram",
+   "figure": "flowchart LR\n  Primary[Primary Site]\n  Secondary[Secondary Site / DR Site]\n  Users[Users] --> Primary",
    "mermaid": "flowchart LR\n  Primary[Primary Site] <-->|\"real-time replication\"| Secondary[Secondary Site / DR Site]\n  Users[Users] --> Primary\n  Users -. \"on failure\" .-> Secondary",
    "mark_scheme": {
-    "instruction": "Award up to 4 marks. Award marks for accurate labelling and clear, correct structure.",
+    "instruction": "Award up to 4 marks. Award marks for correctly completing/adding the required element(s) to the given diagram.",
     "points": [
-     "Correct overall structure and relationships",
-     "Accurate and relevant labels",
-     "Clear, logical presentation"
+     "Replication link between primary and secondary added (1)",
+     "Replication shown as continuous/real-time (1)",
+     "Failover path from users to secondary drawn (1)",
+     "Failover clearly triggered on failure (1)"
     ]
    }
   },
@@ -1026,63 +1030,23 @@
    "id": "DIA012",
    "learning_aim": "C",
    "topic": "C1.1 Internal policies",
-   "command_verb": "Draw",
+   "command_verb": "Complete",
    "marks": 4,
    "ao": "AO2",
    "scenario": "An organisation is documenting its cyber security policy.",
-   "question": "Draw a diagram showing the Plan-Do-Check-Act loop of an ongoing cyber security policy.",
+   "question": "Figure 14 shows the first two stages of the Plan-Do-Check-Act loop. Complete the diagram by adding the remaining stages and closing the loop.",
    "guidance": "(4)",
    "type": "diagram",
-   "diagram_kind": "process diagram",
+   "diagram_kind": "diagram",
+   "figure": "flowchart LR\n  Plan[Plan] --> Do[Do]",
    "mermaid": "flowchart LR\n  Plan[Plan] --> Do[Do]\n  Do --> Check[Check]\n  Check --> Act[Act]\n  Act --> Plan",
    "mark_scheme": {
-    "instruction": "Award up to 4 marks for accurate labelling and correct, logical structure.",
+    "instruction": "Award up to 4 marks. Award marks for correctly completing/adding the required element(s) to the given diagram.",
     "points": [
-     "Correct overall structure and sequence",
-     "Accurate and relevant labels",
-     "Clear, logical presentation"
-    ]
-   }
-  },
-  {
-   "id": "DIA103",
-   "learning_aim": "C",
-   "topic": "C1.1 Internal policies",
-   "command_verb": "Identify",
-   "marks": 1,
-   "ao": "AO1",
-   "scenario": "A diagram shows the Plan-Do-Check-Act loop of a cyber security policy.",
-   "question": "The Figure shows the Plan-Do-Check-Act loop. Identify the stage that immediately follows 'Do'.",
-   "guidance": "(1)",
-   "type": "diagram",
-   "diagram_kind": "process diagram",
-   "mermaid": "flowchart LR\n  Plan[Plan] --> Do[Do] --> Check[Check] --> Act[Act] --> Plan",
-   "mark_scheme": {
-    "instruction": "Award one mark for the correct stage.",
-    "points": [
-     "Check (1)"
-    ]
-   }
-  },
-  {
-   "id": "DIA109",
-   "learning_aim": "C",
-   "topic": "C1.3 Containment",
-   "command_verb": "Draw",
-   "marks": 4,
-   "ao": "AO2",
-   "scenario": "A response team must illustrate how a compromised host is isolated.",
-   "question": "Draw a diagram showing a rogue host being quarantined by a switch so it cannot reach the rest of the network.",
-   "guidance": "(4)",
-   "type": "diagram",
-   "diagram_kind": "network diagram",
-   "mermaid": "flowchart LR\n  Host[Compromised Host] -->|\"port shutdown\"| Switch[Managed Switch]\n  Switch -->|\"allowed\"| Legit[Legitimate Devices]\n  Switch -->|\"blocked\"| Rest[Rest of Network]",
-   "mark_scheme": {
-    "instruction": "Award up to 4 marks. Award marks for accurate labelling and clear, correct structure.",
-    "points": [
-     "Correct overall structure and relationships",
-     "Accurate and relevant labels",
-     "Clear, logical presentation"
+     "Check stage added after Do (1)",
+     "Act stage added after Check (1)",
+     "Act loops back to Plan (1)",
+     "Continuous improvement loop completed (1)"
     ]
    }
   }

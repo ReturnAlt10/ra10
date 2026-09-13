@@ -748,43 +748,71 @@
    "id": "DIA009",
    "learning_aim": "D",
    "topic": "D1.1 Forensic collection of evidence",
-   "command_verb": "Draw",
+   "command_verb": "Complete",
    "marks": 4,
    "ao": "AO2",
    "scenario": "A forensic investigator must document the process of collecting evidence.",
-   "question": "Draw a diagram showing the forensic collection process, from seizing a device through imaging, hashing and documenting the chain of custody.",
+   "question": "Figure 15 shows the first stage (Seize device) of the forensic collection process. Complete the diagram by adding the remaining stages in the correct order.",
    "guidance": "(4)",
    "type": "diagram",
-   "diagram_kind": "process diagram",
+   "diagram_kind": "diagram",
+   "figure": "flowchart LR\n  Seize[Seize device]",
    "mermaid": "flowchart LR\n  Seize[Seize device] --> Isolate[Isolate from network]\n  Isolate --> Image[Take forensic image]\n  Image --> Hash[Generate hash/checksum]\n  Hash --> Custody[Document chain of custody]",
    "mark_scheme": {
-    "instruction": "Award up to 4 marks for accurate labelling and correct, logical structure.",
+    "instruction": "Award up to 4 marks. Award marks for correctly completing/adding the required element(s) to the given diagram.",
     "points": [
-     "Correct overall structure and sequence",
-     "Accurate and relevant labels",
-     "Clear, logical presentation"
+     "Isolate-from-network stage added (1)",
+     "Take-forensic-image stage added (1)",
+     "Generate-hash stage added (1)",
+     "Document-chain-of-custody stage added, correct order (1)"
     ]
    }
   },
   {
    "id": "DIA108",
    "learning_aim": "D",
-   "topic": "D2.3 Writing security reports",
-   "command_verb": "Draw",
+   "topic": "D1.2 Pen testing",
+   "command_verb": "Complete",
    "marks": 4,
    "ao": "AO2",
-   "scenario": "An investigator is documenting a security report.",
-   "question": "Draw a structured flowchart showing the general structure of a security report, from title and contents through analysis to conclusions.",
+   "scenario": "",
+   "question": "Figure 16 shows the first phase of a penetration test. Complete the diagram by adding the remaining phases in the correct order.",
    "guidance": "(4)",
    "type": "diagram",
-   "diagram_kind": "process diagram",
-   "mermaid": "flowchart TB\n  Title[Title] --> Contents[Contents]\n  Contents --> Intro[Introduction]\n  Intro --> Body[Headings & analysis]\n  Body --> Concl[Conclusions]",
+   "diagram_kind": "diagram",
+   "figure": "flowchart LR\n  A[Engagement Scope]",
+   "mermaid": "flowchart LR\n  A[Engagement Scope] --> B[Reconnaissance]\n  B --> C[Scanning and Enumeration]\n  C --> D[Exploitation]\n  D --> E[Post-Exploitation]\n  E --> F[Reporting and Debrief]",
    "mark_scheme": {
-    "instruction": "Award up to 4 marks for accurate labelling and correct, logical structure.",
+    "instruction": "Award up to 4 marks. Award marks for correctly completing/adding the required element(s) to the given diagram.",
     "points": [
-     "Correct overall structure and sequence",
-     "Accurate and relevant labels",
-     "Clear, logical presentation"
+     "Reconnaissance phase added (1)",
+     "Scanning & enumeration phase added (1)",
+     "Exploitation and post-exploitation phases added (1)",
+     "Reporting/debrief completes the sequence (1)"
+    ]
+   }
+  },
+  {
+   "id": "DIA107",
+   "learning_aim": "D",
+   "topic": "D2.1 IDS/IPS",
+   "command_verb": "Complete",
+   "marks": 4,
+   "ao": "AO2",
+   "scenario": "A security architect must show where monitoring devices are placed.",
+   "question": "Figure 17 shows a firewall and a switch. Complete the diagram by adding the network-based IDS and its alert link to a SIEM.",
+   "guidance": "(4)",
+   "type": "diagram",
+   "diagram_kind": "diagram",
+   "figure": "flowchart LR\n  Internet[Internet] --> FW{Firewall}\n  FW --> Switch\n  Switch --> Server[Servers]",
+   "mermaid": "flowchart LR\n  Internet[Internet] --> FW{Firewall}\n  FW --> NIDS[NIDS]\n  NIDS --> Switch\n  Switch --> Server[Servers]\n  NIDS -. alerts .-> SIEM[SIEM]",
+   "mark_scheme": {
+    "instruction": "Award up to 4 marks. Award marks for correctly completing/adding the required element(s) to the given diagram.",
+    "points": [
+     "NIDS placed inline/behind the firewall (1)",
+     "NIDS→SIEM alert link drawn (1)",
+     "Monitoring flow through the NIDS (1)",
+     "Clear placement of monitoring device (1)"
     ]
    }
   }

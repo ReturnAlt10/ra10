@@ -3945,21 +3945,47 @@
    "id": "DIA001",
    "learning_aim": "A",
    "topic": "A1.2 External threats — hacking (DoS/DDoS)",
-   "command_verb": "Draw",
+   "command_verb": "Complete",
    "marks": 4,
    "ao": "AO2",
-   "scenario": "A technician must explain a DDoS attack to non-technical staff.",
-   "question": "Draw a diagram showing how a DDoS attack works using a botnet to overwhelm a target server by traffic from many compromised devices.",
+   "scenario": "",
+   "question": "Figure 1 shows an incomplete diagram of a DDoS attack. Complete the diagram by adding the Command & Control (C2) server and drawing its connections to the compromised devices.",
    "guidance": "(4)",
    "type": "diagram",
-   "diagram_kind": "network diagram",
-   "mermaid": "flowchart LR\n  Attacker([Attacker]) --> C2[Command & Control Server] --> Device1[Compromised Device]\n  C2 --> Device2[Compromised Device]\n  C2 --> Device3[Compromised Device]\n  Device1 --> Target[Target Server]\n  Device2 --> Target\n  Device3 --> Target\n  Target --> Down[Server Overwhelmed / Offline]",
+   "diagram_kind": "diagram",
+   "figure": "flowchart LR\n  Attacker([Attacker]) --> GAP[??]\n  Device1[Compromised Device] --> Target[Target Server]\n  Device2[Compromised Device] --> Target\n  Device3[Compromised Device] --> Target\n  Target --> Down[Server Overwhelmed / Offline]",
+   "mermaid": "flowchart LR\n  Attacker([Attacker]) --> C2[Command & Control Server]\n  C2 --> Device1[Compromised Device]\n  C2 --> Device2[Compromised Device]\n  C2 --> Device3[Compromised Device]\n  Device1 --> Target[Target Server]\n  Device2 --> Target\n  Device3 --> Target\n  Target --> Down[Server Overwhelmed / Offline]",
    "mark_scheme": {
-    "instruction": "Award up to 4 marks. Award marks for accurate labelling and clear, correct structure.",
+    "instruction": "Award up to 4 marks. Award marks for correctly completing/adding the required element(s) to the given diagram.",
     "points": [
-     "Correct overall structure and relationships",
-     "Accurate and relevant labels",
-     "Clear, logical presentation"
+     "Command & Control (C2) server correctly placed between attacker and devices (1)",
+     "Lines connecting C2 to each compromised device (1)",
+     "Botnet shown feeding traffic into the target server (1)",
+     "Target labelled as overwhelmed / offline (1)"
+    ]
+   }
+  },
+  {
+   "id": "DIA002",
+   "learning_aim": "A",
+   "topic": "A1.2 External threats — hacking (MitM)",
+   "command_verb": "Complete",
+   "marks": 4,
+   "ao": "AO2",
+   "scenario": "",
+   "question": "Figure 2 shows an incomplete diagram of a man-in-the-middle attack. Complete the diagram by adding the attacker and showing where the attacker sits in relation to the client and server.",
+   "guidance": "(4)",
+   "type": "diagram",
+   "diagram_kind": "diagram",
+   "figure": "flowchart LR\n  Client([Client]) --> SERVER[Server]\n  Client -. \"intended path\" .-> SERVER",
+   "mermaid": "flowchart LR\n  Client([Client]) --> Attacker([Attacker]) --> Server[Server]\n  Client -. \"intended path (intercepted)\" .-> Attacker",
+   "mark_scheme": {
+    "instruction": "Award up to 4 marks. Award marks for correctly completing/adding the required element(s) to the given diagram.",
+    "points": [
+     "Attacker placed between client and server (1)",
+     "Client→attacker and attacker→server links both drawn (1)",
+     "Intercepted leg clearly labelled (1)",
+     "Logical, unambiguous flow (1)"
     ]
    }
   },
@@ -3967,43 +3993,23 @@
    "id": "DIA013",
    "learning_aim": "A",
    "topic": "A4.1 Software and hardware security — firewalls",
-   "command_verb": "Draw",
+   "command_verb": "Complete",
    "marks": 4,
    "ao": "AO2",
    "scenario": "A network administrator must secure the boundary of the network.",
-   "question": "Draw a diagram showing where a firewall sits between the internet and an internal network, and how it filters traffic.",
+   "question": "Figure 3 shows an incomplete network diagram. Complete the diagram by adding the firewall and drawing its connection between the internet and the internal network.",
    "guidance": "(4)",
    "type": "diagram",
-   "diagram_kind": "network diagram",
+   "diagram_kind": "diagram",
+   "figure": "flowchart LR\n  Internet[Internet] --> SWITCH[???]\n  SWITCH --> Server[Servers]\n  SWITCH --> PC[Workstations]",
    "mermaid": "flowchart LR\n  Internet[Internet] --> FW{Firewall}\n  FW --> Switch[Switch]\n  Switch --> Server[Servers]\n  Switch --> PC[Workstations]",
    "mark_scheme": {
-    "instruction": "Award up to 4 marks for accurate labelling and correct, logical structure.",
+    "instruction": "Award up to 4 marks. Award marks for correctly completing/adding the required element(s) to the given diagram.",
     "points": [
-     "Correct overall structure and relationships",
-     "Accurate and relevant labels",
-     "Clear, logical presentation"
-    ]
-   }
-  },
-  {
-   "id": "DIA107",
-   "learning_aim": "A",
-   "topic": "A4.1 Software and hardware security — firewalls",
-   "command_verb": "Draw",
-   "marks": 4,
-   "ao": "AO2",
-   "scenario": "A network administrator is documenting the network perimeter.",
-   "question": "Draw a diagram showing a firewall between the internet and an internal network, protecting servers and workstations.",
-   "guidance": "(4)",
-   "type": "diagram",
-   "diagram_kind": "network diagram",
-   "mermaid": "flowchart LR\n  Internet[Internet] --> FW{Firewall}\n  FW --> Switch[Switch]\n  Switch --> Server[Servers]\n  Switch --> PC[Workstations]",
-   "mark_scheme": {
-    "instruction": "Award up to 4 marks for accurate labelling and correct, logical structure.",
-    "points": [
-     "Correct overall structure and relationships",
-     "Accurate and relevant labels",
-     "Clear, logical presentation"
+     "Firewall drawn between the internet and the internal network (1)",
+     "Correct connection internet→firewall→switch (1)",
+     "Internal devices (servers/workstations) kept behind the firewall (1)",
+     "Clear boundary/protection implied (1)"
     ]
    }
   }

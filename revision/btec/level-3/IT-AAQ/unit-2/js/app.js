@@ -1326,10 +1326,11 @@ function renderMarkScheme(q, opts) {
   if (m.additional_guidance) wrap.appendChild(el('p', { class: 'additional' }, m.additional_guidance));
   if (m.do_not_accept) wrap.appendChild(el('p', { class: 'donotaccept' }, 'Do not accept: ' + m.do_not_accept));
 
-  const isDiagramQ = q.type === 'diagram' || String(q.command_verb || '').toLowerCase() === 'draw';
+  const isDiagramQ = q.type === 'diagram' || /^(draw|complete|label)$/i.test(String(q.command_verb || ''));
   if (isDiagramQ && q.mermaid) {
     const diagramWrap = el('div', { class: 'ms-diagram' });
-    diagramWrap.appendChild(el('p', { class: 'instruction' }, 'Model answer:'));
+    const completedVerb = /^complete$/i.test(String(q.command_verb || '')) ? 'Completed diagram:' : 'Model answer:';
+    diagramWrap.appendChild(el('p', { class: 'instruction' }, completedVerb));
     const svgDiv = el('div', { class: 'ms-diagram-svg' });
     diagramWrap.appendChild(svgDiv);
     wrap.appendChild(diagramWrap);
@@ -1432,7 +1433,7 @@ function renderMockControls() {
 // with extended_levels; "short" is everything else that's regular text.
 function styleOfQuestion(q) {
   if (q.type === 'multiple_choice') return 'mc';
-  if (q.type === 'diagram' || q.type === 'draw' || q.command_verb === 'Draw') return 'diagram';
+  if (q.type === 'diagram' || q.type === 'draw' || q.command_verb === 'Draw' || q.command_verb === 'Complete') return 'diagram';
   if (q.type === 'extended_levels' || q.marks >= 6) return 'long';
   return 'short';
 }
@@ -1666,10 +1667,16 @@ function renderMock(mock) {
     ));
     sx.appendChild(subQ);
     if (q.type === 'diagram') {
-      // Full page-sized blank space for the candidate to draw the diagram
-      sx.appendChild(el('div', { class: 'diagram-space', 'aria-hidden': 'true' },
-        el('span', { class: 'ds-label' }, `Draw your ${q.diagram_kind || 'diagram'} in the space below`)
-      ));
+      // Complete-the-diagram: the incomplete figure is shown above (buildQuestionFigure),
+      // so this is a lined workspace for the candidate to add the missing element(s).
+      const isComplete = /^(complete|label)$/i.test(String(q.command_verb || ''));
+      const box = el('div', { class: 'diagram-space', 'aria-hidden': 'true' });
+      if (isComplete) {
+        box.appendChild(el('span', { class: 'ds-label' }, 'Complete the diagram above — add the missing element(s) in the space below'));
+      } else {
+        box.appendChild(el('span', { class: 'ds-label' }, `Draw your ${q.diagram_kind || 'diagram'} in the space below`));
+      }
+      sx.appendChild(box);
     } else if (q.type === 'multiple_choice') {
       // MC questions print A–D options with a tick box next to each.
       const opts = el('ol', { class: 'mc-options' });

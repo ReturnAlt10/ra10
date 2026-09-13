@@ -1836,21 +1836,23 @@
    "id": "DIA003",
    "learning_aim": "B",
    "topic": "B1.2 Network topologies",
-   "command_verb": "Draw",
+   "command_verb": "Complete",
    "marks": 4,
    "ao": "AO2",
    "scenario": "A network administrator wants to document the office network.",
-   "question": "Draw a star topology showing a central switch connected to four workstations.",
+   "question": "Figure 4 shows part of a star topology. Complete the diagram by adding the central switch and connecting all four workstations to it.",
    "guidance": "(4)",
    "type": "diagram",
-   "diagram_kind": "topology diagram",
+   "diagram_kind": "diagram",
+   "figure": "flowchart TB\n  W1[Workstation 1]\n  W2[Workstation 2]\n  W3[Workstation 3]\n  W4[Workstation 4]",
    "mermaid": "flowchart TB\n  Switch[Central Switch] --- W1[Workstation 1]\n  Switch --- W2[Workstation 2]\n  Switch --- W3[Workstation 3]\n  Switch --- W4[Workstation 4]",
    "mark_scheme": {
-    "instruction": "Award up to 4 marks. Award marks for accurate labelling and clear, correct structure.",
+    "instruction": "Award up to 4 marks. Award marks for correctly completing/adding the required element(s) to the given diagram.",
     "points": [
-     "Correct overall structure and relationships",
-     "Accurate and relevant labels",
-     "Clear, logical presentation"
+     "Central switch added (1)",
+     "All four workstations connected to the switch (1)",
+     "Each device has its own dedicated link (no shared cable) (1)",
+     "Clean, labelled star structure (1)"
     ]
    }
   },
@@ -1858,21 +1860,94 @@
    "id": "DIA004",
    "learning_aim": "B",
    "topic": "B1.2 Network topologies",
-   "command_verb": "Draw",
+   "command_verb": "Complete",
    "marks": 4,
    "ao": "AO2",
    "scenario": "",
-   "question": "Draw a mesh topology showing four devices interconnected with redundant links.",
+   "question": "Figure 5 shows four nodes A–D in an incomplete mesh topology. Complete the diagram by adding the missing redundant links so that every node connects directly to every other node.",
    "guidance": "(4)",
    "type": "diagram",
-   "diagram_kind": "topology diagram",
+   "diagram_kind": "diagram",
+   "figure": "flowchart LR\n  A([Node A]) --- B([Node B])\n  A --- C([Node C])\n  A --- D([Node D])",
    "mermaid": "flowchart LR\n  A([Node A]) --- B([Node B])\n  A --- C([Node C])\n  A --- D([Node D])\n  B --- C\n  B --- D\n  C --- D",
    "mark_scheme": {
-    "instruction": "Award up to 4 marks. Award marks for accurate labelling and clear, correct structure.",
+    "instruction": "Award up to 4 marks. Award marks for correctly completing/adding the required element(s) to the given diagram.",
     "points": [
-     "Correct overall structure and relationships",
-     "Accurate and relevant labels",
-     "Clear, logical presentation"
+     "B→C link added (1)",
+     "B→D link added (1)",
+     "C→D link added (1)",
+     "Full mesh — every node links to every other (1)"
+    ]
+   }
+  },
+  {
+   "id": "DIA005",
+   "learning_aim": "B",
+   "topic": "B1.4 Modern trends",
+   "command_verb": "Complete",
+   "marks": 4,
+   "ao": "AO2",
+   "scenario": "A company uses firewalls and a VLAN strategy to isolate servers.",
+   "question": "Figure 6 shows an incomplete DMZ. Complete the diagram by adding the web server, placing it in the DMZ between the perimeter and internal firewalls.",
+   "guidance": "(4)",
+   "type": "diagram",
+   "diagram_kind": "diagram",
+   "figure": "flowchart LR\n  Internet[Internet] --> FW1{Perimeter Firewall}\n  FW1 --> FW2{Internal Firewall}\n  FW2 --> Trusted[Trusted Internal Network]",
+   "mermaid": "flowchart LR\n  Internet[Internet] --> FW1{Perimeter Firewall}\n  FW1 --> Web[Web Server]\n  Web --> FW2{Internal Firewall}\n  FW2 --> Trusted[Trusted Internal Network]\n  subgraph DMZ[DMZ]\n    Web\n  end",
+   "mark_scheme": {
+    "instruction": "Award up to 4 marks. Award marks for correctly completing/adding the required element(s) to the given diagram.",
+    "points": [
+     "Web server placed between the two firewalls (1)",
+     "Correctly located inside the DMZ (1)",
+     "Perimeter firewall still protects from internet (1)",
+     "Internal firewall still shields trusted network (1)"
+    ]
+   }
+  },
+  {
+   "id": "DIA006",
+   "learning_aim": "B",
+   "topic": "B1.4 Modern trends",
+   "command_verb": "Complete",
+   "marks": 4,
+   "ao": "AO2",
+   "scenario": "",
+   "question": "Figure 7 shows a managed switch. Complete the diagram by adding three VLANs (Staff, Guests, Servers) and connecting them to the switch.",
+   "guidance": "(4)",
+   "type": "diagram",
+   "diagram_kind": "diagram",
+   "figure": "flowchart TB\n  SW[Managed Switch]",
+   "mermaid": "flowchart TB\n  SW[Managed Switch]\n  SW --> VLAN1[VLAN 10 - Staff]\n  SW --> VLAN2[VLAN 20 - Guests]\n  SW --> VLAN3[VLAN 30 - Servers]",
+   "mark_scheme": {
+    "instruction": "Award up to 4 marks. Award marks for correctly completing/adding the required element(s) to the given diagram.",
+    "points": [
+     "VLAN 10 (Staff) added (1)",
+     "VLAN 20 (Guests) added (1)",
+     "VLAN 30 (Servers) added (1)",
+     "All three connected to the single managed switch (1)"
+    ]
+   }
+  },
+  {
+   "id": "DIA104",
+   "learning_aim": "B",
+   "topic": "B3.1 TCP/IP model",
+   "command_verb": "Complete",
+   "marks": 3,
+   "ao": "AO2",
+   "scenario": "",
+   "question": "Figure 8 shows the four-layer TCP/IP model with one layer missing. Complete the diagram by labelling the missing layer.",
+   "guidance": "(3)",
+   "type": "diagram",
+   "diagram_kind": "diagram",
+   "figure": "flowchart TB\n  L4[Application] --> L3[???]\n  L3 --> L2[Internet]\n  L2 --> L1[Network Access]",
+   "mermaid": "flowchart TB\n  L4[Application] --> L3[Transport]\n  L3 --> L2[Internet]\n  L2 --> L1[Network Access]",
+   "mark_scheme": {
+    "instruction": "Award up to 3 marks. Award marks for correctly completing/adding the required element(s) to the given diagram.",
+    "points": [
+     "Missing layer identified as Transport (1)",
+     "Placed correctly between Application and Internet (1)",
+     "Recognised as carrying TCP/UDP (1)"
     ]
    }
   },
@@ -1880,131 +1955,71 @@
    "id": "DIA007",
    "learning_aim": "B",
    "topic": "B3.1 TCP/IP model",
-   "command_verb": "Draw",
+   "command_verb": "Complete",
    "marks": 4,
    "ao": "AO2",
    "scenario": "A student must illustrate the layering of the TCP/IP model.",
-   "question": "Draw the four-layer TCP/IP model and label the position of TCP and IP.",
+   "question": "Figure 9 shows the four TCP/IP layers in the correct order. Complete the diagram by labelling where TCP and IP operate.",
    "guidance": "(4)",
    "type": "diagram",
    "diagram_kind": "diagram",
-   "mermaid": "flowchart TB\n  L4[Application Layer]\n  L3[Transport Layer - TCP]\n  L2[Internet Layer - IP]\n  L1[Network Access Layer]\n  L4 --> L3 --> L2 --> L1",
+   "figure": "flowchart TB\n  L4[Application Layer] --> L3[Layer 3]\n  L3 --> L2[Layer 2]\n  L2 --> L1[Network Access Layer]",
+   "mermaid": "flowchart TB\n  L4[Application Layer] --> L3[Transport Layer - TCP]\n  L3 --> L2[Internet Layer - IP]\n  L2 --> L1[Network Access Layer]",
    "mark_scheme": {
-    "instruction": "Award up to 4 marks. Award marks for accurate labelling and clear, correct structure.",
+    "instruction": "Award up to 4 marks. Award marks for correctly completing/adding the required element(s) to the given diagram.",
     "points": [
-     "Correct overall structure and relationships",
-     "Accurate and relevant labels",
-     "Clear, logical presentation"
+     "TCP correctly placed in the Transport layer (1)",
+     "IP correctly placed in the Internet layer (1)",
+     "Four distinct layers maintained in order (1)",
+     "Clear layering from Application down to Network Access (1)"
     ]
    }
   },
   {
    "id": "DIA008",
    "learning_aim": "B",
-   "topic": "B3.4 Network infrastructure services — DNS",
-   "command_verb": "Draw",
+   "topic": "B3.4 DNS",
+   "command_verb": "Complete",
    "marks": 4,
    "ao": "AO2",
    "scenario": "",
-   "question": "Draw a diagram showing DNS resolution from a client to a recursive DNS server and onward to an authoritative server.",
-   "guidance": "(4)",
-   "type": "diagram",
-   "diagram_kind": "sequence diagram",
-   "mermaid": "flowchart LR\n  Client([Client]) -->|\"www.example.com\"| Recursive[Recursive DNS Server]\n  Recursive --> Authoritative[Authoritative DNS Server]\n  Authoritative -->|\"IP address\"| Recursive\n  Recursive --> Client",
-   "mark_scheme": {
-    "instruction": "Award up to 4 marks. Award marks for accurate labelling and clear, correct structure.",
-    "points": [
-     "Correct overall structure and relationships",
-     "Accurate and relevant labels",
-     "Clear, logical presentation"
-    ]
-   }
-  },
-  {
-   "id": "DIA102",
-   "learning_aim": "B",
-   "topic": "B1.2 Network topologies",
-   "command_verb": "Describe",
-   "marks": 4,
-   "ao": "AO2",
-   "scenario": "",
-   "question": "The Figure shows a star topology. Describe its key feature and one advantage for security.",
+   "question": "Figure 10 shows an incomplete DNS resolution chain. Complete the diagram by adding the authoritative DNS server and the return of the IP address to the client.",
    "guidance": "(4)",
    "type": "diagram",
    "diagram_kind": "diagram",
-   "mermaid": null,
+   "figure": "flowchart LR\n  Client([Client]) -->|\"www.example.com\"| Recursive[Recursive DNS Server]\n  Recursive --> AUTHORITATIVE[??]",
+   "mermaid": "flowchart LR\n  Client([Client]) -->|\"www.example.com\"| Recursive[Recursive DNS Server]\n  Recursive --> Authoritative[Authoritative DNS Server]\n  Authoritative -->|\"IP address\"| Recursive\n  Recursive -->|\"IP address\"| Client",
    "mark_scheme": {
-    "instruction": "Award up to 4 marks. Award marks for accurate labelling and clear, correct structure.",
+    "instruction": "Award up to 4 marks. Award marks for correctly completing/adding the required element(s) to the given diagram.",
     "points": [
-     "All devices connect to a central switch (1)",
-     "Failure of one device/cable does not affect others (1)",
-     "Central point enables centralised management and monitoring (2)"
-    ]
-   },
-   "figure": "flowchart TB\n  C[Central Switch] --- A[Device A]\n  C --- B[Device B]\n  C --- D[Device D]\n  C --- E[Device E]"
-  },
-  {
-   "id": "DIA104",
-   "learning_aim": "B",
-   "topic": "B3.1 TCP/IP model",
-   "command_verb": "Label",
-   "marks": 3,
-   "ao": "AO2",
-   "scenario": "",
-   "question": "The Figure shows the four-layer TCP/IP model with one layer missing its label. State the missing layer.",
-   "guidance": "(3)",
-   "type": "diagram",
-   "diagram_kind": "diagram",
-   "mermaid": null,
-   "mark_scheme": {
-    "instruction": "Award up to 3 marks. Award marks for accurate labelling and clear, correct structure.",
-    "points": [
-     "The missing layer is the Transport layer (which carries TCP/UDP) (3)"
-    ]
-   },
-   "figure": "flowchart TB\n  L4[Application]\n  L3[???]\n  L2[Internet]\n  L1[Network Access]\n  L4 --- L3 --- L2 --- L1"
-  },
-  {
-   "id": "DIA105",
-   "learning_aim": "B",
-   "topic": "B1.2 Network topologies",
-   "command_verb": "Draw",
-   "marks": 4,
-   "ao": "AO2",
-   "scenario": "",
-   "question": "Draw an extended-star topology showing a central switch connected to two further switches, each serving workstations.",
-   "guidance": "(4)",
-   "type": "diagram",
-   "diagram_kind": "topology diagram",
-   "mermaid": "flowchart TB\n  Core[Core Switch] --- S1[Switch 1]\n  Core --- S2[Switch 2]\n  S1 --- W1[Workstation]\n  S1 --- W2[Workstation]\n  S2 --- W3[Workstation]\n  S2 --- W4[Workstation]",
-   "mark_scheme": {
-    "instruction": "Award up to 4 marks. Award marks for accurate labelling and clear, correct structure.",
-    "points": [
-     "Correct overall structure and relationships",
-     "Accurate and relevant labels",
-     "Clear, logical presentation"
+     "Authoritative DNS server added (1)",
+     "Recursive→authoritative query link drawn (1)",
+     "IP address returned from authoritative to recursive (1)",
+     "IP address returned from recursive to client (1)"
     ]
    }
   },
   {
    "id": "DIA106",
    "learning_aim": "B",
-   "topic": "B3.4 Network infrastructure services — DHCP",
-   "command_verb": "Draw",
+   "topic": "B3.5 DHCP",
+   "command_verb": "Complete",
    "marks": 4,
    "ao": "AO2",
    "scenario": "",
-   "question": "Draw the DHCP DORA process showing the four messages between a client and a server.",
+   "question": "Figure 11 shows an incomplete DHCP exchange. Complete the diagram by adding the two missing messages (Request and Ack).",
    "guidance": "(4)",
    "type": "diagram",
-   "diagram_kind": "sequence diagram",
+   "diagram_kind": "diagram",
+   "figure": "sequenceDiagram\n  Client->>Server: DHCP Discover\n  Server-->>Client: DHCP Offer",
    "mermaid": "sequenceDiagram\n  Client->>Server: DHCP Discover\n  Server-->>Client: DHCP Offer\n  Client->>Server: DHCP Request\n  Server-->>Client: DHCP Ack",
    "mark_scheme": {
-    "instruction": "Award up to 4 marks. Award marks for accurate labelling and clear, correct structure.",
+    "instruction": "Award up to 4 marks. Award marks for correctly completing/adding the required element(s) to the given diagram.",
     "points": [
-     "Correct overall structure and relationships",
-     "Accurate and relevant labels",
-     "Clear, logical presentation"
+     "DHCP Request (client→server) added (1)",
+     "DHCP Ack (server→client) added (1)",
+     "Correct order Discover→Offer→Request→Ack (1)",
+     "Correct DORA sequence completed (1)"
     ]
    }
   }

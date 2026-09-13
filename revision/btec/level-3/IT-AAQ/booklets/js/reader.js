@@ -282,28 +282,36 @@
 
   // ---- Diagram pages ----
   function diagramPages() {
-    const dg = (state.bundle.diagrams || []).slice(0, 3); // cap to 3 per booklet
+    const dg = (state.bundle.diagrams || []).slice(0, 4); // cap per booklet
     const pages = [];
     dg.forEach((d, idx) => {
+      const isComplete = d.figure && /^(Complete|Label)$/i.test(String(d.command_verb || '')) ||
+                         (d.figure && !d.mermaid);
       let body = `<div class="bk-qn">${idx + 1}. ${esc(d.question)} <span class="bk-marks"><span class="mk">${d.marks} mark${d.marks === 1 ? '' : 's'}</span></span></div>`;
       if (d.scenario) body += `<p style="font-style:italic;color:var(--bk-muted);">${esc(d.scenario)}</p>`;
       if (state.solutions) {
-        // Model answer diagram (mermaid) + mark scheme points.
+        // Model answer: the COMPLETED diagram (mermaid) + mark scheme points.
         if (d.mermaid) {
-          body += `<div class="bk-model"><b>Model answer</b>${d.diagram_kind ? ` (${esc(d.diagram_kind)})` : ''}<div class="bk-mermaid" data-mermaid="${esc(d.mermaid)}"></div></div>`;
+          const label = d.figure ? 'Completed diagram' : 'Model answer';
+          body += `<div class="bk-model"><b>${label}</b>${d.diagram_kind ? ` (${esc(d.diagram_kind)})` : ''}<div class="bk-mermaid" data-mermaid="${esc(d.mermaid)}"></div></div>`;
         } else {
-          body += `<div class="bk-model"><b>Diagram answer</b><ul style="margin:6px 0 0 18px;">${msPoints(d.mark_scheme).map(p => `<li>${esc(p)}</li>`).join('')}</ul></div>`;
+          body += `<div class="bk-model"><b>Answer</b><ul style="margin:6px 0 0 18px;">${msPoints(d.mark_scheme).map(p => `<li>${esc(p)}</li>`).join('')}</ul></div>`;
         }
         const pts = msPoints(d.mark_scheme);
         if (pts.length) {
           body += `<div class="bk-model"><b>Mark scheme</b><ul style="margin:6px 0 0 18px;">${pts.map(p => `<li>${esc(p)}</li>`).join('')}</ul></div>`;
         }
         if (d.mark_scheme?.instruction) body += `<div class="bk-tip"><b>Note:</b> ${esc(d.mark_scheme.instruction)}</div>`;
+      } else if (d.figure) {
+        // Worksheet: show the INCOMPLETE figure + space to complete it.
+        body += `<div class="bk-task"><b>Figure ${idx + 1}</b></div>`;
+        body += `<div class="bk-mermaid" data-mermaid="${esc(d.figure)}"></div>`;
+        body += `<div class="bk-draw-box" style="min-height:420px;"><span>Complete the diagram — add the missing element(s) above in the space below</span></div>`;
       } else {
-        // One full page for drawing.
+        // One full page for drawing (draw-from-scratch diagrams).
         body += `<div class="bk-draw-box" style="min-height:820px;"><span>Draw and label your diagram here (full page available)</span></div>`;
       }
-      pages.push(pageShell(body, { kicker: 'Diagrams', title: `Diagram practice ${idx + 1}`, label: 'draw', solutions: state.solutions }));
+      pages.push(pageShell(body, { kicker: 'Diagrams', title: `Diagram practice ${idx + 1}`, label: d.figure ? 'complete' : 'draw', solutions: state.solutions }));
     });
     return pages;
   }
