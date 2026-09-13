@@ -285,15 +285,14 @@
     const dg = (state.bundle.diagrams || []).slice(0, 4); // cap per booklet
     const pages = [];
     dg.forEach((d, idx) => {
-      const isComplete = d.figure && /^(Complete|Label)$/i.test(String(d.command_verb || '')) ||
-                         (d.figure && !d.mermaid);
+      const modelSrc = d.model || d.mermaid;
+      const isComplete = !!(d.figure && /^(Complete|Label)$/i.test(String(d.command_verb || ''))) || !!(d.figure && !modelSrc);
       let body = `<div class="bk-qn">${idx + 1}. ${esc(d.question)} <span class="bk-marks"><span class="mk">${d.marks} mark${d.marks === 1 ? '' : 's'}</span></span></div>`;
       if (d.scenario) body += `<p style="font-style:italic;color:var(--bk-muted);">${esc(d.scenario)}</p>`;
       if (state.solutions) {
-        // Model answer: the COMPLETED diagram (mermaid) + mark scheme points.
-        if (d.mermaid) {
+        if (modelSrc) {
           const label = d.figure ? 'Completed diagram' : 'Model answer';
-          body += `<div class="bk-model"><b>${label}</b>${d.diagram_kind ? ` (${esc(d.diagram_kind)})` : ''}<div class="bk-mermaid" data-mermaid="${esc(d.mermaid)}"></div></div>`;
+          body += `<div class="bk-model"><b>${label}</b>${d.diagram_kind ? ` (${esc(d.diagram_kind)})` : ''}${renderDiagramMedia(modelSrc)}</div>`;
         } else {
           body += `<div class="bk-model"><b>Answer</b><ul style="margin:6px 0 0 18px;">${msPoints(d.mark_scheme).map(p => `<li>${esc(p)}</li>`).join('')}</ul></div>`;
         }
@@ -305,7 +304,7 @@
       } else if (d.figure) {
         // Worksheet: show the INCOMPLETE figure + space to complete it.
         body += `<div class="bk-task"><b>Figure ${idx + 1}</b></div>`;
-        body += `<div class="bk-mermaid" data-mermaid="${esc(d.figure)}"></div>`;
+        body += renderDiagramMedia(d.figure);
         body += `<div class="bk-draw-box" style="min-height:420px;"><span>Complete the diagram — add the missing element(s) above in the space below</span></div>`;
       } else {
         // One full page for drawing (draw-from-scratch diagrams).
@@ -314,6 +313,17 @@
       pages.push(pageShell(body, { kicker: 'Diagrams', title: `Diagram practice ${idx + 1}`, label: d.figure ? 'complete' : 'draw', solutions: state.solutions }));
     });
     return pages;
+  }
+
+  // Render a diagram source that is either inline SVG (network pictogram) or
+  // mermaid text (rendered later by renderMermaids).
+  function renderDiagramMedia(src) {
+    if (src == null) return '';
+    const s = String(src).trim();
+    if (s.startsWith('<svg')) {
+      return `<div class="bk-diagram-media">${s}</div>`;
+    }
+    return `<div class="bk-mermaid" data-mermaid="${esc(s)}"></div>`;
   }
 
   // ---- Revision-guide notes with cloze gaps (difficult concepts) ----

@@ -1228,22 +1228,29 @@ function applyBrowseFilters() {
   }
 }
 
-// Render a figure (diagram shown TO the candidate as part of the question)
-// using Mermaid. Returns an element, or null if no figure is present.
+// Render a figure (diagram shown TO the candidate as part of the question).
+// Accepts inline SVG (real network diagrams with pictograms) OR mermaid text.
+// Returns an element, or null if no figure is present.
 function buildQuestionFigure(q) {
   if (!q || !q.figure) return null;
+  const src = String(q.figure).trim();
   const fig = el('div', { class: 'q-figure' });
   fig.appendChild(el('div', { class: 'q-figure-label' }, 'Figure 1'));
   const svgDiv = el('div', { class: 'q-figure-svg' });
-  svgDiv.appendChild(el('p', { class: 'muted', style: 'text-align:center;' }, 'Loading diagram…'));
   fig.appendChild(svgDiv);
-  const mermaidId = 'mermaid-fig-' + (q.id || '') + '-' + (++_mermaidRenderCount);
-  requestAnimationFrame(() => {
-    if (!window.mermaid) { svgDiv.textContent = 'Figure diagram unavailable.'; return; }
-    window.mermaid.render(mermaidId, q.figure)
-      .then(({ svg }) => { svgDiv.innerHTML = svg; })
-      .catch(() => { svgDiv.innerHTML = '<p class="muted" style="text-align:center;">Figure diagram unavailable.</p>'; });
-  });
+
+  if (src.startsWith('<svg')) {
+    svgDiv.innerHTML = src;
+  } else {
+    svgDiv.appendChild(el('p', { class: 'muted', style: 'text-align:center;' }, 'Loading diagram…'));
+    const mermaidId = 'mermaid-fig-' + (q.id || '') + '-' + (++_mermaidRenderCount);
+    requestAnimationFrame(() => {
+      if (!window.mermaid) { svgDiv.textContent = 'Figure diagram unavailable.'; return; }
+      window.mermaid.render(mermaidId, src)
+        .then(({ svg }) => { svgDiv.innerHTML = svg; })
+        .catch(() => { svgDiv.innerHTML = '<p class="muted" style="text-align:center;">Figure diagram unavailable.</p>'; });
+    });
+  }
   return fig;
 }
 
@@ -1327,20 +1334,26 @@ function renderMarkScheme(q, opts) {
   if (m.do_not_accept) wrap.appendChild(el('p', { class: 'donotaccept' }, 'Do not accept: ' + m.do_not_accept));
 
   const isDiagramQ = q.type === 'diagram' || /^(draw|complete|label)$/i.test(String(q.command_verb || ''));
-  if (isDiagramQ && q.mermaid) {
+  const modelSrc = q.model || q.mermaid;
+  if (isDiagramQ && modelSrc) {
     const diagramWrap = el('div', { class: 'ms-diagram' });
     const completedVerb = /^complete$/i.test(String(q.command_verb || '')) ? 'Completed diagram:' : 'Model answer:';
     diagramWrap.appendChild(el('p', { class: 'instruction' }, completedVerb));
     const svgDiv = el('div', { class: 'ms-diagram-svg' });
     diagramWrap.appendChild(svgDiv);
     wrap.appendChild(diagramWrap);
-    const mermaidId = 'mermaid-ms-' + (q.id || '') + '-' + (++_mermaidRenderCount);
-    requestAnimationFrame(() => {
-      if (!window.mermaid) { svgDiv.textContent = 'Diagram unavailable.'; return; }
-      window.mermaid.render(mermaidId, q.mermaid)
-        .then(({ svg }) => { svgDiv.innerHTML = svg; })
-        .catch(() => { svgDiv.style.display = 'none'; });
-    });
+    const src = String(modelSrc).trim();
+    if (src.startsWith('<svg')) {
+      svgDiv.innerHTML = src;
+    } else {
+      const mermaidId = 'mermaid-ms-' + (q.id || '') + '-' + (++_mermaidRenderCount);
+      requestAnimationFrame(() => {
+        if (!window.mermaid) { svgDiv.textContent = 'Diagram unavailable.'; return; }
+        window.mermaid.render(mermaidId, src)
+          .then(({ svg }) => { svgDiv.innerHTML = svg; })
+          .catch(() => { svgDiv.style.display = 'none'; });
+      });
+    }
   }
 
   return wrap;

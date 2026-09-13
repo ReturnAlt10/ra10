@@ -345,6 +345,16 @@ body {
   background: repeating-linear-gradient(0deg, transparent, transparent 27px, #eef1f4 28px);
 }
 /* ============ Model-answer diagrams (mermaid + scaffolds) ============ */
+.bk-diagram-media {
+  margin: 10px 0 4px;
+  background: #fff;
+  border: 1px solid #dce3ea;
+  border-radius: 8px;
+  padding: 12px;
+  overflow-x: auto;
+  text-align: center;
+}
+.bk-diagram-media svg { max-width: 100%; height: auto; }
 .bk-mermaid {
   margin: 10px 0 4px;
   background: #fff;
