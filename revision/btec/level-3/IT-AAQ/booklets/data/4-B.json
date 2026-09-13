@@ -636,22 +636,157 @@
   {
    "kind": "erd",
    "title": "Full ERD with crow's foot notation",
-   "prompt": "Produce a conceptual then logical ERD for the college database. Add attributes, primary keys and foreign keys in the logical version."
+   "prompt": "Produce a conceptual then logical ERD for the college database. Add attributes, primary keys and foreign keys in the logical version.",
+   "model": {
+    "mermaid": "erDiagram\n  LEARNER ||--o{ ENROLMENT : enrols\n  COURSE ||--o{ ENROLMENT : on\n  STAFF ||--o{ COURSE : runs\n  LEARNER { int LearnerID PK }\n  LEARNER { string FirstName }\n  LEARNER { string LastName }\n  LEARNER { string DOB }\n  COURSE { int CourseID PK }\n  COURSE { string CourseName }\n  COURSE { int StaffID FK }\n  STAFF { int StaffID PK }\n  STAFF { string StaffEmail }\n  ENROLMENT { int LearnerID FK }\n  ENROLMENT { int CourseID FK }\n  ENROLMENT { date EnrolDate }"
+   }
   },
   {
    "kind": "table",
    "title": "Data dictionary",
-   "prompt": "Build a data dictionary for the college database: table name, field name, data type, length, validation rule and description for every field."
+   "prompt": "Build a data dictionary for the college database: table name, field name, data type, length, validation rule and description for every field.",
+   "model": {
+    "table": {
+     "head": [
+      "Table.Field",
+      "Data type",
+      "Length",
+      "Validation",
+      "Description"
+     ],
+     "rows": [
+      [
+       "Learner.LearnerID",
+       "Autonumber",
+       "—",
+       "PK, required",
+       "Unique learner id"
+      ],
+      [
+       "Learner.FirstName",
+       "Short Text",
+       "30",
+       "Required, not blank",
+       "Learner first name"
+      ],
+      [
+       "Learner.DOB",
+       "Date/Time",
+       "—",
+       "Between 01/01/1990–today",
+       "Date of birth"
+      ],
+      [
+       "Enrolment.EnrolDate",
+       "Date/Time",
+       "—",
+       "Not in future",
+       "Date enrolled"
+      ],
+      [
+       "Enrolment.CourseID",
+       "Number",
+       "Long",
+       "FK → Course.CourseID",
+       "Course joined"
+      ],
+      [
+       "Staff.StaffEmail",
+       "Short Text",
+       "60",
+       "Must contain @",
+       "Staff email"
+      ]
+     ]
+    }
+   }
   },
   {
    "kind": "form",
    "title": "Data-entry form design",
-   "prompt": "Design the enrolment input form and a report layout. Include combo boxes (pick a Learner/Course), radio buttons, validation and user help."
+   "prompt": "Design the enrolment input form and a report layout. Include combo boxes (pick a Learner/Course), radio buttons, validation and user help.",
+   "model": {
+    "form": [
+     {
+      "field": "Learner",
+      "type": "combo box (drop-down)",
+      "required": true
+     },
+     {
+      "field": "Course",
+      "type": "combo box (drop-down)",
+      "required": true
+     },
+     {
+      "field": "Enrolment date",
+      "type": "date input",
+      "validation": "not in future"
+     },
+     {
+      "field": "Full-time / Part-time",
+      "type": "radio buttons",
+      "required": true
+     },
+     {
+      "field": "Status",
+      "type": "read-only (calculated)",
+      "required": false
+     }
+    ]
+   }
   },
   {
    "kind": "testplan",
    "title": "Database test plan",
-   "prompt": "Write a test plan for the college database covering referential integrity, functionality and usability, using normal, erroneous and extreme data."
+   "prompt": "Write a test plan for the college database covering referential integrity, functionality and usability, using normal, erroneous and extreme data.",
+   "model": {
+    "table": {
+     "head": [
+      "#",
+      "Test",
+      "Data type",
+      "Expected outcome",
+      "Actual"
+     ],
+     "rows": [
+      [
+       "1",
+       "Add enrolment with valid LearnerID",
+       "Normal",
+       "Record saved",
+       ""
+      ],
+      [
+       "2",
+       "Add enrolment with missing Learner",
+       "Erroneous",
+       "Rejected (referential integrity)",
+       ""
+      ],
+      [
+       "3",
+       "Enter DOB 45 years ago",
+       "Extreme",
+       "Rejected (range check)",
+       ""
+      ],
+      [
+       "4",
+       "Deleting a course with enrolments",
+       "Normal",
+       "Prevented / warned",
+       ""
+      ],
+      [
+       "5",
+       "Form navigable by keyboard",
+       "Usability",
+       "All controls reachable",
+       ""
+      ]
+     ]
+    }
+   }
   }
  ],
  "scenario": {

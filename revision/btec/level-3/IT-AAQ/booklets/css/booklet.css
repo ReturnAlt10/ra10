@@ -344,6 +344,45 @@ body {
   text-align: center;
   background: repeating-linear-gradient(0deg, transparent, transparent 27px, #eef1f4 28px);
 }
+/* ============ Model-answer diagrams (mermaid + scaffolds) ============ */
+.bk-mermaid {
+  margin: 10px 0 4px;
+  background: #fff;
+  border: 1px solid #dce3ea;
+  border-radius: 8px;
+  padding: 12px;
+  overflow-x: auto;
+  text-align: center;
+}
+.bk-mermaid svg { max-width: 100%; height: auto; }
+.bk-mermaid.failed { display: none; }
+.bk-wireframe-model { border: 1px solid #dce3ea; border-radius: 8px; overflow: hidden; margin-top: 8px; }
+.bk-wf-row {
+  display: flex;
+  align-items: center;
+  padding: 0 14px;
+  border-bottom: 1px solid #e7ecf1;
+  background: #fafbfc;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--bk-slate);
+}
+.bk-wf-row:nth-child(odd) { background: #f3f6f9; }
+.bk-form-model { border: 1px solid #dce3ea; border-radius: 8px; overflow: hidden; margin-top: 8px; }
+.bk-form-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 8px 14px;
+  border-bottom: 1px solid #e7ecf1;
+  font-size: 13px;
+}
+.bk-form-row:last-child { border-bottom: none; }
+.bk-form-field { font-weight: 700; min-width: 140px; }
+.bk-form-type { color: var(--bk-muted); }
+.bk-form-req { font-size: 10.5px; font-weight: 800; color: #b45309; background: #fff3e0; border-radius: 999px; padding: 1px 7px; }
+.bk-form-val { font-size: 10.5px; font-weight: 700; color: #0f766e; background: #e6f6f3; border-radius: 999px; padding: 1px 7px; }
 
 /* ============ Exam technique / model answer ============ */
 .bk-tip {

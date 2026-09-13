@@ -942,17 +942,77 @@
   {
    "kind": "normalisation",
    "title": "Normalisation worksheet",
-   "prompt": "Using the College Course Enrolment brief, take the UNF enrolment table (with repeating groups) and normalise it to 1NF, 2NF and 3NF. Show tables, fields and keys at each stage."
+   "prompt": "Using the College Course Enrolment brief, take the UNF enrolment table (with repeating groups) and normalise it to 1NF, 2NF and 3NF. Show tables, fields and keys at each stage.",
+   "model": {
+    "table": {
+     "head": [
+      "Form",
+      "Tables (with keys)"
+     ],
+     "rows": [
+      [
+       "UNF",
+       "Enrolment(ID, LearnerName, Course, Subjects[], Staff, StaffEmail)"
+      ],
+      [
+       "1NF",
+       "Learner(LearnerID) — Course(CourseID) — Enrolment(LearnerID, CourseID) — each subject atomic"
+      ],
+      [
+       "2NF",
+       "Remove partial deps: Enrolment(LearnerID, CourseID, EnrolDate) — Subject(SubjectID, SubjectName)"
+      ],
+      [
+       "3NF",
+       "Remove transitive deps: Staff(StaffID, StaffName, StaffEmail) — no non-key depends on non-key"
+      ]
+     ]
+    }
+   }
   },
   {
    "kind": "erd",
    "title": "Entity relationship diagram",
-   "prompt": "Draw an ERD for Learner, Course, Subject, Staff and Enrolment. Label primary keys, foreign keys and cardinality (1:1, 1:M, M:N)."
+   "prompt": "Draw an ERD for Learner, Course, Subject, Staff and Enrolment. Label primary keys, foreign keys and cardinality (1:1, 1:M, M:N).",
+   "model": {
+    "mermaid": "erDiagram\n  LEARNER ||--o{ ENROLMENT : makes\n  COURSE ||--o{ ENROLMENT : has\n  STAFF ||--o{ COURSE : teaches\n  LEARNER }o--o{ SUBJECT : studies\n  LEARNER { int LearnerID PK }\n  COURSE { int CourseID PK }\n  SUBJECT { int SubjectID PK }\n  STAFF { int StaffID PK }\n  ENROLMENT { int LearnerID FK }\n  ENROLMENT { int CourseID FK }"
+   }
   },
   {
    "kind": "table",
    "title": "Relational algebra notes",
-   "prompt": "For each operation (union, intersect, join, select) write what it does and a small worked example using two college relations."
+   "prompt": "For each operation (union, intersect, join, select) write what it does and a small worked example using two college relations.",
+   "model": {
+    "table": {
+     "head": [
+      "Operation",
+      "What it does",
+      "Example"
+     ],
+     "rows": [
+      [
+       "SELECT (σ)",
+       "Filter rows by a condition",
+       "σ Course=IT (Enrolment) → only IT rows"
+      ],
+      [
+       "PROJECT (π)",
+       "Choose specific columns",
+       "π LearnerID,CourseID (Enrolment)"
+      ],
+      [
+       "UNION (∪)",
+       "Combine rows of two relations",
+       "Courses ∪ Subjects → all rows"
+      ],
+      [
+       "JOIN (⋈)",
+       "Combine on a matching key",
+       "Learner ⋈ Enrolment on LearnerID"
+      ]
+     ]
+    }
+   }
   }
  ],
  "scenario": {

@@ -15,6 +15,48 @@
   const $ = (sel) => document.querySelector(sel);
   const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
+  // Resolve an MCQ's correct answer across the different data schemas:
+  //  - Units 1/2: options carry {label:"A"} and the answer is mark_scheme.answer ("B")
+  //  - Units 3/4: options are strings and answer is a 0-based index
+  function mcqAnswer(q) {
+    const ms = q.mark_scheme || {};
+    const raw = q.answer ?? q.correct_index;
+    const ansLetter = (ms.answer != null ? String(ms.answer) : (typeof raw === 'string' ? raw : '')).trim().toUpperCase();
+    let index = -1;
+    if (/^[A-Z]$/.test(ansLetter)) index = ansLetter.charCodeAt(0) - 65;
+    else if (raw != null && !Number.isNaN(Number(raw))) index = Number(raw);
+    return { index, letter: index >= 0 ? 'ABCDEFGH'[index] || '' : '', explanation: q.why || q.explanation || ms.explanation || '' };
+  }
+
+  // Normalise a mark scheme's bullet points across the different source schemas.
+  function msPoints(ms) {
+    if (!ms) return [];
+    if (Array.isArray(ms.points)) return ms.points;
+    if (Array.isArray(ms.indicative_content)) return ms.indicative_content;
+    if (Array.isArray(ms.points_to_award)) return ms.points_to_award;
+    return [];
+  }
+
+  // Render a full mark scheme (covers points-based and level-descriptor schemas).
+  function renderMarkScheme(ms) {
+    if (!ms) return '';
+    let h = '';
+    if (ms.instruction) h += `<div class="bk-tip"><b>Instruction:</b> ${esc(ms.instruction)}</div>`;
+    const pts = msPoints(ms);
+    if (pts.length) h += `<ul style="margin:6px 0 0 18px;">${pts.map(p => `<li>${esc(p)}</li>`).join('')}</ul>`;
+    if (Array.isArray(ms.level_descriptors) && ms.level_descriptors.length) {
+      h += '<table class="bk-table"><thead><tr><th>Level</th><th>Marks</th><th>Descriptor</th></tr></thead><tbody>';
+      ms.level_descriptors.forEach(ld => {
+        if (ld.level === 0 && ld.marks === '0') return;
+        h += `<tr><td><strong>${esc(ld.level || '')}</strong></td><td>${esc(ld.marks || '')}</td><td>${esc(ld.descriptor || '')}</td></tr>`;
+      });
+      h += '</tbody></table>';
+    }
+    if (ms.additional_guidance) h += `<div class="bk-tip"><b>Note:</b> ${esc(ms.additional_guidance)}</div>`;
+    if (ms.do_not_accept) h += `<div style="color:var(--bk-brand);"><b>Do not accept:</b> ${esc(ms.do_not_accept)}</div>`;
+    return h;
+  }
+
   // -------------------------------------------------------------------------
   // Loaders
   // -------------------------------------------------------------------------
@@ -160,14 +202,15 @@
       const chunk = mcq.slice(start, start + per);
       let body = '<p class="bk-lead">Circle the letter of the correct answer.</p>';
       chunk.forEach(q => {
+        const a = mcqAnswer(q);
         body += `<div class="bk-mcq"><div class="bk-q">${esc(q.question || q.q)}</div><ol>`;
         (q.options || q.choices || []).forEach((opt, i) => {
           const text = typeof opt === 'string' ? opt : (opt.text || '');
-          const isAns = state.solutions && (Number(q.answer) === i || Number(q.correct_index) === i || (q.answer === letters[i] && !q.correct_index && !q.answer?.toString().match(/^\d+$/)));
+          const isAns = state.solutions && a.index === i;
           body += `<li><span class="bk-letter">${letters[i]}</span><span>${esc(text)}</span>${isAns ? ' <span style="color:var(--bk-accent);font-weight:800;">★</span>' : ''}</li>`;
         });
         body += '</ol>';
-        if (state.solutions && q.why) body += `<div class="bk-model"><b>Answer:</b> ${esc(letters[Number(q.answer) ?? q.correct_index] || q.answer)} — ${esc(q.why || q.explanation)}</div>`;
+        if (state.solutions && a.letter) body += `<div class="bk-model"><b>Answer:</b> ${a.letter}${a.explanation ? ' — ' + esc(a.explanation) : ''}</div>`;
         body += '</div>';
       });
       const pageNo = Math.floor(start / per) + 1;
@@ -207,7 +250,7 @@
       if (q.scenario) block += `<p style="font-style:italic;color:var(--bk-muted);">Scenario: ${esc(q.scenario)}</p>`;
       if (state.solutions) {
         const ms = q.mark_scheme || {};
-        block += `<div class="bk-model"><b>Mark scheme</b>${ms.instruction ? ` — ${esc(ms.instruction)}` : ''}<ul style="margin:6px 0 0 18px;">${(ms.points || []).map(p => `<li>${esc(p)}</li>`).join('')}</ul>${ms.additional_guidance ? `<div class="bk-tip"><b>Note:</b> ${esc(ms.additional_guidance)}</div>` : ''}${ms.do_not_accept ? `<div style="color:var(--bk-brand);"><b>Do not accept:</b> ${esc(ms.do_not_accept)}</div>` : ''}</div>`;
+        block += `<div class="bk-model"><b>Mark scheme</b>${renderMarkScheme(ms)}</div>`;
       } else {
         const lines = Math.max(2, marks * 2);
         for (let i = 0; i < lines; i++) block += `<div class="bk-answer-lines"></div>`;
@@ -226,7 +269,7 @@
       if (q.scenario) block += `<p style="font-style:italic;color:var(--bk-muted);">Scenario: ${esc(q.scenario)}</p>`;
       if (state.solutions) {
         const ms = q.mark_scheme || {};
-        block += `<div class="bk-model"><b>Mark scheme</b>${ms.instruction ? ` — ${esc(ms.instruction)}` : ''}<ul style="margin:6px 0 0 18px;">${(ms.points || []).map(p => `<li>${esc(p)}</li>`).join('')}</ul></div>`;
+        block += `<div class="bk-model"><b>Mark scheme</b>${renderMarkScheme(ms)}</div>`;
       } else {
         const lineCount = marks <= 6 ? 18 : marks <= 9 ? 26 : 34;
         for (let i = 0; i < lineCount; i++) block += `<div class="bk-answer-lines" style="height:${marks >= 9 ? 34 : 28}px;"></div>`;
@@ -245,10 +288,17 @@
       let body = `<div class="bk-qn">${idx + 1}. ${esc(d.question)} <span class="bk-marks"><span class="mk">${d.marks} mark${d.marks === 1 ? '' : 's'}</span></span></div>`;
       if (d.scenario) body += `<p style="font-style:italic;color:var(--bk-muted);">${esc(d.scenario)}</p>`;
       if (state.solutions) {
-        let inner = `<div class="bk-model"><b>Diagram answer</b><ul style="margin:6px 0 0 18px;">${(d.mark_scheme?.points || []).map(p => `<li>${esc(p)}</li>`).join('')}</ul>`;
-        if (d.mark_scheme?.instruction) inner += `<div class="bk-tip"><b>Note:</b> ${esc(d.mark_scheme.instruction)}</div>`;
-        inner += '</div>';
-        body += inner;
+        // Model answer diagram (mermaid) + mark scheme points.
+        if (d.mermaid) {
+          body += `<div class="bk-model"><b>Model answer</b>${d.diagram_kind ? ` (${esc(d.diagram_kind)})` : ''}<div class="bk-mermaid" data-mermaid="${esc(d.mermaid)}"></div></div>`;
+        } else {
+          body += `<div class="bk-model"><b>Diagram answer</b><ul style="margin:6px 0 0 18px;">${msPoints(d.mark_scheme).map(p => `<li>${esc(p)}</li>`).join('')}</ul></div>`;
+        }
+        const pts = msPoints(d.mark_scheme);
+        if (pts.length) {
+          body += `<div class="bk-model"><b>Mark scheme</b><ul style="margin:6px 0 0 18px;">${pts.map(p => `<li>${esc(p)}</li>`).join('')}</ul></div>`;
+        }
+        if (d.mark_scheme?.instruction) body += `<div class="bk-tip"><b>Note:</b> ${esc(d.mark_scheme.instruction)}</div>`;
       } else {
         // One full page for drawing.
         body += `<div class="bk-draw-box" style="min-height:820px;"><span>Draw and label your diagram here (full page available)</span></div>`;
@@ -304,7 +354,9 @@
         body += `<div class="bk-scenario"><b>Working brief:</b> ${esc(sc.brief)} — ${esc(sc.text)} <span class="bk-scenario-aud">${esc(sc.audience || '')}</span></div>`;
       }
       body += `<p class="bk-task">${esc(d.prompt)}</p>`;
-      if (state.solutions) {
+      if (state.solutions && d.model) {
+        body += `<div class="bk-model"><b>Model answer</b>${d.kind ? ` — <em>${esc(d.kind)}</em>` : ''}${renderDesignModel(d.model)}</div>`;
+      } else if (state.solutions) {
         body += `<div class="bk-model"><b>What to include</b>${d.kind ? ` — <em>${esc(d.kind)}</em>` : ''}<p style="margin-top:6px;">Produce this on the worksheet and keep it with your assignment evidence. Use accurate technical vocabulary and label every element.</p></div>`;
       } else {
         const grid = (d.kind === 'table' || d.kind === 'testplan' || d.kind === 'normalisation' || d.kind === 'data dictionary')
@@ -315,6 +367,36 @@
       pages.push(pageShell(body, { kicker: 'Design workshop', title: d.title, label: d.kind || 'design', solutions: state.solutions }));
     });
     return pages;
+  }
+
+  function renderDesignModel(m) {
+    if (m.mermaid) return `<div class="bk-mermaid" data-mermaid="${esc(m.mermaid)}"></div>`;
+    if (m.wireframe) {
+      let h = '<div class="bk-wireframe-model">';
+      (m.wireframe || []).forEach(b => {
+        h += `<div class="bk-wf-row" style="height:${Math.max(24, b.h * 0.9)}px;"><span>${esc(b.label)}</span></div>`;
+      });
+      return h + '</div>';
+    }
+    if (m.table) {
+      let h = '<table class="bk-table"><thead><tr>';
+      (m.table.head || []).forEach(c => { h += `<th>${esc(c)}</th>`; });
+      h += '</tr></thead><tbody>';
+      (m.table.rows || []).forEach(r => {
+        h += '<tr>';
+        r.forEach(c => { h += `<td>${esc(c)}</td>`; });
+        h += '</tr>';
+      });
+      return h + '</tbody></table>';
+    }
+    if (m.form) {
+      let h = '<div class="bk-form-model">';
+      (m.form || []).forEach(f => {
+        h += `<div class="bk-form-row"><span class="bk-form-field">${esc(f.field)}</span><span class="bk-form-type">${esc(f.type)}</span>${f.required ? '<span class="bk-form-req">required</span>' : ''}${f.validation ? `<span class="bk-form-val">${esc(f.validation)}</span>` : ''}</div>`;
+      });
+      return h + '</div>';
+    }
+    return '';
   }
 
   // ---- How to structure Tasks 1–3 (units 3 & 4, Distinction focus) ----
@@ -392,7 +474,8 @@
     let body = `<div class="bk-qn">${esc(model.question)} <span class="bk-marks"><span class="mk">${model.marks} marks</span></span></div>`;
     if (model.scenario) body += `<p style="font-style:italic;color:var(--bk-muted);">Scenario: ${esc(model.scenario)}</p>`;
     const ms = model.mark_scheme || {};
-    body += `<div class="bk-model"><b>Model answer</b><ol style="margin:8px 0 0 18px;">${(ms.points || []).map(p => `<li>${esc(p)}</li>`).join('')}</ol></div>`;
+    const pts = msPoints(ms);
+    body += `<div class="bk-model"><b>Model answer</b><ol style="margin:8px 0 0 18px;">${pts.map(p => `<li>${esc(p)}</li>`).join('')}</ol></div>`;
     body += `<div class="bk-tip"><b>Why these get marks.</b> Each point earns a mark for being accurate and linked to the scenario. Notice how each point uses a technical term and a reason.</div>`;
     return pageShell(body, { kicker: 'Solutions', title: 'Model answer', label: 'answers', solutions: true });
   }
@@ -424,6 +507,24 @@
     html += examPages().join('');
     paper.innerHTML = html;
     updateHeader();
+    renderMermaids(paper);
+  }
+
+  let _mermaidCount = 0;
+  function renderMermaids(root) {
+    if (!window.mermaid) return;
+    const nodes = Array.from(root.querySelectorAll('.bk-mermaid[data-mermaid]'));
+    nodes.forEach((el) => {
+      const src = el.getAttribute('data-mermaid');
+      if (!src) return;
+      const id = 'bk-mm-' + (++_mermaidCount);
+      try {
+        window.mermaid.render(id, src).then(({ svg }) => {
+          el.innerHTML = svg;
+          el.classList.add('rendered');
+        }).catch(() => { el.classList.add('failed'); });
+      } catch { el.classList.add('failed'); }
+    });
   }
 
   function updateHeader() {

@@ -601,17 +601,118 @@
   {
    "kind": "wireframe",
    "title": "Inner-page wireframe",
-   "prompt": "Wireframe a film information page for the cinema site. Include at least one form field (e.g. request a screening) and one call-to-action."
+   "prompt": "Wireframe a film information page for the cinema site. Include at least one form field (e.g. request a screening) and one call-to-action.",
+   "model": {
+    "wireframe": [
+     {
+      "h": 24,
+      "label": "Header — breadcrumb Home › Films › [Title]"
+     },
+     {
+      "h": 100,
+      "label": "Film title + poster thumbnail + synopsis"
+     },
+     {
+      "h": 80,
+      "label": "Key facts — stars, director, runtime, rating"
+     },
+     {
+      "h": 70,
+      "label": "CTA: \"Book a screening\" button (primary)"
+     },
+     {
+      "h": 60,
+      "label": "Request form — email field + \"Send request\" button"
+     }
+    ]
+   }
   },
   {
    "kind": "mockup",
    "title": "Visual design (mockup) annotation",
-   "prompt": "Annotate a high-fidelity mockup: which colours, fonts and images you will use, and WHY they suit a 17–23 audience. Link every choice back to the cinema brief."
+   "prompt": "Annotate a high-fidelity mockup: which colours, fonts and images you will use, and WHY they suit a 17–23 audience. Link every choice back to the cinema brief.",
+   "model": {
+    "table": {
+     "head": [
+      "Element",
+      "Choice",
+      "Why it suits 17–23s"
+     ],
+     "rows": [
+      [
+       "Colours",
+       "Deep burgundy + cream + gold",
+       "Golden-era Hollywood feel; warm and retro but not dated"
+      ],
+      [
+       "Headings",
+       "Bold display serif (e.g. Playfair Display)",
+       "Echoes vintage cinema signage"
+      ],
+      [
+       "Body text",
+       "Clean sans-serif (e.g. Inter)",
+       "Readable on phone screens at small sizes"
+      ],
+      [
+       "Images",
+       "High-quality stills + posters",
+       "Visual-first — classic films need striking visuals"
+      ],
+      [
+       "Motion",
+       "Subtle hover states + image slider",
+       "Adds energy without hurting accessibility"
+      ]
+     ]
+    }
+   }
   },
   {
    "kind": "table",
    "title": "Asset log",
-   "prompt": "List the assets for the cinema site: name, source, file type and where each is used. Check licences and note any compression needed."
+   "prompt": "List the assets for the cinema site: name, source, file type and where each is used. Check licences and note any compression needed.",
+   "model": {
+    "table": {
+     "head": [
+      "Asset",
+      "Source",
+      "Type",
+      "Used on",
+      "Licence / notes"
+     ],
+     "rows": [
+      [
+       "hero-banister.jpg",
+       "Unsplash (own edit)",
+       "JPG (compressed)",
+       "Home hero",
+       "Royalty-free, credit not required"
+      ],
+      [
+       "casablanca-poster.webp",
+       "Studio press kit",
+       "WebP",
+       "Film page",
+       "Promotional use only"
+      ],
+      [
+       "retro-logo.svg",
+       "Created in Illustrator",
+       "SVG",
+       "Header + footer",
+       "Own work"
+      ],
+      [
+       "trailer-1942.mp4",
+       "Official trailer (embed)",
+       "MP4",
+       "Film page",
+       "Embedded, not re-hosted"
+      ]
+     ]
+    }
+   }
   }
  ],
  "scenario": {

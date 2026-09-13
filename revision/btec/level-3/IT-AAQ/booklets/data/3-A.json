@@ -1168,17 +1168,68 @@
   {
    "kind": "sitemap",
    "title": "Site map for the cinema website",
-   "prompt": "Using the Retro Film Hub brief, sketch a site map showing the three pages and how they link. Note the purpose of each page and the navigation between them."
+   "prompt": "Using the Retro Film Hub brief, sketch a site map showing the three pages and how they link. Note the purpose of each page and the navigation between them.",
+   "model": {
+    "mermaid": "flowchart TD\n  HOME[\"Home\"] --> FILMS[\"Film Collection\"]\n  HOME --> GENRE[\"Explore by Genre / Decade\"]\n  HOME --> BOOK[\"My Booking / Tickets\"]\n  FILMS --> DETAIL[\"Film Detail Page\"]\n  GENRE --> DETAIL\n  DETAIL --> REQUEST[\"Request a Screening (form)\"]\n  HOME --> ABOUT[\"About / Contact\"]"
+   }
   },
   {
    "kind": "wireframe",
    "title": "Home page wireframe",
-   "prompt": "Sketch a low-fidelity wireframe of the home page for the cinema. Show the header, navigation, hero, film sections and footer. Label each element — no colours or final images yet."
+   "prompt": "Sketch a low-fidelity wireframe of the home page for the cinema. Show the header, navigation, hero, film sections and footer. Label each element — no colours or final images yet.",
+   "model": {
+    "wireframe": [
+     {
+      "h": 24,
+      "label": "Header — logo left, nav right (Home · Films · About · Book)"
+     },
+     {
+      "h": 120,
+      "label": "Hero — featured film image + headline \"Late-night classics\" + CTA button \"Book now\""
+     },
+     {
+      "h": 90,
+      "label": "Film cards ×4 (thumbnail + title + genre + \"Read more\")"
+     },
+     {
+      "h": 70,
+      "label": "Explore by genre / decade — accordion or filter"
+     },
+     {
+      "h": 48,
+      "label": "Footer — contact, social links, accessibility statement"
+     }
+    ]
+   }
   },
   {
    "kind": "wireframe",
    "title": "Mobile UI wireframe",
-   "prompt": "Sketch the same home page as a mobile layout. Show how the navigation collapses (hamburger) and how content stacks vertically for phone screens."
+   "prompt": "Sketch the same home page as a mobile layout. Show how the navigation collapses (hamburger) and how content stacks vertically for phone screens.",
+   "model": {
+    "wireframe": [
+     {
+      "h": 26,
+      "label": "Header — logo left, hamburger (☰) right"
+     },
+     {
+      "h": 95,
+      "label": "Hero — single column, headline + tap-to-book button"
+     },
+     {
+      "h": 170,
+      "label": "Film cards stacked vertically (2×2 grid on tablet)"
+     },
+     {
+      "h": 120,
+      "label": "Genre accordion — collapsible sections"
+     },
+     {
+      "h": 46,
+      "label": "Footer — stacked links, larger touch targets"
+     }
+    ]
+   }
   }
  ],
  "scenario": {

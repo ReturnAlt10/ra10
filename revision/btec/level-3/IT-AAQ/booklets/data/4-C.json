@@ -544,12 +544,82 @@
   {
    "kind": "report",
    "title": "Report layout & optimisation",
-   "prompt": "Sketch a report layout grouping enrolments by course with totals and conditional formatting. Then list three ways to optimise a slow query."
+   "prompt": "Sketch a report layout grouping enrolments by course with totals and conditional formatting. Then list three ways to optimise a slow query.",
+   "model": {
+    "table": {
+     "head": [
+      "Area",
+      "What to include"
+     ],
+     "rows": [
+      [
+       "Report header",
+       "Title + date + user"
+      ],
+      [
+       "Group by",
+       "Course — header per course"
+      ],
+      [
+       "Detail",
+       "Learner name, course, enrolment date"
+      ],
+      [
+       "Totals",
+       "Count of enrolments per course (calc field)"
+      ],
+      [
+       "Conditional format",
+       "Highlight courses above capacity in red"
+      ],
+      [
+       "Optimise query",
+       "SELECT only needed columns · index the FK · avoid SELECT *"
+      ]
+     ]
+    }
+   }
   },
   {
    "kind": "testplan",
    "title": "Final test log",
-   "prompt": "Record the final tests on the college database (tables, queries, forms, reports) with outcomes and refinements."
+   "prompt": "Record the final tests on the college database (tables, queries, forms, reports) with outcomes and refinements.",
+   "model": {
+    "table": {
+     "head": [
+      "Object",
+      "Test",
+      "Outcome",
+      "Refinement"
+     ],
+     "rows": [
+      [
+       "Tables",
+       "Keys + integrity enforced",
+       "Pass",
+       "—"
+      ],
+      [
+       "Queries",
+       "Parameter query returns correct rows",
+       "Pass",
+       "Added index"
+      ],
+      [
+       "Forms",
+       "Subform shows enrolments",
+       "Pass",
+       "Added combo box"
+      ],
+      [
+       "Reports",
+       "Group totals correct",
+       "Pass",
+       "Conditional formatting added"
+      ]
+     ]
+    }
+   }
   }
  ],
  "scenario": {
