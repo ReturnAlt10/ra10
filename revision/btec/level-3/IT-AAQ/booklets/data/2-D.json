@@ -1,0 +1,795 @@
+{
+ "unit": 2,
+ "unitTitle": "Cyber Security & Incident Management",
+ "unitName": "IT AAQ Unit 2",
+ "aim": "D",
+ "aimTitle": "Forensic procedures",
+ "aimShort": "Forensic collection of evidence and systematic analysis of a suspect system",
+ "board": "Pearson BTEC Level 3 National Extended Certificate in IT (AAQ)",
+ "specIssue": "Issue 5, November 2025",
+ "assessment": "Externally assessed written exam (set + marked by Pearson).",
+ "topics": [
+  {
+   "code": "D1",
+   "name": "Forensic collection of evidence"
+  },
+  {
+   "code": "D1.1",
+   "name": "Forensics on devices (servers, PCs, mobile): meeting requirements, challenges of live forensics, network forensics, documenting the scene"
+  },
+  {
+   "code": "D2",
+   "name": "Systematic forensic analysis of a suspect system"
+  },
+  {
+   "code": "D2.1",
+   "name": "Requirements for accurate records: snapshots, recording findings, recording alterations, visual evidence, relevance/false positives"
+  },
+  {
+   "code": "D2.2",
+   "name": "Assessing findings: evidence of a crime/incident, external/internal compromise indicators"
+  },
+  {
+   "code": "D2.3",
+   "name": "Writing security reports: report structure, preventing recurrence, improving IT policies and protection measures"
+  }
+ ],
+ "checklist": [
+  {
+   "code": "D1",
+   "name": "Forensic collection of evidence",
+   "type": "group"
+  },
+  {
+   "code": "D1.1",
+   "name": "Forensics on devices (servers, PCs, mobile): meeting requirements, challenges of live forensics, network forensics, documenting the scene",
+   "type": "item"
+  },
+  {
+   "code": "D2",
+   "name": "Systematic forensic analysis of a suspect system",
+   "type": "group"
+  },
+  {
+   "code": "D2.1",
+   "name": "Requirements for accurate records: snapshots, recording findings, recording alterations, visual evidence, relevance/false positives",
+   "type": "item"
+  },
+  {
+   "code": "D2.2",
+   "name": "Assessing findings: evidence of a crime/incident, external/internal compromise indicators",
+   "type": "item"
+  },
+  {
+   "code": "D2.3",
+   "name": "Writing security reports: report structure, preventing recurrence, improving IT policies and protection measures",
+   "type": "item"
+  }
+ ],
+ "examQuestions": [
+  {
+   "id": "D001",
+   "learning_aim": "D",
+   "topic": "D1.1 Forensic collection of evidence",
+   "command_verb": "State",
+   "marks": 2,
+   "ao": "AO1",
+   "question": "State two actions to preserve a seized mobile device for forensic analysis.",
+   "type": "short",
+   "mark_scheme": {
+    "instruction": "Award marks as indicated.",
+    "points": [
+     "Retain the current power state/status if possible (1)",
+     "Isolate the device from the network/communications (1)",
+     "Keep chargers and cables with the device (1)",
+     "Use a Faraday bag/cage or disable wireless communication (1)",
+     "Document the chain of custody (1)"
+    ],
+    "additional_guidance": "Award 1 mark each, up to 2."
+   }
+  },
+  {
+   "id": "D002",
+   "learning_aim": "D",
+   "topic": "D1.1 Forensic collection of evidence",
+   "command_verb": "Explain",
+   "marks": 4,
+   "ao": "AO2",
+   "question": "Explain how an investigator should isolate a device that is suspected of communicating so that evidence is preserved.",
+   "type": "short",
+   "mark_scheme": {
+    "instruction": "Award marks as indicated.",
+    "points": [
+     "Photograph the screen first to capture what is displayed (1)",
+     "Turn off the device or remove the battery/power cable (1)",
+     "Use airplane mode or disable wireless communication (1)",
+     "Place the device in a Faraday bag/cage to block signals (1)"
+    ],
+    "additional_guidance": null
+   }
+  },
+  {
+   "id": "D003",
+   "learning_aim": "D",
+   "topic": "D1.1 Forensic collection of evidence",
+   "command_verb": "Explain",
+   "marks": 4,
+   "ao": "AO2",
+   "question": "Explain the importance of documenting the chain of custody when collecting forensic evidence.",
+   "type": "short",
+   "mark_scheme": {
+    "instruction": "Award marks as indicated.",
+    "points": [
+     "The chain of custody records everyone who handled the evidence, when and what they did (1)",
+     "It proves the evidence has not been altered or tampered with (1)",
+     "An unbroken chain is required for evidence to be admissible in court (1)",
+     "Any gap or inconsistency can make the evidence inadmissible (1)"
+    ],
+    "additional_guidance": null
+   }
+  },
+  {
+   "id": "D004",
+   "learning_aim": "D",
+   "topic": "D1.1 Forensic collection of evidence — live forensics",
+   "command_verb": "Explain",
+   "marks": 4,
+   "ao": "AO2",
+   "question": "Explain two challenges of performing live forensics on a running system.",
+   "type": "short",
+   "mark_scheme": {
+    "instruction": "Award marks as indicated.",
+    "points": [
+     "Data is changing in situ — files and memory are being modified while examined (1)",
+     "Recovering corrupted data and preventing further corruption is difficult (1)",
+     "Capturing data in active memory must be done quickly before it is lost (1)",
+     "Remote data must be captured over the network, and temporary files must not be lost (1)"
+    ],
+    "additional_guidance": null
+   }
+  },
+  {
+   "id": "D005",
+   "learning_aim": "D",
+   "topic": "D1.1 Forensic collection of evidence — network forensics",
+   "command_verb": "Explain",
+   "marks": 4,
+   "ao": "AO2",
+   "question": "Explain the steps required before scanning a network for forensic analysis.",
+   "type": "short",
+   "mark_scheme": {
+    "instruction": "Award marks as indicated.",
+    "points": [
+     "Agree a network-testing forensics methodology with supervisory and investigatory authorities (1)",
+     "Ensure permission is granted to carry out the scan (1)",
+     "Ensure the testing protocol will not disrupt a live system (1)",
+     "Use passive and active analysis tools appropriately (1)"
+    ],
+    "additional_guidance": null
+   }
+  },
+  {
+   "id": "D006",
+   "learning_aim": "D",
+   "topic": "D1.1 Forensic collection of evidence — network forensics",
+   "command_verb": "Describe",
+   "marks": 3,
+   "ao": "AO1",
+   "question": "Describe the network infrastructure that an investigator would review during network forensics.",
+   "type": "short",
+   "mark_scheme": {
+    "instruction": "Award marks as indicated.",
+    "points": [
+     "Firewalls and infrastructure devices — switches, routers, wireless access points (1)",
+     "Client or server logs (1)",
+     "Malware activity and alerts (1)"
+    ],
+    "additional_guidance": "Award 1 mark each, up to 3."
+   }
+  },
+  {
+   "id": "D007",
+   "learning_aim": "D",
+   "topic": "D1.1 Forensic collection of evidence — documenting the scene",
+   "command_verb": "Describe",
+   "marks": 3,
+   "ao": "AO1",
+   "question": "Describe how an investigator documents the scene of an incident.",
+   "type": "short",
+   "mark_scheme": {
+    "instruction": "Award marks as indicated.",
+    "points": [
+     "Prior planning for a range of scenarios (1)",
+     "Securing the scene (1)",
+     "Plans, photos and diagrams of the scene (1)",
+     "Contemporaneous notes (1)",
+     "Witness statements (1)"
+    ],
+    "additional_guidance": "Award 1 mark each, up to 3."
+   }
+  },
+  {
+   "id": "D008",
+   "learning_aim": "D",
+   "topic": "D2.1 Accurate records — snapshots",
+   "command_verb": "Explain",
+   "marks": 4,
+   "ao": "AO2",
+   "question": "Explain why a hash/checksum is generated for a forensic copy of a system.",
+   "type": "short",
+   "mark_scheme": {
+    "instruction": "Award marks as indicated.",
+    "points": [
+     "A hash (checksum) is a digital fingerprint of the data (1)",
+     "It proves the forensic copy is an exact match of the original (1)",
+     "If the hash changes, it shows the data has been altered (1)",
+     "This maintains evidence integrity and admissibility (1)"
+    ],
+    "additional_guidance": null
+   }
+  },
+  {
+   "id": "D009",
+   "learning_aim": "D",
+   "topic": "D2.1 Accurate records — recording findings",
+   "command_verb": "State",
+   "marks": 2,
+   "ao": "AO1",
+   "question": "State two requirements for recording forensic findings reliably.",
+   "type": "short",
+   "mark_scheme": {
+    "instruction": "Award marks as indicated.",
+    "points": [
+     "No action should change the data on the digital device (1)",
+     "Collection must be done by a competent person (1)",
+     "A trail/record of all actions taken must be created (1)",
+     "Documentation of who is responsible for collection/decisions (1)"
+    ],
+    "additional_guidance": "Award 1 mark each, up to 2."
+   }
+  },
+  {
+   "id": "D010",
+   "learning_aim": "D",
+   "topic": "D2.1 Accurate records — recording alterations",
+   "command_verb": "Explain",
+   "marks": 4,
+   "ao": "AO2",
+   "question": "Explain why an investigator should work with copies/images rather than original data.",
+   "type": "short",
+   "mark_scheme": {
+    "instruction": "Award marks as indicated.",
+    "points": [
+     "Working on the original could alter the evidence (1)",
+     "Altered data may be inadmissible in court (1)",
+     "Using copies preserves the original unchanged (1)",
+     "All alterations (intentional or unintentional) must be documented (1)"
+    ],
+    "additional_guidance": null
+   }
+  },
+  {
+   "id": "D011",
+   "learning_aim": "D",
+   "topic": "D2.1 Accurate records — visual evidence",
+   "command_verb": "State",
+   "marks": 2,
+   "ao": "AO1",
+   "question": "State two forms of visual evidence created during forensic analysis.",
+   "type": "short",
+   "mark_scheme": {
+    "instruction": "Award marks as indicated.",
+    "points": [
+     "Photos (1)",
+     "Videos (1)",
+     "Screenshots (1)",
+     "Date-time stamps and metadata (1)"
+    ],
+    "additional_guidance": "Award 1 mark each, up to 2."
+   }
+  },
+  {
+   "id": "D012",
+   "learning_aim": "D",
+   "topic": "D2.1 Accurate records — false positives",
+   "command_verb": "Explain",
+   "marks": 4,
+   "ao": "AO2",
+   "question": "Explain how an investigator ensures findings are relevant and not false positives.",
+   "type": "short",
+   "mark_scheme": {
+    "instruction": "Award marks as indicated.",
+    "points": [
+     "Define file signatures and search criteria carefully (1)",
+     "Know the error rates of the tools and data types used (1)",
+     "Feed back false-positive data to improve the detection method (1)",
+     "Manually review all positives and further investigate filtered positives (1)"
+    ],
+    "additional_guidance": null
+   }
+  },
+  {
+   "id": "D013",
+   "learning_aim": "D",
+   "topic": "D2.2 Assessing findings",
+   "command_verb": "State",
+   "marks": 2,
+   "ao": "AO1",
+   "question": "State two things an investigator assesses findings for.",
+   "type": "short",
+   "mark_scheme": {
+    "instruction": "Award marks as indicated.",
+    "points": [
+     "Evidence of a crime and/or an incident (1)",
+     "A regulatory breach (1)",
+     "Civil liability or contractual breach (1)",
+     "Non-compliance with internal policy (1)",
+     "Negligence or mismanagement (1)"
+    ],
+    "additional_guidance": "Award 1 mark each, up to 2."
+   }
+  },
+  {
+   "id": "D014",
+   "learning_aim": "D",
+   "topic": "D2.2 Assessing findings — compromise indicators",
+   "command_verb": "Describe",
+   "marks": 3,
+   "ao": "AO1",
+   "question": "Describe three indicators that a system has been compromised.",
+   "type": "short",
+   "mark_scheme": {
+    "instruction": "Award marks as indicated.",
+    "points": [
+     "Unusual traffic — inbound, outbound or from unusual geographical regions (1)",
+     "Unusual login attempts or DNS requests (1)",
+     "Increase in file/data reads or requests (1)",
+     "Unusual port usage (1)",
+     "Suspicious changes to or access to files/data (1)"
+    ],
+    "additional_guidance": "Award 1 mark each, up to 3."
+   }
+  },
+  {
+   "id": "D015",
+   "learning_aim": "D",
+   "topic": "D2.3 Writing security reports",
+   "command_verb": "Explain",
+   "marks": 4,
+   "ao": "AO2",
+   "question": "Explain the structure and purpose of a security report written after an incident.",
+   "type": "short",
+   "mark_scheme": {
+    "instruction": "Award marks as indicated.",
+    "points": [
+     "A clear structure — title, contents, introduction, headings, numbered/bulleted points, conclusions, footnotes, citations (1)",
+     "It analyses the incident to identify errors/omissions in procedures (1)",
+     "It identifies errors/delays in detection and remedial actions (1)",
+     "It recommends improvements to IT policies and protection measures (physical, software, hardware, processes, training) (1)"
+    ],
+    "additional_guidance": null
+   }
+  },
+  {
+   "id": "D016",
+   "learning_aim": "D",
+   "topic": "D2.3 Writing security reports",
+   "command_verb": "State",
+   "marks": 2,
+   "ao": "AO1",
+   "question": "State two areas of improvement a security report should recommend.",
+   "type": "short",
+   "mark_scheme": {
+    "instruction": "Award marks as indicated.",
+    "points": [
+     "Improvements to the content of IT policies (1)",
+     "Improvements to physical security measures (1)",
+     "Improvements to software or hardware protection (1)",
+     "Improvements to processes, procedures and training (1)"
+    ],
+    "additional_guidance": "Award 1 mark each, up to 2."
+   }
+  }
+ ],
+ "mcq": [
+  {
+   "id": "MC075",
+   "learning_aim": "D1",
+   "topic": "D1.1 Forensic collection of evidence",
+   "command_verb": "Identify",
+   "marks": 1,
+   "ao": "AO1",
+   "scenario": "",
+   "question": "When a device is seized for forensic analysis, the first priority is to:",
+   "guidance": "(1)",
+   "type": "multiple_choice",
+   "options": [
+    {
+     "label": "A",
+     "text": "Preserve the device so evidence is not altered"
+    },
+    {
+     "label": "B",
+     "text": "Turn it off and forget it"
+    },
+    {
+     "label": "C",
+     "text": "Delete suspicious files"
+    },
+    {
+     "label": "D",
+     "text": "Share it online"
+    }
+   ],
+   "mark_scheme": {
+    "instruction": "Award one mark for the correct option.",
+    "answer": "A",
+    "explanation": "Preserving the device prevents data from being changed, which protects the integrity of evidence.",
+    "points": [
+     "A: Preserve the device so evidence is not altered (1)"
+    ]
+   }
+  },
+  {
+   "id": "MC076",
+   "learning_aim": "D1",
+   "topic": "D1.1 Forensic collection of evidence",
+   "command_verb": "Identify",
+   "marks": 1,
+   "ao": "AO1",
+   "scenario": "",
+   "question": "A 'chain of custody' records:",
+   "guidance": "(1)",
+   "type": "multiple_choice",
+   "options": [
+    {
+     "label": "A",
+     "text": "Who handled the evidence and when"
+    },
+    {
+     "label": "B",
+     "text": "The memory size of the device"
+    },
+    {
+     "label": "C",
+     "text": "The internet speed"
+    },
+    {
+     "label": "D",
+     "text": "The purchase price"
+    }
+   ],
+   "mark_scheme": {
+    "instruction": "Award one mark for the correct option.",
+    "answer": "A",
+    "explanation": "A chain of custody documents the handling history of evidence to maintain its integrity in court.",
+    "points": [
+     "A: Who handled the evidence and when (1)"
+    ]
+   }
+  },
+  {
+   "id": "MC077",
+   "learning_aim": "D2",
+   "topic": "D2.1 Requirements for accurate records",
+   "command_verb": "Identify",
+   "marks": 1,
+   "ao": "AO1",
+   "scenario": "",
+   "question": "Forensic investigators work on a copy of the data rather than the original so that:",
+   "guidance": "(1)",
+   "type": "multiple_choice",
+   "options": [
+    {
+     "label": "A",
+     "text": "The original evidence is not altered"
+    },
+    {
+     "label": "B",
+     "text": "It is cheaper"
+    },
+    {
+     "label": "C",
+     "text": "The copy is faster"
+    },
+    {
+     "label": "D",
+     "text": "There is more storage"
+    }
+   ],
+   "mark_scheme": {
+    "instruction": "Award one mark for the correct option.",
+    "answer": "A",
+    "explanation": "Working on a copy preserves the original as unaltered evidence.",
+    "points": [
+     "A: The original evidence is not altered (1)"
+    ]
+   }
+  },
+  {
+   "id": "MC078",
+   "learning_aim": "D2",
+   "topic": "D2.1 Requirements for accurate records",
+   "command_verb": "Identify",
+   "marks": 1,
+   "ao": "AO1",
+   "scenario": "",
+   "question": "A hash (or checksum) is generated for a forensic copy to:",
+   "guidance": "(1)",
+   "type": "multiple_choice",
+   "options": [
+    {
+     "label": "A",
+     "text": "Verify the copy is identical to the original"
+    },
+    {
+     "label": "B",
+     "text": "Compress the file"
+    },
+    {
+     "label": "C",
+     "text": "Encrypt the evidence"
+    },
+    {
+     "label": "D",
+     "text": "Format the drive"
+    }
+   ],
+   "mark_scheme": {
+    "instruction": "Award one mark for the correct option.",
+    "answer": "A",
+    "explanation": "A hash value confirms data integrity — if it matches, the copy is identical to the original.",
+    "points": [
+     "A: Verify the copy is identical to the original (1)"
+    ]
+   }
+  },
+  {
+   "id": "MC079",
+   "learning_aim": "D2",
+   "topic": "D2.2 Assessing findings",
+   "command_verb": "Identify",
+   "marks": 1,
+   "ao": "AO1",
+   "scenario": "",
+   "question": "An 'indicator of compromise' is:",
+   "guidance": "(1)",
+   "type": "multiple_choice",
+   "options": [
+    {
+     "label": "A",
+     "text": "Evidence that a system may have been breached"
+    },
+    {
+     "label": "B",
+     "text": "A type of malware"
+    },
+    {
+     "label": "C",
+     "text": "A brand of firewall"
+    },
+    {
+     "label": "D",
+     "text": "A backup method"
+    }
+   ],
+   "mark_scheme": {
+    "instruction": "Award one mark for the correct option.",
+    "answer": "A",
+    "explanation": "Indicators of compromise are signs that suggest a system has been accessed or attacked.",
+    "points": [
+     "A: Evidence that a system may have been breached (1)"
+    ]
+   }
+  },
+  {
+   "id": "MC080",
+   "learning_aim": "D2",
+   "topic": "D2.3 Writing security reports",
+   "command_verb": "Identify",
+   "marks": 1,
+   "ao": "AO1",
+   "scenario": "",
+   "question": "A security report should finish by recommending:",
+   "guidance": "(1)",
+   "type": "multiple_choice",
+   "options": [
+    {
+     "label": "A",
+     "text": "How to prevent the incident happening again"
+    },
+    {
+     "label": "B",
+     "text": "New office furniture"
+    },
+    {
+     "label": "C",
+     "text": "A pay rise"
+    },
+    {
+     "label": "D",
+     "text": "More meetings"
+    }
+   ],
+   "mark_scheme": {
+    "instruction": "Award one mark for the correct option.",
+    "answer": "A",
+    "explanation": "A security report identifies improvements to policies and protection measures to prevent recurrence.",
+    "points": [
+     "A: How to prevent the incident happening again (1)"
+    ]
+   }
+  }
+ ],
+ "quiz": [
+  {
+   "id": "Q075",
+   "learning_aim": "D1",
+   "topic": "D1.1 Forensic collection of evidence",
+   "type": "mcq",
+   "question": "When a device is seized for forensic analysis, the first priority is to:",
+   "choices": [
+    "Preserve the device so evidence is not altered",
+    "Turn it off and forget it",
+    "Delete suspicious files",
+    "Share it online"
+   ],
+   "correct_index": 0,
+   "explanation": "Preserving the device prevents data from being changed, which protects the integrity of evidence."
+  },
+  {
+   "id": "Q076",
+   "learning_aim": "D1",
+   "topic": "D1.1 Forensic collection of evidence",
+   "type": "mcq",
+   "question": "A 'chain of custody' records:",
+   "choices": [
+    "Who handled the evidence and when",
+    "The memory size of the device",
+    "The internet speed",
+    "The purchase price"
+   ],
+   "correct_index": 0,
+   "explanation": "A chain of custody documents the handling history of evidence to maintain its integrity in court."
+  },
+  {
+   "id": "Q077",
+   "learning_aim": "D2",
+   "topic": "D2.1 Requirements for accurate records",
+   "type": "mcq",
+   "question": "Forensic investigators work on a copy of the data rather than the original so that:",
+   "choices": [
+    "The original evidence is not altered",
+    "It is cheaper",
+    "The copy is faster",
+    "There is more storage"
+   ],
+   "correct_index": 0,
+   "explanation": "Working on a copy preserves the original as unaltered evidence."
+  },
+  {
+   "id": "Q078",
+   "learning_aim": "D2",
+   "topic": "D2.1 Requirements for accurate records",
+   "type": "mcq",
+   "question": "A hash (or checksum) is generated for a forensic copy to:",
+   "choices": [
+    "Verify the copy is identical to the original",
+    "Compress the file",
+    "Encrypt the evidence",
+    "Format the drive"
+   ],
+   "correct_index": 0,
+   "explanation": "A hash value confirms data integrity — if it matches, the copy is identical to the original."
+  },
+  {
+   "id": "Q079",
+   "learning_aim": "D2",
+   "topic": "D2.2 Assessing findings",
+   "type": "mcq",
+   "question": "An 'indicator of compromise' is:",
+   "choices": [
+    "Evidence that a system may have been breached",
+    "A type of malware",
+    "A brand of firewall",
+    "A backup method"
+   ],
+   "correct_index": 0,
+   "explanation": "Indicators of compromise are signs that suggest a system has been accessed or attacked."
+  },
+  {
+   "id": "Q080",
+   "learning_aim": "D2",
+   "topic": "D2.3 Writing security reports",
+   "type": "mcq",
+   "question": "A security report should finish by recommending:",
+   "choices": [
+    "How to prevent the incident happening again",
+    "New office furniture",
+    "A pay rise",
+    "More meetings"
+   ],
+   "correct_index": 0,
+   "explanation": "A security report identifies improvements to policies and protection measures to prevent recurrence."
+  }
+ ],
+ "flashcards": [
+  {
+   "learning_aim": "D",
+   "topic": "D1.1 Forensic collection of evidence",
+   "front": "How should a seized mobile device be handled?",
+   "back": "Prior planning; retain its current power state; isolate it from the network (airplane mode, disable wireless, Faraday bag); photograph the screen; keep chargers/cables; use appropriate packaging; document the chain of custody; establish legal permissions.",
+   "id": "F022"
+  },
+  {
+   "learning_aim": "D",
+   "topic": "D1.1 Forensic collection of evidence — documenting the scene",
+   "front": "What must be done before and during network scanning for forensics?",
+   "back": "Agree a methodology with supervisory/investigatory authorities; obtain permission; ensure the testing protocol won't disrupt the live system; use passive and active analysis tools; review firewalls, switches, routers, WAPs and logs; document the scene (plans, photos, notes, witness statements).",
+   "id": "F023"
+  },
+  {
+   "learning_aim": "D",
+   "topic": "D2.1 Accurate records",
+   "front": "What are the key requirements for reliable forensic records?",
+   "back": "Retain snapshots (whole disk, files, memory, deleted/temp data) and generate a hash/checksum; take no action that changes data; collect by a competent person; keep a trail of all actions (chain of custody); work on copies, not originals; create visual evidence; avoid false positives.",
+   "id": "F024"
+  },
+  {
+   "learning_aim": "D",
+   "topic": "D2.2/D2.3 Assessing findings & reporting",
+   "front": "What indicators suggest a system has been compromised, and what goes in the report?",
+   "back": "Indicators: unusual traffic (inbound/outbound/regions), unusual logins or DNS requests, increased file reads, unusual port usage, suspicious file changes. Report structure: title, contents, introduction, headings, bullets, conclusions, citations - analysing errors, detection delays, remedial actions and improvements to policies and protection measures.",
+   "id": "F025"
+  }
+ ],
+ "diagrams": [
+  {
+   "id": "DIA009",
+   "learning_aim": "D",
+   "topic": "D1.1 Forensic collection of evidence",
+   "command_verb": "Draw",
+   "marks": 4,
+   "ao": "AO2",
+   "scenario": "A forensic investigator must document the process of collecting evidence.",
+   "question": "Draw a diagram showing the forensic collection process, from seizing a device through imaging, hashing and documenting the chain of custody.",
+   "guidance": "(4)",
+   "type": "diagram",
+   "diagram_kind": "process diagram",
+   "mermaid": "flowchart LR\n  Seize[Seize device] --> Isolate[Isolate from network]\n  Isolate --> Image[Take forensic image]\n  Image --> Hash[Generate hash/checksum]\n  Hash --> Custody[Document chain of custody]",
+   "mark_scheme": {
+    "instruction": "Award up to 4 marks for accurate labelling and correct, logical structure.",
+    "points": [
+     "Correct overall structure and sequence",
+     "Accurate and relevant labels",
+     "Clear, logical presentation"
+    ]
+   }
+  },
+  {
+   "id": "DIA108",
+   "learning_aim": "D",
+   "topic": "D2.3 Writing security reports",
+   "command_verb": "Draw",
+   "marks": 4,
+   "ao": "AO2",
+   "scenario": "An investigator is documenting a security report.",
+   "question": "Draw a structured flowchart showing the general structure of a security report, from title and contents through analysis to conclusions.",
+   "guidance": "(4)",
+   "type": "diagram",
+   "diagram_kind": "process diagram",
+   "mermaid": "flowchart TB\n  Title[Title] --> Contents[Contents]\n  Contents --> Intro[Introduction]\n  Intro --> Body[Headings & analysis]\n  Body --> Concl[Conclusions]",
+   "mark_scheme": {
+    "instruction": "Award up to 4 marks for accurate labelling and correct, logical structure.",
+    "points": [
+     "Correct overall structure and sequence",
+     "Accurate and relevant labels",
+     "Clear, logical presentation"
+    ]
+   }
+  }
+ ],
+ "knowledgeBank": null,
+ "criteria": [],
+ "briefs": []
+}

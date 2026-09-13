@@ -1,0 +1,590 @@
+{
+ "unit": 3,
+ "unitTitle": "Website Development",
+ "unitName": "IT AAQ Unit 3",
+ "aim": "B",
+ "aimTitle": "Explore website design skills and techniques to meet client requirements",
+ "aimShort": "Website design; asset management techniques",
+ "board": "Pearson BTEC Level 3 National Extended Certificate in IT (AAQ)",
+ "specIssue": "Issue 2, March 2025",
+ "assessment": "Internally assessed Pearson Set Assignment (coursework).",
+ "topics": [
+  {
+   "code": "B1",
+   "name": "Website design"
+  },
+  {
+   "code": "B2",
+   "name": "Asset management techniques"
+  }
+ ],
+ "checklist": [
+  {
+   "code": "B1",
+   "name": "Website design",
+   "type": "group"
+  },
+  {
+   "code": "",
+   "name": "Creating wireframes: wireframing tools (sketching on paper, graphic design software like Photoshop/Illustrator, UX design software like Figma/Adobe XD, dedicated wireframing apps like Balsamiq), wireframing techniques (hierarchy of page elements, balance of content, grouping elements, aligning elements, accurate dimensions)",
+   "type": "item"
+  },
+  {
+   "code": "",
+   "name": "Wireframes are low-fidelity layouts: boxes and placeholder text showing where elements go — not final designs. They show structure, not style.",
+   "type": "item"
+  },
+  {
+   "code": "",
+   "name": "Design ideas: visual style (colour palette, branding, typography), visual representations/mockups of the web pages (high-fidelity designs showing colours, images, fonts)",
+   "type": "item"
+  },
+  {
+   "code": "",
+   "name": "Reviewing fitness for purpose: quality (clarity, detail), user experience, meeting client requirements — review your designs, get feedback, and make improvements",
+   "type": "item"
+  },
+  {
+   "code": "B2",
+   "name": "Asset management techniques",
+   "type": "group"
+  },
+  {
+   "code": "",
+   "name": "Creating assets: writing headlines and copy (short sentences, short paragraphs, avoiding jargon, appropriate mode of address for the target audience); visual assets (image editing techniques like cropping and resizing, image manipulation like colour correction and layers, vector graphic drawing like logos)",
+   "type": "item"
+  },
+  {
+   "code": "",
+   "name": "Sourcing assets: written copy (write your own), stock images (e.g. royalty-free sites like Unsplash, Pixabay), icons, video — always check licences and credit sources",
+   "type": "item"
+  },
+  {
+   "code": "",
+   "name": "Preparing assets: trimming video (cut to relevant clips), compression (reduce file size for faster loading), file formats (choose the right format: JPG for photos, PNG for graphics with transparency, GIF/WebP for animations, MP4 for video — keep files under 1MB where possible)",
+   "type": "item"
+  },
+  {
+   "code": "",
+   "name": "Managing assets: logical folder structure (e.g. images/, css/, js/, video/), naming conventions (descriptive, consistent, no spaces — e.g. hero-banner.jpg, not 'IMG 3421.jpg')",
+   "type": "item"
+  },
+  {
+   "code": "",
+   "name": "Asset log: track every asset — name, source (own work or where downloaded from), and where it is used on the site",
+   "type": "item"
+  }
+ ],
+ "examQuestions": [],
+ "mcq": [
+  {
+   "id": "MC16",
+   "aim": "B",
+   "topic": "B1 Wireframes",
+   "q": "What is a wireframe?",
+   "options": [
+    "A low-fidelity layout of a page showing the structure and placement of elements",
+    "The site's HTML code",
+    "The final finished design with colours and images",
+    "A network connection diagram"
+   ],
+   "answer": 0,
+   "why": "Wireframes are simple boxes and placeholders showing where elements go â€” structure first, style later."
+  },
+  {
+   "id": "MC17",
+   "aim": "B",
+   "topic": "B1 Wireframes",
+   "q": "Which is a wireframing tool or technique?",
+   "options": [
+    "UX design software like Figma",
+    "All of these",
+    "Sketching on paper",
+    "Dedicated wireframing apps"
+   ],
+   "answer": 1,
+   "why": "Wireframes can be sketched on paper, drawn in graphic design software, built in UX tools like Figma, or made in dedicated apps."
+  },
+  {
+   "id": "MC18",
+   "aim": "B",
+   "topic": "B2 Assets",
+   "q": "Which file format is usually best for a photographic image on a website?",
+   "options": [
+    "PNG",
+    "JPG",
+    "SVG",
+    "MP4"
+   ],
+   "answer": 1,
+   "why": "JPG compresses photographs well. PNG suits graphics with transparency, SVG suits logos and icons, MP4 is for video."
+  },
+  {
+   "id": "MC19",
+   "aim": "B",
+   "topic": "B2 Assets",
+   "q": "Why compress and resize images before adding them to a website?",
+   "options": [
+    "To prevent copyright claims",
+    "Large files slow the page down, hurting user experience and SEO",
+    "Because the HTML standard requires it",
+    "To make them look better"
+   ],
+   "answer": 1,
+   "why": "Large images increase loading time, which frustrates users (especially on mobile) and hurts search ranking. Compress to the size you actually use."
+  },
+  {
+   "id": "MC20",
+   "aim": "B",
+   "topic": "B2 Assets",
+   "q": "What is good practice for naming asset files?",
+   "options": [
+    "Use the person who downloaded it as the name",
+    "Use consistent, descriptive names with no spaces (e.g. hero-banner.jpg)",
+    "Name everything 'img1', 'img2'",
+    "Use random characters so they cannot clash"
+   ],
+   "answer": 1,
+   "why": "Descriptive names with dashes (hero-banner.jpg) are readable, consistent and don't break URLs â€” unlike 'IMG 3421.JPG'."
+  },
+  {
+   "id": "MC21",
+   "aim": "B",
+   "topic": "B2 Assets",
+   "q": "What is an asset log used for?",
+   "options": [
+    "Managing user accounts",
+    "Tracking each asset â€” its name, source and where it appears on the site",
+    "Counting page views",
+    "Recording test results only"
+   ],
+   "answer": 1,
+   "why": "An asset log shows where each asset came from (original work vs sourced, with credit) and how it's used â€” great evidence for the assignment."
+  },
+  {
+   "id": "MC57",
+   "aim": "B",
+   "topic": "B1 Wireframes",
+   "q": "What is the difference between a wireframe and a mockup?",
+   "options": [
+    "A wireframe is low-fidelity structure; a mockup is a high-fidelity visual design",
+    "A mockup is a wireframe with no text",
+    "They are the same thing",
+    "A wireframe is the final code"
+   ],
+   "answer": 0,
+   "why": "Wireframes show structure and layout in simple boxes; mockups add colour, images and typography to show the final look."
+  },
+  {
+   "id": "MC58",
+   "aim": "B",
+   "topic": "B1 Wireframes",
+   "q": "Why annotate a wireframe?",
+   "options": [
+    "To explain the purpose of each element and how it meets the brief",
+    "To add colour",
+    "To make it look prettier",
+    "To make it load faster"
+   ],
+   "answer": 0,
+   "why": "Annotations show your thinking â€” why each element is there and how it meets client requirements â€” key evidence for the assignment."
+  },
+  {
+   "id": "MC59",
+   "aim": "B",
+   "topic": "B1 Design",
+   "q": "What is a visual style?",
+   "options": [
+    "A wireframe",
+    "The consistent look created by colour palette, typography, imagery and layout",
+    "A type of CSS",
+    "A server setting"
+   ],
+   "answer": 1,
+   "why": "The visual style ties together colour, fonts, images and spacing to create a cohesive, recognisable brand."
+  },
+  {
+   "id": "MC60",
+   "aim": "B",
+   "topic": "B1 Design",
+   "q": "What is a brand identity?",
+   "options": [
+    "A type of hosting",
+    "The visual and verbal elements that represent a company (logo, colours, tone)",
+    "The company's bank details",
+    "A database"
+   ],
+   "answer": 1,
+   "why": "Brand identity includes the logo, colour palette, typography and tone of voice that make a company recognisable."
+  },
+  {
+   "id": "MC61",
+   "aim": "B",
+   "topic": "B1 Review",
+   "q": "What does 'fitness for purpose' mean when reviewing a design?",
+   "options": [
+    "Whether the design meets the client's requirements and works for the audience",
+    "Whether the design is colourful",
+    "Whether the design uses images",
+    "Whether the design is new"
+   ],
+   "answer": 0,
+   "why": "Fitness for purpose asks: does this design actually do what the client and audience need? Review it against the brief."
+  },
+  {
+   "id": "MC62",
+   "aim": "B",
+   "topic": "B2 Assets",
+   "q": "Which file format is best for a logo with a transparent background?",
+   "options": [
+    "PNG",
+    "JPG",
+    "GIF",
+    "MP3"
+   ],
+   "answer": 0,
+   "why": "PNG supports transparency, so a logo can sit on any background. SVG is even better for logos as it scales without losing quality."
+  },
+  {
+   "id": "MC63",
+   "aim": "B",
+   "topic": "B2 Assets",
+   "q": "What is a vector graphic?",
+   "options": [
+    "A photograph",
+    "An image made of paths that scales without losing quality (e.g. SVG)",
+    "A video file",
+    "A bitmap image"
+   ],
+   "answer": 1,
+   "why": "Vector graphics use mathematical paths, so they stay sharp at any size â€” ideal for logos, icons and diagrams."
+  },
+  {
+   "id": "MC64",
+   "aim": "B",
+   "topic": "B2 Assets",
+   "q": "Why trim a video before adding it to a website?",
+   "options": [
+    "To change its colour",
+    "To remove unnecessary footage and reduce file size",
+    "To add subtitles",
+    "To make it loop"
+   ],
+   "answer": 1,
+   "why": "Trimming removes unwanted parts, reducing file size and loading time while keeping the content focused."
+  },
+  {
+   "id": "MC65",
+   "aim": "B",
+   "topic": "B2 Assets",
+   "q": "What is a folder structure for assets?",
+   "options": [
+    "A single folder with everything",
+    "A random collection of files",
+    "An organised set of folders (e.g. images/, css/, js/) to keep files tidy",
+    "A database"
+   ],
+   "answer": 2,
+   "why": "A clear folder structure makes assets easy to find, maintain and reference â€” good practice and good evidence."
+  },
+  {
+   "id": "MC66",
+   "aim": "B",
+   "topic": "B2 Assets",
+   "q": "What is the difference between original and sourced assets?",
+   "options": [
+    "Original assets are free; sourced are paid",
+    "There is no difference",
+    "Original assets you create yourself; sourced assets you obtain from elsewhere (with credit)",
+    "Sourced assets are always better"
+   ],
+   "answer": 2,
+   "why": "Creating your own assets shows skill; sourcing others requires credit and licence checks. Both are valid if managed properly."
+  },
+  {
+   "id": "MC105",
+   "aim": "B",
+   "topic": "B1 Wireframes",
+   "q": "What is a low-fidelity wireframe?",
+   "options": [
+    "A rough, simple sketch showing basic structure without detail",
+    "A finished design with colours",
+    "A code file",
+    "A database"
+   ],
+   "answer": 0,
+   "why": "Low-fidelity wireframes are quick, rough sketches (often on paper) to explore layout before investing in detail."
+  },
+  {
+   "id": "MC106",
+   "aim": "B",
+   "topic": "B1 Design",
+   "q": "What is a high-fidelity mockup?",
+   "options": [
+    "A detailed, polished design showing colours, fonts and images",
+    "A rough sketch",
+    "A wireframe",
+    "A code file"
+   ],
+   "answer": 0,
+   "why": "High-fidelity mockups look close to the final site, showing the visual style in detail before coding."
+  },
+  {
+   "id": "MC107",
+   "aim": "B",
+   "topic": "B1 Review",
+   "q": "What is a design review?",
+   "options": [
+    "A code test",
+    "Assessing the design against the brief and audience to identify improvements",
+    "A server check",
+    "A colour picker"
+   ],
+   "answer": 1,
+   "why": "A design review compares the design to the brief and audience needs, identifying what to improve â€” key for the assignment."
+  },
+  {
+   "id": "MC108",
+   "aim": "B",
+   "topic": "B2 Assets",
+   "q": "What is image compression?",
+   "options": [
+    "Reducing an image's file size while keeping acceptable quality",
+    "Adding a border",
+    "Changing the colour",
+    "Resizing the browser"
+   ],
+   "answer": 0,
+   "why": "Compression reduces file size (faster loading) with minimal quality loss â€” essential for web performance."
+  },
+  {
+   "id": "MC109",
+   "aim": "B",
+   "topic": "B2 Assets",
+   "q": "What is a royalty-free image?",
+   "options": [
+    "A copyrighted image",
+    "An image that is always free with no conditions",
+    "An image you can use without paying ongoing royalties, usually with a licence",
+    "A vector graphic"
+   ],
+   "answer": 2,
+   "why": "Royalty-free means you pay once (or it's free) and can use it, but you should still check the licence terms."
+  }
+ ],
+ "quiz": [
+  {
+   "id": "Q06",
+   "aim": "B",
+   "topic": "Wireframes",
+   "q": "Which order should you follow when planning a new site?",
+   "options": [
+    "Build → test → plan",
+    "Wireframes → requirements → design",
+    "Visual design → code → sitemap",
+    "Requirements → sitemap → wireframes → visual design → build → test"
+   ],
+   "answer": 3,
+   "why": "Understand requirements first, then structure (sitemap), then layout (wireframes), then style (visual design), then build and test."
+  },
+  {
+   "id": "Q07",
+   "aim": "B",
+   "topic": "Assets",
+   "q": "You created a logo in Illustrator. Which format preserves it as a scalable vector?",
+   "options": [
+    "JPG",
+    "MP4",
+    "WAV",
+    "SVG"
+   ],
+   "answer": 3,
+   "why": "SVG is a vector format — it scales to any size without losing quality, perfect for logos and icons."
+  },
+  {
+   "id": "Q12",
+   "aim": "B",
+   "topic": "Design review",
+   "q": "After designing wireframes, why should you review them against the client brief?",
+   "options": [
+    "To make them more complicated",
+    "Because the validator requires it",
+    "To add more colours",
+    "To check they meet client requirements and improve the designs"
+   ],
+   "answer": 3,
+   "why": "The spec requires reviewing fitness for purpose — checking quality, user experience and that the designs meet the client's requirements, then improving."
+  }
+ ],
+ "flashcards": [
+  {
+   "id": "F15",
+   "aim": "B",
+   "front": "Wireframe",
+   "back": "A low-fidelity layout of a page showing structure and element placement (boxes, placeholders) — no colour or final styling. One per page for the assignment."
+  },
+  {
+   "id": "F16",
+   "aim": "B",
+   "front": "Visual design / mockup",
+   "back": "A high-fidelity representation of the page showing colours, images, typography and branding — how the page will actually look."
+  },
+  {
+   "id": "F17",
+   "aim": "B",
+   "front": "House style / visual style",
+   "back": "The consistent look of the site: colour palette, branding, typography choices applied across all pages."
+  },
+  {
+   "id": "F18",
+   "aim": "B",
+   "front": "Asset management",
+   "back": "Creating, sourcing, preparing and organising assets: writing copy, editing images, compressing, naming files consistently and logging sources."
+  },
+  {
+   "id": "F19",
+   "aim": "B",
+   "front": "Asset log",
+   "back": "A table tracking each asset — name, source (original work or where downloaded, with credit) and where it is used on the site."
+  },
+  {
+   "id": "F20",
+   "aim": "B",
+   "front": "Fitness for purpose",
+   "back": "Reviewing designs to check quality (clarity, detail), user experience and whether they meet the client's requirements — then improving them."
+  }
+ ],
+ "diagrams": [],
+ "knowledgeBank": {
+  "code": "B",
+  "title": "Explore website design skills and techniques to meet client requirements",
+  "topics": [
+   {
+    "code": "B1",
+    "name": "Website design",
+    "keyPoints": [
+     "Creating wireframes: wireframing tools (sketching on paper, graphic design software like Photoshop/Illustrator, UX design software like Figma/Adobe XD, dedicated wireframing apps like Balsamiq), wireframing techniques (hierarchy of page elements, balance of content, grouping elements, aligning elements, accurate dimensions)",
+     "Wireframes are low-fidelity layouts: boxes and placeholder text showing where elements go — not final designs. They show structure, not style.",
+     "Design ideas: visual style (colour palette, branding, typography), visual representations/mockups of the web pages (high-fidelity designs showing colours, images, fonts)",
+     "Reviewing fitness for purpose: quality (clarity, detail), user experience, meeting client requirements — review your designs, get feedback, and make improvements"
+    ]
+   },
+   {
+    "code": "B2",
+    "name": "Asset management techniques",
+    "keyPoints": [
+     "Creating assets: writing headlines and copy (short sentences, short paragraphs, avoiding jargon, appropriate mode of address for the target audience); visual assets (image editing techniques like cropping and resizing, image manipulation like colour correction and layers, vector graphic drawing like logos)",
+     "Sourcing assets: written copy (write your own), stock images (e.g. royalty-free sites like Unsplash, Pixabay), icons, video — always check licences and credit sources",
+     "Preparing assets: trimming video (cut to relevant clips), compression (reduce file size for faster loading), file formats (choose the right format: JPG for photos, PNG for graphics with transparency, GIF/WebP for animations, MP4 for video — keep files under 1MB where possible)",
+     "Managing assets: logical folder structure (e.g. images/, css/, js/, video/), naming conventions (descriptive, consistent, no spaces — e.g. hero-banner.jpg, not 'IMG 3421.jpg')",
+     "Asset log: track every asset — name, source (own work or where downloaded from), and where it is used on the site"
+    ]
+   }
+  ]
+ },
+ "criteria": [
+  {
+   "code": "task2",
+   "aim": "B",
+   "title": "Designs and assets for the client brief",
+   "criteria": [
+    {
+     "code": "B.P3",
+     "level": "Pass",
+     "text": "Produce adequate wireframes and visual designs for a specific purpose."
+    },
+    {
+     "code": "B.P4",
+     "level": "Pass",
+     "text": "Use asset management techniques to develop assets that partially meet the client's requirements."
+    },
+    {
+     "code": "B.M3",
+     "level": "Merit",
+     "text": "Produce mostly effective wireframes and visual designs for a specific purpose."
+    },
+    {
+     "code": "B.M4",
+     "level": "Merit",
+     "text": "Use asset management techniques to develop assets that meet most of the client's requirements."
+    },
+    {
+     "code": "B.D2",
+     "level": "Distinction",
+     "text": "Make effective use of website design skills to develop designs and assets that comprehensively meet the client's requirements."
+    }
+   ]
+  }
+ ],
+ "briefs": [
+  {
+   "id": "retro-film",
+   "title": "Retro Film Hub",
+   "audience": "17- to 23-year-olds",
+   "scenario": "Midnight Picture Show is a small independent cinema that hosts late-night screenings of classic films. They want a website that introduces young adults (17-23) to the films, stars and cultural moments of Hollywood's golden era.",
+   "purpose": "To introduce a young adult audience to classic films and encourage them to visit the cinema.",
+   "targetAudience": "17- to 23-year-olds — many will have seen remakes or references to old films but never the originals.",
+   "mustIncludes": [
+    "Three pages",
+    "Drop-down menus",
+    "Information about classic films (plot summaries, iconic stars, behind-the-scenes facts)",
+    "An accordion (e.g. 'Explore by genre or decade' with expandable sections)",
+    "External links to relevant websites (e.g. film archive sites, the cinema's ticketing site)",
+    "A form to request a specific film be screened",
+    "Modal images (click a film poster to view it enlarged)",
+    "Video content with controls (trailers — always embed from official sources)",
+    "Search functionality to find films",
+    "Accessibility features (alt text, high contrast, keyboard navigation, readable fonts)"
+   ],
+   "typographyHint": "Try a bold display font for headings to echo old cinema signage, with a clean sans-serif for body text.",
+   "colourHint": "Golden-era Hollywood palette: deep burgundy, cream, gold and black — or teal and burnt orange for a vintage poster feel.",
+   "assignmentStyle": "original"
+  },
+  {
+   "id": "charity",
+   "title": "Community Action Charity",
+   "audience": "13- to 19-year-olds",
+   "scenario": "A non-profit organisation wants a website to create awareness of its activities and encourage teenagers to join as volunteers. It needs to show positive representations of its members and its work in the community.",
+   "purpose": "To create awareness of the charity and encourage a teenage audience to get involved.",
+   "targetAudience": "13- to 19-year-olds (students, young volunteers)",
+   "mustIncludes": [
+    "Three pages",
+    "Information about the organisation (aims, activities, achievements)",
+    "Information about an upcoming event, including a map of the location",
+    "One member's personal story (with permission)",
+    "An email link to contact the organisation",
+    "A form to join the organisation",
+    "An interactive image slider with captions",
+    "A resource section with filter functionality (text, infographics and video resources)",
+    "Positive representations of the organisation and its members",
+    "Accessibility features"
+   ],
+   "typographyHint": "Friendly, rounded fonts for headings; clean body text. Avoid jargon — write for teenagers.",
+   "colourHint": "Bright, energetic palette (e.g. teal, coral, sunshine yellow) with strong contrast for accessibility.",
+   "assignmentStyle": "original"
+  },
+  {
+   "id": "sports-club",
+   "title": "Local Sports & Fitness Club",
+   "audience": "16- to 25-year-olds",
+   "scenario": "A local multi-sport club wants a website that promotes its teams and fitness sessions. The club wants to grow its membership among 16-25 year olds and needs the site to showcase facilities, timetables and how to join.",
+   "purpose": "To promote the club's teams, sessions and facilities and convert visitors into members.",
+   "targetAudience": "16- to 25-year-olds, including students new to the area",
+   "mustIncludes": [
+    "Three pages",
+    "Drop-down menus (sports, sessions, membership)",
+    "Information about sports and fitness sessions",
+    "An accordion (e.g. frequently asked questions)",
+    "External links (e.g. national sport governing bodies)",
+    "A form to register interest in joining",
+    "Modal images (photo gallery with lightbox)",
+    "Video content with controls (session highlights)",
+    "Search functionality",
+    "Accessibility features"
+   ],
+   "typographyHint": "Strong condensed headings for a sporty energy; keep body text highly readable.",
+   "colourHint": "High-contrast sport palette (e.g. royal blue and volt/highlighter accents) — check contrast ratios pass WCAG.",
+   "assignmentStyle": "original"
+  }
+ ]
+}

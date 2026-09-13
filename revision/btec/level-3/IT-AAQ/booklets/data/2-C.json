@@ -1,0 +1,1093 @@
+{
+ "unit": 2,
+ "unitTitle": "Cyber Security & Incident Management",
+ "unitName": "IT AAQ Unit 2",
+ "aim": "C",
+ "aimTitle": "Cyber security documentation",
+ "aimShort": "Internal IT security policies: cyber security, audits, backups, data protection, disaster recovery",
+ "board": "Pearson BTEC Level 3 National Extended Certificate in IT (AAQ)",
+ "specIssue": "Issue 5, November 2025",
+ "assessment": "Externally assessed written exam (set + marked by Pearson).",
+ "topics": [
+  {
+   "code": "C1",
+   "name": "Internal policies"
+  },
+  {
+   "code": "C1.1",
+   "name": "General IT policies: cyber security policy (Plan-Do-Check-Act, ISO 27001), internet/email use, security/password procedures, staff responsibilities, staff IT security training"
+  },
+  {
+   "code": "C1.2",
+   "name": "Security audits and their application to check compliance against policies"
+  },
+  {
+   "code": "C1.3",
+   "name": "Backup policy: selection, methods, type, frequency, storage, responsibility, testing, legal compliance, recovery"
+  },
+  {
+   "code": "C1.4",
+   "name": "Data protection policy: Data Protection Officer, principles, rights/privacy, training, system security, external contractors, accountability"
+  },
+  {
+   "code": "C1.5",
+   "name": "Cyber security incident response policy: contacts, procedures/flowcharts, communications"
+  },
+  {
+   "code": "C1.6",
+   "name": "Disaster recovery policy: purpose/scope, triage, roles/responsibilities, contact lists, monitoring/reporting"
+  },
+  {
+   "code": "C1.7",
+   "name": "External services policy: cloud, hardware, software, support"
+  }
+ ],
+ "checklist": [
+  {
+   "code": "C1",
+   "name": "Internal policies",
+   "type": "group"
+  },
+  {
+   "code": "C1.1",
+   "name": "General IT policies: cyber security policy (Plan-Do-Check-Act, ISO 27001), internet/email use, security/password procedures, staff responsibilities, staff IT security training",
+   "type": "item"
+  },
+  {
+   "code": "C1.2",
+   "name": "Security audits and their application to check compliance against policies",
+   "type": "item"
+  },
+  {
+   "code": "C1.3",
+   "name": "Backup policy: selection, methods, type, frequency, storage, responsibility, testing, legal compliance, recovery",
+   "type": "item"
+  },
+  {
+   "code": "C1.4",
+   "name": "Data protection policy: Data Protection Officer, principles, rights/privacy, training, system security, external contractors, accountability",
+   "type": "item"
+  },
+  {
+   "code": "C1.5",
+   "name": "Cyber security incident response policy: contacts, procedures/flowcharts, communications",
+   "type": "item"
+  },
+  {
+   "code": "C1.6",
+   "name": "Disaster recovery policy: purpose/scope, triage, roles/responsibilities, contact lists, monitoring/reporting",
+   "type": "item"
+  },
+  {
+   "code": "C1.7",
+   "name": "External services policy: cloud, hardware, software, support",
+   "type": "item"
+  }
+ ],
+ "examQuestions": [
+  {
+   "id": "C001",
+   "learning_aim": "C",
+   "topic": "C1.1 Internal policies — cyber security policy",
+   "command_verb": "State",
+   "marks": 2,
+   "ao": "AO1",
+   "question": "State the four stages of the Plan-Do-Check-Act loop used in a cyber security policy.",
+   "type": "short",
+   "mark_scheme": {
+    "instruction": "Award marks as indicated.",
+    "points": [
+     "Plan (1)",
+     "Do (1)",
+     "Check (1)",
+     "Act (1)"
+    ],
+    "additional_guidance": "Accept in correct order or any order."
+   }
+  },
+  {
+   "id": "C002",
+   "learning_aim": "C",
+   "topic": "C1.1 Internal policies — cyber security policy",
+   "command_verb": "Explain",
+   "marks": 4,
+   "ao": "AO2",
+   "question": "Explain why a cyber security policy should follow a Plan-Do-Check-Act approach rather than being a one-off document.",
+   "type": "short",
+   "mark_scheme": {
+    "instruction": "Award marks as indicated.",
+    "points": [
+     "Plan: identify security objectives and risks before acting (1)",
+     "Do: implement the security controls (1)",
+     "Check: monitor and audit whether the controls are working (1)",
+     "Act: take corrective action and continually improve — security is an ongoing process, not a single event (1)"
+    ],
+    "additional_guidance": null
+   }
+  },
+  {
+   "id": "C003",
+   "learning_aim": "C",
+   "topic": "C1.1 Internal policies — internet/email use",
+   "command_verb": "State",
+   "marks": 2,
+   "ao": "AO1",
+   "question": "State two rules that are typically included in an internet and email use policy.",
+   "type": "short",
+   "mark_scheme": {
+    "instruction": "Award marks as indicated.",
+    "points": [
+     "Not sending confidential information by email (1)",
+     "Not visiting potentially dangerous websites (1)",
+     "Not downloading executable files (1)",
+     "Not uploading/downloading copyrighted material (1)",
+     "Not viewing inappropriate, offensive or illegal material (1)"
+    ],
+    "additional_guidance": "Award 1 mark each, up to 2."
+   }
+  },
+  {
+   "id": "C004",
+   "learning_aim": "C",
+   "topic": "C1.1 Internal policies — password procedures",
+   "command_verb": "Describe",
+   "marks": 3,
+   "ao": "AO1",
+   "question": "Describe three measures that an organisation's password policy should specify.",
+   "type": "short",
+   "mark_scheme": {
+    "instruction": "Award marks as indicated.",
+    "points": [
+     "Minimum and maximum length for passwords (1)",
+     "Character restrictions (e.g. require upper/lower case, numbers, symbols) (1)",
+     "A deny list of common/weak passwords (1)",
+     "Lockout after failed login attempts or inactivity (1)",
+     "Preventing password sharing or multiple logons with the same password (1)"
+    ],
+    "additional_guidance": "Award 1 mark each, up to 3."
+   }
+  },
+  {
+   "id": "C005",
+   "learning_aim": "C",
+   "topic": "C1.1 Internal policies — staff responsibilities",
+   "command_verb": "Explain",
+   "marks": 4,
+   "ao": "AO2",
+   "question": "Explain the responsibilities staff have in maintaining cyber security.",
+   "type": "short",
+   "mark_scheme": {
+    "instruction": "Award marks as indicated.",
+    "points": [
+     "Complete required security training (1)",
+     "Follow security procedures and report problems (1)",
+     "Respond to and report suspicious activity (1)",
+     "Maintain security in their own workspace and behaviour (1)"
+    ],
+    "additional_guidance": null
+   }
+  },
+  {
+   "id": "C006",
+   "learning_aim": "C",
+   "topic": "C1.1 Internal policies — staff training",
+   "command_verb": "Explain",
+   "marks": 4,
+   "ao": "AO2",
+   "question": "Explain how an organisation should deliver effective staff IT security training.",
+   "type": "short",
+   "mark_scheme": {
+    "instruction": "Award marks as indicated.",
+    "points": [
+     "Leadership must ensure training is funded and resourced (1)",
+     "Training should be flexible so everyone can take part (1)",
+     "Use a range of resources and learning styles (1)",
+     "Track progress and use incentives rather than punishment (1)",
+     "Provide ongoing training to reinforce and cover new threats (1)"
+    ],
+    "additional_guidance": null
+   }
+  },
+  {
+   "id": "C007",
+   "learning_aim": "C",
+   "topic": "C1.2 Security audits",
+   "command_verb": "Explain",
+   "marks": 4,
+   "ao": "AO2",
+   "question": "Explain the purpose of a security audit and how it is carried out.",
+   "type": "short",
+   "mark_scheme": {
+    "instruction": "Award marks as indicated.",
+    "points": [
+     "An audit checks compliance against internal policies and external regulations/laws (1)",
+     "It starts by defining audit goals and scope (1)",
+     "It identifies problems, gaps and weaknesses (1)",
+     "It reports results and any required improvements/changes (1)"
+    ],
+    "additional_guidance": null
+   }
+  },
+  {
+   "id": "C008",
+   "learning_aim": "C",
+   "topic": "C1.3 Backup policy",
+   "command_verb": "State",
+   "marks": 2,
+   "ao": "AO1",
+   "question": "State two factors that a backup policy should specify.",
+   "type": "short",
+   "mark_scheme": {
+    "instruction": "Award marks as indicated.",
+    "points": [
+     "Selection of data to be backed up (1)",
+     "Backup methods and type (full/differential/incremental) (1)",
+     "Frequency/scheduling (1)",
+     "Storage strategy (onsite/offsite/cloud) (1)",
+     "A backup testing strategy (1)",
+     "Legal/regulatory compliance (1)"
+    ],
+    "additional_guidance": "Award 1 mark each, up to 2."
+   }
+  },
+  {
+   "id": "C009",
+   "learning_aim": "C",
+   "topic": "C1.3 Backup policy",
+   "command_verb": "Explain",
+   "marks": 4,
+   "ao": "AO2",
+   "question": "Explain why a backup policy must include a testing strategy.",
+   "type": "short",
+   "mark_scheme": {
+    "instruction": "Award marks as indicated.",
+    "points": [
+     "Backups may be corrupted or incomplete without the organisation knowing (1)",
+     "Testing confirms that data can actually be restored when needed (1)",
+     "A backup that cannot be restored is worthless in a disaster (1)",
+     "Regular testing identifies problems before a real incident occurs (1)"
+    ],
+    "additional_guidance": null
+   }
+  },
+  {
+   "id": "C010",
+   "learning_aim": "C",
+   "topic": "C1.4 Data protection policy",
+   "command_verb": "Explain",
+   "marks": 4,
+   "ao": "AO2",
+   "question": "Explain the role of the Data Protection Officer (DPO) and the content of a data protection policy.",
+   "type": "short",
+   "mark_scheme": {
+    "instruction": "Award marks as indicated.",
+    "points": [
+     "The DPO oversees compliance with data protection principles and protects rights/privacy (1)",
+     "The policy ensures staff training and system security procedures are in place (1)",
+     "It applies to external contractors, consultants and vendors too (1)",
+     "It sets out the responsibility and accountability of staff and the organisation (1)"
+    ],
+    "additional_guidance": null
+   }
+  },
+  {
+   "id": "C011",
+   "learning_aim": "C",
+   "topic": "C1.5 Incident response policy",
+   "command_verb": "State",
+   "marks": 2,
+   "ao": "AO1",
+   "question": "State two contacts that must be listed in a cyber security incident response policy.",
+   "type": "short",
+   "mark_scheme": {
+    "instruction": "Award marks as indicated.",
+    "points": [
+     "Incident response team leader/provider (1)",
+     "IT team leader/provider (1)",
+     "Senior management (1)",
+     "Legal (1)",
+     "Public relations (1)",
+     "Human resources (1)",
+     "Insurance (1)"
+    ],
+    "additional_guidance": "Award 1 mark each, up to 2."
+   }
+  },
+  {
+   "id": "C012",
+   "learning_aim": "C",
+   "topic": "C1.5 Incident response policy",
+   "command_verb": "Explain",
+   "marks": 4,
+   "ao": "AO2",
+   "question": "Explain what procedures and flowcharts an incident response policy should include.",
+   "type": "short",
+   "mark_scheme": {
+    "instruction": "Award marks as indicated.",
+    "points": [
+     "Triage — initial decisions, escalation (1)",
+     "Main response — analysis, containment, mitigation, recovery (1)",
+     "Reviewing, reporting and closing the incident (1)",
+     "Communications — a contact telephone plus alternative/backup and a conference call facility (1)"
+    ],
+    "additional_guidance": null
+   }
+  },
+  {
+   "id": "C013",
+   "learning_aim": "C",
+   "topic": "C1.6 Disaster recovery policy",
+   "command_verb": "Explain",
+   "marks": 4,
+   "ao": "AO2",
+   "question": "Explain the purpose of a disaster recovery policy and its key content.",
+   "type": "short",
+   "mark_scheme": {
+    "instruction": "Award marks as indicated.",
+    "points": [
+     "Its purpose is to define how the organisation recovers from a major disruption (1)",
+     "It includes triage — a list of possible events, their severity and the appropriate response (1)",
+     "It sets out roles, responsibilities and contact lists (1)",
+     "It includes monitoring and reporting requirements (1)"
+    ],
+    "additional_guidance": null
+   }
+  },
+  {
+   "id": "C014",
+   "learning_aim": "C",
+   "topic": "C1.6 Disaster recovery policy",
+   "command_verb": "State",
+   "marks": 2,
+   "ao": "AO1",
+   "question": "State the three plans that disaster recovery triage may activate.",
+   "type": "short",
+   "mark_scheme": {
+    "instruction": "Award marks as indicated.",
+    "points": [
+     "Activate the cyber security incident response plan (1)",
+     "Activate the business continuity plan (1)",
+     "Activate the disaster recovery plan (1)"
+    ],
+    "additional_guidance": null
+   }
+  },
+  {
+   "id": "C015",
+   "learning_aim": "C",
+   "topic": "C1.7 External services policy",
+   "command_verb": "Explain",
+   "marks": 4,
+   "ao": "AO2",
+   "question": "Explain what an external services policy should cover when an organisation uses cloud services.",
+   "type": "short",
+   "mark_scheme": {
+    "instruction": "Award marks as indicated.",
+    "points": [
+     "Cloud resources requiring protection (1)",
+     "Acceptable use of the cloud service (1)",
+     "Data protection requirements (1)",
+     "Authorisation and access control; management, responsibility and accountability (1)",
+     "Incident response procedures and regulatory compliance (1)"
+    ],
+    "additional_guidance": null
+   }
+  },
+  {
+   "id": "C016",
+   "learning_aim": "C",
+   "topic": "C1.7 External services policy",
+   "command_verb": "Describe",
+   "marks": 3,
+   "ao": "AO1",
+   "question": "Describe how an external services policy applies to software and hardware vendors.",
+   "type": "short",
+   "mark_scheme": {
+    "instruction": "Award marks as indicated.",
+    "points": [
+     "Sources, vendors, contractors and other third parties must be approved (1)",
+     "Service agreements and licensing must be defined (1)",
+     "Maintenance, support and escalation procedures must be set out (1)"
+    ],
+    "additional_guidance": "Award 1 mark each, up to 3."
+   }
+  }
+ ],
+ "mcq": [
+  {
+   "id": "MC065",
+   "learning_aim": "C1",
+   "topic": "C1.1 General IT policies",
+   "command_verb": "Identify",
+   "marks": 1,
+   "ao": "AO1",
+   "scenario": "",
+   "question": "A cyber security policy guides staff on:",
+   "guidance": "(1)",
+   "type": "multiple_choice",
+   "options": [
+    {
+     "label": "A",
+     "text": "How to use IT systems safely and securely"
+    },
+    {
+     "label": "B",
+     "text": "How to decorate the office"
+    },
+    {
+     "label": "C",
+     "text": "Which coffee to buy"
+    },
+    {
+     "label": "D",
+     "text": "Salary levels"
+    }
+   ],
+   "mark_scheme": {
+    "instruction": "Award one mark for the correct option.",
+    "answer": "A",
+    "explanation": "A cyber security policy sets out the rules and responsibilities for secure use of IT.",
+    "points": [
+     "A: How to use IT systems safely and securely (1)"
+    ]
+   }
+  },
+  {
+   "id": "MC066",
+   "learning_aim": "C1",
+   "topic": "C1.1 General IT policies",
+   "command_verb": "Identify",
+   "marks": 1,
+   "ao": "AO1",
+   "scenario": "",
+   "question": "The Plan-Do-Check-Act cycle is used in a cyber security policy to:",
+   "guidance": "(1)",
+   "type": "multiple_choice",
+   "options": [
+    {
+     "label": "A",
+     "text": "Continually improve security"
+    },
+    {
+     "label": "B",
+     "text": "Reduce electricity bills"
+    },
+    {
+     "label": "C",
+     "text": "Speed up the internet"
+    },
+    {
+     "label": "D",
+     "text": "Hire staff"
+    }
+   ],
+   "mark_scheme": {
+    "instruction": "Award one mark for the correct option.",
+    "answer": "A",
+    "explanation": "Plan-Do-Check-Act supports continual improvement of the security policy.",
+    "points": [
+     "A: Continually improve security (1)"
+    ]
+   }
+  },
+  {
+   "id": "MC067",
+   "learning_aim": "C1",
+   "topic": "C1.1 General IT policies",
+   "command_verb": "Identify",
+   "marks": 1,
+   "ao": "AO1",
+   "scenario": "",
+   "question": "An Acceptable Use Policy (AUP) is most commonly used to set rules for:",
+   "guidance": "(1)",
+   "type": "multiple_choice",
+   "options": [
+    {
+     "label": "A",
+     "text": "How staff may use the internet and email"
+    },
+    {
+     "label": "B",
+     "text": "Which firewall to buy"
+    },
+    {
+     "label": "C",
+     "text": "How to format a disk"
+    },
+    {
+     "label": "D",
+     "text": "Network cable colours"
+    }
+   ],
+   "mark_scheme": {
+    "instruction": "Award one mark for the correct option.",
+    "answer": "A",
+    "explanation": "An AUP defines acceptable staff use of the internet, email and IT resources.",
+    "points": [
+     "A: How staff may use the internet and email (1)"
+    ]
+   }
+  },
+  {
+   "id": "MC068",
+   "learning_aim": "C1",
+   "topic": "C1.2 Security audits",
+   "command_verb": "Identify",
+   "marks": 1,
+   "ao": "AO1",
+   "scenario": "",
+   "question": "A security audit is performed to:",
+   "guidance": "(1)",
+   "type": "multiple_choice",
+   "options": [
+    {
+     "label": "A",
+     "text": "Check that systems and staff comply with policies"
+    },
+    {
+     "label": "B",
+     "text": "Sell more software"
+    },
+    {
+     "label": "C",
+     "text": "Train customers"
+    },
+    {
+     "label": "D",
+     "text": "Test the fire alarm"
+    }
+   ],
+   "mark_scheme": {
+    "instruction": "Award one mark for the correct option.",
+    "answer": "A",
+    "explanation": "A security audit checks compliance against the organisation's policies and identifies gaps.",
+    "points": [
+     "A: Check that systems and staff comply with policies (1)"
+    ]
+   }
+  },
+  {
+   "id": "MC069",
+   "learning_aim": "C1",
+   "topic": "C1.3 Backup policy",
+   "command_verb": "Identify",
+   "marks": 1,
+   "ao": "AO1",
+   "scenario": "",
+   "question": "As well as how often backups are taken, a backup policy should also specify:",
+   "guidance": "(1)",
+   "type": "multiple_choice",
+   "options": [
+    {
+     "label": "A",
+     "text": "Where backups are stored and how they are tested"
+    },
+    {
+     "label": "B",
+     "text": "The brand of keyboard"
+    },
+    {
+     "label": "C",
+     "text": "Staff lunch times"
+    },
+    {
+     "label": "D",
+     "text": "The office layout"
+    }
+   ],
+   "mark_scheme": {
+    "instruction": "Award one mark for the correct option.",
+    "answer": "A",
+    "explanation": "A good backup policy covers method, frequency, storage location, responsibility and testing.",
+    "points": [
+     "A: Where backups are stored and how they are tested (1)"
+    ]
+   }
+  },
+  {
+   "id": "MC070",
+   "learning_aim": "C1",
+   "topic": "C1.3 Backup policy",
+   "command_verb": "Identify",
+   "marks": 1,
+   "ao": "AO1",
+   "scenario": "",
+   "question": "Why should a backup policy include testing restores?",
+   "guidance": "(1)",
+   "type": "multiple_choice",
+   "options": [
+    {
+     "label": "A",
+     "text": "To make sure backups can actually be recovered"
+    },
+    {
+     "label": "B",
+     "text": "To waste time"
+    },
+    {
+     "label": "C",
+     "text": "To satisfy the fire service"
+    },
+    {
+     "label": "D",
+     "text": "To clear disk space"
+    }
+   ],
+   "mark_scheme": {
+    "instruction": "Award one mark for the correct option.",
+    "answer": "A",
+    "explanation": "Testing restores confirms that backups are usable and data can be recovered when needed.",
+    "points": [
+     "A: To make sure backups can actually be recovered (1)"
+    ]
+   }
+  },
+  {
+   "id": "MC071",
+   "learning_aim": "C1",
+   "topic": "C1.4 Data protection policy",
+   "command_verb": "Identify",
+   "marks": 1,
+   "ao": "AO1",
+   "scenario": "",
+   "question": "The role responsible for overseeing data protection compliance is usually the:",
+   "guidance": "(1)",
+   "type": "multiple_choice",
+   "options": [
+    {
+     "label": "A",
+     "text": "Data Protection Officer (DPO)"
+    },
+    {
+     "label": "B",
+     "text": "Receptionist"
+    },
+    {
+     "label": "C",
+     "text": "Network technician"
+    },
+    {
+     "label": "D",
+     "text": "Catering manager"
+    }
+   ],
+   "mark_scheme": {
+    "instruction": "Award one mark for the correct option.",
+    "answer": "A",
+    "explanation": "The Data Protection Officer oversees GDPR compliance and data protection practices.",
+    "points": [
+     "A: Data Protection Officer (DPO) (1)"
+    ]
+   }
+  },
+  {
+   "id": "MC072",
+   "learning_aim": "C1",
+   "topic": "C1.5 Incident response policy",
+   "command_verb": "Identify",
+   "marks": 1,
+   "ao": "AO1",
+   "scenario": "",
+   "question": "An incident response policy should clearly identify:",
+   "guidance": "(1)",
+   "type": "multiple_choice",
+   "options": [
+    {
+     "label": "A",
+     "text": "Who to contact and the steps to follow during a breach"
+    },
+    {
+     "label": "B",
+     "text": "Which desk to sit at"
+    },
+    {
+     "label": "C",
+     "text": "The shop opening hours"
+    },
+    {
+     "label": "D",
+     "text": "The brand of server"
+    }
+   ],
+   "mark_scheme": {
+    "instruction": "Award one mark for the correct option.",
+    "answer": "A",
+    "explanation": "It sets out contacts, procedures and communications to follow when an incident occurs.",
+    "points": [
+     "A: Who to contact and the steps to follow during a breach (1)"
+    ]
+   }
+  },
+  {
+   "id": "MC073",
+   "learning_aim": "C1",
+   "topic": "C1.6 Disaster recovery policy",
+   "command_verb": "Identify",
+   "marks": 1,
+   "ao": "AO1",
+   "scenario": "",
+   "question": "A disaster recovery policy describes:",
+   "guidance": "(1)",
+   "type": "multiple_choice",
+   "options": [
+    {
+     "label": "A",
+     "text": "How to recover IT systems after a major disruption"
+    },
+    {
+     "label": "B",
+     "text": "How to decorate the office"
+    },
+    {
+     "label": "C",
+     "text": "The office party"
+    },
+    {
+     "label": "D",
+     "text": "The marketing plan"
+    }
+   ],
+   "mark_scheme": {
+    "instruction": "Award one mark for the correct option.",
+    "answer": "A",
+    "explanation": "Disaster recovery focuses on restoring systems and operations after a major incident.",
+    "points": [
+     "A: How to recover IT systems after a major disruption (1)"
+    ]
+   }
+  },
+  {
+   "id": "MC074",
+   "learning_aim": "C1",
+   "topic": "C1.7 External services policy",
+   "command_verb": "Identify",
+   "marks": 1,
+   "ao": "AO1",
+   "scenario": "",
+   "question": "An external services policy for cloud services should cover:",
+   "guidance": "(1)",
+   "type": "multiple_choice",
+   "options": [
+    {
+     "label": "A",
+     "text": "Security, data ownership and support agreements"
+    },
+    {
+     "label": "B",
+     "text": "The colour of the servers"
+    },
+    {
+     "label": "C",
+     "text": "Staff birthdays"
+    },
+    {
+     "label": "D",
+     "text": "Printing costs"
+    }
+   ],
+   "mark_scheme": {
+    "instruction": "Award one mark for the correct option.",
+    "answer": "A",
+    "explanation": "It sets out the security and contractual expectations for services provided by third parties.",
+    "points": [
+     "A: Security, data ownership and support agreements (1)"
+    ]
+   }
+  }
+ ],
+ "quiz": [
+  {
+   "id": "Q065",
+   "learning_aim": "C1",
+   "topic": "C1.1 General IT policies",
+   "type": "mcq",
+   "question": "A cyber security policy guides staff on:",
+   "choices": [
+    "How to use IT systems safely and securely",
+    "How to decorate the office",
+    "Which coffee to buy",
+    "Salary levels"
+   ],
+   "correct_index": 0,
+   "explanation": "A cyber security policy sets out the rules and responsibilities for secure use of IT."
+  },
+  {
+   "id": "Q066",
+   "learning_aim": "C1",
+   "topic": "C1.1 General IT policies",
+   "type": "mcq",
+   "question": "The Plan-Do-Check-Act cycle is used in a cyber security policy to:",
+   "choices": [
+    "Continually improve security",
+    "Reduce electricity bills",
+    "Speed up the internet",
+    "Hire staff"
+   ],
+   "correct_index": 0,
+   "explanation": "Plan-Do-Check-Act supports continual improvement of the security policy."
+  },
+  {
+   "id": "Q067",
+   "learning_aim": "C1",
+   "topic": "C1.1 General IT policies",
+   "type": "mcq",
+   "question": "An Acceptable Use Policy (AUP) is most commonly used to set rules for:",
+   "choices": [
+    "How staff may use the internet and email",
+    "Which firewall to buy",
+    "How to format a disk",
+    "Network cable colours"
+   ],
+   "correct_index": 0,
+   "explanation": "An AUP defines acceptable staff use of the internet, email and IT resources."
+  },
+  {
+   "id": "Q068",
+   "learning_aim": "C1",
+   "topic": "C1.2 Security audits",
+   "type": "mcq",
+   "question": "A security audit is performed to:",
+   "choices": [
+    "Check that systems and staff comply with policies",
+    "Sell more software",
+    "Train customers",
+    "Test the fire alarm"
+   ],
+   "correct_index": 0,
+   "explanation": "A security audit checks compliance against the organisation's policies and identifies gaps."
+  },
+  {
+   "id": "Q069",
+   "learning_aim": "C1",
+   "topic": "C1.3 Backup policy",
+   "type": "mcq",
+   "question": "As well as how often backups are taken, a backup policy should also specify:",
+   "choices": [
+    "Where backups are stored and how they are tested",
+    "The brand of keyboard",
+    "Staff lunch times",
+    "The office layout"
+   ],
+   "correct_index": 0,
+   "explanation": "A good backup policy covers method, frequency, storage location, responsibility and testing."
+  },
+  {
+   "id": "Q070",
+   "learning_aim": "C1",
+   "topic": "C1.3 Backup policy",
+   "type": "mcq",
+   "question": "Why should a backup policy include testing restores?",
+   "choices": [
+    "To make sure backups can actually be recovered",
+    "To waste time",
+    "To satisfy the fire service",
+    "To clear disk space"
+   ],
+   "correct_index": 0,
+   "explanation": "Testing restores confirms that backups are usable and data can be recovered when needed."
+  },
+  {
+   "id": "Q071",
+   "learning_aim": "C1",
+   "topic": "C1.4 Data protection policy",
+   "type": "mcq",
+   "question": "The role responsible for overseeing data protection compliance is usually the:",
+   "choices": [
+    "Data Protection Officer (DPO)",
+    "Receptionist",
+    "Network technician",
+    "Catering manager"
+   ],
+   "correct_index": 0,
+   "explanation": "The Data Protection Officer oversees GDPR compliance and data protection practices."
+  },
+  {
+   "id": "Q072",
+   "learning_aim": "C1",
+   "topic": "C1.5 Incident response policy",
+   "type": "mcq",
+   "question": "An incident response policy should clearly identify:",
+   "choices": [
+    "Who to contact and the steps to follow during a breach",
+    "Which desk to sit at",
+    "The shop opening hours",
+    "The brand of server"
+   ],
+   "correct_index": 0,
+   "explanation": "It sets out contacts, procedures and communications to follow when an incident occurs."
+  },
+  {
+   "id": "Q073",
+   "learning_aim": "C1",
+   "topic": "C1.6 Disaster recovery policy",
+   "type": "mcq",
+   "question": "A disaster recovery policy describes:",
+   "choices": [
+    "How to recover IT systems after a major disruption",
+    "How to decorate the office",
+    "The office party",
+    "The marketing plan"
+   ],
+   "correct_index": 0,
+   "explanation": "Disaster recovery focuses on restoring systems and operations after a major incident."
+  },
+  {
+   "id": "Q074",
+   "learning_aim": "C1",
+   "topic": "C1.7 External services policy",
+   "type": "mcq",
+   "question": "An external services policy for cloud services should cover:",
+   "choices": [
+    "Security, data ownership and support agreements",
+    "The colour of the servers",
+    "Staff birthdays",
+    "Printing costs"
+   ],
+   "correct_index": 0,
+   "explanation": "It sets out the security and contractual expectations for services provided by third parties."
+  }
+ ],
+ "flashcards": [
+  {
+   "learning_aim": "C",
+   "topic": "C1.1 Internal policies — cyber security policy",
+   "front": "What is the Plan-Do-Check-Act loop?",
+   "back": "A continual-improvement cycle derived from ISO 27001: Plan (identify objectives/risks), Do (implement controls), Check (monitor and audit), Act (correct and improve). Underpins an effective, evolving cyber security policy.",
+   "id": "F018"
+  },
+  {
+   "learning_aim": "C",
+   "topic": "C1.1 Internal policies",
+   "front": "What general IT policies form part of cyber security documentation?",
+   "back": "1. Internet and email use policy\n2. Security and password procedures\n3. Staff responsibilities\n4. Staff IT security training\n5. Security audits\n6. Backup policy\n7. Data protection policy\n8. Incident response policy\n9. Disaster recovery policy\n10. External services policy",
+   "id": "F019"
+  },
+  {
+   "learning_aim": "C",
+   "topic": "C1.3 Backup policy",
+   "front": "What should a backup policy specify?",
+   "back": "Selection of data, backup methods and type (full/differential/incremental), frequency/scheduling, storage strategy (onsite/offsite/cloud), responsibility and accountability, a testing strategy, legal compliance, and recovery procedures.",
+   "id": "F020"
+  },
+  {
+   "learning_aim": "C",
+   "topic": "C1.5/C1.6 Incident & disaster recovery policies",
+   "front": "What is the difference between an incident response policy and a disaster recovery policy?",
+   "back": "Incident response policy = how to react to a security incident (contacts, triage, analysis/containment/mitigation/recovery procedures, communications). Disaster recovery policy = how to recover from major disruption (purpose/scope, triage, roles, contact lists, monitoring/reporting).",
+   "id": "F021"
+  }
+ ],
+ "diagrams": [
+  {
+   "id": "DIA010",
+   "learning_aim": "C",
+   "topic": "C1.3 Containment",
+   "command_verb": "Draw",
+   "marks": 4,
+   "ao": "AO2",
+   "scenario": "A network is infected and the team must isolate the affected area.",
+   "question": "Draw a diagram showing how network segmentation/containment isolates an infected server from the rest of the network at the switch/firewall.",
+   "guidance": "(4)",
+   "type": "diagram",
+   "diagram_kind": "network diagram",
+   "mermaid": "flowchart LR\n  Infected[Infected Server] -->|\"isolated\"| Switch\n  Others[Other Devices] --> Switch\n  Switch --> FW{Quarantine}\n  FW -->|\"blocked\"| Rest[Rest of Network]",
+   "mark_scheme": {
+    "instruction": "Award up to 4 marks. Award marks for accurate labelling and clear, correct structure.",
+    "points": [
+     "Correct overall structure and relationships",
+     "Accurate and relevant labels",
+     "Clear, logical presentation"
+    ]
+   }
+  },
+  {
+   "id": "DIA011",
+   "learning_aim": "C",
+   "topic": "C1.7 Business continuity",
+   "command_verb": "Draw",
+   "marks": 4,
+   "ao": "AO2",
+   "scenario": "A business must illustrate its disaster recovery failover.",
+   "question": "Draw a diagram showing primary and secondary (failover) sites with replication between them.",
+   "guidance": "(4)",
+   "type": "diagram",
+   "diagram_kind": "system diagram",
+   "mermaid": "flowchart LR\n  Primary[Primary Site] <-->|\"real-time replication\"| Secondary[Secondary Site / DR Site]\n  Users[Users] --> Primary\n  Users -. \"on failure\" .-> Secondary",
+   "mark_scheme": {
+    "instruction": "Award up to 4 marks. Award marks for accurate labelling and clear, correct structure.",
+    "points": [
+     "Correct overall structure and relationships",
+     "Accurate and relevant labels",
+     "Clear, logical presentation"
+    ]
+   }
+  },
+  {
+   "id": "DIA012",
+   "learning_aim": "C",
+   "topic": "C1.1 Internal policies",
+   "command_verb": "Draw",
+   "marks": 4,
+   "ao": "AO2",
+   "scenario": "An organisation is documenting its cyber security policy.",
+   "question": "Draw a diagram showing the Plan-Do-Check-Act loop of an ongoing cyber security policy.",
+   "guidance": "(4)",
+   "type": "diagram",
+   "diagram_kind": "process diagram",
+   "mermaid": "flowchart LR\n  Plan[Plan] --> Do[Do]\n  Do --> Check[Check]\n  Check --> Act[Act]\n  Act --> Plan",
+   "mark_scheme": {
+    "instruction": "Award up to 4 marks for accurate labelling and correct, logical structure.",
+    "points": [
+     "Correct overall structure and sequence",
+     "Accurate and relevant labels",
+     "Clear, logical presentation"
+    ]
+   }
+  },
+  {
+   "id": "DIA103",
+   "learning_aim": "C",
+   "topic": "C1.1 Internal policies",
+   "command_verb": "Identify",
+   "marks": 1,
+   "ao": "AO1",
+   "scenario": "A diagram shows the Plan-Do-Check-Act loop of a cyber security policy.",
+   "question": "The Figure shows the Plan-Do-Check-Act loop. Identify the stage that immediately follows 'Do'.",
+   "guidance": "(1)",
+   "type": "diagram",
+   "diagram_kind": "process diagram",
+   "mermaid": "flowchart LR\n  Plan[Plan] --> Do[Do] --> Check[Check] --> Act[Act] --> Plan",
+   "mark_scheme": {
+    "instruction": "Award one mark for the correct stage.",
+    "points": [
+     "Check (1)"
+    ]
+   }
+  },
+  {
+   "id": "DIA109",
+   "learning_aim": "C",
+   "topic": "C1.3 Containment",
+   "command_verb": "Draw",
+   "marks": 4,
+   "ao": "AO2",
+   "scenario": "A response team must illustrate how a compromised host is isolated.",
+   "question": "Draw a diagram showing a rogue host being quarantined by a switch so it cannot reach the rest of the network.",
+   "guidance": "(4)",
+   "type": "diagram",
+   "diagram_kind": "network diagram",
+   "mermaid": "flowchart LR\n  Host[Compromised Host] -->|\"port shutdown\"| Switch[Managed Switch]\n  Switch -->|\"allowed\"| Legit[Legitimate Devices]\n  Switch -->|\"blocked\"| Rest[Rest of Network]",
+   "mark_scheme": {
+    "instruction": "Award up to 4 marks. Award marks for accurate labelling and clear, correct structure.",
+    "points": [
+     "Correct overall structure and relationships",
+     "Accurate and relevant labels",
+     "Clear, logical presentation"
+    ]
+   }
+  }
+ ],
+ "knowledgeBank": null,
+ "criteria": [],
+ "briefs": []
+}

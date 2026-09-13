@@ -1,0 +1,625 @@
+{
+ "unit": 4,
+ "unitTitle": "Relational Database Development",
+ "unitName": "IT AAQ Unit 4",
+ "aim": "B",
+ "aimTitle": "Design a relational database solution to meet client requirements",
+ "aimShort": "Entity relationship modelling, design documentation, user interface design, and reviewing/refining designs",
+ "board": "Pearson BTEC Level 3 National Extended Certificate in IT (AAQ)",
+ "specIssue": "Issue 5, November 2025",
+ "assessment": "Internally assessed Pearson Set Assignment (coursework).",
+ "topics": [
+  {
+   "code": "B1",
+   "name": "Relational database design techniques and processes"
+  },
+  {
+   "code": "B2",
+   "name": "Design documentation"
+  },
+  {
+   "code": "B3",
+   "name": "Reviewing and refining designs"
+  }
+ ],
+ "checklist": [
+  {
+   "code": "B1",
+   "name": "Relational database design techniques and processes",
+   "type": "group"
+  },
+  {
+   "code": "",
+   "name": "Entity relationship modelling: conceptual (entities + relationships) and logical (adds attributes, primary keys, foreign keys)",
+   "type": "item"
+  },
+  {
+   "code": "",
+   "name": "Relational algebra: one-to-many, one-to-one, many-to-many; AND, OR, NOT, >, <, >=, <=",
+   "type": "item"
+  },
+  {
+   "code": "",
+   "name": "DBMS selection: desktop software vs cloud/server-based",
+   "type": "item"
+  },
+  {
+   "code": "",
+   "name": "Database implementation techniques: prototyping and testing",
+   "type": "item"
+  },
+  {
+   "code": "",
+   "name": "Quality and appropriateness: correctness of data, relationships, data integrity, normalisation",
+   "type": "item"
+  },
+  {
+   "code": "B2",
+   "name": "Design documentation",
+   "type": "group"
+  },
+  {
+   "code": "",
+   "name": "Design specification: requirements of the brief, audience, purpose, client requirements, legal and ethical considerations (data protection legislation, regulations)",
+   "type": "item"
+  },
+  {
+   "code": "",
+   "name": "Data structure designs: data dictionaries (tables, field names, lengths, data types, validation), ERDs, normalisation",
+   "type": "item"
+  },
+  {
+   "code": "",
+   "name": "User interface design: forms (input/calculated/disabled fields, combo boxes, list boxes, radio buttons, validation, masks, user help), menus (action buttons), queries (multiple criteria, form values, wildcards, action queries, calculated queries), reports (calculated fields, grouping, layouts, conditional formatting), task automation (macros, scripts, code)",
+   "type": "item"
+  },
+  {
+   "code": "",
+   "name": "Test plans: data integrity, functionality, accessibility, usability",
+   "type": "item"
+  },
+  {
+   "code": "",
+   "name": "Implementation plan and timescales",
+   "type": "item"
+  },
+  {
+   "code": "B3",
+   "name": "Reviewing and refining designs",
+   "type": "group"
+  },
+  {
+   "code": "",
+   "name": "Self-review against: suitability for user, meeting client requirements, legal and ethical constraints, consistency",
+   "type": "item"
+  },
+  {
+   "code": "",
+   "name": "Refine ideas and solutions, then update the design specification documentation",
+   "type": "item"
+  }
+ ],
+ "examQuestions": [],
+ "mcq": [
+  {
+   "id": "MC16",
+   "aim": "B",
+   "topic": "B1 ERD",
+   "q": "A diagram showing entities, their attributes and relationships is an…",
+   "options": [
+    "ERD (Entity Relationship Diagram)",
+    "Flowchart",
+    "Sitemap",
+    "Wireframe"
+   ],
+   "answer": 0,
+   "why": "An Entity Relationship Diagram models the database design — the core of Aim B."
+  },
+  {
+   "id": "MC17",
+   "aim": "B",
+   "topic": "B1 ERD",
+   "q": "Which ERD shows only entity names and relationships (no attributes)?",
+   "options": [
+    "Conceptual model",
+    "Logical model",
+    "Physical model",
+    "Data dictionary"
+   ],
+   "answer": 0,
+   "why": "Conceptual model = high-level (entities + relationships only). Logical adds attributes and keys."
+  },
+  {
+   "id": "MC18",
+   "aim": "B",
+   "topic": "B2 Documentation",
+   "q": "A table listing field names, data types, lengths and validation rules is a…",
+   "options": [
+    "Data dictionary",
+    "Query",
+    "Report",
+    "Macro"
+   ],
+   "answer": 0,
+   "why": "The data dictionary documents every field's name, type, length and validation — required design evidence."
+  },
+  {
+   "id": "MC19",
+   "aim": "B",
+   "topic": "B2 Forms",
+   "q": "Which form control lets users pick one value from a drop-down list (often linked to another table)?",
+   "options": [
+    "Combo box",
+    "Text box",
+    "Label",
+    "Check box"
+   ],
+   "answer": 0,
+   "why": "A combo box restricts input to valid choices, often drawing from a lookup table."
+  },
+  {
+   "id": "MC20",
+   "aim": "B",
+   "topic": "B2 Validation",
+   "q": "An input mask is used to…",
+   "options": [
+    "Format and control data entry",
+    "Delete records",
+    "Sort data",
+    "Back up the database"
+   ],
+   "answer": 0,
+   "why": "An input mask guides consistent entry (e.g. postcode LL00 0LL) — part of good form design."
+  },
+  {
+   "id": "MC21",
+   "aim": "B",
+   "topic": "B2 Queries",
+   "q": "A query that prompts the user for a value each time it runs is a…",
+   "options": [
+    "Parameter query",
+    "Action query",
+    "Select query",
+    "Crosstab query"
+   ],
+   "answer": 0,
+   "why": "Parameter query asks for input (e.g. 'Enter customer ID') so one query serves many uses."
+  },
+  {
+   "id": "MC22",
+   "aim": "B",
+   "topic": "B2 Queries",
+   "q": "Which query type changes data rather than just displaying it?",
+   "options": [
+    "Action query",
+    "Select query",
+    "Parameter query",
+    "Report"
+   ],
+   "answer": 0,
+   "why": "Action queries (append/update/delete/make-table) modify data. Use with care."
+  },
+  {
+   "id": "MC23",
+   "aim": "B",
+   "topic": "B2 Reports",
+   "q": "A formatted, printable output that can group records and show totals is a…",
+   "options": [
+    "Report",
+    "Query",
+    "Form",
+    "Table"
+   ],
+   "answer": 0,
+   "why": "Reports present data for printing — with grouping, calculated fields and conditional formatting."
+  },
+  {
+   "id": "MC24",
+   "aim": "B",
+   "topic": "B3 Review",
+   "q": "Reviewing a design against 'meeting client requirements, legal/ethical constraints, consistency' is…",
+   "options": [
+    "Self-review",
+    "Normalisation",
+    "Testing",
+    "Compilation"
+   ],
+   "answer": 0,
+   "why": "Self-review checks suitability for user, requirements, legal/ethical constraints and consistency — then refines."
+  },
+  {
+   "id": "MC33",
+   "aim": "B",
+   "topic": "B2 Queries",
+   "q": "The wildcard * in a query criterion means…",
+   "options": [
+    "Match any number of characters",
+    "Match exactly one character",
+    "End of query",
+    "Comment"
+   ],
+   "answer": 0,
+   "why": "* matches any characters (Access); ? matches a single character. 'S*' finds all values starting with S."
+  },
+  {
+   "id": "MC34",
+   "aim": "B",
+   "topic": "B2 Forms",
+   "q": "A main form containing a related 'child' form showing matching records is…",
+   "options": [
+    "A form + subform",
+    "A report",
+    "A macro",
+    "A query"
+   ],
+   "answer": 0,
+   "why": "Form + subform shows one parent record with its many children (e.g. an order and its order lines)."
+  },
+  {
+   "id": "MC39",
+   "aim": "B",
+   "topic": "B1 Techniques",
+   "q": "Building and testing a basic working version early, then refining it, is…",
+   "options": [
+    "Prototyping",
+    "Normalisation",
+    "Backup",
+    "Compilation"
+   ],
+   "answer": 0,
+   "why": "Prototyping builds an early version to test ideas and get feedback before full development."
+  },
+  {
+   "id": "MC40",
+   "aim": "B",
+   "topic": "B2 Documentation",
+   "q": "Which document lists the steps and timescales for building the database?",
+   "options": [
+    "Implementation plan",
+    "Data dictionary",
+    "ERD",
+    "Report"
+   ],
+   "answer": 0,
+   "why": "The implementation plan sets out steps and timescales — part of the design specification."
+  }
+ ],
+ "quiz": [
+  {
+   "id": "Q09",
+   "aim": "B",
+   "topic": "ERD",
+   "q": "You're designing a school database. In the conceptual ERD you would include…",
+   "options": [
+    "Entity names and relationships only",
+    "Full data types",
+    "Validation rules",
+    "SQL code"
+   ],
+   "answer": 0,
+   "why": "Conceptual = high level (entities + relationships). Attributes, keys and types come in the logical model."
+  },
+  {
+   "id": "Q10",
+   "aim": "B",
+   "topic": "Documentation",
+   "q": "Which field would you make the primary key in an Employee table?",
+   "options": [
+    "EmployeeID (AutoNumber)",
+    "Surname",
+    "JobTitle",
+    "DateOfBirth"
+   ],
+   "answer": 0,
+   "why": "EmployeeID is unique and stable. Names, job titles and DOB can repeat or change."
+  },
+  {
+   "id": "Q11",
+   "aim": "B",
+   "topic": "Forms",
+   "q": "On an order form, you want the user to pick a customer from a drop-down rather than type an ID. Use a…",
+   "options": [
+    "Combo box",
+    "Plain text box",
+    "Label",
+    "Command button"
+   ],
+   "answer": 0,
+   "why": "A combo box lets users select from a list (often a lookup table), preventing invalid IDs."
+  },
+  {
+   "id": "Q12",
+   "aim": "B",
+   "topic": "Queries",
+   "q": "You need a query that asks 'Enter minimum price:' and then lists products above it. This is a…",
+   "options": [
+    "Parameter query",
+    "Action query",
+    "Crosstab query",
+    "Report"
+   ],
+   "answer": 0,
+   "why": "A parameter query prompts for a value at run time, making it reusable."
+  },
+  {
+   "id": "Q17",
+   "aim": "B",
+   "topic": "Validation",
+   "q": "You set a rule that a Product's Price must be > 0. This is a…",
+   "options": [
+    "Validation rule",
+    "Input mask",
+    "Data type",
+    "Index"
+   ],
+   "answer": 0,
+   "why": "A validation rule enforces a condition (Price > 0) before data is accepted."
+  }
+ ],
+ "flashcards": [
+  {
+   "id": "F31",
+   "aim": "B",
+   "front": "Entity Relationship Diagram (ERD)",
+   "back": "A diagram showing entities (tables), their attributes and the relationships between them. Core design documentation for Aim B."
+  },
+  {
+   "id": "F32",
+   "aim": "B",
+   "front": "Conceptual model",
+   "back": "High-level ERD showing entity names and relationships only — no attributes or keys yet. Communicates the big picture to the client."
+  },
+  {
+   "id": "F33",
+   "aim": "B",
+   "front": "Logical model",
+   "back": "Detailed ERD adding attributes, primary keys, foreign keys and data types — a blueprint ready to implement."
+  },
+  {
+   "id": "F34",
+   "aim": "B",
+   "front": "Data type",
+   "back": "What kind of data a field stores — Text, Number, Date/Time, Currency, Yes/No, AutoNumber. Choosing correctly saves space and prevents invalid data."
+  },
+  {
+   "id": "F35",
+   "aim": "B",
+   "front": "Validation rule",
+   "back": "A condition data must pass before it's accepted — e.g. Age between 0 and 120, or a required field. Prevents bad data entering the database."
+  },
+  {
+   "id": "F36",
+   "aim": "B",
+   "front": "Input mask",
+   "back": "A pattern that formats and controls data entry — e.g. postcodes (LL00 0LL) or phone numbers. Guides users to enter data consistently."
+  },
+  {
+   "id": "F37",
+   "aim": "B",
+   "front": "Combo box",
+   "back": "A drop-down list on a form that lets users pick from a list (often linked to another table). Restricts input to valid values."
+  },
+  {
+   "id": "F38",
+   "aim": "B",
+   "front": "Query",
+   "back": "A saved request for data — selecting, filtering and sorting records. Can use multiple criteria, wildcards, calculated fields and parameters."
+  },
+  {
+   "id": "F39",
+   "aim": "B",
+   "front": "Wildcard",
+   "back": "A placeholder in a query criterion — e.g. * (Access) matches any characters, ? matches one. 'S*' finds everything starting with S."
+  },
+  {
+   "id": "F40",
+   "aim": "B",
+   "front": "Parameter query",
+   "back": "A query that prompts the user for a value when run — e.g. 'Enter customer ID:' — making it reusable for different inputs."
+  },
+  {
+   "id": "F41",
+   "aim": "B",
+   "front": "Calculated field",
+   "back": "A field whose value is computed from other fields — e.g. [Price] * [Quantity] in a query or report. Stored results are usually avoided (recompute instead)."
+  },
+  {
+   "id": "F42",
+   "aim": "B",
+   "front": "Action query",
+   "back": "A query that changes data, not just displays it — append, update, delete or make-table queries. Powerful but must be used carefully."
+  },
+  {
+   "id": "F43",
+   "aim": "B",
+   "front": "Report",
+   "back": "A formatted, printable output of data — can group records, add calculated totals and conditional formatting. One of the assignment outputs."
+  },
+  {
+   "id": "F44",
+   "aim": "B",
+   "front": "Macro",
+   "back": "A saved sequence of automated actions (open form, run query, etc.) in Access — task automation without writing code."
+  },
+  {
+   "id": "F45",
+   "aim": "B",
+   "front": "Form",
+   "back": "A user-friendly data entry screen — input fields, combo boxes, buttons. Main form + subform (child form) pattern for parent/child data."
+  }
+ ],
+ "diagrams": [],
+ "knowledgeBank": {
+  "code": "B",
+  "title": "Design a relational database solution to meet client requirements",
+  "topics": [
+   {
+    "code": "B1",
+    "name": "Relational database design techniques and processes",
+    "keyPoints": [
+     "Entity relationship modelling: conceptual (entities + relationships) and logical (adds attributes, primary keys, foreign keys)",
+     "Relational algebra: one-to-many, one-to-one, many-to-many; AND, OR, NOT, >, <, >=, <=",
+     "DBMS selection: desktop software vs cloud/server-based",
+     "Database implementation techniques: prototyping and testing",
+     "Quality and appropriateness: correctness of data, relationships, data integrity, normalisation"
+    ]
+   },
+   {
+    "code": "B2",
+    "name": "Design documentation",
+    "keyPoints": [
+     "Design specification: requirements of the brief, audience, purpose, client requirements, legal and ethical considerations (data protection legislation, regulations)",
+     "Data structure designs: data dictionaries (tables, field names, lengths, data types, validation), ERDs, normalisation",
+     "User interface design: forms (input/calculated/disabled fields, combo boxes, list boxes, radio buttons, validation, masks, user help), menus (action buttons), queries (multiple criteria, form values, wildcards, action queries, calculated queries), reports (calculated fields, grouping, layouts, conditional formatting), task automation (macros, scripts, code)",
+     "Test plans: data integrity, functionality, accessibility, usability",
+     "Implementation plan and timescales"
+    ]
+   },
+   {
+    "code": "B3",
+    "name": "Reviewing and refining designs",
+    "keyPoints": [
+     "Self-review against: suitability for user, meeting client requirements, legal and ethical constraints, consistency",
+     "Refine ideas and solutions, then update the design specification documentation"
+    ]
+   }
+  ]
+ },
+ "criteria": [
+  {
+   "code": "task2",
+   "aim": "B",
+   "title": "Design a relational database solution",
+   "criteria": [
+    {
+     "code": "B.P3",
+     "level": "Pass",
+     "text": "Produce a design and documentation that meets some of the client's requirements."
+    },
+    {
+     "code": "B.M3",
+     "level": "Merit",
+     "text": "Produce a design and documentation that meets most of the client's requirements."
+    },
+    {
+     "code": "B.D2",
+     "level": "Distinction",
+     "text": "Produce a design and documentation that comprehensively meets the client's requirements."
+    }
+   ]
+  }
+ ],
+ "briefs": [
+  {
+   "id": "college-enrolment",
+   "accdb": "CollegeCourseEnrolment.accdb",
+   "title": "College Course Enrolment",
+   "audience": "Enrolment team & tutors (Newman College-style)",
+   "scenario": "A sixth-form college needs a database to manage its learners, courses, subjects and staff, and to track which learner is enrolled on which course. Enrolment data is currently held across spreadsheets and paper, making it hard to see who is on each course and how learners are progressing against their target grades.",
+   "purpose": "To replace the spreadsheets with a relational database that stores learners, courses, subjects and staff, records every learner's enrolments, and produces reports on course enrolment and learner progress.",
+   "targetAudience": "Enrolment staff enter and update enrolments; tutors run queries and reports on their courses; managers review enrolment numbers and completion rates.",
+   "mustIncludes": [
+    "Tables for Learner, Course, Subject, Staff and a linking Enrolment table",
+    "Primary and foreign keys with one-to-many relationships (and a many-to-many resolved via Enrolment)",
+    "A data dictionary documenting every field name, data type, size and validation",
+    "Data validation (e.g. dates, target/actual grades, required fields)",
+    "Lookup fields / combo boxes so users pick Learners, Courses and Staff from drop-downs",
+    "Queries using multiple criteria and wildcards (e.g. learners on one course, surnames starting with a letter)",
+    "A parameter query to find a learner's enrolments",
+    "A report grouping enrolments by course with totals",
+    "A form with a subform showing a learner's (or course's) enrolments",
+    "Task automation using a macro or button",
+    "A test plan covering normal, erroneous and extreme data"
+   ],
+   "assignmentStyle": "original"
+  },
+  {
+   "id": "cinema-bookings",
+   "accdb": "RetroCinemaBooking.accdb",
+   "title": "Retro Cinema Booking System",
+   "audience": "Cinema manager & box-office staff",
+   "scenario": "A small independent cinema (Retro Reel) shows classic and cult films across three screens. Screenings are planned on a whiteboard and bookings taken over the phone, causing double-bookings and lost sales.",
+   "purpose": "To manage films, screens, screenings and bookings, prevent double-selling seats and produce daily sales reports.",
+   "targetAudience": "Box-office staff create bookings; the manager checks screening attendance and revenue.",
+   "mustIncludes": [
+    "Tables for Film, Screen, Screening, Member (or Customer) and a linking Booking table",
+    "One-to-many relationships with enforced referential integrity",
+    "A data dictionary for every field and validation rule",
+    "Lookup/combo boxes so staff pick a film and screen from a list",
+    "A query with criteria and wildcards (e.g. films of one genre, titles starting with a letter)",
+    "A parameter query to show all screenings on a chosen date",
+    "A report grouping bookings by screening with seat totals",
+    "A form with a subform for a screening's bookings",
+    "A macro or button to open the booking form",
+    "A test plan with normal, erroneous and extreme data"
+   ],
+   "assignmentStyle": "original"
+  },
+  {
+   "id": "garage-repairs",
+   "accdb": "GarageRepairs.accdb",
+   "title": "Garage Repairs & MOT Booking",
+   "audience": "Garage receptionist & mechanics",
+   "scenario": "A local garage (Precision Motors) keeps job cards in a filing cabinet. Customers, vehicles, jobs and parts are recorded on paper, so it's hard to see what work is outstanding and which parts were used.",
+   "purpose": "To manage customers, vehicles, jobs and parts, track each repair and produce invoices and workload reports.",
+   "targetAudience": "Receptionists book in vehicles; mechanics see outstanding jobs; owners review parts usage and invoicing.",
+   "mustIncludes": [
+    "Tables for Customer, Vehicle, Mechanic, Part and a linking Job table",
+    "Primary/foreign keys with a many-to-many resolved via a JobPart linking table",
+    "A data dictionary documenting field names, types, sizes and validation",
+    "Validation (e.g. date completed after date booked, valid registration format)",
+    "Lookup/combo boxes for customer, vehicle and mechanic",
+    "Queries using multiple criteria and wildcards",
+    "A parameter query to list jobs for a customer",
+    "A report grouping jobs by mechanic or customer with totals",
+    "A form with a subform showing a customer's vehicles",
+    "A macro used to automate opening a form/report",
+    "A test plan covering normal, erroneous and extreme data"
+   ],
+   "assignmentStyle": "original"
+  },
+  {
+   "id": "library-loans",
+   "accdb": "SchoolLibraryLoans.accdb",
+   "title": "School Library Loans",
+   "audience": "Librarian & students",
+   "scenario": "A secondary school library wants a database to manage its books, students and loans. Books are logged in a paper register, so it is hard to know which books are on loan and which are overdue.",
+   "purpose": "To manage books, students and loans, track which books are out on loan and generate overdue reports.",
+   "targetAudience": "The librarian issues and returns books; students are recorded as borrowers.",
+   "mustIncludes": [
+    "Tables for Student, Book and a linking Loan table",
+    "A many-to-many relationship resolved via the Loan table",
+    "A data dictionary documenting all fields and validation",
+    "Conceptual and logical ERDs",
+    "A loan form with a subform for a student's loans",
+    "A query with a calculated field (e.g. days overdue)",
+    "A report of overdue books grouped by student",
+    "Validation (e.g. loan date before return date)",
+    "Usability testing with real users and documented feedback"
+   ],
+   "assignmentStyle": "original"
+  },
+  {
+   "id": "travel-agency",
+   "accdb": "HolidayBookingAgency.accdb",
+   "title": "Holiday Booking Agency",
+   "audience": "Travel agents & customers",
+   "scenario": "A high-street travel agency (Sunrise Travel) arranges package holidays. Agents record bookings in paper folders and a shared spreadsheet, leading to duplicate bookings and errors in customer details.",
+   "purpose": "To manage customers, holidays, hotels and bookings, prevent double-booking and produce commission and passenger-list reports.",
+   "targetAudience": "Agents create and amend bookings; managers review sales and passenger manifests.",
+   "mustIncludes": [
+    "Tables for Customer, Holiday, Hotel (or Destination) and a linking Booking table",
+    "One-to-many relationships with referential integrity",
+    "A data dictionary with validation rules and input masks (e.g. date, price)",
+    "Lookup/combo boxes for customer, holiday and hotel",
+    "Queries with multiple criteria and wildcards (e.g. holidays under a price)",
+    "A parameter query for all customers on one holiday",
+    "Reports with grouping and totals (e.g. commission by agent)",
+    "A booking form with a subform for extra passengers",
+    "A macro to open the booking or report from a menu",
+    "A full test plan with normal, erroneous and extreme data"
+   ],
+   "assignmentStyle": "original"
+  }
+ ]
+}

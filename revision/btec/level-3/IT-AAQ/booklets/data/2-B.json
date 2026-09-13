@@ -1,0 +1,2015 @@
+{
+ "unit": 2,
+ "unitTitle": "Cyber Security & Incident Management",
+ "unitName": "IT AAQ Unit 2",
+ "aim": "B",
+ "aimTitle": "Use of networking architectures and principles for security",
+ "aimShort": "Network types, topologies, components, infrastructure services, modern trends",
+ "board": "Pearson BTEC Level 3 National Extended Certificate in IT (AAQ)",
+ "specIssue": "Issue 5, November 2025",
+ "assessment": "Externally assessed written exam (set + marked by Pearson).",
+ "topics": [
+  {
+   "code": "B1",
+   "name": "Network types"
+  },
+  {
+   "code": "B1.1",
+   "name": "Network types: LAN, WLAN, WAN, SAN, PAN, the internet; private networks (intranet, extranet, cloud); wired/wireless integration; schematic diagrams; cyber-security-related features"
+  },
+  {
+   "code": "B1.2",
+   "name": "Network topologies: physical (star, extended star, hierarchical, wireless mesh, ad-hoc); logical (bus, ring)"
+  },
+  {
+   "code": "B1.3",
+   "name": "Network architecture: peer-to-peer, client/server, thin client"
+  },
+  {
+   "code": "B1.4",
+   "name": "Modern trends: virtualisation, cloud computing, BYOD, SDN, SAN, IoT, remote working"
+  },
+  {
+   "code": "B2",
+   "name": "Network components"
+  },
+  {
+   "code": "B2.1",
+   "name": "Hardware components: end-user devices, connectivity devices (switch, router, gateway, bridge, repeater, access point, USB hub, modem), connection media (cable, wireless, optical fibre, Li-Fi)"
+  },
+  {
+   "code": "B2.2",
+   "name": "External media and storage security issues: encryption, secure disposal, loss/theft, interception, data corruption, lifespan, malware vector"
+  },
+  {
+   "code": "B2.3",
+   "name": "Software components: OS (GUI/CLI/web interface), monitoring/management tools, network applications"
+  },
+  {
+   "code": "B3",
+   "name": "Networking infrastructure services and resources"
+  },
+  {
+   "code": "B3.1",
+   "name": "TCP/IP (four-layer model, TLS, packets/headers, error correction); ports; packet structure; NAT and IPv4/IPv6 addressing (RFC 1918, APIPA, loopback)"
+  },
+  {
+   "code": "B3.2",
+   "name": "Domains, sub-domains and segmentation: hierarchy, trust relationships, access control, security benefits"
+  },
+  {
+   "code": "B3.3",
+   "name": "Network devices to configure networks: server, router, switch, WAP, firewall, bridge, gateway"
+  },
+  {
+   "code": "B3.4",
+   "name": "Network infrastructure services: DNS, directory services, authentication services, DHCP, routing, remote access services"
+  },
+  {
+   "code": "B3.5",
+   "name": "Network services and resources: file/print services, web/mail/communications services"
+  }
+ ],
+ "checklist": [
+  {
+   "code": "B1",
+   "name": "Network types",
+   "type": "group"
+  },
+  {
+   "code": "B1.1",
+   "name": "Network types: LAN, WLAN, WAN, SAN, PAN, the internet; private networks (intranet, extranet, cloud); wired/wireless integration; schematic diagrams; cyber-security-related features",
+   "type": "item"
+  },
+  {
+   "code": "B1.2",
+   "name": "Network topologies: physical (star, extended star, hierarchical, wireless mesh, ad-hoc); logical (bus, ring)",
+   "type": "item"
+  },
+  {
+   "code": "B1.3",
+   "name": "Network architecture: peer-to-peer, client/server, thin client",
+   "type": "item"
+  },
+  {
+   "code": "B1.4",
+   "name": "Modern trends: virtualisation, cloud computing, BYOD, SDN, SAN, IoT, remote working",
+   "type": "item"
+  },
+  {
+   "code": "B2",
+   "name": "Network components",
+   "type": "group"
+  },
+  {
+   "code": "B2.1",
+   "name": "Hardware components: end-user devices, connectivity devices (switch, router, gateway, bridge, repeater, access point, USB hub, modem), connection media (cable, wireless, optical fibre, Li-Fi)",
+   "type": "item"
+  },
+  {
+   "code": "B2.2",
+   "name": "External media and storage security issues: encryption, secure disposal, loss/theft, interception, data corruption, lifespan, malware vector",
+   "type": "item"
+  },
+  {
+   "code": "B2.3",
+   "name": "Software components: OS (GUI/CLI/web interface), monitoring/management tools, network applications",
+   "type": "item"
+  },
+  {
+   "code": "B3",
+   "name": "Networking infrastructure services and resources",
+   "type": "group"
+  },
+  {
+   "code": "B3.1",
+   "name": "TCP/IP (four-layer model, TLS, packets/headers, error correction); ports; packet structure; NAT and IPv4/IPv6 addressing (RFC 1918, APIPA, loopback)",
+   "type": "item"
+  },
+  {
+   "code": "B3.2",
+   "name": "Domains, sub-domains and segmentation: hierarchy, trust relationships, access control, security benefits",
+   "type": "item"
+  },
+  {
+   "code": "B3.3",
+   "name": "Network devices to configure networks: server, router, switch, WAP, firewall, bridge, gateway",
+   "type": "item"
+  },
+  {
+   "code": "B3.4",
+   "name": "Network infrastructure services: DNS, directory services, authentication services, DHCP, routing, remote access services",
+   "type": "item"
+  },
+  {
+   "code": "B3.5",
+   "name": "Network services and resources: file/print services, web/mail/communications services",
+   "type": "item"
+  }
+ ],
+ "examQuestions": [
+  {
+   "id": "B001",
+   "learning_aim": "B",
+   "topic": "B1.1 Network types",
+   "command_verb": "State",
+   "marks": 1,
+   "ao": "AO1",
+   "question": "State what WLAN stands for.",
+   "type": "short",
+   "mark_scheme": {
+    "instruction": "Award one mark.",
+    "points": [
+     "Wireless Local Area Network (1)"
+    ]
+   }
+  },
+  {
+   "id": "B002",
+   "learning_aim": "B",
+   "topic": "B1.1 Network types",
+   "command_verb": "Describe",
+   "marks": 2,
+   "ao": "AO1",
+   "question": "Describe the difference between an intranet and an extranet.",
+   "guidance": "(2)",
+   "type": "short",
+   "mark_scheme": {
+    "instruction": "Award up to two marks.",
+    "points": [
+     "An intranet is a private network accessible only to an organisation's internal employees/members (1)",
+     "An extranet extends the intranet to authorised external parties such as suppliers, partners or customers, typically via secure login over the internet (1)"
+    ]
+   }
+  },
+  {
+   "id": "B003",
+   "learning_aim": "B",
+   "topic": "B1.2 Network topologies",
+   "command_verb": "Explain",
+   "marks": 3,
+   "ao": "AO2",
+   "scenario": "An IT services company is designing a network where reliability is critical.",
+   "question": "Explain the advantages and disadvantages of a star topology for this network.",
+   "guidance": "(3)",
+   "type": "short",
+   "mark_scheme": {
+    "instruction": "Award up to three marks.",
+    "points": [
+     "Advantage: if one device/cable fails, only that device is affected â€” the rest of the network continues to function (1)",
+     "Advantage: easy to add or remove devices without disrupting the network (1)",
+     "Disadvantage: the central switch/hub is a single point of failure â€” if it fails, the entire network goes down (1)"
+    ]
+   }
+  },
+  {
+   "id": "B004",
+   "learning_aim": "B",
+   "topic": "B1.3 Network architecture",
+   "command_verb": "State",
+   "marks": 1,
+   "ao": "AO1",
+   "question": "State one advantage of a client-server network over a peer-to-peer network.",
+   "type": "short",
+   "mark_scheme": {
+    "instruction": "Award one mark.",
+    "points": [
+     "Centralised management of users, files and security policies (1)",
+     "Centralised backup of all data on the server (1)",
+     "Better scalability â€” can support many more users (1)",
+     "Stronger security through centralised access control (1)"
+    ],
+    "additional_guidance": "Accept any one valid advantage."
+   }
+  },
+  {
+   "id": "B005",
+   "learning_aim": "B",
+   "topic": "B1.4 Modern trends",
+   "command_verb": "Explain",
+   "marks": 4,
+   "ao": "AO2",
+   "scenario": "A manufacturing company allows employees to use their personal smartphones and laptops for work (BYOD).",
+   "question": "Explain the security issues associated with a BYOD policy and how they can be mitigated.",
+   "guidance": "(4)",
+   "type": "short",
+   "mark_scheme": {
+    "instruction": "Award up to four marks.",
+    "points": [
+     "Issue: organisational data stored on personal devices may be accessed by family members or others â€” risk of data breach (1)",
+     "Issue: personal devices may not have up-to-date security patches or antivirus, increasing vulnerability (1)",
+     "Mitigation: implement Mobile Device Management (MDM) to enforce security policies, remote wipe capability, and separate work/personal profiles (1)",
+     "Mitigation: require VPN for all work connections and encrypt all organisational data on the device (1)"
+    ]
+   }
+  },
+  {
+   "id": "B006",
+   "learning_aim": "B",
+   "topic": "B1.4 Modern trends",
+   "command_verb": "Describe",
+   "marks": 2,
+   "ao": "AO1",
+   "question": "Describe one security concern associated with Internet of Things (IoT) devices.",
+   "guidance": "(2)",
+   "type": "short",
+   "mark_scheme": {
+    "instruction": "Award up to two marks.",
+    "points": [
+     "Many IoT devices ship with default passwords/security settings that users never change, making them easy targets for attackers (1)",
+     "IoT devices often lack regular security updates/patches, leaving known vulnerabilities permanently exploitable â€” compromised devices can be recruited into botnets for DDoS attacks (1)"
+    ]
+   }
+  },
+  {
+   "id": "B007",
+   "learning_aim": "B",
+   "topic": "B2.1 Hardware components — connectivity devices",
+   "command_verb": "Identify",
+   "marks": 1,
+   "ao": "AO1",
+   "question": "Identify the network device that connects multiple networks together and forwards data packets between them based on IP addresses.",
+   "type": "short",
+   "mark_scheme": {
+    "instruction": "Award one mark.",
+    "points": [
+     "Router (1)"
+    ]
+   }
+  },
+  {
+   "id": "B008",
+   "learning_aim": "B",
+   "topic": "B2.1 Hardware components — connectivity devices",
+   "command_verb": "Explain",
+   "marks": 3,
+   "ao": "AO2",
+   "question": "Explain the difference between a managed and an unmanaged switch.",
+   "guidance": "(3)",
+   "type": "short",
+   "mark_scheme": {
+    "instruction": "Award up to three marks.",
+    "points": [
+     "An unmanaged switch is plug-and-play â€” it simply connects devices and forwards data automatically without any configuration (1)",
+     "A managed switch allows administrators to configure settings such as VLANs, port security, bandwidth control, and Quality of Service (QoS) (1)",
+     "Managed switches provide greater security (e.g. MAC address filtering, disabling unused ports) and monitoring (SNMP) but cost more and require skilled administration (1)"
+    ]
+   }
+  },
+  {
+   "id": "B009",
+   "learning_aim": "B",
+   "topic": "B2.1 Hardware components — connection media",
+   "command_verb": "Compare",
+   "marks": 4,
+   "ao": "AO3a",
+   "question": "Compare and contrast Wi-Fi (802.11) and Ethernet (wired) connections for a business network, including security considerations.",
+   "guidance": "(4)",
+   "type": "short",
+   "mark_scheme": {
+    "instruction": "Award up to four marks â€” must include at least one security point.",
+    "points": [
+     "Ethernet is faster and more reliable â€” less susceptible to interference, consistent speeds up to 10 Gbps on Cat 6a (1)",
+     "Wi-Fi offers mobility and flexibility â€” no cabling required, supports BYOD, but speeds are variable and affected by distance/walls/interference (1)",
+     "Ethernet is inherently more secure â€” physical access to the network is required to intercept data (1)",
+     "Wi-Fi is more vulnerable â€” signals broadcast through the air can be intercepted; requires encryption (WPA3), strong passwords, MAC filtering and hidden SSID to mitigate (1)"
+    ]
+   }
+  },
+  {
+   "id": "B011",
+   "learning_aim": "B",
+   "topic": "B3.1 TCP/IP — ports",
+   "command_verb": "Identify",
+   "marks": 1,
+   "ao": "AO1",
+   "question": "Identify the default port number used by HTTPS.",
+   "type": "short",
+   "mark_scheme": {
+    "instruction": "Award one mark.",
+    "points": [
+     "Port 443 (1)"
+    ]
+   }
+  },
+  {
+   "id": "B012",
+   "learning_aim": "B",
+   "topic": "B3.1 TCP/IP — ports",
+   "command_verb": "Describe",
+   "marks": 2,
+   "ao": "AO1",
+   "question": "Describe the difference between TCP and UDP transport protocols.",
+   "guidance": "(2)",
+   "type": "short",
+   "mark_scheme": {
+    "instruction": "Award up to two marks.",
+    "points": [
+     "TCP is connection-oriented â€” it establishes a connection, guarantees delivery, and reorders packets if they arrive out of sequence (reliable) (1)",
+     "UDP is connectionless â€” it sends data without establishing a connection first, no guarantee of delivery, no reordering; it is faster but less reliable, suitable for streaming/voice/video where some packet loss is acceptable (1)"
+    ]
+   }
+  },
+  {
+   "id": "B013",
+   "learning_aim": "B",
+   "topic": "B3.1 TCP/IP — NAT and addressing",
+   "command_verb": "State",
+   "marks": 1,
+   "ao": "AO1",
+   "question": "State the purpose of Network Address Translation (NAT).",
+   "type": "short",
+   "mark_scheme": {
+    "instruction": "Award one mark.",
+    "points": [
+     "NAT translates private/internal IP addresses to a public IP address (and vice versa), allowing multiple devices on a private network to share a single public IP address for internet access, while hiding the internal network structure for security (1)"
+    ]
+   }
+  },
+  {
+   "id": "B014",
+   "learning_aim": "B",
+   "topic": "B3.4 Network infrastructure services — DNS",
+   "command_verb": "Explain",
+   "marks": 3,
+   "ao": "AO2",
+   "question": "Explain the DNS resolution process when a user types www.example.com into their browser.",
+   "guidance": "(3)",
+   "type": "short",
+   "mark_scheme": {
+    "instruction": "Award up to three marks.",
+    "points": [
+     "The browser checks its local DNS cache; if not found, the query is sent to the configured DNS resolver/recursive server (1)",
+     "The DNS resolver queries the root server, then the TLD (.com) server, then the authoritative name server for example.com (1)",
+     "The authoritative server returns the IP address, which is cached by the resolver and returned to the browser â€” the browser then connects to that IP address (1)"
+    ]
+   }
+  },
+  {
+   "id": "B015",
+   "learning_aim": "B",
+   "topic": "B3.4 Network infrastructure services — DHCP",
+   "command_verb": "Describe",
+   "marks": 2,
+   "ao": "AO1",
+   "question": "Describe the DORA process in DHCP.",
+   "guidance": "(2)",
+   "type": "short",
+   "mark_scheme": {
+    "instruction": "Award up to two marks.",
+    "points": [
+     "Discover: the client broadcasts a DHCPDISCOVER message to find available DHCP servers (1)",
+     "Offer: the DHCP server responds with a DHCPOFFER containing a proposed IP address (1)",
+     "Request: the client sends a DHCPREQUEST to accept the offered address (1)",
+     "Acknowledge: the server confirms with a DHCPACK, and the client can now use the IP address for the lease duration (1)"
+    ],
+    "additional_guidance": "Award 2 marks for any two of the four stages correctly described."
+   }
+  },
+  {
+   "id": "B016",
+   "learning_aim": "B",
+   "topic": "B1.2 Network topologies",
+   "command_verb": "Explain",
+   "marks": 4,
+   "ao": "AO2",
+   "scenario": "A secondary school is designing a new network for 200 workstations across 10 classrooms.",
+   "question": "Explain why a star topology would be the most appropriate choice for the school network.",
+   "guidance": "(4)",
+   "type": "short",
+   "mark_scheme": {
+    "instruction": "Award up to four marks.",
+    "points": [
+     "Each classroom can have its own switch, and if one cable fails only that device is affected — the rest of the network continues to function (1)",
+     "Easy to add new devices without disrupting the network — important as the school expands its IT provision (1)",
+     "Fault isolation is simple — a faulty device or cable can be quickly identified and replaced without affecting others (1)",
+     "The central switch in each room can implement port security, VLANs for different user groups (staff vs students), which enhances security (1)"
+    ]
+   }
+  },
+  {
+   "id": "B017",
+   "learning_aim": "B",
+   "topic": "B1.4 Modern trends — IoT",
+   "command_verb": "Explain",
+   "marks": 4,
+   "ao": "AO2",
+   "scenario": "A manufacturing company has installed IoT sensors on all production equipment to monitor performance in real time.",
+   "question": "Explain the security risks associated with connecting IoT sensors to the company network and recommend two mitigation measures.",
+   "guidance": "(4)",
+   "type": "short",
+   "mark_scheme": {
+    "instruction": "Award up to four marks.",
+    "points": [
+     "Risk: IoT devices often ship with default passwords and lack regular security updates — they become easy entry points for attackers (1)",
+     "Risk: Once compromised, IoT devices can be recruited into botnets or used as a pivot point to access the main corporate network (1)",
+     "Mitigation: Segment IoT devices onto a separate VLAN isolated from the main corporate network — limits lateral movement if compromised (1)",
+     "Mitigation: Change all default credentials immediately, implement network access control (802.1X), and maintain a regular patching schedule for all IoT firmware (1)"
+    ]
+   }
+  },
+  {
+   "id": "B018",
+   "learning_aim": "B",
+   "topic": "B3.4 Network infrastructure services — DNS",
+   "command_verb": "Describe",
+   "marks": 3,
+   "ao": "AO1",
+   "question": "Describe the DNS resolution process when a user enters www.bank.com into their browser.",
+   "guidance": "(3)",
+   "type": "short",
+   "mark_scheme": {
+    "instruction": "Award up to three marks.",
+    "points": [
+     "Browser checks local DNS cache; if not found, query is sent to the configured DNS recursive resolver (1)",
+     "The resolver queries the root server, then the .com TLD server, then the authoritative name server for bank.com (1)",
+     "The authoritative server returns the IP address which is cached at each level and returned to the browser, which then connects to that IP (1)"
+    ]
+   }
+  },
+  {
+   "id": "B019",
+   "learning_aim": "B",
+   "topic": "B3.4 Network infrastructure services — remote access",
+   "command_verb": "Explain",
+   "marks": 4,
+   "ao": "AO2",
+   "scenario": "A financial services company has employees working remotely who need secure access to internal financial systems.",
+   "question": "Explain how a VPN provides secure remote access and why it is necessary for this scenario.",
+   "guidance": "(4)",
+   "type": "short",
+   "mark_scheme": {
+    "instruction": "Award up to four marks.",
+    "points": [
+     "A VPN creates an encrypted tunnel between the remote employee device and the company network — all data is encrypted in transit (1)",
+     "Without a VPN, data transmitted over the public internet could be intercepted (MITM attack) — financial data is highly sensitive (1)",
+     "The VPN authenticates the user before granting access — ensures only authorised employees can reach internal systems (1)",
+     "Additional: VPN allows the employee to access internal resources (file servers, databases) as if they were physically in the office, maintaining productivity with security (1)"
+    ]
+   }
+  },
+  {
+   "id": "B020",
+   "learning_aim": "B",
+   "topic": "B1.4 Modern trends — BYOD",
+   "command_verb": "Evaluate",
+   "marks": 6,
+   "ao": "AO3b",
+   "scenario": "A large organisation is considering implementing a BYOD policy to reduce hardware costs.",
+   "question": "Evaluate the security implications of implementing BYOD and recommend how the risks can be managed.",
+   "guidance": "(6)",
+   "type": "short",
+   "mark_scheme": {
+    "instruction": "Award up to six marks.",
+    "points": [
+     "Risk: Organisational data stored on personal devices may be accessed by family members, friends, or anyone who borrows the device (1)",
+     "Risk: Personal devices may not have up-to-date security patches, antivirus, or encryption — they may already be compromised before connecting (1)",
+     "Risk: Difficult to enforce password policies and screen lock timeouts on personal devices — inconsistent security posture (1)",
+     "Mitigation: Implement Mobile Device Management (MDM) to enforce security policies, require encryption, and enable remote wipe of organisational data (1)",
+     "Mitigation: Use containerisation to separate work apps/data from personal — if the employee leaves, only the work container is wiped (1)",
+     "Mitigation: Require VPN for all work connections and implement Network Access Control to check device compliance before allowing network access (1)"
+    ]
+   }
+  },
+  {
+   "id": "B021",
+   "learning_aim": "B",
+   "topic": "B2.1 Hardware components — connection media",
+   "command_verb": "Compare",
+   "marks": 4,
+   "ao": "AO3a",
+   "question": "Compare wired (Ethernet) and wireless (Wi-Fi) connections for a business network, considering both performance and security.",
+   "guidance": "(4)",
+   "type": "short",
+   "mark_scheme": {
+    "instruction": "Award up to four marks.",
+    "points": [
+     "Ethernet is faster and more reliable — consistent speeds up to 10 Gbps, no interference from walls or other devices (1)",
+     "Wi-Fi offers mobility and flexibility — no cabling needed, supports BYOD and mobile devices, but speeds vary with distance and interference (1)",
+     "Ethernet is inherently more secure — physical access to the network required to intercept data, making eavesdropping very difficult (1)",
+     "Wi-Fi broadcasts through the air — must be secured with WPA3 encryption, strong passwords, and ideally 802.1X enterprise authentication to mitigate interception risk (1)"
+    ]
+   }
+  },
+  {
+   "id": "B022",
+   "learning_aim": "B",
+   "topic": "B1.1 Network types",
+   "command_verb": "Explain",
+   "marks": 3,
+   "ao": "AO2",
+   "scenario": "A company has offices in London and Manchester that need to share data.",
+   "question": "Explain the difference between a LAN and a WAN.",
+   "guidance": "(3)",
+   "type": "short",
+   "mark_scheme": {
+    "instruction": "Award up to 3 marks.",
+    "points": [
+     "A LAN covers a limited area such as one office or building (1)",
+     "A WAN spans a large geographic area and connects multiple LANs (1)",
+     "WANs often use leased lines or the internet; LANs use local media such as Ethernet or Wi-Fi (1)"
+    ]
+   }
+  },
+  {
+   "id": "B023",
+   "learning_aim": "B",
+   "topic": "B1.1 Network types",
+   "command_verb": "Describe",
+   "marks": 2,
+   "ao": "AO1",
+   "scenario": "",
+   "question": "State what a SAN and a PAN each are.",
+   "guidance": "(2)",
+   "type": "short",
+   "mark_scheme": {
+    "instruction": "Award up to 2 marks.",
+    "points": [
+     "SAN (Storage Area Network) is a high-speed network providing block-level storage access (1)",
+     "PAN (Personal Area Network) connects personal devices over short distances such as Bluetooth (1)"
+    ]
+   }
+  },
+  {
+   "id": "B024",
+   "learning_aim": "B",
+   "topic": "B1.2 Network topologies",
+   "command_verb": "Explain",
+   "marks": 3,
+   "ao": "AO2",
+   "scenario": "A firm is choosing a topology that stays working if one cable fails.",
+   "question": "Explain the advantage of a mesh topology over a star topology.",
+   "guidance": "(3)",
+   "type": "short",
+   "mark_scheme": {
+    "instruction": "Award up to 3 marks.",
+    "points": [
+     "Mesh topology provides multiple redundant paths between devices (1)",
+     "If one link fails, traffic can re-route around it (1)",
+     "Star topology has a single point of failure at the central switch (1)"
+    ]
+   }
+  },
+  {
+   "id": "B025",
+   "learning_aim": "B",
+   "topic": "B1.2 Network topologies",
+   "command_verb": "Describe",
+   "marks": 2,
+   "ao": "AO1",
+   "scenario": "",
+   "question": "Describe a star topology.",
+   "guidance": "(2)",
+   "type": "short",
+   "mark_scheme": {
+    "instruction": "Award up to 2 marks.",
+    "points": [
+     "All devices connect to a central switch or hub (1)",
+     "Each device has its own connection, so a failure of one cable affects only that device (1)"
+    ]
+   }
+  },
+  {
+   "id": "B026",
+   "learning_aim": "B",
+   "topic": "B1.3 Network architecture",
+   "command_verb": "Describe",
+   "marks": 3,
+   "ao": "AO2",
+   "scenario": "",
+   "question": "Describe the difference between client/server and peer-to-peer architecture.",
+   "guidance": "(3)",
+   "type": "short",
+   "mark_scheme": {
+    "instruction": "Award up to 3 marks.",
+    "points": [
+     "Client/server centralises services and resources on servers accessed by clients (1)",
+     "Peer-to-peer treats all devices as equal and shares directly without a central server (1)",
+     "Client/server offers centralised security and management; peer-to-peer is simpler but less controlled (1)"
+    ]
+   }
+  },
+  {
+   "id": "B027",
+   "learning_aim": "B",
+   "topic": "B1.4 Modern trends",
+   "command_verb": "Explain",
+   "marks": 3,
+   "ao": "AO2",
+   "scenario": "A firm allows employees to use personal devices for work (BYOD).",
+   "question": "Explain one security benefit and one risk of BYOD.",
+   "guidance": "(3)",
+   "type": "short",
+   "mark_scheme": {
+    "instruction": "Award up to 3 marks.",
+    "points": [
+     "Benefit: flexibility and productivity for the user, and can reduce hardware costs (1)",
+     "Risk: inconsistent security on personal devices, and lost or stolen devices containing work data (1)",
+     "Mitigations: mobile device management, containerisation, and access control policies (1)"
+    ]
+   }
+  },
+  {
+   "id": "B028",
+   "learning_aim": "B",
+   "topic": "B1.4 Modern trends",
+   "command_verb": "Explain",
+   "marks": 3,
+   "ao": "AO2",
+   "scenario": "A company is migrating systems to the cloud and wants to assess the security implications.",
+   "question": "Explain one security benefit and one risk of using cloud services.",
+   "guidance": "(3)",
+   "type": "short",
+   "mark_scheme": {
+    "instruction": "Award up to 3 marks.",
+    "points": [
+     "Benefit: providers often offer strong security features, encryption, backup and scalable resources (1)",
+     "Risk: data is held by a third party and depends on their security, with shared responsibility (1)",
+     "Mitigations: strong authentication, encryption, and clear contracts around data handling (1)"
+    ]
+   }
+  }
+ ],
+ "mcq": [
+  {
+   "id": "MC044",
+   "learning_aim": "B1",
+   "topic": "B1.1 Network types",
+   "command_verb": "Identify",
+   "marks": 1,
+   "ao": "AO1",
+   "scenario": "",
+   "question": "A network that covers a single building or site is a:",
+   "guidance": "(1)",
+   "type": "multiple_choice",
+   "options": [
+    {
+     "label": "A",
+     "text": "LAN"
+    },
+    {
+     "label": "B",
+     "text": "WAN"
+    },
+    {
+     "label": "C",
+     "text": "PAN"
+    },
+    {
+     "label": "D",
+     "text": "The internet"
+    }
+   ],
+   "mark_scheme": {
+    "instruction": "Award one mark for the correct option.",
+    "answer": "A",
+    "explanation": "A Local Area Network (LAN) covers a small area such as one building.",
+    "points": [
+     "A: LAN (1)"
+    ]
+   }
+  },
+  {
+   "id": "MC045",
+   "learning_aim": "B1",
+   "topic": "B1.1 Network types",
+   "command_verb": "Identify",
+   "marks": 1,
+   "ao": "AO1",
+   "scenario": "",
+   "question": "A network that connects offices across a country or the world is a:",
+   "guidance": "(1)",
+   "type": "multiple_choice",
+   "options": [
+    {
+     "label": "A",
+     "text": "LAN"
+    },
+    {
+     "label": "B",
+     "text": "WAN"
+    },
+    {
+     "label": "C",
+     "text": "PAN"
+    },
+    {
+     "label": "D",
+     "text": "MAN"
+    }
+   ],
+   "mark_scheme": {
+    "instruction": "Award one mark for the correct option.",
+    "answer": "B",
+    "explanation": "A Wide Area Network (WAN) covers large distances, often across countries.",
+    "points": [
+     "B: WAN (1)"
+    ]
+   }
+  },
+  {
+   "id": "MC046",
+   "learning_aim": "B1",
+   "topic": "B1.1 Network types",
+   "command_verb": "Identify",
+   "marks": 1,
+   "ao": "AO1",
+   "scenario": "",
+   "question": "WLAN stands for:",
+   "guidance": "(1)",
+   "type": "multiple_choice",
+   "options": [
+    {
+     "label": "A",
+     "text": "Wireless Local Area Network"
+    },
+    {
+     "label": "B",
+     "text": "Wired Local Access Node"
+    },
+    {
+     "label": "C",
+     "text": "Wide Link and Network"
+    },
+    {
+     "label": "D",
+     "text": "Web Linked Area Network"
+    }
+   ],
+   "mark_scheme": {
+    "instruction": "Award one mark for the correct option.",
+    "answer": "A",
+    "explanation": "WLAN is a Wireless Local Area Network, typically using Wi-Fi.",
+    "points": [
+     "A: Wireless Local Area Network (1)"
+    ]
+   }
+  },
+  {
+   "id": "MC047",
+   "learning_aim": "B1",
+   "topic": "B1.1 Network types",
+   "command_verb": "Identify",
+   "marks": 1,
+   "ao": "AO1",
+   "scenario": "",
+   "question": "A private network only accessible to an organisation's staff is called an:",
+   "guidance": "(1)",
+   "type": "multiple_choice",
+   "options": [
+    {
+     "label": "A",
+     "text": "Intranet"
+    },
+    {
+     "label": "B",
+     "text": "Extranet"
+    },
+    {
+     "label": "C",
+     "text": "Internet"
+    },
+    {
+     "label": "D",
+     "text": "PAN"
+    }
+   ],
+   "mark_scheme": {
+    "instruction": "Award one mark for the correct option.",
+    "answer": "A",
+    "explanation": "An intranet is a private, internal network for staff within an organisation.",
+    "points": [
+     "A: Intranet (1)"
+    ]
+   }
+  },
+  {
+   "id": "MC048",
+   "learning_aim": "B1",
+   "topic": "B1.1 Network types",
+   "command_verb": "Identify",
+   "marks": 1,
+   "ao": "AO1",
+   "scenario": "",
+   "question": "A network connecting two devices used by one person (e.g. a phone and headphones) is a:",
+   "guidance": "(1)",
+   "type": "multiple_choice",
+   "options": [
+    {
+     "label": "A",
+     "text": "PAN"
+    },
+    {
+     "label": "B",
+     "text": "WAN"
+    },
+    {
+     "label": "C",
+     "text": "LAN"
+    },
+    {
+     "label": "D",
+     "text": "SAN"
+    }
+   ],
+   "mark_scheme": {
+    "instruction": "Award one mark for the correct option.",
+    "answer": "A",
+    "explanation": "A Personal Area Network (PAN) connects devices close to an individual.",
+    "points": [
+     "A: PAN (1)"
+    ]
+   }
+  },
+  {
+   "id": "MC049",
+   "learning_aim": "B1",
+   "topic": "B1.2 Network topologies",
+   "command_verb": "Identify",
+   "marks": 1,
+   "ao": "AO1",
+   "scenario": "",
+   "question": "In a star topology all devices connect to a central:",
+   "guidance": "(1)",
+   "type": "multiple_choice",
+   "options": [
+    {
+     "label": "A",
+     "text": "Switch or hub"
+    },
+    {
+     "label": "B",
+     "text": "Terminator"
+    },
+    {
+     "label": "C",
+     "text": "Bus cable"
+    },
+    {
+     "label": "D",
+     "text": "Modem only"
+    }
+   ],
+   "mark_scheme": {
+    "instruction": "Award one mark for the correct option.",
+    "answer": "A",
+    "explanation": "In a star topology every device connects to a central switch or hub.",
+    "points": [
+     "A: Switch or hub (1)"
+    ]
+   }
+  },
+  {
+   "id": "MC050",
+   "learning_aim": "B1",
+   "topic": "B1.2 Network topologies",
+   "command_verb": "Identify",
+   "marks": 1,
+   "ao": "AO1",
+   "scenario": "",
+   "question": "A major disadvantage of a star topology is that:",
+   "guidance": "(1)",
+   "type": "multiple_choice",
+   "options": [
+    {
+     "label": "A",
+     "text": "It is very slow"
+    },
+    {
+     "label": "B",
+     "text": "If the central device fails the whole network stops"
+    },
+    {
+     "label": "C",
+     "text": "It needs no cables"
+    },
+    {
+     "label": "D",
+     "text": "It cannot be wireless"
+    }
+   ],
+   "mark_scheme": {
+    "instruction": "Award one mark for the correct option.",
+    "answer": "B",
+    "explanation": "Because all connections go through the central device, its failure brings down the network.",
+    "points": [
+     "B: If the central device fails the whole network stops (1)"
+    ]
+   }
+  },
+  {
+   "id": "MC051",
+   "learning_aim": "B1",
+   "topic": "B1.3 Network architecture",
+   "command_verb": "Identify",
+   "marks": 1,
+   "ao": "AO1",
+   "scenario": "",
+   "question": "In a client-server network, files and applications are stored centrally on the:",
+   "guidance": "(1)",
+   "type": "multiple_choice",
+   "options": [
+    {
+     "label": "A",
+     "text": "Client"
+    },
+    {
+     "label": "B",
+     "text": "Server"
+    },
+    {
+     "label": "C",
+     "text": "Printer"
+    },
+    {
+     "label": "D",
+     "text": "Monitor"
+    }
+   ],
+   "mark_scheme": {
+    "instruction": "Award one mark for the correct option.",
+    "answer": "B",
+    "explanation": "A server provides centralised resources that client devices access.",
+    "points": [
+     "B: Server (1)"
+    ]
+   }
+  },
+  {
+   "id": "MC052",
+   "learning_aim": "B1",
+   "topic": "B1.4 Modern trends",
+   "command_verb": "Identify",
+   "marks": 1,
+   "ao": "AO1",
+   "scenario": "",
+   "question": "BYOD stands for:",
+   "guidance": "(1)",
+   "type": "multiple_choice",
+   "options": [
+    {
+     "label": "A",
+     "text": "Bring Your Own Device"
+    },
+    {
+     "label": "B",
+     "text": "Backup Your Own Data"
+    },
+    {
+     "label": "C",
+     "text": "Build Your Own Database"
+    },
+    {
+     "label": "D",
+     "text": "Business Yearly Operations Directory"
+    }
+   ],
+   "mark_scheme": {
+    "instruction": "Award one mark for the correct option.",
+    "answer": "A",
+    "explanation": "BYOD (Bring Your Own Device) means staff use their own phones/laptops for work.",
+    "points": [
+     "A: Bring Your Own Device (1)"
+    ]
+   }
+  },
+  {
+   "id": "MC053",
+   "learning_aim": "B1",
+   "topic": "B1.4 Modern trends",
+   "command_verb": "Identify",
+   "marks": 1,
+   "ao": "AO1",
+   "scenario": "",
+   "question": "A key security risk of IoT (Internet of Things) devices is that they:",
+   "guidance": "(1)",
+   "type": "multiple_choice",
+   "options": [
+    {
+     "label": "A",
+     "text": "Often have weak default security"
+    },
+    {
+     "label": "B",
+     "text": "Are too fast"
+    },
+    {
+     "label": "C",
+     "text": "Use no power"
+    },
+    {
+     "label": "D",
+     "text": "Cannot connect to Wi-Fi"
+    }
+   ],
+   "mark_scheme": {
+    "instruction": "Award one mark for the correct option.",
+    "answer": "A",
+    "explanation": "Many IoT devices ship with weak default passwords and poor security, making them easy targets.",
+    "points": [
+     "A: Often have weak default security (1)"
+    ]
+   }
+  },
+  {
+   "id": "MC054",
+   "learning_aim": "B1",
+   "topic": "B1.4 Modern trends",
+   "command_verb": "Identify",
+   "marks": 1,
+   "ao": "AO1",
+   "scenario": "",
+   "question": "Cloud computing means storing data and running software on:",
+   "guidance": "(1)",
+   "type": "multiple_choice",
+   "options": [
+    {
+     "label": "A",
+     "text": "Servers accessed over the internet"
+    },
+    {
+     "label": "B",
+     "text": "Only the local hard drive"
+    },
+    {
+     "label": "C",
+     "text": "A single USB stick"
+    },
+    {
+     "label": "D",
+     "text": "The monitor"
+    }
+   ],
+   "mark_scheme": {
+    "instruction": "Award one mark for the correct option.",
+    "answer": "A",
+    "explanation": "Cloud services provide storage and computing over the internet rather than on local hardware.",
+    "points": [
+     "A: Servers accessed over the internet (1)"
+    ]
+   }
+  },
+  {
+   "id": "MC055",
+   "learning_aim": "B2",
+   "topic": "B2.1 Hardware components",
+   "command_verb": "Identify",
+   "marks": 1,
+   "ao": "AO1",
+   "scenario": "",
+   "question": "Which device forwards data packets between different networks?",
+   "guidance": "(1)",
+   "type": "multiple_choice",
+   "options": [
+    {
+     "label": "A",
+     "text": "A router"
+    },
+    {
+     "label": "B",
+     "text": "A monitor"
+    },
+    {
+     "label": "C",
+     "text": "A printer"
+    },
+    {
+     "label": "D",
+     "text": "A keyboard"
+    }
+   ],
+   "mark_scheme": {
+    "instruction": "Award one mark for the correct option.",
+    "answer": "A",
+    "explanation": "A router connects different networks and forwards packets between them.",
+    "points": [
+     "A: A router (1)"
+    ]
+   }
+  },
+  {
+   "id": "MC056",
+   "learning_aim": "B2",
+   "topic": "B2.1 Hardware components",
+   "command_verb": "Identify",
+   "marks": 1,
+   "ao": "AO1",
+   "scenario": "",
+   "question": "A switch mainly works by connecting devices within:",
+   "guidance": "(1)",
+   "type": "multiple_choice",
+   "options": [
+    {
+     "label": "A",
+     "text": "The same network"
+    },
+    {
+     "label": "B",
+     "text": "Different countries"
+    },
+    {
+     "label": "C",
+     "text": "The cloud"
+    },
+    {
+     "label": "D",
+     "text": "The internet backbone"
+    }
+   ],
+   "mark_scheme": {
+    "instruction": "Award one mark for the correct option.",
+    "answer": "A",
+    "explanation": "A switch connects devices on the same local network segment.",
+    "points": [
+     "A: The same network (1)"
+    ]
+   }
+  },
+  {
+   "id": "MC057",
+   "learning_aim": "B2",
+   "topic": "B2.2 External media and storage security",
+   "command_verb": "Identify",
+   "marks": 1,
+   "ao": "AO1",
+   "scenario": "",
+   "question": "Which of the following is a security risk of using USB drives?",
+   "guidance": "(1)",
+   "type": "multiple_choice",
+   "options": [
+    {
+     "label": "A",
+     "text": "They can carry malware between systems"
+    },
+    {
+     "label": "B",
+     "text": "They are too small"
+    },
+    {
+     "label": "C",
+     "text": "They always work"
+    },
+    {
+     "label": "D",
+     "text": "They are cheap"
+    }
+   ],
+   "mark_scheme": {
+    "instruction": "Award one mark for the correct option.",
+    "answer": "A",
+    "explanation": "USB drives can unintentionally spread malware when moved between computers.",
+    "points": [
+     "A: They can carry malware between systems (1)"
+    ]
+   }
+  },
+  {
+   "id": "MC058",
+   "learning_aim": "B2",
+   "topic": "B2.2 External media and storage security",
+   "command_verb": "Identify",
+   "marks": 1,
+   "ao": "AO1",
+   "scenario": "",
+   "question": "Before disposing of a hard drive that held personal data, an organisation should:",
+   "guidance": "(1)",
+   "type": "multiple_choice",
+   "options": [
+    {
+     "label": "A",
+     "text": "Securely wipe or destroy it"
+    },
+    {
+     "label": "B",
+     "text": "Sell it as-is"
+    },
+    {
+     "label": "C",
+     "text": "Leave it in a drawer"
+    },
+    {
+     "label": "D",
+     "text": "Format only the recycle bin"
+    }
+   ],
+   "mark_scheme": {
+    "instruction": "Award one mark for the correct option.",
+    "answer": "A",
+    "explanation": "Secure erasure or physical destruction prevents data being recovered from the drive.",
+    "points": [
+     "A: Securely wipe or destroy it (1)"
+    ]
+   }
+  },
+  {
+   "id": "MC059",
+   "learning_aim": "B3",
+   "topic": "B3.1 TCP/IP",
+   "command_verb": "Identify",
+   "marks": 1,
+   "ao": "AO1",
+   "scenario": "",
+   "question": "The TCP/IP model has how many layers?",
+   "guidance": "(1)",
+   "type": "multiple_choice",
+   "options": [
+    {
+     "label": "A",
+     "text": "4"
+    },
+    {
+     "label": "B",
+     "text": "7"
+    },
+    {
+     "label": "C",
+     "text": "2"
+    },
+    {
+     "label": "D",
+     "text": "10"
+    }
+   ],
+   "mark_scheme": {
+    "instruction": "Award one mark for the correct option.",
+    "answer": "A",
+    "explanation": "TCP/IP is commonly described with four layers (application, transport, internet, network access).",
+    "points": [
+     "A: 4 (1)"
+    ]
+   }
+  },
+  {
+   "id": "MC060",
+   "learning_aim": "B3",
+   "topic": "B3.1 TCP/IP",
+   "command_verb": "Identify",
+   "marks": 1,
+   "ao": "AO1",
+   "scenario": "",
+   "question": "The default port for HTTPS (secure web traffic) is:",
+   "guidance": "(1)",
+   "type": "multiple_choice",
+   "options": [
+    {
+     "label": "A",
+     "text": "443"
+    },
+    {
+     "label": "B",
+     "text": "80"
+    },
+    {
+     "label": "C",
+     "text": "21"
+    },
+    {
+     "label": "D",
+     "text": "25"
+    }
+   ],
+   "mark_scheme": {
+    "instruction": "Award one mark for the correct option.",
+    "answer": "A",
+    "explanation": "HTTPS uses port 443; plain HTTP uses port 80.",
+    "points": [
+     "A: 443 (1)"
+    ]
+   }
+  },
+  {
+   "id": "MC061",
+   "learning_aim": "B3",
+   "topic": "B3.1 TCP/IP",
+   "command_verb": "Identify",
+   "marks": 1,
+   "ao": "AO1",
+   "scenario": "",
+   "question": "NAT (Network Address Translation) hides:",
+   "guidance": "(1)",
+   "type": "multiple_choice",
+   "options": [
+    {
+     "label": "A",
+     "text": "Internal (private) IP addresses from the internet"
+    },
+    {
+     "label": "B",
+     "text": "Passwords"
+    },
+    {
+     "label": "C",
+     "text": "File names"
+    },
+    {
+     "label": "D",
+     "text": "Wi-Fi signals"
+    }
+   ],
+   "mark_scheme": {
+    "instruction": "Award one mark for the correct option.",
+    "answer": "A",
+    "explanation": "NAT maps many private internal addresses to one public address, hiding them from the internet.",
+    "points": [
+     "A: Internal (private) IP addresses from the internet (1)"
+    ]
+   }
+  },
+  {
+   "id": "MC062",
+   "learning_aim": "B3",
+   "topic": "B3.4 Network infrastructure services",
+   "command_verb": "Identify",
+   "marks": 1,
+   "ao": "AO1",
+   "scenario": "",
+   "question": "DNS (Domain Name System) translates:",
+   "guidance": "(1)",
+   "type": "multiple_choice",
+   "options": [
+    {
+     "label": "A",
+     "text": "Domain names into IP addresses"
+    },
+    {
+     "label": "B",
+     "text": "Files into folders"
+    },
+    {
+     "label": "C",
+     "text": "Passwords into hashes"
+    },
+    {
+     "label": "D",
+     "text": "Emails into texts"
+    }
+   ],
+   "mark_scheme": {
+    "instruction": "Award one mark for the correct option.",
+    "answer": "A",
+    "explanation": "DNS resolves human-readable names (e.g. example.com) into numeric IP addresses.",
+    "points": [
+     "A: Domain names into IP addresses (1)"
+    ]
+   }
+  },
+  {
+   "id": "MC063",
+   "learning_aim": "B3",
+   "topic": "B3.4 Network infrastructure services",
+   "command_verb": "Identify",
+   "marks": 1,
+   "ao": "AO1",
+   "scenario": "",
+   "question": "DHCP is responsible for:",
+   "guidance": "(1)",
+   "type": "multiple_choice",
+   "options": [
+    {
+     "label": "A",
+     "text": "Automatically assigning IP addresses to devices"
+    },
+    {
+     "label": "B",
+     "text": "Encrypting files"
+    },
+    {
+     "label": "C",
+     "text": "Blocking spam"
+    },
+    {
+     "label": "D",
+     "text": "Backing up data"
+    }
+   ],
+   "mark_scheme": {
+    "instruction": "Award one mark for the correct option.",
+    "answer": "A",
+    "explanation": "DHCP automatically allocates IP addresses and network settings to devices.",
+    "points": [
+     "A: Automatically assigning IP addresses to devices (1)"
+    ]
+   }
+  },
+  {
+   "id": "MC064",
+   "learning_aim": "B3",
+   "topic": "B3.4 Network infrastructure services",
+   "command_verb": "Identify",
+   "marks": 1,
+   "ao": "AO1",
+   "scenario": "",
+   "question": "A VPN (Virtual Private Network) mainly provides:",
+   "guidance": "(1)",
+   "type": "multiple_choice",
+   "options": [
+    {
+     "label": "A",
+     "text": "A secure, encrypted connection over the internet"
+    },
+    {
+     "label": "B",
+     "text": "A faster printer"
+    },
+    {
+     "label": "C",
+     "text": "More storage"
+    },
+    {
+     "label": "D",
+     "text": "A bigger monitor"
+    }
+   ],
+   "mark_scheme": {
+    "instruction": "Award one mark for the correct option.",
+    "answer": "A",
+    "explanation": "A VPN creates an encrypted tunnel so data travels securely over the internet.",
+    "points": [
+     "A: A secure, encrypted connection over the internet (1)"
+    ]
+   }
+  }
+ ],
+ "quiz": [
+  {
+   "id": "Q044",
+   "learning_aim": "B1",
+   "topic": "B1.1 Network types",
+   "type": "mcq",
+   "question": "A network that covers a single building or site is a:",
+   "choices": [
+    "LAN",
+    "WAN",
+    "PAN",
+    "The internet"
+   ],
+   "correct_index": 0,
+   "explanation": "A Local Area Network (LAN) covers a small area such as one building."
+  },
+  {
+   "id": "Q045",
+   "learning_aim": "B1",
+   "topic": "B1.1 Network types",
+   "type": "mcq",
+   "question": "A network that connects offices across a country or the world is a:",
+   "choices": [
+    "LAN",
+    "WAN",
+    "PAN",
+    "MAN"
+   ],
+   "correct_index": 1,
+   "explanation": "A Wide Area Network (WAN) covers large distances, often across countries."
+  },
+  {
+   "id": "Q046",
+   "learning_aim": "B1",
+   "topic": "B1.1 Network types",
+   "type": "mcq",
+   "question": "WLAN stands for:",
+   "choices": [
+    "Wireless Local Area Network",
+    "Wired Local Access Node",
+    "Wide Link and Network",
+    "Web Linked Area Network"
+   ],
+   "correct_index": 0,
+   "explanation": "WLAN is a Wireless Local Area Network, typically using Wi-Fi."
+  },
+  {
+   "id": "Q047",
+   "learning_aim": "B1",
+   "topic": "B1.1 Network types",
+   "type": "mcq",
+   "question": "A private network only accessible to an organisation's staff is called an:",
+   "choices": [
+    "Intranet",
+    "Extranet",
+    "Internet",
+    "PAN"
+   ],
+   "correct_index": 0,
+   "explanation": "An intranet is a private, internal network for staff within an organisation."
+  },
+  {
+   "id": "Q048",
+   "learning_aim": "B1",
+   "topic": "B1.1 Network types",
+   "type": "mcq",
+   "question": "A network connecting two devices used by one person (e.g. a phone and headphones) is a:",
+   "choices": [
+    "PAN",
+    "WAN",
+    "LAN",
+    "SAN"
+   ],
+   "correct_index": 0,
+   "explanation": "A Personal Area Network (PAN) connects devices close to an individual."
+  },
+  {
+   "id": "Q049",
+   "learning_aim": "B1",
+   "topic": "B1.2 Network topologies",
+   "type": "mcq",
+   "question": "In a star topology all devices connect to a central:",
+   "choices": [
+    "Switch or hub",
+    "Terminator",
+    "Bus cable",
+    "Modem only"
+   ],
+   "correct_index": 0,
+   "explanation": "In a star topology every device connects to a central switch or hub."
+  },
+  {
+   "id": "Q050",
+   "learning_aim": "B1",
+   "topic": "B1.2 Network topologies",
+   "type": "mcq",
+   "question": "A major disadvantage of a star topology is that:",
+   "choices": [
+    "It is very slow",
+    "If the central device fails the whole network stops",
+    "It needs no cables",
+    "It cannot be wireless"
+   ],
+   "correct_index": 1,
+   "explanation": "Because all connections go through the central device, its failure brings down the network."
+  },
+  {
+   "id": "Q051",
+   "learning_aim": "B1",
+   "topic": "B1.3 Network architecture",
+   "type": "mcq",
+   "question": "In a client-server network, files and applications are stored centrally on the:",
+   "choices": [
+    "Client",
+    "Server",
+    "Printer",
+    "Monitor"
+   ],
+   "correct_index": 1,
+   "explanation": "A server provides centralised resources that client devices access."
+  },
+  {
+   "id": "Q052",
+   "learning_aim": "B1",
+   "topic": "B1.4 Modern trends",
+   "type": "mcq",
+   "question": "BYOD stands for:",
+   "choices": [
+    "Bring Your Own Device",
+    "Backup Your Own Data",
+    "Build Your Own Database",
+    "Business Yearly Operations Directory"
+   ],
+   "correct_index": 0,
+   "explanation": "BYOD (Bring Your Own Device) means staff use their own phones/laptops for work."
+  },
+  {
+   "id": "Q053",
+   "learning_aim": "B1",
+   "topic": "B1.4 Modern trends",
+   "type": "mcq",
+   "question": "A key security risk of IoT (Internet of Things) devices is that they:",
+   "choices": [
+    "Often have weak default security",
+    "Are too fast",
+    "Use no power",
+    "Cannot connect to Wi-Fi"
+   ],
+   "correct_index": 0,
+   "explanation": "Many IoT devices ship with weak default passwords and poor security, making them easy targets."
+  },
+  {
+   "id": "Q054",
+   "learning_aim": "B1",
+   "topic": "B1.4 Modern trends",
+   "type": "mcq",
+   "question": "Cloud computing means storing data and running software on:",
+   "choices": [
+    "Servers accessed over the internet",
+    "Only the local hard drive",
+    "A single USB stick",
+    "The monitor"
+   ],
+   "correct_index": 0,
+   "explanation": "Cloud services provide storage and computing over the internet rather than on local hardware."
+  },
+  {
+   "id": "Q055",
+   "learning_aim": "B2",
+   "topic": "B2.1 Hardware components",
+   "type": "mcq",
+   "question": "Which device forwards data packets between different networks?",
+   "choices": [
+    "A router",
+    "A monitor",
+    "A printer",
+    "A keyboard"
+   ],
+   "correct_index": 0,
+   "explanation": "A router connects different networks and forwards packets between them."
+  },
+  {
+   "id": "Q056",
+   "learning_aim": "B2",
+   "topic": "B2.1 Hardware components",
+   "type": "mcq",
+   "question": "A switch mainly works by connecting devices within:",
+   "choices": [
+    "The same network",
+    "Different countries",
+    "The cloud",
+    "The internet backbone"
+   ],
+   "correct_index": 0,
+   "explanation": "A switch connects devices on the same local network segment."
+  },
+  {
+   "id": "Q057",
+   "learning_aim": "B2",
+   "topic": "B2.2 External media and storage security",
+   "type": "mcq",
+   "question": "Which of the following is a security risk of using USB drives?",
+   "choices": [
+    "They can carry malware between systems",
+    "They are too small",
+    "They always work",
+    "They are cheap"
+   ],
+   "correct_index": 0,
+   "explanation": "USB drives can unintentionally spread malware when moved between computers."
+  },
+  {
+   "id": "Q058",
+   "learning_aim": "B2",
+   "topic": "B2.2 External media and storage security",
+   "type": "mcq",
+   "question": "Before disposing of a hard drive that held personal data, an organisation should:",
+   "choices": [
+    "Securely wipe or destroy it",
+    "Sell it as-is",
+    "Leave it in a drawer",
+    "Format only the recycle bin"
+   ],
+   "correct_index": 0,
+   "explanation": "Secure erasure or physical destruction prevents data being recovered from the drive."
+  },
+  {
+   "id": "Q059",
+   "learning_aim": "B3",
+   "topic": "B3.1 TCP/IP",
+   "type": "mcq",
+   "question": "The TCP/IP model has how many layers?",
+   "choices": [
+    "4",
+    "7",
+    "2",
+    "10"
+   ],
+   "correct_index": 0,
+   "explanation": "TCP/IP is commonly described with four layers (application, transport, internet, network access)."
+  },
+  {
+   "id": "Q060",
+   "learning_aim": "B3",
+   "topic": "B3.1 TCP/IP",
+   "type": "mcq",
+   "question": "The default port for HTTPS (secure web traffic) is:",
+   "choices": [
+    "443",
+    "80",
+    "21",
+    "25"
+   ],
+   "correct_index": 0,
+   "explanation": "HTTPS uses port 443; plain HTTP uses port 80."
+  },
+  {
+   "id": "Q061",
+   "learning_aim": "B3",
+   "topic": "B3.1 TCP/IP",
+   "type": "mcq",
+   "question": "NAT (Network Address Translation) hides:",
+   "choices": [
+    "Internal (private) IP addresses from the internet",
+    "Passwords",
+    "File names",
+    "Wi-Fi signals"
+   ],
+   "correct_index": 0,
+   "explanation": "NAT maps many private internal addresses to one public address, hiding them from the internet."
+  },
+  {
+   "id": "Q062",
+   "learning_aim": "B3",
+   "topic": "B3.4 Network infrastructure services",
+   "type": "mcq",
+   "question": "DNS (Domain Name System) translates:",
+   "choices": [
+    "Domain names into IP addresses",
+    "Files into folders",
+    "Passwords into hashes",
+    "Emails into texts"
+   ],
+   "correct_index": 0,
+   "explanation": "DNS resolves human-readable names (e.g. example.com) into numeric IP addresses."
+  },
+  {
+   "id": "Q063",
+   "learning_aim": "B3",
+   "topic": "B3.4 Network infrastructure services",
+   "type": "mcq",
+   "question": "DHCP is responsible for:",
+   "choices": [
+    "Automatically assigning IP addresses to devices",
+    "Encrypting files",
+    "Blocking spam",
+    "Backing up data"
+   ],
+   "correct_index": 0,
+   "explanation": "DHCP automatically allocates IP addresses and network settings to devices."
+  },
+  {
+   "id": "Q064",
+   "learning_aim": "B3",
+   "topic": "B3.4 Network infrastructure services",
+   "type": "mcq",
+   "question": "A VPN (Virtual Private Network) mainly provides:",
+   "choices": [
+    "A secure, encrypted connection over the internet",
+    "A faster printer",
+    "More storage",
+    "A bigger monitor"
+   ],
+   "correct_index": 0,
+   "explanation": "A VPN creates an encrypted tunnel so data travels securely over the internet."
+  }
+ ],
+ "flashcards": [
+  {
+   "id": "F012",
+   "learning_aim": "B",
+   "topic": "B1.1 Network types",
+   "front": "What is the difference between LAN, WAN, WLAN, and SAN?",
+   "back": "LAN (Local Area Network): single building/site, owned by organisation. WAN (Wide Area Network): connects LANs across geographical distances. WLAN (Wireless LAN): LAN using Wi-Fi instead of cables. SAN (Storage Area Network): dedicated high-speed network for storage devices."
+  },
+  {
+   "id": "F013",
+   "learning_aim": "B",
+   "topic": "B1.2 Network topologies",
+   "front": "Compare star, bus, and ring topologies.",
+   "back": "Star: devices connect to central switch. Advantage: one failure doesn't affect others. Disadvantage: central switch is single point of failure. Bus: devices share backbone cable with terminators. Advantage: cheap, simple. Disadvantage: backbone failure = whole network down. Ring: devices in circular loop, data travels in one direction. Advantage: no collisions. Disadvantage: one break = entire ring fails."
+  },
+  {
+   "id": "F014",
+   "learning_aim": "B",
+   "topic": "B3.1 TCP/IP",
+   "front": "Name the 4 layers of the TCP/IP model from top to bottom.",
+   "back": "1. Application Layer (HTTP, HTTPS, SMTP, DNS, FTP) — provides services to end-user applications\n2. Transport Layer (TCP, UDP) — breaks data into segments, ensures delivery/reliability\n3. Internet Layer (IP) — addresses and routes packets across networks\n4. Network Access Layer (Ethernet, Wi-Fi) — physical transmission of bits"
+  },
+  {
+   "id": "F015",
+   "learning_aim": "B",
+   "topic": "B3.4 Network infrastructure services — DHCP",
+   "front": "What is the DORA process in DHCP?",
+   "back": "Discover: Client broadcasts DHCPDISCOVER to find servers. Offer: Server responds with DHCPOFFER containing proposed IP. Request: Client sends DHCPREQUEST to accept. Acknowledge: Server confirms with DHCPACK; client can use IP for lease duration."
+  },
+  {
+   "id": "F016",
+   "learning_aim": "B",
+   "topic": "B3.4 Network infrastructure services — DNS",
+   "front": "Describe the DNS resolution process step by step.",
+   "back": "1. Browser checks local DNS cache. If not found → 2. Query sent to DNS resolver (ISP). 3. Resolver queries root server → gets TLD server (.com). 4. Resolver queries TLD server → gets authoritative name server for domain. 5. Authoritative server returns IP address. 6. Resolver caches result and returns IP to browser. Browser connects to that IP."
+  },
+  {
+   "id": "F017",
+   "learning_aim": "B",
+   "topic": "B1.4 Modern trends — cloud computing",
+   "front": "What are the key cloud computing security concerns?",
+   "back": "Configuration issues (default access settings), reliance on service provider for security, data leaks/loss/theft, API vulnerabilities, account hijacking, lack of visibility into provider's security practices. Shared Responsibility Model: provider secures the cloud, customer secures what's IN the cloud."
+  }
+ ],
+ "diagrams": [
+  {
+   "id": "DIA003",
+   "learning_aim": "B",
+   "topic": "B1.2 Network topologies",
+   "command_verb": "Draw",
+   "marks": 4,
+   "ao": "AO2",
+   "scenario": "A network administrator wants to document the office network.",
+   "question": "Draw a star topology showing a central switch connected to four workstations.",
+   "guidance": "(4)",
+   "type": "diagram",
+   "diagram_kind": "topology diagram",
+   "mermaid": "flowchart TB\n  Switch[Central Switch] --- W1[Workstation 1]\n  Switch --- W2[Workstation 2]\n  Switch --- W3[Workstation 3]\n  Switch --- W4[Workstation 4]",
+   "mark_scheme": {
+    "instruction": "Award up to 4 marks. Award marks for accurate labelling and clear, correct structure.",
+    "points": [
+     "Correct overall structure and relationships",
+     "Accurate and relevant labels",
+     "Clear, logical presentation"
+    ]
+   }
+  },
+  {
+   "id": "DIA004",
+   "learning_aim": "B",
+   "topic": "B1.2 Network topologies",
+   "command_verb": "Draw",
+   "marks": 4,
+   "ao": "AO2",
+   "scenario": "",
+   "question": "Draw a mesh topology showing four devices interconnected with redundant links.",
+   "guidance": "(4)",
+   "type": "diagram",
+   "diagram_kind": "topology diagram",
+   "mermaid": "flowchart LR\n  A([Node A]) --- B([Node B])\n  A --- C([Node C])\n  A --- D([Node D])\n  B --- C\n  B --- D\n  C --- D",
+   "mark_scheme": {
+    "instruction": "Award up to 4 marks. Award marks for accurate labelling and clear, correct structure.",
+    "points": [
+     "Correct overall structure and relationships",
+     "Accurate and relevant labels",
+     "Clear, logical presentation"
+    ]
+   }
+  },
+  {
+   "id": "DIA007",
+   "learning_aim": "B",
+   "topic": "B3.1 TCP/IP model",
+   "command_verb": "Draw",
+   "marks": 4,
+   "ao": "AO2",
+   "scenario": "A student must illustrate the layering of the TCP/IP model.",
+   "question": "Draw the four-layer TCP/IP model and label the position of TCP and IP.",
+   "guidance": "(4)",
+   "type": "diagram",
+   "diagram_kind": "diagram",
+   "mermaid": "flowchart TB\n  L4[Application Layer]\n  L3[Transport Layer - TCP]\n  L2[Internet Layer - IP]\n  L1[Network Access Layer]\n  L4 --> L3 --> L2 --> L1",
+   "mark_scheme": {
+    "instruction": "Award up to 4 marks. Award marks for accurate labelling and clear, correct structure.",
+    "points": [
+     "Correct overall structure and relationships",
+     "Accurate and relevant labels",
+     "Clear, logical presentation"
+    ]
+   }
+  },
+  {
+   "id": "DIA008",
+   "learning_aim": "B",
+   "topic": "B3.4 Network infrastructure services — DNS",
+   "command_verb": "Draw",
+   "marks": 4,
+   "ao": "AO2",
+   "scenario": "",
+   "question": "Draw a diagram showing DNS resolution from a client to a recursive DNS server and onward to an authoritative server.",
+   "guidance": "(4)",
+   "type": "diagram",
+   "diagram_kind": "sequence diagram",
+   "mermaid": "flowchart LR\n  Client([Client]) -->|\"www.example.com\"| Recursive[Recursive DNS Server]\n  Recursive --> Authoritative[Authoritative DNS Server]\n  Authoritative -->|\"IP address\"| Recursive\n  Recursive --> Client",
+   "mark_scheme": {
+    "instruction": "Award up to 4 marks. Award marks for accurate labelling and clear, correct structure.",
+    "points": [
+     "Correct overall structure and relationships",
+     "Accurate and relevant labels",
+     "Clear, logical presentation"
+    ]
+   }
+  },
+  {
+   "id": "DIA102",
+   "learning_aim": "B",
+   "topic": "B1.2 Network topologies",
+   "command_verb": "Describe",
+   "marks": 4,
+   "ao": "AO2",
+   "scenario": "",
+   "question": "The Figure shows a star topology. Describe its key feature and one advantage for security.",
+   "guidance": "(4)",
+   "type": "diagram",
+   "diagram_kind": "diagram",
+   "mermaid": null,
+   "mark_scheme": {
+    "instruction": "Award up to 4 marks. Award marks for accurate labelling and clear, correct structure.",
+    "points": [
+     "All devices connect to a central switch (1)",
+     "Failure of one device/cable does not affect others (1)",
+     "Central point enables centralised management and monitoring (2)"
+    ]
+   },
+   "figure": "flowchart TB\n  C[Central Switch] --- A[Device A]\n  C --- B[Device B]\n  C --- D[Device D]\n  C --- E[Device E]"
+  },
+  {
+   "id": "DIA104",
+   "learning_aim": "B",
+   "topic": "B3.1 TCP/IP model",
+   "command_verb": "Label",
+   "marks": 3,
+   "ao": "AO2",
+   "scenario": "",
+   "question": "The Figure shows the four-layer TCP/IP model with one layer missing its label. State the missing layer.",
+   "guidance": "(3)",
+   "type": "diagram",
+   "diagram_kind": "diagram",
+   "mermaid": null,
+   "mark_scheme": {
+    "instruction": "Award up to 3 marks. Award marks for accurate labelling and clear, correct structure.",
+    "points": [
+     "The missing layer is the Transport layer (which carries TCP/UDP) (3)"
+    ]
+   },
+   "figure": "flowchart TB\n  L4[Application]\n  L3[???]\n  L2[Internet]\n  L1[Network Access]\n  L4 --- L3 --- L2 --- L1"
+  },
+  {
+   "id": "DIA105",
+   "learning_aim": "B",
+   "topic": "B1.2 Network topologies",
+   "command_verb": "Draw",
+   "marks": 4,
+   "ao": "AO2",
+   "scenario": "",
+   "question": "Draw an extended-star topology showing a central switch connected to two further switches, each serving workstations.",
+   "guidance": "(4)",
+   "type": "diagram",
+   "diagram_kind": "topology diagram",
+   "mermaid": "flowchart TB\n  Core[Core Switch] --- S1[Switch 1]\n  Core --- S2[Switch 2]\n  S1 --- W1[Workstation]\n  S1 --- W2[Workstation]\n  S2 --- W3[Workstation]\n  S2 --- W4[Workstation]",
+   "mark_scheme": {
+    "instruction": "Award up to 4 marks. Award marks for accurate labelling and clear, correct structure.",
+    "points": [
+     "Correct overall structure and relationships",
+     "Accurate and relevant labels",
+     "Clear, logical presentation"
+    ]
+   }
+  },
+  {
+   "id": "DIA106",
+   "learning_aim": "B",
+   "topic": "B3.4 Network infrastructure services — DHCP",
+   "command_verb": "Draw",
+   "marks": 4,
+   "ao": "AO2",
+   "scenario": "",
+   "question": "Draw the DHCP DORA process showing the four messages between a client and a server.",
+   "guidance": "(4)",
+   "type": "diagram",
+   "diagram_kind": "sequence diagram",
+   "mermaid": "sequenceDiagram\n  Client->>Server: DHCP Discover\n  Server-->>Client: DHCP Offer\n  Client->>Server: DHCP Request\n  Server-->>Client: DHCP Ack",
+   "mark_scheme": {
+    "instruction": "Award up to 4 marks. Award marks for accurate labelling and clear, correct structure.",
+    "points": [
+     "Correct overall structure and relationships",
+     "Accurate and relevant labels",
+     "Clear, logical presentation"
+    ]
+   }
+  }
+ ],
+ "knowledgeBank": null,
+ "criteria": [],
+ "briefs": []
+}

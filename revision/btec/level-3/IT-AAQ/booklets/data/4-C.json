@@ -1,0 +1,534 @@
+{
+ "unit": 4,
+ "unitTitle": "Relational Database Development",
+ "unitName": "IT AAQ Unit 4",
+ "aim": "C",
+ "aimTitle": "Develop a relational database solution to meet client requirements",
+ "aimShort": "Producing a database with SQL, testing, reviewing and optimising the solution",
+ "board": "Pearson BTEC Level 3 National Extended Certificate in IT (AAQ)",
+ "specIssue": "Issue 5, November 2025",
+ "assessment": "Internally assessed Pearson Set Assignment (coursework).",
+ "topics": [
+  {
+   "code": "C1",
+   "name": "Producing a database solution"
+  },
+  {
+   "code": "C2",
+   "name": "Testing the database solution"
+  },
+  {
+   "code": "C3",
+   "name": "Reviewing the database solution"
+  },
+  {
+   "code": "C4",
+   "name": "Optimising the database solution"
+  }
+ ],
+ "checklist": [
+  {
+   "code": "C1",
+   "name": "Producing a database solution",
+   "type": "group"
+  },
+  {
+   "code": "",
+   "name": "Use an appropriate DBMS and SQL to create, set up and maintain data tables",
+   "type": "item"
+  },
+  {
+   "code": "",
+   "name": "Create links/relationships between tables and apply validation rules",
+   "type": "item"
+  },
+  {
+   "code": "",
+   "name": "Generate outputs: user-generated queries, automated queries, reports",
+   "type": "item"
+  },
+  {
+   "code": "",
+   "name": "Build the user interface: navigation, data entry forms, child (sub) forms",
+   "type": "item"
+  },
+  {
+   "code": "",
+   "name": "Task automation, and populating the database by importing, adding and manipulating data",
+   "type": "item"
+  },
+  {
+   "code": "C2",
+   "name": "Testing the database solution",
+   "type": "group"
+  },
+  {
+   "code": "",
+   "name": "Testing types: referential integrity and functionality",
+   "type": "item"
+  },
+  {
+   "code": "",
+   "name": "Test data: erroneous, extreme and normal",
+   "type": "item"
+  },
+  {
+   "code": "",
+   "name": "Object testing: tables, queries, reports, forms, menus",
+   "type": "item"
+  },
+  {
+   "code": "",
+   "name": "Usability testing: selecting suitable test users and devising suitable tests",
+   "type": "item"
+  },
+  {
+   "code": "",
+   "name": "Gather feedback, produce test documentation, and use outcomes to refine the solution",
+   "type": "item"
+  },
+  {
+   "code": "C3",
+   "name": "Reviewing the database solution",
+   "type": "group"
+  },
+  {
+   "code": "",
+   "name": "Review against: quality of the database, fitness for purpose, suitability against original requirements, legal and ethical constraints, strengths and improvements",
+   "type": "item"
+  },
+  {
+   "code": "C4",
+   "name": "Optimising the database solution",
+   "type": "group"
+  },
+  {
+   "code": "",
+   "name": "Data types and data sizes (size on disk, image storage requirements)",
+   "type": "item"
+  },
+  {
+   "code": "",
+   "name": "Many tables: overheads and query complexity",
+   "type": "item"
+  },
+  {
+   "code": "",
+   "name": "Query optimisation: select specific columns, efficient joins/sub-queries",
+   "type": "item"
+  }
+ ],
+ "examQuestions": [],
+ "mcq": [
+  {
+   "id": "MC25",
+   "aim": "C",
+   "topic": "C1 SQL",
+   "q": "Which SQL statement creates a new table?",
+   "options": [
+    "CREATE TABLE",
+    "INSERT TABLE",
+    "MAKE TABLE",
+    "NEW TABLE"
+   ],
+   "answer": 0,
+   "why": "CREATE TABLE defines a new relation with its columns and data types."
+  },
+  {
+   "id": "MC26",
+   "aim": "C",
+   "topic": "C1 Relationships",
+   "q": "Enforcing that a child record can't exist without its parent is done through…",
+   "options": [
+    "Relationships with referential integrity",
+    "Formatting",
+    "Sorting",
+    "Indexing"
+   ],
+   "answer": 0,
+   "why": "Defining table relationships with referential integrity ensures child records always have a valid parent."
+  },
+  {
+   "id": "MC27",
+   "aim": "C",
+   "topic": "C2 Testing",
+   "q": "Testing with age = -5, or letters in a number field, uses…",
+   "options": [
+    "Erroneous test data",
+    "Normal test data",
+    "Extreme test data",
+    "Random data"
+   ],
+   "answer": 0,
+   "why": "Erroneous (invalid) data confirms validation rules correctly reject bad input."
+  },
+  {
+   "id": "MC28",
+   "aim": "C",
+   "topic": "C2 Testing",
+   "q": "Testing with values at the very edge of allowed ranges (0, 120) is…",
+   "options": [
+    "Extreme / boundary testing",
+    "Normal testing",
+    "Erroneous testing",
+    "Usability testing"
+   ],
+   "answer": 0,
+   "why": "Extreme/boundary data checks the limits of ranges and field lengths — catches overflow and off-by-one bugs."
+  },
+  {
+   "id": "MC29",
+   "aim": "C",
+   "topic": "C4 Optimisation",
+   "q": "To make a query run faster you should…",
+   "options": [
+    "Select only the columns you need and use efficient joins",
+    "Always use SELECT *",
+    "Add more sub-queries",
+    "Store calculated results"
+   ],
+   "answer": 0,
+   "why": "Selecting specific columns and efficient joins (over slow sub-queries) are key query optimisations."
+  },
+  {
+   "id": "MC30",
+   "aim": "C",
+   "topic": "C3 Review",
+   "q": "Assessing whether the database meets the client's original requirements is…",
+   "options": [
+    "Fitness for purpose review",
+    "Normalisation",
+    "Backup",
+    "Compilation"
+   ],
+   "answer": 0,
+   "why": "Fitness for purpose checks the solution against the brief — quality, suitability, legal/ethical constraints."
+  },
+  {
+   "id": "MC35",
+   "aim": "C",
+   "topic": "C2 Testing",
+   "q": "Checking that links between tables stay valid when records are added/deleted is…",
+   "options": [
+    "Referential integrity testing",
+    "Usability testing",
+    "Formatting",
+    "Indexing"
+   ],
+   "answer": 0,
+   "why": "Referential integrity testing verifies relationships hold — no orphans, blocked deletes of parents with children."
+  },
+  {
+   "id": "MC38",
+   "aim": "C",
+   "topic": "C4 Optimisation",
+   "q": "Storing images directly inside a table can bloat the file. A better approach is…",
+   "options": [
+    "Store image paths, not the images themselves",
+    "Always embed base64",
+    "Duplicate the table",
+    "Use bigger data types"
+   ],
+   "answer": 0,
+   "why": "Storing paths/references keeps the database small and fast — part of optimising data storage."
+  }
+ ],
+ "quiz": [
+  {
+   "id": "Q13",
+   "aim": "C",
+   "topic": "Testing",
+   "q": "Testing an Age field with -5, 999 and 'abc' checks…",
+   "options": [
+    "Erroneous + extreme data handling",
+    "Normal data only",
+    "Report formatting",
+    "Print layout"
+   ],
+   "answer": 0,
+   "why": "These invalid/edge values confirm validation rules reject bad input and boundary cases."
+  },
+  {
+   "id": "Q14",
+   "aim": "C",
+   "topic": "Testing",
+   "q": "You ask three classmates to enter a new customer and give feedback. This is…",
+   "options": [
+    "Usability testing",
+    "Functionality testing",
+    "Normalisation",
+    "Optimisation"
+   ],
+   "answer": 0,
+   "why": "Usability testing gathers real-user feedback on how easy the forms/menus are to use."
+  },
+  {
+   "id": "Q15",
+   "aim": "C",
+   "topic": "Review",
+   "q": "Before submitting, you check the database still meets every point in the client's brief. This is…",
+   "options": [
+    "Fitness-for-purpose review",
+    "Backup",
+    "Compilation",
+    "Data entry"
+   ],
+   "answer": 0,
+   "why": "Fitness for purpose verifies the solution against the original requirements — a C3 criterion."
+  },
+  {
+   "id": "Q18",
+   "aim": "C",
+   "topic": "SQL",
+   "q": "Write the SQL to fetch every column from a table called Movie.",
+   "options": [
+    "SELECT * FROM Movie;",
+    "INSERT INTO Movie;",
+    "GET ALL Movie;",
+    "FETCH Movie;"
+   ],
+   "answer": 0,
+   "why": "SELECT * FROM Movie retrieves all columns and rows. (Note: selecting only needed columns is better for optimisation.)"
+  },
+  {
+   "id": "Q19",
+   "aim": "C",
+   "topic": "Optimisation",
+   "q": "A query is slow. Which change is most likely to help?",
+   "options": [
+    "Select only needed columns and index the join key",
+    "Use SELECT * everywhere",
+    "Add more sub-queries",
+    "Store results in the same table"
+   ],
+   "answer": 0,
+   "why": "Selecting specific columns and indexing join keys reduce work — core query optimisation."
+  }
+ ],
+ "flashcards": [
+  {
+   "id": "F46",
+   "aim": "C",
+   "front": "Normal / valid test data",
+   "back": "Everyday, expected data — e.g. age 34, a real postcode. Confirms the system handles normal input correctly."
+  },
+  {
+   "id": "F47",
+   "aim": "C",
+   "front": "Erroneous / invalid test data",
+   "back": "Deliberately wrong data — e.g. age -5, letters in a number field, a customer ID that doesn't exist. Confirms validation and referential integrity work."
+  },
+  {
+   "id": "F48",
+   "aim": "C",
+   "front": "Extreme / boundary test data",
+   "back": "Values at the edge of allowed ranges — e.g. age 0, 120, or the maximum field length. Catches off-by-one and overflow bugs."
+  },
+  {
+   "id": "F49",
+   "aim": "C",
+   "front": "Referential integrity testing",
+   "back": "Checking that relationships hold — deleting a parent with children should be blocked, orphan records should not exist."
+  },
+  {
+   "id": "F50",
+   "aim": "C",
+   "front": "Query optimisation",
+   "back": "Making queries efficient — select only needed columns, index key fields, use efficient joins rather than slow sub-queries where possible."
+  },
+  {
+   "id": "F51",
+   "aim": "C",
+   "front": "Fitness for purpose",
+   "back": "Does the database actually meet the client's requirements? Reviewed against the original brief — quality, suitability, legal/ethical constraints."
+  },
+  {
+   "id": "F52",
+   "aim": "C",
+   "front": "Usability testing",
+   "back": "Getting real users to try the database (forms, menus, queries) and gather feedback — then refining based on what they found hard."
+  }
+ ],
+ "diagrams": [],
+ "knowledgeBank": {
+  "code": "C",
+  "title": "Develop a relational database solution to meet client requirements",
+  "topics": [
+   {
+    "code": "C1",
+    "name": "Producing a database solution",
+    "keyPoints": [
+     "Use an appropriate DBMS and SQL to create, set up and maintain data tables",
+     "Create links/relationships between tables and apply validation rules",
+     "Generate outputs: user-generated queries, automated queries, reports",
+     "Build the user interface: navigation, data entry forms, child (sub) forms",
+     "Task automation, and populating the database by importing, adding and manipulating data"
+    ]
+   },
+   {
+    "code": "C2",
+    "name": "Testing the database solution",
+    "keyPoints": [
+     "Testing types: referential integrity and functionality",
+     "Test data: erroneous, extreme and normal",
+     "Object testing: tables, queries, reports, forms, menus",
+     "Usability testing: selecting suitable test users and devising suitable tests",
+     "Gather feedback, produce test documentation, and use outcomes to refine the solution"
+    ]
+   },
+   {
+    "code": "C3",
+    "name": "Reviewing the database solution",
+    "keyPoints": [
+     "Review against: quality of the database, fitness for purpose, suitability against original requirements, legal and ethical constraints, strengths and improvements"
+    ]
+   },
+   {
+    "code": "C4",
+    "name": "Optimising the database solution",
+    "keyPoints": [
+     "Data types and data sizes (size on disk, image storage requirements)",
+     "Many tables: overheads and query complexity",
+     "Query optimisation: select specific columns, efficient joins/sub-queries"
+    ]
+   }
+  ]
+ },
+ "criteria": [
+  {
+   "code": "task3",
+   "aim": "C",
+   "title": "Develop, test and optimise the database",
+   "criteria": [
+    {
+     "code": "C.P4",
+     "level": "Pass",
+     "text": "Use tools, techniques, processes and testing to produce a database that meets some of the client's requirements."
+    },
+    {
+     "code": "C.M4",
+     "level": "Merit",
+     "text": "Use tools, techniques, processes and testing to produce a database that meets most of the client's requirements."
+    },
+    {
+     "code": "C.D3",
+     "level": "Distinction",
+     "text": "Use tools, techniques, processes and testing to produce a database that comprehensively meets the client's requirements."
+    }
+   ]
+  }
+ ],
+ "briefs": [
+  {
+   "id": "college-enrolment",
+   "accdb": "CollegeCourseEnrolment.accdb",
+   "title": "College Course Enrolment",
+   "audience": "Enrolment team & tutors (Newman College-style)",
+   "scenario": "A sixth-form college needs a database to manage its learners, courses, subjects and staff, and to track which learner is enrolled on which course. Enrolment data is currently held across spreadsheets and paper, making it hard to see who is on each course and how learners are progressing against their target grades.",
+   "purpose": "To replace the spreadsheets with a relational database that stores learners, courses, subjects and staff, records every learner's enrolments, and produces reports on course enrolment and learner progress.",
+   "targetAudience": "Enrolment staff enter and update enrolments; tutors run queries and reports on their courses; managers review enrolment numbers and completion rates.",
+   "mustIncludes": [
+    "Tables for Learner, Course, Subject, Staff and a linking Enrolment table",
+    "Primary and foreign keys with one-to-many relationships (and a many-to-many resolved via Enrolment)",
+    "A data dictionary documenting every field name, data type, size and validation",
+    "Data validation (e.g. dates, target/actual grades, required fields)",
+    "Lookup fields / combo boxes so users pick Learners, Courses and Staff from drop-downs",
+    "Queries using multiple criteria and wildcards (e.g. learners on one course, surnames starting with a letter)",
+    "A parameter query to find a learner's enrolments",
+    "A report grouping enrolments by course with totals",
+    "A form with a subform showing a learner's (or course's) enrolments",
+    "Task automation using a macro or button",
+    "A test plan covering normal, erroneous and extreme data"
+   ],
+   "assignmentStyle": "original"
+  },
+  {
+   "id": "cinema-bookings",
+   "accdb": "RetroCinemaBooking.accdb",
+   "title": "Retro Cinema Booking System",
+   "audience": "Cinema manager & box-office staff",
+   "scenario": "A small independent cinema (Retro Reel) shows classic and cult films across three screens. Screenings are planned on a whiteboard and bookings taken over the phone, causing double-bookings and lost sales.",
+   "purpose": "To manage films, screens, screenings and bookings, prevent double-selling seats and produce daily sales reports.",
+   "targetAudience": "Box-office staff create bookings; the manager checks screening attendance and revenue.",
+   "mustIncludes": [
+    "Tables for Film, Screen, Screening, Member (or Customer) and a linking Booking table",
+    "One-to-many relationships with enforced referential integrity",
+    "A data dictionary for every field and validation rule",
+    "Lookup/combo boxes so staff pick a film and screen from a list",
+    "A query with criteria and wildcards (e.g. films of one genre, titles starting with a letter)",
+    "A parameter query to show all screenings on a chosen date",
+    "A report grouping bookings by screening with seat totals",
+    "A form with a subform for a screening's bookings",
+    "A macro or button to open the booking form",
+    "A test plan with normal, erroneous and extreme data"
+   ],
+   "assignmentStyle": "original"
+  },
+  {
+   "id": "garage-repairs",
+   "accdb": "GarageRepairs.accdb",
+   "title": "Garage Repairs & MOT Booking",
+   "audience": "Garage receptionist & mechanics",
+   "scenario": "A local garage (Precision Motors) keeps job cards in a filing cabinet. Customers, vehicles, jobs and parts are recorded on paper, so it's hard to see what work is outstanding and which parts were used.",
+   "purpose": "To manage customers, vehicles, jobs and parts, track each repair and produce invoices and workload reports.",
+   "targetAudience": "Receptionists book in vehicles; mechanics see outstanding jobs; owners review parts usage and invoicing.",
+   "mustIncludes": [
+    "Tables for Customer, Vehicle, Mechanic, Part and a linking Job table",
+    "Primary/foreign keys with a many-to-many resolved via a JobPart linking table",
+    "A data dictionary documenting field names, types, sizes and validation",
+    "Validation (e.g. date completed after date booked, valid registration format)",
+    "Lookup/combo boxes for customer, vehicle and mechanic",
+    "Queries using multiple criteria and wildcards",
+    "A parameter query to list jobs for a customer",
+    "A report grouping jobs by mechanic or customer with totals",
+    "A form with a subform showing a customer's vehicles",
+    "A macro used to automate opening a form/report",
+    "A test plan covering normal, erroneous and extreme data"
+   ],
+   "assignmentStyle": "original"
+  },
+  {
+   "id": "library-loans",
+   "accdb": "SchoolLibraryLoans.accdb",
+   "title": "School Library Loans",
+   "audience": "Librarian & students",
+   "scenario": "A secondary school library wants a database to manage its books, students and loans. Books are logged in a paper register, so it is hard to know which books are on loan and which are overdue.",
+   "purpose": "To manage books, students and loans, track which books are out on loan and generate overdue reports.",
+   "targetAudience": "The librarian issues and returns books; students are recorded as borrowers.",
+   "mustIncludes": [
+    "Tables for Student, Book and a linking Loan table",
+    "A many-to-many relationship resolved via the Loan table",
+    "A data dictionary documenting all fields and validation",
+    "Conceptual and logical ERDs",
+    "A loan form with a subform for a student's loans",
+    "A query with a calculated field (e.g. days overdue)",
+    "A report of overdue books grouped by student",
+    "Validation (e.g. loan date before return date)",
+    "Usability testing with real users and documented feedback"
+   ],
+   "assignmentStyle": "original"
+  },
+  {
+   "id": "travel-agency",
+   "accdb": "HolidayBookingAgency.accdb",
+   "title": "Holiday Booking Agency",
+   "audience": "Travel agents & customers",
+   "scenario": "A high-street travel agency (Sunrise Travel) arranges package holidays. Agents record bookings in paper folders and a shared spreadsheet, leading to duplicate bookings and errors in customer details.",
+   "purpose": "To manage customers, holidays, hotels and bookings, prevent double-booking and produce commission and passenger-list reports.",
+   "targetAudience": "Agents create and amend bookings; managers review sales and passenger manifests.",
+   "mustIncludes": [
+    "Tables for Customer, Holiday, Hotel (or Destination) and a linking Booking table",
+    "One-to-many relationships with referential integrity",
+    "A data dictionary with validation rules and input masks (e.g. date, price)",
+    "Lookup/combo boxes for customer, holiday and hotel",
+    "Queries with multiple criteria and wildcards (e.g. holidays under a price)",
+    "A parameter query for all customers on one holiday",
+    "Reports with grouping and totals (e.g. commission by agent)",
+    "A booking form with a subform for extra passengers",
+    "A macro to open the booking or report from a menu",
+    "A full test plan with normal, erroneous and extreme data"
+   ],
+   "assignmentStyle": "original"
+  }
+ ]
+}

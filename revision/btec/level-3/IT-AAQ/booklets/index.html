@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RA10 — BTEC IT AAQ Revision Booklets</title>
+<meta name="description" content="Printable revision booklets and solutions booklets for every BTEC IT AAQ unit and learning aim.">
+<link rel="icon" href="https://ra10.co.uk/logo.png" type="image/png">
+<link rel="stylesheet" href="css/booklet.css">
+</head>
+<body>
+
+<header class="bk-topbar">
+  <div class="bk-brand">
+    <img src="../../../logo.png" alt="RA10" onerror="this.style.display='none'">
+    <span>Revision Booklets</span>
+  </div>
+  <div class="bk-spacer"></div>
+  <div class="bk-toolbar">
+    <select class="bk-select" id="bk-unit" aria-label="Unit"></select>
+    <select class="bk-select" id="bk-aim" aria-label="Learning aim"></select>
+    <label class="bk-btn ghost" style="display:inline-flex;align-items:center;gap:6px;cursor:pointer;">
+      <input type="checkbox" id="bk-solutions" style="width:16px;height:16px;accent-color:#d20000;">
+      <span id="bk-solutions-toggle">Solutions</span>
+    </label>
+    <button class="bk-btn primary" id="bk-print" type="button">🖨 Print / Save PDF</button>
+  </div>
+</header>
+
+<main class="bk-stage">
+  <div class="bk-current-meta" style="margin-bottom:10px;font-size:12px;color:#5b6472;align-self:flex-start;">
+    <span id="bk-current-title">IT AAQ — Aim A</span>
+  </div>
+  <div class="bk-paper" id="bk-paper"></div>
+</main>
+
+<script src="js/reader.js"></script>
+</body>
+</html>

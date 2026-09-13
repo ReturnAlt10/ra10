@@ -1,0 +1,907 @@
+{
+ "unit": 3,
+ "unitTitle": "Website Development",
+ "unitName": "IT AAQ Unit 3",
+ "aim": "C",
+ "aimTitle": "Develop a website to meet client requirements",
+ "aimShort": "Common tools and techniques; website development processes; testing",
+ "board": "Pearson BTEC Level 3 National Extended Certificate in IT (AAQ)",
+ "specIssue": "Issue 2, March 2025",
+ "assessment": "Internally assessed Pearson Set Assignment (coursework).",
+ "topics": [
+  {
+   "code": "C1",
+   "name": "Common tools and techniques to produce a website"
+  },
+  {
+   "code": "C2",
+   "name": "Website development processes"
+  },
+  {
+   "code": "C3",
+   "name": "Testing"
+  }
+ ],
+ "checklist": [
+  {
+   "code": "C1",
+   "name": "Common tools and techniques",
+   "type": "group"
+  },
+  {
+   "code": "",
+   "name": "HTML (HyperText Markup Language): the structure of a webpage. Elements include navigation (menus, internal and external links, anchors), adding content (text, images, video, tables of information), and forms (input fields, textareas, buttons, dropdowns). Semantic HTML uses meaningful tags like <header>, <nav>, <main>, <section>, <footer>, <article> for accessibility and SEO.",
+   "type": "item"
+  },
+  {
+   "code": "",
+   "name": "CSS (Cascading Style Sheets): the presentation. Styling (colour, web typography, text formatting, links and buttons, tables, forms), page layout (CSS box model — content, padding, border, margin; responsive layouts using CSS media queries and layout tools like Flexbox and Grid)",
+   "type": "item"
+  },
+  {
+   "code": "",
+   "name": "JavaScript: adds interactivity. Displaying images (sliders, galleries), displaying information (accordions, tabs, modal boxes, filtering information), animation (hover effects, transitions, animated logos, motion), search functionality, shopping carts, interactive maps, video (controlling video playback, video backgrounds)",
+   "type": "item"
+  },
+  {
+   "code": "",
+   "name": "Web development tools: text editors (VS Code), WYSIWYG editors (Adobe Dreamweaver), browser developer tools, version control (Git)",
+   "type": "item"
+  },
+  {
+   "code": "",
+   "name": "Development process: plan → design → build → test → review → refine → publish",
+   "type": "item"
+  },
+  {
+   "code": "C2",
+   "name": "Website development processes",
+   "type": "group"
+  },
+  {
+   "code": "",
+   "name": "Accessibility features: alternative text (alt tags) on images, zoom features, text-to-speech",
+   "type": "item"
+  },
+  {
+   "code": "",
+   "name": "Accessibility standards: WCAG (Web Content Accessibility Guidelines), W3C standards, HTML5 standards",
+   "type": "item"
+  },
+  {
+   "code": "",
+   "name": "Semantic HTML: using meaningful structural tags improves accessibility for screen readers and SEO",
+   "type": "item"
+  },
+  {
+   "code": "",
+   "name": "Search Engine Optimisation (SEO): keywords, meta tags (title, description), heading structure, alt text, fast loading, mobile-friendly design, internal links",
+   "type": "item"
+  },
+  {
+   "code": "",
+   "name": "Self-review: quality in comparison to similar websites, suitability for audience and purpose, meeting client requirements, legal and ethical constraints, consistency, readability",
+   "type": "item"
+  },
+  {
+   "code": "",
+   "name": "Publishing the website: choosing a hosting provider/domain, uploading files via FTP or a hosting dashboard, testing the live site",
+   "type": "item"
+  },
+  {
+   "code": "C3",
+   "name": "Testing",
+   "type": "group"
+  },
+  {
+   "code": "",
+   "name": "Functionality testing: creating a test plan (description, test data, expected outcome, actual outcome, comments), testing areas including links (do all navigation links work?), user interactivity (do buttons, forms, accordions, sliders work?), and responsiveness (does it work at different screen sizes?)",
+   "type": "item"
+  },
+  {
+   "code": "",
+   "name": "Usability testing: a user testing audit with real users — asking classmates/friends/family to try the site and give feedback; testing areas include accessibility, logical navigation, clarity of information, user experience",
+   "type": "item"
+  },
+  {
+   "code": "",
+   "name": "Refinements: use the outcomes of testing and self-review to make improvements to the final website",
+   "type": "item"
+  }
+ ],
+ "examQuestions": [],
+ "mcq": [
+  {
+   "id": "MC22",
+   "aim": "C",
+   "topic": "C1 HTML",
+   "q": "Which HTML element is semantic (has meaning for accessibility and SEO)?",
+   "options": [
+    "<div>",
+    "<span>",
+    "<header>",
+    "<br>"
+   ],
+   "answer": 2,
+   "why": "Semantic elements like <header>, <nav>, <main>, <section> and <footer> describe their meaning, helping screen readers and search engines."
+  },
+  {
+   "id": "MC23",
+   "aim": "C",
+   "topic": "C1 CSS",
+   "q": "Which describes the CSS box model?",
+   "options": [
+    "Header, nav and footer",
+    "Content, padding, border and margin",
+    "HTML, CSS and JavaScript",
+    "Row, column, cell"
+   ],
+   "answer": 1,
+   "why": "Every element is a box: content in the middle, then padding (space inside), border, and margin (space outside)."
+  },
+  {
+   "id": "MC24",
+   "aim": "C",
+   "topic": "C1 CSS",
+   "q": "How do you make a layout responsive to different screen sizes?",
+   "options": [
+    "Using only fixed pixel widths",
+    "Media queries and responsive layout tools like Flexbox and Grid",
+    "Disabling CSS on mobile",
+    "Using more images"
+   ],
+   "answer": 1,
+   "why": "Media queries apply different styles at different screen widths, and Flexbox/Grid layouts flex to fit. Never rely on fixed widths alone."
+  },
+  {
+   "id": "MC25",
+   "aim": "C",
+   "topic": "C1 JS",
+   "q": "Which JavaScript-powered component reveals and hides content in a collapsible section?",
+   "options": [
+    "Accordion",
+    "Breadcrumb",
+    "Carousel",
+    "Modal"
+   ],
+   "answer": 0,
+   "why": "An accordion lets users expand and collapse sections â€” great for FAQs. Modals overlay the page; carousels slide images."
+  },
+  {
+   "id": "MC26",
+   "aim": "C",
+   "topic": "C1 JS",
+   "q": "What does a modal box do?",
+   "options": [
+    "Opens an overlay on top of the page (e.g. an enlarged image or a sign-in dialog)",
+    "Closes the browser window",
+    "Redirects to another site",
+    "Plays a video automatically"
+   ],
+   "answer": 0,
+   "why": "A modal displays content in an overlay. Clicking a thumbnail to view a larger image in a modal is a common assignment requirement."
+  },
+  {
+   "id": "MC27",
+   "aim": "C",
+   "topic": "C2 Access",
+   "q": "Which organisation publishes the WCAG accessibility guidelines?",
+   "options": [
+    "ISO",
+    "Ofcom",
+    "W3C",
+    "NASA"
+   ],
+   "answer": 2,
+   "why": "The World Wide Web Consortium (W3C) publishes the Web Content Accessibility Guidelines (WCAG)."
+  },
+  {
+   "id": "MC28",
+   "aim": "C",
+   "topic": "C2 Access",
+   "q": "What is the purpose of alt text on an image?",
+   "options": [
+    "Adds a border around the image",
+    "Makes the image load faster",
+    "Describes the image for screen readers and shows if the image fails to load",
+    "Stores the image copyright"
+   ],
+   "answer": 2,
+   "why": "Alt text gives a text description of the image for screen readers and appears when the image can't load."
+  },
+  {
+   "id": "MC29",
+   "aim": "C",
+   "topic": "C3 Testing",
+   "q": "Which of these would you check during functionality testing?",
+   "options": [
+    "Whether the colour scheme is 'nice'",
+    "Whether users find the site intuitive",
+    "Whether all navigation links work",
+    "Whether the brand name is memorable"
+   ],
+   "answer": 2,
+   "why": "Functionality testing checks that things WORK â€” links, buttons, forms, interactions and responsiveness. Usability testing checks how real users experience the site."
+  },
+  {
+   "id": "MC30",
+   "aim": "C",
+   "topic": "C3 Testing",
+   "q": "What is usability testing?",
+   "options": [
+    "Testing the server uptime",
+    "Running the site through a code validator",
+    "Asking real users to try the site and give feedback on navigation, clarity and experience",
+    "Checking the site loads on one computer"
+   ],
+   "answer": 2,
+   "why": "Usability testing uses real users (classmates, friends, family) to audit the experience â€” accessibility, logical navigation, clarity and overall UX."
+  },
+  {
+   "id": "MC31",
+   "aim": "C",
+   "topic": "C3 Testing",
+   "q": "What is a test plan?",
+   "options": [
+    "A list of page names",
+    "A schedule of when to write code",
+    "A table of tests listing description, test data, expected outcome, actual outcome and comments",
+    "A wireframe of the final site"
+   ],
+   "answer": 2,
+   "why": "A formal test plan documents each test so you can compare expected vs actual outcomes â€” essential evidence for the assignment."
+  },
+  {
+   "id": "MC32",
+   "aim": "C",
+   "topic": "C2 Review",
+   "q": "What should your self-review of the finished website consider?",
+   "options": [
+    "Quality vs similar sites, suitability for the audience, meeting client requirements, consistency and readability",
+    "Only the number of images",
+    "Only the page count",
+    "Whether you enjoyed building it"
+   ],
+   "answer": 0,
+   "why": "The spec's self-review covers comparison with similar websites, audience and purpose suitability, client requirements, legal/ethical constraints, consistency and readability."
+  },
+  {
+   "id": "MC67",
+   "aim": "C",
+   "topic": "C1 HTML",
+   "q": "Which HTML tag is used to create a hyperlink?",
+   "options": [
+    "<link>",
+    "<href>",
+    "<a>",
+    "<url>"
+   ],
+   "answer": 2,
+   "why": "The <a> (anchor) tag creates links using the href attribute, e.g. <a href=\"page.html\">Link</a>."
+  },
+  {
+   "id": "MC68",
+   "aim": "C",
+   "topic": "C1 HTML",
+   "q": "Which HTML element is used for a form?",
+   "options": [
+    "<form>",
+    "<button>",
+    "<input>",
+    "<field>"
+   ],
+   "answer": 0,
+   "why": "The <form> element wraps form controls like inputs, selects and buttons, and defines how data is submitted."
+  },
+  {
+   "id": "MC69",
+   "aim": "C",
+   "topic": "C1 HTML",
+   "q": "Which HTML tag embeds a video?",
+   "options": [
+    "<audio>",
+    "<video>",
+    "<img>",
+    "<embed>"
+   ],
+   "answer": 1,
+   "why": "The <video> element embeds video with controls, e.g. <video controls src=\"clip.mp4\"></video>."
+  },
+  {
+   "id": "MC70",
+   "aim": "C",
+   "topic": "C1 HTML",
+   "q": "What is the purpose of the <nav> element?",
+   "options": [
+    "To mark up a block of navigation links",
+    "To embed an image",
+    "To create a table",
+    "To style text"
+   ],
+   "answer": 0,
+   "why": "<nav> is a semantic element that identifies navigation links, helping screen readers and SEO understand the structure."
+  },
+  {
+   "id": "MC71",
+   "aim": "C",
+   "topic": "C1 CSS",
+   "q": "What does CSS stand for?",
+   "options": [
+    "Creative Style Sheets",
+    "Cascading Style Sheets",
+    "Computer Style System",
+    "Cascading Script Syntax"
+   ],
+   "answer": 1,
+   "why": "CSS (Cascading Style Sheets) controls the presentation â€” layout, colours, fonts and spacing â€” of HTML content."
+  },
+  {
+   "id": "MC72",
+   "aim": "C",
+   "topic": "C1 CSS",
+   "q": "Which CSS property changes the text colour?",
+   "options": [
+    "color",
+    "font-size",
+    "background",
+    "text-align"
+   ],
+   "answer": 0,
+   "why": "The color property sets text colour; background sets the background; font-size sets size; text-align aligns text."
+  },
+  {
+   "id": "MC73",
+   "aim": "C",
+   "topic": "C1 CSS",
+   "q": "What is a media query used for?",
+   "options": [
+    "Applying different styles based on screen size or device",
+    "Playing media files",
+    "Querying a database",
+    "Loading images"
+   ],
+   "answer": 0,
+   "why": "Media queries (e.g. @media (max-width: 600px)) apply CSS only under certain conditions â€” the basis of responsive design."
+  },
+  {
+   "id": "MC74",
+   "aim": "C",
+   "topic": "C1 CSS",
+   "q": "What is Flexbox used for?",
+   "options": [
+    "Styling text",
+    "Laying out elements in a flexible row or column",
+    "Embedding video",
+    "Creating forms"
+   ],
+   "answer": 1,
+   "why": "Flexbox arranges items in one dimension (row or column) and handles spacing, alignment and wrapping â€” great for nav bars and cards."
+  },
+  {
+   "id": "MC75",
+   "aim": "C",
+   "topic": "C1 JS",
+   "q": "What is JavaScript used for on a website?",
+   "options": [
+    "Adding interactivity like sliders, forms and dynamic content",
+    "Styling the page",
+    "Structuring the page",
+    "Hosting the site"
+   ],
+   "answer": 0,
+   "why": "JavaScript adds behaviour and interactivity â€” responding to clicks, validating forms, animating and updating content."
+  },
+  {
+   "id": "MC76",
+   "aim": "C",
+   "topic": "C1 JS",
+   "q": "What does a carousel/slider do?",
+   "options": [
+    "Cycles through a set of images or slides",
+    "Closes the page",
+    "Plays audio",
+    "Validates a form"
+   ],
+   "answer": 0,
+   "why": "A carousel automatically or manually cycles through slides â€” common for galleries, testimonials and featured content."
+  },
+  {
+   "id": "MC77",
+   "aim": "C",
+   "topic": "C1 JS",
+   "q": "What is a tab component?",
+   "options": [
+    "A browser tab",
+    "A type of image",
+    "A set of buttons that switch between different content panels",
+    "A CSS grid"
+   ],
+   "answer": 2,
+   "why": "Tabs let users switch between sections of content without leaving the page â€” a common interactive component."
+  },
+  {
+   "id": "MC78",
+   "aim": "C",
+   "topic": "C1 JS",
+   "q": "What is a filter/search feature?",
+   "options": [
+    "A type of image",
+    "A CSS animation",
+    "Lets users narrow down a list by typing or selecting criteria",
+    "A server log"
+   ],
+   "answer": 2,
+   "why": "Search/filter functionality lets users find items quickly â€” a common assignment requirement (e.g. filtering a product list)."
+  },
+  {
+   "id": "MC79",
+   "aim": "C",
+   "topic": "C2 Access",
+   "q": "What is a skip link?",
+   "options": [
+    "A broken link",
+    "A link to skip ads",
+    "A link that lets keyboard users jump straight to the main content",
+    "A type of image"
+   ],
+   "answer": 2,
+   "why": "A skip link ('Skip to main content') lets keyboard and screen-reader users bypass repeated navigation â€” an accessibility best practice."
+  },
+  {
+   "id": "MC80",
+   "aim": "C",
+   "topic": "C2 Access",
+   "q": "What is semantic HTML?",
+   "options": [
+    "HTML with inline styles",
+    "HTML with lots of <div> tags",
+    "Using elements that describe their meaning (e.g. <header>, <main>)",
+    "HTML that only works in one browser"
+   ],
+   "answer": 2,
+   "why": "Semantic HTML uses meaningful tags, improving accessibility, SEO and code readability compared to generic <div>s."
+  },
+  {
+   "id": "MC81",
+   "aim": "C",
+   "topic": "C2 Access",
+   "q": "Why is the lang attribute important on the <html> element?",
+   "options": [
+    "It sets the font",
+    "It sets the background colour",
+    "It tells screen readers and search engines the page language",
+    "It is decorative"
+   ],
+   "answer": 2,
+   "why": "The lang attribute (e.g. lang=\"en\") helps screen readers pronounce content correctly and helps search engines index the language."
+  },
+  {
+   "id": "MC82",
+   "aim": "C",
+   "topic": "C2 SEO",
+   "q": "What is a heading hierarchy?",
+   "options": [
+    "Random heading sizes",
+    "Using h1, h2, h3 in a logical order to structure content",
+    "Using only h1 tags",
+    "No headings at all"
+   ],
+   "answer": 1,
+   "why": "A logical heading hierarchy (one h1, then h2/h3 for subsections) helps screen readers and search engines understand structure."
+  },
+  {
+   "id": "MC83",
+   "aim": "C",
+   "topic": "C2 SEO",
+   "q": "What is a sitemap in the context of SEO?",
+   "options": [
+    "A file listing all pages of a site to help search engines index it",
+    "A type of image",
+    "A wireframe",
+    "A CSS file"
+   ],
+   "answer": 0,
+   "why": "An XML sitemap lists all URLs so search engines can discover and index pages efficiently."
+  },
+  {
+   "id": "MC84",
+   "aim": "C",
+   "topic": "C3 Testing",
+   "q": "What is a test plan's 'expected outcome'?",
+   "options": [
+    "The test data",
+    "What the site should do if the feature works correctly",
+    "What the user thinks",
+    "The page name"
+   ],
+   "answer": 1,
+   "why": "The expected outcome is the correct result you predict; comparing it to the actual outcome reveals whether the feature works."
+  },
+  {
+   "id": "MC85",
+   "aim": "C",
+   "topic": "C3 Testing",
+   "q": "What is a test plan's 'actual outcome'?",
+   "options": [
+    "What the site should do",
+    "What the site actually did when tested",
+    "The test description",
+    "The tester's name"
+   ],
+   "answer": 1,
+   "why": "The actual outcome records what really happened, so you can compare it to the expected outcome and note any defects."
+  },
+  {
+   "id": "MC86",
+   "aim": "C",
+   "topic": "C3 Testing",
+   "q": "What is a defect/bug?",
+   "options": [
+    "An error or fault in the website that stops it working as intended",
+    "A feature request",
+    "A design choice",
+    "A type of image"
+   ],
+   "answer": 0,
+   "why": "A defect is any flaw â€” a broken link, a form that won't submit, a layout that breaks on mobile â€” that needs fixing."
+  },
+  {
+   "id": "MC87",
+   "aim": "C",
+   "topic": "C3 Testing",
+   "q": "Why test a website on a mobile device?",
+   "options": [
+    "To check the responsive layout works and content is usable on small screens",
+    "Because it is faster",
+    "To reduce file size",
+    "It is not necessary"
+   ],
+   "answer": 0,
+   "why": "Most users browse on mobile, so you must verify the responsive layout, touch targets and readability on small screens."
+  },
+  {
+   "id": "MC88",
+   "aim": "C",
+   "topic": "C3 Testing",
+   "q": "What is a usability audit?",
+   "options": [
+    "A code validator",
+    "A structured review of how easy and pleasant the site is to use",
+    "A server check",
+    "A colour test"
+   ],
+   "answer": 1,
+   "why": "A usability audit assesses navigation, clarity, accessibility and overall user experience â€” often with real users."
+  },
+  {
+   "id": "MC89",
+   "aim": "C",
+   "topic": "C2 Review",
+   "q": "What is a refinement?",
+   "options": [
+    "A CSS property",
+    "A type of image",
+    "A change made to improve the website after testing or review",
+    "A hosting plan"
+   ],
+   "answer": 2,
+   "why": "Refinements are improvements made in response to testing and feedback â€” showing the review cycle is key evidence."
+  },
+  {
+   "id": "MC90",
+   "aim": "C",
+   "topic": "C2 Review",
+   "q": "Why document the improvements you made after testing?",
+   "options": [
+    "To make the site bigger",
+    "Because it is required by law",
+    "To show the examiner you reviewed and refined your work",
+    "It is optional"
+   ],
+   "answer": 2,
+   "why": "Documenting before â†’ feedback â†’ after shows the review cycle, which is essential for higher grades in the assignment."
+  },
+  {
+   "id": "MC110",
+   "aim": "C",
+   "topic": "C1 HTML",
+   "q": "Which HTML element is used for a table?",
+   "options": [
+    "<grid>",
+    "<list>",
+    "<table>",
+    "<row>"
+   ],
+   "answer": 2,
+   "why": "The <table> element creates tables, with <tr> for rows, <th> for headers and <td> for cells."
+  },
+  {
+   "id": "MC111",
+   "aim": "C",
+   "topic": "C1 CSS",
+   "q": "What is the purpose of the CSS 'margin' property?",
+   "options": [
+    "To add space inside an element",
+    "To set the border",
+    "To add space outside an element, pushing it away from neighbours",
+    "To change the font"
+   ],
+   "answer": 2,
+   "why": "Margin adds space outside the border; padding adds space inside. Both control spacing in the box model."
+  },
+  {
+   "id": "MC112",
+   "aim": "C",
+   "topic": "C1 JS",
+   "q": "What is an event listener in JavaScript?",
+   "options": [
+    "A type of image",
+    "A CSS rule",
+    "Code that waits for an action (like a click) and runs a function in response",
+    "A server log"
+   ],
+   "answer": 2,
+   "why": "Event listeners (e.g. addEventListener('click', ...)) make elements interactive by responding to user actions."
+  }
+ ],
+ "quiz": [
+  {
+   "id": "Q08",
+   "aim": "C",
+   "topic": "HTML",
+   "q": "Which HTML tag creates an internal link to another page of the same site?",
+   "options": [
+    "<link href=\"about.html\">",
+    "<img src=\"about.html\">",
+    "<nav>About</nav>",
+    "<a href=\"about.html\">About</a>"
+   ],
+   "answer": 3,
+   "why": "Internal links use <a> with a relative href to another file in the site (about.html). <link> is for stylesheets."
+  },
+  {
+   "id": "Q09",
+   "aim": "C",
+   "topic": "CSS",
+   "q": "Which CSS rule makes a website adapt to a small phone screen?",
+   "options": [
+    "@import phones",
+    "@screen small",
+    "@responsive true",
+    "@media (max-width: 600px) { ... }"
+   ],
+   "answer": 3,
+   "why": "Media queries apply specific styles when the viewport matches, e.g. max-width: 600px for phones."
+  },
+  {
+   "id": "Q10",
+   "aim": "C",
+   "topic": "Testing",
+   "q": "A tester clicks every nav link and records which work. This is:",
+   "options": [
+    "Usability testing",
+    "Accessibility auditing",
+    "SEO auditing",
+    "Functionality testing"
+   ],
+   "answer": 3,
+   "why": "Functionality testing verifies features work — links, buttons, forms. Usability testing asks real users about the experience."
+  },
+  {
+   "id": "Q11",
+   "aim": "C",
+   "topic": "Publishing",
+   "q": "Which is an example of publishing a website?",
+   "options": [
+    "Screenshotting the homepage",
+    "Saving files to a USB stick",
+    "Printing the code",
+    "Uploading files to a web host so they are live on the internet"
+   ],
+   "answer": 3,
+   "why": "Publishing means making the site publicly accessible — uploading to hosting (e.g. GitHub Pages, Netlify) with a domain."
+  }
+ ],
+ "flashcards": [
+  {
+   "id": "F21",
+   "aim": "C",
+   "front": "Semantic HTML",
+   "back": "Using meaningful tags (<header>, <nav>, <main>, <article>, <footer>) that describe structure — improves accessibility and SEO."
+  },
+  {
+   "id": "F22",
+   "aim": "C",
+   "front": "CSS box model",
+   "back": "Every element is a box: content → padding → border → margin. Understanding it is essential for layout and spacing."
+  },
+  {
+   "id": "F23",
+   "aim": "C",
+   "front": "Media query",
+   "back": "A CSS rule (@media) that applies styles based on viewport size — the basis of responsive design."
+  },
+  {
+   "id": "F24",
+   "aim": "C",
+   "front": "Accordion",
+   "back": "Collapsible sections that expand and contract (powered by JavaScript) — ideal for FAQs and long content lists."
+  },
+  {
+   "id": "F25",
+   "aim": "C",
+   "front": "Modal",
+   "back": "An overlay dialog on top of the page — commonly used for image lightboxes and sign-in forms."
+  },
+  {
+   "id": "F26",
+   "aim": "C",
+   "front": "Alt text",
+   "back": "Alternative text describing an image for screen readers, shown if the image fails to load. Required for accessibility."
+  },
+  {
+   "id": "F27",
+   "aim": "C",
+   "front": "Functionality testing",
+   "back": "Testing that the site works: links, buttons, forms, interactivity and responsiveness. Recorded in a test plan (expected vs actual outcome)."
+  },
+  {
+   "id": "F28",
+   "aim": "C",
+   "front": "Usability testing",
+   "back": "Getting real users (classmates, friends) to try the site and give feedback on navigation, clarity, accessibility and experience."
+  },
+  {
+   "id": "F29",
+   "aim": "C",
+   "front": "Self-review",
+   "back": "Reflecting on the finished site: quality vs similar sites, suitability for audience/purpose, meeting client requirements, consistency and readability — then refining."
+  },
+  {
+   "id": "F30",
+   "aim": "C",
+   "front": "Copyright",
+   "back": "Legal protection for created work (images, text, music, video). Using others' work without permission breaches the Copyright, Designs and Patents Act."
+  },
+  {
+   "id": "F31",
+   "aim": "C",
+   "front": "UK GDPR",
+   "back": "Data protection law covering personal data collected by websites — privacy policy, consent, only collecting what you need, safe form handling."
+  }
+ ],
+ "diagrams": [],
+ "knowledgeBank": {
+  "code": "C",
+  "title": "Develop a website to meet client requirements",
+  "topics": [
+   {
+    "code": "C1",
+    "name": "Common tools and techniques",
+    "keyPoints": [
+     "HTML (HyperText Markup Language): the structure of a webpage. Elements include navigation (menus, internal and external links, anchors), adding content (text, images, video, tables of information), and forms (input fields, textareas, buttons, dropdowns). Semantic HTML uses meaningful tags like <header>, <nav>, <main>, <section>, <footer>, <article> for accessibility and SEO.",
+     "CSS (Cascading Style Sheets): the presentation. Styling (colour, web typography, text formatting, links and buttons, tables, forms), page layout (CSS box model — content, padding, border, margin; responsive layouts using CSS media queries and layout tools like Flexbox and Grid)",
+     "JavaScript: adds interactivity. Displaying images (sliders, galleries), displaying information (accordions, tabs, modal boxes, filtering information), animation (hover effects, transitions, animated logos, motion), search functionality, shopping carts, interactive maps, video (controlling video playback, video backgrounds)",
+     "Web development tools: text editors (VS Code), WYSIWYG editors (Adobe Dreamweaver), browser developer tools, version control (Git)",
+     "Development process: plan → design → build → test → review → refine → publish"
+    ]
+   },
+   {
+    "code": "C2",
+    "name": "Website development processes",
+    "keyPoints": [
+     "Accessibility features: alternative text (alt tags) on images, zoom features, text-to-speech",
+     "Accessibility standards: WCAG (Web Content Accessibility Guidelines), W3C standards, HTML5 standards",
+     "Semantic HTML: using meaningful structural tags improves accessibility for screen readers and SEO",
+     "Search Engine Optimisation (SEO): keywords, meta tags (title, description), heading structure, alt text, fast loading, mobile-friendly design, internal links",
+     "Self-review: quality in comparison to similar websites, suitability for audience and purpose, meeting client requirements, legal and ethical constraints, consistency, readability",
+     "Publishing the website: choosing a hosting provider/domain, uploading files via FTP or a hosting dashboard, testing the live site"
+    ]
+   },
+   {
+    "code": "C3",
+    "name": "Testing",
+    "keyPoints": [
+     "Functionality testing: creating a test plan (description, test data, expected outcome, actual outcome, comments), testing areas including links (do all navigation links work?), user interactivity (do buttons, forms, accordions, sliders work?), and responsiveness (does it work at different screen sizes?)",
+     "Usability testing: a user testing audit with real users — asking classmates/friends/family to try the site and give feedback; testing areas include accessibility, logical navigation, clarity of information, user experience",
+     "Refinements: use the outcomes of testing and self-review to make improvements to the final website"
+    ]
+   }
+  ]
+ },
+ "criteria": [
+  {
+   "code": "task3",
+   "aim": "C",
+   "title": "Build, test and review the website",
+   "criteria": [
+    {
+     "code": "C.P5",
+     "level": "Pass",
+     "text": "Use tools, techniques, processes and testing to produce a website that partially meets the client's requirements."
+    },
+    {
+     "code": "C.M5",
+     "level": "Merit",
+     "text": "Use tools, techniques, processes and testing to produce a website that meets most of the client's requirements."
+    },
+    {
+     "code": "C.D3",
+     "level": "Distinction",
+     "text": "Use tools, techniques, processes and testing to produce a website that comprehensively meets the client's requirements."
+    }
+   ]
+  }
+ ],
+ "briefs": [
+  {
+   "id": "retro-film",
+   "title": "Retro Film Hub",
+   "audience": "17- to 23-year-olds",
+   "scenario": "Midnight Picture Show is a small independent cinema that hosts late-night screenings of classic films. They want a website that introduces young adults (17-23) to the films, stars and cultural moments of Hollywood's golden era.",
+   "purpose": "To introduce a young adult audience to classic films and encourage them to visit the cinema.",
+   "targetAudience": "17- to 23-year-olds — many will have seen remakes or references to old films but never the originals.",
+   "mustIncludes": [
+    "Three pages",
+    "Drop-down menus",
+    "Information about classic films (plot summaries, iconic stars, behind-the-scenes facts)",
+    "An accordion (e.g. 'Explore by genre or decade' with expandable sections)",
+    "External links to relevant websites (e.g. film archive sites, the cinema's ticketing site)",
+    "A form to request a specific film be screened",
+    "Modal images (click a film poster to view it enlarged)",
+    "Video content with controls (trailers — always embed from official sources)",
+    "Search functionality to find films",
+    "Accessibility features (alt text, high contrast, keyboard navigation, readable fonts)"
+   ],
+   "typographyHint": "Try a bold display font for headings to echo old cinema signage, with a clean sans-serif for body text.",
+   "colourHint": "Golden-era Hollywood palette: deep burgundy, cream, gold and black — or teal and burnt orange for a vintage poster feel.",
+   "assignmentStyle": "original"
+  },
+  {
+   "id": "charity",
+   "title": "Community Action Charity",
+   "audience": "13- to 19-year-olds",
+   "scenario": "A non-profit organisation wants a website to create awareness of its activities and encourage teenagers to join as volunteers. It needs to show positive representations of its members and its work in the community.",
+   "purpose": "To create awareness of the charity and encourage a teenage audience to get involved.",
+   "targetAudience": "13- to 19-year-olds (students, young volunteers)",
+   "mustIncludes": [
+    "Three pages",
+    "Information about the organisation (aims, activities, achievements)",
+    "Information about an upcoming event, including a map of the location",
+    "One member's personal story (with permission)",
+    "An email link to contact the organisation",
+    "A form to join the organisation",
+    "An interactive image slider with captions",
+    "A resource section with filter functionality (text, infographics and video resources)",
+    "Positive representations of the organisation and its members",
+    "Accessibility features"
+   ],
+   "typographyHint": "Friendly, rounded fonts for headings; clean body text. Avoid jargon — write for teenagers.",
+   "colourHint": "Bright, energetic palette (e.g. teal, coral, sunshine yellow) with strong contrast for accessibility.",
+   "assignmentStyle": "original"
+  },
+  {
+   "id": "sports-club",
+   "title": "Local Sports & Fitness Club",
+   "audience": "16- to 25-year-olds",
+   "scenario": "A local multi-sport club wants a website that promotes its teams and fitness sessions. The club wants to grow its membership among 16-25 year olds and needs the site to showcase facilities, timetables and how to join.",
+   "purpose": "To promote the club's teams, sessions and facilities and convert visitors into members.",
+   "targetAudience": "16- to 25-year-olds, including students new to the area",
+   "mustIncludes": [
+    "Three pages",
+    "Drop-down menus (sports, sessions, membership)",
+    "Information about sports and fitness sessions",
+    "An accordion (e.g. frequently asked questions)",
+    "External links (e.g. national sport governing bodies)",
+    "A form to register interest in joining",
+    "Modal images (photo gallery with lightbox)",
+    "Video content with controls (session highlights)",
+    "Search functionality",
+    "Accessibility features"
+   ],
+   "typographyHint": "Strong condensed headings for a sporty energy; keep body text highly readable.",
+   "colourHint": "High-contrast sport palette (e.g. royal blue and volt/highlighter accents) — check contrast ratios pass WCAG.",
+   "assignmentStyle": "original"
+  }
+ ]
+}

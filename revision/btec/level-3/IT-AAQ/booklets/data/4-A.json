@@ -1,0 +1,930 @@
+{
+ "unit": 4,
+ "unitTitle": "Relational Database Development",
+ "unitName": "IT AAQ Unit 4",
+ "aim": "A",
+ "aimTitle": "Understand how the principles of relational database models, data storage and normalisation are used to create effective relational database solutions",
+ "aimShort": "RDBMS types, data structure concepts, relational algebra, keys, integrity constraints, entity relationships, SQL, normalisation and scoping to a brief",
+ "board": "Pearson BTEC Level 3 National Extended Certificate in IT (AAQ)",
+ "specIssue": "Issue 5, November 2025",
+ "assessment": "Internally assessed Pearson Set Assignment (coursework).",
+ "topics": [
+  {
+   "code": "A1",
+   "name": "Relational database management systems"
+  },
+  {
+   "code": "A2",
+   "name": "Manipulating data structures and data"
+  },
+  {
+   "code": "A3",
+   "name": "Normalisation"
+  },
+  {
+   "code": "A4",
+   "name": "Planning a solution in response to a client brief"
+  }
+ ],
+ "checklist": [
+  {
+   "code": "A1",
+   "name": "Relational database management systems",
+   "type": "group"
+  },
+  {
+   "code": "",
+   "name": "Types of RDBMS: desktop databases (e.g. Microsoft Access — single file, local, one user at a time) and server databases (MySQL, Oracle — central server, many concurrent users)",
+   "type": "item"
+  },
+  {
+   "code": "",
+   "name": "Relational data structure concepts: relation (table), attribute (column), domain (allowed values), tuple (row), degree (number of columns), cardinality (number of rows)",
+   "type": "item"
+  },
+  {
+   "code": "",
+   "name": "Relational algebra operations: union, intersect, join and select",
+   "type": "item"
+  },
+  {
+   "code": "",
+   "name": "Relational keys: super key, candidate key, primary key, foreign key",
+   "type": "item"
+  },
+  {
+   "code": "",
+   "name": "Integrity constraints: entity integrity (PK never null/duplicate) and referential integrity (FK must match an existing PK or be null)",
+   "type": "item"
+  },
+  {
+   "code": "",
+   "name": "Entity relationship types: one-to-one, one-to-many, many-to-many",
+   "type": "item"
+  },
+  {
+   "code": "A2",
+   "name": "Manipulating data structures and data",
+   "type": "group"
+  },
+  {
+   "code": "",
+   "name": "Defining, modifying and removing data structures and data (CREATE, ALTER, DROP)",
+   "type": "item"
+  },
+  {
+   "code": "",
+   "name": "Updating, inserting, modifying and deleting data (INSERT, UPDATE, DELETE)",
+   "type": "item"
+  },
+  {
+   "code": "",
+   "name": "Retrieval of data for queries and reports (SELECT with criteria, sorting, grouping)",
+   "type": "item"
+  },
+  {
+   "code": "A3",
+   "name": "Normalisation",
+   "type": "group"
+  },
+  {
+   "code": "",
+   "name": "Purpose: develop efficient data structures free of redundancy and dependency problems",
+   "type": "item"
+  },
+  {
+   "code": "",
+   "name": "Anomalies: update, insertion and deletion anomalies caused by poor table design",
+   "type": "item"
+  },
+  {
+   "code": "",
+   "name": "Keys: primary, foreign and composite keys",
+   "type": "item"
+  },
+  {
+   "code": "",
+   "name": "Referential integrity and the data dictionary",
+   "type": "item"
+  },
+  {
+   "code": "",
+   "name": "Stages: un-normalised form (UNF) → first (1NF) → second (2NF) → third normal form (3NF)",
+   "type": "item"
+  },
+  {
+   "code": "",
+   "name": "1NF removes repeating groups (atomic values); 2NF removes partial dependencies; 3NF removes transitive dependencies",
+   "type": "item"
+  },
+  {
+   "code": "A4",
+   "name": "Preliminary scoping of a solution in response to a client brief",
+   "type": "group"
+  },
+  {
+   "code": "",
+   "name": "Purpose: the problem to be solved and the technical requirements",
+   "type": "item"
+  },
+  {
+   "code": "",
+   "name": "Research: existing databases, structuring data into tables and keys, available resources",
+   "type": "item"
+  },
+  {
+   "code": "",
+   "name": "Use accurate technical vocabulary and plan the logical structure",
+   "type": "item"
+  }
+ ],
+ "examQuestions": [],
+ "mcq": [
+  {
+   "id": "MC01",
+   "aim": "A",
+   "topic": "A1 Data structures",
+   "q": "In a relational database, a single row of a table is called a…",
+   "options": [
+    "Attribute",
+    "Tuple",
+    "Domain",
+    "Relation"
+   ],
+   "answer": 1,
+   "why": "A tuple is a single row (record). An attribute is a column, a domain is the set of allowed values, and a relation is the whole table."
+  },
+  {
+   "id": "MC02",
+   "aim": "A",
+   "topic": "A1 Data structures",
+   "q": "The number of columns (attributes) in a relation is its…",
+   "options": [
+    "Cardinality",
+    "Degree",
+    "Domain",
+    "Depth"
+   ],
+   "answer": 1,
+   "why": "Degree = number of columns; cardinality = number of rows. Don't confuse the two."
+  },
+  {
+   "id": "MC03",
+   "aim": "A",
+   "topic": "A1 Keys",
+   "q": "Which key uniquely identifies every row and can never be null?",
+   "options": [
+    "Foreign key",
+    "Super key",
+    "Primary key",
+    "Composite key"
+   ],
+   "answer": 2,
+   "why": "The primary key uniquely identifies each tuple and cannot be null or duplicated. A foreign key references another table's primary key."
+  },
+  {
+   "id": "MC04",
+   "aim": "A",
+   "topic": "A1 Integrity",
+   "q": "A foreign key value must match an existing primary key (or be null). This is…",
+   "options": [
+    "Entity integrity",
+    "Referential integrity",
+    "Domain integrity",
+    "Data integrity"
+   ],
+   "answer": 1,
+   "why": "Referential integrity ensures relationships stay valid — a foreign key can't point at a non-existent record."
+  },
+  {
+   "id": "MC05",
+   "aim": "A",
+   "topic": "A1 Relationships",
+   "q": "One customer can place many orders. This is a…",
+   "options": [
+    "One-to-one relationship",
+    "One-to-many relationship",
+    "Many-to-many relationship",
+    "Recursive relationship"
+   ],
+   "answer": 1,
+   "why": "One customer (one) → many orders (many). The primary key of Customer becomes a foreign key in Order."
+  },
+  {
+   "id": "MC06",
+   "aim": "A",
+   "topic": "A1 Relationships",
+   "q": "Students can enrol on many courses, and each course has many students. How is this modelled?",
+   "options": [
+    "One-to-many",
+    "One-to-one",
+    "Many-to-many via a linking table",
+    "It can't be modelled"
+   ],
+   "answer": 2,
+   "why": "Many-to-many is resolved with a linking (junction) table holding the two foreign keys, e.g. Enrolment(StudentID, CourseID)."
+  },
+  {
+   "id": "MC07",
+   "aim": "A",
+   "topic": "A1 RDBMS",
+   "q": "Which of these is a desktop (single-file) RDBMS commonly used in this unit?",
+   "options": [
+    "Microsoft Access",
+    "Oracle",
+    "MySQL",
+    "PostgreSQL"
+   ],
+   "answer": 0,
+   "why": "Access is a desktop database — stored locally as a single file. Oracle and MySQL are server databases."
+  },
+  {
+   "id": "MC08",
+   "aim": "A",
+   "topic": "A1 RDBMS",
+   "q": "MySQL and Oracle are examples of…",
+   "options": [
+    "Desktop databases",
+    "Server databases",
+    "Spreadsheets",
+    "Word processors"
+   ],
+   "answer": 1,
+   "why": "They are server databases — running centrally and serving many concurrent users over a network."
+  },
+  {
+   "id": "MC09",
+   "aim": "A",
+   "topic": "A2 SQL",
+   "q": "Which SQL keyword retrieves data from a table?",
+   "options": [
+    "INSERT",
+    "SELECT",
+    "UPDATE",
+    "DELETE"
+   ],
+   "answer": 1,
+   "why": "SELECT retrieves data. INSERT adds rows, UPDATE modifies, DELETE removes."
+  },
+  {
+   "id": "MC10",
+   "aim": "A",
+   "topic": "A2 SQL",
+   "q": "Which SQL statement adds a new record to a table?",
+   "options": [
+    "INSERT INTO",
+    "SELECT FROM",
+    "UPDATE SET",
+    "DELETE FROM"
+   ],
+   "answer": 0,
+   "why": "INSERT INTO adds a new tuple, e.g. INSERT INTO Customer VALUES (...)."
+  },
+  {
+   "id": "MC11",
+   "aim": "A",
+   "topic": "A3 Normalisation",
+   "q": "Repeating groups must be removed so each cell holds a single value. Which normal form is this?",
+   "options": [
+    "UNF",
+    "1NF",
+    "2NF",
+    "3NF"
+   ],
+   "answer": 1,
+   "why": "First Normal Form (1NF) removes repeating groups — every attribute is atomic."
+  },
+  {
+   "id": "MC12",
+   "aim": "A",
+   "topic": "A3 Normalisation",
+   "q": "Removing partial-key dependencies (non-key attrs depending on only part of a composite key) achieves…",
+   "options": [
+    "1NF",
+    "2NF",
+    "3NF",
+    "BCNF"
+   ],
+   "answer": 1,
+   "why": "Second Normal Form removes partial dependencies — non-key attributes must depend on the whole primary key."
+  },
+  {
+   "id": "MC13",
+   "aim": "A",
+   "topic": "A3 Normalisation",
+   "q": "Removing transitive dependencies (non-key attr depending on another non-key attr) achieves…",
+   "options": [
+    "1NF",
+    "2NF",
+    "3NF",
+    "UNF"
+   ],
+   "answer": 2,
+   "why": "Third Normal Form removes transitive dependencies — non-key attributes depend only on the key."
+  },
+  {
+   "id": "MC14",
+   "aim": "A",
+   "topic": "A3 Anomalies",
+   "q": "Updating a duplicated phone number in one row but not another causes…",
+   "options": [
+    "An insertion anomaly",
+    "An update anomaly",
+    "A deletion anomaly",
+    "No problem"
+   ],
+   "answer": 1,
+   "why": "Update anomaly — the same data stored in multiple places becomes inconsistent when changed in only one place."
+  },
+  {
+   "id": "MC15",
+   "aim": "A",
+   "topic": "A3 Anomalies",
+   "q": "Deleting the last student on a course accidentally deletes the course details too. This is…",
+   "options": [
+    "An update anomaly",
+    "An insertion anomaly",
+    "A deletion anomaly",
+    "Referential integrity"
+   ],
+   "answer": 2,
+   "why": "Deletion anomaly — losing related data when removing a record, caused by bad table design."
+  },
+  {
+   "id": "MC31",
+   "aim": "A",
+   "topic": "A1 Keys",
+   "q": "A primary key made from two or more attributes combined is a…",
+   "options": [
+    "Composite key",
+    "Foreign key",
+    "Super key",
+    "Surrogate key"
+   ],
+   "answer": 0,
+   "why": "Composite key = two+ attributes together uniquely identify a row (e.g. OrderID + ProductID)."
+  },
+  {
+   "id": "MC32",
+   "aim": "A",
+   "topic": "A1 Relational algebra",
+   "q": "Combining two relations to produce a single result without duplicates is…",
+   "options": [
+    "Union",
+    "Intersect",
+    "Join",
+    "Select"
+   ],
+   "answer": 0,
+   "why": "Union combines rows from two compatible relations. Intersect returns common rows; join combines on a shared attribute."
+  },
+  {
+   "id": "MC36",
+   "aim": "A",
+   "topic": "A4 Scoping",
+   "q": "The first step when scoping a database solution to a brief is…",
+   "options": [
+    "Establish purpose and technical requirements",
+    "Write SQL",
+    "Design forms",
+    "Test the database"
+   ],
+   "answer": 0,
+   "why": "Preliminary scoping starts with the problem to be solved and technical requirements, then research existing databases."
+  },
+  {
+   "id": "MC37",
+   "aim": "A",
+   "topic": "A1 Integrity",
+   "q": "Every table must have a primary key that is never null or duplicated. This is…",
+   "options": [
+    "Entity integrity",
+    "Referential integrity",
+    "Domain integrity",
+    "User integrity"
+   ],
+   "answer": 0,
+   "why": "Entity integrity guarantees each row is uniquely identifiable via its primary key."
+  }
+ ],
+ "quiz": [
+  {
+   "id": "Q01",
+   "aim": "A",
+   "topic": "Data structures",
+   "q": "A library database stores members. Each member's complete record (one row) is best described as a…",
+   "options": [
+    "Tuple",
+    "Attribute",
+    "Domain",
+    "Relation"
+   ],
+   "answer": 0,
+   "why": "A tuple is one complete row/record. The whole members table is the relation; each column is an attribute."
+  },
+  {
+   "id": "Q02",
+   "aim": "A",
+   "topic": "Keys",
+   "q": "A film-rental database has a Movie table. Which field is the best primary key?",
+   "options": [
+    "MovieID (unique per film)",
+    "Title (can repeat)",
+    "Genre (many films share it)",
+    "Rating"
+   ],
+   "answer": 0,
+   "why": "A primary key must be unique and non-null. MovieID is unique; titles and genres can repeat."
+  },
+  {
+   "id": "Q03",
+   "aim": "A",
+   "topic": "Relationships",
+   "q": "One author writes many books. Which key links the Book table back to the Author table?",
+   "options": [
+    "A foreign key (AuthorID) in Book",
+    "A primary key in Book",
+    "A composite key",
+    "No key needed"
+   ],
+   "answer": 0,
+   "why": "The 'many' side (Book) holds a foreign key referencing the 'one' side (Author) primary key."
+  },
+  {
+   "id": "Q04",
+   "aim": "A",
+   "topic": "Normalisation",
+   "q": "A table stores customer name, address and a repeating list of phone numbers in one cell. What's wrong?",
+   "options": [
+    "It's not in 1NF — cells must be atomic",
+    "It's not in 2NF",
+    "It's over-normalised",
+    "Nothing is wrong"
+   ],
+   "answer": 0,
+   "why": "Repeating groups / multiple values in one cell violate 1NF. Split phone numbers into separate rows (or a Phone table)."
+  },
+  {
+   "id": "Q05",
+   "aim": "A",
+   "topic": "Normalisation",
+   "q": "In a composite-key table OrderDetail(OrderID, ProductID, ProductName), ProductName depends only on ProductID. Which normal form is violated?",
+   "options": [
+    "2NF (partial dependency)",
+    "1NF",
+    "3NF",
+    "No violation"
+   ],
+   "answer": 0,
+   "why": "ProductName depends on part of the composite key (ProductID) only — a partial dependency, so it must move to a Product table (2NF)."
+  },
+  {
+   "id": "Q06",
+   "aim": "A",
+   "topic": "Normalisation",
+   "q": "A Student table stores (StudentID, TutorID, TutorName). TutorName depends on TutorID, not StudentID. What should be done?",
+   "options": [
+    "Move TutorName to a Tutor table (3NF)",
+    "Delete TutorName",
+    "Merge into StudentID",
+    "Nothing"
+   ],
+   "answer": 0,
+   "why": "TutorName is transitively dependent on StudentID via TutorID. Move it to a Tutor table to reach 3NF."
+  },
+  {
+   "id": "Q07",
+   "aim": "A",
+   "topic": "Integrity",
+   "q": "You try to add an Order with CustomerID 999, but no customer 999 exists. The DBMS should reject it because of…",
+   "options": [
+    "Referential integrity",
+    "Entity integrity",
+    "Domain integrity",
+    "Formatting"
+   ],
+   "answer": 0,
+   "why": "Referential integrity requires a foreign key to match an existing primary key."
+  },
+  {
+   "id": "Q08",
+   "aim": "A",
+   "topic": "RDBMS",
+   "q": "A small charity needs a single-user database on one office PC. Which is the most suitable choice?",
+   "options": [
+    "Microsoft Access (desktop)",
+    "Oracle (server)",
+    "A large server cluster",
+    "A spreadsheet is always better"
+   ],
+   "answer": 0,
+   "why": "Access is a desktop RDBMS ideal for small, single-user needs. Server databases suit many concurrent users."
+  },
+  {
+   "id": "Q16",
+   "aim": "A",
+   "topic": "Relational algebra",
+   "q": "Returning only the rows two tables have in common is the ______ operation.",
+   "options": [
+    "Intersect",
+    "Union",
+    "Join",
+    "Select"
+   ],
+   "answer": 0,
+   "why": "Intersect returns common rows; union combines all rows; join merges on a shared attribute."
+  },
+  {
+   "id": "Q20",
+   "aim": "A",
+   "topic": "Anomalies",
+   "q": "You can't add a new course until at least one student enrols on it. This design flaw is…",
+   "options": [
+    "An insertion anomaly",
+    "A deletion anomaly",
+    "An update anomaly",
+    "Referential integrity"
+   ],
+   "answer": 0,
+   "why": "Insertion anomaly — unrelated data (a student) is required before you can insert the course."
+  }
+ ],
+ "flashcards": [
+  {
+   "id": "F01",
+   "aim": "A",
+   "front": "Relation",
+   "back": "A two-dimensional table of data with a unique name. Each row is a record (tuple), each column an attribute. The fundamental structure in a relational database."
+  },
+  {
+   "id": "F02",
+   "aim": "A",
+   "front": "Attribute",
+   "back": "A named column in a relation (table) — e.g. CustomerID, FirstName, PostCode. Each attribute has a domain (set of allowed values)."
+  },
+  {
+   "id": "F03",
+   "aim": "A",
+   "front": "Tuple",
+   "back": "A single row (record) in a relation — one complete set of related attribute values, e.g. one customer."
+  },
+  {
+   "id": "F04",
+   "aim": "A",
+   "front": "Domain",
+   "back": "The set of legal values an attribute can take, e.g. the domain of 'Age' might be integers 0-120. Enforced by data types and validation rules."
+  },
+  {
+   "id": "F05",
+   "aim": "A",
+   "front": "Degree",
+   "back": "The number of attributes (columns) in a relation. A table with 5 columns has a degree of 5."
+  },
+  {
+   "id": "F06",
+   "aim": "A",
+   "front": "Cardinality",
+   "back": "The number of tuples (rows) in a relation. A table with 200 records has a cardinality of 200."
+  },
+  {
+   "id": "F07",
+   "aim": "A",
+   "front": "Primary key",
+   "back": "An attribute (or composite) that uniquely identifies each tuple in a relation. Cannot be null and must be unique — e.g. CustomerID."
+  },
+  {
+   "id": "F08",
+   "aim": "A",
+   "front": "Foreign key",
+   "back": "An attribute in one table that references the primary key of another, creating a relationship and enforcing referential integrity."
+  },
+  {
+   "id": "F09",
+   "aim": "A",
+   "front": "Candidate key",
+   "back": "Any attribute (or set) that could be chosen as the primary key — it uniquely identifies rows. One candidate is selected as the primary key."
+  },
+  {
+   "id": "F10",
+   "aim": "A",
+   "front": "Composite key",
+   "back": "A primary key made of two or more attributes combined, used when no single column is unique on its own (e.g. OrderID + ProductID)."
+  },
+  {
+   "id": "F11",
+   "aim": "A",
+   "front": "Super key",
+   "back": "Any set of attributes that uniquely identifies a tuple. A candidate key is a minimal super key (no extra columns)."
+  },
+  {
+   "id": "F12",
+   "aim": "A",
+   "front": "Entity integrity",
+   "back": "Every table must have a primary key, and it can never be null or duplicated — guarantees each row is uniquely identifiable."
+  },
+  {
+   "id": "F13",
+   "aim": "A",
+   "front": "Referential integrity",
+   "back": "A foreign key must match an existing primary key value (or be null) — you can't have an order pointing at a customer that doesn't exist."
+  },
+  {
+   "id": "F14",
+   "aim": "A",
+   "front": "RDBMS",
+   "back": "Relational Database Management System — software that stores and manages data in related tables (e.g. Microsoft Access, MySQL, Oracle, SQL Server, PostgreSQL)."
+  },
+  {
+   "id": "F15",
+   "aim": "A",
+   "front": "DBMS",
+   "back": "Database Management System — general software to create, maintain and query databases. RDBMS is a DBMS that stores data in related tables."
+  },
+  {
+   "id": "F16",
+   "aim": "A",
+   "front": "One-to-many relationship",
+   "back": "One record in table A links to many in table B (e.g. one customer has many orders). The most common relationship type — PK on 'one' side, FK on 'many' side."
+  },
+  {
+   "id": "F17",
+   "aim": "A",
+   "front": "One-to-one relationship",
+   "back": "One record in A links to exactly one in B (e.g. employee to company car). Often merged into a single table unless separation is needed."
+  },
+  {
+   "id": "F18",
+   "aim": "A",
+   "front": "Many-to-many relationship",
+   "back": "Many A records relate to many B (e.g. students to courses). Resolved with a linking (junction) table holding two foreign keys."
+  },
+  {
+   "id": "F19",
+   "aim": "A",
+   "front": "Normalisation",
+   "back": "Organising tables to remove redundant data and dependency problems, in stages UNF → 1NF → 2NF → 3NF. Produces efficient, consistent data structures."
+  },
+  {
+   "id": "F20",
+   "aim": "A",
+   "front": "Update anomaly",
+   "back": "When data is duplicated, changing it in one place but not another leaves inconsistency — e.g. updating a phone number in one row only."
+  },
+  {
+   "id": "F21",
+   "aim": "A",
+   "front": "Insertion anomaly",
+   "back": "You can't add new data without adding unrelated data — e.g. can't add a course until a student enrols on it."
+  },
+  {
+   "id": "F22",
+   "aim": "A",
+   "front": "Deletion anomaly",
+   "back": "Deleting one record accidentally removes other useful data — e.g. deleting the last student on a course erases the course itself."
+  },
+  {
+   "id": "F23",
+   "aim": "A",
+   "front": "1NF (First Normal Form)",
+   "back": "Remove repeating groups — each cell holds a single atomic value, no repeating columns or lists. Every row identified by a key."
+  },
+  {
+   "id": "F24",
+   "aim": "A",
+   "front": "2NF (Second Normal Form)",
+   "back": "Already in 1NF, and remove partial-key dependencies — non-key attributes must depend on the whole primary key, not just part of a composite key."
+  },
+  {
+   "id": "F25",
+   "aim": "A",
+   "front": "3NF (Third Normal Form)",
+   "back": "Already in 2NF, and remove transitive dependencies — non-key attributes must not depend on other non-key attributes."
+  },
+  {
+   "id": "F26",
+   "aim": "A",
+   "front": "Data dictionary",
+   "back": "A document listing every table, field name, data type, length and validation rule. Central design documentation (required in the assignment)."
+  },
+  {
+   "id": "F27",
+   "aim": "A",
+   "front": "Relational algebra",
+   "back": "A formal set of operations to query relations — union, intersect, join and select — the mathematical basis of SQL."
+  },
+  {
+   "id": "F28",
+   "aim": "A",
+   "front": "SQL",
+   "back": "Structured Query Language — the standard language for defining, manipulating and querying relational databases (SELECT, INSERT, UPDATE, DELETE, CREATE)."
+  },
+  {
+   "id": "F29",
+   "aim": "A",
+   "front": "Desktop database",
+   "back": "An RDBMS installed and running on one computer, storing the file locally (e.g. Microsoft Access). Good for single-user / small-team use."
+  },
+  {
+   "id": "F30",
+   "aim": "A",
+   "front": "Server database",
+   "back": "An RDBMS running on a central server that many users connect to over a network (e.g. MySQL, Oracle). Handles large scale and concurrency."
+  }
+ ],
+ "diagrams": [],
+ "knowledgeBank": {
+  "code": "A",
+  "title": "Understand how the principles of relational database models, data storage and normalisation are used to create effective relational database solutions",
+  "topics": [
+   {
+    "code": "A1",
+    "name": "Relational database management systems",
+    "keyPoints": [
+     "Types of RDBMS: desktop databases (e.g. Microsoft Access — single file, local, one user at a time) and server databases (MySQL, Oracle — central server, many concurrent users)",
+     "Relational data structure concepts: relation (table), attribute (column), domain (allowed values), tuple (row), degree (number of columns), cardinality (number of rows)",
+     "Relational algebra operations: union, intersect, join and select",
+     "Relational keys: super key, candidate key, primary key, foreign key",
+     "Integrity constraints: entity integrity (PK never null/duplicate) and referential integrity (FK must match an existing PK or be null)",
+     "Entity relationship types: one-to-one, one-to-many, many-to-many"
+    ]
+   },
+   {
+    "code": "A2",
+    "name": "Manipulating data structures and data",
+    "keyPoints": [
+     "Defining, modifying and removing data structures and data (CREATE, ALTER, DROP)",
+     "Updating, inserting, modifying and deleting data (INSERT, UPDATE, DELETE)",
+     "Retrieval of data for queries and reports (SELECT with criteria, sorting, grouping)"
+    ]
+   },
+   {
+    "code": "A3",
+    "name": "Normalisation",
+    "keyPoints": [
+     "Purpose: develop efficient data structures free of redundancy and dependency problems",
+     "Anomalies: update, insertion and deletion anomalies caused by poor table design",
+     "Keys: primary, foreign and composite keys",
+     "Referential integrity and the data dictionary",
+     "Stages: un-normalised form (UNF) → first (1NF) → second (2NF) → third normal form (3NF)",
+     "1NF removes repeating groups (atomic values); 2NF removes partial dependencies; 3NF removes transitive dependencies"
+    ]
+   },
+   {
+    "code": "A4",
+    "name": "Preliminary scoping of a solution in response to a client brief",
+    "keyPoints": [
+     "Purpose: the problem to be solved and the technical requirements",
+     "Research: existing databases, structuring data into tables and keys, available resources",
+     "Use accurate technical vocabulary and plan the logical structure"
+    ]
+   }
+  ]
+ },
+ "criteria": [
+  {
+   "code": "task1",
+   "aim": "A",
+   "title": "Research and scoping for the client brief",
+   "criteria": [
+    {
+     "code": "A.P1",
+     "level": "Pass",
+     "text": "Demonstrate an adequate understanding of how relational database models, data storage and normalisation provide reliable data structures, using partially relevant examples."
+    },
+    {
+     "code": "A.P2",
+     "level": "Pass",
+     "text": "Carry out adequate research to produce a preliminary scoping document that partially meets the client's requirements."
+    },
+    {
+     "code": "A.M1",
+     "level": "Merit",
+     "text": "Demonstrate a good understanding of relational database models, data storage and normalisation, using mostly relevant examples."
+    },
+    {
+     "code": "A.M2",
+     "level": "Merit",
+     "text": "Carry out mostly detailed research to produce a scoping document that considers most of the client's requirements."
+    },
+    {
+     "code": "A.D1",
+     "level": "Distinction",
+     "text": "Carry out effective research demonstrating thorough understanding of database principles, normalisation and how to comprehensively meet the client's requirements, using pertinent examples."
+    }
+   ]
+  }
+ ],
+ "briefs": [
+  {
+   "id": "college-enrolment",
+   "accdb": "CollegeCourseEnrolment.accdb",
+   "title": "College Course Enrolment",
+   "audience": "Enrolment team & tutors (Newman College-style)",
+   "scenario": "A sixth-form college needs a database to manage its learners, courses, subjects and staff, and to track which learner is enrolled on which course. Enrolment data is currently held across spreadsheets and paper, making it hard to see who is on each course and how learners are progressing against their target grades.",
+   "purpose": "To replace the spreadsheets with a relational database that stores learners, courses, subjects and staff, records every learner's enrolments, and produces reports on course enrolment and learner progress.",
+   "targetAudience": "Enrolment staff enter and update enrolments; tutors run queries and reports on their courses; managers review enrolment numbers and completion rates.",
+   "mustIncludes": [
+    "Tables for Learner, Course, Subject, Staff and a linking Enrolment table",
+    "Primary and foreign keys with one-to-many relationships (and a many-to-many resolved via Enrolment)",
+    "A data dictionary documenting every field name, data type, size and validation",
+    "Data validation (e.g. dates, target/actual grades, required fields)",
+    "Lookup fields / combo boxes so users pick Learners, Courses and Staff from drop-downs",
+    "Queries using multiple criteria and wildcards (e.g. learners on one course, surnames starting with a letter)",
+    "A parameter query to find a learner's enrolments",
+    "A report grouping enrolments by course with totals",
+    "A form with a subform showing a learner's (or course's) enrolments",
+    "Task automation using a macro or button",
+    "A test plan covering normal, erroneous and extreme data"
+   ],
+   "assignmentStyle": "original"
+  },
+  {
+   "id": "cinema-bookings",
+   "accdb": "RetroCinemaBooking.accdb",
+   "title": "Retro Cinema Booking System",
+   "audience": "Cinema manager & box-office staff",
+   "scenario": "A small independent cinema (Retro Reel) shows classic and cult films across three screens. Screenings are planned on a whiteboard and bookings taken over the phone, causing double-bookings and lost sales.",
+   "purpose": "To manage films, screens, screenings and bookings, prevent double-selling seats and produce daily sales reports.",
+   "targetAudience": "Box-office staff create bookings; the manager checks screening attendance and revenue.",
+   "mustIncludes": [
+    "Tables for Film, Screen, Screening, Member (or Customer) and a linking Booking table",
+    "One-to-many relationships with enforced referential integrity",
+    "A data dictionary for every field and validation rule",
+    "Lookup/combo boxes so staff pick a film and screen from a list",
+    "A query with criteria and wildcards (e.g. films of one genre, titles starting with a letter)",
+    "A parameter query to show all screenings on a chosen date",
+    "A report grouping bookings by screening with seat totals",
+    "A form with a subform for a screening's bookings",
+    "A macro or button to open the booking form",
+    "A test plan with normal, erroneous and extreme data"
+   ],
+   "assignmentStyle": "original"
+  },
+  {
+   "id": "garage-repairs",
+   "accdb": "GarageRepairs.accdb",
+   "title": "Garage Repairs & MOT Booking",
+   "audience": "Garage receptionist & mechanics",
+   "scenario": "A local garage (Precision Motors) keeps job cards in a filing cabinet. Customers, vehicles, jobs and parts are recorded on paper, so it's hard to see what work is outstanding and which parts were used.",
+   "purpose": "To manage customers, vehicles, jobs and parts, track each repair and produce invoices and workload reports.",
+   "targetAudience": "Receptionists book in vehicles; mechanics see outstanding jobs; owners review parts usage and invoicing.",
+   "mustIncludes": [
+    "Tables for Customer, Vehicle, Mechanic, Part and a linking Job table",
+    "Primary/foreign keys with a many-to-many resolved via a JobPart linking table",
+    "A data dictionary documenting field names, types, sizes and validation",
+    "Validation (e.g. date completed after date booked, valid registration format)",
+    "Lookup/combo boxes for customer, vehicle and mechanic",
+    "Queries using multiple criteria and wildcards",
+    "A parameter query to list jobs for a customer",
+    "A report grouping jobs by mechanic or customer with totals",
+    "A form with a subform showing a customer's vehicles",
+    "A macro used to automate opening a form/report",
+    "A test plan covering normal, erroneous and extreme data"
+   ],
+   "assignmentStyle": "original"
+  },
+  {
+   "id": "library-loans",
+   "accdb": "SchoolLibraryLoans.accdb",
+   "title": "School Library Loans",
+   "audience": "Librarian & students",
+   "scenario": "A secondary school library wants a database to manage its books, students and loans. Books are logged in a paper register, so it is hard to know which books are on loan and which are overdue.",
+   "purpose": "To manage books, students and loans, track which books are out on loan and generate overdue reports.",
+   "targetAudience": "The librarian issues and returns books; students are recorded as borrowers.",
+   "mustIncludes": [
+    "Tables for Student, Book and a linking Loan table",
+    "A many-to-many relationship resolved via the Loan table",
+    "A data dictionary documenting all fields and validation",
+    "Conceptual and logical ERDs",
+    "A loan form with a subform for a student's loans",
+    "A query with a calculated field (e.g. days overdue)",
+    "A report of overdue books grouped by student",
+    "Validation (e.g. loan date before return date)",
+    "Usability testing with real users and documented feedback"
+   ],
+   "assignmentStyle": "original"
+  },
+  {
+   "id": "travel-agency",
+   "accdb": "HolidayBookingAgency.accdb",
+   "title": "Holiday Booking Agency",
+   "audience": "Travel agents & customers",
+   "scenario": "A high-street travel agency (Sunrise Travel) arranges package holidays. Agents record bookings in paper folders and a shared spreadsheet, leading to duplicate bookings and errors in customer details.",
+   "purpose": "To manage customers, holidays, hotels and bookings, prevent double-booking and produce commission and passenger-list reports.",
+   "targetAudience": "Agents create and amend bookings; managers review sales and passenger manifests.",
+   "mustIncludes": [
+    "Tables for Customer, Holiday, Hotel (or Destination) and a linking Booking table",
+    "One-to-many relationships with referential integrity",
+    "A data dictionary with validation rules and input masks (e.g. date, price)",
+    "Lookup/combo boxes for customer, holiday and hotel",
+    "Queries with multiple criteria and wildcards (e.g. holidays under a price)",
+    "A parameter query for all customers on one holiday",
+    "Reports with grouping and totals (e.g. commission by agent)",
+    "A booking form with a subform for extra passengers",
+    "A macro to open the booking or report from a menu",
+    "A full test plan with normal, erroneous and extreme data"
+   ],
+   "assignmentStyle": "original"
+  }
+ ]
+}

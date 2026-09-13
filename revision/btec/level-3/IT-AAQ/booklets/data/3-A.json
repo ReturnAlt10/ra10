@@ -1,0 +1,1156 @@
+{
+ "unit": 3,
+ "unitTitle": "Website Development",
+ "unitName": "IT AAQ Unit 3",
+ "aim": "A",
+ "aimTitle": "Understand how the principles of website development are used to create effective websites",
+ "aimShort": "Purpose and principles of websites; planning a website in response to a client brief",
+ "board": "Pearson BTEC Level 3 National Extended Certificate in IT (AAQ)",
+ "specIssue": "Issue 2, March 2025",
+ "assessment": "Internally assessed Pearson Set Assignment (coursework).",
+ "topics": [
+  {
+   "code": "A1",
+   "name": "Purpose and principles of websites"
+  },
+  {
+   "code": "A2",
+   "name": "Planning a website in response to a client brief"
+  }
+ ],
+ "checklist": [
+  {
+   "code": "A1",
+   "name": "Purpose and principles of websites",
+   "type": "group"
+  },
+  {
+   "code": "",
+   "name": "Purpose of websites: eCommerce (selling online), providing information, promoting products or services, providing entertainment",
+   "type": "item"
+  },
+  {
+   "code": "",
+   "name": "Target audience: demographics (age, gender, income, education, location) and user personas (fictional profiles representing typical users)",
+   "type": "item"
+  },
+  {
+   "code": "",
+   "name": "Page layout: F-shaped pattern (users scan left-to-right, then down — good for text-heavy sites), Z-shaped pattern (scan across the top, diagonal, across the bottom — good for simple hero pages), grid layout, visual hierarchy (ordering elements by importance), grouping elements, separating content",
+   "type": "item"
+  },
+  {
+   "code": "",
+   "name": "Navigation: fixed/sticky navigation bars, vertical navigation, hamburger menus, logical navigation (predictable structure)",
+   "type": "item"
+  },
+  {
+   "code": "",
+   "name": "Content: written content (copy), visual content (images, video), calls-to-action (buttons/links that encourage the user to do something)",
+   "type": "item"
+  },
+  {
+   "code": "",
+   "name": "Design: typography (fonts, readability), colour scheme (colour psychology, brand colours, contrast)",
+   "type": "item"
+  },
+  {
+   "code": "",
+   "name": "User experience (UX): accessibility (colour contrast, colour combinations, closed captions and transcripts, keyboard-only navigation, breadcrumbs, customisable features), consistency (branding, page layout, design, UI elements), user-friendly (simple, intuitive, engaging, responsive)",
+   "type": "item"
+  },
+  {
+   "code": "",
+   "name": "Use of motion and movement: micro-interactions (small feedback animations), animation, parallax scrolling, image sliders; every use of motion must have a purpose",
+   "type": "item"
+  },
+  {
+   "code": "",
+   "name": "Dynamic websites: customised user experience (e.g. personal recommendations), controlled access to content (e.g. member-only areas)",
+   "type": "item"
+  },
+  {
+   "code": "",
+   "name": "Cross-browser compatibility: reducing discrepancies between browsers; mobile compatibility",
+   "type": "item"
+  },
+  {
+   "code": "",
+   "name": "Search Engine Optimisation (SEO): techniques to improve ranking in search results",
+   "type": "item"
+  },
+  {
+   "code": "A2",
+   "name": "Planning a website in response to a client brief",
+   "type": "group"
+  },
+  {
+   "code": "",
+   "name": "Establishing the client's requirements: purpose (the problem to be solved, key messages, user motivations and goals), intended audience, technical requirements",
+   "type": "item"
+  },
+  {
+   "code": "",
+   "name": "Research to identify new ideas: existing websites (analyse competitors), content ideas, available resources, legal and ethical constraints (copyright, data protection, digital accessibility, inclusive and diverse content and representations)",
+   "type": "item"
+  },
+  {
+   "code": "",
+   "name": "Structuring the website: site map (number of pages, content and features for each page, site navigation between pages)",
+   "type": "item"
+  },
+  {
+   "code": "",
+   "name": "Legal and ethical constraints in detail: copyright (don't use others' images/text/music without permission — use Creative Commons, royalty-free stock, or your own assets), data protection (UK GDPR — must have a privacy policy, only collect data you need, ask permission, use forms safely), digital accessibility (WCAG 2.2 guidelines — alt text, contrast, keyboard navigation), inclusive and diverse content (represent different groups positively, avoid stereotypes)",
+   "type": "item"
+  }
+ ],
+ "examQuestions": [],
+ "mcq": [
+  {
+   "id": "MC01",
+   "aim": "A",
+   "topic": "A1 Purpose",
+   "q": "Which of these is a common purpose of a website?",
+   "options": [
+    "eCommerce and selling products",
+    "All of these",
+    "Providing information",
+    "Promoting products or services"
+   ],
+   "answer": 1,
+   "why": "Websites commonly exist for eCommerce, to provide information, to promote products/services, or for entertainment â€” all are valid purposes."
+  },
+  {
+   "id": "MC02",
+   "aim": "A",
+   "topic": "A1 Audience",
+   "q": "What is a user persona?",
+   "options": [
+    "A fictional profile representing a typical user",
+    "A real customer's login details",
+    "A type of website security test",
+    "A browser extension"
+   ],
+   "answer": 0,
+   "why": "A user persona is a made-up but realistic profile of a typical user â€” their age, goals, habits and frustrations â€” used to design for real people."
+  },
+  {
+   "id": "MC03",
+   "aim": "A",
+   "topic": "A1 Layout",
+   "q": "Which reading pattern do users most commonly follow on text-heavy websites?",
+   "options": [
+    "F-shaped",
+    "Circular",
+    "Z-shaped",
+    "Diagonal"
+   ],
+   "answer": 0,
+   "why": "Eye-tracking shows users scan in an F-shape: horizontal lines across the top, then down the left edge. Put key info where eyes go first."
+  },
+  {
+   "id": "MC04",
+   "aim": "A",
+   "topic": "A1 Layout",
+   "q": "Which layout pattern is best suited to a simple homepage with a strong headline and a call to action?",
+   "options": [
+    "Tabular grid",
+    "Z-shaped pattern",
+    "F-shaped pattern",
+    "None of these"
+   ],
+   "answer": 1,
+   "why": "The Z-pattern suits hero pages: the eye moves top-left, then top-right, then diagonally to the bottom-right where the call to action sits."
+  },
+  {
+   "id": "MC05",
+   "aim": "A",
+   "topic": "A1 Navigation",
+   "q": "What is a benefit of a fixed/sticky navigation bar?",
+   "options": [
+    "Navigation is always visible while scrolling",
+    "It removes the need for a sitemap",
+    "It makes the page load faster",
+    "It automatically translates the page"
+   ],
+   "answer": 0,
+   "why": "A sticky nav stays visible as the user scrolls, so they can always find their way around without scrolling back to the top."
+  },
+  {
+   "id": "MC06",
+   "aim": "A",
+   "topic": "A1 Design",
+   "q": "Which describes 'visual hierarchy' in page design?",
+   "options": [
+    "Making every element the same size",
+    "Using only one font",
+    "Placing elements in order of importance so users notice key things first",
+    "Listing content alphabetically"
+   ],
+   "answer": 2,
+   "why": "Visual hierarchy uses size, colour, spacing and position to guide the eye from the most to the least important content."
+  },
+  {
+   "id": "MC07",
+   "aim": "A",
+   "topic": "A1 UX",
+   "q": "Why is sufficient colour contrast between text and background important?",
+   "options": [
+    "It makes the site look more colourful",
+    "It reduces file size",
+    "It helps users with visual impairments read the content",
+    "It is only for aesthetic appeal"
+   ],
+   "answer": 2,
+   "why": "Good contrast (WCAG recommends at least 4.5:1 for normal text) makes text readable for everyone, including users with low vision."
+  },
+  {
+   "id": "MC08",
+   "aim": "A",
+   "topic": "A1 UX",
+   "q": "Which of these is an accessibility feature?",
+   "options": [
+    "Alt text on images",
+    "Keyboard-only navigation",
+    "All of these",
+    "Providing transcripts for video content"
+   ],
+   "answer": 2,
+   "why": "Accessibility includes keyboard navigation, alt text, transcripts and captions, breadcrumbs, customisable features and more."
+  },
+  {
+   "id": "MC09",
+   "aim": "A",
+   "topic": "A1 Motion",
+   "q": "What is a micro-interaction?",
+   "options": [
+    "A type of malware",
+    "A short feedback animation, like a button changing colour when clicked",
+    "A requirement to enable JavaScript",
+    "A very small image file"
+   ],
+   "answer": 1,
+   "why": "Micro-interactions are small animations that give feedback â€” like a button press effect. Every use of motion should have a purpose."
+  },
+  {
+   "id": "MC10",
+   "aim": "A",
+   "topic": "A1 Dynamic",
+   "q": "What makes a website 'dynamic'?",
+   "options": [
+    "It changes colours automatically each day",
+    "It uses animated GIFs",
+    "It customises the user experience or controls access to content, often using server-side processing",
+    "It loads images on scroll"
+   ],
+   "answer": 2,
+   "why": "Dynamic sites serve customised experiences (recommendations, member areas) â€” usually powered by a server and database, not fixed static pages."
+  },
+  {
+   "id": "MC11",
+   "aim": "A",
+   "topic": "A1 Compatibility",
+   "q": "Why must a website be tested across different browsers and devices?",
+   "options": [
+    "Because browsers render HTML, CSS and JS with slight differences",
+    "To increase the number of users",
+    "It is a legal requirement in the UK",
+    "To make file sizes smaller"
+   ],
+   "answer": 0,
+   "why": "Browsers (Chrome, Safari, Firefox, Edge) and devices (phone, tablet, desktop) can render the same code slightly differently, so cross-browser testing catches discrepancies."
+  },
+  {
+   "id": "MC12",
+   "aim": "A",
+   "topic": "A1 SEO",
+   "q": "Which of these helps with search engine optimisation (SEO)?",
+   "options": [
+    "Using descriptive page titles and meta descriptions",
+    "Using only images (no text) on the page",
+    "Hiding keywords in the page background",
+    "Disabling the viewport meta tag"
+   ],
+   "answer": 0,
+   "why": "SEO uses keywords, descriptive titles, meta descriptions, headings, alt text and fast, mobile-friendly pages to help search engines rank your site."
+  },
+  {
+   "id": "MC13",
+   "aim": "A",
+   "topic": "A2 Requirements",
+   "q": "Which of these should you establish first when planning from a client brief?",
+   "options": [
+    "The client's requirements: purpose, audience and technical needs",
+    "The colour palette",
+    "The domain name",
+    "The hosting provider"
+   ],
+   "answer": 0,
+   "why": "Everything else â€” structure, design, content â€” flows from understanding the purpose, the intended audience and the technical requirements of the brief."
+  },
+  {
+   "id": "MC14",
+   "aim": "A",
+   "topic": "A2 Legal",
+   "q": "You find a great photo on Google Images for your client's website. What should you do?",
+   "options": [
+    "Use it â€” everything online is free to use",
+    "Check the licence and credit the source, or use royalty-free images",
+    "Crop it so the owner won't recognise it",
+    "Only use it if the site is not making money"
+   ],
+   "answer": 1,
+   "why": "Most images are protected by copyright. Check the licence, credit the source, use Creative Commons or royalty-free stock, or create your own assets."
+  },
+  {
+   "id": "MC15",
+   "aim": "A",
+   "topic": "A2 Legal",
+   "q": "Your site has a form where users enter their email. Under UK GDPR, what must you provide?",
+   "options": [
+    "A captcha only",
+    "A password on every page",
+    "A privacy policy explaining what you collect and why, plus consent",
+    "Nothing â€” small sites are exempt"
+   ],
+   "answer": 2,
+   "why": "GDPR applies to any site processing personal data. You must be transparent about what data you collect, why, and get consent where needed."
+  },
+  {
+   "id": "MC33",
+   "aim": "A",
+   "topic": "A1 Purpose",
+   "q": "Which of these is an example of an entertainment website?",
+   "options": [
+    "A streaming service showing films and series",
+    "A school's homework portal",
+    "A bank's online banking portal",
+    "A government tax website"
+   ],
+   "answer": 0,
+   "why": "Entertainment sites exist to amuse or engage users â€” streaming, gaming, music and video platforms are classic examples."
+  },
+  {
+   "id": "MC34",
+   "aim": "A",
+   "topic": "A1 Purpose",
+   "q": "What is the main purpose of an eCommerce website?",
+   "options": [
+    "To host a blog",
+    "To sell products or services online",
+    "To provide free information",
+    "To display a company's contact details only"
+   ],
+   "answer": 1,
+   "why": "eCommerce sites are built to sell â€” they include product listings, a shopping basket, checkout and payment processing."
+  },
+  {
+   "id": "MC35",
+   "aim": "A",
+   "topic": "A1 Audience",
+   "q": "Why is it important to identify the target audience before designing a website?",
+   "options": [
+    "To decide the hosting provider",
+    "So the design, content and tone match what the audience expects",
+    "Because all websites must have an audience",
+    "To set the price of the website"
+   ],
+   "answer": 1,
+   "why": "Knowing the audience (age, interests, technical ability) shapes everything â€” layout, colour, language, features and content."
+  },
+  {
+   "id": "MC36",
+   "aim": "A",
+   "topic": "A1 Audience",
+   "q": "Which of these is a demographic factor used to define a target audience?",
+   "options": [
+    "Age",
+    "All of these",
+    "Income",
+    "Location"
+   ],
+   "answer": 1,
+   "why": "Demographics include age, gender, income, education, location and occupation â€” all used to build a picture of the audience."
+  },
+  {
+   "id": "MC37",
+   "aim": "A",
+   "topic": "A1 Layout",
+   "q": "What is the purpose of grouping related content together on a page?",
+   "options": [
+    "To make the page load faster",
+    "To make the page easier to scan and understand",
+    "To reduce the number of images",
+    "To improve the domain name"
+   ],
+   "answer": 1,
+   "why": "Grouping related items (e.g. all navigation together, all product cards together) helps users find what they need quickly."
+  },
+  {
+   "id": "MC38",
+   "aim": "A",
+   "topic": "A1 Layout",
+   "q": "What is a grid layout in web design?",
+   "options": [
+    "A type of image file",
+    "A system of columns and rows used to align content consistently",
+    "A network topology",
+    "A CSS colour value"
+   ],
+   "answer": 1,
+   "why": "A grid divides the page into columns and rows so elements align neatly â€” the basis of most professional layouts."
+  },
+  {
+   "id": "MC39",
+   "aim": "A",
+   "topic": "A1 Navigation",
+   "q": "What is a hamburger menu?",
+   "options": [
+    "A navigation icon (three lines) that expands a menu, common on mobile",
+    "A type of food website",
+    "A browser bookmark",
+    "A CSS animation"
+   ],
+   "answer": 0,
+   "why": "The hamburger icon (â˜°) collapses navigation into a button, saving space on small screens â€” a common responsive pattern."
+  },
+  {
+   "id": "MC40",
+   "aim": "A",
+   "topic": "A1 Navigation",
+   "q": "What is logical navigation?",
+   "options": [
+    "Organising pages in a way that makes sense to the user, matching how they think",
+    "Alphabetical ordering of all pages",
+    "Random page order",
+    "Using only one page"
+   ],
+   "answer": 0,
+   "why": "Logical navigation groups pages by meaning (e.g. all 'About' pages together) so users can predict where to find things."
+  },
+  {
+   "id": "MC41",
+   "aim": "A",
+   "topic": "A1 Content",
+   "q": "What is a call to action (CTA)?",
+   "options": [
+    "A type of image",
+    "A legal disclaimer",
+    "A button or link that prompts the user to take a specific action, like 'Buy now'",
+    "A server request"
+   ],
+   "answer": 2,
+   "why": "A CTA guides the user toward a goal â€” 'Sign up', 'Buy now', 'Contact us' â€” and should be visually prominent."
+  },
+  {
+   "id": "MC42",
+   "aim": "A",
+   "topic": "A1 Design",
+   "q": "Why is typography important in web design?",
+   "options": [
+    "It determines the site's colour",
+    "It controls the server",
+    "It affects readability and the overall feel of the site",
+    "It is only decorative"
+   ],
+   "answer": 2,
+   "why": "Font choice, size, spacing and weight affect how easily users read and how professional the site looks."
+  },
+  {
+   "id": "MC43",
+   "aim": "A",
+   "topic": "A1 Design",
+   "q": "What is a colour scheme?",
+   "options": [
+    "A CSS media query",
+    "A type of image filter",
+    "The set of colours used consistently across a website",
+    "A browser setting"
+   ],
+   "answer": 2,
+   "why": "A colour scheme is a deliberate palette used for backgrounds, text, buttons and accents to create a consistent brand feel."
+  },
+  {
+   "id": "MC44",
+   "aim": "A",
+   "topic": "A1 UX",
+   "q": "What does 'consistency' mean in user experience design?",
+   "options": [
+    "Using the same layout, colours and patterns throughout the site",
+    "Using only one page",
+    "Making every page identical",
+    "Removing all animations"
+   ],
+   "answer": 0,
+   "why": "Consistency means users learn how the site works once and can apply it everywhere â€” reducing confusion and frustration."
+  },
+  {
+   "id": "MC45",
+   "aim": "A",
+   "topic": "A1 UX",
+   "q": "Why should a website be 'user-friendly'?",
+   "options": [
+    "To increase the file size",
+    "So users can achieve their goals easily without frustration",
+    "Because it is a legal requirement",
+    "To make it harder to use"
+   ],
+   "answer": 1,
+   "why": "A user-friendly site is intuitive, fast and accessible, so visitors stay longer and are more likely to return or convert."
+  },
+  {
+   "id": "MC46",
+   "aim": "A",
+   "topic": "A1 Motion",
+   "q": "Why should motion on a website be used sparingly?",
+   "options": [
+    "Too much motion distracts users and can hurt accessibility and performance",
+    "Motion is only for games",
+    "Motion is always bad",
+    "Motion makes text unreadable always"
+   ],
+   "answer": 0,
+   "why": "Motion should have a purpose (feedback, guidance). Excessive animation distracts, slows the page and can trigger accessibility issues."
+  },
+  {
+   "id": "MC47",
+   "aim": "A",
+   "topic": "A1 Dynamic",
+   "q": "Which of these is an example of dynamic content?",
+   "options": [
+    "A personalised 'recommended for you' section",
+    "A fixed footer",
+    "A static 'About us' page",
+    "A plain text paragraph"
+   ],
+   "answer": 0,
+   "why": "Dynamic content changes based on the user or data â€” recommendations, member dashboards, live scores and search results."
+  },
+  {
+   "id": "MC48",
+   "aim": "A",
+   "topic": "A1 Compatibility",
+   "q": "What is cross-browser compatibility?",
+   "options": [
+    "A site that only works in one browser",
+    "A website working correctly across different browsers",
+    "A browser extension",
+    "A type of malware"
+   ],
+   "answer": 1,
+   "why": "Cross-browser compatibility means the site renders and functions correctly in Chrome, Safari, Firefox, Edge and others."
+  },
+  {
+   "id": "MC49",
+   "aim": "A",
+   "topic": "A1 SEO",
+   "q": "What is a meta description?",
+   "options": [
+    "A hidden password",
+    "A short summary of a page shown in search results",
+    "A type of image",
+    "A CSS rule"
+   ],
+   "answer": 1,
+   "why": "A meta description is a brief snippet that appears under the page title in search results, helping users decide whether to click."
+  },
+  {
+   "id": "MC50",
+   "aim": "A",
+   "topic": "A1 SEO",
+   "q": "Why is a mobile-friendly (responsive) website important for SEO?",
+   "options": [
+    "It is only for aesthetics",
+    "Google prioritises mobile-friendly sites in search rankings",
+    "It reduces the number of pages",
+    "It is not important"
+   ],
+   "answer": 1,
+   "why": "Google uses mobile-first indexing, so a responsive site ranks better and provides a better experience for mobile users."
+  },
+  {
+   "id": "MC51",
+   "aim": "A",
+   "topic": "A2 Requirements",
+   "q": "What is a client brief?",
+   "options": [
+    "A document describing what the client wants the website to achieve",
+    "A list of server specifications",
+    "A type of contract for hosting",
+    "A design template"
+   ],
+   "answer": 0,
+   "why": "The brief sets out the purpose, audience, features, tone and constraints â€” the starting point for all planning."
+  },
+  {
+   "id": "MC52",
+   "aim": "A",
+   "topic": "A2 Requirements",
+   "q": "Which of these is a technical requirement you might establish from a brief?",
+   "options": [
+    "The client's favourite colour",
+    "The hosting and domain requirements",
+    "The number of employees",
+    "The company's logo design"
+   ],
+   "answer": 1,
+   "why": "Technical requirements include hosting, domain, platform, performance, security and compatibility needs."
+  },
+  {
+   "id": "MC53",
+   "aim": "A",
+   "topic": "A2 Research",
+   "q": "Why research existing websites before designing a new one?",
+   "options": [
+    "To copy them exactly",
+    "To find free hosting",
+    "To learn what works well and what to avoid",
+    "To get a domain name"
+   ],
+   "answer": 2,
+   "why": "Researching similar sites reveals best practice, common features and gaps you can improve on â€” evidence for the assignment."
+  },
+  {
+   "id": "MC54",
+   "aim": "A",
+   "topic": "A2 Legal",
+   "q": "What is copyright?",
+   "options": [
+    "A browser feature",
+    "A type of hosting",
+    "The legal right of the creator to control how their work is used",
+    "A CSS property"
+   ],
+   "answer": 2,
+   "why": "Copyright protects original work (text, images, music, code). You need permission or a licence to use someone else's work."
+  },
+  {
+   "id": "MC55",
+   "aim": "A",
+   "topic": "A2 Legal",
+   "q": "What is a Creative Commons licence?",
+   "options": [
+    "A type of malware",
+    "A hosting plan",
+    "A licence that lets creators share their work with certain conditions",
+    "A browser extension"
+   ],
+   "answer": 2,
+   "why": "Creative Commons licences allow reuse under set conditions (e.g. attribution, non-commercial) â€” a safe source of assets."
+  },
+  {
+   "id": "MC56",
+   "aim": "A",
+   "topic": "A2 Legal",
+   "q": "Why must a website be accessible to users with disabilities?",
+   "options": [
+    "To reduce file size",
+    "It is a legal requirement under the Equality Act and improves the experience for everyone",
+    "Because it is cheaper",
+    "It is optional"
+   ],
+   "answer": 1,
+   "why": "The Equality Act 2010 requires websites to be accessible, and accessibility also benefits all users (e.g. captions, keyboard nav)."
+  },
+  {
+   "id": "MC91",
+   "aim": "A",
+   "topic": "A1 Purpose",
+   "q": "Which of these is a purpose of a promotional website?",
+   "options": [
+    "To host a game",
+    "To store a database",
+    "To advertise a product or service and encourage action",
+    "To provide a login system"
+   ],
+   "answer": 2,
+   "why": "Promotional sites market a product/service, using CTAs and persuasive content to drive sales or enquiries."
+  },
+  {
+   "id": "MC92",
+   "aim": "A",
+   "topic": "A1 Purpose",
+   "q": "What is an informational website?",
+   "options": [
+    "A site that sells products",
+    "A site that streams video",
+    "A site whose main purpose is to provide facts and details",
+    "A site that hosts games"
+   ],
+   "answer": 2,
+   "why": "Informational sites (news, encyclopaedias, company 'about' pages) exist to deliver facts and knowledge."
+  },
+  {
+   "id": "MC93",
+   "aim": "A",
+   "topic": "A1 Audience",
+   "q": "What is a user journey?",
+   "options": [
+    "A type of image",
+    "A CSS animation",
+    "The path a user takes through a website to reach a goal",
+    "A server route"
+   ],
+   "answer": 2,
+   "why": "A user journey maps the steps a visitor takes â€” from landing to completing a task â€” helping you spot friction points."
+  },
+  {
+   "id": "MC94",
+   "aim": "A",
+   "topic": "A1 Layout",
+   "q": "What is whitespace (negative space) in design?",
+   "options": [
+    "The empty space between elements that improves readability and focus",
+    "A type of image",
+    "A white background",
+    "A CSS colour"
+   ],
+   "answer": 0,
+   "why": "Whitespace gives content room to breathe, making layouts cleaner and easier to scan â€” a key design principle."
+  },
+  {
+   "id": "MC95",
+   "aim": "A",
+   "topic": "A1 Navigation",
+   "q": "What is a breadcrumb?",
+   "options": [
+    "A CSS property",
+    "A navigation trail showing the user's location in the site hierarchy",
+    "A type of cookie",
+    "A browser history"
+   ],
+   "answer": 1,
+   "why": "Breadcrumbs (e.g. Home â€º Products â€º Laptops) show where you are and let users jump back up the hierarchy."
+  },
+  {
+   "id": "MC96",
+   "aim": "A",
+   "topic": "A1 Content",
+   "q": "What is a hero section?",
+   "options": [
+    "A footer",
+    "The large prominent area at the top of a homepage with the main headline and CTA",
+    "A type of image",
+    "A navigation bar"
+   ],
+   "answer": 1,
+   "why": "The hero is the first thing users see â€” a big headline, supporting text and a call to action that sets the tone."
+  },
+  {
+   "id": "MC97",
+   "aim": "A",
+   "topic": "A1 Design",
+   "q": "What is a logo?",
+   "options": [
+    "A symbol or design that identifies a brand",
+    "A type of image file",
+    "A CSS class",
+    "A hosting plan"
+   ],
+   "answer": 0,
+   "why": "A logo is a recognisable mark that represents a company â€” a key part of brand identity."
+  },
+  {
+   "id": "MC98",
+   "aim": "A",
+   "topic": "A1 UX",
+   "q": "What is a loading time and why does it matter?",
+   "options": [
+    "A type of animation",
+    "How long a page takes to load; slow pages frustrate users and hurt SEO",
+    "A server setting",
+    "It does not matter"
+   ],
+   "answer": 1,
+   "why": "Fast loading improves user experience and search ranking; slow sites lose visitors. Optimise images and code."
+  },
+  {
+   "id": "MC99",
+   "aim": "A",
+   "topic": "A1 Dynamic",
+   "q": "What is a static website?",
+   "options": [
+    "A site that always changes",
+    "A site with fixed content that doesn't change based on the user",
+    "A site with no images",
+    "A site with no CSS"
+   ],
+   "answer": 1,
+   "why": "Static sites serve the same content to everyone (e.g. a simple brochure site) â€” simpler but less personalised."
+  },
+  {
+   "id": "MC100",
+   "aim": "A",
+   "topic": "A1 SEO",
+   "q": "What is a keyword?",
+   "options": [
+    "A CSS property",
+    "A type of image",
+    "A word or phrase users type into a search engine",
+    "A server variable"
+   ],
+   "answer": 2,
+   "why": "Keywords are the terms people search for; using them naturally in titles, headings and content helps SEO."
+  },
+  {
+   "id": "MC101",
+   "aim": "A",
+   "topic": "A2 Requirements",
+   "q": "What is a constraint in a client brief?",
+   "options": [
+    "A CSS rule",
+    "A limitation or requirement the design must work within (e.g. budget, deadline, brand rules)",
+    "A type of image",
+    "A hosting plan"
+   ],
+   "answer": 1,
+   "why": "Constraints are boundaries â€” budget, time, brand colours, accessibility, legal rules â€” that shape the design."
+  },
+  {
+   "id": "MC102",
+   "aim": "A",
+   "topic": "A2 Research",
+   "q": "What is a competitor analysis?",
+   "options": [
+    "Reviewing similar websites to see what they do well and poorly",
+    "A server check",
+    "A type of malware",
+    "A CSS test"
+   ],
+   "answer": 0,
+   "why": "Analysing competitors reveals best practice, gaps and opportunities â€” strong evidence for the planning task."
+  },
+  {
+   "id": "MC103",
+   "aim": "A",
+   "topic": "A2 Legal",
+   "q": "What is a privacy policy?",
+   "options": [
+    "A statement explaining what personal data a site collects and how it's used",
+    "A CSS file",
+    "A type of image",
+    "A hosting contract"
+   ],
+   "answer": 0,
+   "why": "A privacy policy is required under GDPR to be transparent about data collection, use and user rights."
+  },
+  {
+   "id": "MC104",
+   "aim": "A",
+   "topic": "A2 Legal",
+   "q": "What is GDPR?",
+   "options": [
+    "A CSS framework",
+    "The General Data Protection Regulation governing personal data",
+    "A type of image",
+    "A hosting provider"
+   ],
+   "answer": 1,
+   "why": "GDPR is EU/UK law protecting personal data â€” sites must be transparent, get consent and protect user data."
+  }
+ ],
+ "quiz": [
+  {
+   "id": "Q01",
+   "aim": "A",
+   "topic": "Purpose",
+   "q": "A restaurant chain wants a site where customers can book tables and order food for collection. What is the site's purpose?",
+   "options": [
+    "Only providing information",
+    "Providing entertainment",
+    "eCommerce and promoting services",
+    "Cross-browser compatibility"
+   ],
+   "answer": 2,
+   "why": "Taking orders and bookings makes it eCommerce plus promotion — serving a clear business purpose."
+  },
+  {
+   "id": "Q02",
+   "aim": "A",
+   "topic": "Layout",
+   "q": "Which layout principle means putting important content where the eye lands first?",
+   "options": [
+    "Parallax scrolling",
+    "Border radius",
+    "Visual hierarchy",
+    "CSS grid"
+   ],
+   "answer": 2,
+   "why": "Visual hierarchy arranges elements by importance so users notice key content (headlines, CTAs) first."
+  },
+  {
+   "id": "Q03",
+   "aim": "A",
+   "topic": "Navigation",
+   "q": "When is a hamburger menu most appropriate?",
+   "options": [
+    "Mobile-first designs where space is limited",
+    "When the site has one page",
+    "Desktop banking sites",
+    "Never"
+   ],
+   "answer": 0,
+   "why": "Hamburger menus hide navigation behind an icon — ideal on small screens where space is tight."
+  },
+  {
+   "id": "Q04",
+   "aim": "A",
+   "topic": "UX",
+   "q": "Which colour pair would NOT be acceptable for WCAG colour contrast?",
+   "options": [
+    "Dark green on yellow",
+    "Black text on white",
+    "Navy text on cream",
+    "Light grey text on white"
+   ],
+   "answer": 3,
+   "why": "Light grey on white fails contrast guidelines — poor contrast makes text unreadable for many users. Check contrast with tools like WebAIM."
+  },
+  {
+   "id": "Q05",
+   "aim": "A",
+   "topic": "Audience",
+   "q": "A client brief targets 'teenagers interested in gaming'. Which is the correct demographic approach?",
+   "options": [
+    "Design only for adults",
+    "Ignore the audience",
+    "Assume every user is the same age",
+    "Design for 13-19 year olds with personas for casual and hardcore gamers"
+   ],
+   "answer": 3,
+   "why": "Demographics plus personas let you design content, tone and visuals that actually appeal to the target users."
+  }
+ ],
+ "flashcards": [
+  {
+   "id": "F01",
+   "aim": "A",
+   "front": "F-shaped pattern",
+   "back": "The eye-tracking reading pattern on text-heavy pages: horizontal scans across the top, then down the left edge, like the letter F. Put key content in the top-left and upper areas."
+  },
+  {
+   "id": "F02",
+   "aim": "A",
+   "front": "Z-shaped pattern",
+   "back": "Reading pattern on simple hero pages: across the top, diagonal, across the bottom (like Z). Good for landing pages with a headline and a call to action in the bottom-right."
+  },
+  {
+   "id": "F03",
+   "aim": "A",
+   "front": "Visual hierarchy",
+   "back": "Arranging page elements by importance using size, colour, spacing and position so users notice the most important content first."
+  },
+  {
+   "id": "F04",
+   "aim": "A",
+   "front": "User persona",
+   "back": "A fictional but realistic profile of a typical user (age, goals, habits, frustrations) used to design content and features for real people."
+  },
+  {
+   "id": "F05",
+   "aim": "A",
+   "front": "Call to action (CTA)",
+   "back": "An element that prompts the user to act — e.g. 'Buy now', 'Join free', 'Contact us'. Usually a button or link placed prominently."
+  },
+  {
+   "id": "F06",
+   "aim": "A",
+   "front": "Micro-interaction",
+   "back": "A small feedback animation triggered by user action (button press, like button). Uses of motion should always have a purpose, not just decoration."
+  },
+  {
+   "id": "F07",
+   "aim": "A",
+   "front": "Sticky / fixed navigation",
+   "back": "A navigation bar that stays visible while the user scrolls, so navigation is always one click away."
+  },
+  {
+   "id": "F08",
+   "aim": "A",
+   "front": "Hamburger menu",
+   "back": "A navigation icon (three stacked lines) that expands a menu — commonly used on mobile to save space."
+  },
+  {
+   "id": "F09",
+   "aim": "A",
+   "front": "Breadcrumbs",
+   "back": "A navigation trail showing where the user is (e.g. Home > Music > 1970s). Improves orientation and accessibility."
+  },
+  {
+   "id": "F10",
+   "aim": "A",
+   "front": "Cross-browser compatibility",
+   "back": "Ensuring the site displays and works consistently across different browsers (Chrome, Safari, Firefox, Edge) and devices."
+  },
+  {
+   "id": "F11",
+   "aim": "A",
+   "front": "SEO",
+   "back": "Search Engine Optimisation — techniques like keywords, descriptive titles, meta descriptions, alt text and fast mobile-friendly pages that improve search engine ranking."
+  },
+  {
+   "id": "F12",
+   "aim": "A",
+   "front": "Dynamic website",
+   "back": "A site that customises the experience or controls access to content, usually powered by a server and database (e.g. member areas, recommendations)."
+  },
+  {
+   "id": "F13",
+   "aim": "A",
+   "front": "WCAG",
+   "back": "Web Content Accessibility Guidelines, published by the W3C — the international standard for making web content accessible (contrast, keyboard navigation, captions, etc.)."
+  },
+  {
+   "id": "F14",
+   "aim": "A",
+   "front": "Site map",
+   "back": "A diagram showing the structure of the website — every page and how they link together. Required evidence for the assignment."
+  },
+  {
+   "id": "F32",
+   "aim": "A",
+   "front": "Grouping / separating content",
+   "back": "Placing related elements together (grouping) and using white space/lines to separate different content — improves scanability."
+  }
+ ],
+ "diagrams": [],
+ "knowledgeBank": {
+  "code": "A",
+  "title": "Understand how the principles of website development are used to create effective websites",
+  "topics": [
+   {
+    "code": "A1",
+    "name": "Purpose and principles of websites",
+    "keyPoints": [
+     "Purpose of websites: eCommerce (selling online), providing information, promoting products or services, providing entertainment",
+     "Target audience: demographics (age, gender, income, education, location) and user personas (fictional profiles representing typical users)",
+     "Page layout: F-shaped pattern (users scan left-to-right, then down — good for text-heavy sites), Z-shaped pattern (scan across the top, diagonal, across the bottom — good for simple hero pages), grid layout, visual hierarchy (ordering elements by importance), grouping elements, separating content",
+     "Navigation: fixed/sticky navigation bars, vertical navigation, hamburger menus, logical navigation (predictable structure)",
+     "Content: written content (copy), visual content (images, video), calls-to-action (buttons/links that encourage the user to do something)",
+     "Design: typography (fonts, readability), colour scheme (colour psychology, brand colours, contrast)",
+     "User experience (UX): accessibility (colour contrast, colour combinations, closed captions and transcripts, keyboard-only navigation, breadcrumbs, customisable features), consistency (branding, page layout, design, UI elements), user-friendly (simple, intuitive, engaging, responsive)",
+     "Use of motion and movement: micro-interactions (small feedback animations), animation, parallax scrolling, image sliders; every use of motion must have a purpose",
+     "Dynamic websites: customised user experience (e.g. personal recommendations), controlled access to content (e.g. member-only areas)",
+     "Cross-browser compatibility: reducing discrepancies between browsers; mobile compatibility",
+     "Search Engine Optimisation (SEO): techniques to improve ranking in search results"
+    ]
+   },
+   {
+    "code": "A2",
+    "name": "Planning a website in response to a client brief",
+    "keyPoints": [
+     "Establishing the client's requirements: purpose (the problem to be solved, key messages, user motivations and goals), intended audience, technical requirements",
+     "Research to identify new ideas: existing websites (analyse competitors), content ideas, available resources, legal and ethical constraints (copyright, data protection, digital accessibility, inclusive and diverse content and representations)",
+     "Structuring the website: site map (number of pages, content and features for each page, site navigation between pages)",
+     "Legal and ethical constraints in detail: copyright (don't use others' images/text/music without permission — use Creative Commons, royalty-free stock, or your own assets), data protection (UK GDPR — must have a privacy policy, only collect data you need, ask permission, use forms safely), digital accessibility (WCAG 2.2 guidelines — alt text, contrast, keyboard navigation), inclusive and diverse content (represent different groups positively, avoid stereotypes)"
+    ]
+   }
+  ]
+ },
+ "criteria": [
+  {
+   "code": "task1",
+   "aim": "A",
+   "title": "Research and planning for the client brief",
+   "criteria": [
+    {
+     "code": "A.P1",
+     "level": "Pass",
+     "text": "Undertake research showing adequate understanding of how website development principles are used to meet a specific purpose, using partially relevant examples."
+    },
+    {
+     "code": "A.P2",
+     "level": "Pass",
+     "text": "Produce a site map that partially meets the client's requirements."
+    },
+    {
+     "code": "A.M1",
+     "level": "Merit",
+     "text": "Undertake research showing good understanding of how the principles are used, with mostly relevant examples."
+    },
+    {
+     "code": "A.M2",
+     "level": "Merit",
+     "text": "Produce a site map that mostly meets the client's requirements."
+    },
+    {
+     "code": "A.D1",
+     "level": "Distinction",
+     "text": "Carry out effective research demonstrating a thorough understanding of the principles and how to comprehensively meet the client's requirements, using pertinent examples."
+    }
+   ]
+  }
+ ],
+ "briefs": [
+  {
+   "id": "retro-film",
+   "title": "Retro Film Hub",
+   "audience": "17- to 23-year-olds",
+   "scenario": "Midnight Picture Show is a small independent cinema that hosts late-night screenings of classic films. They want a website that introduces young adults (17-23) to the films, stars and cultural moments of Hollywood's golden era.",
+   "purpose": "To introduce a young adult audience to classic films and encourage them to visit the cinema.",
+   "targetAudience": "17- to 23-year-olds — many will have seen remakes or references to old films but never the originals.",
+   "mustIncludes": [
+    "Three pages",
+    "Drop-down menus",
+    "Information about classic films (plot summaries, iconic stars, behind-the-scenes facts)",
+    "An accordion (e.g. 'Explore by genre or decade' with expandable sections)",
+    "External links to relevant websites (e.g. film archive sites, the cinema's ticketing site)",
+    "A form to request a specific film be screened",
+    "Modal images (click a film poster to view it enlarged)",
+    "Video content with controls (trailers — always embed from official sources)",
+    "Search functionality to find films",
+    "Accessibility features (alt text, high contrast, keyboard navigation, readable fonts)"
+   ],
+   "typographyHint": "Try a bold display font for headings to echo old cinema signage, with a clean sans-serif for body text.",
+   "colourHint": "Golden-era Hollywood palette: deep burgundy, cream, gold and black — or teal and burnt orange for a vintage poster feel.",
+   "assignmentStyle": "original"
+  },
+  {
+   "id": "charity",
+   "title": "Community Action Charity",
+   "audience": "13- to 19-year-olds",
+   "scenario": "A non-profit organisation wants a website to create awareness of its activities and encourage teenagers to join as volunteers. It needs to show positive representations of its members and its work in the community.",
+   "purpose": "To create awareness of the charity and encourage a teenage audience to get involved.",
+   "targetAudience": "13- to 19-year-olds (students, young volunteers)",
+   "mustIncludes": [
+    "Three pages",
+    "Information about the organisation (aims, activities, achievements)",
+    "Information about an upcoming event, including a map of the location",
+    "One member's personal story (with permission)",
+    "An email link to contact the organisation",
+    "A form to join the organisation",
+    "An interactive image slider with captions",
+    "A resource section with filter functionality (text, infographics and video resources)",
+    "Positive representations of the organisation and its members",
+    "Accessibility features"
+   ],
+   "typographyHint": "Friendly, rounded fonts for headings; clean body text. Avoid jargon — write for teenagers.",
+   "colourHint": "Bright, energetic palette (e.g. teal, coral, sunshine yellow) with strong contrast for accessibility.",
+   "assignmentStyle": "original"
+  },
+  {
+   "id": "sports-club",
+   "title": "Local Sports & Fitness Club",
+   "audience": "16- to 25-year-olds",
+   "scenario": "A local multi-sport club wants a website that promotes its teams and fitness sessions. The club wants to grow its membership among 16-25 year olds and needs the site to showcase facilities, timetables and how to join.",
+   "purpose": "To promote the club's teams, sessions and facilities and convert visitors into members.",
+   "targetAudience": "16- to 25-year-olds, including students new to the area",
+   "mustIncludes": [
+    "Three pages",
+    "Drop-down menus (sports, sessions, membership)",
+    "Information about sports and fitness sessions",
+    "An accordion (e.g. frequently asked questions)",
+    "External links (e.g. national sport governing bodies)",
+    "A form to register interest in joining",
+    "Modal images (photo gallery with lightbox)",
+    "Video content with controls (session highlights)",
+    "Search functionality",
+    "Accessibility features"
+   ],
+   "typographyHint": "Strong condensed headings for a sporty energy; keep body text highly readable.",
+   "colourHint": "High-contrast sport palette (e.g. royal blue and volt/highlighter accents) — check contrast ratios pass WCAG.",
+   "assignmentStyle": "original"
+  }
+ ]
+}
