@@ -538,9 +538,51 @@
     "Tests use [[normal]], [[erroneous]] and [[extreme]] data. [[Referential integrity]] testing checks that related records behave correctly when added or deleted.",
     "To optimise a query, [[SELECT]] only the [[columns]] you need and use efficient [[joins]], avoiding unnecessary tables."
    ]
+  },
+  {
+   "title": "Optimisation & review",
+   "passages": [
+    "Database performance is affected by chosen [[data types]], the [[volume]] of data, and the accuracy of [[normalisation]].",
+    "A final review weighs [[quality]], [[fitness for purpose]], [[suitability]] against the original requirements, and [[legal/ethical]] constraints — backed by [[evidence]] from testing."
+   ]
   }
  ],
  "designs": [
+  {
+   "kind": "table",
+   "title": "Build with SQL (both ways)",
+   "prompt": "Plan how you will build the college database. Pearson expects you to create tables, relationships and validation using BOTH a GUI (Access) AND SQL, then compare the two.",
+   "model": {
+    "table": {
+     "head": [
+      "Task",
+      "SQL example"
+     ],
+     "rows": [
+      [
+       "Create a table",
+       "CREATE TABLE Learner (LearnerID ... PRIMARY KEY, ...);"
+      ],
+      [
+       "Add a relationship",
+       "Foreign key + referential integrity constraint"
+      ],
+      [
+       "Add validation",
+       "CHECK (EnrolDate <= today) or Access validation rule"
+      ],
+      [
+       "Query data",
+       "SELECT FirstName, CourseName FROM ... JOIN ... WHERE ...;"
+      ],
+      [
+       "Update / delete",
+       "UPDATE ... SET ... WHERE ...;  DELETE FROM ... WHERE ...;"
+      ]
+     ]
+    }
+   }
+  },
   {
    "kind": "report",
    "title": "Report layout & optimisation",

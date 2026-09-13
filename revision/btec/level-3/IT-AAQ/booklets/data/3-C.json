@@ -909,7 +909,14 @@
    "title": "Development & testing",
    "passages": [
     "Testing should cover [[functionality]] (does it work?), [[usability]] (is it easy to use?) and [[accessibility]]. [[Responsive]] design ensures the site works on [[different screen sizes]].",
-    "A [[test plan]] lists each test with its expected [[outcome]], actual [[result]], and any [[actions]] needed."
+    "A [[test plan]] lists each test with its expected [[outcome]], actual [[result]], and any [[actions]] needed, backed by [[evidence]] such as screenshots or screen recordings."
+   ]
+  },
+  {
+   "title": "Publishing & review",
+   "passages": [
+    "Before publishing, run a final check for [[legal and ethical]] compliance and run the site through a [[validator]] (e.g. W3C) to confirm it meets web [[standards]].",
+    "A self-review compares your site to [[similar websites]], checks it meets the [[client requirements]], and considers [[accessibility]] and [[readability]]."
    ]
   }
  ],
@@ -951,6 +958,42 @@
       "required": false
      }
     ]
+   }
+  },
+  {
+   "kind": "table",
+   "title": "Build checklist (HTML → CSS → JS)",
+   "prompt": "Plan your build in three layers, as Pearson expects: HTML structure first, then CSS, then JavaScript for interactivity.",
+   "model": {
+    "table": {
+     "head": [
+      "Layer",
+      "What it does",
+      "Cinema-site examples"
+     ],
+     "rows": [
+      [
+       "HTML",
+       "Structure + content",
+       "Semantic tags: header, nav, main, sections, footer, form, figure"
+      ],
+      [
+       "CSS",
+       "Style + layout",
+       "External stylesheet, colour scheme, typography, media queries for mobile"
+      ],
+      [
+       "JavaScript",
+       "Interactivity",
+       "Image slider, accordion, modal images, form validation, video controls"
+      ],
+      [
+       "Accessibility",
+       "Built in, not added on",
+       "alt text, semantic tags, keyboard navigation, captions, contrast"
+      ]
+     ]
+    }
    }
   },
   {

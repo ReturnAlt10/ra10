@@ -315,13 +315,19 @@ const NOTES = {
       'To choose a device for a scenario, always link a [[feature]] to a [[need]]. For example, a tablet suits field work because its [[touchscreen]] allows interaction without a keyboard.',
       'Flowchart notation: an [[oval]] shows start/end, a [[rectangle]] is a process step, a [[diamond]] is a decision, and a [[parallelogram]] is input/output.'
     ]},
+    { title: 'Flowcharts vs system diagrams', passages: [
+      'A [[flowchart]] shows the [[steps / process]] of a task, using standard symbols linked by [[arrows]].',
+      'A [[system diagram]] shows how the [[components]] of an IT system [[interact]] — different to a flowchart, which shows a [[process]].',
+      'Storage media are compared on [[capacity]], [[cost]], [[speed]] and [[compatibility]].'
+    ]},
   ],
   '1-B': [
     { title: 'Compression, codecs & protocols', passages: [
       '[[Lossless]] compression removes redundancy so the original file can be perfectly [[reconstructed]] (e.g. [[PNG]], [[ZIP]]). [[Lossy]] compression permanently removes detail that humans are unlikely to notice, giving much [[smaller files]] (e.g. [[JPEG]], [[MP3]]).',
       'A [[codec]] is software or hardware that [[codes and decodes]] media files. Without the right codec a media file will not [[play]].',
       'The protocol [[SMTP]] is used to [[send]] email, whereas [[POP]]/[[IMAP]] are used to [[receive]] it. Web pages travel over [[HTTP]] or its encrypted form [[HTTPS]].',
-      '[[Bandwidth]] is the amount of data that can be carried in a given time, while [[latency]] is the [[delay]] between sending and receiving.'
+      '[[Bandwidth]] is the amount of data that can be carried in a given time, while [[latency]] is the [[delay]] between sending and receiving.',
+      'Connection types: [[Bluetooth]] and [[USB]] for short range/wired, [[Wi-Fi]] for wireless LAN, and [[Ethernet]] for wired LAN.'
     ]},
   ],
   '1-C': [
@@ -359,6 +365,12 @@ const NOTES = {
       'The impact of a credible threat is judged as [[operational]], [[financial]], [[reputational]] and [[intellectual-property]] loss.',
       '[[Penetration testing]] is an authorised simulated [[attack]] to find weak spots before attackers do. A [[port scanner]] finds [[open ports]]. Risk can be handled by [[transfer]], [[avoidance]] or [[acceptance]].'
     ]},
+    { title: 'Don\u2019t fall for these — common misconceptions', passages: [
+      'Thinking anti-virus makes you \u201ccompletely secure\u201d is wrong. Security needs [[defence in depth]] — multiple [[layers]] of protection, so if one fails the others still hold.',
+      '[[GDPR]] applies to organisations of [[all]] sizes, not just large firms — even a small business holding personal data must comply.',
+      '[[MAC]] addresses CAN be [[spoofed]], so [[MAC filtering]] on its own is not enough security — use proper [[network access controls]].',
+      '[[Updates / patches]] are not just extra features — they fix [[security flaws]]. Missing patches are a common cause of real-world [[breaches]].'
+    ]},
   ],
   '2-B': [
     { title: 'Topologies & TCP/IP', passages: [
@@ -366,11 +378,20 @@ const NOTES = {
       'The [[TCP/IP]] model layers are [[application]], [[transport]], [[internet]] and [[network access]]. [[NAT]] lets many devices share one [[public IP address]].',
       '[[IPv4]] addresses are running out, so [[IPv6]] provides a much larger address space. [[APIPA]] gives a device a link-local address when [[DHCP]] is unavailable.'
     ]},
+    { title: 'Don\u2019t fall for these — common misconceptions', passages: [
+      'Cyber security is not just about [[technical]] controls — [[human behaviour]] is just as important, so training and policy matter too.',
+      'Multiple [[layers]] of defence is called [[defence in depth]] — no single control is enough on its own.'
+    ]},
   ],
   '2-C': [
     { title: 'Policies: DR vs incident response', passages: [
       'A [[disaster recovery]] policy describes how to restore [[operations]] after a major incident, while an [[incident response]] policy describes the immediate [[steps]] taken when a security incident is detected.',
       'Security is often managed using the [[Plan-Do-Check-Act]] cycle from [[ISO 27001]]. A [[security audit]] checks compliance against [[policies]].'
+    ]},
+    { title: 'Don\u2019t fall for these — common misconceptions', passages: [
+      '[[Backup]] and [[disaster recovery]] are NOT the same thing — backup is a [[copy]] of data, while disaster recovery is the [[process]] of restoring operations after an incident.',
+      'Small organisations DO still need [[security policies]] — breaches affect small businesses too, and policies let you set [[expectations]] and act on unsafe practices.',
+      'Policies are not \u201cdocuments nobody reads\u201d — they help [[prevent]] incidents and give a basis to [[discipline]] users who break the rules.'
     ]},
   ],
   '2-D': [
@@ -386,6 +407,11 @@ const NOTES = {
       '[[Accessibility]] means designing so people with [[disabilities]] can use the site — alt text, [[contrast]], captions and [[keyboard]] navigation. In the UK, the [[Equality Act 2010]] makes sites legally required to be accessible.',
       'A [[site map]] shows the [[pages]] of a website and how they [[link]] together.'
     ]},
+    { title: 'Planning from a client brief', passages: [
+      'A client brief sets the [[purpose]], the [[problem]] to solve, the key [[messages]] and the overall [[goals]].',
+      'From the brief you must establish the intended [[audience]] and any [[technical]] requirements (e.g. mobile-first, integration with a stock system).',
+      'You must also research [[legal and ethical]] constraints: [[copyright]], [[data protection]] (UK GDPR) and [[digital accessibility]].'
+    ]},
   ],
   '3-B': [
     { title: 'Wireframes, mockups & assets', passages: [
@@ -393,11 +419,19 @@ const NOTES = {
       '[[JPG]] suits photographs, [[PNG]] suits graphics needing [[transparency]], and [[MP4]] is used for video. Compress assets to keep them under about [[1MB]] for fast loading.',
       'Use a logical [[folder structure]] and descriptive, consistent [[naming conventions]] (e.g. hero-banner.jpg, not IMG-3421.jpg).'
     ]},
+    { title: 'Don\u2019t fall for these — common misconceptions', passages: [
+      'Do NOT put all CSS [[inline]] in every HTML tag — use an [[external]] stylesheet so the style is [[consistent]] and easy to maintain.',
+      '[[Closing]] HTML tags are NOT optional. Almost every opening tag needs a closing tag — the few exceptions include [[br]], [[img]] and [[link]].'
+    ]},
   ],
   '3-C': [
     { title: 'Development & testing', passages: [
       'Testing should cover [[functionality]] (does it work?), [[usability]] (is it easy to use?) and [[accessibility]]. [[Responsive]] design ensures the site works on [[different screen sizes]].',
-      'A [[test plan]] lists each test with its expected [[outcome]], actual [[result]], and any [[actions]] needed.'
+      'A [[test plan]] lists each test with its expected [[outcome]], actual [[result]], and any [[actions]] needed, backed by [[evidence]] such as screenshots or screen recordings.'
+    ]},
+    { title: 'Publishing & review', passages: [
+      'Before publishing, run a final check for [[legal and ethical]] compliance and run the site through a [[validator]] (e.g. W3C) to confirm it meets web [[standards]].',
+      'A self-review compares your site to [[similar websites]], checks it meets the [[client requirements]], and considers [[accessibility]] and [[readability]].'
     ]},
   ],
   '4-A': [
@@ -407,6 +441,12 @@ const NOTES = {
       'Poor design causes [[insertion]], [[update]] and [[deletion]] anomalies. Normalisation removes [[redundancy]] and these dependency problems.',
       'Entity relationship types: [[one-to-one]], [[one-to-many]] and [[many-to-many]]. A many-to-many link is resolved with a [[linking table]].'
     ]},
+    { title: 'Don\u2019t fall for these — common misconceptions', passages: [
+      'Do not confuse the keys — the [[primary key]] uniquely identifies a [[tuple]] (row), while the [[foreign key]] [[links]] tuples between tables by referencing another table\'s primary key.',
+      '[[Data]] and [[information]] are different: data is [[raw and unprocessed]], while information is [[processed and meaningful]] (e.g. a list of numbers vs. "monthly sales figures").',
+      'A [[table]] and a [[relation]] are the same thing — \u201crelation\u201d is just the formal database term.',
+      'Being in [[2NF]] does NOT mean you are in [[3NF]] — 3NF still removes [[transitive]] dependencies (a non-key field depending on another non-key field).'
+    ]},
   ],
   '4-B': [
     { title: 'Design documentation', passages: [
@@ -414,11 +454,21 @@ const NOTES = {
       'A [[data dictionary]] lists every [[table]], [[field]], data type, length and [[validation]] rule.',
       'Forms use controls such as [[combo boxes]], [[radio buttons]], [[list boxes]] and input masks to make data entry quick and accurate.'
     ]},
+    { title: 'Design deliverables to produce', passages: [
+      'A [[design specification]] states the requirements of the brief, the [[audience]], [[purpose]], client requirements, and [[legal/ethical]] considerations.',
+      '[[Data structure designs]] combine normalisation, an [[ERD]] and a [[data dictionary]].',
+      'The user interface includes [[forms]], [[menus]], [[queries]] and [[reports]].',
+      'A [[test plan]] covers data integrity, [[functionality]], [[accessibility]] and [[usability]], plus an [[implementation plan]] with timescales.'
+    ]},
   ],
   '4-C': [
     { title: 'Build, test & optimise', passages: [
       'Tests use [[normal]], [[erroneous]] and [[extreme]] data. [[Referential integrity]] testing checks that related records behave correctly when added or deleted.',
       'To optimise a query, [[SELECT]] only the [[columns]] you need and use efficient [[joins]], avoiding unnecessary tables.'
+    ]},
+    { title: 'Optimisation & review', passages: [
+      'Database performance is affected by chosen [[data types]], the [[volume]] of data, and the accuracy of [[normalisation]].',
+      'A final review weighs [[quality]], [[fitness for purpose]], [[suitability]] against the original requirements, and [[legal/ethical]] constraints — backed by [[evidence]] from testing.'
     ]},
   ],
 };
@@ -506,6 +556,16 @@ const DESIGNS = {
         { field: 'Number of guests', type: 'number input (1–20)', validation: 'range check' },
         { field: 'Submit', type: 'primary button', required: false },
       ] } },
+    { kind: 'table', title: 'Build checklist (HTML → CSS → JS)', prompt: 'Plan your build in three layers, as Pearson expects: HTML structure first, then CSS, then JavaScript for interactivity.',
+      model: { table: {
+        head: ['Layer', 'What it does', 'Cinema-site examples'],
+        rows: [
+          ['HTML', 'Structure + content', 'Semantic tags: header, nav, main, sections, footer, form, figure'],
+          ['CSS', 'Style + layout', 'External stylesheet, colour scheme, typography, media queries for mobile'],
+          ['JavaScript', 'Interactivity', 'Image slider, accordion, modal images, form validation, video controls'],
+          ['Accessibility', 'Built in, not added on', 'alt text, semantic tags, keyboard navigation, captions, contrast'],
+        ],
+      } } },
     { kind: 'testplan', title: 'Website test plan', prompt: 'Write a test plan for the built cinema site: test, expected outcome, actual result and any fix. Cover functionality, usability and accessibility.',
       model: { table: {
         head: ['#', 'Test', 'Expected outcome', 'Actual result', 'Fix needed'],
@@ -585,6 +645,17 @@ const DESIGNS = {
       } } },
   ],
   '4-C': [
+    { kind: 'table', title: 'Build with SQL (both ways)', prompt: 'Plan how you will build the college database. Pearson expects you to create tables, relationships and validation using BOTH a GUI (Access) AND SQL, then compare the two.',
+      model: { table: {
+        head: ['Task', 'SQL example'],
+        rows: [
+          ['Create a table', 'CREATE TABLE Learner (LearnerID ... PRIMARY KEY, ...);'],
+          ['Add a relationship', 'Foreign key + referential integrity constraint'],
+          ['Add validation', 'CHECK (EnrolDate <= today) or Access validation rule'],
+          ['Query data', 'SELECT FirstName, CourseName FROM ... JOIN ... WHERE ...;'],
+          ['Update / delete', 'UPDATE ... SET ... WHERE ...;  DELETE FROM ... WHERE ...;'],
+        ],
+      } } },
     { kind: 'report', title: 'Report layout & optimisation', prompt: 'Sketch a report layout grouping enrolments by course with totals and conditional formatting. Then list three ways to optimise a slow query.',
       model: { table: {
         head: ['Area', 'What to include'],

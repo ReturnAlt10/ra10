@@ -936,6 +936,15 @@
     "Poor design causes [[insertion]], [[update]] and [[deletion]] anomalies. Normalisation removes [[redundancy]] and these dependency problems.",
     "Entity relationship types: [[one-to-one]], [[one-to-many]] and [[many-to-many]]. A many-to-many link is resolved with a [[linking table]]."
    ]
+  },
+  {
+   "title": "Don’t fall for these — common misconceptions",
+   "passages": [
+    "Do not confuse the keys — the [[primary key]] uniquely identifies a [[tuple]] (row), while the [[foreign key]] [[links]] tuples between tables by referencing another table's primary key.",
+    "[[Data]] and [[information]] are different: data is [[raw and unprocessed]], while information is [[processed and meaningful]] (e.g. a list of numbers vs. \"monthly sales figures\").",
+    "A [[table]] and a [[relation]] are the same thing — “relation” is just the formal database term.",
+    "Being in [[2NF]] does NOT mean you are in [[3NF]] — 3NF still removes [[transitive]] dependencies (a non-key field depending on another non-key field)."
+   ]
   }
  ],
  "designs": [
