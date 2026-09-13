@@ -178,14 +178,13 @@
 
   // ---- Exam-style question pages ----
   function examPages() {
-    const qs = (state.bundle.examQuestions || [])
-      .slice()
-      .sort((a, b) => (a.marks || 0) - (b.marks || 0));
+    const qs = (state.bundle.examQuestions || []).slice();
 
     // Cap totals: a focused set per booklet.
     const short = qs.filter(q => (q.marks || 0) <= 2).slice(0, 4);
-    const medium = qs.filter(q => (q.marks || 0) >= 3 && (q.marks || 0) <= 5).slice(0, 4);
-    const long = qs.filter(q => (q.marks || 0) >= 6).slice(0, 3);
+    const medium = qs.filter(q => (q.marks || 0) >= 3 && (q.marks || 0) <= 5).slice(0, 3);
+    // Long questions: prefer the biggest (9/12 markers where they exist).
+    const long = qs.filter(q => (q.marks || 0) >= 6).sort((a, b) => (b.marks || 0) - (a.marks || 0)).slice(0, 3);
     const selected = [...short, ...medium, ...long];
 
     const pages = [];
@@ -263,23 +262,32 @@
   function clozePages() {
     const notes = state.bundle.notes || [];
     const pages = [];
-    notes.forEach((section, sIdx) => {
-      (section.passages || []).forEach((passage, pIdx) => {
-        let body = '';
-        if (state.solutions) {
-          // Inline answers, highlighted.
-          body = `<p class="bk-cloze">${passage.replace(/\[\[([^\]]+)\]\]/g, (m, a) => `<span class="ans">${esc(a)}</span>`)}</p>`;
-        } else {
-          // Blanks. Keep blank width readable.
-          body = `<p class="bk-cloze">${passage.replace(/\[\[([^\]]+)\]\]/g, (m, a) => {
-            const w = Math.max(90, Math.min(220, a.length * 9));
+    notes.forEach((section) => {
+      // Collect all answer words for a scrambled key (word bank).
+      const words = [...new Set(
+        (section.passages || []).flatMap(p => [...String(p).matchAll(/\[\[([^\]]+)\]\]/g)].map(m => m[1]))
+      )];
+      const bank = words.slice().sort(() => Math.random() - 0.5);
+
+      let body = '<div class="bk-wordbank"><span class="bk-wordbank-label">Word bank — use these to fill the gaps</span><div class="bk-wordbank-chips">';
+      body += bank.map(w => `<span class="bk-word-chip">${esc(w)}</span>`).join('');
+      body += '</div></div>';
+
+      if (state.solutions) {
+        // Inline answers, highlighted.
+        (section.passages || []).forEach(passage => {
+          body += `<p class="bk-cloze">${String(passage).replace(/\[\[([^\]]+)\]\]/g, (m, a) => `<span class="ans">${esc(a)}</span>`)}</p>`;
+        });
+      } else {
+        (section.passages || []).forEach(passage => {
+          body += `<p class="bk-cloze">${String(passage).replace(/\[\[([^\]]+)\]\]/g, (m, a) => {
+            const w = Math.max(90, Math.min(200, a.length * 9));
             return `<span class="bk-blank" style="min-width:${w}px;">&nbsp;</span>`;
           })}</p>`;
-          body += `<div class="bk-tip"><b>How to use.</b> Read the sentence aloud, guess the missing word(s), then check in the solutions booklet. These are the tricky concepts worth testing yourself on.</div>`;
-        }
-        const title = `${section.title} ${notes.length === 1 && section.passages.length === 1 ? '' : (pIdx + 1)}`;
-        pages.push(pageShell(body, { kicker: 'Revision notes', title, label: 'notes', solutions: state.solutions }));
-      });
+        });
+        body += `<div class="bk-tip"><b>How to use.</b> Read each sentence, choose the missing word from the bank above, then check in the solutions booklet.</div>`;
+      }
+      pages.push(pageShell(body, { kicker: 'Revision notes', title: section.title, label: 'notes', solutions: state.solutions }));
     });
     return pages;
   }
@@ -289,11 +297,16 @@
     const designs = state.bundle.designs || [];
     const pages = [];
     designs.forEach((d, idx) => {
-      let body = `<p class="bk-lead">${esc(d.prompt)}</p>`;
+      const sc = state.bundle.scenario;
+      let body = '';
+      // Scenario reminder (first page only) so tasks are concrete.
+      if (idx === 0 && sc) {
+        body += `<div class="bk-scenario"><b>Working brief:</b> ${esc(sc.brief)} — ${esc(sc.text)} <span class="bk-scenario-aud">${esc(sc.audience || '')}</span></div>`;
+      }
+      body += `<p class="bk-task">${esc(d.prompt)}</p>`;
       if (state.solutions) {
-        body += `<div class="bk-model"><b>What to include</b>${d.kind ? ` — <em>${esc(d.kind)}</em>` : ''}<p style="margin-top:8px;">Produce this on the worksheet and hand it in with your assignment evidence. Use accurate technical vocabulary and label every element.</p></div>`;
+        body += `<div class="bk-model"><b>What to include</b>${d.kind ? ` — <em>${esc(d.kind)}</em>` : ''}<p style="margin-top:6px;">Produce this on the worksheet and keep it with your assignment evidence. Use accurate technical vocabulary and label every element.</p></div>`;
       } else {
-        // A large full-page working area, with a grid backdrop to help line things up.
         const grid = (d.kind === 'table' || d.kind === 'testplan' || d.kind === 'normalisation' || d.kind === 'data dictionary')
           ? '<div class="bk-table-lines"></div>'
           : '<div class="bk-grid-pad"></div>';
@@ -302,6 +315,20 @@
       pages.push(pageShell(body, { kicker: 'Design workshop', title: d.title, label: d.kind || 'design', solutions: state.solutions }));
     });
     return pages;
+  }
+
+  // ---- How to structure Tasks 1–3 (units 3 & 4, Distinction focus) ----
+  function taskGuidePage() {
+    const g = state.bundle.taskGuide;
+    if (!g) return null;
+    let body = `<p class="bk-lead">${esc(g.title)} — read each step, then tick it off as you complete it. Aim for the <strong>Distinction</strong> column.</p>`;
+    (g.tasks || []).forEach(t => {
+      body += `<div class="bk-taskcard"><div class="bk-taskcard-hd"><span class="bk-tasknum">Task ${t.num}</span><div><strong>${esc(t.name)}</strong><span class="bk-taskaim">Learning Aim ${esc(t.aim)}</span></div></div>`;
+      body += `<ol class="bk-tasksteps">${(t.steps || []).map(s => `<li>${esc(s)}</li>`).join('')}</ol>`;
+      body += `<div class="bk-distinction"><b>To reach Distinction:</b> ${esc(t.distinction)}</div>`;
+      body += '</div>';
+    });
+    return pageShell(body, { kicker: 'Assignment structure', title: g.title, label: 'tasks' });
   }
 
   // ---- Exam technique + command verb page (always included) ----
@@ -384,6 +411,8 @@
     if (tech) html += tech;
     const crit = criteriaPage();
     if (crit) html += crit;
+    const tg = taskGuidePage();
+    if (tg) html += tg;
     html += clozePages().join('');
     html += designPages().join('');
     html += knowledgePages().join('');

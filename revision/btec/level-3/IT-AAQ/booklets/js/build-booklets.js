@@ -270,6 +270,8 @@ function buildAimBooklet(unit, aim, spec) {
     briefs: briefs ? briefs.briefs : [],
     notes: notesFor(unit, aim),
     designs: designsFor(unit, aim),
+    scenario: SCENARIO[unit] || null,
+    taskGuide: TASK_GUIDE[unit] || null,
   };
 }
 
@@ -425,37 +427,98 @@ const NOTES = {
 // Design / workshop page scaffolds for units 3 & 4 (the coursework units).
 // Each entry prompts the student to produce a piece of design documentation.
 // ---------------------------------------------------------------------------
+// Running scenario for each coursework unit's design workshops.
+const SCENARIO = {
+  3: {
+    brief: 'Retro Film Hub',
+    text: 'Midnight Picture Show is a small independent cinema that hosts late-night screenings of classic films. It wants a website that introduces young adults (17–23) to the films, stars and cultural moments of Hollywood\'s golden era and encourages them to book tickets.',
+    audience: 'Target audience: 17- to 23-year-olds, many of whom have seen remakes or references but never the originals.',
+  },
+  4: {
+    brief: 'College Course Enrolment',
+    text: 'A sixth-form college needs a database to manage its learners, courses, subjects and staff, and to track which learner is enrolled on which course. Enrolment data currently lives across spreadsheets and paper.',
+    audience: 'Users: enrolment staff enter enrolments; tutors run queries and reports; managers review numbers and completion rates.',
+  },
+};
+
+// Design / workshop page scaffolds for units 3 & 4 (the coursework units).
+// Each entry prompts the student to produce a piece of design documentation,
+// tied to the running scenario so the task is concrete.
 const DESIGNS = {
   '3-A': [
-    { kind: 'sitemap', title: 'Site map for a client website', prompt: 'Choose a brief (or your own client). Sketch a site map showing the pages and how they link. Add a short note on the purpose of each page.' },
-    { kind: 'wireframe', title: 'Home page wireframe', prompt: 'Sketch a low-fidelity wireframe of the home page. Show the header, navigation, hero, content sections and footer. Label each element — do NOT add colours or final images.' },
-    { kind: 'wireframe', title: 'Mobile UI wireframe', prompt: 'Sketch the same home page as a mobile layout. Show how the navigation collapses (e.g. hamburger) and how content stacks vertically.' },
+    { kind: 'sitemap', title: 'Site map for the cinema website', prompt: 'Using the Retro Film Hub brief, sketch a site map showing the three pages and how they link. Note the purpose of each page and the navigation between them.' },
+    { kind: 'wireframe', title: 'Home page wireframe', prompt: 'Sketch a low-fidelity wireframe of the home page for the cinema. Show the header, navigation, hero, film sections and footer. Label each element — no colours or final images yet.' },
+    { kind: 'wireframe', title: 'Mobile UI wireframe', prompt: 'Sketch the same home page as a mobile layout. Show how the navigation collapses (hamburger) and how content stacks vertically for phone screens.' },
   ],
   '3-B': [
-    { kind: 'wireframe', title: 'Inner-page wireframe', prompt: 'Wireframe a content page (e.g. a film page or "join us" page). Include at least one form and one call-to-action.' },
-    { kind: 'mockup', title: 'Visual design (mockup) annotation', prompt: 'Annotate a mockup: which colours, fonts and images you will use, and WHY they suit the target audience. Link each choice to the brief.' },
-    { kind: 'table', title: 'Asset log', prompt: 'List the assets you will use: name, source (own work or URL), file type, and where each is used on the site. Check licences.' },
+    { kind: 'wireframe', title: 'Inner-page wireframe', prompt: 'Wireframe a film information page for the cinema site. Include at least one form field (e.g. request a screening) and one call-to-action.' },
+    { kind: 'mockup', title: 'Visual design (mockup) annotation', prompt: 'Annotate a high-fidelity mockup: which colours, fonts and images you will use, and WHY they suit a 17–23 audience. Link every choice back to the cinema brief.' },
+    { kind: 'table', title: 'Asset log', prompt: 'List the assets for the cinema site: name, source, file type and where each is used. Check licences and note any compression needed.' },
   ],
   '3-C': [
-    { kind: 'form', title: 'Form design', prompt: 'Design a form for the site (e.g. request a film, join the charity). Show fields, suitable input types, validation and a clear submit button.' },
-    { kind: 'testplan', title: 'Website test plan', prompt: 'Write a test plan: for each test give the test, expected outcome, actual result and any fix needed. Cover functionality, usability and accessibility.' },
-    { kind: 'wireframe', title: 'Report / review page', prompt: 'Sketch the layout of a report or review page the client could read, summarising what was built and how it meets the brief.' },
+    { kind: 'form', title: 'Form design', prompt: 'Design the "request a screening" form for the cinema site. Show fields, suitable input types, validation and a clear submit button.' },
+    { kind: 'testplan', title: 'Website test plan', prompt: 'Write a test plan for the built cinema site: test, expected outcome, actual result and any fix. Cover functionality, usability and accessibility.' },
+    { kind: 'report', title: 'Client review report', prompt: 'Sketch the layout of a review report for the cinema client, summarising what was built and how it meets the brief.' },
   ],
   '4-A': [
-    { kind: 'normalisation', title: 'Normalisation worksheet', prompt: 'Take a UNF table with repeating groups and normalise it to 1NF, 2NF and 3NF. Show tables, fields and keys at each stage.' },
-    { kind: 'erd', title: 'Entity relationship diagram', prompt: 'Draw an ERD for a small database (e.g. orders, customers, products). Label primary keys, foreign keys and cardinality (1:1, 1:M, M:N).' },
-    { kind: 'table', title: 'Relational algebra notes', prompt: 'For each operation (union, intersect, join, select) write what it does and a small worked example using two relations.' },
+    { kind: 'normalisation', title: 'Normalisation worksheet', prompt: 'Using the College Course Enrolment brief, take the UNF enrolment table (with repeating groups) and normalise it to 1NF, 2NF and 3NF. Show tables, fields and keys at each stage.' },
+    { kind: 'erd', title: 'Entity relationship diagram', prompt: 'Draw an ERD for Learner, Course, Subject, Staff and Enrolment. Label primary keys, foreign keys and cardinality (1:1, 1:M, M:N).' },
+    { kind: 'table', title: 'Relational algebra notes', prompt: 'For each operation (union, intersect, join, select) write what it does and a small worked example using two college relations.' },
   ],
   '4-B': [
-    { kind: 'erd', title: 'Full ERD with crow\'s foot notation', prompt: 'Produce a conceptual then logical ERD. Add attributes, primary keys and foreign keys in the logical version.' },
-    { kind: 'table', title: 'Data dictionary', prompt: 'Build a data dictionary: table name, field name, data type, length, validation rule and description for every field.' },
-    { kind: 'form', title: 'Data-entry form design', prompt: 'Design an input form and a report layout. Include combo boxes, radio buttons, validation and user help.' },
-    { kind: 'testplan', title: 'Database test plan', prompt: 'Write a test plan covering referential integrity, functionality and usability, using normal, erroneous and extreme test data.' },
+    { kind: 'erd', title: 'Full ERD with crow\'s foot notation', prompt: 'Produce a conceptual then logical ERD for the college database. Add attributes, primary keys and foreign keys in the logical version.' },
+    { kind: 'table', title: 'Data dictionary', prompt: 'Build a data dictionary for the college database: table name, field name, data type, length, validation rule and description for every field.' },
+    { kind: 'form', title: 'Data-entry form design', prompt: 'Design the enrolment input form and a report layout. Include combo boxes (pick a Learner/Course), radio buttons, validation and user help.' },
+    { kind: 'testplan', title: 'Database test plan', prompt: 'Write a test plan for the college database covering referential integrity, functionality and usability, using normal, erroneous and extreme data.' },
   ],
   '4-C': [
-    { kind: 'report', title: 'Report layout & optimisation', prompt: 'Sketch a report layout (grouping, calculated fields, conditional formatting). Then list three ways you would optimise a slow query.' },
-    { kind: 'testplan', title: 'Final test log', prompt: 'Record the final tests you carried out on tables, queries, forms and reports, with outcomes and refinements.' },
+    { kind: 'report', title: 'Report layout & optimisation', prompt: 'Sketch a report layout grouping enrolments by course with totals and conditional formatting. Then list three ways to optimise a slow query.' },
+    { kind: 'testplan', title: 'Final test log', prompt: 'Record the final tests on the college database (tables, queries, forms, reports) with outcomes and refinements.' },
   ],
+};
+
+// How to structure Tasks 1–3 to a Distinction standard (units 3 & 4 only).
+const TASK_GUIDE = {
+  3: {
+    title: 'How to structure Tasks 1–3 (Website Development)',
+    tasks: [
+      { num: 1, aim: 'A', name: 'Research & plan the website', steps: [
+        'Read the brief and highlight the purpose, audience and must-include features.',
+        'Research 2–3 existing websites and compare what they do well / badly.',
+        'Produce a site map showing every page and how they link.',
+      ], distinction: 'Use pertinent, named examples and a clearly annotated site map showing HOW each page meets the brief. Use accurate technical vocabulary (SEO, accessibility, UX).' },
+      { num: 2, aim: 'B', name: 'Design the website & manage assets', steps: [
+        'Sketch wireframes for every page, then a high-fidelity visual design.',
+        'Source or create assets and keep an asset log with licences.',
+        'Review your designs against the brief and refine them.',
+      ], distinction: 'Justify every design choice against the audience and brief. Show a clear link between wireframe, mockup and final site, with effective asset management.' },
+      { num: 3, aim: 'C', name: 'Build, test & review the website', steps: [
+        'Build the site to your design using the required tools and techniques.',
+        'Test functionality, usability and accessibility; log results and fixes.',
+        'Write a self-review of strengths, weaknesses and improvements.',
+      ], distinction: 'Demonstrate web standards, a consistent and accessible site, effective testing, and considered refinements drawn from a thorough self-review.' },
+    ],
+  },
+  4: {
+    title: 'How to structure Tasks 1–3 (Relational Database Development)',
+    tasks: [
+      { num: 1, aim: 'A', name: 'Research & scope the database', steps: [
+        'Read the brief and identify the entities, data and reports needed.',
+        'Research how similar databases are structured (keys, normalisation).',
+        'Produce a preliminary scoping document with the planned tables and keys.',
+      ], distinction: 'Use pertinent examples and fluent, accurate technical vocabulary. Show thorough understanding of normalisation and how it comprehensively meets the brief.' },
+      { num: 2, aim: 'B', name: 'Design the database solution', steps: [
+        'Draw conceptual then logical ERDs with keys and cardinality.',
+        'Write a data dictionary for every table and field.',
+        'Design forms, queries and reports, plus a test plan and timescale.',
+      ], distinction: 'Produce a complete, logical design package (ERDs, data dictionary, UI designs, test plan) that comprehensively meets every client requirement.' },
+      { num: 3, aim: 'C', name: 'Build, test & optimise the database', steps: [
+        'Build the tables, relationships, forms, queries and reports.',
+        'Test with normal, erroneous and extreme data; log and fix issues.',
+        'Review and optimise (data types, efficient queries) and document refinements.',
+      ], distinction: 'Build a fully functional database, carry out effective object and usability testing, and make considered optimisations from a thorough self-review.' },
+    ],
+  },
 };
 
 function notesFor(unit, aim) {

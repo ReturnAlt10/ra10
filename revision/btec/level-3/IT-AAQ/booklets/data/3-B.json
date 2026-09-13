@@ -601,17 +601,60 @@
   {
    "kind": "wireframe",
    "title": "Inner-page wireframe",
-   "prompt": "Wireframe a content page (e.g. a film page or \"join us\" page). Include at least one form and one call-to-action."
+   "prompt": "Wireframe a film information page for the cinema site. Include at least one form field (e.g. request a screening) and one call-to-action."
   },
   {
    "kind": "mockup",
    "title": "Visual design (mockup) annotation",
-   "prompt": "Annotate a mockup: which colours, fonts and images you will use, and WHY they suit the target audience. Link each choice to the brief."
+   "prompt": "Annotate a high-fidelity mockup: which colours, fonts and images you will use, and WHY they suit a 17–23 audience. Link every choice back to the cinema brief."
   },
   {
    "kind": "table",
    "title": "Asset log",
-   "prompt": "List the assets you will use: name, source (own work or URL), file type, and where each is used on the site. Check licences."
+   "prompt": "List the assets for the cinema site: name, source, file type and where each is used. Check licences and note any compression needed."
   }
- ]
+ ],
+ "scenario": {
+  "brief": "Retro Film Hub",
+  "text": "Midnight Picture Show is a small independent cinema that hosts late-night screenings of classic films. It wants a website that introduces young adults (17–23) to the films, stars and cultural moments of Hollywood's golden era and encourages them to book tickets.",
+  "audience": "Target audience: 17- to 23-year-olds, many of whom have seen remakes or references but never the originals."
+ },
+ "taskGuide": {
+  "title": "How to structure Tasks 1–3 (Website Development)",
+  "tasks": [
+   {
+    "num": 1,
+    "aim": "A",
+    "name": "Research & plan the website",
+    "steps": [
+     "Read the brief and highlight the purpose, audience and must-include features.",
+     "Research 2–3 existing websites and compare what they do well / badly.",
+     "Produce a site map showing every page and how they link."
+    ],
+    "distinction": "Use pertinent, named examples and a clearly annotated site map showing HOW each page meets the brief. Use accurate technical vocabulary (SEO, accessibility, UX)."
+   },
+   {
+    "num": 2,
+    "aim": "B",
+    "name": "Design the website & manage assets",
+    "steps": [
+     "Sketch wireframes for every page, then a high-fidelity visual design.",
+     "Source or create assets and keep an asset log with licences.",
+     "Review your designs against the brief and refine them."
+    ],
+    "distinction": "Justify every design choice against the audience and brief. Show a clear link between wireframe, mockup and final site, with effective asset management."
+   },
+   {
+    "num": 3,
+    "aim": "C",
+    "name": "Build, test & review the website",
+    "steps": [
+     "Build the site to your design using the required tools and techniques.",
+     "Test functionality, usability and accessibility; log results and fixes.",
+     "Write a self-review of strengths, weaknesses and improvements."
+    ],
+    "distinction": "Demonstrate web standards, a consistent and accessible site, effective testing, and considered refinements drawn from a thorough self-review."
+   }
+  ]
+ }
 }

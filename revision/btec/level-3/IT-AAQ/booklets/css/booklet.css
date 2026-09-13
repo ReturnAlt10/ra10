@@ -98,7 +98,7 @@ body {
 /* ============ Booklet pages ============ */
 .bk-page {
   position: relative;
-  padding: 44px 52px;
+  padding: 40px 48px;
   min-height: 1280px; /* approx A4 portrait ratio at 944px width */
   page-break-after: always;
   break-after: page;
@@ -111,7 +111,7 @@ body {
   gap: 14px;
   border-bottom: 2px solid var(--bk-ink);
   padding-bottom: 8px;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
 }
 .bk-page-num { font-size: 12px; font-weight: 700; color: var(--bk-muted); }
 .bk-section-kicker {
@@ -120,20 +120,20 @@ body {
   letter-spacing: .12em;
   text-transform: uppercase;
   color: var(--bk-brand);
-  margin-bottom: 4px;
+  margin-bottom: 3px;
 }
 .bk-page h2 {
-  margin: 0 0 6px;
+  margin: 0 0 4px;
   font-size: 26px;
   line-height: 1.15;
   letter-spacing: -.01em;
 }
 .bk-page h3 {
-  margin: 22px 0 10px;
+  margin: 16px 0 8px;
   font-size: 18px;
   line-height: 1.2;
 }
-.bk-page p { margin: 0 0 10px; line-height: 1.55; color: var(--bk-slate); }
+.bk-page p { margin: 0 0 8px; line-height: 1.5; color: var(--bk-slate); }
 .bk-lead { font-size: 14px; color: var(--bk-muted); }
 
 /* ============ Cover ============ */
@@ -241,17 +241,56 @@ body {
 }
 .bk-match-item .bk-k { flex: 0 0 auto; font-weight: 800; color: var(--bk-brand); }
 
-/* ============ Cloze (fill the gaps) + tables ============ */
-.bk-cloze { line-height: 2.1; font-size: 15px; color: var(--bk-ink); }
+/* ============ Cloze (fill the gaps) + word bank + tables ============ */
+.bk-cloze { line-height: 1.9; font-size: 15px; color: var(--bk-ink); margin-bottom: 14px; }
 .bk-cloze .ans { color: var(--bk-accent); font-weight: 800; }
 .bk-blank {
   display: inline-block;
-  min-width: 120px;
+  min-width: 110px;
   border-bottom: 1.6px solid var(--bk-ink);
   margin: 0 3px;
   padding: 0 4px;
 }
+.bk-wordbank {
+  border: 2px solid var(--bk-brand);
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin-bottom: 18px;
+  background: var(--bk-brand-soft);
+}
+.bk-wordbank-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--bk-brand);
+  margin-bottom: 8px;
+}
+.bk-wordbank-chips { display: flex; flex-wrap: wrap; gap: 6px 8px; }
+.bk-word-chip {
+  display: inline-block;
+  padding: 3px 10px;
+  border: 1px solid #d9a1a1;
+  border-radius: 999px;
+  background: #fff;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--bk-ink);
+}
 /* ============ Design workshop workspace ============ */
+.bk-scenario {
+  border: 2px solid var(--bk-ink);
+  border-left: 6px solid var(--bk-brand);
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-bottom: 14px;
+  font-size: 13.5px;
+  line-height: 1.5;
+  background: #fafafa;
+}
+.bk-scenario-aud { display: block; margin-top: 4px; color: var(--bk-muted); font-style: italic; }
+.bk-task { font-weight: 700; font-size: 14.5px; color: var(--bk-ink); margin-bottom: 12px; }
 .bk-grid-pad {
   min-height: 780px;
   margin: 16px 0;
@@ -312,10 +351,10 @@ body {
   border: 1px solid #f5d9b5;
   border-left: 5px solid var(--bk-gold);
   border-radius: 8px;
-  padding: 12px 16px;
-  margin: 14px 0;
+  padding: 10px 14px;
+  margin: 12px 0;
   font-size: 13.5px;
-  line-height: 1.55;
+  line-height: 1.5;
 }
 .bk-tip b:first-child { color: var(--bk-gold); }
 .bk-model {
@@ -323,14 +362,55 @@ body {
   border: 1px solid #bfe6de;
   border-left: 5px solid var(--bk-accent);
   border-radius: 8px;
-  padding: 12px 16px;
-  margin: 14px 0;
+  padding: 10px 14px;
+  margin: 12px 0;
   font-size: 13.5px;
-  line-height: 1.6;
+  line-height: 1.55;
 }
 .bk-model b:first-child { color: var(--bk-accent); }
 .bk-marks { font-size: 12px; color: var(--bk-muted); margin-top: 6px; }
 .bk-marks .mk { display: inline-block; background: var(--bk-brand-soft); color: var(--bk-brand); border-radius: 4px; padding: 1px 6px; font-weight: 700; }
+
+/* ============ Assignment task structure (units 3 & 4) ============ */
+.bk-taskcard {
+  border: 1px solid var(--bk-line);
+  border-radius: 9px;
+  margin-bottom: 14px;
+  overflow: hidden;
+}
+.bk-taskcard-hd {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  background: #f7f9fb;
+  border-bottom: 1px solid var(--bk-line);
+}
+.bk-tasknum {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--bk-brand);
+  color: #fff;
+  font-weight: 800;
+  font-size: 14px;
+}
+.bk-taskcard-hd strong { display: block; font-size: 14.5px; }
+.bk-taskaim { font-size: 12px; color: var(--bk-muted); font-weight: 700; }
+.bk-tasksteps { margin: 0; padding: 10px 14px 10px 34px; font-size: 13.5px; line-height: 1.55; }
+.bk-tasksteps li { margin-bottom: 4px; }
+.bk-distinction {
+  margin: 0;
+  padding: 10px 14px;
+  background: #f6f0ff;
+  border-top: 1px solid #e2d4ff;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.bk-distinction b { color: #6d28d9; }
 
 /* Solutions watermark */
 .bk-solutions-badge {

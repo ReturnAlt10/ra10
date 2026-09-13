@@ -942,17 +942,60 @@
   {
    "kind": "normalisation",
    "title": "Normalisation worksheet",
-   "prompt": "Take a UNF table with repeating groups and normalise it to 1NF, 2NF and 3NF. Show tables, fields and keys at each stage."
+   "prompt": "Using the College Course Enrolment brief, take the UNF enrolment table (with repeating groups) and normalise it to 1NF, 2NF and 3NF. Show tables, fields and keys at each stage."
   },
   {
    "kind": "erd",
    "title": "Entity relationship diagram",
-   "prompt": "Draw an ERD for a small database (e.g. orders, customers, products). Label primary keys, foreign keys and cardinality (1:1, 1:M, M:N)."
+   "prompt": "Draw an ERD for Learner, Course, Subject, Staff and Enrolment. Label primary keys, foreign keys and cardinality (1:1, 1:M, M:N)."
   },
   {
    "kind": "table",
    "title": "Relational algebra notes",
-   "prompt": "For each operation (union, intersect, join, select) write what it does and a small worked example using two relations."
+   "prompt": "For each operation (union, intersect, join, select) write what it does and a small worked example using two college relations."
   }
- ]
+ ],
+ "scenario": {
+  "brief": "College Course Enrolment",
+  "text": "A sixth-form college needs a database to manage its learners, courses, subjects and staff, and to track which learner is enrolled on which course. Enrolment data currently lives across spreadsheets and paper.",
+  "audience": "Users: enrolment staff enter enrolments; tutors run queries and reports; managers review numbers and completion rates."
+ },
+ "taskGuide": {
+  "title": "How to structure Tasks 1–3 (Relational Database Development)",
+  "tasks": [
+   {
+    "num": 1,
+    "aim": "A",
+    "name": "Research & scope the database",
+    "steps": [
+     "Read the brief and identify the entities, data and reports needed.",
+     "Research how similar databases are structured (keys, normalisation).",
+     "Produce a preliminary scoping document with the planned tables and keys."
+    ],
+    "distinction": "Use pertinent examples and fluent, accurate technical vocabulary. Show thorough understanding of normalisation and how it comprehensively meets the brief."
+   },
+   {
+    "num": 2,
+    "aim": "B",
+    "name": "Design the database solution",
+    "steps": [
+     "Draw conceptual then logical ERDs with keys and cardinality.",
+     "Write a data dictionary for every table and field.",
+     "Design forms, queries and reports, plus a test plan and timescale."
+    ],
+    "distinction": "Produce a complete, logical design package (ERDs, data dictionary, UI designs, test plan) that comprehensively meets every client requirement."
+   },
+   {
+    "num": 3,
+    "aim": "C",
+    "name": "Build, test & optimise the database",
+    "steps": [
+     "Build the tables, relationships, forms, queries and reports.",
+     "Test with normal, erroneous and extreme data; log and fix issues.",
+     "Review and optimise (data types, efficient queries) and document refinements."
+    ],
+    "distinction": "Build a fully functional database, carry out effective object and usability testing, and make considered optimisations from a thorough self-review."
+   }
+  ]
+ }
 }
