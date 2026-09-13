@@ -530,5 +530,26 @@
    ],
    "assignmentStyle": "original"
   }
+ ],
+ "notes": [
+  {
+   "title": "Build, test & optimise",
+   "passages": [
+    "Tests use [[normal]], [[erroneous]] and [[extreme]] data. [[Referential integrity]] testing checks that related records behave correctly when added or deleted.",
+    "To optimise a query, [[SELECT]] only the [[columns]] you need and use efficient [[joins]], avoiding unnecessary tables."
+   ]
+  }
+ ],
+ "designs": [
+  {
+   "kind": "report",
+   "title": "Report layout & optimisation",
+   "prompt": "Sketch a report layout (grouping, calculated fields, conditional formatting). Then list three ways you would optimise a slow query."
+  },
+  {
+   "kind": "testplan",
+   "title": "Final test log",
+   "prompt": "Record the final tests you carried out on tables, queries, forms and reports, with outcomes and refinements."
+  }
  ]
 }

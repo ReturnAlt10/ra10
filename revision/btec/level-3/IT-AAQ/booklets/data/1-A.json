@@ -4220,5 +4220,17 @@
  ],
  "knowledgeBank": null,
  "criteria": [],
- "briefs": []
+ "briefs": [],
+ "notes": [
+  {
+   "title": "Embedded systems & device selection",
+   "passages": [
+    "A(n) [[embedded system]] is a dedicated computer built into a device to control a [[specific function]]. It has fixed hardware and software, so it cannot be [[reprogrammed by the user]]. Examples include a washing-machine controller, a pacemaker and a car [[engine management unit]].",
+    "A [[file server]] provides large centralised storage for a network, while a [[web server]] responds to HTTP/HTTPS requests and hosts web pages, and an [[application server]] runs the business logic behind a service.",
+    "To choose a device for a scenario, always link a [[feature]] to a [[need]]. For example, a tablet suits field work because its [[touchscreen]] allows interaction without a keyboard.",
+    "Flowchart notation: an [[oval]] shows start/end, a [[rectangle]] is a process step, a [[diamond]] is a decision, and a [[parallelogram]] is input/output."
+   ]
+  }
+ ],
+ "designs": []
 }

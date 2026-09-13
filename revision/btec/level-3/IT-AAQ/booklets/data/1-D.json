@@ -3995,5 +3995,17 @@
  ],
  "knowledgeBank": null,
  "criteria": [],
- "briefs": []
+ "briefs": [],
+ "notes": [
+  {
+   "title": "Encryption & protection",
+   "passages": [
+    "[[Symmetric]] encryption uses the [[same key]] to encrypt and decrypt (fast, e.g. [[AES]]). [[Asymmetric]] encryption uses a [[public/private key pair]] (slower, e.g. [[RSA]]) and is used to share symmetric keys securely.",
+    "[[Encryption]] protects data in [[storage]] (at rest) and in [[transit]]. It does not stop data being stolen — it makes it [[unreadable]] without the key.",
+    "A [[firewall]] filters [[incoming and outgoing]] network traffic using rules. [[Antivirus]] software detects and removes [[malware]] using signatures and behaviour monitoring.",
+    "[[RAID]] combines [[multiple disks]] to improve performance and/or provide [[redundancy]] so data survives a disk failure. A [[backup]] is a copy kept separately for [[recovery]]."
+   ]
+  }
+ ],
+ "designs": []
 }

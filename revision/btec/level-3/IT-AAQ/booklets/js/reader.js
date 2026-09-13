@@ -108,7 +108,7 @@
 
   // ---- Flashcards -> definitions/match-up pages ----
   function flashcardPages() {
-    const fc = state.bundle.flashcards || [];
+    const fc = (state.bundle.flashcards || []).slice(0, 10); // cap
     const pages = [];
     if (!fc.length) return pages;
 
@@ -152,10 +152,10 @@
 
   // ---- MCQ pages ----
   function mcqPages() {
-    const mcq = state.bundle.mcq || [];
+    const mcq = (state.bundle.mcq || []).slice(0, 10); // cap to keep booklet focused
     const pages = [];
     const letters = 'ABCD';
-    const per = 6;
+    const per = 5;
     for (let start = 0; start < mcq.length; start += per) {
       const chunk = mcq.slice(start, start + per);
       let body = '<p class="bk-lead">Circle the letter of the correct answer.</p>';
@@ -178,43 +178,69 @@
 
   // ---- Exam-style question pages ----
   function examPages() {
-    const qs = state.bundle.examQuestions || [];
+    const qs = (state.bundle.examQuestions || [])
+      .slice()
+      .sort((a, b) => (a.marks || 0) - (b.marks || 0));
+
+    // Cap totals: a focused set per booklet.
+    const short = qs.filter(q => (q.marks || 0) <= 2).slice(0, 4);
+    const medium = qs.filter(q => (q.marks || 0) >= 3 && (q.marks || 0) <= 5).slice(0, 4);
+    const long = qs.filter(q => (q.marks || 0) >= 6).slice(0, 3);
+    const selected = [...short, ...medium, ...long];
+
     const pages = [];
-    // Sort: short (1-2m) first, then medium, then extended.
-    const sorted = qs.slice().sort((a, b) => (a.marks || 0) - (b.marks || 0));
+    const LONG_THRESHOLD = 6;
+
+    // Short/medium questions share pages (up to 4 per page).
+    const sm = selected.filter(q => (q.marks || 0) < LONG_THRESHOLD);
     let body = '';
     let count = 0;
     const flush = (title) => {
       if (!body.trim().length) return;
       pages.push(pageShell(body, { kicker: 'Exam-style questions', title, label: 'practice', solutions: state.solutions }));
       body = '';
+      count = 0;
     };
 
-    sorted.forEach((q, idx) => {
+    sm.forEach((q) => {
       const marks = q.marks || 1;
-      let block = `<div class="bk-qn">${idx + 1}. ${esc(q.question || q.q)} <span class="bk-marks"><span class="mk">${marks} mark${marks === 1 ? '' : 's'}</span></span></div>`;
+      let block = `<div class="bk-qn">${esc(q.question || q.q)} <span class="bk-marks"><span class="mk">${marks} mark${marks === 1 ? '' : 's'}</span></span></div>`;
       if (q.scenario) block += `<p style="font-style:italic;color:var(--bk-muted);">Scenario: ${esc(q.scenario)}</p>`;
       if (state.solutions) {
         const ms = q.mark_scheme || {};
         block += `<div class="bk-model"><b>Mark scheme</b>${ms.instruction ? ` — ${esc(ms.instruction)}` : ''}<ul style="margin:6px 0 0 18px;">${(ms.points || []).map(p => `<li>${esc(p)}</li>`).join('')}</ul>${ms.additional_guidance ? `<div class="bk-tip"><b>Note:</b> ${esc(ms.additional_guidance)}</div>` : ''}${ms.do_not_accept ? `<div style="color:var(--bk-brand);"><b>Do not accept:</b> ${esc(ms.do_not_accept)}</div>` : ''}</div>`;
       } else {
-        // answer lines proportional to marks
-        const lines = Math.max(1, Math.min(10, marks * 2));
+        const lines = Math.max(2, marks * 2);
         for (let i = 0; i < lines; i++) block += `<div class="bk-answer-lines"></div>`;
-        block += `<div style="height:10px;"></div>`;
+        block += `<div style="height:12px;"></div>`;
       }
       body += block;
       count++;
-      // flush when body gets large (approx 4 blocks)
-      if (count % 4 === 0) flush('Questions ' + (count - 3) + '–' + count);
+      if (count >= 3) flush('Short & medium questions');
     });
-    flush('Questions');
+    flush('Short & medium questions');
+
+    // Long (6+ mark) questions — each gets at least a full page of space.
+    long.forEach((q, idx) => {
+      const marks = q.marks || 6;
+      let block = `<div class="bk-qn">${esc(q.question || q.q)} <span class="bk-marks"><span class="mk">${marks} marks</span></span></div>`;
+      if (q.scenario) block += `<p style="font-style:italic;color:var(--bk-muted);">Scenario: ${esc(q.scenario)}</p>`;
+      if (state.solutions) {
+        const ms = q.mark_scheme || {};
+        block += `<div class="bk-model"><b>Mark scheme</b>${ms.instruction ? ` — ${esc(ms.instruction)}` : ''}<ul style="margin:6px 0 0 18px;">${(ms.points || []).map(p => `<li>${esc(p)}</li>`).join('')}</ul></div>`;
+      } else {
+        const lineCount = marks <= 6 ? 18 : marks <= 9 ? 26 : 34;
+        for (let i = 0; i < lineCount; i++) block += `<div class="bk-answer-lines" style="height:${marks >= 9 ? 34 : 28}px;"></div>`;
+      }
+      pages.push(pageShell(block, { kicker: 'Extended answer', title: `Extended question ${idx + 1} (${marks} marks)`, label: 'extended', solutions: state.solutions }));
+    });
+
     return pages;
   }
 
   // ---- Diagram pages ----
   function diagramPages() {
-    const dg = state.bundle.diagrams || [];
+    const dg = (state.bundle.diagrams || []).slice(0, 3); // cap to 3 per booklet
     const pages = [];
     dg.forEach((d, idx) => {
       let body = `<div class="bk-qn">${idx + 1}. ${esc(d.question)} <span class="bk-marks"><span class="mk">${d.marks} mark${d.marks === 1 ? '' : 's'}</span></span></div>`;
@@ -225,9 +251,55 @@
         inner += '</div>';
         body += inner;
       } else {
-        body += `<div class="bk-draw-box">Draw and label your diagram here<br><span style="font-size:11px;">(use a ruler — full marks need clear labels)</span></div>`;
+        // One full page for drawing.
+        body += `<div class="bk-draw-box" style="min-height:820px;"><span>Draw and label your diagram here (full page available)</span></div>`;
       }
       pages.push(pageShell(body, { kicker: 'Diagrams', title: `Diagram practice ${idx + 1}`, label: 'draw', solutions: state.solutions }));
+    });
+    return pages;
+  }
+
+  // ---- Revision-guide notes with cloze gaps (difficult concepts) ----
+  function clozePages() {
+    const notes = state.bundle.notes || [];
+    const pages = [];
+    notes.forEach((section, sIdx) => {
+      (section.passages || []).forEach((passage, pIdx) => {
+        let body = '';
+        if (state.solutions) {
+          // Inline answers, highlighted.
+          body = `<p class="bk-cloze">${passage.replace(/\[\[([^\]]+)\]\]/g, (m, a) => `<span class="ans">${esc(a)}</span>`)}</p>`;
+        } else {
+          // Blanks. Keep blank width readable.
+          body = `<p class="bk-cloze">${passage.replace(/\[\[([^\]]+)\]\]/g, (m, a) => {
+            const w = Math.max(90, Math.min(220, a.length * 9));
+            return `<span class="bk-blank" style="min-width:${w}px;">&nbsp;</span>`;
+          })}</p>`;
+          body += `<div class="bk-tip"><b>How to use.</b> Read the sentence aloud, guess the missing word(s), then check in the solutions booklet. These are the tricky concepts worth testing yourself on.</div>`;
+        }
+        const title = `${section.title} ${notes.length === 1 && section.passages.length === 1 ? '' : (pIdx + 1)}`;
+        pages.push(pageShell(body, { kicker: 'Revision notes', title, label: 'notes', solutions: state.solutions }));
+      });
+    });
+    return pages;
+  }
+
+  // ---- Design / workshop pages (units 3 & 4 coursework) ----
+  function designPages() {
+    const designs = state.bundle.designs || [];
+    const pages = [];
+    designs.forEach((d, idx) => {
+      let body = `<p class="bk-lead">${esc(d.prompt)}</p>`;
+      if (state.solutions) {
+        body += `<div class="bk-model"><b>What to include</b>${d.kind ? ` — <em>${esc(d.kind)}</em>` : ''}<p style="margin-top:8px;">Produce this on the worksheet and hand it in with your assignment evidence. Use accurate technical vocabulary and label every element.</p></div>`;
+      } else {
+        // A large full-page working area, with a grid backdrop to help line things up.
+        const grid = (d.kind === 'table' || d.kind === 'testplan' || d.kind === 'normalisation' || d.kind === 'data dictionary')
+          ? '<div class="bk-table-lines"></div>'
+          : '<div class="bk-grid-pad"></div>';
+        body += grid;
+      }
+      pages.push(pageShell(body, { kicker: 'Design workshop', title: d.title, label: d.kind || 'design', solutions: state.solutions }));
     });
     return pages;
   }
@@ -312,6 +384,8 @@
     if (tech) html += tech;
     const crit = criteriaPage();
     if (crit) html += crit;
+    html += clozePages().join('');
+    html += designPages().join('');
     html += knowledgePages().join('');
     html += flashcardPages().join('');
     const model = modelAnswerPage();

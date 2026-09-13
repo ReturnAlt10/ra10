@@ -2011,5 +2011,16 @@
  ],
  "knowledgeBank": null,
  "criteria": [],
- "briefs": []
+ "briefs": [],
+ "notes": [
+  {
+   "title": "Topologies & TCP/IP",
+   "passages": [
+    "A [[star]] topology connects every node to a central [[switch]], so one cable failure affects only that node. A [[bus]] uses one shared cable, and a [[ring]] passes data around a loop.",
+    "The [[TCP/IP]] model layers are [[application]], [[transport]], [[internet]] and [[network access]]. [[NAT]] lets many devices share one [[public IP address]].",
+    "[[IPv4]] addresses are running out, so [[IPv6]] provides a much larger address space. [[APIPA]] gives a device a link-local address when [[DHCP]] is unavailable."
+   ]
+  }
+ ],
+ "designs": []
 }

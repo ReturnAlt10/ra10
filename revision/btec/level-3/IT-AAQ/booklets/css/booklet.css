@@ -242,12 +242,39 @@ body {
 .bk-match-item .bk-k { flex: 0 0 auto; font-weight: 800; color: var(--bk-brand); }
 
 /* ============ Cloze (fill the gaps) + tables ============ */
-.bk-cloze { line-height: 2.1; font-size: 14.5px; }
+.bk-cloze { line-height: 2.1; font-size: 15px; color: var(--bk-ink); }
+.bk-cloze .ans { color: var(--bk-accent); font-weight: 800; }
 .bk-blank {
   display: inline-block;
   min-width: 120px;
   border-bottom: 1.6px solid var(--bk-ink);
-  margin: 0 2px;
+  margin: 0 3px;
+  padding: 0 4px;
+}
+/* ============ Design workshop workspace ============ */
+.bk-grid-pad {
+  min-height: 780px;
+  margin: 16px 0;
+  border: 2px dashed #b6bdc7;
+  border-radius: 10px;
+  background:
+    linear-gradient(to right, #eef1f4 1px, transparent 1px),
+    linear-gradient(to bottom, #eef1f4 1px, transparent 1px),
+    #fff;
+  background-size: 24px 24px;
+}
+.bk-table-lines {
+  min-height: 780px;
+  margin: 16px 0;
+  border: 2px solid #b6bdc7;
+  border-radius: 10px;
+  background: repeating-linear-gradient(to bottom, #fff, #fff 34px, #d5dae2 35px);
+}
+.bk-table-lines::before {
+  content: '';
+  display: block;
+  height: 34px;
+  background: repeating-linear-gradient(to right, transparent, transparent 33%, #d5dae2 33%, #d5dae2 calc(33% + 1px));
 }
 .bk-table { width: 100%; border-collapse: collapse; margin: 10px 0 16px; font-size: 13.5px; }
 .bk-table th, .bk-table td { border: 1px solid var(--bk-line); padding: 7px 9px; text-align: left; vertical-align: top; }

@@ -621,5 +621,37 @@
    ],
    "assignmentStyle": "original"
   }
+ ],
+ "notes": [
+  {
+   "title": "Design documentation",
+   "passages": [
+    "An [[ERD]] (entity relationship diagram) shows entities, their [[attributes]] and the [[relationships]] between them, using [[crow's foot]] notation for cardinality.",
+    "A [[data dictionary]] lists every [[table]], [[field]], data type, length and [[validation]] rule.",
+    "Forms use controls such as [[combo boxes]], [[radio buttons]], [[list boxes]] and input masks to make data entry quick and accurate."
+   ]
+  }
+ ],
+ "designs": [
+  {
+   "kind": "erd",
+   "title": "Full ERD with crow's foot notation",
+   "prompt": "Produce a conceptual then logical ERD. Add attributes, primary keys and foreign keys in the logical version."
+  },
+  {
+   "kind": "table",
+   "title": "Data dictionary",
+   "prompt": "Build a data dictionary: table name, field name, data type, length, validation rule and description for every field."
+  },
+  {
+   "kind": "form",
+   "title": "Data-entry form design",
+   "prompt": "Design an input form and a report layout. Include combo boxes, radio buttons, validation and user help."
+  },
+  {
+   "kind": "testplan",
+   "title": "Database test plan",
+   "prompt": "Write a test plan covering referential integrity, functionality and usability, using normal, erroneous and extreme test data."
+  }
  ]
 }

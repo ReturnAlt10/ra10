@@ -903,5 +903,31 @@
    "colourHint": "High-contrast sport palette (e.g. royal blue and volt/highlighter accents) — check contrast ratios pass WCAG.",
    "assignmentStyle": "original"
   }
+ ],
+ "notes": [
+  {
+   "title": "Development & testing",
+   "passages": [
+    "Testing should cover [[functionality]] (does it work?), [[usability]] (is it easy to use?) and [[accessibility]]. [[Responsive]] design ensures the site works on [[different screen sizes]].",
+    "A [[test plan]] lists each test with its expected [[outcome]], actual [[result]], and any [[actions]] needed."
+   ]
+  }
+ ],
+ "designs": [
+  {
+   "kind": "form",
+   "title": "Form design",
+   "prompt": "Design a form for the site (e.g. request a film, join the charity). Show fields, suitable input types, validation and a clear submit button."
+  },
+  {
+   "kind": "testplan",
+   "title": "Website test plan",
+   "prompt": "Write a test plan: for each test give the test, expected outcome, actual result and any fix needed. Cover functionality, usability and accessibility."
+  },
+  {
+   "kind": "wireframe",
+   "title": "Report / review page",
+   "prompt": "Sketch the layout of a report or review page the client could read, summarising what was built and how it meets the brief."
+  }
  ]
 }

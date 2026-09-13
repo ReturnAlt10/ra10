@@ -268,6 +268,8 @@ function buildAimBooklet(unit, aim, spec) {
     knowledgeBank,
     criteria: criteria ? (criteria.tasks || criteria).filter(t => t.aim === aim) : [],
     briefs: briefs ? briefs.briefs : [],
+    notes: notesFor(unit, aim),
+    designs: designsFor(unit, aim),
   };
 }
 
@@ -296,6 +298,172 @@ function buildChecklist(unit, aim, aimSpec, knowledgeBank) {
     out.push({ code, name: t.name, type: isGroup ? 'group' : 'item' });
   });
   return out;
+}
+
+// ---------------------------------------------------------------------------
+// Authored revision-guide notes (cloze "fill the gap" for difficult concepts).
+// Each passage is plain text with [[answer]] markers the reader turns into
+// blanks (worksheet) or inline answers (solutions).
+// ---------------------------------------------------------------------------
+const NOTES = {
+  '1-A': [
+    { title: 'Embedded systems & device selection', passages: [
+      'A(n) [[embedded system]] is a dedicated computer built into a device to control a [[specific function]]. It has fixed hardware and software, so it cannot be [[reprogrammed by the user]]. Examples include a washing-machine controller, a pacemaker and a car [[engine management unit]].',
+      'A [[file server]] provides large centralised storage for a network, while a [[web server]] responds to HTTP/HTTPS requests and hosts web pages, and an [[application server]] runs the business logic behind a service.',
+      'To choose a device for a scenario, always link a [[feature]] to a [[need]]. For example, a tablet suits field work because its [[touchscreen]] allows interaction without a keyboard.',
+      'Flowchart notation: an [[oval]] shows start/end, a [[rectangle]] is a process step, a [[diamond]] is a decision, and a [[parallelogram]] is input/output.'
+    ]},
+  ],
+  '1-B': [
+    { title: 'Compression, codecs & protocols', passages: [
+      '[[Lossless]] compression removes redundancy so the original file can be perfectly [[reconstructed]] (e.g. [[PNG]], [[ZIP]]). [[Lossy]] compression permanently removes detail that humans are unlikely to notice, giving much [[smaller files]] (e.g. [[JPEG]], [[MP3]]).',
+      'A [[codec]] is software or hardware that [[codes and decodes]] media files. Without the right codec a media file will not [[play]].',
+      'The protocol [[SMTP]] is used to [[send]] email, whereas [[POP]]/[[IMAP]] are used to [[receive]] it. Web pages travel over [[HTTP]] or its encrypted form [[HTTPS]].',
+      '[[Bandwidth]] is the amount of data that can be carried in a given time, while [[latency]] is the [[delay]] between sending and receiving.'
+    ]},
+  ],
+  '1-C': [
+    { title: 'Cloud service models', passages: [
+      '[[IaaS]] gives you raw infrastructure — servers, storage and networking — that you manage yourself. [[PaaS]] adds a managed platform for building and deploying apps. [[SaaS]] delivers ready-to-use software over the internet, so the user only manages their [[data and login]].',
+      'A [[VPN]] creates an encrypted "tunnel" over the public internet so remote workers can [[securely]] access the office network as if they were on-site.'
+    ]},
+  ],
+  '1-D': [
+    { title: 'Encryption & protection', passages: [
+      '[[Symmetric]] encryption uses the [[same key]] to encrypt and decrypt (fast, e.g. [[AES]]). [[Asymmetric]] encryption uses a [[public/private key pair]] (slower, e.g. [[RSA]]) and is used to share symmetric keys securely.',
+      '[[Encryption]] protects data in [[storage]] (at rest) and in [[transit]]. It does not stop data being stolen — it makes it [[unreadable]] without the key.',
+      'A [[firewall]] filters [[incoming and outgoing]] network traffic using rules. [[Antivirus]] software detects and removes [[malware]] using signatures and behaviour monitoring.',
+      '[[RAID]] combines [[multiple disks]] to improve performance and/or provide [[redundancy]] so data survives a disk failure. A [[backup]] is a copy kept separately for [[recovery]].'
+    ]},
+  ],
+  '1-E': [
+    { title: 'Transactional data & accuracy', passages: [
+      '[[Transactional data]] changes as events happen (e.g. sales, bookings) and must stay [[accurate and consistent]]. [[Master data]] changes less often.',
+      '[[Validation]] checks data against [[rules]] (e.g. range, format) as it is entered, while [[verification]] checks the data matches the [[source]] (e.g. typing a password twice).'
+    ]},
+  ],
+  '1-F': [
+    { title: 'Legislation & ethics', passages: [
+      '[[GDPR]] governs how organisations handle [[personal data]]: keep it minimal, secure and used only for a clear, lawful purpose. The [[Computer Misuse Act 1990]] makes it an offence to gain [[unauthorised access]] to computer material.',
+      '[[Copyright]] protects creators of original work — you need [[permission]] to reuse others\' images, text and music.',
+      'The [[digital divide]] is the gap between those who have access to technology and those who do not.'
+    ]},
+  ],
+  '2-A': [
+    { title: 'Social engineering & malware', passages: [
+      '[[Phishing]] uses fake emails to trick users into revealing credentials; [[vishing]] uses phone calls and [[smishing]] uses SMS. [[Spear phishing]] targets a [[specific individual]], and [[whaling]] targets senior [[executives]].',
+      '[[Ransomware]] [[encrypts]] a victim\'s files and demands payment. [[Spyware]] secretly [[monitors]] activity. [[Adware]] floods the device with [[advertisements]].',
+      '[[DoS/DDoS]] overloads a system with traffic so it becomes [[unavailable]]. A DDoS uses many [[compromised computers]] (a botnet).',
+      'The impact of a credible threat is judged as [[operational]], [[financial]], [[reputational]] and [[intellectual-property]] loss.',
+      '[[Penetration testing]] is an authorised simulated [[attack]] to find weak spots before attackers do. A [[port scanner]] finds [[open ports]]. Risk can be handled by [[transfer]], [[avoidance]] or [[acceptance]].'
+    ]},
+  ],
+  '2-B': [
+    { title: 'Topologies & TCP/IP', passages: [
+      'A [[star]] topology connects every node to a central [[switch]], so one cable failure affects only that node. A [[bus]] uses one shared cable, and a [[ring]] passes data around a loop.',
+      'The [[TCP/IP]] model layers are [[application]], [[transport]], [[internet]] and [[network access]]. [[NAT]] lets many devices share one [[public IP address]].',
+      '[[IPv4]] addresses are running out, so [[IPv6]] provides a much larger address space. [[APIPA]] gives a device a link-local address when [[DHCP]] is unavailable.'
+    ]},
+  ],
+  '2-C': [
+    { title: 'Policies: DR vs incident response', passages: [
+      'A [[disaster recovery]] policy describes how to restore [[operations]] after a major incident, while an [[incident response]] policy describes the immediate [[steps]] taken when a security incident is detected.',
+      'Security is often managed using the [[Plan-Do-Check-Act]] cycle from [[ISO 27001]]. A [[security audit]] checks compliance against [[policies]].'
+    ]},
+  ],
+  '2-D': [
+    { title: 'Forensic procedures', passages: [
+      '[[Chain of custody]] documents who has handled [[evidence]] and when, so it is admissible. Evidence must be collected in [[order of volatility]] — most volatile first (e.g. [[RAM]], running processes, then [[disks]]).',
+      'An [[image]] (bit-for-bit copy) is made of the suspect drive rather than working on the [[original]], preserving its [[integrity]].'
+    ]},
+  ],
+  '3-A': [
+    { title: 'Principles & planning', passages: [
+      'The [[F-shaped pattern]] describes how users scan text-heavy pages, while the [[Z-shaped pattern]] fits simple hero pages. [[Visual hierarchy]] orders elements by [[importance]].',
+      '[[SEO]] improves a site\'s ranking in [[search results]] through headings, keywords, alt text and performance.',
+      '[[Accessibility]] means designing so people with [[disabilities]] can use the site — alt text, [[contrast]], captions and [[keyboard]] navigation. In the UK, the [[Equality Act 2010]] makes sites legally required to be accessible.',
+      'A [[site map]] shows the [[pages]] of a website and how they [[link]] together.'
+    ]},
+  ],
+  '3-B': [
+    { title: 'Wireframes, mockups & assets', passages: [
+      'A [[wireframe]] is a [[low-fidelity]] layout of boxes and placeholder text showing [[structure]], not style. A [[mockup]] is a [[high-fidelity]] visual showing colours, fonts and images.',
+      '[[JPG]] suits photographs, [[PNG]] suits graphics needing [[transparency]], and [[MP4]] is used for video. Compress assets to keep them under about [[1MB]] for fast loading.',
+      'Use a logical [[folder structure]] and descriptive, consistent [[naming conventions]] (e.g. hero-banner.jpg, not IMG-3421.jpg).'
+    ]},
+  ],
+  '3-C': [
+    { title: 'Development & testing', passages: [
+      'Testing should cover [[functionality]] (does it work?), [[usability]] (is it easy to use?) and [[accessibility]]. [[Responsive]] design ensures the site works on [[different screen sizes]].',
+      'A [[test plan]] lists each test with its expected [[outcome]], actual [[result]], and any [[actions]] needed.'
+    ]},
+  ],
+  '4-A': [
+    { title: 'Keys, integrity & normalisation', passages: [
+      'A [[primary key]] uniquely identifies each [[row]] and is never null. A [[foreign key]] in one table matches a [[primary key]] in another, enforcing [[referential integrity]].',
+      '[[1NF]] removes [[repeating groups]] so every value is [[atomic]]. [[2NF]] removes [[partial]] dependencies on part of a [[composite key]]. [[3NF]] removes [[transitive]] dependencies (a non-key field depending on another non-key field).',
+      'Poor design causes [[insertion]], [[update]] and [[deletion]] anomalies. Normalisation removes [[redundancy]] and these dependency problems.',
+      'Entity relationship types: [[one-to-one]], [[one-to-many]] and [[many-to-many]]. A many-to-many link is resolved with a [[linking table]].'
+    ]},
+  ],
+  '4-B': [
+    { title: 'Design documentation', passages: [
+      'An [[ERD]] (entity relationship diagram) shows entities, their [[attributes]] and the [[relationships]] between them, using [[crow\'s foot]] notation for cardinality.',
+      'A [[data dictionary]] lists every [[table]], [[field]], data type, length and [[validation]] rule.',
+      'Forms use controls such as [[combo boxes]], [[radio buttons]], [[list boxes]] and input masks to make data entry quick and accurate.'
+    ]},
+  ],
+  '4-C': [
+    { title: 'Build, test & optimise', passages: [
+      'Tests use [[normal]], [[erroneous]] and [[extreme]] data. [[Referential integrity]] testing checks that related records behave correctly when added or deleted.',
+      'To optimise a query, [[SELECT]] only the [[columns]] you need and use efficient [[joins]], avoiding unnecessary tables.'
+    ]},
+  ],
+};
+
+// ---------------------------------------------------------------------------
+// Design / workshop page scaffolds for units 3 & 4 (the coursework units).
+// Each entry prompts the student to produce a piece of design documentation.
+// ---------------------------------------------------------------------------
+const DESIGNS = {
+  '3-A': [
+    { kind: 'sitemap', title: 'Site map for a client website', prompt: 'Choose a brief (or your own client). Sketch a site map showing the pages and how they link. Add a short note on the purpose of each page.' },
+    { kind: 'wireframe', title: 'Home page wireframe', prompt: 'Sketch a low-fidelity wireframe of the home page. Show the header, navigation, hero, content sections and footer. Label each element — do NOT add colours or final images.' },
+    { kind: 'wireframe', title: 'Mobile UI wireframe', prompt: 'Sketch the same home page as a mobile layout. Show how the navigation collapses (e.g. hamburger) and how content stacks vertically.' },
+  ],
+  '3-B': [
+    { kind: 'wireframe', title: 'Inner-page wireframe', prompt: 'Wireframe a content page (e.g. a film page or "join us" page). Include at least one form and one call-to-action.' },
+    { kind: 'mockup', title: 'Visual design (mockup) annotation', prompt: 'Annotate a mockup: which colours, fonts and images you will use, and WHY they suit the target audience. Link each choice to the brief.' },
+    { kind: 'table', title: 'Asset log', prompt: 'List the assets you will use: name, source (own work or URL), file type, and where each is used on the site. Check licences.' },
+  ],
+  '3-C': [
+    { kind: 'form', title: 'Form design', prompt: 'Design a form for the site (e.g. request a film, join the charity). Show fields, suitable input types, validation and a clear submit button.' },
+    { kind: 'testplan', title: 'Website test plan', prompt: 'Write a test plan: for each test give the test, expected outcome, actual result and any fix needed. Cover functionality, usability and accessibility.' },
+    { kind: 'wireframe', title: 'Report / review page', prompt: 'Sketch the layout of a report or review page the client could read, summarising what was built and how it meets the brief.' },
+  ],
+  '4-A': [
+    { kind: 'normalisation', title: 'Normalisation worksheet', prompt: 'Take a UNF table with repeating groups and normalise it to 1NF, 2NF and 3NF. Show tables, fields and keys at each stage.' },
+    { kind: 'erd', title: 'Entity relationship diagram', prompt: 'Draw an ERD for a small database (e.g. orders, customers, products). Label primary keys, foreign keys and cardinality (1:1, 1:M, M:N).' },
+    { kind: 'table', title: 'Relational algebra notes', prompt: 'For each operation (union, intersect, join, select) write what it does and a small worked example using two relations.' },
+  ],
+  '4-B': [
+    { kind: 'erd', title: 'Full ERD with crow\'s foot notation', prompt: 'Produce a conceptual then logical ERD. Add attributes, primary keys and foreign keys in the logical version.' },
+    { kind: 'table', title: 'Data dictionary', prompt: 'Build a data dictionary: table name, field name, data type, length, validation rule and description for every field.' },
+    { kind: 'form', title: 'Data-entry form design', prompt: 'Design an input form and a report layout. Include combo boxes, radio buttons, validation and user help.' },
+    { kind: 'testplan', title: 'Database test plan', prompt: 'Write a test plan covering referential integrity, functionality and usability, using normal, erroneous and extreme test data.' },
+  ],
+  '4-C': [
+    { kind: 'report', title: 'Report layout & optimisation', prompt: 'Sketch a report layout (grouping, calculated fields, conditional formatting). Then list three ways you would optimise a slow query.' },
+    { kind: 'testplan', title: 'Final test log', prompt: 'Record the final tests you carried out on tables, queries, forms and reports, with outcomes and refinements.' },
+  ],
+};
+
+function notesFor(unit, aim) {
+  return NOTES[`${unit}-${aim}`] || [];
+}
+
+function designsFor(unit, aim) {
+  return DESIGNS[`${unit}-${aim}`] || [];
 }
 
 // ---------------------------------------------------------------------------
@@ -331,6 +499,8 @@ function main() {
         hasKnowledge: !!bundle.knowledgeBank,
         hasCriteria: bundle.criteria.length > 0,
         hasBriefs: bundle.briefs.length > 0,
+        notes: bundle.notes.length,
+        designs: bundle.designs.length,
       });
       console.log(`built ${fn}: q=${bundle.examQuestions.length} mcq=${bundle.mcq.length} quiz=${bundle.quiz.length} fc=${bundle.flashcards.length} dg=${bundle.diagrams.length}`);
     }

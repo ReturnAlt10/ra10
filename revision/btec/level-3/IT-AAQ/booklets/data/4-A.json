@@ -926,5 +926,33 @@
    ],
    "assignmentStyle": "original"
   }
+ ],
+ "notes": [
+  {
+   "title": "Keys, integrity & normalisation",
+   "passages": [
+    "A [[primary key]] uniquely identifies each [[row]] and is never null. A [[foreign key]] in one table matches a [[primary key]] in another, enforcing [[referential integrity]].",
+    "[[1NF]] removes [[repeating groups]] so every value is [[atomic]]. [[2NF]] removes [[partial]] dependencies on part of a [[composite key]]. [[3NF]] removes [[transitive]] dependencies (a non-key field depending on another non-key field).",
+    "Poor design causes [[insertion]], [[update]] and [[deletion]] anomalies. Normalisation removes [[redundancy]] and these dependency problems.",
+    "Entity relationship types: [[one-to-one]], [[one-to-many]] and [[many-to-many]]. A many-to-many link is resolved with a [[linking table]]."
+   ]
+  }
+ ],
+ "designs": [
+  {
+   "kind": "normalisation",
+   "title": "Normalisation worksheet",
+   "prompt": "Take a UNF table with repeating groups and normalise it to 1NF, 2NF and 3NF. Show tables, fields and keys at each stage."
+  },
+  {
+   "kind": "erd",
+   "title": "Entity relationship diagram",
+   "prompt": "Draw an ERD for a small database (e.g. orders, customers, products). Label primary keys, foreign keys and cardinality (1:1, 1:M, M:N)."
+  },
+  {
+   "kind": "table",
+   "title": "Relational algebra notes",
+   "prompt": "For each operation (union, intersect, join, select) write what it does and a small worked example using two relations."
+  }
  ]
 }

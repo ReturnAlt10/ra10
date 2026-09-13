@@ -4063,5 +4063,15 @@
  ],
  "knowledgeBank": null,
  "criteria": [],
- "briefs": []
+ "briefs": [],
+ "notes": [
+  {
+   "title": "Transactional data & accuracy",
+   "passages": [
+    "[[Transactional data]] changes as events happen (e.g. sales, bookings) and must stay [[accurate and consistent]]. [[Master data]] changes less often.",
+    "[[Validation]] checks data against [[rules]] (e.g. range, format) as it is entered, while [[verification]] checks the data matches the [[source]] (e.g. typing a password twice)."
+   ]
+  }
+ ],
+ "designs": []
 }
