@@ -1038,7 +1038,7 @@ function renderTable(role) {
           groupOptions.replace('value="' + esc(gName) + '"', 'value="' + esc(gName) + '" selected') +
         '</select>' +
       '</td>' +
-      '<td><span class="chip">All subjects</span></td>' +
+      '<td><button class="btn btn-g" style="font-size:var(--tx-xs)" data-editsubjects="' + safeId + '">Edit subjects</button></td>' +
       '<td>' +
         '<button class="btn btn-g" style="font-size:var(--tx-xs);margin-right:var(--sp2)" data-resend="' + safeId + '">Resend invite</button>' +
         '<button class="btn btn-g" style="font-size:var(--tx-xs);margin-right:var(--sp2)" data-fixusername="' + safeId + '">Set/reset username</button>' +
@@ -1722,6 +1722,8 @@ async function removeMember(memberId) {
 
   var profileRes = await state.sb.from('profiles').update({
     tier: 'free',
+    credits: 10,
+    credits_reset_at: new Date().toISOString(),
     school_id: null,
     school_name: null,
     unlocked_subjects: [],
@@ -1931,6 +1933,8 @@ async function resendInvite(memberId) {
     if (resendBtn) { await resendInvite(resendBtn.dataset.resend); return; }
     var userBtn = e.target.closest('[data-fixusername]');
     if (userBtn) { await setOrResetMemberUsername(userBtn.dataset.fixusername); return; }
+    var subjBtn = e.target.closest('[data-editsubjects]');
+    if (subjBtn) { await editMemberSubjects(subjBtn.dataset.editsubjects); return; }
     var btn = e.target.closest('[data-remove]');
     if (btn) await removeMember(btn.dataset.remove);
   });

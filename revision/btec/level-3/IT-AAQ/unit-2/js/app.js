@@ -3115,15 +3115,16 @@ function renderQuizControls() {
 }
 
 async function startQuiz() {
-  if (!await ra10Gate('quiz_question')) return;
-  if (!QUIZ || !QUIZ.length) { alert('Quiz data not available.'); return; }
+  if (!QUIZ || !QUIZ.length) { alert('Quiz data not available yet — try again in a moment.'); return; }
   const aim = $('#quiz-aim').value;
   const lenVal = $('#quiz-length').value;
   let pool = QUIZ.slice();
-  if (aim) pool = pool.filter(q => q.learning_aim === aim);
-  if (!pool.length) { alert('No quiz questions for this filter.'); return; }
+  if (aim) pool = pool.filter(q => String(q.learning_aim || '').trim().toUpperCase().startsWith(aim.toUpperCase()));
+  if (!pool.length) { alert('No quiz questions for this filter yet — try "All aims".'); return; }
   pool = shuffle(pool);
   const length = lenVal === 'all' ? pool.length : Math.min(parseInt(lenVal, 10), pool.length);
+  // Only charge now that we know a valid session can start.
+  if (!await ra10Gate('quiz_question')) return;
   quizState = {
     items: pool.slice(0, length),
     idx: 0,
