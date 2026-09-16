@@ -1530,7 +1530,7 @@
       returnUrl: window.location && window.location.origin ? window.location.origin : '',
     };
 
-    const response = await fetch(SUPABASE_URL + '/functions/v1/gocardless-checkout', {
+    const response = await fetch(SUPABASE_URL + '/functions/v1/create-checkout', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -1566,7 +1566,7 @@
       returnUrl: String((input && input.returnUrl) || (window.location && window.location.origin ? window.location.origin : '')),
     };
 
-    const response = await fetch(SUPABASE_URL + '/functions/v1/gocardless-cancel', {
+    const response = await fetch(SUPABASE_URL + '/functions/v1/create-billing-portal', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -1577,11 +1577,11 @@
 
     const result = await response.json().catch(function () { return {}; });
     if (!response.ok) {
-      throw new Error(result && result.error ? String(result.error) : 'Failed to cancel subscription.');
+      throw new Error(result && result.error ? String(result.error) : 'Failed to open billing portal.');
     }
 
-    if (!result || result.ok !== true) {
-      throw new Error('Cancellation was not confirmed.');
+    if (!result || !result.url) {
+      throw new Error('Billing portal URL was not returned.');
     }
 
     return result;
