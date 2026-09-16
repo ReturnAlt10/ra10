@@ -1229,8 +1229,8 @@ async function editMemberSubjects(memberId) {
   if (memberUpdate.error) { toast('Could not update member subjects.'); return; }
 
   m.subjects = unique;
-  if (String(m.status || '').toLowerCase() === 'active') {
-    await state.sb.from('profiles').update({ unlocked_subjects: unique }).ilike('email', m.email);
+  if (String(m.status || '').toLowerCase() === 'active' && window.RA10_SET_MEMBER_SUBJECTS) {
+    await window.RA10_SET_MEMBER_SUBJECTS(m.email, unique, state.schoolId, state.schoolName);
   }
 
   renderAll();
@@ -1393,31 +1393,17 @@ async function addOrInviteMember(payload, options) {
     return { ok: false, message: 'Could not add ' + email + ': ' + (res.error.message || 'unknown error') };
   }
 
-  var memberTier = role === 'teacher' ? 'school_teacher' : 'school_student';
-  var memberCredits = role === 'teacher' ? 600 : 300;
   if (existingProfile || priorMember) {
-    var nextReset = new Date();
-    nextReset.setUTCMonth(nextReset.getUTCMonth() + 1);
-    var profUpdate = await state.sb.from('profiles').update({
-      tier: memberTier,
-      credits: memberCredits,
-      credits_reset_at: nextReset.toISOString(),
-      school_id: state.schoolId,
-      school_name: state.schoolName,
-      unlocked_subjects: subjects
-    }).ilike('email', email);
-    if (window.RA10_ACTIVATE_SCHOOL_MEMBER) {
-      const forceActivated = await window.RA10_ACTIVATE_SCHOOL_MEMBER(email, role, state.schoolId, state.schoolName);
-      if (forceActivated && !forceActivated.ok && profUpdate.error) {
-        console.warn('addMember fallback activation failed', forceActivated.error || 'unknown');
-      }
-    }
-    if (profUpdate.error) {
-      console.warn('addMember profile activation failed', profUpdate.error);
+    // Activation is performed server-side (tier/credits cannot be written
+    // client-side once the DB privilege-escalation trigger is enabled).
+    const forceActivated = window.RA10_ACTIVATE_SCHOOL_MEMBER
+      ? await window.RA10_ACTIVATE_SCHOOL_MEMBER(email, role, state.schoolId, state.schoolName)
+      : { ok: false, error: 'missing helper' };
+    if (!forceActivated || !forceActivated.ok) {
+      console.warn('addMember activation failed', (forceActivated && forceActivated.error) || 'unknown');
       return { ok: true, message: email + ' added. Activation is syncing — ask them to refresh once.' };
-    } else {
-      return { ok: true, message: (role === 'teacher' ? 'Teacher' : 'Student') + ' added and activated: ' + email };
     }
+    return { ok: true, message: (role === 'teacher' ? 'Teacher' : 'Student') + ' added and activated: ' + email };
   } else {
     const inviteResult = await window.RA10_INVITE(
       email,
@@ -1720,21 +1706,16 @@ async function removeMember(memberId) {
   var res = await state.sb.from('school_members').update({ status: 'removed' }).eq('id', m.id);
   if (res.error) { toast('Could not remove member.'); return; }
 
-  var profileRes = await state.sb.from('profiles').update({
-    tier: 'free',
-    credits: 10,
-    credits_reset_at: new Date().toISOString(),
-    school_id: null,
-    school_name: null,
-    unlocked_subjects: [],
-    unlimited_credits: false
-  }).ilike('email', m.email.toLowerCase());
-  
-  if (profileRes.error) { 
-    toast('Warning: profile tier may not have been updated. ' + (profileRes.error.message || 'unknown error')); 
-    return; 
+  // Revert the profile server-side (tier/credits cannot be written client-side
+  // once the DB privilege-escalation trigger is enabled).
+  var deactivated = await window.RA10_DEACTIVATE_SCHOOL_MEMBER
+    ? await window.RA10_DEACTIVATE_SCHOOL_MEMBER(m.email, state.schoolId, state.schoolName)
+    : { ok: false };
+  if (!deactivated || !deactivated.ok) {
+    toast('Warning: profile tier may not have been updated. ' + ((deactivated && deactivated.error) || 'unknown error'));
+    return;
   }
-  
+
   toast(m.email + ' removed and reverted to free tier.');
   await loadMembers();
 }
@@ -1758,16 +1739,10 @@ async function bulkRemoveMembers(role) {
   var res = await state.sb.from('school_members').update({ status: 'removed' }).in('id', ids);
   if (res.error) { toast('Could not remove members: ' + (res.error.message || 'unknown error')); return; }
 
-  if (emails.length) {
-    await state.sb.from('profiles').update({
-      tier: 'free',
-      credits: 10,
-      credits_reset_at: new Date().toISOString(),
-      school_id: null,
-      school_name: null,
-      unlocked_subjects: [],
-      unlimited_credits: false
-    }).in('email', emails);
+  if (emails.length && window.RA10_DEACTIVATE_SCHOOL_MEMBER) {
+    for (var i = 0; i < emails.length; i++) {
+      await window.RA10_DEACTIVATE_SCHOOL_MEMBER(emails[i], state.schoolId, state.schoolName);
+    }
   }
 
   clearSelection(role);
@@ -1880,14 +1855,10 @@ document.getElementById('btn-remove-all').addEventListener('click', async functi
   var emails = state.members.map(function(m) { return m.email; });
 
   await state.sb.from('school_members').update({ status: 'removed' }).in('id', ids);
-  if (emails.length) {
-    await state.sb.from('profiles').update({
-      tier: 'free',
-      credits: 10,
-      credits_reset_at: new Date().toISOString(),
-      school_id: null,
-      school_name: null
-    }).in('email', emails.map(function(e) { return String(e || '').toLowerCase(); }));
+  if (emails.length && window.RA10_DEACTIVATE_SCHOOL_MEMBER) {
+    for (var i = 0; i < emails.length; i++) {
+      await window.RA10_DEACTIVATE_SCHOOL_MEMBER(String(emails[i] || '').toLowerCase(), state.schoolId, state.schoolName);
+    }
   }
   toast('All members removed.');
   await loadMembers();

@@ -57,7 +57,38 @@
     }
   };
 
-  // Invite a new (or reactivated) account; if they already have an account,
+  // Sync an active member's unlocked_subjects (server-authorised).
+window.RA10_SET_MEMBER_SUBJECTS = async function (email, subjects, schoolId, schoolName) {
+  try {
+    var data = await postAction({
+      action: 'set-subjects',
+      email: email,
+      subjects: subjects,
+      schoolId: schoolId,
+      schoolName: schoolName
+    });
+    return data && data.ok ? { ok: true } : { ok: false, error: (data && data.error) || 'Subject update failed' };
+  } catch (e) {
+    return { ok: false, error: e && e.message ? e.message : 'Subject update failed' };
+  }
+};
+
+// Revert a member's profile to free tier (server-authorised).
+window.RA10_DEACTIVATE_SCHOOL_MEMBER = async function (email, schoolId, schoolName) {
+  try {
+    var data = await postAction({
+      action: 'deactivate',
+      email: email,
+      schoolId: schoolId,
+      schoolName: schoolName
+    });
+    return data && data.ok ? { ok: true } : { ok: false, error: (data && data.error) || 'Profile deactivation failed' };
+  } catch (e) {
+    return { ok: false, error: e && e.message ? e.message : 'Profile deactivation failed' };
+  }
+};
+
+// Invite a new (or reactivated) account; if they already have an account,
   // the server activates them directly. Returns { ok, skipped?, activated?,
   // link?, error? }.
   window.RA10_INVITE = async function (email, role, schoolId, schoolName) {

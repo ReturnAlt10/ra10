@@ -16,7 +16,7 @@
     "learning_aim": "A",
     "topic": "A1.1.2 Multifunctional Devices",
     "front": "What is a multifunctional device (MFD)?",
-    "back": "A device that combines the functionality of multiple peripherals into one unit, typically integrating printing, scanning, copying, and faxing. MFDs reduce desk space and cost in office environments.",
+    "back": "An all-in-one machine that prints, scans, copies and faxes. 'MFD' means multifunctional device. It saves desk space and money compared to buying each machine separately.",
     "tags": [
       "hardware",
       "devices",
@@ -41,7 +41,7 @@
     "learning_aim": "A",
     "topic": "A1.1.4 Servers",
     "front": "What is a web server?",
-    "back": "A server that hosts websites and delivers web pages to clients over the internet using HTTP or HTTPS. When a user requests a URL, the web server processes the request and returns the appropriate HTML content.",
+    "back": "A web server is a computer that stores the files for a website. When someone visits the site, it sends the right web pages to their browser using HTTP or HTTPS.",
     "tags": [
       "hardware",
       "servers",
@@ -53,7 +53,7 @@
     "learning_aim": "A",
     "topic": "A1.1.4 Servers",
     "front": "Difference between a file server and an application server?",
-    "back": "A file server provides centralised storage so users can access and share files across a network. An application server hosts and runs software applications, processing logic server-side and sending results to clients.",
+    "back": "A file server is a shared hard drive that stores files so everyone on the network can open and save them. An application server runs a program centrally and sends the results out to users' computers.",
     "tags": [
       "hardware",
       "servers",
@@ -77,7 +77,7 @@
     "learning_aim": "A",
     "topic": "A1.1.9 Embedded Systems",
     "front": "What is an embedded system?",
-    "back": "A dedicated computer system built into a larger device to perform a specific function, with hardware and software tightly integrated. Examples include the control unit in a washing machine, a car's ECU, and a smart thermostat.",
+    "back": "A small computer built into a bigger device to do one specific job. Examples: the control chip in a washing machine, a car's engine computer (ECU), and a smart thermostat.",
     "tags": [
       "hardware",
       "embedded",
@@ -125,7 +125,7 @@
     "learning_aim": "A",
     "topic": "A1.3.1 Network Diagrams",
     "front": "What is a network diagram used for?",
-    "back": "A network diagram is a visual representation of how devices (nodes) are connected within a network. Standard symbols represent routers, switches, servers, and clients, enabling engineers to plan and document IT infrastructure.",
+    "back": "A network diagram is a drawing that shows how devices in a network are linked together. Standard symbols represent parts like routers, switches, servers and computers, so engineers can plan and record the setup.",
     "tags": [
       "notation",
       "network diagram",
@@ -149,7 +149,7 @@
     "learning_aim": "A",
     "topic": "A2.2 Assistive Technologies",
     "front": "What is a screen reader, and who benefits from it?",
-    "back": "Screen-reading software converts on-screen text and interface elements into synthesised speech or braille output. It primarily benefits users who are blind or have severe visual impairments, enabling them to use a computer independently.",
+    "back": "A screen reader is software that reads out loud what is on the screen (or turns it into braille). It helps people who are blind or have severe sight loss use a computer on their own.",
     "tags": [
       "assistive technology",
       "accessibility",
@@ -161,7 +161,7 @@
     "learning_aim": "A",
     "topic": "A2.3 Storage Media",
     "front": "What four characteristics are used to compare storage media?",
-    "back": "Capacity (how much data it stores) • Cost (price per GB) • Speed (read/write transfer rate) • Compatibility (whether the device works with the required system or interface, e.g. USB, SATA).",
+    "back": "Storage is compared by four things: Capacity (how much it holds) • Cost (price) • Speed (how fast it reads and writes) • Compatibility (whether it works with your device, e.g. USB or SATA).",
     "tags": [
       "storage",
       "media",
@@ -173,7 +173,7 @@
     "learning_aim": "A",
     "topic": "A2.4 Data Processing",
     "front": "Difference between manual and automatic data processing?",
-    "back": "Manual processing requires human intervention at each step (e.g. entering data into a spreadsheet by hand). Automatic processing uses hardware and software to process data without human involvement (e.g. a sensor automatically logging temperature readings).",
+    "back": "Manual processing needs a person at every step (e.g. typing data into a spreadsheet by hand). Automatic processing is done by hardware and software with no person involved (e.g. a sensor that logs temperatures by itself).",
     "tags": [
       "data processing",
       "manual",
@@ -185,7 +185,7 @@
     "learning_aim": "A",
     "topic": "A3.1 Operating Systems",
     "front": "What is a real-time operating system (RTOS)?",
-    "back": "An RTOS processes inputs and produces outputs within guaranteed time constraints, making it essential for safety-critical applications. Examples include the OS controlling an aircraft's autopilot or a medical monitoring device.",
+    "back": "A real-time operating system (RTOS) must respond within a strict time limit, so a job is never late. Examples: the system running an aircraft autopilot or a hospital monitor.",
     "tags": [
       "OS",
       "RTOS",
@@ -197,7 +197,7 @@
     "learning_aim": "A",
     "topic": "A3.2 OS Memory Management",
     "front": "What is virtual memory?",
-    "back": "Virtual memory is a memory management technique where the OS uses a portion of secondary storage (the page file) as an extension of RAM. This allows programs larger than physical RAM to run, though it is slower than using RAM alone.",
+    "back": "Virtual memory is when the computer uses part of the hard drive as extra RAM when the real RAM is full. This lets larger programs run, but it is slower than real RAM.",
     "tags": [
       "OS",
       "memory management",
@@ -209,7 +209,7 @@
     "learning_aim": "A",
     "topic": "A3.3 Utility Software",
     "front": "Give three examples of utility software.",
-    "back": "Antivirus software, disk defragmenters, and file compression tools (e.g. WinZip) are all utilities. Utility software performs maintenance and optimisation tasks for the operating system and hardware.",
+    "back": "Antivirus software, disk defragmenters and file compression tools (like WinZip) are all utilities. Utility software does the 'housekeeping' jobs that keep the system running well.",
     "tags": [
       "software",
       "utility",
@@ -221,7 +221,7 @@
     "learning_aim": "A",
     "topic": "A3.5 User Interfaces",
     "front": "What is a Command Line Interface (CLI)?",
-    "back": "A CLI allows users to interact with the OS by typing text commands directly. It offers precise control and is often faster for experienced users but has a steep learning curve compared to graphical interfaces.",
+    "back": "A Command Line Interface (CLI) is where you control the computer by typing text commands. It gives precise control and is fast for experts, but is harder to learn than clicking icons.",
     "tags": [
       "UI",
       "CLI",
@@ -233,7 +233,7 @@
     "learning_aim": "A",
     "topic": "A3.6 Open Source vs Proprietary Software",
     "front": "What is the key difference between open source and proprietary software?",
-    "back": "Open source software provides access to its source code, allowing anyone to view, modify, and distribute it (e.g. Linux, LibreOffice). Proprietary software is owned by a company, with the source code kept private (e.g. Microsoft Windows, Adobe Photoshop).",
+    "back": "Open source software lets anyone see and change the code (Linux, LibreOffice). Proprietary software is owned by a company and its code is kept secret (Windows, Adobe Photoshop).",
     "tags": [
       "software",
       "open source",
@@ -246,7 +246,7 @@
     "learning_aim": "A",
     "topic": "A3.7 File Formats",
     "front": "What is the difference between a JPEG and a PNG image file?",
-    "back": "JPEG uses lossy compression, reducing file size but permanently discarding some image data — suitable for photographs. PNG uses lossless compression, preserving all image data and supporting transparency — better for logos and diagrams.",
+    "back": "JPEG shrinks photos by throwing away some detail to make files smaller (lossy) — best for photos. PNG keeps all detail and can have transparent backgrounds (lossless) — best for logos and diagrams.",
     "tags": [
       "file formats",
       "images",
@@ -258,7 +258,7 @@
     "learning_aim": "A",
     "topic": "A4.1 Choosing IT Systems",
     "front": "What does 'downtime' mean in the context of implementing a new IT system?",
-    "back": "Downtime refers to the period during which an IT system is unavailable, typically while it is being replaced, updated, or migrated to a new system. Organisations must plan to minimise downtime to avoid loss of productivity and revenue.",
+    "back": "Downtime is the time when an IT system is not working — for example while it is being replaced or updated. Organisations plan carefully to keep downtime short so they don't lose work or money.",
     "tags": [
       "implementation",
       "downtime",
@@ -270,7 +270,7 @@
     "learning_aim": "A",
     "topic": "A4.2 IT System Uses",
     "front": "How is an IT system used for stock control in retail?",
-    "back": "Barcode or RFID scanners automatically update stock levels when items are sold or received. The system can trigger automatic reordering when stock falls below a minimum threshold, reducing both stockouts and overstocking.",
+    "back": "Barcode or RFID scanners automatically update stock levels as items are sold or delivered. The system can automatically reorder when stock runs low, so the shop never runs out (and never orders too much).",
     "tags": [
       "stock control",
       "retail",
@@ -282,7 +282,7 @@
     "learning_aim": "A",
     "topic": "A4.3 Impact on Organisations",
     "front": "Why do employees need initial and ongoing training when a new IT system is introduced?",
-    "back": "Initial training ensures staff can use the new system safely and effectively from launch. Ongoing training is needed as software is updated, new features are added, or security threats evolve, maintaining productivity and compliance.",
+    "back": "Initial training makes sure staff can use the new system safely from day one. Ongoing training is needed because software keeps changing and new risks appear, so staff stay productive and safe.",
     "tags": [
       "training",
       "implementation",
@@ -294,7 +294,7 @@
     "learning_aim": "A",
     "topic": "A5 Emerging Technologies",
     "front": "Give two implications of artificial intelligence (AI) on IT system performance.",
-    "back": "AI can improve system performance through automation of repetitive tasks and predictive maintenance (identifying hardware faults before failure). However, AI models require significant processing power and large datasets, increasing hardware and energy demands.",
+    "back": "AI can improve performance by automating boring tasks and spotting faults before hardware breaks. But AI needs a lot of processing power and data, which increases energy and hardware demands.",
     "tags": [
       "AI",
       "emerging technology",
@@ -306,7 +306,7 @@
     "learning_aim": "B",
     "topic": "B1.1.1 Bluetooth",
     "front": "What is Bluetooth, and what is its typical range?",
-    "back": "Bluetooth is a short-range wireless standard used to connect devices over Personal Area Networks (PANs), typically within 10 metres (Class 2). It is commonly used for connecting keyboards, headphones, and smartphones.",
+    "back": "Bluetooth is a short-range wireless link (about 10 metres) that connects nearby devices, like a phone to some headphones or a keyboard. It forms a personal area network (PAN).",
     "tags": [
       "connectivity",
       "Bluetooth",
@@ -318,7 +318,7 @@
     "learning_aim": "B",
     "topic": "B1.1.3 Wi-Fi",
     "front": "What is Wi-Fi, and which IEEE standard defines it?",
-    "back": "Wi-Fi is a wireless networking technology that allows devices to connect to a Local Area Network (LAN) and the internet using radio waves. It is defined by the IEEE 802.11 family of standards (e.g. 802.11ac, 802.11ax/Wi-Fi 6).",
+    "back": "Wi-Fi is wireless networking that uses radio waves to connect devices to the internet. It follows the IEEE 802.11 standards (for example Wi-Fi 6 is also called 802.11ax).",
     "tags": [
       "connectivity",
       "Wi-Fi",
@@ -331,7 +331,7 @@
     "learning_aim": "B",
     "topic": "B1.1.4 Ethernet",
     "front": "What is Ethernet, and what are two advantages over Wi-Fi?",
-    "back": "Ethernet is a wired networking standard (IEEE 802.3) that connects devices using cables (e.g. Cat5e, Cat6). Advantages over Wi-Fi: faster and more consistent speeds, and more secure as signals cannot be intercepted wirelessly.",
+    "back": "Ethernet is a wired connection using network cables (like Cat5e or Cat6). It is faster, more reliable and more secure than Wi-Fi because the signal can't be picked up through the air.",
     "tags": [
       "connectivity",
       "Ethernet",
@@ -344,7 +344,7 @@
     "learning_aim": "B",
     "topic": "B2.1 Network Topologies",
     "front": "What is a star network topology?",
-    "back": "In a star topology, all devices (nodes) connect to a central switch or hub. If one node fails, others are unaffected. The main disadvantage is that if the central switch fails, the entire network goes down.",
+    "back": "A star topology connects every device to a central switch. If one device breaks, the rest keep working. The downside is that if the central switch fails, the whole network goes down.",
     "tags": [
       "network topology",
       "star",
@@ -356,7 +356,7 @@
     "learning_aim": "B",
     "topic": "B2.1 Network Topologies",
     "front": "Compare ring and bus network topologies.",
-    "back": "In a ring topology, each device connects to exactly two others, forming a closed loop; a single break can disrupt the whole network. In a bus topology, all devices share one central cable (backbone); collisions occur if multiple devices transmit simultaneously, and a break in the bus disrupts all communications.",
+    "back": "Ring: each device connects to two others in a loop; a single break stops the whole network. Bus: all devices share one main cable; a break in that cable stops everything, and transmissions can clash.",
     "tags": [
       "network topology",
       "ring",
@@ -369,7 +369,7 @@
     "learning_aim": "B",
     "topic": "B2.2.1 PAN",
     "front": "What does PAN stand for, and give an example of its use?",
-    "back": "PAN stands for Personal Area Network. It covers a very short range (typically up to 10 m) and connects personal devices, such as a smartphone paired to a Bluetooth headset or smartwatch.",
+    "back": "PAN stands for Personal Area Network. It covers a very small area (about 10 metres) and connects personal devices, like a phone linked to Bluetooth headphones or a smartwatch.",
     "tags": [
       "networks",
       "PAN",
@@ -381,7 +381,7 @@
     "learning_aim": "B",
     "topic": "B2.2.2 LAN",
     "front": "What is a LAN?",
-    "back": "A Local Area Network (LAN) connects devices within a limited geographic area such as a single building or campus. LANs are typically privately owned and use Ethernet or Wi-Fi. They offer high speeds and low latency.",
+    "back": "A Local Area Network (LAN) connects devices in one building or campus. It is usually privately owned, uses Ethernet or Wi-Fi, and offers fast speeds with low delay.",
     "tags": [
       "networks",
       "LAN",
@@ -393,7 +393,7 @@
     "learning_aim": "B",
     "topic": "B2.2.3 WAN",
     "front": "Difference between a LAN and a WAN?",
-    "back": "A LAN (Local Area Network) covers a small area (one building/site) and is usually privately owned. A WAN (Wide Area Network) spans large geographic distances (cities, countries, or globally), often using leased lines or the internet, and is typically managed by a telecoms provider.",
+    "back": "A LAN (Local Area Network) covers a small area (one building or site) and is usually privately owned. A WAN (Wide Area Network) covers a huge area — cities, countries or the whole world — often using the internet or leased lines, run by a telecoms provider.",
     "tags": [
       "networks",
       "LAN",
@@ -406,7 +406,7 @@
     "learning_aim": "B",
     "topic": "B2.2.4 VPN",
     "front": "What is a VPN and how does it protect data?",
-    "back": "A Virtual Private Network (VPN) creates an encrypted tunnel between a device and a remote server over the public internet. It masks the user's IP address and encrypts all transmitted data, protecting it from interception and enabling secure remote access to corporate networks.",
+    "back": "A Virtual Private Network (VPN) builds a secure, encrypted 'tunnel' between your device and a server over the internet. It hides your IP address and scrambles your data, so it can't be read or intercepted, and lets you safely reach the office network from home.",
     "tags": [
       "VPN",
       "encryption",
@@ -419,7 +419,7 @@
     "learning_aim": "B",
     "topic": "B2.3 Choosing a Network",
     "front": "Give three factors affecting the choice of network for an organisation.",
-    "back": "Cost (installation and running costs) • Security (protection of data in transit) • Scalability and compatibility with existing hardware and software. Organisations must also consider downtime during implementation and long-term productivity impact.",
+    "back": "Cost (to set up and run) • Security (protecting data while it travels) • Scalability and whether it works with existing hardware and software. Organisations also think about downtime and the long-term effect on productivity.",
     "tags": [
       "networks",
       "choice",
@@ -431,7 +431,7 @@
     "learning_aim": "B",
     "topic": "B3.1.1 Email Protocols",
     "front": "What is the difference between POP3 and IMAP for email retrieval?",
-    "back": "POP3 (Post Office Protocol 3) downloads emails to a local device and typically deletes them from the server. IMAP (Internet Message Access Protocol) keeps emails on the server and synchronises them across multiple devices, making it better for users accessing email on several devices.",
+    "back": "POP3 downloads emails to one device and usually removes them from the server. IMAP keeps emails on the server and syncs them across all your devices, so it's better if you check email on several devices.",
     "tags": [
       "protocols",
       "email",
@@ -445,7 +445,7 @@
     "learning_aim": "B",
     "topic": "B3.1.1 SMTP",
     "front": "What does SMTP stand for and what is it used for?",
-    "back": "SMTP stands for Simple Mail Transfer Protocol. It is used to send and relay email messages between mail servers. SMTP works alongside POP3 or IMAP: SMTP sends mail, while POP3/IMAP retrieve it.",
+    "back": "SMTP stands for Simple Mail Transfer Protocol. It is used to send and pass on emails between mail servers. SMTP sends mail, while POP3 or IMAP receive it.",
     "tags": [
       "protocols",
       "SMTP",
@@ -458,7 +458,7 @@
     "learning_aim": "B",
     "topic": "B3.1.3 HTTP and HTTPS",
     "front": "What is the difference between HTTP and HTTPS?",
-    "back": "HTTP (HyperText Transfer Protocol) transmits web page data in plain text, making it vulnerable to interception. HTTPS (HTTP Secure) adds TLS/SSL encryption, ensuring data passed between the browser and server is secure. HTTPS is required for e-commerce and login pages.",
+    "back": "HTTP sends web page data as plain text, so it could be read by others. HTTPS adds encryption (TLS/SSL), scrambling data between the browser and server — shown by the padlock. HTTPS is needed for logins and online shopping.",
     "tags": [
       "protocols",
       "HTTP",
@@ -472,7 +472,7 @@
     "learning_aim": "B",
     "topic": "B3.1 TCP/IP",
     "front": "What does TCP/IP stand for and what is its role?",
-    "back": "TCP/IP stands for Transmission Control Protocol/Internet Protocol. It is the foundational suite of protocols governing how data is packaged, addressed, transmitted, and received across the internet and local networks.",
+    "back": "TCP/IP is the set of rules that lets computers talk to each other over the internet. It packages data, gives it an address, sends it, and puts it back together at the other end.",
     "tags": [
       "protocols",
       "TCP/IP",
@@ -484,7 +484,7 @@
     "learning_aim": "B",
     "topic": "B3.1.4 Secure Payment Protocols",
     "front": "What protocol is used to secure online payment transactions?",
-    "back": "HTTPS with TLS (Transport Layer Security) encrypts payment data in transit. Additionally, payment systems use tokenisation and 3D Secure (3DS) authentication to protect card details and verify the cardholder's identity.",
+    "back": "Online payments are protected with HTTPS/TLS encryption, plus extra checks like 3D Secure (a code from your bank) and tokenisation (a fake number is used instead of your real card number).",
     "tags": [
       "protocols",
       "payment",
@@ -497,7 +497,7 @@
     "learning_aim": "B",
     "topic": "B3.3 Bandwidth and Latency",
     "front": "What is bandwidth?",
-    "back": "Bandwidth is the maximum amount of data that can be transmitted over a network connection in a given time, measured in megabits per second (Mbps) or gigabits per second (Gbps). Higher bandwidth allows more data to be sent simultaneously, improving performance for data-intensive tasks.",
+    "back": "Bandwidth is the most data that can travel over a connection in a set time, measured in megabits or gigabits per second (Mbps/Gbps). More bandwidth means more data can be sent at once.",
     "tags": [
       "bandwidth",
       "transmission",
@@ -509,7 +509,7 @@
     "learning_aim": "B",
     "topic": "B3.3 Bandwidth and Latency",
     "front": "What is latency and how does it affect network performance?",
-    "back": "Latency is the time delay between a data packet being sent and received, measured in milliseconds (ms). High latency causes noticeable lag in real-time applications such as video calls, online gaming, and VoIP, even when bandwidth is sufficient.",
+    "back": "Latency is the delay between sending data and receiving it, measured in milliseconds (ms). High latency causes lag in video calls and online games, even when bandwidth is good.",
     "tags": [
       "latency",
       "transmission",
@@ -522,7 +522,7 @@
     "learning_aim": "B",
     "topic": "B3.4 File Formats — Audio",
     "front": "What is the difference between MP3 and WAV audio formats?",
-    "back": "MP3 uses lossy compression to reduce file size by removing audio data deemed less perceptible to the human ear — suitable for music streaming. WAV is an uncompressed format that preserves full audio quality but produces much larger files, used in professional audio production.",
+    "back": "MP3 shrinks music files by removing sounds you barely hear, so files are small — good for streaming. WAV is uncompressed with perfect quality but huge files — used in music production.",
     "tags": [
       "file formats",
       "audio",
@@ -536,7 +536,7 @@
     "learning_aim": "B",
     "topic": "B3.4 File Formats — Video",
     "front": "Give two common video file formats and describe their uses.",
-    "back": "MP4 (MPEG-4) is widely used for streaming and sharing due to its high compression and broad device compatibility. AVI (Audio Video Interleave) is an older Microsoft format with larger file sizes but high quality, still used in some editing workflows.",
+    "back": "MP4 is widely used for streaming and sharing because it compresses well and plays on almost anything. AVI is an older Microsoft format with big files but high quality, still used in some video editing.",
     "tags": [
       "file formats",
       "video",
@@ -550,7 +550,7 @@
     "learning_aim": "B",
     "topic": "B3.5 Compression Types",
     "front": "What is lossy compression?",
-    "back": "Lossy compression permanently removes some data from a file to achieve a smaller file size. The lost data cannot be recovered, so quality is reduced. It is used for images (JPEG), audio (MP3), and video (MP4) where some quality loss is acceptable.",
+    "back": "Lossy compression permanently removes some data to make a file smaller. The removed data can't be recovered, so quality drops. Used for JPEG images, MP3 audio and MP4 video.",
     "tags": [
       "compression",
       "lossy",
@@ -562,7 +562,7 @@
     "learning_aim": "B",
     "topic": "B3.5 Compression Types",
     "front": "What is lossless compression, and give an example?",
-    "back": "Lossless compression reduces file size without any loss of data; the original file can be perfectly reconstructed. Examples include PNG (images), FLAC (audio), and ZIP (general files). It is used where data integrity is critical, such as software distribution.",
+    "back": "Lossless compression shrinks a file without losing any data, so the original can be perfectly rebuilt. Examples: PNG (images), FLAC (audio) and ZIP (files). Used where data must stay perfect.",
     "tags": [
       "compression",
       "lossless",
@@ -574,7 +574,7 @@
     "learning_aim": "B",
     "topic": "B3.6 Codecs",
     "front": "What is a codec?",
-    "back": "A codec (COder-DECoder) is software or hardware that compresses and decompresses digital audio or video data. Common video codecs include H.264 and H.265 (HEVC); common audio codecs include AAC and MP3. Without the correct codec, media cannot be played.",
+    "back": "A codec is a program that shrinks (compresses) and expands (decompresses) audio or video so it can be played. Examples: H.264 for video, AAC or MP3 for audio. Without the right codec, a file won't play.",
     "tags": [
       "codec",
       "audio",
@@ -587,7 +587,7 @@
     "learning_aim": "B",
     "topic": "B1.2 Connection Types",
     "front": "Give two implications of choosing a wireless connection over a wired one.",
-    "back": "Wireless connections offer greater mobility, allowing devices to be used anywhere within range without physical cables. However, they are more susceptible to interference and security risks (e.g. eavesdropping on unsecured Wi-Fi) and typically have lower and less consistent speeds than wired connections.",
+    "back": "Wireless offers freedom to move around without cables. But it's more open to interference, can be less secure (e.g. unsecured Wi-Fi), and is usually slower and less consistent than wired.",
     "tags": [
       "connectivity",
       "wireless",
@@ -600,7 +600,7 @@
     "learning_aim": "B",
     "topic": "B2.4 Network Performance",
     "front": "Name two network components and explain how they affect performance.",
-    "back": "A router directs data packets between networks; a slow router creates a bottleneck reducing overall throughput. A switch connects devices within a LAN; a managed switch can prioritise traffic (Quality of Service) to improve performance for critical applications.",
+    "back": "A router directs data between networks; a slow router creates a bottleneck. A switch connects devices within a LAN; a managed switch can prioritise important traffic (Quality of Service) to keep key apps fast.",
     "tags": [
       "networks",
       "router",
@@ -614,7 +614,7 @@
     "learning_aim": "B",
     "topic": "B3.2 Security in Transmission",
     "front": "What is a man-in-the-middle (MitM) attack in data transmission?",
-    "back": "A MitM attack occurs when an attacker secretly intercepts and potentially alters communications between two parties who believe they are communicating directly. It is a risk on unsecured public Wi-Fi networks. HTTPS and VPNs help mitigate this threat.",
+    "back": "A man-in-the-middle (MitM) attack is when a hacker secretly gets between two people or systems and reads or changes what they send each other. It is a risk on unsecured public Wi-Fi. HTTPS and VPNs help stop it.",
     "tags": [
       "security",
       "MitM",
@@ -627,7 +627,7 @@
     "learning_aim": "C",
     "topic": "C1.1.1 Private Cloud",
     "front": "What is a private cloud?",
-    "back": "A private cloud is a cloud computing environment dedicated exclusively to one organisation, hosted either on-premises or by a third party. It offers greater control, customisation, and security than public cloud, but at higher cost.",
+    "back": "A private cloud is a cloud used by only one organisation, hosted at their site or by another company for them. It gives more control and security than public cloud, but costs more.",
     "tags": [
       "cloud",
       "private cloud",
@@ -639,7 +639,7 @@
     "learning_aim": "C",
     "topic": "C1.1.2 Public Cloud",
     "front": "What is a public cloud?",
-    "back": "A public cloud is a cloud environment where computing resources (servers, storage, software) are owned and managed by a third-party provider (e.g. Microsoft Azure, AWS, Google Cloud) and shared across multiple customers over the internet.",
+    "back": "A public cloud is where servers and software are owned and run by a provider (Azure, AWS, Google Cloud) and shared between many customers over the internet.",
     "tags": [
       "cloud",
       "public cloud",
@@ -651,7 +651,7 @@
     "learning_aim": "C",
     "topic": "C1.1.3 Hybrid Cloud",
     "front": "What is a hybrid cloud and why would an organisation use one?",
-    "back": "A hybrid cloud combines private and public cloud environments, allowing data and applications to move between them. Organisations use it to keep sensitive data on a private cloud while using public cloud for less sensitive workloads, balancing cost and security.",
+    "back": "A hybrid cloud combines a private and a public cloud so data and apps can move between them. Companies keep sensitive data private while using the cheaper public cloud for the rest.",
     "tags": [
       "cloud",
       "hybrid cloud",
@@ -663,7 +663,7 @@
     "learning_aim": "C",
     "topic": "C1.1.4 IaaS",
     "front": "What does IaaS stand for and what does it provide?",
-    "back": "IaaS stands for Infrastructure as a Service. The provider supplies virtualised computing infrastructure (servers, networking, storage) over the internet. The customer manages the OS, middleware, and applications. Example: Amazon EC2.",
+    "back": "IaaS (Infrastructure as a Service) — the provider gives you servers, storage and networking; you manage the software. Example: Amazon EC2.",
     "tags": [
       "cloud",
       "IaaS",
@@ -676,7 +676,7 @@
     "learning_aim": "C",
     "topic": "C1.1.5 SaaS",
     "front": "What does SaaS stand for and give two examples?",
-    "back": "SaaS stands for Software as a Service. The provider hosts and delivers software over the internet; users access it via a web browser without installing it locally. Examples: Microsoft 365, Google Workspace, Salesforce.",
+    "back": "SaaS (Software as a Service) — the provider hosts software you use through a web browser, no install needed. Examples: Microsoft 365, Google Workspace, Salesforce.",
     "tags": [
       "cloud",
       "SaaS",
@@ -689,7 +689,7 @@
     "learning_aim": "C",
     "topic": "C1.1.6 PaaS",
     "front": "What does PaaS stand for and who uses it?",
-    "back": "PaaS stands for Platform as a Service. It provides a cloud-based environment where developers can build, test, and deploy applications without managing the underlying infrastructure. Example: Google App Engine, Microsoft Azure App Service.",
+    "back": "PaaS (Platform as a Service) — a ready-made environment where developers build, test and launch apps without managing the servers underneath. Examples: Google App Engine, Azure App Service.",
     "tags": [
       "cloud",
       "PaaS",
@@ -702,7 +702,7 @@
     "learning_aim": "C",
     "topic": "C1.1 Cloud Computing",
     "front": "Compare IaaS, PaaS, and SaaS — what does each layer manage?",
-    "back": "IaaS: provider manages hardware/virtualisation; user manages OS upwards. PaaS: provider manages hardware + OS + runtime; user manages application and data. SaaS: provider manages everything; user only interacts with the application.",
+    "back": "IaaS: provider manages the hardware, you manage the software. PaaS: provider also manages the operating system and platform, you just build the app. SaaS: provider manages everything, you just use the app.",
     "tags": [
       "cloud",
       "IaaS",
@@ -716,7 +716,7 @@
     "learning_aim": "C",
     "topic": "C1.2 Cloud Implications",
     "front": "Give two benefits and two drawbacks of cloud computing for organisations.",
-    "back": "Benefits: scalability (scale resources up/down on demand) and reduced capital expenditure (pay-as-you-go). Drawbacks: dependency on internet connectivity (downtime if connection fails) and potential security and data sovereignty concerns.",
+    "back": "Benefits: you can scale up or down instantly, and you pay as you go instead of buying hardware. Drawbacks: you depend on the internet (down if the connection fails), plus security and data location concerns.",
     "tags": [
       "cloud",
       "implications",
@@ -728,7 +728,7 @@
     "learning_aim": "C",
     "topic": "C1.3.1 VPNs",
     "front": "How does a VPN support remote working?",
-    "back": "A VPN allows remote employees to securely connect to their organisation's internal network over the internet by creating an encrypted tunnel. This means home workers can access files, applications, and systems as if they were in the office.",
+    "back": "A VPN lets remote workers connect to the office network securely over the internet, through an encrypted tunnel. They can reach files and systems as if they were sitting in the office.",
     "tags": [
       "VPN",
       "remote working",
@@ -740,7 +740,7 @@
     "learning_aim": "C",
     "topic": "C1.3.2 Remote Desktop",
     "front": "What is remote desktop technology?",
-    "back": "Remote desktop software (e.g. Microsoft Remote Desktop, TeamViewer) allows a user to view and control another computer's desktop over a network connection. It is used by IT support staff and remote workers who need access to office computers.",
+    "back": "Remote desktop software (like Microsoft Remote Desktop or TeamViewer) lets you view and control another computer's screen over a network. IT support and remote workers use it to reach office computers.",
     "tags": [
       "remote desktop",
       "remote working",
@@ -752,7 +752,7 @@
     "learning_aim": "C",
     "topic": "C1.4 Online System Selection",
     "front": "What does 'scalability' mean when choosing an online system?",
-    "back": "Scalability refers to the ability of a system to handle increasing workloads by adding resources (scaling up or scaling out). Cloud systems are considered highly scalable because additional storage or computing power can be provisioned quickly to meet demand.",
+    "back": "Scalability means the system can handle more work by adding more resources. Cloud systems are highly scalable because you can quickly add storage or computing power when needed.",
     "tags": [
       "cloud",
       "scalability",
@@ -764,7 +764,7 @@
     "learning_aim": "C",
     "topic": "C2.1.1 Social Media",
     "front": "Give two implications of social media use for organisations.",
-    "back": "Positive: organisations can use social media for marketing, brand building, and direct customer engagement at low cost. Negative: negative reviews or staff misconduct posted publicly can cause reputational damage quickly and be difficult to control.",
+    "back": "Good: cheap marketing, brand building and direct contact with customers. Bad: a negative review or staff mistake can go viral and damage the reputation very quickly.",
     "tags": [
       "social media",
       "online communities",
@@ -776,7 +776,7 @@
     "learning_aim": "C",
     "topic": "C2.1.2 Blog and Vlog",
     "front": "What is the difference between a blog and a vlog?",
-    "back": "A blog (weblog) is an online journal or informational website consisting primarily of written posts. A vlog (video blog) is a blog in video format, typically hosted on platforms such as YouTube. Both are used for sharing opinions, tutorials, and news.",
+    "back": "A blog is a written online journal or article site. A vlog is the same but in video form, usually hosted on YouTube.",
     "tags": [
       "blog",
       "vlog",
@@ -789,7 +789,7 @@
     "learning_aim": "C",
     "topic": "C2.1.3 Wiki",
     "front": "What is a wiki and give an example?",
-    "back": "A wiki is a collaborative website where multiple users can create and edit content. Wikipedia is the most widely known example. Organisations use internal wikis (e.g. Confluence) for knowledge management and documentation.",
+    "back": "A wiki is a website that many people can edit together. Wikipedia is the best-known example. Companies use internal wikis to store knowledge and documentation.",
     "tags": [
       "wiki",
       "online communities",
@@ -801,7 +801,7 @@
     "learning_aim": "C",
     "topic": "C2.1.6 Podcasts",
     "front": "What is a podcast?",
-    "back": "A podcast is an on-demand audio programme distributed via the internet as episodic files, typically in MP3 format. Users subscribe to podcast feeds and listen at a time convenient to them, through platforms such as Spotify or Apple Podcasts.",
+    "back": "A podcast is an audio show you can download or stream and listen to whenever you like, through apps like Spotify or Apple Podcasts.",
     "tags": [
       "podcast",
       "online communities",
@@ -813,7 +813,7 @@
     "learning_aim": "C",
     "topic": "C2.2.4 Privacy",
     "front": "What privacy risks arise for individuals using online communities?",
-    "back": "Personal data (location, age, relationships) shared on social media can be harvested by third parties or used for targeted advertising. Data breaches on platforms can expose private information. Users should apply privacy settings and avoid sharing sensitive details.",
+    "back": "Personal details shared on social media can be collected and used for ads, and data breaches can expose private information. Users should use privacy settings and avoid sharing sensitive details.",
     "tags": [
       "privacy",
       "online communities",
@@ -825,7 +825,7 @@
     "learning_aim": "C",
     "topic": "C2.2.5 Security",
     "front": "Give two security risks associated with online communities.",
-    "back": "Phishing attacks exploit trust built in online communities to trick users into revealing credentials. Malicious links shared in forums or instant messages can deliver malware to a user's device.",
+    "back": "Phishing tricks people into giving up login details by pretending to be someone they trust. Malicious links shared in forums or messages can install malware on a device.",
     "tags": [
       "security",
       "online communities",
@@ -837,7 +837,7 @@
     "learning_aim": "C",
     "topic": "C2.2.9 Productivity",
     "front": "How can online communities both increase and decrease employee productivity?",
-    "back": "Online communities and instant messaging tools (e.g. Microsoft Teams) can increase productivity by enabling rapid collaboration and knowledge sharing. However, excessive use of social media or chatrooms during work hours can distract employees and reduce output.",
+    "back": "Tools like Microsoft Teams can boost productivity through quick collaboration. But too much social media or chatting during work time can distract staff and cut output.",
     "tags": [
       "productivity",
       "online communities",
@@ -849,7 +849,7 @@
     "learning_aim": "C",
     "topic": "C2.2.10 Acceptable Use Policies",
     "front": "What is an acceptable use policy (AUP) in relation to online communities?",
-    "back": "An AUP is a document that sets out rules governing how employees may use an organisation's IT systems and internet access, including rules about social media and online communities. It protects the organisation from legal liability and misuse of resources.",
+    "back": "An acceptable use policy (AUP) is a written set of rules on how staff may use the company's IT and internet, including social media. It protects the company from legal trouble and misuse.",
     "tags": [
       "AUP",
       "policy",
@@ -861,7 +861,7 @@
     "learning_aim": "C",
     "topic": "C2.1.5 Instant Messaging",
     "front": "Give two business uses of instant messaging platforms.",
-    "back": "Instant messaging tools such as Microsoft Teams or Slack allow employees to communicate in real time via text, voice, or video. They support remote working by replicating informal office communication and can integrate with other business applications (e.g. project management tools).",
+    "back": "Instant messaging tools like Teams or Slack let staff chat, call and video in real time. They support remote work and can plug into other business apps.",
     "tags": [
       "instant messaging",
       "collaboration",
@@ -873,7 +873,7 @@
     "learning_aim": "C",
     "topic": "C1.4.1 Cloud Security",
     "front": "Give two security considerations when selecting a cloud provider.",
-    "back": "Data encryption (both in transit and at rest) ensures data cannot be read if intercepted. Data sovereignty — checking whether data is stored in the UK/EU — ensures compliance with UK GDPR, which restricts transfers of personal data outside the UK.",
+    "back": "Data should be encrypted (in transit and when stored) so it can't be read if stolen. Data sovereignty — checking data stays in the UK/EU — keeps it compliant with UK GDPR.",
     "tags": [
       "cloud",
       "security",
@@ -886,7 +886,7 @@
     "learning_aim": "C",
     "topic": "C2.2.1 User Experience",
     "front": "Why is accessibility an important consideration for online communities?",
-    "back": "Accessibility ensures that users with disabilities (visual, hearing, motor, or cognitive) can participate in online communities. Failure to provide accessible features (e.g. captions, screen-reader-compatible layouts) may exclude users and could breach the Equality Act 2010.",
+    "back": "Accessibility means making the site usable by people with disabilities (sight, hearing, motor or thinking). Missing features like captions or screen-reader support could exclude users and break the Equality Act.",
     "tags": [
       "accessibility",
       "online communities",
@@ -899,7 +899,7 @@
     "learning_aim": "C",
     "topic": "C2.2.6 Downtime",
     "front": "What is the impact of downtime on an organisation using an online community platform?",
-    "back": "Downtime means the platform is unavailable, preventing communication and collaboration. This reduces productivity and may affect customer relationships if the platform is customer-facing. Organisations should check a provider's Service Level Agreement (SLA) for uptime guarantees.",
+    "back": "Downtime means the platform is unavailable, so nobody can communicate or work. It costs productivity and may upset customers. Organisations check a provider's Service Level Agreement (SLA) for uptime promises.",
     "tags": [
       "downtime",
       "online communities",
@@ -912,7 +912,7 @@
     "learning_aim": "C",
     "topic": "C1.4.2 Cloud Cost",
     "front": "How does cloud computing change the cost model for organisations?",
-    "back": "Cloud computing shifts costs from capital expenditure (CapEx — buying physical hardware) to operational expenditure (OpEx — paying a subscription or usage-based fee). This improves cash flow and avoids the cost of maintaining ageing hardware.",
+    "back": "Cloud shifts costs from buying hardware up-front (CapEx) to paying a subscription or usage fee (OpEx). This helps cash flow and avoids the cost of maintaining old machines.",
     "tags": [
       "cloud",
       "cost",
@@ -926,7 +926,7 @@
     "learning_aim": "C",
     "topic": "C2.1.7 Forums",
     "front": "What is an online forum and how is it used?",
-    "back": "An online forum is a discussion platform where users post questions, answers, and comments organised into threads and topics. Examples include Reddit and specialist tech communities. Organisations use forums for community support and product feedback.",
+    "back": "An online forum is a discussion site where people post questions and answers in 'threads'. Examples: Reddit and tech communities. Companies use forums for support and feedback.",
     "tags": [
       "forums",
       "online communities",
@@ -938,7 +938,7 @@
     "learning_aim": "D",
     "topic": "D1.1.1 Malware",
     "front": "What is malware?",
-    "back": "Malware (malicious software) is any software intentionally designed to damage, disrupt, or gain unauthorised access to a computer system. Types include viruses, worms, ransomware, spyware, and Trojans.",
+    "back": "Malware is 'malicious software' — any program designed to damage, disrupt or break into a computer system. Types include viruses, worms, ransomware, spyware and Trojans.",
     "tags": [
       "malware",
       "threats",
@@ -950,7 +950,7 @@
     "learning_aim": "D",
     "topic": "D1.1.1 Malware Types",
     "front": "What is ransomware?",
-    "back": "Ransomware is malware that encrypts the victim's files and demands a ransom payment (often cryptocurrency) for the decryption key. High-profile examples include the WannaCry attack (2017), which affected NHS systems in the UK.",
+    "back": "Ransomware locks (encrypts) a victim's files and demands payment, usually in cryptocurrency, to unlock them. The WannaCry attack (2017) famously hit NHS systems.",
     "tags": [
       "malware",
       "ransomware",
@@ -963,7 +963,7 @@
     "learning_aim": "D",
     "topic": "D1.1.1 Malware Types",
     "front": "Difference between a virus and a worm?",
-    "back": "A virus attaches itself to a legitimate file and requires a user action (e.g. opening the file) to spread. A worm is self-replicating and spreads automatically across networks without user interaction, often exploiting security vulnerabilities.",
+    "back": "A virus hangs onto a legitimate file and needs a user to open it to spread. A worm copies itself and spreads automatically across networks without any user action.",
     "tags": [
       "malware",
       "virus",
@@ -977,7 +977,7 @@
     "learning_aim": "D",
     "topic": "D1.1.2 Hackers",
     "front": "What is the difference between a white hat and a black hat hacker?",
-    "back": "A white hat (ethical) hacker is employed to test systems for vulnerabilities with permission, improving security. A black hat hacker exploits vulnerabilities illegally and maliciously, with the intent to steal data or cause damage.",
+    "back": "A white-hat (ethical) hacker tests systems with permission to find and fix weaknesses. A black-hat hacker breaks in illegally to steal data or cause damage.",
     "tags": [
       "hackers",
       "threats",
@@ -990,7 +990,7 @@
     "learning_aim": "D",
     "topic": "D1.1.4 Social Engineering",
     "front": "What is phishing?",
-    "back": "Phishing is a social engineering attack where criminals send fraudulent emails or messages that appear to be from legitimate organisations (e.g. banks or HMRC) to trick recipients into revealing sensitive information such as passwords or bank details.",
+    "back": "Phishing sends fake emails or messages pretending to be a real company (bank, HMRC) to trick you into giving away passwords or bank details.",
     "tags": [
       "social engineering",
       "phishing",
@@ -1003,7 +1003,7 @@
     "learning_aim": "D",
     "topic": "D1.1.4 Social Engineering",
     "front": "What is pretexting in social engineering?",
-    "back": "Pretexting involves an attacker fabricating a scenario (pretext) to manipulate a victim into revealing confidential information or performing an action. For example, an attacker may impersonate IT support to obtain a user's password.",
+    "back": "Pretexting is when an attacker makes up a believable story to trick you, e.g. pretending to be IT support to get your password.",
     "tags": [
       "social engineering",
       "pretexting",
@@ -1015,7 +1015,7 @@
     "learning_aim": "D",
     "topic": "D1.2 Internal Threats",
     "front": "Why are portable devices (e.g. USB drives) considered an internal threat to data?",
-    "back": "USB drives and other portable storage can be used to copy sensitive data and remove it from the organisation, intentionally or accidentally. They can also introduce malware if infected drives are plugged into organisational computers.",
+    "back": "USB drives can be used to copy and remove sensitive data, on purpose or by accident. An infected drive can also spread malware when plugged into a company computer.",
     "tags": [
       "internal threats",
       "portable devices",
@@ -1027,7 +1027,7 @@
     "learning_aim": "D",
     "topic": "D1.3 Impact of Threats",
     "front": "What is the impact of a data breach on an organisation's public image?",
-    "back": "A data breach can severely damage customer trust, leading to loss of business and reputational harm. Organisations may face negative press coverage, loss of customers to competitors, and difficulty attracting new clients — particularly if personal data was compromised.",
+    "back": "A data breach badly damages customer trust, so people leave and revenue drops. There is bad press, lost customers and difficulty attracting new ones — especially if personal data was exposed.",
     "tags": [
       "impact",
       "data breach",
@@ -1039,7 +1039,7 @@
     "learning_aim": "D",
     "topic": "D2.1.1 File Permissions",
     "front": "What are file permissions and why are they used?",
-    "back": "File permissions control who can read, write, or execute a file or folder. By assigning permissions to specific users or groups, organisations restrict access to sensitive data, reducing the risk of unauthorised access or accidental modification.",
+    "back": "File permissions set who can read, write or run a file or folder. Assigning permissions to users or groups limits access to sensitive data and reduces the risk of unauthorised changes.",
     "tags": [
       "file permissions",
       "access control",
@@ -1051,7 +1051,7 @@
     "learning_aim": "D",
     "topic": "D2.1.2 Access Levels",
     "front": "What is the principle of least privilege?",
-    "back": "The principle of least privilege means users are granted only the minimum level of access rights required to perform their job. This limits the potential damage from insider threats or compromised accounts, as users cannot access systems or data outside their role.",
+    "back": "Least privilege means users are only given the access they need for their job — nothing more. This limits the damage if their account is compromised.",
     "tags": [
       "access levels",
       "least privilege",
@@ -1063,7 +1063,7 @@
     "learning_aim": "D",
     "topic": "D2.1.3 Backup and Recovery",
     "front": "What is the 3-2-1 backup rule?",
-    "back": "The 3-2-1 rule recommends keeping 3 copies of data, on 2 different types of storage media, with 1 copy stored off-site (e.g. cloud or remote location). This strategy protects against data loss from hardware failure, ransomware, or physical disasters.",
+    "back": "The 3-2-1 rule: keep 3 copies of your data, on 2 different storage types, with 1 copy stored off-site. This protects against hardware failure, ransomware and disasters.",
     "tags": [
       "backup",
       "recovery",
@@ -1075,7 +1075,7 @@
     "learning_aim": "D",
     "topic": "D2.1.4 Multi-Factor Authentication",
     "front": "What is multi-factor authentication (MFA)?",
-    "back": "MFA requires users to provide two or more verification factors before gaining access: something they know (password), something they have (authenticator app or hardware token), and/or something they are (biometric). It significantly reduces risk from stolen passwords.",
+    "back": "MFA asks for two or more proofs before letting you in: something you know (password), something you have (phone or token), and something you are (fingerprint). It greatly reduces the risk from stolen passwords.",
     "tags": [
       "MFA",
       "authentication",
@@ -1087,7 +1087,7 @@
     "learning_aim": "D",
     "topic": "D2.1.5 Biometrics",
     "front": "Give three examples of biometric authentication methods.",
-    "back": "Fingerprint scanning, facial recognition, and iris scanning are all biometric authentication methods. They use unique biological characteristics to verify identity, offering stronger security than passwords as they are much harder to steal or replicate.",
+    "back": "Fingerprint scanning, facial recognition and iris scanning. They use your unique biology to verify who you are, making them much harder to steal than a password.",
     "tags": [
       "biometrics",
       "authentication",
@@ -1099,7 +1099,7 @@
     "learning_aim": "D",
     "topic": "D2.1.6 Physical Access Control",
     "front": "Give two examples of physical access control methods.",
-    "back": "Swipe cards and PIN-protected door locks restrict physical entry to server rooms and sensitive areas. CCTV surveillance monitors access and deters unauthorised entry. Physical security prevents hardware theft and tampering.",
+    "back": "Swipe cards, PIN-protected doors and CCTV. These block physical entry to server rooms and deter theft, protecting hardware from theft or tampering.",
     "tags": [
       "physical security",
       "access control",
@@ -1111,7 +1111,7 @@
     "learning_aim": "D",
     "topic": "D2.1.7 Digital Certificates",
     "front": "What is a digital certificate?",
-    "back": "A digital certificate is an electronic document issued by a Certificate Authority (CA) that verifies the identity of a website or organisation. It binds a public key to an entity's identity and is used to establish encrypted HTTPS connections.",
+    "back": "A digital certificate is an electronic ID card for a website, issued by a trusted authority. It links a public key to the site's identity and is used to set up encrypted HTTPS.",
     "tags": [
       "digital certificate",
       "encryption",
@@ -1123,7 +1123,7 @@
     "learning_aim": "D",
     "topic": "D2.2 Antivirus Software",
     "front": "How does antivirus software protect a computer system?",
-    "back": "Antivirus software scans files and processes for known malware signatures and suspicious behaviour. It quarantines or deletes detected threats, provides real-time protection by monitoring activity, and receives regular updates to detect new malware variants.",
+    "back": "Antivirus scans files for known malware and suspicious behaviour. It quarantines or deletes threats, watches in real time, and updates regularly to catch new malware.",
     "tags": [
       "antivirus",
       "protection",
@@ -1135,7 +1135,7 @@
     "learning_aim": "D",
     "topic": "D2.3 Firewalls",
     "front": "What is a firewall and how does it protect a network?",
-    "back": "A firewall monitors and filters incoming and outgoing network traffic based on predefined security rules. It blocks unauthorised access attempts and can prevent malicious traffic from reaching devices on the network. Firewalls can be hardware or software-based.",
+    "back": "A firewall watches traffic coming in and out and allows or blocks it using set rules. It stops unauthorised access and blocks harmful traffic. It can be hardware or software.",
     "tags": [
       "firewall",
       "network security",
@@ -1147,7 +1147,7 @@
     "learning_aim": "D",
     "topic": "D2.4 Encryption",
     "front": "What is encryption and how does it protect stored data?",
-    "back": "Encryption transforms readable data (plaintext) into an unreadable format (ciphertext) using an algorithm and key. If encrypted storage is accessed without the key, the data cannot be read. Full-disk encryption (e.g. BitLocker) protects data on lost or stolen devices.",
+    "back": "Encryption scrambles readable data (plaintext) into unreadable code (ciphertext) using a key. Without the key it can't be read. Full-disk encryption (BitLocker) protects data on lost devices.",
     "tags": [
       "encryption",
       "stored data",
@@ -1159,7 +1159,7 @@
     "learning_aim": "D",
     "topic": "D2.4.3 HTTPS Encryption",
     "front": "How does HTTPS encryption protect users of secure websites?",
-    "back": "HTTPS uses TLS (Transport Layer Security) to encrypt data passing between the user's browser and the web server, preventing interception. A padlock icon in the browser address bar confirms a valid certificate is in use. It is essential for login pages and e-commerce.",
+    "back": "HTTPS uses TLS to encrypt data between your browser and the site, stopping interception. The padlock in the address bar shows a valid certificate is in use. Needed for logins and shopping.",
     "tags": [
       "HTTPS",
       "encryption",
@@ -1172,7 +1172,7 @@
     "learning_aim": "D",
     "topic": "D1.1.5 Natural Disasters",
     "front": "How can natural disasters pose a threat to data?",
-    "back": "Floods, fires, and earthquakes can physically destroy servers and storage hardware, resulting in permanent data loss. Organisations must protect against this risk using off-site backups, cloud storage, and disaster recovery plans.",
+    "back": "Floods, fires and earthquakes can physically destroy servers, causing permanent data loss. Protect against this with off-site backups, cloud storage and disaster recovery plans.",
     "tags": [
       "threats",
       "natural disaster",
@@ -1185,7 +1185,7 @@
     "learning_aim": "D",
     "topic": "D1.3.2 Financial Loss",
     "front": "How can a data breach lead to financial loss for an organisation?",
-    "back": "Organisations may face fines from the ICO under UK GDPR (up to £17.5 million or 4% of global annual turnover), compensation claims from affected individuals, and legal costs. There are also indirect costs such as reputational damage leading to lost business.",
+    "back": "Fines from the ICO under UK GDPR (up to £17.5 million or 4% of yearly turnover), compensation to victims, and legal costs — plus lost business from reputation damage.",
     "tags": [
       "financial loss",
       "UK GDPR",
@@ -1198,7 +1198,7 @@
     "learning_aim": "D",
     "topic": "D1.2.2 Accidental Disclosure",
     "front": "Give an example of accidental data disclosure and how to prevent it.",
-    "back": "An employee accidentally CC-ing personal data to the wrong recipient in an email is a common accidental disclosure. Prevention methods include staff training on data handling, email 'delay send' features, and data loss prevention (DLP) tools that flag sensitive data in emails.",
+    "back": "An employee accidentally emailing personal data to the wrong person. Prevent it with staff training, email 'delay send', and data loss prevention tools that flag sensitive data.",
     "tags": [
       "internal threats",
       "accidental disclosure",
@@ -1210,7 +1210,7 @@
     "learning_aim": "D",
     "topic": "D2.1 Audit Logs",
     "front": "What is an audit log and why is it important for data protection?",
-    "back": "An audit log is an automated record of user activities on a system, capturing events such as logins, file access, and changes. It supports data protection by enabling the detection of suspicious behaviour, investigation of incidents, and demonstrating compliance to regulators.",
+    "back": "An audit log is an automatic record of what users do — logins, file access, changes. It helps spot suspicious behaviour, investigate incidents, and show regulators the system is compliant.",
     "tags": [
       "audit log",
       "monitoring",
@@ -1222,7 +1222,7 @@
     "learning_aim": "D",
     "topic": "D1.1.1 Spyware",
     "front": "What is spyware?",
-    "back": "Spyware is malware that secretly monitors a user's activity and collects data (such as keystrokes, browsing history, and login credentials) without their knowledge, transmitting it to a third party. It can be installed via malicious downloads or drive-by website attacks.",
+    "back": "Spyware secretly watches what you do and collects data (keystrokes, browsing, logins) without you knowing, sending it to a third party. It can come from malicious downloads or dodgy websites.",
     "tags": [
       "malware",
       "spyware",
@@ -1234,7 +1234,7 @@
     "learning_aim": "D",
     "topic": "D1.1.3 Accidental Damage",
     "front": "Give two examples of accidental damage as a threat to data.",
-    "back": "Accidental deletion of critical files by an employee is a common accidental threat. Hardware failure (e.g. hard drive crash due to physical impact or power surge) can also cause data loss. Regular backups and access controls help mitigate these risks.",
+    "back": "Accidentally deleting important files, or a hard drive crash from a knock or power surge. Regular backups and access controls reduce the damage.",
     "tags": [
       "accidental damage",
       "threats",
@@ -1246,7 +1246,7 @@
     "learning_aim": "E",
     "topic": "E1.1.1 Online Retail",
     "front": "Give two implications of online retail (e-commerce) for organisations.",
-    "back": "E-commerce allows businesses to sell 24/7 to a global customer base, removing geographic limitations and reducing overhead costs compared to physical stores. However, organisations must invest in secure payment systems, website maintenance, and logistics to compete effectively.",
+    "back": "E-commerce lets shops sell 24/7 around the world, cutting the cost of physical stores. But they must invest in secure payment systems, website upkeep and logistics to compete.",
     "tags": [
       "e-commerce",
       "retail",
@@ -1258,7 +1258,7 @@
     "learning_aim": "E",
     "topic": "E1.1.2 Financial Services Online",
     "front": "Give two features of online banking services.",
-    "back": "Online banking allows customers to view balances, transfer funds, and pay bills at any time via a website or mobile app. Security features include multi-factor authentication (e.g. OTP codes) and device registration to prevent unauthorised access.",
+    "back": "Online banking lets customers check balances, move money and pay bills any time, via website or app. Security includes multi-factor authentication (one-time codes) and device registration.",
     "tags": [
       "financial services",
       "online banking",
@@ -1270,7 +1270,7 @@
     "learning_aim": "E",
     "topic": "E1.1.3 Online Education",
     "front": "Give two benefits of online education and training for individuals.",
-    "back": "Flexible access — learners can study at their own pace and from any location with internet access. Wider choice — individuals can access courses from institutions worldwide without needing to relocate or travel, often at lower cost than face-to-face provision.",
+    "back": "Flexible access — study at your own pace from anywhere with internet. Wider choice — courses from anywhere in the world, often cheaper than in-person.",
     "tags": [
       "education",
       "online learning",
@@ -1282,7 +1282,7 @@
     "learning_aim": "E",
     "topic": "E1.1.5 Entertainment and Leisure Online",
     "front": "Give two examples of online entertainment services and their implications.",
-    "back": "Streaming services (e.g. Netflix, Spotify) provide on-demand video and music, reducing the need for physical media. Online gaming platforms provide multiplayer experiences globally; however, both raise data privacy concerns and may contribute to sedentary lifestyles.",
+    "back": "Streaming (Netflix, Spotify) gives on-demand film and music. Online gaming connects players globally. Both raise privacy concerns and can encourage sitting too much.",
     "tags": [
       "entertainment",
       "streaming",
@@ -1294,7 +1294,7 @@
     "learning_aim": "E",
     "topic": "E1.1.6 Booking Systems",
     "front": "How do online booking systems benefit organisations and customers?",
-    "back": "Organisations benefit from reduced administration costs and 24/7 availability of bookings without staff involvement. Customers can instantly check availability, compare prices, and confirm bookings in real time, improving experience and convenience.",
+    "back": "Organisations save on admin and bookings go through 24/7 without staff. Customers can instantly check availability, compare prices and confirm bookings.",
     "tags": [
       "booking systems",
       "e-commerce",
@@ -1306,7 +1306,7 @@
     "learning_aim": "E",
     "topic": "E1.2.1 Transactional Data",
     "front": "What is transactional data and give two examples of its use.",
-    "back": "Transactional data records details of individual transactions, such as purchases, bookings, or payments. Retailers analyse it to track buying trends and manage stock; banks use it to detect fraudulent card activity by identifying unusual spending patterns.",
+    "back": "Transactional data records each transaction — purchases, bookings, payments. Retailers use it to spot buying trends and manage stock; banks use it to detect suspicious spending.",
     "tags": [
       "transactional data",
       "data use",
@@ -1318,7 +1318,7 @@
     "learning_aim": "E",
     "topic": "E1.2.2 Targeted Marketing",
     "front": "What is targeted marketing and how is it enabled by IT systems?",
-    "back": "Targeted marketing uses data analysis to show personalised adverts to individuals based on their browsing history, purchase behaviour, and demographics. Algorithms on platforms such as Facebook Ads and Google Ads match ads to users most likely to convert.",
+    "back": "Targeted marketing uses data to show personalised ads based on browsing, purchases and demographics. Platforms like Facebook Ads and Google Ads match ads to likely buyers.",
     "tags": [
       "targeted marketing",
       "data",
@@ -1330,7 +1330,7 @@
     "learning_aim": "E",
     "topic": "E1.2.3 Collaborative Working",
     "front": "Give two IT tools that support collaborative working and explain how.",
-    "back": "Microsoft SharePoint allows teams to co-author documents and share files from a central repository. Google Workspace (Docs/Sheets) enables multiple users to edit the same document simultaneously in real time, with changes tracked automatically.",
+    "back": "SharePoint lets teams co-author documents in one place. Google Workspace (Docs/Sheets) lets several people edit the same file at once, with changes tracked.",
     "tags": [
       "collaborative working",
       "tools",
@@ -1342,7 +1342,7 @@
     "learning_aim": "E",
     "topic": "E1.2.4 Remote Working",
     "front": "Give two IT systems that enable remote working.",
-    "back": "VPNs provide secure encrypted access to an organisation's network from remote locations. Video conferencing tools (e.g. Microsoft Teams, Zoom) enable face-to-face meetings and screen sharing without requiring physical presence.",
+    "back": "VPNs give secure encrypted access to the office network from home. Video tools like Teams and Zoom give meetings and screen sharing without being there in person.",
     "tags": [
       "remote working",
       "IT tools",
@@ -1354,7 +1354,7 @@
     "learning_aim": "E",
     "topic": "E2.1 Data Sources",
     "front": "What is the difference between primary and secondary data?",
-    "back": "Primary data is original data collected first-hand for a specific purpose (e.g. surveys, interviews, experiments). Secondary data is data that already exists and was collected by someone else for a different purpose (e.g. government statistics, published reports).",
+    "back": "Primary data is information you collect yourself for a set purpose (surveys, interviews, experiments). Secondary data already exists and was collected by someone else (government stats, reports).",
     "tags": [
       "data sources",
       "primary",
@@ -1367,7 +1367,7 @@
     "learning_aim": "E",
     "topic": "E2.2 Reliability of Information",
     "front": "Give two methods of ensuring the reliability of information.",
-    "back": "Cross-referencing data against multiple independent sources helps verify accuracy. Checking the authority and recency of sources — such as using government or peer-reviewed publications — ensures information is credible and up to date.",
+    "back": "Check the information against several independent sources, and check the source is trusted and up to date (e.g. government or peer-reviewed).",
     "tags": [
       "reliability",
       "information",
@@ -1379,7 +1379,7 @@
     "learning_aim": "E",
     "topic": "E2.3 Data Collection Methods",
     "front": "Compare questionnaires and focus groups as methods of data collection.",
-    "back": "Questionnaires can reach large numbers of respondents quickly and cost-effectively, generating quantitative data. Focus groups involve small group discussions, producing richer qualitative insights but are more time-consuming and expensive to run.",
+    "back": "Questionnaires reach many people quickly and cheaply and give numbers. Focus groups are small discussions that give richer detail but cost more and take longer.",
     "tags": [
       "data collection",
       "questionnaire",
@@ -1393,7 +1393,7 @@
     "learning_aim": "E",
     "topic": "E2.4 Data Accuracy",
     "front": "Why is data accuracy important for organisations?",
-    "back": "Inaccurate data leads to poor decision-making (e.g. ordering the wrong stock levels), wasted resources, and potential legal liability (e.g. incorrect personal data held in breach of UK GDPR). Accurate data improves operational efficiency and customer satisfaction.",
+    "back": "Bad data leads to bad decisions (e.g. ordering too much stock), wasted resources, and legal trouble under UK GDPR. Good data improves efficiency and customer satisfaction.",
     "tags": [
       "data accuracy",
       "implications",
@@ -1405,7 +1405,7 @@
     "learning_aim": "E",
     "topic": "E2.5.1 Verification",
     "front": "What is data verification?",
-    "back": "Verification is the process of checking that data has been accurately transferred or input — i.e. that it matches the original source. Methods include double entry (typing data twice and comparing) and proofreading. It checks for transcription errors rather than whether data is valid.",
+    "back": "Verification checks data was entered/copied correctly (matches the original). Methods: entering it twice and comparing, or proofreading. It catches typing errors, not whether data is valid.",
     "tags": [
       "verification",
       "data accuracy",
@@ -1417,7 +1417,7 @@
     "learning_aim": "E",
     "topic": "E2.5.2 Validation",
     "front": "What is data validation and give three validation checks?",
-    "back": "Validation checks that data entered meets defined rules before being accepted. Examples: Range check (value within acceptable limits, e.g. age 0–120) • Presence check (required field not left blank) • Format check (data matches a pattern, e.g. postcode format).",
+    "back": "Validation checks data meets rules before it is accepted. Examples: range check (age 0–120), presence check (field not blank), format check (matches a pattern like a postcode).",
     "tags": [
       "validation",
       "data accuracy",
@@ -1429,7 +1429,7 @@
     "learning_aim": "E",
     "topic": "E2.6 User Interface Design",
     "front": "What does 'ease of use' mean in the context of user interface design for data collection?",
-    "back": "Ease of use (usability) means the interface is intuitive and requires minimal effort to navigate. Clear labelling, logical layout, and helpful error messages reduce user errors and training needs, improving data quality and user satisfaction.",
+    "back": "Ease of use means the interface is easy to understand and navigate. Clear labels, a logical layout and helpful error messages reduce mistakes and training.",
     "tags": [
       "UI design",
       "ease of use",
@@ -1441,7 +1441,7 @@
     "learning_aim": "E",
     "topic": "E2.6.3 Error Reduction",
     "front": "Give two UI design features that reduce data entry errors.",
-    "back": "Drop-down menus restrict input to valid options, eliminating typing errors. Input masks enforce a specific format (e.g. a date field showing DD/MM/YYYY) so users enter data correctly. Both reduce the need for post-entry validation.",
+    "back": "Drop-down menus limit input to set options, stopping typing errors. Input masks force a format (e.g. DD/MM/YYYY). Both cut the need for checking afterwards.",
     "tags": [
       "UI design",
       "error reduction",
@@ -1453,7 +1453,7 @@
     "learning_aim": "E",
     "topic": "E1.1.4 News and Information Online",
     "front": "Give two implications of online news for individuals.",
-    "back": "Online news provides instant access to breaking stories globally, free from geographic or time constraints. However, individuals may encounter misinformation or 'fake news' on social media, requiring critical evaluation of source credibility before sharing.",
+    "back": "Online news gives instant access to global stories. But misinformation or 'fake news' spreads on social media, so readers must check how trustworthy the source is before sharing.",
     "tags": [
       "online news",
       "information",
@@ -1465,7 +1465,7 @@
     "learning_aim": "E",
     "topic": "E2.6.2 Accessibility",
     "front": "What accessibility features should a data collection UI include?",
-    "back": "Screen-reader compatibility (using correct HTML semantics and ARIA labels) allows visually impaired users to complete forms. Sufficient colour contrast and scalable text sizes support users with low vision. Keyboard-only navigation assists users who cannot use a mouse.",
+    "back": "Screen-reader support, enough colour contrast and resizable text, plus keyboard-only navigation for people who can't use a mouse.",
     "tags": [
       "UI design",
       "accessibility",
@@ -1477,7 +1477,7 @@
     "learning_aim": "E",
     "topic": "E2.3.4 Interviews",
     "front": "What are the advantages and disadvantages of using interviews for data collection?",
-    "back": "Interviews allow in-depth exploration of responses and follow-up questions, yielding rich qualitative data. Disadvantages include being time-consuming, expensive, and potentially subject to interviewer bias, making them unsuitable for large-scale data collection.",
+    "back": "Interviews give deep answers and allow follow-ups, producing rich detail. But they're time-consuming, expensive and can be biased, so they don't suit large-scale collection.",
     "tags": [
       "data collection",
       "interviews",
@@ -1489,7 +1489,7 @@
     "learning_aim": "E",
     "topic": "E1.2.1 Transactional Data",
     "front": "What is a loyalty card scheme and what data does it generate for retailers?",
-    "back": "A loyalty card scheme (e.g. Tesco Clubcard) rewards repeat customers and collects transactional data showing what products each customer buys, when, and how often. Retailers use this data to personalise offers, manage stock, and analyse buying trends.",
+    "back": "A loyalty card (like Tesco Clubcard) rewards repeat customers and records what each customer buys, when and how often. Retailers use this to tailor offers and manage stock.",
     "tags": [
       "transactional data",
       "loyalty",
@@ -1502,7 +1502,7 @@
     "learning_aim": "E",
     "topic": "E2.6.5 Performance",
     "front": "How does system performance affect a data collection user interface?",
-    "back": "Slow response times frustrate users, leading to errors (e.g. clicking a button multiple times) or abandonment of the form. A high-performance UI ensures data is processed and saved quickly, particularly important in high-traffic or real-time data collection systems.",
+    "back": "Slow forms frustrate people and cause errors (like clicking a button twice) or abandoning the form. A fast interface keeps data flowing quickly.",
     "tags": [
       "UI design",
       "performance",
@@ -1514,7 +1514,7 @@
     "learning_aim": "E",
     "topic": "E2.6.6 Compatibility",
     "front": "Why is compatibility important when designing a data collection interface?",
-    "back": "The UI must function correctly across different operating systems (Windows, macOS, Android, iOS) and browsers (Chrome, Edge, Safari) to ensure all users can submit data. Lack of compatibility can result in data loss or exclusion of certain user groups.",
+    "back": "The interface must work on different operating systems and browsers (Windows, Mac, Android, iOS; Chrome, Edge, Safari) or some users can't submit data.",
     "tags": [
       "UI design",
       "compatibility",
@@ -1526,7 +1526,7 @@
     "learning_aim": "E",
     "topic": "E1.1.1 Online Retail Implications",
     "front": "Give two implications of e-commerce for individuals as consumers.",
-    "back": "Consumers benefit from price comparison across many retailers and the convenience of home delivery. Risks include online fraud (e.g. counterfeit goods, payment scams) and the digital divide excluding those without reliable internet access or digital skills.",
+    "back": "Consumers can compare prices and get things delivered. Risks include online fraud (fake goods, payment scams) and the digital divide for those offline.",
     "tags": [
       "e-commerce",
       "consumers",
@@ -1539,7 +1539,7 @@
     "learning_aim": "E",
     "topic": "E2.3.1 Surveys",
     "front": "What is the difference between open and closed survey questions?",
-    "back": "Closed questions offer a fixed set of responses (e.g. multiple choice, rating scales), making data easy to quantify and analyse. Open questions allow free-text answers, providing richer qualitative insight but making analysis more difficult.",
+    "back": "Closed questions give fixed answers (multiple choice) — easy to count. Open questions allow free text — richer detail but harder to analyse.",
     "tags": [
       "surveys",
       "data collection",
@@ -1551,7 +1551,7 @@
     "learning_aim": "F",
     "topic": "F1.1.1 Privacy",
     "front": "What moral and ethical issues around privacy arise from the use of IT systems?",
-    "back": "IT systems can collect, store, and share vast amounts of personal data without users' full awareness (e.g. location tracking by apps, employee monitoring software). This raises ethical concerns about informed consent, surveillance, and the right to a private life.",
+    "back": "IT systems gather huge amounts of personal data often without users fully knowing (app location tracking, monitoring). This raises concerns about consent, surveillance and privacy.",
     "tags": [
       "privacy",
       "ethics",
@@ -1563,7 +1563,7 @@
     "learning_aim": "F",
     "topic": "F1.1.2 Environmental Impact",
     "front": "What are the environmental implications of IT systems?",
-    "back": "Data centres consume large amounts of electricity, contributing to carbon emissions. Manufacturing digital devices uses rare earth minerals and creates e-waste when devices are discarded. Cloud computing can improve energy efficiency through shared infrastructure.",
+    "back": "Data centres use lots of electricity, adding to carbon emissions. Making devices uses rare minerals and creates e-waste. Shared cloud computing can be more energy-efficient.",
     "tags": [
       "environment",
       "ethics",
@@ -1575,7 +1575,7 @@
     "learning_aim": "F",
     "topic": "F1.1.3 Digital Divide",
     "front": "What is the digital divide?",
-    "back": "The digital divide refers to the gap between those who have access to modern information technology and the internet, and those who do not. Causes include cost, geographic location (rural broadband coverage), age, disability, and lack of digital skills.",
+    "back": "The digital divide is the gap between people who have internet and technology and those who don't. Causes include cost, location (poor rural broadband), age, disability and digital skills.",
     "tags": [
       "digital divide",
       "ethics",
@@ -1587,7 +1587,7 @@
     "learning_aim": "F",
     "topic": "F1.1.4 Assistive Technology Access",
     "front": "What is the ethical issue around access to assistive technology?",
-    "back": "Assistive technologies (e.g. screen readers, voice input software) are essential for people with disabilities to use IT. However, they can be expensive or unavailable in some regions, creating an ethical obligation on organisations and governments to ensure equal access.",
+    "back": "Assistive technology (screen readers, voice input) is essential for disabled people, but it can be expensive or unavailable. This creates an ethical duty to ensure equal access.",
     "tags": [
       "assistive technology",
       "ethics",

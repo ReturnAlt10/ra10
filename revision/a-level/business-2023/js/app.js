@@ -1604,11 +1604,11 @@ function buildPaper3Structure(pool, rng) {
 }
 
 async function generateMock(total, seed, aims, styles, paperType) {
-  if (!await ra10Gate('mock_paper_gen')) return;
   const rng = makeRng(seed);
   styles = styles && styles.length ? styles : ['short', 'data', 'essay'];
   const basePool = QUESTIONS.filter(q => aims.includes(String(q.learning_aim)) && questionHasPaper(q, paperType));
   if (!basePool.length) { alert('No questions available for selected topics.'); return; }
+  if (!await ra10Gate('mock_paper_gen')) return;
   const wanted = new Set(styles);
 
   function styleAllowed(q) {
@@ -1789,7 +1789,6 @@ function renderPracticeControls() {
 }
 
 async function startPractice() {
-  if (!await ra10Gate('practice_question')) return;
   const aim = $('#practice-aim').value;
   const marks = $('#practice-marks').value;
   const paper = $('#practice-paper') ? $('#practice-paper').value : '';
@@ -1798,6 +1797,7 @@ async function startPractice() {
   if (marks) pool = pool.filter(q => String(q.marks) === marks);
   if (paper) pool = pool.filter(q => questionHasPaper(q, paper));
   if (!pool.length) { alert('No questions match those filters.'); return; }
+  if (!await ra10Gate('practice_question')) return;
   window._practiceSession = {
     aims: aim ? [aim] : TOPIC_CODES,
     total: 0,
@@ -3165,7 +3165,6 @@ function renderQuizControls() {
 }
 
 async function startQuiz() {
-  if (!await ra10Gate('quiz_question')) return;
   if (!QUIZ || !QUIZ.length) { alert('Quiz data not available.'); return; }
   const aim = $('#quiz-aim').value;
   const paper = $('#quiz-paper') ? $('#quiz-paper').value : '';
@@ -3174,6 +3173,7 @@ async function startQuiz() {
   if (aim) pool = pool.filter(q => q.learning_aim === aim);
   if (paper) pool = pool.filter(q => questionHasPaper(q, paper));
   if (!pool.length) { alert('No quiz questions for this filter.'); return; }
+  if (!await ra10Gate('quiz_question')) return;
   pool = shuffle(pool);
   const length = lenVal === 'all' ? pool.length : Math.min(parseInt(lenVal, 10), pool.length);
   quizState = {

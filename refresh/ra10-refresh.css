@@ -463,6 +463,26 @@
    The main site and embedded subject pages use different markup, but
    share one visual language and interaction model.
    ============================================================ */
+
+/* Nav icon baseline — every inline `.nu` SVG in a nav/link gets an explicit
+   box size at ALL viewport widths. Without this, an SVG with only a viewBox
+   collapses to the browser default (huge), which is what makes the desktop
+   navbar icons blow up on smaller/squarer displays. */
+.nav-link svg.nu,
+.nav-link svg,
+.site-unit-link svg.nu,
+.site-unit-link svg,
+.unit-avatar-btn svg,
+.nav-user-btn svg,
+.nav [class*="toggle"] svg {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 16px;
+  display: inline-block;
+  vertical-align: middle;
+  stroke-width: 2;
+}
+
 @media screen and (min-width: 841px) {
   body.ra10-refresh-enabled .nav-inner {
     width: 100%;

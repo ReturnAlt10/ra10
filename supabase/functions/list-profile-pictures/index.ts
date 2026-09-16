@@ -25,18 +25,18 @@ function corsHeaders(origin: string | null) {
 }
 
 async function hasOwnerAccess(supabase: any, requesterId: string, authEmail: string) {
+  // Trust the JWT email only — never the client-editable profiles.email column
+  // (which a logged-in user could overwrite to impersonate the owner).
   const email = String(authEmail || '').toLowerCase();
   if (email === OWNER_EMAIL) return true;
 
   const { data } = await supabase
     .from('profiles')
-    .select('email, tier')
+    .select('tier')
     .eq('id', requesterId)
     .maybeSingle();
 
-  const profileEmail = String(data?.email || '').toLowerCase();
   const profileTier = String(data?.tier || '').toLowerCase();
-  if (profileEmail === OWNER_EMAIL) return true;
   if (profileTier === 'owner' || profileTier === 'ultra') return true;
   return false;
 }

@@ -49,6 +49,663 @@ function postProcessQuestions() {
   });
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// Model-answer mark schemes for the auto-generated question banks.
+//
+// These questions previously shipped with a generic placeholder mark scheme
+// ("Relevant knowledge / Clear explanation…"), which gave the AI Examiner
+// nothing concrete to grade against and led to inflate full marks. Each entry
+// below maps a topic code to real, exam-style answer points so marking is
+// accurate. Points are written mini-sentence answers; the loader trims/pads
+// them to the question's mark count.
+// ─────────────────────────────────────────────────────────────────────────────
+const TOPIC_MARK_SCHEMES = {
+  // ── A — threats & vulnerabilities ──
+  'A1.1 Internal threats': {
+    instruction: 'Award marks for each accurate point about internal threats.',
+    points: [
+      'Internal threats originate from within the organisation — employees, contractors or visitors.',
+      'Examples include deliberate employee sabotage, theft or loss of equipment/data, and use of unauthorised software.',
+      'Accidental damage (fire, flood, power loss) or accidental deletion of data is an internal threat.',
+      'Weak security practices — poor training, weak passwords, no visitor vetting — create internal risk.',
+      'Untrusted or poorly-vetted third parties with access to systems are an internal threat.'
+    ]
+  },
+  'A1.1 Internal threats — accidental/deliberate damage': {
+    instruction: 'Award marks for accurate points on accidental/deliberate damage as an internal threat.',
+    points: [
+      'Accidental damage is unintentional, e.g. spilling a drink on a device or dropping a laptop.',
+      'Deliberate damage is intentional, e.g. sabotage or vandalism of equipment by a disgruntled employee.',
+      'Both can destroy hardware or corrupt data, causing downtime and data loss.',
+      'Natural events such as fire or flood can physically damage servers and hardware.',
+      'Power loss or power surges can damage equipment and cause data corruption.'
+    ]
+  },
+  'A1.2 External threats': {
+    instruction: 'Award marks for each accurate point about external threats.',
+    points: [
+      'External threats come from outside the organisation, e.g. hackers or criminals.',
+      'Categories include malware, hacking (DoS/DDoS), social engineering, sabotage and physical attack.',
+      'Personal data is valuable because it can be sold, used for fraud or identity theft.',
+      'Small businesses are often targeted because they have weaker defences and less security budget.',
+      'External attackers may be motivated by financial gain, espionage, activism or disruption.'
+    ]
+  },
+  'A1.2 External threats — malware': {
+    instruction: 'Award marks for each accurate point about malware.',
+    points: [
+      'A virus attaches to a legitimate file and needs user action (opening the file) to spread.',
+      'A worm self-replicates automatically across networks without user interaction.',
+      'A Trojan disguises itself as legitimate software to trick users into running it.',
+      'Ransomware encrypts files and demands payment to restore access, harming service availability.',
+      'Spyware secretly monitors activity and steals credentials or personal data.',
+      'A keylogger records every keystroke, capturing usernames, passwords and bank details.',
+      'A rootkit hides its presence and gives an attacker persistent, covert control.',
+      'A logic bomb is dormant code triggered by a specific condition or date.'
+    ]
+  },
+  'A1.2 External threats — social engineering': {
+    instruction: 'Award marks for each accurate point about social engineering.',
+    points: [
+      'Social engineering manipulates people into revealing information or performing actions.',
+      'Phishing is a mass email pretending to be a trusted organisation to steal credentials.',
+      'Spear phishing targets a specific individual using personal information to seem genuine.',
+      'Pretexting uses a fabricated scenario (e.g. fake IT support) to obtain information.',
+      'Shoulder surfing observes someone entering a PIN or password over their shoulder.',
+      'A watering-hole attack compromises a website victims are known to visit, then infects visitors.',
+      'Human error is a leading cause of successful attacks, so training is essential.',
+      'Attackers favour social engineering because exploiting people is often easier than technical flaws.'
+    ]
+  },
+  'A1.2 External threats — hacking (DoS/DDoS)': {
+    instruction: 'Award marks for each accurate point about hacking / DoS / DDoS.',
+    points: [
+      'A denial-of-service (DoS) attack floods a system or service with traffic to make it unavailable.',
+      'A distributed (DDoS) attack uses many compromised devices (a botnet) at once, making it harder to block.',
+      'A botnet is a network of infected devices controlled remotely by an attacker (command and control).',
+      'Symptoms include unusually slow service, timeouts or the service becoming unavailable.',
+      'DNS poisoning redirects users to fraudulent sites by corrupting DNS records.',
+      'DDoS overwhelms bandwidth or resources so legitimate users cannot access the service.'
+    ]
+  },
+  'A1.3 Impact of a credible threat': {
+    instruction: 'Award marks for each accurate point about the impact of a credible threat.',
+    points: [
+      'A data breach damages customer trust and reputation, leading to lost business.',
+      'Financial loss arises from fines (e.g. UK GDPR), compensation and lost revenue.',
+      'Ransomware halts operations while systems are encrypted or being recovered.',
+      'Downtime reduces productivity and can delay customer-facing services.',
+      'A business continuity plan minimises disruption by ensuring recovery procedures exist.',
+      'Customers may switch to competitors after a widely publicised breach.'
+    ]
+  },
+  'A2.1 System vulnerabilities': {
+    instruction: 'Award marks for each accurate point about system vulnerabilities.',
+    points: [
+      'A vulnerability is a weakness an attacker can exploit, e.g. unpatched software.',
+      'Unsupported/outdated software no longer receives security updates, leaving known flaws open.',
+      'A zero-day is a vulnerability unknown to the vendor, so no patch yet exists.',
+      'Default/weak settings, open ports and weak encryption are common configuration vulnerabilities.',
+      'Patch management closes known flaws before attackers can exploit them.',
+      'Third-party/cloud suppliers increase attack surface because their security is outside direct control.',
+      'Encryption at rest helps, but alone it does not stop all attacks (e.g. stolen credentials).'
+    ]
+  },
+  'A2.1 System vulnerabilities — software': {
+    instruction: 'Award marks for accurate points on software vulnerabilities.',
+    points: [
+      'Unpatched software retains known security flaws that attackers can exploit.',
+      'Default configurations (e.g. default passwords) are widely known and easily exploited.',
+      'A zero-day exploit targets a flaw the vendor has not yet patched, so it is especially dangerous.',
+      'Applying security patches promptly closes vulnerabilities before they are abused.'
+    ]
+  },
+  'A2.1 System vulnerabilities — network': {
+    instruction: 'Award marks for accurate points on network vulnerabilities.',
+    points: [
+      'Open ports expose services that attackers can probe and exploit.',
+      'Weak encryption (e.g. WEP or plaintext) allows traffic to be intercepted.',
+      'Insecure protocols transmit data in plaintext that can be captured by attackers.'
+    ]
+  },
+  'A2.1 System vulnerabilities — people/process': {
+    instruction: 'Award marks for accurate points on human/process vulnerabilities.',
+    points: [
+      'Reusing passwords across accounts means one breach exposes many systems.',
+      'A lack of training leaves staff unaware of phishing and other threats.',
+      'Weak processes, e.g. no access review, allow unauthorised or stale access.'
+    ]
+  },
+  'A2.5 Independent third-party review': {
+    instruction: 'Award marks for accurate points on supply-chain/third-party risk.',
+    points: [
+      'Third-party software can introduce vulnerabilities the organisation does not control.',
+      'A compromised supplier can expose all organisations using its software or services.',
+      'Independent review assesses whether third-party components meet security standards.'
+    ]
+  },
+  'A3.1 Current legislation': {
+    instruction: 'Award marks for accurate points on UK cyber security legislation.',
+    points: [
+      'The Computer Misuse Act 1990 makes unauthorised access to computer material illegal.',
+      'Unauthorised access with intent to commit further offences is a more serious CMA offence.',
+      'Unauthorised modification of data (e.g. spreading malware) is an offence under the CMA.',
+      'UK GDPR requires organisations to protect personal data and report serious breaches to the ICO within 72 hours.',
+      'Fines for serious GDPR breaches can reach £17.5 million or 4% of annual turnover.'
+    ]
+  },
+  'A4.1 Software and hardware security — physical': {
+    instruction: 'Award marks for each accurate point about physical security.',
+    points: [
+      'Server rooms should use locked doors, PIN pads or swipe cards to restrict access.',
+      'CCTV monitors and deters unauthorised entry and theft.',
+      'Off-site backups protect data if a site is physically damaged or inaccessible.',
+      'Tailgating is following an authorised person through a secured door without credentials.',
+      'Biometric readers (fingerprint, iris) or smart cards control who enters secure areas.'
+    ]
+  },
+  'A4.1 Software and hardware security — authentication': {
+    instruction: 'Award marks for each accurate point about authentication.',
+    points: [
+      'Multi-factor authentication requires two or more factors: something you know, have or are.',
+      'MFA significantly reduces the risk from stolen passwords — a second factor is still needed.',
+      'Biometrics (fingerprint, face, iris) are hard to steal but can be inconvenient or rejected.',
+      'A brute-force attack tries many password combinations; account lockout and rate limiting reduce it.',
+      'A dictionary attack tries common words/passwords rather than all combinations.',
+      'A TOTP (time-based one-time password) changes every 30–60 seconds, adding a dynamic second factor.',
+      'Strong passwords should be long, unique and not reused across accounts.',
+      'Something you know = password/PIN; something you have = token/phone; something you are = biometric.'
+    ]
+  },
+  'A4.1 Software and hardware security — access controls': {
+    instruction: 'Award marks for each accurate point about access controls.',
+    points: [
+      'Least privilege means users get only the minimum access needed for their job.',
+      'Authentication verifies who the user is; authorisation decides what they may access.',
+      'Network administrators should have separate, privileged accounts used only for admin tasks.',
+      'Discretionary access control (DAC) lets the owner decide who can access each resource.',
+      'Role-based access control (RBAC) assigns permissions to roles, then assigns users to roles.'
+    ]
+  },
+  'A4.1 Software and hardware security — firewalls': {
+    instruction: 'Award marks for each accurate point about firewalls.',
+    points: [
+      'A firewall filters incoming and outgoing traffic using predefined rules.',
+      'A packet-filtering firewall inspects packet headers (source, destination, ports).',
+      'A hardware firewall is a dedicated device protecting the whole network, independent of hosts.',
+      'An antivirus with firewall protection combines malware scanning with traffic filtering.',
+      'A firewall can block malicious traffic or unauthorised connection attempts.',
+      'Rules are matched in order to allow or deny traffic based on source, destination and port.'
+    ]
+  },
+  'A4.1 Software and hardware security — antivirus': {
+    instruction: 'Award marks for each accurate point about antivirus software.',
+    points: [
+      'Antivirus detects known malware by matching files against a signature database.',
+      'Detected malware is quarantined (isolated) or deleted so it cannot spread.',
+      'Real-time protection monitors activity continuously, not just on scheduled scans.',
+      'Regular signature updates allow detection of new malware; zero-day evasion is a known limitation.',
+      'Anti-phishing and web protection block malicious downloads and dangerous websites.'
+    ]
+  },
+  'A4.1 Software and hardware security — backup/recovery': {
+    instruction: 'Award marks for each accurate point about backup and recovery.',
+    points: [
+      'Backups create copies of data so it can be restored after loss or an attack.',
+      'Off-site or cloud backups protect against physical damage such as fire or flood.',
+      'The 3-2-1 rule: three copies, two media, one off-site.',
+      'Backups must be tested so restoration is known to work when needed.'
+    ]
+  },
+  'A4.1 Software and hardware security — device-based security': {
+    instruction: 'Award marks for each accurate point about device-level security.',
+    points: [
+      'A trusted platform module (TPM) is a hardware chip that stores encryption keys securely.',
+      'Remote wipe deletes data on a lost or stolen device over a network.',
+      'Full-disk encryption (e.g. BitLocker) protects data on lost devices from being read.'
+    ]
+  },
+  'A4.2 Encryption': {
+    instruction: 'Award marks for each accurate point about encryption.',
+    points: [
+      'Encryption converts plaintext into ciphertext using an algorithm and a key.',
+      'Data in transit (e.g. HTTPS/TLS) is encrypted so it cannot be read if intercepted.',
+      'Data at rest (e.g. full-disk encryption) protects stored data on lost/stolen devices.',
+      'Symmetric encryption uses one shared key; asymmetric uses a public/private key pair.',
+      'Encryption keys must be stored securely (e.g. hardware module, key vault) and rotated.',
+      'A digital certificate binds a public key to an identity, verifying a server is genuine.',
+      'Hashing is one-way (produces a fixed digest) and is used to verify integrity, not encrypt.'
+    ]
+  },
+  'A4.3 WLAN protection': {
+    instruction: 'Award marks for each accurate point about wireless network security.',
+    points: [
+      'Use WPA2/WPA3 (not WEP) to encrypt wireless traffic.',
+      'WPA3 improves key handling and protects against offline password guessing.',
+      'Change default admin and Wi-Fi passwords on access points.',
+      'Separate guest Wi-Fi from internal systems to limit exposure.',
+      'Disable WPS and SSID features that are not needed; use strong pre-shared keys.'
+    ]
+  },
+  'A4.4 Security by design': {
+    instruction: 'Award marks for each accurate point about security by design.',
+    points: [
+      'Threat modelling identifies potential threats before a system is built/deployed.',
+      'Defence in depth layers multiple controls so one failure does not break security.',
+      'ISO 27001 provides a framework for an information security management system.',
+      'A system-hardening baseline applies consistent secure configuration to all systems.',
+      'Building security in early is cheaper than retrofitting it after a breach.'
+    ]
+  },
+  'A4.4 Security by design (ISO 27000)': {
+    instruction: 'Award marks for accurate points on ISO 27001.',
+    points: [
+      'ISO 27001 is an international standard for information security management systems.',
+      'It uses a Plan-Do-Check-Act continual-improvement cycle.',
+      'Certification demonstrates security is managed systematically and independently audited.'
+    ]
+  },
+  // ── B — networks ──
+  'B1.1 Network types': {
+    instruction: 'Award marks for each accurate point about network types/architecture.',
+    points: [
+      'A PAN connects personal devices over a very short range (e.g. Bluetooth).',
+      'A LAN connects devices in one building/site and is usually privately owned.',
+      'An intranet is a private internal network; an extranet extends it to trusted partners.',
+      'Segmentation divides a network so an attack in one segment cannot spread to others.',
+      'A client-server network centralises resources; one advantage is easier central admin/backup.',
+      'A zero-trust architecture verifies every request and assumes no implicit trust.',
+      'Centralised management is simpler to control but the central point is a target/single point of failure.'
+    ]
+  },
+  'B1.1 Network types — PAN': { instruction: 'Award marks for accurate points on PAN.', points: ['A PAN covers a very short range, typically under 10 metres.', 'Examples: Bluetooth headset, smartwatch or phone tethering.'] },
+  'B1.2 Network topologies': {
+    instruction: 'Award marks for accurate points on network topologies.',
+    points: [
+      'Star: devices connect to a central switch; one failure does not affect others.',
+      'Mesh: devices interconnect with multiple paths, so it is resilient but complex.',
+      'A hierarchical topology uses core, distribution and access layers for scalability.'
+    ]
+  },
+  'B1.3 Network architecture': {
+    instruction: 'Award marks for accurate points on client-server architecture.',
+    points: [
+      'A client-server network centralises resources on servers, easing admin and backups.',
+      'Centralised security policies can be enforced consistently across clients.'
+    ]
+  },
+  'B1.4 Modern trends': {
+    instruction: 'Award marks for accurate points on modern network trends.',
+    points: [
+      'Network segmentation limits how far an attack or malware can spread.',
+      'Segmentation aids incident containment by isolating affected systems.'
+    ]
+  },
+  'B1.4 Modern trends — BYOD': {
+    instruction: 'Award marks for accurate points on BYOD.',
+    points: [
+      'BYOD lets employees use personal devices, increasing convenience and productivity.',
+      'Risk: personal devices may be less secure or unpatched, increasing malware risk.',
+      'Risk: separating personal and corporate data is harder, risking data leakage.',
+      'Mitigation: mobile device management (MDM), encryption and remote wipe policies.'
+    ]
+  },
+  'B1.4 Modern trends — IoT': {
+    instruction: 'Award marks for accurate points on IoT security.',
+    points: [
+      'IoT devices often ship with weak or default credentials.',
+      'Many IoT devices receive few or no security updates, leaving vulnerabilities open.',
+      'A compromised IoT device can be used in botnets to launch DDoS attacks.',
+      'Change default credentials and segment IoT devices from core systems.'
+    ]
+  },
+  'B1.4 Modern trends — cloud computing': {
+    instruction: 'Award marks for accurate points on cloud security.',
+    points: [
+      'Cloud storage offers scalability and expert-maintained security, but data sits with a third party.',
+      'The shared responsibility model: the provider secures the cloud, the customer secures what is in it.',
+      'Risks include misconfiguration, data breaches, account hijacking and loss of visibility.',
+      'Sensitive data may be restricted by regulation (data sovereignty) and should be encrypted.',
+      'Cloud may be more or less secure than on-premises depending on configuration and expertise.'
+    ]
+  },
+  'B2.1 Hardware components': {
+    instruction: 'Award marks for each accurate point about network hardware.',
+    points: [
+      'A firewall filters traffic; an intrusion detection system monitors and alerts on suspicious activity.',
+      'Default passwords should be changed because they are publicly known and easily guessed.',
+      'An access control list (ACL) on a router specifies which traffic may pass.',
+      'A proxy server sits between clients and the internet, filtering traffic and hiding internal addresses.',
+      'A hardware firewall is a dedicated device protecting the whole network independent of hosts.',
+      'Secure configuration baselines ensure all devices share consistent hardened settings.',
+      'Regular security audits verify controls remain effective and compliant.'
+    ]
+  },
+  'B2.1 Hardware components — end-user devices': {
+    instruction: 'Award marks for accurate points on end-user/storage devices.',
+    points: ['A NAS (network-attached storage) device provides shared file storage on a network.', 'NAS devices can enforce access control and centralise backups.']
+  },
+  'B2.1 Hardware components — connectivity devices': {
+    instruction: 'Award marks for accurate points on connectivity devices.',
+    points: [
+      'A switch connects devices within a LAN and forwards frames to the correct port.',
+      'A router forwards packets between networks using IP addresses.',
+      'A gateway connects networks that use different protocols.',
+      'A proxy server filters traffic and can cache content to improve performance.',
+      'A hardware firewall is a dedicated device inspecting all network traffic.',
+      'Connection media other than copper/fibre include wireless (radio) and infrared.'
+    ]
+  },
+  'B2.1 Hardware components — connection media': {
+    instruction: 'Award marks for accurate points on connection media.',
+    points: [
+      'Copper (e.g. twisted pair / Ethernet) and fibre are common wired media.',
+      'Wireless (radio) and infrared are connection media other than copper and fibre.'
+    ]
+  },
+  'B2.2 External media and storage security': {
+    instruction: 'Award marks for accurate points on removable media.',
+    points: [
+      'USB drives can introduce malware when plugged into organisational computers.',
+      'Removable media can be used to copy or steal sensitive data.',
+      'Encrypting removable media prevents data being read if a device is lost or stolen.'
+    ]
+  },
+  'B2.3 Software components': {
+    instruction: 'Award marks for accurate points on network software.',
+    points: [
+      'A network access control (NAC) system checks devices before allowing them on the network.',
+      'NAC can enforce policy, e.g. require antivirus and patches before access is granted.'
+    ]
+  },
+  'B3.1 TCP/IP': {
+    instruction: 'Award marks for accurate points about TCP/IP.',
+    points: [
+      'The four layers are Application, Transport, Internet and Network Access.',
+      'TCP provides reliable, ordered delivery; UDP is faster but unreliable (no guaranteed delivery).',
+      'The transport layer breaks data into segments and manages delivery.',
+      'Common ports: DNS 53, HTTPS 443, SSH 22.'
+    ]
+  },
+  'B3.1 TCP/IP — ports': {
+    instruction: 'Award marks for accurate points about TCP/IP ports.',
+    points: [
+      'DNS uses port 53; HTTPS uses 443; SSH uses 22.',
+      'TCP is connection-oriented and reliable; UDP is connectionless and faster.',
+      'An ACL on a router can filter traffic by port to enforce policy.'
+    ]
+  },
+  'B3.1 TCP/IP — NAT and addressing': {
+    instruction: 'Award marks for accurate points about NAT and addressing.',
+    points: [
+      'NAT translates private internal addresses to a single public address.',
+      'NAT hides internal IP addresses from the public internet, adding a layer of protection.',
+      'RFC 1918 defines private address ranges used inside networks (e.g. 192.168.x.x, 10.x.x.x).'
+    ]
+  },
+  'B3.4 Network infrastructure services — DHCP': {
+    instruction: 'Award marks for accurate points about DHCP.',
+    points: [
+      'DHCP automatically assigns IP addresses to devices on the network.',
+      'The DORA process: Discover, Offer, Request, Acknowledge.',
+      'DHCP reduces configuration errors and address conflicts compared to manual assignment.'
+    ]
+  },
+  'B3.4 Network infrastructure services — directory services': {
+    instruction: 'Award marks for accurate points about directory services.',
+    points: [
+      'A directory service (e.g. Active Directory) centrally stores users, groups and resources.',
+      'Group policy applies consistent security settings across all managed devices.',
+      'Central authentication and authorisation simplify account admin and remove leavers promptly.'
+    ]
+  },
+  'B3.4 Network infrastructure services — routing': {
+    instruction: 'Award marks for accurate points about routing.',
+    points: [
+      'Static routing uses manually configured paths; dynamic routing learns paths automatically.',
+      'Dynamic routing adapts to network changes but uses more overhead than static routing.'
+    ]
+  },
+  'B3.4 Network infrastructure services — remote access': {
+    instruction: 'Award marks for accurate points about remote access.',
+    points: [
+      'A VPN creates an encrypted tunnel over the internet for secure remote access.',
+      'Remote workers need secure access to reach corporate systems as if on-site.',
+      'Public Wi-Fi is unencrypted; a VPN protects data in transit on untrusted networks.',
+      'Single sign-on (SSO) lets users authenticate once to access multiple systems.'
+    ]
+  },
+  'B3.4 Network infrastructure services — authentication': {
+    instruction: 'Award marks for accurate points about authentication services.',
+    points: [
+      'Symmetric encryption uses one shared key; asymmetric uses a public/private key pair.',
+      'Single sign-on (SSO) lets a user authenticate once for multiple applications.',
+      'Asymmetric encryption solves the key-distribution problem of symmetric encryption.'
+    ]
+  },
+  // ── C — policies ──
+  'C1.1 Cyber security policy': {
+    instruction: 'Award marks for accurate points about cyber security policy.',
+    points: [
+      'Plan-Do-Check-Act is a continual-improvement cycle for policy.',
+      'Plan: identify risks and objectives; Do: implement controls; Check: monitor/audit; Act: correct and improve.',
+      'A policy should be reviewed and updated as threats change.'
+    ]
+  },
+  'C1.1 Internet and email use': {
+    instruction: 'Award marks for accurate points on acceptable internet/email use.',
+    points: [
+      'Rules on acceptable use, e.g. no accessing inappropriate websites.',
+      'Rules on email, e.g. not opening unexpected attachments or links.',
+      'Consequences for breach and a requirement to report suspicious activity.'
+    ]
+  },
+  'C1.1 Security and password procedures': {
+    instruction: 'Award marks for accurate points on password policy.',
+    points: [
+      'Passwords should be long, unique and changed regularly.',
+      'Multi-factor authentication should be required for sensitive systems.',
+      'Passwords must not be shared or written down; account lockout prevents guessing.'
+    ]
+  },
+  'C1.1 Staff responsibilities': {
+    instruction: 'Award marks for accurate points on staff security responsibilities.',
+    points: [
+      'Staff should follow security policies and report security incidents promptly.',
+      'Staff should handle data carefully and avoid unsafe practices (e.g. unapproved software).',
+      'Completing security training and using strong authentication are staff responsibilities.'
+    ]
+  },
+  'C1.1 Staff training': {
+    instruction: 'Award marks for accurate points on staff security training.',
+    points: [
+      'Training should be delivered regularly and on induction, not once only.',
+      'It should cover phishing recognition, password hygiene and incident reporting.',
+      'Refresher training and testing (e.g. simulated phishing) reinforce good behaviour.'
+    ]
+  },
+  'C1.2 Security audits': {
+    instruction: 'Award marks for accurate points on security audits.',
+    points: [
+      'A security audit systematically reviews controls against policy and standards.',
+      'It identifies weaknesses and non-compliance so they can be remediated.',
+      'Regular audits demonstrate due diligence and continuous improvement.'
+    ]
+  },
+  'C1.3 Backup policy': {
+    instruction: 'Award marks for accurate points on backup policy.',
+    points: [
+      'A backup policy specifies what data is backed up and how often.',
+      'It should define storage (onsite/offsite/cloud) and retention periods.',
+      'It must include a testing strategy so restores are known to work.',
+      'Full, differential and incremental are common backup types.'
+    ]
+  },
+  'C1.4 Data protection policy': {
+    instruction: 'Award marks for accurate points on data protection.',
+    points: [
+      'The Data Protection Officer (DPO) oversees compliance with data protection law.',
+      'The policy sets rules for collecting, storing and processing personal data lawfully.',
+      'It ensures only necessary data is collected and handled securely.'
+    ]
+  },
+  'C1.5 Incident response policy': {
+    instruction: 'Award marks for accurate points on incident response.',
+    points: [
+      'The policy lists contacts to notify during an incident (e.g. team lead, DPO, IT).',
+      'It defines procedures: detection, triage, containment, mitigation and recovery.',
+      'Clear roles and a communication plan reduce response time and chaos.'
+    ]
+  },
+  'C1.6 Disaster recovery policy': {
+    instruction: 'Award marks for accurate points on disaster recovery.',
+    points: [
+      'The policy explains how to recover from major disruption to systems and data.',
+      'Triage may activate three plans: business continuity, incident response and disaster recovery.',
+      'It sets recovery time objectives and prioritises critical systems.'
+    ]
+  },
+  'C1.7 External services policy': {
+    instruction: 'Award marks for accurate points on external services policy.',
+    points: [
+      'For cloud services, the policy covers how data is stored, secured and transferred.',
+      'For vendors, it covers vetting, access and security responsibilities in contracts.',
+      'It sets out supplier security requirements and how compliance is verified.'
+    ]
+  },
+  // ── D — forensics ──
+  'D1.1 Meeting requirements for forensics': {
+    instruction: 'Award marks for accurate points on forensic evidence preservation.',
+    points: [
+      'Preserve a seized mobile device in its current power state and isolate it from the network.',
+      'Use a Faraday bag or airplane mode and disable wireless to prevent remote wipe.',
+      'A chain of custody records who handled evidence and when, ensuring it is admissible.',
+      'Investigators work on copies, not originals, to avoid altering evidence.',
+      'Document the scene with photographs, notes and witness statements.'
+    ]
+  },
+  'D1.1 Challenges of live forensics': {
+    instruction: 'Award marks for accurate points on live forensics challenges.',
+    points: [
+      'Live forensics analyses a running system, where data changes constantly.',
+      'Running processes and volatile memory can be lost if the system is switched off.',
+      'Writing to the system during analysis must be avoided to preserve evidence.'
+    ]
+  },
+  'D1.1 Network forensics': {
+    instruction: 'Award marks for accurate points on network forensics.',
+    points: [
+      'Before scanning, agree methodology, obtain permission and ensure the network is not disrupted.',
+      'Review infrastructure: firewalls, switches, routers, wireless access points and logs.',
+      'Use passive then active analysis to avoid corrupting the live system.'
+    ]
+  },
+  'D1.1 Documenting the scene': {
+    instruction: 'Award marks for accurate points on documenting the scene.',
+    points: [
+      'Photograph the scene and devices before anything is moved or changed.',
+      'Record written notes, plans/diagrams and witness statements.',
+      'Documenting the scene preserves context and supports the chain of custody.'
+    ]
+  },
+  'D2.1 Retaining snapshots': {
+    instruction: 'Award marks for accurate points on retaining forensic snapshots.',
+    points: [
+      'A hash (e.g. SHA-256) of the copy verifies it is identical to the original.',
+      'Retain whole-disk, file, memory and deleted/temp data snapshots.',
+      'Hashing proves the evidence has not been altered after acquisition.'
+    ]
+  },
+  'D2.1 Recording findings': {
+    instruction: 'Award marks for accurate points on recording findings.',
+    points: [
+      'Recording must be accurate, complete and attributable to a competent person.',
+      'Keep a trail of all actions taken so findings can be verified and reproduced.'
+    ]
+  },
+  'D2.1 Recording alterations': {
+    instruction: 'Award marks for accurate points on avoiding evidence alteration.',
+    points: [
+      'Work on forensic copies, not the original, so original evidence is preserved.',
+      'Any action that changes data must be avoided and documented if unavoidable.'
+    ]
+  },
+  'D2.1 Visual evidence': {
+    instruction: 'Award marks for accurate points on visual evidence.',
+    points: [
+      'Screenshots and photographs of running systems and analyst output.',
+      'Timelines and diagrams illustrating how an incident unfolded.'
+    ]
+  },
+  'D2.1 False positives': {
+    instruction: 'Award marks for accurate points on avoiding false positives.',
+    points: [
+      'Correlate multiple sources of evidence before concluding a system is compromised.',
+      'Use a consistent, verified methodology so findings are reliable and repeatable.',
+      'Confirm indicators with independent tools to rule out benign activity.'
+    ]
+  },
+  'D2.2 Assessing findings': {
+    instruction: 'Award marks for accurate points on assessing forensic findings.',
+    points: [
+      'Assess findings for reliability, relevance and whether they support a conclusion.',
+      'Assess for errors, detection delays and the impact of the incident.'
+    ]
+  },
+  'D2.2 Compromise indicators': {
+    instruction: 'Award marks for accurate points on indicators of compromise.',
+    points: [
+      'Unusual inbound/outbound traffic or traffic to unexpected regions.',
+      'Unusual logins (times, locations) or unusual DNS requests.',
+      'Increased file reads or suspicious file changes and port usage.'
+    ]
+  },
+  'D2.3 Writing security reports': {
+    instruction: 'Award marks for accurate points on security reports.',
+    points: [
+      'A report has title, contents, introduction, findings, conclusions and citations.',
+      'It analyses errors, detection delays and remedial actions.',
+      'It recommends improvements to policies and protection measures.'
+    ]
+  }
+};
+
+// Pick the closest topic key for a generated question, favouring the longest
+// (most specific) matching key, otherwise falling back to a safe default.
+function markSchemeForTopic(topic, marks) {
+  const raw = String(topic || '').trim();
+  let best = null;
+  Object.keys(TOPIC_MARK_SCHEMES).forEach((key) => {
+    if (raw === key || raw.indexOf(key) >= 0 || key.indexOf(raw) >= 0) {
+      if (!best || key.length > best.length) best = key;
+    }
+  });
+  const src = best ? TOPIC_MARK_SCHEMES[best] : null;
+
+  if (!src) {
+    return {
+      instruction: 'Award marks for accurate, relevant points using correct terminology.',
+      points: acceptablePoints(null, marks)
+    };
+  }
+
+  // Return the source points trimmed/padded to the question's mark count.
+  const pts = acceptablePoints(src.points, marks);
+  return { instruction: src.instruction, points: pts };
+}
+
+// Trim the model-answer list to roughly `marks` points; pad with generic
+// prompts only if the bank is shorter than the question's marks.
+function acceptablePoints(points, marks) {
+  const src = (Array.isArray(points) ? points : []).slice();
+  const want = Math.max(1, Math.min(Number(marks) || 1, 8));
+  if (src.length === 0) {
+    return ['Accurate, relevant knowledge', 'Clear explanation linked to the question', 'Correct use of cybersecurity terminology'].slice(0, want);
+  }
+  // Use as many concrete points as marks allow (up to available).
+  return src.slice(0, want);
+}
+
 function addExpandedQuestionBank() {
   const banks = {
     A: [
@@ -166,7 +823,7 @@ function addExpandedQuestionBank() {
   Object.entries(banks).forEach(([aim, items]) => items.forEach(([question, marks, topic], index) => {
     const id = `EXP${aim}${String(index + 1).padStart(3, '0')}`;
     if (QUESTIONS.some(q => q && q.id === id)) return;
-    QUESTIONS.push({ id, learning_aim: aim, topic, command_verb: question.split(' ')[0], marks, ao: marks >= 6 ? 'AO3' : marks >= 4 ? 'AO2' : 'AO1', scenario: '', question, guidance: `(${marks})`, type: marks >= 6 ? 'extended' : marks >= 4 ? 'medium' : 'short', mark_scheme: { instruction: 'Award marks for accurate, relevant points supported by appropriate explanation or application.', points: ['Relevant knowledge', 'Clear explanation linked to the question', 'Accurate use of cybersecurity terminology'] } });
+    QUESTIONS.push({ id, learning_aim: aim, topic, command_verb: question.split(' ')[0], marks, ao: marks >= 6 ? 'AO3' : marks >= 4 ? 'AO2' : 'AO1', scenario: '', question, guidance: `(${marks})`, type: marks >= 6 ? 'extended' : marks >= 4 ? 'medium' : 'short', mark_scheme: markSchemeForTopic(topic, marks) });
   }));
 }
 
@@ -329,7 +986,7 @@ function addExpandedQuestionBank2() {
   Object.entries(banks).forEach(([aim, items]) => items.forEach(([question, marks, topic], index) => {
     const id = `EXP2${aim}${String(index + 1).padStart(3, '0')}`;
     if (QUESTIONS.some(q => q && q.id === id)) return;
-    QUESTIONS.push({ id, learning_aim: aim, topic, command_verb: question.split(' ')[0], marks, ao: marks >= 6 ? 'AO3' : marks >= 4 ? 'AO2' : 'AO1', scenario: '', question, guidance: `(${marks})`, type: marks >= 6 ? 'extended' : marks >= 4 ? 'medium' : 'short', mark_scheme: { instruction: 'Award marks for accurate, relevant points supported by appropriate explanation or application.', points: ['Relevant knowledge', 'Clear explanation linked to the question', 'Accurate use of cybersecurity terminology'] } });
+    QUESTIONS.push({ id, learning_aim: aim, topic, command_verb: question.split(' ')[0], marks, ao: marks >= 6 ? 'AO3' : marks >= 4 ? 'AO2' : 'AO1', scenario: '', question, guidance: `(${marks})`, type: marks >= 6 ? 'extended' : marks >= 4 ? 'medium' : 'short', mark_scheme: markSchemeForTopic(topic, marks) });
   }));
 }
 

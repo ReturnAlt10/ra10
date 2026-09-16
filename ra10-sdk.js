@@ -556,25 +556,53 @@
       return profile;
     }
 
-    const nextReset = new Date();
-    nextReset.setUTCMonth(nextReset.getUTCMonth() + 1);
-    const updateResult = await client
-      .from('profiles')
-      .update({
-        tier: schoolTier,
-        credits: schoolCredits,
-        credits_reset_at: nextReset.toISOString(),
-        school_id: member.school_id,
-        school_name: schoolName,
-        unlocked_subjects: mappedSubjects,
-      })
-      .eq('id', profile.id)
-      .select('*')
-      .single();
+    // Prefer the server-side entitlement RPC (required once the DB
+    // privilege-escalation trigger is enabled). Fall back to the legacy direct
+    // update only while the RPC is NOT yet deployed (i.e. the RPC call itself
+    // threw because the function does not exist). If the RPC exists and denies
+    // the request, do NOT attempt a client-side escalation.
+    let updatedProfile = null;
+    let rpcResult = null;
+    let rpcAvailable = true;
+    try {
+      const rpcRes = await client.rpc('apply_school_entitlement');
+      rpcResult = (rpcRes && !rpcRes.error) ? rpcRes.data : null;
+    } catch (e) {
+      rpcAvailable = false; // function missing / not yet deployed
+    }
 
-    if (updateResult.error) {
-      console.warn('RA10 school entitlement apply error', updateResult.error);
-      return profile;
+    if (!rpcAvailable || rpcResult == null) {
+      const nextReset = new Date();
+      nextReset.setUTCMonth(nextReset.getUTCMonth() + 1);
+      const updateResult = await client
+        .from('profiles')
+        .update({
+          tier: schoolTier,
+          credits: schoolCredits,
+          credits_reset_at: nextReset.toISOString(),
+          school_id: member.school_id,
+          school_name: schoolName,
+          unlocked_subjects: mappedSubjects,
+        })
+        .eq('id', profile.id)
+        .select('*')
+        .single();
+
+      if (updateResult.error) {
+        console.warn('RA10 school entitlement apply error', updateResult.error);
+        return profile;
+      }
+      updatedProfile = updateResult.data || profile;
+    } else if (rpcResult.ok) {
+      const refreshed = await client
+        .from('profiles')
+        .select('*')
+        .eq('id', profile.id)
+        .single();
+      updatedProfile = refreshed.data || profile;
+    } else {
+      // RPC explicitly denied (e.g. no active membership) — leave unchanged.
+      updatedProfile = profile;
     }
 
     if (String(member.status || '').toLowerCase() !== 'active') {
@@ -584,7 +612,6 @@
         .eq('id', member.id);
     }
 
-    const updatedProfile = updateResult.data || profile;
     // group_name lives on school_members, not profiles — re-attach it.
     if (updatedProfile) updatedProfile.group_name = member.group_name || null;
     return updatedProfile;
@@ -687,11 +714,34 @@
     }
 
     const client = await _ensureSupabaseClient();
-    const nextReset = new Date();
-    nextReset.setUTCMonth(nextReset.getUTCMonth() + 1);
-    const update = await client.from('profiles').update({ credits, credits_reset_at: nextReset.toISOString() }).eq('id', _profile.id).select().single();
-    if (!update.error && update.data) {
-      _profile = update.data;
+
+    // Prefer the server-side reset RPC (required once the DB privilege-
+    // escalation trigger is enabled). Fall back to the legacy direct update
+    // only while the RPC is NOT yet deployed.
+    let updated = null;
+    let rpcResult = null;
+    let rpcAvailable = true;
+    try {
+      const rpcRes = await client.rpc('reset_monthly_credits');
+      rpcResult = (rpcRes && !rpcRes.error) ? rpcRes.data : null;
+    } catch (e) {
+      rpcAvailable = false; // function missing / not yet deployed
+    }
+
+    if (!rpcAvailable || rpcResult == null) {
+      const nextReset = new Date();
+      nextReset.setUTCMonth(nextReset.getUTCMonth() + 1);
+      const update = await client.from('profiles').update({ credits, credits_reset_at: nextReset.toISOString() }).eq('id', _profile.id).select().single();
+      if (!update.error && update.data) {
+        updated = update.data;
+      }
+    } else if (rpcResult.ok && !rpcResult.skipped) {
+      const refreshed = await client.from('profiles').select('*').eq('id', _profile.id).single();
+      updated = refreshed.data || null;
+    }
+
+    if (updated) {
+      _profile = updated;
       _emit('creditschange', _profile);
     }
   }
@@ -1050,34 +1100,6 @@
         note: 'Spent from account credits',
       });
     }
-    _emit('creditschange', _profile);
-    return true;
-  }
-
-  async function awardCredits(amount) {
-    const grant = Number(amount) || 0;
-    if (grant <= 0 || !isLoggedIn()) {
-      return false;
-    }
-    if (UNLIMITED_TIERS.has(getTier())) {
-      return true;
-    }
-    const current = _getStoredCredits();
-    const newAmount = current + grant;
-    const client = await _ensureSupabaseClient();
-    const result = await client.from('profiles').update({ credits: newAmount }).eq('id', _profile.id).select().single();
-    if (result.error || !result.data) {
-      console.warn('RA10 awardCredits failed', result.error);
-      return false;
-    }
-    _profile = result.data;
-    _writeCreditSnapshot(_profile);
-    _appendCreditActivity({
-      type: 'gain',
-      source: 'credit_award',
-      amount: grant,
-      note: 'Credits awarded',
-    });
     _emit('creditschange', _profile);
     return true;
   }
@@ -1508,7 +1530,7 @@
       returnUrl: window.location && window.location.origin ? window.location.origin : '',
     };
 
-    const response = await fetch(SUPABASE_URL + '/functions/v1/create-checkout', {
+    const response = await fetch(SUPABASE_URL + '/functions/v1/gocardless-checkout', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -1544,7 +1566,7 @@
       returnUrl: String((input && input.returnUrl) || (window.location && window.location.origin ? window.location.origin : '')),
     };
 
-    const response = await fetch(SUPABASE_URL + '/functions/v1/create-billing-portal', {
+    const response = await fetch(SUPABASE_URL + '/functions/v1/gocardless-cancel', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -1555,11 +1577,11 @@
 
     const result = await response.json().catch(function () { return {}; });
     if (!response.ok) {
-      throw new Error(result && result.error ? String(result.error) : 'Failed to open billing portal.');
+      throw new Error(result && result.error ? String(result.error) : 'Failed to cancel subscription.');
     }
 
-    if (!result || !result.url) {
-      throw new Error('Billing portal URL was not returned.');
+    if (!result || result.ok !== true) {
+      throw new Error('Cancellation was not confirmed.');
     }
 
     return result;
@@ -1893,7 +1915,6 @@
     getGuestCredits,
     canAfford,
     spendCredits,
-    awardCredits,
     gate,
     guestGate,
     showPaywall,

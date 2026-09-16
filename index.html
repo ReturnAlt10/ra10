@@ -417,39 +417,42 @@ body.auth-popup-open{overflow:hidden}
 .site-announcement-bar{
   display:none;
   width:100%;
-  border-bottom:1px solid oklch(from var(--color-text) l c h/.1);
+  color:var(--color-text);
+  background:transparent;
+  padding:10px 16px 2px;
+}
+.site-announcement-inner{
+  width:min(100%, 860px);
+  margin-inline:auto;
+  padding:13px 18px;
+  display:flex;
+  align-items:center;
+  gap:13px;
+  border-radius:16px;
+  border:1px solid oklch(from var(--color-text) l c h/.12);
   background:
     radial-gradient(150% 120% at 100% 0%, rgba(99,102,241,.12) 0%, rgba(99,102,241,0) 52%),
     linear-gradient(96deg,#f6fbff 0%,#f9f6ff 46%,#f6fffa 100%);
-  color:var(--color-text);
-  box-shadow:inset 0 -1px 0 oklch(from var(--color-text) l c h/.08);
-}
-.site-announcement-inner{
-  width:100%;
-  margin-inline:0;
-  padding:10px clamp(var(--sp4),2.4vw,var(--sp7));
-  display:flex;
-  align-items:center;
-  gap:12px;
+  box-shadow:0 10px 30px oklch(0 0 0/.08), inset 0 1px 0 rgba(255,255,255,.6);
 }
 .site-announcement-emoji{
-  width:28px;
-  height:28px;
-  border-radius:999px;
-  font-size:16px;
+  width:40px;
+  height:40px;
+  border-radius:12px;
+  font-size:20px;
   line-height:1;
   flex-shrink:0;
   display:flex;
   align-items:center;
   justify-content:center;
-  background:rgba(56,189,248,.14);
+  background:rgba(56,189,248,.16);
 }
-.site-announcement-copy{min-width:0;flex:1}
-.site-announcement-text{font-size:var(--tx-sm);font-weight:700;line-height:1.35;color:var(--color-text)}
-.site-announcement-meta{font-size:var(--tx-xs);color:var(--color-text-muted);line-height:1.45;margin-top:2px}
+.site-announcement-copy{min-width:0;flex:1;display:grid;gap:2px}
+.site-announcement-text{font-size:var(--tx-base);font-weight:700;line-height:1.4;color:var(--color-text)}
+.site-announcement-meta{font-size:var(--tx-xs);color:var(--color-text-muted);line-height:1.45}
 .site-announcement-close{
-  width:30px;
-  height:30px;
+  width:32px;
+  height:32px;
   border-radius:999px;
   flex-shrink:0;
   background:oklch(from var(--color-text) l c h/.06);
@@ -457,14 +460,16 @@ body.auth-popup-open{overflow:hidden}
   display:flex;
   align-items:center;
   justify-content:center;
+  font-size:14px;
 }
 .site-announcement-close:hover{background:oklch(from var(--color-text) l c h/.1);color:var(--color-text)}
-[data-theme="dark"] .site-announcement-bar{
+[data-theme="dark"] .site-announcement-inner{
   background:
     radial-gradient(140% 120% at 100% 0%, rgba(99,102,241,.2) 0%, rgba(99,102,241,0) 52%),
     linear-gradient(96deg,#162131 0%,#22172e 46%,#172625 100%);
   color:#dbeafe;
-  border-bottom-color:rgba(148,163,184,.22);
+  border-color:rgba(148,163,184,.24);
+  box-shadow:0 10px 30px oklch(0 0 0/.28), inset 0 1px 0 rgba(255,255,255,.08);
 }
 [data-theme="dark"] .site-announcement-emoji{background:rgba(125,211,252,.16)}
 [data-theme="dark"] .site-announcement-meta{color:rgba(191,219,254,.82)}
@@ -1808,8 +1813,10 @@ footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-bloc
 }
 
 @media (max-width: 640px){
-  .site-announcement-inner{padding:9px var(--sp4);gap:8px}
-  .site-announcement-text{font-size:12px}
+  .site-announcement-bar{padding:8px 10px 0}
+  .site-announcement-inner{padding:11px 12px;gap:10px;border-radius:14px}
+  .site-announcement-emoji{width:34px;height:34px;font-size:17px;border-radius:10px}
+  .site-announcement-text{font-size:13px}
   .site-announcement-meta{font-size:11px}
   .nav { display:none; }
   .nav-inner { padding: 0 var(--sp4); gap: var(--sp3); }
@@ -4447,6 +4454,10 @@ html body #community-share-sheet .community-share-panel{
 .exams-countdown.today{background:#dcfce7;color:#166534}
 .exams-next-date{font-size:12px;color:var(--color-text-muted)}
 .exams-open-app{margin-left:auto;padding:6px 12px;border-radius:999px;background:#d20000;color:#fff;font-size:12px;font-weight:700;border:none;cursor:pointer}
+.exams-sync{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.exams-sync-btn{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;padding:7px 12px;border-radius:999px;border:1px solid var(--color-border);background:var(--color-surface-2);color:var(--color-text-muted);text-decoration:none;cursor:pointer;line-height:1}
+.exams-sync-btn:hover{color:var(--color-primary);border-color:var(--color-primary);background:var(--color-surface)}
+[data-theme="dark"] .exams-sync-btn{background:#262a34;border-color:#3a404c;color:#c7cdd6}
 .exams-empty{color:var(--color-text-muted);font-size:var(--tx-sm);grid-column:1/-1;text-align:center;padding:var(--sp8) 0}
 .exams-controls{display:flex;align-items:center;gap:var(--sp2)}
 .exams-view-toggle{display:flex;gap:4px;border:1px solid var(--color-border);border-radius:12px;padding:3px;background:var(--color-surface)}
@@ -6935,7 +6946,7 @@ html body #community-share-sheet .community-share-panel{
           <div class="auth-success" id="owner-profile-pic-success" style="margin-top:var(--sp2);"></div>
         </div>
         <div class="card-ft account-actions" style="flex-wrap:wrap;gap:var(--sp3)">
-          <button class="btn account-btn account-btn-billing" id="btn-manage-billing" type="button">Manage billing</button>
+          <button class="btn account-btn account-btn-billing" id="btn-manage-billing" type="button">Cancel subscription</button>
           <button class="btn account-btn account-btn-signout" id="btn-account-signout">Sign out</button>
         </div>
       </div>
@@ -7029,6 +7040,7 @@ html body #community-share-sheet .community-share-panel{
       <div class="exams-search">
         <input id="exams-search-input" type="text" placeholder="Search exams…" class="exams-search-input">
       </div>
+      <button id="exams-export-ics" class="exams-filter-btn" type="button" title="Download the currently filtered timetable as a calendar (.ics) file">⤓ Download .ics</button>
     </div>
     <div class="exams-summary" id="exams-summary"></div>
     <div class="exams-calendar" id="exams-calendar" style="display:none;"></div>
@@ -11702,6 +11714,136 @@ function examsProgressPct(next, now) {
   return Math.max(0, Math.min(100, Math.round((elapsed / total) * 100)));
 }
 
+// ── Exam calendar export (ICS + Google Calendar deep-link) ──
+function examCalendarTitle(exam) {
+  const subject = String(exam.subject || '').trim();
+  const name = String(exam.name || '').trim();
+  return name ? (subject + ' — ' + name) : subject;
+}
+
+function examCalendarDescription(exam) {
+  const lines = [];
+  lines.push('Board: ' + (exam.board || ''));
+  lines.push('Level: ' + (exam.level || ''));
+  const sittings = (exam.dates || [])
+    .filter(d => /^\d{4}-\d{2}-\d{2}$/.test(String(d)))
+    .map(d => new Date(d + 'T00:00:00').toLocaleDateString(undefined, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }))
+    .join(', ');
+  if (sittings) lines.push('Sittings: ' + sittings);
+  if (exam.specUrl) lines.push('Specification: ' + exam.specUrl);
+  if (exam.appPath) lines.push('Revise on RA10: https://ra10.co.uk' + exam.appPath);
+  lines.push('Generated by RA10 — ra10.co.uk');
+  return lines.join('\n');
+}
+
+function icsEscape(text) {
+  return String(text == null ? '' : text)
+    .replace(/\\/g, '\\\\')
+    .replace(/;/g, '\\;')
+    .replace(/,/g, '\\,')
+    .replace(/\r\n/g, '\n')
+    .replace(/\n/g, '\\n');
+}
+
+function icsStamp(date) {
+  return date.getUTCFullYear()
+    + String(date.getUTCMonth() + 1).padStart(2, '0')
+    + String(date.getUTCDate()).padStart(2, '0') + 'T'
+    + String(date.getUTCHours()).padStart(2, '0')
+    + String(date.getUTCMinutes()).padStart(2, '0')
+    + String(date.getUTCSeconds()).padStart(2, '0') + 'Z';
+}
+
+function examNextDayYmd(dateStr) {
+  const d = new Date(dateStr + 'T00:00:00');
+  d.setDate(d.getDate() + 1);
+  return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+}
+
+function icsEventLines(lines, exam, d, now) {
+  const start = String(d).replace(/-/g, '');
+  const end = examNextDayYmd(d).replace(/-/g, '');
+  lines.push('BEGIN:VEVENT');
+  lines.push('UID:ra10-' + exam.id + '-' + start + '@ra10.co.uk');
+  lines.push('DTSTAMP:' + icsStamp(now));
+  lines.push('DTSTART;VALUE=DATE:' + start);
+  lines.push('DTEND;VALUE=DATE:' + end);
+  lines.push('SUMMARY:' + icsEscape(examCalendarTitle(exam)));
+  lines.push('DESCRIPTION:' + icsEscape(examCalendarDescription(exam)));
+  lines.push('END:VEVENT');
+}
+
+function buildExamIcs(exam) {
+  const now = new Date();
+  const lines = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//RA10//Exam Timetable//EN', 'CALSCALE:GREGORIAN'];
+  (exam.dates || []).forEach((d) => { if (/^\d{4}-\d{2}-\d{2}$/.test(String(d))) icsEventLines(lines, exam, d, now); });
+  lines.push('END:VCALENDAR');
+  return lines.join('\r\n');
+}
+
+function buildTimetableIcs(exams) {
+  const now = new Date();
+  const lines = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//RA10//Exam Timetable//EN', 'CALSCALE:GREGORIAN'];
+  (exams || []).forEach((exam) => {
+    (exam.dates || []).forEach((d) => { if (/^\d{4}-\d{2}-\d{2}$/.test(String(d))) icsEventLines(lines, exam, d, now); });
+  });
+  lines.push('END:VCALENDAR');
+  return lines.join('\r\n');
+}
+
+function triggerIcsDownload(filename, icsText) {
+  const blob = new Blob([icsText], { type: 'text/calendar;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(function () { URL.revokeObjectURL(url); }, 1500);
+}
+
+function downloadExamIcs(examId) {
+  const exam = EXAM_DATA.find(e => e.id === examId);
+  if (!exam) return;
+  triggerIcsDownload('ra10-' + exam.id + '.ics', buildExamIcs(exam));
+  showExamToast('Downloaded — open the file to add it to Apple Calendar, Outlook or Google.');
+}
+
+function downloadTimetableIcs() {
+  const exams = examsFiltered();
+  if (!exams.length) { showExamToast('No exams match the current filters.'); return; }
+  triggerIcsDownload('ra10-exam-timetable.ics', buildTimetableIcs(exams));
+  showExamToast('Timetable downloaded — open the file to add all these exams to your calendar.');
+}
+
+function googleCalendarAddUrl(exam, dateStr) {
+  const start = String(dateStr).replace(/-/g, '');
+  const end = examNextDayYmd(dateStr).replace(/-/g, '');
+  const p = new URLSearchParams({
+    action: 'TEMPLATE',
+    text: examCalendarTitle(exam),
+    dates: start + '/' + end,
+    details: examCalendarDescription(exam),
+    location: 'RA10 — ra10.co.uk'
+  });
+  return 'https://calendar.google.com/calendar/render?' + p.toString();
+}
+
+function showExamToast(msg) {
+  let t = document.getElementById('exam-toast');
+  if (!t) {
+    t = document.createElement('div');
+    t.id = 'exam-toast';
+    t.style.cssText = 'position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);background:var(--color-text);color:var(--color-bg);padding:11px 18px;border-radius:12px;font-size:14px;font-weight:600;z-index:2147483647;opacity:0;transition:opacity .2s,transform .2s;box-shadow:0 12px 32px rgba(0,0,0,.28);max-width:88vw;text-align:center;';
+    document.body.appendChild(t);
+  }
+  t.textContent = msg;
+  requestAnimationFrame(function () { t.style.opacity = '1'; t.style.transform = 'translateX(-50%) translateY(0)'; });
+  clearTimeout(t._hide);
+  t._hide = setTimeout(function () { t.style.opacity = '0'; t.style.transform = 'translateX(-50%) translateY(20px)'; }, 2800);
+}
+
 function renderExamsPage() {
   const list = document.getElementById('exams-list');
   if (!list) return;
@@ -11790,6 +11932,7 @@ function renderExamsPage() {
     const allDates = (exam.dates || []).map(d => new Date(d + 'T09:00:00').toLocaleDateString(undefined, { day: 'numeric', month: 'short' })).join(', ');
     const appLink = exam.appPath ? '<button class="exams-open-app" type="button" onclick="go(\'' + exam.appPath + '\')">Open app</button>' : '';
     const pct = examsProgressPct(next, now);
+    const gcalUrl = googleCalendarAddUrl(exam, ymdLocal(next));
     return '<div class="exams-card' + (isPinned ? ' pinned' : '') + '">'
       + '<div class="exams-card-top">'
       +   '<span class="exams-board ' + exam.board.toLowerCase().replace(/\s+/g, '-') + '">' + exam.board + '</span>'
@@ -11806,6 +11949,10 @@ function renderExamsPage() {
       +   '<span class="exams-countdown ' + cls + '">' + badge + '</span>'
       +   '<span class="exams-next-date">Next: ' + dateStr + '</span>'
       +   appLink
+      + '</div>'
+      + '<div class="exams-sync">'
+      +   '<a class="exams-sync-btn" href="' + gcalUrl + '" target="_blank" rel="noopener">📅 Google Calendar</a>'
+      +   '<button class="exams-sync-btn" type="button" onclick="downloadExamIcs(\'' + exam.id + '\')">⤓ Apple / .ics</button>'
       + '</div>'
       + '</div>';
   }).join('');
@@ -11977,12 +12124,14 @@ function openExamDay(ymd) {
       const specBtn = '<a class="ghost" href="' + specUrl + '" target="_blank" rel="noopener">View exam spec &#8599;</a>';
       const appBtn = exam.appPath ? '<a href="javascript:void(0)" onclick="closeExamModal();go(\'' + exam.appPath + '\')">Open RA10 course</a>' : '';
       const pinBtn = '<button class="ghost" type="button" onclick="togglePinnedExam(\'' + exam.id + '\')">' + (isPinned ? '★ Unpin' : '☆ Pin') + '</button>';
+      const calBtn = '<a class="ghost" href="' + googleCalendarAddUrl(exam, ymd) + '" target="_blank" rel="noopener">📅 Google Calendar</a>';
+      const icsBtn = '<button class="ghost" type="button" onclick="downloadExamIcs(\'' + exam.id + '\')">⤓ Download .ics</button>';
       return '<div style="margin-bottom:var(--sp6);padding-bottom:var(--sp6);border-bottom:1px solid var(--color-border);">'
         + '<span class="exam-modal-board ' + boardCls + '">' + exam.board + '</span>'
         + '<h3>' + exam.subject + '</h3>'
         + '<p class="exam-modal-name">' + exam.name + '</p>'
         + '<ul class="exam-modal-dates">' + datesHtml + '</ul>'
-        + '<div class="exam-modal-actions">' + appBtn + specBtn + pinBtn + '</div>'
+        + '<div class="exam-modal-actions">' + appBtn + specBtn + pinBtn + calBtn + icsBtn + '</div>'
         + '</div>';
     }).join('');
 
@@ -12108,6 +12257,9 @@ function bindExamsFilters() {
   if (modalClose) modalClose.addEventListener('click', closeExamModal);
   if (modalOverlay) modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) closeExamModal(); });
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeExamModal(); });
+
+  const exportIcs = document.getElementById('exams-export-ics');
+  if (exportIcs) exportIcs.addEventListener('click', downloadTimetableIcs);
 }
 
 // Exam dates from the Pearson BTEC 2027 timetables (winter + summer).
@@ -12578,7 +12730,7 @@ async function waitForRA10Sdk(timeoutMs) {
       }
 
       try {
-        const res = await fetch('https://tcrrgsylxbyyrmnouihl.supabase.co/functions/v1/billing-status', {
+        const res = await fetch('https://tcrrgsylxbyyrmnouihl.supabase.co/functions/v1/gocardless-billing-status', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -14027,11 +14179,6 @@ async function waitForRA10Sdk(timeoutMs) {
         const session = RA10.getSession();
         const { error: nameError } = await sb.from('profiles').update({ full_name: name }).eq('id', session.user.id);
         if (nameError) throw nameError;
-        const p = RA10.getProfile();
-        if (!p?.credits || p.credits === 0) {
-          const { error: creditsError } = await sb.from('profiles').update({ credits: 10, credits_reset_at: new Date().toISOString() }).eq('id', session.user.id);
-          if (creditsError) throw creditsError;
-        }
         clearTimeout(safetyTimeout);
         await RA10.init();
         _updateNavAuth();
@@ -14450,23 +14597,6 @@ async function waitForRA10Sdk(timeoutMs) {
         + '<div style="font-size:var(--tx-sm);line-height:1.6;">' + message + '</div>';
     }
 
-    async function confirmCheckoutSession(sessionId) {
-      if (!sessionId || !window.RA10 || !RA10.isLoggedIn()) return false;
-      const session = RA10.getSession && RA10.getSession();
-      const token = session && session.access_token ? session.access_token : '';
-      if (!token) return false;
-      const endpoint = 'https://tcrrgsylxbyyrmnouihl.supabase.co/functions/v1/confirm-checkout';
-      const res = await fetch(endpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + token,
-        },
-        body: JSON.stringify({ sessionId: String(sessionId) }),
-      });
-      return !!res.ok;
-    }
-
     function hasCheckoutStateAdvanced(previousTier, previousCredits, previousSubjects) {
       const nextProfile = RA10.getProfile();
       if (!nextProfile) return false;
@@ -14485,9 +14615,11 @@ async function waitForRA10Sdk(timeoutMs) {
       const currentPath = (hashNoPrefix.split('?')[0] || '/');
       if (currentPath !== '/upgrade') return;
       const query = rawHash.includes('?') ? rawHash.slice(rawHash.indexOf('?') + 1) : '';
-      const params = new URLSearchParams(query);
-      const status = params.get('checkout');
-      const sessionId = params.get('session_id') || '';
+      // GoCardless appends its own query params (e.g. `?id=BRF123`) to the
+      // redirect URL, so parse the checkout status with a tight regex instead
+      // of URLSearchParams (which would swallow the trailing values).
+      const statusMatch = query.match(/(?:^|[&?])checkout=([^&?]+)/);
+      const status = statusMatch ? decodeURIComponent(statusMatch[1]) : '';
       if (!status) return;
 
       if (status === 'success') {
@@ -14497,20 +14629,13 @@ async function waitForRA10Sdk(timeoutMs) {
         const previousSubjects = Array.isArray(previousProfile.unlocked_subjects)
           ? previousProfile.unlocked_subjects.filter(Boolean)
           : [];
-        setSubscriptionSyncWindow(30000);
-        showUpgradeCheckoutStatus('warn', 'Payment received. Updating your account now...');
-        try {
-          const confirmed = await confirmCheckoutSession(sessionId);
-          if (confirmed) {
-            showUpgradeCheckoutStatus('warn', 'Payment received. Finalising your account now...');
-          } else {
-            showUpgradeCheckoutStatus('warn', 'Payment succeeded, but profile update is still syncing. It should appear shortly after webhook processing.');
-          }
-        } catch (e) {
-          showUpgradeCheckoutStatus('warn', 'Payment succeeded, but immediate sync failed. Webhook processing should still update your account shortly.');
-        }
+        setSubscriptionSyncWindow(120000);
+        showUpgradeCheckoutStatus('warn', 'Direct Debit set up. Finalising your account now...');
+        // GoCardless settles via BACS asynchronously; the webhook applies the
+        // plan as soon as the mandate/subscription/payment is confirmed, so we
+        // poll the profile rather than calling a synchronous confirm endpoint.
         let synced = false;
-        for (let i = 0; i < 10; i++) {
+        for (let i = 0; i < 25; i++) {
           try {
             await RA10.refreshProfile();
             await _updateNavAuth();
@@ -14525,7 +14650,7 @@ async function waitForRA10Sdk(timeoutMs) {
         if (synced) {
           showUpgradeCheckoutStatus('ok', 'Your plan is now active and your account has been updated.');
         } else {
-          showUpgradeCheckoutStatus('warn', 'Payment succeeded, but the account update is still syncing. It should appear automatically shortly.');
+          showUpgradeCheckoutStatus('warn', 'Your Direct Debit is being set up. As soon as it confirms (usually within a few minutes) your plan will activate automatically.');
         }
       } else if (status === 'cancel') {
         showUpgradeCheckoutStatus('warn', 'Checkout was cancelled. No payment was taken.');
@@ -14544,18 +14669,21 @@ async function waitForRA10Sdk(timeoutMs) {
     document.getElementById('btn-manage-billing')?.addEventListener('click', async () => {
       const btn = document.getElementById('btn-manage-billing');
       const original = btn ? btn.textContent : 'Manage billing';
+      // GoCardless has no self-serve portal like Stripe, so "Manage billing"
+      // means cancelling the Direct Debit directly.
+      const proceed = confirm('This will cancel your RA10 subscription. Your access will end as soon as the cancellation is processed. Continue?');
+      if (!proceed) return;
       if (btn) {
         btn.disabled = true;
-        btn.textContent = 'Opening...';
+        btn.textContent = 'Cancelling...';
       }
       try {
-        const result = await RA10.startBillingPortal({
-          returnUrl: window.location.origin + '/#/account',
-        });
-        if (!result || !result.url) throw new Error('Billing portal is unavailable right now.');
-        window.location.href = result.url;
+        const result = await RA10.startBillingPortal({});
+        alert((result && result.message) ? result.message : 'Your subscription has been cancelled.');
+        try { await RA10.refreshProfile(); } catch (e) {}
+        _updateNavAuth();
       } catch (e) {
-        alert((e && e.message) ? e.message : 'Could not open billing portal.');
+        alert((e && e.message) ? e.message : 'Could not cancel billing.');
       } finally {
         if (btn) {
           btn.disabled = false;
@@ -15620,9 +15748,9 @@ async function waitForRA10Sdk(timeoutMs) {
         <article class="news-article" id="news-payments" data-category="billing" data-status="live" data-date="2026-05-10">
           <div class="news-content">
             <div class="news-meta"><span>10.05.2026</span><span>Billing + Rewards</span></div>
-            <h2>Live Stripe, Gift Credits, and Weekly Leaderboard Economy</h2>
-            <p>Payments are fully live on Stripe with webhook-backed subscription state. Gift credits and weekly leaderboard rewards now connect cleanly to account activity, enabling schools and individuals to keep study momentum without manual admin friction.</p>
-            <div class="news-tags"><span class="news-tag">Stripe</span><span class="news-tag">Gift Credits</span><span class="news-tag">Leaderboard</span></div>
+            <h2>Live Payments, Gift Credits, and Weekly Leaderboard Economy</h2>
+            <p>Payments are fully live with webhook-backed subscription state, now powered by GoCardless Direct Debit. Gift credits and weekly leaderboard rewards connect cleanly to account activity, enabling schools and individuals to keep study momentum without manual admin friction.</p>
+            <div class="news-tags"><span class="news-tag">Payments</span><span class="news-tag">Gift Credits</span><span class="news-tag">Leaderboard</span></div>
           </div>
         </article>
 

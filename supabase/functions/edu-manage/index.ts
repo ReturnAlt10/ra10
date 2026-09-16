@@ -38,28 +38,33 @@ function error(body: unknown, status: number, headers: Record<string, string>) {
 interface Ctx {
   supabase: any;
   userId: string;
+  userEmail: string;
 }
 
 // The caller must be the school's owner (or the platform owner).
+// Authorisation is based on the JWT identity (email) and the authorised
+// user's tier, never on the client-editable profiles.email column (which a
+// logged-in user could otherwise overwrite to impersonate the owner).
 async function assertSchoolOwner(ctx: Ctx, schoolId: string) {
+  const email = String(ctx.userEmail || '').toLowerCase();
+  if (email === OWNER_EMAIL) return true;
+
   const { data } = await ctx.supabase
     .from('profiles')
-    .select('email, tier')
+    .select('tier')
     .eq('id', ctx.userId)
     .maybeSingle();
 
-  const email = String(data?.email || '').toLowerCase();
   const tier = String(data?.tier || '').toLowerCase();
-  if (email === OWNER_EMAIL) return true;
-  if (tier === 'owner' || tier === 'ultra' || tier === 'school_admin') {
-    // school_admin must also actually own this school (defence in depth)
-    if (!schoolId) return tier === 'owner' || tier === 'ultra';
+  if (tier === 'owner' || tier === 'ultra') return true;
+  if (tier === 'school_admin') {
+    if (!schoolId) return false;
     const { data: school } = await ctx.supabase
       .from('schools')
       .select('owner_id')
       .eq('id', schoolId)
       .maybeSingle();
-    if (!school || !school.owner_id) return tier === 'owner' || tier === 'ultra';
+    if (!school || !school.owner_id) return false;
     if (String(school.owner_id) === String(ctx.userId)) return true;
   }
   return false;
@@ -110,6 +115,70 @@ async function activateMember(ctx: Ctx, email: string, role: string, schoolId: s
     .eq('role', normalizedRole);
 
   return { ok: true, activated: true };
+}
+
+// Revert a member's profile to free tier server-side. Client cannot legally
+// write tier/credits once the DB privilege-escalation trigger is enabled, so
+// removal must go through the service_role here.
+async function deactivateMember(ctx: Ctx, email: string) {
+  const normalizedEmail = String(email || '').trim().toLowerCase();
+  if (!normalizedEmail) return { ok: false, error: 'Missing email.' };
+
+  const { data: rows, error: lookupErr } = await ctx.supabase
+    .from('profiles')
+    .select('id')
+    .ilike('email', normalizedEmail)
+    .limit(1);
+
+  if (lookupErr) return { ok: false, error: lookupErr.message || 'Profile lookup failed.' };
+  if (!Array.isArray(rows) || rows.length === 0 || !rows[0].id) {
+    return { ok: false, error: 'No matching profile row found.' };
+  }
+
+  const { error: patchErr } = await ctx.supabase
+    .from('profiles')
+    .update({
+      tier: 'free',
+      credits: 10,
+      credits_reset_at: new Date().toISOString(),
+      school_id: null,
+      school_name: null,
+      unlocked_subjects: [],
+      unlimited_credits: false,
+    })
+    .eq('id', String(rows[0].id));
+
+  if (patchErr) return { ok: false, error: patchErr.message || 'Profile deactivation failed.' };
+  return { ok: true, deactivated: true };
+}
+
+// Sync an active member's unlocked_subjects on their profile (server-side).
+async function setMemberSubjects(ctx: Ctx, email: string, subjects: string[]) {
+  const normalizedEmail = String(email || '').trim().toLowerCase();
+  if (!normalizedEmail) return { ok: false, error: 'Missing email.' };
+
+  const clean = (Array.isArray(subjects) ? subjects : [])
+    .map((s) => String(s || '').trim())
+    .filter(Boolean);
+
+  const { data: rows, error: lookupErr } = await ctx.supabase
+    .from('profiles')
+    .select('id')
+    .ilike('email', normalizedEmail)
+    .limit(1);
+
+  if (lookupErr) return { ok: false, error: lookupErr.message || 'Profile lookup failed.' };
+  if (!Array.isArray(rows) || rows.length === 0 || !rows[0].id) {
+    return { ok: false, error: 'No matching profile row found.' };
+  }
+
+  const { error: patchErr } = await ctx.supabase
+    .from('profiles')
+    .update({ unlocked_subjects: clean })
+    .eq('id', String(rows[0].id));
+
+  if (patchErr) return { ok: false, error: patchErr.message || 'Subject update failed.' };
+  return { ok: true };
 }
 
 async function inviteMember(ctx: Ctx, email: string, role: string, schoolId: string, schoolName: string) {
@@ -192,7 +261,11 @@ serve(async (req) => {
     return error({ error: 'Invalid auth token' }, 401, headers);
   }
 
-  const ctx: Ctx = { supabase, userId: String(userRes.user.id) };
+  const ctx: Ctx = {
+    supabase,
+    userId: String(userRes.user.id),
+    userEmail: String(userRes.user.email || userRes.user.user_metadata?.email || ''),
+  };
 
   let body: any = null;
   try { body = await req.json(); } catch { body = null; }
@@ -215,6 +288,13 @@ serve(async (req) => {
   }
   if (action === 'invite') {
     return new Response(JSON.stringify(await inviteMember(ctx, email, role, schoolId, schoolName)), { headers });
+  }
+  if (action === 'deactivate') {
+    return new Response(JSON.stringify(await deactivateMember(ctx, email)), { headers });
+  }
+  if (action === 'set-subjects') {
+    const subjects = Array.isArray(body && body.subjects) ? body.subjects : [];
+    return new Response(JSON.stringify(await setMemberSubjects(ctx, email, subjects)), { headers });
   }
 
   return error({ error: 'Unknown action.' }, 400, headers);

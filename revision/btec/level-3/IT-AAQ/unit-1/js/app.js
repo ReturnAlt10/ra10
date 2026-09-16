@@ -1047,15 +1047,44 @@ function renderRevisionGuide() {
   }
 }
 
+// Track the last known guide-unlock state so we only repaint when it actually
+// changes (avoids flicker from repeated auth/credit events).
+let _guideAccessWasUnlocked = null;
+
+function refreshGuideAccessState() {
+  const container = document.getElementById('guide-comprehensive');
+  if (!container) return;
+
+  // Log out of a guest session invalidates any temporary unlock.
+  if (window.RA10 && typeof RA10.isLoggedIn === 'function' && !RA10.isLoggedIn()) {
+    setGuideSessionUnlock(false);
+  }
+
+  const nowUnlocked = canViewFullRevisionGuide();
+  if (_guideAccessWasUnlocked === nowUnlocked) return;
+  _guideAccessWasUnlocked = nowUnlocked;
+
+  // Re-apply lock/unlock visuals (blur, padlocks, TOC, print buttons).
+  applyGuideAccessRules();
+}
+
 function setupGuideAuthListener() {
   if (!window.RA10 || typeof RA10.on !== 'function') return;
-  RA10.on('authchange', () => {
-    if (!RA10.isLoggedIn()) {
-      setGuideSessionUnlock(false);
-      const container = document.getElementById('guide-comprehensive');
-      if (container) applyGuideAccessRules();
-    }
+
+  // Re-evaluate access on every auth change — covers sign-in, sign-out and
+  // profile refresh where a paid tier is confirmed after the guide is drawn.
+  RA10.on('authchange', refreshGuideAccessState);
+  // Credits/tier changes (purchase, renewal, school entitlement) also affect access.
+  RA10.on('creditschange', refreshGuideAccessState);
+
+  // Constant checks: re-evaluate whenever the tab regains focus and on an
+  // interval, so a plan activated in another tab or late SDK init unsticks a
+  // blurred guide automatically.
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') refreshGuideAccessState();
   });
+  window.addEventListener('focus', refreshGuideAccessState);
+  setInterval(refreshGuideAccessState, 3000);
 }
 
 // ---------- Boot when data loaded ----------
@@ -1372,10 +1401,11 @@ function styleOfQuestion(q) {
 }
 
 async function generateMock(total, seed, aims, styles) {
+  const pool = QUESTIONS.filter(q => aims.includes(q.learning_aim));
+  if (!pool.length) { alert('No questions available for selected aims.'); return; }
   if (!await ra10Gate('mock_paper_gen')) return;
   const rng = makeRng(seed);
   styles = styles && styles.length ? styles : ['pearson'];
-  const pool = QUESTIONS.filter(q => aims.includes(q.learning_aim));
   if (!pool.length) { alert('No questions available for selected aims.'); return; }
 
   // ---- STYLE-FILTERED MODE ----
@@ -1652,13 +1682,13 @@ function renderPracticeControls() {
 }
 
 async function startPractice() {
-  if (!await ra10Gate('practice_question')) return;
   const aim = $('#practice-aim').value;
   const marks = $('#practice-marks').value;
   let pool = QUESTIONS.slice();
   if (aim) pool = pool.filter(q => q.learning_aim === aim);
   if (marks) pool = pool.filter(q => String(q.marks) === marks);
   if (!pool.length) { alert('No questions match those filters.'); return; }
+  if (!await ra10Gate('practice_question')) return;
   window._practiceSession = {
     aims: aim ? [aim] : ['A','B','C','D','E','F'],
     total: 0,

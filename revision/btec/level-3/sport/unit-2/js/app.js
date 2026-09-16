@@ -1367,11 +1367,11 @@ function styleOfQuestion(q) {
 }
 
 async function generateMock(total, seed, aims, styles) {
-  if (!await ra10Gate('mock_paper_gen')) return;
   const rng = makeRng(seed);
   styles = styles && styles.length ? styles : ['pearson'];
   const pool = QUESTIONS.filter(q => aims.includes(q.learning_aim));
   if (!pool.length) { alert('No questions available for selected aims.'); return; }
+  if (!await ra10Gate('mock_paper_gen')) return;
 
   // ---- STYLE-FILTERED MODE ----
   // If the user picked specific styles (anything other than just "pearson"),
@@ -1639,13 +1639,13 @@ function renderPracticeControls() {
 }
 
 async function startPractice() {
-  if (!await ra10Gate('practice_question')) return;
   const aim = $('#practice-aim').value;
   const marks = $('#practice-marks').value;
   let pool = QUESTIONS.slice();
   if (aim) pool = pool.filter(q => q.learning_aim === aim);
   if (marks) pool = pool.filter(q => String(q.marks) === marks);
   if (!pool.length) { alert('No questions match those filters.'); return; }
+  if (!await ra10Gate('practice_question')) return;
   window._practiceSession = {
     aims: aim ? [aim] : LEARNING_AIMS.slice(),
     total: 0,
@@ -2934,13 +2934,13 @@ function renderQuizControls() {
 }
 
 async function startQuiz() {
-  if (!await ra10Gate('quiz_question')) return;
   if (!QUIZ || !QUIZ.length) { alert('Quiz data not available.'); return; }
   const aim = $('#quiz-aim').value;
   const lenVal = $('#quiz-length').value;
   let pool = QUIZ.slice();
   if (aim) pool = pool.filter(q => q.learning_aim === aim);
   if (!pool.length) { alert('No quiz questions for this filter.'); return; }
+  if (!await ra10Gate('quiz_question')) return;
   pool = shuffle(pool);
   const length = lenVal === 'all' ? pool.length : Math.min(parseInt(lenVal, 10), pool.length);
   quizState = {
