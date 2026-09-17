@@ -2741,43 +2741,6 @@ body.mobile-ui.mobile-sheet-open .mobile-bottom-nav{display:flex !important;}
 .feat li{margin-bottom:6px}
 .card-ft{display:flex;align-items:center;justify-content:space-between;gap:var(--sp2);margin-top:var(--sp4);flex-wrap:wrap}
 
-.tools-hub{display:grid;gap:var(--sp4)}
-.tools-hero{
-  border:1px solid oklch(from var(--color-text) l c h/.08);
-  border-radius:28px;
-  padding:clamp(var(--sp4),2.8vw,var(--sp6));
-  background:
-    radial-gradient(120% 100% at 0% 0%, rgba(2,132,199,.13) 0%, rgba(2,132,199,0) 45%),
-    radial-gradient(120% 120% at 100% 0%, rgba(22,163,74,.12) 0%, rgba(22,163,74,0) 50%),
-    linear-gradient(155deg,var(--color-surface),var(--color-surface-offset));
-  box-shadow:var(--shadow-sm);
-}
-.tools-hero h1{margin-top:var(--sp3);line-height:1.05}
-.tools-hero p{margin-top:var(--sp2);max-width:62ch;color:var(--color-text-muted)}
-.tools-stat-row{display:flex;gap:var(--sp2);flex-wrap:wrap;margin-top:var(--sp4)}
-.tools-stat{padding:6px 10px;border-radius:999px;font-size:var(--tx-xs);font-weight:700;background:var(--color-surface-offset-2);color:var(--color-text-muted);border:1px solid oklch(from var(--color-text) l c h/.08)}
-.tools-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--sp4)}
-.tool-tile{
-  border:1px solid oklch(from var(--color-text) l c h/.08);
-  border-radius:24px;
-  padding:clamp(var(--sp4),2.3vw,var(--sp5));
-  background:linear-gradient(150deg,var(--color-surface),var(--color-surface-offset));
-  box-shadow:var(--shadow-sm);
-}
-.tool-tile.live{border-color:rgba(2,132,199,.25)}
-.tool-tile.soon{border-color:oklch(from var(--color-text) l c h/.12)}
-.tool-kicker{display:inline-flex;align-items:center;gap:8px;padding:5px 10px;border-radius:999px;background:var(--color-surface-offset-2);font-size:var(--tx-xs);font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--color-text-muted)}
-.tool-tile h3{margin-top:var(--sp3);line-height:1.15}
-.tool-tile p{margin-top:var(--sp2);line-height:1.65;color:var(--color-text-muted)}
-.tool-points{display:grid;gap:6px;margin-top:var(--sp3)}
-.tool-points span{font-size:var(--tx-xs);color:var(--color-text-muted)}
-.tool-actions{display:flex;align-items:center;justify-content:space-between;gap:var(--sp2);margin-top:var(--sp4);flex-wrap:wrap}
-
-@media (max-width: 980px){
-  .grid-2,
-  .tools-grid{grid-template-columns:1fr}
-}
-
 .bc{
   margin-top:var(--sp4);
   padding:8px;
@@ -4956,7 +4919,6 @@ html body #community-share-sheet .community-share-panel{
           </div>
         </div>
       </div>
-      <button class="nav-link" data-nav="tools"    onclick="go('/tools')"><svg class="nu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a6 6 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>Tools</button>
       <button class="nav-link" data-nav="community" onclick="go('/community')"><svg class="nu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>Community</button>
       <button class="nav-link" data-nav="tasks"    onclick="go('/tasks')"><svg class="nu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3 8-8"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Tasks</button>
       <button class="nav-link" data-nav="exams"    onclick="go('/exams')"><svg class="nu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13"/><path d="M8 12h13"/><path d="M8 18h13"/><path d="M3 6h.01M3 12h.01M3 18h.01"/></svg>Exams</button>
@@ -5437,7 +5399,7 @@ html body #community-share-sheet .community-share-panel{
             </div>
             <div class="hx-stat-row" aria-label="Platform snapshot">
               <div class="hx-stat"><b>5</b><span>Live subject apps</span></div>
-              <div class="hx-stat"><b>24/7</b><span>AI Examiner feedback</span></div>
+              <div class="hx-stat"><b>24/7</b><span>AI feedback &amp; marking</span></div>
               <div class="hx-stat"><b>0-cost</b><span>Student plan via school</span></div>
             </div>
           </div>
@@ -5487,12 +5449,14 @@ html body #community-share-sheet .community-share-panel{
           <span><b></b>Sport Unit 1 live</span>
           <span><b></b>IT Level 2 Unit 2 live</span>
           <span><b></b>AI Examiner feedback</span>
+          <span><b></b>AI Assigner for coursework</span>
           <span><b></b>IT AAQ Unit 1 &amp; 2 live</span>
           <span><b></b>Business Unit 3 live</span>
           <span><b></b>A-Level Business (7132) live</span>
           <span><b></b>Sport Unit 1 live</span>
           <span><b></b>IT Level 2 Unit 2 live</span>
           <span><b></b>AI Examiner feedback</span>
+          <span><b></b>AI Assigner for coursework</span>
         </div>
       </div>
 
@@ -5549,13 +5513,18 @@ html body #community-share-sheet .community-share-panel{
             <span class="hx-eyebrow">What's inside</span>
             <h2>Everything you can use in RA10</h2>
           </div>
-          <p>From quick recall to full exam answers, the platform keeps revision in one place with tools that are useful day to day.</p>
+          <p>From quick recall to full exam answers and AI-marked coursework, the platform keeps revision in one place.</p>
         </div>
         <div class="hx-bento">
           <article class="hx-bento-card featured">
             <span class="hx-bento-icon featured">✦</span>
             <h3>AI Examiner</h3>
             <p>Submit longer exam-style responses and get structured marking-style feedback to improve answer quality, clarity and exam technique.</p>
+          </article>
+          <article class="hx-bento-card">
+            <span class="hx-bento-icon">✎</span>
+            <h3>AI Assigner</h3>
+            <p>Upload coursework and get step-by-step Distinction support — hints, criteria checks and marking — for IT Unit 3 &amp; Unit 4 tasks.</p>
           </article>
           <article class="hx-bento-card">
             <span class="hx-bento-icon">◆</span>
@@ -5572,15 +5541,10 @@ html body #community-share-sheet .community-share-panel{
             <h3>Tasks, XP &amp; leaderboard</h3>
             <p>Track daily progress and stay accountable through exam season with XP and the weekly leaderboard.</p>
           </article>
-          <article class="hx-bento-card">
-            <span class="hx-bento-icon">●</span>
-            <h3>Built-in utilities</h3>
-            <p>Exports and study helpers without leaving the platform, so less time is wasted between apps.</p>
-          </article>
         </div>
         <div class="ctas" style="margin-top:var(--sp2)">
-          <button class="btn btn-p" type="button" onclick="go('/tools')">Explore tools</button>
-          <button class="btn btn-s" type="button" onclick="go('/upgrade')">See AI Examiner plans</button>
+          <button class="btn btn-p" type="button" onclick="go('/revision')">Start revising</button>
+          <button class="btn btn-s" type="button" onclick="go('/upgrade')">See AI plans</button>
         </div>
       </section>
 
@@ -6323,67 +6287,6 @@ html body #community-share-sheet .community-share-panel{
   </div>
 </div>
 
-<!-- ============================================================
-     TOOLS HUB  /tools
-============================================================ -->
-<div class="page" id="p-tools">
-  <div class="cd">
-    <nav class="bc">
-      <button class="bc-item" onclick="go('/')">Home</button>
-      <span class="bc-sep">›</span>
-      <span class="bc-item cur">Tools</span>
-    </nav>
-
-    <div class="tools-hub">
-      <section class="tools-hero" aria-label="Tools overview">
-        <span class="hero-label">Tools</span>
-        <h1>Utilities</h1>
-        <p>Purpose-built helpers for file conversion and workflow tasks. Open a tool and run it directly in your browser.</p>
-        <div class="tools-stat-row">
-          <span class="tools-stat">1 live tool</span>
-          <span class="tools-stat">Browser-based</span>
-          <span class="tools-stat">No upload required</span>
-        </div>
-      </section>
-
-      <section class="sec" aria-label="Available tools">
-        <div class="sec-label">Available now</div>
-        <div class="tools-grid" style="margin-top:var(--sp3)">
-          <article class="tool-tile live click" onclick="go('/tools/whatsapp-exporter')">
-            <span class="tool-kicker">Chat utilities</span>
-            <h3>WhatsApp Chat Exporter</h3>
-            <p>Convert WhatsApp text exports into clean chat layouts and structured tables with filtering, search, and print output.</p>
-            <div class="tool-points">
-              <span>Chat view and table view</span>
-              <span>Date filtering and keyword search</span>
-              <span>Print-ready output and PDF workflow</span>
-            </div>
-            <div class="tool-actions">
-              <span class="pill pill-live">Live</span>
-              <button class="btn btn-p" onclick="event.stopPropagation();go('/tools/whatsapp-exporter')">Open tool</button>
-            </div>
-          </article>
-
-          <article class="tool-tile soon off" aria-disabled="true">
-            <span class="tool-kicker">File utilities</span>
-            <h3>PDF Combiner</h3>
-            <p>Combine multiple PDF files into a single document with ordered page control.</p>
-            <div class="tool-points">
-              <span>Multi-file merge</span>
-              <span>Simple ordering controls</span>
-              <span>Download combined file</span>
-            </div>
-            <div class="tool-actions">
-              <span class="pill pill-soon">Coming soon</span>
-              <button class="btn btn-g" type="button" disabled>Not available yet</button>
-            </div>
-          </article>
-        </div>
-      </section>
-    </div>
-  </div>
-</div>
-
 <!-- AUTH REDIRECT PAGE -->
 <div class="page" id="p-auth">
   <div class="c">
@@ -7052,58 +6955,6 @@ html body #community-share-sheet .community-share-panel{
   <div class="exam-modal">
     <button class="exam-modal-close" id="exam-modal-close" aria-label="Close">✕</button>
     <div id="exam-modal-content"></div>
-  </div>
-</div>
-
-<!-- ============================================================
-     WHATSAPP EXPORTER  /tools/whatsapp-exporter
-     iframe src: ra10/tools/whatsapp-exporter/index.html
-============================================================ -->
-<div class="page" id="p-whatsapp">
-  <div class="cd">
-    <nav class="bc">
-      <button class="bc-item" onclick="go('/')">Home</button>
-      <span class="bc-sep">›</span>
-      <button class="bc-item" onclick="go('/tools')">Tools</button>
-      <span class="bc-sep">›</span>
-      <span class="bc-item cur">WhatsApp Exporter</span>
-    </nav>
-    <div class="hero">
-      <div class="hero-label">Tool · Chat Utilities</div>
-      <h1>WhatsApp Chat Exporter</h1>
-      <p>Turn your WhatsApp chat exports into clean, printable chat views or structured tables. Works entirely in your browser — nothing is uploaded or stored.</p>
-    </div>
-    <div class="steps">
-      <div class="step">
-        <div class="step-n">01</div>
-        <h4>Export from WhatsApp</h4>
-        <p><strong>iOS:</strong> Open chat → tap name → scroll down → Export Chat → Without Media.<br><br><strong>Android:</strong> Open chat → ⋮ → More → Export Chat → Without Media.</p>
-      </div>
-      <div class="step">
-        <div class="step-n">02</div>
-        <h4>Upload the file</h4>
-        <p>Drag the <code>.txt</code> file into the tool below, or click Browse. The file is processed entirely in your browser.</p>
-      </div>
-      <div class="step">
-        <div class="step-n">03</div>
-        <h4>Export your way</h4>
-        <p>Switch between Chat and Table view, filter by date or search messages, then hit Print or Download PDF.</p>
-      </div>
-    </div>
-  </div>
-  <!-- Full-width iframe -->
-  <div class="cf">
-    <div class="iframe-wrap">
-      <div class="iframe-toolbar">
-        <button class="btn btn-s" type="button" data-iframe-fullscreen>Full screen</button>
-      </div>
-      <iframe
-        src="tools/whatsapp-exporter/index.html"
-        title="WhatsApp Chat Exporter"
-        loading="lazy"
-        allowfullscreen
-      ></iframe>
-    </div>
   </div>
 </div>
 
@@ -7943,8 +7794,6 @@ const ROUTES = {
   '/revision/btec/level-2':              'p-btec-l2',
   '/revision/btec/level-2/it':           'p-btec-l2-it',
   '/revision/btec/level-2/it/unit-2':    'p-it-l2-u2',
-  '/tools':                               'p-tools',
-  '/tools/whatsapp-exporter':            'p-whatsapp',
   '/community':                           'p-community',
   '/tasks':                               'p-tasks',
   '/exams':                               'p-exams',
@@ -7952,7 +7801,7 @@ const ROUTES = {
   '/upgrade':                             'p-upgrade',
   '/account':                             'p-account',
 };
-const NAV_MAP = {'/':'home','leaderboard':'leaderboard','/revision':'revision','/tools':'tools','/community':'community','/tasks':'tasks','/exams':'exams'};
+const NAV_MAP = {'/':'home','leaderboard':'leaderboard','/revision':'revision','/community':'community','/tasks':'tasks','/exams':'exams'};
 
 let _lbHideTimeout = null;
 window._lbHideTimeout = null;
@@ -12396,7 +12245,7 @@ function route(){
   const mobileKey = path === '/' || path === '' ? 'home'
     : path.startsWith('/exams') ? 'exams'
     : path.startsWith('/tasks') ? 'tasks'
-    : path.startsWith('/revision') || path.startsWith('/tools') || path.startsWith('/revision/btec/level-3/') ? 'subjects'
+    : path.startsWith('/revision') || path.startsWith('/revision/btec/level-3/') ? 'subjects'
     : path.startsWith('leaderboard') ? 'leaderboard'
     : path.startsWith('/community') ? 'community'
     : path.startsWith('/account') || path.startsWith('/upgrade') || path.startsWith('/news') ? 'you'
