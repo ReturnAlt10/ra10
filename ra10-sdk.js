@@ -91,6 +91,12 @@
   const MONTHLY_TIERS = new Set(['free', 'all_subjects', 'school_student', 'school_teacher', 'school_admin']);
   const UNLIMITED_TIERS = new Set(['ultra', 'owner']);
 
+  // Transition mode: payments are paused while RA10 becomes something new.
+  // While this is on, every signed-in user gets unlimited credits and full
+  // access to premium features (revision guides, AI marking, etc.) for free.
+  // Signing in is still required.
+  const TRANSITION_MODE = true;
+
   const SUBJECT_LABEL_MAP = {
     IT: 'IT',
     'IT AAQ': 'IT',
@@ -946,11 +952,17 @@
   }
 
   function isPaid() {
+    if (TRANSITION_MODE && isLoggedIn()) {
+      return true;
+    }
     const tier = _normalizeTier(_profile?.tier);
     return tier !== 'free' && !!_profile;
   }
 
   function hasNoAds() {
+    if (TRANSITION_MODE && isLoggedIn()) {
+      return true;
+    }
     const tier = _normalizeTier(_profile?.tier);
     return !!_profile && tier !== 'free';
   }
@@ -960,12 +972,25 @@
   }
 
   function getTierInfo() {
+    if (TRANSITION_MODE && isLoggedIn()) {
+      return {
+        label: 'Unlimited',
+        price: 'Free (transition)',
+        credits: Infinity,
+        resets: 'unlimited',
+        ads: false,
+        description: 'Unlimited credits and features while payments are paused',
+      };
+    }
     return _getTierDefaults(getTier());
   }
 
   function getCredits() {
     if (!_profile) {
       return 0;
+    }
+    if (TRANSITION_MODE) {
+      return Infinity;
     }
     if (_profile.unlimited_credits) {
       return Infinity;
@@ -1006,7 +1031,7 @@
         unlimited: false,
       };
     }
-    if (_profile.unlimited_credits || UNLIMITED_TIERS.has(_normalizeTier(_profile.tier))) {
+    if (TRANSITION_MODE || _profile.unlimited_credits || UNLIMITED_TIERS.has(_normalizeTier(_profile.tier))) {
       return {
         totalCredits: Infinity,
         storedCredits: Infinity,
@@ -1040,7 +1065,7 @@
     if (!_profile) {
       return false;
     }
-    if (UNLIMITED_TIERS.has(_normalizeTier(_profile.tier))) {
+    if (TRANSITION_MODE || UNLIMITED_TIERS.has(_normalizeTier(_profile.tier))) {
       return true;
     }
     return getCredits() >= cost;
@@ -1054,7 +1079,7 @@
     if (!isLoggedIn() || !canAfford(action)) {
       return false;
     }
-    if (UNLIMITED_TIERS.has(getTier())) {
+    if (TRANSITION_MODE || UNLIMITED_TIERS.has(getTier())) {
       return true;
     }
 
@@ -1588,6 +1613,9 @@
   }
 
   function canUseAiMarking() {
+    if (TRANSITION_MODE && isLoggedIn()) {
+      return true;
+    }
     const tier = _normalizeTier(getTier());
     return tier === 'ultra' || tier === 'owner' || UNLIMITED_TIERS.has(tier);
   }
@@ -1645,7 +1673,8 @@
 
     const isSchool = tier === 'school_student' || tier === 'school_teacher' || tier === 'school_admin';
     let costToDeduct = 3;
-    if (tier === 'free') costToDeduct = 5;
+    if (TRANSITION_MODE) costToDeduct = 0;
+    else if (tier === 'free') costToDeduct = 5;
     else if (isPro) costToDeduct = 1;
     else if (isSchool) costToDeduct = 2;
     else if (isUltra) costToDeduct = 0;
@@ -1753,6 +1782,9 @@
   }
 
   function _tierCost(costMap) {
+    if (TRANSITION_MODE && isLoggedIn()) {
+      return costMap && typeof costMap.ultra === 'number' ? costMap.ultra : 0;
+    }
     const tier = _normalizeTier(getTier());
     const isUltra = tier === 'ultra' || tier === 'owner' || UNLIMITED_TIERS.has(tier);
     const isPro = tier === 'all_subjects';
@@ -1765,7 +1797,7 @@
   }
 
   async function _deductTieredCredits(costToDeduct, source, action, note) {
-    if (costToDeduct <= 0) return true;
+    if (costToDeduct <= 0 || TRANSITION_MODE) return true;
     const currentBase = _getStoredCredits();
     const bonusRemaining = _getExamBonusRemaining();
     const totalCredit = currentBase + bonusRemaining;
@@ -1938,6 +1970,7 @@
       SUPABASE_URL,
       SUPABASE_ANON_KEY,
       OWNER_EMAIL,
+      TRANSITION_MODE,
     },
   };
 

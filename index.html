@@ -4951,7 +4951,7 @@ html body #community-share-sheet .community-share-panel{
     </div>
     <div class="nav-actions">
       <div id="nav-credit-chip" class="nav-credit-chip" style="display:none"></div>
-      <button id="nav-upgrade-btn" class="nav-upgrade-btn" type="button" onclick="go('/upgrade')">Upgrade</button>
+      <button id="nav-upgrade-btn" class="nav-upgrade-btn" type="button" onclick="go('/upgrade')" style="display:none">Upgrade</button>
       <button id="nav-auth-btn" class="nav-auth-btn" type="button" onclick="openSignInOverlayFallback()">Sign in</button>
       <div class="nav-user-wrap" id="nav-user-wrap" style="display:none">
         <button class="nav-user-btn" id="nav-user-btn">
@@ -4964,7 +4964,7 @@ html body #community-share-sheet .community-share-panel{
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" onclick="go('/account')">My Account</a>
           <a class="dropdown-item" id="dropdown-edu-admin" href="/admin/index.html" style="display:none">EDU Admin</a>
-          <a class="dropdown-item" onclick="go('/upgrade')">⚡ Upgrade</a>
+          <a class="dropdown-item" id="dropdown-upgrade" onclick="go('/upgrade')" style="display:none">⚡ Upgrade</a>
           <div class="dropdown-divider"></div>
           <button class="dropdown-item" id="dropdown-reset-pw">Reset password</button>
           <div class="dropdown-divider"></div>
@@ -5213,7 +5213,7 @@ html body #community-share-sheet .community-share-panel{
         <span class="mobile-you-copy"><strong>Community</strong><small>Ask questions &amp; share resources</small></span>
         <em>Open</em>
       </button>
-      <button class="mobile-you-item" type="button" data-mobile-you="/upgrade">
+      <button class="mobile-you-item" type="button" data-mobile-you="/upgrade" id="mobile-you-upgrade" style="display:none">
         <span class="mobile-you-icon upgrade"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z"></path></svg></span>
         <span class="mobile-you-copy"><strong>Upgrade</strong><small>Unlock more credits &amp; features</small></span>
         <em>Open</em>
@@ -5236,7 +5236,7 @@ html body #community-share-sheet .community-share-panel{
   <img src="logo.png" alt="RA10 logo" width="26" height="26">
   <span class="brand">RA10</span>
   <div id="mobile-credit-chip" class="mobile-credit-chip" style="display:none"></div>
-  <button id="mobile-upgrade-btn" class="mobile-upgrade-btn" type="button" onclick="go('/upgrade')">Upgrade</button>
+  <button id="mobile-upgrade-btn" class="mobile-upgrade-btn" type="button" onclick="go('/upgrade')" style="display:none">Upgrade</button>
   <button class="theme-toggle mobile-theme-toggle" id="mobile-theme-toggle" aria-label="Toggle dark mode">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
   </button>
@@ -5544,7 +5544,7 @@ html body #community-share-sheet .community-share-panel{
         </div>
         <div class="ctas" style="margin-top:var(--sp2)">
           <button class="btn btn-p" type="button" onclick="go('/revision')">Start revising</button>
-          <button class="btn btn-s" type="button" onclick="go('/upgrade')">See AI plans</button>
+          <button class="btn btn-s" type="button" onclick="showTransitionPopup()">Everything's unlocked</button>
         </div>
       </section>
 
@@ -5609,105 +5609,23 @@ html body #community-share-sheet .community-share-panel{
         </div>
       </section>
 
-      <section class="hx-section" aria-label="Plans">
+      <section class="hx-section" aria-label="Transition announcement">
         <div class="hx-plans-shell">
         <div class="hx-section-head">
           <div>
-            <span class="hx-eyebrow">Plans</span>
-            <h2>Start free, upgrade when you need to</h2>
+            <span class="hx-eyebrow">Something new is coming</span>
+            <h2>RA10.CO.UK is turning into something new</h2>
           </div>
-          <p>Small monthly credit allowance to try it, or upgrade for full access and no ads.</p>
-        </div>
-        <div class="hx-plan-grid">
-          <article class="hx-plan-card free">
-            <h3>Free</h3>
-            <div class="price">£0</div>
-            <p>Basic access and a small monthly credit allowance.</p>
-          </article>
-          <article class="hx-plan-card pro">
-            <span class="hx-plan-ribbon">Popular</span>
-            <h3>Pro</h3>
-            <div class="price">£1.67/mo</div>
-            <p>1,000 monthly credits, no ads and full subject access.</p>
-          </article>
-          <article class="hx-plan-card ultra">
-            <h3>Ultra</h3>
-            <div class="price">£2.50/mo</div>
-            <p>Unlimited credits and access to the full platform.</p>
-          </article>
+          <p>Payments are paused right now, so everything is unlocked while we build what's next.</p>
         </div>
 
-        <div class="home-price-showdown" id="home-price-visual" aria-label="Annual cost snapshot comparison">
-          <div class="price-visual">
-            <div class="price-visual-head">
-              <strong>Annual cost snapshot</strong>
-              <span data-snapshot-label>Lower is better</span>
-            </div>
-            <div class="price-toggle-row" role="tablist" aria-label="Price comparison filters">
-              <button type="button" class="price-toggle is-active" data-snapshot-view="all" role="tab" aria-selected="true" onclick="setPriceSnapshotView('all', this)">All</button>
-              <button type="button" class="price-toggle" data-snapshot-view="seneca" role="tab" aria-selected="false" onclick="setPriceSnapshotView('seneca', this)">RA10 vs Seneca</button>
-              <button type="button" class="price-toggle" data-snapshot-view="sme-low" role="tab" aria-selected="false" onclick="setPriceSnapshotView('sme-low', this)">RA10 vs Save My Exams</button>
-            </div>
-
-            <div class="price-bar-row" data-snapshot-key="ra10-pro">
-              <span class="price-bar-label">RA10 Pro</span>
-              <div class="price-bar-track"><div class="price-bar ra10" style="width:21%"></div></div>
-              <span class="price-bar-value">£20</span>
-            </div>
-            <div class="price-bar-row" data-snapshot-key="ra10-ultra">
-              <span class="price-bar-label">RA10 Ultra</span>
-              <div class="price-bar-track"><div class="price-bar ra10" style="width:31%"></div></div>
-              <span class="price-bar-value">£30</span>
-            </div>
-            <div class="price-bar-row" data-snapshot-key="sme-low">
-              <span class="price-bar-label">Save My Exams</span>
-              <div class="price-bar-track"><div class="price-bar sme-low" style="width:50%"></div></div>
-              <span class="price-bar-value">£48</span>
-            </div>
-            <div class="price-bar-row" data-snapshot-key="seneca">
-              <span class="price-bar-label">Seneca</span>
-              <div class="price-bar-track"><div class="price-bar seneca" style="width:100%"></div></div>
-              <span class="price-bar-value">£96</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="home-school-box" aria-label="Student and education plan details">
-          <span class="home-school-badge">Student and Education</span>
-          <h4>School plan makes student accounts effectively free.</h4>
-          <p>
-            If your school chooses the Education plan, students do not need to buy personal subscriptions.
-            Every student account is included under the school, with monthly credits and full subject access.
-            This is designed for departments that want consistent access across classes without individual payment barriers.
-          </p>
-
-          <div class="home-school-points">
-            <article class="home-school-widget student">
-              <h5>Student account (via school)</h5>
-              <div class="price">£0 direct cost</div>
-              <ul>
-                <li>Included when the school is on Education</li>
-                <li>300 credits per month per student</li>
-                <li>All live subjects unlocked</li>
-                <li>No ads during study sessions</li>
-              </ul>
-            </article>
-
-            <article class="home-school-widget teacher">
-              <h5>Education plan (school-wide)</h5>
-              <div class="price">£100/year per school</div>
-              <ul>
-                <li>Unlimited teachers and students</li>
-                <li>Teachers receive 600 credits per month each</li>
-                <li>Students receive 300 credits per month each</li>
-                <li>Admin portal for inviting and managing users</li>
-              </ul>
-            </article>
-          </div>
-
-          <div class="ctas">
-            <button class="btn btn-p" type="button" onclick="go('/upgrade')">View Education Plan</button>
-            <button class="btn btn-s" type="button" onclick="go('/upgrade')">Compare All Plans</button>
+        <div class="card" style="max-width:760px;margin:0 auto;padding:var(--sp6);border:1px solid var(--color-primary);background:linear-gradient(135deg,rgba(124,58,237,.08),rgba(16,185,129,.08));text-align:center;">
+          <div style="font-size:2rem;line-height:1;margin-bottom:12px;">🎉</div>
+          <h3 style="margin:0 0 10px;font-weight:700;">Unlimited credits for every signed-in account</h3>
+          <p style="margin:0 0 16px;color:var(--color-text-muted);line-height:1.7;">As a transition gift while payments are paused, every signed-in account gets <strong>unlimited credits</strong> and full access to revision guides and all premium features — completely free. You just need to be signed in.</p>
+          <div class="ctas" style="justify-content:center;">
+            <button class="btn btn-p" type="button" onclick="openSignInOverlayFallback()">Sign in free</button>
+            <button class="btn btn-s" type="button" onclick="showTransitionPopup()">Learn more</button>
           </div>
         </div>
         </div>
@@ -6307,6 +6225,14 @@ html body #community-share-sheet .community-share-panel{
     <span class="bc-item cur">Upgrade</span>
   </div>
 
+  <div class="card" id="upgrade-paused-card" style="max-width:760px;margin:var(--sp8) auto;padding:var(--sp6);border:1px solid var(--color-primary);background:linear-gradient(135deg,rgba(124,58,237,.08),rgba(16,185,129,.08));text-align:center;display:none;">
+    <div style="font-size:var(--tx-xs);font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--color-primary);margin-bottom:var(--sp3);">Transition period</div>
+    <h1 style="font-size:var(--tx-2xl);font-weight:400;margin-bottom:var(--sp4);line-height:1.1;">Everything is unlocked for now</h1>
+    <p style="color:var(--color-text);font-size:var(--tx-base);line-height:1.7;margin-bottom:var(--sp4);">RA10.CO.UK is turning into something new soon. While payments are paused, every signed-in account gets <strong>unlimited credits</strong> and full access to revision guides and premium features — completely free.</p>
+    <a class="btn btn-p" style="justify-content:center;" onclick="openSignInOverlayFallback()">Sign in to continue</a>
+  </div>
+
+  <div id="p-upgrade-content" style="display:none;">
   <div style="padding-block:var(--sp12) var(--sp8);text-align:center;max-width:600px;margin-inline:auto;">
     <div style="font-size:var(--tx-xs);font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--color-primary);margin-bottom:var(--sp3);">RA10 Plans</div>
     <h1 style="font-size:var(--tx-2xl);font-weight:400;margin-bottom:var(--sp4);line-height:1.1;">Simple, honest pricing</h1>
@@ -6630,6 +6556,7 @@ html body #community-share-sheet .community-share-panel{
         </div>
       </div>
     </div>
+  </div>
   </div>
 </div>
 </div>
@@ -12517,6 +12444,7 @@ async function waitForRA10Sdk(timeoutMs) {
     }
 
     _updateNavAuth();
+    applyTransitionModeUi();
 
   ra10.on('authchange', () => { _updateNavAuth(); renderSignedInDashboard(); });
   ra10.on('creditschange', _updateNavAuth);
@@ -12734,6 +12662,16 @@ async function waitForRA10Sdk(timeoutMs) {
       const mobileCreditChip = document.getElementById('mobile-credit-chip');
       const mobileUpgradeBtn = document.getElementById('mobile-upgrade-btn');
       const examBanner = document.getElementById('exam-banner');
+      const navUpgradeBtn = document.getElementById('nav-upgrade-btn');
+      const dropdownUpgrade = document.getElementById('dropdown-upgrade');
+      const mobileYouUpgrade = document.getElementById('mobile-you-upgrade');
+      const transitionMode = !!(window.RA10 && window.RA10._raw && window.RA10._raw.TRANSITION_MODE);
+      if (transitionMode) {
+        if (navUpgradeBtn) navUpgradeBtn.style.display = 'none';
+        if (dropdownUpgrade) dropdownUpgrade.style.display = 'none';
+        if (mobileUpgradeBtn) mobileUpgradeBtn.style.display = 'none';
+        if (mobileYouUpgrade) mobileYouUpgrade.style.display = 'none';
+      }
 
       if (authRestorePending) {
         if (navAuthBtn) {
@@ -12747,7 +12685,7 @@ async function waitForRA10Sdk(timeoutMs) {
         if (mobileYouSignout) mobileYouSignout.style.display = 'none';
         if (navCreditChip) navCreditChip.style.display = 'none';
         if (mobileCreditChip) mobileCreditChip.style.display = 'none';
-        if (mobileUpgradeBtn) mobileUpgradeBtn.style.display = 'inline-flex';
+        if (mobileUpgradeBtn) mobileUpgradeBtn.style.display = transitionMode ? 'none' : 'inline-flex';
         if (examBanner) examBanner.style.display = '';
         return;
       }
@@ -12764,7 +12702,7 @@ async function waitForRA10Sdk(timeoutMs) {
         if (mobileYouSignout2) mobileYouSignout2.style.display = 'none';
         if (navCreditChip) navCreditChip.style.display = 'none';
         if (mobileCreditChip) mobileCreditChip.style.display = 'none';
-        if (mobileUpgradeBtn) mobileUpgradeBtn.style.display = 'inline-flex';
+        if (mobileUpgradeBtn) mobileUpgradeBtn.style.display = transitionMode ? 'none' : 'inline-flex';
         if (examBanner) examBanner.style.display = '';
         return;
       }
@@ -12778,9 +12716,13 @@ async function waitForRA10Sdk(timeoutMs) {
         navAuthBtn.disabled = false;
       }
       if (navUserWrap) navUserWrap.style.display = loggedIn ? '' : 'none';
-      if (!loggedIn || !tier || tier === 'free') document.getElementById('nav-upgrade-btn').style.display = 'inline-flex';
-      else document.getElementById('nav-upgrade-btn').style.display = 'none';
-      if (mobileUpgradeBtn) mobileUpgradeBtn.style.display = (!loggedIn || !tier || tier === 'free') ? 'inline-flex' : 'none';
+      if (transitionMode) {
+        if (navUpgradeBtn) navUpgradeBtn.style.display = 'none';
+        if (mobileUpgradeBtn) mobileUpgradeBtn.style.display = 'none';
+      } else {
+        if (navUpgradeBtn) navUpgradeBtn.style.display = (!loggedIn || !tier || tier === 'free') ? 'inline-flex' : 'none';
+        if (mobileUpgradeBtn) mobileUpgradeBtn.style.display = (!loggedIn || !tier || tier === 'free') ? 'inline-flex' : 'none';
+      }
       if (examBanner) {
         const isFreeOrSignedOut = !loggedIn || tier === 'free';
         examBanner.style.display = isFreeOrSignedOut ? '' : 'none';
@@ -14284,6 +14226,71 @@ async function waitForRA10Sdk(timeoutMs) {
 
     const PURCHASES_TEMPORARILY_DISABLED = false;
 
+    const TRANSITION_POPUP_SEEN_KEY = 'ra10_transition_popup_seen_v1';
+
+    function transitionModeActive() {
+      return !!(window.RA10 && window.RA10._raw && window.RA10._raw.TRANSITION_MODE);
+    }
+
+    // Hides every upgrade / buy entry point while transition mode is on, and
+    // swaps the upgrade page body for an "everything is unlocked" notice.
+    function applyTransitionModeUi() {
+      const on = transitionModeActive();
+      const navUpgradeBtn = document.getElementById('nav-upgrade-btn');
+      const mobileUpgradeBtn = document.getElementById('mobile-upgrade-btn');
+      const dropdownUpgrade = document.getElementById('dropdown-upgrade');
+      const mobileYouUpgrade = document.getElementById('mobile-you-upgrade');
+      if (navUpgradeBtn) navUpgradeBtn.style.display = on ? 'none' : '';
+      if (mobileUpgradeBtn) mobileUpgradeBtn.style.display = on ? 'none' : '';
+      if (dropdownUpgrade) dropdownUpgrade.style.display = on ? 'none' : '';
+      if (mobileYouUpgrade) mobileYouUpgrade.style.display = on ? 'none' : '';
+      const pausedCard = document.getElementById('upgrade-paused-card');
+      const upgradeContent = document.getElementById('p-upgrade-content');
+      if (pausedCard) pausedCard.style.display = on ? 'block' : 'none';
+      if (upgradeContent) upgradeContent.style.display = on ? 'none' : '';
+      const manageBillingBtn = document.getElementById('btn-manage-billing');
+      if (manageBillingBtn) manageBillingBtn.style.display = on ? 'none' : '';
+      if (on) {
+        showTransitionPopup();
+      }
+    }
+
+    function showTransitionPopup() {
+      try {
+        if (localStorage.getItem(TRANSITION_POPUP_SEEN_KEY) === '1') return;
+      } catch (e) {}
+      if (document.getElementById('transition-popup-overlay')) return;
+      const overlay = document.createElement('div');
+      overlay.id = 'transition-popup-overlay';
+      overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:1200;display:flex;align-items:center;justify-content:center;padding:16px;font-family:sans-serif;';
+      const card = document.createElement('div');
+      card.style.cssText = 'width:min(520px,100%);background:var(--color-surface,#fff);color:var(--color-text,#101218);border:1px solid var(--color-border,#d6dbe8);border-radius:18px;padding:24px;box-shadow:0 12px 40px rgba(0,0,0,.28);text-align:center;';
+      card.innerHTML = ''
+        + '<div style="font-size:2rem;line-height:1;margin-bottom:10px;">🎉</div>'
+        + '<h3 style="margin:0 0 10px 0;font-size:1.3rem;font-weight:700;">RA10.CO.UK is turning into something new</h3>'
+        + '<p style="margin:0 0 16px 0;color:var(--color-text-muted,#5f6780);line-height:1.6;">Payments are paused for now, so as a transition gift <strong>everyone signed in gets unlimited credits</strong> and full access to revision guides and premium features — completely free.</p>'
+        + '<p style="margin:0 0 16px 0;color:var(--color-text-muted,#5f6780);line-height:1.6;"><strong>You still need to be signed in</strong> to use everything.</p>'
+        + '<div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">'
+        +   '<button id="transition-popup-signin" class="btn btn-p" type="button" style="justify-content:center;">Sign in</button>'
+        +   '<button id="transition-popup-close" class="btn btn-s" type="button" style="justify-content:center;">Got it</button>'
+        + '</div>';
+      overlay.appendChild(card);
+      document.body.appendChild(overlay);
+      const markSeen = () => {
+        try { localStorage.setItem(TRANSITION_POPUP_SEEN_KEY, '1'); } catch (e) {}
+        overlay.remove();
+      };
+      document.getElementById('transition-popup-close')?.addEventListener('click', markSeen);
+      document.getElementById('transition-popup-signin')?.addEventListener('click', () => {
+        overlay.remove();
+        openAuthModal('signin');
+      });
+      overlay.addEventListener('click', (e) => { if (e.target === overlay) markSeen(); });
+    }
+
+    window.applyTransitionModeUi = applyTransitionModeUi;
+    window.showTransitionPopup = showTransitionPopup;
+
     function showPurchasesPausedPopup() {
       const existing = document.getElementById('purchase-paused-overlay');
       if (existing) {
@@ -14314,6 +14321,10 @@ async function waitForRA10Sdk(timeoutMs) {
     }
 
     async function lsBuy(plan, subject, extra) {
+      if (transitionModeActive()) {
+        showTransitionPopup();
+        return;
+      }
       if (PURCHASES_TEMPORARILY_DISABLED) {
         showPurchasesPausedPopup();
         return;
@@ -14343,6 +14354,7 @@ async function waitForRA10Sdk(timeoutMs) {
     document.getElementById('btn-buy-pro')?.addEventListener('click', () => lsBuy('pro', '', { billingInterval: _billingInterval }));
     document.getElementById('btn-buy-ultra')?.addEventListener('click', () => lsBuy('ultra', '', { billingInterval: _billingInterval }));
     document.getElementById('btn-buy-edu')?.addEventListener('click', () => lsBuy('edu'));
+    if (transitionModeActive()) applyTransitionModeUi();
 
     // ---- Billing interval (monthly vs yearly) ----
     let _billingInterval = 'year';

@@ -292,6 +292,7 @@ async function ra10Gate(action) {
   try {
     if (!window.RA10) return true;
     if (RA10.isOwner()) return true;
+    if (RA10._raw && RA10._raw.TRANSITION_MODE && RA10.isLoggedIn()) return true;
     if (!RA10.isLoggedIn()) {
       const result = await RA10.guestGate(action, 3, RA10.showPaywall);
       if (window.RA10) await _ra10RenderUnitCreditChip();

@@ -830,6 +830,7 @@
   function hasPlanGuideAccess() {
     if (!window.RA10 || !RA10.isLoggedIn()) return false;
     if (RA10.isOwner()) return true;
+    if (RA10._raw && RA10._raw.TRANSITION_MODE) return true;
     const tier = RA10.getTier ? RA10.getTier() : 'free';
     if (tier === 'subject') {
       const ctx = (typeof window._ra10GetUnitCreditsContext === 'function') ? window._ra10GetUnitCreditsContext() : null;

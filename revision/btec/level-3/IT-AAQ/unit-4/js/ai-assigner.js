@@ -82,6 +82,7 @@
       ? { free: 8, school: 3, pro: 2, ultra: 0, subject: 5 }
       : { free: 3, school: 1, pro: 1, ultra: 0, subject: 2 };
     if (isUltra) return map.ultra;
+    if (window.RA10 && window.RA10._raw && window.RA10._raw.TRANSITION_MODE) return 0;
     if (isPro) return map.pro;
     if (isSchool) return map.school;
     if (tier === 'subject') return map.subject != null ? map.subject : map.free;
