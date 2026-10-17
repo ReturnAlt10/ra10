@@ -22,7 +22,6 @@ Past-paper style signals captured:
 - • in the context of the situation faced by AJS plc.  For example, selectively using the data.
 
 Output files regenerated from scratch:
-- guide_content.json
 - flashcards.json
 - mc.json
 - quiz.json

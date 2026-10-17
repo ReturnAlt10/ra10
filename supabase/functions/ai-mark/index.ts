@@ -1,4 +1,5 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { BUSINESS_SYSTEM, buildBusinessPrompt, businessPostProcess, isALevelBusiness } from "./business_examiner.ts";
 
 const ALLOWED_ORIGINS = [
   "https://ra10.co.uk",
@@ -23,7 +24,7 @@ function initProviders() {
   const openaiKey = Deno.env.get("OPENAI_API_KEY") || "";
   const geminiKey = Deno.env.get("GEMINI_API_KEY") || "";
 
-  // Priority order: OpenRouter free (0 cost) → DeepSeek (cheaper) → OpenAI (expensive)
+  // Business marking uses OpenAI/Gemini first; OpenRouter is the preferred fallback.
   if (openrouterKey) {
     const openrouterModels = (Deno.env.get("OPENROUTER_MODELS") || "")
       .split(",")
@@ -147,7 +148,7 @@ function ensureResultShape(raw: any, marksMax: number): MarkResult {
     ? raw.improvements.map((i: any) => String(i || "").trim()).filter((i: string) => i.length > 0)
     : [];
 
-  return {
+  const result: MarkResult = {
     source: "ai",
     earned,
     max,
@@ -155,6 +156,16 @@ function ensureResultShape(raw: any, marksMax: number): MarkResult {
     improvements,
     feedback: String(raw?.feedback || "").trim(),
   };
+  // Optional richer fields (used by the A-level Business examiner).
+  const extra: Record<string, unknown> = {};
+  if (Number.isFinite(Number(raw?.level))) extra.level = Math.round(Number(raw.level));
+  if (raw?.level_marks) extra.level_marks = String(raw.level_marks);
+  if (raw?.ao_feedback && typeof raw.ao_feedback === "object") extra.ao_feedback = raw.ao_feedback;
+  if (Array.isArray(raw?.annotations)) extra.annotations = raw.annotations.slice(0, 12);
+  if (Array.isArray(raw?.next_level)) extra.next_level = raw.next_level.map((x: unknown) => String(x)).slice(0, 4);
+  if (raw?.examiner_comment) extra.examiner_comment = String(raw.examiner_comment);
+  if (raw?.calculation_check) extra.calculation_check = String(raw.calculation_check);
+  return Object.assign(result, extra);
 }
 
 function buildPrompt(question: any, answer: string, learnedHints: string[]) {
@@ -182,17 +193,19 @@ function buildPrompt(question: any, answer: string, learnedHints: string[]) {
   ].filter(Boolean).join("\n");
 }
 
-async function callProvider(provider: ProviderConfig, prompt: string): Promise<any> {
+type CallOptions = { system?: string; timeout?: number; maxTokens?: number };
+
+async function callProvider(provider: ProviderConfig, prompt: string, opts: CallOptions = {}): Promise<any> {
   const modelErrors: string[] = [];
   for (const model of provider.models) {
-    const payload = {
+    const payload: Record<string, unknown> = {
       model,
-      temperature: 0.1,
+      temperature: opts.system ? 0 : 0.1,
       response_format: { type: "json_object" },
       messages: [
         {
           role: "system",
-          content: "You are a strict but fair examiner. Output JSON only.",
+          content: opts.system || "You are a strict but fair examiner. Output JSON only.",
         },
         {
           role: "user",
@@ -201,8 +214,9 @@ async function callProvider(provider: ProviderConfig, prompt: string): Promise<a
       ],
     };
 
+    if (opts.maxTokens) payload.max_tokens = opts.maxTokens;
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), provider.timeout);
+    const timeoutId = setTimeout(() => controller.abort(), opts.timeout || provider.timeout);
 
     try {
       const response = await fetch(provider.endpoint, {
@@ -244,14 +258,19 @@ async function callProvider(provider: ProviderConfig, prompt: string): Promise<a
   return { success: false, error: modelErrors.join(" || "), provider: provider.name };
 }
 
-async function callAnyProvider(prompt: string): Promise<{ content: string; provider: string }> {
+async function callAnyProvider(prompt: string, opts: CallOptions = {}, preferStrong = false): Promise<{ content: string; provider: string }> {
   if (PROVIDERS.length === 0) {
     throw new Error("No AI providers configured");
   }
 
+  // Level-of-response marking needs a capable model: try paid/stronger providers before
+  // small free OpenRouter models when preferStrong is set.
+  const rank: Record<string, number> = { openai: 0, gemini: 1, openrouter: 2, deepseek: 3 };
+  const ordered = preferStrong ? PROVIDERS.slice().sort((a, b) => (rank[a.name] ?? 9) - (rank[b.name] ?? 9)) : PROVIDERS;
+
   const errors: string[] = [];
-  for (const provider of PROVIDERS) {
-    const result = await callProvider(provider, prompt);
+  for (const provider of ordered) {
+    const result = await callProvider(provider, prompt, opts);
     if (result.success) {
       console.log(`AI mark succeeded with provider: ${result.provider}`);
       return { content: result.content, provider: result.provider };
@@ -334,14 +353,18 @@ export default Deno.serve(async (req: Request) => {
       });
     }
 
-    const marksMax = clamp(Math.round(safeNum(question?.marks, 1)), 1, 20);
-    const prompt = buildPrompt(question, answer, []);
+    const marksMax = clamp(Math.round(safeNum(question?.marks, 1)), 1, 40);
+    const business = isALevelBusiness(question);
+    const prompt = business ? buildBusinessPrompt(question, answer) : buildPrompt(question, answer, []);
 
-    const aiResponse = await callAnyProvider(prompt);
-    const parsed = extractJsonObject(aiResponse.content);
+    const aiResponse = business
+      ? await callAnyProvider(prompt, { system: BUSINESS_SYSTEM, timeout: 45000, maxTokens: 1800 }, true)
+      : await callAnyProvider(prompt);
+    let parsed = extractJsonObject(aiResponse.content);
     if (!parsed || typeof parsed !== "object") {
       throw new Error("AI response could not be parsed as JSON");
     }
+    if (business) parsed = businessPostProcess(parsed, question, answer);
 
     const result = ensureResultShape(parsed, marksMax);
 

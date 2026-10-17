@@ -5086,3 +5086,75 @@ main {
     grid-template-columns: 1fr;
   }
 }
+
+/* ===== 2026 Business overhaul: contexts, appendices, mock papers, AI examiner ===== */
+.q-context { margin: 6px 0 10px; }
+.scenario-data { white-space: pre-wrap; font-family: var(--mono); font-size: 13px; background: var(--bg); border: 1px solid var(--line); border-radius: var(--r-sm); padding: 10px 12px; margin: 6px 0 10px; color: var(--ink); }
+.context-details { border: 1px solid var(--line); border-radius: var(--r-md); background: var(--bg); padding: 8px 12px; margin: 6px 0 12px; }
+.context-details > summary { cursor: pointer; font-weight: 700; color: var(--accent); padding: 4px 0; }
+.context-details .scenario { font-size: 14px; line-height: 1.6; margin: 6px 0; }
+.context-heading { margin: 12px 0 2px; font-size: 13px; text-transform: uppercase; letter-spacing: .05em; color: var(--ink-2); }
+.appendices { display: grid; gap: 12px; margin: 10px 0; }
+.appendix-title { font-weight: 700; font-size: 13.5px; margin: 0 0 4px; }
+.appendix-table { width: 100%; border-collapse: collapse; font-size: 13px; background: var(--surface); }
+.appendix-table th, .appendix-table td { border: 1px solid var(--line-2); padding: 5px 8px; text-align: left; vertical-align: top; }
+.appendix-table th { background: color-mix(in srgb, var(--accent) 8%, var(--surface)); font-weight: 700; }
+.appendix-note { font-size: 12px; color: var(--muted); margin: 4px 0 0; font-style: italic; }
+.exam-technique-hint { font-size: 13px; background: color-mix(in srgb, var(--accent) 7%, var(--surface)); border-left: 3px solid var(--accent); padding: 8px 12px; border-radius: var(--r-sm); margin: 4px 0 12px; color: var(--ink-2); }
+.markscheme .ms-ao { font-size: 12.5px; font-weight: 700; color: var(--ink-2); margin: 0 0 6px; }
+.markscheme ul.ms-calcs li { font-family: var(--mono); font-size: 12.5px; }
+.markscheme ul.ms-notes li { color: var(--warn); }
+.mock-format { border: 1px dashed var(--line-2); border-radius: var(--r-md); padding: 10px 14px; margin: 6px 0 12px; background: var(--bg); font-size: 13.5px; }
+.mock-format-summary { margin: 0 0 6px; }
+.mock-format-list { margin: 0; padding-left: 18px; color: var(--ink-2); }
+.paper-instructions { margin: 6px 0 0; padding-left: 18px; font-size: 13px; }
+.section-note { font-style: italic; font-size: 13.5px; color: var(--ink-2); margin: 2px 0 12px; }
+.paper-insert, .paper-context { border: 2px solid var(--ink); border-radius: var(--r-sm); padding: 14px 18px; margin: 14px 0 22px; background: var(--surface); }
+.paper-insert h3 { margin-top: 0; }
+.paper-insert h4, .paper-context h4 { margin: 14px 0 4px; }
+.paper-insert p, .paper-context p { line-height: 1.6; font-size: 14px; }
+.insert-end { text-align: center; font-weight: 700; letter-spacing: .1em; font-size: 12px !important; margin-top: 14px; }
+.paper-choice { border-left: 3px solid var(--accent-2); padding-left: 12px; }
+.calc-answer-box { display: flex; gap: 10px; align-items: flex-end; margin: 8px 0 2px; font-weight: 700; font-size: 13px; }
+.calc-answer-line { flex: 0 0 220px; border-bottom: 1px solid var(--ink); height: 18px; }
+.calc-working-label { font-weight: 700; font-size: 13px; margin: 8px 0 0; }
+.ai-examiner-comment { background: color-mix(in srgb, #7c3aed 8%, var(--surface)); border-left: 3px solid #7c3aed; padding: 10px 12px; border-radius: var(--r-sm); margin: 8px 0; font-size: 14px; line-height: 1.55; }
+.ai-calc-check { font-size: 13.5px; margin: 6px 0; }
+.ai-ao-table { width: 100%; border-collapse: collapse; margin: 8px 0; font-size: 13px; }
+.ai-ao-table th, .ai-ao-table td { border: 1px solid var(--line); padding: 6px 8px; text-align: left; vertical-align: top; }
+.ai-ao-table th { background: var(--bg); }
+.ai-ao-table td:first-child { white-space: nowrap; font-weight: 700; }
+.ai-annotations { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 8px 0; font-size: 12.5px; }
+.ai-ann-tag { border: 1px solid var(--line-2); border-radius: 999px; padding: 2px 9px; background: var(--surface); }
+.ai-ann-ku { border-color: #3b82f6; } .ai-ann-arg { border-color: #10b981; } .ai-ann-dev { border-color: #059669; background: color-mix(in srgb, #10b981 10%, var(--surface)); }
+.ai-ann-eval { border-color: #7c3aed; } .ai-ann-nff, .ai-ann-naq { border-color: #ef4444; } .ai-ann-bal { border-color: #f59e0b; }
+.pp-format td { font-size: 13px; padding: 4px 6px; }
+.pp-map td, .pp-map th { font-size: 12.5px; vertical-align: top; }
+.pp-mistakes { padding-left: 20px; margin: 6px 0 0; }
+.pp-mistakes li { margin-bottom: 8px; line-height: 1.5; font-size: 14px; }
+@media print {
+  .context-details { border: none; padding: 0; }
+  .paper-insert { page-break-after: always; }
+  .exam-technique-hint { display: none; }
+}
+
+/* Business guide: analysis chains, evaluation and worked examples */
+.chain-box { background: rgba(16,185,129,0.08); border-left: 4px solid #10b981; padding: 10px 14px; border-radius: 0 var(--r-sm) var(--r-sm) 0; margin: 10px 0; }
+[data-theme="dark"] .chain-box { background: rgba(16,185,129,0.13); }
+.chain-label, .eval-label, .worked-label, .seen-label { font-size: 0.67rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+.chain-label { color: #047857; }
+.chain-steps { list-style: none; padding: 0; margin: 4px 0 0; counter-reset: chain; }
+.chain-steps li { position: relative; padding: 3px 0 3px 26px; counter-increment: chain; }
+.chain-steps li::before { content: counter(chain); position: absolute; left: 0; top: 4px; width: 18px; height: 18px; border-radius: 50%; background: #10b981; color: #fff; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+.chain-steps li + li::after { content: ''; }
+.eval-box { background: rgba(124,58,237,0.07); border-left: 4px solid #7c3aed; padding: 10px 14px; border-radius: 0 var(--r-sm) var(--r-sm) 0; margin: 10px 0; }
+[data-theme="dark"] .eval-box { background: rgba(124,58,237,0.14); }
+.eval-label { color: #6d28d9; }
+.worked-box { border: 1px solid var(--line-2); border-radius: var(--r-sm); padding: 10px 14px; margin: 10px 0; background: var(--surface); }
+.worked-label { color: var(--accent); }
+.worked-box .w-step { font-family: var(--mono); font-size: 0.8rem; margin: 2px 0; }
+.seen-box { font-size: 0.8rem; color: var(--ink-2); margin: 10px 0 2px; }
+.seen-label { display: inline; color: var(--muted); margin-right: 6px; }
+.guide-intro-card { border: 1px solid var(--line); border-radius: var(--r-md); padding: 14px 18px; margin: 0 0 22px; background: var(--surface); }
+.guide-intro-card h3 { margin: 0 0 6px; }
+.guide-intro-card ul { margin: 6px 0 0; padding-left: 20px; }

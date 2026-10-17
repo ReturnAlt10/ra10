@@ -1,355 +1,223 @@
+/* AQA A-level Business (7132) - comprehensive revision guide.
+   Content lives in guide-content-a.js / guide-content-b.js (window.BG.sections).
+   Initialised by window.initComprehensiveGuide(); access gating is applied by app.js
+   (applyGuideAccessRules) using the .guide-aim-section ids "guide-aim-1".."guide-aim-10". */
 (function () {
   'use strict';
 
-  const GUIDE_STATE_KEY = 'aqa_business_guide_smx_v1';
+  const STORE_KEY = 'ra10-guide-revised-alevel-business-2025';
 
-  function arr(v) {
-    return Array.isArray(v) ? v : [];
+  function getRevised() {
+    try { return JSON.parse(localStorage.getItem(STORE_KEY) || '[]'); } catch (_) { return []; }
   }
-
+  function saveRevised(arr) {
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(arr)); } catch (_) { /* storage unavailable */ }
+  }
   function esc(s) {
-    return String(s == null ? '' : s)
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#39;');
+    return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   }
 
-  function loadState() {
-    try {
-      const parsed = JSON.parse(localStorage.getItem(GUIDE_STATE_KEY) || '{}');
-      return parsed && typeof parsed === 'object' ? parsed : {};
-    } catch (_) {
-      return {};
-    }
+  function sections() { return (window.BG && window.BG.sections) || []; }
+
+  function buildSidebar() {
+    return `
+<button class="guide-sb-toggle" onclick="this.closest('.guide-sidebar').classList.toggle('sb-open')">
+  <span>&#9776; Contents</span><span>&#8595;</span>
+</button>
+<div class="guide-sidebar-hd"><span class="guide-toc-label">AQA 7132 Guide</span></div>
+<div class="guide-toc-scroll">
+  <div class="guide-toc-aim-group">
+    <button class="guide-toc-aim-link" onclick="guideScrollTo('guide-start')"><span class="guide-toc-badge">&#9733;</span>How you're marked</button>
+  </div>
+  ${sections().map(s => `
+  <div class="guide-toc-aim-group">
+    <button class="guide-toc-aim-link" onclick="guideScrollTo('guide-aim-${s.num}')">
+      <span class="guide-toc-badge">3.${s.num}</span>${esc(s.title.replace(/^3\.\d+\s*/, ''))}
+    </button>
+    <div class="guide-toc-topic-links">
+      ${s.topics.map(t => `<button class="guide-toc-topic-link" onclick="guideScrollTo('gt-${t.code}')">${t.code} ${esc(t.name)}</button>`).join('')}
+    </div>
+  </div>`).join('')}
+  <div class="guide-toc-aim-group">
+    <button class="guide-toc-aim-link" onclick="guideScrollTo('guide-formulae')"><span class="guide-toc-badge">f(x)</span>Formula sheet</button>
+  </div>
+  <div class="guide-toc-aim-group">
+    <button class="guide-toc-aim-link" onclick="guideScrollTo('guide-glossary')"><span class="guide-toc-badge">A-Z</span>Key terms glossary</button>
+  </div>
+</div>`;
   }
 
-  function saveState(state) {
-    localStorage.setItem(GUIDE_STATE_KEY, JSON.stringify(state || {}));
+  function topicHtml(t, open) {
+    return `
+<div class="guide-topic${open ? ' open' : ''}" id="gt-${t.code}">
+  <div class="guide-topic-hd" onclick="toggleGT('gt-${t.code}')">
+    <span class="guide-topic-code">${t.code}</span>
+    <span class="guide-topic-name">${esc(t.name)}</span>
+    <span class="guide-topic-chevron">&#9660;</span>
+  </div>
+  <div class="guide-topic-body">${t.body}</div>
+</div>`;
   }
 
-  function readDone(code, state) {
-    return !!(state && state.done && state.done[code]);
+  function sectionHtml(s, idx) {
+    return `
+<div class="guide-aim-section" id="guide-aim-${s.num}">
+  <div class="guide-aim-hd">
+    <div class="guide-aim-badge">3.${s.num}</div>
+    <div>
+      <div class="guide-aim-title">${esc(s.title)}</div>
+      <div class="guide-aim-subtitle">${esc(s.subtitle)}</div>
+    </div>
+  </div>
+  ${s.topics.map((t, i) => topicHtml(t, idx === 0 && i === 0)).join('')}
+  <button class="guide-mark-btn" id="gmb-${s.num}" onclick="toggleGuideRevised('${s.num}')">
+    <span class="guide-mark-icon">&#9711;</span> Mark 3.${s.num} as revised
+  </button>
+</div>`;
   }
 
-  function setDone(code, value, state) {
-    state.done = state.done || {};
-    state.done[code] = !!value;
+  function startHtml() {
+    return `
+<div class="guide-intro-card" id="guide-start">
+  <h3>How your answers are marked (read this first)</h3>
+  <p>All three papers (2 hours, 100 marks each) can test <strong>any</strong> part of 3.1-3.10. Marks come from four assessment objectives:</p>
+  <table class="g-table"><thead><tr><th>AO</th><th>What it means</th><th>How to show it</th></tr></thead><tbody>
+    <tr><td><strong>AO1</strong> Knowledge</td><td>Accurate terms, concepts, theories, formulae</td><td>Define precisely; use the model's real mechanism, not just its name</td></tr>
+    <tr><td><strong>AO2</strong> Application</td><td>Using the context</td><td>Use names, numbers and details from the case or data - or a real/hypothetical business in essays</td></tr>
+    <tr><td><strong>AO3</strong> Analysis</td><td>Chains of reasoning</td><td>Point &rarr; because &rarr; which means &rarr; so (impact on the focus of the question). Explain WHY each link follows</td></tr>
+    <tr><td><strong>AO4</strong> Evaluation</td><td>Judgement</td><td>Weigh the arguments, say which matters most and why, and what the answer depends on</td></tr>
+  </tbody></table>
+  <p><strong>Examiner annotations to aim for:</strong> <em>ARG</em> = developed analysis in context; <em>DEV</em> = well-developed analysis in context (the full chain, each step explained). One DEV argument can reach the top level of a 9- or 12-mark 'Analyse' question.</p>
+  <div class="exam-tip"><div class="tip-label">&#128161; The four question types</div>
+  <ul>
+    <li><strong>Calculate (2-4 marks)</strong>: write the formula, show every step, label the unit. Method marks are given with the Own Figure Rule.</li>
+    <li><strong>Explain (3-4 marks)</strong>: one point, explained and applied to the context.</li>
+    <li><strong>Analyse (6, 9, 12 marks)</strong>: one or two well-developed chains in context. No conclusion needed.</li>
+    <li><strong>Evaluate / To what extent / Should... (16, 20, 24, 25 marks)</strong>: developed arguments on both sides, then a judgement that weighs them. 'All businesses' questions need contrasting contexts.</li>
+  </ul></div>
+  <p>Each topic below has key definitions, formulae with worked examples, a <span style="color:#047857;font-weight:700">model chain of analysis</span>, an <span style="color:#6d28d9;font-weight:700">evaluation</span> box ("it depends on..."), and <span style="color:#b91c1c;font-weight:700">what examiners report</span> students getting wrong, plus where the topic has appeared in past papers.</p>
+</div>`;
   }
 
-  function pickSummary(sub) {
-    const points = arr(sub.summary_points);
-    if (points.length) return points;
-    const concept = arr(sub.concept_map);
-    if (concept.length) return concept.slice(0, 5);
-    return ['Define the concept clearly.', 'Apply context.', 'Build analysis.', 'Finish with judgement.'];
+  function formulaSheet() {
+    const cards = (typeof FLASHCARDS !== 'undefined' ? FLASHCARDS : []).filter(c => String(c.front).startsWith('Formula:'));
+    const rows = cards.map(c => `<tr><td>3.${esc(c.learning_aim)}</td><td><strong>${esc(c.front.replace('Formula: ', ''))}</strong></td><td style="font-family:var(--mono)">${esc(c.back)}</td></tr>`).join('');
+    return `
+<div class="guide-aim-section" id="guide-formulae">
+  <div class="guide-aim-hd"><div class="guide-aim-badge" style="font-size:.9rem">f(x)</div>
+    <div><div class="guide-aim-title">Formula sheet - every calculation on the spec</div>
+    <div class="guide-aim-subtitle">No formula sheet is given in the exam. Calculations are worth around 10%+ of the marks.</div></div></div>
+  <div class="guide-topic open" id="gt-formulae">
+    <div class="guide-topic-hd" onclick="toggleGT('gt-formulae')"><span class="guide-topic-code">REF</span><span class="guide-topic-name">All formulae</span><span class="guide-topic-chevron">&#9660;</span></div>
+    <div class="guide-topic-body">
+      <table class="g-table"><thead><tr><th>Spec</th><th>Measure</th><th>Formula</th></tr></thead><tbody>${rows}</tbody></table>
+      <div class="exam-tip"><div class="tip-label">&#128161; Units checklist</div>Margin of safety and break-even: <strong>units</strong> · payables/receivables: <strong>days</strong> · inventory turnover: <strong>times</strong> · current ratio: <strong>x:1</strong> · margins, ROCE, gearing, ARR, labour turnover: <strong>%</strong> · NPV: <strong>£ (watch for £m)</strong> · payback: <strong>years and months</strong>.</div>
+    </div>
+  </div>
+</div>`;
   }
 
-  function renderList(items, className) {
-    const list = arr(items);
-    if (!list.length) return '<p class="smx-empty">No content yet.</p>';
-    return '<ul class="' + (className || 'smx-list') + '">' + list.map((x) => '<li>' + esc(x) + '</li>').join('') + '</ul>';
+  function glossary() {
+    const cards = (typeof FLASHCARDS !== 'undefined' ? FLASHCARDS : []).filter(c => !String(c.front).startsWith('Formula:'));
+    const byTopic = {};
+    cards.forEach(c => { (byTopic[c.learning_aim] = byTopic[c.learning_aim] || []).push(c); });
+    const blocks = Object.keys(byTopic).sort((a, b) => Number(a) - Number(b)).map(t => `
+      <h4>3.${esc(t)}</h4>
+      <table class="g-table"><thead><tr><th style="width:30%">Term</th><th>Definition</th></tr></thead><tbody>
+      ${byTopic[t].map(c => `<tr><td><strong>${esc(c.front)}</strong></td><td>${esc(c.back)}</td></tr>`).join('')}
+      </tbody></table>`).join('');
+    return `
+<div class="guide-aim-section" id="guide-glossary">
+  <div class="guide-aim-hd"><div class="guide-aim-badge" style="font-size:.9rem">A-Z</div>
+    <div><div class="guide-aim-title">Key terms glossary</div><div class="guide-aim-subtitle">Precise definitions earn AO1 marks and stop arguments being built on a misunderstanding.</div></div></div>
+  <div class="guide-topic" id="gt-glossary">
+    <div class="guide-topic-hd" onclick="toggleGT('gt-glossary')"><span class="guide-topic-code">REF</span><span class="guide-topic-name">All key terms by spec section</span><span class="guide-topic-chevron">&#9660;</span></div>
+    <div class="guide-topic-body">${blocks}</div>
+  </div>
+</div>`;
   }
 
-  function renderTerms(items) {
-    const list = arr(items);
-    if (!list.length) return '<p class="smx-empty">No definitions yet.</p>';
-    return '<div class="smx-terms">' + list.map((t) =>
-      '<article class="smx-term">'
-      + '<h5>' + esc(t.term || 'Term') + '</h5>'
-      + '<p>' + esc(t.definition || '') + '</p>'
-      + '</article>'
-    ).join('') + '</div>';
+  function buildGuideHTML() {
+    const total = sections().length;
+    return `
+<div class="guide-shell">
+  <div class="guide-sidebar" id="guide-sidebar-bus">${buildSidebar()}</div>
+  <div class="guide-main">
+    <div class="guide-topbar">
+      <div class="guide-progress-track"><div class="guide-progress-fill" id="guide-pf-bus" style="width:0%"></div></div>
+      <span class="guide-progress-text" id="guide-pt-bus">0 / ${total} sections revised</span>
+      <button class="guide-print-btn" onclick="window.print()">&#128438; Print guide</button>
+    </div>
+    ${startHtml()}
+    ${sections().map((s, i) => sectionHtml(s, i)).join('')}
+    ${formulaSheet()}
+    ${glossary()}
+  </div>
+</div>`;
   }
 
-  function renderWorked(items) {
-    const ex = arr(items)[0];
-    if (!ex) return '<p class="smx-empty">No worked example yet.</p>';
-    return '<article class="smx-worked">'
-      + '<h5>' + esc(ex.title || 'Worked example') + '</h5>'
-      + '<p class="smx-worked-scenario">' + esc(ex.scenario || '') + '</p>'
-      + '<ol>' + arr(ex.steps).map((s) => '<li>' + esc(s) + '</li>').join('') + '</ol>'
-      + '<p class="smx-worked-why"><strong>Why this scores:</strong> ' + esc(ex.interpretation || '') + '</p>'
-      + '</article>';
-  }
-
-  function renderPlans(items) {
-    const plans = arr(items);
-    if (!plans.length) return '<p class="smx-empty">No exam plans yet.</p>';
-    return '<div class="smx-plans">' + plans.map((p) =>
-      '<article class="smx-plan">'
-      + '<h5>' + esc(p.question_type || 'Plan') + '</h5>'
-      + '<ol>' + arr(p.plan).map((step) => '<li>' + esc(step) + '</li>').join('') + '</ol>'
-      + '</article>'
-    ).join('') + '</div>';
-  }
-
-  function renderQuickChecks(items) {
-    const checks = arr(items);
-    if (!checks.length) return '<p class="smx-empty">No quick checks yet.</p>';
-    return '<div class="smx-checks">' + checks.map((q) =>
-      '<article class="smx-check">'
-      + '<h5>' + esc(q.q || 'Question') + '</h5>'
-      + '<p>' + esc(q.a || '') + '</p>'
-      + '</article>'
-    ).join('') + '</div>';
-  }
-
-  function subtopicSearchBlob(sub) {
-    return [
-      sub.code || '',
-      sub.name || '',
-      sub.overview || '',
-      sub.big_picture || '',
-      arr(sub.summary_points).join(' '),
-      arr(sub.business_examples).join(' '),
-      arr(sub.formulae).join(' '),
-      arr(sub.concept_map).join(' ')
-    ].join(' ').toLowerCase();
-  }
-
-  function renderSubtopic(sub, topicNum, state) {
-    const code = String(sub.code || '');
-    const done = readDone(code, state);
-
-    return ''
-      + '<article class="smx-subtopic" id="gt-' + esc(code) + '" data-guide-subtopic data-topic="' + esc(topicNum) + '" data-search="' + esc(subtopicSearchBlob(sub)) + '">'
-      + '  <header class="smx-subtopic-head">'
-      + '    <button type="button" class="smx-toggle" data-expand="' + esc(code) + '" aria-expanded="false" aria-controls="smx-body-' + esc(code) + '">'
-      + '      <span class="smx-code">' + esc(code) + '</span>'
-      + '      <span class="smx-name">' + esc(sub.name || '') + '</span>'
-      + '      <span class="smx-sign">+</span>'
-      + '    </button>'
-      + '    <label class="smx-done">'
-      + '      <input type="checkbox" data-done="' + esc(code) + '" ' + (done ? 'checked' : '') + '>'
-      + '      <span>Done</span>'
-      + '    </label>'
-      + '  </header>'
-      + '  <div class="smx-subtopic-body" id="smx-body-' + esc(code) + '" hidden>'
-      + '    <section class="smx-intro">'
-      + '      <h4>Overview</h4>'
-      + '      <p>' + esc(sub.overview || '') + '</p>'
-      + '      <p>' + esc(sub.big_picture || '') + '</p>'
-      + '      <p class="smx-tip"><strong>Exam tip:</strong> ' + esc(sub.exam_tip || 'Define, apply context, analyse chain effects, and judge clearly.') + '</p>'
-      + '    </section>'
-      + '    <section class="smx-grid">'
-      + '      <article class="smx-card">'
-      + '        <h4>What You Need To Know</h4>'
-      +          renderList(pickSummary(sub))
-      + '      </article>'
-      + '      <article class="smx-card">'
-      + '        <h4>Key Definitions</h4>'
-      +          renderTerms(sub.key_terms)
-      + '      </article>'
-      + '      <article class="smx-card">'
-      + '        <h4>Business Examples</h4>'
-      +          renderList(sub.business_examples)
-      + '      </article>'
-      + '      <article class="smx-card">'
-      + '        <h4>Formula Toolkit</h4>'
-      +          renderList(sub.formulae)
-      + '      </article>'
-      + '      <article class="smx-card smx-card-wide">'
-      + '        <h4>Worked Example</h4>'
-      +          renderWorked(sub.worked_examples)
-      + '      </article>'
-      + '      <article class="smx-card smx-card-wide">'
-      + '        <h4>Exam Practice Structure</h4>'
-      +          renderPlans(sub.exam_plans)
-      + '      </article>'
-      + '      <article class="smx-card">'
-      + '        <h4>Common Mistakes</h4>'
-      +          renderList(sub.common_mistakes)
-      + '      </article>'
-      + '      <article class="smx-card">'
-      + '        <h4>Quick Checks</h4>'
-      +          renderQuickChecks(sub.quick_checks)
-      + '      </article>'
-      + '    </section>'
-      + '  </div>'
-      + '</article>';
-  }
-
-  function renderTopic(t, state) {
-    const topicNum = String(t.topic || '');
-    const subtopics = arr(t.subtopics);
-    return ''
-      + '<section class="smx-topic guide-aim-section" id="guide-aim-' + esc(topicNum) + '">'  
-      + '  <header class="smx-topic-head">'
-      + '    <div>'
-      + '      <p class="smx-topic-kicker">Topic ' + esc(topicNum) + '</p>'
-      + '      <h3>' + esc(t.title || '') + '</h3>'
-      + '      <p>' + esc(t.short || '') + '</p>'
-      + '    </div>'
-      + '    <div class="smx-topic-meta">'
-      + '      <span>' + subtopics.length + ' sections</span>'
-      + '      <span>' + (Number(topicNum) <= 6 ? 'Paper 1 + 3' : 'Paper 2 + 3') + '</span>'
-      + '    </div>'
-      + '  </header>'
-      + '  <section class="smx-focus">'
-      + '    <h4>How examiners reward this topic</h4>'
-      +      renderList(t.topic_exam_focus)
-      + '  </section>'
-      + '  <div class="smx-subtopics">'
-      +      subtopics.map((s) => renderSubtopic(s, topicNum, state)).join('')
-      + '  </div>'
-      + '</section>';
-  }
-
-  function renderToc(topics) {
-    return arr(topics).map((t) =>
-      '<div class="guide-toc-aim-group">'
-      + '<button type="button" class="smx-toc-link guide-toc-aim-link" onclick="guideScrollTo(\'guide-aim-' + esc(t.topic) + '\')"  data-guide-toc-aim="' + esc(t.topic) + '">'
-      + '<span class="n">' + esc(t.topic || '') + '</span>'
-      + '<span class="t">' + esc(t.title || '') + '</span>'
-      + '</button>'
-      + '</div>'
-    ).join('');
-  }
-
-  function updateProgress(data) {
-    const state = loadState();
-    const total = arr(data.topics).reduce((sum, t) => sum + arr(t.subtopics).length, 0);
-    let done = 0;
-    arr(data.topics).forEach((t) => arr(t.subtopics).forEach((s) => {
-      if (readDone(String(s.code || ''), state)) done += 1;
-    }));
-    const pct = total ? Math.round((done / total) * 100) : 0;
-    const el = document.querySelector('[data-guide-progress]');
-    if (el) el.textContent = done + '/' + total + ' complete (' + pct + '%)';
-  }
-
-  function filterSubtopics(query, topic) {
-    const q = String(query || '').trim().toLowerCase();
-    const t = String(topic || '').trim();
-    document.querySelectorAll('[data-guide-subtopic]').forEach((el) => {
-      const inTopic = !t || el.getAttribute('data-topic') === t;
-      const blob = (el.getAttribute('data-search') || '').toLowerCase();
-      const pass = !q || blob.includes(q);
-      el.style.display = inTopic && pass ? '' : 'none';
+  function updateProgress() {
+    const nums = sections().map(s => s.num);
+    const revised = getRevised();
+    const count = nums.filter(n => revised.includes(n)).length;
+    const fill = document.getElementById('guide-pf-bus');
+    const text = document.getElementById('guide-pt-bus');
+    if (fill) fill.style.width = (nums.length ? count / nums.length * 100 : 0) + '%';
+    if (text) text.textContent = count + ' / ' + nums.length + ' sections revised';
+    nums.forEach(n => {
+      const btn = document.getElementById('gmb-' + n);
+      if (!btn) return;
+      const done = revised.includes(n);
+      btn.classList.toggle('revised', done);
+      btn.innerHTML = done ? '<span class="guide-mark-icon">&#10003;</span> 3.' + n + ' revised!' : '<span class="guide-mark-icon">&#9711;</span> Mark 3.' + n + ' as revised';
     });
   }
 
-  function setExpandState(root, code, expand) {
-    const btn = root.querySelector('[data-expand="' + code.replace(/\\/g, '\\\\').replace(/"/g, '\"') + '"]');
-    // Use getElementById to avoid CSS.escape mangling codes like "1.1" → "\\31 \.1"
-    const body = document.getElementById('smx-body-' + code);
-    if (!btn || !body) return;
-    btn.setAttribute('aria-expanded', expand ? 'true' : 'false');
-    body.hidden = !expand;
-    const sign = btn.querySelector('.smx-sign');
-    if (sign) sign.textContent = expand ? '-' : '+';
+  function setupScrollSpy() {
+    const els = document.querySelectorAll('.guide-aim-section[id]');
+    if (!els.length || typeof IntersectionObserver === 'undefined') return;
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (!e.isIntersecting) return;
+        const id = e.target.id;
+        document.querySelectorAll('.guide-toc-aim-link').forEach(l => {
+          const on = (l.getAttribute('onclick') || '').includes("'" + id + "'");
+          l.classList.toggle('active', on);
+        });
+      });
+    }, { rootMargin: '-30% 0px -60% 0px' });
+    els.forEach(s => observer.observe(s));
   }
 
-  function bindInteractions(data) {
-    const root = document.getElementById('guide-comprehensive');
-    if (!root) return;
-
-    const search = root.querySelector('[data-guide-search]');
-    const topic = root.querySelector('[data-guide-topic]');
-    if (search) search.addEventListener('input', () => filterSubtopics(search.value, topic ? topic.value : ''));
-    if (topic) topic.addEventListener('change', () => filterSubtopics(search ? search.value : '', topic.value));
-
-    root.addEventListener('click', (ev) => {
-      const expandBtn = ev.target.closest('[data-expand]');
-      if (expandBtn) {
-        const code = String(expandBtn.getAttribute('data-expand') || '');
-        const expanded = expandBtn.getAttribute('aria-expanded') === 'true';
-        setExpandState(root, code, !expanded);
-      }
-
-      const ctrl = ev.target.closest('[data-guide-control]');
-      if (ctrl) {
-        const action = ctrl.getAttribute('data-guide-control');
-        const cards = arr(data.topics).flatMap((t) => arr(t.subtopics)).map((s) => String(s.code || ''));
-        if (action === 'expand') cards.forEach((code) => setExpandState(root, code, true));
-        if (action === 'collapse') cards.forEach((code) => setExpandState(root, code, false));
-      }
-    });
-
-    root.addEventListener('change', (ev) => {
-      const done = ev.target.closest('[data-done]');
-      if (!done) return;
-      const code = String(done.getAttribute('data-done') || '');
-      const state = loadState();
-      setDone(code, done.checked, state);
-      saveState(state);
-      updateProgress(data);
-    });
-
-    filterSubtopics('', '');
-    updateProgress(data);
-  }
-
-  function renderGuideFromData(data) {
-    const mount = document.getElementById('guide-comprehensive');
-    if (!mount) return;
-
-    let topics = arr(data && data.topics);
-    const state = loadState();
-    const subCount = topics.reduce((sum, t) => sum + arr(t.subtopics).length, 0);
-
-    mount.innerHTML = ''
-      + '<section class="smx-shell">'
-      + '  <header class="smx-hero">'
-      + '    <div class="smx-hero-main">'
-      + '      <p class="smx-kicker">A-Level AQA Business</p>'
-      + '      <h2>Revision Notes</h2>'
-      + '      <p>Fully rebuilt from scratch in a clean exam-note format with worked structure, definitions, formulas, and practice prompts.</p>'
-      + '    </div>'
-      + '    <div class="smx-stats">'
-      + '      <div><strong>' + topics.length + '</strong><small>Topics</small></div>'
-      + '      <div><strong>' + subCount + '</strong><small>Sections</small></div>'
-      + '      <div><strong data-guide-progress>0/' + subCount + ' complete (0%)</strong><small>Progress</small></div>'
-      + '    </div>'
-      + '  </header>'
-      + '  <section class="smx-controls">'
-      + '    <input type="search" data-guide-search placeholder="Search terms, formulas, examples, and topic notes...">'
-      + '    <select data-guide-topic>'
-      + '      <option value="">All topics</option>'
-      +         topics.map((t) => '<option value="' + esc(t.topic) + '">Topic ' + esc(t.topic) + ' - ' + esc(t.title || '') + '</option>').join('')
-      + '    </select>'
-      + '    <button type="button" class="btn" data-guide-control="expand">Expand all</button>'
-      + '    <button type="button" class="btn" data-guide-control="collapse">Collapse all</button>'
-      + '  </section>'
-      + '  <section class="smx-layout">'
-      + '    <aside class="smx-sidebar">'
-      + '      <h3>Jump To Topic</h3>'
-      +       renderToc(topics)
-      + '    </aside>'
-      + '    <div class="smx-main">'
-      +       topics.map((t) => renderTopic(t, state)).join('')
-      + '    </div>'
-      + '  </section>'
-      + '</section>';
-
-    bindInteractions(data);
-
-    // Call gating AFTER the DOM is fully populated (fetch has completed).
-    if (typeof window.applyGuideAccessRules === 'function') {
-      window.applyGuideAccessRules();
-    }
-  }
-
-  function renderError(message) {
-    const mount = document.getElementById('guide-comprehensive');
-    if (!mount) return;
-    mount.innerHTML = '<div class="card"><h3>Revision guide loading issue</h3><p>' + esc(message) + '</p></div>';
-  }
-
+  window.toggleGT = function (id) {
+    const el = document.getElementById(id);
+    if (el) el.classList.toggle('open');
+  };
+  window.toggleGuideRevised = function (num) {
+    const arr = getRevised();
+    const i = arr.indexOf(num);
+    if (i === -1) arr.push(num); else arr.splice(i, 1);
+    saveRevised(arr);
+    updateProgress();
+  };
   window.guideScrollTo = function (id) {
-    const target = document.getElementById(id);
-    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (el.classList.contains('guide-topic')) el.classList.add('open');
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    const sb = document.getElementById('guide-sidebar-bus');
+    if (sb && window.innerWidth < 769) sb.classList.remove('sb-open');
   };
 
   window.initComprehensiveGuide = function () {
-    fetch('data/guide_content.json')
-      .then((res) => {
-        if (!res.ok) throw new Error('HTTP ' + res.status);
-        return res.json();
-      })
-      .then((data) => renderGuideFromData(data))
-      .catch((err) => renderError('Unable to load guide content: ' + err.message));
+    const container = document.getElementById('guide-comprehensive');
+    if (!container) return;
+    if (container.dataset.built !== '1') {
+      container.innerHTML = buildGuideHTML();
+      container.dataset.built = '1';
+      setupScrollSpy();
+    }
+    updateProgress();
+    if (typeof window.applyGuideAccessRules === 'function') window.applyGuideAccessRules();
   };
 })();

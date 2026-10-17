@@ -39,7 +39,53 @@ window.RA10_BUSINESS_MODE = IS_PAPER1_MODE ? 'paper1' : 'full';
 const PAPER_OPTIONS = ['Paper 1', 'Paper 2', 'Paper 3'];
 const TOPIC_CODES = Object.keys(SPEC || {}).sort((a, b) => Number(a) - Number(b));
 function topicLabel(code) {
-  return `Topic ${code}`;
+  return code ? `3.${code}` : '';
+}
+
+// Appendix tables for Paper 2 / Paper 3 contexts.
+function renderAppendices(apps) {
+  const wrap = el('div', { class: 'appendices' });
+  (apps || []).forEach((a) => {
+    const box = el('div', { class: 'appendix' });
+    box.appendChild(el('p', { class: 'appendix-title' }, a.title || 'Appendix'));
+    const tbl = el('table', { class: 'appendix-table' });
+    if (Array.isArray(a.headers) && a.headers.some(Boolean)) {
+      tbl.appendChild(el('tr', null, ...a.headers.map(h => el('th', null, String(h)))));
+    }
+    (a.rows || []).forEach(r => tbl.appendChild(el('tr', null, ...r.map(c => el('td', null, String(c))))));
+    box.appendChild(tbl);
+    if (a.note) box.appendChild(el('p', { class: 'appendix-note' }, a.note));
+    wrap.appendChild(box);
+  });
+  return wrap;
+}
+
+// Context block: short contexts shown inline; long case-study inserts collapsible.
+function renderQuestionContext(q, opts) {
+  opts = opts || {};
+  const frag = el('div', { class: 'q-context' });
+  const text = String(q.scenario || '');
+  const isCase = !!q.context_id;
+  if (isCase) {
+    const label = (q.paper === 'Paper 3' ? 'Case study: ' : 'Context: ') + (q.context_title || '');
+    const det = el('details', { class: 'context-details' });
+    if (opts.open || q.paper === 'Paper 2') det.setAttribute('open', '');
+    det.appendChild(el('summary', null, label + (q.paper === 'Paper 3' ? ' (Insert)' : '')));
+    text.split(/\n\n+/).forEach(p => {
+      const lines = p.split('\n');
+      if (lines.length > 1 && lines[0].length < 40) {
+        det.appendChild(el('h5', { class: 'context-heading' }, lines[0]));
+        det.appendChild(el('p', { class: 'scenario' }, lines.slice(1).join(' ')));
+      } else {
+        det.appendChild(el('p', { class: 'scenario' }, p));
+      }
+    });
+    if (Array.isArray(q.appendices) && q.appendices.length) det.appendChild(renderAppendices(q.appendices));
+    frag.appendChild(det);
+  } else if (text) {
+    frag.appendChild(el('pre', { class: 'scenario scenario-data' }, text));
+  }
+  return frag;
 }
 function getQuestionPapers(q) {
   if (!q || !Array.isArray(q.papers)) return [];
@@ -1165,7 +1211,7 @@ function renderDashboard() {
     const count = QUESTIONS.filter(q => String(q.learning_aim) === String(letter)).length;
     const data = SPEC[letter] || { title: topicLabel(letter), short: '' };
     const card = el('div', { class: 'aim-card', onclick: () => { $('#filter-aim').value = letter; switchTab('browse'); applyBrowseFilters(); } },
-      el('div', { class: 'aim-letter' }, letter),
+      el('div', { class: 'aim-letter' }, topicLabel(letter)),
       el('h4', null, data.title),
       el('p', { class: 'desc' }, data.short),
       el('span', { class: 'count' }, `${count} questions`)
@@ -1246,7 +1292,7 @@ function renderQuestionRow(q) {
   head.appendChild(el('div', { class: 'qrow-meta' },
     el('span', { class: 'tag id' }, q.id || ''),
     el('span', { class: 'tag' }, topicLabel(q.learning_aim)),
-    getQuestionPapers(q).length ? el('span', { class: 'tag' }, getQuestionPapers(q).join(' · ')) : null,
+    getQuestionPapers(q).length ? el('span', { class: 'tag' }, getQuestionPapers(q).join(' · ') + (q.paper_section ? ' · ' + q.paper_section : '')) : null,
     el('span', { class: 'tag verb' }, q.command_verb || ''),
     el('span', { class: 'tag marks' }, `${q.marks} mark${q.marks===1?'':'s'}`)
   ));
@@ -1254,7 +1300,7 @@ function renderQuestionRow(q) {
   row.appendChild(head);
 
   const body = el('div', { class: 'qrow-body' });
-  if (q.scenario) body.appendChild(el('p', { class: 'scenario' }, q.scenario));
+  if (q.scenario) body.appendChild(renderQuestionContext(q));
   body.appendChild(el('p', { class: 'question-text' },
     q.question,
     el('span', { class: 'marks-bracket' }, ` (${q.marks})`)
@@ -1279,47 +1325,57 @@ function renderMarkScheme(q, opts) {
   const m = q.mark_scheme || {};
   const wrap = el('div', { class: 'markscheme' });
   wrap.appendChild(el('h5', null, 'Mark Scheme'));
+  if (q.ao) wrap.appendChild(el('p', { class: 'ms-ao' }, `Marks for this question: ${q.ao}`));
   if (m.instruction) wrap.appendChild(el('p', { class: 'instruction' }, m.instruction));
+
+  const list = (title, items, cls) => {
+    if (!Array.isArray(items) || !items.length) return;
+    wrap.appendChild(el('p', { class: 'instruction ' + (cls || '') }, el('strong', null, title)));
+    const ul = el('ul', { class: cls || '' });
+    items.forEach(p => ul.appendChild(el('li', null, String(p))));
+    wrap.appendChild(ul);
+  };
 
   if (q.type === 'multiple_choice' && m.answer) {
     const correct = (q.options || []).find(o => o.label === m.answer);
     wrap.appendChild(el('p', { class: 'mc-answer' },
       el('strong', null, 'Correct answer: '),
-      el('span', { class: 'mc-correct' }, m.answer + (correct ? ' — ' + correct.text : '')),
+      el('span', { class: 'mc-correct' }, m.answer + (correct ? ' - ' + correct.text : '')),
       ' (1)'
     ));
     if (m.explanation) wrap.appendChild(el('p', { class: 'instruction' }, m.explanation));
-    if (m.additional_guidance) wrap.appendChild(el('p', { class: 'additional' }, m.additional_guidance));
-    if (m.do_not_accept) wrap.appendChild(el('p', { class: 'donotaccept' }, 'Do not accept: ' + m.do_not_accept));
     return wrap;
   }
 
-  if (q.type === 'extended_levels' || m.indicative_content) {
-    if (m.indicative_content && m.indicative_content.length) {
-      wrap.appendChild(el('p', { class: 'instruction' }, el('strong', null, 'Indicative content:')));
-      const ul = el('ul');
-      m.indicative_content.forEach(p => ul.appendChild(el('li', null, p)));
-      wrap.appendChild(ul);
+  if (q.type === 'calculation') {
+    wrap.appendChild(el('p', { class: 'mc-answer' }, el('strong', null, 'Answer: '), el('span', { class: 'mc-correct' }, String(m.answer || '')), ` (${q.marks} marks)`));
+    list('Marks awarded for working:', m.points);
+  } else if (q.type === 'extended_levels' || m.level_descriptors) {
+    list('The demands of the question are:', m.demands);
+    if (m.arguments_for && m.arguments_for.length) {
+      list('Indicative content - arguments that support / benefits:', m.arguments_for);
+      list('Indicative content - arguments against / limitations:', m.arguments_against);
+    } else {
+      list('Indicative content:', m.indicative_content);
     }
+    list('Relevant calculations:', m.calculations, 'ms-calcs');
+    list('Evaluation - the judgement may consider:', m.evaluation);
     if (m.level_descriptors && m.level_descriptors.length) {
       const tbl = el('table', { class: 'levels' });
-      const trh = el('tr', null, el('th', null, 'Level'), el('th', null, 'Marks'), el('th', null, 'Descriptor'));
-      tbl.appendChild(trh);
+      tbl.appendChild(el('tr', null, el('th', null, 'Level'), el('th', null, 'Marks'), el('th', null, 'The student will typically demonstrate')));
       m.level_descriptors.forEach(d => tbl.appendChild(el('tr', null, el('td', null, 'Level ' + d.level), el('td', null, String(d.marks)), el('td', null, d.descriptor))));
       wrap.appendChild(tbl);
     }
-  } else {
-    if (m.points && m.points.length) {
-      const ul = el('ul');
-      m.points.forEach(p => ul.appendChild(el('li', { html: escapeHTML(p).replace(/\(1\)/g, '<strong>(1)</strong>') })));
-      wrap.appendChild(ul);
-    }
+    list('Marker notes:', m.marker_notes, 'ms-notes');
+  } else if (m.points && m.points.length) {
+    const ul = el('ul');
+    m.points.forEach(p => ul.appendChild(el('li', { html: escapeHTML(p).replace(/\(1\)/g, '<strong>(1)</strong>') })));
+    wrap.appendChild(ul);
   }
-  if (m.additional_guidance) wrap.appendChild(el('p', { class: 'additional' }, m.additional_guidance));
-  if (m.do_not_accept) wrap.appendChild(el('p', { class: 'donotaccept' }, 'Do not accept: ' + m.do_not_accept));
+  if (q.type === 'calculation' && m.additional_guidance) wrap.appendChild(el('p', { class: 'additional' }, m.additional_guidance));
   if (Array.isArray(m.formulae) && m.formulae.length) {
     const formulaBox = el('div', { class: 'ms-formulae' });
-    formulaBox.appendChild(el('p', { class: 'instruction' }, el('strong', null, 'Useful formulae and equations:')));
+    formulaBox.appendChild(el('p', { class: 'instruction' }, el('strong', null, 'Formula:')));
     const ul = el('ul');
     m.formulae.forEach((f) => {
       const li = el('li');
@@ -1330,112 +1386,73 @@ function renderMarkScheme(q, opts) {
     formulaBox.appendChild(ul);
     wrap.appendChild(formulaBox);
   }
-
-  const isDiagramQ = q.type === 'diagram' || String(q.command_verb || '').toLowerCase() === 'draw';
-  if (isDiagramQ && q.mermaid) {
-    const diagramWrap = el('div', { class: 'ms-diagram' });
-    diagramWrap.appendChild(el('p', { class: 'instruction' }, 'Model answer:'));
-    const svgDiv = el('div', { class: 'ms-diagram-svg' });
-    diagramWrap.appendChild(svgDiv);
-    wrap.appendChild(diagramWrap);
-    const mermaidId = 'mermaid-ms-' + (q.id || '') + '-' + (++_mermaidRenderCount);
-    requestAnimationFrame(() => {
-      if (!window.mermaid) { svgDiv.textContent = 'Diagram unavailable.'; return; }
-      window.mermaid.render(mermaidId, q.mermaid)
-        .then(({ svg }) => { svgDiv.innerHTML = svg; })
-        .catch(() => { svgDiv.style.display = 'none'; });
-    });
-  }
-
   return wrap;
 }
 
 // ---------- Mock paper builder ----------
+// Builds papers in the exact AQA 7132 format (see PAPER_FORMATS in spec.js):
+//   Paper 1: Section A 15 MCQs, Section B 4+4+9+9+9, Sections C and D a choice of two 25-mark essays each.
+//   Paper 2: three complete data-response question sets (each with context + appendices) totalling 100.
+//   Paper 3: one complete case study (Insert) with questions worth 12, 12, 16, 16, 20, 24.
 let lastMock = null;
 let mockShowMs = false;
+
+function renderMockFormatInfo() {
+  const box = $('#mock-format');
+  const sel = $('#mock-paper-type');
+  if (!box || !sel) return;
+  const fmt = PAPER_FORMATS[sel.value];
+  box.innerHTML = '';
+  if (!fmt) return;
+  box.appendChild(el('p', { class: 'mock-format-summary' }, el('strong', null, `${sel.value}: ${fmt.name} · ${fmt.time} · ${fmt.marks} marks. `), fmt.summary));
+  const ul = el('ul', { class: 'mock-format-list' });
+  fmt.sections.forEach(s => ul.appendChild(el('li', null, el('strong', null, `${s.name} (${s.marks})`), ' - ' + s.note)));
+  box.appendChild(ul);
+
+  const ctxRow = $('#mock-context-row');
+  const ctxSel = $('#mock-context');
+  const aimsCtl = $('#mock-aims-control');
+  if (aimsCtl) aimsCtl.style.display = sel.value === 'Paper 1' ? '' : 'none';
+  if (ctxRow && ctxSel) {
+    if (sel.value === 'Paper 3') {
+      ctxRow.style.display = '';
+      ctxSel.innerHTML = '';
+      ctxSel.appendChild(el('option', { value: '' }, 'Random case study'));
+      P3_CASES.forEach(c => ctxSel.appendChild(el('option', { value: c.id }, c.title)));
+    } else {
+      ctxRow.style.display = 'none';
+      ctxSel.innerHTML = '';
+    }
+  }
+}
 
 function renderMockControls() {
   const aimsRow = $('#mock-aims');
   aimsRow.innerHTML = '';
-  const selected = new Set(TOPIC_CODES);
   TOPIC_CODES.forEach(a => {
-    const chip = el('div', { class: 'chip on' }, topicLabel(a));
-    chip.addEventListener('click', () => {
-      if (selected.has(a) && selected.size > 1) { selected.delete(a); chip.classList.remove('on'); }
-      else { selected.add(a); chip.classList.add('on'); }
-    });
+    const chip = el('div', { class: 'chip on', title: (SPEC[a] && SPEC[a].title) || '' }, topicLabel(a));
     chip.dataset.aim = a;
+    chip.addEventListener('click', () => {
+      const on = $$('#mock-aims .chip.on');
+      if (chip.classList.contains('on') && on.length > 1) chip.classList.remove('on');
+      else chip.classList.add('on');
+    });
     aimsRow.appendChild(chip);
   });
 
-  // Question-style chips. User can mix-and-match styles; at least one must stay on.
-  const stylesRow = $('#mock-styles');
-  if (stylesRow) {
-    stylesRow.innerHTML = '';
-    const styleDefs = [
-      { key: 'short', label: 'Short-response', hint: '2–4 mark response items' },
-      { key: 'data', label: 'Data-response', hint: '6–15 mark analysis and assessment items' },
-      { key: 'essay', label: 'Essay-style', hint: '16–25 mark evaluative responses' },
-      { key: 'mc', label: 'Multiple choice', hint: '1 mark objective items' }
-    ];
-    const selStyles = new Set(['short', 'data', 'essay']);
-    styleDefs.forEach(def => {
-      const chip = el('div', { class: 'chip' + (selStyles.has(def.key) ? ' on' : ''), title: def.hint }, def.label);
-      chip.dataset.style = def.key;
-      chip.addEventListener('click', () => {
-        if (selStyles.has(def.key) && selStyles.size > 1) { selStyles.delete(def.key); chip.classList.remove('on'); }
-        else if (!selStyles.has(def.key)) { selStyles.add(def.key); chip.classList.add('on'); }
-      });
-      stylesRow.appendChild(chip);
-    });
-
-    const paperTypeSel = $('#mock-paper-type');
-    const syncByPaper = () => {
-      const p = paperTypeSel ? paperTypeSel.value : 'Paper 1';
-      const allowed = p === 'Paper 1'
-        ? new Set(['1', '2', '3', '4', '5', '6'])
-        : p === 'Paper 2'
-          ? new Set(['7', '8', '9', '10'])
-          : new Set(TOPIC_CODES);
-
-      $$('#mock-aims .chip').forEach((chip) => {
-        const code = chip.dataset.aim;
-        const on = allowed.has(code);
-        chip.classList.toggle('on', on);
-        chip.style.opacity = on ? '' : '0.35';
-        if (on) selected.add(code);
-        else selected.delete(code);
-      });
-
-      if (p === 'Paper 2') {
-        selStyles.clear();
-        ['data', 'essay'].forEach((k) => selStyles.add(k));
-      } else if (p === 'Paper 3') {
-        selStyles.clear();
-        ['data', 'essay'].forEach((k) => selStyles.add(k));
-      } else {
-        selStyles.clear();
-        ['short', 'data', 'essay'].forEach((k) => selStyles.add(k));
-      }
-      $$('#mock-styles .chip').forEach((chip) => {
-        const k = chip.dataset.style;
-        chip.classList.toggle('on', selStyles.has(k));
-      });
-    };
-    if (paperTypeSel && !paperTypeSel.dataset.bound) {
-      paperTypeSel.addEventListener('change', syncByPaper);
-      paperTypeSel.dataset.bound = '1';
-    }
-    syncByPaper();
+  const paperTypeSel = $('#mock-paper-type');
+  if (paperTypeSel && !paperTypeSel.dataset.bound) {
+    paperTypeSel.addEventListener('change', renderMockFormatInfo);
+    paperTypeSel.dataset.bound = '1';
   }
+  renderMockFormatInfo();
 
   $('#btn-generate').addEventListener('click', () => {
-    const total = 100;
     const seed = $('#mock-seed').value || String(Date.now());
-    const paperType = $('#mock-paper-type') ? $('#mock-paper-type').value : 'Paper 1';
-    const sel = $$('#mock-aims .chip.on').map(c => c.dataset.aim);
-    const styles = $$('#mock-styles .chip.on').map(c => c.dataset.style);
-    generateMock(total, seed, sel, styles.length ? styles : ['short', 'data', 'essay'], paperType);
+    const paperType = paperTypeSel ? paperTypeSel.value : 'Paper 1';
+    const aims = $$('#mock-aims .chip.on').map(c => c.dataset.aim);
+    const ctx = $('#mock-context') ? $('#mock-context').value : '';
+    generateMock(seed, aims, paperType, ctx);
   });
   $('#btn-print').addEventListener('click', () => {
     document.body.classList.remove('print-ms-only');
@@ -1444,7 +1461,6 @@ function renderMockControls() {
   });
   $('#btn-print-ms').addEventListener('click', () => {
     if (!lastMock) { alert('Generate a paper first.'); return; }
-    // Render the paper with mark schemes forcibly visible, then print, then restore.
     const paper = $('#mock-paper');
     const wasShowing = mockShowMs;
     mockShowMs = true;
@@ -1453,7 +1469,6 @@ function renderMockControls() {
     document.body.classList.add('print-ms-only');
     setTimeout(() => {
       window.print();
-      // restore after the print dialog closes
       setTimeout(() => {
         document.body.classList.remove('print-ms-only');
         paper.classList.remove('force-ms');
@@ -1468,191 +1483,138 @@ function renderMockControls() {
     if (lastMock) renderMock(lastMock);
   });
   $('#mock-paper').className = 'paper empty';
-  $('#mock-paper').innerHTML = '<p>Click <strong>Generate mock paper</strong> to build a randomised paper.</p>';
+  $('#mock-paper').innerHTML = '<p>Choose a paper and click <strong>Generate mock paper</strong> to build a full 100-mark paper in the real AQA format.</p>';
 }
 
-// Classify a question into a style bucket so the mock builder can honour
-// the user's chosen mix of styles. Pearson "long" answers are anything 6m+
-// with extended_levels; "short" is everything else that's regular text.
 function styleOfQuestion(q) {
   if (q.type === 'multiple_choice') return 'mc';
-  if (q.marks >= 16 || q.type === 'extended_levels') return 'essay';
+  if (q.marks >= 16) return 'essay';
   if (q.marks >= 6) return 'data';
   return 'short';
 }
 
-function selectQuestion(pool, targetMark, used, rng, opts) {
-  opts = opts || {};
-  const requireScenario = !!opts.requireScenario;
-  const type = opts.type || '';
-  const sameAim = opts.sameAim || '';
-
-  let candidates = pool.filter((q) => !used.has(q.id));
-  if (type) candidates = candidates.filter((q) => String(q.type || '') === type);
-  if (sameAim) candidates = candidates.filter((q) => String(q.learning_aim) === String(sameAim));
-
-  const exact = candidates.filter((q) => Number(q.marks) === Number(targetMark));
-  const exactByScenario = requireScenario
-    ? exact.filter((q) => !!q.scenario)
-    : exact.slice();
-  if (exactByScenario.length) return shuffle(exactByScenario.slice(), rng)[0];
-  if (exact.length) return shuffle(exact.slice(), rng)[0];
-
-  if (requireScenario) {
-    const anyScenario = candidates.filter((q) => !!q.scenario);
-    if (anyScenario.length) {
-      anyScenario.sort((a, b) => Math.abs(Number(a.marks) - Number(targetMark)) - Math.abs(Number(b.marks) - Number(targetMark)));
-      return anyScenario[0];
+// Pick n items spreading across topics (round robin) so a paper covers the spec.
+function pickSpread(pool, n, rng, usedTopics) {
+  const byTopic = {};
+  shuffle(pool, rng).forEach(q => { (byTopic[q.learning_aim] = byTopic[q.learning_aim] || []).push(q); });
+  const topics = shuffle(Object.keys(byTopic), rng);
+  if (usedTopics) topics.sort((a, b) => (usedTopics.has(a) ? 1 : 0) - (usedTopics.has(b) ? 1 : 0));
+  const out = [];
+  while (out.length < n && topics.some(t => byTopic[t].length)) {
+    for (const t of topics) {
+      if (out.length >= n) break;
+      const q = byTopic[t].shift();
+      if (q) { out.push(q); if (usedTopics) usedTopics.add(t); }
     }
   }
-
-  if (!candidates.length) return null;
-  candidates.sort((a, b) => Math.abs(Number(a.marks) - Number(targetMark)) - Math.abs(Number(b.marks) - Number(targetMark)));
-  return candidates[0];
+  return out;
 }
 
-function buildPaper1Structure(pool, rng) {
-  const used = new Set();
+function buildPaper1(aims, rng) {
+  const pool = QUESTIONS.filter(q => q.paper === 'Paper 1' && aims.includes(String(q.learning_aim)));
+  const fallback = QUESTIONS.filter(q => q.paper === 'Paper 1');
+  const take = (filter, n, used) => {
+    let got = pickSpread(pool.filter(filter), n, rng, used);
+    if (got.length < n) {
+      const ids = new Set(got.map(q => q.id));
+      got = got.concat(pickSpread(fallback.filter(q => filter(q) && !ids.has(q.id)), n - got.length, rng, used));
+    }
+    return got;
+  };
   const items = [];
-
-  const mcPool = pool.filter((q) => q.type === 'multiple_choice' && Number(q.marks) === 1);
-  const secA = shuffle(mcPool.slice(), rng).slice(0, 15);
-  secA.forEach((q, idx) => {
-    used.add(q.id);
-    items.push({ ...q, _section: 'Section A', _label: String(idx + 1).padStart(2, '0') });
-  });
-
-  const secBMarks = [4, 4, 9, 9, 9];
-  secBMarks.forEach((m, idx) => {
-    const pick = selectQuestion(pool.filter((q) => q.type !== 'multiple_choice'), m, used, rng, { requireScenario: m >= 9 });
-    if (!pick) return;
-    used.add(pick.id);
-    items.push({ ...pick, _section: 'Section B', _label: `B${idx + 1}` });
-  });
-
-  const secC = selectQuestion(pool.filter((q) => q.type !== 'multiple_choice'), 25, used, rng, { requireScenario: true });
-  if (secC) {
-    used.add(secC.id);
-    items.push({ ...secC, _section: 'Section C', _label: 'C1' });
+  take(q => q.type === 'multiple_choice', 15).forEach((q, i) =>
+    items.push({ ...q, _section: 'Section A', _label: String(i + 1).padStart(2, '0') }));
+  const usedB = new Set();
+  const calcs = take(q => q.type === 'calculation' && q.marks === 4, 2, usedB);
+  const ana = take(q => q.paper_section === 'Section B' && q.marks === 9, 3, usedB);
+  calcs.concat(ana).forEach((q, i) => items.push({ ...q, _section: 'Section B', _label: String(16 + i) }));
+  const essays = q => q.marks === 25;
+  const usedE = new Set();
+  let secC = take(q => essays(q) && Number(q.learning_aim) <= 6, 2, usedE);
+  let secD = take(q => essays(q) && Number(q.learning_aim) >= 7, 2, usedE);
+  if (secC.length < 2 || secD.length < 2) {
+    const all = take(essays, 4, new Set());
+    secC = all.slice(0, 2); secD = all.slice(2, 4);
   }
-
-  const secD = selectQuestion(pool.filter((q) => q.type !== 'multiple_choice'), 25, used, rng, { requireScenario: true });
-  if (secD) {
-    used.add(secD.id);
-    items.push({ ...secD, _section: 'Section D', _label: 'D1' });
-  }
-
-  return items;
+  secC.forEach((q, i) => items.push({ ...q, _section: 'Section C', _label: String(21 + i), _choice: 'C' }));
+  secD.forEach((q, i) => items.push({ ...q, _section: 'Section D', _label: String(23 + i), _choice: 'D' }));
+  const counted = items.filter(q => !q._choice).reduce((t, q) => t + q.marks, 0) + (secC.length ? 25 : 0) + (secD.length ? 25 : 0);
+  return { items, counted };
 }
 
-function buildPaper2Structure(pool, rng) {
-  const used = new Set();
+function buildPaper2(rng) {
+  const sets = shuffle(P2_SETS.slice(), rng);
+  let chosen = null;
+  for (let i = 0; i < sets.length && !chosen; i++)
+    for (let j = i + 1; j < sets.length && !chosen; j++)
+      for (let k = j + 1; k < sets.length && !chosen; k++)
+        if (sets[i].total + sets[j].total + sets[k].total === 100) chosen = [sets[i], sets[j], sets[k]];
+  if (!chosen) chosen = sets.slice(0, 3);
+  const byId = Object.fromEntries(QUESTIONS.map(q => [q.id, q]));
   const items = [];
-  const groups = [
-    [6, 4, 9, 16],
-    [3, 5, 9, 16],
-    [2, 5, 9, 16]
-  ];
-
-  groups.forEach((marks, gIdx) => {
-    const stem = selectQuestion(pool.filter((q) => q.type !== 'multiple_choice'), marks[3], used, rng, { requireScenario: true });
-    if (!stem) return;
-    used.add(stem.id);
-    const sharedScenario = stem.scenario || '';
-    const aim = stem.learning_aim;
-
-    marks.forEach((m, qIdx) => {
-      if (qIdx === 3) {
-        items.push({
-          ...stem,
-          _section: `Question ${gIdx + 1}`,
-          _label: `${gIdx + 1}.${qIdx + 1}`,
-          _sharedScenario: sharedScenario,
-          _hideScenario: true
-        });
-        return;
-      }
-      const pick = selectQuestion(pool.filter((q) => q.type !== 'multiple_choice'), m, used, rng, {
-        sameAim: aim,
-        requireScenario: false
-      }) || selectQuestion(pool.filter((q) => q.type !== 'multiple_choice'), m, used, rng, { requireScenario: false });
-      if (!pick) return;
-      used.add(pick.id);
-      items.push({
-        ...pick,
-        _section: `Question ${gIdx + 1}`,
-        _label: `${gIdx + 1}.${qIdx + 1}`,
-        _sharedScenario: qIdx === 0 ? sharedScenario : '',
-        _hideScenario: true
-      });
+  chosen.forEach((s, n) => {
+    s.question_ids.forEach((id, pIdx) => {
+      const q = byId[id];
+      if (q) items.push({ ...q, _section: `Question ${n + 1}`, _label: `0${n + 1}.${pIdx + 1}`, _setIndex: n });
     });
   });
-
-  return items;
+  return { items, contexts: chosen, counted: items.reduce((t, q) => t + q.marks, 0) };
 }
 
-function buildPaper3Structure(pool, rng) {
-  const used = new Set();
-  const items = [];
-  const marks = [12, 12, 16, 16, 20, 24];
-  marks.forEach((m, idx) => {
-    const pick = selectQuestion(pool.filter((q) => q.type !== 'multiple_choice'), m, used, rng, { requireScenario: true });
-    if (!pick) return;
-    used.add(pick.id);
-    items.push({ ...pick, _section: 'Case Study Questions', _label: String(idx + 1) });
-  });
-  return items;
+function buildPaper3(rng, caseId) {
+  const c = (caseId && P3_CASES.find(x => x.id === caseId)) || shuffle(P3_CASES.slice(), rng)[0];
+  if (!c) return { items: [], counted: 0 };
+  const byId = Object.fromEntries(QUESTIONS.map(q => [q.id, q]));
+  const items = c.question_ids
+    .map((id, i) => byId[id] ? { ...byId[id], _section: 'Answer all questions', _label: String(i + 1).padStart(2, '0') } : null)
+    .filter(Boolean);
+  return { items, caseStudy: c, counted: items.reduce((t, q) => t + q.marks, 0) };
 }
 
-async function generateMock(total, seed, aims, styles, paperType) {
+async function generateMock(seed, aims, paperType, contextId) {
   const rng = makeRng(seed);
-  styles = styles && styles.length ? styles : ['short', 'data', 'essay'];
-  const basePool = QUESTIONS.filter(q => aims.includes(String(q.learning_aim)) && questionHasPaper(q, paperType));
-  if (!basePool.length) { alert('No questions available for selected topics.'); return; }
   if (!await ra10Gate('mock_paper_gen')) return;
-  const wanted = new Set(styles);
-
-  function styleAllowed(q) {
-    const style = styleOfQuestion(q);
-    return wanted.has(style) || (style === 'data' && wanted.has('essay'));
-  }
-
-  const stylePool = basePool.filter(styleAllowed);
-  let items = [];
-  if (paperType === 'Paper 1') items = buildPaper1Structure(stylePool, rng);
-  else if (paperType === 'Paper 2') items = buildPaper2Structure(stylePool, rng);
-  else if (paperType === 'Paper 3') items = buildPaper3Structure(stylePool, rng);
-  else items = buildPaper1Structure(stylePool, rng);
-
-  let totalMarks = items.reduce((s, q) => s + Number(q.marks || 0), 0);
-
-  // If style filters are too restrictive, retry with all styles so users still get a full paper.
-  if (totalMarks !== 100) {
-    if (paperType === 'Paper 1') items = buildPaper1Structure(basePool, rng);
-    else if (paperType === 'Paper 2') items = buildPaper2Structure(basePool, rng);
-    else if (paperType === 'Paper 3') items = buildPaper3Structure(basePool, rng);
-    else items = buildPaper1Structure(basePool, rng);
-    totalMarks = items.reduce((s, q) => s + Number(q.marks || 0), 0);
-  }
-
-  if (totalMarks !== 100) {
-    alert(`Could not generate an exact 100-mark ${paperType} from current bank. Generated ${totalMarks} marks.`);
-  }
-
-  lastMock = { items, total: 100, seed, paperType, generatedAt: new Date().toISOString() };
+  let built;
+  if (paperType === 'Paper 2') built = buildPaper2(rng);
+  else if (paperType === 'Paper 3') built = buildPaper3(rng, contextId);
+  else built = buildPaper1(aims && aims.length ? aims : TOPIC_CODES, rng);
+  if (!built.items.length) { alert('No questions available for this paper.'); return; }
+  if (built.counted !== 100) console.warn(`${paperType} mock totals ${built.counted} marks`);
+  lastMock = { ...built, total: built.counted, seed, paperType, generatedAt: new Date().toISOString() };
   renderMock(lastMock);
+}
+
+function answerSpace(q, lineDensity) {
+  if (q.type === 'multiple_choice') {
+    const opts = el('ol', { class: 'mc-options' });
+    (q.options || []).forEach(o => opts.appendChild(el('li', null, el('span', { class: 'mc-tick' }), el('span', { class: 'mc-letter' }, o.label), el('span', { class: 'mc-text' }, o.text))));
+    return el('div', null, opts, el('p', { class: 'mc-instr' }, 'Completely fill in the circle alongside the appropriate answer.'));
+  }
+  const linesByMark = { 2: 4, 3: 6, 4: 10, 6: 14, 9: 24, 12: 32, 16: 42, 20: 50, 24: 60, 25: 62 };
+  const baseLines = linesByMark[q.marks] || Math.max(4, q.marks * 2);
+  const densityMult = { extra: 1.4, normal: 1, compact: 0.6, none: 0 }[lineDensity] || 1;
+  const numLines = Math.round(baseLines * densityMult);
+  const box = el('div');
+  if (q.type === 'calculation' && numLines > 0) {
+    box.appendChild(el('div', { class: 'calc-answer-box' }, el('span', null, 'Answer'), el('span', { class: 'calc-answer-line' })));
+    box.appendChild(el('p', { class: 'calc-working-label' }, 'Working'));
+  }
+  if (numLines > 0) {
+    const linesBox = el('div', { class: 'answer-lines', 'aria-hidden': 'true' });
+    for (let l = 0; l < numLines; l++) linesBox.appendChild(el('div', { class: 'answer-line' }));
+    box.appendChild(linesBox);
+  }
+  return box;
 }
 
 function renderMock(mock) {
   const wrap = $('#mock-paper');
   wrap.className = 'paper' + (mockShowMs ? ' mock-with-ms' : '');
   wrap.innerHTML = '';
-  const totalMarks = mock.items.reduce((s, q) => s + q.marks, 0);
-
-  // Read header options from the controls
+  const fmt = PAPER_FORMATS[mock.paperType] || {};
   const headerOpts = {
     name: $('#opt-header-name') ? $('#opt-header-name').checked : false,
-    cls:  $('#opt-header-class') ? $('#opt-header-class').checked : false,
+    cls: $('#opt-header-class') ? $('#opt-header-class').checked : false,
     date: $('#opt-header-date') ? $('#opt-header-date').checked : false,
     centre: $('#opt-header-centre') ? $('#opt-header-centre').checked : false,
     teacher: $('#opt-header-teacher') ? $('#opt-header-teacher').checked : false,
@@ -1660,99 +1622,79 @@ function renderMock(mock) {
   };
   const lineDensity = $('#opt-line-density') ? $('#opt-line-density').value : 'normal';
 
+  const instructions = {
+    'Paper 1': ['Answer all questions in Section A and Section B.', 'Answer one question from Section C and one question from Section D.', 'You will need a calculator. The maximum mark for this paper is 100.'],
+    'Paper 2': ['Answer all questions.', 'Each question is based on its own information and appendices.', 'You will need a calculator. The maximum mark for this paper is 100.'],
+    'Paper 3': ['Read the case study (Insert) before answering.', 'Answer all questions.', 'You will need a calculator. The maximum mark for this paper is 100.']
+  }[mock.paperType] || [];
   wrap.appendChild(el('div', { class: 'paper-header' },
-    el('h3', null, `A-Level AQA Business (7132) — ${mock.paperType || 'Mock Paper'}`),
-    el('p', null, `${mock.paperType || 'Mock paper'} · ${totalMarks} marks · Time allowed: ${Math.round(totalMarks * 4 / 3)} minutes · Seed: ${mock.seed}`),
-    el('p', { class: 'paper-instructions' },
-      mock.paperType === 'Paper 1'
-        ? 'Section A and B are compulsory. Then answer the sectioned long-response tasks provided in this mock build for C and D.'
-        : mock.paperType === 'Paper 2'
-          ? 'Answer all three data-response question sets. Show clear working for calculations and develop analysis to judgement in 16-mark parts.'
-          : 'Answer all case-study questions using evidence from the context and synoptic analysis across business functions.'
-    )
+    el('h3', null, `A-level Business (7132) · ${mock.paperType}: ${fmt.name || ''}`),
+    el('p', null, `RA10 mock · Time allowed: 2 hours · ${mock.total} marks · Seed: ${mock.seed}`),
+    el('ul', { class: 'paper-instructions' }, ...instructions.map(t => el('li', null, t)))
   ));
 
-  // Candidate header lines (Name / Class / Date / Centre / Teacher / Custom)
   const candidateRows = [];
-  if (headerOpts.name)    candidateRows.push(['Name', 'name']);
-  if (headerOpts.cls)     candidateRows.push(['Class', 'cls']);
-  if (headerOpts.date)    candidateRows.push(['Date', 'date']);
-  if (headerOpts.centre)  candidateRows.push(['Centre / Candidate №', 'centre']);
-  if (headerOpts.teacher) candidateRows.push(['Teacher', 'teacher']);
+  if (headerOpts.name) candidateRows.push('Name');
+  if (headerOpts.cls) candidateRows.push('Class');
+  if (headerOpts.date) candidateRows.push('Date');
+  if (headerOpts.centre) candidateRows.push('Centre / Candidate No.');
+  if (headerOpts.teacher) candidateRows.push('Teacher');
   if (candidateRows.length || headerOpts.custom) {
     const ch = el('div', { class: 'candidate-header' });
-    candidateRows.forEach(([label]) => {
-      ch.appendChild(el('div', { class: 'ch-line' },
-        el('span', { class: 'ch-label' }, label + ':'),
-        el('span', { class: 'ch-fill' })
-      ));
-    });
-    if (headerOpts.custom) {
-      ch.appendChild(el('div', { class: 'ch-custom' }, headerOpts.custom));
-    }
+    candidateRows.forEach(label => ch.appendChild(el('div', { class: 'ch-line' }, el('span', { class: 'ch-label' }, label + ':'), el('span', { class: 'ch-fill' }))));
+    if (headerOpts.custom) ch.appendChild(el('div', { class: 'ch-custom' }, headerOpts.custom));
     wrap.appendChild(ch);
   }
 
+  if (mock.paperType === 'Paper 3' && mock.caseStudy) {
+    const c = mock.caseStudy;
+    const ins = el('div', { class: 'paper-insert' });
+    ins.appendChild(el('h3', null, `Insert - Source: ${c.title}`));
+    (c.insert || []).forEach(sec => {
+      if (sec.heading) ins.appendChild(el('h4', null, sec.heading));
+      (sec.paragraphs || []).forEach(p => ins.appendChild(el('p', null, p)));
+    });
+    ins.appendChild(renderAppendices(c.appendices));
+    ins.appendChild(el('p', { class: 'insert-end' }, 'END OF SOURCES'));
+    wrap.appendChild(ins);
+  }
+
+  const sectionNotes = {
+    'Section A': 'Answer all questions in this section. Only one answer per question is allowed.',
+    'Section B': 'Answer all questions in this section.',
+    'Section C': 'Answer EITHER Question 21 OR Question 22.',
+    'Section D': 'Answer EITHER Question 23 OR Question 24.'
+  };
   let currentSection = '';
-  mock.items.forEach((q, i) => {
-    if (q._section && q._section !== currentSection) {
+  mock.items.forEach((q) => {
+    if (q._section !== currentSection) {
       currentSection = q._section;
       wrap.appendChild(el('div', { class: 'paper-section-title' }, currentSection));
-    }
-
-    const sx = el('div', { class: 'paper-section' });
-    sx.appendChild(el('div', { class: 'section-tag' },
-      q._label ? `Question ${q._label}` : `Question ${i + 1}`,
-      el('span', { class: 'aim-pill' }, topicLabel(q.learning_aim))
-    ));
-    if (q._sharedScenario) sx.appendChild(el('div', { class: 'scenario' }, q._sharedScenario));
-    else if (q.scenario && !q._hideScenario) sx.appendChild(el('div', { class: 'scenario' }, q.scenario));
-    const subQ = el('div', { class: 'paper-question' });
-    subQ.appendChild(el('span', { class: 'qtext' },
-      q.question,
-      el('span', { class: 'marks-bracket' }, ` (${q.marks})`)
-    ));
-    sx.appendChild(subQ);
-    if (q.type === 'diagram') {
-      // Full page-sized blank space for the candidate to draw the diagram
-      sx.appendChild(el('div', { class: 'diagram-space', 'aria-hidden': 'true' },
-        el('span', { class: 'ds-label' }, `Draw your ${q.diagram_kind || 'diagram'} in the space below`)
-      ));
-    } else if (q.type === 'multiple_choice') {
-      // MC questions print A–D options with a tick box next to each.
-      const opts = el('ol', { class: 'mc-options' });
-      (q.options || []).forEach(o => {
-        opts.appendChild(el('li', null,
-          el('span', { class: 'mc-tick' }),
-          el('span', { class: 'mc-letter' }, o.label),
-          el('span', { class: 'mc-text' }, o.text)
-        ));
-      });
-      sx.appendChild(opts);
-      sx.appendChild(el('p', { class: 'mc-instr' }, 'Tick (✓) the box next to your chosen answer.'));
-    } else {
-      // Answer lines — generous, mirroring the real Pearson booklets.
-      // Real papers give roughly: 1m → 2 lines, 2m → 4, 3m → 6, 4m → 8,
-      // 6m → 14, 8m → 18, 9m → 22, 12m → 28.
-      const linesByMark = { 1: 2, 2: 4, 3: 6, 4: 8, 6: 14, 8: 18, 9: 22, 12: 28 };
-      const baseLines = linesByMark[q.marks] || Math.max(2, q.marks * 2);
-      const densityMult = { extra: 1.4, normal: 1, compact: 0.6, none: 0 }[lineDensity] || 1;
-      const numLines = Math.round(baseLines * densityMult);
-      if (numLines > 0) {
-        const linesBox = el('div', { class: 'answer-lines', 'aria-hidden': 'true' });
-        for (let l = 0; l < numLines; l++) linesBox.appendChild(el('div', { class: 'answer-line' }));
-        sx.appendChild(linesBox);
+      if (mock.paperType === 'Paper 1' && sectionNotes[currentSection]) wrap.appendChild(el('p', { class: 'section-note' }, sectionNotes[currentSection]));
+      if (mock.paperType === 'Paper 2' && mock.contexts && q._setIndex != null) {
+        const s = mock.contexts[q._setIndex];
+        const ctx = el('div', { class: 'paper-context' });
+        ctx.appendChild(el('p', { class: 'section-note' }, 'Read the information below and then answer the questions that follow.'));
+        ctx.appendChild(el('h4', null, s.title));
+        (s.context || []).forEach(p => ctx.appendChild(el('p', null, p)));
+        ctx.appendChild(renderAppendices(s.appendices));
+        wrap.appendChild(ctx);
       }
     }
+    const sx = el('div', { class: 'paper-section' + (q._choice ? ' paper-choice' : '') });
+    sx.appendChild(el('div', { class: 'section-tag' }, `Question ${q._label}`, el('span', { class: 'aim-pill' }, q.spec_ref || topicLabel(q.learning_aim))));
+    if (mock.paperType === 'Paper 1' && q.scenario) sx.appendChild(el('pre', { class: 'scenario scenario-data' }, q.scenario));
+    sx.appendChild(el('div', { class: 'paper-question' }, el('span', { class: 'qtext' }, q.question, el('span', { class: 'marks-bracket' }, ` [${q.marks} mark${q.marks === 1 ? '' : 's'}]`))));
+    sx.appendChild(answerSpace(q, lineDensity));
     if (mockShowMs) {
       const msb = el('div', { class: 'ms-block' });
       msb.appendChild(renderMarkScheme(q, { enableDrawing: false }));
       sx.appendChild(msb);
     }
-    sx.appendChild(el('div', { class: 'paper-totals' }, `(Total for Question ${i + 1} = ${q.marks} mark${q.marks===1?'':'s'})`));
     wrap.appendChild(sx);
   });
-  wrap.appendChild(el('div', { class: 'paper-totals', style: 'text-align:right;font-size:16px;margin-top:24px;border-top:2px solid #14201E;padding-top:12px;' }, `TOTAL FOR PAPER = ${totalMarks} MARKS`));
+  wrap.appendChild(el('div', { class: 'paper-totals', style: 'text-align:right;font-size:16px;margin-top:24px;border-top:2px solid #14201E;padding-top:12px;' },
+    mock.paperType === 'Paper 1' ? 'END OF QUESTIONS · Maximum mark for this paper = 100 (one essay from Section C and one from Section D)' : `END OF QUESTIONS · TOTAL FOR PAPER = ${mock.total} MARKS`));
 }
 
 // ---------- Practice mode ----------
@@ -1873,12 +1815,23 @@ function renderPracticeCard() {
   card.appendChild(el('div', { class: 'qrow-meta' },
     el('span', { class: 'tag id' }, q.id),
     el('span', { class: 'tag' }, topicLabel(q.learning_aim)),
-    getQuestionPapers(q).length ? el('span', { class: 'tag' }, getQuestionPapers(q).join(' · ')) : null,
+    getQuestionPapers(q).length ? el('span', { class: 'tag' }, getQuestionPapers(q).join(' · ') + (q.paper_section ? ' · ' + q.paper_section : '')) : null,
     el('span', { class: 'tag verb' }, q.command_verb),
     el('span', { class: 'tag marks' }, `${q.marks} mark${q.marks===1?'':'s'}`)
   ));
-  if (q.scenario) card.appendChild(el('div', { class: 'scenario' }, q.scenario));
-  card.appendChild(el('p', { class: 'question' }, q.question, el('span', { class: 'marks-bracket' }, ` (${q.marks})`)));
+  if (q.scenario) card.appendChild(renderQuestionContext(q, { open: !(q.paper === 'Paper 3' && q.part === '6') }));
+  card.appendChild(el('p', { class: 'question' }, q.question, el('span', { class: 'marks-bracket' }, ` [${q.marks} mark${q.marks === 1 ? '' : 's'}]`)));
+  if (q.marks >= 9) {
+    const tips = {
+      9: 'Analyse: build one or two developed chains of reasoning applied to the context. No conclusion needed.',
+      12: 'Analyse (12): one well-developed argument using the case can reach Level 3. No judgement needed.',
+      16: 'Evaluate (16): arguments on both sides, using the data/case, then a judgement that weighs them and says what it depends on.',
+      20: 'Evaluate (20): analyse BOTH options or both sides in context, then a justified recommendation.',
+      24: "Evaluate (24): use contrasting business contexts for 'all businesses', balance, and a judgement that flows from your arguments.",
+      25: 'Essay (25): pick your own examples for context, develop arguments on both sides, then weigh them up - do not just summarise.'
+    };
+    if (tips[q.marks]) card.appendChild(el('p', { class: 'exam-technique-hint' }, 'ℹ️ ' + tips[q.marks]));
+  }
 
   // Diagram questions get a sketch canvas; MC gets clickable A–D options;
   // everything else gets a textarea.
@@ -2762,6 +2715,39 @@ function matchClause(clause, lexicon) {
   return { hit, matched, need, total: kw.length };
 }
 
+// Numeric marking for calculation questions: full marks for the correct final answer,
+// otherwise one mark per correct intermediate value in the working (method marks).
+function extractNumbers(text) {
+  let t = String(text || '').replace(/[−–]/g, '-');
+  for (let i = 0; i < 3; i++) t = t.replace(/(\d)[ ,](\d{3})(?!\d)/g, '$1$2');
+  return (t.match(/-?\d+(?:\.\d+)?/g) || []).map(Number).filter(Number.isFinite);
+}
+function numbersNear(a, b) {
+  return Math.abs(Math.abs(a) - Math.abs(b)) <= Math.max(0.06, Math.abs(b) * 0.012);
+}
+function autoMarkCalc(q, answer) {
+  const m = q.mark_scheme || {};
+  const nums = extractNumbers(answer);
+  const has = v => nums.some(n => numbersNear(n, v));
+  const lines = [];
+  let hits = 0;
+  (m.points || []).forEach(step => {
+    const after = String(step).split('=').slice(1).join('=');
+    const stepNums = extractNumbers(after.replace(/\(\d+ marks?[^)]*\)/gi, ''));
+    const target = stepNums.length ? stepNums[stepNums.length - 1] : null;
+    const hit = target != null && has(target);
+    if (hit) hits++;
+    lines.push({ label: step, hit, details: target != null ? `looking for ${target}` : '' });
+  });
+  const finalVal = Number(m.final_answer);
+  const finalHit = Number.isFinite(finalVal) && has(finalVal);
+  let earned = finalHit ? q.marks : Math.min(q.marks - 1, hits);
+  const unit = String(m.unit || '');
+  if (finalHit && /^units|days|times|years/.test(unit) && /£\s*\d/.test(answer)) earned = q.marks - 1;
+  lines.unshift({ label: `Final answer: ${m.answer || ''}`, hit: finalHit, details: finalHit ? 'correct final answer' : 'final answer not found' });
+  return { type: 'calc', earned: Math.max(0, earned), max: q.marks, lines };
+}
+
 function autoMarkShort(q, answer) {
   const points = (q.mark_scheme && q.mark_scheme.points) || [];
   const lexicon = buildAnswerLexicon(answer);
@@ -2894,7 +2880,13 @@ function normaliseAiMarkResult(raw, q, isExt, answer) {
     coverage: Number.isFinite(Number(raw.coverage)) ? Math.max(0, Math.min(1, Number(raw.coverage))) : 0,
     wordCount: Number.isFinite(Number(raw.wordCount)) ? Math.max(0, Math.round(Number(raw.wordCount))) : words,
     level: Number.isFinite(Number(raw.level)) ? Math.max(0, Math.round(Number(raw.level))) : 0,
-    levelMarks: String(raw.levelMarks || '').trim(),
+    levelMarks: String(raw.levelMarks || raw.level_marks || '').trim(),
+    feedback: String(raw.feedback || '').trim(),
+    examinerComment: String(raw.examiner_comment || '').trim(),
+    nextLevel: Array.isArray(raw.next_level) ? raw.next_level.map(String).filter(Boolean) : [],
+    aoFeedback: raw.ao_feedback && typeof raw.ao_feedback === 'object' ? raw.ao_feedback : null,
+    annotations: Array.isArray(raw.annotations) ? raw.annotations.filter(a => a && a.tag).slice(0, 12) : [],
+    calcCheck: String(raw.calculation_check || '').trim(),
   };
   return result;
 }
@@ -2937,8 +2929,8 @@ async function buildBestAutoMarkUI(q, answer) {
 }
 
 function buildAutoMarkUI(q, answer, forcedResult, sourceLabel) {
-  const isExt = q.type === 'extended_levels' || (q.mark_scheme && q.mark_scheme.indicative_content);
-  const result = forcedResult || (isExt ? autoMarkExtended(q, answer) : autoMarkShort(q, answer));
+  const isExt = q.type === 'extended_levels' || !!(q.mark_scheme && q.mark_scheme.indicative_content);
+  const result = forcedResult || (q.type === 'calculation' ? autoMarkCalc(q, answer) : isExt ? autoMarkExtended(q, answer) : autoMarkShort(q, answer));
   const isAiFeedback = sourceLabel === 'ai';
 
   const box = el('div', { class: 'automark-box' + (isAiFeedback ? ' ai-examiner-box' : '') });
@@ -2964,64 +2956,67 @@ function buildAutoMarkUI(q, answer, forcedResult, sourceLabel) {
   adjust.appendChild(minus); adjust.appendChild(plus);
   head.appendChild(adjust);
 
-  if (isExt && result.level) {
-    head.appendChild(el('span', { class: 'automark-level' }, `Level ${result.level} (${result.levelMarks || ''})`));
+  if (result.level) {
+    head.appendChild(el('span', { class: 'automark-level' }, `Level ${result.level}${result.levelMarks ? ' (' + result.levelMarks + ')' : ''}`));
   }
   box.appendChild(head);
 
   const safeCoverage = Number.isFinite(Number(result.coverage)) ? Math.round(Number(result.coverage) * 100) : 0;
   const safeWordCount = Number.isFinite(Number(result.wordCount)) ? Number(result.wordCount) : String(answer || '').trim().split(/\s+/).filter(Boolean).length;
-  const blurb = sourceLabel === 'ai'
-    ? (isExt
-      ? `Mark estimate based on your content coverage (${safeCoverage}% matched, ${safeWordCount} words).`
-      : `Mark estimate based on mark-scheme point matching and answer accuracy.`)
-    : (isExt
-      ? `Estimated from content coverage, answer depth and analysis cues (${safeCoverage}% covered, ${safeWordCount} words). Adjust with + / − if needed.`
-      : `Estimated by matching scheme concepts using token, stem and near-match checks. Adjust with + / − if needed.`);
+  let blurb;
+  if (isAiFeedback) blurb = result.feedback || 'Marked by the RA10 AI Examiner against the AQA level descriptors for this tariff.';
+  else if (q.type === 'calculation') blurb = 'Checked numerically: full marks for the correct final answer in the right unit; otherwise method marks for each correct step (Own Figure Rule). Adjust with + / - if needed.';
+  else if (isExt) blurb = `Rough estimate from content coverage and answer depth (${safeCoverage}% covered, ${safeWordCount} words). Level-marked answers are best checked with the AI Examiner. Adjust with + / - if needed.`;
+  else blurb = 'Estimated by matching mark-scheme points. Adjust with + / - if needed.';
   box.appendChild(el('p', { class: 'automark-detail' }, blurb));
 
   if (isAiFeedback) {
+    if (result.examinerComment) {
+      box.appendChild(el('div', { class: 'ai-examiner-comment' }, el('strong', null, 'Examiner commentary: '), result.examinerComment));
+    }
+    if (result.calcCheck) {
+      box.appendChild(el('p', { class: 'ai-calc-check' }, el('strong', null, 'Calculation check: '), result.calcCheck));
+    }
+    if (result.aoFeedback) {
+      const ao = el('table', { class: 'ai-ao-table' });
+      ao.appendChild(el('tr', null, el('th', null, 'Skill'), el('th', null, 'Judgement')));
+      const names = { AO1: 'AO1 Knowledge', AO2: 'AO2 Application', AO3: 'AO3 Analysis', AO4: 'AO4 Evaluation' };
+      Object.keys(names).forEach(k => {
+        if (result.aoFeedback[k]) ao.appendChild(el('tr', null, el('td', null, names[k]), el('td', null, String(result.aoFeedback[k]))));
+      });
+      box.appendChild(ao);
+    }
+    if (result.annotations && result.annotations.length) {
+      const ann = el('div', { class: 'ai-annotations' });
+      ann.appendChild(el('strong', null, 'Examiner annotations: '));
+      result.annotations.forEach(a => ann.appendChild(el('span', { class: 'ai-ann-tag ai-ann-' + String(a.tag).toLowerCase(), title: String(a.text || '') }, String(a.tag) + (a.text ? ': ' + String(a.text) : ''))));
+      box.appendChild(ann);
+    }
     const hits = (result.lines || []).filter((line) => !!line.hit).slice(0, 4);
     const misses = (result.lines || []).filter((line) => !line.hit).slice(0, 4);
     const summary = el('div', { class: 'ai-feedback-grid' });
-
     const goodCard = el('section', { class: 'ai-feedback-card good' });
     goodCard.appendChild(el('h4', null, 'What you did well'));
     const goodList = el('ul');
-    if (hits.length) {
-      hits.forEach((line) => {
-        goodList.appendChild(el('li', null, line.label));
-      });
-    } else {
-      goodList.appendChild(el('li', null, 'You attempted the question and included some relevant points.'));
-    }
+    (hits.length ? hits : [{ label: 'You attempted the question.' }]).forEach(line => goodList.appendChild(el('li', null, line.label)));
     goodCard.appendChild(goodList);
-
     const improveCard = el('section', { class: 'ai-feedback-card improve' });
-    improveCard.appendChild(el('h4', null, 'How to improve'));
+    improveCard.appendChild(el('h4', null, result.nextLevel.length ? 'To reach the next level' : 'How to improve'));
     const improveList = el('ul');
-    if (misses.length) {
-      misses.forEach((line) => {
-        improveList.appendChild(el('li', null, line.label));
-      });
-    } else {
-      improveList.appendChild(el('li', null, 'Add one extra explained point to push to full marks.'));
-    }
+    const nextItems = result.nextLevel.length ? result.nextLevel.map(t => ({ label: t })) : misses;
+    (nextItems.length ? nextItems : [{ label: 'Develop each point further: explain WHY each link in your chain follows, using the context.' }]).forEach(line => improveList.appendChild(el('li', null, line.label)));
     improveCard.appendChild(improveList);
-
     summary.appendChild(goodCard);
     summary.appendChild(improveCard);
     box.appendChild(summary);
+  } else {
+    const detail = el('div', { class: 'automark-detail automark-hits' });
+    detail.appendChild(el('strong', null, q.type === 'calculation' ? 'Working check:' : isExt ? 'Indicative-content coverage:' : 'Scheme-point check:'));
+    const ul = el('ul');
+    result.lines.forEach(l => ul.appendChild(el('li', { class: l.hit ? 'hit' : 'miss', title: l.details || '' }, l.label)));
+    detail.appendChild(ul);
+    box.appendChild(detail);
   }
-
-  const detail = el('div', { class: 'automark-detail automark-hits' });
-  detail.appendChild(el('strong', null, isExt ? 'Indicative-content coverage:' : 'Scheme-point check:'));
-  const ul = el('ul');
-  result.lines.forEach(l => {
-    ul.appendChild(el('li', { class: l.hit ? 'hit' : 'miss', title: l.details || '' }, l.label));
-  });
-  detail.appendChild(ul);
-  box.appendChild(detail);
 
   // Toggle full mark scheme ("I'll mark it myself")
   const showMsBtn = el('button', { class: 'btn ghost', style: 'margin-top:14px;' }, 'Show full mark scheme');
@@ -3046,8 +3041,8 @@ function renderSpec() {
   TOPIC_CODES.forEach(letter => {
     const data = SPEC[letter];
     const a = el('a', { href: '#spec-aim-' + letter },
-      el('span', { class: 'sj-letter' }, letter),
-      data.title.split(' ').slice(0, 3).join(' ')
+      el('span', { class: 'sj-letter' }, topicLabel(letter)),
+      data.title.replace(/^3\.\d+\s*/, '').split(' ').slice(0, 3).join(' ')
     );
     jump.appendChild(a);
   });
@@ -3060,7 +3055,7 @@ function renderSpec() {
     const sec = el('section', { class: 'spec-aim card', id: 'spec-aim-' + letter });
 
     const head = el('div', { class: 'spec-aim-head' });
-    head.appendChild(el('div', { class: 'spec-aim-letter' }, letter));
+    head.appendChild(el('div', { class: 'spec-aim-letter' }, topicLabel(letter)));
     head.appendChild(el('div', { class: 'spec-aim-title' },
       el('h3', null, data.title),
       el('p', { class: 'spec-aim-sub' }, data.short)
@@ -3072,7 +3067,7 @@ function renderSpec() {
     sec.appendChild(head);
 
     // Group sub-topics under their parent (e.g. A1.1, A1.2 under A1)
-    const tree = buildTopicTree(data.topics);
+    const tree = data.topics.map(t => ({ code: t.code, name: t.name, children: [] }));
     const groups = el('div', { class: 'spec-groups' });
     tree.forEach(node => {
       const group = el('div', { class: 'spec-group' });
@@ -3159,7 +3154,7 @@ function renderQuizControls() {
   }
 
   if (typeof QUIZ !== 'undefined' && QUIZ.length) {
-    $('#quiz-card').innerHTML = `<p class="muted" style="padding:30px;text-align:center;">${QUIZ.length} source-backed quiz questions ready (from extracted A-Level PPT files). Pick filters and click <strong>Start quiz</strong>.</p>`;
+    $('#quiz-card').innerHTML = `<p class="muted" style="padding:30px;text-align:center;">${QUIZ.length} quiz questions ready (AQA-style MCQs, key-term and formula checks). Pick filters and click <strong>Start quiz</strong>.</p>`;
   } else {
     $('#quiz-card').innerHTML = `<p class="muted" style="padding:30px;text-align:center;">Quiz data is loading…</p>`;
   }
@@ -3199,7 +3194,7 @@ function renderQuizCard() {
   card.appendChild(el('div', { class: 'quiz-meta' },
     el('span', { class: 'tag id' }, q.id),
     el('span', { class: 'tag' }, topicLabel(q.learning_aim)),
-    getQuestionPapers(q).length ? el('span', { class: 'tag' }, getQuestionPapers(q).join(' · ')) : null,
+    getQuestionPapers(q).length ? el('span', { class: 'tag' }, getQuestionPapers(q).join(' · ') + (q.paper_section ? ' · ' + q.paper_section : '')) : null,
     q.topic ? el('span', { class: 'tag verb' }, q.topic) : null,
     el('span', { class: 'tag marks' }, q.type === 'true_false' ? 'True / False' : 'Multiple choice')
   ));
