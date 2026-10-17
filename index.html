@@ -1202,6 +1202,29 @@ body.unit-shell-mode .site-announcement-bar{
 .revision-app-it{background:linear-gradient(145deg,#ecfeff 0%,#eef2ff 100%)}
 .revision-app-business{background:linear-gradient(145deg,#eff6ff 0%,#e0f2fe 100%)}
 .revision-app-sport{background:linear-gradient(145deg,#f5f3ff 0%,#fdf2f8 100%)}
+[data-theme="dark"] .revision-showcase{
+  background:
+    radial-gradient(120% 120% at 0% 0%,rgba(59,130,246,.18) 0%,rgba(59,130,246,0) 45%),
+    radial-gradient(120% 120% at 100% 100%,rgba(249,115,22,.14) 0%,rgba(249,115,22,0) 50%),
+    var(--color-surface);
+  border-color:var(--color-border);
+}
+[data-theme="dark"] .revision-kicker{background:var(--color-surface-offset);color:var(--color-text);border-color:var(--color-border)}
+[data-theme="dark"] .rev-flow-row{background:var(--color-surface);border-color:var(--color-border)}
+[data-theme="dark"] .rev-flow-card{background:var(--color-bg-soft);border-color:var(--color-border)}
+[data-theme="dark"] .rev-flow-chip.ok{background:rgba(34,197,94,.18);color:#bbf7d0}
+[data-theme="dark"] .revision-app-card,
+[data-theme="dark"] .revision-app-it,
+[data-theme="dark"] .revision-app-business,
+[data-theme="dark"] .revision-app-sport{
+  background:var(--color-surface);
+  border-color:var(--color-border);
+  box-shadow:var(--shadow-sm);
+}
+[data-theme="dark"] .revision-app-pill{background:rgba(15,23,42,.84);color:#f8fafc;border:1px solid rgba(255,255,255,.18)}
+[data-theme="dark"] #p-revision .card{background:var(--color-surface) !important;border-color:var(--color-border) !important}
+[data-theme="dark"] #p-revision .card-tag{color:#93c5fd !important}
+[data-theme="dark"] #p-revision .card p{color:var(--color-text-muted) !important}
 
 /* =====================================================
    LEADERBOARD STAGE
@@ -5624,7 +5647,7 @@ html body #community-share-sheet .community-share-panel{
           <h3 style="margin:0 0 10px;font-weight:700;">Unlimited credits for every signed-in account</h3>
           <p style="margin:0 0 16px;color:var(--color-text-muted);line-height:1.7;">As a transition gift while payments are paused, every signed-in account gets <strong>unlimited credits</strong> and full access to revision guides and all premium features — completely free. You just need to be signed in.</p>
           <div class="ctas" style="justify-content:center;">
-            <button class="btn btn-p" type="button" onclick="openSignInOverlayFallback()">Sign in free</button>
+            <button id="transition-home-signin" class="btn btn-p" type="button" onclick="openSignInOverlayFallback()">Sign in free</button>
             <button class="btn btn-s" type="button" onclick="showTransitionPopup()">Learn more</button>
           </div>
         </div>
@@ -6620,6 +6643,12 @@ html body #community-share-sheet .community-share-panel{
               <div id="account-badge-current">No badge set</div>
             </div>
             <button class="btn account-btn account-btn-change" id="account-change-badge-btn" type="button">Change</button>
+          </div>
+          <div class="account-row account-row-top">
+            <div class="account-meta">
+              <div class="account-row-label">Earned last week</div>
+              <div id="account-earned-leaderboard-badge">No weekly podium finish yet</div>
+            </div>
           </div>
           <div id="account-badge-edit" class="account-edit-block">
             <div class="account-inline-input">
@@ -8502,6 +8531,14 @@ function getLeaderboardDisplayName(profile) {
   return badge ? badge + ' ' + name : name;
 }
 
+function getEarnedLeaderboardBadge(profile) {
+  const badge = getLeaderboardBadgeEmoji(profile);
+  const week = String(profile?.leaderboard_badge_week || '').trim();
+  const credits = Number(profile?.leaderboard_award_credits || 0);
+  if (!badge || !week) return '';
+  return badge + ' · Week of ' + week + (credits > 0 ? ' · +' + credits + ' credits' : '');
+}
+
 function getLeaderboardInitials(profile) {
   const raw = String(profile?.full_name || profile?.username || 'RA').trim();
   const cleaned = raw.replace(/^@+/, '').replace(/[^a-zA-Z0-9 ]+/g, ' ').trim();
@@ -8897,7 +8934,7 @@ async function fetchLeaderboardRows(sb, limitCount) {
     if (q.error && isMissingProfilePicColumnError(q.error)) {
       const fallback = await sb
         .from('profiles')
-        .select('id, username, full_name, leaderboard_badge, badge_emoji, emoji_badge, xp_this_week, xp_total')
+        .select('id, username, full_name, leaderboard_badge, badge_emoji, emoji_badge, profile_pic_url, xp_this_week, xp_total')
         .gt('xp_this_week', 0)
         .order('xp_this_week', { ascending: false })
         .order('xp_total', { ascending: false })
@@ -8923,6 +8960,17 @@ async function renderLeaderboard() {
       'https://tcrrgsylxbyyrmnouihl.supabase.co',
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRjcnJnc3lseGJ5eXJtbm91aWhsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4ODUyMTEsImV4cCI6MjA5MzQ2MTIxMX0.eOp6ma-mfgh8F20nM7E2OaBW28LlZlwuEEWr6k2zDWw'
     );
+    try {
+      const settlement = await sb.rpc('settle_previous_leaderboard');
+      if (settlement.error) {
+        console.warn('Leaderboard settlement is unavailable:', settlement.error.message || settlement.error);
+      } else if (settlement.data?.settled && window.RA10?.isLoggedIn()) {
+        await RA10.refreshProfile();
+        _updateNavAuth();
+      }
+    } catch (e) {
+      console.warn('Leaderboard settlement failed:', e);
+    }
     const data = await fetchLeaderboardRows(sb, 50);
     if (loadingEl) loadingEl.style.display = 'none';
     tableEl.style.display = 'block';
@@ -12446,7 +12494,11 @@ async function waitForRA10Sdk(timeoutMs) {
     _updateNavAuth();
     applyTransitionModeUi();
 
-  ra10.on('authchange', () => { _updateNavAuth(); renderSignedInDashboard(); });
+   ra10.on('authchange', () => {
+     _updateNavAuth();
+     renderSignedInDashboard();
+     updateTransitionSignInActions();
+   });
   ra10.on('creditschange', _updateNavAuth);
 
     let focusRefreshInFlight = false;
@@ -12880,6 +12932,10 @@ async function waitForRA10Sdk(timeoutMs) {
         const accountPicInput = document.getElementById('account-pic-input');
         document.getElementById('account-username-current').textContent = profile.username ? ('@' + profile.username) : 'No username set';
         document.getElementById('account-badge-current').textContent = getLeaderboardBadgeEmoji(profile) || 'No badge set';
+        const earnedBadgeEl = document.getElementById('account-earned-leaderboard-badge');
+        if (earnedBadgeEl) {
+          earnedBadgeEl.textContent = getEarnedLeaderboardBadge(profile) || 'No weekly podium finish yet';
+        }
         let currentPicUrl = getProfilePictureUrl(profile);
         if (!currentPicUrl) {
           try {
@@ -14232,6 +14288,24 @@ async function waitForRA10Sdk(timeoutMs) {
       return !!(window.RA10 && window.RA10._raw && window.RA10._raw.TRANSITION_MODE);
     }
 
+    function transitionPopupSeen() {
+      try {
+        return localStorage.getItem(TRANSITION_POPUP_SEEN_KEY) === '1';
+      } catch (e) {
+        return false;
+      }
+    }
+
+    function updateTransitionSignInActions() {
+      const signedIn = !!(window.RA10 && typeof RA10.isLoggedIn === 'function' && RA10.isLoggedIn());
+      const homeSignIn = document.getElementById('transition-home-signin');
+      if (homeSignIn) homeSignIn.style.display = signedIn ? 'none' : '';
+      const popupSignIn = document.getElementById('transition-popup-signin');
+      if (popupSignIn) popupSignIn.style.display = signedIn ? 'none' : '';
+      const popupSignInCopy = document.getElementById('transition-popup-signin-copy');
+      if (popupSignInCopy) popupSignInCopy.style.display = signedIn ? 'none' : '';
+    }
+
     // Hides every upgrade / buy entry point while transition mode is on, and
     // swaps the upgrade page body for an "everything is unlocked" notice.
     function applyTransitionModeUi() {
@@ -14253,12 +14327,11 @@ async function waitForRA10Sdk(timeoutMs) {
       if (on) {
         showTransitionPopup();
       }
+      updateTransitionSignInActions();
     }
 
     function showTransitionPopup() {
-      try {
-        if (localStorage.getItem(TRANSITION_POPUP_SEEN_KEY) === '1') return;
-      } catch (e) {}
+      if (transitionPopupSeen()) return;
       if (document.getElementById('transition-popup-overlay')) return;
       const overlay = document.createElement('div');
       overlay.id = 'transition-popup-overlay';
@@ -14269,13 +14342,14 @@ async function waitForRA10Sdk(timeoutMs) {
         + '<div style="font-size:2rem;line-height:1;margin-bottom:10px;">🎉</div>'
         + '<h3 style="margin:0 0 10px 0;font-size:1.3rem;font-weight:700;">RA10.CO.UK is turning into something new</h3>'
         + '<p style="margin:0 0 16px 0;color:var(--color-text-muted,#5f6780);line-height:1.6;">Payments are paused for now, so as a transition gift <strong>everyone signed in gets unlimited credits</strong> and full access to revision guides and premium features — completely free.</p>'
-        + '<p style="margin:0 0 16px 0;color:var(--color-text-muted,#5f6780);line-height:1.6;"><strong>You still need to be signed in</strong> to use everything.</p>'
+        + '<p id="transition-popup-signin-copy" style="margin:0 0 16px 0;color:var(--color-text-muted,#5f6780);line-height:1.6;"><strong>You still need to be signed in</strong> to use everything.</p>'
         + '<div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">'
         +   '<button id="transition-popup-signin" class="btn btn-p" type="button" style="justify-content:center;">Sign in</button>'
         +   '<button id="transition-popup-close" class="btn btn-s" type="button" style="justify-content:center;">Got it</button>'
         + '</div>';
       overlay.appendChild(card);
       document.body.appendChild(overlay);
+      updateTransitionSignInActions();
       const markSeen = () => {
         try { localStorage.setItem(TRANSITION_POPUP_SEEN_KEY, '1'); } catch (e) {}
         overlay.remove();

@@ -6,6 +6,10 @@ returns table(
   username text,
   full_name text,
   profile_pic_url text,
+  leaderboard_badge text,
+  leaderboard_badge_week date,
+  leaderboard_last_rank integer,
+  leaderboard_award_credits integer,
   xp_this_week integer,
   xp_total integer
 )
@@ -18,6 +22,10 @@ as $$
     p.username,
     p.full_name,
     p.profile_pic_url,
+    p.leaderboard_badge,
+    p.leaderboard_badge_week,
+    p.leaderboard_last_rank,
+    coalesce(p.leaderboard_award_credits, 0)::int as leaderboard_award_credits,
     coalesce(p.xp_this_week, 0)::int as xp_this_week,
     coalesce(p.xp_total, 0)::int as xp_total
   from public.profiles p
