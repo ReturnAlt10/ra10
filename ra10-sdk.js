@@ -115,7 +115,15 @@
   const EVENTS = {
     authchange: [],
     creditschange: [],
+    legalchange: [],
+    termsrequired: [],
   };
+
+  // Only used when the legal_documents table can't be reached (e.g. before
+  // supabase/sql/legal-terms-acceptance.sql is applied). The database is the
+  // source of truth — keep these in sync when you bump a version there.
+  const LEGAL_FALLBACK_VERSIONS = { terms: '2026-10-18', privacy: '2026-10-18' };
+  const LEGAL_LOCAL_ACCEPT_PREFIX = 'ra10_legal_accepted_';
 
   const EXAM_SEASON_BONUS_CREDITS = 50;
   const EXAM_SEASON_BONUS_END_UTC = Date.parse('2026-08-02T00:00:00Z');
@@ -126,6 +134,7 @@
   let _profile = null;
   let _scriptLoader = null;
   let _authSubscription = null;
+  let _legalStatus = null;
 
   function _emit(eventName, payload) {
     const listeners = EVENTS[eventName] || [];
@@ -409,6 +418,20 @@
       if (!SupabaseFactory || typeof SupabaseFactory.createClient !== 'function') {
         throw new Error('Supabase SDK did not expose createClient');
       }
+      return _createSharedClient(SupabaseFactory);
+    });
+  }
+
+  // The one Supabase client for the whole site. It reads the signed-in session
+  // from AUTH_STORAGE_KEY, so every query runs as the user (RLS applies).
+  // A bare `supabase.createClient(url, key)` looks for the session under
+  // Supabase's default key, finds none and silently runs as anon — always
+  // use RA10.getClient() instead.
+  function _createSharedClient(SupabaseFactory) {
+    if (_supabaseClient) {
+      return _supabaseClient;
+    }
+    {
       const authStorage = {
         getItem(key) {
           try {
@@ -438,7 +461,17 @@
         },
       });
       return _supabaseClient;
-    });
+    }
+  }
+
+  // Synchronous access to the shared, authenticated client (null only if the
+  // Supabase library hasn't loaded yet).
+  function getClient() {
+    if (_supabaseClient) {
+      return _supabaseClient;
+    }
+    const factory = _getSupabaseFactory();
+    return factory && typeof factory.createClient === 'function' ? _createSharedClient(factory) : null;
   }
 
   function _normalizeTier(tier) {
@@ -703,7 +736,157 @@
       _syncPlanCreditActivity(_profile);
     }
 
+    await _loadLegalStatus();
     return _profile;
+  }
+
+  // --- Terms of Service / Privacy Policy acceptance ---
+  function _fallbackLegalStatus() {
+    const userId = _profile?.id || _session?.user?.id || '';
+    let local = null;
+    try {
+      local = userId ? JSON.parse(localStorage.getItem(LEGAL_LOCAL_ACCEPT_PREFIX + userId) || 'null') : null;
+    } catch (e) {}
+    const acceptedTerms = _profile?.terms_accepted_version || local?.terms || null;
+    const acceptedPrivacy = _profile?.privacy_accepted_version || local?.privacy || null;
+    return {
+      terms: { version: LEGAL_FALLBACK_VERSIONS.terms, url: '/legal/terms.html', change_summary: null },
+      privacy: { version: LEGAL_FALLBACK_VERSIONS.privacy, url: '/legal/privacy.html', change_summary: null },
+      signed_in: !!userId,
+      accepted_terms_version: acceptedTerms,
+      accepted_privacy_version: acceptedPrivacy,
+      has_previous_acceptance: !!acceptedTerms,
+      onboarding_completed_at: _profile ? (_profile.onboarding_completed_at || null) : null,
+      needs_acceptance: !!userId && (acceptedTerms !== LEGAL_FALLBACK_VERSIONS.terms || acceptedPrivacy !== LEGAL_FALLBACK_VERSIONS.privacy),
+      fallback: true,
+    };
+  }
+
+  async function _loadLegalStatus() {
+    try {
+      const client = await _ensureSupabaseClient();
+      const res = await client.rpc('get_legal_status');
+      if (res.error || !res.data || !res.data.terms) {
+        throw res.error || new Error('get_legal_status unavailable');
+      }
+      _legalStatus = res.data;
+    } catch (e) {
+      _legalStatus = _fallbackLegalStatus();
+    }
+    return _legalStatus;
+  }
+
+  function getLegalStatus() {
+    return _legalStatus || _fallbackLegalStatus();
+  }
+
+  async function refreshLegalStatus() {
+    await _loadLegalStatus();
+    _emit('legalchange', _legalStatus);
+    return _legalStatus;
+  }
+
+  function hasAcceptedTerms() {
+    if (!isLoggedIn()) return false;
+    return !getLegalStatus().needs_acceptance;
+  }
+
+  async function acceptTerms(options) {
+    if (!isLoggedIn()) {
+      return { ok: false, reason: 'not_signed_in' };
+    }
+    const opts = options || {};
+    const status = getLegalStatus();
+    const termsVersion = opts.termsVersion || status.terms.version;
+    const privacyVersion = opts.privacyVersion || status.privacy.version;
+    const client = await _ensureSupabaseClient();
+    const res = await client.rpc('accept_legal_terms', {
+      p_terms_version: termsVersion,
+      p_privacy_version: privacyVersion,
+      p_age_confirmed: !!opts.ageConfirmed,
+      p_user_agent: String(navigator.userAgent || '').slice(0, 400),
+    });
+
+    if (res.error) {
+      const code = String(res.error.code || '');
+      if (code !== 'PGRST202' && code !== '42883') {
+        return { ok: false, reason: 'error', error: res.error };
+      }
+      // SQL not applied yet: remember acceptance on this device so the user
+      // isn't blocked. It's asked again server-side once the SQL is live.
+      try {
+        localStorage.setItem(LEGAL_LOCAL_ACCEPT_PREFIX + _session.user.id, JSON.stringify({
+          terms: termsVersion, privacy: privacyVersion, at: new Date().toISOString(),
+        }));
+      } catch (e) {}
+      _legalStatus = _fallbackLegalStatus();
+      _emit('legalchange', _legalStatus);
+      return { ok: true, local: true };
+    }
+
+    const result = res.data || {};
+    if (!result.ok) {
+      if (result.reason === 'version_mismatch') {
+        await refreshLegalStatus();
+      }
+      return result;
+    }
+    await _refreshProfile();
+    _emit('legalchange', _legalStatus);
+    return result;
+  }
+
+  // Returns true when the signed-in user may use terms-gated features.
+  // Otherwise asks the page to show the terms dialog (delegating to the main
+  // RA10 shell when called from inside a revision iframe) and returns false.
+  function requireTerms(feature) {
+    if (!isLoggedIn()) return false;
+    if (hasAcceptedTerms()) return true;
+    _emit('termsrequired', { feature: feature || '' });
+    try {
+      if (window.top && window.top !== window) {
+        window.top.postMessage({ type: 'RA10_OPEN_TERMS', feature: feature || '' }, window.location.origin);
+      } else if (window.RA10Onboarding && typeof window.RA10Onboarding.openTerms === 'function') {
+        window.RA10Onboarding.openTerms({ feature: feature || '' });
+      } else if (!_termsPromptOpen) {
+        // A revision page opened on its own, outside the main shell.
+        _termsPromptOpen = true;
+        const go = window.confirm('To use this feature, please review and accept the RA10 Terms of Service and Privacy Policy. Open RA10 to do that now?');
+        setTimeout(() => { _termsPromptOpen = false; }, 30000);
+        if (go) window.location.href = window.location.origin + '/#/accept-terms';
+      }
+    } catch (e) {}
+    return false;
+  }
+
+  let _termsPromptOpen = false;
+
+  // The main shell tells embedded revision apps when the user accepts.
+  window.addEventListener('message', function (e) {
+    if (e.origin === window.location.origin && e.data && e.data.type === 'RA10_LEGAL_UPDATED' && isLoggedIn()) {
+      refreshLegalStatus();
+    }
+  });
+
+  function _termsError() {
+    const err = new Error('Please accept the RA10 Terms of Service and Privacy Policy to use this feature.');
+    err.code = 'terms_required';
+    return err;
+  }
+
+  function _assertTermsAccepted(feature) {
+    if (!requireTerms(feature)) {
+      throw _termsError();
+    }
+  }
+
+  // Edge functions reply 403 { code: 'terms_required' } when the server-side
+  // check fails (e.g. terms changed since this page loaded).
+  function _throwIfTermsRequired(response, result, feature) {
+    if (response.status === 403 && result && result.code === 'terms_required') {
+      _loadLegalStatus().finally(() => requireTerms(feature));
+      throw _termsError();
+    }
   }
 
   async function _maybeResetMonthlyCredits() {
@@ -1136,6 +1319,9 @@
       }
       return false;
     }
+    if (!requireTerms(action)) {
+      return false;
+    }
     if (!canAfford(action)) {
       if (typeof onDenied === 'function') {
         onDenied('credits', action);
@@ -1245,6 +1431,10 @@
   }
 
   function showPaywall(reason, action) {
+    if (reason === 'terms') {
+      requireTerms(action);
+      return null;
+    }
     const existing = document.getElementById('ra10-paywall-overlay');
     if (existing) {
       existing.remove();
@@ -1565,6 +1755,7 @@
     });
 
     const result = await response.json().catch(function () { return {}; });
+    _throwIfTermsRequired(response, result, 'ai');
     if (!response.ok) {
       throw new Error(result && result.error ? String(result.error) : 'Failed to create checkout session.');
     }
@@ -1601,6 +1792,7 @@
     });
 
     const result = await response.json().catch(function () { return {}; });
+    _throwIfTermsRequired(response, result, 'ai');
     if (!response.ok) {
       throw new Error(result && result.error ? String(result.error) : 'Failed to open billing portal.');
     }
@@ -1624,6 +1816,7 @@
     if (!isLoggedIn()) {
       throw new Error('You need to sign in before AI marking.');
     }
+    _assertTermsAccepted('ai_mark');
     if (!canUseAiMarking()) {
       throw new Error('AI marking is available on Ultra only.');
     }
@@ -1653,6 +1846,7 @@
     });
 
     const result = await response.json().catch(function () { return {}; });
+    _throwIfTermsRequired(response, result, 'ai');
     if (!response.ok) {
       throw new Error(result && result.error ? String(result.error) : 'AI marking is unavailable right now.');
     }
@@ -1666,6 +1860,7 @@
     if (!isLoggedIn()) {
       throw new Error('You need to sign in before using AI Examiner.');
     }
+    _assertTermsAccepted('ai_examiner');
 
     const tier = _normalizeTier(getTier());
     const isUltra = tier === 'ultra' || tier === 'owner' || UNLIMITED_TIERS.has(tier);
@@ -1704,6 +1899,7 @@
     });
 
     const result = await response.json().catch(function () { return {}; });
+    _throwIfTermsRequired(response, result, 'ai');
     if (!response.ok) {
       throw new Error(result && result.error ? String(result.error) : 'AI Examiner is unavailable right now.');
     }
@@ -1836,6 +2032,7 @@
     if (!isLoggedIn()) {
       throw new Error('You need to sign in before using AI Assigner.');
     }
+    _assertTermsAccepted('ai_assigner');
     const message = input && typeof input.message === 'string' ? input.message.trim() : '';
     if (!message) {
       throw new Error('A message is required for AI Assigner.');
@@ -1858,6 +2055,7 @@
       body: JSON.stringify(payload),
     });
     const result = await response.json().catch(function () { return {}; });
+    _throwIfTermsRequired(response, result, 'ai');
     if (!response.ok) {
       throw new Error(result && result.error ? String(result.error) : 'AI Assigner is unavailable right now.');
     }
@@ -1873,6 +2071,7 @@
     if (!isLoggedIn()) {
       throw new Error('You need to sign in before using AI Assigner marking.');
     }
+    _assertTermsAccepted('ai_assigner_mark');
     const submission = input && typeof input.submission === 'string' ? input.submission.trim() : '';
     if (!submission) {
       throw new Error('A submission is required for marking.');
@@ -1894,6 +2093,7 @@
       body: JSON.stringify(payload),
     });
     const result = await response.json().catch(function () { return {}; });
+    _throwIfTermsRequired(response, result, 'ai');
     if (!response.ok) {
       throw new Error(result && result.error ? String(result.error) : 'AI Assigner marking is unavailable right now.');
     }
@@ -1960,6 +2160,12 @@
     askAiAssigner,
     markAssignment,
     refreshProfile: _refreshProfile,
+    getClient,
+    getLegalStatus,
+    refreshLegalStatus,
+    hasAcceptedTerms,
+    acceptTerms,
+    requireTerms,
     _appendCreditActivity,
     on,
     off,

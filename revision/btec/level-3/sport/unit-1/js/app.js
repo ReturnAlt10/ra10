@@ -54,7 +54,6 @@ const DAILY_TASKS_KEY = 'ra10-daily-tasks-v2';
 const STREAK_DATES_KEY = 'ra10_streak_dates';
 const SESSION_TYPES = [
   'quiz_sport_u1', 'practice_sport_u1', 'mock_sport_u1', 'flashcard_sport_u1',
-  'quiz', 'practice', 'mock', 'flashcard'
 ];
 const LEARNING_AIMS = Array.isArray(window.LEARNING_AIMS) && window.LEARNING_AIMS.length
   ? window.LEARNING_AIMS.slice()
@@ -211,7 +210,7 @@ function greetingByTime() {
 
 async function getWeakestAim() {
   if (!window.RA10 || !RA10.isLoggedIn() || !window.supabase) return '';
-  const sb = window.supabase.createClient(SB_URL, SB_KEY);
+  const sb = RA10.getClient();
   const session = RA10.getSession();
   const userId = session?.user?.id;
   if (!userId) return '';
@@ -487,9 +486,9 @@ async function saveSession(sessionType, data) {
   if (!session?.user?.id) return;
   try {
     const payload = normaliseSessionPayload(data);
-    if (!payload.total && sessionType !== 'flashcard_sport_u1') return;
+    if (!payload.total && !String(sessionType).startsWith('flashcard')) return;
     const sb = window.supabase
-      ? window.supabase.createClient(SB_URL, SB_KEY)
+      ? RA10.getClient()
       : null;
     if (!sb) return;
     const { error } = await sb.from('revision_sessions').insert({
@@ -586,7 +585,7 @@ async function refreshProgressSidebar(force) {
       sessions = cache.sessions;
       leaders = cache.leaders;
     } else {
-      const sb = window.supabase.createClient(SB_URL, SB_KEY);
+      const sb = RA10.getClient();
       const session = RA10.getSession();
       const userId = session?.user?.id;
       if (!userId) return;
@@ -3150,7 +3149,7 @@ async function renderProgress() {
   content.style.display = 'block';
 
   const session = RA10.getSession();
-  const sb = window.supabase.createClient(SB_URL, SB_KEY);
+  const sb = RA10.getClient();
   const since = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
 
   const [{ data: sessions }, { data: profile }] = await Promise.all([
@@ -3298,7 +3297,7 @@ async function renderProgress() {
         <div class="prog-session-card ${cls}">
           <div>
             <span class="t">
-              ${typeLabel[r.session_type] || r.session_type}
+              ${typeLabel[r.session_type] || typeLabel[String(r.session_type).split('_')[0]] || r.session_type}
             </span>
             <span class="d">${date}</span>
             ${r.learning_aims?.length ? `<span class="a">Aims: ${r.learning_aims.join(', ')}</span>` : ''}

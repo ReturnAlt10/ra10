@@ -1,4 +1,5 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { requireTermsAccepted } from "../_shared/legal.ts";
 
 // AI Assigner / AI Helper — revision assistant across all RA10 units.
 // Two modes:
@@ -386,6 +387,8 @@ export default Deno.serve(async (req: Request) => {
       return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401, headers: corsHeaders });
     }
     const userId = String(userData.user.id || "");
+    const termsDenied = await requireTermsAccepted(supabase, userId, corsHeaders);
+    if (termsDenied) return termsDenied;
     const profileRes = await supabase.from("profiles").select("tier, unlimited_credits").eq("id", userId).maybeSingle();
     if (profileRes.error || !profileRes.data) {
       return new Response(JSON.stringify({ error: "Profile not found" }), { status: 404, headers: corsHeaders });

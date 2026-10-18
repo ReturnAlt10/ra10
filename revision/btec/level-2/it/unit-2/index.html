@@ -44,7 +44,7 @@
   var s = document.createElement('script');
   var isFile = location.protocol === 'file:';
   var isLocalHost = location.hostname === '127.0.0.1' || location.hostname === 'localhost';
-  s.src = isFile ? 'file:///C:/Users/mistr/Downloads/ra10/ra10-sdk.js?v=20260903' : (isLocalHost ? 'http://127.0.0.1:5500/ra10-sdk.js?v=20260903' : 'https://ra10.co.uk/ra10-sdk.js?v=20260903');
+  s.src = isFile ? 'file:///C:/Users/mistr/Downloads/ra10/ra10-sdk.js?v=20261018b' : (isLocalHost ? 'http://127.0.0.1:5500/ra10-sdk.js?v=20261018b' : 'https://ra10.co.uk/ra10-sdk.js?v=20261018b');
   document.head.insertBefore(s, document.head.firstChild);
 })();
 </script>
@@ -78,11 +78,11 @@
 
   var css = document.createElement('link');
   css.rel = 'stylesheet';
-  css.href = base + '/refresh/ra10-refresh.css?v=20260525';
+  css.href = base + '/refresh/ra10-refresh.css?v=20261018c';
   document.head.appendChild(css);
 
   var js = document.createElement('script');
-  js.src = base + '/refresh/ra10-refresh.js?v=20260525';
+  js.src = base + '/refresh/ra10-refresh.js?v=20261018c';
   document.head.appendChild(js);
 })();
 </script>
@@ -109,6 +109,7 @@
     <button class="tab" data-tab="flash" data-tip="Flip &amp; track flashcards">Flashcards</button>
     <button class="tab" data-tab="browse" data-tip="Browse all questions">All Questions</button>
     <button class="tab" data-tab="guide" data-tip="Full revision guide">Guide</button>
+    <button class="tab tab-special" data-tab="progress" data-tip="Track your scores & streak">Progress</button>
   </nav>
   <div id="unit2-credit-chip" style="margin-left:auto;display:flex;align-items:center;"></div>
   <div style="display:flex;align-items:center;gap:8px;">
@@ -127,6 +128,16 @@
   <main id="app">
     <section class="view active">
       <div class="container" id="main-content"></div>
+    </section>
+
+    <section id="view-progress" class="view" style="display:none;">
+      <div class="container">
+        <header class="section-head">
+          <h2>Your Progress</h2>
+          <p>Your Unit 2 activity is saved on this device, with signed-in sessions added when available.</p>
+        </header>
+        <div id="progress-content"></div>
+      </div>
     </section>
   </main>
 </div>

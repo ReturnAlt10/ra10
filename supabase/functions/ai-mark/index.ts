@@ -1,5 +1,6 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { BUSINESS_SYSTEM, buildBusinessPrompt, businessPostProcess, isALevelBusiness } from "./business_examiner.ts";
+import { requireTermsAccepted } from "../_shared/legal.ts";
 
 const ALLOWED_ORIGINS = [
   "https://ra10.co.uk",
@@ -338,6 +339,8 @@ export default Deno.serve(async (req: Request) => {
     }
 
     const userId = String(userData.user.id || "");
+    const termsDenied = await requireTermsAccepted(supabase, userId, corsHeaders);
+    if (termsDenied) return termsDenied;
     const profileRes = await supabase.from("profiles").select("tier, unlimited_credits").eq("id", userId).maybeSingle();
     if (profileRes.error || !profileRes.data) {
       return new Response(JSON.stringify({ error: "Profile not found" }), {

@@ -30,6 +30,8 @@
 </script>
 <link rel="icon" href="logo.png" type="image/png">
 <link rel="manifest" href="manifest.json">
+<script src="ra10-a11y.js?v=20261018c"></script>
+<script src="ra10-onboarding.js?v=20261018b" defer></script>
 <meta name="theme-color" content="#d20000">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -1795,6 +1797,29 @@ body.unit-shell-mode .iframe-wrap.full-screen{
    FOOTER
 ===================================================== */
 footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-block:var(--sp5);margin-top:var(--sp3)}
+.footer-start{display:flex;flex-direction:column;gap:2px}
+.footer-legal{display:flex;flex-wrap:wrap;align-items:center;gap:var(--sp1) var(--sp4);font-size:var(--tx-xs)}
+.footer-legal a,.footer-link-btn{color:var(--color-text-muted);text-decoration:underline;text-underline-offset:.18em;min-height:32px;display:inline-flex;align-items:center}
+.footer-legal a:hover,.footer-link-btn:hover{color:var(--color-text)}
+.footer-link-btn{font-size:var(--tx-xs);gap:6px}
+.skip-link{position:fixed;left:var(--sp4);top:-120px;z-index:2147483647;background:var(--color-text);color:var(--color-bg);padding:var(--sp3) var(--sp4);border-radius:var(--radius-md);font-weight:700;text-decoration:none}
+.skip-link:focus{top:var(--sp3)}
+.auth-consent{display:flex;align-items:flex-start;gap:var(--sp3);margin:var(--sp2) 0 var(--sp4);font-size:var(--tx-xs);line-height:1.45;color:var(--color-text-muted)}
+.auth-consent input{flex:none;width:20px;height:20px;margin-top:1px;accent-color:var(--color-primary);cursor:pointer}
+.auth-consent a{color:var(--color-primary);text-decoration:underline}
+#p-account .account-legal-panel{display:block}
+.account-legal-row{display:flex;align-items:center;gap:var(--sp3);flex-wrap:wrap}
+.account-legal-row .account-meta{flex:1 1 200px;min-width:0}
+.account-legal-icon{flex:none;width:36px;height:36px;border-radius:999px;display:flex;align-items:center;justify-content:center;background:var(--color-surface-offset);color:var(--color-text-muted)}
+.account-legal-icon svg{width:18px;height:18px}
+.account-legal-panel.is-accepted .account-legal-icon{background:var(--color-success-highlight);color:var(--color-success)}
+.account-legal-panel.needs-accept .account-legal-icon{background:var(--color-warning-highlight);color:var(--color-warning)}
+.account-legal-panel.needs-accept{border-color:var(--color-warning)}
+#account-terms-status{font-size:var(--tx-sm)}
+.account-legal-panel.is-accepted #account-terms-status{color:var(--color-success);font-weight:600}
+.account-legal-panel.needs-accept #account-terms-status{color:var(--color-warning);font-weight:600}
+.account-legal-links{display:flex;flex-wrap:wrap;gap:var(--sp1) var(--sp4);margin-top:var(--sp3);font-size:var(--tx-xs)}
+.account-legal-links a,.account-legal-link-btn{color:var(--color-text-muted);text-decoration:underline;text-underline-offset:.18em;font-size:var(--tx-xs);min-height:32px;display:inline-flex;align-items:center}
 .footer-inner{max-width:var(--w-wide);margin-inline:auto;padding-inline:var(--sp6);
   display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--sp4)}
 .footer-brand{font-family:var(--font-d);font-size:var(--tx-base);color:var(--color-text-muted)}
@@ -2454,6 +2479,160 @@ body.mobile-ui{
   padding-bottom:calc(82px + env(safe-area-inset-bottom, 0px));
 }
 body.mobile-ui.mobile-sheet-open .mobile-bottom-nav{display:flex !important;}
+
+/* =====================================================
+   MOBILE DOCK — Liquid Glass
+   Floating capsule of clear, lightly-blurred glass with a specular rim, and
+   a glass lens that marks the active tab. While a finger is down the lens
+   magnifies and follows it across tabs (see initDockLiquidPress).
+===================================================== */
+.mobile-bottom-nav{
+  --lg-tint-top:rgba(255,255,255,.26);
+  --lg-tint-bottom:rgba(255,255,255,.08);
+  --lg-accent:var(--color-primary);
+  --lg-rim:rgba(255,255,255,.9);
+  --lg-rim-soft:rgba(255,255,255,.35);
+  --lg-edge:rgba(0,0,0,.07);
+  --lg-lens:rgba(120,120,128,.16);
+  --lg-lens-press:rgba(255,255,255,.5);
+  --lg-ink:rgba(0,0,0,.82);
+  left:16px;
+  right:16px;
+  max-width:calc(100vw - 32px);
+  bottom:calc(12px + env(safe-area-inset-bottom, 0px));
+  min-height:64px;
+  padding:4px;
+  gap:0;
+  border:0;
+  border-radius:999px;
+  overflow:visible;
+  touch-action:none;
+  background:linear-gradient(180deg,var(--lg-tint-top),var(--lg-tint-bottom));
+  backdrop-filter:blur(10px) saturate(210%) brightness(1.04);
+  -webkit-backdrop-filter:blur(10px) saturate(210%) brightness(1.04);
+  box-shadow:
+    inset 0 0 0 .5px var(--lg-rim-soft),
+    inset 0 1px 1.5px var(--lg-rim),
+    inset 0 -1px 1px rgba(255,255,255,.25),
+    inset 0 -14px 22px -16px rgba(255,255,255,.4),
+    0 0 0 .5px var(--lg-edge),
+    0 12px 34px -8px rgba(0,0,0,.22),
+    0 2px 8px rgba(0,0,0,.06);
+}
+[data-theme="dark"] .mobile-bottom-nav{
+  --lg-tint-top:rgba(60,60,66,.38);
+  --lg-tint-bottom:rgba(28,28,32,.46);
+  --lg-rim:rgba(255,255,255,.32);
+  --lg-rim-soft:rgba(255,255,255,.14);
+  --lg-edge:rgba(0,0,0,.5);
+  --lg-lens:rgba(255,255,255,.13);
+  --lg-lens-press:rgba(255,255,255,.22);
+  --lg-ink:rgba(255,255,255,.88);
+  --lg-accent:#ff6b6b;
+  background:linear-gradient(180deg,var(--lg-tint-top),var(--lg-tint-bottom));
+  box-shadow:
+    inset 0 0 0 .5px var(--lg-rim-soft),
+    inset 0 1px 1px var(--lg-rim),
+    inset 0 -1px 1px rgba(255,255,255,.08),
+    0 0 0 .5px var(--lg-edge),
+    0 14px 38px -8px rgba(0,0,0,.6),
+    0 2px 8px rgba(0,0,0,.3);
+}
+/* Specular rim: bright where light hits the top-left and bottom-right edges. */
+.mobile-bottom-nav::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  border-radius:inherit;
+  padding:1px;
+  pointer-events:none;
+  z-index:2;
+  background:linear-gradient(125deg,
+    var(--lg-rim) 0%, rgba(255,255,255,.12) 22%, rgba(255,255,255,0) 45%,
+    rgba(255,255,255,0) 60%, rgba(255,255,255,.12) 80%, var(--lg-rim-soft) 100%);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;
+  mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0);
+}
+/* Soft sheen across the upper half, like light pooling on a curved surface. */
+.mobile-bottom-nav::after{
+  content:'';
+  position:absolute;
+  left:8%;
+  right:8%;
+  top:1px;
+  height:46%;
+  border-radius:999px;
+  pointer-events:none;
+  z-index:0;
+  background:linear-gradient(180deg,rgba(255,255,255,.32),rgba(255,255,255,0));
+  opacity:.7;
+}
+[data-theme="dark"] .mobile-bottom-nav::after{opacity:.18}
+.mobile-bottom-nav .mobile-dock-goo{z-index:1}
+.mobile-bottom-nav .mobile-dock-blob{
+  left:0;
+  top:4px;
+  bottom:4px;
+  border-radius:999px;
+  background:var(--lg-lens);
+  box-shadow:
+    inset 0 0 0 .5px rgba(255,255,255,.45),
+    inset 0 1px 1px rgba(255,255,255,.6),
+    0 1px 2px rgba(0,0,0,.04);
+  will-change:translate,width,scale;
+  transition:
+    translate .48s cubic-bezier(.3,1.35,.4,1),
+    width .48s cubic-bezier(.3,1.35,.4,1),
+    scale .28s cubic-bezier(.3,1.5,.5,1),
+    background .2s ease,
+    box-shadow .2s ease;
+}
+[data-theme="dark"] .mobile-bottom-nav .mobile-dock-blob{
+  box-shadow:
+    inset 0 0 0 .5px rgba(255,255,255,.16),
+    inset 0 1px 1px rgba(255,255,255,.22);
+}
+/* Finger down: the lens swells into a clear magnifying bubble. */
+.mobile-bottom-nav.is-pressing .mobile-dock-blob{
+  scale:1.14 1.1;
+  background:var(--lg-lens-press);
+  box-shadow:
+    inset 0 0 0 .5px rgba(255,255,255,.7),
+    inset 0 1.5px 2px rgba(255,255,255,.9),
+    inset 0 -6px 12px -6px rgba(255,255,255,.6),
+    0 6px 18px rgba(0,0,0,.14);
+}
+.mobile-bottom-nav .mobile-nav-btn{
+  z-index:3;
+  min-height:56px;
+  gap:2px;
+  padding:4px 2px;
+  border-radius:999px;
+  color:var(--lg-ink);
+  transition:color .2s ease, scale .2s ease;
+}
+.mobile-bottom-nav .mobile-nav-btn svg{width:24px;height:24px;stroke-width:1.9}
+.mobile-bottom-nav .mobile-nav-btn span{font-size:10px;font-weight:600;letter-spacing:.01em;line-height:1.1}
+.mobile-bottom-nav .mobile-nav-btn.active,
+.mobile-bottom-nav .mobile-nav-btn[aria-expanded="true"]{color:var(--lg-accent)}
+.mobile-bottom-nav .mobile-nav-btn.active svg{transform:none;stroke-width:2.2}
+.mobile-bottom-nav .mobile-nav-btn.active span{transform:none;font-weight:700}
+.mobile-bottom-nav.is-pressing .mobile-nav-btn.is-under-finger{scale:1.06}
+@media (prefers-reduced-motion:reduce){
+  .mobile-bottom-nav .mobile-dock-blob{transition:none}
+  .mobile-bottom-nav.is-pressing .mobile-dock-blob{scale:1}
+}
+/* No backdrop-filter support: fall back to a solid, still glassy-looking bar. */
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  .mobile-bottom-nav{background:color-mix(in srgb,var(--color-surface) 94%,transparent)}
+}
+/* Keep the dock above the dim layer while a sheet is open, so "More" /
+   "Subjects" can close it and other tabs stay tappable (as on iOS). */
+body.mobile-you-open .mobile-bottom-nav,
+body.mobile-sheet-open .mobile-bottom-nav{z-index:10032 !important}
+/* Accessibility "High contrast": trade translucency for legibility. */
+html.a11y-contrast .mobile-bottom-nav{background:var(--color-surface);backdrop-filter:none;-webkit-backdrop-filter:none}
 
 @media (max-width: 640px) {
   body.ra10-refresh-enabled .topbar .tabs,
@@ -4731,7 +4910,7 @@ html body #community-share-sheet .community-share-panel{
 (function(){
   var isFile = location.protocol === 'file:';
   var isLocalHost = location.hostname === '127.0.0.1' || location.hostname === 'localhost';
-  var SDK_V = '?v=20260921';
+  var SDK_V = '?v=20261018b';
   var candidates = isFile
     ? ['file:///C:/Users/mistr/Downloads/ra10/ra10-sdk.js' + SDK_V, 'https://ra10.co.uk/ra10-sdk.js' + SDK_V]
     : (isLocalHost
@@ -4788,16 +4967,17 @@ html body #community-share-sheet .community-share-panel{
 
   var css = document.createElement('link');
   css.rel = 'stylesheet';
-  css.href = base + '/refresh/ra10-refresh.css?v=20260912';
+  css.href = base + '/refresh/ra10-refresh.css?v=20261018c';
   document.head.appendChild(css);
 
   var js = document.createElement('script');
-  js.src = base + '/refresh/ra10-refresh.js?v=20260525';
+  js.src = base + '/refresh/ra10-refresh.js?v=20261018c';
   document.head.appendChild(js);
 })();
 </script>
 </head>
 <body>
+<a class="skip-link" href="#main-content" onclick="return ra10SkipToMain(event)">Skip to main content</a>
 
 <!-- ============================================================
      NAVBAR
@@ -4990,6 +5170,8 @@ html body #community-share-sheet .community-share-panel{
           <a class="dropdown-item" id="dropdown-upgrade" onclick="go('/upgrade')" style="display:none">⚡ Upgrade</a>
           <div class="dropdown-divider"></div>
           <button class="dropdown-item" id="dropdown-reset-pw">Reset password</button>
+          <button class="dropdown-item" type="button" data-open-a11y>Accessibility settings</button>
+          <a class="dropdown-item" href="legal/privacy.html">Privacy &amp; terms</a>
           <div class="dropdown-divider"></div>
           <button class="dropdown-item danger" id="nav-signout-btn">Sign out</button>
         </div>
@@ -5244,6 +5426,11 @@ html body #community-share-sheet .community-share-panel{
       <button class="mobile-you-item" type="button" data-mobile-you="/news">
         <span class="mobile-you-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"></rect><path d="M7 7h10"></path><path d="M7 12h10"></path><path d="M7 17h4"></path></svg></span>
         <span class="mobile-you-copy"><strong>News</strong><small>What&rsquo;s new on RA10</small></span>
+        <em>Open</em>
+      </button>
+      <button class="mobile-you-item" type="button" data-open-a11y onclick="closeMobileYouSheet()">
+        <span class="mobile-you-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4" r="2"></circle><path d="M4 8l8 2 8-2M12 10v5l-3 7M12 15l3 7"></path></svg></span>
+        <span class="mobile-you-copy"><strong>Accessibility</strong><small>Text size, contrast, motion &amp; font</small></span>
         <em>Open</em>
       </button>
       <div class="mobile-you-divider"></div>
@@ -6686,6 +6873,23 @@ html body #community-share-sheet .community-share-panel{
         <p>Subscription status: <strong id="account-sub-status">—</strong></p>
         <p>Next billing: <strong id="account-next-billing">—</strong></p>
         <p>Credits renew on: <strong id="account-reset-date">—</strong></p>
+        <div id="account-legal-panel" class="account-gift-panel account-legal-panel">
+          <h4 class="account-gift-title">Terms &amp; privacy</h4>
+          <div class="account-legal-row">
+            <span class="account-legal-icon" id="account-terms-icon" aria-hidden="true"></span>
+            <div class="account-meta">
+              <div class="account-row-label">Terms of Service &amp; Privacy Policy</div>
+              <div id="account-terms-status" aria-live="polite">Checking…</div>
+            </div>
+            <button class="btn account-btn account-btn-save-user" id="account-accept-terms-btn" type="button" hidden>Review &amp; accept</button>
+          </div>
+          <p class="account-legal-links">
+            <a href="legal/terms.html">Terms of Service</a>
+            <a href="legal/privacy.html">Privacy Policy</a>
+            <a href="legal/cookies.html">Cookies</a>
+            <button type="button" class="account-legal-link-btn" data-open-a11y>Accessibility settings</button>
+          </p>
+        </div>
         <div id="account-credit-gift-panel" class="account-gift-panel">
           <h4 class="account-gift-title">Send Gift Credits</h4>
           <div class="account-gift-grid">
@@ -8336,13 +8540,80 @@ function positionMobileDockBlob() {
     blob.style.width = '0';
     return;
   }
+  moveDockBlobTo(active);
+}
+
+// Liquid Glass lens: spans almost the whole tab cell, like iOS.
+function moveDockBlobTo(btn) {
+  const nav = document.querySelector('.mobile-bottom-nav');
+  const blob = document.getElementById('mobile-dock-blob');
+  if (!nav || !blob || !btn) return;
   const navRect = nav.getBoundingClientRect();
-  const btnRect = active.getBoundingClientRect();
-  // Blob sits inside the goo layer (inset:0 of the nav) with its own 6px inset.
-  const left = btnRect.left - navRect.left + 6;
-  const width = btnRect.width - 12;
-  blob.style.transform = 'translateX(' + left + 'px)';
-  blob.style.width = width + 'px';
+  const btnRect = btn.getBoundingClientRect();
+  // Uses the independent `translate` property (not `transform`) so the
+  // press-time `scale` magnifies the lens in place instead of shifting it.
+  blob.style.transform = 'none';
+  blob.style.translate = (btnRect.left - navRect.left + 1) + 'px 0';
+  blob.style.width = (btnRect.width - 2) + 'px';
+}
+
+// While a finger is on the dock the lens magnifies and follows it from tab
+// to tab; releasing over a different tab than the one pressed opens it.
+function initDockLiquidPress() {
+  const nav = document.querySelector('.mobile-bottom-nav');
+  if (!nav) return;
+  let startBtn = null;
+  let underBtn = null;
+
+  function setUnder(btn) {
+    if (btn === underBtn) return;
+    if (underBtn) underBtn.classList.remove('is-under-finger');
+    underBtn = btn;
+    if (btn) {
+      btn.classList.add('is-under-finger');
+      moveDockBlobTo(btn);
+    }
+  }
+  function end(commit) {
+    if (!startBtn) return;
+    const target = underBtn;
+    const pressed = startBtn;
+    startBtn = null;
+    setUnder(null);
+    nav.classList.remove('is-pressing');
+    if (commit && target && target !== pressed) {
+      target.click();
+      // The browser may still fire its own click on the originally pressed
+      // tab (touch capture keeps it as the target) — swallow that one.
+      const swallow = (e) => {
+        if (e.target.closest && e.target.closest('.mobile-nav-btn') === pressed) {
+          e.stopPropagation();
+          e.preventDefault();
+        }
+      };
+      nav.addEventListener('click', swallow, true);
+      setTimeout(() => nav.removeEventListener('click', swallow, true), 400);
+    }
+    setTimeout(positionMobileDockBlob, 80);
+  }
+
+  nav.addEventListener('pointerdown', (e) => {
+    if (document.body.classList.contains('mobile-dock-edit')) return;
+    const btn = e.target.closest('.mobile-nav-btn');
+    if (!btn) return;
+    startBtn = btn;
+    nav.classList.add('is-pressing');
+    setUnder(btn);
+  });
+  nav.addEventListener('pointermove', (e) => {
+    if (!startBtn) return;
+    const el = document.elementFromPoint(e.clientX, e.clientY);
+    const btn = el && el.closest ? el.closest('.mobile-bottom-nav .mobile-nav-btn') : null;
+    if (btn) setUnder(btn);
+  });
+  nav.addEventListener('pointerup', () => end(true));
+  nav.addEventListener('pointercancel', () => end(false));
+  nav.addEventListener('lostpointercapture', () => end(false));
 }
 
 // Reposition the gooey pebbles so each sits at the centre of a dock button.
@@ -8888,10 +9159,7 @@ async function loadLbPreview() {
   const listEl = document.getElementById('lb-preview-list');
   if (!listEl || !window.supabase) return;
   try {
-    const sb = window.supabase.createClient(
-      'https://tcrrgsylxbyyrmnouihl.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRjcnJnc3lseGJ5eXJtbm91aWhsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4ODUyMTEsImV4cCI6MjA5MzQ2MTIxMX0.eOp6ma-mfgh8F20nM7E2OaBW28LlZlwuEEWr6k2zDWw'
-    );
+    const sb = RA10.getClient();
     let data = [];
     try {
       const previewRes = await sb.rpc('get_leaderboard_preview');
@@ -8956,10 +9224,7 @@ async function renderLeaderboard() {
   const heroPill = document.getElementById('lb-theme-pill');
   if (!tableEl || !window.supabase) return;
   try {
-    const sb = window.supabase.createClient(
-      'https://tcrrgsylxbyyrmnouihl.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRjcnJnc3lseGJ5eXJtbm91aWhsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4ODUyMTEsImV4cCI6MjA5MzQ2MTIxMX0.eOp6ma-mfgh8F20nM7E2OaBW28LlZlwuEEWr6k2zDWw'
-    );
+    const sb = RA10.getClient();
     try {
       const settlement = await sb.rpc('settle_previous_leaderboard');
       if (settlement.error) {
@@ -9139,10 +9404,7 @@ async function renderLeaderboard() {
 async function checkWeeklyXpReset() {
   if (!window.supabase || !RA10.isLoggedIn()) return;
   try {
-    const sb = window.supabase.createClient(
-      'https://tcrrgsylxbyyrmnouihl.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRjcnJnc3lseGJ5eXJtbm91aWhsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4ODUyMTEsImV4cCI6MjA5MzQ2MTIxMX0.eOp6ma-mfgh8F20nM7E2OaBW28LlZlwuEEWr6k2zDWw'
-    );
+    const sb = RA10.getClient();
     const session = RA10.getSession();
     const { data } = await sb.from('profiles')
       .select('xp_week_reset_at')
@@ -12161,16 +12423,50 @@ function renderAiOverview() {
     + '<div class="signed-in-ai-tip"><div><b>Suggested next step</b><p>' + tip + '</p></div></div>';
 }
 
+const LEGAL_ROUTES = { '/terms': 'terms', '/privacy': 'privacy', '/cookies': 'cookies', '/accessibility': 'accessibility' };
+let _routeAnnounceReady = false;
+
+function ra10SkipToMain(event) {
+  if (event) event.preventDefault();
+  const target = document.querySelector('.page.active') || document.querySelector('.page');
+  if (target) {
+    if (!target.hasAttribute('tabindex')) target.setAttribute('tabindex', '-1');
+    target.focus();
+    target.scrollIntoView();
+  }
+  return false;
+}
+
 function route(){
   closeMobileSubjectSheet();
   document.body.classList.remove('iframe-fullscreen-mode');
   document.body.classList.remove('unit-shell-mode');
   const rawPath = location.hash.replace('#','') || '/';
   const path = rawPath.split('?')[0] || '/';
+  if (LEGAL_ROUTES[path]) {
+    location.replace('legal/' + LEGAL_ROUTES[path] + '.html');
+    return;
+  }
+  if (path === '/accept-terms') {
+    history.replaceState(null, '', '#/');
+    route();
+    setTimeout(() => { if (window.RA10Onboarding) RA10Onboarding.openTerms({}); }, 800);
+    return;
+  }
   const id   = ROUTES[path] || 'p-home';
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.page').forEach(p=>{ p.classList.remove('active'); p.removeAttribute('role'); });
   const el = document.getElementById(id);
-  if(el){ el.classList.add('active'); window.scrollTo(0,0); }
+  if(el){
+    el.classList.add('active');
+    el.setAttribute('role', 'main');
+    window.scrollTo(0,0);
+    if (_routeAnnounceReady && window.RA10A11y) {
+      const heading = el.querySelector('h1, h2');
+      const label = heading ? heading.textContent.trim().replace(/\s+/g, ' ') : 'RA10';
+      RA10A11y.announce(label + ' page');
+    }
+    _routeAnnounceReady = true;
+  }
   if (id === 'p-home') {
     renderSignedInDashboard();
     renderHomeExams();
@@ -12305,6 +12601,10 @@ async function waitForRA10Sdk(timeoutMs) {
 }
 
   let authRestorePending = true;
+  // Declared before DOMContentLoaded: these are read by code that can run
+  // before the handler reaches their original position (temporal dead zone).
+  const TRANSITION_POPUP_SEEN_KEY = 'ra10_transition_popup_seen_v1';
+  const SITE_ANNOUNCEMENT_DISMISS_KEY = 'ra10-site-announcement-dismiss-v1';
 
   document.addEventListener('DOMContentLoaded', async () => {
     route();
@@ -12319,6 +12619,7 @@ async function waitForRA10Sdk(timeoutMs) {
     initHomeReveal();
     applyMobileDockOrder();
     initDockReorder();
+    initDockLiquidPress();
     requestAnimationFrame(() => {
       syncDockPebbles();
       positionMobileDockBlob();
@@ -13194,7 +13495,6 @@ async function waitForRA10Sdk(timeoutMs) {
 
     var _siteAnnouncementData = null;
     var _siteAnnouncementRefreshTimer = null;
-    const SITE_ANNOUNCEMENT_DISMISS_KEY = 'ra10-site-announcement-dismiss-v1';
 
     function announcementDismissToken(ann) {
       if (!ann || !ann.message) return '';
@@ -13867,10 +14167,7 @@ async function waitForRA10Sdk(timeoutMs) {
 
       usernamePolicySyncInFlight = true;
       try {
-        const sb = window.supabase.createClient(
-          'https://tcrrgsylxbyyrmnouihl.supabase.co',
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRjcnJnc3lseGJ5eXJtbm91aWhsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4ODUyMTEsImV4cCI6MjA5MzQ2MTIxMX0.eOp6ma-mfgh8F20nM7E2OaBW28LlZlwuEEWr6k2zDWw'
-        );
+        const sb = RA10.getClient();
         const session = RA10.getSession();
         if (!session?.user?.id) {
           return;
@@ -13921,6 +14218,7 @@ async function waitForRA10Sdk(timeoutMs) {
 
     async function checkProfileCompletion() {
       if (!RA10.isLoggedIn()) return;
+      if (window.RA10Onboarding && RA10Onboarding.handlesProfile()) return;
       await enforceUsernamePolicyForCurrentUser();
       const profile = RA10.getProfile();
       maybeNotifyUsernameReset(profile);
@@ -14022,7 +14320,7 @@ async function waitForRA10Sdk(timeoutMs) {
           err.classList.add('show');
           return;
         }
-        const sb = window.supabase.createClient('https://tcrrgsylxbyyrmnouihl.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRjcnJnc3lseGJ5eXJtbm91aWhsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4ODUyMTEsImV4cCI6MjA5MzQ2MTIxMX0.eOp6ma-mfgh8F20nM7E2OaBW28LlZlwuEEWr6k2zDWw');
+        const sb = RA10.getClient();
         const session = RA10.getSession();
         const { error: nameError } = await sb.from('profiles').update({ full_name: name }).eq('id', session.user.id);
         if (nameError) throw nameError;
@@ -14067,6 +14365,18 @@ async function waitForRA10Sdk(timeoutMs) {
       const b = document.getElementById('exam-banner');
       if (b) b.style.display = 'none';
     }
+
+    window.__ra10ProfileHelpers = {
+      validateDisplayName,
+      validateUsername,
+      saveUsernameForCurrentUser,
+      checkProfileCompletion,
+      updateNavAuth: _updateNavAuth,
+      showMiniToast,
+      openAuthModal,
+    };
+    RA10.on('authchange', () => { if (window.RA10Onboarding) RA10Onboarding.check(); });
+    if (window.RA10Onboarding) RA10Onboarding.check();
 
     RA10.on('authchange', checkProfileCompletion);
     RA10.on('authchange', checkWeeklyXpReset);
@@ -14135,6 +14445,14 @@ async function waitForRA10Sdk(timeoutMs) {
       const suc = document.getElementById('signup-success');
       err.classList.remove('show'); suc.classList.remove('show');
 
+      const consentBox = document.getElementById('signup-consent');
+      if (consentBox && !consentBox.checked) {
+        err.textContent = 'Please confirm you are 13 or older and agree to the Terms of Service and Privacy Policy.';
+        err.classList.add('show');
+        consentBox.focus();
+        return;
+      }
+
       const signupNamePolicy = validateDisplayName(document.getElementById('signup-name').value);
       if (!signupNamePolicy.ok) {
         err.textContent = signupNamePolicy.error;
@@ -14159,7 +14477,8 @@ async function waitForRA10Sdk(timeoutMs) {
       }
 
       btn.disabled = true; btn.textContent = 'Creating account…';
-      const { error } = await RA10.signUp(
+      const signupEmailValue = document.getElementById('signup-email').value;
+      const { data: signupData, error } = await RA10.signUp(
         document.getElementById('signup-email').value,
         document.getElementById('signup-password').value,
         signupNamePolicy.value
@@ -14177,14 +14496,15 @@ async function waitForRA10Sdk(timeoutMs) {
       }
       else {
         clearSignupCooldown();
+        // Consent was given on this form; record it server-side as soon as a
+        // session exists (now, or on first sign-in after email confirmation).
+        if (window.RA10Onboarding) RA10Onboarding.rememberSignupConsent(signupEmailValue);
+        if (signupData && signupData.session && window.RA10Onboarding) RA10Onboarding.check();
         const usernamePolicy = validateUsername(document.getElementById('signup-username').value);
         document.getElementById('signup-username').value = usernamePolicy.username;
         if (usernamePolicy.ok) {
           try {
-            const sb = window.supabase.createClient(
-              'https://tcrrgsylxbyyrmnouihl.supabase.co',
-              'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRjcnJnc3lseGJ5eXJtbm91aWhsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4ODUyMTEsImV4cCI6MjA5MzQ2MTIxMX0.eOp6ma-mfgh8F20nM7E2OaBW28LlZlwuEEWr6k2zDWw'
-            );
+            const sb = RA10.getClient();
             await sb.from('profiles').update({ username: usernamePolicy.username })
               .eq('email', document.getElementById('signup-email').value.trim());
           } catch(e) { console.warn('username save failed', e); }
@@ -14281,8 +14601,6 @@ async function waitForRA10Sdk(timeoutMs) {
     });
 
     const PURCHASES_TEMPORARILY_DISABLED = false;
-
-    const TRANSITION_POPUP_SEEN_KEY = 'ra10_transition_popup_seen_v1';
 
     function transitionModeActive() {
       return !!(window.RA10 && window.RA10._raw && window.RA10._raw.TRANSITION_MODE);
@@ -14699,10 +15017,7 @@ async function waitForRA10Sdk(timeoutMs) {
         btn.textContent = 'Deleting...';
       }
       try {
-        const sb = window.supabase.createClient(
-          'https://tcrrgsylxbyyrmnouihl.supabase.co',
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRjcnJnc3lseGJ5eXJtbm91aWhsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4ODUyMTEsImV4cCI6MjA5MzQ2MTIxMX0.eOp6ma-mfgh8F20nM7E2OaBW28LlZlwuEEWr6k2zDWw'
-        );
+        const sb = RA10.getClient();
         const session = RA10.getSession();
         const currentUserId = session?.user?.id || RA10.getProfile()?.id || '';
         if (!currentUserId) throw new Error('You are not signed in. Please refresh and try again.');
@@ -14782,10 +15097,7 @@ async function waitForRA10Sdk(timeoutMs) {
       btn.disabled = true;
       btn.textContent = 'Saving...';
       try {
-        const sb = window.supabase.createClient(
-          'https://tcrrgsylxbyyrmnouihl.supabase.co',
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRjcnJnc3lseGJ5eXJtbm91aWhsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4ODUyMTEsImV4cCI6MjA5MzQ2MTIxMX0.eOp6ma-mfgh8F20nM7E2OaBW28LlZlwuEEWr6k2zDWw'
-        );
+        const sb = RA10.getClient();
         const session = RA10.getSession();
         const { error } = await sb.from('profiles').update({ full_name: val }).eq('id', session.user.id);
         if (error) throw error;
@@ -14843,10 +15155,7 @@ async function waitForRA10Sdk(timeoutMs) {
       btn.disabled = true;
       btn.textContent = 'Saving...';
       try {
-        const sb = window.supabase.createClient(
-          'https://tcrrgsylxbyyrmnouihl.supabase.co',
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRjcnJnc3lseGJ5eXJtbm91aWhsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4ODUyMTEsImV4cCI6MjA5MzQ2MTIxMX0.eOp6ma-mfgh8F20nM7E2OaBW28LlZlwuEEWr6k2zDWw'
-        );
+        const sb = RA10.getClient();
         const session = RA10.getSession();
         const currentUserId = session?.user?.id || RA10.getProfile()?.id || '';
         if (!currentUserId) {
@@ -14888,10 +15197,7 @@ async function waitForRA10Sdk(timeoutMs) {
       btn.disabled = true;
       btn.textContent = 'Saving...';
       try {
-        const sb = window.supabase.createClient(
-          'https://tcrrgsylxbyyrmnouihl.supabase.co',
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRjcnJnc3lseGJ5eXJtbm91aWhsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4ODUyMTEsImV4cCI6MjA5MzQ2MTIxMX0.eOp6ma-mfgh8F20nM7E2OaBW28LlZlwuEEWr6k2zDWw'
-        );
+        const sb = RA10.getClient();
         const session = RA10.getSession();
         const currentUserId = session?.user?.id || RA10.getProfile()?.id || '';
         if (!currentUserId) throw new Error('You are not signed in. Please refresh and try again.');
@@ -15307,13 +15613,10 @@ async function waitForRA10Sdk(timeoutMs) {
       btn.disabled = true;
       btn.textContent = 'Processing...';
       try {
-        const sb = window.supabase.createClient(
-          'https://tcrrgsylxbyyrmnouihl.supabase.co',
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRjcnJnc3lseGJ5eXJtbm91aWhsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4ODUyMTEsImV4cCI6MjA5MzQ2MTIxMX0.eOp6ma-mfgh8F20nM7E2OaBW28LlZlwuEEWr6k2zDWw'
-        );
+        const sb = RA10.getClient();
         await sb.auth.signOut();
         document.getElementById('account-delete-overlay').classList.remove('open');
-        msg.textContent = 'Account deletion requested — contact contact.ra10@outlook.com to complete removal.';
+        msg.textContent = 'Account deletion requested — contact contact@ra10studios.co.uk to complete removal.';
         msg.style.display = 'block';
       } catch (e) {
         err.textContent = 'Could not process request. Please try again.';
@@ -15843,8 +16146,8 @@ async function waitForRA10Sdk(timeoutMs) {
 </script>
 
 <div class="auth-overlay" id="auth-overlay" hidden>
-  <div class="auth-modal">
-    <button class="auth-close" id="auth-close" type="button">✕</button>
+  <div class="auth-modal" role="dialog" aria-modal="true" aria-label="Sign in or create an account">
+    <button class="auth-close" id="auth-close" type="button" aria-label="Close">✕</button>
     <div class="auth-brand">
       <div class="auth-brand-mark"><img src="logo.png" alt="RA10 logo"></div>
       <span class="auth-brand-text">RA10</span>
@@ -15856,23 +16159,27 @@ async function waitForRA10Sdk(timeoutMs) {
     </div>
     <form class="auth-panel active" id="panel-signin" autocomplete="on" method="post" onsubmit="return false;">
       <div class="auth-error" id="signin-error"></div>
-      <div class="auth-field"><label class="auth-label">Email</label><input class="auth-input" type="email" id="signin-email" name="email" placeholder="you@example.com" autocomplete="email" required></div>
-      <div class="auth-field"><label class="auth-label">Password</label><input class="auth-input" type="password" id="signin-password" name="password" placeholder="••••••••" autocomplete="current-password" required></div>
+      <div class="auth-field"><label class="auth-label" for="signin-email">Email</label><input class="auth-input" type="email" id="signin-email" name="email" placeholder="you@example.com" autocomplete="email" required></div>
+      <div class="auth-field"><label class="auth-label" for="signin-password">Password</label><input class="auth-input" type="password" id="signin-password" name="password" placeholder="••••••••" autocomplete="current-password" required></div>
       <button class="auth-submit-btn" id="signin-btn" type="submit">Sign in</button>
       <p class="auth-foot"><a id="forgot-link">Forgot password?</a></p>
     </form>
     <div class="auth-panel" id="panel-signup">
       <div class="auth-error" id="signup-error"></div>
       <div class="auth-success" id="signup-success"></div>
-      <div class="auth-field"><label class="auth-label">Display name</label><input class="auth-input" type="text" id="signup-name" placeholder="Your name" autocomplete="name"></div>
+      <div class="auth-field"><label class="auth-label" for="signup-name">Display name</label><input class="auth-input" type="text" id="signup-name" placeholder="Your name" autocomplete="name"></div>
       <div class="auth-field">
-        <label class="auth-label">Username</label>
+        <label class="auth-label" for="signup-username">Username</label>
         <input class="auth-input" type="text" id="signup-username"
           placeholder="@yourname - letters, numbers, underscores only"
           autocomplete="off" maxlength="30">
       </div>
-      <div class="auth-field"><label class="auth-label">Email</label><input class="auth-input" type="email" id="signup-email" placeholder="you@example.com" autocomplete="email"></div>
-      <div class="auth-field"><label class="auth-label">Password</label><input class="auth-input" type="password" id="signup-password" placeholder="Min. 8 characters" autocomplete="new-password"></div>
+      <div class="auth-field"><label class="auth-label" for="signup-email">Email</label><input class="auth-input" type="email" id="signup-email" placeholder="you@example.com" autocomplete="email"></div>
+      <div class="auth-field"><label class="auth-label" for="signup-password">Password</label><input class="auth-input" type="password" id="signup-password" placeholder="Min. 8 characters" autocomplete="new-password"></div>
+      <label class="auth-consent" for="signup-consent">
+        <input type="checkbox" id="signup-consent">
+        <span>I&rsquo;m 13 or older and I agree to the <a href="legal/terms.html" target="_blank" rel="noopener">Terms of Service</a> and <a href="legal/privacy.html" target="_blank" rel="noopener">Privacy Policy</a>.</span>
+      </label>
       <button class="auth-submit-btn" id="signup-btn">Create free account</button>
       <p class="auth-foot">Free forever · No card required</p>
     </div>
@@ -15880,7 +16187,7 @@ async function waitForRA10Sdk(timeoutMs) {
       <div class="auth-error" id="forgot-error"></div>
       <div class="auth-success" id="forgot-success"></div>
       <p style="font-size:var(--tx-sm);color:var(--color-text-muted);margin-bottom:1rem;">Enter your email and we'll send a reset link.</p>
-      <div class="auth-field"><label class="auth-label">Email</label><input class="auth-input" type="email" id="forgot-email" placeholder="you@example.com"></div>
+      <div class="auth-field"><label class="auth-label" for="forgot-email">Email</label><input class="auth-input" type="email" id="forgot-email" placeholder="you@example.com"></div>
       <button class="auth-submit-btn" id="forgot-btn">Send reset link</button>
       <p class="auth-foot"><a id="back-to-signin">← Back to sign in</a></p>
     </div>
@@ -15910,6 +16217,8 @@ async function waitForRA10Sdk(timeoutMs) {
           <option>Feature request</option>
           <option>Account / sign-in issue</option>
           <option>Schools &amp; teachers</option>
+          <option>Accessibility</option>
+          <option>Privacy / data request</option>
           <option>Something else</option>
         </select>
       </div>
@@ -16267,8 +16576,20 @@ function bindContactModal() {
 ============================================================ -->
 <footer>
   <div class="footer-inner">
-    <span class="footer-brand">RA10</span>
-    <span class="footer-copy">Built for revision, tools and more.</span>
+    <div class="footer-start">
+      <span class="footer-brand">RA10</span>
+      <span class="footer-copy">&copy; 2026 RA10 &middot; Built for revision, tools and more. Not affiliated with Pearson, AQA or OCR.</span>
+    </div>
+    <nav class="footer-legal" aria-label="Legal and accessibility">
+      <a href="legal/terms.html">Terms of Service</a>
+      <a href="legal/privacy.html">Privacy Policy</a>
+      <a href="legal/cookies.html">Cookies</a>
+      <a href="legal/accessibility.html">Accessibility statement</a>
+      <button class="footer-link-btn" type="button" data-open-a11y>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline"><circle cx="12" cy="4" r="2"/><path d="M4 8l8 2 8-2M12 10v5l-3 7M12 15l3 7"/></svg>
+        Accessibility settings
+      </button>
+    </nav>
     <button class="btn btn-g" type="button" onclick="contactSupportFromFooter()" aria-label="Contact RA10 support" style="padding:8px 14px;font-size:var(--tx-xs);">Contact Us</button>
   </div>
 </footer>

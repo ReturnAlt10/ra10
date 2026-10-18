@@ -31,6 +31,16 @@ let questionData = { A: [], B: [], C: [] };
 let quizState = null;
 let practiceState = null;
 let flashState = { aim: '', current: 0, known: new Set(), learning: new Set(), flipped: false };
+// Remember which cards were marked between visits (previously only the
+// count was stored, so marks were lost on reload and the count reset).
+const FLASH_STATE_KEY = 'ra10_flash_state_it_l2_u2';
+(function restoreFlashState() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(FLASH_STATE_KEY) || 'null');
+    if (saved && Array.isArray(saved.known)) flashState.known = new Set(saved.known);
+    if (saved && Array.isArray(saved.learning)) flashState.learning = new Set(saved.learning);
+  } catch (e) {}
+})();
 let flashcardData = [];
 let userProgress = {};
 let practiceXpAwarded = false;
@@ -1132,6 +1142,8 @@ function renderQuizResults() {
   const bestKey = 'ra10_best_quiz_it_l2_u2';
   const prevBest = Number(localStorage.getItem(bestKey) || 0);
   if (percentage > prevBest) localStorage.setItem(bestKey, String(percentage));
+  // The dashboard's "Quizzes" stat reads this, but nothing ever increased it.
+  localStorage.setItem('ra10_quiz_sessions_it_l2_u2', String(Number(localStorage.getItem('ra10_quiz_sessions_it_l2_u2') || 0) + 1));
 
   const host = $('#quiz-container');
   host.innerHTML = '';
@@ -1313,6 +1325,9 @@ function markCard(status) {
     flashState.known.delete(card.id);
   }
   localStorage.setItem('ra10_flash_known_it_l2_u2', String(flashState.known.size));
+  try {
+    localStorage.setItem(FLASH_STATE_KEY, JSON.stringify({ known: [...flashState.known], learning: [...flashState.learning] }));
+  } catch (e) {}
   if (flashState.current < cards.length - 1) {
     flashState.current++;
     flashState.flipped = false;
@@ -1632,12 +1647,60 @@ function formatGuideContent(text) {
   return html;
 }
 
+function renderProgress() {
+  const host = $('#progress-content');
+  if (!host) return;
+
+  const todayPractice = getCounter('ra10_practice_today');
+  const bestQuiz = Number(localStorage.getItem('ra10_best_quiz_it_l2_u2') || 0);
+  const knownCards = Number(localStorage.getItem('ra10_flash_known_it_l2_u2') || flashState.known.size || 0);
+  const quizSessions = Number(localStorage.getItem('ra10_quiz_sessions_it_l2_u2') || 0);
+  const streak = calcLocalStreak();
+  const totalQuestions = Object.values(questionData).reduce((sum, questions) => sum + questions.length, 0);
+  const progressItems = [
+    ['🔥 Streak', streak + ' day' + (streak === 1 ? '' : 's')],
+    ['Questions today', todayPractice],
+    ['Quiz sessions', quizSessions],
+    ['Best quiz', bestQuiz ? bestQuiz + '%' : '—'],
+    ['Cards known', knownCards],
+    ['Question bank', totalQuestions]
+  ];
+  const questionTarget = Math.max(10, Math.min(50, totalQuestions));
+  const practicePct = Math.min(100, Math.round(todayPractice / questionTarget * 100));
+  const flashTotal = flashcardData.length || 0;
+  const flashPct = flashTotal ? Math.min(100, Math.round(knownCards / flashTotal * 100)) : 0;
+
+  host.innerHTML = `
+    <div class="prog-mini-grid">
+      ${progressItems.map(([label, value]) => `
+        <div class="prog-mini-card"><div class="v">${escapeHTML(value)}</div><div class="k">${escapeHTML(label)}</div></div>
+      `).join('')}
+    </div>
+    <div class="prog-aim-accuracy">
+      <h3>Today’s revision momentum</h3>
+      <div class="prog-aim-row">
+        <div class="meta"><span>Practice questions</span><strong>${todayPractice} / ${questionTarget}</strong></div>
+        <div class="bar ${practicePct >= 70 ? 'good' : practicePct >= 35 ? 'mid' : 'bad'}"><span style="width:${practicePct}%"></span></div>
+      </div>
+      <div class="prog-aim-row">
+        <div class="meta"><span>Flashcards known</span><strong>${knownCards}${flashTotal ? ' / ' + flashTotal : ''}</strong></div>
+        <div class="bar ${flashPct >= 70 ? 'good' : flashPct >= 35 ? 'mid' : 'bad'}"><span style="width:${flashPct}%"></span></div>
+      </div>
+      <p class="muted small">Progress updates as soon as you finish practice, quizzes, or mark flashcards as known.</p>
+    </div>
+  `;
+}
+
 // ====== NAVIGATION ======
 function switchTab(tab) {
   // Update nav links
   $$('.tab').forEach(l => l.classList.remove('active'));
   const activeLink = $$(`.tab`).find(l => l.dataset.tab === tab);
   if (activeLink) activeLink.classList.add('active');
+  const homeView = $('#main-content')?.closest('.view');
+  const progressView = $('#view-progress');
+  if (homeView) homeView.style.display = tab === 'progress' ? 'none' : '';
+  if (progressView) progressView.style.display = tab === 'progress' ? 'block' : 'none';
   
   switch(tab) {
     case 'home':     renderHome(); break;
@@ -1646,6 +1709,7 @@ function switchTab(tab) {
     case 'flash':    renderFlashcards(); break;
     case 'guide':    renderGuide(); break;
     case 'browse':   renderBrowse(); break;
+    case 'progress': renderProgress(); break;
   }
 }
 

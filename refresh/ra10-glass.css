@@ -1,0 +1,389 @@
+/* =====================================================================
+   RA10 Liquid Glass
+   Injected last by ra10-refresh.js on every page that uses the refresh
+   theme (main site + all unit apps).
+
+   Two materials:
+     - "clear" glass  — bars that float over content (nav, top bars, tabs).
+     - "panel" glass  — menus, sheets and dialogs that hold text, so a
+                         little more frosted for readability.
+   Both share a specular rim (bright top edge, soft bottom edge) built from
+   inset shadows + a sheen gradient layer, so no pseudo-elements are needed
+   (several of these elements already use ::before for other things).
+
+   Selectors are prefixed with `html :is(body, body.ra10-refresh-enabled)`
+   so they out-rank the refresh theme's `body.ra10-refresh-enabled …`
+   rules (many of which are !important) on pages with or without it.
+
+   Solid fallbacks: no backdrop-filter support, "High contrast" in RA10's
+   accessibility settings, and the OS "Reduce transparency" setting.
+   ===================================================================== */
+
+:root {
+  --glass-clear-top: rgba(255, 255, 255, .36);
+  --glass-clear-bottom: rgba(255, 255, 255, .16);
+  --glass-clear-blur: blur(16px) saturate(200%) brightness(1.04);
+  --glass-panel-top: rgba(255, 255, 255, .76);
+  --glass-panel-bottom: rgba(250, 250, 252, .62);
+  --glass-panel-blur: blur(26px) saturate(190%);
+  --glass-modal-top: rgba(255, 255, 255, .86);
+  --glass-modal-bottom: rgba(250, 250, 252, .78);
+  --glass-sheen: radial-gradient(120% 70% at 25% -25%, rgba(255, 255, 255, .55), rgba(255, 255, 255, 0) 62%);
+  --glass-rim: rgba(255, 255, 255, .92);
+  --glass-rim-soft: rgba(255, 255, 255, .42);
+  --glass-edge: rgba(15, 23, 42, .08);
+  --glass-lens: rgba(120, 120, 128, .15);
+  --glass-lens-hover: rgba(120, 120, 128, .09);
+  --glass-ink: rgba(0, 0, 0, .86);
+  --glass-shadow-bar: 0 10px 30px -10px rgba(15, 23, 42, .22), 0 2px 6px rgba(15, 23, 42, .05);
+  --glass-shadow-panel: 0 24px 60px -14px rgba(15, 23, 42, .32), 0 6px 18px rgba(15, 23, 42, .08);
+  --glass-rims:
+    inset 0 0 0 .5px var(--glass-rim-soft),
+    inset 0 1px 1px var(--glass-rim),
+    inset 0 -1px 1px rgba(255, 255, 255, .22),
+    0 0 0 .5px var(--glass-edge);
+  --glass-lens-rims:
+    inset 0 0 0 .5px rgba(255, 255, 255, .5),
+    inset 0 1px 1px rgba(255, 255, 255, .7),
+    0 1px 2px rgba(0, 0, 0, .05);
+}
+
+[data-theme="dark"] {
+  --glass-clear-top: rgba(58, 58, 64, .40);
+  --glass-clear-bottom: rgba(26, 26, 30, .48);
+  --glass-panel-top: rgba(46, 46, 52, .78);
+  --glass-panel-bottom: rgba(28, 28, 32, .70);
+  --glass-modal-top: rgba(44, 44, 50, .9);
+  --glass-modal-bottom: rgba(28, 28, 32, .86);
+  --glass-sheen: radial-gradient(120% 70% at 25% -25%, rgba(255, 255, 255, .12), rgba(255, 255, 255, 0) 62%);
+  --glass-rim: rgba(255, 255, 255, .30);
+  --glass-rim-soft: rgba(255, 255, 255, .13);
+  --glass-edge: rgba(0, 0, 0, .5);
+  --glass-lens: rgba(255, 255, 255, .13);
+  --glass-lens-hover: rgba(255, 255, 255, .07);
+  --glass-ink: rgba(255, 255, 255, .92);
+  --glass-shadow-bar: 0 12px 34px -10px rgba(0, 0, 0, .6), 0 2px 8px rgba(0, 0, 0, .3);
+  --glass-shadow-panel: 0 26px 64px -14px rgba(0, 0, 0, .7), 0 6px 18px rgba(0, 0, 0, .35);
+  --glass-lens-rims:
+    inset 0 0 0 .5px rgba(255, 255, 255, .16),
+    inset 0 1px 1px rgba(255, 255, 255, .22);
+}
+
+/* ─── Clear glass: bars ─────────────────────────────────────────────── */
+html :is(body, body.ra10-refresh-enabled) :is(.nav, .mobile-top-nav, .topbar, .navbar, .viewer-topbar) {
+  background: var(--glass-sheen), linear-gradient(180deg, var(--glass-clear-top), var(--glass-clear-bottom)) !important;
+  backdrop-filter: var(--glass-clear-blur) !important;
+  -webkit-backdrop-filter: var(--glass-clear-blur) !important;
+  border: 0 !important;
+  box-shadow: var(--glass-rims), var(--glass-shadow-bar) !important;
+}
+
+/* Desktop: the main nav floats as a capsule. */
+@media (min-width: 841px) {
+  html :is(body, body.ra10-refresh-enabled) .nav {
+    margin: 10px 14px 0 !important;
+    border-radius: 999px !important;
+  }
+}
+
+/* Mobile header spans the width; only a hairline + soft shadow underneath. */
+html :is(body, body.ra10-refresh-enabled) .mobile-top-nav {
+  border-radius: 0 !important;
+  box-shadow: inset 0 -.5px 0 var(--glass-edge), inset 0 1px 0 var(--glass-rim-soft), 0 6px 20px -12px rgba(15, 23, 42, .25) !important;
+}
+
+/* Unit app header: rounded floating bar. */
+html :is(body, body.ra10-refresh-enabled) .topbar {
+  border-radius: 24px !important;
+}
+
+/* Unit navigation uses the same layered material as the site navbar. */
+html :is(body, body.ra10-refresh-enabled) .topbar .unit-brand,
+html :is(body, body.ra10-refresh-enabled) .topbar .site-unit-nav,
+html :is(body, body.ra10-refresh-enabled) .topbar .tabs,
+html :is(body, body.ra10-refresh-enabled) .topbar .unit-avatar-btn {
+  background: var(--glass-lens-hover) !important;
+  border: 0 !important;
+  box-shadow: var(--glass-lens-rims) !important;
+  color: var(--glass-ink) !important;
+}
+html :is(body, body.ra10-refresh-enabled) .topbar .unit-brand,
+html :is(body, body.ra10-refresh-enabled) .topbar .site-unit-nav,
+html :is(body, body.ra10-refresh-enabled) .topbar .tabs {
+  border-radius: 999px !important;
+}
+html :is(body, body.ra10-refresh-enabled) .topbar .unit-brand {
+  padding: 6px 12px !important;
+}
+html :is(body, body.ra10-refresh-enabled) .topbar .site-unit-nav {
+  padding: 4px !important;
+  gap: 2px !important;
+}
+html :is(body, body.ra10-refresh-enabled) .topbar .unit-avatar-btn {
+  border-radius: 999px !important;
+  transition: background .2s ease, transform .2s ease !important;
+}
+html :is(body, body.ra10-refresh-enabled) .topbar .unit-avatar-btn:hover {
+  background: var(--glass-lens) !important;
+  transform: translateY(-1px);
+}
+html :is(body, body.ra10-refresh-enabled) .topbar .site-unit-link {
+  border-radius: 999px !important;
+  color: var(--glass-ink) !important;
+  transition: background .2s ease, opacity .2s ease !important;
+}
+html :is(body, body.ra10-refresh-enabled) .topbar .site-unit-link:hover,
+html :is(body, body.ra10-refresh-enabled) .topbar .site-unit-link.active {
+  background: var(--glass-lens) !important;
+  opacity: 1 !important;
+}
+html :is(body, body.ra10-refresh-enabled) .topbar .tabs {
+  padding: 4px !important;
+}
+
+/* Nav links: a glass lens marks the active page (like the mobile dock). */
+html :is(body, body.ra10-refresh-enabled) :is(.nav .nav-link, .topbar .site-unit-link) {
+  border-radius: 999px !important;
+  border-color: transparent !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: var(--glass-ink) !important;
+  opacity: .82;
+  transition: background .2s ease, color .2s ease, opacity .2s ease, transform .2s ease;
+}
+html :is(body, body.ra10-refresh-enabled) :is(.nav .nav-link, .topbar .site-unit-link):hover {
+  background: var(--glass-lens-hover) !important;
+  opacity: 1;
+  transform: none;
+}
+html :is(body, body.ra10-refresh-enabled) :is(.nav .nav-link.active, .topbar .site-unit-link.active) {
+  background: var(--glass-lens) !important;
+  box-shadow: var(--glass-lens-rims) !important;
+  color: var(--color-primary, #d20000) !important;
+  opacity: 1;
+}
+[data-theme="dark"] :is(body, body.ra10-refresh-enabled) .nav .nav-link.active { color: #ff6b6b !important; }
+
+/* Round glass icon buttons in the headers. */
+html :is(body, body.ra10-refresh-enabled) :is(.nav, .mobile-top-nav) :is(.theme-toggle, .news-toggle) {
+  border-radius: 999px !important;
+  background: var(--glass-lens-hover) !important;
+  box-shadow: var(--glass-lens-rims) !important;
+  color: var(--glass-ink) !important;
+}
+html :is(body, body.ra10-refresh-enabled) :is(.nav, .mobile-top-nav) :is(.theme-toggle, .news-toggle):hover {
+  background: var(--glass-lens) !important;
+}
+html :is(body, body.ra10-refresh-enabled) :is(.nav-credit-chip, .mobile-credit-chip) {
+  background: var(--glass-lens-hover) !important;
+  border: 0 !important;
+  box-shadow: var(--glass-lens-rims) !important;
+}
+
+/* ─── Segmented control: unit app tab bars ──────────────────────────── */
+html :is(body, body.ra10-refresh-enabled) .tabs {
+  background: linear-gradient(180deg, var(--glass-clear-top), var(--glass-clear-bottom)) !important;
+  backdrop-filter: var(--glass-clear-blur);
+  -webkit-backdrop-filter: var(--glass-clear-blur);
+  border: 0 !important;
+  border-radius: 999px !important;
+  box-shadow: var(--glass-rims) !important;
+  padding: 4px !important;
+  gap: 2px !important;
+}
+html :is(body, body.ra10-refresh-enabled) .tabs .tab {
+  border: 0 !important;
+  border-radius: 999px !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: var(--glass-ink) !important;
+  opacity: .78;
+  font-weight: 700 !important;
+  transition: background .25s ease, opacity .2s ease, box-shadow .25s ease;
+}
+html :is(body, body.ra10-refresh-enabled) .tabs .tab:hover {
+  background: var(--glass-lens-hover) !important;
+  opacity: 1;
+  transform: none !important;
+}
+html :is(body, body.ra10-refresh-enabled) .tabs .tab.active {
+  background: rgba(255, 255, 255, .72) !important;
+  box-shadow: var(--glass-lens-rims), 0 3px 10px rgba(15, 23, 42, .10) !important;
+  color: var(--glass-ink) !important;
+  opacity: 1;
+  font-weight: 800 !important;
+}
+[data-theme="dark"] :is(body, body.ra10-refresh-enabled) .tabs .tab.active {
+  background: rgba(255, 255, 255, .16) !important;
+}
+
+/* ─── Panel glass: menus and sheets ─────────────────────────────────── */
+/* IDs and classes are kept in separate lists: :is() takes the specificity
+   of its most specific argument, so mixing them would let this rule
+   override the sheet-specific rule below. */
+html :is(body, body.ra10-refresh-enabled) :is(#nav-user-dropdown, #rev-preview, #lb-preview),
+html :is(body, body.ra10-refresh-enabled) :is(.mobile-subject-sheet, .mobile-you-sheet, .site-announcement-inner) {
+  background: var(--glass-sheen), linear-gradient(180deg, var(--glass-panel-top), var(--glass-panel-bottom)) !important;
+  backdrop-filter: var(--glass-panel-blur) !important;
+  -webkit-backdrop-filter: var(--glass-panel-blur) !important;
+  border: 0 !important;
+  box-shadow: var(--glass-rims), var(--glass-shadow-panel) !important;
+}
+html :is(body, body.ra10-refresh-enabled) :is(#nav-user-dropdown, #rev-preview, #lb-preview) { border-radius: 24px !important; }
+html :is(body, body.ra10-refresh-enabled) :is(.mobile-subject-sheet, .mobile-you-sheet) {
+  border-radius: 30px !important;
+  /* Sheets cover busy content: a touch more frosted so nothing bleeds through. */
+  background: var(--glass-sheen), linear-gradient(180deg, var(--glass-modal-top), var(--glass-modal-bottom)) !important;
+  /* Low saturation: bright content underneath shouldn't tint the text area. */
+  backdrop-filter: blur(30px) saturate(120%) !important;
+  -webkit-backdrop-filter: blur(30px) saturate(120%) !important;
+}
+/* The help button would float over an open sheet's content. */
+html :is(body, body.ra10-refresh-enabled):is(.mobile-you-open, .mobile-sheet-open) #ra10-help-fab {
+  opacity: 0;
+  pointer-events: none;
+}
+html :is(body, body.ra10-refresh-enabled) .site-announcement-inner { border-radius: 20px !important; }
+
+/* Menu rows highlight with a lens instead of a flat grey. */
+html :is(body, body.ra10-refresh-enabled) :is(.dropdown-item, .rev-preview-unit, .mobile-you-item, .mobile-unit-link) {
+  border-radius: 14px;
+  transition: background .18s ease;
+}
+html :is(body, body.ra10-refresh-enabled) :is(.dropdown-item, .rev-preview-unit, .mobile-you-item, .mobile-unit-link):hover {
+  background: var(--glass-lens-hover) !important;
+}
+
+/* Small interactive surfaces should feel related to the larger glass panels. */
+html :is(body, body.ra10-refresh-enabled) :is(.card, .aim-card, .tool-card, .stat-card, .prog-mini-card, .prog-aim-accuracy, .section-head, .flash-controls, .practice-controls, .quiz-controls) {
+  border-color: var(--glass-edge) !important;
+  box-shadow: var(--glass-lens-rims), 0 12px 28px -20px rgba(15, 23, 42, .35) !important;
+}
+html :is(body, body.ra10-refresh-enabled) :is(.card, .aim-card, .tool-card, .stat-card, .prog-mini-card, .prog-aim-accuracy, .section-head, .flash-controls, .practice-controls, .quiz-controls):hover {
+  transform: translateY(-1px);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+html :is(body, body.ra10-refresh-enabled) :is(select, input, textarea) {
+  border-color: var(--glass-edge) !important;
+  box-shadow: inset 0 1px 2px rgba(15, 23, 42, .06), var(--glass-lens-rims) !important;
+}
+
+/* Dim behind sheets: lighter, with a soft blur so the glass reads. */
+html :is(body, body.ra10-refresh-enabled) .mobile-sheet-backdrop {
+  background: rgba(15, 23, 42, .22) !important;
+  backdrop-filter: blur(3px) saturate(120%);
+  -webkit-backdrop-filter: blur(3px) saturate(120%);
+}
+
+/* ─── Dialogs ───────────────────────────────────────────────────────── */
+html :is(body, body.ra10-refresh-enabled) .auth-overlay {
+  background: rgba(15, 23, 42, .32) !important;
+  backdrop-filter: blur(10px) saturate(140%) !important;
+  -webkit-backdrop-filter: blur(10px) saturate(140%) !important;
+}
+html :is(body, body.ra10-refresh-enabled) :is(.auth-modal, .modal, .ra10-ai-panel) {
+  background: var(--glass-sheen), linear-gradient(180deg, var(--glass-modal-top), var(--glass-modal-bottom)) !important;
+  backdrop-filter: var(--glass-panel-blur) !important;
+  -webkit-backdrop-filter: var(--glass-panel-blur) !important;
+  border: 0 !important;
+  box-shadow: var(--glass-rims), var(--glass-shadow-panel) !important;
+}
+html :is(body, body.ra10-refresh-enabled) .auth-modal { border-radius: 28px !important; }
+html :is(body, body.ra10-refresh-enabled) .auth-close {
+  background: var(--glass-lens-hover) !important;
+  box-shadow: var(--glass-lens-rims);
+}
+html :is(body, body.ra10-refresh-enabled) .auth-close:hover { background: var(--glass-lens) !important; }
+/* Inputs inside glass dialogs: a recessed, slightly translucent well. */
+html :is(body, body.ra10-refresh-enabled) .auth-modal .auth-input {
+  background: rgba(255, 255, 255, .6);
+  box-shadow: inset 0 1px 2px rgba(15, 23, 42, .06);
+}
+[data-theme="dark"] :is(body, body.ra10-refresh-enabled) .auth-modal .auth-input { background: rgba(0, 0, 0, .22); }
+
+/* ─── Tinted glass buttons ──────────────────────────────────────────── */
+html :is(body, body.ra10-refresh-enabled) #ra10-help-fab {
+  background:
+    radial-gradient(120% 80% at 30% -10%, rgba(255, 255, 255, .45), rgba(255, 255, 255, 0) 55%),
+    linear-gradient(180deg, rgba(228, 28, 28, .80), rgba(165, 0, 0, .76)) !important;
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
+  border: 0 !important;
+  box-shadow:
+    inset 0 0 0 .5px rgba(255, 255, 255, .35),
+    inset 0 1px 1px rgba(255, 255, 255, .6),
+    inset 0 -1px 1px rgba(255, 255, 255, .15),
+    0 10px 26px -6px rgba(180, 0, 0, .55) !important;
+}
+html :is(body, body.ra10-refresh-enabled) .ra10-ai-fab {
+  background:
+    radial-gradient(120% 80% at 30% -10%, rgba(255, 255, 255, .45), rgba(255, 255, 255, 0) 55%),
+    linear-gradient(135deg, rgba(31, 111, 235, .82), rgba(124, 58, 237, .80)) !important;
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
+  box-shadow:
+    inset 0 0 0 .5px rgba(255, 255, 255, .35),
+    inset 0 1px 1px rgba(255, 255, 255, .6),
+    0 12px 28px -6px rgba(31, 111, 235, .5) !important;
+}
+/* AI panel header keeps its brand gradient, softened to sit on the glass. */
+html :is(body, body.ra10-refresh-enabled) .ra10-ai-panel .ra10-ai-head {
+  background: linear-gradient(135deg, rgba(31, 111, 235, .88), rgba(124, 58, 237, .86)) !important;
+  border-bottom: 0 !important;
+}
+html :is(body, body.ra10-refresh-enabled) .ra10-ai-panel .ra10-ai-bubble {
+  background: rgba(120, 120, 128, .12) !important;
+  color: inherit !important;
+}
+
+/* ─── Toasts: a floating glass pill ─────────────────────────────────── */
+html :is(body, body.ra10-refresh-enabled) #mini-toast {
+  background: var(--glass-sheen), linear-gradient(180deg, var(--glass-panel-top), var(--glass-panel-bottom)) !important;
+  backdrop-filter: var(--glass-panel-blur) !important;
+  -webkit-backdrop-filter: var(--glass-panel-blur) !important;
+  color: var(--glass-ink) !important;
+  box-shadow: var(--glass-rims), var(--glass-shadow-panel) !important;
+  padding-left: 30px !important;
+}
+/* On mobile the toast used to sit behind the bottom dock; lift and centre it. */
+@media (max-width: 640px) {
+  html :is(body, body.ra10-refresh-enabled) #mini-toast {
+    z-index: 10040 !important;
+    left: 16px !important;
+    right: 16px !important;
+    bottom: calc(92px + env(safe-area-inset-bottom, 0px)) !important;
+    width: max-content;
+    max-width: calc(100% - 32px);
+    margin-inline: auto;
+  }
+}
+html :is(body, body.ra10-refresh-enabled) #mini-toast::before {
+  content: '';
+  position: absolute;
+  left: 13px;
+  top: 50%;
+  width: 8px;
+  height: 8px;
+  margin-top: -4px;
+  border-radius: 50%;
+  background: var(--color-primary, #d20000);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary, #d20000) 22%, transparent);
+}
+
+/* ─── Solid fallbacks ───────────────────────────────────────────────── */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  :root { --glass-clear-top: rgba(255, 255, 255, .94); --glass-clear-bottom: rgba(250, 250, 252, .94); --glass-panel-top: #fff; --glass-panel-bottom: #fafafc; }
+  [data-theme="dark"] { --glass-clear-top: rgba(36, 36, 40, .96); --glass-clear-bottom: rgba(28, 28, 32, .96); --glass-panel-top: #2a2a2f; --glass-panel-bottom: #1f1f23; }
+}
+@media (prefers-reduced-transparency: reduce) {
+  :root { --glass-clear-top: #fff; --glass-clear-bottom: #fafafc; --glass-panel-top: #fff; --glass-panel-bottom: #fafafc; --glass-modal-top: #fff; --glass-modal-bottom: #fafafc; }
+  [data-theme="dark"] { --glass-clear-top: #26262b; --glass-clear-bottom: #1f1f23; --glass-panel-top: #2a2a2f; --glass-panel-bottom: #1f1f23; --glass-modal-top: #2a2a2f; --glass-modal-bottom: #1f1f23; }
+}
+html.a11y-contrast {
+  --glass-clear-top: var(--color-surface, #fff); --glass-clear-bottom: var(--color-surface, #fff);
+  --glass-panel-top: var(--color-surface, #fff); --glass-panel-bottom: var(--color-surface, #fff);
+  --glass-modal-top: var(--color-surface, #fff); --glass-modal-bottom: var(--color-surface, #fff);
+  --glass-sheen: linear-gradient(transparent, transparent);
+  --glass-edge: rgba(0, 0, 0, .55);
+}
+html.a11y-contrast[data-theme="dark"] { --glass-edge: rgba(255, 255, 255, .55); }

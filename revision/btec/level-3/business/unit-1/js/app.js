@@ -72,7 +72,6 @@
   const FLASH_STORE_KEY  = 'btec-bus-u1-flash-progress-v1';
   const SESSION_TYPES = [
     'quiz_business_u1', 'practice_business_u1', 'mock_business_u1', 'flashcard_business_u1',
-    'quiz', 'practice', 'mock', 'flashcard'
   ];
 
   // ---------- Spec (Business Unit 1) ----------
@@ -257,7 +256,7 @@
   async function getWeakestAim() {
     if (!window.RA10 || !RA10.isLoggedIn() || !window.supabase) return 'A';
     try {
-      const sb = window.supabase.createClient(SB_URL, SB_KEY);
+      const sb = RA10.getClient();
       const session = RA10.getSession();
       const { data: rows } = await sb.from('revision_sessions').select('aim_breakdown').eq('user_id', session.user.id).in('session_type', SESSION_TYPES).limit(20).order('created_at', { ascending: false });
       const aimTotals = {};
@@ -527,9 +526,9 @@
     if (!session?.user?.id) return;
     try {
       const payload = normaliseSessionPayload(data);
-      if (!payload.total && sessionType !== 'flashcard_business_u1') return;
+      if (!payload.total && !String(sessionType).startsWith('flashcard')) return;
       const sb = window.supabase
-        ? window.supabase.createClient(SB_URL, SB_KEY)
+        ? RA10.getClient()
         : null;
       if (!sb) return;
       const { error } = await sb.from('revision_sessions').insert({
@@ -622,7 +621,7 @@
       if (fresh) {
         profile = cache.profile; sessions = cache.sessions; leaders = cache.leaders;
       } else {
-        const sb = window.supabase.createClient(SB_URL, SB_KEY);
+        const sb = RA10.getClient();
         const session = RA10.getSession();
         const userId = session?.user?.id;
         if (!userId) return;
@@ -2354,7 +2353,7 @@
     content.style.display = 'block';
 
     const session = RA10.getSession();
-    const sb = window.supabase.createClient(SB_URL, SB_KEY);
+    const sb = RA10.getClient();
     const since = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
 
     const [{ data: sessions }, { data: profile }] = await Promise.all([
@@ -2468,7 +2467,7 @@
         return `
           <div class="prog-session-card ${cls}">
             <div>
-              <span class="t">${typeLabel[r.session_type] || r.session_type}</span>
+              <span class="t">${typeLabel[r.session_type] || typeLabel[String(r.session_type).split('_')[0]] || r.session_type}</span>
               <span class="d">${date}</span>
               ${r.learning_aims?.length ? `<span class="a">Aims: ${r.learning_aims.join(', ')}</span>` : ''}
             </div>

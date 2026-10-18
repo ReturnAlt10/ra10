@@ -196,7 +196,7 @@ function renderProgress() {
   // Flashcards known (from revise.js store)
   let flashKnown = 0;
   try { flashKnown = Object.keys(JSON.parse(localStorage.getItem('ra10_u3_flash_known') || '{}') || {}).filter(function (k) { return JSON.parse(localStorage.getItem('ra10_u3_flash_known'))[k]; }).length; } catch (e) {}
-  const totalFlash = (window.FLASHCARDS && window.FLASHCARDS.length) || 0;
+  const totalFlash = (typeof FLASHCARDS !== 'undefined' && FLASHCARDS.length) || 0;
   // Best quiz score (from revise.js)
   const bestQuiz = Number(localStorage.getItem('ra10_u3_best_quiz') || 0);
   // Assignment tasks completed (from assignment.js)

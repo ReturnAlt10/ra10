@@ -187,7 +187,7 @@ function greetingByTime() {
 
 async function getWeakestAim() {
   if (!window.RA10 || !RA10.isLoggedIn() || !window.supabase) return '';
-  const sb = window.supabase.createClient(SB_URL, SB_KEY);
+  const sb = RA10.getClient();
   const session = RA10.getSession();
   const userId = session?.user?.id;
   if (!userId) return '';
@@ -463,9 +463,9 @@ async function saveSession(sessionType, data) {
   if (!session?.user?.id) return;
   try {
     const payload = normaliseSessionPayload(data);
-    if (!payload.total && sessionType !== 'flashcard') return;
+    if (!payload.total && !String(sessionType).startsWith('flashcard')) return;
     const sb = window.supabase
-      ? window.supabase.createClient(SB_URL, SB_KEY)
+      ? RA10.getClient()
       : null;
     if (!sb) return;
     const { error } = await sb.from('revision_sessions').insert({
@@ -562,7 +562,7 @@ async function refreshProgressSidebar(force) {
       sessions = cache.sessions;
       leaders = cache.leaders;
     } else {
-      const sb = window.supabase.createClient(SB_URL, SB_KEY);
+      const sb = RA10.getClient();
       const session = RA10.getSession();
       const userId = session?.user?.id;
       if (!userId) return;
@@ -1738,7 +1738,7 @@ async function endPracticeSession() {
     return;
   }
   const practiceQ = window._practiceSession?.total || 0;
-  await saveSession('practice', {
+  await saveSession('practice_it_aaq_u1', {
     aims: Object.keys(ps.aimBreakdown),
     total: ps.total,
     correct: ps.correct,
@@ -3174,7 +3174,7 @@ function showQuizResults() {
     aimBreakdown[aim] = { correct: s.right, total: s.total };
   });
   if (total > 0) {
-    saveSession('quiz', {
+    saveSession('quiz_it_aaq_u1', {
       aims: Object.keys(aimStats),
       total,
       correct,
@@ -3252,7 +3252,7 @@ async function renderProgress() {
   content.style.display = 'block';
 
   const session = RA10.getSession();
-  const sb = window.supabase.createClient(SB_URL, SB_KEY);
+  const sb = RA10.getClient();
   const since = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
 
   const [{ data: sessions }, { data: profile }] = await Promise.all([
@@ -3391,7 +3391,7 @@ async function renderProgress() {
         <div class="prog-session-card ${cls}">
           <div>
             <span class="t">
-              ${typeLabel[r.session_type] || r.session_type}
+              ${typeLabel[r.session_type] || typeLabel[String(r.session_type).split('_')[0]] || r.session_type}
             </span>
             <span class="d">${date}</span>
             ${r.learning_aims?.length ? `<span class="a">Aims: ${r.learning_aims.join(', ')}</span>` : ''}
@@ -3650,7 +3650,7 @@ async function endFlashSession() {
     alert('No flashcard activity to save yet.');
     return;
   }
-  await saveSession('flashcard', {
+  await saveSession('flashcard_it_aaq_u1', {
     aims: Object.keys(fs.aimBreakdown),
     total: fs.total,
     correct: fs.correct,

@@ -4,6 +4,22 @@
 
   document.documentElement.setAttribute("data-ra10-refresh", "1");
 
+  // Liquid Glass layer — lives next to this script so it resolves on every
+  // page (main site and nested unit apps) without per-page links.
+  (function injectGlass() {
+    if (document.getElementById("ra10-glass-css")) return;
+    var href = "/refresh/ra10-glass.css";
+    try {
+      var src = document.currentScript && document.currentScript.src;
+      if (src) href = src.replace(/ra10-refresh\.js(\?.*)?$/, "ra10-glass.css");
+    } catch (e) {}
+    var link = document.createElement("link");
+    link.id = "ra10-glass-css";
+    link.rel = "stylesheet";
+    link.href = href + "?v=20261018";
+    (document.head || document.documentElement).appendChild(link);
+  })();
+
   function addBodyClass() {
     if (!document.body) return;
     document.body.classList.add("ra10-refresh-enabled");

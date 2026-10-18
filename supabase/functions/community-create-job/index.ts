@@ -1,5 +1,6 @@
 import { serve } from 'https://deno.land/std@0.177.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { requireTermsAccepted } from "../_shared/legal.ts";
 
 const url = Deno.env.get('SUPABASE_URL') || '';
 const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || '';
@@ -28,6 +29,8 @@ serve(async (request) => {
   const admin = createClient(url, serviceKey);
   const { data: auth } = await admin.auth.getUser(token);
   if (!auth?.user) return new Response(JSON.stringify({ error: 'Sign in required.' }), { status: 401, headers: cors });
+  const termsDenied = await requireTermsAccepted(admin, auth.user.id, cors);
+  if (termsDenied) return termsDenied;
 
   try {
     const body = await request.json();
