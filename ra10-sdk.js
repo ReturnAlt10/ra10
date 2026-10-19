@@ -122,7 +122,7 @@
   // Only used when the legal_documents table can't be reached (e.g. before
   // supabase/sql/legal-terms-acceptance.sql is applied). The database is the
   // source of truth — keep these in sync when you bump a version there.
-  const LEGAL_FALLBACK_VERSIONS = { terms: '2026-10-18', privacy: '2026-10-18' };
+  const LEGAL_FALLBACK_VERSIONS = { terms: '2026-10-18', privacy: '2026-10-19' };
   const LEGAL_LOCAL_ACCEPT_PREFIX = 'ra10_legal_accepted_';
 
   const EXAM_SEASON_BONUS_CREDITS = 50;
@@ -1715,6 +1715,7 @@
     if (src === 'credit_award') return 'Credits awarded';
     if (src === 'stored_credits') {
       if (action === 'ai_examiner_use') return 'AI Examiner';
+      if (action === 'ai_transcribe') return 'Photo of work';
       if (action === 'quiz_question' || action === 'quiz') return 'Quiz';
       if (action === 'practice_question' || action === 'practice') return 'Practice';
       if (action === 'mock_paper_gen' || action === 'mock') return 'Mock paper';
@@ -2104,6 +2105,40 @@
     return result;
   }
 
+  // Photo of handwritten work -> editable text (maths as LaTeX) for practice answers.
+  // The image is sent once for transcription and is not stored. Credits are only
+  // taken if the transcription succeeds.
+  async function transcribeWork(input) {
+    if (!isLoggedIn()) {
+      throw new Error('You need to sign in before uploading a photo of your work.');
+    }
+    _assertTermsAccepted('ai_transcribe');
+    const image = input && typeof input.image === 'string' ? input.image : '';
+    if (!/^data:image\/(jpeg|png|webp);base64,/.test(image)) {
+      throw new Error('Please choose a photo (JPEG, PNG or WebP).');
+    }
+    const costToDeduct = _tierCost({ free: 2, school: 1, pro: 1, ultra: 0, subject: 1 });
+    const session = getSession();
+    const token = session && session.access_token ? session.access_token : '';
+    if (!token) throw new Error('Missing auth session token. Please sign in again.');
+
+    const response = await fetch(SUPABASE_URL + '/functions/v1/ai-transcribe', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+      body: JSON.stringify({ image, question: input && input.question ? String(input.question).slice(0, 1500) : '' }),
+    });
+    const result = await response.json().catch(function () { return {}; });
+    _throwIfTermsRequired(response, result, 'ai');
+    if (!response.ok) {
+      throw new Error(result && result.error ? String(result.error) : 'Photo reading is unavailable right now.');
+    }
+    if (!result || typeof result.text !== 'string') {
+      throw new Error('Photo reading returned an invalid response.');
+    }
+    await _deductTieredCredits(costToDeduct, 'ai_examiner', 'ai_transcribe', 'Photo of written work read by AI');
+    return result;
+  }
+
   function on(event, callback) {
     if (!EVENTS[event] || typeof callback !== 'function') {
       return false;
@@ -2159,6 +2194,7 @@
     examineAnswer,
     askAiAssigner,
     markAssignment,
+    transcribeWork,
     refreshProfile: _refreshProfile,
     getClient,
     getLegalStatus,

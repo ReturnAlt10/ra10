@@ -16,7 +16,9 @@
    rules (many of which are !important) on pages with or without it.
 
    Solid fallbacks: no backdrop-filter support, "High contrast" in RA10's
-   accessibility settings, and the OS "Reduce transparency" setting.
+   accessibility settings, the OS "Reduce transparency" setting, and
+   html[data-glass="off"] from ra10-liquid.js. The WebGL tier
+   (html[data-glass="webgl"]) only upgrades small stages — see ra10-liquid.js.
    ===================================================================== */
 
 :root {
@@ -281,7 +283,7 @@ html :is(body, body.ra10-refresh-enabled) .auth-overlay {
   backdrop-filter: blur(10px) saturate(140%) !important;
   -webkit-backdrop-filter: blur(10px) saturate(140%) !important;
 }
-html :is(body, body.ra10-refresh-enabled) :is(.auth-modal, .modal, .ra10-ai-panel) {
+html :is(body, body.ra10-refresh-enabled) :is(.auth-modal, .modal) {
   background: var(--glass-sheen), linear-gradient(180deg, var(--glass-modal-top), var(--glass-modal-bottom)) !important;
   backdrop-filter: var(--glass-panel-blur) !important;
   -webkit-backdrop-filter: var(--glass-panel-blur) !important;
@@ -315,26 +317,7 @@ html :is(body, body.ra10-refresh-enabled) #ra10-help-fab {
     inset 0 -1px 1px rgba(255, 255, 255, .15),
     0 10px 26px -6px rgba(180, 0, 0, .55) !important;
 }
-html :is(body, body.ra10-refresh-enabled) .ra10-ai-fab {
-  background:
-    radial-gradient(120% 80% at 30% -10%, rgba(255, 255, 255, .45), rgba(255, 255, 255, 0) 55%),
-    linear-gradient(135deg, rgba(31, 111, 235, .82), rgba(124, 58, 237, .80)) !important;
-  backdrop-filter: blur(12px) saturate(180%);
-  -webkit-backdrop-filter: blur(12px) saturate(180%);
-  box-shadow:
-    inset 0 0 0 .5px rgba(255, 255, 255, .35),
-    inset 0 1px 1px rgba(255, 255, 255, .6),
-    0 12px 28px -6px rgba(31, 111, 235, .5) !important;
-}
-/* AI panel header keeps its brand gradient, softened to sit on the glass. */
-html :is(body, body.ra10-refresh-enabled) .ra10-ai-panel .ra10-ai-head {
-  background: linear-gradient(135deg, rgba(31, 111, 235, .88), rgba(124, 58, 237, .86)) !important;
-  border-bottom: 0 !important;
-}
-html :is(body, body.ra10-refresh-enabled) .ra10-ai-panel .ra10-ai-bubble {
-  background: rgba(120, 120, 128, .12) !important;
-  color: inherit !important;
-}
+/* AI Helper / Assigner / Examiner glass lives in ra10-ai.css (.rai-*). */
 
 /* ─── Toasts: a floating glass pill ─────────────────────────────────── */
 html :is(body, body.ra10-refresh-enabled) #mini-toast {
@@ -374,6 +357,14 @@ html :is(body, body.ra10-refresh-enabled) #mini-toast::before {
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
   :root { --glass-clear-top: rgba(255, 255, 255, .94); --glass-clear-bottom: rgba(250, 250, 252, .94); --glass-panel-top: #fff; --glass-panel-bottom: #fafafc; }
   [data-theme="dark"] { --glass-clear-top: rgba(36, 36, 40, .96); --glass-clear-bottom: rgba(28, 28, 32, .96); --glass-panel-top: #2a2a2f; --glass-panel-bottom: #1f1f23; }
+}
+/* RA10Liquid "off" tier (Glass effects → Off) behaves like Reduce transparency. */
+html[data-glass="off"] {
+  --glass-clear-top: #fff; --glass-clear-bottom: #fafafc; --glass-panel-top: #fff; --glass-panel-bottom: #fafafc; --glass-modal-top: #fff; --glass-modal-bottom: #fafafc;
+  --glass-sheen: linear-gradient(transparent, transparent);
+}
+html[data-glass="off"][data-theme="dark"] {
+  --glass-clear-top: #26262b; --glass-clear-bottom: #1f1f23; --glass-panel-top: #2a2a2f; --glass-panel-bottom: #1f1f23; --glass-modal-top: #2a2a2f; --glass-modal-bottom: #1f1f23;
 }
 @media (prefers-reduced-transparency: reduce) {
   :root { --glass-clear-top: #fff; --glass-clear-bottom: #fafafc; --glass-panel-top: #fff; --glass-panel-bottom: #fafafc; --glass-modal-top: #fff; --glass-modal-bottom: #fafafc; }

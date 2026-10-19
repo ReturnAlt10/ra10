@@ -44,7 +44,7 @@
   var s = document.createElement('script');
   var isFile = location.protocol === 'file:';
   var isLocalHost = location.hostname === '127.0.0.1' || location.hostname === 'localhost';
-  s.src = isFile ? 'file:///C:/Users/mistr/Downloads/ra10/ra10-sdk.js?v=20261018b' : (isLocalHost ? 'http://127.0.0.1:5500/ra10-sdk.js?v=20261018b' : 'https://ra10.co.uk/ra10-sdk.js?v=20261018b');
+  s.src = isFile ? 'file:///C:/Users/mistr/Downloads/ra10/ra10-sdk.js?v=20261021' : (isLocalHost ? 'http://127.0.0.1:5500/ra10-sdk.js?v=20261021' : 'https://ra10.co.uk/ra10-sdk.js?v=20261021');
   document.head.insertBefore(s, document.head.firstChild);
 })();
 </script>
@@ -236,11 +236,11 @@
 
   var css = document.createElement('link');
   css.rel = 'stylesheet';
-  css.href = base + '/refresh/ra10-refresh.css?v=20261018c';
+  css.href = base + '/refresh/ra10-refresh.css?v=20261020';
   document.head.appendChild(css);
 
   var js = document.createElement('script');
-  js.src = base + '/refresh/ra10-refresh.js?v=20261018c';
+  js.src = base + '/refresh/ra10-refresh.js?v=20261021';
   document.head.appendChild(js);
 })();
 </script>
@@ -713,7 +713,7 @@
 <script src="js/data-loader.js"></script>
 <script src="js/spec.js"></script>
 <script src="js/guide.js"></script>
-<script src="js/app.js"></script>
+<script src="js/app.js?v=20261019"></script>
 <script>
 const RA10_UNIT_SUBJECT = 'IT';
 const RA10_CREDIT_CHIP_ID = 'unit1-credit-chip';

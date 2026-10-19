@@ -228,11 +228,11 @@ body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background:
 
   var css = document.createElement('link');
   css.rel = 'stylesheet';
-  css.href = base + '/refresh/ra10-refresh.css?v=20261018c';
+  css.href = base + '/refresh/ra10-refresh.css?v=20261020';
   document.head.appendChild(css);
 
   var js = document.createElement('script');
-  js.src = base + '/refresh/ra10-refresh.js?v=20261018c';
+  js.src = base + '/refresh/ra10-refresh.js?v=20261021';
   document.head.appendChild(js);
 })();
 </script>
@@ -248,7 +248,7 @@ body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background:
     <button onclick="zoomOut();">−</button>
     <button onclick="zoomReset();">100%</button>
     <button onclick="zoomIn();">+</button>
-    <button onclick="window.print();">Print</button>
+    <button type="button" data-download-paper onclick="downloadPaperPdf()">Download PDF</button><script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script><script src="../../../../a-level/business-2023/predicted-papers/paper-download.js"></script>
   </div>
 </div>
 

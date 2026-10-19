@@ -84,7 +84,11 @@ function openAccountOrSignIn() {
   }
 }
 
-function renderAiExaminerFeedback(container, result) {
+function renderAiExaminerFeedback(container, result, question, answer) {
+  if (window.RA10AI) {
+    container.appendChild(RA10AI.renderExamResult({ question: question || {}, answer: answer || "", result, allowAdjust: false }));
+    return;
+  }
   const host = createEl("div", "question-card", "");
   const earned = Number(result && result.earned) || 0;
   const max = Number(result && result.max) || 1;
@@ -783,7 +787,7 @@ function renderObjectiveSession(stage, session, type) {
 
             const result = response && response.result ? response.result : {};
             aiWrap.innerHTML = "";
-            renderAiExaminerFeedback(aiWrap, result);
+            renderAiExaminerFeedback(aiWrap, result, { question: item.question, marks: item.marks, command_verb: "Evaluate", topic }, answerText);
 
             const earned = Number(result.earned) || 0;
             const max = Number(result.max) || Math.max(1, Number(item.marks) || 1);
@@ -999,7 +1003,7 @@ function renderPractice() {
             answer: answerText
           });
           out.innerHTML = "";
-          renderAiExaminerFeedback(out, response.result || {});
+          renderAiExaminerFeedback(out, response.result || {}, { question: questionText, marks: 16, command_verb: "Evaluate" }, answerText);
           const score = Number(response && response.result && response.result.earned) || 0;
           const max = Number(response && response.result && response.result.max) || 1;
           const ok = score >= Math.ceil(max / 2);

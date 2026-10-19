@@ -4,20 +4,40 @@
 
   document.documentElement.setAttribute("data-ra10-refresh", "1");
 
+  // Everything else lives next to this script. Resolving from our own URL
+  // works on the live site, localhost and file:// alike.
+  var V = "20261026";
+  var DIR = "/refresh/";
+  try {
+    var me = document.currentScript && document.currentScript.src;
+    if (me) DIR = me.replace(/ra10-refresh\.js(\?.*)?$/, "");
+  } catch (e) {}
+
   // Liquid Glass layer — lives next to this script so it resolves on every
   // page (main site and nested unit apps) without per-page links.
   (function injectGlass() {
     if (document.getElementById("ra10-glass-css")) return;
-    var href = "/refresh/ra10-glass.css";
-    try {
-      var src = document.currentScript && document.currentScript.src;
-      if (src) href = src.replace(/ra10-refresh\.js(\?.*)?$/, "ra10-glass.css");
-    } catch (e) {}
     var link = document.createElement("link");
     link.id = "ra10-glass-css";
     link.rel = "stylesheet";
-    link.href = href + "?v=20261018";
+    link.href = DIR + "ra10-glass.css?v=" + V;
     (document.head || document.documentElement).appendChild(link);
+
+    // Liquid glass tier switch (auto / webgl / css / off). Tiny; the WebGL
+    // library itself is only fetched when a page mounts a glass stage.
+    if (!document.getElementById("ra10-liquid-js")) {
+      var lq = document.createElement("script");
+      lq.id = "ra10-liquid-js";
+      lq.src = DIR + "ra10-liquid.js?v=" + V;
+      (document.head || document.documentElement).appendChild(lq);
+    }
+    // XP boosts, overtake popups and the boost countdown (all pages).
+    if (!document.getElementById("ra10-xp-js")) {
+      var xp = document.createElement("script");
+      xp.id = "ra10-xp-js";
+      xp.src = DIR + "ra10-xp.js?v=" + V;
+      (document.head || document.documentElement).appendChild(xp);
+    }
   })();
 
   function addBodyClass() {
@@ -135,12 +155,23 @@
     // Only inject the AI helper on revision/unit pages — it self-guards too.
     if (!/\/revision\//i.test(location.pathname)) return;
     if (document.getElementById("ra10-ai-helper-script")) return;
-    var base = location.protocol === "file:" ? "" : (location.hostname === "127.0.0.1" || location.hostname === "localhost" ? "http://" + location.host : (location.protocol + "//" + location.host));
+    // Shared AI UI (chat history, examiner card).
+    if (!document.getElementById("ra10-ai-js") && !window.RA10AI) {
+      var core = document.createElement("script");
+      core.id = "ra10-ai-js";
+      core.src = DIR + "ra10-ai.js?v=" + V;
+      document.head.appendChild(core);
+    }
+    // Business model diagrams under guide headings (Ansoff, Maslow, ...).
+    if (!document.getElementById("ra10-models-js")) {
+      var md = document.createElement("script");
+      md.id = "ra10-models-js";
+      md.src = DIR + "ra10-models.js?v=" + V;
+      document.head.appendChild(md);
+    }
     var s = document.createElement("script");
     s.id = "ra10-ai-helper-script";
-    var path = location.pathname;
-    // Resolve the site root: the helper lives at /refresh/ra10-ai-helper.js
-    s.src = base + "/refresh/ra10-ai-helper.js";
+    s.src = DIR + "ra10-ai-helper.js?v=" + V;
     document.body.appendChild(s);
   }
 

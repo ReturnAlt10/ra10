@@ -34,6 +34,13 @@
 .ob-progress{display:flex;gap:6px;margin:0 0 var(--sp4,1rem);padding:0;list-style:none}
 .ob-progress li{flex:1;height:6px;border-radius:999px;background:var(--color-surface-dynamic,#e6e4df)}
 .ob-progress li.is-done,.ob-progress li.is-current{background:var(--color-primary,#d20000)}
+.ob-roles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:4px 0 16px}
+.ob-role{display:flex;flex-direction:column;align-items:flex-start;gap:4px;text-align:left;padding:14px;border-radius:16px;border:2px solid var(--color-border,#d4d1ca);background:var(--color-surface,#fff);color:inherit;font:inherit;cursor:pointer;transition:border-color .15s,transform .15s,box-shadow .15s}
+.ob-role:hover{transform:translateY(-1px)}
+.ob-role[aria-checked="true"]{border-color:#22c55e;box-shadow:0 0 0 3px rgba(34,197,94,.18)}
+.ob-role .ob-role-ico{font-size:1.5rem;line-height:1}
+.ob-role b{font-size:.95rem}
+.ob-role small{font-size:.76rem;color:var(--color-text-muted,#7a7974);line-height:1.35}
 .ob-step-label{font-size:var(--tx-xs,.8rem);font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--color-text-muted,#7a7974);margin:0 0 4px}
 .ob-title{font-family:var(--font-d,Georgia,serif);font-size:var(--tx-xl,1.8rem);font-weight:400;line-height:1.15;margin:0 0 var(--sp2,.5rem)}
 .ob-title:focus{outline:none}
@@ -102,6 +109,13 @@
     const ra = sdk();
     const profile = ra && ra.getProfile ? ra.getProfile() : null;
     return !!profile && Object.prototype.hasOwnProperty.call(profile, 'onboarding_completed_at') && !profile.onboarding_completed_at;
+  }
+
+  // Only once the leaderboard-v2 migration has added profiles.user_role.
+  function needsRole() {
+    const ra = sdk();
+    const profile = ra && ra.getProfile ? ra.getProfile() : null;
+    return !!profile && Object.prototype.hasOwnProperty.call(profile, 'user_role') && !profile.user_role;
   }
 
   function needsTerms() {
@@ -222,6 +236,7 @@
     const step = state.steps[state.index];
     const body = step === 'terms' ? termsHtml()
       : step === 'profile' ? profileHtml()
+      : step === 'role' ? roleHtml()
       : step === 'personalise' ? personaliseHtml()
       : doneHtml();
     const closable = step !== 'terms';
@@ -303,6 +318,40 @@
       '</form>';
   }
 
+  const ROLE_OPTIONS = [
+    ['student', '\uD83C\uDF93', 'Student', 'Revising for my exams or coursework'],
+    ['teacher', '\uD83C\uDF4E', 'Teacher', 'I teach in a school or college'],
+    ['educator', '\uD83D\uDCDA', 'Educator', 'Tutor, lecturer or learning support'],
+    ['other', '\u2728', 'Other', 'Parent, professional or just curious'],
+  ];
+
+  function roleHtml() {
+    const current = (sdk().getProfile() || {}).user_role || '';
+    return '' +
+      '<h2 class="ob-title" id="ob-title" tabindex="-1">Who are you?</h2>' +
+      '<p class="ob-lead">This shows as a badge next to your name on the leaderboard and your profile.</p>' +
+      '<div class="ob-error" id="ob-role-error" role="alert"></div>' +
+      '<div class="ob-roles" role="radiogroup" aria-labelledby="ob-title">' + ROLE_OPTIONS.map(function (r) {
+        return '<button type="button" class="ob-role" role="radio" data-ob-role="' + r[0] + '" aria-checked="' + (current === r[0]) + '">' +
+          '<span class="ob-role-ico" aria-hidden="true">' + r[1] + '</span><b>' + r[2] + '</b><small>' + r[3] + '</small></button>';
+      }).join('') + '</div>' +
+      '<div class="ob-actions">' +
+        '<button class="auth-submit-btn" type="button" id="ob-role-save"' + (current ? '' : ' disabled') + '>Continue</button>' +
+        '<button class="ob-secondary" type="button" data-ob-role-skip>Ask me later</button>' +
+      '</div>';
+  }
+
+  async function saveRole(role) {
+    const ra = sdk();
+    const client = ra.getClient ? ra.getClient() : null;
+    if (client && client.rpc) {
+      const res = await client.rpc('set_user_role', { p_role: role });
+      if (!res.error) return;
+      if (!/function|does not exist|PGRST202/i.test(String(res.error.message || res.error.code || ''))) throw new Error(res.error.message || 'Could not save.');
+    }
+    await patchProfile({ user_role: role });
+  }
+
   function personaliseHtml() {
     const a11y = window.RA10A11y;
     const prefs = a11y ? a11y.get() : {};
@@ -372,6 +421,44 @@
     }
     if (step === 'profile') {
       root.querySelector('#ob-profile-form').addEventListener('submit', onSaveProfile);
+    }
+    if (step === 'role') {
+      let chosen = (sdk().getProfile() || {}).user_role || '';
+      const saveBtn = root.querySelector('#ob-role-save');
+      const options = root.querySelectorAll('[data-ob-role]');
+      options.forEach(function (b, i) {
+        b.addEventListener('click', function () {
+          chosen = b.getAttribute('data-ob-role');
+          options.forEach(function (o) { o.setAttribute('aria-checked', String(o === b)); });
+          saveBtn.disabled = false;
+        });
+        b.addEventListener('keydown', function (e) {
+          if (e.key !== 'ArrowRight' && e.key !== 'ArrowDown' && e.key !== 'ArrowLeft' && e.key !== 'ArrowUp') return;
+          e.preventDefault();
+          const n = options[(i + (e.key === 'ArrowRight' || e.key === 'ArrowDown' ? 1 : options.length - 1)) % options.length];
+          n.focus(); n.click();
+        });
+      });
+      root.querySelector('[data-ob-role-skip]').addEventListener('click', function () {
+        setDismissed();
+        if (state.mode === 'role') close(); else next();
+      });
+      saveBtn.addEventListener('click', async function () {
+        if (!chosen) return;
+        const err = root.querySelector('#ob-role-error');
+        saveBtn.disabled = true;
+        saveBtn.textContent = 'Saving\u2026';
+        try {
+          await saveRole(chosen);
+          await sdk().refreshProfile();
+          next();
+        } catch (ex) {
+          err.textContent = (ex && ex.message) || 'Could not save. Please try again.';
+          err.classList.add('show');
+          saveBtn.disabled = false;
+          saveBtn.textContent = 'Continue';
+        }
+      });
     }
     if (step === 'personalise') {
       root.querySelectorAll('[data-ob-pref]').forEach(function (b) {
@@ -573,13 +660,19 @@
     const terms = needsTerms();
     state.feature = options.feature || '';
 
+    const role = needsRole();
     if (options.mode === 'terms' || !wizard) {
-      if (!terms) return;
-      state.mode = 'terms';
-      state.steps = ['terms'];
+      if (options.mode !== 'terms' && !terms && role) {
+        state.mode = 'role';
+        state.steps = ['role'];
+      } else {
+        if (!terms) return;
+        state.mode = 'terms';
+        state.steps = ['terms'].concat(role && options.mode !== 'terms' ? ['role'] : []);
+      }
     } else {
       state.mode = 'wizard';
-      state.steps = (terms ? ['terms'] : []).concat(['profile', 'personalise', 'done']);
+      state.steps = (terms ? ['terms'] : []).concat(['profile'], role ? ['role'] : [], ['personalise', 'done']);
     }
     state.index = 0;
 
@@ -653,10 +746,11 @@
       if (state.open) return;
       const wizard = needsWizard();
       const terms = needsTerms();
-      if (!wizard && !terms) return;
+      const role = needsRole();
+      if (!wizard && !terms && !role) return;
       if (dismissedThisSession()) return;
       setTimeout(function () {
-        if (!state.open && ra.isLoggedIn() && (needsWizard() || needsTerms())) open({});
+        if (!state.open && ra.isLoggedIn() && (needsWizard() || needsTerms() || needsRole())) open({});
       }, 600);
     } finally {
       checking = false;
@@ -737,5 +831,6 @@
     rememberSignupConsent: rememberSignupConsent,
     renderAccountStatus: renderAccountStatus,
     isOpen: function () { return state.open; },
+    openRole: function () { if (sdk() && sdk().isLoggedIn()) { state.feature = ''; state.mode = 'role'; state.steps = ['role']; state.index = 0; if (!state.open) lastFocus = document.activeElement; ensureOverlay(); overlay.hidden = false; overlay.removeAttribute('hidden'); overlay.classList.add('open'); document.body.classList.add('auth-popup-open'); state.open = true; render(); } },
   };
 })(window, document);

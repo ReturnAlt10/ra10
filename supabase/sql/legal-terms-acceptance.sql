@@ -56,6 +56,12 @@ values
   ('privacy', 'Privacy Policy',   '2026-10-18', 'https://ra10.co.uk/legal/privacy.html', 'First published version.')
 on conflict (slug) do nothing;
 
+update public.legal_documents
+set version = '2026-10-19',
+    change_summary = 'Added AI chat history storage, retention and deletion details.',
+    updated_at = now()
+where slug = 'privacy' and version = '2026-10-18';
+
 alter table public.legal_documents enable row level security;
 
 drop policy if exists "legal_documents readable by everyone" on public.legal_documents;

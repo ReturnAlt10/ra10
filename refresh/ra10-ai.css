@@ -1,0 +1,653 @@
+/* =====================================================================
+   RA10 AI — shared UI for AI Helper, AI Assigner and AI Examiner.
+   Loaded by /refresh/ra10-ai.js. Everything is prefixed `rai-` so it never
+   collides with the older per-unit `.ai-*` styles.
+   Glass surfaces follow html[data-glass] from ra10-liquid.js:
+     webgl → stage elements get real refraction (CSS blur steps aside)
+     css   → backdrop-filter glass
+     off   → solid surfaces
+   ===================================================================== */
+
+.rai, .rai-exam, .rai-dialog, .rai-fab, .rai-pop, .rai-toast, .rai-tip {
+  --rai-a: #1f6feb;
+  --rai-b: #7c3aed;
+  --rai-grad: linear-gradient(135deg, var(--rai-a), var(--rai-b));
+  --rai-ink: #14161c;
+  --rai-ink-2: #5b6170;
+  --rai-ink-3: #8a90a0;
+  --rai-line: rgba(20, 22, 28, .09);
+  --rai-line-2: rgba(20, 22, 28, .15);
+  --rai-bg: #fbfaf8;
+  --rai-surface: rgba(255, 255, 255, .78);
+  --rai-surface-solid: #ffffff;
+  --rai-well: rgba(20, 22, 28, .045);
+  --rai-well-2: rgba(20, 22, 28, .075);
+  --rai-user: #eef1f8;
+  --rai-good: #138a4b;
+  --rai-good-bg: rgba(19, 138, 75, .09);
+  --rai-warn: #b45309;
+  --rai-warn-bg: rgba(180, 83, 9, .09);
+  --rai-bad: #c0262d;
+  --rai-glass: linear-gradient(180deg, rgba(255, 255, 255, .62), rgba(255, 255, 255, .40));
+  --rai-glass-strong: linear-gradient(180deg, rgba(255, 255, 255, .86), rgba(255, 255, 255, .72));
+  --rai-blur: blur(18px) saturate(180%);
+  --rai-rim: inset 0 0 0 .5px rgba(255, 255, 255, .55), inset 0 1px 1px rgba(255, 255, 255, .85), 0 0 0 .5px rgba(15, 23, 42, .08);
+  --rai-shadow: 0 24px 60px -18px rgba(15, 23, 42, .35), 0 6px 18px rgba(15, 23, 42, .08);
+  --rai-shadow-sm: 0 8px 22px -12px rgba(15, 23, 42, .28);
+  --rai-font: var(--font-b, 'DM Sans', 'Satoshi', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif);
+  --rai-display: var(--font-d, 'Instrument Serif', Georgia, 'Times New Roman', serif);
+  --rai-mono: ui-monospace, 'JetBrains Mono', SFMono-Regular, Menlo, Consolas, monospace;
+  --rai-r: 22px;
+  color: var(--rai-ink);
+}
+[data-theme="dark"] :is(.rai, .rai-exam, .rai-dialog, .rai-fab, .rai-pop, .rai-toast, .rai-tip) {
+  --rai-a: #4c8dff;
+  --rai-b: #a274ff;
+  --rai-ink: #eceef3;
+  --rai-ink-2: #a3a9b8;
+  --rai-ink-3: #727888;
+  --rai-line: rgba(255, 255, 255, .08);
+  --rai-line-2: rgba(255, 255, 255, .14);
+  --rai-bg: #16171b;
+  --rai-surface: rgba(32, 33, 39, .8);
+  --rai-surface-solid: #1d1e23;
+  --rai-well: rgba(255, 255, 255, .05);
+  --rai-well-2: rgba(255, 255, 255, .085);
+  --rai-user: #262a35;
+  --rai-good: #4ade80;
+  --rai-good-bg: rgba(74, 222, 128, .1);
+  --rai-warn: #fbbf24;
+  --rai-warn-bg: rgba(251, 191, 36, .1);
+  --rai-bad: #f87171;
+  --rai-glass: linear-gradient(180deg, rgba(60, 62, 72, .55), rgba(30, 31, 37, .45));
+  --rai-glass-strong: linear-gradient(180deg, rgba(44, 45, 52, .9), rgba(28, 29, 34, .84));
+  --rai-rim: inset 0 0 0 .5px rgba(255, 255, 255, .14), inset 0 1px 1px rgba(255, 255, 255, .2), 0 0 0 .5px rgba(0, 0, 0, .5);
+  --rai-shadow: 0 26px 64px -16px rgba(0, 0, 0, .7), 0 6px 18px rgba(0, 0, 0, .35);
+  --rai-shadow-sm: 0 8px 22px -12px rgba(0, 0, 0, .6);
+}
+
+/* Shared glass material */
+.rai-glass {
+  background: var(--rai-glass);
+  -webkit-backdrop-filter: var(--rai-blur);
+  backdrop-filter: var(--rai-blur);
+  box-shadow: var(--rai-rim), var(--rai-shadow-sm);
+}
+html[data-glass="off"] .rai-glass,
+html[data-glass="off"] :is(.rai-panel, .rai-composer, .rai-fab, .rai-pop, .rai-dialog-card, .rai-toast) {
+  background: var(--rai-surface-solid) !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+/* WebGL stage is live: the shader draws the glass, CSS steps aside. */
+.lg-live > .rai-glass {
+  background: transparent !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  box-shadow: none !important;
+}
+
+.rai *, .rai-exam *, .rai-dialog * { box-sizing: border-box; }
+.rai button, .rai-exam button, .rai-dialog button { font: inherit; color: inherit; }
+.rai :focus-visible, .rai-exam :focus-visible, .rai-dialog :focus-visible, .rai-fab:focus-visible {
+  outline: 2px solid var(--rai-a);
+  outline-offset: 2px;
+}
+.rai-sr { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+.rai-icon-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  min-width: 34px; height: 34px; padding: 0 9px;
+  border: 0; border-radius: 999px; background: transparent; cursor: pointer;
+  color: var(--rai-ink-2); font-size: .8rem; font-weight: 600;
+  transition: background .18s ease, color .18s ease, transform .18s ease;
+}
+.rai-icon-btn:hover { background: var(--rai-well-2); color: var(--rai-ink); }
+.rai-icon-btn:active { transform: scale(.96); }
+.rai-icon-btn[aria-pressed="true"] { color: #e0a100; }
+.rai-icon-btn svg { flex-shrink: 0; }
+
+/* ─── Shell ─────────────────────────────────────────────────────────── */
+.rai {
+  position: relative;
+  display: flex;
+  height: 100%;
+  min-height: 0;
+  width: 100%;
+  overflow: hidden;
+  background: var(--rai-bg);
+  font-size: 15px;
+  line-height: 1.55;
+}
+.rai-main { position: relative; flex: 1; min-width: 0; display: flex; flex-direction: column; }
+
+/* Aurora backdrop behind the header stage and welcome screen */
+.rai-aurora-bg {
+  position: absolute; inset: 0 0 auto 0; height: 340px; pointer-events: none; z-index: 0;
+  background:
+    radial-gradient(60% 90% at 12% 0%, rgba(31, 111, 235, .16), transparent 70%),
+    radial-gradient(50% 80% at 88% 10%, rgba(124, 58, 237, .16), transparent 70%),
+    radial-gradient(40% 60% at 50% 0%, rgba(236, 72, 153, .07), transparent 70%);
+  mask-image: linear-gradient(#000 40%, transparent);
+  -webkit-mask-image: linear-gradient(#000 40%, transparent);
+}
+
+/* ─── Header: WebGL stage underneath, controls on top ───────────────── */
+.rai-head { position: relative; z-index: 3; flex: 0 0 auto; padding: 12px 14px 8px; }
+.rai-stage { position: absolute; inset: 0 0 -48px 0; z-index: 0; pointer-events: none; isolation: isolate; }
+.rai-stage-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.rai-bar-glass {
+  position: absolute; top: 12px; left: 14px; right: 14px; bottom: 56px; /* 8px + the stage's 48px tail */
+  z-index: 1; isolation: isolate; /* keeps the library's z-index:-1 canvas above the backdrop */
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, .74), rgba(255, 255, 255, .52));
+  box-shadow: var(--rai-rim), 0 10px 26px -14px rgba(15, 23, 42, .4);
+}
+[data-theme="dark"] .rai-bar-glass { background: linear-gradient(180deg, rgba(58, 60, 70, .7), rgba(34, 35, 42, .6)); }
+.rai-bar {
+  position: relative; z-index: 1;
+  display: flex; align-items: center; gap: 6px;
+  min-height: 52px; padding: 6px 8px 6px 8px;
+}
+.rai-brand { display: flex; align-items: center; gap: 10px; min-width: 0; flex: 1; padding-left: 2px; }
+.rai-orb {
+  flex-shrink: 0; width: 30px; height: 30px; border-radius: 50%;
+  display: inline-flex; align-items: center; justify-content: center; color: #fff;
+  background: radial-gradient(120% 90% at 30% 15%, rgba(255, 255, 255, .55), transparent 45%), var(--rai-grad);
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, .5), 0 4px 12px -2px rgba(76, 80, 235, .55);
+}
+.rai-orb.sm { width: 24px; height: 24px; }
+.rai-orb.lg { width: 64px; height: 64px; }
+.rai-brand-text { min-width: 0; display: flex; flex-direction: column; line-height: 1.15; }
+.rai-brand-name { font-weight: 700; font-size: .95rem; letter-spacing: -.01em; }
+.rai-brand-sub {
+  font-size: .72rem; color: var(--rai-ink-2);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%;
+}
+.rai-bar-actions { display: flex; align-items: center; gap: 2px; flex-shrink: 0; }
+
+/* ─── Context chips row ─────────────────────────────────────────────── */
+.rai-ctx {
+  position: relative; z-index: 4; /* above the header stage's faded tail */
+  display: flex; align-items: center; gap: 6px; flex-wrap: nowrap; overflow-x: auto;
+  padding: 2px 16px 8px; scrollbar-width: none;
+}
+.rai-ctx::-webkit-scrollbar { display: none; }
+.rai-chip {
+  display: inline-flex; align-items: center; gap: 5px; flex-shrink: 0;
+  height: 26px; padding: 0 10px; border-radius: 999px;
+  border: 0; background: var(--rai-well); color: var(--rai-ink-2);
+  font-size: .72rem; font-weight: 600; cursor: pointer; white-space: nowrap;
+  transition: background .15s ease, color .15s ease;
+}
+.rai-chip:hover { background: var(--rai-well-2); color: var(--rai-ink); }
+.rai-chip.group { color: var(--rai-chip-color, var(--rai-b)); background: color-mix(in srgb, var(--rai-chip-color, var(--rai-b)) 12%, transparent); }
+.rai-chip.expiry { cursor: default; background: transparent; padding: 0 4px; color: var(--rai-ink-3); font-weight: 500; }
+.rai-chip.saved { color: #b98200; background: rgba(224, 161, 0, .12); }
+.rai-dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; flex-shrink: 0; }
+
+/* ─── Messages ──────────────────────────────────────────────────────── */
+.rai-scroll {
+  position: relative; z-index: 1; flex: 1; min-height: 0; overflow-y: auto;
+  overscroll-behavior: contain; scroll-behavior: smooth;
+}
+.rai-msgs { max-width: 780px; margin: 0 auto; padding: 8px 18px 150px; display: flex; flex-direction: column; gap: 22px; }
+.rai-msg { display: flex; gap: 12px; animation: raiIn .32s cubic-bezier(.2, .8, .2, 1) both; }
+@keyframes raiIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+.rai-msg.user { justify-content: flex-end; }
+.rai-msg.user .rai-bubble {
+  max-width: 82%;
+  background: var(--rai-user); color: var(--rai-ink);
+  padding: 10px 15px; border-radius: 20px 20px 6px 20px;
+  white-space: pre-wrap; word-wrap: break-word;
+}
+.rai-msg.bot .rai-orb { margin-top: 1px; }
+.rai-msg.bot .rai-body { flex: 1; min-width: 0; }
+.rai-prose { word-wrap: break-word; }
+.rai-prose > :first-child { margin-top: 0; }
+.rai-prose > :last-child { margin-bottom: 0; }
+.rai-prose p { margin: 0 0 .7em; }
+.rai .rai-prose :is(h1, h2, h3, h4) { margin: 1em 0 .4em; line-height: 1.25; font-family: inherit; font-weight: 700; letter-spacing: -.005em; }
+.rai .rai-prose h1 { font-size: 1.2rem; } .rai .rai-prose h2 { font-size: 1.1rem; } .rai .rai-prose :is(h3, h4) { font-size: 1rem; }
+.rai-prose ul, .rai-prose ol { margin: 0 0 .8em; padding-left: 1.3em; }
+.rai-prose li { margin: .2em 0; }
+.rai-prose li::marker { color: var(--rai-ink-3); }
+.rai-prose strong { font-weight: 700; }
+.rai-prose a { color: var(--rai-a); }
+.rai-prose code { font-family: var(--rai-mono); font-size: .86em; background: var(--rai-well-2); padding: .1em .38em; border-radius: 6px; }
+.rai-prose pre { position: relative; margin: .4em 0 .9em; padding: 14px 16px; border-radius: 14px; background: #0f1117; color: #dde3ee; overflow-x: auto; font-size: .82rem; line-height: 1.5; }
+.rai-prose pre code { background: none; padding: 0; color: inherit; }
+.rai-prose pre .rai-code-lang { position: absolute; top: 6px; right: 10px; font-size: .66rem; text-transform: uppercase; letter-spacing: .06em; color: #8a93a6; }
+.rai-prose blockquote { margin: 0 0 .8em; padding: 6px 14px; border-left: 3px solid var(--rai-b); color: var(--rai-ink-2); background: var(--rai-well); border-radius: 0 10px 10px 0; }
+.rai-prose .rai-table { overflow-x: auto; margin: .4em 0 .9em; border-radius: 12px; box-shadow: 0 0 0 1px var(--rai-line-2); }
+.rai-prose table { border-collapse: collapse; width: 100%; font-size: .86rem; }
+.rai-prose th, .rai-prose td { padding: 8px 12px; text-align: left; border-bottom: 1px solid var(--rai-line); vertical-align: top; }
+.rai-prose th { background: var(--rai-well); font-weight: 700; }
+.rai-prose tr:last-child td { border-bottom: 0; }
+.rai-prose .rai-tasks { list-style: none; padding-left: 0; }
+.rai-prose .rai-task { display: flex; gap: 9px; align-items: flex-start; }
+.rai-check { flex-shrink: 0; width: 17px; height: 17px; margin-top: 3px; border-radius: 6px; box-shadow: inset 0 0 0 1.5px var(--rai-line-2); }
+.rai-check.on { background: var(--rai-grad); box-shadow: none; position: relative; }
+.rai-check.on::after { content: ''; position: absolute; left: 5.5px; top: 2.5px; width: 4px; height: 8px; border: solid #fff; border-width: 0 2px 2px 0; transform: rotate(45deg); }
+
+.rai-msg-tools { display: flex; gap: 2px; margin-top: 6px; opacity: 0; transition: opacity .2s ease; }
+.rai-msg:hover .rai-msg-tools, .rai-msg:focus-within .rai-msg-tools, .rai-msg.last .rai-msg-tools { opacity: 1; }
+.rai-msg-tools .rai-icon-btn { height: 28px; min-width: 28px; font-size: .72rem; }
+
+.rai-quote {
+  margin: 0 0 6px auto; max-width: 82%;
+  font-size: .78rem; color: var(--rai-ink-2);
+  border-left: 3px solid var(--rai-b); padding: 2px 10px;
+  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+}
+
+/* Thinking indicator */
+.rai-thinking { display: flex; align-items: center; gap: 12px; color: var(--rai-ink-2); font-size: .86rem; }
+.rai-thinking .rai-orb { animation: raiPulse 1.4s ease-in-out infinite; }
+@keyframes raiPulse { 0%, 100% { transform: scale(1); filter: saturate(1); } 50% { transform: scale(.88); filter: saturate(1.5) brightness(1.1); } }
+.rai-shimmer {
+  background: linear-gradient(90deg, var(--rai-ink-3) 0%, var(--rai-ink) 40%, var(--rai-ink-3) 80%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  animation: raiShimmer 1.6s linear infinite;
+}
+@keyframes raiShimmer { from { background-position: 100% 0; } to { background-position: -100% 0; } }
+
+/* Error / notice line in the stream */
+.rai-notice { align-self: center; font-size: .8rem; color: var(--rai-ink-2); background: var(--rai-well); padding: 6px 12px; border-radius: 999px; text-align: center; }
+.rai-notice.err { color: var(--rai-bad); }
+
+/* ─── Welcome screen ────────────────────────────────────────────────── */
+.rai-welcome { padding: 6vh 4px 8px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 10px; animation: raiIn .4s ease both; }
+.rai .rai-welcome h2 {
+  margin: 8px 0 0; font-family: var(--rai-display); font-weight: 400;
+  font-size: clamp(1.7rem, 4vw, 2.3rem); line-height: 1.1; letter-spacing: -.01em;
+}
+.rai .rai-welcome h2 em { font-style: italic; background: var(--rai-grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.rai-welcome p { margin: 0; max-width: 460px; color: var(--rai-ink-2); font-size: .9rem; }
+.rai-starts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; width: 100%; max-width: 640px; margin-top: 16px; }
+.rai.compact .rai-starts { grid-template-columns: 1fr; }
+.rai-start {
+  display: flex; align-items: flex-start; gap: 10px; text-align: left; border: 0; cursor: pointer;
+  padding: 12px 14px; border-radius: 18px; color: var(--rai-ink);
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+.rai-start:hover { transform: translateY(-2px); }
+.rai-start.on { box-shadow: var(--rai-rim), 0 0 0 2px var(--rai-a), var(--rai-shadow-sm); }
+.rai-start b { display: block; font-size: .86rem; }
+.rai-start small { display: block; margin-top: 2px; font-size: .72rem; line-height: 1.35; color: var(--rai-ink-2); }
+.rai-start-ico { flex-shrink: 0; width: 32px; height: 32px; border-radius: 11px; display: inline-flex; align-items: center; justify-content: center; color: #fff; background: var(--rai-grad); }
+.rai-tasks-pick { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin: 2px 4px 8px; }
+.rai-tasks-label { font-size: .68rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--rai-ink-3); margin-right: 2px; }
+.rai-tasks-pick .rai-chip[aria-checked="true"] { background: var(--rai-ink); color: var(--rai-bg); }
+.rai-sugs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; width: 100%; max-width: 560px; margin-top: 14px; }
+.rai-sug {
+  text-align: left; border: 0; cursor: pointer; padding: 12px 14px; border-radius: 16px;
+  font-size: .82rem; line-height: 1.35; color: var(--rai-ink);
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+.rai-sug small { display: block; color: var(--rai-ink-3); font-size: .7rem; margin-bottom: 3px; font-weight: 600; text-transform: uppercase; letter-spacing: .05em; }
+.rai-sug:hover { transform: translateY(-2px); }
+.rai.compact .rai-sugs { grid-template-columns: 1fr; }
+.rai.compact .rai-welcome { padding-top: 3vh; }
+
+/* ─── Composer ──────────────────────────────────────────────────────── */
+.rai-dock {
+  position: absolute; left: 0; right: 0; bottom: 0; z-index: 4;
+  padding: 26px 14px 10px;
+  max-height: 70%; overflow-y: auto;
+  background: linear-gradient(to bottom, transparent, var(--rai-bg) 42%);
+  pointer-events: none;
+}
+.rai-dock > * { pointer-events: auto; }
+.rai-composer {
+  max-width: 780px; margin: 0 auto;
+  border-radius: 26px; padding: 8px;
+  background: var(--rai-glass-strong);
+  -webkit-backdrop-filter: var(--rai-blur); backdrop-filter: var(--rai-blur);
+  box-shadow: var(--rai-rim), var(--rai-shadow);
+  transition: box-shadow .2s ease;
+}
+.rai-composer:focus-within { box-shadow: var(--rai-rim), 0 0 0 3px color-mix(in srgb, var(--rai-a) 22%, transparent), var(--rai-shadow); }
+.rai-attach {
+  display: flex; align-items: flex-start; gap: 8px; margin: 2px 4px 8px; padding: 8px 10px;
+  border-radius: 14px; background: var(--rai-well); font-size: .76rem; color: var(--rai-ink-2);
+}
+.rai-attach b { flex: 1; min-width: 0; font-weight: 500; color: var(--rai-ink); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.rai-attach-label { flex-shrink: 0; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; font-size: .62rem; color: var(--rai-b); margin-top: 2px; }
+.rai-attach button { flex-shrink: 0; border: 0; background: transparent; cursor: pointer; color: var(--rai-ink-3); padding: 0 2px; font-size: .9rem; line-height: 1; }
+.rai .rai-input {
+  display: block; width: 100%; resize: none; outline: 0;
+  border: 0 !important; border-radius: 0 !important; background: transparent !important; box-shadow: none !important;
+  padding: 8px 10px 4px; min-height: 40px; max-height: 180px;
+  font: inherit; font-size: .95rem; line-height: 1.45; color: var(--rai-ink) !important;
+}
+.rai .rai-tray .rai-input { min-height: 64px; height: 64px; border-radius: 14px !important; background: var(--rai-well) !important; padding: 10px 12px; font-size: .85rem; }
+.rai-input::placeholder { color: var(--rai-ink-3); }
+.rai-composer-row { display: flex; align-items: center; gap: 6px; padding: 2px 2px 0; }
+.rai-spacer { flex: 1; }
+.rai-modes { display: inline-flex; padding: 3px; gap: 2px; border-radius: 999px; background: var(--rai-well); }
+.rai-mode {
+  display: inline-flex; align-items: center; gap: 5px; height: 28px; padding: 0 11px;
+  border: 0; border-radius: 999px; background: transparent; cursor: pointer;
+  font-size: .76rem; font-weight: 600; color: var(--rai-ink-2);
+  transition: background .2s ease, color .2s ease, box-shadow .2s ease;
+}
+.rai-mode:hover { color: var(--rai-ink); }
+.rai-mode[aria-checked="true"] { background: var(--rai-surface-solid); color: var(--rai-ink); box-shadow: 0 1px 3px rgba(15, 23, 42, .12), 0 0 0 .5px var(--rai-line); }
+.rai-cost { font-size: .7rem; color: var(--rai-ink-3); white-space: nowrap; }
+.rai-send {
+  flex-shrink: 0; width: 38px; height: 38px; border: 0; border-radius: 50%; cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center; color: #fff;
+  background: radial-gradient(120% 90% at 30% 10%, rgba(255, 255, 255, .4), transparent 50%), var(--rai-grad);
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, .45), 0 6px 16px -6px rgba(76, 80, 235, .7);
+  transition: transform .18s ease, opacity .18s ease, filter .18s ease;
+}
+.rai-send:hover { transform: scale(1.05); }
+.rai-send:disabled { opacity: .35; cursor: default; transform: none; filter: grayscale(.4); }
+.rai-send.stop { background: var(--rai-ink); }
+.rai-disclaimer { max-width: 780px; margin: 6px auto 0; text-align: center; font-size: .68rem; color: var(--rai-ink-3); }
+
+/* Examiner tray (assignment upload) */
+.rai-tray { margin: 2px 2px 8px; display: grid; gap: 8px; }
+@media (min-width: 700px) { .rai:not(.compact) .rai-tray:has(textarea) { grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr); } }
+.rai-drop {
+  display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 16px; cursor: pointer;
+  background: var(--rai-well); box-shadow: inset 0 0 0 1.5px var(--rai-line-2);
+  transition: background .15s ease, box-shadow .15s ease;
+}
+.rai-drop:hover, .rai-drop.drag { background: color-mix(in srgb, var(--rai-a) 8%, transparent); box-shadow: inset 0 0 0 1.5px var(--rai-a); }
+.rai-drop.loading { opacity: .6; pointer-events: none; }
+.rai-drop-ico { width: 36px; height: 36px; border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; background: var(--rai-surface-solid); color: var(--rai-a); flex-shrink: 0; box-shadow: 0 0 0 .5px var(--rai-line-2); }
+.rai-drop b { display: block; font-size: .85rem; }
+.rai-drop small { display: block; font-size: .72rem; color: var(--rai-ink-2); }
+.rai-file { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 14px; background: var(--rai-good-bg); color: var(--rai-good); font-size: .78rem; font-weight: 600; }
+.rai-file.err { background: rgba(192, 38, 45, .08); color: var(--rai-bad); }
+.rai-file span { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* ─── History sidebar ───────────────────────────────────────────────── */
+.rai-side {
+  position: relative; z-index: 6; flex: 0 0 290px; width: 290px; min-width: 0;
+  display: flex; flex-direction: column;
+  background: color-mix(in srgb, var(--rai-bg) 70%, var(--rai-well-2));
+  box-shadow: inset -1px 0 0 var(--rai-line);
+  transition: margin-left .28s cubic-bezier(.2, .8, .2, 1), transform .28s cubic-bezier(.2, .8, .2, 1);
+}
+.rai:not(.side-open) .rai-side { margin-left: -290px; }
+.rai.overlay-side .rai-side {
+  position: absolute; top: 0; bottom: 0; left: 0; margin-left: 0;
+  transform: translateX(-102%);
+  background: var(--rai-glass-strong);
+  -webkit-backdrop-filter: blur(24px) saturate(160%); backdrop-filter: blur(24px) saturate(160%);
+  box-shadow: var(--rai-rim), var(--rai-shadow);
+  border-radius: 0 var(--rai-r) var(--rai-r) 0;
+  width: min(300px, 86%);
+}
+.rai.overlay-side.side-open .rai-side { transform: none; }
+.rai-scrim { position: absolute; inset: 0; z-index: 5; background: rgba(15, 23, 42, .18); opacity: 0; pointer-events: none; transition: opacity .25s ease; }
+.rai.overlay-side.side-open .rai-scrim { opacity: 1; pointer-events: auto; }
+.rai-side-head { padding: 12px 12px 8px; display: flex; flex-direction: column; gap: 8px; }
+.rai-side-top { display: flex; align-items: center; gap: 6px; }
+.rai-side-title { flex: 1; font-weight: 700; font-size: .92rem; padding-left: 4px; }
+.rai .rai-search {
+  width: 100%; height: 34px; border: 0 !important; border-radius: 12px !important; padding: 0 12px 0 32px;
+  background: var(--rai-well) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%238a90a0' stroke-width='2.2' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='M20 20l-3.5-3.5'/%3E%3C/svg%3E") no-repeat 11px center !important;
+  font: inherit; font-size: .82rem; color: var(--rai-ink) !important; outline: 0; box-shadow: none !important;
+}
+.rai .rai-search:focus { box-shadow: 0 0 0 2px color-mix(in srgb, var(--rai-a) 35%, transparent) !important; }
+.rai-sort { display: flex; padding: 3px; gap: 2px; border-radius: 12px; background: var(--rai-well); }
+.rai-sort button { flex: 1; height: 26px; border: 0; border-radius: 9px; background: transparent; cursor: pointer; font-size: .7rem; font-weight: 600; color: var(--rai-ink-2); }
+.rai-sort button[aria-pressed="true"] { background: var(--rai-surface-solid); color: var(--rai-ink); box-shadow: 0 1px 2px rgba(15, 23, 42, .1); }
+.rai-side-list { flex: 1; min-height: 0; overflow-y: auto; padding: 4px 8px 12px; }
+.rai-sec { margin-top: 10px; }
+.rai-sec-head {
+  display: flex; align-items: center; gap: 6px; padding: 4px 8px; margin-bottom: 2px;
+  font-size: .66rem; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; color: var(--rai-ink-3);
+}
+.rai-sec-head .rai-dot { width: 8px; height: 8px; }
+.rai-sec-head .rai-icon-btn { margin-left: auto; height: 22px; min-width: 22px; padding: 0 4px; opacity: 0; }
+.rai-sec:hover .rai-sec-head .rai-icon-btn, .rai-sec-head .rai-icon-btn:focus-visible { opacity: 1; }
+.rai-row {
+  position: relative; display: flex; align-items: center; gap: 8px; width: 100%;
+  padding: 8px 10px; border: 0; border-radius: 12px; background: transparent; cursor: pointer; text-align: left;
+  transition: background .15s ease;
+}
+.rai-row:hover { background: var(--rai-well); }
+.rai-row.active { background: var(--rai-well-2); }
+.rai-row-main { flex: 1; min-width: 0; }
+.rai-row-title { display: block; font-size: .82rem; font-weight: 600; color: var(--rai-ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.rai-row-meta { display: block; font-size: .68rem; color: var(--rai-ink-3); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.rai-row-meta .soon { color: var(--rai-warn); font-weight: 600; }
+.rai-row-kind { flex-shrink: 0; width: 26px; height: 26px; border-radius: 9px; display: inline-flex; align-items: center; justify-content: center; background: var(--rai-well-2); color: var(--rai-ink-2); }
+.rai-row-kind.examiner { color: var(--rai-b); }
+.rai-row-kind.assigner { color: var(--rai-a); }
+.rai-row-star { flex-shrink: 0; color: #e0a100; }
+.rai-side-empty { padding: 26px 14px; text-align: center; font-size: .8rem; color: var(--rai-ink-3); }
+.rai-side-foot { padding: 10px 14px 12px; font-size: .68rem; color: var(--rai-ink-3); box-shadow: inset 0 1px 0 var(--rai-line); }
+.rai-side-foot button { border: 0; background: none; padding: 0; cursor: pointer; color: var(--rai-a); font-weight: 600; font-size: inherit; }
+
+/* Menus */
+.rai-menu {
+  position: absolute; z-index: 20; min-width: 210px; padding: 6px; border-radius: 16px;
+  background: var(--rai-glass-strong);
+  -webkit-backdrop-filter: blur(24px) saturate(170%); backdrop-filter: blur(24px) saturate(170%);
+  box-shadow: var(--rai-rim), var(--rai-shadow);
+  animation: raiMenu .16s cubic-bezier(.2, .9, .3, 1.1) both;
+}
+@keyframes raiMenu { from { opacity: 0; transform: translateY(-4px) scale(.97); } to { opacity: 1; transform: none; } }
+.rai-menu button {
+  display: flex; align-items: center; gap: 10px; width: 100%; padding: 8px 10px; border: 0; border-radius: 10px;
+  background: transparent; cursor: pointer; text-align: left; font-size: .82rem; color: var(--rai-ink);
+}
+.rai-menu button:hover { background: var(--rai-well-2); }
+.rai-menu button.danger { color: var(--rai-bad); }
+.rai-menu hr { border: 0; height: 1px; background: var(--rai-line); margin: 4px 6px; }
+.rai-menu-label { padding: 6px 10px 2px; font-size: .64rem; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; color: var(--rai-ink-3); }
+
+/* ─── Dialogs (confirm credits, rename, groups) ─────────────────────── */
+.rai-dialog {
+  position: fixed; inset: 0; z-index: 2147483600;
+  display: flex; align-items: center; justify-content: center; padding: 16px;
+  background: rgba(15, 23, 42, .28);
+  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+  animation: raiFade .18s ease both;
+}
+@keyframes raiFade { from { opacity: 0; } to { opacity: 1; } }
+.rai-dialog-card {
+  width: min(400px, 100%); padding: 22px; border-radius: 26px;
+  background: var(--rai-glass-strong);
+  -webkit-backdrop-filter: blur(28px) saturate(170%); backdrop-filter: blur(28px) saturate(170%);
+  box-shadow: var(--rai-rim), var(--rai-shadow);
+  animation: raiPop .22s cubic-bezier(.2, .9, .3, 1.15) both;
+}
+@keyframes raiPop { from { opacity: 0; transform: translateY(8px) scale(.96); } to { opacity: 1; transform: none; } }
+.rai-dialog .rai-dialog-card h3 { margin: 10px 0 6px; font-family: inherit; letter-spacing: 0; line-height: 1.3; font-size: 1.08rem; font-weight: 700; }
+.rai-dialog-card p { margin: 0 0 14px; font-size: .86rem; color: var(--rai-ink-2); }
+.rai-dialog-card label { display: block; font-size: .72rem; font-weight: 700; color: var(--rai-ink-2); margin: 10px 0 5px; }
+.rai-dialog .rai-field {
+  width: 100%; height: 40px; border: 0 !important; border-radius: 12px !important; padding: 0 12px; outline: 0;
+  background: var(--rai-well-2) !important; font: inherit; font-size: .9rem; color: var(--rai-ink) !important; box-shadow: none !important;
+}
+.rai-dialog .rai-field:focus { box-shadow: 0 0 0 2px var(--rai-a) !important; }
+.rai-swatches { display: flex; gap: 8px; flex-wrap: wrap; }
+.rai-swatch { width: 26px; height: 26px; border-radius: 50%; border: 0; cursor: pointer; box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .1); }
+.rai-swatch[aria-pressed="true"] { box-shadow: 0 0 0 2px var(--rai-surface-solid), 0 0 0 4px currentColor; }
+.rai-dialog-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 18px; }
+.rai-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+  height: 38px; padding: 0 16px; border: 0; border-radius: 999px; cursor: pointer;
+  font-size: .84rem; font-weight: 600; background: var(--rai-well-2); color: var(--rai-ink);
+  transition: transform .15s ease, filter .15s ease, background .15s ease;
+}
+.rai-btn:hover { background: color-mix(in srgb, var(--rai-ink) 12%, transparent); }
+.rai-btn:active { transform: scale(.97); }
+.rai-btn.primary { color: #fff; background: radial-gradient(120% 90% at 30% 0%, rgba(255, 255, 255, .3), transparent 55%), var(--rai-grad); box-shadow: inset 0 1px 1px rgba(255, 255, 255, .4), 0 8px 18px -8px rgba(76, 80, 235, .7); }
+.rai-btn.primary:hover { filter: brightness(1.06); }
+.rai-btn.ghost { background: transparent; box-shadow: inset 0 0 0 1px var(--rai-line-2); }
+.rai-btn.sm { height: 32px; padding: 0 12px; font-size: .78rem; }
+.rai-btn:disabled { opacity: .5; cursor: default; }
+
+/* Toast */
+.rai-toast {
+  position: fixed; left: 50%; bottom: calc(24px + env(safe-area-inset-bottom, 0px)); z-index: 2147483650;
+  transform: translateX(-50%); padding: 10px 16px; border-radius: 999px; font-size: .82rem; font-weight: 600;
+  background: var(--rai-glass-strong); -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px);
+  box-shadow: var(--rai-rim), var(--rai-shadow); animation: raiPop .2s ease both;
+}
+
+/* ─── Floating panel variant (AI Helper) ────────────────────────────── */
+.rai-fab {
+  position: fixed; right: 18px; bottom: 18px; z-index: 2147483300;
+  width: 58px; height: 58px; border: 0; border-radius: 50%; cursor: pointer; color: #fff;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: radial-gradient(120% 80% at 30% 0%, rgba(255, 255, 255, .5), rgba(255, 255, 255, 0) 55%), linear-gradient(135deg, rgba(31, 111, 235, .86), rgba(124, 58, 237, .86));
+  -webkit-backdrop-filter: blur(12px) saturate(180%); backdrop-filter: blur(12px) saturate(180%);
+  box-shadow: inset 0 0 0 .5px rgba(255, 255, 255, .4), inset 0 1px 1px rgba(255, 255, 255, .65), 0 14px 30px -8px rgba(76, 80, 235, .6);
+  transition: transform .22s cubic-bezier(.2, .9, .3, 1.3), opacity .2s ease;
+}
+.rai-fab:hover { transform: translateY(-2px) scale(1.05); }
+.rai-fab.hidden { transform: scale(.6); opacity: 0; pointer-events: none; }
+.rai-fab .rai-fab-dot { position: absolute; top: 4px; right: 4px; width: 11px; height: 11px; border-radius: 50%; background: #34d399; box-shadow: 0 0 0 2px #fff; }
+/* Floating layers must stay fixed even if an older cached site stylesheet
+   pushes body children to position:relative. */
+.rai-fab, .rai-panel, .rai-pop, .rai-dialog, .rai-toast { position: fixed !important; }
+.rai-panel:not(.open) { visibility: hidden !important; opacity: 0 !important; pointer-events: none !important; }
+.rai-panel {
+  position: fixed; right: 18px; bottom: 18px; z-index: 2147483350;
+  width: min(440px, calc(100vw - 24px)); height: min(680px, calc(100vh - 36px));
+  border-radius: 28px; overflow: hidden;
+  box-shadow: var(--rai-rim), var(--rai-shadow);
+  transform-origin: bottom right;
+  transform: translateY(12px) scale(.94); opacity: 0; pointer-events: none; visibility: hidden;
+  transition: transform .3s cubic-bezier(.2, .9, .3, 1.1), opacity .22s ease, width .3s ease, height .3s ease, visibility 0s linear .3s;
+}
+.rai-panel.open { transform: none; opacity: 1; pointer-events: auto; visibility: visible; transition-delay: 0s; }
+.rai-panel.wide { width: min(980px, calc(100vw - 36px)); height: min(820px, calc(100vh - 36px)); }
+.rai-panel > .rai { border-radius: inherit; }
+@media (max-width: 640px) {
+  .rai-panel { right: 0; left: 0; bottom: 0; width: 100vw !important; height: min(92dvh, calc(100dvh - 40px)) !important; border-radius: 26px 26px 0 0; }
+  .rai-fab { right: 14px; bottom: calc(86px + env(safe-area-inset-bottom, 0px)); width: 54px; height: 54px; }
+  .rai-msgs { padding-left: 14px; padding-right: 14px; }
+  .rai-sugs { grid-template-columns: 1fr; }
+  .rai-mode span { display: none; }
+  .rai-mode { padding: 0 9px; }
+}
+
+/* Selection popup */
+.rai-pop {
+  position: fixed; z-index: 2147483500; display: none; align-items: center; gap: 7px;
+  padding: 8px 14px 8px 10px; border-radius: 999px; border: 0; cursor: pointer;
+  font-size: .8rem; font-weight: 700; color: #fff;
+  background: radial-gradient(120% 90% at 30% 0%, rgba(255, 255, 255, .35), transparent 55%), linear-gradient(135deg, rgba(31, 111, 235, .92), rgba(124, 58, 237, .92));
+  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, .5), 0 10px 26px -6px rgba(76, 80, 235, .65);
+}
+.rai-pop.show { display: inline-flex; animation: raiPop .16s ease both; }
+
+/* Tip banner */
+.rai-tip {
+  position: relative; z-index: 2; display: flex; align-items: center; gap: 10px;
+  width: min(760px, calc(100% - 32px)); margin: 12px auto 0; padding: 9px 10px 9px 12px;
+  border-radius: 18px; font-size: .82rem; line-height: 1.4; color: var(--rai-ink);
+  animation: raiIn .4s ease both;
+}
+.rai-tip b { font-weight: 700; }
+.rai-tip > span:not(.rai-orb) { flex: 1; }
+/* Full-screen tools (e.g. AI Assigner tab) have their own AI UI. */
+body.tool-full .rai-tip,
+body:has(#view-ai.active .rai) .rai-fab { display: none !important; }
+
+/* ─── AI Examiner result card ───────────────────────────────────────── */
+.rai-exam {
+  position: relative; margin-top: 16px; padding: 18px; border-radius: 24px; overflow: hidden;
+  background: var(--rai-glass-strong);
+  -webkit-backdrop-filter: blur(20px) saturate(170%); backdrop-filter: blur(20px) saturate(170%);
+  box-shadow: var(--rai-rim), var(--rai-shadow-sm);
+  font-size: .9rem; line-height: 1.5;
+  animation: raiIn .4s cubic-bezier(.2, .8, .2, 1) both;
+}
+.rai-exam::before {
+  content: ''; position: absolute; inset: 0 0 auto 0; height: 140px; pointer-events: none;
+  background: radial-gradient(60% 100% at 0% 0%, color-mix(in srgb, var(--rai-band, var(--rai-a)) 16%, transparent), transparent 70%);
+}
+.rai-exam > * { position: relative; }
+.rai-exam.in-chat { margin-top: 0; }
+.rai-exam-hero { display: flex; align-items: center; gap: 16px; }
+.rai-ring { position: relative; flex-shrink: 0; width: 84px; height: 84px; }
+.rai-ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+.rai-ring .track { stroke: var(--rai-well-2); }
+.rai-ring .bar { stroke: var(--rai-band, var(--rai-a)); stroke-linecap: round; transition: stroke-dashoffset 1s cubic-bezier(.2, .8, .2, 1); }
+.rai-exam .rai-ring .automark-score { position: absolute; inset: 0; display: flex; align-items: baseline; justify-content: center; padding-top: 26px; gap: 1px; background: none !important; border: 0 !important; box-shadow: none !important; }
+.rai-exam .rai-ring .value { font-size: 1.6rem; font-weight: 800; letter-spacing: -.03em; line-height: 1; color: var(--rai-ink); }
+.rai-exam .rai-ring .total { font-size: .8rem; font-weight: 600; color: var(--rai-ink-3); }
+.rai-exam-head { flex: 1; min-width: 0; }
+.rai-grade {
+  flex-shrink: 0; width: 72px; height: 72px; border-radius: 22px;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-family: var(--rai-display); font-size: 2.4rem; line-height: 1; color: #fff;
+  background: radial-gradient(120% 90% at 30% 0%, rgba(255, 255, 255, .4), transparent 55%), var(--rai-band);
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, .5), 0 10px 22px -10px var(--rai-band);
+}
+.rai-eyebrow { display: inline-flex; align-items: center; gap: 6px; font-size: .68rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--rai-ink-3); }
+.rai-exam .rai-band { margin: 2px 0 4px; letter-spacing: -.01em; font-family: var(--rai-display); font-size: 1.45rem; font-weight: 400; line-height: 1.15; color: var(--rai-ink); }
+.rai-exam-summary { margin: 0; color: var(--rai-ink-2); font-size: .86rem; }
+.rai-exam-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+.rai-tag { display: inline-flex; align-items: center; height: 22px; padding: 0 9px; border-radius: 999px; font-size: .7rem; font-weight: 700; background: var(--rai-well-2); color: var(--rai-ink-2); }
+.rai-adjust { display: inline-flex; flex-direction: column; gap: 4px; flex-shrink: 0; }
+.rai-adjust button { width: 28px; height: 28px; border: 0; border-radius: 9px; cursor: pointer; background: var(--rai-well); color: var(--rai-ink-2); font-size: .95rem; font-weight: 700; line-height: 1; }
+.rai-adjust button:hover { background: var(--rai-well-2); color: var(--rai-ink); }
+.rai-exam-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 16px; }
+.rai-fb { padding: 12px 14px; border-radius: 16px; background: var(--rai-well); }
+.rai-exam .rai-fb h4 { display: flex; align-items: center; gap: 7px; margin: 0 0 6px; font-family: inherit; letter-spacing: 0; line-height: 1.3; font-size: .8rem; font-weight: 700; }
+.rai-fb.good h4 { color: var(--rai-good); }
+.rai-fb.improve h4 { color: var(--rai-warn); }
+.rai-fb.next h4 { color: var(--rai-b); }
+.rai-fb ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 6px; }
+.rai-fb li { position: relative; padding-left: 16px; font-size: .84rem; color: var(--rai-ink); }
+.rai-fb li::before { content: ''; position: absolute; left: 2px; top: .58em; width: 6px; height: 6px; border-radius: 50%; background: currentColor; opacity: .45; }
+.rai-fb.good li::before { background: var(--rai-good); opacity: 1; }
+.rai-fb.improve li::before { background: var(--rai-warn); opacity: 1; }
+.rai-fb.next li::before { background: var(--rai-b); opacity: 1; }
+.rai-fb.wide { grid-column: 1 / -1; }
+.rai-ao { display: grid; gap: 6px; }
+.rai-ao-row { display: grid; grid-template-columns: 52px 1fr; gap: 10px; font-size: .82rem; }
+.rai-ao-row b { font-size: .72rem; color: var(--rai-b); padding-top: 2px; }
+.rai-crit { display: grid; gap: 6px; margin-top: 14px; }
+.rai-crit-row { display: flex; gap: 10px; align-items: flex-start; padding: 8px 12px; border-radius: 12px; background: var(--rai-well); font-size: .82rem; }
+.rai-crit-row i { flex-shrink: 0; font-style: normal; width: 20px; height: 20px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: .7rem; font-weight: 800; color: #fff; background: var(--rai-bad); }
+.rai-crit-row.met i { background: var(--rai-good); }
+.rai-exam-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
+.rai-exam-ms { margin-top: 12px; }
+.rai-exam-foot { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 14px; padding-top: 12px; box-shadow: inset 0 1px 0 var(--rai-line); font-size: .74rem; color: var(--rai-ink-3); }
+.rai-exam-foot button { border: 0; background: none; padding: 0; cursor: pointer; color: var(--rai-a); font-weight: 600; font-size: inherit; }
+@media (max-width: 560px) {
+  .rai-exam { padding: 14px; }
+  .rai-exam-grid { grid-template-columns: 1fr; }
+  .rai-ring { width: 70px; height: 70px; }
+  .rai-exam .rai-ring .automark-score { padding-top: 21px; }
+  .rai-exam .rai-ring .value { font-size: 1.3rem; }
+}
+
+/* AI Examiner trigger button (unit practice cards) */
+.btn.btn-examine, .rai-examine-btn {
+  position: relative; display: inline-flex !important; align-items: center; gap: 8px;
+  border: 0 !important; border-radius: 999px !important; padding: 10px 18px !important;
+  color: #fff !important; font-weight: 700 !important;
+  background: radial-gradient(120% 90% at 30% 0%, rgba(255, 255, 255, .38), transparent 55%), linear-gradient(135deg, #1f6feb, #7c3aed) !important;
+  box-shadow: inset 0 0 0 .5px rgba(255, 255, 255, .35), inset 0 1px 1px rgba(255, 255, 255, .55), 0 10px 22px -10px rgba(76, 80, 235, .8) !important;
+  animation: none !important;
+  transition: transform .18s ease, filter .18s ease, box-shadow .18s ease !important;
+}
+.btn.btn-examine:hover:not(:disabled) { transform: translateY(-1px); filter: brightness(1.06); }
+.btn.btn-examine:disabled { opacity: .85; cursor: progress; }
+.btn.btn-examine .ai-examiner-loading { display: inline-flex; align-items: center; gap: 9px; }
+.btn.btn-examine .ai-examiner-orb {
+  width: 14px; height: 14px; border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #fff, rgba(255, 255, 255, .3) 60%);
+  animation: raiPulse 1.2s ease-in-out infinite;
+}
+.btn.btn-examine .ai-examiner-dots { display: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .rai *, .rai-exam, .rai-panel, .rai-fab, .rai-dialog-card, .rai-menu { animation: none !important; transition: none !important; }
+}

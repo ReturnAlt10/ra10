@@ -42,6 +42,8 @@ function switchTab(name) {
     const el = document.getElementById('view-' + id);
     if (el) el.classList.toggle('active', id === name);
   });
+  // AI Assigner fills the screen below the topbar (same as Unit 3).
+  document.body.classList.toggle('tool-full', name === 'ai');
   if (name === 'revise' && window.initRevise) window.initRevise();
   if (name === 'guide' && window.initComprehensiveGuide) window.initComprehensiveGuide();
   if (name === 'quiz' && window.initQuiz) window.initQuiz();

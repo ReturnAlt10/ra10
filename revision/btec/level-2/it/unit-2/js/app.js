@@ -834,7 +834,7 @@ function renderPracticeCard() {
   btnCheck.textContent = isMC ? 'Check answer' : 'Auto-mark';
 
   const btnExamine = document.createElement('button');
-  btnExamine.className = 'btn btn-ai-examine';
+  btnExamine.className = 'btn btn-ai-examine btn-examine';
   btnExamine.innerHTML = '<span class="ai-star">✦</span> AI Examiner';
   btnExamine.style.display = isMC ? 'none' : '';
 
@@ -904,7 +904,9 @@ function renderPracticeCard() {
       const aiResult = normaliseAiResult(resp && resp.result ? resp.result : null, q, ans);
       feedbackArea.innerHTML = '';
       if (aiResult) {
-        feedbackArea.appendChild(buildAiAutoMarkUI(q, ans, aiResult));
+        feedbackArea.appendChild(window.RA10AI
+          ? RA10AI.renderExamResult({ question: q, answer: ans, result: resp.result, markScheme: () => buildMarkSchemeBlock(q) })
+          : buildAiAutoMarkUI(q, ans, aiResult));
       } else {
         feedbackArea.appendChild(buildAutoMarkUI(q, ans));
         feedbackArea.appendChild(el('p', { class: 'muted', style: 'margin-top:8px' }, 'AI response was invalid — local estimate shown.'));

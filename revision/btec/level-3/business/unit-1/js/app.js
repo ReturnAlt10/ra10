@@ -1643,7 +1643,7 @@
     const actions = el('div', { class: 'practice-actions' });
     const btnLabel = q.type === 'multiple_choice' ? 'Check my answer' : 'Auto-mark my answer';
     const btnAutoMark = el('button', { class: 'btn primary' }, btnLabel);
-    const btnExamine = el('button', { class: 'btn btn-examine', style: 'background:linear-gradient(120deg,#2563eb 0%,#7c3aed 24%,#ec4899 52%,#f97316 76%,#22c55e 100%);background-size:300% 300%;color:#fff;border:none;animation:examine-glow 3.6s ease-in-out infinite;box-shadow:0 0 18px rgba(59,130,246,0.28),0 0 32px rgba(236,72,153,0.26),inset 0 0 18px rgba(255,255,255,0.10);border-radius:6px;font-weight:600;' }, '✦ AI Examiner');
+    const btnExamine = el('button', { class: 'btn btn-examine' }, '✦ AI Examiner');
     const btnReveal = el('button', { class: 'btn' }, 'Reveal mark scheme');
     const btnNext = el('button', { class: 'btn' }, 'Next question →');
     const btnPrev = el('button', { class: 'btn ghost' }, '← Previous');
@@ -1679,14 +1679,9 @@
         return;
       }
 
-      // Show cost warning for free/pro users
-      const tier = window.RA10 && typeof window.RA10.getTier === 'function' ? window.RA10.getTier() : '';
-      const isFree = tier === '' || tier === 'free';
-      const isPro = tier === 'all_subjects';
-      if (isFree || isPro) {
-        const cost = isFree ? 5 : 1;
-        const proceed = confirm(`AI Examiner will cost ${cost} credit(s). Do you want to continue?`);
-        if (!proceed) return;
+      // Confirm the credit cost (skipped when it's free on the user's plan).
+      if (window.RA10AI) {
+        if (!(await RA10AI.confirmCredits(RA10AI.examinerCost(), 'AI Examiner'))) return;
       }
 
       btnExamine.disabled = true;
@@ -1699,7 +1694,7 @@
         if (response && response.result) {
           const aiResult = normaliseAiMarkResult(response.result, q, true, answer);
           if (aiResult) {
-            automarkHost.appendChild(buildAutoMarkUI(q, answer, aiResult, 'ai'));
+            automarkHost.appendChild(window.RA10AI ? RA10AI.renderExamResult({ question: q, answer, result: response.result, markScheme: () => renderMarkScheme(q) }) : buildAutoMarkUI(q, answer, aiResult, 'ai'));
           } else {
             automarkHost.appendChild(el('p', { style: 'color:var(--color-error);' }, 'AI Examiner response was invalid. Please try again.'));
           }

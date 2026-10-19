@@ -1896,7 +1896,7 @@ function renderPracticeCard() {
                  : q.type === 'multiple_choice' ? 'Check my answer'
                  : 'Auto-mark my answer';
   const btnAutoMark = el('button', { class: 'btn primary' }, btnLabel);
-  const btnExamine = el('button', { class: 'btn btn-examine', style: 'background:linear-gradient(120deg,#581c87 0%,#7c3aed 45%,#a855f7 100%);background-size:220% 220%;color:#fff;border:none;animation:examine-glow 3.2s ease-in-out infinite;box-shadow:0 0 14px rgba(124,58,237,0.30),0 0 28px rgba(168,85,247,0.20),inset 0 0 14px rgba(255,255,255,0.10);border-radius:10px;font-weight:700;padding:10px 18px;display:inline-flex;align-items:center;gap:8px;' });
+  const btnExamine = el('button', { class: 'btn btn-examine' });
   const aiBtnIcon = el('span', { style: 'display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;' });
   aiBtnIcon.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" style="filter:drop-shadow(0 0 4px #fff9);"><path d="M12 3l2.1 4.9L19 10l-4.9 2.1L12 17l-2.1-4.9L5 10l4.9-2.1L12 3z"/><path d="M18.5 4.5l.9 2.1 2.1.9-2.1.9-.9 2.1-.9-2.1-2.1-.9 2.1-.9.9-2.1z"/></svg>';
   btnExamine.appendChild(aiBtnIcon);
@@ -1936,14 +1936,9 @@ function renderPracticeCard() {
       return;
     }
 
-    // Show cost warning for free/pro users
-    const tier = window.RA10 && typeof window.RA10.getTier === 'function' ? window.RA10.getTier() : '';
-    const isFree = tier === '' || tier === 'free';
-    const isPro = tier === 'all_subjects';
-    if (isFree || isPro) {
-      const cost = isFree ? 5 : 1;
-      const proceed = confirm(`AI Examiner will cost ${cost} credit(s). Do you want to continue?`);
-      if (!proceed) return;
+    // Confirm the credit cost (skipped when it's free on the user's plan).
+    if (window.RA10AI) {
+      if (!(await RA10AI.confirmCredits(RA10AI.examinerCost(), 'AI Examiner'))) return;
     }
 
     btnExamine.disabled = true;
@@ -1956,7 +1951,7 @@ function renderPracticeCard() {
       if (response && response.result) {
         const aiResult = normaliseAiMarkResult(response.result, q, true, answer);
         if (aiResult) {
-          automarkHost.appendChild(buildAutoMarkUI(q, answer, aiResult, 'ai'));
+          automarkHost.appendChild(window.RA10AI ? RA10AI.renderExamResult({ question: q, answer, result: response.result, markScheme: () => renderMarkScheme(q) }) : buildAutoMarkUI(q, answer, aiResult, 'ai'));
         } else {
           automarkHost.appendChild(el('p', { style: 'color:var(--color-error);' }, 'AI Examiner response was invalid. Please try again.'));
         }
