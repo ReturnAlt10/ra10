@@ -6,7 +6,7 @@
 
   // Everything else lives next to this script. Resolving from our own URL
   // works on the live site, localhost and file:// alike.
-  var V = "20261026";
+  var V = "20261027";
   var DIR = "/refresh/";
   try {
     var me = document.currentScript && document.currentScript.src;
