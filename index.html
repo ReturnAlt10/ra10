@@ -372,7 +372,7 @@ body.auth-popup-open{overflow:hidden}
 .contact-submit-btn:hover{filter:brightness(1.06)}
 .contact-submit-btn:disabled{opacity:.6;cursor:not-allowed;filter:grayscale(.3)}
 
-/* Floating help button (bottom-left) */
+/* Help button: floating on general pages, footer control on unit pages */
 #ra10-help-fab{
   position:fixed;left:18px;bottom:18px;z-index:2147483400;
   display:inline-flex;align-items:center;gap:8px;
@@ -387,9 +387,19 @@ body.auth-popup-open{overflow:hidden}
 #ra10-help-fab span{letter-spacing:.01em}
 #ra10-help-fab:hover{transform:translateY(-2px);box-shadow:0 14px 32px rgba(210,0,0,.5)}
 #ra10-help-fab:active{transform:translateY(0) scale(.98)}
+body:has(.page-iframe.active, #p-btec.active, #p-btec-l3.active, #p-it-aaq.active, #p-btec-business-l3.active, #p-btec-sport-l3.active, #p-aqa-business-2023.active) #ra10-help-fab{
+  position:static;z-index:auto;flex-shrink:0;
+  height:38px;padding:0 14px;font-size:var(--tx-xs);
+  box-shadow:0 4px 12px rgba(210,0,0,.22);
+}
+body:has(.page-iframe.active, #p-btec.active, #p-btec-l3.active, #p-it-aaq.active, #p-btec-business-l3.active, #p-btec-sport-l3.active, #p-aqa-business-2023.active) #ra10-help-fab span{display:inline}
 @media (max-width:640px){
   #ra10-help-fab{padding:0 12px;height:44px;bottom:calc(84px + env(safe-area-inset-bottom,0px))}
   #ra10-help-fab span{display:none}
+  body:has(.page-iframe.active, #p-btec.active, #p-btec-l3.active, #p-it-aaq.active, #p-btec-business-l3.active, #p-btec-sport-l3.active, #p-aqa-business-2023.active) #ra10-help-fab{
+    height:36px;padding:0 12px;
+  }
+  body:has(.page-iframe.active, #p-btec.active, #p-btec-l3.active, #p-it-aaq.active, #p-btec-business-l3.active, #p-btec-sport-l3.active, #p-aqa-business-2023.active) #ra10-help-fab span{display:inline}
 }
 .auth-overlay.open .auth-modal{transform:translateY(0) scale(1)}
 .home-reframe-banner{
@@ -1798,6 +1808,7 @@ body.unit-shell-mode .iframe-wrap.full-screen{
 ===================================================== */
 footer{border-top:1px solid oklch(from var(--color-text) l c h/.07);padding-block:var(--sp5);margin-top:var(--sp3)}
 .footer-start{display:flex;flex-direction:column;gap:2px}
+.footer-actions{display:flex;align-items:center;gap:var(--sp2);flex-wrap:wrap}
 .footer-legal{display:flex;flex-wrap:wrap;align-items:center;gap:var(--sp1) var(--sp4);font-size:var(--tx-xs)}
 .footer-legal a,.footer-link-btn{color:var(--color-text-muted);text-decoration:underline;text-underline-offset:.18em;min-height:32px;display:inline-flex;align-items:center}
 .footer-legal a:hover,.footer-link-btn:hover{color:var(--color-text)}
@@ -16628,12 +16639,6 @@ function bindContactModal() {
 }
 </script>
 
-<!-- Floating help button (bottom-left) -->
-<button id="ra10-help-fab" type="button" onclick="openContactModal()" aria-label="Help and contact">
-  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-  <span>Help</span>
-</button>
-
 <!-- ============================================================
      FOOTER
 ============================================================ -->
@@ -16653,7 +16658,13 @@ function bindContactModal() {
         Accessibility settings
       </button>
     </nav>
-    <button class="btn btn-g" type="button" onclick="contactSupportFromFooter()" aria-label="Contact RA10 support" style="padding:8px 14px;font-size:var(--tx-xs);">Contact Us</button>
+    <div class="footer-actions">
+      <button class="btn btn-g" type="button" onclick="contactSupportFromFooter()" aria-label="Contact RA10 support" style="padding:8px 14px;font-size:var(--tx-xs);">Contact Us</button>
+      <button id="ra10-help-fab" type="button" onclick="openContactModal()" aria-label="Help and contact">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 0-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        <span>Help</span>
+      </button>
+    </div>
   </div>
 </footer>
 
