@@ -35,13 +35,13 @@
     var st = document.createElement('style');
     st.id = 'rxp-css';
     st.textContent = [
-      '.rxp-widget{position:fixed;left:16px;bottom:calc(18px + env(safe-area-inset-bottom,0px));z-index:2147483200;display:inline-flex;align-items:stretch;border-radius:999px;filter:drop-shadow(0 12px 26px rgba(239,68,68,.35));animation:rxpIn .4s cubic-bezier(.2,.9,.3,1.3) both}',
+      '.rxp-widget{position:fixed;left:0;right:0;margin-inline:auto;width:max-content;bottom:calc(18px + env(safe-area-inset-bottom,0px));z-index:2147483200;display:inline-flex;align-items:stretch;border-radius:999px;filter:drop-shadow(0 12px 26px rgba(239,68,68,.35));animation:rxpIn .4s cubic-bezier(.2,.9,.3,1.3) both}',
       '.rxp-pill{display:inline-flex;align-items:center;gap:8px;padding:8px 12px 8px 8px;border:0;border-radius:999px 0 0 999px;font:700 .82rem/1 var(--font-b,system-ui,sans-serif);color:#fff;background:radial-gradient(120% 90% at 30% 0%,rgba(255,255,255,.35),transparent 55%),linear-gradient(135deg,#f59e0b,#ef4444 60%,#d946ef);box-shadow:inset 0 1px 1px rgba(255,255,255,.5);cursor:pointer}',
       '.rxp-close{width:30px;border:0;border-left:1px solid rgba(255,255,255,.3);border-radius:0 999px 999px 0;color:#fff;background:linear-gradient(135deg,#ef4444,#d946ef);font:700 1rem/1 var(--font-b,system-ui);cursor:pointer}',
       '.rxp-close:hover,.rxp-close:focus-visible{background:#b91c1c}',
       '.rxp-pill b{display:inline-flex;align-items:center;justify-content:center;min-width:34px;height:26px;padding:0 6px;border-radius:999px;background:rgba(255,255,255,.25);font-size:.9rem}',
       '.rxp-pill .t{font-variant-numeric:tabular-nums}',
-      '@media(max-width:640px){.rxp-widget{bottom:calc(90px + env(safe-area-inset-bottom,0px));left:10px}.rxp-close{width:28px}}',
+      '@media(max-width:640px){.rxp-widget{bottom:calc(90px + env(safe-area-inset-bottom,0px))}.rxp-close{width:28px}}',
       '@keyframes rxpIn{from{opacity:0;transform:translateY(12px) scale(.9)}to{opacity:1;transform:none}}',
       '.rxp-overlay{position:fixed;inset:0;z-index:2147483640;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(10,12,20,.45);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);animation:rxpFade .2s ease both}',
       '@keyframes rxpFade{from{opacity:0}to{opacity:1}}',

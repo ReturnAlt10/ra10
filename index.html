@@ -4978,7 +4978,7 @@ html body #community-share-sheet .community-share-panel{
 
   var css = document.createElement('link');
   css.rel = 'stylesheet';
-  css.href = base + '/refresh/ra10-refresh.css?v=20261020';
+  css.href = base + '/refresh/ra10-refresh.css?v=20261028';
   document.head.appendChild(css);
 
   var js = document.createElement('script');
@@ -4986,6 +4986,138 @@ html body #community-share-sheet .community-share-panel{
   document.head.appendChild(js);
 })();
 </script>
+<style id="hm-css">
+/* Homepage (signed-out) — one scoped system: ink, paper, one red accent. */
+#p-home{--hm-ink:#16130f;--hm-ink-2:#57534b;--hm-paper:#fffdf8;--hm-line:rgba(22,19,15,.09);--hm-red:#d20000;--hm-red-soft:#fde8e6;--hm-green:#15803d;--hm-r:22px}
+[data-theme="dark"] #p-home{--hm-ink:#f2efe8;--hm-ink-2:#a8a398;--hm-paper:#1f1d1a;--hm-line:rgba(255,255,255,.08);--hm-red:#ff4d4d;--hm-red-soft:rgba(255,77,77,.14);--hm-green:#4ade80}
+#p-home .hx-home{max-width:1160px;margin-inline:auto;gap:clamp(3.5rem,8vw,6.5rem)}
+#p-home :is(.hm-hero,.hm-section,.hm-cta) :is(h1,h2,h3){font-family:var(--font-b);color:var(--hm-ink)}
+
+/* Hero */
+.hm-hero{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:clamp(2rem,5vw,4.5rem);align-items:center;padding-top:clamp(1.5rem,5vw,4rem)}
+.hm-pill{display:inline-flex;align-items:center;gap:10px;padding:5px 14px 5px 5px;border:1px solid var(--hm-line);border-radius:999px;background:var(--hm-paper);color:var(--hm-ink-2);font:500 .85rem/1.2 var(--font-b);cursor:pointer;transition:border-color .2s,color .2s}
+.hm-pill:hover{border-color:var(--hm-red);color:var(--hm-ink)}
+.hm-pill-tag{padding:3px 9px;border-radius:999px;background:var(--hm-red);color:#fff;font-weight:700;font-size:.72rem;letter-spacing:.02em}
+.hm-title{margin:1.4rem 0 1.2rem;font-size:clamp(2.9rem,7vw,5.6rem)!important;font-weight:700;line-height:.98!important;letter-spacing:-.045em}
+.hm-title em{font-family:var(--font-d);font-weight:400;font-style:italic;letter-spacing:-.02em;color:var(--hm-red)}
+.hm-lede{max-width:34rem;margin:0 0 2rem;color:var(--hm-ink-2);font-size:clamp(1.05rem,1rem + .3vw,1.2rem);line-height:1.6}
+.hm-actions{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.hm-btn{display:inline-flex;align-items:center;gap:8px;height:50px;padding:0 22px;border-radius:14px;border:0;font:600 1rem/1 var(--font-b);cursor:pointer;transition:transform .15s,background .2s,box-shadow .2s}
+.hm-btn:active{transform:translateY(1px)}
+.hm-btn-primary{background:var(--hm-ink);color:var(--hm-paper);box-shadow:0 1px 0 rgba(255,255,255,.15) inset,0 10px 24px -12px rgba(22,19,15,.6)}
+.hm-btn-primary:hover{background:var(--hm-red);color:#fff}
+.hm-btn-primary span{transition:transform .2s}
+.hm-btn-primary:hover span{transform:translateX(3px)}
+.hm-btn-quiet{background:transparent;color:var(--hm-ink);box-shadow:inset 0 0 0 1px var(--hm-line)}
+.hm-btn-quiet:hover{box-shadow:inset 0 0 0 1px var(--hm-ink)}
+.hm-boards{display:flex;flex-wrap:wrap;gap:6px 18px;margin:2.2rem 0 0;padding:0;list-style:none;color:var(--hm-ink-2);font-size:.85rem;font-weight:500}
+.hm-boards li{display:flex;align-items:center;gap:8px}
+.hm-boards li::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--hm-green)}
+
+/* Hero demo: a real-looking question card */
+.hm-demo{position:relative;padding:2.5rem 1rem 3.5rem}
+.hm-demo::before{content:"";position:absolute;inset:0;border-radius:32px;background:radial-gradient(circle at 1px 1px,var(--hm-line) 1px,transparent 0) 0 0/18px 18px;mask-image:radial-gradient(closest-side,#000,transparent);-webkit-mask-image:radial-gradient(closest-side,#000,transparent)}
+.hm-demo-card{position:relative;max-width:420px;margin-inline:auto;padding:22px;border-radius:var(--hm-r);background:var(--hm-paper);box-shadow:0 0 0 1px var(--hm-line),0 30px 60px -30px rgba(22,19,15,.35);transform:rotate(-1.5deg)}
+.hm-demo-head{display:flex;justify-content:space-between;font-size:.78rem;font-weight:600;color:var(--hm-ink-2)}
+.hm-demo-unit{color:var(--hm-red)}
+.hm-demo-bar{height:4px;margin:12px 0 18px;border-radius:4px;background:var(--hm-line);overflow:hidden}
+.hm-demo-bar i{display:block;height:100%;background:var(--hm-ink);border-radius:4px}
+.hm-demo-q{margin:0 0 16px;color:var(--hm-ink);font-weight:600;line-height:1.45}
+.hm-demo-opts{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.hm-demo-opts li{display:flex;justify-content:space-between;align-items:center;padding:11px 14px;border-radius:12px;box-shadow:inset 0 0 0 1px var(--hm-line);color:var(--hm-ink);font-size:.92rem}
+.hm-demo-opts li.ok{background:color-mix(in srgb,var(--hm-green) 12%,transparent);box-shadow:inset 0 0 0 1.5px var(--hm-green);color:var(--hm-green);font-weight:700}
+.hm-float{position:absolute;display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:16px;background:var(--hm-paper);box-shadow:0 0 0 1px var(--hm-line),0 18px 36px -18px rgba(22,19,15,.45);font-size:.8rem;color:var(--hm-ink-2);animation:hmFloat 6s ease-in-out infinite}
+.hm-float b{color:var(--hm-ink)}
+.hm-float-xp{top:6px;right:0;flex-direction:column;align-items:flex-start;gap:2px}
+.hm-float-xp b{color:var(--hm-red);font-size:1.05rem}
+.hm-float-mark{bottom:4px;left:0;animation-delay:-3s}
+.hm-float-mark span:last-child{display:flex;flex-direction:column}
+.hm-float-mark em{font-style:normal}
+.hm-mark-ring{display:grid;place-items:center;width:44px;height:44px;border-radius:50%;background:conic-gradient(var(--hm-green) calc(var(--p)*1%),var(--hm-line) 0)}
+.hm-mark-ring b{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:var(--hm-paper);font-size:.72rem}
+@keyframes hmFloat{50%{transform:translateY(-6px)}}
+
+/* Sections */
+.hm-head{display:flex;justify-content:space-between;align-items:end;gap:1rem;margin-bottom:1.5rem}
+.hm-head h2{margin:0;font-size:clamp(1.6rem,1.2rem + 1.6vw,2.4rem)!important;font-weight:700;letter-spacing:-.03em}
+.hm-head-stack{flex-direction:column;align-items:flex-start;gap:.6rem;max-width:40rem}
+.hm-head-stack p{margin:0;color:var(--hm-ink-2);font-size:1.05rem}
+.hm-link{color:var(--hm-ink);font-weight:600;font-size:.95rem;text-decoration:none;white-space:nowrap}
+.hm-link:hover{color:var(--hm-red)}
+
+/* Units directory */
+.hm-units{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.hm-unit-col{display:flex;flex-direction:column;gap:6px;padding:18px;border-radius:var(--hm-r);background:var(--hm-paper);box-shadow:0 0 0 1px var(--hm-line)}
+.hm-unit-col h3{display:flex;align-items:center;gap:8px;margin:0 0 8px;font-size:.8rem!important;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--hm-ink-2)!important}
+.hm-unit-col h3::before{content:"";width:8px;height:8px;border-radius:3px;background:var(--c)}
+.hm-unit-col.it{--c:#2563eb}.hm-unit-col.business{--c:#d97706}.hm-unit-col.sport{--c:#dc2626}
+.hm-unit-col button{display:grid;grid-template-columns:52px 1fr;row-gap:1px;align-items:center;gap:10px;width:100%;padding:11px 10px;border:0;border-radius:12px;background:transparent;color:var(--hm-ink);font:600 .93rem/1.3 var(--font-b);text-align:left;cursor:pointer;transition:background .15s}
+.hm-unit-col button span{font-size:.75rem;font-weight:700;color:var(--c)}
+.hm-unit-col button i{grid-column:2;font-style:normal;font-size:.72rem;font-weight:500;color:var(--hm-ink-2)}
+.hm-unit-col button:hover{background:color-mix(in srgb,var(--c) 9%,transparent)}
+.hm-unit-note{margin:auto 0 0;padding:12px 10px 2px;color:var(--hm-ink-2);font-size:.85rem}
+.hm-unit-note a{color:var(--hm-ink);font-weight:600}
+
+/* Bento */
+.hm-bento{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.hm-tile{position:relative;overflow:hidden;display:flex;flex-direction:column;padding:26px;border-radius:var(--hm-r);background:var(--hm-paper);box-shadow:0 0 0 1px var(--hm-line);transition:transform .25s,box-shadow .25s}
+.hm-tile:hover{transform:translateY(-3px);box-shadow:0 0 0 1px var(--hm-line),0 24px 40px -28px rgba(22,19,15,.45)}
+.hm-tile h3{margin:.5rem 0 .4rem;font-size:1.25rem!important;font-weight:700;letter-spacing:-.02em}
+.hm-tile p{margin:0;color:var(--hm-ink-2);line-height:1.55}
+.hm-tile-label{font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--hm-red)}
+.hm-tile-wide{grid-column:span 2;display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:center}
+.hm-tile-ink{background:#16130f;box-shadow:none}
+.hm-tile-ink h3{color:#fff!important}.hm-tile-ink p{color:#b5afa3}.hm-tile-ink .hm-tile-label{color:#ff6b6b}
+.hm-viz-levels{display:grid;gap:12px}
+.hm-viz-levels div{display:grid;gap:6px;font-size:.78rem;color:#b5afa3}
+.hm-viz-levels i{display:block;height:8px;border-radius:8px;background:rgba(255,255,255,.08);position:relative;overflow:hidden}
+.hm-viz-levels i::after{content:"";position:absolute;inset:0;width:var(--w);border-radius:8px;background:linear-gradient(90deg,#ff6b6b,#ffb86b)}
+.hm-viz-cards{position:relative;height:96px;margin-top:22px}
+.hm-viz-cards i{position:absolute;inset:0 10px 0 0;display:grid;place-items:center;border-radius:14px;background:var(--hm-paper);box-shadow:0 0 0 1px var(--hm-line);font-style:normal;font-weight:600;font-size:.9rem;color:var(--hm-ink)}
+.hm-viz-cards i:nth-child(1){transform:translate(14px,-10px) rotate(4deg);opacity:.5}
+.hm-viz-cards i:nth-child(2){transform:translate(7px,-5px) rotate(2deg);opacity:.75}
+.hm-tile-accent{background:var(--hm-red-soft);box-shadow:none}
+.hm-viz-board{display:grid;gap:6px;margin:18px 0 0;padding:0;list-style:none;font-size:.85rem}
+.hm-viz-board li{display:flex;gap:10px;padding:8px 12px;border-radius:10px;background:var(--hm-paper);color:var(--hm-ink)}
+.hm-viz-board li b{width:14px}.hm-viz-board li em{margin-left:auto;font-style:normal;font-weight:700}
+.hm-viz-board li.me{box-shadow:inset 0 0 0 1.5px var(--hm-red)}
+
+/* Steps */
+.hm-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin:0;padding:0;list-style:none;border-top:1px solid var(--hm-line)}
+.hm-steps li{padding:24px 24px 0 0}
+.hm-steps li+li{padding-left:24px;border-left:1px solid var(--hm-line)}
+.hm-steps b{font-family:var(--font-d);font-size:2.2rem;font-weight:400;color:var(--hm-red)}
+.hm-steps h3{margin:.4rem 0 .3rem;font-size:1.15rem!important;font-weight:700}
+.hm-steps p{margin:0;color:var(--hm-ink-2)}
+
+/* CTA */
+.hm-cta{display:flex;justify-content:space-between;align-items:center;gap:2rem;padding:clamp(28px,5vw,52px);border-radius:28px;background:#16130f;color:#b5afa3;background-image:radial-gradient(600px 240px at 100% 0%,rgba(210,0,0,.35),transparent 70%)}
+.hm-cta h2{margin:.5rem 0;max-width:32rem;font-size:clamp(1.6rem,1.2rem + 1.6vw,2.4rem)!important;font-weight:700;letter-spacing:-.03em;color:#fff!important}
+.hm-cta p{margin:0;max-width:30rem}
+.hm-cta .hm-tile-label{color:#ff6b6b}
+.hm-btn-light{background:#fff;color:#16130f}.hm-btn-light:hover{background:#ffe1e1}
+.hm-btn-outline{background:transparent;color:#fff;box-shadow:inset 0 0 0 1px rgba(255,255,255,.25)}.hm-btn-outline:hover{box-shadow:inset 0 0 0 1px #fff}
+
+#p-home .hx-exam-card{border-radius:var(--hm-r);background:var(--hm-paper);box-shadow:0 0 0 1px var(--hm-line);border:0}
+#p-home .hx-exam-count{background:var(--hm-ink)!important;box-shadow:none!important;border:0!important}
+#p-home .hx-exam-water{background:color-mix(in srgb,var(--hm-red) 55%,transparent)!important}
+#p-home .hx-exam-count *{color:var(--hm-paper)!important}
+@media (max-width:900px){
+  .hm-hero{grid-template-columns:1fr}
+  .hm-demo{max-width:460px;width:100%;margin-inline:auto}
+  .hm-units,.hm-bento{grid-template-columns:1fr}
+  .hm-tile-wide{grid-column:auto;grid-template-columns:1fr}
+  .hm-steps{grid-template-columns:1fr}
+  .hm-steps li,.hm-steps li+li{padding:20px 0;border-left:0;border-bottom:1px solid var(--hm-line)}
+  .hm-cta{flex-direction:column;align-items:flex-start}
+}
+@media (max-width:520px){
+  .hm-head{flex-direction:column;align-items:flex-start}
+  .hm-btn{flex:1;justify-content:center}
+  .hm-float-mark{display:none}
+}
+@media (prefers-reduced-motion:reduce){.hm-float{animation:none}.hm-tile:hover{transform:none}}
+</style>
 </head>
 <body>
 <a class="skip-link" href="#main-content" onclick="return ra10SkipToMain(event)">Skip to main content</a>
@@ -5103,6 +5235,11 @@ html body #community-share-sheet .community-share-panel{
                 <a class="rev-preview-unit" href="#/revision/btec/level-3/sport/unit-1" onclick="go('/revision/btec/level-3/sport/unit-1');hideRevPreview()">
                   <span class="rev-preview-badge">Unit 1</span>
                   <span class="rev-preview-copy"><strong>Anatomy &amp; Physiology</strong><small>Flashcards · Mock papers</small></span>
+                  <em>Open</em>
+                </a>
+                <a class="rev-preview-unit" href="#/revision/btec/level-3/sport/unit-2" onclick="go('/revision/btec/level-3/sport/unit-2');hideRevPreview()">
+                  <span class="rev-preview-badge">Unit 2</span>
+                  <span class="rev-preview-copy"><strong>Fitness Training &amp; Programming</strong><small>Past papers · AI Examiner</small></span>
                   <em>Open</em>
                 </a>
               </div>
@@ -5348,6 +5485,14 @@ html body #community-share-sheet .community-share-panel{
           <span class="mobile-unit-copy">
             <strong>Anatomy &amp; Physiology</strong>
             <small>Flashcards · Mock papers</small>
+          </span>
+          <em>Open</em>
+        </button>
+        <button class="mobile-unit-link" type="button" data-mobile-subject="/revision/btec/level-3/sport/unit-2">
+          <span class="mobile-unit-badge">Unit 2</span>
+          <span class="mobile-unit-copy">
+            <strong>Fitness Training &amp; Programming</strong>
+            <small>Past papers · AI Examiner</small>
           </span>
           <em>Open</em>
         </button>
@@ -5606,249 +5751,139 @@ html body #community-share-sheet .community-share-panel{
         </div>
       </section>
 
-      <section class="hx-hero" aria-label="RA10 homepage hero">
-        <div class="hx-hero-grain" aria-hidden="true"></div>
-        <div class="hx-hero-grid">
-          <div>
-            <span class="hx-kicker"><span class="hx-kicker-dot"></span>Live now · 5 subject apps</span>
-            <h1 class="hx-hero-title">Revision that actually <em>clicks</em>.</h1>
-            <p class="hx-hero-copy">Open your subject, work through the unit, and keep every guide, quiz, flashcard set and exam question in the same place. No hunting through folders or old notes.</p>
-            <div class="hx-hero-actions">
-              <button class="hx-btn hx-btn-primary" type="button" onclick="go('/revision')">Start revising →</button>
-              <button class="hx-btn hx-btn-ghost" type="button" onclick="go('/tasks')">Open tasks</button>
-              <button class="hx-btn hx-btn-ghost" type="button" onclick="go('/leaderboard')">Leaderboard</button>
-            </div>
-            <div class="hx-stat-row" aria-label="Platform snapshot">
-              <div class="hx-stat"><b>5</b><span>Live subject apps</span></div>
-              <div class="hx-stat"><b>24/7</b><span>AI feedback &amp; marking</span></div>
-              <div class="hx-stat"><b>0-cost</b><span>Student plan via school</span></div>
-            </div>
+      <section class="hm-hero" aria-label="RA10 homepage hero">
+        <div class="hm-hero-copy">
+          <button type="button" class="hm-pill" onclick="go('/revision/btec/level-3/IT-AAQ/unit-3')"><span class="hm-pill-tag">New</span>IT Unit 3 Website Development is live <span aria-hidden="true">→</span></button>
+          <h1 class="hm-title">Revise less.<br>Remember <em>more.</em></h1>
+          <p class="hm-lede">Guides, flashcards, quizzes and real exam questions for every unit, all in one place. Get answers marked like the examiner would mark them, and see exactly what to revise next.</p>
+          <div class="hm-actions">
+            <button class="hm-btn hm-btn-primary" type="button" onclick="go('/revision')">Start revising <span aria-hidden="true">→</span></button>
+            <button class="hm-btn hm-btn-quiet" type="button" onclick="go('/leaderboard')">View the leaderboard</button>
           </div>
+          <ul class="hm-boards" aria-label="Exam boards covered">
+            <li>Pearson BTEC</li><li>AQA A-Level</li><li>Level 2 &amp; Level 3</li>
+          </ul>
+        </div>
 
-          <aside class="hx-launch" aria-label="Quick launch">
-            <div class="hx-launch-head">
-              <h3>Jump back in</h3>
-              <a class="hx-launch-all" href="javascript:void(0)" onclick="go('/revision')">See all →</a>
-            </div>
-            <div class="hx-launch-groups">
-              <div class="hx-launch-group">
-                <span class="hx-launch-group-label">IT &amp; Digital</span>
-                <div class="hx-launch-tiles">
-                  <button class="hx-launch-tile" type="button" onclick="go('/revision/btec/level-3/IT-AAQ/unit-1')"><span class="hx-launch-dot it"></span><span class="hx-launch-tile-name"><b>IT AAQ</b><em>Unit 1</em></span></button>
-                  <button class="hx-launch-tile" type="button" onclick="go('/revision/btec/level-3/IT-AAQ/unit-2')"><span class="hx-launch-dot it"></span><span class="hx-launch-tile-name"><b>IT AAQ</b><em>Unit 2</em></span></button>
-                  <button class="hx-launch-tile" type="button" onclick="go('/revision/btec/level-3/IT-AAQ/unit-3')"><span class="hx-launch-dot it"></span><span class="hx-launch-tile-name"><b>IT AAQ</b><em>Unit 3</em></span></button>
-                  <button class="hx-launch-tile" type="button" onclick="go('/revision/btec/level-3/IT-AAQ/unit-4')"><span class="hx-launch-dot it"></span><span class="hx-launch-tile-name"><b>IT AAQ</b><em>Unit 4</em></span></button>
-                  <button class="hx-launch-tile" type="button" onclick="go('/revision/btec/level-2/it/unit-2')"><span class="hx-launch-dot l2"></span><span class="hx-launch-tile-name"><b>IT L2</b><em>Unit 2</em></span></button>
-                </div>
-              </div>
-              <div class="hx-launch-group">
-                <span class="hx-launch-group-label">Business</span>
-                <div class="hx-launch-tiles">
-                  <button class="hx-launch-tile" type="button" onclick="go('/revision/btec/level-3/business/unit-1')"><span class="hx-launch-dot business"></span><span class="hx-launch-tile-name"><b>Business</b><em>Unit 1</em></span></button>
-                  <button class="hx-launch-tile" type="button" onclick="go('/revision/btec/level-3/business/unit-2')"><span class="hx-launch-dot business"></span><span class="hx-launch-tile-name"><b>Business</b><em>Unit 2</em></span></button>
-                  <button class="hx-launch-tile" type="button" onclick="go('/revision/btec/level-3/business/unit-3')"><span class="hx-launch-dot business"></span><span class="hx-launch-tile-name"><b>Business</b><em>Unit 3</em></span></button>
-                  <button class="hx-launch-tile" type="button" onclick="go('/revision/btec/level-3/business/unit-4')"><span class="hx-launch-dot business"></span><span class="hx-launch-tile-name"><b>Business</b><em>Unit 4</em></span></button>
-                  <button class="hx-launch-tile" type="button" onclick="go('/revision/a-level/business-2023')"><span class="hx-launch-dot business"></span><span class="hx-launch-tile-name"><b>A-Level</b><em>Business</em></span></button>
-                </div>
-              </div>
-              <div class="hx-launch-group">
-                <span class="hx-launch-group-label">Sport</span>
-                <div class="hx-launch-tiles">
-                  <button class="hx-launch-tile" type="button" onclick="go('/revision/btec/level-3/sport/unit-1')"><span class="hx-launch-dot sport"></span><span class="hx-launch-tile-name"><b>Sport</b><em>Unit 1</em></span></button>
-                </div>
-              </div>
-            </div>
-          </aside>
+        <div class="hm-demo" aria-hidden="true">
+          <div class="hm-demo-card">
+            <div class="hm-demo-head"><span class="hm-demo-unit">Business · Unit 3</span><span class="hm-demo-step">Q4 of 10</span></div>
+            <div class="hm-demo-bar"><i style="width:40%"></i></div>
+            <p class="hm-demo-q">A business has fixed costs of £12,000 and a contribution of £8 per unit. What is its break-even output?</p>
+            <ul class="hm-demo-opts">
+              <li>960 units</li>
+              <li class="ok">1,500 units <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12l5 5L19 7"/></svg></li>
+              <li>2,000 units</li>
+            </ul>
+          </div>
+          <div class="hm-float hm-float-xp"><b>+40 XP</b><span>Moved up to #3 this week</span></div>
+          <div class="hm-float hm-float-mark"><span class="hm-mark-ring" style="--p:78"><b>7/9</b></span><span><b>AI Examiner</b><em>Good analysis. Add a judgement.</em></span></div>
         </div>
       </section>
 
-      <div class="hx-marquee" aria-hidden="true">
-        <div class="hx-marquee-track">
-          <span><b></b>IT AAQ Unit 1 &amp; 2 live</span>
-          <span><b></b>Business Unit 3 live</span>
-          <span><b></b>A-Level Business (7132) live</span>
-          <span><b></b>Sport Unit 1 live</span>
-          <span><b></b>IT Level 2 Unit 2 live</span>
-          <span><b></b>AI Examiner feedback</span>
-          <span><b></b>AI Assigner for coursework</span>
-          <span><b></b>IT AAQ Unit 1 &amp; 2 live</span>
-          <span><b></b>Business Unit 3 live</span>
-          <span><b></b>A-Level Business (7132) live</span>
-          <span><b></b>Sport Unit 1 live</span>
-          <span><b></b>IT Level 2 Unit 2 live</span>
-          <span><b></b>AI Examiner feedback</span>
-          <span><b></b>AI Assigner for coursework</span>
+      <section class="hm-section" aria-labelledby="hm-units-title">
+        <div class="hm-head">
+          <h2 id="hm-units-title">Choose your unit</h2>
+          <a class="hm-link" href="javascript:void(0)" onclick="go('/revision')">All revision <span aria-hidden="true">→</span></a>
         </div>
-      </div>
-
-      <section class="hx-section" aria-label="Upcoming exams">
-        <div class="hx-section-head">
-          <div>
-            <span class="hx-eyebrow">Exam timetable</span>
-            <h2>Upcoming exams</h2>
+        <div class="hm-units">
+          <div class="hm-unit-col it">
+            <h3>IT &amp; Digital</h3>
+            <button type="button" onclick="go('/revision/btec/level-3/IT-AAQ/unit-1')"><span>Unit 1</span>Information Technology<i>BTEC L3</i></button>
+            <button type="button" onclick="go('/revision/btec/level-3/IT-AAQ/unit-2')"><span>Unit 2</span>Cyber Security &amp; Incident Management<i>BTEC L3</i></button>
+            <button type="button" onclick="go('/revision/btec/level-3/IT-AAQ/unit-3')"><span>Unit 3</span>Website Development<i>BTEC L3</i></button>
+            <button type="button" onclick="go('/revision/btec/level-3/IT-AAQ/unit-4')"><span>Unit 4</span>IT AAQ Unit 4<i>BTEC L3</i></button>
+            <button type="button" onclick="go('/revision/btec/level-2/it/unit-2')"><span>Unit 2</span>Technology Systems<i>BTEC L2</i></button>
           </div>
-          <p>Your next exam dates at a glance. Pin the ones that matter and they'll appear as goals in your unit apps.</p>
+          <div class="hm-unit-col business">
+            <h3>Business</h3>
+            <button type="button" onclick="go('/revision/btec/level-3/business/unit-1')"><span>Unit 1</span>Business Unit 1<i>BTEC L3</i></button>
+            <button type="button" onclick="go('/revision/btec/level-3/business/unit-2')"><span>Unit 2</span>Business Unit 2<i>BTEC L3</i></button>
+            <button type="button" onclick="go('/revision/btec/level-3/business/unit-3')"><span>Unit 3</span>Personal &amp; Business Finance<i>BTEC L3</i></button>
+            <button type="button" onclick="go('/revision/btec/level-3/business/unit-4')"><span>Unit 4</span>Business Unit 4<i>BTEC L3</i></button>
+            <button type="button" onclick="go('/revision/a-level/business-2023')"><span>7132</span>Business<i>AQA A-Level</i></button>
+          </div>
+          <div class="hm-unit-col sport">
+            <h3>Sport</h3>
+            <button type="button" onclick="go('/revision/btec/level-3/sport/unit-1')"><span>Unit 1</span>Anatomy &amp; Physiology<i>BTEC L3</i></button>
+            <button type="button" onclick="go('/revision/btec/level-3/sport/unit-2')"><span>Unit 2</span>Fitness Training &amp; Programming<i>BTEC L3</i></button>
+            <p class="hm-unit-note">More subjects are on the way. <a href="javascript:void(0)" onclick="openContactModal()">Request one</a></p>
+          </div>
+        </div>
+      </section>
+
+      <section class="hm-section" aria-labelledby="hm-exams-title">
+        <div class="hm-head">
+          <h2 id="hm-exams-title">Upcoming exams</h2>
+          <a class="hm-link" href="javascript:void(0)" onclick="go('/exams')">Full timetable <span aria-hidden="true">→</span></a>
         </div>
         <div class="hx-exams-grid" id="home-exams-grid"></div>
-        <div style="text-align:center;margin-top:18px;">
-          <button class="hx-btn hx-btn-ghost" type="button" onclick="go('/exams')">View full timetable →</button>
-        </div>
       </section>
 
-      <section class="hx-section" aria-label="How RA10 works">
-        <div class="hx-section-head">
-          <div>
-            <span class="hx-eyebrow">How it works</span>
-            <h2>Three steps, every session</h2>
-          </div>
-          <p>Everything is grouped around the unit so you move between content, practice and progress without jumping between pages.</p>
+      <section class="hm-section" aria-labelledby="hm-feat-title">
+        <div class="hm-head hm-head-stack">
+          <h2 id="hm-feat-title">Built for the way exams are actually marked</h2>
+          <p>Practise the questions that come up, get feedback against the mark scheme and keep going until it sticks.</p>
         </div>
-        <div class="hx-timeline">
-          <article class="hx-timeline-step">
-            <span class="hx-timeline-num">1</span>
+        <div class="hm-bento">
+          <article class="hm-tile hm-tile-wide hm-tile-ink">
             <div>
-              <h3>Open the unit</h3>
-              <p>Use guides, topic sections and revision material arranged around the specification.</p>
+              <span class="hm-tile-label">AI Examiner</span>
+              <h3>Marked like the real thing</h3>
+              <p>Write a long answer and get a mark, the level it reached and what would push it higher, in seconds.</p>
+            </div>
+            <div class="hm-viz-levels" aria-hidden="true">
+              <div><span>Knowledge</span><i style="--w:100%"></i></div>
+              <div><span>Application</span><i style="--w:85%"></i></div>
+              <div><span>Analysis</span><i style="--w:70%"></i></div>
+              <div><span>Evaluation</span><i style="--w:40%"></i></div>
             </div>
           </article>
-          <article class="hx-timeline-step">
-            <span class="hx-timeline-num">2</span>
-            <div>
-              <h3>Practise properly</h3>
-              <p>Move from quick recall to quizzes, flashcards and full exam-style questions without leaving the unit.</p>
-            </div>
+          <article class="hm-tile">
+            <span class="hm-tile-label">Recall</span>
+            <h3>Flashcards &amp; quizzes</h3>
+            <p>Short sessions for quick wins, built from the specification.</p>
+            <div class="hm-viz-cards" aria-hidden="true"><i></i><i></i><i>Gross profit margin = ?</i></div>
           </article>
-          <article class="hx-timeline-step">
-            <span class="hx-timeline-num">3</span>
-            <div>
-              <h3>Track what's next</h3>
-              <p>See what to revise next, build consistency with tasks and XP, and keep a record of completed work.</p>
-            </div>
-          </article>
-        </div>
-      </section>
-
-      <section class="hx-section" aria-label="RA10 feature highlights">
-        <div class="hx-section-head">
-          <div>
-            <span class="hx-eyebrow">What's inside</span>
-            <h2>Everything you can use in RA10</h2>
-          </div>
-          <p>From quick recall to full exam answers and AI-marked coursework, the platform keeps revision in one place.</p>
-        </div>
-        <div class="hx-bento">
-          <article class="hx-bento-card featured">
-            <span class="hx-bento-icon featured">✦</span>
-            <h3>AI Examiner</h3>
-            <p>Submit longer exam-style responses and get structured marking-style feedback to improve answer quality, clarity and exam technique.</p>
-          </article>
-          <article class="hx-bento-card">
-            <span class="hx-bento-icon">✎</span>
-            <h3>AI Assigner</h3>
-            <p>Upload coursework and get step-by-step Distinction support — hints, criteria checks and marking — for IT Unit 3 &amp; Unit 4 tasks.</p>
-          </article>
-          <article class="hx-bento-card">
-            <span class="hx-bento-icon">◆</span>
-            <h3>Quizzes &amp; flashcards</h3>
-            <p>Quick recall, mixed quizzes and exam-style questions in the same unit so sessions stay focused.</p>
-          </article>
-          <article class="hx-bento-card">
-            <span class="hx-bento-icon">▤</span>
+          <article class="hm-tile">
+            <span class="hm-tile-label">Exam practice</span>
             <h3>Predicted papers</h3>
-            <p>Generate and attempt predicted papers to build exam stamina, then jump straight back to weak topics.</p>
+            <p>Full papers with mark schemes, so you build stamina before the real thing.</p>
           </article>
-          <article class="hx-bento-card">
-            <span class="hx-bento-icon">▲</span>
-            <h3>Tasks, XP &amp; leaderboard</h3>
-            <p>Track daily progress and stay accountable through exam season with XP and the weekly leaderboard.</p>
+          <article class="hm-tile">
+            <span class="hm-tile-label">Coursework</span>
+            <h3>AI Assigner</h3>
+            <p>Hints and criteria checks for IT Unit 3 and Unit 4 tasks, from Pass to Distinction.</p>
           </article>
-        </div>
-        <div class="ctas" style="margin-top:var(--sp2)">
-          <button class="btn btn-p" type="button" onclick="go('/revision')">Start revising</button>
-          <button class="btn btn-s" type="button" onclick="showTransitionPopup()">Everything's unlocked</button>
-        </div>
-      </section>
-
-      <section class="hx-section" aria-label="Live revision lanes">
-        <div class="hx-section-head">
-          <div>
-            <span class="hx-eyebrow">Subjects</span>
-            <h2>Pick up where you need to</h2>
-          </div>
-          <p>Open a subject to find its guide, recall practice, quizzes and exam questions in one place.</p>
-        </div>
-        <div class="hx-subject-grid">
-          <article class="hx-subject-card it" onclick="go('/revision/btec/level-3/IT-AAQ/unit-1')">
-            <div class="hx-subject-glow" aria-hidden="true"></div>
-            <span class="hx-subject-tag">Live · IT AAQ</span>
-            <h3>Information Technology</h3>
-            <p>Structured learning aims, question practice, flashcards, quizzes and revision tools for Unit 1.</p>
-            <span class="hx-subject-foot">Open IT Unit 1 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-          </article>
-          <article class="hx-subject-card it" onclick="go('/revision/btec/level-3/IT-AAQ/unit-2')">
-            <div class="hx-subject-glow" aria-hidden="true"></div>
-            <span class="hx-subject-tag">Live · IT AAQ</span>
-            <h3>Cyber Security and Incident Management</h3>
-            <p>Threat actors, malware, network security, incident response and digital forensics for Unit 2.</p>
-            <span class="hx-subject-foot">Open IT Unit 2 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-          </article>
-          <article class="hx-subject-card it" onclick="go('/revision/btec/level-3/IT-AAQ/unit-3')">
-            <div class="hx-subject-glow" aria-hidden="true"></div>
-            <span class="hx-subject-tag">Live · IT AAQ</span>
-            <h3>Website Development</h3>
-            <p>Study guide, wireframe &amp; sitemap builders, code editor, sample assignments and AI marking for Unit 3.</p>
-            <span class="hx-subject-foot">Open IT Unit 3 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-          </article>
-          <article class="hx-subject-card business" onclick="go('/revision/btec/level-3/business/unit-3')">
-            <div class="hx-subject-glow" aria-hidden="true"></div>
-            <span class="hx-subject-tag">Live · Business</span>
-            <h3>Personal and Business Finance</h3>
-            <p>Finance content and exam-style practice focused on the Unit 3 specification.</p>
-            <span class="hx-subject-foot">Open Business <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-          </article>
-          <article class="hx-subject-card sport" onclick="go('/revision/btec/level-3/sport/unit-1')">
-            <div class="hx-subject-glow" aria-hidden="true"></div>
-            <span class="hx-subject-tag">Live · Sport</span>
-            <h3>Anatomy and Physiology</h3>
-            <p>Anatomy and physiology revision with recall checks, quizzes and question practice.</p>
-            <span class="hx-subject-foot">Open Sport <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-          </article>
-          <article class="hx-subject-card l2" onclick="go('/revision/btec/level-2/it/unit-2')">
-            <div class="hx-subject-glow" aria-hidden="true"></div>
-            <span class="hx-subject-tag">Live · IT Level 2</span>
-            <h3>Technology Systems</h3>
-            <p>Level 2 technology systems content with practice questions and revision support.</p>
-            <span class="hx-subject-foot">Open IT L2 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-          </article>
-          <article class="hx-subject-card business" onclick="go('/revision/a-level/business-2023')">
-            <div class="hx-subject-glow" aria-hidden="true"></div>
-            <span class="hx-subject-tag">Live · A-Level</span>
-            <h3>AQA Business (7132)</h3>
-            <p>Topic 1-10 revision app with case-study questions, quizzes, mock papers and AI marking support.</p>
-            <span class="hx-subject-foot">Open A-Level Business <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+          <article class="hm-tile hm-tile-accent">
+            <span class="hm-tile-label">Motivation</span>
+            <h3>XP &amp; weekly leaderboard</h3>
+            <p>Every answer earns XP. Finish in the top three on Saturday to win credits.</p>
+            <ol class="hm-viz-board" aria-hidden="true"><li><b>1</b>mia_revises<em>410</em></li><li class="me"><b>2</b>you<em>395</em></li><li><b>3</b>sam.k<em>380</em></li></ol>
           </article>
         </div>
       </section>
 
-      <section class="hx-section" aria-label="Transition announcement">
-        <div class="hx-plans-shell">
-        <div class="hx-section-head">
-          <div>
-            <span class="hx-eyebrow">Something new is coming</span>
-            <h2>RA10.CO.UK is turning into something new</h2>
-          </div>
-          <p>Payments are paused right now, so everything is unlocked while we build what's next.</p>
+      <section class="hm-section" aria-labelledby="hm-steps-title">
+        <div class="hm-head hm-head-stack">
+          <h2 id="hm-steps-title">How a session works</h2>
         </div>
+        <ol class="hm-steps">
+          <li><b>01</b><h3>Open the unit</h3><p>Topics follow the specification, so you always know where you are.</p></li>
+          <li><b>02</b><h3>Practise</h3><p>Go from quick recall to full exam-style answers without leaving the page.</p></li>
+          <li><b>03</b><h3>See what's next</h3><p>Your weak topics, tasks and progress tell you what to do in the next session.</p></li>
+        </ol>
+      </section>
 
-        <div class="card" style="max-width:760px;margin:0 auto;padding:var(--sp6);border:1px solid var(--color-primary);background:linear-gradient(135deg,rgba(124,58,237,.08),rgba(16,185,129,.08));text-align:center;">
-          <div style="font-size:2rem;line-height:1;margin-bottom:12px;">🎉</div>
-          <h3 style="margin:0 0 10px;font-weight:700;">Unlimited credits for every signed-in account</h3>
-          <p style="margin:0 0 16px;color:var(--color-text-muted);line-height:1.7;">As a transition gift while payments are paused, every signed-in account gets <strong>unlimited credits</strong> and full access to revision guides and all premium features — completely free. You just need to be signed in.</p>
-          <div class="ctas" style="justify-content:center;">
-            <button id="transition-home-signin" class="btn btn-p" type="button" onclick="openSignInOverlayFallback()">Sign in free</button>
-            <button class="btn btn-s" type="button" onclick="showTransitionPopup()">Learn more</button>
-          </div>
+      <section class="hm-cta" aria-labelledby="hm-cta-title">
+        <div>
+          <span class="hm-tile-label">Free for now</span>
+          <h2 id="hm-cta-title">Everything is unlocked while we build what's next.</h2>
+          <p>Payments are paused. Sign in and you get unlimited credits and every premium feature at no cost.</p>
         </div>
+        <div class="hm-actions">
+          <button id="transition-home-signin" class="hm-btn hm-btn-light" type="button" onclick="openSignInOverlayFallback()">Sign in free</button>
+          <button class="hm-btn hm-btn-outline" type="button" onclick="showTransitionPopup()">Learn more</button>
         </div>
       </section>
     </div>
@@ -7791,7 +7826,7 @@ html body #community-share-sheet .community-share-panel{
         <div class="unit-card click" onclick="go('/revision/btec/level-3/sport/unit-2')">
           <div class="unit-num">Unit 02 · 120 GLH</div>
           <div class="unit-title">Fitness Training and Programming</div>
-          <div class="unit-desc">External set task covering lifestyle factors, screening, nutrition, training methods and programme design.</div>
+          <div class="unit-desc">Every Pearson set task since 2017, ten practice clients, AI Examiner marking on all six activities and a full revision guide.</div>
           <div class="unit-ft">
             <div style="display:flex;gap:var(--sp2);align-items:center">
               <span class="badge badge-ext">External</span>
@@ -7858,7 +7893,7 @@ html body #community-share-sheet .community-share-panel{
   <div class="cf">
     <div class="iframe-wrap">
       <iframe
-        src="revision/btec/level-3/sport/unit-2/index.html?v=20261021"
+        src="revision/btec/level-3/sport/unit-2/index.html?v=20261028"
         title="Unit 2 Fitness Training and Programming"
         loading="lazy"
         allowfullscreen>
@@ -11645,6 +11680,7 @@ const ALL_APPS = [
   { path: '/revision/btec/level-3/business/unit-3', icon: 'business', label: 'BU', name: 'Business Unit 3', desc: 'Finance confidence and exam control' },
   { path: '/revision/a-level/business-2023', icon: 'business', label: 'AL', name: 'A-Level Business (7132)', desc: 'Topic-by-topic revision, quizzes, exam practice' },
   { path: '/revision/btec/level-3/sport/unit-1', icon: 'sport', label: 'SP', name: 'Sport Unit 1', desc: 'Anatomy recall with timed checks' },
+  { path: '/revision/btec/level-3/sport/unit-2', icon: 'sport', label: 'SP', name: 'Sport Unit 2', desc: 'Pearson set tasks marked by AI Examiner' },
   { path: '/revision/btec/level-2/it/unit-2', icon: 'l2', label: 'L2', name: 'IT Level 2 Unit 2', desc: 'Technology systems done properly' }
 ];
 
@@ -11751,7 +11787,7 @@ function renderSignedInDashboard() {
   const dash = document.getElementById('signed-in-dashboard');
   if (!dash) return;
   const loggedIn = window.RA10 && typeof RA10.isLoggedIn === 'function' && RA10.isLoggedIn();
-  const hero = document.getElementById('p-home') ? document.getElementById('p-home').querySelector('.hx-hero') : null;
+  const hero = document.getElementById('p-home') ? document.getElementById('p-home').querySelector('.hm-hero') : null;
   if (!loggedIn) {
     dash.style.display = 'none';
     if (hero) hero.style.display = '';
@@ -12284,7 +12320,7 @@ function closeExamModal() {
 function initHomeReveal() {
   const home = document.getElementById('p-home');
   if (!home) return;
-  const targets = home.querySelectorAll('.hx-section, .hx-marquee, .hx-timeline-step, .hx-bento-card, .hx-subject-card, .hx-plan-card');
+  const targets = home.querySelectorAll('.hm-section, .hm-unit-col, .hm-tile, .hm-cta');
   targets.forEach((el, i) => {
     el.classList.add('hx-reveal');
     if (i % 4) el.setAttribute('data-reveal-delay', String(i % 4));

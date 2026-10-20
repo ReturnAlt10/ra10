@@ -58,8 +58,9 @@ const SESSION_TYPES = [
 const LEARNING_AIMS = Array.isArray(window.LEARNING_AIMS) && window.LEARNING_AIMS.length
   ? window.LEARNING_AIMS.slice()
   : ['A', 'B', 'C', 'D', 'E'];
-const MARKS_OPTIONS = [1, 2, 3, 4, 6, 8];
-const COMMAND_VERBS = ['Identify', 'Name', 'Label', 'State', 'Give', 'Define', 'Describe', 'Explain', 'Analyse', 'Discuss', 'Evaluate', 'Calculate'];
+const MARKS_OPTIONS = [1, 2, 3, 4, 6, 8, 12, 14];
+const COMMAND_VERBS = ['State', 'Identify', 'Give', 'Define', 'Describe', 'Explain', 'Interpret', 'Calculate', 'Provide and justify', 'Propose and justify', 'Design', 'Justify'];
+const ORIGIN_LABELS = { pearson: 'Pearson past paper activities', ra10: 'RA10 set-task activities', knowledge: 'Knowledge checks & calculations' };
 
 function mockTimeAllowedMinutes(totalMarks) {
   return Math.round(totalMarks * 9 / 8);
@@ -652,10 +653,11 @@ async function refreshProgressSidebar(force) {
 $$('.tab').forEach(t => t.addEventListener('click', () => switchTab(t.dataset.tab)));
 $$('[data-goto]').forEach(b => b.addEventListener('click', () => switchTab(b.dataset.goto)));
 function switchTab(name) {
-  const parentTab = ({ mock: 'questions', practice: 'questions', browse: 'questions', quiz: 'revise', flash: 'revise', guide: 'revise', spec: 'revise' })[name] || name;
+  const parentTab = ({ papers: 'questions', mock: 'questions', practice: 'questions', browse: 'questions', quiz: 'revise', flash: 'revise', guide: 'revise', spec: 'revise' })[name] || name;
   $$('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === parentTab));
   $$('.view').forEach(v => v.classList.toggle('active', v.id === 'view-' + name));
   if (name === 'guide') renderRevisionGuide();
+  if (name === 'papers') renderPapers();
   if (name === 'progress') renderProgress();
   if (name === 'you') renderYou();
   window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1108,9 +1110,47 @@ function diagramSvgForSection(section) {
   return '<svg viewBox="0 0 420 180" class="source-svg" role="img" aria-label="Section diagram"><rect x="1" y="1" width="418" height="178" rx="10" fill="#f8fafc" stroke="#cbd5e1"/><rect x="24" y="26" width="120" height="42" rx="8" fill="#dbeafe" stroke="#1d4ed8"/><rect x="150" y="26" width="120" height="42" rx="8" fill="#dcfce7" stroke="#16a34a"/><rect x="276" y="26" width="120" height="42" rx="8" fill="#fef9c3" stroke="#ca8a04"/><line x1="84" y1="70" x2="84" y2="130" stroke="#334155"/><line x1="210" y1="70" x2="210" y2="130" stroke="#334155"/><line x1="336" y1="70" x2="336" y2="130" stroke="#334155"/><rect x="44" y="130" width="80" height="26" rx="6" fill="#e2e8f0" stroke="#64748b"/><rect x="170" y="130" width="80" height="26" rx="6" fill="#e2e8f0" stroke="#64748b"/><rect x="296" y="130" width="80" height="26" rx="6" fill="#e2e8f0" stroke="#64748b"/></svg>';
 }
 
-function renderSourceMaterial(item) {
+function renderClientCard(caseId, open) {
+  const c = (window.U2 && U2.CASES || []).find(x => x.id === caseId);
+  if (!c) return null;
+  const det = el('details', { class: 'client-card' });
+  if (open) det.open = true;
+  det.appendChild(el('summary', null, el('span', null, `${c.name} — case study & lifestyle questionnaire `, el('span', { class: 'client-tag' + (c.source === 'pearson' ? ' pearson' : '') }, c.source === 'pearson' ? 'Pearson ' + c.series : 'RA10 practice'))));
+  const b = el('div', { class: 'client-body' });
+  b.appendChild(el('h5', null, 'Part A — case study'));
+  c.partA.split(/\n+/).forEach(par => b.appendChild(el('p', null, par)));
+  b.appendChild(el('h5', null, 'Part B — lifestyle questionnaire'));
+  const grid = el('div', { class: 'client-grid' });
+  [['Name', c.name], ['Age', String(c.age)], ['Occupation', c.occupation], ['Hours worked/studied', c.hours], ['Distance to occupation', c.distance], ['Travel', c.travel], ['How active is the occupation?', c.activeJob], ['Physical activity per week', c.activityFreq], ['Type of activity', c.activityType]]
+    .forEach(([k, v]) => grid.appendChild(el('div', null, el('span', null, k), v)));
+  b.appendChild(grid);
+  b.appendChild(el('h5', null, 'Nutritional status — food diary'));
+  const ft = el('table', { class: 'client-table' });
+  ft.appendChild(el('tr', null, el('th', null, ''), el('th', null, 'Breakfast'), el('th', null, 'Lunch'), el('th', null, 'Dinner'), el('th', null, 'Snacks'), el('th', null, 'Fluid intake')));
+  c.diary.forEach((d, i) => ft.appendChild(el('tr', null, el('th', null, 'Day ' + (i + 1)), el('td', null, (d.times[0] ? d.times[0] + ': ' : '') + d.breakfast), el('td', null, (d.times[1] ? d.times[1] + ': ' : '') + d.lunch), el('td', null, (d.times[2] ? d.times[2] + ': ' : '') + d.dinner), el('td', null, d.snacks), el('td', null, d.fluid))));
+  b.appendChild(el('div', { class: 'g-table-wrap' }, ft));
+  b.appendChild(el('p', null, 'Supplements: ' + c.supplements));
+  b.appendChild(el('h5', null, 'Your lifestyle'));
+  const lg = el('div', { class: 'client-grid' });
+  [['Units of alcohol a week', String(c.alcohol)], ['Smoke?', c.smoking ? 'Yes — ' + c.smoking + ' a day' : 'No' + (c.vaping ? ' (vapes: ' + c.vaping.toLowerCase() + ')' : '')], ['Daily stress?', c.stress ? 'Yes — ' + c.stress : 'No'], ['Hours of sleep a night', c.sleep]]
+    .forEach(([k, v]) => lg.appendChild(el('div', null, el('span', null, k), v)));
+  b.appendChild(lg);
+  b.appendChild(el('h5', null, 'Health monitoring tests'));
+  const tt = el('table', { class: 'client-table' });
+  tt.appendChild(el('tr', null, el('th', null, 'Test'), el('th', null, 'Result')));
+  [['Blood pressure', c.tests.bp.join('/') + ' mmHg'], ['Resting heart rate', c.tests.rhr + ' bpm'], ['Body mass index', String(c.tests.bmi)], ['Waist-to-hip ratio', String(c.tests.whr)]].concat(c.tests.extra || [])
+    .forEach(([k, v]) => tt.appendChild(el('tr', null, el('td', null, k), el('td', null, v))));
+  b.appendChild(tt);
+  b.appendChild(el('h5', null, 'Physical activity / sporting goals'));
+  b.appendChild(el('p', null, c.goal));
+  det.appendChild(b);
+  return det;
+}
+
+function renderSourceMaterial(item, opts) {
   const s = item && item.source_material;
   if (!s) return null;
+  if (s.type === 'client') return renderClientCard(s.case_id, !(opts && opts.compact));
   const box = el('div', { class: 'source-material source-' + (s.type || 'case_study') });
   box.appendChild(el('div', { class: 'source-head' }, s.title || 'Source material'));
   if (s.prompt) box.appendChild(el('p', { class: 'source-text' }, s.prompt));
@@ -1155,13 +1195,17 @@ function renderBrowse() {
   MARKS_OPTIONS.forEach(m => marksSel.appendChild(el('option', { value: String(m) }, `${m} mark${m===1?'':'s'}`)));
   const verbSel = $('#filter-verb');
   COMMAND_VERBS.forEach(v => verbSel.appendChild(el('option', { value: v }, v)));
+  const originSel = el('select', { id: 'filter-origin' }, el('option', { value: '' }, 'All question types'));
+  Object.entries(ORIGIN_LABELS).forEach(([k, v]) => originSel.appendChild(el('option', { value: k }, v)));
+  verbSel.insertAdjacentElement('afterend', originSel);
+  originSel.addEventListener('change', applyBrowseFilters);
 
   $('#search').addEventListener('input', applyBrowseFilters);
   aimSel.addEventListener('change', applyBrowseFilters);
   marksSel.addEventListener('change', applyBrowseFilters);
   verbSel.addEventListener('change', applyBrowseFilters);
   $('#btn-clear').addEventListener('click', () => {
-    $('#search').value = ''; aimSel.value = ''; marksSel.value = ''; verbSel.value = '';
+    $('#search').value = ''; aimSel.value = ''; marksSel.value = ''; verbSel.value = ''; originSel.value = '';
     applyBrowseFilters();
   });
 
@@ -1173,8 +1217,10 @@ function applyBrowseFilters() {
   const aim = $('#filter-aim').value;
   const marks = $('#filter-marks').value;
   const verb = $('#filter-verb').value;
+  const origin = ($('#filter-origin') || {}).value;
 
   let list = QUESTIONS.slice();
+  if (origin) list = list.filter(x => (x.origin || 'knowledge') === origin);
   if (aim) list = list.filter(x => x.learning_aim === aim);
   if (marks) list = list.filter(x => String(x.marks) === marks);
   if (verb) list = list.filter(x => (x.command_verb || '').toLowerCase() === verb.toLowerCase());
@@ -1204,14 +1250,15 @@ function renderQuestionRow(q) {
     el('span', { class: 'tag id' }, q.id || ''),
     el('span', { class: 'tag' }, `Aim ${q.learning_aim}`),
     el('span', { class: 'tag verb' }, q.command_verb || ''),
-    el('span', { class: 'tag marks' }, `${q.marks} mark${q.marks===1?'':'s'}`)
+    el('span', { class: 'tag marks' }, `${q.marks} mark${q.marks===1?'':'s'}`),
+    q.origin === 'pearson' ? el('span', { class: 'client-tag pearson' }, 'Pearson ' + q.series + ' · Activity ' + q.activity) : q.origin === 'ra10' ? el('span', { class: 'client-tag' }, 'RA10 set task · Activity ' + q.activity) : null
   ));
   if (q.topic) head.appendChild(el('span', { class: 'muted' }, q.topic));
   row.appendChild(head);
 
   const body = el('div', { class: 'qrow-body' });
   if (q.scenario) body.appendChild(el('p', { class: 'scenario' }, q.scenario));
-  const source = renderSourceMaterial(q);
+  const source = renderSourceMaterial(q, { compact: true });
   if (source) body.appendChild(source);
   body.appendChild(el('p', { class: 'question-text' },
     q.question,
@@ -1250,6 +1297,12 @@ function renderMarkScheme(q) {
   }
 
   if (q.type === 'extended_levels' || m.indicative_content) {
+    if (Array.isArray(m.traits) && m.traits.length) {
+      wrap.appendChild(el('p', { class: 'instruction' }, el('strong', null, 'Traits (top-band requirement):')));
+      const tl = el('ul', { class: 'trait-list' });
+      m.traits.forEach(t => tl.appendChild(el('li', null, el('strong', null, `${t.name} (${t.weight}%): `), t.top_band)));
+      wrap.appendChild(tl);
+    }
     if (m.indicative_content && m.indicative_content.length) {
       wrap.appendChild(el('p', { class: 'instruction' }, el('strong', null, 'Indicative content:')));
       const ul = el('ul');
@@ -1620,6 +1673,11 @@ function renderPracticeControls() {
     LEARNING_AIMS.forEach(a => aimSel.appendChild(el('option', { value: a }, `Aim ${a}`)));
     aimSel.dataset.ready = '1';
   }
+  if (!document.getElementById('practice-origin')) {
+    const originSel = el('select', { id: 'practice-origin' }, el('option', { value: '' }, 'All question types'));
+    Object.entries(ORIGIN_LABELS).forEach(([k, v]) => originSel.appendChild(el('option', { value: k }, v)));
+    $('#practice-marks').insertAdjacentElement('afterend', originSel);
+  }
   const marksSel = $('#practice-marks');
   if (!marksSel.dataset.ready) {
     MARKS_OPTIONS.forEach(m => marksSel.appendChild(el('option', { value: String(m) }, `${m} mark${m===1?'':'s'}`)));
@@ -1644,6 +1702,8 @@ async function startPractice() {
   let pool = QUESTIONS.slice();
   if (aim) pool = pool.filter(q => q.learning_aim === aim);
   if (marks) pool = pool.filter(q => String(q.marks) === marks);
+  const origin = ($('#practice-origin') || {}).value;
+  if (origin) pool = pool.filter(q => (q.origin || 'knowledge') === origin);
   if (!pool.length) { alert('No questions match those filters.'); return; }
   if (!await ra10Gate('practice_question')) return;
   window._practiceSession = {
@@ -3569,5 +3629,487 @@ function advanceFlash() {
   renderFlashCard();
 }
 
-})();
 
+// ---------- Past papers & set-task practice (Unit 2) ----------
+// Library of set tasks → exam-paper viewer (A4 pages) with two modes:
+//   'paper'  — read the paper as it is laid out in the real exam
+//   'answer' — answer lines become writing areas, each activity gets AI Examiner feedback
+// "Download PDF" builds a real PDF file (jsPDF) and saves it to the user's downloads.
+const SET_TASK_STORE = 'ra10_u2_settask_';
+const WEEK_DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+const ACT_MINUTES = { 1: 30, 2: 30, 3: 20, 4: 20, 5: 20, 6: 30 };
+let setTaskTimer = null;
+let paperView = { caseId: null, mode: 'paper' };
+
+function setTaskState(caseId) {
+  try { return JSON.parse(localStorage.getItem(SET_TASK_STORE + caseId) || '{}') || {}; } catch (e) { return {}; }
+}
+function saveSetTaskState(caseId, state) {
+  try { localStorage.setItem(SET_TASK_STORE + caseId, JSON.stringify(state)); } catch (e) {}
+}
+function caseQuestions(caseId) {
+  return QUESTIONS.filter(q => q.case_id === caseId).sort((a, b) => a.activity - b.activity);
+}
+function week5Grid(state) {
+  if (state.A5grid && typeof state.A5grid === 'object') return state.A5grid;
+  return { w1: {}, w3: {}, w6: {} };
+}
+function answerText(state, n) {
+  if (n !== 5) return String(state['A' + n] || '').trim();
+  const g = week5Grid(state);
+  return [['w1', 'Week 1'], ['w3', 'Week 3'], ['w6', 'Week 6']].map(([k, label]) =>
+    label + ':\n' + WEEK_DAYS.map(d => `${d}: ${(g[k] && g[k][d]) || ''}`).join('\n')).join('\n\n');
+}
+function answeredCount(state) {
+  return [1, 2, 3, 4, 5, 6].filter(n => n === 5
+    ? Object.values(week5Grid(state)).some(w => Object.values(w || {}).some(v => String(v).trim()))
+    : String(state['A' + n] || '').trim()).length;
+}
+
+/* ── Library ─────────────────────────────────────────────────────────── */
+function renderPapers(filter) {
+  const host = $('#papers-host');
+  if (!host) return;
+  clearInterval(setTaskTimer); setTaskTimer = null;
+  paperView.caseId = null;
+  host.innerHTML = '';
+  host.className = 'pp-library';
+  const cases = (window.U2 && U2.CASES) || [];
+  const current = filter || host.dataset.filter || 'pearson';
+  host.dataset.filter = current;
+
+  const top = el('div', { class: 'pp-libbar' });
+  const seg = el('div', { class: 'pp-seg', role: 'tablist' });
+  [['pearson', 'Pearson past papers', cases.filter(c => c.source === 'pearson').length], ['ra10', 'Practice set tasks', cases.filter(c => c.source === 'ra10').length]].forEach(([k, label, n]) => {
+    const b = el('button', { type: 'button', role: 'tab', class: k === current ? 'on' : '', 'aria-selected': String(k === current) }, label, el('span', { class: 'pp-count' }, String(n)));
+    b.addEventListener('click', () => renderPapers(k));
+    seg.appendChild(b);
+  });
+  top.appendChild(seg);
+  const mock = el('button', { type: 'button', class: 'btn primary' }, '⏱ Timed mock (unseen task)');
+  mock.addEventListener('click', () => {
+    const pool = cases.filter(c => c.source === 'ra10');
+    openSetTask(pool[Math.floor(Math.random() * pool.length)].id, { mode: 'answer', timed: true });
+  });
+  top.appendChild(mock);
+  host.appendChild(top);
+
+  host.appendChild(el('div', { class: 'pp-howto' },
+    el('div', null, el('b', null, '1'), el('span', null, 'Open a paper and read the case study and lifestyle questionnaire.')),
+    el('div', null, el('b', null, '2'), el('span', null, 'Switch to “Answer online” and complete the six activities (60 marks, 2 h 30 min).')),
+    el('div', null, el('b', null, '3'), el('span', null, 'Get AI Examiner feedback on each activity, or download the paper as a PDF.'))));
+
+  const grid = el('div', { class: 'pp-grid' });
+  cases.filter(c => c.source === current).slice().reverse().forEach(c => {
+    const st = setTaskState(c.id);
+    const done = answeredCount(st);
+    const examined = [1, 2, 3, 4, 5, 6].filter(n => Number.isFinite(st['S' + n]));
+    const score = examined.reduce((a, n) => a + st['S' + n], 0);
+    const card = el('article', { class: 'pp-card' });
+    card.appendChild(el('div', { class: 'pp-card-top' },
+      el('span', { class: 'pp-series' }, c.source === 'pearson' ? c.series : 'Practice task'),
+      el('span', { class: 'pp-focus ' + (c.focus === 'sport' ? 'sport' : 'health') }, c.focus === 'sport' ? 'Sport' : 'Health')));
+    card.appendChild(el('h3', null, c.name));
+    card.appendChild(el('p', { class: 'pp-meta' }, `${c.age} · ${c.sport ? c.sport.replace(/\(.*\)/, '').trim() : c.occupation}`));
+    card.appendChild(el('p', { class: 'pp-goal' }, '“' + c.goal + '”'));
+    const bar = el('div', { class: 'pp-progress' }, el('i', { style: `width:${Math.round(done / 6 * 100)}%` }));
+    card.appendChild(bar);
+    card.appendChild(el('p', { class: 'pp-status' }, done ? `${done}/6 activities answered${examined.length ? ` · ${score} marks from ${examined.length} examined` : ''}` : 'Not started · 6 activities · 60 marks'));
+    const actions = el('div', { class: 'pp-card-actions' });
+    const openBtn = el('button', { type: 'button', class: 'btn primary' }, done ? 'Continue' : 'Open paper');
+    openBtn.addEventListener('click', () => openSetTask(c.id, { mode: done ? 'answer' : 'paper' }));
+    const pdfBtn = el('button', { type: 'button', class: 'btn ghost', title: 'Download this paper as a PDF' }, '⤓ PDF');
+    pdfBtn.addEventListener('click', () => downloadPaperPdf(c.id, false, pdfBtn));
+    actions.appendChild(openBtn); actions.appendChild(pdfBtn);
+    card.appendChild(actions);
+    grid.appendChild(card);
+  });
+  host.appendChild(grid);
+}
+
+/* ── Paper viewer ────────────────────────────────────────────────────── */
+function openSetTask(caseId, opts) {
+  opts = opts || {};
+  const host = $('#papers-host');
+  const c = U2.CASES.find(x => x.id === caseId);
+  if (!host || !c) return;
+  clearInterval(setTaskTimer); setTaskTimer = null;
+  paperView = { caseId, mode: opts.mode || paperView.mode || 'paper' };
+  const qs = caseQuestions(caseId);
+  const state = setTaskState(caseId);
+  host.innerHTML = '';
+  host.className = 'pp-viewer-host';
+
+  // Toolbar
+  const bar = el('div', { class: 'pp-toolbar' });
+  const back = el('button', { type: 'button', class: 'pp-tool' }, '← Papers');
+  back.addEventListener('click', () => renderPapers());
+  const title = el('div', { class: 'pp-title' }, el('strong', null, c.name), el('span', null, c.source === 'pearson' ? `Pearson ${c.series} · 31525H` : 'RA10 practice set task'));
+  const modes = el('div', { class: 'pp-seg small' });
+  [['paper', '📄 Paper'], ['answer', '✍️ Answer online']].forEach(([k, label]) => {
+    const b = el('button', { type: 'button', class: paperView.mode === k ? 'on' : '' }, label);
+    b.addEventListener('click', () => { if (paperView.mode !== k) { paperView.mode = k; openSetTask(caseId, { mode: k, keepScroll: true }); } });
+    modes.appendChild(b);
+  });
+  const timerEl = el('span', { class: 'pp-timer', title: 'Exam timer (2 h 30 min)' }, '2:30:00');
+  const timerBtn = el('button', { type: 'button', class: 'pp-tool' }, '▶ Timer');
+  let remaining = 150 * 60, running = false;
+  const paint = () => { const h = Math.floor(remaining / 3600), m = Math.floor(remaining % 3600 / 60), sec = remaining % 60; timerEl.textContent = `${h}:${String(m).padStart(2, '0')}:${String(sec).padStart(2, '0')}`; timerEl.classList.toggle('low', remaining <= 600); };
+  const toggle = () => {
+    running = !running; timerBtn.textContent = running ? '❚❚ Pause' : '▶ Resume';
+    clearInterval(setTaskTimer);
+    if (running) setTaskTimer = setInterval(() => { remaining = Math.max(0, remaining - 1); paint(); if (!remaining) { clearInterval(setTaskTimer); timerBtn.textContent = 'Time up'; } }, 1000);
+  };
+  timerBtn.addEventListener('click', toggle);
+  const dl = el('button', { type: 'button', class: 'pp-tool primary' }, '⤓ Download PDF');
+  const dlMenu = el('div', { class: 'pp-menu', hidden: '' });
+  const dlBlank = el('button', { type: 'button' }, 'Blank exam paper');
+  const dlMine = el('button', { type: 'button' }, 'Paper with my answers');
+  dlBlank.addEventListener('click', () => { dlMenu.hidden = true; downloadPaperPdf(caseId, false, dl); });
+  dlMine.addEventListener('click', () => { dlMenu.hidden = true; downloadPaperPdf(caseId, true, dl); });
+  dlMenu.appendChild(dlBlank); dlMenu.appendChild(dlMine);
+  dl.addEventListener('click', (e) => { e.stopPropagation(); dlMenu.hidden = !dlMenu.hidden; });
+  host.addEventListener('click', () => { dlMenu.hidden = true; });
+  const dlWrap = el('div', { class: 'pp-dlwrap' }, dl, dlMenu);
+  bar.appendChild(back); bar.appendChild(title); bar.appendChild(modes);
+  bar.appendChild(el('div', { class: 'pp-tools-right' }, timerEl, timerBtn, dlWrap));
+  host.appendChild(bar);
+
+  const shell = el('div', { class: 'pp-shell' });
+  // Sidebar: page navigation + score
+  const side = el('aside', { class: 'pp-side' });
+  const nav = el('nav', { class: 'pp-nav' });
+  const navItems = [['pp-cover', 'Cover'], ['pp-parta', 'Part A · Case study'], ['pp-quest', 'Lifestyle questionnaire']].concat(qs.map(q => ['pp-act-' + q.activity, `Activity ${q.activity}`, q]));
+  navItems.forEach(([id, label, q]) => {
+    const b = el('button', { type: 'button', 'data-target': id }, el('span', null, label));
+    if (q) {
+      const st = Number.isFinite(state['S' + q.activity]) ? `${state['S' + q.activity]}/${q.marks}` : (answerText(state, q.activity).replace(/Week \d:|Monday:|Tuesday:|Wednesday:|Thursday:|Friday:|Saturday:|Sunday:|\s/g, '') ? '✓' : `${q.marks}m`);
+      b.appendChild(el('em', { 'data-badge': q.activity }, st));
+    }
+    b.addEventListener('click', () => { const t = document.getElementById(id); if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' }); });
+    nav.appendChild(b);
+  });
+  side.appendChild(nav);
+  const scoreBox = el('div', { class: 'pp-score' });
+  const paintScore = () => {
+    const ex = [1, 2, 3, 4, 5, 6].filter(n => Number.isFinite(state['S' + n]));
+    const got = ex.reduce((a, n) => a + state['S' + n], 0);
+    const max = ex.reduce((a, n) => a + qs[n - 1].marks, 0);
+    scoreBox.innerHTML = '';
+    scoreBox.appendChild(el('span', null, 'AI Examiner score'));
+    scoreBox.appendChild(el('strong', null, ex.length ? `${got} / ${max}` : '—'));
+    scoreBox.appendChild(el('small', null, ex.length ? `${ex.length} of 6 activities examined` : 'Answer online and press “Get feedback”'));
+  };
+  paintScore();
+  side.appendChild(scoreBox);
+  shell.appendChild(side);
+
+  const doc = el('div', { class: 'pp-doc' + (paperView.mode === 'answer' ? ' answering' : '') });
+  doc.appendChild(paperCover(c));
+  doc.appendChild(paperPartA(c));
+  doc.appendChild(paperQuestionnaire(c));
+  qs.forEach(q => doc.appendChild(paperActivity(q, c, state, paperView.mode, () => { paintScore(); refreshBadge(q); })));
+  doc.appendChild(el('div', { class: 'pp-page pp-end' }, el('p', null, 'TOTAL FOR TASK = 60 MARKS'), el('small', null, c.source === 'pearson' ? 'Past paper content © Pearson Education Ltd. Reformatted by RA10 for revision.' : 'RA10 practice set task written in the Pearson Unit 2 format.')));
+  shell.appendChild(doc);
+  host.appendChild(shell);
+
+  function refreshBadge(q) {
+    const badge = nav.querySelector(`[data-badge="${q.activity}"]`);
+    if (badge && Number.isFinite(state['S' + q.activity])) badge.textContent = `${state['S' + q.activity]}/${q.marks}`;
+  }
+  // Highlight current page in the sidebar
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver(entries => entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      nav.querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.target === e.target.id));
+    }), { rootMargin: '-35% 0px -60% 0px' });
+    doc.querySelectorAll('.pp-page[id]').forEach(p => io.observe(p));
+  }
+  paint();
+  if (opts.timed) toggle();
+  if (!opts.keepScroll) window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function paperHead(c, label) {
+  return el('div', { class: 'pp-runhead' }, el('span', null, 'Unit 2: Fitness Training and Programming for Health, Sport and Well-being'), el('span', null, label));
+}
+
+function paperCover(c) {
+  const p = el('section', { class: 'pp-page pp-cover', id: 'pp-cover' });
+  p.appendChild(el('div', { class: 'pp-cover-boxes' },
+    el('div', null, el('small', null, 'Candidate surname'), el('span')), el('div', null, el('small', null, 'Other names'), el('span')),
+    el('div', null, el('small', null, 'Centre number'), el('span')), el('div', null, el('small', null, 'Learner registration number'), el('span'))));
+  p.appendChild(el('p', { class: 'pp-qual' }, 'BTEC Level 3 Nationals Extended Certificate'));
+  p.appendChild(el('p', { class: 'pp-series-big' }, c.source === 'pearson' ? c.series : 'RA10 practice task'));
+  p.appendChild(el('h2', null, 'Sport'));
+  p.appendChild(el('h3', null, 'Unit 2: Fitness Training and Programming for Health, Sport and Well-being'));
+  p.appendChild(el('p', { class: 'pp-part' }, 'Part A and Part B'));
+  p.appendChild(el('div', { class: 'pp-cover-row' }, el('div', null, el('small', null, 'Paper reference'), el('b', null, '31525H')), el('div', null, el('small', null, 'Time'), el('b', null, '2 hours 30 minutes')), el('div', { class: 'pp-total' }, el('small', null, 'Total marks'), el('b', null, '60'))));
+  p.appendChild(el('div', { class: 'pp-instr' },
+    el('h4', null, 'Instructions'),
+    el('ul', null, el('li', null, 'Use your research notes from Part A (maximum four A4 sides).'), el('li', null, 'Answer all activities.'), el('li', null, 'Answer the activities in the spaces provided – there may be more space than you need.')),
+    el('h4', null, 'Information'),
+    el('ul', null, el('li', null, 'The total mark for this paper is 60.'), el('li', null, 'The marks for each activity are shown in brackets – use this as a guide as to how much time to spend on each activity.')),
+    el('h4', null, 'Advice'),
+    el('ul', null, el('li', null, 'Read each activity carefully before you start to answer it.'), el('li', null, 'Try to answer every activity.'), el('li', null, 'Check your answers if you have time at the end.'))));
+  return p;
+}
+
+function paperPartA(c) {
+  const p = el('section', { class: 'pp-page', id: 'pp-parta' });
+  p.appendChild(paperHead(c, 'Part A'));
+  p.appendChild(el('h3', { class: 'pp-section' }, 'Part A — Case study'));
+  c.partA.split(/\n+/).forEach(par => p.appendChild(el('p', { class: 'pp-body' }, par)));
+  p.appendChild(el('div', { class: 'pp-note' }, 'In the real assessment you receive Part A before the supervised session and have up to four hours to research and make notes.'));
+  return p;
+}
+
+function paperQuestionnaire(c) {
+  const p = el('section', { class: 'pp-page', id: 'pp-quest' });
+  p.appendChild(paperHead(c, 'Part B'));
+  p.appendChild(el('h3', { class: 'pp-section' }, 'Part B — Lifestyle questionnaire'));
+  const sec = (t) => p.appendChild(el('h4', { class: 'pp-qhead' }, t));
+  const kv = (rows) => { const t = el('table', { class: 'pp-kv' }); rows.forEach(([k, v]) => t.appendChild(el('tr', null, el('th', null, k), el('td', null, v)))); p.appendChild(t); };
+  sec('Section 1: Personal details');
+  kv([['Name', c.name], ['Age', String(c.age)], ['1. What is your occupation?', c.occupation], ['2. How many hours do you work each day?', c.hours], ['3. How far do you live from your occupation?', c.distance], ['4. How do you travel to your occupation?', c.travel], ['5. How active would you say your occupation was?', c.activeJob]]);
+  sec('Section 2: Current activity levels');
+  kv([['1. How many times a week do you take part in physical activity?', c.activityFreq], ['2. What type of activity/exercise do you mainly take part in?', c.activityType]]);
+  sec('Section 3: Nutritional status');
+  const ft = el('table', { class: 'pp-grid-table' });
+  ft.appendChild(el('tr', null, el('th', null, ''), el('th', null, 'Breakfast'), el('th', null, 'Lunch'), el('th', null, 'Dinner'), el('th', null, 'Snacks')));
+  c.diary.forEach((d, i) => {
+    ft.appendChild(el('tr', null, el('th', null, 'Day ' + (i + 1)), el('td', null, (d.times[0] ? d.times[0] + ' — ' : '') + d.breakfast), el('td', null, (d.times[1] ? d.times[1] + ' — ' : '') + d.lunch), el('td', null, (d.times[2] ? d.times[2] + ' — ' : '') + d.dinner), el('td', null, d.snacks)));
+    ft.appendChild(el('tr', { class: 'fluid' }, el('th', null, 'Fluid'), el('td', { colspan: '4' }, d.fluid)));
+  });
+  p.appendChild(el('div', { class: 'pp-scroll' }, ft));
+  kv([['2. Do you take any supplements?', c.supplements]]);
+  sec('Section 4: Your lifestyle');
+  kv([['1. How many units of alcohol do you drink in a typical week?', String(c.alcohol)], ['2. Do you smoke? If yes, how many a day?', c.smoking ? 'Yes — ' + c.smoking : 'No' + (c.vaping ? ' (vapes ' + c.vaping.toLowerCase() + ')' : '')], ['3. Do you experience stress on a daily basis?', c.stress ? 'Yes — ' + c.stress : 'No'], ['4. On average, how many hours of sleep do you get per night?', c.sleep]]);
+  sec('Section 5: Health monitoring tests');
+  kv([['Blood pressure', c.tests.bp.join('/') + ' mmHg'], ['Resting heart rate', c.tests.rhr + ' bpm'], ['Body mass index', String(c.tests.bmi)], ['Waist-to-hip ratio', String(c.tests.whr)]].concat(c.tests.extra || []));
+  sec('Section 6: Physical activity/sporting goals');
+  p.appendChild(el('p', { class: 'pp-body' }, c.goal));
+  return p;
+}
+
+function paperActivity(q, c, state, mode, onScore) {
+  const p = el('section', { class: 'pp-page pp-activity', id: 'pp-act-' + q.activity });
+  p.appendChild(paperHead(c, 'Taskbook'));
+  p.appendChild(el('div', { class: 'pp-qrow' }, el('span', { class: 'pp-qnum' }, String(q.activity)), el('p', { class: 'pp-qtext' }, q.question), el('span', { class: 'pp-qmarks' }, `(${q.marks})`)));
+  p.appendChild(el('p', { class: 'pp-hint' }, `Suggested time: ${ACT_MINUTES[q.activity]} minutes`));
+  const save = () => saveSetTaskState(c.id, state);
+
+  if (q.activity === 5) {
+    const g = week5Grid(state);
+    [['w1', 'Week 1'], ['w3', 'Week 3'], ['w6', 'Week 6']].forEach(([k, label]) => {
+      const t = el('table', { class: 'pp-week' });
+      t.appendChild(el('tr', null, el('th', { colspan: '2' }, label), el('th', null, 'Physical activity')));
+      WEEK_DAYS.forEach(d => {
+        const cell = el('td');
+        if (mode === 'answer') {
+          const ta = el('textarea', { 'data-rmt': 'off', rows: '2', placeholder: 'Activity, FITT and intensity… or Rest', 'aria-label': `${label} ${d}` });
+          ta.value = (g[k] && g[k][d]) || '';
+          ta.addEventListener('input', () => { g[k] = g[k] || {}; g[k][d] = ta.value; state.A5grid = g; save(); });
+          cell.appendChild(ta);
+        } else cell.appendChild(el('div', { class: 'pp-blank' }));
+        t.appendChild(el('tr', null, el('th', { colspan: '2' }, d), cell));
+      });
+      p.appendChild(t);
+    });
+  } else if (mode === 'answer') {
+    const ta = el('textarea', { 'data-rmt': 'off', class: 'pp-lines', placeholder: 'Write your answer here…', rows: String(Math.max(10, q.marks * 2)) });
+    ta.value = state['A' + q.activity] || '';
+    const count = el('span', { class: 'pp-wc' });
+    const wc = () => { const n = ta.value.trim().split(/\s+/).filter(Boolean).length; count.textContent = n + ' words'; };
+    ta.addEventListener('input', () => { state['A' + q.activity] = ta.value; save(); wc(); });
+    wc();
+    p.appendChild(ta);
+    p.appendChild(count);
+  } else {
+    p.appendChild(el('div', { class: 'pp-ruled', style: `--lines:${Math.min(40, q.marks * 3)}` }));
+  }
+
+  p.appendChild(el('p', { class: 'pp-total-line' }, `(Total for Activity ${q.activity} = ${q.marks} marks)`));
+
+  if (mode === 'answer') {
+    const actions = el('div', { class: 'pp-actions' });
+    const fb = el('button', { type: 'button', class: 'btn primary btn-examine' }, '✦ Get feedback');
+    const msBtn = el('button', { type: 'button', class: 'btn ghost' }, 'Mark scheme');
+    actions.appendChild(fb); actions.appendChild(msBtn);
+    if (Number.isFinite(state['S' + q.activity])) actions.appendChild(el('span', { class: 'pp-last' }, `Last examined: ${state['S' + q.activity]}/${q.marks}`));
+    p.appendChild(actions);
+    const result = el('div', { class: 'pp-result' });
+    p.appendChild(result);
+    const ms = el('div', { class: 'pp-ms', hidden: '' }, renderMarkScheme(q));
+    p.appendChild(ms);
+    msBtn.addEventListener('click', () => { ms.hidden = !ms.hidden; msBtn.textContent = ms.hidden ? 'Mark scheme' : 'Hide mark scheme'; });
+    fb.addEventListener('click', async () => {
+      const answer = answerText(state, q.activity);
+      if (answer.replace(/Week \d:|Monday:|Tuesday:|Wednesday:|Thursday:|Friday:|Saturday:|Sunday:/g, '').trim().length < 20) { alert('Write your answer first, then press “Get feedback”.'); return; }
+      if (!window.RA10 || typeof RA10.examineAnswer !== 'function') { alert('AI Examiner is not available right now.'); return; }
+      if (window.RA10AI && !(await RA10AI.confirmCredits(RA10AI.examinerCost(), 'AI Examiner'))) return;
+      fb.disabled = true; fb.dataset.aiExamining = 'true';
+      fb.innerHTML = '<span class="ai-examiner-loading"><span class="ai-examiner-orb"></span><span>Marking<span class="ai-examiner-dots">...</span></span></span>';
+      try {
+        const response = await RA10.examineAnswer({ question: q, answer });
+        result.innerHTML = '';
+        if (response && response.result) {
+          result.appendChild(window.RA10AI
+            ? RA10AI.renderExamResult({ question: q, answer, result: response.result, markScheme: () => renderMarkScheme(q) })
+            : buildAutoMarkUI(q, answer, normaliseAiMarkResult(response.result, q, true, answer), 'ai'));
+          const earned = Number(response.result.earned);
+          if (Number.isFinite(earned)) { state['S' + q.activity] = earned; save(); if (onScore) onScore(); }
+          awardXP(10, '+10 XP — activity examined');
+          result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        } else result.appendChild(el('p', { class: 'pp-err' }, 'The AI Examiner returned no result. Please try again.'));
+      } catch (err) {
+        const message = err && err.message ? String(err.message) : 'AI Examiner request failed.';
+        if (message.includes('Not enough credits') && window.RA10 && RA10.showPaywall) RA10.showPaywall('credits', 'ai_examiner');
+        else result.appendChild(el('p', { class: 'pp-err' }, message));
+      } finally {
+        fb.disabled = false; delete fb.dataset.aiExamining; fb.textContent = '✦ Get feedback';
+      }
+    });
+  }
+  return p;
+}
+
+/* ── PDF download (real file via jsPDF) ─────────────────────────────── */
+function loadScriptOnce(src, test) {
+  return new Promise((resolve, reject) => {
+    if (test()) return resolve();
+    const s = document.createElement('script');
+    s.src = src; s.async = true;
+    s.onload = () => test() ? resolve() : reject(new Error('Library failed to initialise'));
+    s.onerror = () => reject(new Error('Could not load the PDF library'));
+    document.head.appendChild(s);
+  });
+}
+async function ensurePdfLib() {
+  await loadScriptOnce('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js', () => !!(window.jspdf && window.jspdf.jsPDF));
+  await loadScriptOnce('https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js', () => !!(window.jspdf && window.jspdf.jsPDF && window.jspdf.jsPDF.API.autoTable));
+}
+
+async function downloadPaperPdf(caseId, withAnswers, btn) {
+  const c = U2.CASES.find(x => x.id === caseId);
+  if (!c) return;
+  const label = btn ? btn.textContent : '';
+  if (btn) { btn.disabled = true; btn.textContent = 'Preparing PDF…'; }
+  try {
+    await ensurePdfLib();
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ unit: 'mm', format: 'a4' });
+    const W = 210, M = 18, CW = W - M * 2, BOTTOM = 280;
+    const state = setTaskState(caseId);
+    const qs = caseQuestions(caseId);
+    const clean = (t) => String(t || '').replace(/[’‘]/g, "'").replace(/[“”]/g, '"').replace(/[–—]/g, '-').replace(/×/g, 'x').replace(/≤/g, '<=').replace(/≥/g, '>=').replace(/→/g, '->').replace(/·/g, '-').replace(/…/g, '...').replace(/[^\x00-\xFF]/g, '');
+    let y = M;
+    const runHead = (txt) => {
+      doc.setFont('helvetica', 'normal'); doc.setFontSize(8); doc.setTextColor(110);
+      doc.text('Unit 2: Fitness Training and Programming for Health, Sport and Well-being', M, 10);
+      doc.text(txt, W - M, 10, { align: 'right' });
+      doc.setDrawColor(200); doc.line(M, 12, W - M, 12); doc.setTextColor(20);
+      y = 20;
+    };
+    const newPage = (txt) => { doc.addPage(); runHead(txt); };
+    const para = (t, size, style, gap, page) => {
+      doc.setFont('helvetica', style || 'normal'); doc.setFontSize(size || 10.5);
+      const lines = doc.splitTextToSize(clean(t), CW);
+      lines.forEach(line => { if (y > BOTTOM) newPage(page || 'Part B'); doc.text(line, M, y); y += (size || 10.5) * 0.45; });
+      y += gap == null ? 3 : gap;
+    };
+    const heading = (t, page) => { if (y > BOTTOM - 12) newPage(page); doc.setFont('helvetica', 'bold'); doc.setFontSize(12.5); doc.text(clean(t), M, y); y += 7; };
+    const table = (body, head, opts) => {
+      doc.autoTable(Object.assign({ startY: y, head: head ? [head.map(clean)] : undefined, body: body.map(r => r.map(clean)), margin: { left: M, right: M, top: 20 }, styles: { font: 'helvetica', fontSize: 9, cellPadding: 2, lineColor: 180, lineWidth: 0.2, textColor: 20 }, headStyles: { fillColor: [235, 235, 235], textColor: 20, fontStyle: 'bold' }, theme: 'grid', didDrawPage: (d) => { if (d.pageNumber > 1 && d.cursor) {} } }, opts || {}));
+      y = doc.lastAutoTable.finalY + 6;
+    };
+    const ruled = (pagesToFill) => { doc.setDrawColor(170); for (let pg = 0; pg < pagesToFill; pg++) { if (pg) newPage('Taskbook'); y += 4; while (y < BOTTOM - 14) { doc.setLineDashPattern([0.6, 0.9], 0); doc.line(M, y, W - M, y); doc.setLineDashPattern([], 0); y += 8; } } };
+
+    // Cover
+    doc.setDrawColor(40); doc.setLineWidth(0.4);
+    [['Candidate surname', M, 18, 84], ['Other names', M + 88, 18, 86], ['Centre number', M, 34, 84], ['Learner registration number', M + 88, 34, 86]].forEach(([t, x, yy, w]) => { doc.rect(x, yy, w, 12); doc.setFontSize(7); doc.setFont('helvetica', 'normal'); doc.text(t, x + 1.5, yy + 3.5); });
+    if (withAnswers) { doc.setFontSize(7); doc.text('Completed online with RA10', M + 1.5, 26); }
+    doc.setFont('helvetica', 'normal'); doc.setFontSize(12); doc.text('BTEC Level 3 Nationals Extended Certificate', M, 64);
+    doc.setFont('helvetica', 'bold'); doc.setFontSize(16); doc.text(clean(c.source === 'pearson' ? c.series : 'RA10 practice set task'), M, 74);
+    doc.setFontSize(30); doc.text('Sport', M, 92);
+    doc.setFontSize(14); doc.text(doc.splitTextToSize('Unit 2: Fitness Training and Programming for Health, Sport and Well-being', CW), M, 104);
+    doc.setFont('helvetica', 'normal'); doc.setFontSize(12); doc.text('Part A and Part B', M, 122);
+    doc.rect(M, 130, 56, 18); doc.rect(M + 60, 130, 56, 18); doc.rect(W - M - 54, 130, 54, 18);
+    doc.setFontSize(8); doc.text('Paper reference', M + 2, 135); doc.text('Time', M + 62, 135); doc.text('Total marks', W - M - 52, 135);
+    doc.setFont('helvetica', 'bold'); doc.setFontSize(14); doc.text('31525H', M + 2, 144); doc.text('2 hours 30 minutes', M + 62, 144); doc.text('60', W - M - 52, 144);
+    y = 160;
+    [['Instructions', ['Use your research notes from Part A (maximum four A4 sides).', 'Answer all activities.', 'Answer the activities in the spaces provided - there may be more space than you need.']],
+     ['Information', ['The total mark for this paper is 60.', 'The marks for each activity are shown in brackets - use this as a guide as to how much time to spend on each activity.']],
+     ['Advice', ['Read each activity carefully before you start to answer it.', 'Try to answer every activity.', 'Check your answers if you have time at the end.']]].forEach(([h, items]) => {
+      doc.setFont('helvetica', 'bold'); doc.setFontSize(11); doc.text(h, M, y); y += 6;
+      doc.setFont('helvetica', 'normal'); doc.setFontSize(10);
+      items.forEach(it => { doc.splitTextToSize('- ' + it, CW).forEach(l => { doc.text(l, M + 2, y); y += 5; }); });
+      y += 3;
+    });
+    doc.setFontSize(7.5); doc.setTextColor(110);
+    doc.text(clean(c.source === 'pearson' ? 'Past paper content (c) Pearson Education Ltd. Reformatted by RA10 for revision practice.' : 'RA10 practice set task written in the Pearson Unit 2 format.'), M, 286);
+    doc.setTextColor(20);
+
+    // Part A
+    newPage('Part A');
+    heading('Part A - Case study', 'Part A');
+    c.partA.split(/\n+/).forEach(par => para(par, 10.5, 'normal', 3, 'Part A'));
+
+    // Questionnaire
+    newPage('Part B');
+    heading('Part B - Lifestyle questionnaire');
+    const kv = (rows) => table(rows, null, { columnStyles: { 0: { cellWidth: 90, fontStyle: 'bold' } } });
+    para('Section 1: Personal details', 11, 'bold', 1);
+    kv([['Name', c.name], ['Age', String(c.age)], ['1. What is your occupation?', c.occupation], ['2. How many hours do you work each day?', c.hours], ['3. How far do you live from your occupation?', c.distance], ['4. How do you travel to your occupation?', c.travel], ['5. How active would you say your occupation was?', c.activeJob]]);
+    para('Section 2: Current activity levels', 11, 'bold', 1);
+    kv([['1. How many times a week do you take part in physical activity?', c.activityFreq], ['2. What type of activity/exercise do you mainly take part in?', c.activityType]]);
+    para('Section 3: Nutritional status', 11, 'bold', 1);
+    table(c.diary.flatMap((d, i) => [['Day ' + (i + 1), (d.times[0] ? d.times[0] + ' - ' : '') + d.breakfast, (d.times[1] ? d.times[1] + ' - ' : '') + d.lunch, (d.times[2] ? d.times[2] + ' - ' : '') + d.dinner, d.snacks], ['Fluid', { content: d.fluid, colSpan: 4 }]]).map(r => r.map(x => typeof x === 'object' ? x : x)), ['', 'Breakfast', 'Lunch', 'Dinner', 'Snacks']);
+    kv([['Do you take any supplements?', c.supplements]]);
+    para('Section 4: Your lifestyle', 11, 'bold', 1);
+    kv([['1. Units of alcohol in a typical week', String(c.alcohol)], ['2. Do you smoke? How many a day?', c.smoking ? 'Yes - ' + c.smoking : 'No'], ['3. Do you experience stress on a daily basis?', c.stress ? 'Yes - ' + c.stress : 'No'], ['4. Average hours of sleep per night', String(c.sleep)]]);
+    para('Section 5: Health monitoring tests', 11, 'bold', 1);
+    kv([['Blood pressure', c.tests.bp.join('/') + ' mmHg'], ['Resting heart rate', c.tests.rhr + ' bpm'], ['Body mass index', String(c.tests.bmi)], ['Waist-to-hip ratio', String(c.tests.whr)]].concat(c.tests.extra || []));
+    para('Section 6: Physical activity/sporting goals', 11, 'bold', 1);
+    para(c.goal);
+
+    // Taskbook
+    qs.forEach(q => {
+      newPage('Taskbook');
+      doc.setFont('helvetica', 'bold'); doc.setFontSize(12);
+      doc.text(String(q.activity), M, y);
+      const qLines = doc.splitTextToSize(clean(q.question), CW - 22);
+      doc.text(qLines, M + 8, y);
+      doc.text(`(${q.marks})`, W - M, y + (qLines.length - 1) * 5.5, { align: 'right' });
+      y += qLines.length * 5.5 + 4;
+      if (q.activity === 5) {
+        const g = week5Grid(state);
+        [['w1', 'Week 1'], ['w3', 'Week 3'], ['w6', 'Week 6']].forEach(([k, lbl]) => {
+          if (y > 200) newPage('Taskbook');
+          table(WEEK_DAYS.map(d => [d, withAnswers ? ((g[k] && g[k][d]) || '') : '']), [lbl, 'Physical activity'], { columnStyles: { 0: { cellWidth: 32, fontStyle: 'bold' } }, bodyStyles: { minCellHeight: withAnswers ? 8 : 12 } });
+        });
+      } else if (withAnswers && String(state['A' + q.activity] || '').trim()) {
+        para(state['A' + q.activity], 10.5, 'normal', 4, 'Taskbook');
+      } else {
+        ruled(q.marks >= 12 ? 2 : 1);
+      }
+      if (y > BOTTOM) newPage('Taskbook');
+      doc.setFont('helvetica', 'bold'); doc.setFontSize(10);
+      doc.text(`(Total for Activity ${q.activity} = ${q.marks} marks)`, W - M, y + 2, { align: 'right' });
+      y += 10;
+      if (withAnswers && Number.isFinite(state['S' + q.activity])) { doc.setFont('helvetica', 'italic'); doc.setFontSize(9); doc.text(`RA10 AI Examiner mark: ${state['S' + q.activity]}/${q.marks}`, M, y); y += 6; }
+    });
+    doc.setFont('helvetica', 'bold'); doc.setFontSize(12); doc.text('TOTAL FOR TASK = 60 MARKS', W / 2, y + 6, { align: 'center' });
+
+    const pages = doc.getNumberOfPages();
+    for (let i = 1; i <= pages; i++) { doc.setPage(i); doc.setFont('helvetica', 'normal'); doc.setFontSize(8); doc.setTextColor(120); doc.text(`${i} / ${pages}`, W / 2, 292, { align: 'center' }); }
+    const fname = `BTEC-Sport-Unit2-${(c.source === 'pearson' ? c.series : 'Practice').replace(/\s+/g, '-')}-${c.name.replace(/\s+/g, '-')}${withAnswers ? '-my-answers' : ''}.pdf`;
+    doc.save(fname);
+  } catch (err) {
+    alert('Sorry — the PDF could not be created (' + (err && err.message ? err.message : 'unknown error') + ').');
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = label; }
+  }
+}
+
+})();

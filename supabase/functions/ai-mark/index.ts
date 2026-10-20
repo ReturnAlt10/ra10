@@ -1,5 +1,6 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { BUSINESS_SYSTEM, buildBusinessPrompt, businessPostProcess, isALevelBusiness } from "./business_examiner.ts";
+import { SPORT_U2_SYSTEM, buildSportUnit2Prompt, sportUnit2PostProcess, isSportUnit2Task } from "./sport_unit2_examiner.ts";
 import { requireTermsAccepted } from "../_shared/legal.ts";
 
 const ALLOWED_ORIGINS = [
@@ -358,16 +359,20 @@ export default Deno.serve(async (req: Request) => {
 
     const marksMax = clamp(Math.round(safeNum(question?.marks, 1)), 1, 40);
     const business = isALevelBusiness(question);
-    const prompt = business ? buildBusinessPrompt(question, answer) : buildPrompt(question, answer, []);
+    const sportU2 = !business && isSportUnit2Task(question);
+    const prompt = business ? buildBusinessPrompt(question, answer) : sportU2 ? buildSportUnit2Prompt(question, answer) : buildPrompt(question, answer, []);
 
     const aiResponse = business
       ? await callAnyProvider(prompt, { system: BUSINESS_SYSTEM, timeout: 45000, maxTokens: 1800 }, true)
-      : await callAnyProvider(prompt);
+      : sportU2
+        ? await callAnyProvider(prompt, { system: SPORT_U2_SYSTEM, timeout: 45000, maxTokens: 1800 }, true)
+        : await callAnyProvider(prompt);
     let parsed = extractJsonObject(aiResponse.content);
     if (!parsed || typeof parsed !== "object") {
       throw new Error("AI response could not be parsed as JSON");
     }
     if (business) parsed = businessPostProcess(parsed, question, answer);
+    if (sportU2) parsed = sportUnit2PostProcess(parsed, question);
 
     const result = ensureResultShape(parsed, marksMax);
 

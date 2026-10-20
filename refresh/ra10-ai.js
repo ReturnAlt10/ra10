@@ -1677,10 +1677,11 @@
     fb('improve', 'How to improve', 'arrow', r.improvements.length ? r.improvements : ['Add one more developed point to push for full marks.']);
     if (r.nextLevel.length) fb('next', 'To reach the next level', 'flag', r.nextLevel, true);
     if (r.ao) {
-      var aoSec = h('section', { class: 'rai-fb next wide' }, '<h4>' + icon('exam', 14) + 'Assessment objectives</h4><div class="rai-ao"></div>');
+      var isTraits = Object.keys(r.ao).some(function (k) { return /^Trait \d/.test(k); });
+      var aoSec = h('section', { class: 'rai-fb next wide' }, '<h4>' + icon('exam', 14) + (isTraits ? 'Trait bands' : 'Assessment objectives') + '</h4><div class="rai-ao"></div>');
       Object.keys(r.ao).slice(0, 6).forEach(function (k) {
         var row = h('div', { class: 'rai-ao-row' }, '<b></b><span></span>');
-        row.querySelector('b').textContent = k.toUpperCase();
+        row.querySelector('b').textContent = isTraits ? k : k.toUpperCase();
         row.querySelector('span').textContent = String(r.ao[k]);
         aoSec.querySelector('.rai-ao').appendChild(row);
       });
