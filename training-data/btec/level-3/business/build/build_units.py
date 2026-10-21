@@ -59,7 +59,7 @@ UNITS = {
             quiz_p='Multiple-choice and true/false questions with an explanation for every answer.',
             guide_p='Every content area with diagrams, theory summaries and the examiner-report advice that decides the top bands.',
             calc=False),
-    7: dict(code='31589H', name='Business Decision Making', key='bus_u7', n=7, aims='A–E', free='the set-task overview and Aim A', locked='Aims B–E', nAims=5,
+    7: dict(code='31589H', name='Business Decision Making', key='bus_u7', n=7, aims='A–H', free='the set-task overview and Aim A', locked='Aims B–H', nAims=8,
             accent='#C2410C', accent2='#FFEDD5', ink='#9A3412', d2='#431407', dink='#FED7AA', grad=('#7c2d12', '#c2410c', '#fb923c'),
             eyebrow='Pearson BTEC Level 3 Business — External Set Task (Part S)',
             hero='Unit 7 Business Decision Making',
@@ -199,7 +199,9 @@ def build_index(u, m):
         s = s.replace('<button class="tab tab-special" data-tab="progress"', '<button class="tab" data-tab="calculator" data-tip="Break-even, cash flow, ratios and depreciation">Calculator</button>\n    <button class="tab tab-special" data-tab="progress"', 1)
         s = s.replace('  <!-- PAST PAPERS / SET TASKS -->', '  <!-- FINANCE CALCULATOR -->\n  <section id="view-calculator" class="view" style="margin-top:24px;margin-bottom:24px;">\n    <div id="calc-root"></div>\n  </section>\n\n  <!-- PAST PAPERS / SET TASKS -->', 1)
     # stylesheet + scripts
-    s = s.replace('<link rel="stylesheet" href="css/style.css?v=20260507c">', CSS_LINKS.format(calc=CALC_LINK if m['calc'] else ''))
+    s, ncss = re.subn(r'<link rel="stylesheet" href="css/style\.css\?v=[^"]*">', lambda mo: CSS_LINKS.format(calc=CALC_LINK if m['calc'] else ''), s, count=1)
+    if not ncss:
+        raise SystemExit('css link not found')
     scripts = re.search(r'<script src="js/u2-spec.js.*?<script src="js/app.js\?v=\d+"></script>', s, re.S)
     if not scripts:
         raise SystemExit('script block not found')

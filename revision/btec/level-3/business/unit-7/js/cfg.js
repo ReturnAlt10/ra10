@@ -25,7 +25,7 @@
   };
   window.BIZ_UNIT = {
     n: 7, key: 'bus_u7', code: '31589H', name: 'Business Decision Making', kind: 'set', total: 70, minutes: 180,
-    timeLabel: '3 hours (Part S)', aims: ['A', 'B', 'C', 'D', 'E'],
+    timeLabel: '3 hours (Part S)', aims: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'],
     partsLabel: 'Part S (set task information and task)',
     partALabel: 'Set task information',
     partANote: 'Unit 7 is a single 3-hour supervised task (Part S) typed on a computer. You receive a scenario with two options and the data for each, then produce a report (52 marks) and a presentation with speaker notes (18 marks). Use at least two decision-making tools.',
@@ -47,11 +47,14 @@
       2: ['AF7 – a short overview of the situation, both options and the decision; evidence from the report.', 'AF8 – key costs/finance and factors/risks stated to convince the client or investors.', 'AF9 – professional slides plus speaker notes/script that engage and persuade.']
     },
     classify: function (text) {
-      if (/ratio|break-?even|margin of safety|profit|roce|cash flow|forecast|financial/i.test(text)) return 'B';
-      if (/resource|human|premises|location|staff|time/i.test(text)) return 'A';
-      if (/swot|pest|porter|5c|tool|decision/i.test(text)) return 'C';
-      if (/risk|factor/i.test(text)) return 'D';
-      return 'E';
+      if (/porter|5c|ansoff|boston|statistic|mean|median|standard deviation|correlation|npv|net present|trend line|critical path|gantt/i.test(text)) return 'B';
+      if (/swot|pest|what if|contingency|ratio|viab/i.test(text)) return 'G';
+      if (/cash flow|break-?even|forecast|profit|income statement|financial position|roce|margin/i.test(text)) return 'F';
+      if (/resource|human|premises|location|staff|equipment|finance|time/i.test(text)) return 'E';
+      if (/market|competitor|research|price|promotion/i.test(text)) return 'C';
+      if (/legislation|quality|gdpr/i.test(text)) return 'D';
+      if (/idea|ownership|structure|aim/i.test(text)) return 'A';
+      return 'H';
     },
     topicFor: function () { return 'Set task'; }
   };

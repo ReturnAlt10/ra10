@@ -860,7 +860,7 @@ function renderGuideAccessGate(container, aimASection) {
       </div>
     `
     : `
-      <h4 style="margin-top:0">Aims B-E are locked</h4>
+      <h4 style="margin-top:0">Aims B-H are locked</h4>
       <p style="margin-bottom:10px">You can preview Aim A for free. The other aims below have padlocks and need an unlock.</p>
       <ul style="margin-top:0;margin-bottom:12px;">
         <li>Click <strong>Unlock for 2 hours (10 credits)</strong> to open all aims temporarily</li>

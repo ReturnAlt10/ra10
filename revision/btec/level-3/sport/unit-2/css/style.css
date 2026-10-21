@@ -2686,3 +2686,42 @@ main {
 #view-papers .pp-nav button.on em { background: #16a34a; }
 #view-papers .pp-seg button.on { color: #15803d; }
 [data-theme="dark"] #view-papers .pp-nav button.on, [data-theme="dark"] #view-papers .pp-seg button.on { color: #4ade80; }
+
+/* ── Past papers: mobile optimisation ─────────────────────────────────────── */
+.pp-shell > * { min-width: 0; }
+@media (max-width: 900px) {
+  #view-papers .pp-toolbar { position: static; top: auto; }
+  .pp-shell { display: block; }
+  .pp-side { display: contents; }
+  .pp-nav { position: sticky; top: 0; z-index: 25; flex-direction: row; max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; margin-bottom: 10px; box-shadow: 0 6px 16px -12px rgba(0,0,0,.4); }
+  .pp-nav::-webkit-scrollbar { display: none; }
+  .pp-nav button { flex: none; white-space: nowrap; }
+  .pp-score { flex-direction: row; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; margin-bottom: 10px; }
+  .pp-score strong { font-size: 1.15rem; }
+  .pp-page { scroll-margin-top: 64px; }
+}
+@media (max-width: 640px) {
+  #view-papers .section-head p { font-size: 0.9rem; }
+  .pp-libbar { gap: 8px; } .pp-libbar > .btn { width: 100%; }
+  .pp-seg { width: 100%; } .pp-seg button { flex: 1; justify-content: center; padding: 0 8px; }
+  .pp-toolbar { gap: 8px; padding: 10px; }
+  .pp-title { flex-basis: 100%; } .pp-title strong { white-space: normal; }
+  .pp-toolbar .pp-seg.small { width: 100%; }
+  .pp-tools-right { width: 100%; justify-content: space-between; gap: 6px; }
+  .pp-menu { right: auto; left: 0; }
+  .pp-page { padding: 20px 14px; min-height: 0; }
+  .pp-qrow { grid-template-columns: 22px 1fr auto; gap: 8px; }
+  .pp-hint { margin-left: 30px; }
+  .pp-qtext { font-size: 0.95rem; }
+  .pp-lines { font-size: 16px; line-height: 28px; background-image: repeating-linear-gradient(to bottom, #fffef6 0 27px, #b8b8b8 27px 28px); }
+  .pp-self input, .pp-ans, .pp-slide input, .pp-slide textarea, .pp-budget-row input, .pp-week textarea { font-size: 16px; }
+  .pp-actions { gap: 8px; } .pp-actions .btn { flex: 1 1 auto; }
+  .pp-budget-row { grid-template-columns: 1fr 92px; }
+  .pp-data { font-size: 0.74rem; } .pp-data th, .pp-data td { padding: 4px 5px; }
+  .pp-stat-table td:first-child { width: 42%; } .pp-stat-v { width: 44px; } .pp-stat-bar { width: 22%; }
+  .pp-flow { columns: 1; }
+  .pp-kv, .pp-grid-table, .pp-week { font-size: 0.78rem; } .pp-kv th { width: 46%; }
+  .pp-actbox { padding: 10px; }
+  .pp-cover-row div, .pp-cover-boxes div { height: auto; min-height: 40px; }
+  .pp-result, .pp-ms { overflow-x: auto; }
+}
