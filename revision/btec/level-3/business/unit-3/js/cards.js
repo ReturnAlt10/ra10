@@ -1,0 +1,92 @@
+/* BTEC Business Unit 3 — flashcards. */
+(function () {
+  'use strict';
+  const B = window.__BIZ_B, F = B.F;
+  // A
+  F('A', 'Functions of money', 'Unit of account · means of exchange · store of value · legal tender.');
+  F('A', 'Why plan expenditure?', 'Avoid debt · control costs · avoid legal action/repossession · stay solvent · keep a good credit rating · save for goals · insurance · beat inflation.');
+  F('A', 'Interest rate rises', 'Borrowing costs up (loans, mortgages, cards); savings returns up; disposable income down; less borrowing.');
+  F('A', 'Keep a good credit rating', 'Electoral roll · pay on time · avoid CCJs/bankruptcy · avoid too much credit · stay in one home.');
+  F('A', 'Direct debit vs standing order', 'Direct debit: payee collects, amount can vary. Standing order: payer sets fixed amount and date.');
+  F('A', 'Credit card vs charge card', 'Credit: borrow to a limit, pay minimum, interest on balance. Charge: pay in full every month.');
+  F('A', 'BACS / FPS / CHAPS', 'BACS: ~3 working days (salaries, DDs). Faster Payments: near-instant. CHAPS: same-day high-value.');
+  F('A', 'Types of current account', 'Standard · packaged/premium (fee + extras) · basic (no overdraft) · student (interest-free overdraft).');
+  F('A', 'Overdraft', 'Flexible borrowing on a current account; arranged = lower cost, unarranged = high fees.');
+  F('A', 'Payday loan', 'Short-term, very high APR; whole amount due at payday; can create a debt spiral.');
+  F('A', 'Hire purchase', 'Pay deposit + instalments; own the item at the end; total cost > cash price.');
+  F('A', 'Mortgage', 'Long-term loan secured on property; lender can repossess.');
+  F('A', 'ISA', 'Tax-free savings/investment wrapper; annual allowance (£20,000); cash, stocks & shares, lifetime.');
+  F('A', 'Premium Bonds', 'NS&I; prizes instead of interest; no guaranteed return; backed by the Treasury.');
+  F('A', 'Risk and reward', 'Higher potential return = higher risk (shares). Lower risk = lower return (deposit account).');
+  F('A', 'Insurance terms', 'Premium = regular payment. Excess = your share of each claim. Higher excess → lower premium.');
+  F('A', 'Insurance types', 'Car · home and contents · life · travel · pet · health.');
+  // B
+  F('B', 'Financial institutions', 'Bank of England · banks · building societies · credit unions · NS&I · insurance cos · pension cos · pawnbrokers · payday lenders.');
+  F('B', 'Building society vs bank', 'Building society = mutual, owned by members. Bank = owned by shareholders for profit.');
+  F('B', 'Credit union', 'Member-owned, common bond, savings + low-cost loans, FSCS-protected.');
+  F('B', 'Bank of England', 'Sets base rate; controls inflation; issues notes; lender of last resort.');
+  F('B', 'FCA', 'Regulates conduct; authorises firms; can fine/ban; keeps a register.');
+  F('B', 'FOS', 'Free independent complaints service; use after complaining to the firm.');
+  F('B', 'FSCS', 'Compensation if an authorised firm fails – £85,000 per person per institution for deposits.');
+  F('B', 'IFA vs IVA', 'IFA = independent financial advisor (advice). IVA = Individual Voluntary Arrangement (debt solution). Don’t confuse them!');
+  F('B', 'IVA', 'Formal repayment plan over 5–6 years, remaining debt written off, avoids bankruptcy, fees, hits credit rating.');
+  F('B', 'Bankruptcy', 'Legal process: assets can be sold to repay creditors; restrictions; stays on credit file.');
+  F('B', 'Free debt advice', 'Citizens Advice · debt counsellors (e.g. StepChange) · MoneyHelper.');
+  F('B', 'Banking channels', 'Branch · online · telephone · mobile · postal – each has convenience vs security/personal-service trade-offs.');
+  // C
+  F('C', 'Purposes of accounting', 'Recording · management (plan, monitor, control) · compliance · measuring performance · fraud/receivable/payable control.');
+  F('C', 'Capital income', 'Loans · mortgages · shares · owner’s capital · debentures.');
+  F('C', 'Revenue income', 'Cash sales · credit sales · rent · commission · interest · discount received.');
+  F('C', 'Capital expenditure', 'Non-current assets: land, buildings, machinery, vehicles, fixtures (tangible); goodwill, patents, trademarks, brands (intangible).');
+  F('C', 'Revenue expenditure', 'Inventory, rent, rates, utilities, insurance, admin, wages, marketing, bank charges, interest paid, depreciation, discount allowed.');
+  // D
+  F('D', 'Internal sources of finance', 'Retained profit · net current assets · sale of assets.');
+  F('D', 'External sources of finance', 'Owner’s capital · loans · crowd-funding · mortgages · venture capital · factoring · hire purchase · leasing · trade credit · grants · donations · P2P lending · invoice discounting.');
+  F('D', 'Debt factoring', 'Sell unpaid invoices to a factor for immediate cash (less fee). + cash flow, − lower receipts.');
+  F('D', 'Invoice discounting', 'Borrow against invoices; you still collect the debt; confidential.');
+  F('D', 'Venture capital', 'Investors take equity for large funding and expertise; want growth and a say.');
+  F('D', 'Leasing', 'Rent an asset; no big upfront cost; never own it.');
+  F('D', 'Trade credit', 'Buy now, pay in 30–60 days; free short-term finance.');
+  F('D', 'Short vs long term', 'Short (< 1 year): overdraft, trade credit, factoring. Long: mortgage, loan, equity, venture capital.');
+  // E
+  F('E', 'Break-even formula', 'Fixed costs ÷ (selling price − variable cost per unit).');
+  F('E', 'Contribution per unit', 'Selling price − variable cost per unit.');
+  F('E', 'Total contribution', 'Contribution per unit × units sold.  Profit = total contribution − fixed costs.');
+  F('E', 'Margin of safety', 'Expected (or actual) sales − break-even output (units or £).');
+  F('E', 'Total costs', 'Fixed costs + variable costs (variable cost per unit × output).');
+  F('E', 'Total revenue', 'Selling price × units sold.');
+  F('E', 'Cutting break-even', 'Raise price · cut variable costs · cut fixed costs.');
+  F('E', 'Break-even limitations', 'One price assumed · linear costs · estimates · ignores demand/competitors.');
+  F('E', 'Cash flow: net and closing', 'Net cash flow = inflows − outflows. Closing = opening + net cash flow (closing becomes next month’s opening).');
+  F('E', 'Cash inflows', 'Cash sales · credit sales (when received) · loans · capital introduced · sale of assets · interest.');
+  F('E', 'Cash outflows', 'Purchases · rent · rates · salaries/wages · utilities · assets · VAT · interest paid.');
+  F('E', 'Benefits of cash flow forecasts', 'Spot shortages early · support loan applications · plan and control · set targets.');
+  F('E', 'Profit vs cash', 'Profit is revenue − costs; cash is timing of receipts/payments. Profitable firms can run out of cash.');
+  // F
+  F('F', 'Gross profit', 'Revenue − cost of sales.');
+  F('F', 'Cost of sales', 'Opening inventory + purchases − closing inventory.');
+  F('F', 'Profit for the year', 'Gross profit + other income − expenses.');
+  F('F', 'Gross profit margin', '(Gross profit ÷ revenue) × 100.');
+  F('F', 'Mark-up', '(Gross profit ÷ cost of sales) × 100.');
+  F('F', 'Profit margin', '(Profit for the year ÷ revenue) × 100.');
+  F('F', 'ROCE', '(Profit ÷ capital employed) × 100. Capital employed = total assets − current liabilities = non-current liabilities + equity.');
+  F('F', 'Current ratio', 'Current assets ÷ current liabilities (expressed e.g. 1.2 : 1 – calculate it!).');
+  F('F', 'Liquid capital ratio', '(Current assets − inventory) ÷ current liabilities.');
+  F('F', 'Trade receivable days', '(Trade receivables ÷ credit sales) × 365.');
+  F('F', 'Trade payable days', '(Trade payables ÷ credit purchases) × 365.');
+  F('F', 'Inventory turnover (days)', '(Average inventory ÷ cost of sales) × 365.');
+  F('F', 'Straight-line depreciation', 'Cost × x% every year (same charge). NBV = cost − accumulated depreciation.');
+  F('F', 'Reducing balance depreciation', '(Cost − depreciation to date) × x% – charge falls each year.');
+  F('F', 'Prepayment', 'Paid in advance – reduces expense, shown as current asset.');
+  F('F', 'Accrual', 'Used but unpaid – increases expense, shown as current liability.');
+  F('F', 'Net current assets', 'Current assets − current liabilities (working capital).');
+  F('F', 'Net assets', 'Non-current assets + net current assets − non-current liabilities = total equity.');
+  F('F', 'Total equity', 'Opening capital + profit − drawings.');
+  F('F', 'Limitations of ratios', 'Historical · snapshot · no non-financial factors · accounting policies differ · need comparison/trends · can be manipulated.');
+  F('F', 'Ratio answers', 'Show the formula, the figures and the answer; write ratios as a single number (1.2:1), margins as %, days as days.');
+  F('F', 'Own figure rule (OFR/ECF)', 'A wrong earlier answer used correctly in a later part still earns later marks.');
+  F('F', 'Exam structure', '2 hours · 80 marks (100 before 2021) · Section A personal finance (~⅓) · Section B business finance (~⅔) · formulae not given.');
+  F('F', 'Command words', 'Identify/Give 1–2 · Explain (identify + development) 2–4 · Calculate 2–4 · Discuss 6 · Analyse 8 · Evaluate 12.');
+  F('F', 'Evaluate (12 marks)', 'Compare options in context, weigh advantages/disadvantages, reach a justified conclusion – don’t just copy the table.');
+  B.publish();
+})();

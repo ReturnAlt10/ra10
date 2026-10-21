@@ -162,32 +162,28 @@ const UNIT_PROFILES: Record<string, string> = {
   ].join("\n"),
 
   // ---------------- BTEC Level 3 Business ----------------
-  "business-unit-1": [
-    "BTEC Level 3 Business Unit 1: Exploring Business (National Extended Certificate).",
-    "ASSESSMENT TYPE: EXTERNALLY ASSESSED WRITTEN EXAM (scenario-based). NOT coursework.",
-    "Learning Aims: A — features of businesses (ownership, sectors, size, scope), stakeholders & communication; B — organisational structure, functional areas, aims & SMART objectives; C — external environment (PESTLE), internal & competitive environment, situational analysis (SWOT); D — market structures, demand/supply/price, pricing & output decisions; E — innovation & enterprise, benefits & risks.",
-    "Answer in the context of the business in the question, link to stakeholders and use business terminology.",
-  ].join("\n"),
-
   "business-unit-2": [
-    "BTEC Level 3 Business Unit 2: Developing a Marketing Campaign.",
-    "ASSESSMENT TYPE: EXTERNALLY ASSESSED written task + controlled scenario (NOT a traditional exam; it's a set task/activity completed under controlled conditions).",
-    "Learning Aims: A — Principles & purposes of marketing (role, aims, markets, branding, influences); B — Information for the rationale (market research methods, data, product life cycle, market size/share/structure); C — Planning the campaign (situational analysis, marketing mix 7Ps, campaign content, budget, timescale); D — Developing the campaign (marketing mix, appropriateness, legal/ethical, evaluation & flexibility).",
-    "Apply the 7Ps and research to the scenario; justify decisions and relate to aims/objectives.",
+    "BTEC Level 3 Business Unit 2: Developing a Marketing Campaign (31489H).",
+    "ASSESSMENT TYPE: EXTERNALLY ASSESSED set task, 70 marks: Part A research pack (2 hours prep, two sides of A4 notes) then a 3-hour supervised Part B on a computer. Activity 1 = rationale (34 marks); Activity 2 = campaign plan (36 marks). Marked on 8 assessment foci: AF1 structure 4, AF2 aims/objectives 8, AF3 research & analysis 12, AF4 justification 10, AF5 marketing mix/message/media 20, AF6 budget 8, AF7 timescale 4, AF8 presentation 4. Content areas: A principles/purposes of marketing, aims/objectives, mass/niche markets, segmentation, branding, internal and external (PESTLE) influences; B research (primary/secondary, validity, reliability, currency, product life cycle); C SWOT/PESTLE, 7Ps marketing mix, message, media, budget, timescale, evaluation, appropriateness.",
+    "Coach the student: objectives need numbers and dates with a rationale; analyse (not copy) both primary and secondary data and evaluate reliability/validity; SWOT/PESTLE must be turned into actions; cover all 7Ps in context (people = employees, not the target market); itemise the budget in £ including wider costs; give a dated timescale with reasons. Do NOT write the whole answer for them.",
   ].join("\n"),
 
   "business-unit-3": [
-    "BTEC Level 3 Business Unit 3: Personal and Business Finance.",
-    "ASSESSMENT TYPE: EXTERNALLY ASSESSED WRITTEN EXAM (with calculations). NOT coursework.",
-    "Learning Aims: A — Personal finance (life stages, payment methods, borrowing, saving, insurance, budgeting); B — Personal finance sector (institutions, banking, roles); C — Government & personal finance (taxation, benefits, FCA/FOS/FSCS); D — Sources of business finance (internal & external, short/long-term, suitability); E — Financial planning (break-even, cash flow forecasts, variance analysis, budgets); F — Financial statements (income statement, statement of financial position, depreciation, profitability & liquidity ratios).",
-    "Show working for numeric questions and interpret results in context.",
+    "BTEC Level 3 Business Unit 3: Personal and Business Finance (31463H).",
+    "ASSESSMENT TYPE: EXTERNALLY ASSESSED WRITTEN EXAM, 2 hours (80 marks from 2021; 100 before). Section A personal finance (about one third), Section B business finance. Formulae are not given. Content areas: A personal finance (functions of money, ways to pay, current accounts, borrowing, saving/investing, insurance); B the personal finance sector (institutions, FCA/FOS/FSCS, advice, IFA vs IVA); C purpose of accounting, income and expenditure; D sources of business finance; E cash flow forecasts and break-even/margin of safety; F statements of comprehensive income and financial position, depreciation, ratios (gross profit margin, mark-up, profit margin, ROCE, current/liquid ratios, receivable/payable days, inventory turnover) and their limitations.",
+    "Coach the student: learn every formula; show working and use the own-figure rule; calculate ratios (1.2:1) rather than presenting two figures; explain questions need a point + linked development; 6-12 mark questions need application to the scenario, balance and a judgement; compare every option in a table. Do NOT write full answers for them.",
   ].join("\n"),
 
-  "business-unit-4": [
-    "BTEC Level 3 Business Unit 4: Managing an Event.",
-    "ASSESSMENT TYPE: INTERNALLY ASSESSED (coursework). NOT an exam.",
-    "Learning Aims: A — Role of an event organiser (tasks, skills, skills audit); B — Feasibility of an event (types, factors, feasibility); C — Planning the event (planning tools, Gantt charts, budgets, risk); D — Staging & managing the event (problem solving, contingency); E — Evaluation & reflection.",
-    "Support planning, budgeting, risk assessment and evaluation with practical, structured guidance.",
+  "business-unit-6": [
+    "BTEC Level 3 Business Unit 6: Principles of Management (31588H).",
+    "ASSESSMENT TYPE: EXTERNALLY ASSESSED set task, 88 marks: Part A case study and data (about 6 hours preparation, no notes allowed in Part B), Part B 3 hours on a computer: Activity 1 report (44 marks, size 12 font) and Activity 2 presentation with speaker notes (44 marks). Each activity has four assessment foci: data analysis & interpretation 12, key principles of management 12, suggested alternative management approaches 12, structure/presentation 8. Content: management/leadership functions and styles, business culture (Handy, Schein, Hofstede), skills and theories (Fayol, Weber, Blake & Mouton), HR and HR planning, motivation (Maslow, Herzberg, Taylor, Mayo), training and appraisal, managing change (Lewin, Kotter), quality management (BSI/ISO, quality circles, lean, six sigma, kaizen, audits).",
+    "Coach the student: use the figures in the case tables, link every theory to the business goals, recommend specific realistic actions with benefits and drawbacks, and structure the report/presentation clearly. Do NOT write the whole answer for them.",
+  ].join("\n"),
+
+  "business-unit-7": [
+    "BTEC Level 3 Business Unit 7: Business Decision Making (31589H), Part S.",
+    "ASSESSMENT TYPE: EXTERNALLY ASSESSED 3-hour set task on a computer, 70 marks: Activity 1 report on two options (52 marks) and Activity 2 presentation with speaker notes (18 marks). Foci: AF1 data selection 8, AF2 resources 8, AF3 financial forecasting 8, AF4 key factors/risks/alternatives using at least two decision tools 16, AF5 supported decision 8, AF6 structure 4, AF7 overview 6, AF8 pitch 6, AF9 design 6. Content: human/physical/financial/time resources, gross and net profit and margins, break-even and margin of safety, ROCE, cash flow, SWOT, PESTLE, Porter's five forces, 5C model, risks and alternatives, recommendations.",
+    "Coach the student: analyse BOTH options throughout, show financial working (own-figure rule), use two or more tools, link to the client's aims and give one justified recommendation including why the other is rejected. Do NOT write the whole answer for them.",
   ].join("\n"),
 
   // ---------------- BTEC Level 3 Sport ----------------
