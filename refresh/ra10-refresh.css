@@ -60,7 +60,7 @@
     z-index: 0;
   }
 
-  body.ra10-refresh-enabled > :not(.mobile-top-nav):not(.mobile-bottom-nav):not(.mobile-sheet-backdrop):not(.mobile-subject-sheet):not(.mobile-you-sheet):not(.auth-overlay):not(.nav-user-dropdown):not(.nav):not(.navbar):not(.topbar):not(.viewer-topbar):not(.brief-modal):not(.ed-fullscreen-overlay):not(.mobile-tool-notice-overlay):not(.exam-modal-overlay):not(.rai-layer):not(#ra10-help-fab):not(.ra10-a11y-overlay):not(.skip-link):not(.rxp-overlay):not(.rxp-widget):not(.rxp-toast):not(.lbx-pe) {
+  body.ra10-refresh-enabled > :not(.mobile-top-nav):not(.mobile-bottom-nav):not(.mobile-sheet-backdrop):not(.mobile-subject-sheet):not(.mobile-you-sheet):not(.auth-overlay):not(.nav-user-dropdown):not(.nav):not(.navbar):not(.topbar):not(.viewer-topbar):not(.brief-modal):not(.ed-fullscreen-overlay):not(.mobile-tool-notice-overlay):not(.exam-modal-overlay):not(.rai-layer):not(#ra10-help-fab):not(.ra10-a11y-overlay):not(.skip-link):not(.rxp-overlay):not(.rxp-widget):not(.rxp-toast):not(.lbx-pe):not(.u1-progress-sidebar):not(.u1-sidebar-toggle):not(.u2-progress-sidebar):not(.u2-sidebar-toggle) {
     position: relative;
     z-index: 1;
   }
@@ -80,6 +80,13 @@
   body.ra10-refresh-enabled .exam-modal-overlay,
   body.ra10-refresh-enabled .rai-layer,
   body.ra10-refresh-enabled #ra10-help-fab {
+    position: fixed !important;
+  }
+
+  body.ra10-refresh-enabled > .u1-progress-sidebar,
+  body.ra10-refresh-enabled > .u1-sidebar-toggle,
+  body.ra10-refresh-enabled > .u2-progress-sidebar,
+  body.ra10-refresh-enabled > .u2-sidebar-toggle {
     position: fixed !important;
   }
 
