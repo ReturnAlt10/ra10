@@ -95,6 +95,13 @@
     pointer-events: auto !important;
   }
 
+  @media (min-width: 1101px) {
+    body.ra10-refresh-enabled > .u1-progress-sidebar,
+    body.ra10-refresh-enabled > .u2-progress-sidebar {
+      top: 110px !important;
+    }
+  }
+
   body.ra10-refresh-enabled .u1-progress-sidebar .u1-sb-close,
   body.ra10-refresh-enabled .u2-progress-sidebar .u2-sb-close {
     position: relative !important;
@@ -111,6 +118,17 @@
     pointer-events: auto !important;
     font-size: 16px;
     line-height: 1;
+  }
+
+  body.ra10-refresh-enabled .kpi-emoji,
+  body.ra10-refresh-enabled [class*="emoji"],
+  body.ra10-refresh-enabled .you-hero-streak,
+  body.ra10-refresh-enabled .you-xp-pill,
+  body.ra10-refresh-enabled .u1-sb-chip,
+  body.ra10-refresh-enabled .u2-sb-chip,
+  body.ra10-refresh-enabled .u1-sidebar-toggle,
+  body.ra10-refresh-enabled .u2-sidebar-toggle {
+    font-family: "Segoe UI Emoji", "Segoe UI Symbol", "Plus Jakarta Sans", sans-serif;
   }
 
   body.ra10-refresh-enabled h1,
@@ -147,7 +165,7 @@
   body.ra10-refresh-enabled input,
   body.ra10-refresh-enabled select,
   body.ra10-refresh-enabled textarea {
-    font-family: "Plus Jakarta Sans", "Segoe UI", sans-serif;
+    font-family: "Plus Jakarta Sans", "Segoe UI Emoji", "Segoe UI Symbol", "Segoe UI", sans-serif;
   }
 
   .ra10-scroll-progress {
