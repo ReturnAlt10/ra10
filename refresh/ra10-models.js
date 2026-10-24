@@ -412,7 +412,7 @@
       '.rm-svg{cursor:zoom-in}',
       '.rm-fig figcaption{margin-top:8px;font-size:.84rem;line-height:1.45;opacity:.85}',
       '.rm-zoom{position:absolute;top:8px;right:8px;width:30px;height:30px;border-radius:50%;border:0;cursor:pointer;background:color-mix(in srgb,currentColor 8%,transparent);color:inherit;font-size:1rem}',
-      '.rm-zoom-ov{position:fixed;inset:0;z-index:2147483600;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(10,12,20,.5);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}',
+      '.rm-zoom-ov{position:fixed !important;inset:0;z-index:2147483600 !important;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(10,12,20,.5);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}',
       '.rm-zoom-card{position:relative;width:min(1000px,100%);max-height:94vh;overflow:auto;border-radius:22px;padding:22px;background:var(--surface,var(--color-surface,#fff));color:var(--ink,var(--color-text,#14161c))}',
       '[data-theme="dark"] .rm-zoom-card{background:#1b1c22;color:#eef0f6}',
       '.rm-zoom-card h3{margin:0 0 10px}.rm-zoom-card p{margin:10px 0 0;opacity:.85}',

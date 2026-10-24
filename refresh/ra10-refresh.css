@@ -60,7 +60,7 @@
     z-index: 0;
   }
 
-  body.ra10-refresh-enabled > :not(.mobile-top-nav):not(.mobile-bottom-nav):not(.mobile-sheet-backdrop):not(.mobile-subject-sheet):not(.mobile-you-sheet):not(.auth-overlay):not(.nav-user-dropdown):not(.nav):not(.navbar):not(.topbar):not(.viewer-topbar):not(.brief-modal):not(.ed-fullscreen-overlay):not(.mobile-tool-notice-overlay):not(.exam-modal-overlay):not(.rai-layer):not(#ra10-help-fab):not(.ra10-a11y-overlay):not(.skip-link):not(.rxp-overlay):not(.rxp-widget):not(.rxp-toast):not(.lbx-pe):not(.u1-progress-sidebar):not(.u1-sidebar-toggle):not(.u2-progress-sidebar):not(.u2-sidebar-toggle) {
+  body.ra10-refresh-enabled > :not(.mobile-top-nav):not(.mobile-bottom-nav):not(.mobile-sheet-backdrop):not(.mobile-subject-sheet):not(.mobile-you-sheet):not(.auth-overlay):not(.nav-user-dropdown):not(.nav):not(.navbar):not(.topbar):not(.viewer-topbar):not(.brief-modal):not(.ed-fullscreen-overlay):not(.mobile-tool-notice-overlay):not(.exam-modal-overlay):not(.rai-layer):not(.rm-zoom-ov):not(#ra10-help-fab):not(.ra10-a11y-overlay):not(.skip-link):not(.rxp-overlay):not(.rxp-widget):not(.rxp-toast):not(.lbx-pe):not(.u1-progress-sidebar):not(.u1-sidebar-toggle):not(.u2-progress-sidebar):not(.u2-sidebar-toggle) {
     position: relative;
     z-index: 1;
   }
@@ -510,7 +510,7 @@
    share one visual language and interaction model.
    ============================================================ */
 
-/* Nav icon baseline — every inline `.nu` SVG in a nav/link gets an explicit
+/* Nav icon baseline â€” every inline `.nu` SVG in a nav/link gets an explicit
    box size at ALL viewport widths. Without this, an SVG with only a viewBox
    collapses to the browser default (huge), which is what makes the desktop
    navbar icons blow up on smaller/squarer displays. */

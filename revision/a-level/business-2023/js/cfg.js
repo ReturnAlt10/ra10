@@ -9,7 +9,7 @@
   window.AQA_UNIT = {
     key: 'aqa_biz_2023', code: '7132', subjectName: 'A-Level Business', qualLine: 'A-level', subjectLine: 'Business', fileStem: 'AQA-A-level-Business-7132', dataSrc: 'js/papers-data.js',
     pastLabel: 'Past Papers',
-    howto: ['Choose a paper. Past papers 2020–2025 are the real AQA questions; RA10 papers are fresh practice sets in the same format.',
+    howto: ['Choose a paper. Past papers are the real AQA questions; RA10 papers are fresh practice sets in the same format.',
       'Switch to “Answer online”: tap an option for instant multiple-choice marking, type short answers and essays, and use the case-study button beside your answer.',
       'Press “AI Examiner” on any part for a level, a mark and what to do to move up a level — or download the paper as a PDF.'],
     paperNote: 'Paper 1 has no case study (you supply the context). Paper 2 has three data-response cases. Paper 3 has one case study with six questions.',
