@@ -59,6 +59,8 @@
 <link rel="preconnect" href="https://api.fontshare.com">
 <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@500,700,900,400&f[]=jetbrains-mono@500&display=swap">
 <link rel="stylesheet" href="css/style.css?v=20260507c">
+<link rel="stylesheet" href="../shared/aqa-papers.css?v=20261024">
+<link rel="stylesheet" href="../../btec/level-3/business/shared/biz-guide.css?v=20261024">
 <style>
 .ra10-cost-label {
   display: inline-block;
@@ -1373,6 +1375,7 @@
   document.head.appendChild(js);
 })();
 </script>
+<link rel="stylesheet" href="../../shared/unit-ui.css?v=20261103">
 </head>
 <body>
 <header class="topbar">
@@ -1573,6 +1576,23 @@
       <p style="font-size:1.15rem;color:var(--accent);font-weight:700;">How do you want to practise? <span style="font-size:1.5em;">&#x1F4DD;</span></p>
     </header>
     <div class="dashboard-grid">
+      <div class="feature-section">
+        <div class="feature-header">
+          <div class="feature-icon">&#x1F4DA;</div>
+          <div>
+            <h3>Past Papers &amp; RA10 Papers</h3>
+            <p>Real AQA papers 2020-2025 and RA10 practice papers, with mark schemes and AI marking.</p>
+          </div>
+        </div>
+        <div class="feature-cards grid-1">
+          <article class="card primary-card">
+            <span class="card-tag">Recommended</span>
+            <h4>Open the paper library</h4>
+            <p>Read, answer online, get the AI Examiner to mark each question, or download a PDF.</p>
+            <button class="btn primary" data-goto="pastpapers">Open</button>
+          </article>
+        </div>
+      </div>
       <div class="feature-section">
         <div class="feature-header">
           <div class="feature-icon">&#x1F4DD;</div>
@@ -1852,6 +1872,14 @@
   </section>
 
   <!-- PREDICTED PAPERS -->
+  <section id="view-pastpapers" class="view">
+    <header class="section-head">
+      <h2>Past Papers &amp; RA10 Papers</h2>
+      <p>Every AQA 7132 paper from June 2020 to June 2025 with its mark scheme, plus 15 RA10 papers. Open a paper, answer it online, then get your answers marked by the AI Examiner.</p>
+    </header>
+    <div id="papers-host" class="pp-library"></div>
+  </section>
+
   <section id="view-papers" class="view">
     <section class="papers-flow-card">
       <div class="papers-flow-head">
@@ -2168,8 +2196,12 @@
 <script src="js/spec.js"></script>
 <script src="js/guide-content-a.js"></script>
 <script src="js/guide-content-b.js"></script>
-<script src="js/guide.js"></script>
-<script src="js/app.js?v=20261019"></script>
+<script src="../../btec/level-3/business/shared/biz-guide.js?v=20261024"></script>
+<script src="js/guide-visuals.js?v=20261024"></script>
+<script src="js/guide.js?v=20261024"></script>
+<script src="js/cfg.js?v=20261024"></script>
+<script src="../shared/aqa-papers.js?v=20261024"></script>
+<script src="js/app.js?v=20261024"></script>
 
 <script data-pplx-inline-edit>
 (function () {
@@ -3122,7 +3154,8 @@ document.addEventListener('DOMContentLoaded', function () {
   spinBtn.addEventListener('click', spinWithFeedback);
   refreshBtn.addEventListener('click', spinWithFeedback);
 });
-</script></body>
+</script><script src="../../shared/unit-ui.js?v=20261103"></script>
+</body>
 </html>
 
 

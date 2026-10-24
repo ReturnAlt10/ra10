@@ -169,7 +169,7 @@
 
       const top = el('div', { class: 'pp-libbar' });
       const seg = el('div', { class: 'pp-seg', role: 'tablist' });
-      [['pearson', 'Pearson past papers', nP], ['ra10', 'RA10 practice papers', nR]].forEach(([k, label, n]) => {
+      [['pearson', 'Past Papers', nP], ['ra10', 'RA10 Papers', nR]].forEach(([k, label, n]) => {
         if (k === 'ra10' && !n) return;
         const b = el('button', { type: 'button', role: 'tab', class: k === cur ? 'on' : '', 'aria-selected': String(k === cur) }, label, el('span', { class: 'pp-count' }, String(n)));
         b.addEventListener('click', () => renderPapers(k));

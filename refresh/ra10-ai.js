@@ -394,7 +394,8 @@
     'sport-unit-1': { subject: 'Sport', qualification: 'BTEC Level 3', unit: 'Unit 1 · Anatomy & Physiology' },
     'sport-unit-2': { subject: 'Sport', qualification: 'BTEC Level 3', unit: 'Unit 2 · Fitness Training' },
     'it-l2-unit-2': { subject: 'IT', qualification: 'BTEC Level 2', unit: 'Unit 2 · Technology Systems' },
-    'a-level-business': { subject: 'Business', qualification: 'A Level (AQA)', unit: 'AQA Business' }
+    'a-level-business': { subject: 'Business', qualification: 'A Level (AQA)', unit: 'AQA Business' },
+    'a-level-business-2026': { subject: 'Business', qualification: 'A Level (AQA)', unit: 'AQA Business (2026 spec, 7138)' }
   };
   function detectUnitKey(path) {
     var p = String(path || location.pathname || '').toLowerCase();
@@ -403,6 +404,7 @@
     if ((m = /\/revision\/btec\/level-3\/business\/unit-(\d)/.exec(p))) return 'business-unit-' + m[1];
     if ((m = /\/revision\/btec\/level-3\/sport\/unit-(\d)/.exec(p))) return 'sport-unit-' + m[1];
     if (/\/revision\/btec\/level-2\/it\/unit-2/.test(p)) return 'it-l2-unit-2';
+    if (/\/revision\/a-level\/business-2026/.test(p)) return 'a-level-business-2026';
     if (/\/revision\/a-level\/business/.test(p)) return 'a-level-business';
     return '';
   }
@@ -590,6 +592,26 @@
     deleteGroup: function (id) { return this.run(this.client().from('ai_chat_groups').delete().eq('id', id)); }
   };
 
+  // Per-device copy of recent conversation text, keyed by chat id.
+  var Mirror = {
+    key: function () { return 'ra10_ai_msgs:' + (userId() || 'anon'); },
+    all: function () { try { return JSON.parse(ls(this.key()) || '{}') || {}; } catch (e) { return {}; } },
+    get: function (id) { return (this.all()[id] || []).slice(); },
+    add: function (id, rows) {
+      var all = this.all();
+      all[id] = (all[id] || []).concat(rows.map(function (r) { return { role: r.role, content: r.content, created_at: new Date().toISOString() }; })).slice(-300);
+      var ids = Object.keys(all);
+      if (ids.length > 60) {
+        ids.sort(function (a, b) { var la = all[a][all[a].length - 1], lb = all[b][all[b].length - 1]; return (la && la.created_at) < (lb && lb.created_at) ? -1 : 1; });
+        ids.slice(0, ids.length - 60).forEach(function (k) { delete all[k]; });
+      }
+      var json = JSON.stringify(all);
+      while (json.length > 1500000 && ids.length > 1) { delete all[ids.shift()]; json = JSON.stringify(all); }
+      ls(this.key(), json);
+    },
+    drop: function (id) { var all = this.all(); if (all[id]) { delete all[id]; ls(this.key(), JSON.stringify(all)); } }
+  };
+
   var store = (function () {
     var backend = null;      // chosen on first call
     var cache = { chats: [], groups: [] };
@@ -646,12 +668,26 @@
       createChat: function (meta) { return call('createChat', [meta]).then(upsertChat); },
       updateChat: function (id, patch) { return call('updateChat', [id, patch]).then(upsertChat); },
       deleteChat: function (id) {
-        return call('deleteChat', [id]).then(function () { cache.chats = cache.chats.filter(function (c) { return c.id !== id; }); emit(); });
+        return call('deleteChat', [id]).then(function () { Mirror.drop(id); cache.chats = cache.chats.filter(function (c) { return c.id !== id; }); emit(); });
       },
-      messages: function (id) { return call('messages', [id]); },
+      // Reads the saved conversation. A device-side mirror (written on every
+      // send) is used if the server returns nothing or errors, so a chat never
+      // opens blank just because one save or load round-trip failed.
+      messages: function (id) {
+        var mirror = Mirror.get(id);
+        return call('messages', [id]).then(function (rows) {
+          rows = rows || [];
+          return rows.length >= mirror.length ? rows : mirror;
+        }, function (err) {
+          if (window.console) console.warn('RA10 AI: could not load chat messages', err);
+          if (mirror.length) return mirror;
+          throw err;
+        });
+      },
       addMessages: function (id, rows) {
         rows = rows.map(function (r) { return { role: r.role, content: stripText(r.content) }; }).filter(function (r) { return r.content.trim(); });
         if (!rows.length) return Promise.resolve(store.chat(id));
+        Mirror.add(id, rows);
         return call('addMessages', [id, rows]).then(upsertChat);
       },
       createGroup: function (g) { return call('createGroup', [g]).then(function (row) { cache.groups.push(row); cache.groups.sort(function (a, b) { return a.name.localeCompare(b.name); }); emit(); return row; }); },
@@ -1274,7 +1310,7 @@
       if (root.classList.contains('overlay-side')) setSide(false);
       return store.messages(id).then(function (rows) {
         t.remove();
-        if (state.chat !== c) return true;
+        if (!state.chat || state.chat.id !== c.id) return true;
         state.messages = (rows || []).map(function (r) { return { role: r.role, content: r.content }; });
         renderMessages();
         return true;

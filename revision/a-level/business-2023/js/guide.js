@@ -69,6 +69,7 @@
       <div class="guide-aim-subtitle">${esc(s.subtitle)}</div>
     </div>
   </div>
+  ${s.hero || ''}
   ${s.topics.map((t, i) => topicHtml(t, idx === 0 && i === 0)).join('')}
   <button class="guide-mark-btn" id="gmb-${s.num}" onclick="toggleGuideRevised('${s.num}')">
     <span class="guide-mark-icon">&#9711;</span> Mark 3.${s.num} as revised

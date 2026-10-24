@@ -387,19 +387,19 @@ body.auth-popup-open{overflow:hidden}
 #ra10-help-fab span{letter-spacing:.01em}
 #ra10-help-fab:hover{transform:translateY(-2px);box-shadow:0 14px 32px rgba(210,0,0,.5)}
 #ra10-help-fab:active{transform:translateY(0) scale(.98)}
-body:has(.page-iframe.active, #p-btec.active, #p-btec-l3.active, #p-it-aaq.active, #p-btec-business-l3.active, #p-btec-sport-l3.active, #p-aqa-business-2023.active) #ra10-help-fab{
+body:has(.page-iframe.active, #p-btec.active, #p-btec-l3.active, #p-it-aaq.active, #p-btec-business-l3.active, #p-btec-sport-l3.active, #p-aqa-business-2023.active, #p-aqa-business-2026.active, #p-alevel.active) #ra10-help-fab{
   position:static;z-index:auto;flex-shrink:0;
   height:38px;padding:0 14px;font-size:var(--tx-xs);
   box-shadow:0 4px 12px rgba(210,0,0,.22);
 }
-body:has(.page-iframe.active, #p-btec.active, #p-btec-l3.active, #p-it-aaq.active, #p-btec-business-l3.active, #p-btec-sport-l3.active, #p-aqa-business-2023.active) #ra10-help-fab span{display:inline}
+body:has(.page-iframe.active, #p-btec.active, #p-btec-l3.active, #p-it-aaq.active, #p-btec-business-l3.active, #p-btec-sport-l3.active, #p-aqa-business-2023.active, #p-aqa-business-2026.active, #p-alevel.active) #ra10-help-fab span{display:inline}
 @media (max-width:640px){
   #ra10-help-fab{padding:0 12px;height:44px;bottom:calc(84px + env(safe-area-inset-bottom,0px))}
   #ra10-help-fab span{display:none}
-  body:has(.page-iframe.active, #p-btec.active, #p-btec-l3.active, #p-it-aaq.active, #p-btec-business-l3.active, #p-btec-sport-l3.active, #p-aqa-business-2023.active) #ra10-help-fab{
+  body:has(.page-iframe.active, #p-btec.active, #p-btec-l3.active, #p-it-aaq.active, #p-btec-business-l3.active, #p-btec-sport-l3.active, #p-aqa-business-2023.active, #p-aqa-business-2026.active, #p-alevel.active) #ra10-help-fab{
     height:36px;padding:0 12px;
   }
-  body:has(.page-iframe.active, #p-btec.active, #p-btec-l3.active, #p-it-aaq.active, #p-btec-business-l3.active, #p-btec-sport-l3.active, #p-aqa-business-2023.active) #ra10-help-fab span{display:inline}
+  body:has(.page-iframe.active, #p-btec.active, #p-btec-l3.active, #p-it-aaq.active, #p-btec-business-l3.active, #p-btec-sport-l3.active, #p-aqa-business-2023.active, #p-aqa-business-2026.active, #p-alevel.active) #ra10-help-fab span{display:inline}
 }
 .auth-overlay.open .auth-modal{transform:translateY(0) scale(1)}
 .home-reframe-banner{
@@ -5118,6 +5118,156 @@ html body #community-share-sheet .community-share-panel{
 }
 @media (prefers-reduced-motion:reduce){.hm-float{animation:none}.hm-tile:hover{transform:none}}
 </style>
+<style id="sd-style">
+/* ===== Signed-in landing dashboard ===== */
+body.home-signed-in #p-home .hx-home > :not(#signed-in-dashboard){display:none !important}
+.sd{max-width:1160px;margin:0 auto;width:100%;color:var(--color-text)}
+.sd-top{display:flex;align-items:center;justify-content:space-between;gap:var(--sp4);flex-wrap:wrap;margin-bottom:var(--sp5)}
+.sd-who{display:flex;align-items:center;gap:var(--sp4);min-width:0}
+.sd-avatar{width:64px;height:64px;border-radius:20px;display:grid;place-items:center;font:700 1.7rem/1 var(--font-b);color:#fff;background:linear-gradient(135deg,#d20000,#7a0000);box-shadow:0 10px 24px -10px rgba(210,0,0,.6);overflow:hidden;flex:none}
+.sd-greet{font-size:var(--tx-sm);color:var(--color-text-muted);margin:0}
+.sd-name{font:400 clamp(1.8rem,1.3rem + 2vw,2.6rem)/1.1 var(--font-d);margin:2px 0 6px;letter-spacing:-.01em}
+.sd-badges{display:flex;gap:8px;flex-wrap:wrap}
+.sd-actions{display:flex;gap:10px;flex-wrap:wrap}
+.sd-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:11px 18px;min-height:44px;border-radius:999px;border:1px solid var(--color-border);background:var(--color-surface-2);color:var(--color-text);font:600 .9rem/1 var(--font-b);cursor:pointer;transition:transform .15s,border-color .15s,background .15s}
+.sd-btn:hover{border-color:var(--color-primary);transform:translateY(-1px)}
+.sd-btn-primary{background:var(--color-primary);border-color:var(--color-primary);color:#fff}
+.sd-btn-primary:hover{background:var(--color-primary-hover);border-color:var(--color-primary-hover)}
+.sd-btn-ghost{background:transparent}
+.sd-btn.sm{padding:9px 14px;min-height:38px;font-size:.82rem}
+.sd-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:var(--sp5)}
+.sd-stat{display:flex;align-items:center;gap:14px;padding:16px;border-radius:18px;background:var(--color-surface-2);border:1px solid var(--color-divider)}
+.sd-stat-ico{display:grid;place-items:center;width:46px;height:46px;border-radius:14px;font-size:1.4rem;background:var(--color-surface-offset);flex:none}
+.sd-stat.streak .sd-stat-ico{background:#fff1e6}.sd-stat.credits .sd-stat-ico{background:#fff8d6}.sd-stat.pins .sd-stat-ico{background:#eaf2ff}.sd-stat.exam .sd-stat-ico{background:#fde8e8}
+.sd-stat b{display:block;font:700 1.7rem/1 var(--font-b);letter-spacing:-.02em}
+.sd-stat span{display:block;font-size:.8rem;color:var(--color-text-muted);margin-top:2px}
+.sd-stat small{display:block;font-size:.72rem;color:var(--color-text-faint);margin-top:1px}
+.sd-grid{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:var(--sp5);align-items:start}
+.sd-main,.sd-side{display:flex;flex-direction:column;gap:var(--sp5);min-width:0}
+.sd-card{padding:20px;border-radius:22px;background:var(--color-surface-2);border:1px solid var(--color-divider);box-shadow:var(--shadow-sm)}
+.sd-card-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:14px;flex-wrap:wrap}
+.sd-card-head h3{font:700 1.08rem/1.2 var(--font-b)}
+.sd-card-head span{font-size:.8rem;color:var(--color-text-muted)}
+.sd-link{border:0;background:none;color:var(--color-primary);font:600 .82rem var(--font-b);cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.sd-empty{font-size:.9rem;color:var(--color-text-muted);padding:4px 0 8px;grid-column:1/-1}
+.sd-recent{display:grid;grid-template-columns:minmax(0,1fr);gap:10px}.sd-resume{min-width:0;box-sizing:border-box}
+.sd-resume{display:flex;align-items:center;gap:14px;width:100%;padding:14px 16px;border-radius:16px;border:1px solid var(--color-divider);background:var(--color-surface);color:inherit;text-align:left;font:inherit;cursor:pointer;transition:transform .15s,border-color .15s,box-shadow .15s}
+.sd-resume:hover{transform:translateY(-1px);border-color:var(--color-primary);box-shadow:var(--shadow-md)}
+.sd-resume.first{padding:18px;background:linear-gradient(135deg,rgba(210,0,0,.07),var(--color-surface) 60%);border-color:rgba(210,0,0,.25)}
+.sd-resume-copy{display:flex;flex-direction:column;min-width:0;flex:1}
+.sd-resume-copy small{font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--color-primary)}
+.sd-resume-copy strong{font-size:1.05rem}
+.sd-resume-copy em{font-style:normal;font-size:.82rem;color:var(--color-text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sd-go{font-weight:700;font-size:.85rem;color:var(--color-primary);white-space:nowrap}
+.sd-pins,.sd-all{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+.sd-app{position:relative;display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:16px;border:1px solid var(--color-divider);background:var(--color-surface);cursor:pointer;transition:transform .15s,border-color .15s,box-shadow .15s}
+.sd-app:hover,.sd-app:focus-visible{transform:translateY(-1px);border-color:var(--color-primary);box-shadow:var(--shadow-md);outline:none}
+.sd-app-ico{flex:none;width:44px;height:44px;border-radius:14px;display:grid;place-items:center;font:800 .85rem var(--font-b);color:#fff;background:#64748b}
+.sd-app-ico.it{background:linear-gradient(135deg,#16a34a,#0f766e)}.sd-app-ico.l2{background:linear-gradient(135deg,#ea580c,#c2410c)}.sd-app-ico.business{background:linear-gradient(135deg,#2563eb,#1e3a8a)}.sd-app-ico.sport{background:linear-gradient(135deg,#7c3aed,#c026d3)}
+.sd-app-copy{display:flex;flex-direction:column;min-width:0;flex:1}
+.sd-app-copy strong{font-size:.95rem}
+.sd-app-copy small{font-size:.76rem;color:var(--color-text-muted);line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.sd-pin{flex:none;width:36px;height:36px;border-radius:50%;border:1px solid var(--color-border);background:transparent;color:var(--color-text-muted);font-size:1.05rem;cursor:pointer}
+.sd-pin:hover{border-color:var(--color-primary);color:var(--color-primary)}
+.sd-pin.on{background:var(--color-primary);border-color:var(--color-primary);color:#fff}
+.sd-filter{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.sd-chip{padding:8px 14px;border-radius:999px;border:1px solid var(--color-border);background:transparent;color:var(--color-text);font:600 .8rem var(--font-b);cursor:pointer}
+.sd-chip.on{background:var(--color-text);border-color:var(--color-text);color:var(--color-bg)}
+.sd-next{background:linear-gradient(145deg,#1f1b1b,#3a0b0b 70%,#7a0000);color:#fff;border-color:transparent}
+.sd-next .sd-card-head span{color:rgba(255,255,255,.7)}
+.sd-count{display:flex;align-items:center;gap:18px}
+.sd-ring{--p:50;position:relative;flex:none;width:96px;height:96px;border-radius:50%;display:grid;place-content:center;text-align:center;background:conic-gradient(#ff6b6b calc(var(--p)*1%),rgba(255,255,255,.15) 0)}
+.sd-ring::before{content:'';position:absolute;inset:8px;border-radius:50%;background:#2a0d0d}
+.sd-ring b,.sd-ring small{position:relative}
+.sd-ring b{font:700 1.9rem/1 var(--font-b)}.sd-ring small{font-size:.7rem;opacity:.75}
+.sd-count-copy{display:flex;flex-direction:column;gap:6px;align-items:flex-start;min-width:0}
+.sd-count-copy strong{font-size:1.05rem}.sd-count-copy span{font-size:.8rem;opacity:.75}
+.sd-next .sd-btn-primary{background:#fff;color:#7a0000;border-color:#fff}
+.sd-exams{display:flex;flex-direction:column;gap:8px}
+.sd-exam{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:14px;background:var(--color-surface);border:1px solid var(--color-divider)}
+.sd-exam-date{flex:none;width:46px;text-align:center;border-radius:12px;background:var(--color-surface-offset);padding:5px 0}
+.sd-exam-date b{display:block;font-size:1.15rem;line-height:1}.sd-exam-date span{font-size:.66rem;text-transform:uppercase;letter-spacing:.06em;color:var(--color-text-muted)}
+.sd-exam-copy{display:flex;flex-direction:column;min-width:0;flex:1}.sd-exam-copy strong{font-size:.88rem}.sd-exam-copy small{font-size:.74rem;color:var(--color-text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sd-exam-days{font:700 .75rem var(--font-b);padding:4px 9px;border-radius:999px;background:var(--color-surface-offset);color:var(--color-text-muted)}
+.sd-exam-days.near{background:#fff1d6;color:#8a5a00}.sd-exam-days.soon{background:#fde8e8;color:#b00020}
+.sd-links{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.sd-links button{display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:12px;border-radius:14px;border:1px solid var(--color-divider);background:var(--color-surface);color:inherit;text-align:left;font:inherit;cursor:pointer;transition:border-color .15s,transform .15s}
+.sd-links button:hover{border-color:var(--color-primary);transform:translateY(-1px)}
+.sd-links span{font-size:1.2rem}.sd-links b{font-size:.88rem}.sd-links small{font-size:.72rem;color:var(--color-text-muted)}
+[data-theme="dark"] .sd-stat .sd-stat-ico{background:var(--color-surface-offset-2) !important}
+[data-theme="dark"] .sd-exam-days.near{background:#3d3010;color:#ffd27a}[data-theme="dark"] .sd-exam-days.soon{background:#3d1515;color:#ff9a9a}
+@media (max-width:980px){.sd-grid{grid-template-columns:1fr}.sd-side{order:-1}.sd-stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:560px){.sd-top{align-items:flex-start}.sd-avatar{width:52px;height:52px;font-size:1.4rem;border-radius:16px}.sd-actions{width:100%}.sd-actions .sd-btn{flex:1}.sd-actions .sd-btn-ghost{display:none}.sd-pins,.sd-all{grid-template-columns:1fr}.sd-card{padding:16px;border-radius:18px}.sd-stat{padding:12px;gap:10px}.sd-stat b{font-size:1.35rem}.sd-stat-ico{width:38px;height:38px;font-size:1.15rem}.sd-ring{width:84px;height:84px}}
+
+
+/* ---- dashboard icon + motion layer ---- */
+.sd-svg{width:100%;height:100%;display:block;overflow:visible}
+.sd-stat{position:relative;overflow:hidden;animation:sd-rise .55s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--i,0)*70ms)}
+.sd-stat::after{content:'';position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.35) 50%,transparent 70%);transform:translateX(-120%);transition:transform .7s}
+.sd-stat:hover::after{transform:translateX(120%)}
+.sd-stat-ico{width:58px;height:58px;border-radius:18px;padding:11px;color:#c2410c}
+.sd-stat.streak .sd-stat-ico{color:#ea580c;background:linear-gradient(145deg,#fff3e6,#ffd9b8)}
+.sd-stat.credits .sd-stat-ico{color:#ca8a04;background:linear-gradient(145deg,#fffbe0,#ffec99)}
+.sd-stat.pins .sd-stat-ico{color:#2563eb;background:linear-gradient(145deg,#eef4ff,#c7dbff)}
+.sd-stat.exam .sd-stat-ico{color:#dc2626;background:linear-gradient(145deg,#ffecec,#ffc9c9)}
+.sd-stat b{font-size:2rem}
+.sd-card{animation:sd-rise .6s cubic-bezier(.2,.8,.2,1) both}
+.sd-main .sd-card:nth-child(2){animation-delay:.08s}.sd-main .sd-card:nth-child(3){animation-delay:.16s}
+.sd-side .sd-card:nth-child(1){animation-delay:.05s}.sd-side .sd-card:nth-child(2){animation-delay:.12s}.sd-side .sd-card:nth-child(3){animation-delay:.2s}
+.sd-app{animation:sd-pop .45s cubic-bezier(.2,.9,.3,1.2) both;animation-delay:calc(var(--i,0)*35ms + .15s)}
+.sd-app-ico{position:relative;width:60px;height:60px;border-radius:18px;padding:12px 12px 16px;color:#fff;box-shadow:0 8px 18px -8px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.35);transition:transform .25s cubic-bezier(.3,1.6,.5,1)}
+.sd-app-ico em{position:absolute;left:0;right:0;bottom:3px;text-align:center;font:800 .56rem/1 var(--font-b);letter-spacing:.08em;font-style:normal;opacity:.9}
+.sd-app:hover .sd-app-ico,.sd-resume:hover .sd-app-ico{transform:rotate(-6deg) scale(1.1)}
+.sd-resume .sd-app-ico{width:64px;height:64px}
+.sd-resume.first .sd-app-ico{width:72px;height:72px;border-radius:22px;animation:sd-float 3.4s ease-in-out infinite}
+.sd-go{transition:transform .2s}.sd-resume:hover .sd-go{transform:translateX(5px)}
+.sd-pin.on{animation:sd-star .5s cubic-bezier(.3,1.6,.5,1)}
+.sd-avatar{width:72px;height:72px;font-size:2rem;position:relative;animation:sd-float 4s ease-in-out infinite}
+.sd-avatar::after{content:'';position:absolute;inset:-5px;border-radius:25px;border:2px solid rgba(210,0,0,.35);animation:sd-ping 2.8s ease-out infinite}
+.sd-wave{display:inline-block;transform-origin:70% 70%;animation:sd-wave 2.4s ease-in-out 1s 2}
+.sd-ring{width:112px;height:112px;animation:sd-spin-in 1.2s cubic-bezier(.2,.8,.2,1) both}
+.sd-ring b{font-size:2.2rem}
+.sd-ql{display:grid;place-items:center;width:46px;height:46px;border-radius:14px;padding:9px;margin-bottom:6px;color:#fff;transition:transform .25s cubic-bezier(.3,1.6,.5,1)}
+.sd-ql.tasks{background:linear-gradient(135deg,#16a34a,#0f766e)}.sd-ql.trophy{background:linear-gradient(135deg,#f59e0b,#d97706)}.sd-ql.people{background:linear-gradient(135deg,#2563eb,#7c3aed)}.sd-ql.books{background:linear-gradient(135deg,#d20000,#7a0000)}
+.sd-links button:hover .sd-ql{transform:translateY(-3px) rotate(-5deg) scale(1.08)}
+.sd-links button{padding:14px}
+/* icon-internal animations */
+.a-flame{transform-origin:50% 90%;animation:sd-flicker 1.3s ease-in-out infinite}
+.a-flame2{transform-origin:50% 100%;animation:sd-flicker 0.9s ease-in-out infinite reverse}
+.a-bolt{transform-origin:50% 50%;animation:sd-zap 2.2s ease-in-out infinite}
+.a-spark{animation:sd-twinkle 1.6s ease-in-out infinite}
+.a-cap{transform-origin:50% 40%;animation:sd-bob 2.6s ease-in-out infinite}
+.a-tassel{transform-origin:42px 20px;animation:sd-swing 2s ease-in-out infinite}
+.a-tick{animation:sd-draw 2.8s ease-in-out infinite}
+.a-t1,.a-t2{animation:sd-draw2 3s ease-in-out infinite}.a-t2{animation-delay:.6s}
+.a-shine{animation:sd-twinkle 2s ease-in-out infinite}
+.a-p1{animation:sd-bob 2.4s ease-in-out infinite}.a-p2{animation:sd-bob 2.4s ease-in-out .5s infinite}
+.a-b1,.a-b2,.a-b3{transform-box:fill-box;transform-origin:50% 100%;animation:sd-bob 2.8s ease-in-out infinite}.a-b2{animation-delay:.25s}.a-b3{animation-delay:.5s}
+.a-bar{transform-box:fill-box;transform-origin:50% 100%;animation:sd-grow 2.8s ease-in-out infinite}.a-bar.b2{animation-delay:.2s}.a-bar.b3{animation-delay:.4s}
+.a-pulse{stroke-dashoffset:0;animation:sd-trace 2.4s linear infinite}
+.a-cursor{animation:sd-blink 1.1s steps(2) infinite}
+.a-page{transform-origin:50% 100%;animation:sd-bob 3s ease-in-out infinite}
+@keyframes sd-rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes sd-pop{from{opacity:0;transform:scale(.88) translateY(8px)}to{opacity:1;transform:none}}
+@keyframes sd-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+@keyframes sd-ping{0%{transform:scale(.96);opacity:.8}80%,100%{transform:scale(1.22);opacity:0}}
+@keyframes sd-wave{0%,60%,100%{transform:rotate(0)}10%{transform:rotate(16deg)}20%{transform:rotate(-10deg)}30%{transform:rotate(16deg)}40%{transform:rotate(-6deg)}50%{transform:rotate(12deg)}}
+@keyframes sd-star{0%{transform:scale(.4) rotate(-60deg)}100%{transform:scale(1) rotate(0)}}
+@keyframes sd-spin-in{from{opacity:0;transform:rotate(-120deg) scale(.7)}to{opacity:1;transform:none}}
+@keyframes sd-flicker{0%,100%{transform:scale(1,1) skewX(0)}30%{transform:scale(.96,1.06) skewX(-3deg)}60%{transform:scale(1.04,.96) skewX(3deg)}}
+@keyframes sd-zap{0%,100%{transform:scale(1);filter:none}45%{transform:scale(1.1) rotate(-4deg)}55%{transform:scale(1.04) rotate(3deg)}}
+@keyframes sd-twinkle{0%,100%{opacity:.2}50%{opacity:1}}
+@keyframes sd-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-2.5px)}}
+@keyframes sd-swing{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(8deg)}}
+@keyframes sd-draw{0%,15%{stroke-dashoffset:40}45%,85%{stroke-dashoffset:0}100%{stroke-dashoffset:40}}
+@keyframes sd-draw2{0%,10%{stroke-dashoffset:20}35%,85%{stroke-dashoffset:0}100%{stroke-dashoffset:20}}
+@keyframes sd-grow{0%,100%{transform:scaleY(1)}50%{transform:scaleY(.72)}}
+@keyframes sd-trace{from{stroke-dashoffset:0}to{stroke-dashoffset:-180}}
+@keyframes sd-blink{50%{opacity:0}}
+@media (max-width:560px){.sd-stat-ico{width:46px;height:46px;padding:9px}.sd-stat b{font-size:1.6rem}.sd-app-ico{width:54px;height:54px}.sd-resume.first .sd-app-ico{width:64px;height:64px}.sd-avatar{width:60px;height:60px}.sd-ring{width:96px;height:96px}}
+@media (prefers-reduced-motion:reduce){.sd *,.sd *::before,.sd *::after{animation:none !important;transition:none !important}.a-tick,.a-t1,.a-t2{stroke-dashoffset:0}}
+[data-theme="dark"] .sd-stat.streak .sd-stat-ico{background:linear-gradient(145deg,#3a2210,#5c3410)}[data-theme="dark"] .sd-stat.credits .sd-stat-ico{background:linear-gradient(145deg,#3a3210,#5a4c10)}[data-theme="dark"] .sd-stat.pins .sd-stat-ico{background:linear-gradient(145deg,#142544,#1e3a6e)}[data-theme="dark"] .sd-stat.exam .sd-stat-ico{background:linear-gradient(145deg,#441414,#6e1e1e)}
+</style>
 </head>
 <body>
 <a class="skip-link" href="#main-content" onclick="return ra10SkipToMain(event)">Skip to main content</a>
@@ -5257,6 +5407,11 @@ html body #community-share-sheet .community-share-panel{
                 <a class="rev-preview-unit" href="#/revision/a-level/business-2023" onclick="go('/revision/a-level/business-2023');hideRevPreview()">
                   <span class="rev-preview-badge">2023</span>
                   <span class="rev-preview-copy"><strong>Full Course</strong><small>Paper 1-3 · AI Examiner</small></span>
+                  <em>Open</em>
+                </a>
+                <a class="rev-preview-unit" href="#/revision/a-level/business-2026" onclick="go('/revision/a-level/business-2026');hideRevPreview()">
+                  <span class="rev-preview-badge">2026</span>
+                  <span class="rev-preview-copy"><strong>New specification (7138)</strong><small>Two case studies · AI Examiner</small></span>
                   <em>Open</em>
                 </a>
               </div>
@@ -5516,6 +5671,14 @@ html body #community-share-sheet .community-share-panel{
           </span>
           <em>Open</em>
         </button>
+        <button class="mobile-unit-link" type="button" data-mobile-subject="/revision/a-level/business-2026">
+          <span class="mobile-unit-badge">2026</span>
+          <span class="mobile-unit-copy">
+            <strong>New specification (7138)</strong>
+            <small>Two case studies · AI Examiner</small>
+          </span>
+          <em>Open</em>
+        </button>
       </div>
     </div>
 
@@ -5698,56 +5861,60 @@ html body #community-share-sheet .community-share-panel{
     </div>
 
     <div class="hx-home">
-      <section id="signed-in-dashboard" class="signed-in-dashboard" style="display:none" aria-label="Your dashboard">
-        <div class="signed-in-dash-hero">
-          <div class="signed-in-dash-hero-glow" aria-hidden="true"></div>
-          <div class="signed-in-dash-hero-inner">
-            <div class="signed-in-dash-avatar" id="signed-in-dash-avatar">?</div>
-            <div class="signed-in-dash-hero-copy">
-              <span class="signed-in-dash-greeting">Welcome back</span>
-              <h2 class="signed-in-dash-title" id="signed-in-dash-name">Learner</h2>
-              <p class="signed-in-dash-sub">Pick up where you left off, or jump into a pinned app.</p>
-              <div class="signed-in-dash-school" id="signed-in-dash-school" style="display:none">
+      <section id="signed-in-dashboard" class="sd" style="display:none" aria-label="Your dashboard">
+        <header class="sd-top">
+          <div class="sd-who">
+            <div class="sd-avatar" id="signed-in-dash-avatar">?</div>
+            <div class="sd-who-copy">
+              <p class="sd-greet"><span id="sd-greet">Welcome back</span> <span class="sd-wave" aria-hidden="true">👋</span></p>
+              <h2 class="sd-name" id="signed-in-dash-name">Learner</h2>
+              <div class="sd-badges" id="signed-in-dash-school" style="display:none">
                 <span class="signed-in-dash-school-chip school-chip" id="signed-in-dash-school-chip"></span>
                 <span class="signed-in-dash-school-chip group-chip" id="signed-in-dash-group-chip" style="display:none"></span>
               </div>
             </div>
-            <div class="signed-in-dash-hero-actions">
-              <button class="signed-in-dash-btn" type="button" onclick="go('/tasks')">Today's tasks</button>
-              <button class="signed-in-dash-btn signed-in-dash-btn-ghost" type="button" onclick="go('/account')">My account</button>
-            </div>
           </div>
-        </div>
-        <div class="signed-in-dash-stats" id="signed-in-dash-stats"></div>
-        <div class="signed-in-dash-section">
-          <div class="signed-in-dash-section-head">
-            <h3>AI overview</h3>
-            <span>Your progress at a glance</span>
+          <div class="sd-actions">
+            <button class="sd-btn sd-btn-primary" type="button" onclick="go('/tasks')">Today's tasks</button>
+            <button class="sd-btn" type="button" onclick="go('/exams')">Exam calendar</button>
+            <button class="sd-btn sd-btn-ghost" type="button" onclick="go('/account')">Account</button>
           </div>
-          <div class="signed-in-ai-overview" id="signed-in-ai-overview">
-            <div class="signed-in-ai-loading">Analysing your progress…</div>
+        </header>
+
+        <div class="sd-stats" id="signed-in-dash-stats"></div>
+
+        <div class="sd-grid">
+          <div class="sd-main">
+            <section class="sd-card" aria-labelledby="sd-h-recent">
+              <div class="sd-card-head"><h3 id="sd-h-recent">Continue revising</h3><span id="sd-recent-sub">Pick up where you left off</span></div>
+              <div class="sd-recent" id="sd-recent"></div>
+            </section>
+            <section class="sd-card" aria-labelledby="sd-h-pins">
+              <div class="sd-card-head"><h3 id="sd-h-pins">Your subjects</h3><span>Pinned for one-tap access</span></div>
+              <div class="sd-pins" id="signed-in-pinned-grid"></div>
+            </section>
+            <section class="sd-card" aria-labelledby="sd-h-all">
+              <div class="sd-card-head"><h3 id="sd-h-all">All subjects</h3><span>Tap the star to pin the ones you use most</span></div>
+              <div class="sd-filter" id="sd-filter" role="group" aria-label="Filter subjects"></div>
+              <div class="sd-all" id="signed-in-all-grid"></div>
+            </section>
           </div>
-        </div>
-        <div class="signed-in-dash-section">
-          <div class="signed-in-dash-section-head">
-            <h3>Upcoming exams</h3>
-            <span>Plan your revision</span>
-          </div>
-          <div class="signed-in-exams" id="signed-in-exams"></div>
-        </div>
-        <div class="signed-in-dash-section">
-          <div class="signed-in-dash-section-head">
-            <h3>Pinned apps</h3>
-            <span>Tap the pin to add or remove</span>
-          </div>
-          <div class="signed-in-pinned-grid" id="signed-in-pinned-grid"></div>
-        </div>
-        <div class="signed-in-dash-section">
-          <div class="signed-in-dash-section-head">
-            <h3>All apps</h3>
-            <span>Pin the ones you use most</span>
-          </div>
-          <div class="signed-in-all-grid" id="signed-in-all-grid"></div>
+          <aside class="sd-side">
+            <section class="sd-card sd-next" id="sd-next" aria-label="Next exam"></section>
+            <section class="sd-card" aria-labelledby="sd-h-exams">
+              <div class="sd-card-head"><h3 id="sd-h-exams">Upcoming exams</h3><button class="sd-link" type="button" onclick="go('/exams')">View all</button></div>
+              <div class="sd-exams" id="signed-in-exams"></div>
+            </section>
+            <section class="sd-card" aria-labelledby="sd-h-links">
+              <div class="sd-card-head"><h3 id="sd-h-links">Quick links</h3></div>
+              <div class="sd-links">
+                <button type="button" onclick="go('/tasks')"><span class="sd-ql tasks">ICON_tasks</span><b>Tasks</b><small>Daily practice goals</small></button>
+                <button type="button" onclick="go('/leaderboard')"><span class="sd-ql trophy">ICON_trophy</span><b>Leaderboard</b><small>Weekly race</small></button>
+                <button type="button" onclick="go('/community')"><span class="sd-ql people">ICON_people</span><b>Community</b><small>Shared study apps</small></button>
+                <button type="button" onclick="go('/revision')"><span class="sd-ql books">ICON_books</span><b>All revision</b><small>Browse every course</small></button>
+              </div>
+            </section>
+          </aside>
         </div>
       </section>
 
@@ -5802,6 +5969,7 @@ html body #community-share-sheet .community-share-panel{
             <button type="button" onclick="go('/revision/btec/level-3/business/unit-6')"><span>Unit 6</span>Principles of Management<i>BTEC L3</i></button>
             <button type="button" onclick="go('/revision/btec/level-3/business/unit-7')"><span>Unit 7</span>Business Decision Making<i>BTEC L3</i></button>
             <button type="button" onclick="go('/revision/a-level/business-2023')"><span>7132</span>Business<i>AQA A-Level</i></button>
+            <button type="button" onclick="go('/revision/a-level/business-2026')"><span>7138</span>Business (2026 spec)<i>AQA A-Level</i></button>
           </div>
           <div class="hm-unit-col sport">
             <h3>Sport</h3>
@@ -5933,11 +6101,11 @@ html body #community-share-sheet .community-share-panel{
             <p>AAQ-focused revision tracks with live subject apps and exam-ready tools.</p>
             <button class="btn btn-g" onclick="event.stopPropagation();go('/revision/btec')">Open BTEC</button>
           </article>
-          <article class="rev-flow-card" onclick="go('/revision/a-level/business-2023')">
+          <article class="rev-flow-card" onclick="go('/revision/a-level')">
             <span class="rev-flow-chip ok">Live now</span>
             <h3>A-Level</h3>
-            <p>AQA Business (2023) is now available with paper-aware filters, predicted papers and AI Examiner support.</p>
-            <button class="btn btn-g" onclick="event.stopPropagation();go('/revision/a-level/business-2023')">Open A-Level</button>
+            <p>AQA Business (2023) and the new 2026 specification (7138) are live, with every past paper, RA10 practice papers, a full visual guide and an AI Examiner.</p>
+            <button class="btn btn-g" onclick="event.stopPropagation();go('/revision/a-level')">Open A-Level</button>
           </article>
         </div>
       </section>
@@ -6007,6 +6175,66 @@ html body #community-share-sheet .community-share-panel{
             <span class="rev-flow-chip soon">Soon</span>
             <h3>Other pathways</h3>
             <p>New levels and course types will slot into this flow as content launches.</p>
+            <button class="btn btn-g" disabled>Coming soon</button>
+          </article>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     A-LEVEL HUB  /revision/a-level
+============================================================ -->
+<div class="page" id="p-alevel">
+  <div class="cd">
+    <nav class="bc">
+      <button class="bc-item" onclick="go('/')">Home</button>
+      <span class="bc-sep">›</span>
+      <button class="bc-item" onclick="go('/revision')">Revision</button>
+      <span class="bc-sep">›</span>
+      <span class="bc-item cur">A-Level</span>
+    </nav>
+
+    <div class="revision-showcase">
+      <div>
+        <div class="revision-kicker">Step 2 · Choose your course</div>
+        <h1>AQA A-Level Business</h1>
+        <p>Pick the specification you are studying. Both have past or sample papers, RA10 practice papers, a visual revision guide and the AI Examiner.</p>
+        <div class="revision-stat-row">
+          <span class="revision-stat">2 specifications</span>
+          <span class="revision-stat">AI Examiner</span>
+          <span class="revision-stat">Past Papers + RA10 Papers</span>
+        </div>
+      </div>
+      <div class="revision-showcase-media">
+        <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1200&q=80" alt="Business analysis on a desk">
+      </div>
+    </div>
+
+    <div class="rev-flow" style="margin-top:var(--sp8)">
+      <section class="rev-flow-row">
+        <div class="rev-flow-head">
+          <div class="rev-flow-title"><span class="rev-step">2</span>Choose specification</div>
+          <span class="rev-flow-chip ok">AQA Business</span>
+        </div>
+        <div class="rev-flow-grid levels">
+          <article class="rev-flow-card" onclick="go('/revision/a-level/business-2023')">
+            <span class="rev-flow-chip ok">Current spec · 7131 / 7132</span>
+            <h3>Business (2023 specification)</h3>
+            <p>For students sitting exams up to June 2027. All 18 AQA papers from 2020–2025 with mark schemes, 15 RA10 papers, predicted June 2027 papers, a full guide and the AI Examiner.</p>
+            <button class="btn btn-g" onclick="event.stopPropagation();go('/revision/a-level/business-2023')">Open 2023 course</button>
+          </article>
+          <article class="rev-flow-card" onclick="go('/revision/a-level/business-2026')">
+            <span class="rev-flow-chip ok">New spec · 7137 / 7138</span>
+            <h3>Business (2026 specification)</h3>
+            <p>For students starting in 2026 (first A-level exams June 2028). Two case studies per paper, 6/9/15-mark questions, AQA sample papers, 12 RA10 papers, guide and AI Examiner.</p>
+            <button class="btn btn-g" onclick="event.stopPropagation();go('/revision/a-level/business-2026')">Open 2026 course</button>
+          </article>
+          <article class="rev-flow-card off" aria-disabled="true">
+            <span class="rev-flow-chip soon">Soon</span>
+            <h3>More A-Level subjects</h3>
+            <p>New subjects will appear here as content launches.</p>
             <button class="btn btn-g" disabled>Coming soon</button>
           </article>
         </div>
@@ -7912,6 +8140,8 @@ html body #community-share-sheet .community-share-panel{
       <span class="bc-sep">›</span>
       <button class="bc-item" onclick="go('/revision')">Revision</button>
       <span class="bc-sep">›</span>
+      <button class="bc-item" onclick="go('/revision/a-level')">A-Level</button>
+      <span class="bc-sep">›</span>
       <span class="bc-item cur">A-Level AQA Business (2023)</span>
     </nav>
   </div>
@@ -7920,6 +8150,33 @@ html body #community-share-sheet .community-share-panel{
       <iframe
         src="revision/a-level/business-2023/index.html?v=20261021"
         title="A-Level AQA Business 2023"
+        loading="lazy"
+        allowfullscreen>
+      </iframe>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     A-LEVEL AQA BUSINESS (2026 spec)  /revision/a-level/business-2026
+============================================================ -->
+<div class="page page-iframe" id="p-aqa-business-2026">
+  <div class="cd">
+    <nav class="bc">
+      <button class="bc-item" onclick="go('')">Home</button>
+      <span class="bc-sep">›</span>
+      <button class="bc-item" onclick="go('/revision')">Revision</button>
+      <span class="bc-sep">›</span>
+      <button class="bc-item" onclick="go('/revision/a-level')">A-Level</button>
+      <span class="bc-sep">›</span>
+      <span class="bc-item cur">A-Level AQA Business (2026 spec)</span>
+    </nav>
+  </div>
+  <div class="cf">
+    <div class="iframe-wrap">
+      <iframe
+        src="revision/a-level/business-2026/index.html?v=20261102"
+        title="A-Level AQA Business 2026 specification"
         loading="lazy"
         allowfullscreen>
       </iframe>
@@ -7983,7 +8240,9 @@ const ROUTES = {
   '/news':                                'p-news',
   '/revision':                            'p-revision',
   '/revision/a-level/business-2023':      'p-aqa-business-2023',
+  '/revision/a-level/business-2026':      'p-aqa-business-2026',
   '/revision/btec':                       'p-btec',
+  '/revision/a-level':                    'p-alevel',
   '/revision/btec/level-3':              'p-btec-l3',
   '/revision/btec/level-3/business':     'p-btec-business-l3',
   '/revision/btec/level-3/business/unit-2': 'p-bus-u2',
@@ -11681,7 +11940,8 @@ const ALL_APPS = [
   { path: '/revision/btec/level-3/business/unit-3', icon: 'business', label: 'BU', name: 'Business Unit 3', desc: 'Finance exams, calculations and AI marking' },
   { path: '/revision/btec/level-3/business/unit-6', icon: 'business', label: 'BU', name: 'Business Unit 6', desc: 'Principles of Management set tasks' },
   { path: '/revision/btec/level-3/business/unit-7', icon: 'business', label: 'BU', name: 'Business Unit 7', desc: 'Business Decision Making Part S tasks' },
-  { path: '/revision/a-level/business-2023', icon: 'business', label: 'AL', name: 'A-Level Business (7132)', desc: 'Topic-by-topic revision, quizzes, exam practice' },
+  { path: '/revision/a-level/business-2023', icon: 'business', label: 'AL', name: 'A-Level Business (7132)', desc: 'Every past paper 2020-25, RA10 papers, visual guide, AI Examiner' },
+  { path: '/revision/a-level/business-2026', icon: 'business', label: 'AL', name: 'A-Level Business (7138, 2026 spec)', desc: 'New spec: sample papers, RA10 papers, guide, AI Examiner' },
   { path: '/revision/btec/level-3/sport/unit-1', icon: 'sport', label: 'SP', name: 'Sport Unit 1', desc: 'Anatomy recall with timed checks' },
   { path: '/revision/btec/level-3/sport/unit-2', icon: 'sport', label: 'SP', name: 'Sport Unit 2', desc: 'Pearson set tasks marked by AI Examiner' },
   { path: '/revision/btec/level-2/it/unit-2', icon: 'l2', label: 'L2', name: 'IT Level 2 Unit 2', desc: 'Technology systems done properly' }
@@ -11787,7 +12047,82 @@ function togglePinnedApp(path) {
   renderSignedInDashboard();
 }
 
+
+/* Animated icon set for the signed-in dashboard (inline SVG, CSS-animated). */
+const SD_SVG = (inner, cls) => '<svg class="sd-svg ' + (cls || '') + '" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + inner + '</svg>';
+const SD_ICONS = {
+  flame: SD_SVG('<path class="a-flame" d="M24 5c1 7 9 10 9 20a9 9 0 0 1-18 0c0-4 2-6 4-8 0 4 2 5 3 5 0-6-1-11 2-17z" fill="currentColor" fill-opacity=".18"/><path class="a-flame2" d="M24 40a4.5 4.5 0 0 1-4.5-4.5c0-3 2.5-4 4.5-7 2 3 4.5 4 4.5 7A4.5 4.5 0 0 1 24 40z" fill="currentColor" fill-opacity=".5" stroke="none"/>'),
+  bolt: SD_SVG('<path class="a-bolt" d="M27 4 10 27h12l-3 17 19-25H26z" fill="currentColor" fill-opacity=".2"/><path class="a-spark" d="M38 6v6M35 9h6M9 38v5M6.5 40.5h5" stroke-width="2"/>'),
+  cap: SD_SVG('<path class="a-cap" d="M3 18 24 8l21 10-21 10z" fill="currentColor" fill-opacity=".18"/><path d="M11 23v9c0 3 6 6 13 6s13-3 13-6v-9"/><path class="a-tassel" d="M42 20v12"/>'),
+  cal: SD_SVG('<rect x="6" y="9" width="36" height="33" rx="7" fill="currentColor" fill-opacity=".12"/><path d="M6 19h36M16 5v8M32 5v8"/><path class="a-tick" d="m16 30 6 6 11-12" stroke-dasharray="40" stroke-dashoffset="40"/>'),
+  tasks: SD_SVG('<rect x="8" y="6" width="32" height="36" rx="7" fill="currentColor" fill-opacity=".12"/><path class="a-t1" d="m15 17 3 3 6-7" stroke-dasharray="20"/><path d="M28 17h7"/><path class="a-t2" d="m15 30 3 3 6-7" stroke-dasharray="20"/><path d="M28 30h7"/>'),
+  trophy: SD_SVG('<path d="M14 6h20v12a10 10 0 0 1-20 0z" fill="currentColor" fill-opacity=".18"/><path d="M14 10H6c0 8 3 11 8 11M34 10h8c0 8-3 11-8 11M24 28v8M15 42h18M18 36h12"/><path class="a-shine" d="M19 12v6" stroke-width="2"/>'),
+  people: SD_SVG('<circle class="a-p1" cx="17" cy="16" r="6" fill="currentColor" fill-opacity=".18"/><circle class="a-p2" cx="33" cy="19" r="5" fill="currentColor" fill-opacity=".12"/><path d="M5 40c0-7 5-11 12-11s12 4 12 11M31 30c6 0 11 3 11 10"/>'),
+  books: SD_SVG('<rect class="a-b1" x="7" y="7" width="9" height="34" rx="2" fill="currentColor" fill-opacity=".18"/><rect class="a-b2" x="19" y="11" width="9" height="30" rx="2" fill="currentColor" fill-opacity=".12"/><path class="a-b3" d="m31 14 8-3 6 26-8 3z" fill="currentColor" fill-opacity=".18"/>'),
+  business: SD_SVG('<path d="M6 42h36"/><rect class="a-bar b1" x="9" y="26" width="8" height="16" rx="2" fill="currentColor" fill-opacity=".22"/><rect class="a-bar b2" x="20" y="16" width="8" height="26" rx="2" fill="currentColor" fill-opacity=".22"/><rect class="a-bar b3" x="31" y="8" width="8" height="34" rx="2" fill="currentColor" fill-opacity=".22"/>'),
+  sport: SD_SVG('<circle cx="24" cy="24" r="17" fill="currentColor" fill-opacity=".1"/><path class="a-pulse" d="M5 25h9l4-10 6 20 5-14 3 4h11" stroke-dasharray="90"/>'),
+  it: SD_SVG('<rect x="5" y="8" width="38" height="28" rx="6" fill="currentColor" fill-opacity=".12"/><path d="m16 18-6 6 6 6M32 18l6 6-6 6"/><path class="a-cursor" d="M24 17v14" stroke-width="3"/><path d="M16 42h16"/>'),
+  l2: SD_SVG('<path class="a-page" d="M6 10c7-3 13-2 18 2 5-4 11-5 18-2v28c-7-3-13-2-18 2-5-4-11-5-18-2z" fill="currentColor" fill-opacity=".16"/><path d="M24 12v28"/>')
+};
+function sdIcon(name) { return SD_ICONS[name] || SD_ICONS.books; }
+
+function sdCountUp(root) {
+  const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  (root || document).querySelectorAll('[data-count]').forEach(el => {
+    const to = Number(el.getAttribute('data-count'));
+    if (!isFinite(to) || reduce || to < 2) { el.textContent = isFinite(to) ? to : el.textContent; return; }
+    const t0 = performance.now(), dur = 900;
+    const tick = (t) => {
+      const p = Math.min(1, (t - t0) / dur);
+      el.textContent = Math.round(to * (1 - Math.pow(1 - p, 3)));
+      if (p < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  });
+}
+
+const RECENT_APPS_KEY = 'ra10_recent_apps_v1';
+function getRecentApps() {
+  try { const r = JSON.parse(localStorage.getItem(RECENT_APPS_KEY) || '[]'); return Array.isArray(r) ? r : []; } catch (_) { return []; }
+}
+function recordRecentApp(path) {
+  if (!ALL_APPS.some(a => a.path === path)) return;
+  try {
+    const list = getRecentApps().filter(r => r.path !== path);
+    list.unshift({ path, t: Date.now() });
+    localStorage.setItem(RECENT_APPS_KEY, JSON.stringify(list.slice(0, 8)));
+  } catch (_) {}
+}
+function sdUpcomingExams() {
+  const now = new Date();
+  const pinnedPaths = getPinnedApps();
+  const out = [];
+  EXAM_DATA.forEach(e => {
+    const next = (e.dates || []).map(d => new Date(d + 'T09:00:00')).filter(d => d.getTime() >= now.getTime() - 86400000).sort((a, b) => a - b)[0];
+    if (!next) return;
+    out.push({ exam: e, date: next, days: Math.max(0, Math.ceil((next.getTime() - now.getTime()) / 86400000)), subject: e.subject, pinned: !!(e.appPath && pinnedPaths.includes(e.appPath)) });
+  });
+  out.sort((a, b) => (b.pinned - a.pinned) || (a.date - b.date));
+  return out;
+}
+function sdNextExam() {
+  const list = sdUpcomingExams();
+  return list.length ? list[0] : null;
+}
+function renderSdNext(ne) {
+  const host = document.getElementById('sd-next');
+  if (!host) return;
+  if (!ne) { host.innerHTML = '<div class="sd-card-head"><h3>Next exam</h3></div><p class="sd-empty">No upcoming exams found.</p>'; return; }
+  const total = 120, pct = Math.max(4, Math.min(100, Math.round((1 - Math.min(ne.days, total) / total) * 100)));
+  const dateStr = ne.date.toLocaleDateString(undefined, { weekday: 'long', day: 'numeric', month: 'long' });
+  host.innerHTML = '<div class="sd-card-head"><h3>Next exam</h3><span>' + (ne.pinned ? 'From your pinned subjects' : 'Soonest overall') + '</span></div>'
+    + '<div class="sd-count"><div class="sd-ring" style="--p:' + pct + '"><b>' + ne.days + '</b><small>' + (ne.days === 1 ? 'day' : 'days') + '</small></div>'
+    + '<div class="sd-count-copy"><strong>' + ne.subject + '</strong><span>' + ne.exam.board + ' · ' + dateStr + '</span>'
+    + (ne.exam.appPath ? '<button class="sd-btn sd-btn-primary sm" type="button" onclick="go(\'' + ne.exam.appPath + '\')">Revise this</button>' : '<button class="sd-btn sm" type="button" onclick="go(\'/exams\')">Exam calendar</button>') + '</div></div>';
+}
+
 function renderSignedInDashboard() {
+  document.querySelectorAll('#signed-in-dashboard .sd-ql').forEach(el => { const n = el.className.replace('sd-ql', '').trim(); if (!el.firstElementChild && el.textContent.indexOf('ICON_') === 0) el.innerHTML = sdIcon(n); });
   const dash = document.getElementById('signed-in-dashboard');
   if (!dash) return;
   const loggedIn = window.RA10 && typeof RA10.isLoggedIn === 'function' && RA10.isLoggedIn();
@@ -11847,36 +12182,60 @@ function renderSignedInDashboard() {
     schoolRow.style.display = (hasSchool || hasGroup) ? '' : 'none';
   }
 
+  const hour = new Date().getHours();
+  const greetEl = document.getElementById('sd-greet');
+  if (greetEl) greetEl.textContent = hour < 5 ? 'Up late' : hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening';
+
+  const streak = (window.RA10 && typeof RA10.getStreak === 'function') ? (RA10.getStreak() || 0) : 0;
+  const credits = (window.RA10 && typeof RA10.getCredits === 'function') ? (RA10.getCredits() || 0) : 0;
+  const tier = (window.RA10 && typeof RA10.getTier === 'function') ? (RA10.getTier() || 'free') : 'free';
+  const nextExam = sdNextExam();
   const statsHost = document.getElementById('signed-in-dash-stats');
   if (statsHost) {
-    const streak = (window.RA10 && typeof RA10.getStreak === 'function') ? (RA10.getStreak() || 0) : 0;
-    const credits = (window.RA10 && typeof RA10.getCredits === 'function') ? (RA10.getCredits() || 0) : 0;
-    const tier = (window.RA10 && typeof RA10.getTier === 'function') ? (RA10.getTier() || 'free') : 'free';
+    let statIdx = 0;
+    const stat = (icon, val, label, sub, cls) => '<div class="sd-stat ' + (cls || '') + '" style="--i:' + (statIdx++) + '"><span class="sd-stat-ico" aria-hidden="true">' + sdIcon(icon) + '</span><div><b data-count="' + val + '">' + val + '</b><span>' + label + '</span>' + (sub ? '<small>' + sub + '</small>' : '') + '</div></div>';
     statsHost.innerHTML = [
-      ['Streak', streak + ' days'],
-      ['Credits', credits],
-      ['Plan', tier === 'free' ? 'Free' : tier.replace(/_/g, ' ')]
-    ].map(([k, v]) => '<div class="signed-in-dash-stat"><b>' + v + '</b><span>' + k + '</span></div>').join('');
+      stat('flame', streak, 'day streak', streak ? 'Keep it going today' : 'Start one today', 'streak'),
+      stat('bolt', (credits === Infinity ? '∞' : credits), 'credits', tier === 'free' ? 'Free plan' : 'AI Examiner included', 'credits'),
+      stat('cap', pinned.length || '–', 'pinned subjects', pinned.length ? 'Shown first below' : 'Pin one below', 'pins'),
+      stat('cal', nextExam ? nextExam.days : '–', nextExam ? (nextExam.days === 1 ? 'day to next exam' : 'days to next exam') : 'no exam set', nextExam ? nextExam.subject : '', 'exam')
+    ].join('');
   }
 
   const cardHtml = (app) => {
     const isPinned = pinned.includes(app.path);
-    return '<div class="signed-in-app-card" onclick="go(\'' + app.path + '\')">'
-      + '<div class="signed-in-app-top">'
-      +   '<span class="signed-in-app-icon ' + app.icon + '">' + app.label + '</span>'
-      +   '<button class="signed-in-pin-btn ' + (isPinned ? 'pinned' : '') + '" type="button" title="' + (isPinned ? 'Unpin' : 'Pin') + '" onclick="event.stopPropagation();togglePinnedApp(\'' + app.path + '\')">' + (isPinned ? '★' : '☆') + '</button>'
-      + '</div>'
-      + '<div class="signed-in-app-copy"><strong>' + app.name + '</strong><small>' + app.desc + '</small></div>'
-      + '<span class="signed-in-app-open">Open</span>'
+    return '<div class="sd-app" style="--i:' + ((window._sdI = (window._sdI || 0) + 1) % 14) + '" role="link" tabindex="0" onclick="go(\'' + app.path + '\')" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();go(\'' + app.path + '\')}">'
+      + '<span class="sd-app-ico ' + app.icon + '">' + sdIcon(app.icon) + '<em>' + app.label + '</em></span>'
+      + '<span class="sd-app-copy"><strong>' + app.name + '</strong><small>' + app.desc + '</small></span>'
+      + '<button class="sd-pin' + (isPinned ? ' on' : '') + '" type="button" aria-pressed="' + isPinned + '" aria-label="' + (isPinned ? 'Unpin ' : 'Pin ') + app.name + '" onclick="event.stopPropagation();togglePinnedApp(\'' + app.path + '\')">' + (isPinned ? '★' : '☆') + '</button>'
       + '</div>';
   };
 
-  const pinnedHost = document.getElementById('signed-in-pinned-grid');
-  const allHost = document.getElementById('signed-in-all-grid');
-  if (pinnedHost) pinnedHost.innerHTML = pinnedApps.length ? pinnedApps.map(cardHtml).join('') : '<div class="signed-in-dash-sub" style="grid-column:1/-1">No pinned apps yet. Pin the ones you use most below.</div>';
-  if (allHost) allHost.innerHTML = unpinnedApps.map(cardHtml).join('');
+  const recent = getRecentApps().map(r => ALL_APPS.find(a => a.path === r.path)).filter(Boolean).slice(0, 3);
+  const recentHost = document.getElementById('sd-recent');
+  if (recentHost) {
+    if (recent.length) {
+      recentHost.innerHTML = recent.map((app, i) => '<button type="button" class="sd-resume' + (i === 0 ? ' first' : '') + '" onclick="go(\'' + app.path + '\')"><span class="sd-app-ico ' + app.icon + '">' + sdIcon(app.icon) + '<em>' + app.label + '</em></span><span class="sd-resume-copy"><small>' + (i === 0 ? 'Last opened' : 'Recently opened') + '</small><strong>' + app.name + '</strong><em>' + app.desc + '</em></span><span class="sd-go" aria-hidden="true">' + (i === 0 ? 'Continue →' : '→') + '</span></button>').join('');
+    } else {
+      const picks = ALL_APPS.filter(a => /business-2026|business\/unit-3|sport\/unit-2/.test(a.path)).slice(0, 3);
+      recentHost.innerHTML = '<p class="sd-empty">Nothing opened yet. Good places to start:</p>' + picks.map(cardHtml).join('');
+    }
+  }
 
-  renderAiOverview();
+  const pinnedHost = document.getElementById('signed-in-pinned-grid');
+  if (pinnedHost) pinnedHost.innerHTML = pinnedApps.length ? pinnedApps.map(cardHtml).join('') : '<p class="sd-empty">No pinned subjects yet. Tap the star on any subject below to keep it here.</p>';
+
+  const groups = [['all', 'All'], ['business', 'Business'], ['sport', 'Sport'], ['it', 'IT'], ['l2', 'Level 2']];
+  const filter = window._sdFilter || 'all';
+  const filterHost = document.getElementById('sd-filter');
+  if (filterHost) {
+    filterHost.innerHTML = groups.map(([k, l]) => '<button type="button" class="sd-chip' + (k === filter ? ' on' : '') + '" aria-pressed="' + (k === filter) + '" onclick="window._sdFilter=\'' + k + '\';renderSignedInDashboard()">' + l + '</button>').join('');
+  }
+  const allHost = document.getElementById('signed-in-all-grid');
+  if (allHost) allHost.innerHTML = ALL_APPS.filter(a => filter === 'all' || a.icon === filter).map(cardHtml).join('');
+
+  renderSdNext(nextExam);
+  sdCountUp(dash);
   renderExamTimes();
 }
 
@@ -12453,27 +12812,13 @@ const EXAM_TIMES = [
 function renderExamTimes() {
   const host = document.getElementById('signed-in-exams');
   if (!host) return;
-  const now = new Date();
-  const cards = EXAM_TIMES.map((exam) => {
-    // Pick the next upcoming sitting (or the most recent if all are past).
-    const upcoming = (exam.dates || []).map(d => new Date(d + 'T09:00:00')).filter(d => d.getTime() >= now.getTime() - 86400000).sort((a, b) => a - b);
-    const examDate = upcoming[0] || new Date((exam.dates || [])[0] + 'T09:00:00');
-    const diffMs = examDate.getTime() - now.getTime();
-    const days = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
-    let badge, cls;
-    if (days < 0) { badge = 'Done'; cls = ''; }
-    else if (days === 0) { badge = 'Today'; cls = 'today'; }
-    else if (days <= 7) { badge = days + ' day' + (days === 1 ? '' : 's') + ' to go'; cls = 'soon'; }
-    else { badge = days + ' days to go'; cls = ''; }
-    const dateStr = examDate.toLocaleDateString(undefined, { weekday: 'short', day: 'numeric', month: 'short' });
-    return '<div class="signed-in-exam-card">'
-      + '<div class="exam-subject">' + exam.subject + '</div>'
-      + '<div class="exam-date">' + exam.board + ' · ' + dateStr + '</div>'
-      + '<div class="exam-note">' + exam.note + '</div>'
-      + '<span class="exam-countdown ' + cls + '">' + badge + '</span>'
-      + '</div>';
-  }).join('');
-  host.innerHTML = cards || '<div class="signed-in-exam-empty">No upcoming exams.</div>';
+  const list = sdUpcomingExams().slice(0, 5);
+  host.innerHTML = list.length ? list.map(x => {
+    const cls = x.days <= 7 ? 'soon' : x.days <= 30 ? 'near' : '';
+    return '<div class="sd-exam"><div class="sd-exam-date"><b>' + x.date.getDate() + '</b><span>' + x.date.toLocaleDateString(undefined, { month: 'short' }) + '</span></div>'
+      + '<div class="sd-exam-copy"><strong>' + x.subject + '</strong><small>' + x.exam.board + ' · ' + (x.exam.name || '') + '</small></div>'
+      + '<span class="sd-exam-days ' + cls + '">' + (x.days === 0 ? 'Today' : x.days + 'd') + '</span></div>';
+  }).join('') : '<p class="sd-empty">No upcoming exams.</p>';
 }
 
 function renderAiOverview() {
@@ -12557,6 +12902,7 @@ function route(){
     }
     _routeAnnounceReady = true;
   }
+  recordRecentApp(path);
   if (id === 'p-home') {
     renderSignedInDashboard();
     renderHomeExams();
@@ -14470,6 +14816,7 @@ async function waitForRA10Sdk(timeoutMs) {
 
     RA10.on('authchange', checkProfileCompletion);
     RA10.on('authchange', checkWeeklyXpReset);
+    RA10.on('streakchange', () => { if (typeof renderSignedInDashboard === 'function') renderSignedInDashboard(); });
     RA10.on('authchange', checkExamSeasonToast);
     RA10.on('authchange', checkGiftCreditPopup);
     RA10.on('authchange', checkModerationNotice);

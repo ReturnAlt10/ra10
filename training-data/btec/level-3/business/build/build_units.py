@@ -190,7 +190,7 @@ def build_index(u, m):
     s = re.sub(r'<p>BTEC Level 3 Sport Unit 2[^<]*</p>', '<p>%s</p>' % m['footer'], s, count=1)
     s = re.sub(r'<p>BTEC Level 3 Business Unit %d \(Fitness[^<]*</p>' % u, '<p>%s</p>' % m['footer'], s, count=1)
     # papers section text
-    s = re.sub(r'(<h2>Past papers &amp; set tasks</h2>\s*<p>)[^<]*(</p>)', r'\g<1>%s\g<2>' % m['papers_sub'].replace('\\', '\\\\'), s, count=1)
+    s = re.sub(r'(<h2>Past Papers &amp; RA10 Papers</h2>\s*<p>)[^<]*(</p>)', r'\g<1>%s\g<2>' % m['papers_sub'].replace('\\', '\\\\'), s, count=1)
     # mock controls
     s = re.sub(r'<select id="mock-total">.*?</select>', '<select id="mock-total">%s</select>' % m['mock_total'], s, count=1, flags=re.S)
     s = s.replace('Generate a random mock paper using real exam structure.', 'Generate a random knowledge-check paper from the question bank.')

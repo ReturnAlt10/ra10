@@ -154,7 +154,7 @@ export function buildBusinessPrompt(q: AnyObj, answer: string): string {
   const ao = q?.ao || "";
   const isCalc = q?.type === "calculation";
   let context = String(q?.scenario || "");
-  if (context.length > 9000) context = context.slice(0, 9000) + " [...]";
+  if (context.length > 16000) context = context.slice(0, 16000) + " [...]";
   const apps = appendixText(q?.appendices);
 
   const parts: string[] = [];
@@ -175,6 +175,10 @@ export function buildBusinessPrompt(q: AnyObj, answer: string): string {
       list("MARKER NOTES FOR THIS QUESTION:", ms.marker_notes),
     ].filter(Boolean).join("\n\n"));
     if (grid.length) parts.push("LEVELS OF RESPONSE\n" + grid.map((g) => `Level ${g.level} (${g.marks} marks): ${g.descriptor}`).join("\n"));
+  }
+
+  if (q?.origin === "aqa" && typeof ms.raw === "string" && ms.raw.trim()) {
+    parts.push("OFFICIAL AQA MARK SCHEME TEXT (authoritative - follow its guidance, accept/ignore notes and OFR instructions)\n" + ms.raw.slice(0, 6000));
   }
 
   parts.push("EXAMINER ANNOTATIONS YOU MUST USE\n" + ANNOTATIONS.join("\n"));

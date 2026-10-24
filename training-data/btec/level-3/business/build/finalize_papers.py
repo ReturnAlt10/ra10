@@ -227,10 +227,11 @@ def js_write(unit, papers, extra=''):
     print('wrote unit', unit, len(s) // 1024, 'KB')
 
 if __name__ == '__main__':
+    import ra10_sets, ra10_u2_more, ra10_u6_more, ra10_u7_more, ra10_u3_more
+    MORE = {2: ra10_u2_more.papers, 6: ra10_u6_more.papers, 7: ra10_u7_more.papers}
     for u in (2, 6, 7):
-        import ra10_sets
-        js_write(u, build_set(u) + deep(ra10_sets.papers(u)))
+        js_write(u, build_set(u) + deep(ra10_sets.papers(u)) + deep(MORE[u]()))
     papers, levels = build_u3()
     import ra10_u3
-    papers = papers + deep(ra10_u3.papers())
+    papers = papers + deep(ra10_u3.papers()) + deep(ra10_u3_more.papers())
     js_write(3, papers, 'window.BIZ_LEVELS = %s;\n' % json.dumps(levels, ensure_ascii=False, separators=(',', ':')))

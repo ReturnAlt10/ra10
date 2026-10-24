@@ -115,6 +115,7 @@
   const EVENTS = {
     authchange: [],
     creditschange: [],
+    streakchange: [],
     legalchange: [],
     termsrequired: [],
   };
@@ -949,6 +950,7 @@
     const session = sessionResult.data?.session || null;
     _session = session;
     _profile = session ? await _loadProfileFromSession(session) : null;
+    if (_profile) markStudyDay();
 
     if (_authSubscription && typeof _authSubscription.unsubscribe === 'function') {
     _authSubscription.unsubscribe();
@@ -959,6 +961,7 @@
       if (updatedSession) {
         _session = updatedSession;
         _loadProfileFromSession(_session).then(() => {
+        if (_profile) markStudyDay();
         _emit('authchange', { event, session: _session, profile: _profile });
         });
         return;
@@ -1182,26 +1185,128 @@
     return _getStoredCredits() + _getExamBonusRemaining();
   }
 
-  // Current study streak (consecutive days with a recorded visit), read from
-  // the shared localStorage key used by every unit app. Returns 0 if none.
-  function getStreak() {
-    const key = 'ra10_streak_dates';
-    let dates = [];
+  // ── Study streak ─────────────────────────────────────────────────────────
+  // Stored on the account (public.study_days, see supabase/sql/study-streak.sql)
+  // so it is identical on every device. localStorage is only a per-user cache
+  // that lets the number render instantly and survive being offline; days that
+  // never reached the server are pushed on the next sync.
+  const STREAK_LEGACY_KEY = 'ra10_streak_dates';
+  const STREAK_CACHE_PREFIX = 'ra10_study_days:';
+  const DAY_RE = /^\d{4}-\d{2}-\d{2}$/;
+  let _studyDays = null;      // Set of 'YYYY-MM-DD' (device-local calendar days)
+  let _studyDaysUser = '';
+  let _streakSyncing = null;
+  let _streakSyncedAt = 0;
+
+  function _dayKey(date) {
+    const d = date instanceof Date ? date : new Date(date);
+    if (Number.isNaN(d.getTime())) return '';
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return d.getFullYear() + '-' + m + '-' + day;
+  }
+
+  function _streakUserId() {
+    return (_session && _session.user && _session.user.id) || '';
+  }
+
+  function _loadStudyDays() {
+    const uid = _streakUserId();
+    if (_studyDays && _studyDaysUser === uid) return _studyDays;
+    _studyDaysUser = uid;
+    _studyDays = new Set();
+    if (!uid) return _studyDays;
     try {
-      const parsed = JSON.parse(localStorage.getItem(key) || '[]');
-      dates = Array.isArray(parsed) ? parsed.filter(d => /^\d{4}-\d{2}-\d{2}$/.test(d)) : [];
-    } catch (e) {
-      dates = [];
-    }
-    const set = new Set(dates);
-    let streak = 0;
+      const parsed = JSON.parse(localStorage.getItem(STREAK_CACHE_PREFIX + uid) || '[]');
+      (Array.isArray(parsed) ? parsed : []).forEach(d => { if (DAY_RE.test(d)) _studyDays.add(d); });
+    } catch (e) { /* ignore */ }
+    return _studyDays;
+  }
+
+  function _saveStudyDays() {
+    const uid = _streakUserId();
+    if (!uid || !_studyDays) return;
+    try {
+      localStorage.setItem(STREAK_CACHE_PREFIX + uid, JSON.stringify(Array.from(_studyDays).sort().slice(-400)));
+    } catch (e) { /* ignore */ }
+  }
+
+  function getStudyDays() {
+    return Array.from(_loadStudyDays()).sort();
+  }
+
+  // Count consecutive days ending today. A streak stays alive until the end of
+  // the day after the last visit, so it still shows yesterday's run in the
+  // morning. `extraDates` lets callers add account activity timestamps.
+  function getStreak(extraDates) {
+    if (!isLoggedIn()) return 0;
+    const set = new Set(_loadStudyDays());
+    (extraDates || []).forEach(v => { const k = DAY_RE.test(String(v)) ? String(v) : _dayKey(v); if (k) set.add(k); });
     const cursor = new Date();
-    cursor.setHours(0, 0, 0, 0);
-    while (set.has(cursor.toISOString().slice(0, 10))) {
+    cursor.setHours(12, 0, 0, 0);
+    if (!set.has(_dayKey(cursor))) cursor.setDate(cursor.getDate() - 1);
+    let streak = 0;
+    while (set.has(_dayKey(cursor))) {
       streak++;
       cursor.setDate(cursor.getDate() - 1);
     }
     return streak;
+  }
+
+  async function syncStreak(force) {
+    if (!isLoggedIn()) return 0;
+    if (_streakSyncing) return _streakSyncing;
+    if (!force && Date.now() - _streakSyncedAt < 60000) return getStreak();
+    const uid = _streakUserId();
+    _streakSyncing = (async () => {
+      try {
+        const client = await _ensureSupabaseClient();
+        const days = _loadStudyDays();
+        const since = new Date();
+        since.setDate(since.getDate() - 400);
+        const { data, error } = await client.from('study_days').select('day').gte('day', _dayKey(since)).order('day', { ascending: false }).limit(450);
+        if (error) throw error;
+        const server = new Set((data || []).map(r => String(r.day).slice(0, 10)));
+        // One-off: carry over streak days recorded on this device before accounts held them.
+        try {
+          const legacy = JSON.parse(localStorage.getItem(STREAK_LEGACY_KEY) || '[]');
+          const floor = _dayKey(since), today = _dayKey(new Date());
+          (Array.isArray(legacy) ? legacy : []).forEach(d => { if (DAY_RE.test(d) && d >= floor && d <= today) days.add(d); });
+        } catch (e) { /* ignore */ }
+        // Push anything the server hasn't got; adopt everything it has.
+        const missing = Array.from(days).filter(d => !server.has(d)).sort().slice(-120);
+        if (missing.length) {
+          const up = await client.from('study_days').upsert(missing.map(d => ({ user_id: uid, day: d })), { onConflict: 'user_id,day', ignoreDuplicates: true });
+          if (up.error) throw up.error;
+        }
+        if (_streakUserId() === uid) {
+          server.forEach(d => days.add(d));
+          _saveStudyDays();
+        }
+        _streakSyncedAt = Date.now();
+      } catch (e) {
+        if (window.console) console.info('RA10: streak sync deferred', e && e.message ? e.message : e);
+      } finally {
+        _streakSyncing = null;
+      }
+      _emit('streakchange', { streak: getStreak() });
+      return getStreak();
+    })();
+    return _streakSyncing;
+  }
+
+  // Record that the signed-in user studied today, then sync with the account.
+  function markStudyDay() {
+    if (!isLoggedIn()) return 0;
+    const days = _loadStudyDays();
+    const today = _dayKey(new Date());
+    if (!days.has(today)) {
+      days.add(today);
+      _saveStudyDays();
+      _streakSyncedAt = 0;
+    }
+    syncStreak();
+    return getStreak();
   }
 
   function getCreditBreakdown() {
@@ -2177,6 +2282,9 @@
     getTierInfo,
     getCredits,
     getStreak,
+    getStudyDays,
+    markStudyDay,
+    syncStreak,
     getCreditBreakdown,
     getCreditActivity,
     getGuestCredits,

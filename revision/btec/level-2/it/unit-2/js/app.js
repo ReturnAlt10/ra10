@@ -59,27 +59,16 @@ function todayKey() {
 }
 
 function getStreakDates() {
-  try {
-    const parsed = JSON.parse(localStorage.getItem(STREAK_DATES_KEY) || '[]');
-    return Array.isArray(parsed) ? parsed.filter(d => /^\d{4}-\d{2}-\d{2}$/.test(d)) : [];
-  } catch (e) { return []; }
+  return window.RA10 && typeof RA10.getStudyDays === 'function' ? RA10.getStudyDays() : [];
 }
 function saveStreakDates(dates) {
-  const unique = Array.from(new Set((dates || []).filter(Boolean))).sort();
-  localStorage.setItem(STREAK_DATES_KEY, JSON.stringify(unique.slice(-90)));
+  /* The streak lives on the account (RA10.markStudyDay) - nothing to store here. */
 }
 function markTodayVisitForStreak() {
-  if (!window.RA10 || !RA10.isLoggedIn || !RA10.isLoggedIn()) return;
-  const today = todayKey();
-  const dates = getStreakDates();
-  if (!dates.includes(today)) { dates.push(today); saveStreakDates(dates); }
+  if (window.RA10 && typeof RA10.markStudyDay === 'function') RA10.markStudyDay();
 }
 function calcLocalStreak() {
-  const dates = new Set(getStreakDates());
-  let streak = 0;
-  const cursor = new Date(todayKey() + 'T00:00:00');
-  while (dates.has(cursor.toISOString().slice(0, 10))) { streak++; cursor.setDate(cursor.getDate() - 1); }
-  return streak;
+  return window.RA10 && typeof RA10.getStreak === 'function' ? RA10.getStreak() : 0;
 }
 
 function counterKey(prefix, date) {

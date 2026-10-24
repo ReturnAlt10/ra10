@@ -89,38 +89,19 @@ function incrementCounter(prefix, delta, date) {
 }
 
 function getStreakDates() {
-  try {
-    const parsed = JSON.parse(localStorage.getItem(STREAK_DATES_KEY) || '[]');
-    return Array.isArray(parsed) ? parsed.filter(d => /^\d{4}-\d{2}-\d{2}$/.test(d)) : [];
-  } catch (_) {
-    return [];
-  }
+  return window.RA10 && typeof RA10.getStudyDays === 'function' ? RA10.getStudyDays() : [];
 }
 
 function saveStreakDates(dates) {
-  const unique = Array.from(new Set((dates || []).filter(Boolean))).sort();
-  localStorage.setItem(STREAK_DATES_KEY, JSON.stringify(unique.slice(-90)));
+  /* The streak lives on the account (RA10.markStudyDay) - nothing to store here. */
 }
 
 function markTodayVisitForStreak() {
-  if (!window.RA10 || !RA10.isLoggedIn()) return;
-  const today = todayKey();
-  const dates = getStreakDates();
-  if (!dates.includes(today)) {
-    dates.push(today);
-    saveStreakDates(dates);
-  }
+  if (window.RA10 && typeof RA10.markStudyDay === 'function') RA10.markStudyDay();
 }
 
 function calcLocalStreak() {
-  const dates = new Set(getStreakDates());
-  let streak = 0;
-  const cursor = new Date(todayKey() + 'T00:00:00');
-  while (dates.has(cursor.toISOString().slice(0, 10))) {
-    streak++;
-    cursor.setDate(cursor.getDate() - 1);
-  }
-  return streak;
+  return window.RA10 && typeof RA10.getStreak === 'function' ? RA10.getStreak() : 0;
 }
 
 function dayOfYear() {
@@ -3328,22 +3309,8 @@ async function renderProgress() {
 }
 
 function calcStreak(rows) {
-  const days = new Set(getStreakDates());
-  (rows || []).forEach((row) => {
-    const createdAt = row?.created_at;
-    if (!createdAt) return;
-    const parsed = new Date(createdAt);
-    if (!Number.isNaN(parsed.getTime())) {
-      days.add(parsed.toISOString().slice(0, 10));
-    }
-  });
-  let streak = 0;
-  const d = new Date(todayKey() + 'T00:00:00');
-  while (days.has(d.toISOString().slice(0, 10))) {
-    streak++;
-    d.setDate(d.getDate() - 1);
-  }
-  return streak;
+  const extra = (rows || []).map(row => row && row.created_at).filter(Boolean);
+  return window.RA10 && typeof RA10.getStreak === 'function' ? RA10.getStreak(extra) : 0;
 }
 
 function startWeakQuiz(aims) {

@@ -210,6 +210,12 @@ const UNIT_PROFILES: Record<string, string> = {
   ].join("\n"),
 
   // ---------------- A-Level ---------------
+  "a-level-business-2026": [
+    "AQA A-Level Business (7138, new specification, first exam June 2028).",
+    "ASSESSMENT TYPE: EXTERNALLY ASSESSED WRITTEN EXAMS (Papers 1-3, 90 marks each, 2 hours). Each paper has TWO case studies (Source A and B) with five questions each: Analyse (6), Analyse (6), Assess (9), Assess (9), Evaluate (15).",
+    "Unit 3.1 (Paper 1): entrepreneurs, business planning, objectives, forms of business, stakeholders, marketing (research, elasticity, segmentation, mix, digital/AI) and finance (sources, break-even, budgets, cash flow, ratios). Unit 3.2 (Paper 2): people (HR planning, structure, leadership, teams, motivation, wellbeing, relations), operations (efficiency, quality, supply chain, inventory, network analysis, scale) and culture. Unit 3.3 (Paper 3, synoptic): sustainability/CSR/ESG, external environment, strategy, investment appraisal, growth, global/digital strategy, change, risk and agility.",
+    "Marks reward knowledge, application to the case (not repeating it), analysis as chains of reasoning, and evaluation. 15-mark questions evaluate TWO options and recommend one. Quantitative questions award 6 marks for the calculation (formula 2, calculation 2, interpretation 1, judgement 1) with the Own Figure Rule.",
+  ].join("\n"),
   "a-level-business": [
     "AQA A-Level Business (7132).",
     "ASSESSMENT TYPE: EXTERNALLY ASSESSED WRITTEN EXAMS (Papers 1–3). NOT coursework.",

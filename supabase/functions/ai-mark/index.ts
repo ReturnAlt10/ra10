@@ -1,5 +1,6 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { BUSINESS_SYSTEM, buildBusinessPrompt, businessPostProcess, isALevelBusiness } from "./business_examiner.ts";
+import { BUSINESS_2026_SYSTEM, buildBusiness2026Prompt, business2026PostProcess, is2026Business } from "./business_2026_examiner.ts";
 import { BUSINESS_BTEC_SYSTEM, buildBusinessBtecPrompt, businessBtecPostProcess, isBusinessBtec } from "./business_btec_examiner.ts";
 import { SPORT_U2_SYSTEM, buildSportUnit2Prompt, sportUnit2PostProcess, isSportUnit2Task } from "./sport_unit2_examiner.ts";
 import { requireTermsAccepted } from "../_shared/legal.ts";
@@ -359,12 +360,15 @@ export default Deno.serve(async (req: Request) => {
     }
 
     const marksMax = clamp(Math.round(safeNum(question?.marks, 1)), 1, 60);
-    const business = isALevelBusiness(question);
-    const sportU2 = !business && isSportUnit2Task(question);
-    const btec = !business && !sportU2 && isBusinessBtec(question);
-    const prompt = business ? buildBusinessPrompt(question, answer) : sportU2 ? buildSportUnit2Prompt(question, answer) : btec ? buildBusinessBtecPrompt(question, answer) : buildPrompt(question, answer, []);
+    const b2026 = is2026Business(question);
+    const business = !b2026 && isALevelBusiness(question);
+    const sportU2 = !business && !b2026 && isSportUnit2Task(question);
+    const btec = !business && !b2026 && !sportU2 && isBusinessBtec(question);
+    const prompt = b2026 ? buildBusiness2026Prompt(question, answer) : business ? buildBusinessPrompt(question, answer) : sportU2 ? buildSportUnit2Prompt(question, answer) : btec ? buildBusinessBtecPrompt(question, answer) : buildPrompt(question, answer, []);
 
-    const aiResponse = business
+    const aiResponse = b2026
+      ? await callAnyProvider(prompt, { system: BUSINESS_2026_SYSTEM, timeout: 50000, maxTokens: 2200 }, true)
+      : business
       ? await callAnyProvider(prompt, { system: BUSINESS_SYSTEM, timeout: 45000, maxTokens: 1800 }, true)
       : sportU2
         ? await callAnyProvider(prompt, { system: SPORT_U2_SYSTEM, timeout: 45000, maxTokens: 1800 }, true)
@@ -375,6 +379,7 @@ export default Deno.serve(async (req: Request) => {
     if (!parsed || typeof parsed !== "object") {
       throw new Error("AI response could not be parsed as JSON");
     }
+    if (b2026) parsed = business2026PostProcess(parsed, question, answer);
     if (business) parsed = businessPostProcess(parsed, question, answer);
     if (sportU2) parsed = sportUnit2PostProcess(parsed, question);
     if (btec) parsed = businessBtecPostProcess(parsed, question);

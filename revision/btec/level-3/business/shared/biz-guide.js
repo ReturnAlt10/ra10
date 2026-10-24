@@ -456,7 +456,7 @@
   </div>
   ${d.aims.map(a => `
   <div class="guide-toc-aim-group">
-    <button class="guide-toc-aim-link" onclick="guideScrollTo('guide-aim-${a}')"><span class="guide-toc-badge">${a}</span>${d.titles[a]}</button>
+    <button class="guide-toc-aim-link" onclick="guideScrollTo('guide-aim-${a}')"><span class="guide-toc-badge">${(d.aimLabels && d.aimLabels[a]) || a}</span>${d.titles[a]}</button>
     <div class="guide-toc-topic-links">
       ${d.topics[a].map(t => `<button class="guide-toc-topic-link" onclick="guideScrollTo('gt-${t.code}')">${t.code} ${t.name}</button>`).join('')}
     </div>
@@ -480,15 +480,15 @@
     return `
 <div class="guide-aim-section" id="guide-aim-${letter}">
   <div class="guide-aim-hd">
-    <div class="guide-aim-badge">${letter}</div>
+    <div class="guide-aim-badge">${(d.aimLabels && d.aimLabels[letter]) || letter}</div>
     <div>
-      <div class="guide-aim-title">${d.aimWord || 'Learning aim'} ${letter}: ${d.titles[letter]}</div>
+      <div class="guide-aim-title">${d.aimLabels ? 'Unit ' + d.aimLabels[letter] + ': ' : (d.aimWord || 'Learning aim') + ' ' + letter + ': '}${d.titles[letter]}</div>
       <div class="guide-aim-subtitle">${d.subtitles[letter]}</div>
     </div>
   </div>
   ${d.topics[letter].map((t, i) => topicHtml(t, letter === 'A' && i === 0)).join('')}
   <button class="guide-mark-btn" id="gmb-${letter}" onclick="toggleGuideRevised('${letter}')">
-    <span class="guide-mark-icon">&#9711;</span> Mark ${(d.aimWord || 'Learning aim').toLowerCase()} ${letter} as revised
+    <span class="guide-mark-icon">&#9711;</span> Mark ${d.aimLabels ? 'unit ' + d.aimLabels[letter] : (d.aimWord || 'Learning aim').toLowerCase() + ' ' + letter} as revised
   </button>
 </div>`;
   }
@@ -533,7 +533,8 @@
     d.aims.forEach(a => {
       const btn = document.getElementById('gmb-' + a); if (!btn) return;
       const done = revised.includes(a); btn.classList.toggle('revised', done);
-      btn.innerHTML = done ? `<span class="guide-mark-icon">&#10003;</span> ${d.aimWord || 'Learning aim'} ${a} revised!` : `<span class="guide-mark-icon">&#9711;</span> Mark ${(d.aimWord || 'learning aim').toLowerCase()} ${a} as revised`;
+      const nm = d.aimLabels ? 'unit ' + d.aimLabels[a] : (d.aimWord || 'learning aim').toLowerCase() + ' ' + a;
+      btn.innerHTML = done ? `<span class="guide-mark-icon">&#10003;</span> ${nm.charAt(0).toUpperCase() + nm.slice(1)} revised!` : `<span class="guide-mark-icon">&#9711;</span> Mark ${nm} as revised`;
     });
   }
 
