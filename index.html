@@ -1761,13 +1761,18 @@ body.unit-shell-mode .nav,
 body.unit-shell-mode .mobile-top-nav{
   display:none !important;
 }
-/* A unit app brings its own mobile header + bottom bar, so the site's mobile bars step aside
-   (they used to sit on top of the unit tabs). Higher specificity than the fullscreen-mode rule. */
+/* A unit app brings its own mobile header (logo, credits, swipeable tabs), so the site's mobile TOP bar
+   steps aside (it used to sit on top of the unit tabs). The site's normal bottom navbar stays, and the
+   unit iframe stops above it. */
 body.unit-shell-mode.iframe-fullscreen-mode .mobile-top-nav,
-body.unit-shell-mode.iframe-fullscreen-mode .mobile-bottom-nav,
-body.unit-shell-mode.mobile-ui .mobile-top-nav,
-body.unit-shell-mode.mobile-ui .mobile-bottom-nav{
+body.unit-shell-mode.mobile-ui .mobile-top-nav{
   display:none !important;
+}
+@media (max-width: 820px){
+  body.unit-shell-mode .page-iframe.active .iframe-wrap iframe{
+    height:calc(100dvh - 84px - env(safe-area-inset-bottom, 0px)) !important;
+    min-height:0 !important;
+  }
 }
 
 body.unit-shell-mode .page-iframe.active > .cf,
@@ -2718,103 +2723,63 @@ html.a11y-contrast .mobile-bottom-nav{background:var(--color-surface);backdrop-f
 }
 
 .lb-countdown-pill{
+  --lbt-accent:#34d399;
+  --lbt-accent2:#22d3ee;
+  position:relative;
   display:grid;
-  gap:8px;
-  justify-items:center;
-  align-items:center;
-  padding:12px 16px;
-  border-radius:16px;
-  color:#fff;
-  border:1px solid rgba(255,255,255,.24);
-  background:
-    linear-gradient(140deg, rgba(255,255,255,.14), rgba(255,255,255,.03)),
-    linear-gradient(115deg,#8f0e1b,#b91c1c 55%,#ea580c);
-  box-shadow:
-    0 10px 24px rgba(193,18,31,.28),
-    inset 0 1px 0 rgba(255,255,255,.35);
-  animation:lbPulse 1.8s ease-out infinite;
-  font-family: 'JetBrains Mono', 'SF Mono', Menlo, monospace;
-  text-shadow:0 1px 1px rgba(0,0,0,.26);
-}
-
-#lb-countdown-inline{
-  margin-left:auto !important;
-  margin-right:auto !important;
-  width:min(100%, 560px) !important;
-  padding:18px 24px;
-}
-
-#lb-countdown-inline .lb-digit{
-  font-size:clamp(1.55rem, 4.4vw, 2.85rem);
-}
-
-#lb-countdown-inline .lb-time-unit{
-  font-size:.72rem;
-}
-
-.lb-count-label{
-  font-size:var(--tx-xs);
-  font-weight:800;
-  letter-spacing:.1em;
-  text-transform:uppercase;
-  opacity:.96;
-}
-
-.lb-count-grid{
-  display:flex;
-  align-items:flex-end;
-  justify-content:center;
-  gap:10px;
-  flex-wrap:wrap;
-}
-
-.lb-time-block{
-  display:grid;
-  gap:6px;
-  justify-items:center;
-}
-
-.lb-digits{
-  display:flex;
-  align-items:center;
-  gap:3px;
-}
-
-.lb-digit{
-  width:.72em;
-  height:1em;
-  overflow:hidden;
-  display:inline-flex;
-  border-radius:8px;
-  background:rgba(0,0,0,.2);
-  border:1px solid rgba(255,255,255,.2);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.14);
-  font-size:clamp(1.2rem, 2.3vw, 1.95rem);
-  line-height:1;
-  font-weight:900;
-}
-
-.lb-digit-stack{
-  display:block;
+  gap:14px;
   width:100%;
-  transition:transform .45s cubic-bezier(.2,.8,.2,1);
-  will-change:transform;
+  box-sizing:border-box;
+  padding:16px 18px 14px;
+  border-radius:22px;
+  color:#fff;
+  overflow:hidden;
+  background:
+    radial-gradient(260px 120px at 12% -10%, color-mix(in srgb,var(--lbt-accent) 28%, transparent), transparent 70%),
+    radial-gradient(260px 140px at 100% 110%, color-mix(in srgb,var(--lbt-accent2) 22%, transparent), transparent 70%),
+    linear-gradient(160deg,#10172a,#141b33 60%,#0c1224);
+  border:1px solid rgba(255,255,255,.12);
+  box-shadow:0 22px 50px -26px rgba(2,6,23,.8), inset 0 1px 0 rgba(255,255,255,.12);
+  font-family:var(--font-b, system-ui, sans-serif);
+  text-shadow:none;
+  text-align:left;
 }
-
-.lb-digit-stack span{
-  display:block;
-  height:1em;
-  line-height:1;
-  text-align:center;
+.lb-countdown-pill[data-urgency="soon"]{--lbt-accent:#fbbf24;--lbt-accent2:#fb923c}
+.lb-countdown-pill[data-urgency="now"]{--lbt-accent:#fb7185;--lbt-accent2:#f43f5e}
+.lbt-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.lbt-live{display:inline-flex;align-items:center;gap:7px;padding:4px 10px;border-radius:999px;background:rgba(255,255,255,.08);box-shadow:inset 0 0 0 1px rgba(255,255,255,.12);font:800 .62rem/1 var(--font-b,system-ui);letter-spacing:.12em;text-transform:uppercase;color:#d1fae5}
+.lbt-live i{position:relative;width:8px;height:8px;border-radius:50%;background:var(--lbt-accent)}
+.lbt-live i::after{content:'';position:absolute;inset:-4px;border-radius:50%;border:2px solid var(--lbt-accent);animation:lbtPing 1.8s ease-out infinite}
+.lbt-title{font:800 .98rem/1.1 var(--font-b,system-ui);letter-spacing:-.01em}
+.lbt-when{margin-left:auto;font-size:.72rem;color:rgba(226,232,240,.7)}
+.lb-count-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;align-items:start}
+.lb-time-block{position:relative;display:grid;gap:8px;justify-items:center;padding:12px 6px 10px;border-radius:16px;background:linear-gradient(180deg,rgba(255,255,255,.09),rgba(255,255,255,.03));box-shadow:inset 0 0 0 1px rgba(255,255,255,.1)}
+.lb-time-block:not(:last-child)::after{content:':';position:absolute;right:-9px;top:34%;transform:translateY(-50%);font:800 1.3rem/1 var(--font-b,system-ui);color:rgba(255,255,255,.35);animation:lbtBlink 1s steps(2) infinite}
+.lb-digits{display:flex;align-items:center;gap:4px}
+.lb-digit{
+  width:.74em;height:1em;overflow:hidden;display:inline-flex;border-radius:9px;
+  background:linear-gradient(180deg,#0b1224,#18213b);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.14), inset 0 -10px 14px -10px rgba(0,0,0,.7), 0 6px 12px -8px rgba(0,0,0,.8);
+  font-size:clamp(1.5rem,5.6vw,2.5rem);line-height:1;font-weight:800;
+  font-variant-numeric:tabular-nums;color:#fff;position:relative;
 }
-
-.lb-time-unit{
-  font-size:.62rem;
-  font-weight:800;
-  letter-spacing:.08em;
-  text-transform:uppercase;
-  opacity:.95;
-}
+.lb-digit::after{content:'';position:absolute;left:0;right:0;top:50%;height:1px;background:rgba(0,0,0,.45);box-shadow:0 1px 0 rgba(255,255,255,.07)}
+.lb-digit-stack{display:block;width:100%;transition:transform .5s cubic-bezier(.2,.9,.25,1.15);will-change:transform}
+.lb-digit-stack span{display:block;height:1em;line-height:1;text-align:center}
+.lb-time-unit{font:800 .6rem/1 var(--font-b,system-ui);letter-spacing:.14em;text-transform:uppercase;color:rgba(226,232,240,.72)}
+.lb-time-block[data-unit="secs"] .lb-digit{box-shadow:inset 0 1px 0 rgba(255,255,255,.14), inset 0 -10px 14px -10px rgba(0,0,0,.7), 0 0 0 1px color-mix(in srgb,var(--lbt-accent) 55%, transparent), 0 6px 18px -8px var(--lbt-accent)}
+.lbt-foot{display:grid;gap:7px}
+.lbt-bar{position:relative;height:8px;border-radius:99px;background:rgba(255,255,255,.1);overflow:hidden}
+.lbt-bar i{position:absolute;left:0;top:0;bottom:0;width:var(--lbt-p,0%);border-radius:99px;background:linear-gradient(90deg,var(--lbt-accent),var(--lbt-accent2));box-shadow:0 0 14px var(--lbt-accent);transition:width 1s linear}
+.lbt-bar i::after{content:'';position:absolute;inset:0;background:linear-gradient(100deg,transparent 30%,rgba(255,255,255,.5) 50%,transparent 70%);background-size:200% 100%;animation:lbtShine 2.8s linear infinite}
+.lbt-caption{display:flex;justify-content:space-between;gap:10px;font-size:.72rem;color:rgba(226,232,240,.75)}
+.lbt-caption b{color:#fff}
+#lb-countdown-inline{margin-left:auto !important;margin-right:auto !important;width:min(100%,560px) !important;padding:18px 20px 16px}
+#lb-preview-countdown .lb-digit{font-size:clamp(1.2rem,4vw,1.7rem)}
+@keyframes lbtPing{0%{transform:scale(.6);opacity:.9}100%{transform:scale(1.8);opacity:0}}
+@keyframes lbtBlink{50%{opacity:.1}}
+@keyframes lbtShine{to{background-position:-200% 0}}
+@media (max-width:480px){.lb-countdown-pill{padding:14px 12px 12px;gap:12px}.lb-count-grid{gap:8px}.lb-time-block{padding:10px 4px 8px}.lbt-when{width:100%;margin-left:0}}
 
 .lb-visually-hidden{
   position:absolute;
@@ -2829,8 +2794,8 @@ html.a11y-contrast .mobile-bottom-nav{background:var(--color-surface);backdrop-f
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .lb-countdown-pill { animation:none; }
   .lb-digit-stack { transition:none; }
+  .lbt-live i::after,.lb-time-block::after,.lbt-bar i::after { animation:none !important; }
 }
 
 @keyframes lbPulse {
@@ -8288,37 +8253,24 @@ const _lbDigitStackHtml = '<span class="lb-digit-stack"><span>0</span><span>1</s
 function buildCountdownPill(el) {
   if (!el || el.dataset.countdownBuilt === '1') return;
   el.dataset.countdownBuilt = '1';
+  const block = (unit, label, a, b) => `
+      <span class="lb-time-block" data-unit="${unit}">
+        <span class="lb-digits">
+          <span class="lb-digit" data-slot="${a}">${_lbDigitStackHtml}</span>
+          <span class="lb-digit" data-slot="${b}">${_lbDigitStackHtml}</span>
+        </span>
+        <span class="lb-time-unit">${label}</span>
+      </span>`;
   el.innerHTML = `
-    <span class="lb-count-label">Reset in</span>
-    <span class="lb-count-grid" aria-hidden="true">
-      <span class="lb-time-block">
-        <span class="lb-digits">
-          <span class="lb-digit" data-slot="d1">${_lbDigitStackHtml}</span>
-          <span class="lb-digit" data-slot="d2">${_lbDigitStackHtml}</span>
-        </span>
-        <span class="lb-time-unit">Days</span>
-      </span>
-      <span class="lb-time-block">
-        <span class="lb-digits">
-          <span class="lb-digit" data-slot="h1">${_lbDigitStackHtml}</span>
-          <span class="lb-digit" data-slot="h2">${_lbDigitStackHtml}</span>
-        </span>
-        <span class="lb-time-unit">Hours</span>
-      </span>
-      <span class="lb-time-block">
-        <span class="lb-digits">
-          <span class="lb-digit" data-slot="m1">${_lbDigitStackHtml}</span>
-          <span class="lb-digit" data-slot="m2">${_lbDigitStackHtml}</span>
-        </span>
-        <span class="lb-time-unit">Mins</span>
-      </span>
-      <span class="lb-time-block">
-        <span class="lb-digits">
-          <span class="lb-digit" data-slot="s1">${_lbDigitStackHtml}</span>
-          <span class="lb-digit" data-slot="s2">${_lbDigitStackHtml}</span>
-        </span>
-        <span class="lb-time-unit">Secs</span>
-      </span>
+    <span class="lbt-head">
+      <span class="lbt-live"><i></i>Live</span>
+      <span class="lbt-title">Weekly reset</span>
+      <span class="lbt-when" data-slot="when"></span>
+    </span>
+    <span class="lb-count-grid" aria-hidden="true">${block('days', 'Days', 'd1', 'd2')}${block('hours', 'Hours', 'h1', 'h2')}${block('mins', 'Mins', 'm1', 'm2')}${block('secs', 'Secs', 's1', 's2')}</span>
+    <span class="lbt-foot">
+      <span class="lbt-bar" aria-hidden="true"><i data-slot="bar"></i></span>
+      <span class="lbt-caption"><span data-slot="pct"></span><span>Top 3 win <b>credits</b> at reset</span></span>
     </span>
     <span class="lb-visually-hidden" data-slot="aria"></span>
   `;
@@ -8362,9 +8314,17 @@ function updateLeaderboardCountdown() {
   const hours = Math.floor((total % 86400) / 3600);
   const mins = Math.floor((total % 3600) / 60);
   const secs = total % 60;
+  const WEEK = 7 * 86400;
+  const pct = Math.max(0, Math.min(100, Math.round((1 - total / WEEK) * 1000) / 10));
+  const urgency = total < 3600 ? 'now' : total < 86400 ? 'soon' : 'ok';
+  const whenText = new Date(target).toLocaleDateString(undefined, { weekday: 'long' }) + ' midnight';
   document.querySelectorAll('#lb-preview-countdown, #lb-countdown-inline').forEach((el) => {
     buildCountdownPill(el);
     updateCountdownDigits(el, days, hours, mins, secs);
+    el.dataset.urgency = urgency;
+    el.style.setProperty('--lbt-p', pct + '%');
+    const pc = el.querySelector('[data-slot="pct"]'); if (pc) pc.innerHTML = 'Week <b>' + Math.round(pct) + '%</b> complete';
+    const wh = el.querySelector('[data-slot="when"]'); if (wh) wh.textContent = whenText;
   });
 }
 
@@ -13613,7 +13573,10 @@ async function waitForRA10Sdk(timeoutMs) {
         if (!row) return;
         const noticeType = String(row.moderation_notice_type || '').trim();
         const noticeSeen = !!row.moderation_notice_seen;
-        if (!noticeType || noticeSeen) return;
+        const modSeenKey = 'ra10_mod_notice_seen_' + currentUserId + '_' + String(row.moderation_notice_created_at || noticeType);
+        let seenLocally = false;
+        try { seenLocally = localStorage.getItem(modSeenKey) === '1'; } catch (e) {}
+        if (!noticeType || noticeSeen || seenLocally) return;
 
         const popup = document.getElementById('moderation-popup');
         if (!popup) return;
@@ -13643,6 +13606,9 @@ async function waitForRA10Sdk(timeoutMs) {
         }
         popup.dataset.userId = currentUserId;
         popup.style.display = 'block';
+        // Shown once: mark it seen right now rather than waiting for the close button.
+        try { localStorage.setItem(modSeenKey, '1'); } catch (e) {}
+        authedProfilesRequest('PATCH', '?id=eq.' + encodeURIComponent(currentUserId), { moderation_notice_seen: true }, null).catch(function (err) { console.warn('mark moderation notice seen failed', err); });
       } catch (e) {
         console.warn('moderation popup check failed', e);
       }
@@ -14523,6 +14489,7 @@ async function waitForRA10Sdk(timeoutMs) {
     function showTransitionPopup() {
       if (transitionPopupSeen()) return;
       if (document.getElementById('transition-popup-overlay')) return;
+      try { localStorage.setItem(TRANSITION_POPUP_SEEN_KEY, '1'); } catch (e) {}   // one showing only, even if it is dismissed by refreshing
       const overlay = document.createElement('div');
       overlay.id = 'transition-popup-overlay';
       overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:1200;display:flex;align-items:center;justify-content:center;padding:16px;font-family:sans-serif;';

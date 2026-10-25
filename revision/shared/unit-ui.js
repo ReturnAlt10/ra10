@@ -189,6 +189,16 @@
     tabs.insertAdjacentElement('afterend', b);
   }
 
+  // Phones inside the site: a Menu button in the header opens the Jump-to sheet (the unit's own bottom bar is hidden there).
+  function addHeaderMenuButton() {
+    const actions = $('.topbar > div:last-child');
+    if (!actions || $('.ux-menubtn')) return;
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'ux-menubtn'; b.setAttribute('aria-label', 'Open menu'); b.setAttribute('aria-haspopup', 'dialog'); b.setAttribute('data-ux-open', ''); b.setAttribute('aria-expanded', 'false');
+    b.innerHTML = I.menu; b.addEventListener('click', () => openMenu(b));
+    actions.insertAdjacentElement('afterbegin', b);
+  }
+
   /* ───── mobile bottom navigation ───── */
   function addBottomNav() {
     if ($('.ux-bottom')) return;
@@ -307,7 +317,7 @@
     document.documentElement.classList.add('ux-unit');
     try { if (window.self !== window.top) document.documentElement.classList.add('ux-embedded'); } catch (e) { document.documentElement.classList.add('ux-embedded'); }
     buildDests();
-    addJumpButton();
+    addJumpButton(); addHeaderMenuButton();
     addBottomNav();
     launchpad();
     crumbs();

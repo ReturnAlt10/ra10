@@ -160,3 +160,12 @@ html.ux-unit .ux-menu.open { opacity: 1; transform: none; }
   html.ux-unit .topbar > .tabs .tab.active { background: var(--accent) !important; color: #fff !important; box-shadow: 0 6px 14px -8px var(--accent) !important; }
   html.ux-unit main { padding-bottom: 104px; scroll-margin-top: 120px; }
 }
+
+/* Inside the site, the site's own bottom navbar is used - hide the unit's duplicate one. */
+@media (max-width: 820px) {
+  html.ux-embedded .ux-bottom { display: none !important; }
+  html.ux-embedded.ux-unit main { padding-bottom: 28px; }
+  .ux-menubtn { display: inline-grid !important; }
+}
+.ux-menubtn { display: none; place-items: center; width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--line, #ddd); background: var(--surface-soft, rgba(0,0,0,.04)); color: var(--ink, #111); cursor: pointer; }
+.ux-menubtn svg { width: 18px; height: 18px; }

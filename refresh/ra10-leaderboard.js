@@ -55,7 +55,7 @@
       '.lbx-hero p{margin:0 0 16px;max-width:560px;color:#c7cbe0;font-size:.95rem}',
       '.lbx-prizes{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}',
       '.lbx-prize{display:inline-flex;align-items:center;gap:6px;padding:7px 12px;border-radius:999px;font-weight:800;font-size:.8rem;background:rgba(255,255,255,.1);box-shadow:inset 0 0 0 1px rgba(255,255,255,.14);backdrop-filter:blur(8px)}',
-      '.lbx-hero .lb-countdown-pill{background:rgba(255,255,255,.1)!important;color:#fff!important;border-color:rgba(255,255,255,.18)!important}',
+      '.lbx-hero .lb-countdown-pill{margin-top:6px}',
       // me card
       '.lbx-me{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:18px;align-items:center;padding:18px 20px;border-radius:24px;background:var(--lbx-card);box-shadow:0 0 0 1px var(--lbx-line),0 16px 40px -24px rgba(15,23,42,.35)}',
       '@media(max-width:640px){.lbx-me{grid-template-columns:auto minmax(0,1fr)}.lbx-me-rank{grid-column:1/-1;justify-self:start}}',

@@ -543,6 +543,8 @@
     var act = a.dataset.act, id = a.dataset.id;
     switch (act) {
       case 'apply': return applyDialog();
+      case 'invyes': return respondInvite(true);
+      case 'invno': return respondInvite(false);
       case 'new': return renderNew(state.view === 'category' ? state.cat : null);
       case 'home': return renderHome();
       case 'back': return goBack();
@@ -680,6 +682,7 @@
   }
   function applyCardInner() {
     if (staff) return '<h3>🛡️ You\u2019re on the team</h3><p class="cf-muted">Thanks for helping keep RA10 friendly.</p>';
+    if (pendingInvite) return '<h3>🛡️ You’ve been invited!</h3><p class="cf-muted"><b>' + esc(pendingInvite.inviter_name || 'The RA10 team') + '</b> asked if you’d like to be a Community Moderator. It’s completely your choice.</p><div class="cf-row-actions"><button type="button" class="cf-btn primary" data-act="invyes">Accept</button><button type="button" class="cf-btn" data-act="invno">Decline</button></div>';
     if (!loggedIn()) return '<h3>🛡️ Help moderate RA10</h3><p class="cf-muted">Sign in to apply to become a community moderator.</p><button type="button" class="cf-btn" data-act="login">Sign in</button>';
     var a = myApp;
     if (a && a.status === 'pending') return '<h3>🛡️ Application sent</h3><p class="cf-muted">Thanks! The RA10 owner will review it — you\u2019ll see the result here the next time you visit. <span class="cf-chip warn">Pending · ' + ago(a.created_at) + '</span></p>';
@@ -804,7 +807,7 @@
     c.rpc('community_applications_list', { p_status: 'pending' }).then(function (r) {
       if (r.error) return;
       pendingApps = r.data || []; refreshReportBadge();
-      var seen = lsGet(APP_SEEN, sessionStorage).split(',');
+      var seen = lsGet(APP_SEEN).split(',');
       var fresh = pendingApps.filter(function (a) { return seen.indexOf(a.id) < 0; })[0];
       if (!fresh || document.getElementById('cf-app-pop')) return;
       var p = document.createElement('div');
@@ -814,7 +817,8 @@
         '<span>' + Number(fresh.xp_total).toLocaleString() + ' XP · ' + humanAge(appStats(fresh).ageDays) + ' on RA10 · ' + fresh.active_days_30 + '/30 days active' + (more > 0 ? ' · +' + more + ' more waiting' : '') + '</span>' +
         '<div class="cf-ann-actions"><button type="button" class="cf-btn primary sm" data-p="review">Review</button><button type="button" class="cf-btn sm" data-p="later">Later</button></div></div><button type="button" class="cf-ann-x" data-p="later" aria-label="Dismiss">✕</button>';
       document.body.appendChild(p);
-      function dismiss() { lsSet(APP_SEEN, pendingApps.map(function (a) { return a.id; }).concat(seen).join(','), sessionStorage); p.classList.add('out'); setTimeout(function () { p.remove(); }, 260); }
+      lsSet(APP_SEEN, pendingApps.map(function (a) { return a.id; }).concat(seen).join(',').slice(0, 4000));   // popped once; the Moderation tab badge keeps counting
+      function dismiss() { p.classList.add('out'); setTimeout(function () { p.remove(); }, 260); }
       p.addEventListener('click', function (e) {
         var b = e.target.closest('[data-p]'); if (!b) return;
         dismiss();
@@ -836,9 +840,10 @@
              : '<p>Thanks for applying — it wasn\u2019t accepted this time.' + (a.decision_note ? '</p><p class="cf-quote">' + esc(a.decision_note) : '') + '</p><p class="cf-muted small">You can apply again after ' + (a.can_reapply_at ? new Date(a.can_reapply_at).toLocaleDateString() : '14 days') + '. Keep being active and helpful!</p>') +
         '<div class="cf-modal-actions"><button type="button" class="cf-btn primary" data-i="ok">' + (yes ? 'Let\u2019s go' : 'OK') + '</button></div></div>';
       document.body.appendChild(ov);
+      c.rpc('community_ack_application', { p_id: a.id }); a.notified = true;   // shown once — never again, even if refreshed
       ov.addEventListener('click', function (e) {
         if (!e.target.closest('[data-i]') && e.target !== ov) return;
-        ov.remove(); c.rpc('community_ack_application', { p_id: a.id }); a.notified = true;
+        ov.remove();
         if (yes) refreshStaff().then(function () { refreshApplyCard(); });
       });
     });
@@ -1015,6 +1020,7 @@
   function hideAnnPopup() { var p = document.getElementById('cf-ann-pop'); if (p) { p.classList.add('out'); setTimeout(function () { p.remove(); }, 260); } }
   function showAnnPopup(ann) {
     if (document.getElementById('cf-ann-pop')) return;
+    lsSet(ANN_POPUP, ann.id);   // pop up once per announcement, ever — the nav dot stays until it's read
     var p = document.createElement('div');
     p.id = 'cf-ann-pop'; p.className = 'cf-ann-pop'; p.setAttribute('role', 'status'); p.setAttribute('aria-live', 'polite');
     var role = ann.badge === 'owner' ? '👑 Owner' : ann.badge === 'admin' ? '🛡️ Admin' : 'Community team';
@@ -1025,12 +1031,12 @@
     document.body.appendChild(p);
     p.addEventListener('click', function (e) {
       var b = e.target.closest('[data-ann]'); if (!b) return;
-      if (b.dataset.ann === 'later') { lsSet(ANN_POPUP, ann.id, sessionStorage); hideAnnPopup(); return; }
+      if (b.dataset.ann === 'later') { hideAnnPopup(); return; }
       markAnnouncementSeen();
       if (typeof window.go === 'function') window.go('/community');
       setTimeout(function () { setTab('forum'); openThread(ann.id); }, 450);
     });
-    setTimeout(function () { if (document.getElementById('cf-ann-pop') === p) { lsSet(ANN_POPUP, ann.id, sessionStorage); hideAnnPopup(); } }, 20000);
+    setTimeout(function () { if (document.getElementById('cf-ann-pop') === p) hideAnnPopup(); }, 20000);
   }
   function checkAnnouncement() {
     var c = client(); if (!c) return;
@@ -1039,18 +1045,29 @@
       var fresh = Date.now() - new Date(ann.created_at).getTime() < 14 * 86400000;
       var unseen = lsGet(ANN_SEEN) !== ann.id && fresh && String(ann.author_id) !== myId();
       setNavDot(unseen, ann);
-      if (unseen && lsGet(ANN_POPUP, sessionStorage) !== ann.id) setTimeout(function () { if (lsGet(ANN_SEEN) !== ann.id) showAnnPopup(ann); }, 1200);
+      if (unseen && lsGet(ANN_POPUP) !== ann.id) setTimeout(function () { if (lsGet(ANN_SEEN) !== ann.id) showAnnPopup(ann); }, 1200);
       var cat = $('[data-cat="announcements"] .cf-cat-copy b');
       if (cat && unseen && !$('.cf-new', cat)) cat.insertAdjacentHTML('beforeend', ' <i class="cf-new">New</i>');
     }, function () {});
   }
 
   /* ── moderator request popup (shown to the invited member on login) ──── */
+  var pendingInvite = null;
+  function respondInvite(accept) {
+    var c = client(); if (!c) return;
+    c.rpc('community_respond_invite', { p_accept: !!accept }).then(function (res) {
+      if (res.error) return toast(errMsg(res.error));
+      pendingInvite = null;
+      if (accept) { toast('Welcome to the moderation team! 🛡️'); refreshStaff().then(refreshApplyCard); } else { toast('No problem — request declined.'); refreshApplyCard(); }
+    });
+  }
   function checkInvite() {
     var c = client(); if (!c || !loggedIn()) return;
-    if (lsGet('ra10_forum_invite_later', sessionStorage)) return;
     c.rpc('community_my_invite').then(function (r) {
-      var inv = r.data && r.data[0]; if (!inv || document.getElementById('cf-invite')) return;
+      var inv = r.data && r.data[0]; pendingInvite = inv || null; refreshApplyCard();
+      var seenKey = 'ra10_forum_invite_seen_' + myId() + '_' + (inv ? inv.created_at : '');
+      if (!inv || document.getElementById('cf-invite') || lsGet(seenKey)) return;
+      lsSet(seenKey, '1');   // the pop-up appears once; after that the request waits on the Community page
       var ov = document.createElement('div');
       ov.id = 'cf-invite'; ov.className = 'cf-modal-ov'; ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-modal', 'true'); ov.setAttribute('aria-label', 'Community Moderator request');
       ov.innerHTML = '<div class="cf-modal cf-invite"><div class="cf-invite-ico" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path class="sh" d="M24 5 8 11v11c0 10 6.8 17.2 16 21 9.2-3.8 16-11 16-21V11z" fill="currentColor" fill-opacity=".15"/><path class="tk" d="m16.5 24 5 5 10-11" stroke-dasharray="30" stroke-dashoffset="30"/></svg></div>' +
@@ -1061,7 +1078,7 @@
       document.body.appendChild(ov);
       ov.addEventListener('click', function (e) {
         var b = e.target.closest('[data-i]'); if (!b) return;
-        if (b.dataset.i === 'later') { lsSet('ra10_forum_invite_later', '1', sessionStorage); ov.remove(); return; }
+        if (b.dataset.i === 'later') { ov.remove(); toast('You can answer from the Community page any time.'); return; }
         b.disabled = true;
         c.rpc('community_respond_invite', { p_accept: b.dataset.i === 'yes' }).then(function (res) {
           ov.remove();
