@@ -42,6 +42,7 @@
   }
   function errMsg(e) {
     var m = (e && (e.message || e.error_description)) || 'Something went wrong.';
+    if (/community_(staff_overview|member_search|invite_moderator|my_invite|respond_invite|cancel_invite)|forum_(restore|mod_log|mod_queue|latest_announcement)|community_staff_invites/i.test(m) && /does not exist|schema cache|Could not find/i.test(m)) return 'Moderator tools need the second database update: run supabase/sql/community-moderation.sql (after community-forums.sql), then wait a few seconds and refresh.';
     if (/relation .* does not exist|schema cache|Could not find the (table|function)/i.test(m)) return 'The forums need the database update (run supabase/sql/community-forums.sql).';
     if (/row-level security/i.test(m)) return 'You don’t have permission to do that.';
     return String(m).slice(0, 160);

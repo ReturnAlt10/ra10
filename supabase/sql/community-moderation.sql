@@ -265,3 +265,6 @@ begin
 end;
 $$;
 grant execute on function public.community_cancel_invite(text) to authenticated;
+
+-- Make the new tables/functions visible to the API straight away.
+notify pgrst, 'reload schema';

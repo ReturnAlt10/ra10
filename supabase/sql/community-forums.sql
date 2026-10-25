@@ -446,3 +446,6 @@ begin
   end if;
 end;
 $$;
+
+-- Make the new tables/functions visible to the API straight away.
+notify pgrst, 'reload schema';
