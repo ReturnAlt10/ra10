@@ -127,7 +127,13 @@
         <p class="ux-mlabel">${esc(g)}</p>
         ${groups[g].map(d => `<button type="button" class="ux-mitem${d.name === current ? ' on' : ''}" data-ux-go="${esc(d.name)}">
             <span class="ux-mico">${I[d.i] || I.tools}</span><span class="ux-mtxt"><b>${esc(d.t)}</b>${d.d ? `<small>${esc(d.d)}</small>` : ''}</span></button>`).join('')}
-      </div>`).join('');
+      </div>`).join('') + siteLinksHtml();
+  }
+  const SITE = [['Home', '/index.html#/', 'M3 12l9-9 9 9M5 10v10a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V10'], ['Subjects', '/index.html#/revision', 'M4 19.5A2.5 2.5 0 0 1 6.5 17H20M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z'],
+    ['Community', '/index.html#/community', 'M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 3a4 4 0 1 0 0 8 4 4 0 0 0 0-8M23 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8'], ['Tasks', '/index.html#/tasks', 'M9 11l3 3 8-8M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11'],
+    ['Exams', '/index.html#/exams', 'M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01'], ['Leaderboard', '/index.html#/leaderboard', 'M8 21h8M12 17v4M7 4h10v4a5 5 0 0 1-10 0zM7 6H4a2 2 0 0 0 2 3M17 6h3a2 2 0 0 1-2 3']];
+  function siteLinksHtml() {
+    return `<div class="ux-mgroup ux-site" role="group" aria-label="Around RA10"><p class="ux-mlabel">Around RA10</p><div class="ux-sitegrid">${SITE.map(x => `<a class="ux-sitelink" href="${x[1]}" target="_top"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${x[2]}"/></svg><span>${x[0]}</span></a>`).join('')}</div></div>`;
   }
   function openMenu(anchor) {
     if (menu) { closeMenu(); return; }
@@ -274,6 +280,13 @@
   }
 
   /* ───── state sync ───── */
+  // Keep the highlighted unit tab visible in the swipeable mobile tab strip.
+  function centerActiveTab() {
+    const t = $('.topbar .tabs .tab.active'); const strip = $('.topbar .tabs');
+    if (!t || !strip || strip.scrollWidth <= strip.clientWidth) return;
+    const dx = t.getBoundingClientRect().left - strip.getBoundingClientRect().left;
+    strip.scrollTo({ left: Math.max(0, strip.scrollLeft + dx - (strip.clientWidth - t.offsetWidth) / 2), behavior: 'smooth' });
+  }
   function sync() {
     current = activeName();
     const d = destOf(current);
@@ -284,6 +297,7 @@
       if (on) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current');
     });
     document.documentElement.setAttribute('data-ux-view', current);
+    centerActiveTab();
     if (current !== 'dashboard' && current !== 'home') store.set('last_' + unitKey, current);
     refreshCounts();
   }
@@ -291,6 +305,7 @@
   function init() {
     if (!viewNames().length && !$$('.tabs .tab').length) return;
     document.documentElement.classList.add('ux-unit');
+    try { if (window.self !== window.top) document.documentElement.classList.add('ux-embedded'); } catch (e) { document.documentElement.classList.add('ux-embedded'); }
     buildDests();
     addJumpButton();
     addBottomNav();

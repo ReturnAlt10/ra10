@@ -1761,6 +1761,14 @@ body.unit-shell-mode .nav,
 body.unit-shell-mode .mobile-top-nav{
   display:none !important;
 }
+/* A unit app brings its own mobile header + bottom bar, so the site's mobile bars step aside
+   (they used to sit on top of the unit tabs). Higher specificity than the fullscreen-mode rule. */
+body.unit-shell-mode.iframe-fullscreen-mode .mobile-top-nav,
+body.unit-shell-mode.iframe-fullscreen-mode .mobile-bottom-nav,
+body.unit-shell-mode.mobile-ui .mobile-top-nav,
+body.unit-shell-mode.mobile-ui .mobile-bottom-nav{
+  display:none !important;
+}
 
 body.unit-shell-mode .page-iframe.active > .cf,
 body.unit-shell-mode .page-iframe.active > .cd{
