@@ -83,8 +83,8 @@ language plpgsql stable security definer set search_path = public as $$
 begin
   return query
     select p.id, p.username::text, p.full_name::text, p.profile_pic_url::text,
-           case when lower(p.email) = 'mistry.hashim@icloud.com' then 'admin'
-                when exists (select 1 from public.community_staff s where s.email = lower(p.email)) then 'manager'
+           case when lower(p.email) = 'mistry.hashim@icloud.com' then 'owner'
+                when exists (select 1 from public.community_staff s where s.email = lower(p.email)) then 'admin'
                 else null end::text
       from public.profiles p
      where p.id = any (p_ids)
@@ -193,6 +193,9 @@ declare
   v_internal boolean := coalesce(current_setting('ra10.forum_internal', true), '') = '1';
   v_cat public.forum_categories%rowtype;
 begin
+  if tg_op = 'INSERT' and coalesce(current_setting('ra10.forum_restore', true), '') = '1' then
+    return new;  -- staff restoring AI-removed content keeps its original author/date
+  end if;
   if tg_op = 'INSERT' then
     new.user_id := coalesce(auth.uid(), new.user_id);
     if auth.uid() is null then raise exception 'Sign in to post.' using errcode = 'P0001'; end if;
@@ -239,6 +242,9 @@ declare
   v_post public.forum_posts%rowtype;
   v_parent public.forum_comments%rowtype;
 begin
+  if tg_op = 'INSERT' and coalesce(current_setting('ra10.forum_restore', true), '') = '1' then
+    return new;
+  end if;
   if tg_op = 'INSERT' then
     new.user_id := coalesce(auth.uid(), new.user_id);
     if auth.uid() is null then raise exception 'Sign in to comment.' using errcode = 'P0001'; end if;

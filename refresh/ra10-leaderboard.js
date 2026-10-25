@@ -76,6 +76,7 @@
       '.lbx-av.sm .lbx-pen{width:20px;height:20px;right:-5px;bottom:-5px}.lbx-av.sm .lbx-pen svg{width:10px;height:10px}',
       '.lbx-pen:hover{transform:scale(1.12)}',
       // role chips
+      '.lbx-role.owner{background:linear-gradient(135deg,#f59e0b,#b45309);color:#fff}.lbx-role.admin{background:linear-gradient(135deg,#2563eb,#1e3a8a);color:#fff}',
       '.lbx-role{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:999px;font-size:.68rem;font-weight:800;white-space:nowrap}',
       '.lbx-role.student{background:#dbeafe;color:#1d4ed8}.lbx-role.teacher{background:#fee2e2;color:#b91c1c}.lbx-role.educator{background:#ede9fe;color:#6d28d9}.lbx-role.other{background:#f1f5f9;color:#475569}',
       '[data-theme="dark"] .lbx-role.student{background:#1e3a8a55;color:#93c5fd}[data-theme="dark"] .lbx-role.teacher{background:#7f1d1d55;color:#fca5a5}[data-theme="dark"] .lbx-role.educator{background:#4c1d9555;color:#c4b5fd}[data-theme="dark"] .lbx-role.other{background:#33415555;color:#cbd5e1}',
@@ -207,6 +208,34 @@
       renderBoosts(host.querySelector('[data-lbx-boosts]'));
     }
     host.querySelectorAll('[data-lbx-pen]').forEach(function (b) { b.onclick = function (e) { e.preventDefault(); e.stopPropagation(); openPictureEditor(); }; });
+    decorateStaff(host, rows, currentId);
+  }
+
+  /* Owner / Admin (community moderator) badges, looked up by user id. */
+  var staffBadges = {};
+  function staffChip(b) {
+    return b === 'owner' ? '<span class="lbx-role owner" title="Site owner">👑 Owner</span>' : b === 'admin' ? '<span class="lbx-role admin" title="Community moderator">🛡️ Admin</span>' : '';
+  }
+  function decorateStaff(host, rows, currentId) {
+    var ids = rows.map(function (u) { return u.id; }).filter(Boolean);
+    var client = window.RA10 && RA10.getClient ? RA10.getClient() : null;
+    if (!ids.length || !client) return;
+    function apply() {
+      function put(el, anchorSel, id) {
+        var chip = staffChip(staffBadges[id]); if (!el || !chip || el.querySelector('.lbx-role.owner,.lbx-role.admin')) return;
+        var anchor = el.querySelector(anchorSel); if (anchor) anchor.insertAdjacentHTML('afterend', chip);
+      }
+      host.querySelectorAll('.lbx-row').forEach(function (row, i) { if (rows[i]) put(row, '.n', rows[i].id); });
+      [['r1', 0], ['r2', 1], ['r3', 2]].forEach(function (p) { if (rows[p[1]]) put(host.querySelector('.lbx-p.' + p[0]), '.nm', rows[p[1]].id); });
+      var meH = host.querySelector('.lbx-me h3'); if (meH && currentId && staffBadges[currentId]) { if (!meH.querySelector('.lbx-role.owner,.lbx-role.admin')) meH.insertAdjacentHTML('beforeend', staffChip(staffBadges[currentId])); }
+    }
+    var need = ids.filter(function (i) { return !(i in staffBadges); });
+    if (!need.length) { apply(); return; }
+    client.rpc('community_public_profiles', { p_ids: need }).then(function (r) {
+      need.forEach(function (i) { staffBadges[i] = ''; });
+      (r.data || []).forEach(function (p) { staffBadges[p.id] = p.badge || ''; });
+      apply();
+    }, function () {});
   }
 
   function renderMe(slot, rows, me, myIndex, sb) {

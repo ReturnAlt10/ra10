@@ -7283,7 +7283,7 @@ body.home-signed-in #p-home .hx-home > :not(#signed-in-dashboard){display:none !
           <div class="auth-success" id="owner-profile-pic-success" style="margin-top:var(--sp2);"></div>
         </div>
         <div id="account-community-staff-panel" class="account-gift-panel" style="display:none">
-          <h4 class="account-gift-title">Community managers</h4>
+          <h4 class="account-gift-title">Community moderators</h4>
           <div id="account-community-staff-body"></div>
         </div>
         <div class="card-ft account-actions" style="flex-wrap:wrap;gap:var(--sp3)">
@@ -11449,7 +11449,7 @@ async function communityLoadComments(appId) {
       const name = communityUserLabel(user, row.user_id);
       const avatar = String(user.profile_pic_url || '').trim();
       const when = row.created_at ? new Date(row.created_at).toLocaleString() : '';
-      const badge = user.badge === 'admin' ? '<span class="cf-role admin">Admin</span>' : (user.badge === 'manager' ? '<span class="cf-role manager">Manager</span>' : '');
+      const badge = user.badge === 'owner' ? '<span class="cf-role owner">👑 Owner</span>' : (user.badge === 'admin' ? '<span class="cf-role admin">🛡️ Admin</span>' : '');
       const canRemove = isStaff || (me && me === String(row.user_id));
       return ''
         + '<div class="community-comment">'
@@ -16167,6 +16167,17 @@ async function waitForRA10Sdk(timeoutMs) {
       <aside class="news-sidebar">
         <h3>Contents</h3>
         <ul>
+          <li><a href="#news-forums">The Community is now a proper forum</a></li>
+          <li><a href="#news-ai-moderator">An AI moderator keeps the forums friendly</a></li>
+          <li><a href="#news-moderators">Community moderators, Admin badges and announcement alerts</a></li>
+          <li><a href="#news-streak-account">Your study streak now follows your account</a></li>
+          <li><a href="#news-dashboard">A proper signed-in dashboard on the homepage</a></li>
+          <li><a href="#news-aqa-7132">AQA A-Level Business (2023, 7132) rebuilt end to end</a></li>
+          <li><a href="#news-aqa-7138">NEW: AQA A-Level Business (2026 spec, 7138)</a></li>
+          <li><a href="#news-unit-ui">A new, easier way to get around every unit</a></li>
+          <li><a href="#news-ra10-papers">More RA10 papers for every BTEC Business unit</a></li>
+          <li><a href="#news-ai-examiner-upgrade">A sharper AI Examiner for Business</a></li>
+          <li><a href="#news-fixes-oct25">Fixes: centred diagram pop-ups, AI helper history and more</a></li>
           <li><a href="#news-jan2027-papers">January 2027 Predicted Papers (FREE)</a></li>
           <li><a href="#news-exams-calendar">Interactive Exams Calendar</a></li>
           <li><a href="#news-paper-viewer">SAM-Style Predicted Paper Viewer</a></li>
@@ -16194,11 +16205,143 @@ async function waitForRA10Sdk(timeoutMs) {
           <div><span>Project</span><strong>RA10</strong></div>
           <div><span>Status</span><strong>Live</strong></div>
           <div><span>Coverage</span><strong>BTEC L2/L3</strong></div>
-          <div><span>Last sync</span><strong>03.09.2026</strong></div>
+          <div><span>Last sync</span><strong>25.10.2026</strong></div>
         </div>
       </aside>
 
       <section class="news-feed">
+        <article class="news-article" id="news-forums" data-category="roadmap" data-status="live" data-date="2026-10-25">
+          <div class="news-media" style="background:linear-gradient(120deg,#7a0000,#d20000,#f97316)">
+            <svg viewBox="0 0 1200 300" aria-hidden="true"><rect width="1200" height="300" fill="none"/><circle cx="600" cy="150" r="104" fill="#fff" opacity=".16"/><text x="600" y="190" text-anchor="middle" font-size="120">📣</text></svg>
+          </div>
+          <div class="news-content">
+            <div class="news-meta"><span>25.10.2026</span><span>Community</span></div>
+            <h2>The Community is now a proper forum</h2>
+            <p>The Community page has been rebuilt. Join the Forums to ask questions, share exam tips and chat by subject (A-Level Business, BTEC Business, Sport and IT), with threaded replies, likes, search and sharing. Study apps still live in their own tab, now with working comments and a clearer layout.</p>
+            <div class="news-tags"><span class="news-tag">Live</span><span class="news-tag">Forums</span><span class="news-tag">Community</span><span class="news-tag">Comments</span></div>
+          </div>
+        </article>
+
+        <article class="news-article" id="news-ai-moderator" data-category="moderation" data-status="live" data-date="2026-10-25">
+          <div class="news-media" style="background:linear-gradient(120deg,#0f172a,#1d4ed8,#7c3aed)">
+            <svg viewBox="0 0 1200 300" aria-hidden="true"><rect width="1200" height="300" fill="none"/><circle cx="600" cy="150" r="104" fill="#fff" opacity=".16"/><text x="600" y="190" text-anchor="middle" font-size="120">🤖</text></svg>
+          </div>
+          <div class="news-content">
+            <div class="news-meta"><span>25.10.2026</span><span>Moderation</span></div>
+            <h2>An AI moderator keeps the forums friendly</h2>
+            <p>Every new thread and reply is checked by an AI moderator. Swearing and banter are fine, but racism, hate, serious threats, sexual content, doxxing and scams are removed automatically, and borderline posts are flagged for a human. Moderators can review everything it did and restore anything removed by mistake.</p>
+            <div class="news-tags"><span class="news-tag">Live</span><span class="news-tag">AI</span><span class="news-tag">Moderation</span><span class="news-tag">Safety</span></div>
+          </div>
+        </article>
+
+        <article class="news-article" id="news-moderators" data-category="moderation" data-status="live" data-date="2026-10-25">
+          <div class="news-media" style="background:linear-gradient(120deg,#1e3a8a,#2563eb,#38bdf8)">
+            <svg viewBox="0 0 1200 300" aria-hidden="true"><rect width="1200" height="300" fill="none"/><circle cx="600" cy="150" r="104" fill="#fff" opacity=".16"/><text x="600" y="190" text-anchor="middle" font-size="120">🛡️</text></svg>
+          </div>
+          <div class="news-content">
+            <div class="news-meta"><span>25.10.2026</span><span>Community</span></div>
+            <h2>Community moderators, Admin badges and announcement alerts</h2>
+            <p>The owner can now ask any member to become a Community Moderator. They get a pop-up when they next log in and only join if they accept. Admins can pin, lock, move and delete threads, remove replies and study apps, handle reports and ban users. Owner and Admin badges now show in the forums and on the leaderboard, and when staff post an announcement a pulsing dot and pop-up appear on the Community tab.</p>
+            <div class="news-tags"><span class="news-tag">Live</span><span class="news-tag">Moderation</span><span class="news-tag">Badges</span><span class="news-tag">Announcements</span></div>
+          </div>
+        </article>
+
+        <article class="news-article" id="news-streak-account" data-category="infrastructure" data-status="live" data-date="2026-10-25">
+          <div class="news-media" style="background:linear-gradient(120deg,#9a3412,#ea580c,#fbbf24)">
+            <svg viewBox="0 0 1200 300" aria-hidden="true"><rect width="1200" height="300" fill="none"/><circle cx="600" cy="150" r="104" fill="#fff" opacity=".16"/><text x="600" y="190" text-anchor="middle" font-size="120">🔥</text></svg>
+          </div>
+          <div class="news-content">
+            <div class="news-meta"><span>25.10.2026</span><span>Accounts</span></div>
+            <h2>Your study streak now follows your account</h2>
+            <p>Streaks used to be stored in each browser, so one device could say 0 days and another 4. They are now saved to your RA10 account, so the same streak shows on the homepage, your progress pages and every device. Existing streak days on your current device were carried over.</p>
+            <div class="news-tags"><span class="news-tag">Live</span><span class="news-tag">Streak</span><span class="news-tag">Accounts</span><span class="news-tag">Fix</span></div>
+          </div>
+        </article>
+
+        <article class="news-article" id="news-dashboard" data-category="roadmap" data-status="live" data-date="2026-10-25">
+          <div class="news-media" style="background:linear-gradient(120deg,#0f766e,#16a34a,#84cc16)">
+            <svg viewBox="0 0 1200 300" aria-hidden="true"><rect width="1200" height="300" fill="none"/><circle cx="600" cy="150" r="104" fill="#fff" opacity=".16"/><text x="600" y="190" text-anchor="middle" font-size="120">🏠</text></svg>
+          </div>
+          <div class="news-content">
+            <div class="news-meta"><span>25.10.2026</span><span>Homepage</span></div>
+            <h2>A proper signed-in dashboard on the homepage</h2>
+            <p>Signing in now lands you on a real dashboard: a greeting, your streak, credits, pinned subjects and days to your next exam, a Continue revising list, all subjects with filters, a live exam countdown and quick links. New animated icons and smoother motion throughout (respects reduced-motion settings).</p>
+            <div class="news-tags"><span class="news-tag">Live</span><span class="news-tag">Dashboard</span><span class="news-tag">Homepage</span><span class="news-tag">Design</span></div>
+          </div>
+        </article>
+
+        <article class="news-article" id="news-aqa-7132" data-category="revision" data-status="live" data-date="2026-10-25">
+          <div class="news-media" style="background:linear-gradient(120deg,#1e3a8a,#2563eb,#60a5fa)">
+            <svg viewBox="0 0 1200 300" aria-hidden="true"><rect width="1200" height="300" fill="none"/><circle cx="600" cy="150" r="104" fill="#fff" opacity=".16"/><text x="600" y="190" text-anchor="middle" font-size="120">📈</text></svg>
+          </div>
+          <div class="news-content">
+            <div class="news-meta"><span>25.10.2026</span><span>A-Level Business</span></div>
+            <h2>AQA A-Level Business (2023, 7132) rebuilt end to end</h2>
+            <p>A fully visual revision guide with diagrams and photos, real AQA past papers and RA10 practice papers in the Questions tab, answer sheets with realistic line counts, online answering, PDF export and an AI Examiner tuned to AQA levels-of-response marking. Predicted papers keep their own tab.</p>
+            <div class="news-tags"><span class="news-tag">Live</span><span class="news-tag">AQA</span><span class="news-tag">Past papers</span><span class="news-tag">AI Examiner</span></div>
+          </div>
+        </article>
+
+        <article class="news-article" id="news-aqa-7138" data-category="revision" data-status="live" data-date="2026-10-25">
+          <div class="news-media" style="background:linear-gradient(120deg,#581c87,#9333ea,#ec4899)">
+            <svg viewBox="0 0 1200 300" aria-hidden="true"><rect width="1200" height="300" fill="none"/><circle cx="600" cy="150" r="104" fill="#fff" opacity=".16"/><text x="600" y="190" text-anchor="middle" font-size="120">🆕</text></svg>
+          </div>
+          <div class="news-content">
+            <div class="news-meta"><span>25.10.2026</span><span>A-Level Business</span></div>
+            <h2>NEW: AQA A-Level Business (2026 spec, 7138)</h2>
+            <p>A brand new subject for students on the new specification: topics numbered 3.1, 3.2, 3.3 and so on, two-case-study papers with 6, 9 and 15 mark questions, many RA10 practice papers, a full visual guide and its own AI Examiner. Home → Revision → A-Level now lets you choose between the 2023 and 2026 courses.</p>
+            <div class="news-tags"><span class="news-tag">Live</span><span class="news-tag">New subject</span><span class="news-tag">AQA 7138</span><span class="news-tag">RA10 papers</span></div>
+          </div>
+        </article>
+
+        <article class="news-article" id="news-unit-ui" data-category="roadmap" data-status="live" data-date="2026-10-25">
+          <div class="news-media" style="background:linear-gradient(120deg,#0f172a,#334155,#0ea5e9)">
+            <svg viewBox="0 0 1200 300" aria-hidden="true"><rect width="1200" height="300" fill="none"/><circle cx="600" cy="150" r="104" fill="#fff" opacity=".16"/><text x="600" y="190" text-anchor="middle" font-size="120">🧭</text></svg>
+          </div>
+          <div class="news-content">
+            <div class="news-meta"><span>25.10.2026</span><span>Revision</span></div>
+            <h2>A new, easier way to get around every unit</h2>
+            <p>Every unit now shares one modern layout: a Jump to menu for instant navigation, a bottom navigation bar on phones, a launchpad with live counts and a More study tools section. It works the same across Business, Sport and IT, and is built for mobile first.</p>
+            <div class="news-tags"><span class="news-tag">Live</span><span class="news-tag">Mobile</span><span class="news-tag">Navigation</span><span class="news-tag">All subjects</span></div>
+          </div>
+        </article>
+
+        <article class="news-article" id="news-ra10-papers" data-category="revision" data-status="live" data-date="2026-10-25">
+          <div class="news-media" style="background:linear-gradient(120deg,#065f46,#10b981,#a7f3d0)">
+            <svg viewBox="0 0 1200 300" aria-hidden="true"><rect width="1200" height="300" fill="none"/><circle cx="600" cy="150" r="104" fill="#fff" opacity=".16"/><text x="600" y="190" text-anchor="middle" font-size="120">📝</text></svg>
+          </div>
+          <div class="news-content">
+            <div class="news-meta"><span>25.10.2026</span><span>Papers</span></div>
+            <h2>More RA10 papers for every BTEC Business unit</h2>
+            <p>Units 2, 3, 6 and 7 now have at least ten RA10 practice papers each, alongside the real past papers. Sections are clearly labelled Past Papers and RA10 Papers everywhere, and the exam-paper viewer is optimised for mobile.</p>
+            <div class="news-tags"><span class="news-tag">Live</span><span class="news-tag">BTEC Business</span><span class="news-tag">RA10 papers</span><span class="news-tag">Mobile</span></div>
+          </div>
+        </article>
+
+        <article class="news-article" id="news-ai-examiner-upgrade" data-category="ai" data-status="live" data-date="2026-10-25">
+          <div class="news-media" style="background:linear-gradient(120deg,#111827,#312e81,#0f766e)">
+            <svg viewBox="0 0 1200 300" aria-hidden="true"><rect width="1200" height="300" fill="none"/><circle cx="600" cy="150" r="104" fill="#fff" opacity=".16"/><text x="600" y="190" text-anchor="middle" font-size="120">🎯</text></svg>
+          </div>
+          <div class="news-content">
+            <div class="news-meta"><span>25.10.2026</span><span>AI Examiner</span></div>
+            <h2>A sharper AI Examiner for Business</h2>
+            <p>The AI Examiner now marks against the actual AQA and Pearson mark schemes, giving a level, a mark and what to do to move up a level. New examiner modules cover AQA A-Level Business 2023, AQA 2026 and the BTEC Business units.</p>
+            <div class="news-tags"><span class="news-tag">Live</span><span class="news-tag">AI</span><span class="news-tag">Marking</span><span class="news-tag">Accuracy</span></div>
+          </div>
+        </article>
+
+        <article class="news-article" id="news-fixes-oct25" data-category="infrastructure" data-status="live" data-date="2026-10-25">
+          <div class="news-media" style="background:linear-gradient(120deg,#334155,#475569,#94a3b8)">
+            <svg viewBox="0 0 1200 300" aria-hidden="true"><rect width="1200" height="300" fill="none"/><circle cx="600" cy="150" r="104" fill="#fff" opacity=".16"/><text x="600" y="190" text-anchor="middle" font-size="120">🛠️</text></svg>
+          </div>
+          <div class="news-content">
+            <div class="news-meta"><span>25.10.2026</span><span>Fixes</span></div>
+            <h2>Fixes: centred diagram pop-ups, AI helper history and more</h2>
+            <p>Enlarged diagrams now open centred over the page instead of dropping below the footer. Past AI Helper chats open with their full conversation again. Study app comments post and load properly, and A-Level Business answer sheets now have the same amount of writing space as the real papers.</p>
+            <div class="news-tags"><span class="news-tag">Live</span><span class="news-tag">Fix</span><span class="news-tag">AI Helper</span><span class="news-tag">Accessibility</span></div>
+          </div>
+        </article>
+
         <article class="news-article" id="news-ai-maths" data-category="ai" data-status="live" data-date="2026-10-19">
           <div class="news-media" style="background:linear-gradient(120deg,#111827,#312e81,#0f766e)">
             <svg viewBox="0 0 1200 300" aria-hidden="true"><rect width="1200" height="300" fill="none"/><circle cx="220" cy="150" r="86" fill="#22c55e" opacity=".8"/><text x="220" y="174" text-anchor="middle" font-size="70" font-family="Arial" font-weight="bold" fill="#fff">Σ</text><rect x="390" y="88" width="610" height="124" rx="24" fill="#fff" opacity=".95"/><text x="430" y="140" font-size="28" font-family="Arial" font-weight="700" fill="#111827">AI maths, keyboard and photo working</text><text x="430" y="178" font-size="19" font-family="Arial" fill="#475569">LaTeX rendering • calculator • handwriting reading</text></svg>

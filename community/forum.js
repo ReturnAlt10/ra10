@@ -77,7 +77,7 @@
   }
   function roleBadge(id) {
     var b = profiles[id] && profiles[id].badge;
-    return b === 'admin' ? '<span class="cf-role admin">Admin</span>' : b === 'manager' ? '<span class="cf-role manager">Manager</span>' : '';
+    return b === 'owner' ? '<span class="cf-role owner" title="Site owner">👑 Owner</span>' : b === 'admin' ? '<span class="cf-role admin" title="Community moderator">🛡️ Admin</span>' : '';
   }
   function byline(id) { return '<span class="cf-by"><b>' + esc(nameOf(id)) + '</b>' + roleBadge(id) + '</span>'; }
   function catOf(id) { return cats.filter(function (c) { return c.id === id; })[0] || { id: id, name: id, icon: '💬', color: '#64748b' }; }
@@ -140,6 +140,15 @@
   function q(promise) {
     return promise.then(function (r) { if (r.error) throw r.error; return r.data; });
   }
+  // Ask the AI moderator to check something we just posted. Resolves to its verdict (or null).
+  function moderate(kind, id) {
+    var c = client();
+    if (!c || !c.functions) return Promise.resolve(null);
+    return c.functions.invoke('community-moderate', { body: { kind: kind, id: id } }).then(function (r) {
+      var res = r && r.data && r.data.results && r.data.results[0];
+      return res || null;
+    }, function () { return null; });
+  }
   function loadProfiles(ids) {
     var need = Array.from(new Set(ids.filter(Boolean).map(String))).filter(function (i) { return !profiles[i]; });
     if (!need.length || !client()) return Promise.resolve();
@@ -179,8 +188,11 @@
   }
   function refreshReportBadge() {
     var c = client(); var b = $('#cf-mod-badge'); if (!c || !b) return;
-    c.from('forum_reports').select('id', { count: 'exact', head: true }).eq('status', 'open').then(function (r) {
-      var n = r.count || 0; b.textContent = n > 99 ? '99+' : n; b.style.display = n ? '' : 'none';
+    Promise.all([
+      c.from('forum_reports').select('id', { count: 'exact', head: true }).eq('status', 'open'),
+      c.from('forum_mod_log').select('id', { count: 'exact', head: true }).eq('reviewed', false)
+    ]).then(function (r) {
+      var n = (r[0].count || 0) + (r[1].count || 0); b.textContent = n > 99 ? '99+' : n; b.style.display = n ? '' : 'none';
     }, function () {});
   }
   function loadCategories() {
@@ -260,7 +272,7 @@
   function sidebar() {
     return '<aside class="cf-side">' +
       '<div class="cf-card cf-cta"><div class="cf-cta-ico">💬</div><h3>Got a question?</h3><p>Ask the community — someone has probably been stuck on it too.</p><button type="button" class="cf-btn primary" data-act="new">Start a thread</button></div>' +
-      '<div class="cf-card"><h3>Community guidelines</h3><ul class="cf-rules"><li>Be kind and respectful.</li><li>No cheating: don’t share live exam content.</li><li>Don’t share personal details.</li><li>Search before you post — and use the right category.</li></ul></div>' +
+      '<div class="cf-card"><h3>Community guidelines</h3><ul class="cf-rules"><li>Be kind and respectful.</li><li>No cheating: don’t share live exam content.</li><li>Don’t share personal details.</li><li>Search before you post — and use the right category.</li></ul><p class="cf-aimod">🤖 An AI moderator checks every post. Swearing is fine; racism, threats and hate aren\u2019t.</p></div>' +
       '<div class="cf-card"><h3>Study apps</h3><p class="cf-muted">Flashcards, quizzes and guides built by students.</p><button type="button" class="cf-btn" data-cf-go="apps">Browse study apps</button></div>' +
       '</aside>';
   }
@@ -305,6 +317,7 @@
   function renderCategory(id) {
     var c = catOf(id);
     state.view = 'category'; state.cat = id; state.postId = null; setUrl(null);
+    if (id === 'announcements') markAnnouncementSeen();
     host.innerHTML =
       '<div class="cf-layout"><div class="cf-main">' +
       '<button type="button" class="cf-back" data-act="home">' + icon('back') + 'All categories</button>' +
@@ -327,6 +340,7 @@
       q(c.from('forum_comments').select('*').eq('post_id', id).order('created_at', { ascending: true }).limit(500))
     ]).then(function (r) {
       thread = r[0]; comments = r[1] || [];
+      if (thread && thread.category_id === 'announcements') markAnnouncementSeen();
       if (!thread) { host.innerHTML = '<div class="cf-layout"><div class="cf-main"><button type="button" class="cf-back" data-act="home">' + icon('back') + 'Forums</button><div class="cf-empty"><div class="cf-empty-ico">🕳️</div><h4>That thread isn’t here any more</h4><p>It may have been deleted.</p></div></div>' + sidebar() + '</div>'; return; }
       return Promise.all([loadProfiles([thread.user_id].concat(comments.map(function (x) { return x.user_id; }))), loadMyLikes([thread.id], comments.map(function (x) { return x.id; }))]).then(function () { drawThread(focusComments); });
     }).catch(function (e) { host.innerHTML = '<div class="cf-layout"><div class="cf-main"><button type="button" class="cf-back" data-act="home">' + icon('back') + 'Forums</button>' + errorBox(e, false) + '</div>' + sidebar() + '</div>'; });
@@ -403,6 +417,12 @@
       var btn = $('button[type=submit]', f); btn.disabled = true;
       q(client().from('forum_posts').insert({ category_id: f.elements.cat.value, title: f.elements.title.value.trim(), body: f.elements.body.value.trim() }).select('id').single()).then(function (row) {
         toast('Thread posted'); loadCategories().catch(function () {}); openThread(row.id);
+        moderate('post', row.id).then(function (v) {
+          if (v && v.action === 'remove') {
+            toast('Removed by the AI moderator: ' + (v.reason || 'it broke the community rules.'));
+            loadCategories().catch(function () {}); if (state.postId === row.id) renderHome();
+          }
+        });
       }, function (er) { btn.disabled = false; toast(errMsg(er)); });
     });
     scrollTop(); setTimeout(function () { f.elements.title.focus(); }, 60);
@@ -425,7 +445,14 @@
     var btn = $('button[type=submit]', form); btn.disabled = true;
     var parent = form.dataset.parent || null;
     q(client().from('forum_comments').insert({ post_id: thread.id, parent_id: parent, body: body }).select('*').single()).then(function (row) {
-      comments.push(row); thread.comment_count++; return loadProfiles([row.user_id]);
+      comments.push(row); thread.comment_count++; moderate('comment', row.id).then(function (v) {
+        if (v && v.action === 'remove') {
+          comments = comments.filter(function (x) { return x.id !== row.id; }); thread.comment_count = Math.max(0, thread.comment_count - 1);
+          if (state.postId === thread.id) drawThread(false);
+          toast('Removed by the AI moderator: ' + (v.reason || 'it broke the community rules.'));
+        }
+      });
+      return loadProfiles([row.user_id]);
     }).then(function () { drawThread(false); var el = $('#cm-' + comments[comments.length - 1].id); if (el) el.scrollIntoView({ block: 'center', behavior: 'smooth' }); }, function (e) { btn.disabled = false; toast(errMsg(e)); });
   }
   function reportDialog(target) {
@@ -548,12 +575,12 @@
   function renderMod() {
     var pane = $('#cf-pane-mod'); if (!pane) return;
     if (!staff) { pane.innerHTML = '<div class="cf-empty"><p>Moderators only.</p></div>'; return; }
-    var tabs = [['reports', 'Reports'], ['threads', 'Threads'], ['apps', 'Study apps'], ['bans', 'Bans']];
-    if (owner) tabs.push(['team', 'Managers']);
+    var tabs = [['reports', 'Reports'], ['ai', '🤖 AI moderator'], ['threads', 'Threads'], ['apps', 'Study apps'], ['bans', 'Bans']];
+    if (owner) tabs.push(['team', 'Moderators']);
     pane.innerHTML = '<div class="cf-mod"><div class="cf-modtabs" role="tablist">' + tabs.map(function (t) { return '<button type="button" class="cf-pill' + (modSub === t[0] ? ' on' : '') + '" data-mod="' + t[0] + '">' + t[1] + '</button>'; }).join('') + '</div><div id="cf-mod-body">' + skeleton(4) + '</div></div>';
     $$('[data-mod]', pane).forEach(function (b) { b.addEventListener('click', function () { modSub = b.dataset.mod; renderMod(); }); });
     var body = $('#cf-mod-body', pane);
-    ({ reports: modReports, threads: modThreads, apps: modApps, bans: modBans, team: modTeam }[modSub] || modReports)(body);
+    ({ reports: modReports, ai: modAi, threads: modThreads, apps: modApps, bans: modBans, team: modTeam }[modSub] || modReports)(body);
   }
   function modReports(body) {
     var c = client();
@@ -639,48 +666,132 @@
       });
     }, function (e) { body.innerHTML = errorBox(e, false); });
   }
-  function modTeam(body) { renderManagers(body); }
-
-  /* ── community managers (owner only) — used in Moderation and Account ── */
-  function renderManagers(el) {
-    if (!el) return;
-    if (!owner) { el.innerHTML = '<div class="credit-log-note">Owner access required.</div>'; return; }
-    el.innerHTML = '<div class="cf-team"><p class="cf-muted">Community managers can delete and pin threads, delete replies and study apps, handle reports and ban users. Add them by the email address on their RA10 account.</p>' +
-      '<form class="cf-addmgr"><input class="cf-in" type="email" required placeholder="manager@example.com" aria-label="Manager email"><button type="submit" class="cf-btn primary">Add manager</button></form>' +
-      '<div class="cf-table" data-team-list>' + skeleton(2) + '</div></div>';
-    var list = $('[data-team-list]', el);
+  /* ── AI moderator log ───────────────────────────────────────────────── */
+  function modAi(body) {
+    var c = client();
+    body.innerHTML = '<div class="cf-ai-head"><div><h3>🤖 AI moderator</h3><p class="cf-muted">Checks every new thread and reply. Swearing is allowed. Racism, hate, threats, sexual content, doxxing and scams are removed automatically; borderline posts are flagged here for you. Removed something wrongly? Restore it.</p></div><button type="button" class="cf-btn sm" data-sweep>Check for missed posts</button></div><div id="cf-ai-list">' + skeleton(3) + '</div>';
     function load() {
-      client().rpc('community_staff_list').then(function (r) {
-        if (r.error) { list.innerHTML = errorBox(r.error, false); return; }
-        var rows = r.data || [];
-        list.innerHTML = '<div class="cf-trow owner"><span class="cf-tav">' + avatar(myId(), 36) + '</span><div class="cf-tmain"><b>' + esc(OWNER_EMAIL) + '</b><small>You — Admin (owner)</small></div><span class="cf-role admin">Admin</span></div>' +
-          (rows.length ? rows.map(function (m) {
-            var name = m.username ? '@' + m.username : (m.full_name || '');
-            return '<div class="cf-trow"><span class="cf-tav">' + (m.user_id ? '<span class="cf-av" style="--s:36px;--h:' + hue(m.user_id) + '">' + (m.profile_pic_url ? '<img src="' + esc(m.profile_pic_url) + '" alt="">' : esc(initials(name || m.email))) + '</span>' : '<span class="cf-av" style="--s:36px;--h:210">?</span>') + '</span>' +
-              '<div class="cf-tmain"><b>' + esc(m.email) + '</b><small>' + (m.user_id ? esc(name || 'RA10 member') : 'No RA10 account with this email yet') + ' · added ' + ago(m.created_at) + '</small></div><span class="cf-role manager">Manager</span><button class="cf-btn sm danger" data-rm="' + esc(m.email) + '">Remove</button></div>';
-          }).join('') : '<div class="cf-empty small"><p>No managers yet. Add someone above.</p></div>');
-      });
+      q(c.from('forum_mod_log').select('*').order('reviewed', { ascending: true }).order('created_at', { ascending: false }).limit(60)).then(function (rows) {
+        refreshReportBadge();
+        return loadProfiles(rows.map(function (r) { return r.author_id; })).then(function () {
+          var list = $('#cf-ai-list', body);
+          list.innerHTML = rows.length ? rows.map(function (r) {
+            var cls = r.action === 'removed' ? 'rm' : r.action === 'flagged' ? 'fl' : 'ok';
+            return '<article class="cf-card cf-aicard ' + cls + (r.reviewed ? ' done' : '') + '" data-log="' + r.id + '"><div class="cf-block-head"><h3><span class="cf-aitag ' + cls + '">' + esc(r.action) + '</span> ' + esc(r.category || 'other') + ' <span class="cf-sev" title="Severity ' + r.severity + '/3">' + new Array(r.severity + 1).join('●') + new Array(4 - r.severity).join('○') + '</span></h3><span class="cf-time">' + ago(r.created_at) + (r.source === 'filter' ? ' · word filter' : '') + '</span></div>' +
+              '<p class="cf-quote">' + (r.title ? '<b>' + esc(r.title) + '</b><br>' : '') + esc(excerpt(r.content, 400)) + '</p>' +
+              '<p class="cf-muted small">' + (r.kind === 'post' ? 'Thread' : 'Reply') + ' by <b>' + esc(nameOf(r.author_id)) + '</b> — ' + esc(r.reason || '') + '</p>' +
+              '<div class="cf-row-actions">' +
+                (r.action === 'removed' ? '<button class="cf-btn sm" data-restore="' + r.id + '">Restore</button>' : '') +
+                (r.action === 'flagged' ? '<button class="cf-btn sm" data-view="' + (r.post_id || r.target_id) + '">View thread</button><button class="cf-btn sm danger" data-rmflag="' + r.id + '">Remove it</button>' : '') +
+                (!r.reviewed && r.action !== 'restored' ? '<button class="cf-btn sm" data-ok="' + r.id + '">' + (r.action === 'removed' ? 'Correct — dismiss' : 'Fine — dismiss') + '</button>' : '') +
+                (r.author_id && r.author_id !== myId() ? '<button class="cf-btn sm danger" data-ban="' + r.author_id + '">Ban author</button>' : '') +
+              '</div></article>';
+          }).join('') : '<div class="cf-empty"><div class="cf-empty-ico">🤖</div><h4>Nothing caught yet</h4><p>The AI moderator hasn\u2019t had to step in.</p></div>';
+        });
+      }, function (e) { $('#cf-ai-list', body).innerHTML = errorBox(e, false); });
     }
-    el.querySelector('form').addEventListener('submit', function (e) {
-      e.preventDefault();
-      var inp = $('input', e.target), email = inp.value.trim().toLowerCase();
-      if (email === OWNER_EMAIL) return toast('You’re already the admin.');
-      client().from('community_staff').insert({ email: email }).then(function (r) {
-        if (r.error) toast(/duplicate/i.test(r.error.message) ? 'They’re already a manager.' : errMsg(r.error)); else { inp.value = ''; toast('Manager added'); load(); }
-      });
-    });
-    list.addEventListener('click', function (e) {
-      var b = e.target.closest('[data-rm]'); if (!b) return;
-      dialog({ title: 'Remove ' + b.dataset.rm + '?', body: 'They will lose all moderation powers straight away.', confirm: 'Remove', danger: true }).then(function (v) {
-        if (v) client().from('community_staff').delete().eq('email', b.dataset.rm).then(function (r) { if (r.error) toast(errMsg(r.error)); else { toast('Manager removed'); load(); } });
-      });
-    });
+    body.onclick = function (e) {
+      var t = e.target.closest('button'); if (!t) return;
+      if (t.dataset.sweep !== undefined) { t.disabled = true; t.textContent = 'Checking…'; c.functions.invoke('community-moderate', { body: { sweep: true } }).then(function (r) { t.disabled = false; t.textContent = 'Check for missed posts'; var n = r && r.data && r.data.results ? r.data.results.length : 0; toast(n ? 'Checked ' + n + ' item' + (n === 1 ? '' : 's') : (r && r.error ? 'Couldn\u2019t reach the AI moderator.' : 'Nothing was waiting')); load(); }); }
+      else if (t.dataset.restore) c.rpc('forum_restore', { p_log_id: t.dataset.restore }).then(function (r) { if (r.error) toast(errMsg(r.error)); else { toast('Restored'); load(); loadCategories().catch(function () {}); } });
+      else if (t.dataset.ok) c.from('forum_mod_log').update({ reviewed: true, reviewed_by: myId() }).eq('id', t.dataset.ok).then(function () { load(); });
+      else if (t.dataset.view) { setTab('forum'); openThread(t.dataset.view); }
+      else if (t.dataset.ban) banUser(t.dataset.ban, load);
+      else if (t.dataset.rmflag) {
+        var id = t.dataset.rmflag;
+        c.from('forum_mod_log').select('kind,target_id').eq('id', id).single().then(function (r) {
+          if (r.error) return toast(errMsg(r.error));
+          c.from(r.data.kind === 'post' ? 'forum_posts' : 'forum_comments').delete().eq('id', r.data.target_id).then(function (d) {
+            if (d.error) return toast(errMsg(d.error));
+            c.from('forum_mod_log').update({ action: 'removed', reviewed: true, reviewed_by: myId() }).eq('id', id).then(function () { toast('Removed'); load(); });
+          });
+        });
+      }
+    };
+    // pick up anything that slipped through while nobody was online
+    c.functions.invoke('community-moderate', { body: { sweep: true } }).then(function () { load(); }, function () { load(); });
     load();
   }
+
+  /* ── moderators: requests + member directory (owner only) ───────────── */
+  function memberAv(m, size) {
+    var name = m.username ? '@' + m.username : (m.full_name || m.email || '?');
+    return '<span class="cf-av" style="--s:' + size + 'px;--h:' + hue(m.id || m.email) + '">' + (m.profile_pic_url ? '<img src="' + esc(m.profile_pic_url) + '" alt="" loading="lazy">' : esc(initials(name))) + '</span>';
+  }
+  function modTeam(body) { renderModerators(body); }
+  function renderModerators(el) {
+    if (!el) return;
+    if (!owner) { el.innerHTML = '<div class="credit-log-note">Owner access required.</div>'; return; }
+    var offset = 0, qtext = '', PAGE_M = 25;
+    el.innerHTML =
+      '<div class="cf-team">' +
+      '<div class="cf-callout"><b>🔒 Only you can see this.</b> It lists every RA10 member and their email so you can ask them to moderate. <b>Sending a request does not make anyone a moderator</b> — they get a pop-up the next time they\u2019re on RA10 and only become an Admin if they press Accept.</div>' +
+      '<div class="cf-roles"><span><span class="cf-role owner">👑 Owner</span> you — full control</span><span><span class="cf-role admin">🛡️ Admin</span> accepted moderators — manage threads, replies, apps, reports and bans</span></div>' +
+      '<h3 class="cf-sub">Your moderation team</h3><div class="cf-table" data-team-list>' + skeleton(2) + '</div>' +
+      '<h3 class="cf-sub">All members <span class="cf-muted small" data-total></span></h3>' +
+      '<label class="cf-search"><svg class="cf-i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><input type="search" data-msearch placeholder="Search members by name, @username or email…" aria-label="Search members"></label>' +
+      '<div class="cf-table" data-member-list>' + skeleton(4) + '</div><div data-member-more></div>' +
+      '</div>';
+    var teamEl = $('[data-team-list]', el), listEl = $('[data-member-list]', el), moreEl = $('[data-member-more]', el), totalEl = $('[data-total]', el);
+    var c = client();
+
+    function loadTeam() {
+      c.rpc('community_staff_overview').then(function (r) {
+        if (r.error) { teamEl.innerHTML = errorBox(r.error, false); return; }
+        var rows = r.data || [];
+        teamEl.innerHTML = '<div class="cf-trow owner"><span class="cf-tav">' + avatar(myId(), 36) + '</span><div class="cf-tmain"><b>' + esc(OWNER_EMAIL) + '</b><small>You</small></div><span class="cf-role owner">👑 Owner</span></div>' +
+          (rows.length ? rows.map(function (m) {
+            var name = m.username ? '@' + m.username : (m.full_name || '');
+            var state = m.state === 'active' ? '<span class="cf-role admin">🛡️ Admin</span>' : m.state === 'pending' ? '<span class="cf-chip warn">Request sent</span>' : '<span class="cf-chip">Declined</span>';
+            var btn = m.state === 'active' ? '<button class="cf-btn sm danger" data-rm="' + esc(m.email) + '">Remove</button>' : m.state === 'pending' ? '<button class="cf-btn sm" data-cancel="' + esc(m.email) + '">Cancel request</button>' : '<button class="cf-btn sm" data-resend="' + esc(m.email) + '">Ask again</button><button class="cf-btn sm" data-cancel="' + esc(m.email) + '">Clear</button>';
+            return '<div class="cf-trow"><span class="cf-tav">' + memberAv({ id: m.user_id, email: m.email, username: m.username, full_name: m.full_name, profile_pic_url: m.profile_pic_url }, 36) + '</span><div class="cf-tmain"><b>' + esc(name || m.email) + '</b><small>' + esc(m.email) + (m.user_id ? '' : ' · no RA10 account yet') + ' · ' + ago(m.created_at) + '</small></div>' + state + btn + '</div>';
+          }).join('') : '<div class="cf-empty small"><p>No moderators yet. Pick a member below and send them a request.</p></div>');
+        refreshReportBadge();
+      });
+    }
+    function memberRow(m) {
+      var name = m.username ? '@' + m.username : (m.full_name || 'Member');
+      var st = m.status === 'owner' ? '<span class="cf-role owner">👑 Owner</span>' : m.status === 'moderator' ? '<span class="cf-role admin">🛡️ Admin</span>' : m.status === 'invited' ? '<span class="cf-chip warn">Request sent</span>' : '';
+      var btn = m.status ? '' : '<button class="cf-btn sm primary" data-invite="' + esc(m.email) + '" data-name="' + esc(name) + '">Send moderator request</button>';
+      return '<div class="cf-trow"><span class="cf-tav">' + memberAv(m, 36) + '</span><div class="cf-tmain"><b>' + esc(name) + (m.full_name && m.username ? ' <span class="cf-muted small">' + esc(m.full_name) + '</span>' : '') + '</b><small>' + esc(m.email) + '</small></div>' + st + btn + '</div>';
+    }
+    function loadMembers(reset) {
+      if (reset) { offset = 0; listEl.innerHTML = skeleton(3); }
+      c.rpc('community_member_search', { p_q: qtext, p_limit: PAGE_M, p_offset: offset }).then(function (r) {
+        if (r.error) { listEl.innerHTML = errorBox(r.error, false); return; }
+        var rows = r.data || [], total = rows.length ? Number(rows[0].total) : 0;
+        if (reset) listEl.innerHTML = '';
+        if (!rows.length && reset) listEl.innerHTML = '<div class="cf-empty small"><p>No members match “' + esc(qtext) + '”.</p></div>';
+        listEl.insertAdjacentHTML('beforeend', rows.map(memberRow).join(''));
+        offset += rows.length; totalEl.textContent = total ? '· ' + total.toLocaleString() + ' member' + (total === 1 ? '' : 's') : '';
+        moreEl.innerHTML = offset < total ? '<button class="cf-btn cf-more" data-more>Show more members</button>' : '';
+      });
+    }
+    var st = null;
+    $('[data-msearch]', el).addEventListener('input', function (e) { clearTimeout(st); st = setTimeout(function () { qtext = e.target.value.trim(); loadMembers(true); }, 280); });
+    el.addEventListener('click', function (e) {
+      var b = e.target.closest('button'); if (!b) return;
+      if (b.dataset.more !== undefined) { b.disabled = true; loadMembers(false); }
+      else if (b.dataset.invite || b.dataset.resend) {
+        var email = b.dataset.invite || b.dataset.resend, who = b.dataset.name || email;
+        dialog({ title: 'Send a moderator request to ' + who + '?', body: 'They\u2019ll see a pop-up the next time they\u2019re on RA10 asking if they want to be a Community Moderator. They only become an Admin if they accept.', confirm: 'Send request' }).then(function (v) {
+          if (!v) return;
+          c.rpc('community_invite_moderator', { p_email: email }).then(function (r) { if (r.error) toast(errMsg(r.error)); else { toast('Request sent'); loadTeam(); loadMembers(true); } });
+        });
+      }
+      else if (b.dataset.cancel) c.rpc('community_cancel_invite', { p_email: b.dataset.cancel }).then(function (r) { if (r.error) toast(errMsg(r.error)); else { toast('Request cancelled'); loadTeam(); loadMembers(true); } });
+      else if (b.dataset.rm) dialog({ title: 'Remove ' + b.dataset.rm + ' as a moderator?', body: 'They lose all moderation powers straight away.', confirm: 'Remove', danger: true }).then(function (v) {
+        if (v) c.from('community_staff').delete().eq('email', b.dataset.rm).then(function (r) { if (r.error) toast(errMsg(r.error)); else { toast('Moderator removed'); loadTeam(); loadMembers(true); } });
+      });
+    });
+    loadTeam(); loadMembers(true);
+  }
+  var renderManagers = renderModerators;
+
   function mountAccountPanel() {
     var panel = document.getElementById('account-community-staff-panel'); if (!panel) return;
     panel.style.display = owner ? 'block' : 'none';
-    if (owner) renderManagers(document.getElementById('account-community-staff-body'));
+    if (owner) renderModerators(document.getElementById('account-community-staff-body'));
   }
 
   /* ── boot ────────────────────────────────────────────────────────────── */
@@ -700,20 +811,115 @@
     }).catch(function (e) { host.innerHTML = errorBox(e, false); });
   }
 
+  /* ── announcements: navbar dot + popup ─────────────────────────────── */
+  var ANN_SEEN = 'ra10_forum_ann_seen';
+  var ANN_POPUP = 'ra10_forum_ann_popup';
+  var latestAnn = null;
+  function lsGet(k, st) { try { return (st || localStorage).getItem(k) || ''; } catch (e) { return ''; } }
+  function lsSet(k, v, st) { try { (st || localStorage).setItem(k, v); } catch (e) {} }
+  function navTargets() {
+    return $$('.nav [data-nav="community"], .nav-link[data-nav="community"], .mobile-bottom-nav [onclick*="/community"], .mobile-sheet [onclick*="/community"], .mobile-top-nav [onclick*="/community"], [data-mobile-nav="community"], [data-mobile-you="/community"], .mobile-more-menu [data-dock-item="community"]');
+  }
+  function setNavDot(on, ann) {
+    navTargets().forEach(function (el) {
+      var dot = el.querySelector(':scope > .cf-navdot');
+      if (!on) { if (dot) dot.remove(); el.classList.remove('cf-has-dot'); return; }
+      el.classList.add('cf-has-dot');
+      if (!dot) { dot = document.createElement('span'); dot.className = 'cf-navdot'; dot.setAttribute('aria-hidden', 'true'); dot.innerHTML = '<i></i><b>📣</b>'; el.appendChild(dot); }
+      el.setAttribute('title', ann ? 'New announcement from ' + ann.author_name : 'New announcement');
+    });
+  }
+  function markAnnouncementSeen() {
+    if (!latestAnn) return;
+    lsSet(ANN_SEEN, latestAnn.id); setNavDot(false); hideAnnPopup();
+    var n = $('[data-cat="announcements"] .cf-new'); if (n) n.remove();
+  }
+  function hideAnnPopup() { var p = document.getElementById('cf-ann-pop'); if (p) { p.classList.add('out'); setTimeout(function () { p.remove(); }, 260); } }
+  function showAnnPopup(ann) {
+    if (document.getElementById('cf-ann-pop')) return;
+    var p = document.createElement('div');
+    p.id = 'cf-ann-pop'; p.className = 'cf-ann-pop'; p.setAttribute('role', 'status'); p.setAttribute('aria-live', 'polite');
+    var role = ann.badge === 'owner' ? '👑 Owner' : ann.badge === 'admin' ? '🛡️ Admin' : 'Community team';
+    p.innerHTML = '<div class="cf-ann-ico" aria-hidden="true"><span>📣</span><i></i><i></i><i></i></div>' +
+      '<div class="cf-ann-copy"><small>New community announcement</small><b>' + esc(ann.title) + '</b><span>' + esc(ann.author_name) + ' · ' + esc(role) + ' · ' + ago(ann.created_at) + '</span>' +
+      '<div class="cf-ann-actions"><button type="button" class="cf-btn primary sm" data-ann="read">Read it</button><button type="button" class="cf-btn sm" data-ann="later">Later</button></div></div>' +
+      '<button type="button" class="cf-ann-x" aria-label="Dismiss" data-ann="later">✕</button>';
+    document.body.appendChild(p);
+    p.addEventListener('click', function (e) {
+      var b = e.target.closest('[data-ann]'); if (!b) return;
+      if (b.dataset.ann === 'later') { lsSet(ANN_POPUP, ann.id, sessionStorage); hideAnnPopup(); return; }
+      markAnnouncementSeen();
+      if (typeof window.go === 'function') window.go('/community');
+      setTimeout(function () { setTab('forum'); openThread(ann.id); }, 450);
+    });
+    setTimeout(function () { if (document.getElementById('cf-ann-pop') === p) { lsSet(ANN_POPUP, ann.id, sessionStorage); hideAnnPopup(); } }, 20000);
+  }
+  function checkAnnouncement() {
+    var c = client(); if (!c) return;
+    c.rpc('forum_latest_announcement').then(function (r) {
+      var ann = r.data && r.data[0]; latestAnn = ann || null; if (!ann) return;
+      var fresh = Date.now() - new Date(ann.created_at).getTime() < 14 * 86400000;
+      var unseen = lsGet(ANN_SEEN) !== ann.id && fresh && String(ann.author_id) !== myId();
+      setNavDot(unseen, ann);
+      if (unseen && lsGet(ANN_POPUP, sessionStorage) !== ann.id) setTimeout(function () { if (lsGet(ANN_SEEN) !== ann.id) showAnnPopup(ann); }, 1200);
+      var cat = $('[data-cat="announcements"] .cf-cat-copy b');
+      if (cat && unseen && !$('.cf-new', cat)) cat.insertAdjacentHTML('beforeend', ' <i class="cf-new">New</i>');
+    }, function () {});
+  }
+
+  /* ── moderator request popup (shown to the invited member on login) ──── */
+  function checkInvite() {
+    var c = client(); if (!c || !loggedIn()) return;
+    if (lsGet('ra10_forum_invite_later', sessionStorage)) return;
+    c.rpc('community_my_invite').then(function (r) {
+      var inv = r.data && r.data[0]; if (!inv || document.getElementById('cf-invite')) return;
+      var ov = document.createElement('div');
+      ov.id = 'cf-invite'; ov.className = 'cf-modal-ov'; ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-modal', 'true'); ov.setAttribute('aria-label', 'Community Moderator request');
+      ov.innerHTML = '<div class="cf-modal cf-invite"><div class="cf-invite-ico" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path class="sh" d="M24 5 8 11v11c0 10 6.8 17.2 16 21 9.2-3.8 16-11 16-21V11z" fill="currentColor" fill-opacity=".15"/><path class="tk" d="m16.5 24 5 5 10-11" stroke-dasharray="30" stroke-dashoffset="30"/></svg></div>' +
+        '<h3>You\u2019ve got a request!</h3><p><b>' + esc(inv.inviter_name || 'The RA10 team') + '</b> would like you to become a <b>Community Moderator</b> on RA10.</p>' +
+        '<ul class="cf-invite-list"><li>Help keep the forums friendly and useful</li><li>Delete or pin posts, handle reports</li><li>You\u2019ll get an <span class="cf-role admin">🛡️ Admin</span> badge</li></ul>' +
+        '<p class="cf-muted small">It\u2019s completely up to you — you can say no.</p>' +
+        '<div class="cf-modal-actions"><button type="button" class="cf-btn" data-i="later">Not now</button><button type="button" class="cf-btn danger" data-i="no">Decline</button><button type="button" class="cf-btn primary" data-i="yes">Accept</button></div></div>';
+      document.body.appendChild(ov);
+      ov.addEventListener('click', function (e) {
+        var b = e.target.closest('[data-i]'); if (!b) return;
+        if (b.dataset.i === 'later') { lsSet('ra10_forum_invite_later', '1', sessionStorage); ov.remove(); return; }
+        b.disabled = true;
+        c.rpc('community_respond_invite', { p_accept: b.dataset.i === 'yes' }).then(function (res) {
+          ov.remove();
+          if (res.error) return toast(errMsg(res.error));
+          if (b.dataset.i === 'yes') { toast('Welcome to the moderation team! 🛡️'); refreshStaff(); } else toast('No problem — request declined.');
+        });
+      });
+    }, function () {});
+  }
+  function afterLogin() { refreshStaff().then(function () { checkInvite(); }); checkAnnouncement(); }
+
   window.RA10Forum = {
     isStaff: function () { return staff; },
     isOwner: function () { return owner; },
     show: function () { return boot(); },
     refresh: refreshStaff,
     openThread: openThread,
-    mountAccountPanel: mountAccountPanel
+    mountAccountPanel: mountAccountPanel,
+    checkAnnouncement: checkAnnouncement,
+    checkInvite: checkInvite
   };
   document.addEventListener('click', function (e) {
     var b = e.target.closest && e.target.closest('.cf-tab'); if (b && !b.dataset.bound) { bindTabs(); b.click(); }
   });
   window.addEventListener('ra10:community-open', boot);
   document.addEventListener('DOMContentLoaded', function () {
-    if (window.RA10 && RA10.on) { RA10.on('authchange', function () { refreshStaff().then(function () { if (document.getElementById('p-community') && document.getElementById('p-community').classList.contains('active')) { renderMod && tab === 'mod' && renderMod(); if (state.view === 'home') renderHome(); } }); }); }
+    if (window.RA10 && RA10.on) {
+      RA10.on('authchange', function () {
+        afterLogin();
+        var pg = document.getElementById('p-community');
+        if (pg && pg.classList.contains('active')) { if (tab === 'mod') renderMod(); if (state.view === 'home') renderHome(); }
+      });
+    }
     mountAccountPanel();
+    setTimeout(function () { checkAnnouncement(); if (loggedIn()) afterLogin(); }, 2500);
+    setInterval(checkAnnouncement, 5 * 60 * 1000);
+    document.addEventListener('visibilitychange', function () { if (!document.hidden) checkAnnouncement(); });
   });
 })();
