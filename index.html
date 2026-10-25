@@ -7282,6 +7282,10 @@ body.home-signed-in #p-home .hx-home > :not(#signed-in-dashboard){display:none !
           <div class="auth-error" id="owner-profile-pic-error" style="margin-top:var(--sp2);"></div>
           <div class="auth-success" id="owner-profile-pic-success" style="margin-top:var(--sp2);"></div>
         </div>
+        <div id="account-community-staff-panel" class="account-gift-panel" style="display:none">
+          <h4 class="account-gift-title">Community managers</h4>
+          <div id="account-community-staff-body"></div>
+        </div>
         <div class="card-ft account-actions" style="flex-wrap:wrap;gap:var(--sp3)">
           <button class="btn account-btn account-btn-billing" id="btn-manage-billing" type="button">Manage billing</button>
           <button class="btn account-btn account-btn-signout" id="btn-account-signout">Sign out</button>
@@ -7405,25 +7409,29 @@ body.home-signed-in #p-home .hx-home > :not(#signed-in-dashboard){display:none !
 
     <div class="community-page-wrap">
       <!-- Hero -->
-      <div class="community-hero">
-        <div class="community-hero-inner">
-          <div class="community-hero-text">
-            <div class="hero-label">RA10 Community</div>
-            <h1>Study Apps Library</h1>
-            <p>Discover AI-generated revision apps shared by students. Open any app to study with flashcards, questions, a quiz, and a full revision guide — or create your own from your notes.</p>
-            <div class="community-hero-badges">
-              <span class="pill">📘 Revision Guides</span>
-              <span class="pill">🧠 Question Banks</span>
-              <span class="pill">🃏 Flashcards</span>
-              <span class="pill">✅ Quizzes</span>
-            </div>
-          </div>
-          <div class="community-hero-stats" id="community-hero-stats">
-            <div class="community-hero-stat"><strong id="community-stat-count">—</strong><span>Apps</span></div>
-          </div>
+      <header class="cf-hero">
+        <div class="cf-hero-copy">
+          <span class="cf-eyebrow">RA10 Community</span>
+          <h1>Ask, share and revise together</h1>
+          <p>Join the forums to ask questions and swap exam tips, or browse study apps other students have built.</p>
         </div>
-      </div>
+        <div class="cf-hero-stats" id="cf-hero-stats">
+          <div class="cf-stat"><b id="cf-stat-threads">–</b><span>Threads</span></div>
+          <div class="cf-stat"><b id="cf-stat-replies">–</b><span>Replies</span></div>
+          <div class="cf-stat"><b id="community-stat-count">–</b><span>Study apps</span></div>
+        </div>
+      </header>
 
+      <nav class="cf-tabs" role="tablist" aria-label="Community sections">
+        <button class="cf-tab active" role="tab" aria-selected="true" data-cf-tab="forum" type="button"><span class="cf-tab-ico" aria-hidden="true">💬</span>Forums</button>
+        <button class="cf-tab" role="tab" aria-selected="false" data-cf-tab="apps" type="button"><span class="cf-tab-ico" aria-hidden="true">📚</span>Study apps</button>
+        <button class="cf-tab cf-tab-mod" role="tab" aria-selected="false" data-cf-tab="mod" type="button" style="display:none"><span class="cf-tab-ico" aria-hidden="true">🛡️</span>Moderation<span class="cf-badge" id="cf-mod-badge" style="display:none">0</span></button>
+      </nav>
+
+      <section class="cf-pane" id="cf-pane-forum" role="tabpanel"><div class="cf-loading">Loading the forums…</div></section>
+      <section class="cf-pane" id="cf-pane-mod" role="tabpanel" hidden></section>
+
+      <section class="cf-pane" id="cf-pane-apps" role="tabpanel" hidden>
       <!-- Toolbar -->
       <div class="community-toolbar">
         <input id="community-search" class="auth-input" type="search" placeholder="Search apps by title, subject, topic…" autocomplete="off">
@@ -7774,6 +7782,7 @@ body.home-signed-in #p-home .hx-home > :not(#signed-in-dashboard){display:none !
           </div>
         </article>
       </div>
+      </section>
     </div>
   </div>
 </div>
@@ -7781,6 +7790,8 @@ body.home-signed-in #p-home .hx-home > :not(#signed-in-dashboard){display:none !
 <!-- ============================================================
      LEADERBOARD  /leaderboard
 ============================================================ -->
+<link rel="stylesheet" href="community/forum.css?v=20261025">
+<script src="community/forum.js?v=20261025" defer></script>
 <script src="refresh/ra10-leaderboard.js?v=20261022" defer></script>
 <div class="page" id="p-leaderboard">
   <div class="c">
@@ -10144,10 +10155,12 @@ async function communityLoadPublicProfiles(userIds) {
   const ids = Array.isArray(userIds) ? userIds.map((x) => String(x || '').trim()).filter(Boolean) : [];
   if (!ids.length) return {};
   try {
-    const data = await communityCallFunction('community-public-profiles', { userIds: ids });
+    const client = window.RA10 && RA10.getClient ? RA10.getClient() : null;
+    if (!client) return {};
+    const { data, error } = await client.rpc('community_public_profiles', { p_ids: ids });
+    if (error) throw error;
     const map = {};
-    const rows = Array.isArray(data && data.profiles) ? data.profiles : [];
-    rows.forEach((row) => {
+    (data || []).forEach((row) => {
       const id = String(row && row.id || '').trim();
       if (!id) return;
       map[id] = {
@@ -10155,6 +10168,7 @@ async function communityLoadPublicProfiles(userIds) {
         username: String(row.username || ''),
         full_name: String(row.full_name || ''),
         profile_pic_url: String(row.profile_pic_url || ''),
+        badge: String(row.badge || ''),
       };
     });
     return map;
@@ -11323,6 +11337,8 @@ async function communityOpenApp(appId) {
   const creatorAvatar = String(creator.profile_pic_url || '').trim();
   const myId = RA10 && RA10.isLoggedIn && RA10.isLoggedIn() ? String(RA10.getSession().user.id || '') : '';
   const canDelete = myId && myId === String(app.creator_id || '');
+  const isStaff = !!(window.RA10Forum && RA10Forum.isStaff && RA10Forum.isStaff());
+  const canModerate = !!canDelete || isStaff;
   const metadata = (() => {
     try { return JSON.parse(String(byKind.metadata || '{}')); } catch (e) { return {}; }
   })();
@@ -11359,7 +11375,10 @@ async function communityOpenApp(appId) {
     +         (previewMode ? '<span class="pill" style="background:var(--color-warning-highlight);border-color:var(--color-warning);color:var(--color-warning);">Preview mode</span>' : '')
     +       '</div>'
     +     '</div>'
-    +     (canDelete ? '<button class="btn btn-s" type="button" style="flex-shrink:0;margin-left:auto;" onclick="communityDeleteApp(\'' + String(app.id) + '\')">Delete</button>' : '')
+    +     (canModerate ? '<div class="cf-app-mod">'
+    +       (isStaff && !canDelete ? '<span class="cf-mod-flag">🛡️ Moderator</span>' : '')
+    +       (isStaff ? '<button class="btn btn-s" type="button" onclick="communityHideApp(\'' + String(app.id) + '\',' + (app.status === 'hidden' ? 'false' : 'true') + ')">' + (app.status === 'hidden' ? 'Unhide' : 'Hide') + '</button>' : '')
+    +       '<button class="btn btn-s cf-danger" type="button" onclick="communityDeleteApp(\'' + String(app.id) + '\')">Delete</button></div>' : '')
     +   '</div>'
     +   '<div class="community-creator-widget">'
     +     '<div class="community-creator-avatar">' + (creatorAvatar ? '<img src="' + communityEscape(creatorAvatar) + '" alt="" loading="lazy">' : communityEscape(communityInitials(creatorName))) + '</div>'
@@ -11377,9 +11396,9 @@ async function communityOpenApp(appId) {
     + '</div>'
     + '<div id="community-open-tab-content" class="community-tab-panel"></div>'
     + '<div class="community-comment-section">'
-    +   '<h5 style="margin:0 0 var(--sp3);font-size:var(--tx-sm);font-weight:700;color:var(--color-text);">Comments</h5>'
+    +   '<h5 style="margin:0 0 var(--sp3);font-size:var(--tx-sm);font-weight:700;color:var(--color-text);">Comments <span id="community-comments-count" style="font-weight:500;color:var(--color-text-muted);"></span></h5>'
     +   '<div class="community-comment-input-row">'
-    +     '<input id="community-comment-input" class="auth-input" type="text" maxlength="320" placeholder="Add a comment…">'
+    +     '<input id="community-comment-input" class="auth-input" type="text" maxlength="320" placeholder="Add a comment…" onkeydown="if(event.key===\'Enter\'){event.preventDefault();communityPostComment(\'' + String(appId) + '\');}">'
     +     '<button class="btn btn-p" type="button" onclick="communityPostComment(\'' + String(appId) + '\')">Post</button>'
     +   '</div>'
     +   '<div id="community-comments" class="community-comment-list"></div>'
@@ -11411,33 +11430,40 @@ async function communityLoadComments(appId) {
   const host = document.getElementById('community-comments');
   if (!host) return;
   try {
-    const rows = await communityRest('community_app_comments?select=id,user_id,body,created_at&app_id=eq.' + encodeURIComponent(appId) + '&order=created_at.desc&limit=40', 'GET', null, false);
+    const rows = await communityRest('community_app_comments?select=id,user_id,body,created_at&app_id=eq.' + encodeURIComponent(appId) + '&order=created_at.desc&limit=60', 'GET', null, !!(RA10 && RA10.isLoggedIn && RA10.isLoggedIn()));
     const list = Array.isArray(rows) ? rows : [];
+    const head = document.getElementById('community-comments-count');
+    if (head) head.textContent = list.length ? '(' + list.length + ')' : '';
     if (!list.length) {
-      host.innerHTML = '<div class="credit-log-note">No comments yet.</div>';
+      host.innerHTML = '<div class="credit-log-note">No comments yet — be the first to say something.</div>';
       return;
     }
 
     const commentUserIds = Array.from(new Set(list.map((row) => String(row.user_id || '')).filter(Boolean)));
     const commentersById = await communityLoadPublicProfiles(commentUserIds);
+    const me = RA10 && RA10.isLoggedIn && RA10.isLoggedIn() ? String(RA10.getSession().user.id || '') : '';
+    const isStaff = !!(window.RA10Forum && RA10Forum.isStaff && RA10Forum.isStaff());
 
     host.innerHTML = list.map((row) => {
       const user = commentersById[String(row.user_id)] || communityResolveCreator(row.user_id);
       const name = communityUserLabel(user, row.user_id);
       const avatar = String(user.profile_pic_url || '').trim();
       const when = row.created_at ? new Date(row.created_at).toLocaleString() : '';
+      const badge = user.badge === 'admin' ? '<span class="cf-role admin">Admin</span>' : (user.badge === 'manager' ? '<span class="cf-role manager">Manager</span>' : '');
+      const canRemove = isStaff || (me && me === String(row.user_id));
       return ''
         + '<div class="community-comment">'
         +   '<div class="community-comment-head">'
         +     '<div class="community-creator-avatar" style="width:24px;height:24px;font-size:.68rem;">' + (avatar ? '<img src="' + communityEscape(avatar) + '" alt="" loading="lazy">' : communityEscape(communityInitials(name))) + '</div>'
-        +     '<span class="community-comment-name">' + communityEscape(name) + '</span>'
+        +     '<span class="community-comment-name">' + communityEscape(name) + '</span>' + badge
         +     '<span class="community-comment-time">' + communityEscape(when) + '</span>'
+        +     (canRemove ? '<button type="button" class="cf-comment-del" title="Delete comment" aria-label="Delete comment" onclick="communityDeleteComment(\'' + String(appId) + '\',\'' + String(row.id) + '\')">✕</button>' : '')
         +   '</div>'
         +   '<div>' + communityEscape(row.body || '') + '</div>'
         + '</div>';
     }).join('');
   } catch (e) {
-    host.innerHTML = '<div class="credit-log-note">Could not load comments.</div>';
+    host.innerHTML = '<div class="credit-log-note">Could not load comments' + (e && e.message ? ' (' + communityEscape(e.message) + ')' : '') + '.</div>';
   }
 }
 
@@ -11458,7 +11484,7 @@ async function communityPostComment(appId) {
     input.value = '';
     await Promise.all([communityLoadComments(appId), loadCommunityApps()]);
   } catch (e) {
-    showMiniToast('Could not post comment');
+    showMiniToast(String((e && e.message) || 'Could not post comment').slice(0, 120));
   }
 }
 
@@ -11469,8 +11495,9 @@ async function communityDeleteApp(appId) {
   }
   const app = _communityApps.find((x) => String(x.id) === String(appId));
   const userId = String(RA10.getSession().user.id || '');
-  if (!app || String(app.creator_id || '') !== userId) {
-    showMiniToast('Only the creator can delete this app.');
+  const staff = !!(window.RA10Forum && RA10Forum.isStaff && RA10Forum.isStaff());
+  if (!app || (String(app.creator_id || '') !== userId && !staff)) {
+    showMiniToast('Only the creator or a community manager can delete this app.');
     return;
   }
   if (!confirm('Delete this app permanently? This will remove generated content, likes, comments and jobs.')) return;
@@ -11484,6 +11511,28 @@ async function communityDeleteApp(appId) {
     showMiniToast(String((e && e.message) || 'Could not delete app'));
   }
 }
+
+async function communityHideApp(appId, hide) {
+  try {
+    await communityRest('community_apps?id=eq.' + encodeURIComponent(appId), 'PATCH', { status: hide ? 'hidden' : 'published' }, true);
+    showMiniToast(hide ? 'App hidden from the library' : 'App is visible again');
+    await Promise.all([loadCommunityApps(), communityOpenApp(appId)]);
+  } catch (e) {
+    showMiniToast(String((e && e.message) || 'Could not update app'));
+  }
+}
+
+async function communityDeleteComment(appId, commentId) {
+  if (!confirm('Delete this comment?')) return;
+  try {
+    await communityRest('community_app_comments?id=eq.' + encodeURIComponent(commentId), 'DELETE', null, true);
+    await Promise.all([communityLoadComments(appId), loadCommunityApps()]);
+  } catch (e) {
+    showMiniToast(String((e && e.message) || 'Could not delete comment'));
+  }
+}
+window.communityHideApp = communityHideApp;
+window.communityDeleteComment = communityDeleteComment;
 
 async function communityAskRefine(appId) {
   const input = document.getElementById('community-chat-input');
@@ -11883,6 +11932,7 @@ function initCommunityBindings() {
 }
 
 async function renderCommunityPage() {
+  if (window.RA10Forum && typeof RA10Forum.show === 'function') RA10Forum.show();
   initCommunityBindings();
   if (!_communityJobsPoller) {
     _communityJobsPoller = setInterval(() => {
@@ -13634,6 +13684,7 @@ async function waitForRA10Sdk(timeoutMs) {
         const giftPanel = document.getElementById('account-credit-gift-panel');
         const ownerPicPanel = document.getElementById('account-owner-pic-panel');
         const isOwner = isOwnerAccount(profile);
+        if (window.RA10Forum && RA10Forum.refresh) RA10Forum.refresh();
         if (giftPanel) {
           giftPanel.style.display = isOwner ? 'block' : 'none';
           if (ownerPicPanel) ownerPicPanel.style.display = isOwner ? 'block' : 'none';
