@@ -7432,59 +7432,12 @@ body.home-signed-in #p-home .hx-home > :not(#signed-in-dashboard){display:none !
       <section class="cf-pane" id="cf-pane-mod" role="tabpanel" hidden></section>
 
       <section class="cf-pane" id="cf-pane-apps" role="tabpanel" hidden>
-      <!-- Toolbar -->
-      <div class="community-toolbar">
-        <input id="community-search" class="auth-input" type="search" placeholder="Search apps by title, subject, topic…" autocomplete="off">
-        <select id="community-subject-filter" class="auth-input">
-          <option value="">All subjects</option>
-          <option>Business</option>
-          <option>IT</option>
-          <option>Sport</option>
-          <option>Maths</option>
-          <option>Science</option>
-          <option>English</option>
-          <option>History</option>
-          <option>General</option>
-        </select>
-        <button id="community-refresh-btn" class="btn btn-s" type="button">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="flex-shrink:0"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
-          Refresh
-        </button>
-        <button id="community-new-app-btn" class="btn btn-p" type="button">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="flex-shrink:0"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-          Create app
-        </button>
-      </div>
-
-      <!-- Main layout: library left, viewer right -->
-      <div class="community-layout">
-        <!-- LEFT: app library -->
-        <aside class="community-left">
-          <article class="community-panel">
-            <div class="community-panel-head">
-              <div>
-                <h3>Community Apps</h3>
-                <p>Tap any card to open it</p>
-              </div>
-            </div>
-            <div id="community-library" class="community-library-grid">
-              <div class="credit-log-note">Loading apps…</div>
-            </div>
-          </article>
-        </aside>
-
-        <!-- RIGHT: viewer -->
-        <main class="community-main">
-          <article class="community-panel community-viewer-panel" id="community-viewer-panel">
-            <div id="community-open-app">
-              <div class="community-viewer-empty">
-                <div class="community-viewer-empty-icon">📚</div>
-                <h4>Select an app to get started</h4>
-                <p>Choose any app from the library to open it and start studying.</p>
-              </div>
-            </div>
-          </article>
-        </main>
+      <div id="ca-root" class="ca">
+        <div id="ca-library-view">
+          <div id="ca-toolbar-slot"></div>
+          <div id="community-library" class="ca-library"></div>
+        </div>
+        <div id="community-open-app" hidden></div>
       </div>
 
       <!-- Create app wizard / drawer -->
@@ -7791,7 +7744,9 @@ body.home-signed-in #p-home .hx-home > :not(#signed-in-dashboard){display:none !
      LEADERBOARD  /leaderboard
 ============================================================ -->
 <link rel="stylesheet" href="community/forum.css?v=20261027">
+<link rel="stylesheet" href="community/apps.css?v=20261027">
 <script src="community/forum.js?v=20261027" defer></script>
+<script src="community/apps.js?v=20261027" defer></script>
 <script src="refresh/ra10-leaderboard.js?v=20261022" defer></script>
 <div class="page" id="p-leaderboard">
   <div class="c">
@@ -10078,6 +10033,12 @@ let _communityApps = [];
 let _communityJobsPoller = null;
 let _communityCreatorsById = {};
 let _communityOpenState = null;
+// Shared with community/apps.js (the study-app library + viewer).
+window.__caState = {
+  get apps() { return _communityApps; }, set apps(v) { _communityApps = v; },
+  get open() { return _communityOpenState; }, set open(v) { _communityOpenState = v; },
+  get creators() { return _communityCreatorsById; }, set creators(v) { _communityCreatorsById = v; },
+};
 let _communityQueuedKickoff = {};
 let _communityPdfLoader = null;
 let _communityDocxLoader = null;
@@ -10349,25 +10310,6 @@ function communityParseGuideSections(raw) {
   }));
 }
 
-function communityRenderGuide(raw) {
-  const emojis = ['📘', '🧠', '🧩', '📝', '🎯', '📌', '⚙️', '🔎'];
-  const sections = communityParseGuideSections(raw);
-  if (!sections.length) return '<div class="community-content-scroll">No revision guide data.</div>';
-  return '<div class="community-guide-wrap">' + sections.slice(0, 24).map((section, idx) => {
-    const heading = communityEscape(section.title || ('Chapter ' + (idx + 1)));
-    const body = communityEscape(String(section.body || '').replace(/\n{3,}/g, '\n\n'));
-    const isFirst = idx === 0;
-    return '<div class="community-guide-section' + (isFirst ? ' open' : '') + '">'
-      + '<div class="community-guide-section-head" onclick="this.parentElement.classList.toggle(\'open\')">'
-      + '<span style="font-size:1.1em;line-height:1;">' + emojis[idx % emojis.length] + '</span>'
-      + '<span style="flex:1;">' + heading + '</span>'
-      + '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="flex-shrink:0;transition:transform .2s;transform:' + (isFirst ? 'rotate(180deg)' : 'none') + '" class="community-guide-chevron"><polyline points="6 9 12 15 18 9"/></svg>'
-      + '</div>'
-      + '<div class="community-guide-section-body"><div class="community-content-scroll">' + body + '</div></div>'
-      + '</div>';
-  }).join('') + '</div>';
-}
-
 function communityBuildQuestionObject(item, idx) {
   const marks = communityGetQuestionMarks(item);
   const answerText = communityGetQuestionAnswer(item);
@@ -10419,81 +10361,6 @@ function communityResolveQuizAnswerIndex(item) {
     if (optionMatch >= 0) return optionMatch;
   }
   return -1;
-}
-
-function communityRenderQuestionBank(raw) {
-  const list = communityNormalizeQuestionBank(communityParseArray(raw));
-  if (!list.length) return '<div class="community-content-scroll">No question bank data.</div>';
-  return '<div class="community-structured-list">' + list.slice(0, 40).map((item, idx) => {
-    const q = communityEscape(communityGetQuestionText(item, idx));
-    const a = communityEscape(communityGetQuestionAnswer(item));
-    const marks = communityGetQuestionMarks(item);
-    const active = _communityOpenState && Number(_communityOpenState.activeQuestionIndex) === idx;
-    return ''
-      + '<div class="community-structured-item">'
-      +   '<h6>Q' + (idx + 1) + (marks ? ' · ' + marks + ' marks' : '') + '</h6>'
-      +   '<div>' + q + '</div>'
-      +   (a ? '<details style="margin-top:8px;"><summary>Model answer</summary><div style="margin-top:6px;color:var(--color-text-muted);">' + a + '</div></details>' : '')
-      +   '<button class="btn btn-s" type="button" style="margin-top:8px;" onclick="communitySetActiveQuestion(' + idx + ')">' + (active ? 'Open in Questions' : 'Use this question') + '</button>'
-      + '</div>';
-  }).join('') + '</div>';
-}
-
-function communityRenderFlashcards(raw) {
-  const list = communityParseArray(raw);
-  if (!list.length) return '<div class="community-content-scroll">No flashcard data.</div>';
-  if (!_communityOpenState) return '<div class="community-content-scroll">Open an app to use flashcards.</div>';
-  const idx = Math.max(0, Math.min(list.length - 1, Number(_communityOpenState.flashcardIndex || 0)));
-  const item = list[idx] || {};
-  const front = communityEscape(item.front || item.term || 'Front');
-  const back = communityEscape(item.back || item.definition || 'Back');
-  const showingBack = !!_communityOpenState.flashcardReveal;
-  return ''
-    + '<div>'
-    +   '<p class="community-flash-counter">Card ' + (idx + 1) + ' of ' + list.length + ' — click card to flip</p>'
-    +   '<div class="community-flash-scene" onclick="communityToggleFlashcard()" title="Click to flip">'
-    +     '<div class="community-flash-card ' + (showingBack ? 'is-flipped' : '') + '">'
-    +       '<div class="community-flash-face front"><div class="community-flash-label">Term</div><div class="community-flash-text">' + front + '</div></div>'
-    +       '<div class="community-flash-face back"><div class="community-flash-label">Definition</div><div class="community-flash-text">' + back + '</div></div>'
-    +     '</div>'
-    +   '</div>'
-    +   '<div class="community-flash-actions">'
-    +     '<button class="btn btn-s" type="button" onclick="communitySetFlashcardIndex(' + (idx - 1) + ')">← Prev</button>'
-    +     '<button class="btn btn-s" type="button" onclick="communityToggleFlashcard()">' + (showingBack ? 'Show term' : 'Flip') + '</button>'
-    +     '<button class="btn btn-s" type="button" onclick="communitySetFlashcardIndex(' + (idx + 1) + ')">Next →</button>'
-    +     '<button class="btn btn-s" type="button" onclick="communityShuffleFlashcards()">Shuffle</button>'
-    +   '</div>'
-    + '</div>';
-}
-
-function communitySetFlashcardIndex(nextIdx) {
-  if (!_communityOpenState) return;
-  const list = Array.isArray(_communityOpenState.flashcards) ? _communityOpenState.flashcards : [];
-  if (!list.length) return;
-  _communityOpenState.flashcardIndex = Math.max(0, Math.min(list.length - 1, Number(nextIdx || 0)));
-  _communityOpenState.flashcardReveal = false;
-  communityRenderOpenTab();
-}
-
-function communityToggleFlashcard() {
-  if (!_communityOpenState) return;
-  _communityOpenState.flashcardReveal = !_communityOpenState.flashcardReveal;
-  communityRenderOpenTab();
-}
-
-function communityShuffleFlashcards() {
-  if (!_communityOpenState) return;
-  const list = Array.isArray(_communityOpenState.flashcards) ? _communityOpenState.flashcards.slice() : [];
-  for (let i = list.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    const t = list[i];
-    list[i] = list[j];
-    list[j] = t;
-  }
-  _communityOpenState.flashcards = list;
-  _communityOpenState.flashcardIndex = 0;
-  _communityOpenState.flashcardReveal = false;
-  communityRenderOpenTab();
 }
 
 function communityApplyRefineTag(tag) {
@@ -10805,137 +10672,10 @@ function communityTogglePin(appId, origin) {
   loadCommunityApps().then(() => { if (!isPinned) communityAnimatePin(originRect); });
 }
 
-function communityRenderPinnedApps(apps, creatorMap) {
-  const pinnedIds = communityGetPinnedIds();
-  const pinnedApps = pinnedIds.map(id => apps.find(app => String(app.id || '') === id)).filter(Boolean);
-  if (!pinnedApps.length) return '';
-  return '<section class="community-pinned-section">'
-    + '<div class="community-pinned-head"><strong>📌 Pinned for you</strong><span class="community-library-count">' + pinnedApps.length + '</span></div>'
-    + '<div class="community-pinned-list">'
-    + pinnedApps.map(app => {
-      const creator = creatorMap[String(app.creator_id || '')] || communityResolveCreator(app.creator_id);
-      const creatorName = communityUserLabel(creator, app.creator_id);
-      return '<button class="community-pinned-item" type="button" onclick="communityOpenApp(\'' + String(app.id || '') + '\')">'
-        + '<span class="community-pinned-icon">' + communityEscape(String(app.icon_emoji || '📘')) + '</span>'
-        + '<span class="community-pinned-copy"><strong>' + communityEscape(String(app.title || 'Revision App')) + '</strong><span>by ' + communityEscape(creatorName) + '</span></span>'
-        + '<span class="community-pinned-remove" role="button" onclick="event.stopPropagation();communityTogglePin(\'' + String(app.id || '') + '\')" title="Unpin">✕</span>'
-        + '</button>';
-    }).join('')
-    + '</div></section>';
-}
-
 async function loadCommunityApps() {
-  const host = document.getElementById('community-library');
-  if (!host) return;
-  const q = String(document.getElementById('community-search')?.value || '').trim().toLowerCase();
-  const subjectFilter = String(document.getElementById('community-subject-filter')?.value || '').trim();
-  try {
-    let path = 'community_apps?select=id,title,description,subject,level,exam_board,tags,icon_emoji,cover_image_url,credit_cost,like_count,comment_count,creator_id,uses_deeptutor,created_at&status=eq.published&visibility=eq.public&order=created_at.desc&limit=60';
-    if (subjectFilter) {
-      path += '&subject=eq.' + encodeURIComponent(subjectFilter);
-    }
-    const rows = await communityRest(path, 'GET', null, false);
-    const all = Array.isArray(rows) ? rows : [];
-    _communityApps = all.filter((row) => {
-      if (!q) return true;
-      const blob = [row.title, row.description, row.subject, row.level, row.exam_board].join(' ').toLowerCase();
-      return blob.includes(q);
-    });
-    if (!_communityApps.length) {
-      host.innerHTML = '<div class="credit-log-note">No community apps found for this filter yet.</div>';
-      return;
-    }
-
-    const creatorIds = Array.from(new Set(_communityApps.map((x) => String(x.creator_id || '')).filter(Boolean)));
-    const creatorsById = await communityLoadPublicProfiles(creatorIds);
-    _communityCreatorsById = creatorsById;
-
-    let following = {};
-    let likedApps = {};
-    if (RA10 && RA10.isLoggedIn && RA10.isLoggedIn()) {
-      try {
-        if (creatorIds.length) {
-          const inList = creatorIds.map(encodeURIComponent).join(',');
-          const frows = await communityRest('community_user_follows?select=following_id&follower_id=eq.' + encodeURIComponent(RA10.getSession().user.id) + '&following_id=in.(' + inList + ')', 'GET', null, true);
-          (Array.isArray(frows) ? frows : []).forEach((x) => { following[String(x.following_id)] = true; });
-        }
-      } catch (e) {}
-      try {
-        const appIds = _communityApps.map((x) => String(x.id || '')).filter(Boolean);
-        if (appIds.length) {
-          const inList = appIds.map(encodeURIComponent).join(',');
-          const rows = await communityRest('community_app_likes?select=app_id&user_id=eq.' + encodeURIComponent(RA10.getSession().user.id) + '&app_id=in.(' + inList + ')', 'GET', null, true);
-          (Array.isArray(rows) ? rows : []).forEach((row) => { likedApps[String(row.app_id || '')] = true; });
-        }
-      } catch (e) {}
-    }
-
-    const appCount = document.getElementById('community-stat-count');
-    if (appCount) appCount.textContent = _communityApps.length;
-    const pinnedIds = communityGetPinnedIds();
-    host.innerHTML = communityRenderPinnedApps(_communityApps, creatorsById) + _communityApps.map((app, index) => {
-      const creator = communityResolveCreator(app.creator_id);
-      const creatorName = communityUserLabel(creator, app.creator_id);
-      const creatorAvatar = String(creator.profile_pic_url || '').trim();
-      const safeTitle = String(app.title || '').trim() || ((String(app.subject || '').trim() || 'General') + ' Revision App');
-      const safeDescription = String(app.description || '').trim() || ('AI-generated revision materials for ' + (String(app.subject || '').trim() || 'this subject') + '.');
-      const myId = RA10 && RA10.isLoggedIn && RA10.isLoggedIn() ? String(RA10.getSession().user.id || '') : '';
-      const canDelete = myId && myId === String(app.creator_id || '');
-      const icon = communityEscape(String(app.icon_emoji || '📘'));
-      const subject = communityEscape(app.subject || 'General');
-      const level = communityEscape(app.level || 'Mixed');
-      const boardRaw = String(app.exam_board || '').trim();
-      const boardKey = boardRaw.toLowerCase().includes('pearson') || boardRaw.toLowerCase().includes('btec') ? 'Pearson'
-        : (boardRaw.toLowerCase().includes('edexcel') ? 'Edexcel'
-          : (boardRaw.toLowerCase().includes('eduqas') ? 'WJEC' : boardRaw));
-      const board = communityEscape(boardRaw);
-      const tags = Array.isArray(app.tags) ? app.tags.slice(0, 3) : [];
-      const likes = Number(app.like_count || 0);
-      const comments = Number(app.comment_count || 0);
-      const isLiked = !!likedApps[String(app.id || '')];
-      const isPinned = pinnedIds.includes(String(app.id || ''));
-      // Board colour mapping
-      const boardCls = { AQA:'cw-logo-aqa', Edexcel:'cw-logo-edexcel', Pearson:'cw-logo-pearson', OCR:'cw-logo-ocr', WJEC:'cw-logo-wjec', Cambridge:'cw-logo-cambridge', IB:'cw-logo-ib', CCEA:'cw-logo-ccea' };
-      const bCls = (boardCls[boardKey] || 'cw-logo-other');
-      const boardBadge = boardRaw && boardRaw !== 'Mixed' && boardRaw !== 'Other'
-        ? '<span class="community-card-board-badge ' + bCls + '" style="color:#fff;">' + board + '</span>'
-        : '';
-      const isOpen = _communityOpenState && String(_communityOpenState.app?.id || '') === String(app.id || '');
-      return ''
-        + '<article class="community-card' + (isOpen ? ' selected' : '') + '" style="--card-delay:' + Math.min(index * 45, 360) + 'ms" role="button" tabindex="0" aria-current="' + (isOpen ? 'true' : 'false') + '" onclick="communityOpenApp(\'' + String(app.id) + '\')" onkeydown="if(event.target===this&&(event.key===\'Enter\'||event.key===\' \')){event.preventDefault();communityOpenApp(\'' + String(app.id) + '\');}">'
-        +   '<div class="community-card-head">'
-        +     '<div class="community-card-icon">' + icon + '</div>'
-        +     '<div class="community-card-summary">'
-        +       '<h4>' + communityEscape(safeTitle) + '</h4>'
-        +       '<div class="community-card-byline">'
-        +         '<span>' + subject + '</span>'
-        +         '<span class="community-card-byline-dot">·</span>'
-        +         '<span>' + level + '</span>'
-        +         (boardBadge ? '<span class="community-card-byline-dot">·</span>' + boardBadge : '')
-        +       '</div>'
-        +     '</div>'
-        +   '</div>'
-        +   '<p class="community-card-desc">' + communityEscape(safeDescription) + '</p>'
-        +   (tags.length ? '<div class="community-card-tags">' + tags.map((t) => '<span class="pill">#' + communityEscape(t) + '</span>').join('') + '</div>' : '')
-        +   '<div class="community-card-footer">'
-        +     '<div class="community-card-creator">'
-        +       '<div class="community-card-avatar">' + (creatorAvatar ? '<img src="' + communityEscape(creatorAvatar) + '" alt="" loading="lazy">' : communityEscape(communityInitials(creatorName))) + '</div>'
-        +       '<span>' + communityEscape(creatorName) + '</span>'
-        +     '</div>'
-        +     '<div class="community-card-actions">'
-        +       '<button class="community-card-action like' + (isLiked ? ' is-liked' : '') + '" type="button" data-tooltip="' + (isLiked ? 'Unlike' : 'Like') + ' · ' + likes + '" aria-label="' + (isLiked ? 'Unlike' : 'Like') + ' ' + communityEscape(safeTitle) + '" aria-pressed="' + isLiked + '" onclick="event.stopPropagation();communityToggleLike(\'' + String(app.id) + '\',event)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"/></svg></button>'
-        +       '<button class="community-card-action comment" type="button" data-tooltip="Comment · ' + comments + '" aria-label="Comment on ' + communityEscape(safeTitle) + '" onclick="event.stopPropagation();communityOpenComments(\'' + String(app.id) + '\')"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-9 8.3 9.5 9.5 0 0 1-4.6-1.2L3 20l1.4-4.1A8.5 8.5 0 1 1 21 11.5z"/></svg></button>'
-        +       '<button class="community-card-action pin' + (isPinned ? ' is-pinned' : '') + '" type="button" data-tooltip="' + (isPinned ? 'Unpin app' : 'Pin app') + '" aria-label="' + (isPinned ? 'Unpin' : 'Pin') + ' ' + communityEscape(safeTitle) + '" aria-pressed="' + isPinned + '" onclick="event.stopPropagation();communityTogglePin(\'' + String(app.id) + '\',event)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 17v4"/><path d="M9 3h6l-1 6v4l2 2H8l2-2V9z"/></svg></button>'
-        +       '<button class="community-card-action share" type="button" data-tooltip="Share app" aria-label="Share ' + communityEscape(safeTitle) + '" onclick="event.stopPropagation();communityShareApp(\'' + String(app.id) + '\')"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 10.5 6.8-4"/><path d="m8.6 13.5 6.8 4"/></svg></button>'
-        +       '<span class="community-card-open">Open →</span>'
-        +     '</div>'
-        +   '</div>'
-        + '</article>';
-    }).join('');
-  } catch (e) {
-    host.innerHTML = '<div class="credit-log-note">Could not load community apps.</div>';
-  }
+  if (window.RA10Apps) return RA10Apps.loadLibrary();
 }
+
 
 function communityCelebrateLike(origin) {
   if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -11068,363 +10808,10 @@ async function communityToggleFollow(targetUserId) {
   }
 }
 
-function communitySetViewerTab(tab) {
-  if (!_communityOpenState) return;
-  _communityOpenState.activeTab = String(tab || 'guide');
-  document.querySelectorAll('.community-viewer-menu .btn').forEach((btn) => {
-    const id = String(btn.id || '').replace('community-tab-', '');
-    btn.classList.toggle('active', id === _communityOpenState.activeTab);
-  });
-  communityRenderOpenTab();
-}
-
-function communitySetActiveQuestion(idx) {
-  if (!_communityOpenState) return;
-  const currentInput = document.getElementById('community-answer-input');
-  if (currentInput) {
-    _communityOpenState.answerDrafts = _communityOpenState.answerDrafts || {};
-    _communityOpenState.answerDrafts[Number(_communityOpenState.activeQuestionIndex || 0)] = String(currentInput.value || '');
-  }
-  const list = Array.isArray(_communityOpenState.questionBank) ? _communityOpenState.questionBank : [];
-  const safe = Math.max(0, Math.min(list.length - 1, Number(idx || 0)));
-  _communityOpenState.activeQuestionIndex = safe;
-  communitySetViewerTab('questions');
-}
-
-function communitySetQuestionDraft(value) {
-  if (!_communityOpenState) return;
-  const idx = Number(_communityOpenState.activeQuestionIndex || 0);
-  _communityOpenState.answerDrafts = _communityOpenState.answerDrafts || {};
-  _communityOpenState.answerDrafts[idx] = String(value || '');
-}
-
-function communitySetQuizIndex(nextIdx) {
-  if (!_communityOpenState) return;
-  const list = Array.isArray(_communityOpenState.quiz) ? _communityOpenState.quiz : [];
-  if (!list.length) return;
-  _communityOpenState.quizIndex = Math.max(0, Math.min(list.length - 1, Number(nextIdx || 0)));
-  _communityOpenState.quizReveal = _communityOpenState.quizReveal || {};
-  if (typeof _communityOpenState.quizReveal[_communityOpenState.quizIndex] === 'undefined') {
-    _communityOpenState.quizReveal[_communityOpenState.quizIndex] = false;
-  }
-  communityRenderOpenTab();
-}
-
-function communityPickQuizOption(optionIdx) {
-  if (!_communityOpenState) return;
-  const qIdx = Number(_communityOpenState.quizIndex || 0);
-  _communityOpenState.quizAnswers = _communityOpenState.quizAnswers || {};
-  _communityOpenState.quizAnswers[qIdx] = Number(optionIdx);
-  _communityOpenState.quizReveal = _communityOpenState.quizReveal || {};
-  _communityOpenState.quizReveal[qIdx] = false;
-  communityRenderOpenTab();
-}
-
-function communityCheckQuizAnswer() {
-  if (!_communityOpenState) return;
-  const qIdx = Number(_communityOpenState.quizIndex || 0);
-  _communityOpenState.quizReveal = _communityOpenState.quizReveal || {};
-  _communityOpenState.quizReveal[qIdx] = true;
-  communityRenderOpenTab();
-}
-
-function communitySubmitQuiz() {
-  if (!_communityOpenState) return;
-  const list = Array.isArray(_communityOpenState.quiz) ? _communityOpenState.quiz : [];
-  let correct = 0;
-  let gradable = 0;
-  let unknown = 0;
-  list.forEach((item, idx) => {
-    const expected = communityResolveQuizAnswerIndex(item);
-    const picked = Number(_communityOpenState.quizAnswers && _communityOpenState.quizAnswers[idx]);
-    if (expected >= 0) {
-      gradable += 1;
-      if (picked === expected) correct += 1;
-    } else {
-      unknown += 1;
-    }
-  });
-  _communityOpenState.quizScore = { correct, total: gradable || list.length, unknown };
-  communityRenderOpenTab();
-}
-
-async function communityRunAiMark(mode) {
-  if (!_communityOpenState || !RA10) return;
-  const output = document.getElementById('community-ai-output');
-  const answerInput = document.getElementById('community-answer-input');
-  if (!output || !answerInput) return;
-  const answer = String(answerInput.value || '').trim();
-  communitySetQuestionDraft(answerInput.value || '');
-  if (!answer) {
-    output.style.display = '';
-    output.textContent = 'Write your answer first.';
-    return;
-  }
-  output.style.display = '';
-  const list = Array.isArray(_communityOpenState.questionBank) ? _communityOpenState.questionBank : [];
-  const idx = Math.max(0, Math.min(list.length - 1, Number(_communityOpenState.activeQuestionIndex || 0)));
-  const item = list[idx] || {};
-  const question = communityBuildQuestionObject(item, idx);
-  output.style.display = '';
-  output.textContent = 'Marking answer…';
-  try {
-    const payload = { question, answer };
-    const res = mode === 'examiner'
-      ? await RA10.examineAnswer(payload)
-      : await RA10.aiMarkAnswer(payload);
-    const result = res && res.result ? res.result : null;
-    if (!result) {
-      output.textContent = 'No marking result returned.';
-      return;
-    }
-    const strengths = Array.isArray(result.strengths) ? result.strengths : [];
-    const improvements = Array.isArray(result.improvements) ? result.improvements : [];
-    output.innerHTML = ''
-      + '<div><strong>Score:</strong> ' + communityEscape(result.earned) + '/' + communityEscape(result.max) + '</div>'
-      + (result.feedback ? '<div style="margin-top:6px;">' + communityEscape(result.feedback) + '</div>' : '')
-      + (strengths.length ? '<div style="margin-top:8px;"><strong>Strengths</strong><ul style="margin:6px 0 0 16px;">' + strengths.map((s) => '<li>' + communityEscape(s) + '</li>').join('') + '</ul></div>' : '')
-      + (improvements.length ? '<div style="margin-top:8px;"><strong>Improve</strong><ul style="margin:6px 0 0 16px;">' + improvements.map((s) => '<li>' + communityEscape(s) + '</li>').join('') + '</ul></div>' : '');
-  } catch (e) {
-    output.textContent = String((e && e.message) || e || 'Could not mark answer.');
-  }
-}
-
-function communityRenderOpenTab() {
-  if (!_communityOpenState) return;
-  const host = document.getElementById('community-open-tab-content');
-  if (!host) return;
-  const tab = String(_communityOpenState.activeTab || 'guide');
-  if (tab === 'guide') {
-    const guideHtml = communityRenderGuide(_communityOpenState.byKind.revision_guide || '');
-    host.innerHTML = '<div><h5 style="margin:0 0 var(--sp4);font-size:var(--tx-base);font-weight:700;color:var(--color-text);">Revision Guide</h5>' + guideHtml + '</div>';
-    return;
-  }
-  if (tab === 'questions') {
-    const list = Array.isArray(_communityOpenState.questionBank) ? _communityOpenState.questionBank : [];
-    if (!list.length) {
-      host.innerHTML = '<div class="community-content-box"><h5>Questions</h5><div class="community-content-scroll">No question bank data available.</div></div>';
-      return;
-    }
-    const qIdx = Math.max(0, Math.min(list.length - 1, Number(_communityOpenState.activeQuestionIndex || 0)));
-    const item = list[qIdx] || {};
-    const draft = String((_communityOpenState.answerDrafts && _communityOpenState.answerDrafts[qIdx]) || '');
-    const marks = communityGetQuestionMarks(item);
-    host.innerHTML = ''
-      + '<div class="community-question-shell">'
-      +   '<div class="community-question-topbar">'
-      +     '<div><h5 class="community-question-title">Questions</h5><p class="community-question-sub">Navigate, write your answer, then get AI feedback.</p></div>'
-      +     '<div class="community-question-nav">'
-      +       '<button class="btn btn-s" type="button" onclick="communitySetActiveQuestion(' + (qIdx - 1) + ')">← Prev</button>'
-      +       '<span class="community-question-counter">' + (qIdx + 1) + ' / ' + list.length + '</span>'
-      +       '<button class="btn btn-s" type="button" onclick="communitySetActiveQuestion(' + (qIdx + 1) + ')">Next →</button>'
-      +     '</div>'
-      +   '</div>'
-      +   '<div class="community-question-stem">'
-      +     '<div class="community-question-kicker">Q' + (qIdx + 1) + ' · ' + marks + ' mark' + (marks !== 1 ? 's' : '') + '</div>'
-      +     '<p class="community-question-text">' + communityEscape(communityGetQuestionText(item, qIdx)) + '</p>'
-      +   '</div>'
-      +   '<textarea id="community-answer-input" class="community-answer-box" oninput="communitySetQuestionDraft(this.value)" placeholder="Write your answer here…">' + communityEscape(draft) + '</textarea>'
-      +   '<div class="community-answer-actions">'
-      +     '<button class="btn btn-s" type="button" onclick="communityRunAiMark(\'marker\')">⚡ Auto Marker</button>'
-      +     '<button class="btn btn-s" type="button" onclick="communityRunAiMark(\'examiner\')">✨ AI Examiner</button>'
-      +     '<span class="community-answer-note">Auto Marker is faster · AI Examiner gives fuller exam-style feedback</span>'
-      +   '</div>'
-      +   '<div id="community-ai-output" class="community-ai-result" style="display:none;"></div>'
-      +   '<details class="community-question-browser"><summary>Browse all questions</summary><div>' + communityRenderQuestionBank(_communityOpenState.byKind.question_bank || '[]') + '</div></details>'
-      + '</div>';
-    return;
-  }
-  if (tab === 'flashcards') {
-    host.innerHTML = communityRenderFlashcards(_communityOpenState.byKind.flashcards || '[]');
-    return;
-  }
-  if (tab === 'quiz') {
-    const list = Array.isArray(_communityOpenState.quiz) ? _communityOpenState.quiz : [];
-    if (!list.length) {
-      host.innerHTML = '<div class="community-content-box"><h5>Quiz</h5><div class="community-content-scroll">No quiz data.</div></div>';
-      return;
-    }
-    const idx = Math.max(0, Math.min(list.length - 1, Number(_communityOpenState.quizIndex || 0)));
-    const q = list[idx] || {};
-    const options = Array.isArray(q.options) ? q.options : [];
-    const picked = Number(_communityOpenState.quizAnswers && _communityOpenState.quizAnswers[idx]);
-    const correct = communityResolveQuizAnswerIndex(q);
-    const reveal = !!(_communityOpenState.quizReveal && _communityOpenState.quizReveal[idx]);
-    const score = _communityOpenState.quizScore;
-    host.innerHTML = ''
-      + '<div class="community-quiz-card">'
-      +   '<div style="display:flex;justify-content:space-between;align-items:center;gap:var(--sp3);flex-wrap:wrap;">'
-      +     '<h5 style="margin:0;font-size:var(--tx-base);font-weight:700;color:var(--color-text);">Quiz</h5>'
-      +     '<span class="community-quiz-counter">Question ' + (idx + 1) + ' of ' + list.length + '</span>'
-      +   '</div>'
-      +   '<p class="community-quiz-question-text">' + communityEscape(q.question || ('Quiz question ' + (idx + 1))) + '</p>'
-      +   '<div class="community-quiz-options">'
-      +     options.map((opt, oIdx) => {
-              const isPicked = picked === oIdx;
-              const isCorrect = correct >= 0 && correct === oIdx;
-              const cls = reveal ? (isCorrect ? 'correct' : (isPicked ? 'wrong' : '')) : (isPicked ? 'active' : '');
-              return '<button class="community-quiz-option ' + cls + '" type="button" onclick="communityPickQuizOption(' + oIdx + ')">' + communityEscape(opt) + '</button>';
-            }).join('')
-      +   '</div>'
-      +   '<div class="community-quiz-actions">'
-      +     '<button class="btn btn-s" type="button" onclick="communitySetQuizIndex(' + (idx - 1) + ')">← Prev</button>'
-      +     '<button class="btn btn-s" type="button" onclick="communitySetQuizIndex(' + (idx + 1) + ')">Next →</button>'
-      +     '<button class="btn btn-s" type="button" onclick="communityCheckQuizAnswer()">Check answer</button>'
-      +     '<button class="btn btn-p" type="button" onclick="communitySubmitQuiz()">Submit all</button>'
-      +   '</div>'
-      +   (reveal && correct >= 0 ? '<p style="margin:var(--sp3) 0 0;font-size:var(--tx-sm);">' + (picked === correct ? '<strong style="color:var(--color-success);">✓ Correct!</strong>' : '<strong style="color:var(--color-error);">✗ Not quite</strong> — correct answer highlighted above') + '</p>' : '')
-      +   (reveal && correct < 0 ? '<p style="margin:var(--sp3) 0 0;font-size:var(--tx-xs);color:var(--color-text-muted);">No answer key for this question.</p>' : '')
-      +   (score ? '<div class="community-quiz-score"><strong>Final score:</strong> ' + score.correct + ' / ' + score.total + (score.unknown ? ' · ' + score.unknown + ' question(s) without answer key' : '') + '</div>' : '')
-      + '</div>';
-    return;
-  }
-  if (tab === 'refine' && _communityOpenState.canOwnerControls) {
-    host.innerHTML = ''
-      + '<div class="community-content-box">'
-      +   '<h5>Creator Refinement Chat</h5>'
-      +   '<p class="community-muted">Creator-only. DeepTutor prompt style is enforced server-side.</p>'
-      +   '<div class="community-refine-tags">'
-      +     '<button class="btn btn-s" type="button" onclick="communityApplyRefineTag(\'Add more exam questions and raise difficulty progression\')">Add more questions</button>'
-      +     '<button class="btn btn-s" type="button" onclick="communityApplyRefineTag(\'Generate more flashcards with concise backs\')">Add flashcards</button>'
-      +     '<button class="btn btn-s" type="button" onclick="communityApplyRefineTag(\'Improve quiz quality and distractor options\')">Improve MCQs</button>'
-      +   '</div>'
-      +   '<div style="display:flex;gap:8px;flex-wrap:wrap;">'
-      +     '<input id="community-chat-input" class="auth-input" type="text" placeholder="Ask how to improve this app" style="flex:1;min-width:220px;">'
-      +     '<button class="btn btn-s" type="button" onclick="communityAskRefine(\'' + String(_communityOpenState.app.id || '') + '\')">Ask AI</button>'
-      +   '</div>'
-      +   '<div id="community-chat-reply" class="community-content-scroll" style="margin-top:10px;max-height:180px;"></div>'
-      + '</div>';
-    return;
-  }
-  host.innerHTML = '<div class="credit-log-note">Select a tab.</div>';
-}
-
 async function communityOpenApp(appId) {
-  const host = document.getElementById('community-open-app');
-  if (!host) return;
-  const app = _communityApps.find((x) => String(x.id) === String(appId));
-  if (!app) return;
-
-  let previewMode = false;
-  let canAuthRead = !!(RA10 && RA10.isLoggedIn && RA10.isLoggedIn());
-  if (!canAuthRead) {
-    previewMode = true;
-  } else {
-    try {
-      const spent = await RA10.spendCredits('community_open_app');
-      if (!spent) {
-        previewMode = true;
-        showMiniToast('Opened in preview mode (full open needs credits).');
-      }
-    } catch (e) {
-      previewMode = true;
-      showMiniToast('Opened in preview mode.');
-    }
-  }
-
-  let rows = [];
-  try {
-    rows = await communityRest('community_app_contents?select=kind,payload&app_id=eq.' + encodeURIComponent(appId), 'GET', null, canAuthRead && !previewMode);
-  } catch (e) {
-    rows = await communityRest('community_app_contents?select=kind,payload&app_id=eq.' + encodeURIComponent(appId), 'GET', null, false);
-    previewMode = true;
-  }
-  const items = Array.isArray(rows) ? rows : [];
-  const byKind = {};
-  items.forEach((x) => { byKind[String(x.kind)] = String(x.payload || ''); });
-  const creator = communityResolveCreator(app.creator_id);
-  const creatorName = communityUserLabel(creator, app.creator_id);
-  const creatorAvatar = String(creator.profile_pic_url || '').trim();
-  const myId = RA10 && RA10.isLoggedIn && RA10.isLoggedIn() ? String(RA10.getSession().user.id || '') : '';
-  const canDelete = myId && myId === String(app.creator_id || '');
-  const isStaff = !!(window.RA10Forum && RA10Forum.isStaff && RA10Forum.isStaff());
-  const canModerate = !!canDelete || isStaff;
-  const metadata = (() => {
-    try { return JSON.parse(String(byKind.metadata || '{}')); } catch (e) { return {}; }
-  })();
-
-  _communityOpenState = {
-    app,
-    byKind,
-    metadata,
-    activeTab: 'guide',
-    questionBank: communityNormalizeQuestionBank(communityParseArray(byKind.question_bank || '[]')),
-    flashcards: communityParseArray(byKind.flashcards || '[]'),
-    quiz: communityParseArray(byKind.quiz || '[]'),
-    quizIndex: 0,
-    quizAnswers: {},
-    quizReveal: {},
-    quizScore: null,
-    flashcardIndex: 0,
-    flashcardReveal: false,
-    answerDrafts: {},
-    activeQuestionIndex: 0,
-    canOwnerControls: !!canDelete,
-  };
-
-  host.innerHTML = ''
-    + '<div class="community-open-head">'
-    +   '<div class="community-open-header-row">'
-    +     '<div class="community-open-icon">' + communityEscape(String(app.icon_emoji || '📘')) + '</div>'
-    +     '<div class="community-open-meta">'
-    +       '<h4>' + communityEscape(app.title) + '</h4>'
-    +       '<div class="community-open-pills">'
-    +         '<span class="pill">' + communityEscape(app.subject || 'General') + '</span>'
-    +         '<span class="pill">' + communityEscape(app.level || 'Mixed') + '</span>'
-    +         (() => { const raw = String(app.exam_board || '').trim(); const br = raw.toLowerCase().includes('pearson') || raw.toLowerCase().includes('btec') ? 'Pearson' : (raw.toLowerCase().includes('edexcel') ? 'Edexcel' : (raw.toLowerCase().includes('eduqas') ? 'WJEC' : raw)); const bMap = { AQA:'cw-logo-aqa', Edexcel:'cw-logo-edexcel', Pearson:'cw-logo-pearson', OCR:'cw-logo-ocr', WJEC:'cw-logo-wjec', Cambridge:'cw-logo-cambridge', IB:'cw-logo-ib', CCEA:'cw-logo-ccea' }; return raw && raw !== 'Mixed' ? '<span class="community-card-board-badge ' + (bMap[br]||'cw-logo-other') + '" style="color:#fff;">' + communityEscape(raw) + '</span>' : ''; })()
-    +         (previewMode ? '<span class="pill" style="background:var(--color-warning-highlight);border-color:var(--color-warning);color:var(--color-warning);">Preview mode</span>' : '')
-    +       '</div>'
-    +     '</div>'
-    +     (canModerate ? '<div class="cf-app-mod">'
-    +       (isStaff && !canDelete ? '<span class="cf-mod-flag">🛡️ Moderator</span>' : '')
-    +       (isStaff ? '<button class="btn btn-s" type="button" onclick="communityHideApp(\'' + String(app.id) + '\',' + (app.status === 'hidden' ? 'false' : 'true') + ')">' + (app.status === 'hidden' ? 'Unhide' : 'Hide') + '</button>' : '')
-    +       '<button class="btn btn-s cf-danger" type="button" onclick="communityDeleteApp(\'' + String(app.id) + '\')">Delete</button></div>' : '')
-    +   '</div>'
-    +   '<div class="community-creator-widget">'
-    +     '<div class="community-creator-avatar">' + (creatorAvatar ? '<img src="' + communityEscape(creatorAvatar) + '" alt="" loading="lazy">' : communityEscape(communityInitials(creatorName))) + '</div>'
-    +     '<span class="community-creator-name">' + communityEscape(creatorName) + '</span>'
-    +     '<span style="color:var(--color-text-faint);">·</span>'
-    +     '<span style="color:var(--color-text-muted);">❤ ' + Number(app.like_count || 0) + '  💬 ' + Number(app.comment_count || 0) + '</span>'
-    +   '</div>'
-    + '</div>'
-    + '<div class="community-viewer-menu">'
-    +   '<button class="btn active" id="community-tab-guide" type="button" onclick="communitySetViewerTab(\'guide\')">📘 Guide</button>'
-    +   '<button class="btn" id="community-tab-questions" type="button" onclick="communitySetViewerTab(\'questions\')">🧠 Questions</button>'
-    +   '<button class="btn" id="community-tab-flashcards" type="button" onclick="communitySetViewerTab(\'flashcards\')">🃏 Cards</button>'
-    +   '<button class="btn" id="community-tab-quiz" type="button" onclick="communitySetViewerTab(\'quiz\')">✅ Quiz</button>'
-    +   (canDelete ? '<button class="btn" id="community-tab-refine" type="button" onclick="communitySetViewerTab(\'refine\')">✨ Refine</button>' : '')
-    + '</div>'
-    + '<div id="community-open-tab-content" class="community-tab-panel"></div>'
-    + '<div class="community-comment-section">'
-    +   '<h5 style="margin:0 0 var(--sp3);font-size:var(--tx-sm);font-weight:700;color:var(--color-text);">Comments <span id="community-comments-count" style="font-weight:500;color:var(--color-text-muted);"></span></h5>'
-    +   '<div class="community-comment-input-row">'
-    +     '<input id="community-comment-input" class="auth-input" type="text" maxlength="320" placeholder="Add a comment…" onkeydown="if(event.key===\'Enter\'){event.preventDefault();communityPostComment(\'' + String(appId) + '\');}">'
-    +     '<button class="btn btn-p" type="button" onclick="communityPostComment(\'' + String(appId) + '\')">Post</button>'
-    +   '</div>'
-    +   '<div id="community-comments" class="community-comment-list"></div>'
-    + '</div>';
-
-  communitySetViewerTab('guide');
-
-  await communityLoadComments(appId);
-  // On narrow screens, the library stacks above the viewer. Move the user to
-  // the newly opened app once its content has been painted.
-  if (window.matchMedia && window.matchMedia('(max-width: 860px)').matches) {
-    requestAnimationFrame(() => {
-      const viewer = document.getElementById('community-viewer-panel');
-      if (viewer) viewer.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    });
-  }
-  // Update the selected state in the library after opening the app.
-  document.querySelectorAll('.community-card').forEach((card) => {
-    const opensApp = String(card.getAttribute('onclick') || '').includes(String(appId));
-    card.classList.toggle('selected', opensApp);
-    card.setAttribute('aria-current', opensApp ? 'true' : 'false');
-  });
-  if (window._updateNavAuth) {
-    try { await window._updateNavAuth(); } catch (e) {}
-  }
+  if (window.RA10Apps) return RA10Apps.openApp(appId);
 }
+
 
 async function communityLoadComments(appId) {
   const host = document.getElementById('community-comments');
@@ -11503,8 +10890,7 @@ async function communityDeleteApp(appId) {
   if (!confirm('Delete this app permanently? This will remove generated content, likes, comments and jobs.')) return;
   try {
     await communityRest('community_apps?id=eq.' + encodeURIComponent(appId), 'DELETE', null, true);
-    const open = document.getElementById('community-open-app');
-    if (open) open.innerHTML = '<div class="credit-log-note">App deleted.</div>';
+    if (window.RA10Apps) RA10Apps.closeApp();
     await Promise.all([loadCommunityApps(), loadCommunityJobs()]);
     showMiniToast('App deleted');
   } catch (e) {
@@ -11933,6 +11319,7 @@ function initCommunityBindings() {
 
 async function renderCommunityPage() {
   if (window.RA10Forum && typeof RA10Forum.show === 'function') RA10Forum.show();
+  if (window.RA10Apps) RA10Apps.mount();
   initCommunityBindings();
   if (!_communityJobsPoller) {
     _communityJobsPoller = setInterval(() => {
@@ -11963,17 +11350,6 @@ window.cwizPickLevel = cwizPickLevel;
 window.cwizPickDiff = cwizPickDiff;
 window.cwizPickQStyle = cwizPickQStyle;
 window.cwizPickPreset = cwizPickPreset;
-window.communitySetViewerTab = communitySetViewerTab;
-window.communitySetActiveQuestion = communitySetActiveQuestion;
-window.communitySetQuestionDraft = communitySetQuestionDraft;
-window.communitySetQuizIndex = communitySetQuizIndex;
-window.communityPickQuizOption = communityPickQuizOption;
-window.communityCheckQuizAnswer = communityCheckQuizAnswer;
-window.communitySubmitQuiz = communitySubmitQuiz;
-window.communityRunAiMark = communityRunAiMark;
-window.communitySetFlashcardIndex = communitySetFlashcardIndex;
-window.communityToggleFlashcard = communityToggleFlashcard;
-window.communityShuffleFlashcards = communityShuffleFlashcards;
 window.communityApplyRefineTag = communityApplyRefineTag;
 window.communityPostComment = communityPostComment;
 window.communityAskRefine = communityAskRefine;
