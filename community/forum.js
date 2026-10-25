@@ -17,6 +17,9 @@
   var banned = null;          // active ban row for this user
   var tab = 'forum';
   var modSub = 'reports';
+  var modSubTouched = false;
+  var pendingApps = [];       // owner: applications waiting for a decision
+  var myApp = undefined;      // my own latest application (undefined = not loaded yet)
   var postsCache = [];
   var postsEnd = false;
   var booted = false;
@@ -116,7 +119,7 @@
       ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-modal', 'true'); ov.setAttribute('aria-label', o.title || 'Dialog');
       var fields = (o.fields || []).map(function (f) {
         if (f.type === 'select') return '<label class="cf-lbl">' + esc(f.label) + '<select class="cf-in" data-f="' + f.name + '">' + f.options.map(function (op) { return '<option value="' + esc(op[0]) + '">' + esc(op[1]) + '</option>'; }).join('') + '</select></label>';
-        if (f.type === 'textarea') return '<label class="cf-lbl">' + esc(f.label) + '<textarea class="cf-in" rows="3" maxlength="' + (f.max || 400) + '" data-f="' + f.name + '" placeholder="' + esc(f.placeholder || '') + '"></textarea></label>';
+        if (f.type === 'textarea') return '<label class="cf-lbl">' + esc(f.label) + '<textarea class="cf-in" rows="' + (f.rows || 3) + '" maxlength="' + (f.max || 400) + '" data-f="' + f.name + '" placeholder="' + esc(f.placeholder || '') + '">' + esc(f.value || '') + '</textarea>' + (f.hint ? '<span class="cf-count">' + esc(f.hint) + '</span>' : '') + '</label>';
         return '<label class="cf-lbl">' + esc(f.label) + '<input class="cf-in" type="' + (f.type || 'text') + '" maxlength="' + (f.max || 200) + '" data-f="' + f.name + '" placeholder="' + esc(f.placeholder || '') + '"></label>';
       }).join('');
       ov.innerHTML = '<div class="cf-modal"><h3>' + esc(o.title || '') + '</h3>' + (o.body ? '<p>' + esc(o.body) + '</p>' : '') + fields +
@@ -131,7 +134,7 @@
         var x = e.target.closest('[data-x]'); if (!x) return;
         if (x.dataset.x === 'cancel') return close(null);
         var vals = {}; $$('[data-f]', ov).forEach(function (el) { vals[el.dataset.f] = el.value.trim(); });
-        for (var i = 0; i < (o.fields || []).length; i++) { var f = o.fields[i]; if (f.required && !vals[f.name]) { $('[data-f="' + f.name + '"]', ov).focus(); return; } }
+        for (var i = 0; i < (o.fields || []).length; i++) { var f = o.fields[i]; if ((f.required && !vals[f.name]) || (f.min && vals[f.name].length < f.min)) { var bad = $('[data-f="' + f.name + '"]', ov); bad.focus(); bad.classList.add('bad'); return; } }
         close(vals);
       });
     });
@@ -193,7 +196,7 @@
       c.from('forum_reports').select('id', { count: 'exact', head: true }).eq('status', 'open'),
       c.from('forum_mod_log').select('id', { count: 'exact', head: true }).eq('reviewed', false)
     ]).then(function (r) {
-      var n = (r[0].count || 0) + (r[1].count || 0); b.textContent = n > 99 ? '99+' : n; b.style.display = n ? '' : 'none';
+      var n = (r[0].count || 0) + (r[1].count || 0) + (owner ? pendingApps.length : 0); b.textContent = n > 99 ? '99+' : n; b.style.display = n ? '' : 'none';
     }, function () {});
   }
   function loadCategories() {
@@ -274,6 +277,7 @@
     return '<aside class="cf-side">' +
       '<div class="cf-card cf-cta"><div class="cf-cta-ico">💬</div><h3>Got a question?</h3><p>Ask the community — someone has probably been stuck on it too.</p><button type="button" class="cf-btn primary" data-act="new">Start a thread</button></div>' +
       '<div class="cf-card"><h3>Community guidelines</h3><ul class="cf-rules"><li>Be kind and respectful.</li><li>No cheating: don’t share live exam content.</li><li>Don’t share personal details.</li><li>Search before you post — and use the right category.</li></ul><p class="cf-aimod">🤖 An AI moderator checks every post. Swearing is fine; racism, threats and hate aren\u2019t.</p></div>' +
+      '<div class="cf-card" id="cf-apply-card">' + applyCardInner() + '</div>' +
       '<div class="cf-card"><h3>Study apps</h3><p class="cf-muted">Flashcards, quizzes and guides built by students.</p><button type="button" class="cf-btn" data-cf-go="apps">Browse study apps</button></div>' +
       '</aside>';
   }
@@ -538,6 +542,7 @@
     if (!a) { var row = t.closest('[data-post]'); if (row && !t.closest('a')) openThread(row.dataset.post); return; }
     var act = a.dataset.act, id = a.dataset.id;
     switch (act) {
+      case 'apply': return applyDialog();
       case 'new': return renderNew(state.view === 'category' ? state.cat : null);
       case 'home': return renderHome();
       case 'back': return goBack();
@@ -577,11 +582,12 @@
     var pane = $('#cf-pane-mod'); if (!pane) return;
     if (!staff) { pane.innerHTML = '<div class="cf-empty"><p>Moderators only.</p></div>'; return; }
     var tabs = [['reports', 'Reports'], ['ai', '🤖 AI moderator'], ['threads', 'Threads'], ['apps', 'Study apps'], ['bans', 'Bans']];
-    if (owner) tabs.push(['team', 'Moderators']);
+    if (owner) { tabs.unshift(['applications', '🙋 Applications' + (pendingApps.length ? ' (' + pendingApps.length + ')' : '')]); tabs.push(['team', 'Moderators']); }
+    if (modSub === 'reports' && owner && pendingApps.length && !modSubTouched) modSub = 'applications';
     pane.innerHTML = '<div class="cf-mod"><div class="cf-modtabs" role="tablist">' + tabs.map(function (t) { return '<button type="button" class="cf-pill' + (modSub === t[0] ? ' on' : '') + '" data-mod="' + t[0] + '">' + t[1] + '</button>'; }).join('') + '</div><div id="cf-mod-body">' + skeleton(4) + '</div></div>';
-    $$('[data-mod]', pane).forEach(function (b) { b.addEventListener('click', function () { modSub = b.dataset.mod; renderMod(); }); });
+    $$('[data-mod]', pane).forEach(function (b) { b.addEventListener('click', function () { modSub = b.dataset.mod; modSubTouched = true; renderMod(); }); });
     var body = $('#cf-mod-body', pane);
-    ({ reports: modReports, ai: modAi, threads: modThreads, apps: modApps, bans: modBans, team: modTeam }[modSub] || modReports)(body);
+    ({ applications: modApplications, reports: modReports, ai: modAi, threads: modThreads, apps: modApps, bans: modBans, team: modTeam }[modSub] || modReports)(body);
   }
   function modReports(body) {
     var c = client();
@@ -667,6 +673,177 @@
       });
     }, function (e) { body.innerHTML = errorBox(e, false); });
   }
+  /* ── moderator applications ─────────────────────────────────────────── */
+  function loadMyApplication() {
+    var c = client(); if (!c || !loggedIn()) { myApp = null; return Promise.resolve(); }
+    return c.rpc('community_my_application').then(function (r) { myApp = (r.data && r.data[0]) || null; }, function () { myApp = null; });
+  }
+  function applyCardInner() {
+    if (staff) return '<h3>🛡️ You\u2019re on the team</h3><p class="cf-muted">Thanks for helping keep RA10 friendly.</p>';
+    if (!loggedIn()) return '<h3>🛡️ Help moderate RA10</h3><p class="cf-muted">Sign in to apply to become a community moderator.</p><button type="button" class="cf-btn" data-act="login">Sign in</button>';
+    var a = myApp;
+    if (a && a.status === 'pending') return '<h3>🛡️ Application sent</h3><p class="cf-muted">Thanks! The RA10 owner will review it — you\u2019ll see the result here the next time you visit. <span class="cf-chip warn">Pending · ' + ago(a.created_at) + '</span></p>';
+    if (a && a.status === 'rejected' && a.can_reapply_at && new Date(a.can_reapply_at) > new Date()) return '<h3>🛡️ Not this time</h3><p class="cf-muted">Your last application wasn\u2019t accepted' + (a.decision_note ? ': \u201c' + esc(a.decision_note) + '\u201d' : '') + '. You can apply again on ' + new Date(a.can_reapply_at).toLocaleDateString(undefined, { day: 'numeric', month: 'short' }) + '.</p>';
+    return '<h3>🛡️ Help moderate RA10</h3><p class="cf-muted">Love the community? Apply to become a moderator — pin threads, tidy replies and keep things friendly.</p><button type="button" class="cf-btn primary" data-act="apply">Apply to be a moderator</button>';
+  }
+  function refreshApplyCard() { var el = $('#cf-apply-card'); if (el) el.innerHTML = applyCardInner(); }
+  function applyDialog(prefill) {
+    if (needLogin('community_apply')) return;
+    dialog({ title: 'Apply to be a moderator', body: 'Tell the owner why you\u2019d be a good moderator. They\u2019ll also see how long you\u2019ve been on RA10, your XP and how often you use the site.', confirm: 'Send application', fields: [
+      { name: 'message', label: 'Why do you want to help, and what would you do?', type: 'textarea', rows: 6, max: 800, min: 20, required: true, value: prefill || '', hint: 'At least 20 characters — be genuine and specific.' }
+    ] }).then(function (v) {
+      if (!v) return;
+      client().rpc('community_apply_moderator', { p_message: v.message }).then(function (r) {
+        if (r.error) { toast(errMsg(r.error)); if (/at least 20/i.test(r.error.message || '')) applyDialog(v.message); return; }
+        toast('Application sent — thank you! 🛡️'); loadMyApplication().then(refreshApplyCard);
+        if (owner) checkApplications();
+      });
+    });
+  }
+
+  function humanAge(days) {
+    if (days < 1) return 'today'; if (days < 14) return days + ' day' + (days === 1 ? '' : 's');
+    if (days < 60) return Math.round(days / 7) + ' weeks'; if (days < 700) return Math.round(days / 30) + ' months';
+    return (days / 365).toFixed(1) + ' years';
+  }
+  function appName(a) { return a.username ? '@' + a.username : (a.full_name || a.email || 'Member'); }
+  function appAvatar(a, size) {
+    return '<span class="cf-av" style="--s:' + size + 'px;--h:' + hue(a.user_id) + '">' + (a.profile_pic_url ? '<img src="' + esc(a.profile_pic_url) + '" alt="" loading="lazy">' : esc(initials(appName(a)))) + '</span>';
+  }
+  function appStats(a) {
+    var ageDays = a.account_created ? Math.max(0, Math.floor((Date.now() - new Date(a.account_created).getTime()) / 86400000)) : 0;
+    return { ageDays: ageDays,
+      tiles: [
+        ['⚡', Number(a.xp_total).toLocaleString(), 'Total XP'], ['📈', Number(a.xp_this_week).toLocaleString(), 'XP this week'],
+        ['🗓️', humanAge(ageDays), 'Account age'], ['🔥', a.active_days_30 + '/30', 'Days active (30d)'],
+        ['📊', a.active_days_90 + '/90', 'Days active (90d)'], ['⏱️', a.last_active ? ago(a.last_active + 'T12:00:00') : '—', 'Last active'],
+        ['💬', (Number(a.threads) + Number(a.replies)) + '', 'Forum posts'], ['🚫', a.removals + '', 'AI removals']
+      ] };
+  }
+  function modApplications(body) {
+    var c = client();
+    c.rpc('community_applications_list', { p_status: 'all' }).then(function (r) {
+      if (r.error) { body.innerHTML = errorBox(r.error, false); return; }
+      var rows = r.data || [];
+      pendingApps = rows.filter(function (x) { return x.status === 'pending'; }); refreshReportBadge();
+      var pend = pendingApps, done = rows.filter(function (x) { return x.status !== 'pending'; });
+      function card(a) {
+        var st = appStats(a);
+        var chip = a.status === 'pending' ? '<span class="cf-chip warn">Waiting</span>' : a.status === 'approved' ? '<span class="cf-chip ok">Accepted</span>' : '<span class="cf-chip">Rejected</span>';
+        return '<article class="cf-card cf-appcard" data-app="' + a.id + '"><div class="cf-appcard-top">' + appAvatar(a, 46) + '<div class="cf-tmain"><b>' + esc(appName(a)) + '</b><small>' + esc(a.email || '') + ' · applied ' + ago(a.created_at) + '</small></div>' + chip + '</div>' +
+          '<p class="cf-quote">' + esc(excerpt(a.message, 240)) + '</p>' +
+          '<div class="cf-minis">' + [st.tiles[0], st.tiles[2], st.tiles[3], st.tiles[6]].map(function (t) { return '<span><i>' + t[0] + '</i><b>' + esc(t[1]) + '</b> ' + esc(t[2]) + '</span>'; }).join('') + '</div>' +
+          '<div class="cf-row-actions"><button class="cf-btn ' + (a.status === 'pending' ? 'primary' : '') + ' sm" data-review="' + a.id + '">' + (a.status === 'pending' ? 'Review & decide' : 'View details') + '</button></div></article>';
+      }
+      body.innerHTML = '<div class="cf-ai-head"><div><h3>🙋 Moderator applications</h3><p class="cf-muted">Members can apply from the Community page. Each application shows their XP, account age, how often they use RA10 and an AI summary to help you decide.</p></div></div>' +
+        (pend.length ? pend.map(card).join('') : '<div class="cf-empty"><div class="cf-empty-ico">📭</div><h4>No applications waiting</h4><p>You\u2019ll get a pop-up on the site when someone applies.</p></div>') +
+        (done.length ? '<h3 class="cf-sub">Past decisions</h3>' + done.map(card).join('') : '');
+      var map = {}; rows.forEach(function (x) { map[x.id] = x; });
+      body.onclick = function (e) { var b = e.target.closest('[data-review]'); if (b) reviewApplication(map[b.dataset.review], function () { renderMod(); checkApplications(); }); };
+    });
+  }
+
+  function reviewApplication(a, done) {
+    if (!a) return;
+    var c = client(), st = appStats(a);
+    var ov = document.createElement('div');
+    ov.className = 'cf-modal-ov'; ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-modal', 'true'); ov.setAttribute('aria-label', 'Moderator application');
+    function sumHtml(sm) {
+      var rec = { approve: ['👍 Recommend approving', 'ok'], consider: ['🤔 Worth considering', 'warn'], decline: ['👎 Lean towards declining', 'no'] }[sm.recommendation] || ['', ''];
+      return '<div class="cf-sum-head"><b>' + esc(sm.headline || 'AI summary') + '</b><span class="cf-rec ' + rec[1] + '">' + rec[0] + '</span></div><p>' + esc(sm.summary) + '</p>' +
+        ((sm.strengths || []).length ? '<ul class="cf-pro">' + sm.strengths.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>' : '') +
+        ((sm.concerns || []).length ? '<ul class="cf-con">' + sm.concerns.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>' : '') +
+        '<small class="cf-muted">' + (sm.source === 'ai' ? '🤖 AI-written' : '📊 Generated from the numbers') + ' · confidence ' + esc(sm.confidence || 'medium') + ' · a guide, not a verdict</small>';
+    }
+    ov.innerHTML = '<div class="cf-modal wide"><button type="button" class="cf-x" data-x="close" aria-label="Close">✕</button>' +
+      '<div class="cf-rev-head">' + appAvatar(a, 56) + '<div><h3>' + esc(appName(a)) + '</h3><p class="cf-muted">' + esc(a.email || '') + ' · joined ' + (a.account_created ? new Date(a.account_created).toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' }) : 'unknown') + '</p></div></div>' +
+      '<div class="cf-tiles">' + st.tiles.map(function (t) { return '<div class="cf-tile"><span>' + t[0] + '</span><b>' + esc(t[1]) + '</b><small>' + esc(t[2]) + '</small></div>'; }).join('') + '</div>' +
+      '<h4 class="cf-rev-h">Their application</h4><p class="cf-quote">' + esc(a.message) + '</p>' +
+      '<h4 class="cf-rev-h">🤖 AI summary <button type="button" class="cf-link" data-x="regen">Regenerate</button></h4><div class="cf-sum" id="cf-sum">' + (a.ai_summary ? sumHtml(a.ai_summary) : skeleton(2)) + '</div>' +
+      (a.status === 'pending'
+        ? '<div class="cf-rev-actions" id="cf-rev-actions"><button type="button" class="cf-btn danger" data-x="reject">Reject</button><button type="button" class="cf-btn primary" data-x="accept">Accept — make them an Admin</button></div>'
+        : '<p class="cf-muted small">' + (a.status === 'approved' ? '✅ Accepted' : '❌ Rejected') + ' ' + ago(a.decided_at) + (a.decision_note ? ' — “' + esc(a.decision_note) + '”' : '') + '</p>') + '</div>';
+    document.body.appendChild(ov);
+    function close(refresh) { ov.remove(); document.removeEventListener('keydown', key, true); if (refresh && done) done(); }
+    function key(e) { if (e.key === 'Escape') close(false); }
+    document.addEventListener('keydown', key, true);
+    function summarise(refresh) {
+      var box = $('#cf-sum', ov); box.innerHTML = skeleton(2);
+      c.functions.invoke('community-applicant-summary', { body: { applicationId: a.id, refresh: !!refresh } }).then(function (r) {
+        if (r.data && r.data.summary) { a.ai_summary = r.data.summary; box.innerHTML = sumHtml(r.data.summary); }
+        else box.innerHTML = '<p class="cf-muted">Couldn\u2019t generate a summary right now (is the community-applicant-summary function deployed?). The numbers above still tell the story.</p>';
+      }, function () { box.innerHTML = '<p class="cf-muted">Couldn\u2019t generate a summary right now.</p>'; });
+    }
+    if (!a.ai_summary) summarise(false);
+    ov.addEventListener('click', function (e) {
+      if (e.target === ov) return close(false);
+      var b = e.target.closest('[data-x]'); if (!b) return;
+      var x = b.dataset.x;
+      if (x === 'close') close(false);
+      else if (x === 'regen') summarise(true);
+      else if (x === 'accept') {
+        b.disabled = true;
+        c.rpc('community_decide_application', { p_id: a.id, p_accept: true, p_note: null }).then(function (r) { if (r.error) { b.disabled = false; return toast(errMsg(r.error)); } toast(appName(a) + ' is now an Admin 🛡️'); close(true); });
+      } else if (x === 'reject') {
+        var box = $('#cf-rev-actions', ov);
+        box.innerHTML = '<label class="cf-lbl" style="flex:1 1 100%">Optional note (shown to them)<textarea class="cf-in" rows="2" maxlength="300" data-note placeholder="e.g. Come back once you\u2019ve been active a bit longer."></textarea></label><button type="button" class="cf-btn" data-x="back">Back</button><button type="button" class="cf-btn danger" data-x="confirmreject">Confirm rejection</button>';
+        $('[data-note]', ov).focus();
+      } else if (x === 'back') {
+        $('#cf-rev-actions', ov).innerHTML = '<button type="button" class="cf-btn danger" data-x="reject">Reject</button><button type="button" class="cf-btn primary" data-x="accept">Accept — make them an Admin</button>';
+      } else if (x === 'confirmreject') {
+        b.disabled = true;
+        c.rpc('community_decide_application', { p_id: a.id, p_accept: false, p_note: ($('[data-note]', ov).value || '').trim() || null }).then(function (r) { if (r.error) { b.disabled = false; return toast(errMsg(r.error)); } toast('Application rejected'); close(true); });
+      }
+    });
+  }
+
+  /* owner: pop-up when someone applies */
+  var APP_SEEN = 'ra10_forum_app_seen';
+  function checkApplications() {
+    var c = client(); if (!c || !owner) { pendingApps = []; return; }
+    c.rpc('community_applications_list', { p_status: 'pending' }).then(function (r) {
+      if (r.error) return;
+      pendingApps = r.data || []; refreshReportBadge();
+      var seen = lsGet(APP_SEEN, sessionStorage).split(',');
+      var fresh = pendingApps.filter(function (a) { return seen.indexOf(a.id) < 0; })[0];
+      if (!fresh || document.getElementById('cf-app-pop')) return;
+      var p = document.createElement('div');
+      p.id = 'cf-app-pop'; p.className = 'cf-ann-pop apps'; p.setAttribute('role', 'alert');
+      var more = pendingApps.length - 1;
+      p.innerHTML = '<div class="cf-ann-ico" aria-hidden="true"><span>🙋</span><i></i><i></i><i></i></div><div class="cf-ann-copy"><small>New moderator application</small><b>' + esc(appName(fresh)) + ' wants to join the team</b>' +
+        '<span>' + Number(fresh.xp_total).toLocaleString() + ' XP · ' + humanAge(appStats(fresh).ageDays) + ' on RA10 · ' + fresh.active_days_30 + '/30 days active' + (more > 0 ? ' · +' + more + ' more waiting' : '') + '</span>' +
+        '<div class="cf-ann-actions"><button type="button" class="cf-btn primary sm" data-p="review">Review</button><button type="button" class="cf-btn sm" data-p="later">Later</button></div></div><button type="button" class="cf-ann-x" data-p="later" aria-label="Dismiss">✕</button>';
+      document.body.appendChild(p);
+      function dismiss() { lsSet(APP_SEEN, pendingApps.map(function (a) { return a.id; }).concat(seen).join(','), sessionStorage); p.classList.add('out'); setTimeout(function () { p.remove(); }, 260); }
+      p.addEventListener('click', function (e) {
+        var b = e.target.closest('[data-p]'); if (!b) return;
+        dismiss();
+        if (b.dataset.p === 'review') reviewApplication(fresh, function () { checkApplications(); if (tab === 'mod') renderMod(); });
+      });
+    });
+  }
+
+  /* applicant: told about the decision */
+  function checkMyApplication() {
+    return loadMyApplication().then(function () {
+      refreshApplyCard();
+      var a = myApp; if (!a || a.notified || a.status === 'pending' || document.getElementById('cf-decision')) return;
+      var yes = a.status === 'approved', c = client();
+      var ov = document.createElement('div');
+      ov.id = 'cf-decision'; ov.className = 'cf-modal-ov'; ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-modal', 'true');
+      ov.innerHTML = '<div class="cf-modal cf-invite"><div class="cf-decision-ico" aria-hidden="true">' + (yes ? '🎉' : '💌') + '</div><h3>' + (yes ? 'You\u2019re a Community Moderator!' : 'About your moderator application') + '</h3>' +
+        (yes ? '<p>The owner accepted your application. You now have the <span class="cf-role admin">🛡️ Admin</span> badge and can use the Moderation tab on the Community page.</p>'
+             : '<p>Thanks for applying — it wasn\u2019t accepted this time.' + (a.decision_note ? '</p><p class="cf-quote">' + esc(a.decision_note) : '') + '</p><p class="cf-muted small">You can apply again after ' + (a.can_reapply_at ? new Date(a.can_reapply_at).toLocaleDateString() : '14 days') + '. Keep being active and helpful!</p>') +
+        '<div class="cf-modal-actions"><button type="button" class="cf-btn primary" data-i="ok">' + (yes ? 'Let\u2019s go' : 'OK') + '</button></div></div>';
+      document.body.appendChild(ov);
+      ov.addEventListener('click', function (e) {
+        if (!e.target.closest('[data-i]') && e.target !== ov) return;
+        ov.remove(); c.rpc('community_ack_application', { p_id: a.id }); a.notified = true;
+        if (yes) refreshStaff().then(function () { refreshApplyCard(); });
+      });
+    });
+  }
+
   /* ── AI moderator log ───────────────────────────────────────────────── */
   function modAi(body) {
     var c = client();
@@ -803,7 +980,7 @@
       host.dataset.bound = '1';
       host.addEventListener('click', onClick); host.addEventListener('submit', onSubmit); host.addEventListener('keydown', onKey); host.addEventListener('change', onChange);
     }
-    return refreshStaff().then(function () { return loadCategories(); }).then(function () {
+    return refreshStaff().then(function () { return Promise.all([loadCategories(), loadMyApplication()]); }).then(function () {
       state.loaded = true;
       var m = (location.hash.split('?')[1] || '').match(/thread=([0-9a-f-]{36})/i);
       var wantApp = /(^|&)app=/.test(location.hash.split('?')[1] || '');
@@ -894,7 +1071,7 @@
       });
     }, function () {});
   }
-  function afterLogin() { refreshStaff().then(function () { checkInvite(); }); checkAnnouncement(); }
+  function afterLogin() { refreshStaff().then(function () { checkInvite(); checkMyApplication(); checkApplications(); }); checkAnnouncement(); }
 
   window.RA10Forum = {
     isStaff: function () { return staff; },
@@ -904,6 +1081,8 @@
     openThread: openThread,
     mountAccountPanel: mountAccountPanel,
     checkAnnouncement: checkAnnouncement,
+    checkApplications: checkApplications,
+    apply: applyDialog,
     checkInvite: checkInvite
   };
   document.addEventListener('click', function (e) {
@@ -921,6 +1100,7 @@
     mountAccountPanel();
     setTimeout(function () { checkAnnouncement(); if (loggedIn()) afterLogin(); }, 2500);
     setInterval(checkAnnouncement, 5 * 60 * 1000);
+    setInterval(function () { if (owner && !document.hidden) checkApplications(); }, 90 * 1000);
     document.addEventListener('visibilitychange', function () { if (!document.hidden) checkAnnouncement(); });
   });
 })();
