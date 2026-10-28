@@ -810,6 +810,7 @@
     }
   });
   window.addEventListener('hashchange', function () { setTimeout(renderAccountStatus, 0); });
+  window.addEventListener('ra10:route', function () { setTimeout(renderAccountStatus, 0); });
 
   // True while onboarding owns the profile prompts (name / username), so the
   // older one-off overlays don't stack on top of the wizard.

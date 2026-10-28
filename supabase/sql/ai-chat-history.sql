@@ -72,7 +72,8 @@ create table if not exists public.ai_chat_messages (
     char_length(content) between 1 and 8000
     -- Reject embedded images / files (data URIs, long base64 runs).
     and content !~* 'data:[a-z]+/[a-z0-9.+-]+;base64,'
-    and content !~ '[A-Za-z0-9+/]{2000,}'
+    -- (Postgres caps a regex repeat count at 255, so 2000+ chars = 8 runs of 250.)
+    and content !~ '([A-Za-z0-9+/]{250}){8}'
   ),
   created_at timestamptz not null default now()
 );
@@ -253,6 +254,16 @@ create policy "ai_chat_messages own insert" on public.ai_chat_messages
   with check (user_id = auth.uid());
 -- No update policy: messages are immutable. Deleting a chat cascades.
 
+-- Fix for databases created from the first version of this file: its
+-- '{2000,}' regex is invalid in Postgres (max repeat 255), which made EVERY
+-- message insert fail — chats were saved but opened empty.
+alter table public.ai_chat_messages drop constraint if exists ai_chat_messages_content_check;
+alter table public.ai_chat_messages add constraint ai_chat_messages_content_check check (
+  char_length(content) between 1 and 8000
+  and content !~* 'data:[a-z]+/[a-z0-9.+-]+;base64,'
+  and content !~ '([A-Za-z0-9+/]{250}){8}'
+);
+
 grant select, insert, update, delete on public.ai_chat_groups to authenticated;
 grant select, insert, update, delete on public.ai_chats to authenticated;
 grant select, insert on public.ai_chat_messages to authenticated;
@@ -290,3 +301,5 @@ exception when others then
   raise notice 'pg_cron not available (%). Enable it and re-run this file to schedule the purge.', sqlerrm;
 end;
 $$;
+
+notify pgrst, 'reload schema';

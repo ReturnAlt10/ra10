@@ -22,7 +22,7 @@
     try { src = (document.currentScript && document.currentScript.src) || ''; } catch (e) {}
     return src ? src.replace(/ra10-ai\.js(\?.*)?$/, '') : '/refresh/';
   })();
-  var VERSION = '20261021';
+  var VERSION = '20261028';
   var RETENTION_DAYS = 30;
   var MAX_MSG = 8000;
   var CONTEXT_BUDGET = 3900; // the ai-assign function keeps the first 4000 chars
@@ -169,7 +169,63 @@
     flag: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 21V4M5 4h11l-2 4 2 4H5"/></svg>'
   };
   function icon(name, size) { return ICON[name].replace(/\{s\}/g, String(size || 18)); }
-  function orb(cls, size) { return '<span class="rai-orb' + (cls ? ' ' + cls : '') + '">' + icon('logo', size || 16) + '</span>'; }
+  function orb(cls, size, st) { return '<span class="rai-orb' + (cls ? ' ' + cls : '') + '" data-orb-state="' + (st || 'idle') + '"><i class="rai-orb-fb">' + icon('logo', size || 16) + '</i></span>'; }
+
+  /* ── Prism orb (WebGL) ─────────────────────────────────────────────────
+     Vendored prism-orb (MIT) — refresh/vendor/prism-orb. Each AI mode gets its
+     own palette; the orb state follows what the AI is doing (idle / listening /
+     thinking / speaking). The logo icon stays as the fallback if WebGL is off. */
+  var ORB_PALETTES = {
+    chat:     [{ l: .86, c: .11, h: 215 }, { l: .66, c: .19, h: 255 }, { l: .52, c: .24, h: 292 }],   // AI Helper — sky to violet
+    hints:    [{ l: .90, c: .13, h: 160 }, { l: .74, c: .17, h: 182 }, { l: .56, c: .15, h: 222 }],   // Hints — mint to teal
+    examiner: [{ l: .86, c: .14, h: 70 },  { l: .64, c: .23, h: 32 },  { l: .48, c: .21, h: 14 }],    // AI Examiner — amber to red
+    assigner: [{ l: .84, c: .12, h: 305 }, { l: .62, c: .22, h: 292 }, { l: .47, c: .21, h: 268 }]    // AI Assigner — lilac to violet
+  };
+  var ORB_PARAMS = { dispersion: .55, rim: .6, whiteSpread: .35, grain: .12, softness: .6, toneMap: .7 };
+  var orbLib = null, orbLibFailed = false, orbHandles = [];
+  function orbPalette(mode) { return ORB_PALETTES[mode] || ORB_PALETTES.chat; }
+  function orbModeOf(el) { var r = el.closest('[data-orb-mode]'); return r ? r.getAttribute('data-orb-mode') : 'chat'; }
+  function loadOrbLib() {
+    if (orbLib || orbLibFailed) return Promise.resolve(orbLib);
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) { orbLibFailed = true; return Promise.resolve(null); }
+    return import(BASE + 'vendor/prism-orb/vanilla.js').then(function (m) {
+      if (!m.orbRenderer || !m.orbRenderer.isSupported()) { orbLibFailed = true; return null; }
+      orbLib = m; return m;
+    }, function () { orbLibFailed = true; return null; });
+  }
+  // Turn every .rai-orb under `scope` into a live prism orb (once each).
+  function hydrateOrbs(scope) {
+    orbHandles = orbHandles.filter(function (o) { if (o.el.isConnected) return true; try { o.handle.destroy(); } catch (e) {} return false; });
+    // Only the newest reply's orb is live — older replies keep the light static badge.
+    orbHandles = orbHandles.filter(function (o) {
+      if (!o.el.closest('.rai-msg.bot:not(.last)')) return true;
+      try { o.handle.destroy(); } catch (e) {} o.el.removeAttribute('data-orb-live'); return false;
+    });
+    var els = Array.prototype.slice.call((scope || document).querySelectorAll('.rai-orb:not([data-orb-live])')).filter(function (el) { return !el.closest('.rai-msg.bot:not(.last)'); });
+    if (!els.length) return;
+    loadOrbLib().then(function (m) {
+      if (!m) return;
+      els.forEach(function (el) {
+        if (!el.isConnected || el.hasAttribute('data-orb-live')) return;
+        el.setAttribute('data-orb-live', '1');
+        var mode = orbModeOf(el);
+        try {
+          var handle = m.createOrb(el, { state: el.getAttribute('data-orb-state') || 'idle', palette: orbPalette(mode), params: ORB_PARAMS, audio: 'simulated', field: 'noise', noise: 'simplex', motion: { thinking: 'orbit', speaking: 'bloom', listening: 'inflow' }, seed: orbHandles.length + 3 });
+          handle.canvas.className = 'rai-orb-canvas'; handle.canvas.setAttribute('aria-hidden', 'true');
+          orbHandles.push({ el: el, handle: handle, mode: mode });
+        } catch (e) { el.removeAttribute('data-orb-live'); }
+      });
+    });
+  }
+  function setOrbState(el, st) {
+    if (!el) return;
+    el.setAttribute('data-orb-state', st);
+    orbHandles.forEach(function (o) { if (o.el === el) o.handle.set({ state: st }); });
+  }
+  // Re-colour the orbs inside one chat when its mode changes.
+  function setOrbMode(scope, mode) {
+    orbHandles.forEach(function (o) { if (scope.contains(o.el) && o.mode !== mode) { o.mode = mode; o.handle.set({ palette: orbPalette(mode) }); } });
+  }
 
   /* ── Markdown (safe subset: headings, lists, task lists, tables, code) ─ */
   function md(src) {
@@ -824,7 +880,7 @@
       task: ''             // assignment task code ('' = whole assignment)
     };
 
-    var root = h('div', { class: 'rai' + (opts.variant === 'panel' ? ' compact overlay-side' : '') });
+    var root = h('div', { class: 'rai' + (opts.variant === 'panel' ? ' compact overlay-side' : ''), 'data-orb-mode': product === 'helper' ? 'chat' : product });
     root.innerHTML =
       '<aside class="rai-side" aria-label="Chat history">' +
         '<div class="rai-side-head">' +
@@ -925,6 +981,8 @@
     function setMode(m) {
       if (modes.indexOf(m) === -1) return;
       state.mode = m;
+      var om = m === 'chat' ? (product === 'assigner' ? 'assigner' : 'chat') : m;
+      root.setAttribute('data-orb-mode', om); setOrbMode(root, om);
       root.querySelectorAll('.rai-mode').forEach(function (b) { b.setAttribute('aria-checked', String(b.dataset.mode === m)); });
       input.placeholder = (opts.placeholders && opts.placeholders[m]) || MODES[m].placeholder;
       renderTray();
@@ -1005,7 +1063,13 @@
     function markLast() {
       root.querySelectorAll('.rai-msg.last').forEach(function (n) { n.classList.remove('last'); });
       var bots = root.querySelectorAll('.rai-msg.bot');
-      if (bots.length) bots[bots.length - 1].classList.add('last');
+      if (bots.length) {
+        var lastBot = bots[bots.length - 1];
+        lastBot.classList.add('last');
+        var lo = lastBot.querySelector('.rai-orb');
+        if (lo && !lo.dataset.spoke) { lo.dataset.spoke = '1'; setOrbState(lo, 'speaking'); setTimeout(function () { setOrbState(lo, 'idle'); }, 2600); }
+      }
+      hydrateOrbs(root);
     }
     function notice(text, err) { msgsEl.appendChild(h('div', { class: 'rai-notice' + (err ? ' err' : ''), text: text })); scrollDown(true); }
 
@@ -1013,7 +1077,7 @@
       msgsEl.innerHTML = '';
       var w = h('div', { class: 'rai-welcome' });
       var title = opts.welcomeTitle || 'How can I <em>help</em> today?';
-      w.innerHTML = orb('lg', 28) + '<h2>' + title + '</h2>' +
+      w.innerHTML = orb('lg xl', 28) + '<h2>' + title + '</h2>' +
         '<p>' + esc(opts.welcomeText || 'Ask about anything on this page. Your chats are saved to your account and sorted by subject, unit and topic.') + '</p>';
       if (modes.length > 1) {
         var starts = h('div', { class: 'rai-starts', role: 'group', 'aria-label': 'What do you want to do?' });
@@ -1051,7 +1115,7 @@
       var steps = opts.statuses || (state.mode === 'examiner'
         ? ['Reading your work', 'Checking the criteria', 'Weighing up the evidence', 'Writing your feedback']
         : ['Thinking', 'Checking the specification', 'Writing your answer']);
-      row.innerHTML = orb('sm', 13) + '<span class="rai-shimmer">' + steps[0] + '…</span>';
+      row.innerHTML = orb('sm', 13, 'thinking') + '<span class="rai-shimmer">' + steps[0] + '…</span>';
       msgsEl.appendChild(row);
       scrollDown(true);
       var i = 0;
@@ -1202,7 +1266,7 @@
       input.value = ''; autosize();
       msgsEl.appendChild(userNode(text, quote));
       state.messages.push({ role: 'user', content: text });
-      state.busy = true; updateSend();
+      state.busy = true; updateSend(); setOrbState($('.rai-brand .rai-orb'), 'thinking');
       var think = thinking();
       var history = state.messages.slice(-9, -1).map(function (m) { return { role: m.role === 'assistant' ? 'bot' : 'user', content: m.content.slice(0, 1500) }; });
 
@@ -1232,7 +1296,7 @@
         if (/credit/i.test(msg) && window.RA10 && RA10.showPaywall) RA10.showPaywall('credits', 'ai_assigner_hint');
         input.value = text; autosize();
         notice(msg, true);
-      }).then(function () { state.busy = false; updateSend(); updateCost(); });
+      }).then(function () { state.busy = false; updateSend(); updateCost(); setOrbState($('.rai-brand .rai-orb'), 'idle'); });
     }
 
     function examine() {
@@ -1246,7 +1310,7 @@
       if (!state.messages.length) msgsEl.innerHTML = '';
       msgsEl.appendChild(userNode(userText));
       state.messages.push({ role: 'user', content: userText });
-      state.busy = true; updateSend();
+      state.busy = true; updateSend(); setOrbState($('.rai-brand .rai-orb'), 'thinking');
       var think = thinking();
       confirmCredits(markCost(), 'Marking your assignment').then(function (ok) {
         if (!ok) throw { cancelled: true };
@@ -1275,11 +1339,18 @@
         var msg = (e && e.message) || 'Could not examine your work.';
         if (/credit/i.test(msg) && window.RA10 && RA10.showPaywall) RA10.showPaywall('credits', 'ai_assigner_mark');
         notice(msg, true);
-      }).then(function () { state.busy = false; updateSend(); updateCost(); });
+      }).then(function () { state.busy = false; updateSend(); updateCost(); setOrbState($('.rai-brand .rai-orb'), 'idle'); });
     }
 
     function autosize() { input.style.height = 'auto'; input.style.height = Math.min(input.scrollHeight, 180) + 'px'; updateSend(); }
     input.addEventListener('input', autosize);
+    // The header orb "listens" while the student types.
+    var listenT = null;
+    input.addEventListener('input', function () {
+      if (state.busy) return;
+      setOrbState($('.rai-brand .rai-orb'), 'listening');
+      clearTimeout(listenT); listenT = setTimeout(function () { if (!state.busy) setOrbState($('.rai-brand .rai-orb'), 'idle'); }, 1400);
+    });
     input.addEventListener('keydown', function (e) { if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) { e.preventDefault(); send(); } });
     sendBtn.onclick = send;
     root.querySelectorAll('.rai-mode').forEach(function (b) { b.onclick = function () { setMode(b.dataset.mode); }; });
@@ -1948,7 +2019,9 @@
 
   function installHelper() {
     if (fab) return;
-    fab = h('button', { type: 'button', class: 'rai-fab rai-layer', 'aria-label': 'Open AI Helper', title: 'AI Helper' }, icon('logo', 26) + '<span class="rai-fab-dot"></span>');
+    fab = h('button', { type: 'button', class: 'rai-fab rai-layer', 'aria-label': 'Open AI Helper', title: 'AI Helper', 'data-orb-mode': (pageProfile && pageProfile.product === 'assigner') ? 'assigner' : 'chat' }, orb('fab', 26) + '<span class="rai-fab-dot"></span>');
+    fab.addEventListener('mouseenter', function () { setOrbState(fab.querySelector('.rai-orb'), 'listening'); });
+    fab.addEventListener('mouseleave', function () { setOrbState(fab.querySelector('.rai-orb'), 'idle'); });
     fab.onclick = function () { panelChat && panelChat.refreshContext(); openPanel(); };
     document.body.appendChild(fab);
 
@@ -1992,6 +2065,17 @@
       else document.body.insertBefore(tip, document.body.firstChild);
     }
   }
+
+  (function watchOrbs() {
+    var queued = false;
+    function run() { queued = false; hydrateOrbs(document); }
+    var mo = new MutationObserver(function (list) {
+      if (queued) return;
+      for (var i = 0; i < list.length; i++) { if (list[i].addedNodes.length) { queued = true; requestAnimationFrame(run); return; } }
+    });
+    function start() { mo.observe(document.body, { childList: true, subtree: true }); run(); }
+    if (document.body) start(); else document.addEventListener('DOMContentLoaded', start);
+  })();
 
   window.RA10AI = {
     version: VERSION,

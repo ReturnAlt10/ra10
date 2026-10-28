@@ -99,7 +99,7 @@
 
   function shouldSuppressStreakChip() {
     var route = (location.pathname + " " + location.hash).toLowerCase();
-    var isUnitRevisionRoute = /\/revision\/btec\/.*\/unit-\d+/.test(route);
+    var isUnitRevisionRoute = /(\/revision)?\/btec\/.*\/unit-\d+/.test(route);
     var hasNativeStreakUi = !!document.querySelector([
       ".you-hero-streak",
       ".u1-sb-kpi.streak",
@@ -148,6 +148,7 @@
     syncActiveNavFromScroll();
     loadAiHelper();
     window.addEventListener("hashchange", syncStreakChipByRoute);
+    window.addEventListener("ra10:route", syncStreakChipByRoute);
     window.addEventListener("popstate", syncStreakChipByRoute);
   }
 

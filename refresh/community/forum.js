@@ -241,8 +241,12 @@
   }
   function setUrl(thread) {
     try {
-      var base = location.hash.split('?')[0] || '#/community';
-      history.replaceState(null, '', thread ? base + '?thread=' + thread : base);
+      // Only touch ?thread= — other parameters (e.g. ?app= share links) must survive.
+      if (location.hash && /^#\//.test(location.hash)) return;
+      var params = new URLSearchParams(location.search);
+      if (thread) params.set('thread', thread); else params.delete('thread');
+      var qs = params.toString();
+      history.replaceState(null, '', location.pathname + (qs ? '?' + qs : ''));
     } catch (e) {}
   }
   function scrollTop() { var el = $('.cf-tabs'); if (el && el.scrollIntoView) el.scrollIntoView({ block: 'start', behavior: 'smooth' }); }
@@ -553,7 +557,7 @@
       case 'login': return needLogin();
       case 'plike': return toggleLike('post', thread.id, a);
       case 'clike': return toggleLike('comment', id, a);
-      case 'share': { var url = location.origin + location.pathname + '#/community?thread=' + thread.id; if (navigator.share) navigator.share({ title: thread.title, url: url }).catch(function () {}); else if (navigator.clipboard) navigator.clipboard.writeText(url).then(function () { toast('Link copied'); }); return; }
+      case 'share': { var url = location.origin + '/community?thread=' + thread.id; if (navigator.share) navigator.share({ title: thread.title, url: url }).catch(function () {}); else if (navigator.clipboard) navigator.clipboard.writeText(url).then(function () { toast('Link copied'); }); return; }
       case 'preport': return reportDialog({ post_id: thread.id });
       case 'creport': return reportDialog({ comment_id: id, post_id: thread.id });
       case 'pdel': return deletePost(thread.id, true);
@@ -987,8 +991,9 @@
     }
     return refreshStaff().then(function () { return Promise.all([loadCategories(), loadMyApplication()]); }).then(function () {
       state.loaded = true;
-      var m = (location.hash.split('?')[1] || '').match(/thread=([0-9a-f-]{36})/i);
-      var wantApp = /(^|&)app=/.test(location.hash.split('?')[1] || '');
+      var qs = (window.ra10Route ? ra10Route() : location.hash).split('?')[1] || '';
+      var m = qs.match(/thread=([0-9a-f-]{36})/i);
+      var wantApp = /(^|&)app=/.test(qs);
       if (wantApp) setTab('apps');
       if (m) openThread(m[1]); else if (state.view === 'thread' && state.postId) openThread(state.postId); else renderHome();
     }).catch(function (e) { host.innerHTML = errorBox(e, false); });
@@ -1033,7 +1038,7 @@
       var b = e.target.closest('[data-ann]'); if (!b) return;
       if (b.dataset.ann === 'later') { hideAnnPopup(); return; }
       markAnnouncementSeen();
-      if (typeof window.go === 'function') window.go('/community');
+      if (typeof window.go === 'function') window.go('/community?thread=' + ann.id);
       setTimeout(function () { setTab('forum'); openThread(ann.id); }, 450);
     });
     setTimeout(function () { if (document.getElementById('cf-ann-pop') === p) hideAnnPopup(); }, 20000);

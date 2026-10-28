@@ -2,6 +2,29 @@
 <html lang="en" data-theme="light">
 <head>
 <meta charset="UTF-8">
+<base href="/">
+<script>
+/* Clean URLs (ra10.co.uk/leaderboard, /btec/level-3/sport/unit-1).
+   - GitHub Pages serves 404.html for unknown paths; it bounces here with ?__route=<path>.
+   - Old links like /#/leaderboard or /index.html#/revision/... are rewritten in place.
+   Auth callbacks (#...access_token=...) are left alone for the sign-in handler. */
+(function () {
+  try {
+    var l = window.location;
+    var toPublic = function (p) { return p === '/revision' ? '/subjects' : p.replace(/^\/revision\/(btec|a-level)(?=\/|$)/, '/$1'); };
+    var q = new URLSearchParams(l.search);
+    var bounced = q.get('__route');
+    if (bounced !== null && bounced.charAt(0) === '/') {
+      history.replaceState(null, '', bounced);
+    } else if (/^#\//.test(l.hash) && !/access_token=|error_description=|type=recovery|type=invite/.test(l.hash)) {
+      var route = l.hash.slice(1);
+      history.replaceState(null, '', toPublic(route.split('?')[0]) + (route.indexOf('?') >= 0 ? route.slice(route.indexOf('?')) : ''));
+    } else if (/\/index\.html$/.test(l.pathname)) {
+      history.replaceState(null, '', l.pathname.replace(/index\.html$/, '') + l.search + l.hash);
+    }
+  } catch (e) {}
+})();
+</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>RA10 — Advanced Revision Site (BTEC, GCSE, A-LEVEL)</title>
 <meta name="description" content="Free BTEC IT, Business and Sport revision for Level 3 AAQ and A-Level. Flashcards, quizzes, predicted papers, study guides, wireframe and code tools, and AI assignment marking — all in one place.">
@@ -488,10 +511,10 @@ body:has(.page-iframe.active, #p-btec.active, #p-btec-l3.active, #p-it-aaq.activ
 [data-theme="dark"] .site-announcement-close{background:rgba(191,219,254,.12);color:rgba(191,219,254,.82)}
 [data-theme="dark"] .site-announcement-close:hover{background:rgba(191,219,254,.2);color:#eff6ff}
 
+/* On subject-app pages the app frame fills the space under the navbar, so the
+   announcement bar would only peek out behind it — hide it there. */
 body.unit-shell-mode .site-announcement-bar{
-  position:relative;
-  top:auto;
-  z-index:1;
+  display:none !important;
 }
 
 .news-page{
@@ -1756,25 +1779,9 @@ body:has(.page-iframe.active) .iframe-exit{
   display:none;
 }
 
-/* Dynamic navbar mode: on unit iframe routes, only show the unit app navbar */
-body.unit-shell-mode .nav,
-body.unit-shell-mode .mobile-top-nav{
-  display:none !important;
-}
-/* A unit app brings its own mobile header (logo, credits, swipeable tabs), so the site's mobile TOP bar
-   steps aside (it used to sit on top of the unit tabs). The site's normal bottom navbar stays, and the
-   unit iframe stops above it. */
-body.unit-shell-mode.iframe-fullscreen-mode .mobile-top-nav,
-body.unit-shell-mode.mobile-ui .mobile-top-nav{
-  display:none !important;
-}
-@media (max-width: 820px){
-  body.unit-shell-mode .page-iframe.active .iframe-wrap iframe{
-    height:calc(100dvh - 84px - env(safe-area-inset-bottom, 0px)) !important;
-    min-height:0 !important;
-  }
-}
-
+/* Subject-app routes: the SAME site navbar shows on every page. The unit app sits in a frame
+   underneath it (between the site header and, on phones, the site bottom bar) and only shows its
+   own section tabs. The navbar gains a "Jump to" button for the unit's sections. */
 body.unit-shell-mode .page-iframe.active > .cf,
 body.unit-shell-mode .page-iframe.active > .cd{
   width:100%;
@@ -1782,36 +1789,37 @@ body.unit-shell-mode .page-iframe.active > .cd{
   margin-inline:0;
   padding-inline:0;
 }
-
-body.unit-shell-mode .page-iframe.active .iframe-wrap{
-  margin:0;
-}
-
+body.unit-shell-mode .page-iframe.active .iframe-wrap{ margin:0; height:100%; }
 body.unit-shell-mode .page-iframe.active .iframe-wrap iframe{
-  width:100vw;
-  min-height:100dvh;
-  height:100dvh;
+  width:100%;
+  height:100% !important;
+  min-height:0 !important;
   border:none;
   border-radius:0;
   box-shadow:none;
 }
-
 body.unit-shell-mode.iframe-fullscreen-mode .page-iframe.active > .cf{
-  top:0;
+  top:var(--shell-nav-h, 86px);
   bottom:0;
 }
-
-body.unit-shell-mode .iframe-wrap.full-screen{
-  top:0;
-  height:100vh;
-}
-
-@media (max-width: 640px){
-  body.unit-shell-mode{
-    padding-top:0 !important;
-    padding-bottom:0 !important;
+body.unit-shell-mode .iframe-wrap.full-screen{ top:var(--shell-nav-h, 86px); height:auto; bottom:0; }
+@media (max-width: 820px){
+  body.unit-shell-mode.iframe-fullscreen-mode .page-iframe.active > .cf{
+    top:var(--shell-nav-h, 52px);
+    bottom:var(--shell-dock-h, 84px);
   }
 }
+body.unit-shell-mode .iframe-exit{display:none !important}
+.nav-unit-jump{display:none}
+body.unit-shell-mode .nav-unit-jump{display:inline-flex}
+.nav-unit-jump{align-items:center;gap:7px;min-height:38px;padding:0 14px 0 12px;border-radius:999px;border:1px solid color-mix(in srgb,var(--color-primary) 35%,var(--color-border));background:color-mix(in srgb,var(--color-primary) 8%,var(--color-surface));color:var(--color-text);font:700 .86rem/1 var(--font-b);cursor:pointer;white-space:nowrap;transition:background .15s,border-color .15s,transform .15s}
+.nav-unit-jump:hover{border-color:var(--color-primary);transform:translateY(-1px)}
+.nav-unit-jump svg{width:16px;height:16px;flex:none}
+.nav-unit-jump .nuj-chev{width:14px;height:14px;opacity:.7}
+.mobile-top-nav .nav-unit-jump{margin-left:auto;min-height:34px;padding:0 12px 0 10px;font-size:.8rem;max-width:52vw}
+.nav-unit-jump span{overflow:hidden;text-overflow:ellipsis;max-width:200px}
+.mobile-top-nav .nav-unit-jump + #mobile-credit-chip{margin-left:0}
+
 @media print{
   .iframe-wrap{display:none}
 }
@@ -5250,7 +5258,7 @@ body.home-signed-in #p-home .hx-home > :not(#signed-in-dashboard){display:none !
 ============================================================ -->
 <nav class="nav" role="navigation" aria-label="Main navigation">
   <div class="nav-inner">
-    <a href="#/" class="nav-logo" onclick="go('/')">
+    <a href="/" class="nav-logo" onclick="go('/')">
       <img src="logo.png" alt="RA10" width="28" height="28">
       <span class="nav-logo-text">RA10</span>
     </a>
@@ -5274,22 +5282,22 @@ body.home-signed-in #p-home .hx-home > :not(#signed-in-dashboard){display:none !
                 </div>
               </div>
               <div class="rev-preview-units">
-                <a class="rev-preview-unit" href="#/revision/btec/level-3/IT-AAQ/unit-1" onclick="go('/revision/btec/level-3/IT-AAQ/unit-1');hideRevPreview()">
+                <a class="rev-preview-unit" href="/btec/level-3/IT-AAQ/unit-1" onclick="go('/revision/btec/level-3/IT-AAQ/unit-1');hideRevPreview()">
                   <span class="rev-preview-badge">Unit 1</span>
                   <span class="rev-preview-copy"><strong>IT Systems</strong><small>Devices, networks, security &amp; impact</small></span>
                   <em>Open</em>
                 </a>
-                <a class="rev-preview-unit" href="#/revision/btec/level-3/IT-AAQ/unit-2" onclick="go('/revision/btec/level-3/IT-AAQ/unit-2');hideRevPreview()">
+                <a class="rev-preview-unit" href="/btec/level-3/IT-AAQ/unit-2" onclick="go('/revision/btec/level-3/IT-AAQ/unit-2');hideRevPreview()">
                   <span class="rev-preview-badge">Unit 2</span>
                   <span class="rev-preview-copy"><strong>Cyber Security &amp; Incident Management</strong><small>Threats, protection &amp; response</small></span>
                   <em>Open</em>
                 </a>
-                <a class="rev-preview-unit" href="#/revision/btec/level-3/IT-AAQ/unit-3" onclick="go('/revision/btec/level-3/IT-AAQ/unit-3');hideRevPreview()">
+                <a class="rev-preview-unit" href="/btec/level-3/IT-AAQ/unit-3" onclick="go('/revision/btec/level-3/IT-AAQ/unit-3');hideRevPreview()">
                   <span class="rev-preview-badge">Unit 3</span>
                   <span class="rev-preview-copy"><strong>Website Development</strong><small>Wireframes, code &amp; AI marking</small></span>
                   <em>Open</em>
                 </a>
-                <a class="rev-preview-unit" href="#/revision/btec/level-3/IT-AAQ/unit-4" onclick="go('/revision/btec/level-3/IT-AAQ/unit-4');hideRevPreview()">
+                <a class="rev-preview-unit" href="/btec/level-3/IT-AAQ/unit-4" onclick="go('/revision/btec/level-3/IT-AAQ/unit-4');hideRevPreview()">
                   <span class="rev-preview-badge">Unit 4</span>
                   <span class="rev-preview-copy"><strong>Relational Database Development</strong><small>SQL, normalisation &amp; MS Access</small></span>
                   <em>Open</em>
@@ -5306,7 +5314,7 @@ body.home-signed-in #p-home .hx-home > :not(#signed-in-dashboard){display:none !
                 </div>
               </div>
               <div class="rev-preview-units">
-                <a class="rev-preview-unit" href="#/revision/btec/level-2/it/unit-2" onclick="go('/revision/btec/level-2/it/unit-2');hideRevPreview()">
+                <a class="rev-preview-unit" href="/btec/level-2/it/unit-2" onclick="go('/revision/btec/level-2/it/unit-2');hideRevPreview()">
                   <span class="rev-preview-badge">Unit 2</span>
                   <span class="rev-preview-copy"><strong>Technology Systems</strong><small>Practice Q&amp;A · AI marking</small></span>
                   <em>Open</em>
@@ -5323,22 +5331,22 @@ body.home-signed-in #p-home .hx-home > :not(#signed-in-dashboard){display:none !
                 </div>
               </div>
               <div class="rev-preview-units">
-                <a class="rev-preview-unit" href="#/revision/btec/level-3/business/unit-2" onclick="go('/revision/btec/level-3/business/unit-2');hideRevPreview()">
+                <a class="rev-preview-unit" href="/btec/level-3/business/unit-2" onclick="go('/revision/btec/level-3/business/unit-2');hideRevPreview()">
                   <span class="rev-preview-badge">Unit 2</span>
                   <span class="rev-preview-copy"><strong>Marketing Campaign</strong><small>Research · Marketing mix</small></span>
                   <em>Open</em>
                 </a>
-                <a class="rev-preview-unit" href="#/revision/btec/level-3/business/unit-3" onclick="go('/revision/btec/level-3/business/unit-3');hideRevPreview()">
+                <a class="rev-preview-unit" href="/btec/level-3/business/unit-3" onclick="go('/revision/btec/level-3/business/unit-3');hideRevPreview()">
                   <span class="rev-preview-badge">Unit 3</span>
                   <span class="rev-preview-copy"><strong>Business Finance</strong><small>Ratios · Break-even</small></span>
                   <em>Open</em>
                 </a>
-                <a class="rev-preview-unit" href="#/revision/btec/level-3/business/unit-6" onclick="go('/revision/btec/level-3/business/unit-6');hideRevPreview()">
+                <a class="rev-preview-unit" href="/btec/level-3/business/unit-6" onclick="go('/revision/btec/level-3/business/unit-6');hideRevPreview()">
                   <span class="rev-preview-badge">Unit 6</span>
                   <span class="rev-preview-copy"><strong>Principles of Management</strong><small>Culture · Quality</small></span>
                   <em>Open</em>
                 </a>
-                <a class="rev-preview-unit" href="#/revision/btec/level-3/business/unit-7" onclick="go('/revision/btec/level-3/business/unit-7');hideRevPreview()">
+                <a class="rev-preview-unit" href="/btec/level-3/business/unit-7" onclick="go('/revision/btec/level-3/business/unit-7');hideRevPreview()">
                   <span class="rev-preview-badge">Unit 7</span>
                   <span class="rev-preview-copy"><strong>Decision Making</strong><small>Options · Tools</small></span>
                   <em>Open</em>
@@ -5355,12 +5363,12 @@ body.home-signed-in #p-home .hx-home > :not(#signed-in-dashboard){display:none !
                 </div>
               </div>
               <div class="rev-preview-units">
-                <a class="rev-preview-unit" href="#/revision/btec/level-3/sport/unit-1" onclick="go('/revision/btec/level-3/sport/unit-1');hideRevPreview()">
+                <a class="rev-preview-unit" href="/btec/level-3/sport/unit-1" onclick="go('/revision/btec/level-3/sport/unit-1');hideRevPreview()">
                   <span class="rev-preview-badge">Unit 1</span>
                   <span class="rev-preview-copy"><strong>Anatomy &amp; Physiology</strong><small>Flashcards · Mock papers</small></span>
                   <em>Open</em>
                 </a>
-                <a class="rev-preview-unit" href="#/revision/btec/level-3/sport/unit-2" onclick="go('/revision/btec/level-3/sport/unit-2');hideRevPreview()">
+                <a class="rev-preview-unit" href="/btec/level-3/sport/unit-2" onclick="go('/revision/btec/level-3/sport/unit-2');hideRevPreview()">
                   <span class="rev-preview-badge">Unit 2</span>
                   <span class="rev-preview-copy"><strong>Fitness Training &amp; Programming</strong><small>Past papers · AI Examiner</small></span>
                   <em>Open</em>
@@ -5377,12 +5385,12 @@ body.home-signed-in #p-home .hx-home > :not(#signed-in-dashboard){display:none !
                 </div>
               </div>
               <div class="rev-preview-units">
-                <a class="rev-preview-unit" href="#/revision/a-level/business-2023" onclick="go('/revision/a-level/business-2023');hideRevPreview()">
+                <a class="rev-preview-unit" href="/a-level/business-2023" onclick="go('/revision/a-level/business-2023');hideRevPreview()">
                   <span class="rev-preview-badge">2023</span>
                   <span class="rev-preview-copy"><strong>Full Course</strong><small>Paper 1-3 · AI Examiner</small></span>
                   <em>Open</em>
                 </a>
-                <a class="rev-preview-unit" href="#/revision/a-level/business-2026" onclick="go('/revision/a-level/business-2026');hideRevPreview()">
+                <a class="rev-preview-unit" href="/a-level/business-2026" onclick="go('/revision/a-level/business-2026');hideRevPreview()">
                   <span class="rev-preview-badge">2026</span>
                   <span class="rev-preview-copy"><strong>New specification (7138)</strong><small>Two case studies · AI Examiner</small></span>
                   <em>Open</em>
@@ -5427,6 +5435,7 @@ body.home-signed-in #p-home .hx-home > :not(#signed-in-dashboard){display:none !
           </div>
         </div>
       </div>
+      <button class="nav-unit-jump" id="nav-unit-jump" type="button" aria-haspopup="dialog" onclick="openUnitJumpMenu()" title="Jump to a section of this subject"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"/></svg><span>Dashboard</span><svg class="nuj-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
     </div>
     <div class="nav-actions">
       <div id="nav-credit-chip" class="nav-credit-chip" style="display:none"></div>
@@ -5737,6 +5746,7 @@ body.home-signed-in #p-home .hx-home > :not(#signed-in-dashboard){display:none !
 <div class="mobile-top-nav" aria-label="Mobile header">
   <img src="logo.png" alt="RA10 logo" width="26" height="26">
   <span class="brand">RA10</span>
+  <button class="nav-unit-jump" type="button" aria-haspopup="dialog" onclick="openUnitJumpMenu()" aria-label="Jump to a section"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"/></svg><span>Dashboard</span><svg class="nuj-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
   <div id="mobile-credit-chip" class="mobile-credit-chip" style="display:none"></div>
   <button id="mobile-upgrade-btn" class="mobile-upgrade-btn" type="button" onclick="go('/upgrade')" style="display:none">Upgrade</button>
   <button class="theme-toggle mobile-theme-toggle" id="mobile-theme-toggle" aria-label="Toggle dark mode">
@@ -6402,7 +6412,7 @@ body.home-signed-in #p-home .hx-home > :not(#signed-in-dashboard){display:none !
             <span class="badge" style="background:var(--color-primary);color:#fff;">All aims</span>
             <span class="pill" style="border-color:var(--color-primary);color:var(--color-primary);">PDF + solutions</span>
           </div>
-          <a class="btn btn-p" href="/revision/btec/level-3/IT-AAQ/booklets/index.html" target="_blank" rel="noopener">Open booklets →</a>
+          <a class="btn btn-p" href="/btec/level-3/IT-AAQ/booklets/index.html" target="_blank" rel="noopener">Open booklets →</a>
         </div>
       </div>
     </div>
@@ -7716,10 +7726,10 @@ body.home-signed-in #p-home .hx-home > :not(#signed-in-dashboard){display:none !
 <!-- ============================================================
      LEADERBOARD  /leaderboard
 ============================================================ -->
-<link rel="stylesheet" href="community/forum.css?v=20261027">
-<link rel="stylesheet" href="community/apps.css?v=20261027">
-<script src="community/forum.js?v=20261027" defer></script>
-<script src="community/apps.js?v=20261027" defer></script>
+<link rel="stylesheet" href="refresh/community/forum.css?v=20261028">
+<link rel="stylesheet" href="refresh/community/apps.css?v=20261028">
+<script src="refresh/community/forum.js?v=20261028" defer></script>
+<script src="refresh/community/apps.js?v=20261028" defer></script>
 <script src="refresh/ra10-leaderboard.js?v=20261022" defer></script>
 <div class="page" id="p-leaderboard">
   <div class="c">
@@ -8297,6 +8307,49 @@ function updateCountdownDigits(el, days, hours, mins, secs) {
   const ariaEl = el.querySelector('[data-slot="aria"]');
   if (ariaEl) ariaEl.textContent = text;
 }
+
+// ── Shared navbar on subject-app pages ──────────────────────────────────
+// The unit frame sits below the site header (and above the phone dock); these
+// CSS variables tell the layout how tall that chrome currently is.
+function measureShellChrome() {
+  const rootStyle = document.documentElement.style;
+  const mobileTop = document.querySelector('.mobile-top-nav');
+  const desktopNav = document.querySelector('.nav');
+  const dock = document.querySelector('.mobile-bottom-nav');
+  const visible = (el) => el && getComputedStyle(el).display !== 'none' && el.getBoundingClientRect().height > 0;
+  const top = visible(mobileTop) ? mobileTop : (visible(desktopNav) ? desktopNav : null);
+  if (top) rootStyle.setProperty('--shell-nav-h', Math.ceil(top.getBoundingClientRect().bottom + (top === desktopNav ? 8 : 0)) + 'px');
+  if (visible(dock)) rootStyle.setProperty('--shell-dock-h', Math.ceil(window.innerHeight - dock.getBoundingClientRect().top + 8) + 'px');
+  else rootStyle.setProperty('--shell-dock-h', '0px');
+}
+window.addEventListener('resize', () => { if (document.body.classList.contains('unit-shell-mode')) measureShellChrome(); });
+
+// "Jump to" in the navbar opens the active subject app's section menu.
+function openUnitJumpMenu() {
+  const frame = document.querySelector('.page-iframe.active iframe');
+  if (!frame || !frame.contentWindow) return;
+  try {
+    if (frame.contentWindow.RA10UnitUI && typeof frame.contentWindow.RA10UnitUI.open === 'function') { frame.contentWindow.RA10UnitUI.open(); return; }
+  } catch (e) { /* cross-origin: fall back to a message */ }
+  frame.contentWindow.postMessage({ type: 'ra10:unit-open-menu' }, location.origin);
+}
+window.openUnitJumpMenu = openUnitJumpMenu;
+
+// The subject app reports which section is open; the navbar button shows it.
+function setUnitSectionLabel(title) {
+  document.querySelectorAll('.nav-unit-jump').forEach(btn => {
+    const span = btn.querySelector('span');
+    if (span) span.textContent = title || 'Dashboard';
+    btn.setAttribute('aria-label', 'Section: ' + (title || 'Dashboard') + '. Choose another section');
+    btn.title = 'Choose a section';
+  });
+}
+window.addEventListener('message', (e) => {
+  if (e.origin !== location.origin || !e.data || e.data.type !== 'ra10:unit-view') return;
+  const frame = document.querySelector('.page-iframe.active iframe');
+  if (frame && e.source !== frame.contentWindow) return;
+  setUnitSectionLabel(String(e.data.title || '').slice(0, 40));
+});
 
 function nextSundayResetDate() {
   const now = new Date();
@@ -9655,20 +9708,67 @@ async function checkWeeklyXpReset() {
 }
 
 // Render leaderboard when navigating to it
-window.addEventListener('hashchange', () => {
-  const routePath = (location.hash.replace('#/','').replace('#','').split('?')[0] || '');
-  if (routePath === 'leaderboard') {
+window.addEventListener('ra10:route', () => {
+  const routePath = ra10RoutePath();
+  if (routePath === '/leaderboard') {
     setTimeout(renderLeaderboard, 100);
   }
 });
 
-function go(path){
+// ── Routing with clean URLs ──────────────────────────────────────────────
+// Internal route paths stay as before ('/revision/btec/level-3/sport/unit-1');
+// the address bar shows the public form ('/btec/level-3/sport/unit-1').
+// /revision -> /subjects, /revision/btec/... -> /btec/..., /revision/a-level/... -> /a-level/...
+// (public paths never collide with real folders on the static host).
+function toPublicPath(p) { p = String(p || '/'); return p === '/revision' ? '/subjects' : p.replace(/^\/revision\/(btec|a-level)(?=\/|$)/, '/$1'); }
+function toInternalPath(p) { p = String(p || '/'); return p === '/subjects' ? '/revision' : p.replace(/^\/(btec|a-level)(?=\/|$)/, '/revision/$1'); }
+// The current route as '/path?query' (internal form). Still understands old #/ links.
+function ra10Route() {
+  const h = location.hash || '';
+  if (/^#\//.test(h)) return h.slice(1).split('#')[0];
+  let p = location.pathname.replace(/\/index\.html$/, '/').replace(/\/+$/, '') || '/';
+  return toInternalPath(p) + (location.search || '');
+}
+function ra10RoutePath() { return ra10Route().split('?')[0] || '/'; }
+window.ra10Route = ra10Route;
+window.ra10RoutePath = ra10RoutePath;
+
+function go(path, opts){
   document.querySelectorAll('.iframe-wrap.full-screen').forEach(w=>w.classList.remove('full-screen'));
   document.body.classList.remove('iframe-fullscreen-mode');
   closeMobileSubjectSheet();
   closeMobileYouSheet();
-  location.hash = path;
+  let target = String(path == null ? '/' : path).replace(/^#/, '');
+  if (target.charAt(0) !== '/') target = '/' + target;
+  const qi = target.indexOf('?');
+  const url = toPublicPath(qi >= 0 ? target.slice(0, qi) : target) + (qi >= 0 ? target.slice(qi) : '');
+  const same = url === location.pathname + location.search && !location.hash;
+  if (!same) history[(opts && opts.replace) ? 'replaceState' : 'pushState'](null, '', url);
+  route();
+  if (!same) window.scrollTo(0, 0);
 }
+window.go = go;
+
+// Keep every in-site link inside the app (no full reloads), and keep old
+// '#/...' style links working: they are converted to clean URLs.
+document.addEventListener('click', function (e) {
+  if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+  const a = e.target.closest && e.target.closest('a[href]');
+  if (!a || (a.target && a.target !== '_self' && a.target !== '_top')) return;
+  const href = a.getAttribute('href') || '';
+  if (/^#\//.test(href)) { e.preventDefault(); if (!a.getAttribute('onclick')) go(href.slice(1)); return; }
+  if (/^#[^/]/.test(href)) {
+    // In-page anchors (<base href="/"> would otherwise send them to the home page).
+    e.preventDefault();
+    const t = document.getElementById(decodeURIComponent(href.slice(1)));
+    if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    return;
+  }
+  if (/^\/(?!\/)/.test(href) && !/\.(html?|pdf|png|jpe?g|svg|webp|xml|txt|json|js|css|zip|docx?|pptx?|xlsx?)(\?|#|$)/i.test(href) && !/^\/(legal|admin|tools)(\/|$)/.test(href)) {
+    e.preventDefault();
+    if (!a.getAttribute('onclick')) go(href);
+  }
+}, true);
 
 (function(){
   document.querySelectorAll('[data-iframe-fullscreen]').forEach(button=>{
@@ -9769,8 +9869,8 @@ async function syncDailyTaskXpToLeaderboard(state) {
   if (window.RA10 && typeof RA10.refreshProfile === 'function') {
     try { await RA10.refreshProfile(); } catch (e) {}
   }
-  const routePath = (location.hash.replace('#/','').replace('#','').split('?')[0] || '');
-  if (routePath === 'leaderboard') {
+  const routePath = ra10RoutePath();
+  if (routePath === '/leaderboard') {
     setTimeout(renderLeaderboard, 60);
   }
   return { awardedKeys, totalXp };
@@ -9986,7 +10086,7 @@ function renderTaskBoostRewards(host, allDone, practiceCount) {
       try {
         await XP.claim(btn.getAttribute('data-boost-claim'));
         btn.textContent = 'Claimed today';
-        msg.innerHTML = 'Boost added! <a href="#/leaderboard" onclick="go(\'leaderboard\');return false;">Activate it on the leaderboard</a>.';
+        msg.innerHTML = 'Boost added! <a href="/leaderboard" onclick="go(\'leaderboard\');return false;">Activate it on the leaderboard</a>.';
       } catch (e) {
         btn.disabled = false;
         msg.textContent = (e && e.message) || 'Not unlocked yet.';
@@ -10001,7 +10101,7 @@ let _communityApps = [];
 let _communityJobsPoller = null;
 let _communityCreatorsById = {};
 let _communityOpenState = null;
-// Shared with community/apps.js (the study-app library + viewer).
+// Shared with refresh/community/apps.js (the study-app library + viewer).
 window.__caState = {
   get apps() { return _communityApps; }, set apps(v) { _communityApps = v; },
   get open() { return _communityOpenState; }, set open(v) { _communityOpenState = v; },
@@ -10709,7 +10809,7 @@ let _communityShareApp = null;
 
 function communityShareLink(appId) {
   const id = encodeURIComponent(String(appId || ''));
-  return 'https://ra10.co.uk/#/community?app=' + id;
+  return 'https://ra10.co.uk/community?app=' + id;
 }
 
 function communitySharePreviewLink(appId) {
@@ -11291,13 +11391,13 @@ async function renderCommunityPage() {
   initCommunityBindings();
   if (!_communityJobsPoller) {
     _communityJobsPoller = setInterval(() => {
-      if (location.hash.replace('#', '').split('?')[0] === '/community') {
+      if (ra10RoutePath() === '/community') {
         loadCommunityJobs();
       }
     }, 3000);
   }
   await Promise.all([loadCommunityApps(), loadCommunityJobs()]);
-  const query = new URLSearchParams(location.hash.split('?')[1] || '');
+  const query = new URLSearchParams(ra10Route().split('?')[1] || '');
   const sharedAppId = query.get('app');
   if (sharedAppId && (!_communityOpenState || String(_communityOpenState.app?.id || '') !== String(sharedAppId))) {
     communityOpenApp(sharedAppId);
@@ -12270,14 +12370,14 @@ function route(){
   closeMobileSubjectSheet();
   document.body.classList.remove('iframe-fullscreen-mode');
   document.body.classList.remove('unit-shell-mode');
-  const rawPath = location.hash.replace('#','') || '/';
+  const rawPath = ra10Route() || '/';
   const path = rawPath.split('?')[0] || '/';
   if (LEGAL_ROUTES[path]) {
     location.replace('legal/' + LEGAL_ROUTES[path] + '.html');
     return;
   }
   if (path === '/accept-terms') {
-    history.replaceState(null, '', '#/');
+    history.replaceState(null, '', '/');
     route();
     setTimeout(() => { if (window.RA10Onboarding) RA10Onboarding.openTerms({}); }, 800);
     return;
@@ -12334,10 +12434,13 @@ function route(){
     document.body.classList.add('unit-shell-mode');
     document.body.classList.add('iframe-fullscreen-mode');
   }
+  measureShellChrome();
+  if (el && el.classList.contains('page-iframe')) setUnitSectionLabel('Dashboard');
   document.querySelectorAll('.nav-link').forEach(l=>l.classList.remove('active'));
   document.querySelectorAll('.mobile-nav-btn').forEach(btn => btn.classList.remove('active'));
   for(const [prefix,key] of Object.entries(NAV_MAP)){
-    if(path.startsWith(prefix)){
+    const pre = prefix.charAt(0) === '/' ? prefix : '/' + prefix;
+    if(pre === '/' ? path === '/' : path.startsWith(pre)){
       const nl = document.querySelector(`[data-nav="${key}"]`);
       if(nl) nl.classList.add('active');
       break;
@@ -12368,6 +12471,7 @@ function route(){
   if (lbWrap) lbWrap.classList.remove('open');
 
   syncMobileNavChrome();
+  try { window.dispatchEvent(new Event('ra10:route')); } catch (e) {}
 }
 
 function setPriceSnapshotView(mode, trigger) {
@@ -12399,7 +12503,16 @@ function setPriceSnapshotView(mode, trigger) {
   if (trigger && typeof trigger.blur === 'function') trigger.blur();
 }
 
-window.addEventListener('hashchange', route);
+window.addEventListener('popstate', route);
+window.addEventListener('hashchange', function () {
+  const h = location.hash || '';
+  if (/^#\//.test(h) && !/access_token=|type=recovery|type=invite/.test(h)) {
+    const r = h.slice(1);
+    const qi = r.indexOf('?');
+    history.replaceState(null, '', toPublicPath(qi >= 0 ? r.slice(0, qi) : r) + (qi >= 0 ? r.slice(qi) : ''));
+    route();
+  }
+});
 window.addEventListener('resize', () => {
   syncMobileNavChrome();
   syncDockPebbles();
@@ -14227,7 +14340,7 @@ async function waitForRA10Sdk(timeoutMs) {
     checkGiftCreditPopup();
     checkModerationNotice();
 
-    if ((location.hash.replace('#/','').replace('#','')) === 'leaderboard') {
+    if (ra10RoutePath() === '/leaderboard') {
       setTimeout(renderLeaderboard, 100);
     }
 
@@ -14719,11 +14832,10 @@ async function waitForRA10Sdk(timeoutMs) {
     }
 
     async function handleCheckoutReturn() {
-      const rawHash = String(window.location.hash || '');
-      const hashNoPrefix = rawHash.replace('#', '');
-      const currentPath = (hashNoPrefix.split('?')[0] || '/');
+      const rawRoute = ra10Route();
+      const currentPath = (rawRoute.split('?')[0] || '/');
       if (currentPath !== '/upgrade') return;
-      const query = rawHash.includes('?') ? rawHash.slice(rawHash.indexOf('?') + 1) : '';
+      const query = rawRoute.includes('?') ? rawRoute.slice(rawRoute.indexOf('?') + 1) : '';
       const params = new URLSearchParams(query);
       const status = params.get('checkout');
       const sessionId = params.get('session_id') || '';
@@ -14770,7 +14882,7 @@ async function waitForRA10Sdk(timeoutMs) {
         showUpgradeCheckoutStatus('warn', 'Checkout was cancelled. No payment was taken.');
       }
 
-      history.replaceState(null, '', window.location.pathname + window.location.search + '#/upgrade');
+      history.replaceState(null, '', '/upgrade');
       route();
     }
 
@@ -15472,7 +15584,7 @@ async function waitForRA10Sdk(timeoutMs) {
       }
     });
 
-    if (location.hash === '#/auth') {
+    if (ra10RoutePath() === '/auth') {
       go('/');
       setTimeout(() => openAuthModal('signin'), 100);
     }
@@ -16098,7 +16210,7 @@ async function waitForRA10Sdk(timeoutMs) {
       if (!article) return;
       const title = (article.querySelector('h2') && article.querySelector('h2').textContent) ? article.querySelector('h2').textContent.trim() : 'RA10 News Update';
       const summary = (article.querySelector('p') && article.querySelector('p').textContent) ? article.querySelector('p').textContent.trim() : 'See the latest RA10 update.';
-      const url = window.location.origin + window.location.pathname + '#/news?article=' + encodeURIComponent(article.id);
+      const url = window.location.origin + '/news?article=' + encodeURIComponent(article.id);
 
       if (navigator.share) {
         try {
@@ -16132,9 +16244,9 @@ async function waitForRA10Sdk(timeoutMs) {
       shareArticle(String(shareBtn.getAttribute('data-share-article') || ''));
     });
 
-    const hashRaw = String(location.hash || '');
-    if (hashRaw.startsWith('#/news?')) {
-      const params = new URLSearchParams(hashRaw.replace('#/news?', ''));
+    const newsRoute = ra10Route();
+    if (newsRoute.startsWith('/news?')) {
+      const params = new URLSearchParams(newsRoute.replace('/news?', ''));
       const articleId = params.get('article');
       if (articleId) {
         setTimeout(() => {

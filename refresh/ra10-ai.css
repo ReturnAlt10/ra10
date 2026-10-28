@@ -651,3 +651,20 @@ body:has(#view-ai.active .rai) .rai-fab { display: none !important; }
 @media (prefers-reduced-motion: reduce) {
   .rai *, .rai-exam, .rai-panel, .rai-fab, .rai-dialog-card, .rai-menu { animation: none !important; transition: none !important; }
 }
+
+/* ─── Prism orb (WebGL, refresh/vendor/prism-orb) ───────────────────── */
+.rai-orb { position: relative; }
+.rai-orb .rai-orb-fb { display: inline-flex; align-items: center; justify-content: center; font-style: normal; }
+.rai-orb[data-orb-live] { background: transparent; box-shadow: 0 6px 18px -8px rgba(76, 80, 235, .55); }
+.rai-orb[data-orb-live] .rai-orb-fb { display: none; }
+.rai-orb-canvas { position: absolute; inset: 0; width: 100% !important; height: 100% !important; border-radius: 50%; display: block; }
+.rai-orb.xl { width: 96px; height: 96px; }
+.rai-welcome .rai-orb.xl[data-orb-live] { box-shadow: 0 18px 40px -16px rgba(76, 80, 235, .6); }
+.rai-thinking .rai-orb[data-orb-live] { animation: none; }
+/* Keep the button's orb perfectly round: some unit pages add padding to every <button>. */
+.rai-fab { padding: 0 !important; }
+.rai-fab .rai-orb.fab { width: 100% !important; height: 100% !important; aspect-ratio: 1 / 1; flex: none; background: transparent; box-shadow: none; }
+.rai-orb { aspect-ratio: 1 / 1; flex-shrink: 0; }
+.rai-fab:has(.rai-orb[data-orb-live]) { background: transparent; -webkit-backdrop-filter: none; backdrop-filter: none; box-shadow: 0 14px 30px -10px rgba(76, 80, 235, .6); }
+[data-orb-mode="examiner"] .rai-orb[data-orb-live], .rai-orb[data-orb-live][data-orb-mode="examiner"] { box-shadow: 0 6px 18px -8px rgba(220, 38, 38, .55); }
+[data-orb-mode="hints"] .rai-orb[data-orb-live] { box-shadow: 0 6px 18px -8px rgba(13, 148, 136, .55); }

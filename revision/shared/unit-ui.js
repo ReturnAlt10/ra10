@@ -129,9 +129,9 @@
             <span class="ux-mico">${I[d.i] || I.tools}</span><span class="ux-mtxt"><b>${esc(d.t)}</b>${d.d ? `<small>${esc(d.d)}</small>` : ''}</span></button>`).join('')}
       </div>`).join('') + siteLinksHtml();
   }
-  const SITE = [['Home', '/index.html#/', 'M3 12l9-9 9 9M5 10v10a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V10'], ['Subjects', '/index.html#/revision', 'M4 19.5A2.5 2.5 0 0 1 6.5 17H20M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z'],
-    ['Community', '/index.html#/community', 'M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 3a4 4 0 1 0 0 8 4 4 0 0 0 0-8M23 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8'], ['Tasks', '/index.html#/tasks', 'M9 11l3 3 8-8M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11'],
-    ['Exams', '/index.html#/exams', 'M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01'], ['Leaderboard', '/index.html#/leaderboard', 'M8 21h8M12 17v4M7 4h10v4a5 5 0 0 1-10 0zM7 6H4a2 2 0 0 0 2 3M17 6h3a2 2 0 0 1-2 3']];
+  const SITE = [['Home', '/', 'M3 12l9-9 9 9M5 10v10a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V10'], ['Subjects', '/subjects', 'M4 19.5A2.5 2.5 0 0 1 6.5 17H20M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z'],
+    ['Community', '/community', 'M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 3a4 4 0 1 0 0 8 4 4 0 0 0 0-8M23 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8'], ['Tasks', '/tasks', 'M9 11l3 3 8-8M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11'],
+    ['Exams', '/exams', 'M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01'], ['Leaderboard', '/leaderboard', 'M8 21h8M12 17v4M7 4h10v4a5 5 0 0 1-10 0zM7 6H4a2 2 0 0 0 2 3M17 6h3a2 2 0 0 1-2 3']];
   function siteLinksHtml() {
     return `<div class="ux-mgroup ux-site" role="group" aria-label="Around RA10"><p class="ux-mlabel">Around RA10</p><div class="ux-sitegrid">${SITE.map(x => `<a class="ux-sitelink" href="${x[1]}" target="_top"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${x[2]}"/></svg><span>${x[0]}</span></a>`).join('')}</div></div>`;
   }
@@ -149,7 +149,15 @@
     document.body.appendChild(menu);
     scrim.addEventListener('click', closeMenu);
     $('.ux-mclose', menu).addEventListener('click', closeMenu);
-    menu.addEventListener('click', (e) => { const b = e.target.closest('[data-ux-go]'); if (b) go(b.dataset.uxGo); });
+    menu.addEventListener('click', (e) => {
+      const site = e.target.closest('.ux-sitelink');
+      if (site) {
+        // Inside the site shell: navigate the shell without reloading it.
+        try { if (window.top !== window && typeof window.top.go === 'function') { e.preventDefault(); closeMenu(); window.top.go(site.getAttribute('href')); return; } } catch (err) { /* fall through to the link */ }
+        return;
+      }
+      const b = e.target.closest('[data-ux-go]'); if (b) go(b.dataset.uxGo);
+    });
     menu.addEventListener('keydown', (e) => {
       const items = $$('.ux-mitem', menu);
       const i = items.indexOf(document.activeElement);
@@ -297,6 +305,35 @@
     const dx = t.getBoundingClientRect().left - strip.getBoundingClientRect().left;
     strip.scrollTo({ left: Math.max(0, strip.scrollLeft + dx - (strip.clientWidth - t.offsetWidth) / 2), behavior: 'smooth' });
   }
+  // Inside the site the unit header is a slim sticky tab bar. Anything else the unit pins to the
+  // top (guide sidebar, guide header, paper toolbars…) must sit below it, not slide underneath.
+  let stickyT = null;
+  function offsetStickies() {
+    if (!document.documentElement.classList.contains('ux-embedded')) return;
+    const tb = $('.topbar');
+    const h = tb ? Math.round(tb.getBoundingClientRect().height) : 0;
+    document.documentElement.style.setProperty('--ux-header-h', h + 'px');
+    if (!h) return;
+    $$('body *').forEach(el => {
+      if (el === tb || (tb && tb.contains(el)) || el.closest('.ux-menu, .ux-bottom')) return;
+      const cs = getComputedStyle(el);
+      if (cs.position !== 'sticky') return;
+      if (el.dataset.uxTop === undefined) el.dataset.uxTop = cs.top === 'auto' ? '' : String(parseFloat(cs.top) || 0);
+      if (el.dataset.uxTop === '') return;
+      const want = h + Number(el.dataset.uxTop) + 'px';
+      if (el.style.top !== want) el.style.setProperty('top', want, 'important');
+    });
+  }
+  function scheduleStickies() { clearTimeout(stickyT); stickyT = setTimeout(offsetStickies, 120); }
+
+  // Tell the site navbar which section is showing, so its button can read e.g. "Past Papers ▾".
+  function tellShellView() {
+    if (window.self === window.top) return;
+    const d = destOf(current);
+    const title = d && d.t ? d.t : (current === 'dashboard' ? 'Dashboard' : String(current || '').replace(/^\w/, c => c.toUpperCase()));
+    try { window.parent.postMessage({ type: 'ra10:unit-view', name: current, title }, location.origin); } catch (e) {}
+  }
+
   function sync() {
     current = activeName();
     const d = destOf(current);
@@ -308,6 +345,8 @@
     });
     document.documentElement.setAttribute('data-ux-view', current);
     centerActiveTab();
+    tellShellView();
+    scheduleStickies(); setTimeout(offsetStickies, 900);
     if (current !== 'dashboard' && current !== 'home') store.set('last_' + unitKey, current);
     refreshCounts();
   }
@@ -316,6 +355,12 @@
     if (!viewNames().length && !$$('.tabs .tab').length) return;
     document.documentElement.classList.add('ux-unit');
     try { if (window.self !== window.top) document.documentElement.classList.add('ux-embedded'); } catch (e) { document.documentElement.classList.add('ux-embedded'); }
+    // Inside the site the site navbar already shows credits/account, so drop the unit's own copy
+    // (its credit chip is shown with an inline !important style, which CSS can't override).
+    if (document.documentElement.classList.contains('ux-embedded')) {
+      const hideChip = () => $$('.topbar > div[id$="credit-chip"]').forEach(el => el.style.setProperty('display', 'none', 'important'));
+      hideChip(); setTimeout(hideChip, 1500); setTimeout(hideChip, 4000);
+    }
     buildDests();
     addJumpButton(); addHeaderMenuButton();
     addBottomNav();
@@ -332,6 +377,17 @@
   }
 
   window.RA10UnitUI = { go, open: openMenu, close: closeMenu, destinations: () => dests.slice() };
+  // The site navbar's "Jump to" button (in the parent page) asks us to open the menu.
+  if (document.documentElement.classList.contains('ux-embedded') || window.self !== window.top) {
+    window.addEventListener('resize', scheduleStickies);
+    let moQueued = false;
+    new MutationObserver(() => { if (moQueued) return; moQueued = true; setTimeout(() => { moQueued = false; offsetStickies(); }, 1200); })
+      .observe(document.documentElement, { childList: true, subtree: true });
+  }
+  window.addEventListener('message', (e) => {
+    if (e.origin !== location.origin || !e.data || e.data.type !== 'ra10:unit-open-menu') return;
+    openMenu();
+  });
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => setTimeout(init, 0));
   else setTimeout(init, 0);
 })();

@@ -169,3 +169,34 @@ html.ux-unit .ux-menu.open { opacity: 1; transform: none; }
 }
 .ux-menubtn { display: none; place-items: center; width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--line, #ddd); background: var(--surface-soft, rgba(0,0,0,.04)); color: var(--ink, #111); cursor: pointer; }
 .ux-menubtn svg { width: 18px; height: 18px; }
+
+/* ── Inside the site: the site navbar is shown above us, so the unit header
+      shrinks to just its section tabs (a slim sub-nav). ──────────────────── */
+html.ux-embedded.ux-unit body .topbar, html.ux-embedded.ux-unit body.ra10-refresh-enabled .topbar {
+  position: sticky !important; top: 0 !important; z-index: 7000 !important;
+  display: flex !important; justify-content: center !important; align-items: center !important;
+  min-height: 0 !important; height: auto !important; margin: 0 auto !important; padding: 8px 12px !important;
+  border-radius: 0 0 20px 20px !important; grid-template-areas: none !important;
+}
+html.ux-embedded.ux-unit .topbar > .unit-brand,
+html.ux-embedded.ux-unit .topbar > .site-unit-nav,
+html.ux-embedded.ux-unit .topbar > div,
+html.ux-embedded.ux-unit .topbar .ux-jump,
+html.ux-embedded.ux-unit .ux-menubtn,
+html.ux-embedded.ux-unit .ux-bottom { display: none !important; }
+html.ux-embedded.ux-unit .topbar > .tabs, html.ux-embedded.ux-unit body .topbar > nav.tabs {
+  display: flex !important; flex-wrap: nowrap !important; justify-content: flex-start !important; overflow-x: auto !important;
+  max-width: 100% !important; width: auto !important; margin: 0 auto !important; gap: 4px !important; padding: 4px !important;
+  border-radius: 999px !important; scrollbar-width: none; background: var(--surface-soft, rgba(0, 0, 0, .05)) !important;
+}
+html.ux-embedded.ux-unit .topbar > .tabs::-webkit-scrollbar { display: none; }
+html.ux-embedded.ux-unit .topbar > .tabs .tab { flex: none !important; min-height: 38px !important; padding: 0 16px !important; border-radius: 999px !important; font-weight: 700 !important; white-space: nowrap; display: inline-flex !important; align-items: center; }
+html.ux-embedded.ux-unit .topbar > .tabs .tab.active { background: var(--accent) !important; color: #fff !important; }
+html.ux-embedded.ux-unit main { padding-bottom: 28px; }
+
+/* Jumping to a section (anchors, scrollIntoView) lands below the sticky tab bar. */
+html.ux-embedded { scroll-padding-top: calc(var(--ux-header-h, 60px) + 10px); }
+
+/* Inside the site there is no unit header at all: the site navbar's section button
+   (showing the current section, e.g. "Dashboard ▾") replaces the tab strip. */
+html.ux-embedded.ux-unit body .topbar, html.ux-embedded.ux-unit body.ra10-refresh-enabled .topbar { display: none !important; }
