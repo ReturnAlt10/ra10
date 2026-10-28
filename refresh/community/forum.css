@@ -177,7 +177,7 @@ textarea.cf-in{resize:vertical;min-height:70px;line-height:1.5}
 @media (max-width:640px){
   .cf-hero{padding:22px 18px;border-radius:20px}.cf-hero-stats{width:100%}.cf-stat{flex:1;min-width:0}
   .cf-tabs{width:100%}.cf-tab{flex:1;justify-content:center;padding:10px 12px}
-  .cf-cats{grid-template-columns:1fr}.cf-row{padding:12px}.cf-row-stats{flex-direction:row;gap:12px;order:3;width:100%;justify-content:flex-start;margin-left:56px}.cf-row{flex-wrap:wrap}
+  .cf-cats{grid-template-columns:1fr}.cf-row{padding:12px}.cf-row-stats{flex-direction:row;gap:12px;order:3;width:calc(100% - 56px);box-sizing:border-box;justify-content:flex-start;margin-left:56px}.cf-row{flex-wrap:wrap}
   .cf-cm.reply{margin-left:18px}.cf-card{padding:16px;border-radius:18px}.cf-move{margin-left:0;width:100%}
 }
 @media (prefers-reduced-motion:reduce){.cf-cat,.cf-cm,.cf-cta-ico,.cf-skel,.cf-modal{animation:none !important}}

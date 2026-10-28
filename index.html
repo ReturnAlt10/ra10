@@ -1819,6 +1819,10 @@ body.unit-shell-mode .nav-unit-jump{display:inline-flex}
 .mobile-top-nav .nav-unit-jump{margin-left:auto;min-height:34px;padding:0 12px 0 10px;font-size:.8rem;max-width:52vw}
 .nav-unit-jump span{overflow:hidden;text-overflow:ellipsis;max-width:200px}
 .mobile-top-nav .nav-unit-jump + #mobile-credit-chip{margin-left:0}
+/* Phone header: logo on the left, everything else grouped on the right; no empty credit pill when signed out. */
+.mobile-top-nav .brand{margin-right:auto}
+.mobile-top-nav .nav-unit-jump{margin-left:0}
+.mobile-credit-chip:empty{display:none !important}
 
 @media print{
   .iframe-wrap{display:none}
