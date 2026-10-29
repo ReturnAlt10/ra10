@@ -1990,8 +1990,10 @@
       question: input && input.question ? input.question : null,
       answer: input && typeof input.answer === 'string' ? input.answer : '',
     };
+    // Diagram questions can send a drawn / photographed answer as a data-URL image.
+    if (input && typeof input.image === 'string' && /^data:image\/(png|jpeg|webp);base64,/.test(input.image)) payload.image = input.image;
 
-    if (!payload.question || !payload.answer.trim()) {
+    if (!payload.question || (!payload.answer.trim() && !payload.image)) {
       throw new Error('Question and answer are required for AI Examiner.');
     }
 

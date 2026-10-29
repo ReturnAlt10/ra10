@@ -86,6 +86,7 @@ if (window.self !== window.top) document.documentElement.classList.add('ux-unit'
 <link rel="preconnect" href="https://api.fontshare.com">
 <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@500,700,900,400&f[]=jetbrains-mono@500&display=swap">
 <link rel="stylesheet" href="css/style.css?v=20260507c">
+<link rel="stylesheet" href="../../business/shared/biz-papers.css?v=20261105">
 <style>
 .ra10-cost-label {
   display: inline-block;
@@ -1418,6 +1419,16 @@ if (window.self !== window.top) document.documentElement.classList.add('ux-unit'
 
   <!-- DASHBOARD -->
   <section id="view-dashboard" class="view active">
+    <a class="pp-free-banner it-pp-banner" href="#/pastpapers" data-goto="pastpapers" style="display:flex;align-items:center;gap:14px;background:linear-gradient(120deg,#00403a 0%,#00594e 55%,#0f766e 100%);color:#fff;border-radius:14px;padding:16px 20px;margin:6px 0 12px 0;text-decoration:none;box-shadow:0 8px 24px rgba(0,64,58,0.18);">
+      <span style="display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;background:rgba(255,255,255,0.16);border-radius:10px;flex-shrink:0;">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h5"/></svg>
+      </span>
+      <span style="display:flex;flex-direction:column;gap:2px;min-width:0;">
+        <strong style="font-size:15px;">Past Papers &amp; RA10 Papers</strong>
+        <span style="font-size:13px;opacity:.85;">Summer 2026, the 2025 sample paper and old-spec papers from 2019 onwards, plus 6 RA10 practice papers. Answer online with the AI Examiner.</span>
+      </span>
+      <span style="margin-left:auto;font-weight:700;flex-shrink:0;">Open &rsaquo;</span>
+    </a>
     <a class="pp-free-banner" href="#/papers" data-goto="papers" style="display:flex;align-items:center;gap:14px;background:linear-gradient(120deg,#1a1a2e 0%,#2d3561 50%,#1a4a7a 100%);color:#fff;border-radius:14px;padding:16px 20px;margin:6px 0 20px 0;text-decoration:none;box-shadow:0 8px 24px rgba(26,26,46,0.18);position:relative;overflow:hidden;">
       <span style="position:absolute;top:-30px;right:-30px;width:100px;height:100px;background:rgba(255,255,255,0.08);border-radius:50%;"></span>
       <span style="display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;background:linear-gradient(135deg,#7c3aed 0%,#0ea5e9 100%);border-radius:10px;flex-shrink:0;">
@@ -1873,6 +1884,15 @@ if (window.self !== window.top) document.documentElement.classList.add('ux-unit'
     </div>
     <div id="quiz-card"></div>
     <div id="quiz-results" style="display:none;"></div>
+  </section>
+
+  <!-- PAST PAPERS & RA10 PAPERS -->
+  <section id="view-pastpapers" class="view">
+    <header class="section-head">
+      <h2>Past Papers &amp; RA10 Papers</h2>
+      <p>Pearson Unit 1 exams from June 2019 to Summer 2026, plus RA10 practice papers. Papers for the current 2025 AAQ specification (60297T) are marked in green. Older 31760H papers are marked in amber: they are still relevant, but they were written for the old specification. Read each paper like the real exam, answer it online for AI Examiner feedback, or download it as a PDF.</p>
+    </header>
+    <div id="papers-host"></div>
   </section>
 
   <!-- PREDICTED PAPERS -->
@@ -2614,7 +2634,11 @@ if (window.self !== window.top) document.documentElement.classList.add('ux-unit'
 <script src="js/data-loader.js"></script>
 <script src="js/spec.js"></script>
 <script src="js/guide.js"></script>
-<script src="js/app.js?v=20261019"></script>
+<script src="js/cfg.js?v=20261104"></script>
+<script src="js/papers-data.js?v=20261104"></script>
+<script src="js/papers-ra10.js?v=20261104"></script>
+<script src="../../business/shared/biz-papers.js?v=20261105"></script>
+<script src="js/app.js?v=20261104"></script>
 
 <script data-pplx-inline-edit>
 (function () {
@@ -3567,7 +3591,7 @@ document.addEventListener('DOMContentLoaded', function () {
   spinBtn.addEventListener('click', spinWithFeedback);
   refreshBtn.addEventListener('click', spinWithFeedback);
 });
-</script><script src="../../../../shared/unit-ui.js?v=20261103"></script>
+</script><script src="../../../../shared/unit-ui.js?v=20261105"></script>
 </body>
 </html>
 

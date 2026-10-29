@@ -1,6 +1,6 @@
 /* RA10 Business — past papers viewer styles (shared). Based on the Sport Unit 2 viewer. */
 /* ── Past papers v2: library + exam-paper viewer ─────────────────────────── */
-#view-papers .section-head { margin-bottom: 14px; }
+:is(#view-papers, #view-pastpapers) .section-head { margin-bottom: 14px; }
 .pp-libbar { display: flex; flex-wrap: wrap; gap: 12px; justify-content: space-between; align-items: center; margin-bottom: 14px; }
 .pp-seg { display: inline-flex; padding: 4px; gap: 4px; border-radius: 12px; background: var(--surface-soft); border: 1px solid var(--line); }
 .pp-seg button { display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; border: 0; border-radius: 9px; background: transparent; color: var(--ink-2); font: 600 0.88rem/1 inherit; cursor: pointer; }
@@ -121,11 +121,11 @@
 }
 
 /* ── Past papers v2: polished controls ─────────────────────────────────── */
-#view-papers button { font-family: inherit; -webkit-tap-highlight-color: transparent; }
-#view-papers .pp-tool,
-#view-papers .pp-card-actions .btn,
-#view-papers .pp-actions .btn,
-#view-papers .pp-libbar > .btn {
+:is(#view-papers, #view-pastpapers) button { font-family: inherit; -webkit-tap-highlight-color: transparent; }
+:is(#view-papers, #view-pastpapers) .pp-tool,
+:is(#view-papers, #view-pastpapers) .pp-card-actions .btn,
+:is(#view-papers, #view-pastpapers) .pp-actions .btn,
+:is(#view-papers, #view-pastpapers) .pp-libbar > .btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 6px;
   height: 40px; padding: 0 16px; border-radius: 12px;
   font-size: 0.86rem; font-weight: 650; letter-spacing: -0.005em; line-height: 1;
@@ -133,73 +133,73 @@
   box-shadow: 0 1px 2px rgba(15, 23, 42, .06); cursor: pointer;
   transition: transform .12s ease, box-shadow .15s ease, background .15s ease, border-color .15s ease;
 }
-#view-papers .pp-tool:hover,
-#view-papers .pp-card-actions .btn:hover,
-#view-papers .pp-actions .btn:hover { border-color: color-mix(in srgb, var(--accent) 50%, var(--line-2)); background: color-mix(in srgb, var(--accent) 6%, var(--surface)); }
-#view-papers .pp-tool:active,
-#view-papers .pp-card-actions .btn:active,
-#view-papers .pp-actions .btn:active,
-#view-papers .pp-libbar > .btn:active { transform: translateY(1px) scale(.99); }
-#view-papers .pp-tool:focus-visible,
-#view-papers .btn:focus-visible,
-#view-papers .pp-seg button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+:is(#view-papers, #view-pastpapers) .pp-tool:hover,
+:is(#view-papers, #view-pastpapers) .pp-card-actions .btn:hover,
+:is(#view-papers, #view-pastpapers) .pp-actions .btn:hover { border-color: color-mix(in srgb, var(--accent) 50%, var(--line-2)); background: color-mix(in srgb, var(--accent) 6%, var(--surface)); }
+:is(#view-papers, #view-pastpapers) .pp-tool:active,
+:is(#view-papers, #view-pastpapers) .pp-card-actions .btn:active,
+:is(#view-papers, #view-pastpapers) .pp-actions .btn:active,
+:is(#view-papers, #view-pastpapers) .pp-libbar > .btn:active { transform: translateY(1px) scale(.99); }
+:is(#view-papers, #view-pastpapers) .pp-tool:focus-visible,
+:is(#view-papers, #view-pastpapers) .btn:focus-visible,
+:is(#view-papers, #view-pastpapers) .pp-seg button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
 /* Primary actions: one accent gradient everywhere */
-#view-papers .pp-tool.primary,
-#view-papers .pp-card-actions .btn.primary,
-#view-papers .pp-libbar > .btn.primary,
-#view-papers .pp-actions .btn.primary {
+:is(#view-papers, #view-pastpapers) .pp-tool.primary,
+:is(#view-papers, #view-pastpapers) .pp-card-actions .btn.primary,
+:is(#view-papers, #view-pastpapers) .pp-libbar > .btn.primary,
+:is(#view-papers, #view-pastpapers) .pp-actions .btn.primary {
   border: 0; color: #fff;
   background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 70%, #ec4899));
   box-shadow: 0 6px 16px -8px color-mix(in srgb, var(--accent) 80%, transparent), inset 0 1px 0 rgba(255,255,255,.2);
 }
-#view-papers .pp-tool.primary:hover,
-#view-papers .pp-card-actions .btn.primary:hover,
-#view-papers .pp-libbar > .btn.primary:hover,
-#view-papers .pp-actions .btn.primary:hover { filter: brightness(1.06); box-shadow: 0 10px 22px -10px color-mix(in srgb, var(--accent) 85%, transparent); }
-#view-papers .btn .ra10-cost-label { display: none; }
+:is(#view-papers, #view-pastpapers) .pp-tool.primary:hover,
+:is(#view-papers, #view-pastpapers) .pp-card-actions .btn.primary:hover,
+:is(#view-papers, #view-pastpapers) .pp-libbar > .btn.primary:hover,
+:is(#view-papers, #view-pastpapers) .pp-actions .btn.primary:hover { filter: brightness(1.06); box-shadow: 0 10px 22px -10px color-mix(in srgb, var(--accent) 85%, transparent); }
+:is(#view-papers, #view-pastpapers) .btn .ra10-cost-label { display: none; }
 
 /* Ghost buttons */
-#view-papers .pp-card-actions .btn.ghost,
-#view-papers .pp-actions .btn.ghost { background: transparent; box-shadow: none; }
+:is(#view-papers, #view-pastpapers) .pp-card-actions .btn.ghost,
+:is(#view-papers, #view-pastpapers) .pp-actions .btn.ghost { background: transparent; box-shadow: none; }
 
 /* Segmented controls */
-#view-papers .pp-seg { padding: 4px; border-radius: 14px; background: color-mix(in srgb, var(--ink) 5%, var(--surface)); }
-#view-papers .pp-seg button { height: 34px; padding: 0 14px; border-radius: 10px; font-weight: 650; transition: background .15s, color .15s, box-shadow .15s; }
-#view-papers .pp-seg button:hover:not(.on) { color: var(--ink); background: color-mix(in srgb, var(--ink) 4%, transparent); }
-#view-papers .pp-seg button.on { background: var(--surface); color: var(--accent); box-shadow: 0 1px 2px rgba(0,0,0,.08), 0 4px 10px -6px rgba(0,0,0,.25); }
+:is(#view-papers, #view-pastpapers) .pp-seg { padding: 4px; border-radius: 14px; background: color-mix(in srgb, var(--ink) 5%, var(--surface)); }
+:is(#view-papers, #view-pastpapers) .pp-seg button { height: 34px; padding: 0 14px; border-radius: 10px; font-weight: 650; transition: background .15s, color .15s, box-shadow .15s; }
+:is(#view-papers, #view-pastpapers) .pp-seg button:hover:not(.on) { color: var(--ink); background: color-mix(in srgb, var(--ink) 4%, transparent); }
+:is(#view-papers, #view-pastpapers) .pp-seg button.on { background: var(--surface); color: var(--accent); box-shadow: 0 1px 2px rgba(0,0,0,.08), 0 4px 10px -6px rgba(0,0,0,.25); }
 
 /* Toolbar polish */
-#view-papers .pp-toolbar { padding: 10px 12px; gap: 12px; border-radius: 18px; }
-#view-papers .pp-timer { height: 40px; display: inline-flex; align-items: center; padding: 0 12px; border-radius: 12px; border: 1px solid var(--line); background: var(--surface-soft); }
+:is(#view-papers, #view-pastpapers) .pp-toolbar { padding: 10px 12px; gap: 12px; border-radius: 18px; }
+:is(#view-papers, #view-pastpapers) .pp-timer { height: 40px; display: inline-flex; align-items: center; padding: 0 12px; border-radius: 12px; border: 1px solid var(--line); background: var(--surface-soft); }
 
 /* Sidebar nav */
-#view-papers .pp-nav { padding: 6px; border-radius: 16px; }
-#view-papers .pp-nav button { height: 38px; padding: 0 12px; border-radius: 10px; font-weight: 550; }
-#view-papers .pp-nav button.on { background: color-mix(in srgb, var(--accent) 12%, var(--surface)); color: var(--accent); }
-#view-papers .pp-nav button.on em { background: var(--accent); color: #fff; }
+:is(#view-papers, #view-pastpapers) .pp-nav { padding: 6px; border-radius: 16px; }
+:is(#view-papers, #view-pastpapers) .pp-nav button { height: 38px; padding: 0 12px; border-radius: 10px; font-weight: 550; }
+:is(#view-papers, #view-pastpapers) .pp-nav button.on { background: color-mix(in srgb, var(--accent) 12%, var(--surface)); color: var(--accent); }
+:is(#view-papers, #view-pastpapers) .pp-nav button.on em { background: var(--accent); color: #fff; }
 
 /* Download menu */
-#view-papers .pp-menu { padding: 6px; border-radius: 14px; }
-#view-papers .pp-menu button { height: 38px; padding: 0 12px; border-radius: 10px; font-weight: 550; }
-#view-papers .pp-menu button::before { content: '⤓'; margin-right: 8px; color: var(--accent); }
+:is(#view-papers, #view-pastpapers) .pp-menu { padding: 6px; border-radius: 14px; }
+:is(#view-papers, #view-pastpapers) .pp-menu button { height: 38px; padding: 0 12px; border-radius: 10px; font-weight: 550; }
+:is(#view-papers, #view-pastpapers) .pp-menu button::before { content: '⤓'; margin-right: 8px; color: var(--accent); }
 
 /* Answer-mode action row inside the paper page */
-#view-papers .pp-actions { gap: 10px; }
-#view-papers .pp-page .pp-actions .btn { font-family: inherit; }
-#view-papers .pp-last { padding: 6px 10px; border-radius: 999px; background: #f1f5f9; color: #334155; font-weight: 600; font-size: 0.78rem; }
+:is(#view-papers, #view-pastpapers) .pp-actions { gap: 10px; }
+:is(#view-papers, #view-pastpapers) .pp-page .pp-actions .btn { font-family: inherit; }
+:is(#view-papers, #view-pastpapers) .pp-last { padding: 6px 10px; border-radius: 999px; background: #f1f5f9; color: #334155; font-weight: 600; font-size: 0.78rem; }
 
 /* Cards */
-#view-papers .pp-card { border-radius: 18px; padding: 18px; }
-#view-papers .pp-card-actions { gap: 8px; }
-#view-papers .pp-card-actions .btn.primary { flex: 1; }
+:is(#view-papers, #view-pastpapers) .pp-card { border-radius: 18px; padding: 18px; }
+:is(#view-papers, #view-pastpapers) .pp-card-actions { gap: 8px; }
+:is(#view-papers, #view-pastpapers) .pp-card-actions .btn.primary { flex: 1; }
 /* Match the site's primary buttons */
-#view-papers .pp-tool.primary { background: linear-gradient(135deg, #22c55e, #06b6d4); box-shadow: 0 6px 16px -8px rgba(6, 182, 212, .7), inset 0 1px 0 rgba(255,255,255,.25); }
-#view-papers .pp-menu button::before { color: #0891b2; }
-#view-papers .pp-nav button.on { background: color-mix(in srgb, #22c55e 12%, var(--surface)); color: #15803d; }
-#view-papers .pp-nav button.on em { background: #16a34a; }
-#view-papers .pp-seg button.on { color: #15803d; }
-[data-theme="dark"] #view-papers .pp-nav button.on, [data-theme="dark"] #view-papers .pp-seg button.on { color: #4ade80; }
+:is(#view-papers, #view-pastpapers) .pp-tool.primary { background: linear-gradient(135deg, #22c55e, #06b6d4); box-shadow: 0 6px 16px -8px rgba(6, 182, 212, .7), inset 0 1px 0 rgba(255,255,255,.25); }
+:is(#view-papers, #view-pastpapers) .pp-menu button::before { color: #0891b2; }
+:is(#view-papers, #view-pastpapers) .pp-nav button.on { background: color-mix(in srgb, #22c55e 12%, var(--surface)); color: #15803d; }
+:is(#view-papers, #view-pastpapers) .pp-nav button.on em { background: #16a34a; }
+:is(#view-papers, #view-pastpapers) .pp-seg button.on { color: #15803d; }
+[data-theme="dark"] :is(#view-papers, #view-pastpapers) .pp-nav button.on, [data-theme="dark"] :is(#view-papers, #view-pastpapers) .pp-seg button.on { color: #4ade80; }
 
 
 /* ── Business papers: additions ─────────────────────────────────────────── */
@@ -274,7 +274,7 @@
 /* ── Past papers: mobile optimisation ─────────────────────────────────────── */
 .pp-shell > * { min-width: 0; }
 @media (max-width: 900px) {
-  #view-papers .pp-toolbar { position: static; top: auto; }
+  :is(#view-papers, #view-pastpapers) .pp-toolbar { position: static; top: auto; }
   .pp-shell { display: block; }
   .pp-side { display: contents; }
   .pp-nav { position: sticky; top: 0; z-index: 25; flex-direction: row; max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; margin-bottom: 10px; box-shadow: 0 6px 16px -12px rgba(0,0,0,.4); }
@@ -285,7 +285,7 @@
   .pp-page { scroll-margin-top: 64px; }
 }
 @media (max-width: 640px) {
-  #view-papers .section-head p { font-size: 0.9rem; }
+  :is(#view-papers, #view-pastpapers) .section-head p { font-size: 0.9rem; }
   .pp-libbar { gap: 8px; } .pp-libbar > .btn { width: 100%; }
   .pp-seg { width: 100%; } .pp-seg button { flex: 1; justify-content: center; padding: 0 8px; }
   .pp-toolbar { gap: 8px; padding: 10px; }
@@ -309,3 +309,52 @@
   .pp-cover-row div, .pp-cover-boxes div { height: auto; min-height: 40px; }
   .pp-result, .pp-ms { overflow-x: auto; }
 }
+
+/* Specification badges + notices (e.g. IT Unit 1: old 31760H papers vs the 2025 AAQ spec) */
+.pp-badge { display: inline-flex; align-items: center; gap: 6px; align-self: flex-start; margin: 2px 0 2px; padding: 4px 10px; border-radius: 999px; font-size: 0.72rem; font-weight: 800; letter-spacing: .01em; background: #e0e7ff; color: #3730a3; }
+.pp-badge::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+.pp-badge.new { background: #dcfce7; color: #166534; }
+.pp-badge.old { background: #fef3c7; color: #92400e; }
+.pp-badge.warn { background: #ffe4e6; color: #9f1239; }
+[data-theme="dark"] .pp-badge { background: #312e81; color: #e0e7ff; }
+[data-theme="dark"] .pp-badge.new { background: #14532d; color: #dcfce7; }
+[data-theme="dark"] .pp-badge.old { background: #78350f; color: #fef3c7; }
+[data-theme="dark"] .pp-badge.warn { background: #881337; color: #ffe4e6; }
+.pp-notice { display: grid; gap: 4px; margin: 14px 0 6px; padding: 12px 14px; border-radius: 12px; border: 1px solid #c7d2fe; background: #eef2ff; color: #312e81; font-size: 0.86rem; line-height: 1.5; }
+.pp-notice b { font-size: 0.78rem; text-transform: uppercase; letter-spacing: .06em; }
+.pp-notice.old { border-color: #fcd34d; background: #fffbeb; color: #78350f; }
+.pp-notice.new { border-color: #86efac; background: #f0fdf4; color: #14532d; }
+.pp-notice.warn { border-color: #fda4af; background: #fff1f2; color: #881337; }
+[data-theme="dark"] .pp-notice { background: rgba(99,102,241,.14); border-color: rgba(129,140,248,.4); color: #e0e7ff; }
+[data-theme="dark"] .pp-notice.old { background: rgba(245,158,11,.12); border-color: rgba(245,158,11,.4); color: #fde68a; }
+[data-theme="dark"] .pp-notice.new { background: rgba(34,197,94,.12); border-color: rgba(34,197,94,.4); color: #bbf7d0; }
+[data-theme="dark"] .pp-notice.warn { background: rgba(244,63,94,.12); border-color: rgba(244,63,94,.4); color: #fecdd3; }
+.pp-group-h { grid-column: 1 / -1; display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin: 10px 0 0; font-size: 1rem; }
+.pp-group-h small { font-weight: 500; font-size: 0.82rem; color: var(--ink-2); }
+
+/* Inside the site the unit header is hidden (the site navbar sits above the app frame), so the paper
+   toolbar pins to the very top of the frame and the question list just below it. */
+html.ux-embedded .pp-toolbar { top: 10px; }
+html.ux-embedded .pp-side { top: 92px; }
+
+/* Diagram questions: a whole blank page on paper, a drawing pad online */
+.pp-drawspace { position: relative; width: 100%; aspect-ratio: 1 / 1.3; min-height: 520px; margin: 10px 0 6px; border: 1.5px solid #d6d9df; border-radius: 6px; background: #fff; }
+.pp-drawspace span { position: absolute; left: 12px; top: 10px; font-size: .78rem; font-style: italic; color: #8a8f98; }
+.pp-pad { margin: 10px 0 8px; display: grid; gap: 8px; }
+.pp-pad-bar { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; padding: 8px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
+.pp-pad-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.pp-pad-tool { display: inline-flex; align-items: center; gap: 6px; min-height: 36px; padding: 0 10px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); font: 600 .8rem inherit; cursor: pointer; }
+.pp-pad-tool b { font-size: 1rem; line-height: 1; }
+.pp-pad-tool.on { background: var(--accent, #00594e); border-color: var(--accent, #00594e); color: #fff; }
+.pp-pad-col { width: 26px; height: 26px; border-radius: 50%; border: 2px solid var(--surface); background: var(--c); box-shadow: 0 0 0 1px var(--line); cursor: pointer; }
+.pp-pad-col.on { box-shadow: 0 0 0 2px var(--accent, #00594e); }
+.pp-pad-act { min-height: 36px; padding: 0 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); font: 700 .8rem inherit; cursor: pointer; }
+.pp-pad-act.primary { background: var(--accent, #00594e); border-color: var(--accent, #00594e); color: #fff; }
+.pp-pad-page { border: 1.5px solid #d6d9df; border-radius: 6px; background: #fff; overflow: hidden; }
+.pp-pad-canvas { display: block; width: 100%; height: auto; aspect-ratio: 1000 / 1300; touch-action: none; cursor: crosshair; background: #fff; }
+.pp-pad-status { margin: 0; font-size: .8rem; color: var(--ink-2); }
+.pp-pad.full { position: fixed; inset: 0; z-index: 9000; margin: 0; padding: 10px; background: var(--bg, #f4f5f7); overflow: auto; align-content: start; }
+.pp-pad.full .pp-pad-page { width: min(100%, calc((100vh - 130px) / 1.3)); margin: 0 auto; }
+html.pp-pad-open, html.pp-pad-open body { overflow: hidden; }
+@media (max-width: 640px) { .pp-pad-tool span { display: none; } .pp-pad-tool { padding: 0 9px; } }
+@media print { .pp-pad-bar, .pp-pad-status { display: none; } }

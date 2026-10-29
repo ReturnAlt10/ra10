@@ -2725,3 +2725,8 @@ main {
   .pp-cover-row div, .pp-cover-boxes div { height: auto; min-height: 40px; }
   .pp-result, .pp-ms { overflow-x: auto; }
 }
+
+/* Inside the site the unit header is hidden (the site navbar sits above the app frame), so the paper
+   toolbar pins to the very top of the frame and the question list just below it. */
+html.ux-embedded .pp-toolbar { top: 10px; }
+html.ux-embedded .pp-side { top: 92px; }

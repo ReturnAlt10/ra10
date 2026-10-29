@@ -610,10 +610,11 @@ async function refreshProgressSidebar(force) {
 $$('.tab').forEach(t => t.addEventListener('click', () => switchTab(t.dataset.tab)));
 $$('[data-goto]').forEach(b => b.addEventListener('click', () => switchTab(b.dataset.goto)));
 function switchTab(name) {
-  const parentTab = ({ mock: 'questions', practice: 'questions', browse: 'questions', quiz: 'revise', flash: 'revise', guide: 'revise', spec: 'revise' })[name] || name;
+  const parentTab = ({ pastpapers: 'questions', mock: 'questions', practice: 'questions', browse: 'questions', quiz: 'revise', flash: 'revise', guide: 'revise', spec: 'revise' })[name] || name;
   $$('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === parentTab));
   $$('.view').forEach(v => v.classList.toggle('active', v.id === 'view-' + name));
   if (name === 'guide') renderRevisionGuide();
+  if (name === 'pastpapers') renderPastPapers();
   if (name === 'progress') renderProgress();
   if (name === 'you') renderYou();
   window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -3628,6 +3629,18 @@ function advanceFlash() {
   if (flashState.idx < flashState.deck.length - 1) flashState.idx++;
   else flashState.idx = 0;
   renderFlashCard();
+}
+
+// ---------- Past Papers & RA10 Papers (shared BizPapers viewer) ----------
+// Paper questions are built separately from the question bank so the bank stays unchanged.
+var pastPapersApi = null, pastPaperQs = null;
+function renderPastPapers() {
+  if (!window.BizPapers) { const h = $('#papers-host'); if (h) h.innerHTML = '<p class="muted" style="padding:24px">Past papers could not be loaded. Please refresh the page.</p>'; return; }
+  if (!pastPapersApi) {
+    const getQuestions = () => pastPaperQs || (pastPaperQs = BizPapers.buildQuestions(window.BIZ_PAPERS || [], window.BIZ_UNIT));
+    pastPapersApi = BizPapers.init({ $, el, renderMarkScheme, buildAutoMarkUI, normaliseAiMarkResult, awardXP, getQuestions });
+  }
+  pastPapersApi.renderPapers();
 }
 
 })();

@@ -28,6 +28,7 @@
     chevron: ICON('<path d="m6 9 6 6 6-6"/>'),
     back: ICON('<path d="M15 6l-6 6 6 6"/>'),
     spark: ICON('<path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/>'),
+    booklet: ICON('<path d="M6 3h11a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6z"/><path d="M6 3v18"/><path d="M10 8h5M10 12h5"/><path d="M8 17h9"/>'),
     tools: ICON('<path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.6 2.6-2.4-.6-.6-2.4z"/>')
   };
 
@@ -83,12 +84,17 @@
     if (dests.some(d => d.name === 'pastpapers')) {
       dests.forEach(d => { if (d.name === 'papers') { d.t = 'Predicted Papers'; d.d = 'June 2027 predictions and exam trends'; d.feat = 0; } });
     }
+    // Printable revision booklets live outside the app (../booklets/?unit=N): surface them as a real destination.
+    const booklet = $('a[href*="booklets/index.html"]');
+    if (booklet && !dests.some(d => d.name === 'booklets')) {
+      dests.push({ name: 'booklets', t: 'Revision booklets', d: 'Printable booklet + solutions for every aim', i: 'booklet', g: 'Revise', p: 'revise', href: booklet.href });
+    }
     // a unit that has both 'dashboard' and 'home' keeps one
     if (dests.some(d => d.name === 'dashboard')) dests = dests.filter(d => d.name !== 'home');
     // parents (questions/revise) are shown only if they have no children
     const hasChild = (p) => dests.some(d => !d.parent && d.p === p && d.name !== p);
     dests = dests.filter(d => !(d.parent && hasChild(d.p)));
-    const PREF = ['dashboard', 'home', 'pastpapers', 'papers', 'practice', 'browse', 'mock', 'guide', 'flash', 'quiz', 'spec', 'calculator', 'progress'];
+    const PREF = ['dashboard', 'home', 'pastpapers', 'papers', 'practice', 'browse', 'mock', 'guide', 'booklets', 'flash', 'quiz', 'spec', 'calculator', 'progress'];
     const rank = (d) => { const i = PREF.indexOf(d.name); return i < 0 ? 50 : i; };
     dests.sort((a, b) => (GROUP_ORDER.indexOf(a.g) - GROUP_ORDER.indexOf(b.g)) || (rank(a) - rank(b)));
   }
@@ -96,6 +102,8 @@
 
   /* ───── navigation ───── */
   function go(name) {
+    const ext = dests.find(d => d.name === name && d.href);
+    if (ext) { closeMenu(); window.open(ext.href, '_blank', 'noopener'); return; }
     closeMenu();
     const d = destOf(name) || { name, p: name };
     const direct = $(`[data-goto="${name}"]`);
@@ -242,7 +250,7 @@
   function launchpad() {
     const dash = $('#view-dashboard') || $('#view-home');
     if (!dash || $('.ux-launch', dash)) return;
-    const wanted = ['pastpapers', 'papers', 'guide', 'practice', 'quiz', 'flash', 'browse', 'mock', 'spec', 'calculator'];
+    const wanted = ['pastpapers', 'papers', 'guide', 'practice', 'quiz', 'flash', 'browse', 'mock', 'booklets', 'spec', 'calculator'];
     const tiles = wanted.map(destOf).filter(Boolean);
     dests.filter(d => d.g === 'Tools' && $(`.tabs .tab[data-tab="${d.name}"]`) && !tiles.includes(d)).slice(0, 4).forEach(d => tiles.push(Object.assign({}, d, { d: d.d || 'Open ' + d.t.toLowerCase() })));
     if (!tiles.length) return;
@@ -313,15 +321,28 @@
     const tb = $('.topbar');
     const h = tb ? Math.round(tb.getBoundingClientRect().height) : 0;
     document.documentElement.style.setProperty('--ux-header-h', h + 'px');
-    if (!h) return;
+    const list = [];
     $$('body *').forEach(el => {
       if (el === tb || (tb && tb.contains(el)) || el.closest('.ux-menu, .ux-bottom')) return;
       const cs = getComputedStyle(el);
       if (cs.position !== 'sticky') return;
       if (el.dataset.uxTop === undefined) el.dataset.uxTop = cs.top === 'auto' ? '' : String(parseFloat(cs.top) || 0);
-      if (el.dataset.uxTop === '') return;
-      const want = h + Number(el.dataset.uxTop) + 'px';
-      if (el.style.top !== want) el.style.setProperty('top', want, 'important');
+      if (el.dataset.uxTop !== '') list.push(el);
+    });
+    const pin = (el, px) => { const want = px + 'px'; if (el.style.top !== want) el.style.setProperty('top', want, 'important'); };
+    if (h) { list.forEach(el => pin(el, h + Number(el.dataset.uxTop))); return; }
+    // No unit header (the site navbar sits above the frame): tops that were sized to clear the old
+    // header would leave panels pinned mid-screen, so lift each view's stickies to the top of the frame.
+    const groups = new Map();
+    list.forEach(el => {
+      if (Number(el.dataset.uxTop) < 60) return;
+      const g = el.closest('section.view') || document.body;
+      if (!groups.has(g)) groups.set(g, []);
+      groups.get(g).push(el);
+    });
+    groups.forEach(els => {
+      const shift = Math.min(...els.map(el => Number(el.dataset.uxTop))) - 10;
+      els.forEach(el => pin(el, Number(el.dataset.uxTop) - shift));
     });
   }
   function scheduleStickies() { clearTimeout(stickyT); stickyT = setTimeout(offsetStickies, 120); }

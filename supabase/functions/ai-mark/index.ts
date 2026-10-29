@@ -197,7 +197,22 @@ function buildPrompt(question: any, answer: string, learnedHints: string[]) {
   ].filter(Boolean).join("\n");
 }
 
-type CallOptions = { system?: string; timeout?: number; maxTokens?: number };
+type CallOptions = { system?: string; timeout?: number; maxTokens?: number; image?: string };
+
+// A drawn / photographed diagram arrives as a data URL; only small PNG / JPEG / WebP images are accepted.
+function validImage(v: unknown): string {
+  const s = typeof v === "string" ? v : "";
+  if (!s) return "";
+  if (!/^data:image\/(png|jpeg|webp);base64,[A-Za-z0-9+/=]+$/.test(s)) return "";
+  return s.length <= 3_000_000 ? s : "";
+}
+
+const DIAGRAM_NOTE = [
+  "",
+  "IMPORTANT: the student's diagram is attached as an image. Mark the diagram itself against the mark scheme.",
+  "Read every device, symbol, connection, arrow, label and annotation in the image. For flowcharts check the symbols (terminators, processes, decisions with Yes/No branches) and that the logic is correct.",
+  "Any typed text is extra notes that go with the diagram. If the image is blank, unreadable or unrelated to the question, award marks only for what can be credited and say so in the feedback.",
+].join("\n");
 
 async function callProvider(provider: ProviderConfig, prompt: string, opts: CallOptions = {}): Promise<any> {
   const modelErrors: string[] = [];
@@ -213,7 +228,9 @@ async function callProvider(provider: ProviderConfig, prompt: string, opts: Call
         },
         {
           role: "user",
-          content: prompt,
+          content: opts.image
+            ? [{ type: "text", text: prompt }, { type: "image_url", image_url: { url: opts.image } }]
+            : prompt,
         },
       ],
     };
@@ -270,7 +287,10 @@ async function callAnyProvider(prompt: string, opts: CallOptions = {}, preferStr
   // Level-of-response marking needs a capable model: try paid/stronger providers before
   // small free OpenRouter models when preferStrong is set.
   const rank: Record<string, number> = { openai: 0, gemini: 1, openrouter: 2, deepseek: 3 };
-  const ordered = preferStrong ? PROVIDERS.slice().sort((a, b) => (rank[a.name] ?? 9) - (rank[b.name] ?? 9)) : PROVIDERS;
+  // Images need a vision model: DeepSeek's chat API has none, and the strongest providers go first.
+  const pool = opts.image ? PROVIDERS.filter((p) => p.name !== "deepseek") : PROVIDERS;
+  if (pool.length === 0) throw new Error("No AI provider that can read images is configured");
+  const ordered = preferStrong || opts.image ? pool.slice().sort((a, b) => (rank[a.name] ?? 9) - (rank[b.name] ?? 9)) : pool;
 
   const errors: string[] = [];
   for (const provider of ordered) {
@@ -314,7 +334,14 @@ export default Deno.serve(async (req: Request) => {
     const jwt = authHeader.slice(7);
     const body = await req.json().catch(() => ({}));
     const question = body?.question || null;
-    const answer = String(body?.answer || "").trim();
+    const image = validImage(body?.image);
+    if (body?.image && !image) {
+      return new Response(JSON.stringify({ error: "The diagram image is too large or not a PNG/JPEG. Please try a smaller picture." }), {
+        status: 400,
+        headers: corsHeaders,
+      });
+    }
+    const answer = String(body?.answer || "").trim() || (image ? "(The answer is the attached diagram.)" : "");
 
     if (!question || !answer) {
       return new Response(JSON.stringify({ error: "question and answer are required" }), {
@@ -364,17 +391,18 @@ export default Deno.serve(async (req: Request) => {
     const business = !b2026 && isALevelBusiness(question);
     const sportU2 = !business && !b2026 && isSportUnit2Task(question);
     const btec = !business && !b2026 && !sportU2 && isBusinessBtec(question);
-    const prompt = b2026 ? buildBusiness2026Prompt(question, answer) : business ? buildBusinessPrompt(question, answer) : sportU2 ? buildSportUnit2Prompt(question, answer) : btec ? buildBusinessBtecPrompt(question, answer) : buildPrompt(question, answer, []);
+    const basePrompt = b2026 ? buildBusiness2026Prompt(question, answer) : business ? buildBusinessPrompt(question, answer) : sportU2 ? buildSportUnit2Prompt(question, answer) : btec ? buildBusinessBtecPrompt(question, answer) : buildPrompt(question, answer, []);
+    const prompt = image ? basePrompt + "\n" + DIAGRAM_NOTE : basePrompt;
 
     const aiResponse = b2026
-      ? await callAnyProvider(prompt, { system: BUSINESS_2026_SYSTEM, timeout: 50000, maxTokens: 2200 }, true)
+      ? await callAnyProvider(prompt, { system: BUSINESS_2026_SYSTEM, timeout: 50000, maxTokens: 2200, image }, true)
       : business
-      ? await callAnyProvider(prompt, { system: BUSINESS_SYSTEM, timeout: 45000, maxTokens: 1800 }, true)
+      ? await callAnyProvider(prompt, { system: BUSINESS_SYSTEM, timeout: 45000, maxTokens: 1800, image }, true)
       : sportU2
-        ? await callAnyProvider(prompt, { system: SPORT_U2_SYSTEM, timeout: 45000, maxTokens: 1800 }, true)
+        ? await callAnyProvider(prompt, { system: SPORT_U2_SYSTEM, timeout: 45000, maxTokens: 1800, image }, true)
         : btec
-          ? await callAnyProvider(prompt, { system: BUSINESS_BTEC_SYSTEM, timeout: 55000, maxTokens: 2400 }, true)
-          : await callAnyProvider(prompt);
+          ? await callAnyProvider(prompt, { system: BUSINESS_BTEC_SYSTEM, timeout: 55000, maxTokens: 2400, image }, true)
+          : await callAnyProvider(prompt, image ? { timeout: 50000, image } : {});
     let parsed = extractJsonObject(aiResponse.content);
     if (!parsed || typeof parsed !== "object") {
       throw new Error("AI response could not be parsed as JSON");

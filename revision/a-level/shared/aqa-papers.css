@@ -359,3 +359,8 @@
 .pp-opt.pp-opt.right { border-color: #16a34a; background: #f0fdf4; }
 .pp-opt.pp-opt.wrong { border-color: #dc2626; background: #fef2f2; }
 .pp-quant { margin: 6px 0 8px; padding: 6px 10px; border-radius: 8px; background: #eef4ff; border: 1px solid #bcd0ff; color: #1e3a8a; font-size: 0.8rem; }
+
+/* Inside the site the unit header is hidden (the site navbar sits above the app frame), so the paper
+   toolbar pins to the very top of the frame and the question list just below it. */
+html.ux-embedded .pp-toolbar { top: 10px; }
+html.ux-embedded .pp-side { top: 92px; }
