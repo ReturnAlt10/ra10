@@ -374,6 +374,8 @@
     // data finishes loading after first paint in some apps
     [600, 1800, 4000].forEach(ms => setTimeout(refreshCounts, ms));
     if (typeof window.onDataReady === 'function') { try { window.onDataReady(refreshCounts); } catch (e) {} }
+    // Tell the site shell we're painted, so it can drop its loading skeleton.
+    if (window.self !== window.top) { try { window.parent.postMessage({ type: 'ra10:unit-ready' }, location.origin); } catch (e) {} }
   }
 
   window.RA10UnitUI = { go, open: openMenu, close: closeMenu, destinations: () => dests.slice() };
