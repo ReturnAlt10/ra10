@@ -77,13 +77,13 @@
     var p = profiles[id] || {};
     var s = size || 36;
     var inner = p.profile_pic_url ? '<img src="' + esc(p.profile_pic_url) + '" alt="" loading="lazy">' : esc(initials(nameOf(id)));
-    return '<span class="cf-av" style="--s:' + s + 'px;--h:' + hue(id) + '">' + inner + '</span>';
+    return '<span class="cf-av" data-user="' + esc(id) + '" style="--s:' + s + 'px;--h:' + hue(id) + '">' + inner + '</span>';
   }
   function roleBadge(id) {
     var b = profiles[id] && profiles[id].badge;
     return b === 'owner' ? '<span class="cf-role owner" title="Site owner">👑 Owner</span>' : b === 'admin' ? '<span class="cf-role admin" title="Community moderator">🛡️ Admin</span>' : '';
   }
-  function byline(id) { return '<span class="cf-by"><b>' + esc(nameOf(id)) + '</b>' + roleBadge(id) + '</span>'; }
+  function byline(id) { return '<span class="cf-by"><b data-user="' + esc(id) + '" role="button" tabindex="0" title="View profile">' + esc(nameOf(id)) + '</b>' + roleBadge(id) + '</span>'; }
   function catOf(id) { return cats.filter(function (c) { return c.id === id; })[0] || { id: id, name: id, icon: '💬', color: '#64748b' }; }
   function rich(text) {
     var out = esc(text).replace(/(https?:\/\/[^\s<]+[^\s<.,;:!?)\]])/g, '<a href="$1" target="_blank" rel="noopener noreferrer nofollow">$1</a>');
@@ -903,7 +903,7 @@
   /* ── moderators: requests + member directory (owner only) ───────────── */
   function memberAv(m, size) {
     var name = m.username ? '@' + m.username : (m.full_name || m.email || '?');
-    return '<span class="cf-av" style="--s:' + size + 'px;--h:' + hue(m.id || m.email) + '">' + (m.profile_pic_url ? '<img src="' + esc(m.profile_pic_url) + '" alt="" loading="lazy">' : esc(initials(name))) + '</span>';
+    return '<span class="cf-av"' + (m.id ? ' data-user="' + esc(m.id) + '"' : '') + ' style="--s:' + size + 'px;--h:' + hue(m.id || m.email) + '">' + (m.profile_pic_url ? '<img src="' + esc(m.profile_pic_url) + '" alt="" loading="lazy">' : esc(initials(name))) + '</span>';
   }
   function modTeam(body) { renderModerators(body); }
   function renderModerators(el) {
@@ -1003,6 +1003,8 @@
   var ANN_SEEN = 'ra10_forum_ann_seen';
   var ANN_POPUP = 'ra10_forum_ann_popup';
   var latestAnn = null;
+  // wait for the account's closed popups (ra10-sdk.js) before deciding to show one
+  function seenReady() { return window.ra10SeenReady ? window.ra10SeenReady() : (window.RA10 && RA10.seen ? RA10.seen.ready() : Promise.resolve()); }
   function lsGet(k, st) { try { return (st || localStorage).getItem(k) || ''; } catch (e) { return ''; } }
   function lsSet(k, v, st) { try { (st || localStorage).setItem(k, v); } catch (e) {} }
   function navTargets() {
@@ -1025,6 +1027,8 @@
   function hideAnnPopup() { var p = document.getElementById('cf-ann-pop'); if (p) { p.classList.add('out'); setTimeout(function () { p.remove(); }, 260); } }
   function showAnnPopup(ann) {
     if (document.getElementById('cf-ann-pop')) return;
+    // one popup at a time: wait while another popup is open on the page
+    if (document.querySelector('#transition-popup-overlay, #profile-setup-overlay.open, .ra10-modal-open, #ra10-profile-card, .unit-menu-hint')) { setTimeout(function () { if (lsGet(ANN_SEEN) !== ann.id && lsGet(ANN_POPUP) !== ann.id) showAnnPopup(ann); }, 4000); return; }
     lsSet(ANN_POPUP, ann.id);   // pop up once per announcement, ever — the nav dot stays until it's read
     var p = document.createElement('div');
     p.id = 'cf-ann-pop'; p.className = 'cf-ann-pop'; p.setAttribute('role', 'status'); p.setAttribute('aria-live', 'polite');
@@ -1050,7 +1054,7 @@
       var fresh = Date.now() - new Date(ann.created_at).getTime() < 14 * 86400000;
       var unseen = lsGet(ANN_SEEN) !== ann.id && fresh && String(ann.author_id) !== myId();
       setNavDot(unseen, ann);
-      if (unseen && lsGet(ANN_POPUP) !== ann.id) setTimeout(function () { if (lsGet(ANN_SEEN) !== ann.id) showAnnPopup(ann); }, 1200);
+      if (unseen && lsGet(ANN_POPUP) !== ann.id) setTimeout(function () { seenReady().then(function () { if (lsGet(ANN_SEEN) !== ann.id && lsGet(ANN_POPUP) !== ann.id) showAnnPopup(ann); }); }, 1200);
       var cat = $('[data-cat="announcements"] .cf-cat-copy b');
       if (cat && unseen && !$('.cf-new', cat)) cat.insertAdjacentHTML('beforeend', ' <i class="cf-new">New</i>');
     }, function () {});

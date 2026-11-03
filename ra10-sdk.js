@@ -148,6 +148,79 @@
     });
   }
 
+  /* ── Popups and notices the user has closed ("seen" flags), kept on the account ──
+     Every popup already remembers itself with a localStorage key such as
+     'ra10_transition_popup_seen_v1'. Those keys are mirrored to profiles.seen_flags
+     (supabase/sql/popups-and-profile-cards.sql), and copied back into localStorage when
+     the profile loads, so a closed popup stays closed on every browser and device. */
+  const SEEN_KEY_RE = /^ra10[_-].*(seen|dismiss|hidden|popup)/i;
+  const SEEN_SKIP_RE = /pending|cooldown/i;
+  const _rawSetItem = Storage.prototype.setItem;
+  let _seenQueue = {};
+  let _seenTimer = null;
+  let _seenReadyDone = false;
+  let _seenReadyResolve = null;
+  const _seenReady = new Promise((resolve) => { _seenReadyResolve = resolve; });
+
+  function _isSeenKey(key) { return SEEN_KEY_RE.test(key) && !SEEN_SKIP_RE.test(key); }
+  function _seenMarkReady() {
+    if (_seenReadyDone) return;
+    _seenReadyDone = true;
+    _seenReadyResolve();
+  }
+  setTimeout(_seenMarkReady, 6000);   // never hold popups back for long if sign-in is slow
+
+  async function _seenFlush() {
+    if (!_session?.user || !Object.keys(_seenQueue).length) return;
+    const items = _seenQueue;
+    _seenQueue = {};
+    try {
+      const client = await _ensureSupabaseClient();
+      const { data, error } = await client.rpc('mark_seen', { p_items: items });
+      if (error) throw error;
+      if (_profile && data && typeof data === 'object') _profile.seen_flags = data;
+    } catch (err) {
+      // most likely the SQL hasn't been run yet; keep the flags locally and try again later
+      _seenQueue = Object.assign(items, _seenQueue);
+      console.warn('RA10 could not save closed popups to the account', err && err.message ? err.message : err);
+    }
+  }
+  function _seenQueueKey(key, value) {
+    _seenQueue[key] = String(value == null ? '1' : value).slice(0, 2000);
+    clearTimeout(_seenTimer);
+    _seenTimer = setTimeout(_seenFlush, 800);
+  }
+  // Mirror every write of a "seen" key, from any script or inline handler.
+  try {
+    Storage.prototype.setItem = function (key, value) {
+      _rawSetItem.call(this, key, value);
+      try {
+        if (this === window.localStorage && _isSeenKey(String(key))) _seenQueueKey(String(key), value);
+      } catch (e) { /* storage unavailable */ }
+    };
+  } catch (e) { /* locked-down browser: popups just stay per-device */ }
+
+  function _seenAdopt(profile) {
+    const flags = profile && profile.seen_flags && typeof profile.seen_flags === 'object' ? profile.seen_flags : {};
+    try {
+      Object.keys(flags).forEach((key) => {
+        if (localStorage.getItem(key) !== String(flags[key])) _rawSetItem.call(localStorage, key, String(flags[key]));
+      });
+      // popups closed on this device before signing in move onto the account too
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && _isSeenKey(key) && !(key in flags)) _seenQueueKey(key, localStorage.getItem(key));
+      }
+    } catch (e) { /* storage unavailable */ }
+  }
+
+  const seen = {
+    // resolves once the account's closed popups have been loaded (or after a few seconds)
+    ready: () => _seenReady,
+    get(key) { try { return localStorage.getItem(key); } catch (e) { return null; } },
+    set(key, value) { try { localStorage.setItem(key, value == null ? '1' : String(value)); } catch (e) { _seenQueueKey(key, value); } },
+  };
+
   function _getCost(action) {
     return ACTION_COSTS[action] ?? 0;
   }
@@ -735,6 +808,7 @@
       }
       await _maybeResetMonthlyCredits();
       _syncPlanCreditActivity(_profile);
+      _seenAdopt(_profile);
     }
 
     await _loadLegalStatus();
@@ -949,7 +1023,11 @@
     const sessionResult = await client.auth.getSession();
     const session = sessionResult.data?.session || null;
     _session = session;
-    _profile = session ? await _loadProfileFromSession(session) : null;
+    try {
+      _profile = session ? await _loadProfileFromSession(session) : null;
+    } finally {
+      _seenMarkReady();
+    }
     if (_profile) markStudyDay();
 
     if (_authSubscription && typeof _authSubscription.unsubscribe === 'function') {
@@ -2246,6 +2324,19 @@
     return result;
   }
 
+  // Public profile card for any user (by id or @username): streak, join date, leaderboard results.
+  async function getPublicProfile(ref) {
+    const value = String(ref || '').trim();
+    if (!value) return null;
+    const client = await _ensureSupabaseClient();
+    const args = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(value)
+      ? { p_id: value }
+      : { p_username: value.replace(/^@/, '') };
+    const { data, error } = await client.rpc('get_public_profile', args);
+    if (error) throw error;
+    return Array.isArray(data) ? (data[0] || null) : (data || null);
+  }
+
   function on(event, callback) {
     if (!EVENTS[event] || typeof callback !== 'function') {
       return false;
@@ -2313,6 +2404,8 @@
     acceptTerms,
     requireTerms,
     _appendCreditActivity,
+    seen,
+    getPublicProfile,
     on,
     off,
     // Expose internal config for debugging if needed.

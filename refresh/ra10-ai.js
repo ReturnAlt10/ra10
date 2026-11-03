@@ -2057,6 +2057,7 @@
     };
 
     // One-time tip under the top bar.
+    new Promise(function (res) { var t0 = Date.now(); (function w() { if (window.RA10 && RA10.seen) { RA10.seen.ready().then(res, res); return; } if (Date.now() - t0 > 6000) { res(); return; } setTimeout(w, 100); })(); }).then(function () {
     if (ls('ra10_ai_hint_dismissed') !== '1') {
       var tip = h('div', { class: 'rai-tip rai-glass' }, orb('sm', 13) + '<span><b>Tip:</b> select any text and tap <b>Ask AI</b> for an instant explanation. Your chats are saved and sorted by unit and topic.</span><button type="button" class="rai-icon-btn" aria-label="Dismiss tip">' + icon('close', 16) + '</button>');
       tip.querySelector('button').onclick = function () { ls('ra10_ai_hint_dismissed', '1'); tip.remove(); };
@@ -2064,6 +2065,7 @@
       if (topbar && topbar.parentNode) topbar.parentNode.insertBefore(tip, topbar.nextSibling);
       else document.body.insertBefore(tip, document.body.firstChild);
     }
+    });
   }
 
   (function watchOrbs() {

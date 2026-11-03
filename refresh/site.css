@@ -3099,3 +3099,27 @@ html.route-pending footer{display:none !important}
 @media (max-width:860px){#p-notfound .nf{grid-template-columns:1fr;text-align:center;padding-top:12px;gap:8px;min-height:0}.nf-art{max-width:230px}.nf-copy>p{margin-inline:auto}.nf-actions{justify-content:center}}
 @media (max-width:420px){.nf-links{grid-template-columns:1fr}}
 @media (prefers-reduced-motion:reduce){.nf-blob,.nf-orbit,.nf-digits>span,.nf-zero i{animation:none !important}}
+
+/* ── Navbar that always fits: icon-only page links when space is short (fitDesktopNav in site.js) ── */
+.nav.nav-compact .nav-link .nl-t{display:none}
+.nav.nav-compact .nav-link{display:inline-grid;place-items:center;min-width:40px;min-height:40px;padding:0 10px}
+.nav.nav-compact .nav-link svg.nu{width:18px;height:18px;flex-basis:18px;margin:0}
+.nav.nav-compact-2 .nav-logo-text{display:none}
+.nav.nav-compact-2 .nav-unit-jump span{max-width:140px}
+.nav-icon-tip{position:fixed!important;z-index:10050!important;transform:translate(-50%,-4px);padding:6px 10px;border-radius:10px;background:var(--color-text,#14161d);color:var(--color-bg,#fff);font:700 .76rem/1.2 var(--font-b);white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .12s,transform .12s;box-shadow:0 8px 20px -8px rgba(0,0,0,.4)}
+.nav-icon-tip.show{opacity:1;transform:translate(-50%,0)}
+.nav-icon-tip::before{content:"";position:absolute;left:50%;top:-4px;width:8px;height:8px;background:inherit;transform:translateX(-50%) rotate(45deg)}
+
+/* ── First-time hint pointing at the subject section menu ── */
+.unit-menu-hint{position:fixed!important;z-index:10040!important;display:flex;align-items:center;gap:12px;width:min(340px,calc(100vw - 24px));padding:12px 12px 12px 14px;border-radius:18px;background:linear-gradient(135deg,var(--color-primary,#d20000),color-mix(in srgb,var(--color-primary,#d20000) 70%,#7c3aed));color:#fff;box-shadow:0 18px 40px -14px rgba(0,0,0,.45);animation:umhIn .38s cubic-bezier(.2,1.3,.4,1) both, umhBob 2.4s ease-in-out .5s infinite}
+.unit-menu-hint.out{animation:umhOut .2s ease both}
+.unit-menu-hint::before{content:"";position:absolute;top:-7px;left:var(--arrow-x,50%);width:14px;height:14px;margin-left:-7px;background:var(--color-primary,#d20000);border-radius:3px;transform:rotate(45deg)}
+.unit-menu-hint .umh-ic{font-size:1.4rem;line-height:1;flex:none}
+.unit-menu-hint div{display:grid;gap:2px;min-width:0}
+.unit-menu-hint b{font-size:.88rem;line-height:1.25}
+.unit-menu-hint small{font-size:.76rem;line-height:1.35;opacity:.9}
+.unit-menu-hint button{flex:none;min-height:36px;padding:0 14px;border-radius:999px;border:0;background:#fff;color:var(--color-primary,#d20000);font:800 .8rem var(--font-b);cursor:pointer}
+@keyframes umhIn{from{opacity:0;transform:translateY(-8px) scale(.96)}to{opacity:1;transform:none}}
+@keyframes umhOut{to{opacity:0;transform:translateY(-6px) scale(.97)}}
+@keyframes umhBob{0%,100%{translate:0 0}50%{translate:0 3px}}
+@media (prefers-reduced-motion:reduce){.unit-menu-hint{animation:none}}

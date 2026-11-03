@@ -7,7 +7,7 @@
   window.__ra10AiHelperLoaded = true;
   if (!/\/revision\//i.test(String(location.pathname || ''))) return;
 
-  var V = '20261021';
+  var V = '20261103';
   var base = '/refresh/';
   try {
     var src = (document.currentScript && document.currentScript.src) || '';

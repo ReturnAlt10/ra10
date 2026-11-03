@@ -238,7 +238,121 @@ window.addEventListener('message', (e) => {
   const frame = document.querySelector('.page-iframe.active iframe');
   if (frame && e.source !== frame.contentWindow) return;
   setUnitSectionLabel(String(e.data.title || '').slice(0, 40));
+  fitDesktopNav();
 });
+
+// ── Navbar that always fits ──────────────────────────────────────────────
+// The page links and the subject section button share one row. When the screen is too narrow
+// for all of it (the row would scroll and hide the section button), the page links drop to
+// icons only, then the logo text goes too. Icon-only links still show their name on hover.
+function wrapNavLabels() {
+  document.querySelectorAll('.nav .nav-link').forEach(btn => {
+    if (btn.dataset.lbl) return;
+    const textNodes = [...btn.childNodes].filter(n => n.nodeType === 3 && n.textContent.trim());
+    const label = textNodes.map(n => n.textContent.trim()).join(' ');
+    if (!label) return;
+    textNodes.forEach(n => { const s = document.createElement('span'); s.className = 'nl-t'; s.textContent = n.textContent.trim(); n.replaceWith(s); });
+    btn.dataset.lbl = label;
+    btn.setAttribute('aria-label', label);
+  });
+}
+let navFitRaf = 0;
+function fitDesktopNav() {
+  cancelAnimationFrame(navFitRaf);
+  navFitRaf = requestAnimationFrame(() => {
+    const nav = document.querySelector('.nav');
+    const links = nav && nav.querySelector('.nav-links');
+    if (!links || !links.offsetParent) return;
+    wrapNavLabels();
+    const over = () => links.scrollWidth > links.clientWidth + 1;
+    nav.classList.remove('nav-compact', 'nav-compact-2');
+    if (over()) nav.classList.add('nav-compact');
+    if (over()) nav.classList.add('nav-compact-2');
+    if (!nav.classList.contains('nav-compact')) hideNavTip();
+    positionUnitMenuHint();
+  });
+}
+window.fitDesktopNav = fitDesktopNav;
+window.addEventListener('resize', fitDesktopNav);
+window.addEventListener('ra10:route', () => setTimeout(fitDesktopNav, 0));
+document.addEventListener('DOMContentLoaded', () => {
+  fitDesktopNav();
+  // credits chip / account button appear after sign-in and change the space available
+  const actions = document.querySelector('.nav .nav-actions');
+  if (actions && 'ResizeObserver' in window) new ResizeObserver(fitDesktopNav).observe(actions);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitDesktopNav);
+});
+
+// Hover / focus name for icon-only links (Revision and Leaderboard keep their own previews).
+let navTipEl = null;
+function hideNavTip() { if (navTipEl) navTipEl.classList.remove('show'); }
+function showNavTip(btn) {
+  const nav = document.querySelector('.nav');
+  if (!nav || !nav.classList.contains('nav-compact') || !btn.dataset.lbl) return;
+  if (btn.dataset.nav === 'revision' || btn.dataset.nav === 'leaderboard') return;
+  if (!navTipEl) { navTipEl = document.createElement('div'); navTipEl.className = 'nav-icon-tip'; navTipEl.setAttribute('role', 'tooltip'); document.body.appendChild(navTipEl); }
+  navTipEl.textContent = btn.dataset.lbl;
+  const r = btn.getBoundingClientRect();
+  navTipEl.style.left = Math.round(r.left + r.width / 2) + 'px';
+  navTipEl.style.top = Math.round(r.bottom + 10) + 'px';
+  navTipEl.classList.add('show');
+}
+document.addEventListener('mouseover', (e) => { const b = e.target.closest && e.target.closest('.nav .nav-link'); if (b) showNavTip(b); });
+document.addEventListener('mouseout', (e) => { const b = e.target.closest && e.target.closest('.nav .nav-link'); if (b && !b.contains(e.relatedTarget)) hideNavTip(); });
+document.addEventListener('focusin', (e) => { const b = e.target.closest && e.target.closest('.nav .nav-link'); if (b) showNavTip(b); else hideNavTip(); });
+document.addEventListener('click', hideNavTip, true);
+
+// ── First-time hint for the subject section menu ─────────────────────────
+// Shown once per account ('…_seen' keys sync to the account via RA10.seen).
+const UNIT_MENU_HINT_KEY = 'ra10_unit_menu_hint_seen';
+let unitHintEl = null, unitHintTimer = null;
+function visibleUnitJump() {
+  return [...document.querySelectorAll('.nav-unit-jump')].find(b => { const r = b.getBoundingClientRect(); return r.width > 0 && r.height > 0 && getComputedStyle(b).visibility !== 'hidden'; }) || null;
+}
+function unitMenuHintSeen() { try { return !!localStorage.getItem(UNIT_MENU_HINT_KEY); } catch (e) { return true; } }
+function markUnitMenuHintSeen() {
+  try { localStorage.setItem(UNIT_MENU_HINT_KEY, '1'); } catch (e) {}
+  if (unitHintEl) { const el = unitHintEl; unitHintEl = null; el.classList.add('out'); setTimeout(() => el.remove(), 220); }
+}
+function positionUnitMenuHint() {
+  if (!unitHintEl) return;
+  const btn = visibleUnitJump();
+  if (!btn || !document.body.classList.contains('unit-shell-mode')) { unitHintEl.style.display = 'none'; return; }
+  unitHintEl.style.display = '';
+  const r = btn.getBoundingClientRect();
+  const w = unitHintEl.offsetWidth;
+  const left = Math.max(12, Math.min(window.innerWidth - w - 12, r.left + r.width / 2 - w / 2));
+  unitHintEl.style.left = left + 'px';
+  unitHintEl.style.top = Math.round(r.bottom + 14) + 'px';
+  unitHintEl.style.setProperty('--arrow-x', Math.round(r.left + r.width / 2 - left) + 'px');
+}
+function scheduleUnitMenuHint() {
+  clearTimeout(unitHintTimer);
+  unitHintTimer = setTimeout(async () => {
+    if (window.ra10SeenReady) await window.ra10SeenReady();
+    if (unitHintEl || unitMenuHintSeen() || !document.body.classList.contains('unit-shell-mode') || !visibleUnitJump()) return;
+    // one popup at a time: wait while another tip or popup is on screen
+    let busy = !!document.querySelector('.rai-tip, #transition-popup-overlay, #cf-ann-pop, #ra10-profile-card, #profile-setup-overlay.open');
+    try { const f = document.querySelector('.page-iframe.active iframe'); if (!busy && f && f.contentDocument && f.contentDocument.querySelector('.rai-tip')) busy = true; } catch (e) { /* cross-origin frame */ }
+    if (busy) { scheduleUnitMenuHint(); return; }
+    unitHintEl = document.createElement('div');
+    unitHintEl.className = 'unit-menu-hint';
+    unitHintEl.setAttribute('role', 'status');
+    unitHintEl.innerHTML = '<span class="umh-ic" aria-hidden="true">✨</span><div><b>Here’s where you access all the features</b><small>Questions, past papers, flashcards, quizzes, the revision guide and more.</small></div><button type="button">Got it</button>';
+    unitHintEl.querySelector('button').addEventListener('click', markUnitMenuHintSeen);
+    document.body.appendChild(unitHintEl);
+    positionUnitMenuHint();
+  }, 1400);
+}
+window.addEventListener('resize', positionUnitMenuHint);
+window.addEventListener('message', (e) => {
+  if (e.origin === location.origin && e.data && e.data.type === 'ra10:unit-ready') scheduleUnitMenuHint();
+});
+window.addEventListener('ra10:route', () => {
+  if (!document.body.classList.contains('unit-shell-mode') && unitHintEl) unitHintEl.style.display = 'none';
+  else if (unitHintEl) positionUnitMenuHint();
+});
+document.addEventListener('click', (e) => { if (e.target.closest && e.target.closest('.nav-unit-jump')) markUnitMenuHintSeen(); }, true);
 
 function nextSundayResetDate() {
   const now = new Date();
@@ -4403,6 +4517,17 @@ async function waitForRA10Sdk(timeoutMs) {
   return window.RA10;
 }
 
+  // Popups that can appear on page load wait until the account's closed popups have
+  // been copied into this browser (RA10.seen in ra10-sdk.js), so they don't flash up again.
+  // The SDK loads asynchronously, so wait (briefly) for it to exist too.
+  const seenReady = window.ra10SeenReady = () => new Promise((resolve) => {
+    const t0 = Date.now();
+    (function wait() {
+      if (window.RA10 && RA10.seen) { RA10.seen.ready().then(resolve, resolve); return; }
+      if (Date.now() - t0 > 6000) { resolve(); return; }
+      setTimeout(wait, 100);
+    })();
+  });
   let authRestorePending = true;
   // Declared before DOMContentLoaded: these are read by code that can run
   // before the handler reaches their original position (temporal dead zone).
@@ -5330,15 +5455,9 @@ async function waitForRA10Sdk(timeoutMs) {
       const metaEl = document.getElementById('site-announcement-meta');
       if (!bar || !emojiEl || !textEl || !metaEl) return;
 
-      // Fallback announcement shown when no live Supabase announcement is set.
-      const fallback = {
-        emoji: '🎉',
-        message: 'BTEC IT Unit 3 (Website Development) is now live — study guide, wireframe & sitemap builders, code editor, sample assignments and AI Assigner.',
-        duration_hours: 168,
-        created_at: new Date().toISOString(),
-        expires_at: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
-      };
-      const effective = (ann && ann.message) ? ann : fallback;
+      // Only live announcements from Supabase are shown (an old built-in fallback had no fixed
+      // date, so it could never stay dismissed).
+      const effective = (ann && ann.message) ? ann : null;
 
       const now = Date.now();
       const expiresAtMs = effective && effective.expires_at ? Date.parse(String(effective.expires_at)) : NaN;
@@ -5386,6 +5505,7 @@ async function waitForRA10Sdk(timeoutMs) {
 
     async function refreshSiteAnnouncement(options) {
       const opts = options || {};
+      await seenReady();
       try {
         const ann = await fetchSiteAnnouncement();
         _siteAnnouncementData = ann;
@@ -6171,10 +6291,12 @@ async function waitForRA10Sdk(timeoutMs) {
       }
     }
 
-    if (localStorage.getItem('ra10_banner_hidden')) {
-      const b = document.getElementById('exam-banner');
-      if (b) b.style.display = 'none';
-    }
+    seenReady().then(() => {
+      if (localStorage.getItem('ra10_banner_hidden')) {
+        const b = document.getElementById('exam-banner');
+        if (b) b.style.display = 'none';
+      }
+    });
 
     window.__ra10ProfileHelpers = {
       validateDisplayName,
@@ -6459,7 +6581,8 @@ async function waitForRA10Sdk(timeoutMs) {
       updateTransitionSignInActions();
     }
 
-    function showTransitionPopup() {
+    async function showTransitionPopup() {
+      await seenReady();
       if (transitionPopupSeen()) return;
       if (document.getElementById('transition-popup-overlay')) return;
       try { localStorage.setItem(TRANSITION_POPUP_SEEN_KEY, '1'); } catch (e) {}   // one showing only, even if it is dismissed by refreshing

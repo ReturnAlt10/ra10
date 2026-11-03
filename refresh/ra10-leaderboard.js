@@ -113,6 +113,7 @@
       '.lbx-row{display:grid;grid-template-columns:40px auto minmax(0,1fr) auto;gap:12px;align-items:center;padding:10px 12px;border-radius:16px;transition:background .15s}',
       '.lbx-row:hover{background:var(--lbx-well)}',
       '.lbx-row.me{background:linear-gradient(90deg,rgba(34,197,94,.14),rgba(59,130,246,.08));box-shadow:inset 0 0 0 1.5px rgba(34,197,94,.55)}',
+      '.lbx-row[data-user],.lbx-p[data-user]{cursor:pointer}',
       '.lbx-row .rk{font-weight:900;font-size:1rem;text-align:center;color:var(--lbx-ink2);font-variant-numeric:tabular-nums}',
       '.lbx-row .rk.top{font-size:1.25rem}',
       '.lbx-row .who{min-width:0}',
@@ -179,7 +180,7 @@
         if (!u) return '<div></div>';
         var rank = i === 1 ? 1 : (i === 0 ? 2 : 3);
         var mine = u.id === currentId;
-        return '<div class="lbx-p r' + rank + '">' + (rank === 1 ? '<span class="crown" aria-hidden="true">👑</span>' : '') +
+        return '<div class="lbx-p r' + rank + '" data-user="' + esc(u.id) + '" title="View profile">' + (rank === 1 ? '<span class="crown" aria-hidden="true">👑</span>' : '') +
           avatar(u, rank === 1 ? 'lg' : 'md', mine) +
           '<span class="nm">' + nameOf(u) + '</span>' + roleChip(u) +
           '<span class="xp">' + Number(u.xp_this_week || 0) + ' XP</span>' +
@@ -192,7 +193,7 @@
         var pct = Math.max(3, Math.round(Number(u.xp_this_week || 0) / maxXp * 100));
         var badge = badgeOf(u);
         return (i === 3 ? '<div class="lbx-sep">Prize zone ends</div>' : '') +
-          '<div class="lbx-row' + (mine ? ' me' : '') + '"' + (mine ? ' data-lbx-myrow' : '') + '>' +
+          '<div class="lbx-row' + (mine ? ' me' : '') + '" data-user="' + esc(u.id) + '" title="View profile"' + (mine ? ' data-lbx-myrow' : '') + '>' +
           '<span class="rk' + (medal ? ' top' : '') + '">' + (medal || (i + 1)) + '</span>' + avatar(u, 'sm', mine) +
           '<div class="who"><div class="l1"><span class="n">' + nameOf(u) + '</span>' + roleChip(u) + (badge ? '<span>' + badge + '</span>' : '') + (mine ? '<span class="lbx-you">You</span>' : '') + '</div>' +
           '<div class="l2"><div class="lbx-bar"><span style="width:' + pct + '%"></span></div><span>' + Number(u.xp_total || 0).toLocaleString('en-GB') + ' total</span></div></div>' +
