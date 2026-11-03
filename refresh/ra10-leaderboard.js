@@ -114,6 +114,11 @@
       '.lbx-row:hover{background:var(--lbx-well)}',
       '.lbx-row.me{background:linear-gradient(90deg,rgba(34,197,94,.14),rgba(59,130,246,.08));box-shadow:inset 0 0 0 1.5px rgba(34,197,94,.55)}',
       '.lbx-row[data-user],.lbx-p[data-user]{cursor:pointer}',
+      '.lbx-cardtip{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;max-width:none!important;box-sizing:border-box;margin:0;padding:10px 14px;border-radius:16px;background:var(--lbx-well);color:var(--lbx-ink2);font-size:.84rem;font-weight:700;text-align:center}',
+      '.lbx-cardtip span{font-size:1.05rem;animation:lbxTap 1.8s ease-in-out infinite}',
+      '@media (max-width:600px){.lbx-cardtip{justify-content:flex-start;text-align:left;font-size:.8rem}}',
+      '@keyframes lbxTap{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}',
+      '@media (prefers-reduced-motion:reduce){.lbx-cardtip span{animation:none}}',
       '.lbx-row .rk{font-weight:900;font-size:1rem;text-align:center;color:var(--lbx-ink2);font-variant-numeric:tabular-nums}',
       '.lbx-row .rk.top{font-size:1.25rem}',
       '.lbx-row .who{min-width:0}',
@@ -175,6 +180,7 @@
     if (!rows.length) {
       html += '<div class="lbx-list"><div class="lbx-empty">No XP earned yet this week. Answer a question to take first place!</div></div>';
     } else {
+      html += '<p class="lbx-cardtip"><span aria-hidden="true">👆</span> Tap anyone’s name or picture to see their stats: streak, leaderboard wins and when they joined.</p>';
       var podium = [rows[1], rows[0], rows[2]];
       html += '<section class="lbx-podium" aria-label="Top three">' + podium.map(function (u, i) {
         if (!u) return '<div></div>';
