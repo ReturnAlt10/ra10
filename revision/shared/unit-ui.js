@@ -1,8 +1,12 @@
 /* RA10 — unified unit UI (all subjects). Adds, without touching each app's own code:
      • a "Jump to" quick-navigation menu (grouped, keyboard accessible; bottom sheet on phones)
      • a mobile bottom navigation bar (Home · Papers/Practise · Revise · Progress · Menu)
-     • a launchpad dashboard: big, consistent tiles with live counts and a "continue where you left off" card
+     • the Study Hub dashboard: a hero with your progress in this unit, a "pick up where you left off"
+       strip and three clear lanes (Learn · Practise · Test yourself) with plain-English buttons
      • breadcrumbs with a back button on every sub-view
+     • activity tracking (sections, guide reading, answers, quiz choices, AI Examiner marks) → RA10Track
+     • sign-in required for downloads / printing
+     • RA10 EDU: the assignment runner + question-bank catalogue (lazy-loaded unit-edu.js)
    It navigates by clicking the app's existing [data-goto] / .tab controls, so every app's own render hooks still run. */
 (function () {
   'use strict';
@@ -21,46 +25,94 @@
     quiz: ICON('<path d="M13 2 4 14h7l-1 8 9-12h-7z"/>'),
     flash: ICON('<rect x="3" y="6" width="14" height="14" rx="2"/><path d="M7 6V4h14v14h-2"/>'),
     guide: ICON('<path d="M4 5a2 2 0 0 1 2-2h13v17H6a2 2 0 0 0-2 2z"/><path d="M4 19V5"/><path d="M9 8h6"/>'),
-    spec: ICON('<path d="M4 6h16M4 12h16M4 18h10"/>'),
+    spec: ICON('<path d="M9 6h11M9 12h11M9 18h11"/><path d="m3 6 1.5 1.5L7 5M3 12l1.5 1.5L7 11M3 18l1.5 1.5L7 17"/>'),
     calculator: ICON('<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 12h2M12 12h2M16 12h0M8 16h2M12 16h2M16 16h0"/>'),
     progress: ICON('<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>'),
     menu: ICON('<path d="M4 7h16M4 12h16M4 17h16"/>'),
     chevron: ICON('<path d="m6 9 6 6 6-6"/>'),
     back: ICON('<path d="M15 6l-6 6 6 6"/>'),
+    arrow: ICON('<path d="M5 12h14M13 6l6 6-6 6"/>'),
     spark: ICON('<path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/>'),
+    flame: ICON('<path d="M12 22c4 0 7-2.7 7-7 0-3.5-2.4-6-4-8-.4 2-1.5 3.2-3 3.5C12.5 7 11 4.5 8.5 2 8.8 5.5 5 8.6 5 15c0 4.3 3 7 7 7z"/>'),
+    check: ICON('<path d="M20 6 9 17l-5-5"/>'),
+    target: ICON('<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>'),
     booklet: ICON('<path d="M6 3h11a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6z"/><path d="M6 3v18"/><path d="M10 8h5M10 12h5"/><path d="M8 17h9"/>'),
-    tools: ICON('<path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.6 2.6-2.4-.6-.6-2.4z"/>')
+    tools: ICON('<path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.6 2.6-2.4-.6-.6-2.4z"/>'),
+    lock: ICON('<rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>')
   };
 
   // Destinations: meta for every view name we know about. Views not listed here are derived from their heading.
+  // t = title, d = short description (menu), long = plain-English dashboard description, cta = button wording
   const META = {
     dashboard: { t: 'Dashboard', d: 'Your study hub', i: 'home', g: 'Start', p: 'dashboard' },
     home: { t: 'Home', d: 'Your study hub', i: 'home', g: 'Start', p: 'dashboard' },
-    papers: { t: 'Past Papers', d: 'Past papers and RA10 Papers: answer online, AI marking, PDF', i: 'papers', g: 'Practise', p: 'papers', feat: 1 },
-    pastpapers: { t: 'Past Papers', d: 'Past papers and RA10 Papers: answer online, AI marking, PDF', i: 'papers', g: 'Practise', p: 'questions', feat: 1 },
-    practice: { t: 'Practise by topic', d: 'Filter by topic, marks and type', i: 'practice', g: 'Practise', p: 'questions' },
-    questions: { t: 'Questions', d: 'Practice, browse and mock papers', i: 'practice', g: 'Practise', p: 'questions', parent: 1 },
-    browse: { t: 'Question bank', d: 'Every question with its mark scheme', i: 'browse', g: 'Practise', p: 'questions' },
-    mock: { t: 'Mock paper', d: 'A timed random paper', i: 'mock', g: 'Practise', p: 'questions' },
-    quiz: { t: 'Quick quiz', d: 'Multiple choice with explanations', i: 'quiz', g: 'Revise', p: 'revise' },
-    flash: { t: 'Flashcards', d: 'Terms, formulae and key facts', i: 'flash', g: 'Revise', p: 'revise' },
-    guide: { t: 'Revision guide', d: 'Diagrams, examples and exam tips', i: 'guide', g: 'Revise', p: 'revise', feat: 1 },
-    spec: { t: 'Specification', d: 'Content mapped to questions', i: 'spec', g: 'Revise', p: 'revise' },
-    revise: { t: 'Revise', d: 'Guide, flashcards, quiz', i: 'guide', g: 'Revise', p: 'revise', parent: 1 },
-    calculator: { t: 'Calculator', d: 'Finance tools and formulae', i: 'calculator', g: 'Revise', p: 'calculator' },
-    progress: { t: 'Progress', d: 'Scores, streaks and weak topics', i: 'progress', g: 'Track', p: 'progress' }
+    papers: { t: 'Past Papers', d: 'Past papers and RA10 Papers: answer online, AI marking, PDF', long: 'Real exam papers in the exam layout. Answer online and the AI Examiner marks you like Pearson would.', cta: 'Open past papers', i: 'papers', g: 'Practise', p: 'papers', lane: 'practise', feat: 1 },
+    pastpapers: { t: 'Past Papers', d: 'Past papers and RA10 Papers: answer online, AI marking, PDF', long: 'Real exam papers in the exam layout. Answer online and the AI Examiner marks you like Pearson would.', cta: 'Open past papers', i: 'papers', g: 'Practise', p: 'questions', lane: 'practise', feat: 1 },
+    practice: { t: 'Practise by topic', d: 'Filter by topic, marks and type', long: 'Pick a topic and answer exam-style questions one at a time, with instant feedback.', cta: 'Start practising', i: 'practice', g: 'Practise', p: 'questions', lane: 'practise' },
+    questions: { t: 'Questions', d: 'Practice, browse and mock papers', long: 'Every exam-style question for this unit.', cta: 'Open questions', i: 'practice', g: 'Practise', p: 'questions', parent: 1, lane: 'practise' },
+    browse: { t: 'Question bank', d: 'Every question with its mark scheme', long: 'Search every question and read the full mark scheme.', cta: 'Browse questions', i: 'browse', g: 'Practise', p: 'questions', lane: 'practise' },
+    mock: { t: 'Mock exam', d: 'A timed random paper', long: 'A fresh timed paper built from random questions — the closest thing to the real exam.', cta: 'Build a mock', i: 'mock', g: 'Practise', p: 'questions', lane: 'test' },
+    quiz: { t: 'Quick quiz', d: 'Multiple choice with explanations', long: 'Ten quick multiple-choice questions. See the right answer and why straight away.', cta: 'Take a quiz', i: 'quiz', g: 'Revise', p: 'revise', lane: 'test' },
+    flash: { t: 'Flashcards', d: 'Terms, formulae and key facts', long: 'Flip cards to lock in key terms, definitions and facts.', cta: 'Flip flashcards', i: 'flash', g: 'Revise', p: 'revise', lane: 'learn' },
+    guide: { t: 'Revision guide', d: 'Diagrams, examples and exam tips', long: 'Read the notes: every topic explained with diagrams, worked examples and exam tips.', cta: 'Start reading', i: 'guide', g: 'Revise', p: 'revise', lane: 'learn', feat: 1 },
+    spec: { t: 'Specification', d: 'Content mapped to questions', long: 'The checklist of everything you need to know, topic by topic.', cta: 'See the topics', i: 'spec', g: 'Revise', p: 'revise', lane: 'learn' },
+    revise: { t: 'Revise', d: 'Guide, flashcards, quiz', long: 'Guide, flashcards and quizzes.', cta: 'Revise', i: 'guide', g: 'Revise', p: 'revise', parent: 1, lane: 'learn' },
+    calculator: { t: 'Calculator', d: 'Finance tools and formulae', long: 'Finance calculators and every formula you need.', cta: 'Open calculator', i: 'calculator', g: 'Revise', p: 'calculator', lane: 'learn' },
+    progress: { t: 'Progress', d: 'Scores, streaks and weak topics', long: 'Your scores, streak and weakest topics.', cta: 'See progress', i: 'progress', g: 'Track', p: 'progress' }
   };
   const GROUP_ORDER = ['Start', 'Practise', 'Revise', 'Tools', 'Track'];
+  const LANES = [
+    { k: 'learn', t: 'Learn it', s: 'Read and memorise', n: '1' },
+    { k: 'practise', t: 'Practise it', s: 'Answer exam questions', n: '2' },
+    { k: 'test', t: 'Test yourself', s: 'Check you are exam-ready', n: '3' }
+  ];
 
   const store = {
     get(k) { try { return localStorage.getItem('ra10_ux_' + k); } catch (e) { return null; } },
     set(k, v) { try { localStorage.setItem('ra10_ux_' + k, v); } catch (e) {} }
   };
   const unitKey = (location.pathname || '').replace(/[^a-z0-9]+/gi, '_').slice(-40);
+  const embedded = (() => { try { return window.self !== window.top; } catch (e) { return true; } })();
+  const params = new URLSearchParams(location.search);
 
   let dests = [];          // [{name, t, d, i, g, p, el}]
   let current = 'dashboard';
-  let menu = null, bottom = null, crumbHost = null;
+  let menu = null, bottom = null;
+
+  /* ───── the app's own data (top-level let/const globals are visible to classic scripts) ───── */
+  function appData() {
+    const d = {};
+    try { d.questions = typeof QUESTIONS !== 'undefined' ? QUESTIONS : window.QUESTIONS; } catch (e) { d.questions = window.QUESTIONS; }
+    try { d.quiz = typeof QUIZ !== 'undefined' ? QUIZ : window.QUIZ; } catch (e) { d.quiz = window.QUIZ; }
+    try { d.flash = typeof FLASHCARDS !== 'undefined' ? FLASHCARDS : window.FLASHCARDS; } catch (e) { d.flash = window.FLASHCARDS; }
+    try { d.spec = typeof SPEC !== 'undefined' ? SPEC : window.SPEC; } catch (e) { d.spec = window.SPEC; }
+    d.papers = window.AQA_PAPERS || window.BIZ_PAPERS || window.PAPERS || null;
+    ['questions', 'quiz', 'flash', 'papers'].forEach(k => { if (!Array.isArray(d[k])) d[k] = []; });
+    return d;
+  }
+
+  /* ───── local progress stats for this unit (powers the dashboard) ───── */
+  const STATS_KEY = 'stats_' + unitKey;
+  const today = () => new Date().toISOString().slice(0, 10);
+  function stats() { try { return JSON.parse(store.get(STATS_KEY) || '{}') || {}; } catch (e) { return {}; } }
+  function bump(fn) {
+    if (params.has('ra10catalog')) return;
+    const s = stats();
+    fn(s);
+    s.days = s.days || {};
+    s.days[today()] = (s.days[today()] || 0) + 1;
+    const keys = Object.keys(s.days).sort();
+    if (keys.length > 90) keys.slice(0, keys.length - 90).forEach(k => delete s.days[k]);
+    store.set(STATS_KEY, JSON.stringify(s));
+    scheduleHeroPaint();
+  }
+  function streak(s) {
+    const days = s.days || {};
+    let n = 0; const d = new Date();
+    if (!days[d.toISOString().slice(0, 10)]) d.setDate(d.getDate() - 1);
+    while (days[d.toISOString().slice(0, 10)]) { n++; d.setDate(d.getDate() - 1); }
+    return n;
+  }
 
   function viewNames() {
     return $$('section.view[id^="view-"]').map(v => v.id.replace(/^view-/, ''));
@@ -82,12 +134,12 @@
       dests.push({ name, t: headingOf(name), d: '', i: 'tools', g: 'Tools', p: name });
     });
     if (dests.some(d => d.name === 'pastpapers')) {
-      dests.forEach(d => { if (d.name === 'papers') { d.t = 'Predicted Papers'; d.d = 'June 2027 predictions and exam trends'; d.feat = 0; } });
+      dests.forEach(d => { if (d.name === 'papers') { d.t = 'Predicted Papers'; d.d = 'June 2027 predictions and exam trends'; d.long = 'Our predictions for the next exam, written in the exam layout.'; d.cta = 'See predictions'; d.lane = 'test'; d.feat = 0; } });
     }
     // Printable revision booklets live outside the app (../booklets/?unit=N): surface them as a real destination.
     const booklet = $('a[href*="booklets/index.html"]');
     if (booklet && !dests.some(d => d.name === 'booklets')) {
-      dests.push({ name: 'booklets', t: 'Revision booklets', d: 'Printable booklet + solutions for every aim', i: 'booklet', g: 'Revise', p: 'revise', href: booklet.href });
+      dests.push({ name: 'booklets', t: 'Revision booklets', d: 'Printable booklet + solutions for every aim', long: 'Printable booklets with worked solutions for every learning aim.', cta: 'Open booklets', i: 'booklet', g: 'Revise', p: 'revise', lane: 'learn', href: booklet.href });
     }
     // a unit that has both 'dashboard' and 'home' keeps one
     if (dests.some(d => d.name === 'dashboard')) dests = dests.filter(d => d.name !== 'home');
@@ -143,7 +195,7 @@
   function siteLinksHtml() {
     return `<div class="ux-mgroup ux-site" role="group" aria-label="Around RA10"><p class="ux-mlabel">Around RA10</p><div class="ux-sitegrid">${SITE.map(x => `<a class="ux-sitelink" href="${x[1]}" target="_top"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${x[2]}"/></svg><span>${x[0]}</span></a>`).join('')}</div></div>`;
   }
-  function openMenu(anchor) {
+  function openMenu() {
     if (menu) { closeMenu(); return; }
     menu = document.createElement('div');
     menu.className = 'ux-menu';
@@ -201,7 +253,7 @@
     b.type = 'button'; b.className = 'ux-jump';
     b.setAttribute('aria-haspopup', 'dialog'); b.setAttribute('aria-expanded', 'false'); b.setAttribute('data-ux-open', '');
     b.innerHTML = `${I.menu}<span>Jump to</span>${I.chevron}`;
-    b.addEventListener('click', () => openMenu(b));
+    b.addEventListener('click', () => openMenu());
     tabs.insertAdjacentElement('afterend', b);
   }
 
@@ -211,7 +263,7 @@
     if (!actions || $('.ux-menubtn')) return;
     const b = document.createElement('button');
     b.type = 'button'; b.className = 'ux-menubtn'; b.setAttribute('aria-label', 'Open menu'); b.setAttribute('aria-haspopup', 'dialog'); b.setAttribute('data-ux-open', ''); b.setAttribute('aria-expanded', 'false');
-    b.innerHTML = I.menu; b.addEventListener('click', () => openMenu(b));
+    b.innerHTML = I.menu; b.addEventListener('click', () => openMenu());
     actions.insertAdjacentElement('afterbegin', b);
   }
 
@@ -238,54 +290,207 @@
     });
   }
 
-  /* ───── launchpad dashboard ───── */
+  /* ───── Study Hub dashboard ───── */
   function counts() {
-    const c = {};
-    try { if (window.FLASHCARDS) c.flash = FLASHCARDS.length + ' cards'; } catch (e) {}
-    try { if (window.QUIZ) c.quiz = QUIZ.length + ' questions'; } catch (e) {}
-    try { if (window.QUESTIONS) { c.browse = QUESTIONS.length + ' questions'; c.practice = QUESTIONS.length + ' questions'; } } catch (e) {}
-    try { const pp = window.AQA_PAPERS || window.BIZ_PAPERS || window.PAPERS; if (pp && pp.length) c.papers = pp.length + ' papers'; } catch (e) {}
+    const d = appData(), c = {};
+    if (d.flash.length) c.flash = d.flash.length + ' cards';
+    if (d.quiz.length) c.quiz = d.quiz.length + ' questions';
+    if (d.questions.length) { c.browse = d.questions.length + ' questions'; c.practice = d.questions.length + ' questions'; c.mock = 'Timed'; }
+    if (d.papers.length) { c.papers = d.papers.length + ' papers'; c.pastpapers = d.papers.length + ' papers'; }
+    if (d.spec && typeof d.spec === 'object') {
+      const aims = Object.keys(d.spec);
+      const topics = aims.reduce((n, a) => n + ((d.spec[a] && d.spec[a].topics) || []).length, 0);
+      if (topics) { c.guide = topics + ' topics'; c.spec = aims.length + ' learning aims'; }
+    }
     return c;
   }
+  function firstName() {
+    try { const p = window.RA10 && RA10.getProfile && RA10.getProfile(); const n = p && (p.display_name || p.full_name || p.username); return n ? String(n).trim().split(/\s+/)[0].slice(0, 20) : ''; } catch (e) { return ''; }
+  }
+  function recommended() {
+    const s = stats();
+    const guideSeen = Object.keys(s.guide || {}).length, guideTotal = s.guideTotal || 0;
+    const mcq = s.mcq || 0, acc = mcq ? (s.mcqOk || 0) / mcq : 1;
+    if (destOf('guide') && (guideTotal ? guideSeen / guideTotal < 0.25 : guideSeen < 3)) return { n: 'guide', why: 'Start with the notes — you have read ' + (guideTotal ? Math.round(guideSeen / guideTotal * 100) + '%' : 'only a little') + ' of the guide.' };
+    if (destOf('quiz') && mcq < 10) return { n: 'quiz', why: 'A quick quiz shows what you already know.' };
+    if (destOf('flash') && acc < 0.6) return { n: 'flash', why: 'Your quiz accuracy is ' + Math.round(acc * 100) + '% — flashcards will help key terms stick.' };
+    const p = destOf('pastpapers') ? 'pastpapers' : destOf('papers') ? 'papers' : destOf('practice') ? 'practice' : null;
+    return p ? { n: p, why: 'You know the content — time for real exam questions.' } : null;
+  }
+  // The unit's paper library (Pearson/AQA papers + RA10 papers), if it has one.
+  function paperInfo() {
+    const list = appData().papers;
+    if (!list.length) return null;
+    const dest = destOf('pastpapers') ? 'pastpapers' : (destOf('papers') && $('#papers-host') ? 'papers' : null);
+    if (!dest) return null;
+    const ra10 = list.filter(p => p.source === 'ra10').length;
+    const official = list.length - ra10;
+    const board = /a-level/i.test(location.pathname) ? 'AQA' : 'Pearson';
+    return { dest, ra10, official, board };
+  }
+  function openPapers(pp, which) {
+    go(pp.dest);
+    let tries = 0;
+    const pick = () => {
+      const seg = $$('#papers-host .pp-libbar .pp-seg button');
+      if (!seg.length) { if (++tries < 20) setTimeout(pick, 150); return; }
+      if (which === 'mock') { const m = $('#papers-host .pp-libbar .btn.primary'); if (m) m.click(); return; }
+      const b = seg.find(x => (which === 'ra10') === /RA10/i.test(x.textContent));
+      if (b && !b.classList.contains('on')) b.click();
+      const host = $('#papers-host'); host && host.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
+    setTimeout(pick, 120);
+  }
+  function unitInfo() {
+    const legacy = $('#view-dashboard .hero') || $('#view-home .hero');
+    const meta = (window.RA10Units && RA10Units.fromLocation(location.pathname)) || null;
+    const title = (legacy && $('h2', legacy) && $('h2', legacy).textContent.trim()) || (meta && meta.name) || document.title.replace(/\s*[|–-].*$/, '');
+    const eyebrow = (legacy && $('.eyebrow', legacy) && $('.eyebrow', legacy).textContent.trim()) || (meta && meta.qual) || '';
+    const lede = (legacy && $('.lede', legacy) && $('.lede', legacy).textContent.trim()) || '';
+    return { title, eyebrow, lede, kind: meta ? meta.kind : '' };
+  }
+
+  function heroStatsHtml() {
+    const s = stats();
+    const guideSeen = Object.keys(s.guide || {}).length, guideTotal = Math.max(s.guideTotal || 0, guideSeen);
+    const pct = guideTotal ? Math.round(guideSeen / guideTotal * 100) : 0;
+    const answered = Math.max(s.q || 0, s.ai || 0);   // a marked answer is usually also a written one
+    const acc = s.mcq ? Math.round((s.mcqOk || 0) / s.mcq * 100) : null;
+    const st = streak(s);
+    const todayN = (s.days || {})[today()] || 0;
+    const goal = 10, goalPct = Math.min(100, Math.round(todayN / goal * 100));
+    const R = 46, C = 2 * Math.PI * R;
+    return `
+      <div class="ux-ring" role="img" aria-label="Revision guide ${pct}% read">
+        <svg viewBox="0 0 120 120" aria-hidden="true"><circle class="trk" cx="60" cy="60" r="${R}"/><circle class="bar" cx="60" cy="60" r="${R}" stroke-dasharray="${C.toFixed(1)}" stroke-dashoffset="${(C * (1 - pct / 100)).toFixed(1)}"/></svg>
+        <div class="ux-ring-in"><b>${pct}<small>%</small></b><span>guide read</span></div>
+      </div>
+      <div class="ux-mini">
+        <div><b>${answered}</b><span>questions answered</span></div>
+        <div><b>${acc == null ? '—' : acc + '%'}</b><span>quiz accuracy</span></div>
+        <div class="${st ? 'hot' : ''}"><b>${I.flame}${st}</b><span>day streak</span></div>
+      </div>
+      <div class="ux-goal" title="Today's goal: ${goal} study actions in this unit">
+        <span>${todayN >= goal ? I.check + ' Daily goal smashed!' : `Today: ${todayN} / ${goal} study actions`}</span>
+        <i><em style="width:${goalPct}%"></em></i>
+      </div>`;
+  }
+  let heroT = null;
+  function scheduleHeroPaint() { clearTimeout(heroT); heroT = setTimeout(() => { const h = $('.ux-hero-stats'); if (h) h.innerHTML = heroStatsHtml(); }, 250); }
+
+  function tileHtml(d, c, rec) {
+    const isRec = rec && rec.n === d.name;
+    return `<button type="button" class="ux-act${isRec ? ' rec' : ''}" data-ux-go="${esc(d.name)}" data-tile="${esc(d.name)}">
+        ${isRec ? '<span class="ux-rec">Recommended next</span>' : ''}
+        <span class="ux-aicon">${I[d.i] || I.tools}</span>
+        <span class="ux-atxt"><b>${esc(d.t)}</b><small>${esc(d.long || d.d || '')}</small>
+          <span class="ux-ameta"><em class="ux-tcount" data-count="${esc(d.name)}">${esc(c[d.name] || '')}</em><strong>${esc(d.cta || 'Open')} ${I.arrow}</strong></span></span>
+      </button>`;
+  }
+
   function launchpad() {
     const dash = $('#view-dashboard') || $('#view-home');
-    if (!dash || $('.ux-launch', dash)) return;
-    const wanted = ['pastpapers', 'papers', 'guide', 'practice', 'quiz', 'flash', 'browse', 'mock', 'booklets', 'spec', 'calculator'];
-    const tiles = wanted.map(destOf).filter(Boolean);
-    dests.filter(d => d.g === 'Tools' && $(`.tabs .tab[data-tab="${d.name}"]`) && !tiles.includes(d)).slice(0, 4).forEach(d => tiles.push(Object.assign({}, d, { d: d.d || 'Open ' + d.t.toLowerCase() })));
-    if (!tiles.length) return;
+    if (!dash || $('.ux-hub', dash)) return;
+    const lanes = { learn: [], practise: [], test: [] };
+    const pp = paperInfo();
+    dests.forEach(d => { if (d.lane && lanes[d.lane] && d.name !== 'dashboard' && !(pp && d.name === pp.dest)) lanes[d.lane].push(d); });
+    // tools that only exist as tabs (e.g. SQL lab, calculators) join the practise lane
+    dests.filter(d => d.g === 'Tools' && !d.lane && $(`.tabs .tab[data-tab="${d.name}"]`)).slice(0, 3)
+      .forEach(d => lanes.practise.push(Object.assign({}, d, { long: d.d || 'Open ' + d.t.toLowerCase(), cta: 'Open' })));
+    if (!lanes.learn.length && !lanes.practise.length && !lanes.test.length) return;
+    // keep lanes balanced: if "test" is empty, move the mock there
+    if (!lanes.test.length && lanes.practise.length > 2) lanes.test.push(lanes.practise.pop());
+
     const c = counts();
+    const info = unitInfo();
+    const rec = recommended();
     const last = store.get('last_' + unitKey);
     const lastD = last && destOf(last) && last !== 'dashboard' && last !== 'home' ? destOf(last) : null;
+    const lastGuide = (() => { try { return JSON.parse(store.get('lastguide_' + unitKey) || 'null'); } catch (e) { return null; } })();
+    const name = firstName();
+    const hour = new Date().getHours();
+    const hi = hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening';
+
     const wrap = document.createElement('section');
-    wrap.className = 'ux-launch';
-    wrap.setAttribute('aria-label', 'Study launchpad');
+    wrap.className = 'ux-hub';
+    wrap.setAttribute('aria-label', 'Study hub');
     wrap.innerHTML = `
-      ${lastD ? `<button type="button" class="ux-resume" data-ux-go="${esc(lastD.name)}"><span class="ux-ricon">${I[lastD.i] || I.tools}</span><span><small>Continue where you left off</small><b>${esc(lastD.t)}</b></span><em>Resume →</em></button>` : ''}
-      <div class="ux-grid">${tiles.map((d, idx) => `
-        <button type="button" class="ux-tile${d.feat || idx === 0 ? ' feat' : ''}${idx === tiles.length - 1 && (tiles.filter(x => !x.feat).length % 2) ? ' wide' : ''}" data-ux-go="${esc(d.name)}" data-tile="${esc(d.name)}">
-          <span class="ux-ticon">${I[d.i] || I.tools}</span>
-          <span class="ux-ttxt"><b>${esc(d.t)}</b><small>${esc(d.d)}</small><em class="ux-tcount" data-count="${esc(d.name)}">${esc(c[d.name] || '')}</em></span>
-        </button>`).join('')}</div>`;
-    // collapse the legacy dashboard sections into an accordion (they stay in the DOM so their buttons keep working)
-    const legacy = $$(':scope > .dashboard-grid, :scope > .section-block', dash);
-    const hero = $(':scope > .hero', dash) || Array.from(dash.children).find(el => !el.classList.contains('ux-launch') && !el.classList.contains('ux-crumb'));
-    if (hero) hero.insertAdjacentElement('afterend', wrap); else dash.prepend(wrap);
-    if (legacy.length) {
+      <header class="ux-hero">
+        <div class="ux-hero-bg" aria-hidden="true"><i></i><i></i><i></i></div>
+        <div class="ux-hero-main">
+          <p class="ux-hello">${esc(hi)}${name ? ', ' + esc(name) : ''} 👋</p>
+          ${info.eyebrow ? `<p class="ux-eyebrow">${esc(info.eyebrow)}</p>` : ''}
+          <h1 class="ux-title">${esc(info.title)}</h1>
+          ${info.lede ? `<p class="ux-lede">${esc(info.lede)}</p>` : ''}
+          <div class="ux-hero-ctas">
+            ${rec ? `<button type="button" class="ux-cta" data-ux-go="${esc(rec.n)}">${I[destOf(rec.n).i] || I.spark}<span><b>${esc(destOf(rec.n).cta || 'Start')}</b><small>${esc(rec.why)}</small></span>${I.arrow}</button>` : ''}
+          </div>
+          <div class="ux-chips">${[c.guide, c.browse, c.papers, c.quiz && c.quiz.replace('questions', 'quiz questions'), c.flash].filter(Boolean).map(x => `<span>${esc(x)}</span>`).join('')}</div>
+        </div>
+        <div class="ux-hero-stats">${heroStatsHtml()}</div>
+      </header>
+      ${(lastD || lastGuide) ? `<div class="ux-resume-row">
+        ${lastD ? `<button type="button" class="ux-resume" data-ux-go="${esc(lastD.name)}"><span class="ux-ricon">${I[lastD.i] || I.tools}</span><span><small>Pick up where you left off</small><b>${esc(lastD.t)}</b></span><em>Resume ${I.arrow}</em></button>` : ''}
+        ${lastGuide && lastGuide.t ? `<button type="button" class="ux-resume alt" data-ux-guide="${esc(lastGuide.id || '')}"><span class="ux-ricon">${I.guide}</span><span><small>Last thing you read</small><b>${esc(lastGuide.t)}</b></span><em>Keep reading ${I.arrow}</em></button>` : ''}
+      </div>` : ''}
+      ${pp ? `<section class="ux-papers" aria-label="Past papers and RA10 papers">
+        <span class="ux-papers-ico">${I.papers}</span>
+        <div class="ux-papers-txt"><p class="ux-papers-k">Exam papers</p><h2>${pp.ra10 ? 'Past Papers &amp; RA10 Papers' : 'Past Papers'}</h2>
+          <p>${pp.official ? `${pp.official} official ${pp.board} paper${pp.official === 1 ? '' : 's'}` : ''}${pp.official && pp.ra10 ? ' and ' : ''}${pp.ra10 ? `${pp.ra10} RA10 practice paper${pp.ra10 === 1 ? '' : 's'}` : ''} in the real exam layout. Answer online and the AI Examiner marks you, or download a PDF.</p></div>
+        <div class="ux-papers-btns">
+          ${pp.official ? `<button type="button" class="ux-pbtn pri" data-ux-papers="official">${esc(pp.board)} past papers <em>${pp.official}</em></button>` : ''}
+          ${pp.ra10 ? `<button type="button" class="ux-pbtn${pp.official ? '' : ' pri'}" data-ux-papers="ra10">RA10 papers <em>${pp.ra10}</em></button>` : ''}
+          ${pp.ra10 ? `<button type="button" class="ux-pbtn ghost" data-ux-papers="mock">⏱ Timed mock</button>` : ''}
+        </div></section>` : ''}
+      <div class="ux-edu-slot" hidden></div>
+      <div class="ux-lanes">${LANES.filter(l => lanes[l.k].length).map(l => `
+        <section class="ux-lane ux-lane-${l.k}" aria-label="${esc(l.t)}">
+          <header><span class="ux-step">${l.n}</span><div><h2>${esc(l.t)}</h2><p>${esc(l.s)}</p></div></header>
+          <div class="ux-acts">${lanes[l.k].map(d => tileHtml(d, c, rec)).join('')}</div>
+        </section>`).join('')}
+      </div>`;
+
+    // everything the app put on its dashboard moves into the "More" drawer (it stays in the DOM so its buttons keep working)
+    const legacy = Array.from(dash.children).filter(el => !el.classList.contains('ux-hub') && !el.classList.contains('ux-crumb'));
+    dash.prepend(wrap);
+    legacy.forEach(el => {
+      const txt = (el.textContent || '').trim();
+      if (/Why some features cost credits/i.test(txt)) { el.remove(); return; }       // everyone has unlimited credits now
+      if (el.classList.contains('pp-free-banner')) { el.hidden = true; }                // the Past Papers lane button replaces it
+    });
+    const keep = legacy.filter(el => el.isConnected && !el.hidden);
+    if (keep.length) {
       const det = document.createElement('details');
       det.className = 'ux-more';
-      det.innerHTML = '<summary><span>More study tools and topic coverage</span>' + I.chevron + '</summary><div class="ux-morebody"></div>';
+      det.innerHTML = '<summary><span>' + I.tools + ' Unit overview, topic coverage and every tool</span>' + I.chevron + '</summary><div class="ux-morebody"></div>';
       wrap.insertAdjacentElement('afterend', det);
       const body = $('.ux-morebody', det);
-      legacy.forEach(el => body.appendChild(el));
-      if (window.matchMedia && matchMedia('(min-width: 1100px)').matches && store.get('more_open') === '1') det.open = true;
+      keep.forEach(el => body.appendChild(el));
+      if (store.get('more_open') === '1') det.open = true;
       det.addEventListener('toggle', () => store.set('more_open', det.open ? '1' : '0'));
     }
-    wrap.addEventListener('click', (e) => { const b = e.target.closest('[data-ux-go]'); if (b) go(b.dataset.uxGo); });
+    wrap.addEventListener('click', (e) => {
+      const pb = e.target.closest('[data-ux-papers]');
+      if (pb && pp) { openPapers(pp, pb.dataset.uxPapers); return; }
+      const g = e.target.closest('[data-ux-guide]');
+      if (g) { openGuideSection(g.dataset.uxGuide); return; }
+      const b = e.target.closest('[data-ux-go]'); if (b) go(b.dataset.uxGo);
+    });
+    // a soft tilt on pointer devices
+    if (window.matchMedia && matchMedia('(hover: hover) and (prefers-reduced-motion: no-preference)').matches) {
+      wrap.addEventListener('pointermove', (e) => {
+        const t = e.target.closest('.ux-act'); if (!t) return;
+        const r = t.getBoundingClientRect();
+        t.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100).toFixed(1) + '%');
+        t.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100).toFixed(1) + '%');
+      });
+    }
   }
   function refreshCounts() {
     const c = counts();
     $$('.ux-tcount').forEach(el => { const k = el.dataset.count; if (c[k]) el.textContent = c[k]; });
+    const chips = $('.ux-chips');
+    if (chips) chips.innerHTML = [c.guide, c.browse, c.papers, c.quiz && c.quiz.replace('questions', 'quiz questions'), c.flash].filter(Boolean).map(x => `<span>${esc(x)}</span>`).join('');
   }
 
   /* ───── breadcrumbs on sub-views ───── */
@@ -303,6 +508,224 @@
       v.prepend(c);
       c.addEventListener('click', (e) => { const b = e.target.closest('[data-ux-go]'); if (b) go(b.dataset.uxGo); });
     });
+  }
+
+  /* ───── revision guide: section reading tracker + deep links ───── */
+  function guideRoot() { return $('#view-guide.active') || $('section.view.active[id*="guide"]'); }
+  function guideHeadings(root, includeHidden) {
+    return $$('h2, h3, h4, [id^="guide-aim-"]', root)
+      .filter(h => (includeHidden || h.offsetParent !== null) && (h.textContent || '').trim().length > 2 && !h.closest('.ux-crumb, .ux-hub, nav, .ux-gate'));
+  }
+  function slug(s) { return String(s || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 80); }
+  function headingId(h) { return h.id || (h.closest('[id]') && h.closest('[id]').id !== 'view-guide' ? h.closest('[id]').id + ':' : '') + slug(h.textContent); }
+  const dwell = {};
+  const guideLogged = new Set();
+  function sampleGuide() {
+    if (document.visibilityState !== 'visible') return;
+    const root = guideRoot(); if (!root) return;
+    const hs = guideHeadings(root);
+    if (!hs.length) return;
+    const s = stats();
+    if (hs.length > (s.guideTotal || 0)) { bump(x => { x.guideTotal = hs.length; }); }
+    // the section being read = the last heading above 45% of the viewport
+    const line = window.innerHeight * 0.45;
+    let cur = null;
+    for (const h of hs) { if (h.getBoundingClientRect().top <= line) cur = h; else break; }
+    if (!cur) cur = hs[0].getBoundingClientRect().top < window.innerHeight ? hs[0] : null;
+    if (!cur) return;
+    const id = headingId(cur), title = cur.textContent.trim().replace(/\s+/g, ' ').slice(0, 160);
+    dwell[id] = (dwell[id] || 0) + 3;
+    if (dwell[id] >= 9 && !guideLogged.has(id)) {
+      guideLogged.add(id);
+      bump(x => { x.guide = x.guide || {}; x.guide[id] = Date.now(); });
+      store.set('lastguide_' + unitKey, JSON.stringify({ id, t: title }));
+      track('guide_section', { ref: id, title, view: 'guide' });
+    }
+  }
+  function openGuideSection(id, title) {
+    go(destOf('guide') ? 'guide' : 'revise');
+    let tries = 0;
+    const seek = () => {
+      const root = guideRoot();
+      let el = id ? document.getElementById(id.split(':').pop()) || document.getElementById(id) : null;
+      if (!el && root && (id || title)) {
+        const want = slug(title || id.split(':').pop());
+        el = guideHeadings(root).find(h => slug(h.textContent) === want || slug(h.textContent).indexOf(want) === 0) || null;
+        if (!el && id && id.indexOf(':') > 0) el = document.getElementById(id.split(':')[0]);
+      }
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        el.classList.add('ux-flash'); setTimeout(() => el.classList.remove('ux-flash'), 2200);
+        return;
+      }
+      if (++tries < 12) setTimeout(seek, 250);
+    };
+    setTimeout(seek, 250);
+  }
+
+  /* ───── activity tracking hooks ───── */
+  const quiet = params.has('ra10catalog');   // hidden catalogue frame for teachers: never record activity
+  function track(kind, f) { if (quiet) return; try { if (window.RA10Track) RA10Track.log(kind, f || {}); } catch (e) {} }
+  const QSEL = '.pp-qtext, .quiz-q, .question-text, .q-text, .qtext, .practice-question, .question-body, .q-body, .pq-text, .question h3, .question h4, h3, h4';
+  function questionTextFor(el) {
+    // walk up a few levels, and in each look backwards for the question text that sits above the box
+    let node = el;
+    for (let depth = 0; node && depth < 7; depth++, node = node.parentElement) {
+      let sib = node.previousElementSibling;
+      for (let k = 0; sib && k < 8; k++, sib = sib.previousElementSibling) {
+        const hit = sib.matches && sib.matches(QSEL) ? sib : (sib.querySelector ? Array.from(sib.querySelectorAll(QSEL)).pop() : null);
+        if (hit && hit.textContent.trim().length > 12) return hit.textContent.trim().replace(/\s+/g, ' ');
+      }
+    }
+    return '';
+  }
+  function hookAnswers() {
+    document.addEventListener('change', (e) => {
+      const t = e.target;
+      if (!t || !t.matches || !t.matches('textarea, input[type="text"], input:not([type])')) return;
+      if (t.closest('.ux-menu, .ux-hub, .ux-edu, [data-no-track]') || /search|filter/i.test((t.id || '') + ' ' + (t.name || '') + ' ' + (t.placeholder || ''))) return;
+      const v = String(t.value || '').trim();
+      if (v.length < 3) return;
+      const page = t.closest('.pp-page');
+      const q = questionTextFor(t);
+      track('answer', { title: q || (t.getAttribute('aria-label') || t.placeholder || 'Written answer'), answer: v, ref: (page && page.id) || t.id || null, meta: { words: v.split(/\s+/).length } });
+      bump(s => { s.q = (s.q || 0) + 1; });
+    }, true);
+    // multiple-choice: when an option is revealed (locked), log the choice once per question
+    const seenMcq = new Set();
+    const scanMcq = () => {
+      $$('.quiz-card').forEach(card => {
+        if (!$('.quiz-option.locked', card)) return;
+        const qText = ($('.quiz-q', card) || {}).textContent || '';
+        const id = (($('.tag.id', card) || {}).textContent || '').trim() || slug(qText).slice(0, 40);
+        if (!qText || seenMcq.has(id + qText.length)) return;
+        seenMcq.add(id + qText.length);
+        const wrong = $('.quiz-option.wrong', card), right = $('.quiz-option.correct', card);
+        const chosen = wrong || right;
+        const ok = !wrong;
+        const tags = $$('.quiz-meta .tag', card).map(x => x.textContent.trim());
+        track('mcq', { ref: id, title: qText.trim(), answer: chosen ? (($('.opt-text', chosen) || chosen).textContent || '').trim() : '', score: ok ? 1 : 0, max_score: 1, meta: { aim: tags[1] || null, topic: tags[2] || null } });
+        bump(s => { s.mcq = (s.mcq || 0) + 1; if (ok) s.mcqOk = (s.mcqOk || 0) + 1; });
+      });
+    };
+    let mcqT = null;
+    new MutationObserver(() => { clearTimeout(mcqT); mcqT = setTimeout(scanMcq, 150); }).observe(document.body, { childList: true, subtree: true });
+    // papers opened from the library
+    document.addEventListener('click', (e) => {
+      const b = e.target.closest('.pp-card .btn.primary, .pp-card-actions .btn');
+      if (!b) return;
+      const card = b.closest('.pp-card');
+      const title = card && $('h3', card) ? $('h3', card).textContent.trim() : '';
+      if (/pdf/i.test(b.textContent)) return;
+      track('paper_open', { ref: slug(title), title, meta: { series: card && $('.pp-series', card) ? $('.pp-series', card).textContent.trim() : null } });
+      bump(s => { s.papers = s.papers || {}; s.papers[slug(title)] = 1; });
+    }, true);
+  }
+  // Every AI Examiner mark: the exact question, what was written and the score.
+  function hookExaminer() {
+    const R = window.RA10;
+    if (!R || typeof R.examineAnswer !== 'function' || R.examineAnswer.__uxWrapped) return !!(R && R.examineAnswer && R.examineAnswer.__uxWrapped);
+    const orig = R.examineAnswer;
+    const wrapped = async function (input) {
+      const res = await orig.apply(this, arguments);
+      try {
+        const q = (input && input.question) || {};
+        const r = (res && res.result) || {};
+        const max = Number(r.total || r.max || q.marks || 0) || null;
+        track('ai_examine', {
+          ref: q.id || null, title: q.question || q.text || '', answer: (input && input.answer) || '',
+          score: Number.isFinite(Number(r.earned)) ? Number(r.earned) : null, max_score: max,
+          meta: { topic: q.topic || null, aim: q.learning_aim || null, paper: q.paper_id || null, verb: q.command_verb || null, image: !!(input && input.image) }
+        });
+        bump(s => { s.ai = (s.ai || 0) + 1; });
+      } catch (e) {}
+      return res;
+    };
+    wrapped.__uxWrapped = true;
+    R.examineAnswer = wrapped;
+    return true;
+  }
+
+  /* ───── sign-in needed to download or print ───── */
+  function signedIn() { try { return !!(window.RA10 && RA10.isLoggedIn && RA10.isLoggedIn()); } catch (e) { return false; } }
+  function askSignIn(what) {
+    if (document.querySelector('.ux-gate')) return;
+    const ov = document.createElement('div');
+    ov.className = 'ux-gate';
+    ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-modal', 'true');
+    ov.innerHTML = `<div class="ux-gate-card"><span class="ux-gate-ico">${I.lock}</span><h3>Sign in to ${esc(what || 'download')}</h3>
+      <p>Downloading and printing papers, guides and booklets is free for everyone with an RA10 account.</p>
+      <div class="ux-gate-act"><button type="button" class="ux-gate-no">Not now</button><button type="button" class="ux-gate-yes">Sign in free</button></div></div>`;
+    document.documentElement.appendChild(ov);
+    try { ov.style.fontFamily = getComputedStyle(document.body).fontFamily; } catch (e) {}
+    const close = () => ov.remove();
+    ov.addEventListener('click', (e) => { if (e.target === ov || e.target.closest('.ux-gate-no')) close(); });
+    $('.ux-gate-yes', ov).addEventListener('click', () => {
+      close();
+      try { if (window.top && typeof window.top.openSignInOverlayFallback === 'function') { window.top.openSignInOverlayFallback(); return; } } catch (e) {}
+      try { if (window.RA10 && RA10.showPaywall) { RA10.showPaywall('login', 'download'); return; } } catch (e) {}
+      try { window.top.location.href = '/auth'; } catch (e) { location.href = '/auth'; }
+    });
+    $('.ux-gate-yes', ov).focus();
+  }
+  // RA10UnitUI.requireSignIn('download') → true when allowed, otherwise shows the prompt.
+  function requireSignIn(what) {
+    if (signedIn()) { track('download', { title: what || 'download' }); return true; }
+    askSignIn(what);
+    return false;
+  }
+  function gateDownloads() {
+    const origPrint = window.print ? window.print.bind(window) : null;
+    if (origPrint && !window.print.__uxGate) {
+      const p = function () { if (requireSignIn('print')) origPrint(); };
+      p.__uxGate = true;
+      window.print = p;
+    }
+    // jsPDF is loaded on demand by the paper viewers: gate its save()
+    const patchPdf = () => {
+      const J = window.jspdf && window.jspdf.jsPDF;
+      if (!J || !J.API || J.API.__uxGate) return;
+      const save = J.API.save;
+      J.API.save = function () { if (!requireSignIn('download this PDF')) return this; return save.apply(this, arguments); };
+      J.API.__uxGate = true;
+    };
+    let tries = 0;
+    const iv = setInterval(() => { patchPdf(); if (++tries > 600) clearInterval(iv); }, 1000);
+    document.addEventListener('click', patchPdf, true);
+    // image / file download links (diagram exports, booklet PDFs)
+    document.addEventListener('click', (e) => {
+      const a = e.target.closest && e.target.closest('a[download], a[href$=".pdf"], a[href*=".pdf?"]');
+      if (a && !signedIn()) { e.preventDefault(); e.stopPropagation(); askSignIn('download'); }
+    }, true);
+    const origClick = HTMLAnchorElement.prototype.click;
+    if (!origClick.__uxGate) {
+      const c = function () { if (this.hasAttribute('download') && !signedIn()) { askSignIn('download'); return; } return origClick.apply(this, arguments); };
+      c.__uxGate = true;
+      HTMLAnchorElement.prototype.click = c;
+    }
+    // Ctrl+P / browser print when signed out prints a sign-in notice instead of the content
+    const syncPrintFlag = () => document.documentElement.classList.toggle('ux-signed-out', !signedIn());
+    syncPrintFlag();
+    window.addEventListener('beforeprint', syncPrintFlag);
+    try { window.RA10 && RA10.on && RA10.on('authchange', syncPrintFlag); } catch (e) {}
+    setTimeout(syncPrintFlag, 2500);
+  }
+
+  /* ───── RA10 EDU (assignments, catalogue) — loaded only when needed ───── */
+  function eduNeeded() {
+    if (params.has('ra10catalog') || params.has('assignment')) return true;
+    try { const p = JSON.parse(localStorage.getItem('ra10_edu_pending') || 'null'); if (p && Date.now() - p.ts < 10 * 60 * 1000) return true; } catch (e) {}
+    try { const prof = window.RA10 && RA10.getProfile && RA10.getProfile(); if (prof && /^school_/.test(String(prof.tier || '')) || (prof && prof.school_id)) return true; } catch (e) {}
+    return false;
+  }
+  let eduLoading = false;
+  function loadEdu() {
+    if (eduLoading || window.RA10UnitEdu) return;
+    eduLoading = true;
+    const s = document.createElement('script');
+    const me = Array.from(document.scripts).map(x => x.src).find(src => /\/shared\/unit-ui\.js/.test(src)) || '';
+    s.src = me ? me.replace(/unit-ui\.js(\?.*)?$/, 'unit-edu.js?v=20261116') : '/revision/shared/unit-edu.js?v=20261116';
+    document.head.appendChild(s);
   }
 
   /* ───── state sync ───── */
@@ -349,13 +772,15 @@
 
   // Tell the site navbar which section is showing, so its button can read e.g. "Past Papers ▾".
   function tellShellView() {
-    if (window.self === window.top) return;
+    if (!embedded) return;
     const d = destOf(current);
     const title = d && d.t ? d.t : (current === 'dashboard' ? 'Dashboard' : String(current || '').replace(/^\w/, c => c.toUpperCase()));
     try { window.parent.postMessage({ type: 'ra10:unit-view', name: current, title }, location.origin); } catch (e) {}
   }
 
+  let viewStart = { name: null, t: Date.now() };
   function sync() {
+    const prev = current;
     current = activeName();
     const d = destOf(current);
     const p = d ? d.p : current;
@@ -370,24 +795,34 @@
     scheduleStickies(); setTimeout(offsetStickies, 900);
     if (current !== 'dashboard' && current !== 'home') store.set('last_' + unitKey, current);
     refreshCounts();
+    if (prev !== current || viewStart.name === null) {
+      if (viewStart.name && viewStart.name !== current) {
+        const secs = (Date.now() - viewStart.t) / 1000;
+        if (secs >= 3) track('view', { view: viewStart.name, title: (destOf(viewStart.name) || {}).t || viewStart.name, duration_s: secs });
+      }
+      viewStart = { name: current, t: Date.now() };
+      if (current === 'dashboard' || current === 'home') scheduleHeroPaint();
+    }
   }
 
   function init() {
     if (!viewNames().length && !$$('.tabs .tab').length) return;
     document.documentElement.classList.add('ux-unit');
-    try { if (window.self !== window.top) document.documentElement.classList.add('ux-embedded'); } catch (e) { document.documentElement.classList.add('ux-embedded'); }
-    // Inside the site the site navbar already shows credits/account, so drop the unit's own copy
-    // (its credit chip is shown with an inline !important style, which CSS can't override).
-    if (document.documentElement.classList.contains('ux-embedded')) {
-      const hideChip = () => $$('.topbar > div[id$="credit-chip"]').forEach(el => el.style.setProperty('display', 'none', 'important'));
-      hideChip(); setTimeout(hideChip, 1500); setTimeout(hideChip, 4000);
-    }
+    if (embedded) document.documentElement.classList.add('ux-embedded');
+    // The credits widget is retired (everyone has unlimited credits): hide the unit's own copy
+    // (it is shown with an inline !important style, which CSS can't override).
+    const hideChip = () => $$('.topbar > div[id$="credit-chip"]').forEach(el => el.style.setProperty('display', 'none', 'important'));
+    hideChip(); setTimeout(hideChip, 1500); setTimeout(hideChip, 4000);
     buildDests();
     addJumpButton(); addHeaderMenuButton();
     addBottomNav();
     launchpad();
     crumbs();
     sync();
+    hookAnswers();
+    gateDownloads();
+    if (!hookExaminer()) { let n = 0; const iv = setInterval(() => { if (hookExaminer() || ++n > 40) clearInterval(iv); }, 500); }
+    setInterval(sampleGuide, 3000);
     const mo = new MutationObserver(() => sync());
     $$('section.view').forEach(v => mo.observe(v, { attributes: true, attributeFilter: ['class'] }));
     $$('.tabs .tab').forEach(t => mo.observe(t, { attributes: true, attributeFilter: ['class'] }));
@@ -395,21 +830,31 @@
     // data finishes loading after first paint in some apps
     [600, 1800, 4000].forEach(ms => setTimeout(refreshCounts, ms));
     if (typeof window.onDataReady === 'function') { try { window.onDataReady(refreshCounts); } catch (e) {} }
+    // EDU features (assignments, catalogue for teachers)
+    if (eduNeeded()) loadEdu();
+    else setTimeout(() => { if (eduNeeded()) loadEdu(); }, 3500);
+    window.addEventListener('storage', (e) => { if (e.key === 'ra10_edu_pending' && e.newValue) loadEdu(); });
+    try { window.RA10 && RA10.on && RA10.on('authchange', () => { scheduleHeroPaint(); if (eduNeeded()) loadEdu(); }); } catch (e) {}
     // Tell the site shell we're painted, so it can drop its loading skeleton.
-    if (window.self !== window.top) { try { window.parent.postMessage({ type: 'ra10:unit-ready' }, location.origin); } catch (e) {} }
+    if (embedded) { try { window.parent.postMessage({ type: 'ra10:unit-ready' }, location.origin); } catch (e) {} }
   }
 
-  window.RA10UnitUI = { go, open: openMenu, close: closeMenu, destinations: () => dests.slice() };
+  window.RA10UnitUI = { go, open: openMenu, close: closeMenu, destinations: () => dests.slice(), requireSignIn, openGuideSection, appData, track, bump, guideHeadings, slug, headingId, esc, icons: I };
   // The site navbar's "Jump to" button (in the parent page) asks us to open the menu.
-  if (document.documentElement.classList.contains('ux-embedded') || window.self !== window.top) {
+  if (document.documentElement.classList.contains('ux-embedded') || embedded) {
     window.addEventListener('resize', scheduleStickies);
     let moQueued = false;
     new MutationObserver(() => { if (moQueued) return; moQueued = true; setTimeout(() => { moQueued = false; offsetStickies(); }, 1200); })
       .observe(document.documentElement, { childList: true, subtree: true });
   }
   window.addEventListener('message', (e) => {
-    if (e.origin !== location.origin || !e.data || e.data.type !== 'ra10:unit-open-menu') return;
-    openMenu();
+    if (e.origin !== location.origin || !e.data) return;
+    if (e.data.type === 'ra10:unit-open-menu') { openMenu(); return; }
+    if (e.data.type === 'ra10:edu-open' && e.data.pending) {
+      window.__ra10EduPending = e.data.pending;
+      if (window.RA10UnitEdu && RA10UnitEdu.handle) RA10UnitEdu.handle(e.data.pending);
+      else loadEdu();
+    }
   });
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => setTimeout(init, 0));
   else setTimeout(init, 0);

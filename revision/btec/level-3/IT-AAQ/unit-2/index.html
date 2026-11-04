@@ -48,7 +48,7 @@ if (window.self !== window.top) document.documentElement.classList.add('ux-unit'
   var s = document.createElement('script');
   var isFile = location.protocol === 'file:';
   var isLocalHost = location.hostname === '127.0.0.1' || location.hostname === 'localhost';
-  s.src = isFile ? 'file:///C:/Users/mistr/Downloads/ra10/ra10-sdk.js?v=20261021' : (isLocalHost ? 'http://127.0.0.1:5500/ra10-sdk.js?v=20261021' : 'https://ra10.co.uk/ra10-sdk.js?v=20261021');
+  s.src = isFile ? 'file:///C:/Users/mistr/Downloads/ra10/ra10-sdk.js?v=20261106' : (isLocalHost ? 'http://127.0.0.1:5500/ra10-sdk.js?v=20261106' : 'https://ra10.co.uk/ra10-sdk.js?v=20261106');
   document.head.insertBefore(s, document.head.firstChild);
 })();
 </script>
@@ -86,7 +86,7 @@ if (window.self !== window.top) document.documentElement.classList.add('ux-unit'
 <link rel="preconnect" href="https://api.fontshare.com">
 <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@500,700,900,400&f[]=jetbrains-mono@500&display=swap">
 <link rel="stylesheet" href="css/style.css?v=20260813">
-<link rel="stylesheet" href="../../business/shared/biz-papers.css?v=20261105">
+<link rel="stylesheet" href="../../business/shared/biz-papers.css?v=20261107">
 <style>
 @media (max-width:600px){
   #u2-progress-sidebar{position:fixed!important;top:auto!important;right:12px!important;left:12px!important;bottom:calc(70px + env(safe-area-inset-bottom,0px))!important;width:auto!important;max-width:none!important;z-index:1000!important;}
@@ -221,8 +221,8 @@ if (window.self !== window.top) document.documentElement.classList.add('ux-unit'
 <!-- ra10-refresh: styles linked statically so the page paints in its final look -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Sora:wght@500;600;700;800&display=swap">
 <link rel="stylesheet" href="/refresh/ra10-refresh.css?v=20261031">
-<script src="/refresh/ra10-refresh.js?v=20261021" defer></script>
-<link rel="stylesheet" href="../../../../shared/unit-ui.css?v=20261103">
+<script src="/refresh/ra10-refresh.js?v=20261104" defer></script>
+<link rel="stylesheet" href="../../../../shared/unit-ui.css?v=20261116">
 </head>
 <body class="ra10-refresh-enabled">
 <header class="topbar">
@@ -711,10 +711,11 @@ if (window.self !== window.top) document.documentElement.classList.add('ux-unit'
 <script src="js/data-loader.js"></script>
 <script src="js/spec.js"></script>
 <script src="js/guide.js"></script>
-<script src="js/cfg.js?v=20261105"></script>
-<script src="js/papers-data.js?v=20261105"></script>
-<script src="js/papers-ra10.js?v=20261105"></script>
-<script src="../../business/shared/biz-papers.js?v=20261105"></script>
+<script src="js/cfg.js?v=20261108"></script>
+<script src="js/papers-figures.js?v=20261106"></script>
+<script src="js/papers-data.js?v=20261106"></script>
+<script src="js/papers-ra10.js?v=20261106"></script>
+<script src="../../business/shared/biz-papers.js?v=20261107"></script>
 <script src="js/app.js?v=20261105"></script>
 <script>
 const RA10_UNIT_SUBJECT = 'IT';
@@ -884,6 +885,6 @@ document.addEventListener('visibilitychange', function() {
   if (document.visibilityState === 'visible') { window._sidebarCache = null; if (typeof refreshProgressSidebar === 'function') refreshProgressSidebar(true); }
 });
 </script>
-<script src="../../../../shared/unit-ui.js?v=20261105"></script>
+<script src="../../../../shared/unit-ui.js?v=20261116"></script>
 </body>
 </html>

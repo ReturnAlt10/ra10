@@ -3123,3 +3123,8 @@ html.route-pending footer{display:none !important}
 @keyframes umhOut{to{opacity:0;transform:translateY(-6px) scale(.97)}}
 @keyframes umhBob{0%,100%{translate:0 0}50%{translate:0 3px}}
 @media (prefers-reduced-motion:reduce){.unit-menu-hint{animation:none}}
+
+/* Cleaner top bar (2026-11): the avatar alone opens the account menu; the name, the
+   "Unlimited" tier pill and the credits widget are hidden while everyone has unlimited credits. */
+#nav-display-name,#nav-tier-badge,#nav-credit-chip,#mobile-credit-chip{display:none !important}
+.nav-user-btn{gap:0}

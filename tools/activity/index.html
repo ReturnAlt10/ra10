@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Activity · RA10</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="/logo.png" type="image/png">
+<script>(function () { try { var t = localStorage.getItem('ra10-theme'); if (!t) t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'; document.documentElement.setAttribute('data-theme', t === 'dark' ? 'dark' : 'light'); } catch (e) {} })();</script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/school/school.css?v=20261104">
+<script src="/ra10-sdk.js?v=20261106"></script>
+<script src="/refresh/ra10-units.js?v=20261104"></script>
+<script src="/refresh/ra10-activity-view.js?v=20261104"></script>
+</head>
+<body>
+<header class="sc-top">
+  <a class="sc-brand" href="/"><img src="/logo.png" alt="" width="30" height="30"><span>RA10 <b>Activity</b></span></a>
+  <div class="sc-top-actions"><a class="sc-btn ghost" href="/">Back to RA10</a></div>
+</header>
+<div class="sc-layout" style="grid-template-columns:minmax(0,1fr);max-width:1060px">
+  <main class="sc-main" id="main"><div class="sc-loading"><span class="sc-spin"></span> Loading…</div></main>
+</div>
+<script>
+(function () {
+  'use strict';
+  const $ = (s, p) => (p || document).querySelector(s);
+  const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const main = $('#main');
+  const KINDS = { work: ['answer', 'ai_examine', 'mcq', 'assignment'], guide: ['guide_section'], pages: ['page_view', 'view', 'paper_open', 'download'] };
+  let sb, me, owner = false, who = null, offset = 0;
+
+  async function boot() {
+    let n = 0; while (!window.RA10 && n++ < 60) await new Promise(r => setTimeout(r, 100));
+    try { await RA10.init(); } catch (e) {}
+    if (!RA10.isLoggedIn()) { main.innerHTML = '<div class="sc-coming"><h1>Sign in to see your activity</h1><p class="sc-muted">RA10 keeps a record of what you study so you can see your progress.</p><a class="sc-btn pri" href="/auth">Sign in</a></div>'; return; }
+    sb = RA10.getClient(); me = RA10.getSession().user;
+    owner = (me.email || '').toLowerCase() === 'mistry.hashim@icloud.com' || RA10.getTier() === 'owner';
+    const u = new URLSearchParams(location.search).get('user');
+    showUser(owner && u ? u : me.id);
+  }
+
+  async function showUser(uid, label) {
+    who = uid; offset = 0;
+    const mine = uid === me.id;
+    const { data: sum, error } = await sb.rpc('edu_student_summary', { p_student: uid, p_days: 30 });
+    main.innerHTML = `
+      ${owner ? `<div class="sc-card"><h2>Owner tools <span class="sc-badge brand">Only you can see this</span></h2>
+        <div class="sc-row"><input class="sc-in" id="q" placeholder="Find a user by email, username or name" style="flex:1;min-width:220px"><button class="sc-btn pri" id="find">Search</button><button class="sc-btn" id="live">Live feed (everyone)</button><button class="sc-btn" id="mine">My own activity</button></div><div id="found" style="margin-top:10px"></div></div>` : ''}
+      <div class="sc-h"><div><h1>${mine ? 'Your activity' : esc((sum && sum.student && (sum.student.name || sum.student.email)) || label || 'User')}</h1><p>${mine ? 'Everything you have done on RA10 — every question, answer, mark and guide section. Only you' + ' and teachers of classes you joined can see this.' : esc((sum && sum.student && sum.student.email) || '')}</p></div>
+        ${mine ? '<button class="sc-btn danger sm" id="wipe">Delete my activity history</button>' : ''}</div>
+      ${error ? `<div class="sc-card"><p class="sc-muted">${esc(error.message)} — the activity database update may not be installed yet.</p></div>` : `<div class="sc-card"><h2>Last 30 days</h2>${RA10ActivityView.summary(sum)}</div>`}
+      <div class="sc-card"><h2>Timeline <select class="sc-in" id="kind" style="width:auto;padding:6px 10px"><option value="work">Questions & answers</option><option value="all">Everything</option><option value="guide">Guide reading</option><option value="pages">Pages & sections</option></select></h2><div id="tl"></div><button class="sc-btn" id="more" style="width:100%;margin-top:12px">Load more</button></div>`;
+    $('#kind').onchange = () => load(true);
+    $('#more').onclick = () => load(false);
+    load(true);
+    if (mine && $('#wipe')) $('#wipe').onclick = async () => {
+      if (!confirm('Delete your whole RA10 activity history? This cannot be undone.')) return;
+      const { error: e } = await sb.from('activity_events').delete().eq('user_id', me.id);
+      if (e) alert(e.message); else showUser(me.id);
+    };
+    if (owner) {
+      const find = async () => {
+        const q = $('#q').value.trim(); if (!q) return;
+        const { data, error: e } = await sb.rpc('owner_find_users', { p_query: q });
+        $('#found').innerHTML = e ? esc(e.message) : (data || []).map(u => `<div class="sc-pickrow" style="margin-bottom:6px;cursor:pointer" data-u="${esc(u.id)}"><span><p><b>${esc(u.display_name || u.username || u.email)}</b></p><small>${esc(u.email)} · ${esc(u.tier || 'free')} · last active ${u.last_active ? esc(new Date(u.last_active).toLocaleString('en-GB')) : 'never'}</small></span><span>→</span></div>`).join('') || '<p class="sc-muted">No users found.</p>';
+        document.querySelectorAll('[data-u]').forEach(r => r.onclick = () => { history.replaceState(null, '', '?user=' + r.dataset.u); showUser(r.dataset.u); });
+      };
+      $('#find').onclick = find; $('#q').onkeydown = (e) => { if (e.key === 'Enter') find(); };
+      $('#mine').onclick = () => { history.replaceState(null, '', location.pathname); showUser(me.id); };
+      $('#live').onclick = live;
+    }
+  }
+
+  async function load(reset) {
+    if (reset) { offset = 0; $('#tl').innerHTML = '<div class="sc-loading"><span class="sc-spin"></span></div>'; }
+    const k = $('#kind').value;
+    let q = sb.from('activity_events').select('*').eq('user_id', who).order('created_at', { ascending: false }).range(offset, offset + 99);
+    if (KINDS[k]) q = q.in('kind', KINDS[k]);
+    const { data } = await q;
+    offset += (data || []).length;
+    const html = RA10ActivityView.timeline(data || [], { empty: 'Nothing recorded yet — open a unit and start revising.' });
+    if (reset) $('#tl').innerHTML = html; else $('#tl').insertAdjacentHTML('beforeend', html);
+    $('#more').hidden = (data || []).length < 100;
+  }
+
+  async function live() {
+    const { data, error } = await sb.rpc('owner_recent_activity', { p_limit: 300 });
+    main.querySelectorAll('.sc-card, .sc-h').forEach((el, i) => { if (i > 0) el.remove(); });
+    main.insertAdjacentHTML('beforeend', `<div class="sc-h"><div><h1>Live feed</h1><p>The latest 300 actions across every RA10 account.</p></div><button class="sc-btn" id="rf">Refresh</button></div><div class="sc-card">${error ? esc(error.message) : RA10ActivityView.timeline(data || [], { who: true })}</div>`);
+    $('#rf').onclick = live;
+  }
+  boot();
+})();
+</script>
+</body>
+</html>

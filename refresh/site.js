@@ -1767,7 +1767,7 @@ document.addEventListener('click', function (e) {
     if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
     return;
   }
-  if (/^\/(?!\/)/.test(href) && !/\.(html?|pdf|png|jpe?g|svg|webp|xml|txt|json|js|css|zip|docx?|pptx?|xlsx?)(\?|#|$)/i.test(href) && !/^\/(legal|admin|tools)(\/|$)/.test(href)) {
+  if (/^\/(?!\/)/.test(href) && !/\.(html?|pdf|png|jpe?g|svg|webp|xml|txt|json|js|css|zip|docx?|pptx?|xlsx?)(\?|#|$)/i.test(href) && !/^\/(legal|admin|tools|school)(\/|$)/.test(href)) {
     e.preventDefault();
     if (!a.getAttribute('onclick')) go(href);
   }
@@ -5008,8 +5008,9 @@ async function waitForRA10Sdk(timeoutMs) {
         const isFreeOrSignedOut = !loggedIn || tier === 'free';
         examBanner.style.display = isFreeOrSignedOut ? '' : 'none';
       }
-      if (navCreditChip) navCreditChip.style.display = loggedIn ? '' : 'none';
-      if (mobileCreditChip) mobileCreditChip.style.display = loggedIn ? '' : 'none';
+      // Everyone has unlimited credits, so the credits widget is no longer shown.
+      if (navCreditChip) navCreditChip.style.display = 'none';
+      if (mobileCreditChip) mobileCreditChip.style.display = 'none';
       const mobileYouSignout = document.getElementById('mobile-you-signout');
       if (mobileYouSignout) mobileYouSignout.style.display = loggedIn ? '' : 'none';
       const mobileYouAccountLabel = document.getElementById('mobile-you-account-label');
@@ -5114,7 +5115,8 @@ async function waitForRA10Sdk(timeoutMs) {
         if (eduLink) {
           const t = RA10.getTier();
           const em = (profile?.email || '').toLowerCase();
-          const show = t === 'school_admin' || em === 'mistry.hashim@icloud.com';
+          const show = t === 'school_admin' || t === 'school_teacher' || em === 'mistry.hashim@icloud.com';
+          eduLink.textContent = t === 'school_admin' ? 'School dashboard (EDU Admin)' : 'School dashboard';
           eduLink.style.display = show ? '' : 'none';
         }
         const accountTier = RA10.getTier();
@@ -5589,7 +5591,10 @@ async function waitForRA10Sdk(timeoutMs) {
       return 'profile_pic_url';
     }
 
+    // Credit gifts are retired (everyone has unlimited credits): never show the gift popup.
+    const CREDIT_GIFT_POPUPS_ENABLED = false;
     async function checkGiftCreditPopup() {
+      if (!CREDIT_GIFT_POPUPS_ENABLED) return;
       if (!window.supabase || !RA10.isLoggedIn()) return;
       try {
         const data = await callAuthedRpc('get_unseen_credit_gifts');

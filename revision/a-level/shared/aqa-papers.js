@@ -591,7 +591,8 @@
               : el('p', null, JSON.stringify(response.result)));
             const earned = Number(response.result.earned);
             if (Number.isFinite(earned)) { st['S' + key] = earned; saveState(p.id, st); paintLast(); onScore && onScore(); }
-            awardXP && awardXP(10, '+10 XP — answer examined');
+            const sig = String(answer.length) + ':' + answer.slice(0, 40) + answer.slice(-40);
+            if (st['X' + key] !== sig) { st['X' + key] = sig; saveState(p.id, st); awardXP && awardXP(10, '+10 XP — answer examined'); }
             result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
           } else result.appendChild(el('p', { class: 'pp-err' }, 'The AI Examiner returned no result. Please try again.'));
         } catch (err) {
@@ -622,6 +623,7 @@
     }
 
     async function downloadPdf(id, withAnswers, btn, markScheme) {
+      if (window.RA10UnitUI && RA10UnitUI.requireSignIn) { if (!RA10UnitUI.requireSignIn('download this paper')) return; } else if (!(window.RA10 && RA10.isLoggedIn && RA10.isLoggedIn())) { alert('Please sign in to download papers.'); return; }
       const p = getPaper(id);
       if (!p) return;
       const label = btn ? btn.textContent : '';

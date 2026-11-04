@@ -6,7 +6,7 @@
 
   // Everything else lives next to this script. Resolving from our own URL
   // works on the live site, localhost and file:// alike.
-  var V = "20261103";
+  var V = "20261104";
   var DIR = "/refresh/";
   try {
     var me = document.currentScript && document.currentScript.src;
@@ -38,6 +38,14 @@
       xp.src = DIR + "ra10-xp.js?v=" + V;
       (document.head || document.documentElement).appendChild(xp);
     }
+    // Unit catalogue + activity tracking (progress monitoring) on every page.
+    [["ra10-units-js", "ra10-units.js"], ["ra10-track-js", "ra10-track.js"]].forEach(function (s) {
+      if (document.getElementById(s[0])) return;
+      var el = document.createElement("script");
+      el.id = s[0];
+      el.src = DIR + s[1] + "?v=" + V;
+      (document.head || document.documentElement).appendChild(el);
+    });
   })();
 
   function addBodyClass() {

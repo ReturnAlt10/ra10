@@ -6,7 +6,7 @@
   var s = document.createElement('script');
   var isFile = location.protocol === 'file:';
   var isLocalHost = location.hostname === '127.0.0.1' || location.hostname === 'localhost';
-  s.src = isFile ? '../ra10-sdk.js?v=20261021' : (isLocalHost ? 'http://127.0.0.1:5500/ra10-sdk.js?v=20261021' : 'https://ra10.co.uk/ra10-sdk.js?v=20261021');
+  s.src = isFile ? '../ra10-sdk.js?v=20261106' : (isLocalHost ? 'http://127.0.0.1:5500/ra10-sdk.js?v=20261106' : 'https://ra10.co.uk/ra10-sdk.js?v=20261106');
   document.head.insertBefore(s, document.head.firstChild);
 })();
 </script>
@@ -395,7 +395,7 @@ tr.bulk-selected:hover{background:var(--red-hi)}
   document.head.appendChild(css);
 
   var js = document.createElement('script');
-  js.src = base + '/refresh/ra10-refresh.js?v=20261021';
+  js.src = base + '/refresh/ra10-refresh.js?v=20261104';
   document.head.appendChild(js);
 })();
 </script>

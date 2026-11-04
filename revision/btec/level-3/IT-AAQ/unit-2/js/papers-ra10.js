@@ -5,7 +5,7 @@
   const L9 = (window.BIZ_LEVELS || {})[9] || null;
   function Q(n, ctx, parts) {
     return parts.map((p, i) => ({
-      q: n, sub: p[0], marks: p[1], section: 'Q' + n, ctx: i === 0 ? ctx : [], text: p[2], diagram: !!(p[4] && p[4].diagram),
+      q: n, sub: p[0], marks: p[1], section: 'Q' + n, ctx: i === 0 ? ctx : [], text: p[2], diagram: !!(p[4] && p[4].diagram), fig: (p[4] && p[4].fig) || null, padFig: (p[4] && p[4].padFig) || null,
       ms: Object.assign({ body: p[3], levels: p[1] >= 9 ? L9 : null }, p[4] || {})
     }));
   }
@@ -72,7 +72,9 @@
       'Kestrel Outdoor sells camping and hiking equipment online. It has 40 staff: 25 in a warehouse and 15 in an office above it.',
       'The online shop is hosted by a cloud provider. Orders are passed to the warehouse system over the internet.',
       'Office staff often work from home two days a week using company laptops.',
-      'Kestrel takes card payments through a third-party payment provider.'
+      'Kestrel takes card payments through a third-party payment provider.',
+      'Figure 1 shows Kestrel’s current systems.',
+      '[[fig:it2-r02-f1]]'
     ], [
       ['a(i)', 2, 'Kestrel’s website uses HTTPS. Explain how HTTPS protects customers’ details.', L('Award one mark for each linked point:', '• data between the browser and the server is encrypted using TLS (1)', '• so intercepted details (e.g. addresses / logins) cannot be read (1)', 'Accept: the digital certificate confirms the site is genuine (1).')],
       ['a(ii)', 2, 'Explain one difference between symmetric and asymmetric encryption.', L('Award up to two marks:', '• symmetric uses the same key to encrypt and decrypt (1) whereas asymmetric uses a public key to encrypt and a private key to decrypt (1)')],
@@ -118,7 +120,9 @@
       'Riverside Sixth Form College',
       'Riverside Sixth Form College has 1,400 students and 160 staff on one campus.',
       'Staff and students log on using accounts held in a directory service. Students can connect their own devices to a student Wi-Fi network; visitors use a guest network.',
-      'Classrooms have interactive displays connected by Bluetooth to teachers’ laptops. The exam office keeps exam papers on a file server.'
+      'Classrooms have interactive displays connected by Bluetooth to teachers’ laptops. The exam office keeps exam papers on a file server.',
+      'Figure 1 shows the college network.',
+      '[[fig:it2-r03-f1]]'
     ], [
       ['a(i)', 2, 'Explain one security benefit of using a directory service for user accounts.', L('Award up to two marks:', '• accounts are managed centrally (1) so a leaver can be disabled once and loses access everywhere (1)', '• group policies can be applied to all users / devices (1) enforcing password rules / restrictions (1)')],
       ['a(ii)', 2, 'Explain one Bluetooth vulnerability in the classrooms.', L('Award up to two marks:', '• devices left discoverable (1) so a student could pair with / send content to the display (bluejacking) (1)', '• attackers could access data on a paired laptop (bluesnarfing) (1) if the laptop is not secured (1)')],
@@ -164,7 +168,9 @@
       'Hale & Sutton Solicitors',
       'Hale & Sutton is a firm of solicitors with 60 staff in two offices. It handles property sales, wills and family law cases.',
       'Client files are stored on a server in a locked room at the head office. Solicitors send documents to clients and other law firms by email.',
-      'The firm is a common target of criminals who try to divert money from property sales.'
+      'The firm is a common target of criminals who try to divert money from property sales.',
+      'Figure 1 shows the firm’s two offices and how they connect.',
+      '[[fig:it2-r04-f1]]'
     ], [
       ['a(i)', 2, 'Explain one reason why law firms are targeted by cyber criminals.', L('Award up to two marks:', '• they handle large sums of client money in property sales (1) which criminals try to divert with fake bank details (1)', '• they hold highly confidential personal data (1) which can be sold / used for blackmail (1)')],
       ['a(ii)', 2, 'Explain what is meant by an internal threat.', L('Award up to two marks:', '• a threat from people inside the organisation, such as staff / contractors (1) whether deliberate (sabotage / theft) or accidental (mistakes / loss) (1)')],

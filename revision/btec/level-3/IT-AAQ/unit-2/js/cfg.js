@@ -39,7 +39,7 @@
       'Exam layout: 2 hours 15 minutes, 90 marks, four questions of about 22 marks each. Each one builds up from 1–4 mark questions to a 9-mark evaluation.'],
     paperNote: 'Unit 2 is a new unit for the 2025 AAQ specification, so the only official Pearson paper so far is the sample assessment (SAM). The RA10 papers follow exactly the same layout and mark scheme style.',
     specGroups: { new: { t: 'Current specification · 2025 AAQ', d: 'Official Pearson material for this unit.' } },
-    legal: 'Sample assessment text © Pearson Education Ltd, reformatted by RA10 for revision. Figures are described in text.',
+    legal: 'Sample assessment text © Pearson Education Ltd, reformatted by RA10 for revision. Figures are redrawn by RA10.',
     classify: function (text, section, q, p, own) {
       for (const t of [own, text]) if (t) for (const [aim, re] of RULES) if (re.test(t)) return aim;
       return 'A';

@@ -3926,7 +3926,8 @@ function paperActivity(q, c, state, mode, onScore) {
             : buildAutoMarkUI(q, answer, normaliseAiMarkResult(response.result, q, true, answer), 'ai'));
           const earned = Number(response.result.earned);
           if (Number.isFinite(earned)) { state['S' + q.activity] = earned; save(); if (onScore) onScore(); }
-          awardXP(10, '+10 XP — activity examined');
+          const sig = String(answer.length) + ':' + answer.slice(0, 40) + answer.slice(-40);
+          if (state['X' + q.activity] !== sig) { state['X' + q.activity] = sig; save(); awardXP(10, '+10 XP — activity examined'); }
           result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         } else result.appendChild(el('p', { class: 'pp-err' }, 'The AI Examiner returned no result. Please try again.'));
       } catch (err) {
@@ -3958,6 +3959,7 @@ async function ensurePdfLib() {
 }
 
 async function downloadPaperPdf(caseId, withAnswers, btn) {
+  if (window.RA10UnitUI && RA10UnitUI.requireSignIn) { if (!RA10UnitUI.requireSignIn('download this paper')) return; } else if (!(window.RA10 && RA10.isLoggedIn && RA10.isLoggedIn())) { alert('Please sign in to download papers.'); return; }
   const c = U2.CASES.find(x => x.id === caseId);
   if (!c) return;
   const label = btn ? btn.textContent : '';

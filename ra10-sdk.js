@@ -684,6 +684,10 @@
       rpcAvailable = false; // function missing / not yet deployed
     }
 
+    // Invitations must be accepted first (popup / email), so an 'invited' row is never applied client-side.
+    if ((!rpcAvailable || rpcResult == null) && String(member.status || '').toLowerCase() !== 'active') {
+      return profile;
+    }
     if (!rpcAvailable || rpcResult == null) {
       const nextReset = new Date();
       nextReset.setUTCMonth(nextReset.getUTCMonth() + 1);
@@ -716,13 +720,6 @@
     } else {
       // RPC explicitly denied (e.g. no active membership) — leave unchanged.
       updatedProfile = profile;
-    }
-
-    if (String(member.status || '').toLowerCase() !== 'active') {
-      await client
-        .from('school_members')
-        .update({ status: 'active' })
-        .eq('id', member.id);
     }
 
     // group_name lives on school_members, not profiles — re-attach it.
@@ -992,6 +989,10 @@
       rpcAvailable = false; // function missing / not yet deployed
     }
 
+    // Invitations must be accepted first (popup / email), so an 'invited' row is never applied client-side.
+    if ((!rpcAvailable || rpcResult == null) && String(member.status || '').toLowerCase() !== 'active') {
+      return profile;
+    }
     if (!rpcAvailable || rpcResult == null) {
       const nextReset = new Date();
       nextReset.setUTCMonth(nextReset.getUTCMonth() + 1);
@@ -1685,6 +1686,8 @@
   async function renderCreditChip(containerId) {
     const container = document.getElementById(containerId);
     if (!container) return false;
+    // Everyone gets unlimited credits now, so the credits widget is hidden everywhere.
+    if (TRANSITION_MODE) { container.innerHTML = ''; container.style.display = 'none'; return false; }
     const loggedIn = isLoggedIn();
     const credits = loggedIn ? getCredits() : await getGuestCredits();
     const tierLabel = loggedIn ? getTierInfo().label : 'Guest';

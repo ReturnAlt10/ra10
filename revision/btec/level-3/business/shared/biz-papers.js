@@ -9,8 +9,45 @@
   const cfg = () => window.BIZ_UNIT || {};
 
   /* ───────────────────────── helpers ───────────────────────── */
+  /* Figures (network diagrams, floor plans …): window.BIZ_FIGURES[id] = { cap, alt, svg } */
+  const FIG_RE = /^\[\[fig:([\w-]+)\]\]$/;
+  function figOf(id) { return (window.BIZ_FIGURES || {})[id] || null; }
+  function figAlt(id) { const f = figOf(id); return f ? `[${f.cap}: ${f.alt}]` : ''; }
+  function ctxPlain(lines) { return (lines || []).map(l => { const m = String(l).match(FIG_RE); return m ? figAlt(m[1]) : l; }).filter(Boolean); }
+  function figNode(id) {
+    const f = figOf(id);
+    if (!f) return null;
+    const fig = document.createElement('figure');
+    fig.className = 'pp-fig';
+    fig.innerHTML = f.svg;   // trusted: our own data files
+    const cap = document.createElement('figcaption');
+    cap.textContent = f.cap;
+    fig.appendChild(cap);
+    return fig;
+  }
+  // SVG figure → PNG data URL (for the PDF and the drawing pad)
+  function figImage(id, scale) {
+    const f = figOf(id);
+    if (!f) return Promise.resolve(null);
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => {
+        const w = img.naturalWidth || 780, h = img.naturalHeight || 520;
+        try {
+          const k = scale || 2;
+          const c = document.createElement('canvas'); c.width = w * k; c.height = h * k;
+          const x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0, 0, c.width, c.height); x.drawImage(img, 0, 0, c.width, c.height);
+          resolve({ img, url: c.toDataURL('image/png'), w, h });
+        } catch (e) { resolve({ img, url: null, w, h }); }
+      };
+      img.onerror = () => resolve(null);
+      img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(f.svg);
+    });
+  }
+
   function blockText(b) {
     if (!b) return '';
+    if (b.t === 'fig') return figAlt(b.id);
     if (b.t === 'stat') return (b.x.q ? b.x.q + '\n' : '') + b.x.c.map((c, i) => c + ': ' + b.x.v[i]).join('; ');
     if (b.t === 'li') return b.x.map(s => '• ' + s).join('\n');
     if (b.t === 'tbl' || b.t === 'flow') return b.x.join('\n');
@@ -74,7 +111,7 @@
     const q = {
       id: p.id + '-Q' + itemLabel(it).replace(/[()]/g, ''), learning_aim: aim, topic: (c.topicFor && c.topicFor(it.text)) || ('Section ' + it.section),
       command_verb: verbOf(it.text), marks: it.marks, ao: ext ? 'AO3/AO4' : calc ? 'AO2' : 'AO1',
-      scenario: ((it.ctx && it.ctx.length) ? it.ctx.join('\n') : (it.ctxb || []).map(blockText).join('\n')), question: it.text,
+      scenario: [((it.ctx && it.ctx.length) ? ctxPlain(it.ctx).join('\n') : (it.ctxb || []).map(blockText).join('\n')), it.fig ? figAlt(it.fig) : '', it.padFig && it.padFig !== it.fig ? figAlt(it.padFig) : ''].filter(Boolean).join('\n'), question: it.text,
       type: ext ? 'extended_levels' : calc ? 'calculation' : 'short', origin: p.source, series: p.series, spec_code: c.code, unit: c.n,
       paper_id: p.id, item_q: it.q, item_sub: it.sub || null, section: it.section, case_title: p.title,
     };
@@ -230,7 +267,8 @@
     /* ---- block renderer ---- */
     function renderBlocks(blocks, wrap) {
       (blocks || []).forEach(b => {
-        if (b.t === 'h') wrap.appendChild(el('h4', { class: 'pp-qhead' }, b.x));
+        if (b.t === 'fig') { const n = figNode(b.id); if (n) wrap.appendChild(n); }
+        else if (b.t === 'h') wrap.appendChild(el('h4', { class: 'pp-qhead' }, b.x));
         else if (b.t === 'li') { const ul = el('ul', { class: 'pp-list' }); b.x.forEach(s => ul.appendChild(el('li', null, s))); wrap.appendChild(ul); }
         else if (b.t === 'tbl') wrap.appendChild(el('div', { class: 'pp-rows' }, ...b.x.map(r => el('div', null, r))));
         else if (b.t === 'cap') wrap.appendChild(el('p', { class: 'pp-tcap' }, b.x));
@@ -549,9 +587,10 @@
         const key = itemKey(it);
         const q = questionFor(p, key);
         ((it.ctx || []).length || (it.ctxb || []).length) && renderCtx(it, page, ctxSeen);
+        if (it.fig) { const n = figNode(it.fig); if (n) page.appendChild(n); }
         page.appendChild(el('div', { class: 'pp-qrow' }, el('span', { class: 'pp-qnum' }, it.sub ? '(' + it.sub + ')' : String(it.q)), el('p', { class: 'pp-qtext' }, it.text), el('span', { class: 'pp-qmarks' }, `(${it.marks})`)));
         if (mode === 'answer' && isDiagram(it)) {
-          page.appendChild(diagramPad(p, st, key, onScore));
+          page.appendChild(diagramPad(p, st, key, onScore, it.padFig));
           const notes = el('textarea', { 'data-rmt': 'off', class: 'pp-lines', placeholder: 'Optional notes: anything you couldn’t fit on the diagram (e.g. why you chose a connection type)…', rows: '3' });
           stateBind(p, st, key, 'A', notes);
           page.appendChild(notes);
@@ -573,7 +612,8 @@
           }
           page.appendChild(feedbackRow(p, st, key, q, it.marks, onScore, () => answerText(p, st, key), isCalc(it) ? 1 : (it.marks >= 6 ? 40 : 6)));
         } else if (isDiagram(it)) {
-          page.appendChild(el('div', { class: 'pp-drawspace' }, el('span', null, 'Use this space to draw your diagram.')));
+          if (it.padFig && figOf(it.padFig)) page.appendChild(el('p', { class: 'pp-hint' }, `Complete ${figOf(it.padFig).cap.split(':')[0]} above. Choose “Answer online” to draw on it.`));
+          else page.appendChild(el('div', { class: 'pp-drawspace' }, el('span', null, 'Use this space to draw your diagram.')));
         } else {
           page.appendChild(el('div', { class: 'pp-ruled', style: `--lines:${isCalc(it) ? 5 : Math.min(26, it.marks * 2 + 1)}` }));
         }
@@ -586,8 +626,10 @@
     /* ---- drawing pad for diagram questions: draw on a blank page or upload a photo, then annotate ---- */
     // Drawing is kept as a list of shapes (st['D'+key]) so it can be undone and redrawn; a JPEG of the
     // finished page (st['I'+key]) is what the AI Examiner and the PDF use.
-    function diagramPad(p, st, key, onScore) {
-      const W = 1000, H = 1300;                       // one portrait "page"
+    function diagramPad(p, st, key, onScore, baseFig) {
+      let base = null;                                 // figure to complete, drawn under everything (cannot be erased)
+      const baseFigObj = baseFig ? figOf(baseFig) : null;
+      const W = 1000, H = baseFigObj ? 760 : 1300;   // a landscape page when completing a figure                       // one portrait "page"
       const ops = st['D' + key] = Array.isArray(st['D' + key]) ? st['D' + key] : [];
       const imgs = {};                                 // photo cache: src → loaded Image
       let tool = 'pen', colour = '#111827', cur = null, saveT = null;
@@ -612,12 +654,12 @@
       const expand = el('button', { type: 'button', class: 'pp-pad-act', title: 'Bigger drawing area' }, '⤢ Full screen');
       bar.appendChild(el('div', { class: 'pp-pad-tools' }, ...toolBtns));
       bar.appendChild(el('div', { class: 'pp-pad-tools' }, ...colours, undo, clear, upload, expand, fileIn));
-      const canvas = el('canvas', { class: 'pp-pad-canvas', width: String(W), height: String(H), 'aria-label': 'Drawing area for your diagram' });
+      const canvas = el('canvas', { class: 'pp-pad-canvas', style: `aspect-ratio:${W} / ${H}`, width: String(W), height: String(H), 'aria-label': 'Drawing area for your diagram' });
       const ctx = canvas.getContext('2d');
       const status = el('p', { class: 'pp-pad-status' });
       wrap.appendChild(bar); wrap.appendChild(el('div', { class: 'pp-pad-page' }, canvas)); wrap.appendChild(status);
 
-      const paintStatus = () => { status.textContent = st['I' + key] ? '✓ Diagram saved: it will be sent to the AI Examiner and included in “Paper with my answers”.' : 'Draw your diagram on the page above, or upload a photo of a diagram you drew on paper. You can annotate on top of a photo.'; };
+      const paintStatus = () => { status.textContent = st['I' + key] ? '✓ Diagram saved: it will be sent to the AI Examiner and included in “Paper with my answers”.' : (baseFigObj ? 'Add to the figure above: use Box and Text for the new device and Line for its connection.' : 'Draw your diagram on the page above, or upload a photo of a diagram you drew on paper. You can annotate on top of a photo.'); };
       function drawOp(o) {
         ctx.save();
         ctx.strokeStyle = o.c; ctx.fillStyle = o.c; ctx.lineWidth = o.w || 3; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
@@ -642,19 +684,21 @@
       }
       function redraw(extra) {
         ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, W, H);
+        if (base && base.img) { const sc = Math.min(W / base.w, H / base.h) * 0.96; const w = base.w * sc, h = base.h * sc; ctx.drawImage(base.img, (W - w) / 2, (H - h) / 2, w, h); }
         ops.forEach(drawOp);
         if (extra) drawOp(extra);
       }
       function save() {
         clearTimeout(saveT);
         saveT = setTimeout(() => {
-          if (ops.length) st['I' + key] = canvas.toDataURL('image/jpeg', 0.72); else delete st['I' + key];
+          try { if (ops.length) st['I' + key] = canvas.toDataURL('image/jpeg', 0.72); else delete st['I' + key]; } catch (e) { console.warn('drawing could not be saved', e); }
           saveState(p.id, st); paintStatus(); onScore && onScore();
         }, 250);
       }
       // load any photos used in the saved drawing, then paint
       ops.filter(o => o.t === 'img').forEach(o => { const im = new Image(); im.onload = () => redraw(); im.src = o.src; imgs[o.src] = im; });
       redraw(); paintStatus();
+      if (baseFigObj) figImage(baseFig, 1).then(r => { if (r) { base = r; redraw(); } });
 
       const pos = (e) => { const r = canvas.getBoundingClientRect(); return [Math.round((e.clientX - r.left) * W / r.width), Math.round((e.clientY - r.top) * H / r.height)]; };
       canvas.addEventListener('pointerdown', (e) => {
@@ -761,7 +805,9 @@
               : buildAutoMarkUI(q, answer, normaliseAiMarkResult(response.result, q, true, answer), 'ai'));
             const earned = Number(response.result.earned);
             if (Number.isFinite(earned)) { st['S' + key] = earned; saveState(p.id, st); paintLast(); onScore && onScore(); }
-            awardXP(10, '+10 XP — answer examined');
+            // XP only the first time a particular answer is examined (re-marking the same answer earns nothing)
+            const sig = String(answer.length) + ':' + answer.slice(0, 40) + answer.slice(-40) + (image ? image.length : '');
+            if (st['X' + key] !== sig) { st['X' + key] = sig; saveState(p.id, st); awardXP(10, '+10 XP — answer examined'); }
             result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
           } else result.appendChild(el('p', { class: 'pp-err' }, 'The AI Examiner returned no result. Please try again.'));
         } catch (err) {
@@ -794,10 +840,17 @@
     async function downloadPdf(id, withAnswers, btn) {
       const p = getPaper(id);
       if (!p) return;
+      if (window.RA10UnitUI && RA10UnitUI.requireSignIn) { if (!RA10UnitUI.requireSignIn('download this paper')) return; }
+      else if (!(window.RA10 && RA10.isLoggedIn && RA10.isLoggedIn())) { alert('Please sign in to download papers.'); return; }
       const label = btn ? btn.textContent : '';
       if (btn) { btn.disabled = true; btn.textContent = 'Preparing PDF…'; }
       try {
         await ensurePdfLib();
+        const figIds = new Set();
+        (p.items || []).forEach(it => { if (it.fig) figIds.add(it.fig); if (it.padFig) figIds.add(it.padFig); (it.ctx || []).forEach(l => { const m = String(l).match(FIG_RE); if (m) figIds.add(m[1]); }); });
+        (p.partA || []).concat(p.partB || []).forEach(b => { if (b && b.t === 'fig') figIds.add(b.id); });
+        const figPng = {};
+        for (const fid of figIds) { const r = await figImage(fid, 2); if (r && r.url) figPng[fid] = r; }
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF({ unit: 'mm', format: 'a4' });
         const W = 210, M = 18, CW = W - M * 2, BOTTOM = 280;
@@ -818,8 +871,16 @@
           y = doc.lastAutoTable.finalY + 6;
         };
         const ruled = (n, page) => { doc.setDrawColor(170); for (let i = 0; i < n; i++) { if (y > BOTTOM) newPage(page || 'Answers'); doc.setLineDashPattern([0.6, 0.9], 0); doc.line(M, y, W - M, y); doc.setLineDashPattern([], 0); y += 8; } };
+        const pdfFig = (fid, page) => {
+          const r = figPng[fid]; if (!r) return;
+          const w = CW, h = w * r.h / r.w;
+          if (y + h + 8 > BOTTOM) newPage(page || 'Paper');
+          doc.addImage(r.url, 'PNG', M, y, w, h); y += h + 2;
+          doc.setFont('helvetica', 'bold'); doc.setFontSize(9.5); doc.text(clean(figOf(fid).cap), W / 2, y + 3, { align: 'center' }); y += 9;
+        };
         const pdfBlocks = (blocks, page) => (blocks || []).forEach(b => {
-          if (b.t === 'h') { para(b.x, 11, 'bold', 1, page); }
+          if (b.t === 'fig') { pdfFig(b.id, page); }
+          else if (b.t === 'h') { para(b.x, 11, 'bold', 1, page); }
           else if (b.t === 'li') b.x.forEach(s => para('- ' + s, 10.5, 'normal', 1.2, page));
           else if (b.t === 'stat') { if (b.x.q) para(b.x.q, 10, 'bold', 1, page); table([b.x.v], b.x.c); }
           else if (b.t === 'tbl' || b.t === 'flow') b.x.forEach(r => para(r, 10, 'normal', 0.5, page));
@@ -882,7 +943,8 @@
             if (it.section !== curSec) { if (curSec) newPage('Section ' + it.section); curSec = it.section; const sh = C.sectionTitles ? C.sectionTitles[it.section] : (it.section === 'A' ? 'SECTION A - Personal Finance' : 'SECTION B - Business Finance'); if (sh) heading(sh, 'Section ' + it.section); }
             const ck = ((it.ctx || []).join('|') + JSON.stringify(it.ctxb || []).slice(0, 200)).slice(0, 260);
             if (((it.ctx || []).length || (it.ctxb || []).length) && !seen.has(ck)) { seen.add(ck); pdfBlocks(it.ctxb && it.ctxb.length ? it.ctxb : BizPapers.ctxBlocks(it.ctx || []), 'Section ' + it.section); }
-            if (y > BOTTOM - 40 || (isDiagram(it) && y > 40)) newPage('Section ' + it.section);   // a diagram question starts its own page
+            if (it.fig) pdfFig(it.fig, 'Section ' + it.section);
+            if (y > BOTTOM - 40 || (isDiagram(it) && !it.padFig && y > 40)) newPage('Section ' + it.section);   // a diagram question starts its own page
             doc.setFont('helvetica', 'bold'); doc.setFontSize(11);
             const qLines = doc.splitTextToSize(clean(itemLabel(it) + '  ' + it.text), CW - 14);
             doc.text(qLines, M, y); doc.text(`(${it.marks})`, W - M, y + (qLines.length - 1) * 4.9, { align: 'right' }); y += qLines.length * 4.9 + 3;
@@ -890,9 +952,13 @@
             if (isDiagram(it)) {
               // diagram questions: a whole blank page (no lines), or the learner's drawing
               const img = withAnswers && st['I' + itemKey(it)];
-              if (BOTTOM - y < 200) newPage('Section ' + it.section);
-              if (img) {
-                const h = Math.min(BOTTOM - y, CW * 1.3), w = h / 1.3;
+              const ratio = it.padFig ? 0.76 : 1.3;
+              if (BOTTOM - y < (it.padFig ? 140 : 200)) newPage('Section ' + it.section);
+              if (!img && it.padFig && figPng[it.padFig]) {
+                doc.setFont('helvetica', 'italic'); doc.setFontSize(9); doc.setTextColor(110);
+                doc.text(clean('Complete ' + figOf(it.padFig).cap.split(':')[0] + ' above.'), M, y + 2); doc.setTextColor(20); y += 8;
+              } else if (img) {
+                const h = Math.min(BOTTOM - y, CW * ratio), w = h / ratio;
                 doc.addImage(img, 'JPEG', M + (CW - w) / 2, y, w, h); y += h + 4;
                 const notes = String(st['A' + itemKey(it)] || '').trim();
                 if (notes) para('Notes: ' + notes, 10, 'normal', 3, 'Section ' + it.section);
@@ -933,9 +999,11 @@
     const L = (lines || []).map(s => String(s));
     while (i < L.length) {
       const ln = L[i];
+      const fm = ln.match(FIG_RE);
+      if (fm) { flush(); out.push({ t: 'fig', id: fm[1] }); i++; continue; }
       // runs of short lines containing figures read as a table; render them as rows
       let j = i;
-      while (j < L.length && L[j].length <= 46 && !/[.?]$/.test(L[j])) j++;
+      while (j < L.length && L[j].length <= 46 && !/[.?]$/.test(L[j]) && !FIG_RE.test(L[j])) j++;
       if (j - i >= 4) { flush(); out.push({ t: 'tbl', x: L.slice(i, j) }); i = j; continue; }
       if (/^[••]/.test(ln)) { flush(); const items = []; while (i < L.length && /^[••]/.test(L[i])) { items.push(L[i].replace(/^[••]\s*/, '')); i++; } out.push({ t: 'li', x: items }); continue; }
       para.push(ln);
@@ -963,5 +1031,5 @@
     return wrap;
   }
 
-  window.BizPapers = { buildQuestions, init, ctxBlocks, afGridNode, blockText };
+  window.BizPapers = { buildQuestions, init, ctxBlocks, afGridNode, blockText, figNode, figImage };
 })();
