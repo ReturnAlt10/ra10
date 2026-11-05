@@ -373,7 +373,7 @@
     const students = rs.filter(r => r.role === 'student'), teachers = rs.filter(r => r.role === 'teacher');
     const { data: asg } = await S.sb.from('edu_assignments').select('id, title, due_at, status, items, created_at').eq('class_id', id).order('created_at', { ascending: false });
     main.innerHTML = `<div class="sc-hero" style="--hc:${esc(c.color || '#2563eb')}"><div><h1>${esc(c.name)}</h1><p>${students.length} students · taught by ${esc(teachers.map(t => t.display_name || t.email).join(', ') || '—')}</p></div>
-        <div class="acts"><a class="sc-btn pri" href="#new-assignment&class=${esc(id)}">＋ Set assignment</a><button class="sc-btn" id="c-add">＋ Add students</button><button class="sc-btn" id="c-edit">Edit</button></div></div>
+        <div class="acts"><a class="sc-btn pri" href="#new-assignment&class=${esc(id)}">＋ Set assignment</a><button class="sc-btn" id="c-add">＋ Add students or teachers</button><button class="sc-btn" id="c-edit">Edit</button></div></div>
       <div class="sc-tabs">${[['students', 'Students'], ['assignments', 'Assignments'], ['units', 'Units'], ['insights', '✦ AI insights']].map(([k, l]) => `<button data-tab="${k}" class="${k === tab ? 'on' : ''}">${l}</button>`).join('')}</div>
       <div id="c-body"></div>`;
     $$('[data-tab]', main).forEach(b => b.onclick = () => { location.hash = `#class=${id}&tab=${b.dataset.tab}`; });
@@ -385,7 +385,7 @@
           <td><span class="sc-person">${avatar(s)}<span><b>${esc(s.display_name || s.username || s.email.split('@')[0])}</b><small>${esc(s.email)}</small></span></span></td>
           <td>${s.status === 'active' ? '<span class="sc-badge ok">Joined</span>' : s.user_id ? '<span class="sc-badge warn">Invite not accepted</span>' : '<span class="sc-badge">No account yet</span>'}</td>
           <td>${esc(ago(s.last_active))}</td><td>${esc(s.events_7d || 0)}</td><td>${s.avg_score != null ? esc(s.avg_score) + '%' : '—'}</td>
-          <td><button class="sc-btn sm danger" data-rm="${esc(s.email)}">Remove</button></td></tr>`).join('')}</tbody></table></div></div>` : '<div class="sc-empty"><b>No students yet</b>Press “Add students” and paste their school email addresses.</div>';
+          <td><button class="sc-btn sm danger" data-rm="${esc(s.email)}">Remove</button></td></tr>`).join('')}</tbody></table></div></div>` : '<div class="sc-empty"><b>No students yet</b>Press “Add students or teachers” to pick people already at the school, type new emails or upload a CSV.</div>';
       $$('tr[data-stu]', body).forEach(tr => tr.addEventListener('click', (e) => { if (e.target.closest('[data-rm]') || !tr.dataset.stu) return; location.hash = `#student=${tr.dataset.stu}&class=${id}`; }));
       $$('[data-rm]', body).forEach(b => b.onclick = async () => { if (!confirm('Remove ' + b.dataset.rm + ' from this class?')) return; await S.sb.from('edu_class_members').delete().eq('class_id', id).eq('email', b.dataset.rm); toast('Removed from class'); render(); });
     } else if (tab === 'assignments') {
@@ -438,54 +438,193 @@
   }
   async function addPeopleModal(opt) {
     const admin = S.role === 'admin';
-    const people = await loadPeople(true).catch(() => []);
-    const classIds = opt.classIds || [];
-    const rosterPeople = new Set(classIds.flatMap(id => (S.rosters[id] || []).map(p => String(p.email).toLowerCase())));
-    const renderExisting = (role) => people.filter(p => p.role === role && p.status !== 'removed').map(p => `
-      <label class="sc-pickrow sc-person-pick"><span class="sc-person">${avatar(p)}<span><b>${esc(p.display_name || p.username || p.email.split('@')[0])}</b><small>${esc(p.email)}${p.status === 'invited' ? ' · invite pending' : ''}</small></span></span>
-        <input type="checkbox" value="${esc(p.email)}" data-existing-role="${role}"${rosterPeople.has(String(p.email).toLowerCase()) ? ' checked disabled' : ''}></label>`).join('');
+    const people = (await loadPeople(true).catch(() => [])).filter(p => p.status !== 'removed');
+    const byEmail = new Map(people.map(p => [String(p.email).toLowerCase(), p]));
+    const inClass = new Set((opt.classIds || []).flatMap(id => (S.rosters[id] || []).map(p => String(p.email).toLowerCase())));
+    const EMAIL = /^[^@\s,;<>"]+@[^@\s,;<>"]+\.[^@\s,;<>"]+$/;
+    const names = new Map(); // email -> name from CSV / "Name, email" lines
+    let pane = opt.role === 'teacher' ? 'teacher' : 'student';
+    const label = { student: 'Students', teacher: 'Teachers' };
+    const nameOf = (p) => p.display_name || p.username || p.email.split('@')[0];
+    const row = (p) => {
+      const em = String(p.email).toLowerCase(), here = inClass.has(em);
+      return `<label class="sc-pickrow sc-person-pick${here ? ' here' : ''}" data-q="${esc((nameOf(p) + ' ' + em).toLowerCase())}">
+        <span class="sc-person">${avatar(p)}<span><b>${esc(nameOf(p))}</b><small>${esc(em)}${p.status === 'invited' ? ' · invite pending' : ''}</small></span></span>
+        ${here ? '<span class="sc-badge ok">In class</span>' : `<input type="checkbox" value="${esc(em)}" data-existing-role="${esc(p.role)}">`}</label>`;
+    };
+    const paneHtml = (role) => {
+      const list = people.filter(p => p.role === role);
+      const canNew = role === 'student' || admin;
+      return `<div class="sc-ap-pane" data-pane="${role}"${role === pane ? '' : ' hidden'}>
+        <div class="sc-field"><label>${role === 'student' ? 'Students' : 'Staff'} already at ${esc(S.school.name)}</label>
+          ${list.length ? `<div class="sc-ap-tools"><input type="search" class="sc-in" data-search placeholder="Search ${list.length} by name or email"><button type="button" class="sc-btn sm" data-all>Select all shown</button></div>
+          <div class="sc-existing">${list.map(row).join('')}</div><p class="sc-muted sc-small" data-none hidden>Nobody matches that search.</p>`
+          : `<p class="sc-muted sc-small">No ${role === 'student' ? 'students' : 'staff'} at the school yet${canNew ? ' — add them by email below' : ''}.</p>`}</div>
+        ${canNew ? `<div class="sc-field"><label>New ${role === 'student' ? 'students' : 'staff'} — add by email</label>
+          <textarea data-new placeholder="one per line — optionally with a name&#10;sam.jones@yourschool.org.uk&#10;Priya Kaur, priya.k@yourschool.org.uk"></textarea>
+          <div class="sc-ap-tools"><label class="sc-btn sm sc-ap-csv">⇪ Upload CSV<input type="file" data-csv accept=".csv,text/csv,text/plain" hidden></label>
+          <small>CSV columns: <b>email</b>, and optionally <b>name</b> and <b>role</b> (student / teacher). People already at the school are ticked above instead of being invited again.</small></div></div>`
+        : '<p class="sc-muted sc-small">Only the EDU admin can invite new staff. Ask them to add new teachers in Students &amp; staff.</p>'}
+      </div>`;
+    };
     modal(`<h2>${esc(opt.title || 'Add people')}</h2>
-      <div class="sc-field"><label>Existing people</label><div class="sc-existing" id="m-existing">${renderExisting(admin ? (opt.role || 'student') : 'student') || '<p class="sc-muted sc-small">No existing people in this role yet.</p>'}</div><small>Select people already listed in Students &amp; staff. Already-added class members are shown selected.</small></div>
-      <div class="sc-field"><label>Or add by email</label><textarea id="m-emails" placeholder="one per line, or separated by commas&#10;sam.jones@yourschool.org.uk&#10;priya.k@yourschool.org.uk"></textarea>
-        <input id="m-csv" type="file" accept=".csv,text/csv" style="margin-top:8px"><small>CSV format: <b>email</b> or <b>name,email</b>. You can paste several addresses too.</small></div>
-      ${admin ? `<div class="sc-field"><label>They are</label><select id="m-role"><option value="student"${opt.role !== 'teacher' ? ' selected' : ''}>Students</option><option value="teacher"${opt.role === 'teacher' ? ' selected' : ''}>Staff (teachers)</option></select></div>` : ''}
-      ${S.classes.length ? `<div class="sc-field"><label>Add them to</label><div class="sc-checks">${S.classes.map(c => `<label><input type="checkbox" value="${esc(c.id)}"${(opt.classIds || []).includes(c.id) ? ' checked' : ''}> ${esc(c.name)}</label>`).join('')}</div></div>` : '<p class="sc-muted sc-small">Tip: create a class first so you can add people straight into it.</p>'}
+      <div class="sc-tabs" id="m-tabs">${['student', 'teacher'].map(r => `<button type="button" data-pane-btn="${r}" class="${r === pane ? 'on' : ''}">${label[r]} <span class="sc-badge" data-count="${r}">0</span></button>`).join('')}</div>
+      ${paneHtml('student')}${paneHtml('teacher')}
+      ${S.classes.length ? `<div class="sc-field"><label>Add them to</label><div class="sc-checks" id="m-classes">${S.classes.map(c => `<label><input type="checkbox" value="${esc(c.id)}"${(opt.classIds || []).includes(c.id) ? ' checked' : ''}> ${esc(c.name)}</label>`).join('')}</div></div>` : '<p class="sc-muted sc-small">Tip: create a class first so you can add people straight into it.</p>'}
       <div id="m-res"></div>
-      <div class="sc-row" style="justify-content:flex-end"><button class="sc-btn" data-close>Close</button><button class="sc-btn pri" id="m-go">Send invites</button></div>`, (m) => {
-      const roleSelect = $('#m-role', m);
-      const existing = $('#m-existing', m);
-      if (roleSelect) roleSelect.onchange = () => {
-        const html = renderExisting(roleSelect.value);
-        existing.innerHTML = html || '<p class="sc-muted sc-small">No existing people in this role yet.</p>';
+      <div class="sc-row sc-ap-foot"><span class="sc-muted sc-small" id="m-sum"></span><span class="sc-row"><button class="sc-btn" data-close>Close</button><button class="sc-btn pri" id="m-go" disabled>Add</button></span></div>`, (m) => {
+      const P = (role) => $(`[data-pane="${role}"]`, m);
+      // parse a free-text box: "email", "Name, email", or several emails on one line
+      const parse = (text) => {
+        const out = [];
+        String(text || '').split(/\r?\n/).forEach(line => {
+          const parts = line.split(/[,;\t]+/).map(x => x.trim().replace(/^"|"$/g, '').replace(/^<|>$/g, '')).filter(Boolean);
+          const ems = parts.filter(x => EMAIL.test(x)).map(x => x.toLowerCase());
+          const nm = parts.filter(x => !EMAIL.test(x)).join(' ').trim();
+          ems.forEach(em => { out.push(em); if (ems.length === 1 && nm && !names.has(em)) names.set(em, nm.slice(0, 80)); });
+          if (!parts.length) line.split(/\s+/).filter(x => EMAIL.test(x)).forEach(x => out.push(x.toLowerCase()));
+        });
+        return Array.from(new Set(out));
       };
-      $('#m-csv', m).onchange = async (e) => {
-        const file = e.target.files && e.target.files[0]; if (!file) return;
-        const found = (await file.text()).split(/\r?\n/).flatMap(line => line.split(',').map(x => x.trim().replace(/^"|"$/g, '')).filter(x => /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(x)));
-        const box = $('#m-emails', m);
-        box.value = Array.from(new Set(box.value.split(/[\s,;]+/).concat(found).map(x => x.trim().toLowerCase()).filter(x => /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(x)))).join('\n');
-        toast(found.length ? `${found.length} email${found.length === 1 ? '' : 's'} loaded from CSV` : 'No email addresses found in that CSV.');
-        e.target.value = '';
+      const plan = () => {
+        const existing = new Set(), fresh = [];
+        ['student', 'teacher'].forEach(role => {
+          const p = P(role);
+          $$('input[data-existing-role]:checked', p).forEach(i => existing.add(i.value));
+          const box = $('[data-new]', p);
+          if (box) parse(box.value).forEach(em => {
+            if (inClass.has(em)) return;
+            if (byEmail.has(em)) existing.add(em); else if (!fresh.some(f => f.email === em)) fresh.push({ email: em, role });
+          });
+        });
+        return { existing: Array.from(existing), fresh, classIds: $$('#m-classes input:checked', m).map(i => i.value) };
       };
-      $('#m-go', m).onclick = async (e) => {
-        const selected = $$('input[data-existing-role]:checked:not(:disabled)', m).map(x => x.value);
-        const pasted = $('#m-emails', m).value.split(/[\s,;]+/).map(x => x.trim().toLowerCase()).filter(x => /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(x));
-        const emails = Array.from(new Set(selected.concat(pasted)));
-        if (!emails.length) return toast('Choose an existing person, paste an email, or upload a CSV.');
-        const role = admin ? $('#m-role', m).value : 'student';
-        const classIds = $$('.sc-checks input:checked', m).map(i => i.value);
-        e.target.disabled = true; e.target.textContent = 'Sending…';
-        const res = $('#m-res', m); res.innerHTML = '';
-        let ok = 0;
-        for (const em of emails) {
-          try {
-            const r = await api('invite', { schoolId: String(S.school.id), email: em, role, classIds });
-            if (r.ok) ok++;
-            res.insertAdjacentHTML('beforeend', `<div class="sc-pickrow" style="margin-bottom:6px"><span><p><b>${esc(em)}</b></p><small>${r.ok ? (r.status === 'active' ? 'Added to the class' : r.emailed ? (r.existingAccount ? 'Has an account — asked to accept' : 'Invite email sent') : esc(r.note || 'Saved')) : esc(r.error)}</small>${r.link ? `<br><small>Sign-up link: <input class="sc-in" style="padding:4px 8px;margin-top:4px" readonly value="${esc(r.link)}" onclick="this.select()"></small>` : ''}</span><span class="sc-badge ${r.ok ? 'ok' : 'bad'}">${r.ok ? '✓' : '✕'}</span></div>`);
-          } catch (err) { res.insertAdjacentHTML('beforeend', `<p class="sc-small" style="color:var(--bad)">${esc(em)}: ${esc(err.message)}</p>`); }
+      const update = () => {
+        const pl = plan();
+        ['student', 'teacher'].forEach(role => {
+          const n = pl.existing.filter(e => (byEmail.get(e) || {}).role === role).length + pl.fresh.filter(f => f.role === role).length;
+          $(`[data-count="${role}"]`, m).textContent = n;
+        });
+        const parts = [];
+        if (pl.existing.length) parts.push(`${pl.existing.length} from the school`);
+        if (pl.fresh.length) parts.push(`${pl.fresh.length} new to invite`);
+        $('#m-sum', m).textContent = parts.length ? parts.join(' · ') + (pl.classIds.length ? ` → ${pl.classIds.length} class${pl.classIds.length === 1 ? '' : 'es'}` : '') : 'Tick people or add emails.';
+        const go = $('#m-go', m);
+        if (!go.dataset.busy) {
+          go.disabled = !(pl.fresh.length || (pl.existing.length && pl.classIds.length));
+          go.textContent = pl.fresh.length && pl.existing.length ? `Add ${pl.existing.length} & invite ${pl.fresh.length}` : pl.fresh.length ? `Invite ${pl.fresh.length}` : `Add ${pl.existing.length || ''} to class`.replace('  ', ' ');
         }
-        e.target.disabled = false; e.target.textContent = 'Send more';
-        $('#m-emails', m).value = '';
-        toast(ok + ' of ' + emails.length + ' added');
+      };
+      const show = (role) => {
+        pane = role;
+        $$('[data-pane-btn]', m).forEach(b => b.classList.toggle('on', b.dataset.paneBtn === role));
+        ['student', 'teacher'].forEach(r => { P(r).hidden = r !== role; });
+      };
+      $$('[data-pane-btn]', m).forEach(b => b.onclick = () => show(b.dataset.paneBtn));
+      ['student', 'teacher'].forEach(role => {
+        const p = P(role);
+        const search = $('[data-search]', p);
+        const filter = () => {
+          const q = (search ? search.value : '').trim().toLowerCase();
+          let shown = 0;
+          $$('.sc-person-pick', p).forEach(r => { const ok = !q || r.dataset.q.includes(q); r.hidden = !ok; if (ok) shown++; });
+          const none = $('[data-none]', p); if (none) none.hidden = !!shown;
+        };
+        if (search) search.oninput = filter;
+        const all = $('[data-all]', p);
+        if (all) all.onclick = () => {
+          const boxes = $$('.sc-person-pick:not([hidden]) input[data-existing-role]', p);
+          const on = boxes.some(b => !b.checked);
+          boxes.forEach(b => { b.checked = on; });
+          all.textContent = on ? 'Clear shown' : 'Select all shown';
+          update();
+        };
+        const csv = $('[data-csv]', p);
+        if (csv) csv.onchange = async (e) => {
+          const file = e.target.files && e.target.files[0]; if (!file) return;
+          const lines = (await file.text()).split(/\r?\n/).filter(l => l.trim());
+          const first = lines[0] || '';
+          const sep = first.includes('\t') ? '\t' : first.split(';').length > first.split(',').length ? ';' : ',';
+          const cells = (l) => { const out = []; let cur = '', q = false; for (let i = 0; i < l.length; i++) { const ch = l[i]; if (q) { if (ch === '"' && l[i + 1] === '"') { cur += '"'; i++; } else if (ch === '"') q = false; else cur += ch; } else if (ch === '"') q = true; else if (ch === sep) { out.push(cur.trim()); cur = ''; } else cur += ch; } out.push(cur.trim()); return out; };
+          const head = cells(lines[0] || '').map(h => h.toLowerCase());
+          const hasHead = head.some(h => /e-?mail|name|role|type/.test(h)) && !head.some(h => EMAIL.test(h));
+          const col = (re) => hasHead ? head.findIndex(h => re.test(h)) : -1;
+          const cName = col(/^(full ?)?name$|display/), cFirst = col(/first|forename|given/), cLast = col(/last|surname|family/), cRole = col(/role|type|staff|position/);
+          let ticked = 0, added = 0;
+          (hasHead ? lines.slice(1) : lines).forEach(l => {
+            const c = cells(l), em = (c.find(x => EMAIL.test(x)) || '').toLowerCase();
+            if (!em) return;
+            const nm = cName >= 0 ? c[cName] : [cFirst >= 0 ? c[cFirst] : '', cLast >= 0 ? c[cLast] : ''].join(' ').trim() || (!hasHead ? c.filter(x => x && !EMAIL.test(x) && !/^(student|teacher|staff|pupil)$/i.test(x)).join(' ') : '');
+            const rv = (cRole >= 0 ? c[cRole] : c.find(x => /^(student|teacher|staff|pupil)$/i.test(x || '')) || '').toLowerCase();
+            const want = /teach|staff/.test(rv) ? 'teacher' : /stud|pupil/.test(rv) ? 'student' : role;
+            if (nm) names.set(em, nm.slice(0, 80));
+            if (inClass.has(em)) return;
+            const ex = byEmail.get(em);
+            if (ex) {
+              const b = $(`input[data-existing-role][value="${CSS.escape(em)}"]`, m);
+              if (b && !b.checked) { b.checked = true; ticked++; }
+              return;
+            }
+            if (want === 'teacher' && !admin) return; // only the EDU admin can invite new staff
+            const target = want;
+            const box = $('[data-new]', P(target));
+            if (!box || parse(box.value).includes(em)) return;
+            box.value = (box.value.trim() ? box.value.trim() + '\n' : '') + (nm ? nm + ', ' : '') + em;
+            added++;
+          });
+          toast(ticked || added ? `From the CSV: ${ticked} already at the school (ticked), ${added} new to invite` : 'No new email addresses found in that CSV.', 4500);
+          e.target.value = '';
+          update();
+        };
+      });
+      m.addEventListener('change', update);
+      m.addEventListener('input', (e) => { if (e.target.matches('[data-new]')) update(); });
+      update();
+      $('#m-go', m).onclick = async (e) => {
+        const pl = plan();
+        if (!pl.fresh.length && !pl.existing.length) return toast('Tick people or add an email address.');
+        if (pl.existing.length && !pl.classIds.length && !pl.fresh.length) return toast('Choose which class to add them to.');
+        const go = e.target; go.dataset.busy = '1'; go.disabled = true; go.textContent = 'Adding…';
+        const res = $('#m-res', m); res.innerHTML = '';
+        const line = (who, msg, ok) => res.insertAdjacentHTML('beforeend', `<div class="sc-pickrow" style="margin-bottom:6px"><span><p><b>${esc(who)}</b></p><small>${msg}</small></span><span class="sc-badge ${ok ? 'ok' : 'bad'}">${ok ? '✓' : '✕'}</span></div>`);
+        let ok = 0, total = 0;
+        // 1. people already at the school → straight into the class(es), no new invite email
+        if (pl.existing.length && pl.classIds.length) {
+          total += pl.existing.length;
+          let rpcOk = true, added = 0, already = 0;
+          for (const cid of pl.classIds) {
+            const { data, error } = await S.sb.rpc('edu_add_to_class', { p_class: cid, p_emails: pl.existing });
+            if (error) { rpcOk = false; break; }
+            added += data.added || 0; already += data.already || 0;
+          }
+          if (rpcOk) {
+            ok += pl.existing.length;
+            const cn = pl.classIds.map(id => (S.classes.find(c => c.id === id) || {}).name).filter(Boolean).join(', ');
+            line(`${pl.existing.length} ${pl.existing.length === 1 ? 'person' : 'people'} from the school`, esc(`Added to ${cn}` + (already ? ` (${already} place${already === 1 ? ' was' : 's were'} already there)` : '') + '. Anyone with a pending invite joins the class when they accept.'), true);
+          } else {
+            // older database without edu_add_to_class: fall back to the invite route
+            for (const em of pl.existing) {
+              const p = byEmail.get(em) || {};
+              try { const r = await api('invite', { schoolId: String(S.school.id), email: em, role: p.role === 'teacher' ? 'teacher' : 'student', classIds: pl.classIds }); if (r.ok) ok++; line(em, esc(r.ok ? 'Added to the class' : r.error), r.ok); }
+              catch (err) { line(em, esc(err.message), false); }
+            }
+          }
+        } else if (pl.existing.length) {
+          line(`${pl.existing.length} already at the school`, 'Tick a class under “Add them to” to put them in a class.', false);
+        }
+        // 2. new people → invitation (email + popup)
+        for (const f of pl.fresh) {
+          total++;
+          try {
+            const r = await api('invite', { schoolId: String(S.school.id), email: f.email, role: f.role, classIds: pl.classIds, name: names.get(f.email) || undefined });
+            if (r.ok) ok++;
+            line((names.get(f.email) ? names.get(f.email) + ' · ' : '') + f.email + (f.role === 'teacher' ? ' (staff)' : ''), (r.ok ? (r.status === 'active' ? 'Added to the class' : r.emailed ? (r.existingAccount ? 'Has an account — asked to accept' : 'Invite email sent') : esc(r.note || 'Saved')) : esc(r.error)) + (r.link ? `<br>Sign-up link: <input class="sc-in" style="padding:4px 8px;margin-top:4px" readonly value="${esc(r.link)}" onclick="this.select()">` : ''), r.ok);
+          } catch (err) { line(f.email, esc(err.message), false); }
+        }
+        $$('[data-new]', m).forEach(b => { b.value = ''; });
+        $$('input[data-existing-role]:checked', m).forEach(b => { b.checked = false; b.disabled = true; b.closest('.sc-person-pick').classList.add('here'); });
+        delete go.dataset.busy; update(); go.textContent = 'Add more';
+        toast(ok + ' of ' + total + ' done');
         S.people = null; S.rosters = {};
       };
     });

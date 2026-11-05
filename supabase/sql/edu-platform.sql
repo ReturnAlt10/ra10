@@ -721,6 +721,43 @@ $$;
 revoke all on function public.edu_school_people(text) from public, anon;
 grant execute on function public.edu_school_people(text) to authenticated;
 
+-- Put people who are ALREADY at the school (Students & staff list) into a class, with no new
+-- invitation email. Their class role comes from their school role (staff -> teacher), their
+-- status from their school membership (a pending invite stays pending until they accept).
+-- Emails that are not at the school yet are returned in 'unknown' so the app can invite them.
+create or replace function public.edu_add_to_class(p_class uuid, p_emails text[])
+returns json language plpgsql security definer set search_path = public as $$
+declare
+  v_school text := public.edu_class_school(p_class);
+  v_added integer := 0;
+  v_already integer := 0;
+  v_unknown text[] := array[]::text[];
+  v_email text;
+  v_m record;
+begin
+  if v_school is null then raise exception 'Class not found'; end if;
+  if not public.edu_teaches_class(p_class) then raise exception 'Only staff at this school can add people to the class' using errcode = '42501'; end if;
+  foreach v_email in array coalesce(p_emails, array[]::text[]) loop
+    v_email := lower(trim(v_email));
+    continue when v_email = '' or v_email !~ '^[^@\s]+@[^@\s]+\.[^@\s]+$';
+    select m.role, m.status, coalesce(m.user_id, u.id) as uid into v_m
+      from public.school_members m left join auth.users u on lower(u.email) = lower(m.email)
+     where m.school_id::text = v_school and lower(m.email) = v_email and m.status <> 'removed'
+     order by (m.role = 'teacher') desc, (m.status = 'active') desc limit 1;
+    if not found then v_unknown := v_unknown || v_email; continue; end if;
+    if exists (select 1 from public.edu_class_members where class_id = p_class and lower(email) = v_email) then
+      v_already := v_already + 1; continue;
+    end if;
+    insert into public.edu_class_members (class_id, email, user_id, role, status, added_by)
+    values (p_class, v_email, v_m.uid, case when v_m.role = 'teacher' then 'teacher' else 'student' end,
+            case when v_m.status = 'active' then 'active' else 'invited' end, auth.uid());
+    v_added := v_added + 1;
+  end loop;
+  return json_build_object('ok', true, 'added', v_added, 'already', v_already, 'unknown', to_json(v_unknown));
+end $$;
+revoke all on function public.edu_add_to_class(uuid, text[]) from public, anon;
+grant execute on function public.edu_add_to_class(uuid, text[]) to authenticated;
+
 -- ─── 8. School entitlement needs an accepted invitation ─────────────────────
 -- Previously any 'invited' row was applied silently on sign-in. Now an invited
 -- EXISTING account must accept (popup / email). Brand-new accounts created from
