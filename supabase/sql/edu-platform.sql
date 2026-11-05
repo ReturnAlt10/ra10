@@ -117,13 +117,26 @@ returns text language sql stable security definer set search_path = public as $$
   select school_id from public.edu_classes where id = p_class;
 $$;
 
-create or replace function public.edu_teaches_class(p_class uuid)
+-- Is this person THIS class's teacher (or the school's EDU admin)? Used to decide which classes
+-- and assignments appear on their own homepage.
+create or replace function public.edu_is_class_teacher(p_class uuid)
 returns boolean language sql stable security definer set search_path = public as $$
   select auth.uid() is not null and (
     public.edu_is_school_admin(public.edu_class_school(p_class))
     or exists (select 1 from public.edu_class_members cm
                where cm.class_id = p_class and cm.role = 'teacher'
                  and (cm.user_id = auth.uid() or lower(cm.email) = public.edu_my_email()))
+  );
+$$;
+
+-- May this person manage the class (set / edit assignments, see the roster and students' work)?
+-- Any member of staff at the class's school may, not only the class's own teacher(s): staff
+-- cover each other's classes, and this keeps "can view" and "can create" consistent.
+create or replace function public.edu_teaches_class(p_class uuid)
+returns boolean language sql stable security definer set search_path = public as $$
+  select auth.uid() is not null and (
+    public.edu_is_class_teacher(p_class)
+    or public.edu_is_school_staff(public.edu_class_school(p_class))
   );
 $$;
 
@@ -474,14 +487,14 @@ begin
 
   select coalesce(json_agg(x order by x->>'name'), '[]'::json) into v_classes from (
     select json_build_object('id', c.id, 'name', c.name, 'color', c.color, 'units', c.units, 'year_group', c.year_group,
-                             'my_role', case when public.edu_teaches_class(c.id) then 'teacher' else 'student' end,
+                             'my_role', case when public.edu_is_class_teacher(c.id) then 'teacher' else 'student' end,
                              'students', (select count(*) from public.edu_class_members x where x.class_id = c.id and x.role = 'student'),
                              'teachers', (select coalesce(json_agg(coalesce(p.display_name, t.email)), '[]'::json)
                                           from public.edu_class_members t left join public.profiles p on p.id = t.user_id
                                           where t.class_id = c.id and t.role = 'teacher')) as x
     from public.edu_classes c
     where not c.archived and c.school_id = v_cur
-      and (public.edu_in_class(c.id) or public.edu_teaches_class(c.id))
+      and (public.edu_in_class(c.id) or public.edu_is_class_teacher(c.id))
   ) q;
 
   -- Pending invitations (school-level, with the classes they were added to).
@@ -503,10 +516,10 @@ begin
                              'instructions', a.instructions, 'created_at', a.created_at,
                              'done', (select count(*) from public.edu_submissions s where s.assignment_id = a.id and s.user_id = v_uid and s.done),
                              'submitted', (select count(distinct s.user_id) from public.edu_submissions s where s.assignment_id = a.id and s.done),
-                             'mine', public.edu_teaches_class(a.class_id)) as j
+                             'mine', public.edu_is_class_teacher(a.class_id)) as j
     from public.edu_assignments a join public.edu_classes c on c.id = a.class_id
     where a.status = 'published' and c.school_id = v_cur
-      and (public.edu_in_class(a.class_id) or public.edu_teaches_class(a.class_id))
+      and (public.edu_in_class(a.class_id) or public.edu_is_class_teacher(a.class_id))
     order by a.created_at desc limit 40
   ) q;
 
