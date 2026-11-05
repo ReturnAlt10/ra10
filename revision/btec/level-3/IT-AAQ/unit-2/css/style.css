@@ -636,6 +636,12 @@ main {
   letter-spacing: 0.04em;
 }
 .flash-face.back .face-hint { color: rgba(255,255,255,0.55); }
+/* exam-question and MCQ cards: longer text, keep line breaks, scroll inside the card */
+.flash-card.flash-card--long { height: 480px; }
+.flash-card--long .flash-face { justify-content: flex-start; padding: 30px 32px 44px; }
+.flash-card--long .face-content { white-space: pre-line; text-align: left; width: 100%; overflow: auto; max-height: 100%; font-size: 17px; line-height: 1.5; }
+.flash-card--long .flash-face.back .face-content { font-size: 15px; }
+@media (max-width: 640px) { .flash-card.flash-card--long { height: 440px; } .flash-card--long .flash-face { padding: 22px 18px 40px; } }
 .flash-actions { display: flex; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; justify-content: center; }
 .flash-actions .btn { min-width: 140px; }
 .flash-progress-bar {

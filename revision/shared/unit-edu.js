@@ -272,6 +272,8 @@ html[data-theme="dark"] .ws-chip.due{background:#3a2a10;color:#fcd34d}html[data-
 .ws-opt:disabled{cursor:default}
 .ws-guide{padding:20px 22px;border-radius:16px;border:1px solid var(--line,#e3e6ee);background:var(--bg,#fafbfc);max-height:62vh;overflow:auto;font-size:.95rem;line-height:1.65;color:var(--ink,#12151c)}
 .ws-guide.empty{max-height:none}
+.ws-guide .ws-hl{background:color-mix(in srgb,#facc15 26%,transparent)!important;box-shadow:inset 3px 0 0 #eab308;border-radius:4px}
+.ws-guide-note{margin:0 0 12px!important;padding:10px 12px;border-radius:12px;background:color-mix(in srgb,#facc15 16%,var(--surface,#fff));font-size:.85rem;font-weight:700}
 .ws-guide .guide-topic{border:0!important;box-shadow:none!important;background:transparent!important;margin:0!important;padding:0!important}
 .ws-guide .guide-topic-hd{cursor:default!important;pointer-events:none;padding:0 0 10px!important;margin:0 0 10px!important;border-bottom:1px solid var(--line,#e3e6ee);font-size:1.05rem;font-weight:800}
 .ws-guide .guide-topic-body{display:block!important;max-height:none!important;padding:0!important}
@@ -545,13 +547,17 @@ html[data-theme="dark"] .ws-chip.due{background:#3a2a10;color:#fcd34d}html[data-
         return { block: node.closest('.guide-topic') || node };
       }
     }
-    // b) spec code (A1, B1.2 …): topic block id or a header starting with the code
+    // b) spec code (A1, B1.2 …): its own topic block, else the nearest parent (A2.2 → A2) with the sub-topic in focus
+    if (!code) { const m = String(title || '').match(/^\s*([A-Z]\d+(?:\.\d+)*)\b/); if (m) code = m[1]; }
     if (code) {
-      const byId = root.querySelector('#gt-' + (window.CSS && CSS.escape ? CSS.escape(code) : code));
-      if (byId) return { block: byId };
-      const c = norm(code);
-      const t = topics.find(x => norm(topicHead(x)).indexOf(c + ' ') === 0 || norm(topicHead(x)) === c);
-      if (t) return { block: t };
+      const esc2 = (x) => (window.CSS && CSS.escape ? CSS.escape(x) : x);
+      for (let c = code, depth = 0; c; depth++) {
+        const byId = root.querySelector('#gt-' + esc2(c));
+        const nc = norm(c);
+        const t = byId || topics.find(x => norm(topicHead(x)).indexOf(nc + ' ') === 0 || norm(topicHead(x)) === nc);
+        if (t) return depth ? { block: t, focus: { code, title } } : { block: t };
+        c = c.indexOf('.') > 0 ? c.slice(0, c.lastIndexOf('.')) : (/^[A-Z]\d+$/.test(c) ? null : null);
+      }
     }
     // c) best title match among topic blocks, then headings
     if (want) {
@@ -564,8 +570,25 @@ html[data-theme="dark"] .ws-chip.due{background:#3a2a10;color:#fcd34d}html[data-
     }
     return null;
   }
+  function focusWords(f) {
+    const name = String(f.title || '').replace(/^\s*[A-Z]\d+(?:\.\d+)*\s*/, '');
+    const phrase = norm(name.split(':')[0]);
+    const words = norm(name.split(':').slice(1).join(' ')).split(' ').filter(w => w.length > 4 && !/^(which|their|about|other|using|there)$/.test(w));
+    return { phrase, words, code: norm(f.code) };
+  }
+  function subHeading(block, f) {
+    const fw = focusWords(f);
+    return $$('h3, h4, h5, strong, b, .guide-sub, dt', block).find(h => {
+      const n = norm(h.textContent);
+      return n && n.length < 160 && (n.indexOf(fw.code + ' ') === 0 || (fw.phrase.length > 6 && (n.indexOf(fw.phrase) >= 0 || fw.phrase.indexOf(n) === 0 && n.length > 10)));
+    }) || null;
+  }
   function cloneSection(found) {
     const box = document.createElement('div');
+    if (found.block && found.focus) {
+      const sub = subHeading(found.block, found.focus);
+      if (sub && /^H[3-6]$/.test(sub.tagName)) { found = { heading: sub, focus: found.focus, parent: found.block }; }
+    }
     if (found.block) box.appendChild(found.block.cloneNode(true));
     else if (found.heading) {
       const h = found.heading, lvl = Number(h.tagName[1]) || 4;
@@ -584,6 +607,23 @@ html[data-theme="dark"] .ws-chip.due{background:#3a2a10;color:#fcd34d}html[data-
     box.querySelectorAll('.guide-topic-body').forEach(x => { x.style.display = 'block'; x.style.maxHeight = 'none'; x.style.overflow = 'visible'; });
     box.querySelectorAll('*').forEach(x => { if (x.children.length === 0 && /^[▼▲►▸]$/.test((x.textContent || '').trim())) x.remove(); });
     box.querySelectorAll('[onclick]').forEach(x => x.removeAttribute('onclick'));
+    // a sub-topic shown inside its parent block: mark the lines that are about it
+    if (found.focus) {
+      const fw = focusWords(found.focus);
+      let hits = 0;
+      $$('li, tr, p, dd, h3, h4, h5, strong', box).forEach(el => {
+        if (el.closest('.ws-hl')) return;
+        const n = norm(el.textContent);
+        if (!n || n.length > 600) return;
+        const score = (fw.phrase.length > 6 && n.indexOf(fw.phrase) >= 0 ? 3 : 0) + (n.indexOf(fw.code + ' ') === 0 ? 3 : 0) + fw.words.filter(w => n.indexOf(w) >= 0).length;
+        if (score >= 3) { el.classList.add('ws-hl'); hits++; }   // only clear matches, not a stray shared word
+      });
+      const parentTitle = found.parent ? topicHead(found.parent) : (found.block ? topicHead(found.block) : '');
+      const note = document.createElement('p');
+      note.className = 'ws-guide-note';
+      note.textContent = (hits ? 'The highlighted parts are about ' : 'This is covered in ') + String(found.focus.title || found.focus.code).replace(/:.*$/, '') + (parentTitle ? ' — part of “' + parentTitle.replace(/[▼▲]/g, '').trim() + '”.' : '.');
+      box.prepend(note);
+    }
     return box;
   }
   async function fillGuide(t) {
@@ -602,6 +642,8 @@ html[data-theme="dark"] .ws-chip.due{background:#3a2a10;color:#fcd34d}html[data-
     if (!host2 || current.tasks[current.idx] !== t) return;
     host2.innerHTML = html || '<p class="ws-group" style="margin:0">This section could not be shown here. Use “Open in the full guide” below.</p>';
     host2.classList.toggle('empty', !html);
+    const hl = $('.ws-hl', host2);
+    if (hl) setTimeout(() => { const a = hl.getBoundingClientRect().top, b = host2.getBoundingClientRect().top; host2.scrollTop = Math.max(0, host2.scrollTop + a - b - 70); }, 80);
     // 25 seconds on the section counts as read
     clearTimeout(current.readT);
     if (html && !(current.subs[t.id] || {}).done) current.readT = setTimeout(async () => {

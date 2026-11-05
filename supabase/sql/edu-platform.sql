@@ -35,11 +35,11 @@ returns boolean language sql stable security definer set search_path = public as
 $$;
 
 -- School admin = owner of the school row, or a member flagged is_admin.
+-- The RA10 platform owner account is deliberately NOT an EDU admin anywhere.
 create or replace function public.edu_is_school_admin(p_school text)
 returns boolean language sql stable security definer set search_path = public as $$
-  select auth.uid() is not null and (
-    public.edu_is_owner()
-    or exists (select 1 from public.schools s where s.id::text = p_school and s.owner_id = auth.uid())
+  select auth.uid() is not null and not public.edu_is_owner() and (
+    exists (select 1 from public.schools s where s.id::text = p_school and s.owner_id = auth.uid())
     or exists (select 1 from public.school_members m
                where m.school_id::text = p_school and lower(m.email) = public.edu_my_email()
                  and m.status = 'active' and coalesce(m.is_admin, false))
@@ -372,7 +372,7 @@ declare
 begin
   if auth.uid() is null then raise exception 'Not signed in'; end if;
   select lower(coalesce(tier, '')) into v_tier from public.profiles where id = auth.uid();
-  if v_tier not in ('school_admin', 'owner', 'ultra') and not public.edu_is_owner() then
+  if v_tier <> 'school_admin' or public.edu_is_owner() then
     raise exception 'EDU admin plan required' using errcode = '42501';
   end if;
   if coalesce(trim(p_name), '') = '' then raise exception 'School name required'; end if;
@@ -409,6 +409,37 @@ end $$;
 revoke all on function public.edu_setup_school(text, text, text, text[], text[], text) from public, anon;
 grant execute on function public.edu_setup_school(text, text, text, text[], text[], text) to authenticated;
 
+-- The school an account is "in" right now. Someone linked to several schools (common with
+-- test accounts) is shown the one where they have the most responsibility:
+--   1 owns it / EDU admin   2 staff (teacher membership or teaches a class)   3 student
+-- Within the same level the school already on their profile wins, so nothing flips at sign-in.
+create or replace function public.edu_current_school()
+returns text language sql stable security definer set search_path = public as $$
+  with me as (select auth.uid() as uid, public.edu_my_email() as em,
+                     (select school_id::text from public.profiles where id = auth.uid()) as cur),
+  cand as (
+    select s.id::text as sid, 1 as pri from public.schools s, me where s.owner_id = me.uid
+    union all
+    select m.school_id::text, 1 from public.school_members m, me
+     where lower(m.email) = me.em and m.status = 'active' and coalesce(m.is_admin, false)
+    union all
+    select m.school_id::text, 2 from public.school_members m, me
+     where lower(m.email) = me.em and m.status = 'active' and m.role = 'teacher'
+    union all
+    select c.school_id, 2 from public.edu_class_members cm join public.edu_classes c on c.id = cm.class_id, me
+     where cm.role = 'teacher' and (cm.user_id = me.uid or lower(cm.email) = me.em)
+    union all
+    select m.school_id::text, 3 from public.school_members m, me
+     where lower(m.email) = me.em and m.status = 'active'
+  )
+  select cand.sid from cand, me
+  where not public.edu_is_owner()
+  order by cand.pri, (cand.sid = me.cur) desc
+  limit 1;
+$$;
+revoke all on function public.edu_current_school() from public, anon;
+grant execute on function public.edu_current_school() to authenticated;
+
 -- Everything the shell needs for the EDU homepage in one call.
 create or replace function public.edu_my_context()
 returns json language plpgsql stable security definer set search_path = public as $$
@@ -422,29 +453,22 @@ declare
   v_invites json;
   v_assignments json;
   v_comments json;
+  v_cur text;
 begin
   if v_uid is null then return json_build_object('signed_in', false); end if;
   select id, tier, school_id, school_name, display_name into v_profile from public.profiles where id = v_uid;
-  if v_profile.school_id is null then
-    -- not linked yet (e.g. staff added straight to a class): use their staff membership's school
-    v_profile.school_id := coalesce(
-             (select m.school_id::text from public.school_members m
-               where lower(m.email) = v_email and m.role = 'teacher' and m.status <> 'removed' order by m.id desc limit 1),
-             (select c.school_id from public.edu_class_members cm join public.edu_classes c on c.id = cm.class_id
-               where cm.role = 'teacher' and (cm.user_id = v_uid or lower(cm.email) = v_email) limit 1));
-  end if;
+  v_cur := public.edu_current_school();
 
-  if v_profile.school_id is not null then
+  if v_cur is not null then
     select json_build_object('id', s.id, 'name', s.name, 'logo_url', s.logo_url, 'website', s.website,
                              'brand_color', s.brand_color, 'onboarded', s.onboarded_at is not null,
                              'units', s.ra10_units, 'offered_subjects', s.offered_subjects)
-      into v_school from public.schools s where s.id::text = v_profile.school_id::text;
-    if public.edu_is_school_admin(v_profile.school_id::text) then v_role := 'admin';
-    elsif public.edu_is_school_staff(v_profile.school_id::text) then v_role := 'teacher';
-    elsif exists (select 1 from public.school_members m where m.school_id::text = v_profile.school_id::text
-                   and lower(m.email) = v_email and m.status = 'active') then v_role := 'student';
+      into v_school from public.schools s where s.id::text = v_cur;
+    if public.edu_is_school_admin(v_cur) then v_role := 'admin';
+    elsif public.edu_is_school_staff(v_cur) then v_role := 'teacher';
+    else v_role := 'student';
     end if;
-  elsif lower(coalesce(v_profile.tier, '')) = 'school_admin' then
+  elsif lower(coalesce(v_profile.tier, '')) = 'school_admin' and not public.edu_is_owner() then
     v_role := 'admin';   -- admin who has not finished onboarding yet
   end if;
 
@@ -456,7 +480,8 @@ begin
                                           from public.edu_class_members t left join public.profiles p on p.id = t.user_id
                                           where t.class_id = c.id and t.role = 'teacher')) as x
     from public.edu_classes c
-    where not c.archived and (public.edu_in_class(c.id) or public.edu_teaches_class(c.id))
+    where not c.archived and c.school_id = v_cur
+      and (public.edu_in_class(c.id) or public.edu_teaches_class(c.id))
   ) q;
 
   -- Pending invitations (school-level, with the classes they were added to).
@@ -480,7 +505,8 @@ begin
                              'submitted', (select count(distinct s.user_id) from public.edu_submissions s where s.assignment_id = a.id and s.done),
                              'mine', public.edu_teaches_class(a.class_id)) as j
     from public.edu_assignments a join public.edu_classes c on c.id = a.class_id
-    where a.status = 'published' and (public.edu_in_class(a.class_id) or public.edu_teaches_class(a.class_id))
+    where a.status = 'published' and c.school_id = v_cur
+      and (public.edu_in_class(a.class_id) or public.edu_teaches_class(a.class_id))
     order by a.created_at desc limit 40
   ) q;
 
@@ -692,36 +718,41 @@ declare
   v_user_id uuid := auth.uid();
   v_email text;
   v_meta_school text;
-  v_member record;
+  v_invite record;
+  v_school text;
+  v_staff boolean;
+  v_subjects text[];
   v_tier text;
   v_current text;
 begin
   if v_user_id is null then raise exception 'Not authenticated'; end if;
+  if public.edu_is_owner() then return json_build_object('ok', false, 'reason', 'owner'); end if;
   select lower(coalesce(email, '')), coalesce(raw_user_meta_data->>'school_id', '')
     into v_email, v_meta_school from auth.users where id = v_user_id;
 
-  select id, role, school_id, status, subjects into v_member
-  from public.school_members
-  where lower(email) = v_email and role in ('student', 'teacher')
-    and (status = 'active' or (status = 'invited' and school_id::text = v_meta_school))
-  order by (status = 'active') desc, id desc
-  limit 1;
-
-  if v_member.id is null then return json_build_object('ok', false, 'reason', 'no_membership'); end if;
-
-  if v_member.status = 'invited' then
-    return public.edu_accept_invite(v_member.school_id::text);
+  v_school := public.edu_current_school();
+  if v_school is null then
+    -- brand-new account created from an invite email joins that school automatically
+    select school_id into v_invite from public.school_members
+     where lower(email) = v_email and status = 'invited' and school_id::text = v_meta_school limit 1;
+    if v_invite.school_id is not null then return public.edu_accept_invite(v_meta_school); end if;
+    return json_build_object('ok', false, 'reason', 'no_membership');
   end if;
 
+  v_staff := public.edu_is_school_staff(v_school);
+  select m.subjects into v_subjects from public.school_members m
+   where m.school_id::text = v_school and lower(m.email) = v_email and m.status = 'active'
+   order by (m.role = 'teacher') desc, m.id desc limit 1;
   select lower(coalesce(tier, '')) into v_current from public.profiles where id = v_user_id;
-  v_tier := case when v_member.role = 'teacher' then 'school_teacher' else 'school_student' end;
+  v_tier := case when v_staff then 'school_teacher' else 'school_student' end;
   perform set_config('app.skip_profile_priv_check', 'true', true);
   update public.profiles
      set tier = case when v_current in ('owner', 'ultra', 'school_admin') then tier else v_tier end,
-         school_id = v_member.school_id,
-         unlocked_subjects = coalesce(v_member.subjects, array['IT AAQ', 'Business Level 3', 'Sport Level 3'])
+         school_id = (select id from public.schools where id::text = v_school),
+         school_name = (select name from public.schools where id::text = v_school),
+         unlocked_subjects = coalesce(v_subjects, array['IT AAQ', 'Business Level 3', 'Sport Level 3'])
    where id = v_user_id;
-  return json_build_object('ok', true, 'tier', v_tier);
+  return json_build_object('ok', true, 'tier', v_tier, 'school', v_school);
 end $$;
 revoke all on function public.apply_school_entitlement() from public;
 grant execute on function public.apply_school_entitlement() to authenticated;
@@ -938,4 +969,35 @@ begin
     from auth.users u, public.school_members m, public.schools s
    where u.id = p.id and p.school_id is null and lower(m.email) = lower(u.email)
      and m.role = 'teacher' and m.status = 'active' and s.id::text = m.school_id::text;
+end $$;
+
+-- ─── 12. The RA10 owner account (mistry.hashim@icloud.com) is not part of any school ───
+-- Removes its school memberships and class places and unlinks its profile. A school it
+-- created is handed to another active EDU admin of that school when there is one.
+do $$
+declare v_uid uuid; r record; v_new uuid;
+begin
+  select id into v_uid from auth.users where lower(email) = 'mistry.hashim@icloud.com';
+  if v_uid is null then return; end if;
+  perform set_config('app.edu_role_change', 'true', true);
+  update public.school_members set status = 'removed' where lower(email) = 'mistry.hashim@icloud.com' and status <> 'removed';
+  delete from public.edu_class_members where lower(email) = 'mistry.hashim@icloud.com' or user_id = v_uid;
+  perform set_config('app.skip_profile_priv_check', 'true', true);
+  update public.profiles
+     set school_id = null, school_name = null,
+         tier = case when lower(coalesce(tier, '')) like 'school_%' then 'owner' else tier end
+   where id = v_uid;
+  for r in select id, name from public.schools where owner_id = v_uid loop
+    select coalesce(m.user_id, u.id) into v_new
+      from public.school_members m left join auth.users u on lower(u.email) = lower(m.email)
+     where m.school_id::text = r.id::text and coalesce(m.is_admin, false) and m.status = 'active'
+       and lower(m.email) <> 'mistry.hashim@icloud.com' and coalesce(m.user_id, u.id) is not null
+     limit 1;
+    if v_new is not null then
+      update public.schools set owner_id = v_new where id = r.id;
+      raise notice 'School "%" handed to another EDU admin.', r.name;
+    else
+      raise notice 'School "%" was created by the owner account and has no other EDU admin. It is kept but has no admin now.', r.name;
+    end if;
+  end loop;
 end $$;

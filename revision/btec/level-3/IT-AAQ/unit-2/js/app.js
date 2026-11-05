@@ -3581,17 +3581,67 @@ function renderFlashControls() {
     endBtn.addEventListener('click', endFlashSession);
   }
 
-  if (typeof FLASHCARDS !== 'undefined' && FLASHCARDS.length) {
-    $('#flash-stage').innerHTML = `<p class="muted" style="padding:30px;text-align:center;">${FLASHCARDS.length} cards ready across all aims. Click <strong>Start session</strong> to begin.</p>`;
-  } else {
-    $('#flash-stage').innerHTML = `<p class="muted" style="padding:30px;text-align:center;">Flashcards are loading…</p>`;
+  const deckSel = $('#flash-deck');
+  const paintReady = () => {
+    const n = flashDeckSource().length;
+    const name = { terms: 'key-term', exam: 'exam-question', quiz: 'multiple-choice' }[(deckSel || {}).value || 'terms'];
+    $('#flash-stage').innerHTML = n
+      ? `<p class="muted" style="padding:30px;text-align:center;">${n} ${name} cards ready across all aims. Click <strong>Start session</strong> to begin.</p>`
+      : `<p class="muted" style="padding:30px;text-align:center;">Flashcards are loading…</p>`;
+  };
+  if (deckSel && !deckSel.dataset.ready) {
+    deckSel.dataset.ready = '1';
+    deckSel.addEventListener('change', () => { flashState = null; $('#flash-progress').textContent = ''; paintReady(); });
   }
+  // show each deck's size in the picker
+  if (deckSel) Array.from(deckSel.options).forEach(o => {
+    const n = o.value === 'exam' ? examFlashcards().length : o.value === 'quiz' ? quizFlashcards().length : ((typeof FLASHCARDS !== 'undefined' && FLASHCARDS) ? FLASHCARDS.length : 0);
+    o.textContent = o.textContent.replace(/\s*\(\d+\)$/, '') + (n ? ' (' + n + ')' : '');
+  });
+  paintReady();
+}
+
+/* Flashcard decks: the key-terms cards, plus exam questions and MCQs turned into cards. */
+function examFlashcards() {
+  return (typeof QUESTIONS !== 'undefined' ? QUESTIONS : []).filter(q => {
+    const ms = q.mark_scheme || {};
+    return q.question && ((ms.points || []).length || (ms.indicative_content || []).length) && Number(q.marks) <= 9;
+  }).map(q => {
+    const ms = q.mark_scheme || {};
+    const pts = (ms.points && ms.points.length ? ms.points : ms.indicative_content || []).slice(0, 12);
+    const marks = Number(q.marks) || 0;
+    const scen = q.scenario && q.scenario.length < 240 ? q.scenario + '\n\n' : '';
+    return {
+      id: 'EX-' + q.id, kind: 'exam', learning_aim: String(q.learning_aim || '').charAt(0), topic: q.topic || '',
+      front: scen + q.question + '\n\n(' + marks + ' mark' + (marks === 1 ? '' : 's') + (q.command_verb ? ' · ' + q.command_verb : '') + ')',
+      back: (ms.instruction ? ms.instruction + '\n\n' : '') + pts.map(p => '• ' + String(p).replace(/^[•\-]\s*/, '')).join('\n') + (ms.additional_guidance ? '\n\n' + ms.additional_guidance : ''),
+      backLabel: 'Mark scheme'
+    };
+  });
+}
+function quizFlashcards() {
+  return (typeof QUIZ !== 'undefined' ? QUIZ : []).filter(q => q.question && Array.isArray(q.choices) && q.choices.length).map(q => {
+    const L = 'ABCDEF', ci = Number(q.correct_index);
+    return {
+      id: 'QZ-' + q.id, kind: 'quiz', learning_aim: String(q.learning_aim || '').charAt(0), topic: q.topic || '',
+      front: q.question + '\n\n' + q.choices.map((c, i) => L[i] + ')  ' + c).join('\n'),
+      back: 'Answer: ' + L[ci] + ')  ' + (q.choices[ci] || '') + (q.explanation ? '\n\n' + q.explanation : ''),
+      backLabel: 'Answer'
+    };
+  });
+}
+function flashDeckSource() {
+  const kind = ($('#flash-deck') || {}).value || 'terms';
+  if (kind === 'exam') return examFlashcards();
+  if (kind === 'quiz') return quizFlashcards();
+  return (typeof FLASHCARDS !== 'undefined' && FLASHCARDS) ? FLASHCARDS : [];
 }
 
 function startFlash() {
-  if (!FLASHCARDS || !FLASHCARDS.length) { alert('Flashcards not available.'); return; }
+  const source = flashDeckSource();
+  if (!source.length) { alert('These flashcards are not available yet. Try again in a moment.'); return; }
   const aim = $('#flash-aim').value;
-  let deck = FLASHCARDS.slice();
+  let deck = source.slice();
   if (aim) deck = deck.filter(c => c.learning_aim === aim);
   if (!deck.length) { alert('No cards for this filter.'); return; }
   deck = shuffle(deck);
@@ -3635,7 +3685,7 @@ function renderFlashCard() {
   const bar = el('div', { class: 'flash-progress-bar' }, el('span', { style: `width: ${(flashState.idx + 1) / flashState.deck.length * 100}%;` }));
   stage.appendChild(bar);
 
-  const card = el('div', { class: 'flash-card', tabindex: '0' });
+  const card = el('div', { class: 'flash-card' + (c.kind ? ' flash-card--long' : ''), tabindex: '0' });
   const inner = el('div', { class: 'flash-card-inner' });
   const front = el('div', { class: 'flash-face front' },
     el('div', { class: 'face-eyebrow' }, `Aim ${c.learning_aim} · ${c.topic || ''}`),
@@ -3643,7 +3693,7 @@ function renderFlashCard() {
     el('div', { class: 'face-hint' }, 'Click to flip')
   );
   const back = el('div', { class: 'flash-face back' },
-    el('div', { class: 'face-eyebrow' }, c.id),
+    el('div', { class: 'face-eyebrow' }, c.backLabel || c.id),
     el('div', { class: 'face-content' }, c.back),
     el('div', { class: 'face-hint' }, 'Click to flip back')
   );

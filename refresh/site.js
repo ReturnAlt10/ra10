@@ -5115,7 +5115,7 @@ async function waitForRA10Sdk(timeoutMs) {
         if (eduLink) {
           const t = RA10.getTier();
           const em = (profile?.email || '').toLowerCase();
-          const show = t === 'school_admin' || t === 'school_teacher' || em === 'mistry.hashim@icloud.com';
+          const show = (t === 'school_admin' || t === 'school_teacher') && em !== 'mistry.hashim@icloud.com';   // the RA10 owner account has no EDU role
           eduLink.textContent = t === 'school_admin' ? 'School dashboard (EDU Admin)' : 'School dashboard';
           eduLink.style.display = show ? '' : 'none';
         }

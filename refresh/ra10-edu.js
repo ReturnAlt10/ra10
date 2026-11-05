@@ -73,6 +73,15 @@ body.edu-home-on:not(.edu-personal) #signed-in-dashboard{display:none!important}
 .eh-empty{padding:18px;border-radius:16px;border:1px dashed var(--color-border,#e5e7eb);color:var(--color-text-muted,#6b7280);text-align:center;font-size:.9rem}
 .eh-actions{display:flex;flex-wrap:wrap;gap:8px}
 .eh-toggle{justify-self:center;font-size:.82rem;color:var(--color-text-muted,#6b7280);background:none;border:0;text-decoration:underline;cursor:pointer}
+.eh-personal{display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding:18px 20px;border-radius:22px;border:1.5px solid color-mix(in srgb,var(--color-primary,#e11d48) 30%,var(--color-border,#e5e7eb));background:linear-gradient(135deg,color-mix(in srgb,var(--color-primary,#e11d48) 8%,var(--color-surface,#fff)),var(--color-surface,#fff))}
+.eh-personal-ico{flex:none;display:grid;place-items:center;width:52px;height:52px;border-radius:16px;font-size:1.5rem;background:color-mix(in srgb,var(--color-primary,#e11d48) 12%,var(--color-surface,#fff))}
+.eh-personal div{flex:1;min-width:200px}
+.eh-personal b{display:block;font-size:1.08rem;color:var(--color-text,#111)}
+.eh-personal small{display:block;margin-top:2px;font-size:.86rem;color:var(--color-text-muted,#6b7280)}
+.eh-personal-btn{min-height:48px;padding:0 22px;font-size:.95rem;border-radius:14px}
+.eh-back{display:flex;justify-content:center;margin:6px 0 18px}
+.eh-back .eh-btn{min-height:48px;padding:0 22px;font-size:.95rem;border-radius:14px}
+@media(max-width:600px){.eh-personal-btn,.eh-back .eh-btn{width:100%}}
 @media(max-width:860px){.eh-grid{grid-template-columns:1fr}.eh-hero{padding:18px;border-radius:22px}.eh-asg{grid-template-columns:6px minmax(0,1fr)}.eh-asg .eh-btn{grid-column:2;justify-self:start}}
 .ei-ov{position:fixed!important;inset:0!important;top:0!important;left:0!important;width:100vw!important;height:100vh!important;height:100dvh!important;margin:0!important;z-index:2147483600!important;display:flex!important;align-items:center!important;justify-content:center!important;padding:16px;box-sizing:border-box;background:rgba(8,12,20,.55);-webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px);animation:eiIn .2s ease both;font-family:var(--font-b,system-ui,sans-serif)}
 html.ei-lock,html.ei-lock body{overflow:hidden!important}
@@ -243,7 +252,7 @@ html.ei-lock,html.ei-lock body{overflow:hidden!important}
         ${f.recommendation && f.recommendation.unit ? `<div><button type="button" class="eh-btn pri" data-rec='${esc(JSON.stringify(f.recommendation))}'><span>${esc({ guide: 'Open this guide section', questions: 'Practise these questions', quiz: 'Take the quiz', flashcards: 'Open the flashcards', paper: 'Open the past paper' }[f.recommendation.type] || 'Open recommended work')} →</span></button></div>` : ''}</div>`).join('') : '<div class="eh-empty">Comments and recommended work from your teachers will show here.</div>'}</div></div>
     </div>
     <div class="eh-card"><h3>Your classes</h3>${classCards(c, false)}</div>
-    <button type="button" class="eh-toggle" data-personal>Show my personal dashboard</button>`;
+    <div class="eh-personal"><span class="eh-personal-ico">📊</span><div><b>Your personal dashboard</b><small>Your streak, XP, daily tasks and your own revision outside school work.</small></div><button type="button" class="eh-btn pri eh-personal-btn" data-personal>Open my personal dashboard →</button></div>`;
     const unread = fb.filter(f => !f.read).map(f => f.id);
     if (unread.length) setTimeout(() => client().rpc('edu_mark_comments_read', { p_ids: unread }), 4000);
   }
@@ -264,7 +273,7 @@ html.ei-lock,html.ei-lock body{overflow:hidden!important}
         <div class="eh-card"><h3>Your classes <a href="/school/#classes">Manage</a></h3>${classCards(c, true)}</div>
         <div class="eh-card"><h3>Recent assignments</h3><div class="eh-list">${mine.length ? mine.slice(0, 6).map(a => `<div class="eh-asg" style="--cc:${esc(a.class_color || '#2563eb')}"><span class="strip"></span><div><b>${esc(a.title)}</b><small>${esc(a.class_name)} · ${a.submitted || 0} submitted ${dueTag(Object.assign({}, a, { items: 0 }))}</small></div><a class="eh-btn" href="/school/#assignment=${esc(a.id)}">Review</a></div>`).join('') : '<div class="eh-empty">No assignments yet.</div>'}</div></div>
       </div>
-      <button type="button" class="eh-toggle" data-personal>Show my personal dashboard</button>`;
+      <div class="eh-personal"><span class="eh-personal-ico">📊</span><div><b>Your personal dashboard</b><small>Your streak, XP, daily tasks and your own revision outside school work.</small></div><button type="button" class="eh-btn pri eh-personal-btn" data-personal>Open my personal dashboard →</button></div>`;
   }
 
   async function render() {
@@ -272,7 +281,11 @@ html.ei-lock,html.ei-lock body{overflow:hidden!important}
     document.body.classList.remove('edu-home-on');
     const host = document.getElementById('edu-home');
     if (!c || !c.signed_in) { if (host) host.remove(); return; }
+    // the RA10 owner account never gets EDU screens or school invitations
+    if (String(c.email || '').toLowerCase() === 'mistry.hashim@icloud.com') { if (host) host.remove(); document.body.classList.remove('edu-home-on'); return; }
     (c.invites || []).slice(0, 1).forEach(showInvite);
+    // safety net: anyone who teaches a class gets the teacher homepage, whatever their membership says
+    if ((c.role === 'student' || !c.role) && (c.classes || []).some(k => k.my_role === 'teacher')) c.role = 'teacher';
     if (!c.role) { if (host) host.remove(); return; }
     const h = hostEl();
     if (!h) return;
@@ -298,10 +311,10 @@ html.ei-lock,html.ei-lock body{overflow:hidden!important}
     // a tidy toggle back from the personal dashboard
     let back = document.getElementById('edu-home-back');
     if (personal && !back) {
-      back = document.createElement('button');
-      back.id = 'edu-home-back'; back.className = 'eh-toggle'; back.type = 'button';
-      back.textContent = c.role === 'student' ? '← Back to my school homepage' : '← Back to my teaching homepage';
-      back.addEventListener('click', () => { personal = false; back.remove(); render(); });
+      back = document.createElement('div');
+      back.id = 'edu-home-back'; back.className = 'eh-back';
+      back.innerHTML = `<button type="button" class="eh-btn pri">← Back to my ${c.role === 'student' ? 'school' : 'teaching'} homepage</button>`;
+      back.querySelector('button').addEventListener('click', () => { personal = false; back.remove(); render(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
       h.insertAdjacentElement('afterend', back);
     } else if (!personal && back) back.remove();
   }

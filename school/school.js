@@ -86,6 +86,8 @@
     const { data, error } = await S.sb.rpc('edu_my_context');
     if (error) throw error;
     S.ctx = data; S.role = data.role; S.school = data.school || null;
+    // safety net: teaching a class means teacher tools, whatever the membership row says
+    if ((S.role === 'student' || !S.role) && (data.classes || []).some(k => k.my_role === 'teacher')) S.role = 'teacher';
     return data;
   }
   async function loadClasses() {

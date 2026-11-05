@@ -85,7 +85,7 @@ if (window.self !== window.top) document.documentElement.classList.add('ux-unit'
 });</script>
 <link rel="preconnect" href="https://api.fontshare.com">
 <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@500,700,900,400&f[]=jetbrains-mono@500&display=swap">
-<link rel="stylesheet" href="css/style.css?v=20260813">
+<link rel="stylesheet" href="css/style.css?v=20261120">
 <link rel="stylesheet" href="../../business/shared/biz-papers.css?v=20261107">
 <style>
 @media (max-width:600px){
@@ -222,7 +222,7 @@ if (window.self !== window.top) document.documentElement.classList.add('ux-unit'
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Sora:wght@500;600;700;800&display=swap">
 <link rel="stylesheet" href="/refresh/ra10-refresh.css?v=20261031">
 <script src="/refresh/ra10-refresh.js?v=20261104" defer></script>
-<link rel="stylesheet" href="../../../../shared/unit-ui.css?v=20261116">
+<link rel="stylesheet" href="../../../../shared/unit-ui.css?v=20261119">
 </head>
 <body class="ra10-refresh-enabled">
 <header class="topbar">
@@ -679,9 +679,14 @@ if (window.self !== window.top) document.documentElement.classList.add('ux-unit'
   <section id="view-flash" class="view">
     <header class="section-head">
       <h2>Flashcards</h2>
-      <p>Tap or click any card to flip. Mark cards as known or still learning.</p>
+      <p>Tap or click any card to flip. Mark cards as known or still learning. Pick a deck: key terms, real exam questions with their mark scheme, or multiple-choice questions.</p>
     </header>
     <div class="flash-controls">
+      <select id="flash-deck" aria-label="Flashcard deck">
+        <option value="terms">Key terms &amp; facts</option>
+        <option value="exam">Exam questions + mark scheme</option>
+        <option value="quiz">Multiple-choice questions</option>
+      </select>
       <select id="flash-aim"><option value="">All aims</option></select>
       <button id="btn-flash-start" class="btn primary">Start session<span class="ra10-cost-label free-label">Free</span></button>
       <button id="btn-flash-shuffle" class="btn">Shuffle</button>
@@ -716,7 +721,7 @@ if (window.self !== window.top) document.documentElement.classList.add('ux-unit'
 <script src="js/papers-data.js?v=20261106"></script>
 <script src="js/papers-ra10.js?v=20261106"></script>
 <script src="../../business/shared/biz-papers.js?v=20261107"></script>
-<script src="js/app.js?v=20261105"></script>
+<script src="js/app.js?v=20261120"></script>
 <script>
 const RA10_UNIT_SUBJECT = 'IT';
 const RA10_CREDIT_CHIP_ID = 'unit1-credit-chip';
@@ -885,6 +890,6 @@ document.addEventListener('visibilitychange', function() {
   if (document.visibilityState === 'visible') { window._sidebarCache = null; if (typeof refreshProgressSidebar === 'function') refreshProgressSidebar(true); }
 });
 </script>
-<script src="../../../../shared/unit-ui.js?v=20261116"></script>
+<script src="../../../../shared/unit-ui.js?v=20261119"></script>
 </body>
 </html>
