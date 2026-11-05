@@ -78,6 +78,7 @@ a,button,[role="button"],input,select,textarea{
 .nav-logo img{display:block;width:28px;height:28px;object-fit:cover;object-position:center;border-radius:var(--radius-md)}
 .nav-logo-text{font-family:var(--font-d);font-size:var(--tx-lg);font-weight:400;letter-spacing:-.01em}
 .nav-links{display:flex;align-items:center;gap:var(--sp1);margin-left:var(--sp2)}
+a.nav-link{text-decoration:none;display:inline-flex;align-items:center}
 .nav-link{
   font-size:var(--tx-sm);color:var(--color-text-muted);
   padding:var(--sp1) var(--sp3);border-radius:var(--radius-md);font-weight:500;

@@ -31,7 +31,7 @@
 })();
 </script>
 <link rel="preload" href="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0/dist/umd/supabase.js" as="script" crossorigin>
-<link rel="preload" href="/refresh/site.js?v=20261120" as="script">
+<link rel="preload" href="/refresh/site.js?v=20261122" as="script">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>RA10 — Advanced Revision Site (BTEC, GCSE, A-LEVEL)</title>
 <meta name="description" content="Free BTEC IT, Business and Sport revision for Level 3 AAQ and A-Level. Flashcards, quizzes, predicted papers, study guides, wireframe and code tools, and AI assignment marking — all in one place.">
@@ -70,7 +70,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/refresh/site.css?v=20261104">
+<link rel="stylesheet" href="/refresh/site.css?v=20261123">
 <script>
 (function(){
   var isFile = location.protocol === 'file:';
@@ -269,6 +269,15 @@ body.home-signed-in #p-home .hx-home > :not(#signed-in-dashboard){display:none !
 .sd-grid{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:var(--sp5);align-items:start}
 .sd-main,.sd-side{display:flex;flex-direction:column;gap:var(--sp5);min-width:0}
 .sd-card{padding:20px;border-radius:22px;background:var(--color-surface-2);border:1px solid var(--color-divider);box-shadow:var(--shadow-sm)}
+.sd-studyhub{display:flex;align-items:center;gap:16px;text-decoration:none;color:#fff;border:0;background:radial-gradient(120% 160% at 100% 0%,#8b7dff 0%,transparent 55%),linear-gradient(135deg,#4a3be6 0%,#6b3fd8 55%,#a23ccf 100%);box-shadow:0 22px 44px -30px rgba(70,40,200,.85);transition:transform .15s}
+.sd-studyhub:hover{transform:translateY(-2px)}
+.sd-sh-emo{flex:none;width:58px;height:58px;border-radius:18px;display:grid;place-items:center;font-size:1.8rem;background:rgba(255,255,255,.16)}
+.sd-sh-copy{display:grid;gap:2px;min-width:0;flex:1}
+.sd-sh-copy small{font-size:.7rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;opacity:.8}
+.sd-sh-copy b{font-size:1.12rem;line-height:1.25}
+.sd-sh-copy span{font-size:.86rem;opacity:.85;line-height:1.4}
+.sd-sh-go{flex:none;padding:10px 16px;border-radius:14px;background:#fff;color:#3b2bd0;font-weight:800;box-shadow:0 4px 0 #d9d4ff}
+@media (max-width:560px){.sd-sh-go{display:none}}
 .sd-card-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:14px;flex-wrap:wrap}
 .sd-card-head h3{font:700 1.08rem/1.2 var(--font-b)}
 .sd-card-head span{font-size:.8rem;color:var(--color-text-muted)}
@@ -557,6 +566,7 @@ body.home-signed-in #p-home .hx-home > :not(#signed-in-dashboard){display:none !
       <button class="nav-link" data-nav="community" onclick="go('/community')"><svg class="nu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>Community</button>
       <button class="nav-link" data-nav="tasks"    onclick="go('/tasks')"><svg class="nu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3 8-8"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Tasks</button>
       <button class="nav-link" data-nav="exams"    onclick="go('/exams')"><svg class="nu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13"/><path d="M8 12h13"/><path d="M8 18h13"/><path d="M3 6h.01M3 12h.01M3 18h.01"/></svg>Exams</button>
+      <a class="nav-link nav-studyhub" data-nav="study-hub" href="/study-hub/"><svg class="nu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 4.6L18.5 9.5l-4.6 1.9L12 16l-1.9-4.6L5.5 9.5l4.6-1.9z"/><path d="M19 15l.8 1.9 1.9.8-1.9.8L19 20.4l-.8-1.9-1.9-.8 1.9-.8z"/></svg>Study Hub</a>
       <div style="position:relative;display:inline-flex;" id="nav-lb-wrap">
         <button class="nav-link" data-nav="leaderboard" onclick="go('leaderboard')">
           <svg class="nu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v4a5 5 0 0 1-10 0z"/><path d="M7 6H4a2 2 0 0 0 2 3M17 6h3a2 2 0 0 1-2 3"/></svg>
@@ -848,6 +858,11 @@ body.home-signed-in #p-home .hx-home > :not(#signed-in-dashboard){display:none !
         <span class="mobile-you-copy"><strong>Subjects</strong><small>Browse revision subjects</small></span>
         <em>Open</em>
       </button>
+      <button class="mobile-you-item" type="button" data-mobile-you="/study-hub/">
+        <span class="mobile-you-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 4.6L18.5 9.5l-4.6 1.9L12 16l-1.9-4.6L5.5 9.5l4.6-1.9z"/><path d="M19 15l.8 1.9 1.9.8-1.9.8L19 20.4l-.8-1.9-1.9-.8 1.9-.8z"/></svg></span>
+        <span class="mobile-you-copy"><strong>Study Hub</strong><small>Your daily AI lesson</small></span>
+        <em>Open</em>
+      </button>
       <button class="mobile-you-item" type="button" data-mobile-you="/exams" data-dock-item="exams">
         <span class="mobile-you-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 7V3h8v4"/><path d="M4 21V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v15l-2-1.5L16 21l-2-1.5L12 21l-2-1.5L8 21l-2-1.5L4 21z"/><path d="M9 11h6"/><path d="M9 15h4"/></svg></span>
         <span class="mobile-you-copy"><strong>Exams</strong><small>Your exam timetable</small></span>
@@ -1017,6 +1032,11 @@ body.home-signed-in #p-home .hx-home > :not(#signed-in-dashboard){display:none !
 
         <div class="sd-grid">
           <div class="sd-main">
+            <a class="sd-card sd-studyhub" href="/study-hub/" aria-label="Open Study Hub — your daily AI lesson">
+              <span class="sd-sh-emo" aria-hidden="true">✨</span>
+              <span class="sd-sh-copy"><small>Study Hub · Premium</small><b>Your daily lesson is ready</b><span>A short, game-like lesson built from what you've been revising.</span></span>
+              <span class="sd-sh-go" aria-hidden="true">Start →</span>
+            </a>
             <section class="sd-card" aria-labelledby="sd-h-recent">
               <div class="sd-card-head"><h3 id="sd-h-recent">Continue revising</h3><span id="sd-recent-sub">Pick up where you left off</span></div>
               <div class="sd-recent" id="sd-recent"></div>
@@ -3287,7 +3307,7 @@ body.home-signed-in #p-home .hx-home > :not(#signed-in-dashboard){display:none !
 ============================================================ -->
 <!-- Supabase loads here (not in <head>) so it no longer blocks the first paint; it still runs before site.js. -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0/dist/umd/supabase.js"></script>
-<script src="/refresh/site.js?v=20261120"></script>
+<script src="/refresh/site.js?v=20261122"></script>
 <script src="/refresh/ra10-units.js?v=20261104"></script>
 <script src="/refresh/ra10-edu.js?v=20261120" defer></script>
 

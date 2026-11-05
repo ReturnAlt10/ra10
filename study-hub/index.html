@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>RA10 Study Hub</title>
+<meta name="description" content="Your daily AI revision lesson, built from what you've been studying on RA10.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#5b4cf5">
+<link rel="icon" href="/logo.png" type="image/png">
+<script>
+  (function () { try { var t = localStorage.getItem('ra10-theme'); if (!t) t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'; document.documentElement.setAttribute('data-theme', t === 'dark' ? 'dark' : 'light'); } catch (e) {} })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Sora:wght@500;600;700;800&display=swap" rel="stylesheet">
+<!-- the main site's styles, for its navbar and mobile dock -->
+<link rel="stylesheet" href="/refresh/site.css?v=20261123">
+<link rel="stylesheet" href="/refresh/ra10-refresh.css?v=20261031">
+<link rel="stylesheet" href="/refresh/ra10-glass.css?v=20261028">
+<link rel="stylesheet" href="/study-hub/study.css?v=20261123">
+<script src="/ra10-sdk.js?v=20261106"></script>
+<script src="/refresh/ra10-units.js?v=20261104"></script>
+<script src="/refresh/ra10-track.js?v=20261104"></script>
+<script src="/refresh/ra10-site-chrome.js?v=20261123" defer></script>
+</head>
+<body class="ra10-refresh-enabled sh-page">
+<div id="ra10-site-chrome" data-active="study-hub"><div class="sh-nav-ph" aria-hidden="true"></div></div>
+<main class="sh-main" id="sh-main" tabindex="-1">
+  <div class="sh-loading"><span class="sh-spin"></span> Opening your Study Hub…</div>
+</main>
+<div class="sh-toast" id="sh-toast" role="status" aria-live="polite"></div>
+<script src="/study-hub/study.js?v=20261123"></script>
+</body>
+</html>

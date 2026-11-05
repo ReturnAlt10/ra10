@@ -1767,7 +1767,7 @@ document.addEventListener('click', function (e) {
     if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
     return;
   }
-  if (/^\/(?!\/)/.test(href) && !/\.(html?|pdf|png|jpe?g|svg|webp|xml|txt|json|js|css|zip|docx?|pptx?|xlsx?)(\?|#|$)/i.test(href) && !/^\/(legal|admin|tools|school)(\/|$)/.test(href)) {
+  if (/^\/(?!\/)/.test(href) && !/\.(html?|pdf|png|jpe?g|svg|webp|xml|txt|json|js|css|zip|docx?|pptx?|xlsx?)(\?|#|$)/i.test(href) && !/^\/(legal|admin|tools|school|study-hub)(\/|$)/.test(href)) {
     e.preventDefault();
     if (!a.getAttribute('onclick')) go(href);
   }
@@ -4604,6 +4604,7 @@ async function waitForRA10Sdk(timeoutMs) {
           closeMobileYouSheet();
           const path = button.dataset.mobileYou;
           if (path === '/account') { openAccountOrSignIn(); return; }
+          if (/^\/(study-hub|school|tools)(\/|$)/.test(path)) { location.href = path; return; }
           go(path);
         });
       });
