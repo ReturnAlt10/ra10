@@ -140,7 +140,18 @@
     };
   }
   if (params.has('ra10catalog')) {
-    catalog().then(c => { try { window.parent.postMessage({ type: 'ra10:catalog', catalog: c }, location.origin); } catch (e) {} });
+    const full = String(params.get('full') || '').split(',').map(x => x.trim()).filter(Boolean).slice(0, 6);
+    if (full.length) {
+      // Study Hub: the complete question objects (mark scheme, spec code, scenario…) for these ids,
+      // so the real AI Examiner can mark them exactly as the unit app does.
+      dataReady(12000).then(d => {
+        const want = new Set(full);
+        const qs = (d.questions || []).filter(q => want.has(String(q.id))).map(q => { try { return JSON.parse(JSON.stringify(q)); } catch (e) { return null; } }).filter(Boolean);
+        try { window.parent.postMessage({ type: 'ra10:questions', unit: UNIT_PATH, questions: qs }, location.origin); } catch (e) {}
+      });
+    } else {
+      catalog().then(c => { try { window.parent.postMessage({ type: 'ra10:catalog', catalog: c }, location.origin); } catch (e) {} });
+    }
   }
 
   /* ───────────────────── assignments ───────────────────── */
@@ -178,7 +189,7 @@
 
   /* ───────────────────── assignment workspace ───────────────────── */
   let panel = null, pill = null, current = null;
-  const TYPE = { question: 'Exam question', mcq: 'Multiple choice', guide: 'Revision guide', paper: 'Exam paper', other: 'Another unit' };
+  const TYPE = { question: 'Exam question', mcq: 'Multiple choice', guide: 'Revision guide', paper: 'Exam paper', other: 'Another unit', studyhub: 'Study Hub lesson' };
   const IC = {
     question: '<path d="M4 20h4L18.5 9.5a2.8 2.8 0 0 0-4-4L4 16z"/><path d="M13.5 6.5l4 4"/>',
     mcq: '<circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/>',
@@ -361,6 +372,7 @@ html[data-theme="dark"] .ws-chip.due{background:#3a2a10;color:#fcd34d}html[data-
     const { a, d } = current;
     const out = [];
     (a.item_list || a.items || []).forEach(it => {
+      if (it.type === 'studyhub') { out.push(Object.assign({ group: 'Study Hub' }, it)); return; }
       if (it.unit && it.unit !== UNIT_PATH) { out.push(Object.assign({ other: true, group: 'Other units' }, it, { type: 'other' })); return; }
       if (it.type === 'topic') {
         const want = String(it.topic || '').toLowerCase();
@@ -489,6 +501,10 @@ html[data-theme="dark"] .ws-chip.due{background:#3a2a10;color:#fcd34d}html[data-
     } else if (t.type === 'paper') {
       body = `<p class="ws-q">${esc(t.title || 'Exam paper')}</p><p class="ws-group">Answer the paper in the Past Papers section, then come back and mark it as done.</p>
         <div class="ws-acts"><button type="button" class="ws-btn pri" data-paper>${ic('paper')} Open past papers</button>${s.done ? `<span class="ws-score">${ic('check', 16)} Done</span>` : '<button type="button" class="ws-btn" data-markread>Mark as done</button>'}</div>`;
+    } else if (t.type === 'studyhub') {
+      const u = window.RA10Units && RA10Units.byPath(t.unit);
+      body = `<p class="ws-q">${esc(t.title || 'Study Hub lesson')}</p><p class="ws-group">${t.mode === 'class' ? 'A short, game-like lesson your teacher wrote for the class' : 'A short, game-like lesson built just for you from your own progress'}${u ? ' in ' + esc(u.short) : ''}. It opens in Study Hub and your score comes back here.</p>
+        <div class="ws-acts"><button type="button" class="ws-btn pri" data-studyhub="${esc(t.id)}">${ic('spark')} ${s.done ? 'Open again' : 'Start the lesson'}</button>${s.max_score ? `<span class="ws-score${scoreClass(s.score, s.max_score)}">${ic('check', 16)} ${esc(s.score)}/${esc(s.max_score)}</span>` : ''}</div>`;
     } else if (t.type === 'other') {
       const u = window.RA10Units && RA10Units.byPath(t.unit);
       body = `<p class="ws-q">${esc(t.title || 'Task')}</p><p class="ws-group">This task is in ${esc(u ? u.name : 'another unit')}.</p><div class="ws-acts"><button type="button" class="ws-btn pri" data-goto-unit="${esc(t.unit)}">${ic('other')} Open ${esc(u ? u.short : 'unit')}</button></div>`;
@@ -700,6 +716,11 @@ html[data-theme="dark"] .ws-chip.due{background:#3a2a10;color:#fcd34d}html[data-
     if (t.closest('[data-next]')) { go(current.idx + 1); return; }
     const it = current.tasks[current.idx];
     if (!it) return;
+    if (t.closest('[data-studyhub]')) {
+      const url = '/study-hub/?assignment=' + encodeURIComponent(current.a.id) + '&item=' + encodeURIComponent(t.closest('[data-studyhub]').dataset.studyhub);
+      try { window.top.location.href = url; } catch (e) { location.href = url; }
+      return;
+    }
     if (t.closest('[data-goto-unit]')) {
       const path = t.closest('[data-goto-unit]').dataset.gotoUnit;
       try { localStorage.setItem('ra10_edu_pending', JSON.stringify({ assignmentId: current.a.id, unit: path, ts: Date.now() })); } catch (err) {}

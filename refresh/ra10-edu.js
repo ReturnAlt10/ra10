@@ -147,7 +147,10 @@ html.ei-lock,html.ei-lock body{overflow:hidden!important}
   }
   function startAssignment(a, ctxData) {
     const items = a.item_list || [];
-    const first = items.find(it => it.unit) || {};
+    // an assignment made only of Study Hub lessons opens straight in Study Hub
+    const sh = items.filter(it => it.type === 'studyhub');
+    if (sh.length && sh.length === items.length) { location.href = '/study-hub/?assignment=' + encodeURIComponent(a.id) + (sh.length === 1 ? '&item=' + encodeURIComponent(sh[0].id) : ''); return; }
+    const first = items.find(it => it.unit && it.type !== 'studyhub') || items.find(it => it.unit) || {};
     const path = first.unit || ((ctxData.classes || []).find(c => c.id === a.class_id) || {}).units?.[0];
     if (!path) { alert('Your teacher has not linked this assignment to a unit yet.'); return; }
     openUnit(path, { assignmentId: a.id });

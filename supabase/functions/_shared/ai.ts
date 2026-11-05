@@ -33,9 +33,15 @@ export function extractJson(text: string): any {
   return null;
 }
 
-export async function askJson(system: string, user: string, timeout = 25000): Promise<{ json: any; provider: string }> {
+export type AskOptions = { preferStrong?: boolean; temperature?: number; maxTokens?: number };
+
+// preferStrong: try the paid / larger models (OpenAI, Gemini, DeepSeek) before the small free
+// OpenRouter ones — used where accuracy matters (writing answer keys, checking them).
+export async function askJson(system: string, user: string, timeout = 25000, opts: AskOptions = {}): Promise<{ json: any; provider: string }> {
   const errors: string[] = [];
-  for (const p of providers(timeout)) {
+  const rank: Record<string, number> = { openai: 0, gemini: 1, deepseek: 2, openrouter: 3 };
+  const list = opts.preferStrong ? providers(timeout).sort((a, b) => (rank[a.name] ?? 9) - (rank[b.name] ?? 9)) : providers(timeout);
+  for (const p of list) {
     for (const model of p.models) {
       const ctl = new AbortController();
       const t = setTimeout(() => ctl.abort(), p.timeout);
@@ -47,7 +53,7 @@ export async function askJson(system: string, user: string, timeout = 25000): Pr
             "Content-Type": "application/json",
             ...(p.name === "openrouter" ? { "HTTP-Referer": "https://ra10.co.uk", "X-Title": "RA10 EDU" } : {}),
           },
-          body: JSON.stringify({ model, temperature: 0.2, response_format: { type: "json_object" }, messages: [{ role: "system", content: system }, { role: "user", content: user }] }),
+          body: JSON.stringify({ model, temperature: opts.temperature ?? 0.2, ...(opts.maxTokens ? { max_tokens: opts.maxTokens } : {}), response_format: { type: "json_object" }, messages: [{ role: "system", content: system }, { role: "user", content: user }] }),
           signal: ctl.signal,
         });
         const data = await res.json().catch(() => ({}));

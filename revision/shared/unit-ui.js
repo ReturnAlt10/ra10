@@ -724,7 +724,7 @@
     eduLoading = true;
     const s = document.createElement('script');
     const me = Array.from(document.scripts).map(x => x.src).find(src => /\/shared\/unit-ui\.js/.test(src)) || '';
-    s.src = me ? me.replace(/unit-ui\.js(\?.*)?$/, 'unit-edu.js?v=20261119') : '/revision/shared/unit-edu.js?v=20261119';
+    s.src = me ? me.replace(/unit-ui\.js(\?.*)?$/, 'unit-edu.js?v=20261126') : '/revision/shared/unit-edu.js?v=20261126';
     document.head.appendChild(s);
   }
 

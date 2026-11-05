@@ -44,10 +44,10 @@
     if (!res.ok && !data.ok) throw new Error(data.error || ('Request failed (' + res.status + ')'));
     return data;
   }
-  function modal(html, onMount) {
+  function modal(html, onMount, cls) {
     const m = document.createElement('div');
     m.className = 'sc-modal';
-    m.innerHTML = `<div class="sc-modal-card" role="dialog" aria-modal="true">${html}</div>`;
+    m.innerHTML = `<div class="sc-modal-card${cls ? ' ' + cls : ''}" role="dialog" aria-modal="true">${html}</div>`;
     document.body.appendChild(m);
     const close = () => m.remove();
     m.addEventListener('click', (e) => { if (e.target === m || e.target.closest('[data-close]')) close(); });
@@ -632,20 +632,201 @@
     m && m.addEventListener('click', (e) => { if (e.target === m || e.target.closest('[data-close]')) setTimeout(render, 50); });
   }
 
+  /* ── Study Hub lessons in assignments ── */
+  async function shApi(action, body) {
+    const s = RA10.getSession();
+    const raw = RA10._raw || {};
+    const res = await fetch((raw.SUPABASE_URL || 'https://tcrrgsylxbyyrmnouihl.supabase.co') + '/functions/v1/study-hub', {
+      method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + s.access_token, apikey: raw.SUPABASE_ANON_KEY || '' },
+      body: JSON.stringify(Object.assign({ action }, body || {}))
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok && !data.ok) throw new Error(data.error || (res.status === 404 ? 'Study Hub needs deploying (supabase functions deploy study-hub).' : 'Request failed (' + res.status + ')'));
+    return data;
+  }
+  // the unit's real exam questions in full (official mark scheme) for the lesson writer
+  function loadFullQs(unitPath, ids) {
+    const u = unitOf(unitPath);
+    if (!u || !ids.length) return Promise.resolve([]);
+    return new Promise((resolve) => {
+      const f = document.createElement('iframe');
+      f.setAttribute('aria-hidden', 'true'); f.tabIndex = -1;
+      f.style.cssText = 'position:fixed;left:-3000px;top:0;width:1200px;height:900px;visibility:hidden;border:0';
+      f.src = u.app + '?ra10catalog=1&full=' + encodeURIComponent(ids.join(','));
+      const done = (v) => { window.removeEventListener('message', onMsg); clearTimeout(t); f.remove(); resolve(v || []); };
+      const onMsg = (e) => { if (e.origin === location.origin && e.data && e.data.type === 'ra10:questions' && e.source === f.contentWindow) done(e.data.questions); };
+      const t = setTimeout(() => done([]), 25000);
+      window.addEventListener('message', onMsg);
+      document.body.appendChild(f);
+    });
+  }
+  async function shGrounding(unitPath, cat, topic) {
+    const norm = (s) => String(s == null ? '' : s).toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+    const t = norm(topic), words = t.split(' ').filter(w => w.length > 3);
+    const match = (s) => { const n = norm(s); if (!n || !t) return false; if (n.indexOf(t) >= 0 || t.indexOf(n) >= 0) return true; return words.length > 0 && words.filter(w => n.indexOf(w) >= 0).length >= Math.min(2, words.length); };
+    const topics = [];
+    Object.keys((cat && cat.spec) || {}).sort().forEach(a => ((cat.spec[a] || {}).topics || []).forEach(x => topics.push(((x.code ? x.code + ' ' : '') + (x.name || '')).trim())));
+    const L = 'ABCDEF';
+    const quiz = ((cat && cat.quiz) || []).filter(q => !t || match(q.topic) || match(q.q)).slice(0, 8).map(q => {
+      let c = q.correct; const choices = q.choices || [];
+      if (typeof c === 'string' && /^[A-F]$/i.test(c.trim())) c = L.indexOf(c.trim().toUpperCase()); else if (typeof c === 'string') c = choices.findIndex(x => norm(x) === norm(c));
+      return { q: q.q, choices, correct: Number(c), topic: q.topic };
+    }).filter(q => q.correct >= 0 && q.correct < q.choices.length);
+    const ids = ((cat && cat.questions) || []).filter(q => (!q.marks || (q.marks >= 2 && q.marks <= 9)) && (!t || match(q.topic) || match(q.q))).slice(0, 3).map(q => String(q.id));
+    return { quiz, topics: topics.slice(0, 60), exam: await loadFullQs(unitPath, ids) };
+  }
+  const SH_TYPES = { learn: 'Teaching card', mcq: 'Multiple choice', truefalse: 'True or false', fill: 'Fill the gap', match: 'Match the pairs', order: 'Put in order', exam: 'Exam question', recap: 'Recap' };
+  const lines = (v) => String(v || '').split(/\r?\n/).map(x => x.trim()).filter(Boolean);
+
+  function stepFields(s, i) {
+    const ta = (f, v, rows, ph) => `<textarea class="sc-in" data-f="${f}" rows="${rows || 2}" placeholder="${esc(ph || '')}">${esc(v || '')}</textarea>`;
+    const inp = (f, v, ph) => `<input class="sc-in" data-f="${f}" value="${esc(v == null ? '' : v)}" placeholder="${esc(ph || '')}">`;
+    const lab = (t, html) => `<div class="sc-field"><label>${t}</label>${html}</div>`;
+    switch (s.type) {
+      case 'learn': return lab('Heading', inp('title', s.title)) + lab('Explanation', ta('body', s.body, 3)) + lab('Key points (one per line)', ta('points', (s.points || []).join('\n'), 3)) + lab('Example (optional)', ta('example', s.example, 2));
+      case 'mcq': return lab('Question', ta('q', s.q, 2)) + lab('Choices — tick the correct one', `<div class="sc-shchoices">${(s.choices || []).concat(['', '', '', '']).slice(0, Math.max(4, (s.choices || []).length)).map((c, k) => `<label class="sc-shchoice"><input type="radio" name="ans-${i}" value="${k}"${k === s.answer ? ' checked' : ''}><input class="sc-in" data-f="choice" data-k="${k}" value="${esc(c)}" placeholder="Choice ${'ABCDE'[k]}"></label>`).join('')}</div>`) + lab('Explanation shown after answering', ta('explain', s.explain, 2));
+      case 'truefalse': return lab('Statement', ta('statement', s.statement, 2)) + lab('Correct answer', `<select class="sc-in" data-f="answer"><option value="true"${s.answer ? ' selected' : ''}>True</option><option value="false"${s.answer ? '' : ' selected'}>False</option></select>`) + lab('Explanation', ta('explain', s.explain, 2));
+      case 'fill': { const wrong = (s.options || []).filter(o => !(s.blanks || []).includes(o)); return lab('Sentence — use ___ for each gap', ta('text', s.text, 2)) + `<div class="sc-grid two">${lab('Correct word(s), in gap order (comma separated)', inp('blanks', (s.blanks || []).join(', ')))}${lab('Wrong options (comma separated)', inp('wrong', wrong.join(', ')))}</div>` + lab('Explanation', ta('explain', s.explain, 2)); }
+      case 'match': return lab('Instruction', inp('prompt', s.prompt)) + lab('Pairs — one per line as  term = meaning', ta('pairs', (s.pairs || []).map(p => p[0] + ' = ' + p[1]).join('\n'), 4));
+      case 'order': return lab('Instruction', inp('prompt', s.prompt)) + lab('Items in the CORRECT order (one per line — students see them shuffled)', ta('items', (s.items || []).join('\n'), 4)) + lab('Explanation', ta('explain', s.explain, 2));
+      case 'exam': return (s.real ? `<p class="sc-shreal">Real exam question — the AI Examiner marks it with the exam board's mark scheme. If you change the wording it is marked with the points below instead.</p>` : '') + lab('Question', ta('q', s.q, 2)) + lab('Context / scenario (optional)', ta('context', s.context, 2)) + `<div class="sc-grid two">${lab('Marks', `<input class="sc-in" type="number" min="1" max="30" data-f="marks" value="${esc(s.marks || 4)}">`)}${lab('Command word', inp('verb', s.verb, 'e.g. Explain'))}</div>` + lab('Mark-scheme points (one per line)', ta('points', (s.points || []).join('\n'), 4)) + lab('Model answer', ta('model', s.model, 3));
+      case 'recap': return lab('Heading', inp('title', s.title)) + lab('Takeaways (one per line)', ta('points', (s.points || []).join('\n'), 3));
+      default: return '';
+    }
+  }
+  function collectStep(card, old) {
+    const v = (f) => { const el = $(`[data-f="${f}"]`, card); return el ? el.value.trim() : ''; };
+    const t = old.type;
+    const s = { type: t };
+    if (t === 'learn') Object.assign(s, { title: v('title'), body: v('body'), points: lines(v('points')), example: v('example') });
+    if (t === 'mcq') { const ch = $$('[data-f="choice"]', card).map(x => x.value.trim()); const r = $('input[type=radio]:checked', card); const keep = ch.map((c, k) => ({ c, k })).filter(x => x.c); Object.assign(s, { q: v('q'), choices: keep.map(x => x.c), answer: Math.max(0, keep.findIndex(x => r && x.k === Number(r.value))), explain: v('explain') }); if (old.bank) s.bank = true; }
+    if (t === 'truefalse') Object.assign(s, { statement: v('statement'), answer: v('answer') === 'true', explain: v('explain') });
+    if (t === 'fill') { const blanks = v('blanks').split(',').map(x => x.trim()).filter(Boolean); Object.assign(s, { text: v('text'), blanks, options: blanks.concat(v('wrong').split(',').map(x => x.trim()).filter(Boolean)), explain: v('explain') }); }
+    if (t === 'match') Object.assign(s, { prompt: v('prompt'), pairs: lines(v('pairs')).map(l => { const m = l.split(/\s*(?:=|—|–|\|)\s*/); return [m[0], m.slice(1).join(' ')]; }).filter(p => p[0] && p[1]) });
+    if (t === 'order') Object.assign(s, { prompt: v('prompt'), items: lines(v('items')), explain: v('explain') });
+    if (t === 'exam') Object.assign(s, { q: v('q'), context: v('context'), marks: Number(v('marks')) || 4, verb: v('verb'), points: lines(v('points')), model: v('model'), source: old.source, real: old.real });
+    if (t === 'recap') Object.assign(s, { title: v('title'), points: lines(v('points')) });
+    return s;
+  }
+
+  // Review, edit and refine a class lesson before it is set
+  function lessonEditor(lesson, opts) {
+    let L = lesson, W = ((lesson.content && lesson.content.steps) || []).slice();
+    const u = unitOf(L.unit);
+    const html = `<div class="sc-sheh"><div><span class="sc-badge brand">Study Hub lesson</span><h2 style="margin:8px 0 2px">Check and refine the lesson</h2><p class="sc-muted sc-small" style="margin:0">${esc(u ? u.short : '')}${L.topic ? ' · ' + esc(L.topic) : ''} · every answer was checked by a second AI examiner — you have the final say.</p></div><button class="sc-x" data-close aria-label="Close">✕</button></div>
+      <div class="sc-field"><label>Lesson title</label><input class="sc-in" id="le-title" value="${esc(L.title)}"></div>
+      <div class="sc-shrefine"><input class="sc-in" id="le-ins" placeholder="Ask the AI to change the whole lesson, e.g. “make it easier for a lower-ability group” or “add more on encryption”"><button class="sc-btn ai" id="le-refine">✦ Change with AI</button></div>
+      <div id="le-steps" class="sc-shsteps"></div>
+      <div class="sc-shfoot"><span class="sc-muted sc-small" id="le-state"></span><span class="sc-row"><button class="sc-btn" id="le-preview">Preview as a student</button><button class="sc-btn" id="le-save">Save</button><button class="sc-btn pri" id="le-add">${esc(opts.addLabel || 'Add to assignment')}</button></span></div>`;
+    modal(html, (m, close) => {
+      const box = $('#le-steps', m), state = $('#le-state', m);
+      const busy = (on, msg) => { $$('button', m).forEach(b => { if (!b.hasAttribute('data-close')) b.disabled = on; }); state.textContent = msg || ''; };
+      const collect = () => $$('[data-si]', box).map(card => collectStep(card, W[Number(card.dataset.si)]));
+      const paint = () => {
+        box.innerHTML = W.map((s, i) => `<section class="sc-shstep" data-si="${i}"><div class="sc-shstep-h"><span class="n">${i + 1}</span><b>${esc(SH_TYPES[s.type] || s.type)}</b>${s.bank ? '<span class="sc-badge">From the question bank</span>' : ''}${s.type === 'exam' && s.real ? '<span class="sc-badge ok">Real exam question</span>' : ''}
+          <span class="sc-row" style="margin-left:auto"><button class="sc-btn sm" data-up ${i === 0 ? 'disabled' : ''} aria-label="Move up">↑</button><button class="sc-btn sm" data-down ${i === W.length - 1 ? 'disabled' : ''} aria-label="Move down">↓</button><button class="sc-btn sm ai" data-rw>✦ Rewrite</button><button class="sc-btn sm danger" data-del aria-label="Delete step">Delete</button></span></div>${stepFields(s, i)}</section>`).join('');
+        $$('[data-si]', box).forEach(card => {
+          const i = Number(card.dataset.si);
+          $('[data-up]', card).onclick = () => { W = collect(); [W[i - 1], W[i]] = [W[i], W[i - 1]]; paint(); };
+          $('[data-down]', card).onclick = () => { W = collect(); [W[i + 1], W[i]] = [W[i], W[i + 1]]; paint(); };
+          $('[data-del]', card).onclick = () => { W = collect(); W.splice(i, 1); paint(); };
+          $('[data-rw]', card).onclick = async () => {
+            const instruction = prompt('How should the AI change this step? (leave blank for a fresh version)', '') ;
+            if (instruction === null) return;
+            W = collect(); busy(true, 'Rewriting step ' + (i + 1) + '…');
+            try { const r = await shApi('rewrite-step', { lessonId: L.id, index: i, steps: W, instruction }); if (!r.ok) throw new Error(r.error); W[i] = r.step; paint(); toast('Step ' + (i + 1) + ' rewritten and checked'); }
+            catch (e) { toast(e.message, 6000); }
+            busy(false);
+          };
+        });
+        state.textContent = W.length + ' steps';
+      };
+      const save = async () => {
+        W = collect();
+        const r = await shApi('save-template', { lessonId: L.id, title: $('#le-title', m).value.trim(), steps: W });
+        if (!r.ok) throw new Error(r.error);
+        L = r.lesson; W = (L.content.steps || []).slice(); paint();
+        if (r.dropped > 0) toast(r.dropped + ' incomplete step' + (r.dropped === 1 ? ' was' : 's were') + ' removed — check for empty questions or answers.', 6000);
+        return L;
+      };
+      $('#le-refine', m).onclick = async () => {
+        const ins = $('#le-ins', m).value.trim(); if (!ins) return toast('Tell the AI what to change.');
+        W = collect(); busy(true, 'The AI is revising the lesson and re-checking every answer…');
+        try { const r = await shApi('refine', { lessonId: L.id, steps: W, instruction: ins }); if (!r.ok) throw new Error(r.error); W = r.steps; $('#le-title', m).value = r.title || $('#le-title', m).value; $('#le-ins', m).value = ''; paint(); toast('Lesson updated — remember to save'); }
+        catch (e) { toast(e.message, 6000); }
+        busy(false);
+      };
+      $('#le-save', m).onclick = async () => { busy(true, 'Saving…'); try { await save(); toast('Lesson saved'); } catch (e) { toast(e.message, 6000); } busy(false); };
+      $('#le-preview', m).onclick = async () => {
+        const w = window.open('about:blank', '_blank');
+        busy(true, 'Saving…');
+        try { await save(); if (w) w.location.href = '/study-hub/?preview=' + encodeURIComponent(L.id); else location.href = '/study-hub/?preview=' + encodeURIComponent(L.id); }
+        catch (e) { if (w) w.close(); toast(e.message, 6000); }
+        busy(false);
+      };
+      $('#le-add', m).onclick = async () => { busy(true, 'Saving…'); try { const saved = await save(); close(); opts.onAdd && opts.onAdd(saved); } catch (e) { toast(e.message, 6000); busy(false); } };
+      paint();
+    }, 'xl');
+  }
+
+  function studyHubTab(pick, cat, B, add) {
+    const topics = [];
+    Object.keys((cat && cat.spec) || {}).sort().forEach(a => ((cat.spec[a] || {}).topics || []).forEach(x => topics.push({ aim: a, aimTitle: cat.spec[a].title, label: ((x.code ? x.code + ' ' : '') + (x.name || '')).trim() })));
+    B.sh = B.sh || { mode: 'personal', topic: '', length: 'standard', focus: '', request: '' };
+    const sh = B.sh;
+    const opts = (list, val) => list.map(([v, t]) => `<option value="${esc(v)}"${v === val ? ' selected' : ''}>${esc(t)}</option>`).join('');
+    let lastAim = null;
+    const topicOpts = topics.map(t => { const g = t.aim !== lastAim ? (lastAim !== null ? '</optgroup>' : '') + `<optgroup label="${esc(t.aimTitle || 'Aim ' + t.aim)}">` : ''; lastAim = t.aim; return g + `<option value="${esc(t.label)}"${t.label === sh.topic ? ' selected' : ''}>${esc(t.label)}</option>`; }).join('') + (topics.length ? '</optgroup>' : '');
+    pick.innerHTML = `<p class="sc-muted sc-small">A short, game-like Study Hub lesson: teaching cards, quick quizzes, matching and ordering, and a real-style exam question marked by the RA10 AI Examiner. Scores come back to this assignment.</p>
+      <div class="sc-shmodes">
+        <button type="button" data-shm="personal" class="${sh.mode === 'personal' ? 'on' : ''}"><b>Personalised for each student</b><small>Every student gets their own lesson, built from what they have been revising and the topics they find hardest in this unit.</small></button>
+        <button type="button" data-shm="class" class="${sh.mode === 'class' ? 'on' : ''}"><b>The same lesson for the class</b><small>Generate it now, check and edit every question (or ask the AI to change it), preview it, then set it.</small></button>
+      </div>
+      <div class="sc-grid two">
+        <div class="sc-field"><label>Topic</label><select class="sc-in" id="sh-topic"><option value="">${sh.mode === 'personal' ? 'Let Study Hub pick for each student' : 'Let the AI choose a topic'}</option>${topicOpts}</select></div>
+        <div class="sc-field"><label>Length</label><select class="sc-in" id="sh-len">${opts([['quick', 'Quick · about 4 min'], ['standard', 'Standard · about 7 min'], ['deep', 'Deep dive · about 11 min']], sh.length)}</select></div>
+      </div>
+      <div class="sc-field"><label>Focus</label><select class="sc-in" id="sh-focus">${opts([['', 'Balanced — teach then test'], ['learn', 'Learn it — more explaining'], ['practise', 'Practise — more questions'], ['exam', 'Exam skills — command words and marks']], sh.focus)}</select></div>
+      <div class="sc-field"><label>Notes for the AI <span class="sc-muted">(optional)</span></label><textarea class="sc-in" id="sh-req" rows="2" placeholder="e.g. Use a school network as the example. Include the CIA triad.">${esc(sh.request)}</textarea></div>
+      <div class="sc-row"><button class="sc-btn pri" id="sh-go">${sh.mode === 'personal' ? '＋ Add personalised lesson' : '✦ Write the lesson to review'}</button><span class="sc-muted sc-small" id="sh-status"></span></div>`;
+    const keep = () => { sh.topic = $('#sh-topic', pick).value; sh.length = $('#sh-len', pick).value; sh.focus = $('#sh-focus', pick).value; sh.request = $('#sh-req', pick).value; };
+    $$('[data-shm]', pick).forEach(b => b.onclick = () => { keep(); sh.mode = b.dataset.shm; studyHubTab(pick, cat, B, add); });
+    $('#sh-go', pick).onclick = async (e) => {
+      keep();
+      if (sh.mode === 'personal') {
+        add({ type: 'studyhub', mode: 'personal', ref: 'personal:' + Date.now().toString(36), topic: sh.topic || null, length: sh.length, focus: sh.focus, request: sh.request.trim() || null, title: 'Personalised Study Hub lesson' + (sh.topic ? ': ' + sh.topic : '') });
+        return;
+      }
+      const btn = e.target; btn.disabled = true;
+      const st = $('#sh-status', pick);
+      const u = unitOf(B.unit);
+      try {
+        st.innerHTML = '<span class="sc-spin"></span> Pulling real exam questions…';
+        const grounding = await shGrounding(B.unit, cat, sh.topic);
+        st.innerHTML = '<span class="sc-spin"></span> Writing the lesson and checking every answer (about 30–60 seconds)…';
+        const r = await shApi('draft', { classId: B.classId, unit: B.unit, unitName: u ? u.name : B.unit, qual: u ? u.qual : '', topic: sh.topic || null, length: sh.length, focus: sh.focus, request: sh.request.trim(), grounding });
+        if (!r.ok) throw new Error(r.error);
+        st.textContent = '';
+        lessonEditor(r.lesson, { onAdd: (l) => add({ type: 'studyhub', mode: 'class', ref: l.id, lessonId: l.id, topic: l.topic || null, title: 'Study Hub: ' + l.title, steps: ((l.content || {}).steps || []).length }) });
+      } catch (err) { st.textContent = ''; toast(err.message, 6000); }
+      btn.disabled = false;
+    };
+  }
+
   /* ── assignment builder ── */
   async function viewBuilder(classId) {
     await loadClasses();
     if (!S.classes.length) { main.innerHTML = '<div class="sc-empty"><b>Create a class first</b>Assignments are set for a class.<br><br><a class="sc-btn pri" href="#classes">Create a class</a></div>'; return; }
-    const B = S.builder = S.builder && S.builder.classId === classId ? S.builder : { classId: classId || S.classes[0].id, items: [], unit: null, tab: 'topic', search: '' };
+    const B = S.builder = S.builder && S.builder.classId === classId ? S.builder : { classId: classId || S.classes[0].id, items: [], unit: null, tab: 'studyhub', search: '' };
     const cls = () => S.classes.find(c => c.id === B.classId) || S.classes[0];
     const classUnits = () => (cls().units && cls().units.length ? cls().units : ((S.school && S.school.units) || []).length ? S.school.units : UNITS().map(u => u.path));
     if (!B.unit || !classUnits().includes(B.unit)) B.unit = classUnits()[0];
     const { data: recent } = await S.sb.from('edu_assignments').select('id, title, due_at, class_id, created_at').eq('school_id', String(S.school.id)).order('created_at', { ascending: false }).limit(8);
-    main.innerHTML = `<div class="sc-h"><div><h1>Set an assignment</h1><p>Mix topics, exact exam questions, multiple-choice questions, guide sections and papers.</p></div></div>
+    main.innerHTML = `<div class="sc-h"><div><h1>Set an assignment</h1><p>Mix Study Hub lessons, topics, exact exam questions, multiple-choice questions, guide sections and papers.</p></div></div>
       <div class="sc-build"><div>
         <div class="sc-card"><div class="sc-grid two"><div class="sc-field"><label>Class</label><select id="b-class">${S.classes.map(c => `<option value="${esc(c.id)}"${c.id === B.classId ? ' selected' : ''}>${esc(c.name)}</option>`).join('')}</select></div>
           <div class="sc-field"><label>Unit to pick from</label><select id="b-unit">${classUnits().map(u => `<option value="${esc(u)}"${u === B.unit ? ' selected' : ''}>${esc((unitOf(u) || {}).name || u)}</option>`).join('')}</select></div></div>
-          <div class="sc-tabs">${[['topic', 'Topic practice'], ['question', 'Exam questions'], ['mcq', 'Multiple choice'], ['guide', 'Revision guide'], ['paper', 'Papers']].map(([k, l]) => `<button data-bt="${k}" class="${k === B.tab ? 'on' : ''}">${l}</button>`).join('')}</div>
+          <div class="sc-tabs">${[['studyhub', '✦ Study Hub lesson'], ['topic', 'Topic practice'], ['question', 'Exam questions'], ['mcq', 'Multiple choice'], ['guide', 'Revision guide'], ['paper', 'Papers']].map(([k, l]) => `<button data-bt="${k}" class="${k === B.tab ? 'on' : ''}">${l}</button>`).join('')}</div>
           <div id="b-pick"><div class="sc-loading"><span class="sc-spin"></span> Loading ${esc((unitOf(B.unit) || {}).short || 'unit')}…</div></div></div>
         ${(recent || []).length ? `<div class="sc-card"><h2>Recently set</h2>${recent.map(a => `<a class="sc-pickrow" style="text-decoration:none;margin-bottom:6px" href="#assignment=${esc(a.id)}"><span><p><b>${esc(a.title)}</b></p><small>${esc((S.classes.find(c => c.id === a.class_id) || {}).name || '')} · ${esc(fmtDate(a.due_at))}</small></span><span>→</span></a>`).join('')}</div>` : ''}
       </div>
@@ -653,7 +834,7 @@
         <div class="sc-field"><label>Title</label><input id="b-title" placeholder="e.g. Network security — week 6" value="${esc(B.title || '')}"></div>
         <div class="sc-field"><label>Instructions for students</label><textarea id="b-ins" placeholder="Optional: what to focus on, how long to spend…">${esc(B.ins || '')}</textarea></div>
         <div class="sc-field"><label>Due</label><input id="b-due" type="date" value="${esc(B.due || '')}"></div>
-        <p class="sc-muted sc-small" style="margin:0 0 8px">${B.items.length} item${B.items.length === 1 ? '' : 's'}</p>
+        <p class="sc-muted sc-small" style="margin:0 0 8px" id="b-count">${B.items.length} item${B.items.length === 1 ? '' : 's'}</p>
         <div class="sc-sel" id="b-sel"></div>
         <div class="sc-row" style="margin-top:14px"><button class="sc-btn pri" id="b-pub" ${B.items.length ? '' : 'disabled'}>Set assignment</button></div></div></div></div>`;
     const keep = () => { B.title = $('#b-title').value; B.ins = $('#b-ins').value; B.due = $('#b-due').value; };
@@ -662,9 +843,16 @@
     $('#b-unit').onchange = (e) => { keep(); B.unit = e.target.value; B.search = ''; viewBuilder(B.classId); };
     $$('[data-bt]', main).forEach(b => b.onclick = () => { keep(); B.tab = b.dataset.bt; B.search = ''; viewBuilder(B.classId); });
     const paintSel = () => {
-      $('#b-sel').innerHTML = B.items.length ? B.items.map((it, i) => `<div class="sc-selrow"><span class="n">${i + 1}</span><span><p>${esc(it.title)}</p><small>${esc({ topic: 'Topic practice', question: 'Exam question', mcq: 'Multiple choice', guide: 'Guide section', paper: 'Paper' }[it.type])} · ${esc((unitOf(it.unit) || {}).short || '')}</small></span><button class="sc-x" data-rmi="${i}" aria-label="Remove">✕</button></div>`).join('') : '<div class="sc-empty" style="padding:16px">Add items from the left.</div>';
+      $('#b-sel').innerHTML = B.items.length ? B.items.map((it, i) => `<div class="sc-selrow"><span class="n">${i + 1}</span><span><p>${esc(it.title)}</p><small>${esc({ topic: 'Topic practice', question: 'Exam question', mcq: 'Multiple choice', guide: 'Guide section', paper: 'Paper', studyhub: it.mode === 'class' ? 'Study Hub · class lesson' + (it.steps ? ' · ' + it.steps + ' steps' : '') : 'Study Hub · personalised' }[it.type])} · ${esc((unitOf(it.unit) || {}).short || '')}</small>${it.type === 'studyhub' && it.mode === 'class' ? ` <button class="sc-btn sm" data-edsh="${i}" style="margin-top:4px">Review / edit</button>` : ''}</span><button class="sc-x" data-rmi="${i}" aria-label="Remove">✕</button></div>`).join('') : '<div class="sc-empty" style="padding:16px">Add items from the left.</div>';
       $$('[data-rmi]').forEach(b => b.onclick = () => { B.items.splice(Number(b.dataset.rmi), 1); paintSel(); $('#b-pub').disabled = !B.items.length; markAdded(); });
+      $$('[data-edsh]').forEach(b => b.onclick = async () => {
+        const it = B.items[Number(b.dataset.edsh)];
+        const { data: l, error } = await S.sb.from('study_lessons').select('*').eq('id', it.lessonId).maybeSingle();
+        if (error || !l) return toast('That lesson could not be loaded.');
+        lessonEditor(l, { addLabel: 'Save changes', onAdd: (saved) => { it.title = 'Study Hub: ' + saved.title; it.steps = ((saved.content || {}).steps || []).length; paintSel(); toast('Lesson updated'); } });
+      });
       $('#b-pub').disabled = !B.items.length;
+      const cnt = $('#b-count'); if (cnt) cnt.textContent = B.items.length + ' item' + (B.items.length === 1 ? '' : 's');
     };
     const has = (type, ref) => B.items.some(x => x.type === type && x.ref === ref && x.unit === B.unit);
     const add = (it) => { if (has(it.type, it.ref) && it.type !== 'topic') return; B.items.push(Object.assign({ id: 'i' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5), unit: B.unit }, it)); paintSel(); markAdded(); toast('Added: ' + it.title.slice(0, 60)); };
@@ -681,6 +869,7 @@
     let cat;
     try { cat = await catalog(B.unit); } catch (err) { $('#b-pick').innerHTML = `<div class="sc-empty">${esc(err.message)}</div>`; return; }
     const pick = $('#b-pick');
+    if (B.tab === 'studyhub') { studyHubTab(pick, cat, B, add); return; }
     const search = `<input class="sc-in" id="b-q" placeholder="Search…" value="${esc(B.search)}" style="margin-bottom:10px">`;
     const match = (s) => !B.search || String(s || '').toLowerCase().includes(B.search.toLowerCase());
     if (B.tab === 'topic') {
@@ -736,7 +925,7 @@
       modal(`<h2>${esc(r.display_name || r.email)}</h2><p class="sc-muted">${esc(it.title)}</p>
         ${mine.length ? mine.map(s => `<div class="sc-card" style="box-shadow:none;margin-bottom:10px">${s.question_text ? `<p><b>${esc(s.question_text)}</b></p>` : ''}${s.answer && !['read', 'done'].includes(s.answer) ? `<div class="sc-comment"><p>${esc(s.item_type === 'mcq' ? 'Chose option ' + 'ABCDEF'[Number(s.answer)] : s.answer)}</p></div>` : `<p class="sc-muted">${s.done ? 'Marked as done' : 'Started'}</p>`}
           ${s.max_score ? `<p><span class="sc-badge ${s.score / s.max_score >= .7 ? 'ok' : s.score / s.max_score >= .4 ? 'warn' : 'bad'}">${esc(s.score)}/${esc(s.max_score)}</span> ${s.feedback && s.feedback.summary ? `<span class="sc-small">${esc(s.feedback.summary)}</span>` : ''}</p>` : ''}
-          <small class="sc-muted">${esc(ago(s.updated_at))}</small></div>`).join('') : '<p class="sc-muted">Not started yet.</p>'}
+          ${s.item_type === 'studyhub' && s.feedback && (s.feedback.missed || []).length ? `<p class="sc-small" style="margin:8px 0 4px"><b>Got wrong first time:</b></p><ul class="sc-small" style="margin:0 0 8px;padding-left:18px">${s.feedback.missed.map(x => `<li>${esc(x)}</li>`).join('')}</ul>` : ''}<small class="sc-muted">${esc(ago(s.updated_at))}</small></div>`).join('') : '<p class="sc-muted">Not started yet.</p>'}
         <div class="sc-field"><label>Comment for ${esc((r.display_name || 'the student').split(' ')[0])}</label><textarea id="m-c" placeholder="Feedback they will see on their homepage and inside the assignment"></textarea></div>
         <div class="sc-row" style="justify-content:flex-end"><a class="sc-btn" href="#student=${esc(uid)}&class=${esc(a.class_id)}">Full student view</a><button class="sc-btn" data-close>Close</button><button class="sc-btn pri" id="m-send">Send comment</button></div>`, (m, close) => {
         $('#m-send', m).onclick = async () => {

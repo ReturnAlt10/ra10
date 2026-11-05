@@ -39,6 +39,16 @@ create table if not exists public.study_lessons (
 create index if not exists study_lessons_user_idx on public.study_lessons (user_id, created_at desc);
 create unique index if not exists study_lessons_one_daily on public.study_lessons (user_id, lesson_date) where kind = 'daily';
 
+-- Teacher-set lessons (RA10 EDU): a teacher's class lesson is a 'template' row they own and can
+-- edit; each student plays their own 'assigned' copy (or a personalised lesson built for them).
+alter table public.study_lessons add column if not exists assignment_id uuid;
+alter table public.study_lessons add column if not exists item_id text;
+alter table public.study_lessons add column if not exists class_id uuid;
+alter table public.study_lessons add column if not exists school_id text;
+alter table public.study_lessons drop constraint if exists study_lessons_kind_check;
+alter table public.study_lessons add constraint study_lessons_kind_check check (kind in ('daily', 'custom', 'assigned', 'template'));
+create unique index if not exists study_lessons_one_per_item on public.study_lessons (user_id, assignment_id, item_id) where assignment_id is not null;
+
 create table if not exists public.study_hub_trials (
   user_id uuid primary key references auth.users (id) on delete cascade,
   lesson_id uuid,
@@ -80,6 +90,8 @@ begin
     if new.status = 'done' and old.status <> 'done' then new.status := 'in_progress'; end if;
     if old.status = 'done' then new.status := 'done'; end if;
     if pg_column_size(new.progress) > 60000 then new.progress := old.progress; end if;
+    new.assignment_id := old.assignment_id; new.item_id := old.item_id; new.class_id := old.class_id; new.school_id := old.school_id;
+    if old.kind = 'template' then new.status := old.status; new.progress := old.progress; end if;
   end if;
   return new;
 end $$;
@@ -87,18 +99,22 @@ drop trigger if exists trg_study_lessons_guard on public.study_lessons;
 create trigger trg_study_lessons_guard before update on public.study_lessons
   for each row execute function public.study_lessons_guard();
 
--- Who has Study Hub? Premium plans (Pro / all subjects, Ultra) and the owner.
--- School plans and Free get the one free trial lesson. Change it here when
--- subscriptions launch — the edge function asks this function too.
+-- Who has Study Hub? Premium plans (Pro / all subjects, Ultra), the owner, and everyone on a
+-- school (RA10 EDU) plan — students, teachers and EDU admins. Free accounts get one free trial
+-- lesson. Change it here when subscriptions launch — the edge function asks this function too.
 create or replace function public.study_hub_premium(p_user uuid default auth.uid())
 returns boolean language sql stable security definer set search_path = public as $$
   select exists (
     select 1 from public.profiles p
     left join auth.users u on u.id = p.id
     where p.id = p_user
-      and (lower(coalesce(p.tier, '')) in ('all_subjects', 'ultra', 'owner')
+      and (lower(coalesce(p.tier, '')) in ('all_subjects', 'ultra', 'owner', 'school_student', 'school_teacher', 'school_admin')
            or coalesce(p.unlimited_credits, false)
-           or lower(coalesce(u.email, '')) = 'mistry.hashim@icloud.com'));
+           or lower(coalesce(u.email, '')) = 'mistry.hashim@icloud.com'))
+  or exists (
+    select 1 from public.school_members m
+    join auth.users u on lower(u.email) = lower(m.email)
+    where u.id = p_user and m.status = 'active');
 $$;
 revoke all on function public.study_hub_premium(uuid) from public, anon;
 grant execute on function public.study_hub_premium(uuid) to authenticated, service_role;
@@ -147,8 +163,9 @@ begin
     'lessons', (select coalesce(json_agg(j order by created_at desc), '[]'::json) from (
                   select created_at, json_build_object('id', id, 'title', title, 'emoji', emoji, 'kind', kind, 'status', status,
                          'unit', unit, 'topic', topic, 'score', score, 'max_score', max_score, 'xp', xp, 'minutes', minutes,
-                         'lesson_date', lesson_date, 'created_at', created_at, 'trial', trial) as j
-                  from public.study_lessons where user_id = v_uid order by created_at desc limit 60) x)
+                         'lesson_date', lesson_date, 'created_at', created_at, 'trial', trial,
+                         'assignment_id', assignment_id, 'item_id', item_id) as j
+                  from public.study_lessons where user_id = v_uid and kind <> 'template' order by created_at desc limit 60) x)
   );
 end $$;
 revoke all on function public.study_hub_status() from public, anon;

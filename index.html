@@ -421,6 +421,7 @@ body.home-signed-in #p-home .hx-home > :not(#signed-in-dashboard){display:none !
     </a>
     <div class="nav-links">
       <button class="nav-link" data-nav="home" onclick="go('/')"><svg class="nu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l9-9 9 9"/><path d="M5 10v10a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V10"/></svg>Home</button>
+      <a class="nav-link nav-studyhub" data-nav="study-hub" href="/study-hub/"><svg class="nu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 4.6L18.5 9.5l-4.6 1.9L12 16l-1.9-4.6L5.5 9.5l4.6-1.9z"/><path d="M19 15l.8 1.9 1.9.8-1.9.8L19 20.4l-.8-1.9-1.9-.8 1.9-.8z"/></svg>Study Hub</a>
       <div style="position:relative;display:inline-flex;" id="nav-rev-wrap">
         <button class="nav-link" data-nav="revision" onclick="go('/revision')"><svg class="nu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Revision</button>
         <div id="rev-preview" style="display:none;position:absolute;
@@ -566,7 +567,6 @@ body.home-signed-in #p-home .hx-home > :not(#signed-in-dashboard){display:none !
       <button class="nav-link" data-nav="community" onclick="go('/community')"><svg class="nu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>Community</button>
       <button class="nav-link" data-nav="tasks"    onclick="go('/tasks')"><svg class="nu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3 8-8"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Tasks</button>
       <button class="nav-link" data-nav="exams"    onclick="go('/exams')"><svg class="nu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13"/><path d="M8 12h13"/><path d="M8 18h13"/><path d="M3 6h.01M3 12h.01M3 18h.01"/></svg>Exams</button>
-      <a class="nav-link nav-studyhub" data-nav="study-hub" href="/study-hub/"><svg class="nu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 4.6L18.5 9.5l-4.6 1.9L12 16l-1.9-4.6L5.5 9.5l4.6-1.9z"/><path d="M19 15l.8 1.9 1.9.8-1.9.8L19 20.4l-.8-1.9-1.9-.8 1.9-.8z"/></svg>Study Hub</a>
       <div style="position:relative;display:inline-flex;" id="nav-lb-wrap">
         <button class="nav-link" data-nav="leaderboard" onclick="go('leaderboard')">
           <svg class="nu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v4a5 5 0 0 1-10 0z"/><path d="M7 6H4a2 2 0 0 0 2 3M17 6h3a2 2 0 0 1-2 3"/></svg>
@@ -853,14 +853,14 @@ body.home-signed-in #p-home .hx-home > :not(#signed-in-dashboard){display:none !
         <span class="mobile-you-copy"><strong>Home</strong><small>Back to the homepage</small></span>
         <em>Open</em>
       </button>
-      <button class="mobile-you-item" type="button" data-mobile-you="/revision" data-dock-item="subjects">
-        <span class="mobile-you-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v17.5a.5.5 0 0 1-.77.42L16 19l-3.23 1.92A.5.5 0 0 1 12 20.5V5.5A2.5 2.5 0 0 0 9.5 3H6.5A2.5 2.5 0 0 0 4 5.5V20"></path></svg></span>
-        <span class="mobile-you-copy"><strong>Subjects</strong><small>Browse revision subjects</small></span>
-        <em>Open</em>
-      </button>
       <button class="mobile-you-item" type="button" data-mobile-you="/study-hub/">
         <span class="mobile-you-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 4.6L18.5 9.5l-4.6 1.9L12 16l-1.9-4.6L5.5 9.5l4.6-1.9z"/><path d="M19 15l.8 1.9 1.9.8-1.9.8L19 20.4l-.8-1.9-1.9-.8 1.9-.8z"/></svg></span>
         <span class="mobile-you-copy"><strong>Study Hub</strong><small>Your daily AI lesson</small></span>
+        <em>Open</em>
+      </button>
+      <button class="mobile-you-item" type="button" data-mobile-you="/revision" data-dock-item="subjects">
+        <span class="mobile-you-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v17.5a.5.5 0 0 1-.77.42L16 19l-3.23 1.92A.5.5 0 0 1 12 20.5V5.5A2.5 2.5 0 0 0 9.5 3H6.5A2.5 2.5 0 0 0 4 5.5V20"></path></svg></span>
+        <span class="mobile-you-copy"><strong>Subjects</strong><small>Browse revision subjects</small></span>
         <em>Open</em>
       </button>
       <button class="mobile-you-item" type="button" data-mobile-you="/exams" data-dock-item="exams">
@@ -3309,7 +3309,7 @@ body.home-signed-in #p-home .hx-home > :not(#signed-in-dashboard){display:none !
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0/dist/umd/supabase.js"></script>
 <script src="/refresh/site.js?v=20261122"></script>
 <script src="/refresh/ra10-units.js?v=20261104"></script>
-<script src="/refresh/ra10-edu.js?v=20261120" defer></script>
+<script src="/refresh/ra10-edu.js?v=20261126" defer></script>
 
 <!-- ============================================================
      NEWS PAGE  /news

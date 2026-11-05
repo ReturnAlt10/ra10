@@ -10,7 +10,7 @@
   var mount = document.getElementById('ra10-site-chrome');
   if (!mount) return;
   var ACTIVE = mount.getAttribute('data-active') || '';
-  var CACHE_KEY = 'ra10_site_chrome_v1';
+  var CACHE_KEY = 'ra10_site_chrome_v2';
   var PARTS = ['nav.nav', '#mobile-sheet-backdrop', '#mobile-subject-sheet', '.mobile-top-nav', '#mobile-you-sheet', 'nav.mobile-bottom-nav'];
 
   function toPublic(p) {
