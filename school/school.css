@@ -171,6 +171,10 @@ h1, h2, h3 { letter-spacing: -.02em; line-height: 1.15; }
 .sc-pickrow p { margin: 0; font-size: .88rem; line-height: 1.4; }
 .sc-pickrow small { color: var(--ink-2); font-size: .74rem; }
 .sc-pickrow.added { border-color: var(--ok); background: color-mix(in srgb, var(--ok) 6%, var(--card)); }
+.sc-existing { display: grid; gap: 7px; max-height: 240px; overflow: auto; padding: 2px; }
+.sc-person-pick { cursor: pointer; }
+.sc-person-pick:hover { border-color: var(--brand); }
+.sc-person-pick input { width: 18px; height: 18px; accent-color: var(--brand); }
 .sc-sel { display: grid; gap: 8px; }
 .sc-selrow { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 10px; align-items: center; padding: 10px 12px; border-radius: 12px; background: var(--soft); }
 .sc-selrow .n { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 8px; background: var(--card); font-weight: 800; font-size: .8rem; }

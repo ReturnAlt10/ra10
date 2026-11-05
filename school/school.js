@@ -377,7 +377,7 @@
       <div class="sc-tabs">${[['students', 'Students'], ['assignments', 'Assignments'], ['units', 'Units'], ['insights', '✦ AI insights']].map(([k, l]) => `<button data-tab="${k}" class="${k === tab ? 'on' : ''}">${l}</button>`).join('')}</div>
       <div id="c-body"></div>`;
     $$('[data-tab]', main).forEach(b => b.onclick = () => { location.hash = `#class=${id}&tab=${b.dataset.tab}`; });
-    $('#c-add').onclick = () => addPeopleModal({ classIds: [id], role: 'student', title: 'Add students to ' + c.name });
+    $('#c-add').onclick = () => addPeopleModal({ classIds: [id], title: 'Add people to ' + c.name });
     $('#c-edit').onclick = () => classModal(c);
     const body = $('#c-body');
     if (tab === 'students') {
@@ -436,17 +436,41 @@
     });
     if (location.hash === '#people' && !people.filter(p => p.role === 'student').length && !S._peopleAuto) { S._peopleAuto = true; addPeopleModal({}); }
   }
-  function addPeopleModal(opt) {
+  async function addPeopleModal(opt) {
     const admin = S.role === 'admin';
+    const people = await loadPeople(true).catch(() => []);
+    const classIds = opt.classIds || [];
+    const rosterPeople = new Set(classIds.flatMap(id => (S.rosters[id] || []).map(p => String(p.email).toLowerCase())));
+    const renderExisting = (role) => people.filter(p => p.role === role && p.status !== 'removed').map(p => `
+      <label class="sc-pickrow sc-person-pick"><span class="sc-person">${avatar(p)}<span><b>${esc(p.display_name || p.username || p.email.split('@')[0])}</b><small>${esc(p.email)}${p.status === 'invited' ? ' · invite pending' : ''}</small></span></span>
+        <input type="checkbox" value="${esc(p.email)}" data-existing-role="${role}"${rosterPeople.has(String(p.email).toLowerCase()) ? ' checked disabled' : ''}></label>`).join('');
     modal(`<h2>${esc(opt.title || 'Add people')}</h2>
-      <div class="sc-field"><label>Email addresses</label><textarea id="m-emails" placeholder="one per line, or separated by commas&#10;sam.jones@yourschool.org.uk&#10;priya.k@yourschool.org.uk"></textarea><small>Staff who are already at the school stay staff. New people get an email to create their account. People who already use RA10 get an email asking them to accept, and see a pop-up next time they visit.</small></div>
+      <div class="sc-field"><label>Existing people</label><div class="sc-existing" id="m-existing">${renderExisting(admin ? (opt.role || 'student') : 'student') || '<p class="sc-muted sc-small">No existing people in this role yet.</p>'}</div><small>Select people already listed in Students &amp; staff. Already-added class members are shown selected.</small></div>
+      <div class="sc-field"><label>Or add by email</label><textarea id="m-emails" placeholder="one per line, or separated by commas&#10;sam.jones@yourschool.org.uk&#10;priya.k@yourschool.org.uk"></textarea>
+        <input id="m-csv" type="file" accept=".csv,text/csv" style="margin-top:8px"><small>CSV format: <b>email</b> or <b>name,email</b>. You can paste several addresses too.</small></div>
       ${admin ? `<div class="sc-field"><label>They are</label><select id="m-role"><option value="student"${opt.role !== 'teacher' ? ' selected' : ''}>Students</option><option value="teacher"${opt.role === 'teacher' ? ' selected' : ''}>Staff (teachers)</option></select></div>` : ''}
       ${S.classes.length ? `<div class="sc-field"><label>Add them to</label><div class="sc-checks">${S.classes.map(c => `<label><input type="checkbox" value="${esc(c.id)}"${(opt.classIds || []).includes(c.id) ? ' checked' : ''}> ${esc(c.name)}</label>`).join('')}</div></div>` : '<p class="sc-muted sc-small">Tip: create a class first so you can add people straight into it.</p>'}
       <div id="m-res"></div>
       <div class="sc-row" style="justify-content:flex-end"><button class="sc-btn" data-close>Close</button><button class="sc-btn pri" id="m-go">Send invites</button></div>`, (m) => {
+      const roleSelect = $('#m-role', m);
+      const existing = $('#m-existing', m);
+      if (roleSelect) roleSelect.onchange = () => {
+        const html = renderExisting(roleSelect.value);
+        existing.innerHTML = html || '<p class="sc-muted sc-small">No existing people in this role yet.</p>';
+      };
+      $('#m-csv', m).onchange = async (e) => {
+        const file = e.target.files && e.target.files[0]; if (!file) return;
+        const found = (await file.text()).split(/\r?\n/).flatMap(line => line.split(',').map(x => x.trim().replace(/^"|"$/g, '')).filter(x => /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(x)));
+        const box = $('#m-emails', m);
+        box.value = Array.from(new Set(box.value.split(/[\s,;]+/).concat(found).map(x => x.trim().toLowerCase()).filter(x => /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(x)))).join('\n');
+        toast(found.length ? `${found.length} email${found.length === 1 ? '' : 's'} loaded from CSV` : 'No email addresses found in that CSV.');
+        e.target.value = '';
+      };
       $('#m-go', m).onclick = async (e) => {
-        const emails = Array.from(new Set($('#m-emails', m).value.split(/[\s,;]+/).map(x => x.trim().toLowerCase()).filter(x => /@/.test(x))));
-        if (!emails.length) return toast('Paste at least one email address.');
+        const selected = $$('input[data-existing-role]:checked:not(:disabled)', m).map(x => x.value);
+        const pasted = $('#m-emails', m).value.split(/[\s,;]+/).map(x => x.trim().toLowerCase()).filter(x => /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(x));
+        const emails = Array.from(new Set(selected.concat(pasted)));
+        if (!emails.length) return toast('Choose an existing person, paste an email, or upload a CSV.');
         const role = admin ? $('#m-role', m).value : 'student';
         const classIds = $$('.sc-checks input:checked', m).map(i => i.value);
         e.target.disabled = true; e.target.textContent = 'Sending…';
