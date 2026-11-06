@@ -439,8 +439,8 @@
     const idx = units.indexOf(S.pathUnit);
     const doneIn = (p) => ((S.status && S.status.lessons) || []).filter(l => l.unit === p && l.status === 'done').length;
     box.style.setProperty('--pc', (u && u.color) || '#5b4cf5');
-    box.innerHTML = `<div class="sh-path-head"><h2>${I('map', { size: 22 })} Learning paths</h2>
-        <div class="sh-pmode" role="tablist" aria-label="Which path">${[['course', 'Full course', 'clipboard'], ['me', 'My path', 'compass']].map(([k, t, ic]) => `<button role="tab" data-pmode="${k}" aria-selected="${S.pathMode === k}" class="${S.pathMode === k ? 'on' : ''}">${I(ic, { size: 16 })} ${t}</button>`).join('')}</div></div>
+    box.innerHTML = `<div class="sh-path-head"><h2>${I('map', { size: 22 })} Your learning</h2>
+        <div class="sh-pmode" role="tablist" aria-label="Which path">${[['course', 'Full course', 'clipboard'], ['me', 'My plan', 'compass']].map(([k, t, ic]) => `<button role="tab" data-pmode="${k}" aria-selected="${S.pathMode === k}" class="${S.pathMode === k ? 'on' : ''}">${I(ic, { size: 16 })} ${t}</button>`).join('')}</div></div>
       <div class="sh-utabs-wrap"><button class="sh-uarrow" data-ustep="-1" aria-label="Previous subject" ${idx <= 0 ? 'disabled' : ''}>‹</button>
         <div class="sh-utabs" role="tablist" aria-label="Subjects">${units.map(p => { const x = unitOf(p); return `<button role="tab" class="sh-utab${p === S.pathUnit ? ' on' : ''}" data-punit="${esc(p)}" style="--uc:${esc(x.color || '#5b4cf5')}" aria-selected="${p === S.pathUnit}"><span class="ub">${I(unitIcon(p), { size: 16 })}</span><span>${esc(x.short)}</span>${doneIn(p) ? `<small>${doneIn(p)}</small>` : ''}</button>`; }).join('')}
           <button class="sh-utab add" data-uadd>${I('plus', { size: 16 })} Subject</button></div>
@@ -484,7 +484,7 @@
     const nodes = {};
     let html = '';
     if (mode === 'course') {
-      if (!tree.length) { body.innerHTML = `<div class="sh-empty sm"><b>No topic list for this unit yet</b>Use “My path” or make a lesson on anything you like.</div>`; return; }
+      if (!tree.length) { body.innerHTML = `<div class="sh-empty sm"><b>No topic list for this unit yet</b>Use “My plan” or make a lesson on anything you like.</div>`; return; }
       const firstTodo = all.find(x => states.get(x).state !== 'done');
       tree.forEach(a => {
         const inAim = []; a.topics.forEach(t => t.subs.length ? inAim.push(...t.subs) : inAim.push(t));
@@ -551,7 +551,7 @@
       body.innerHTML = h + '</div>';
       $$('[data-act="open"]', body).forEach(b => b.onclick = () => openLesson(b.dataset.id));
       $$('[data-act="rec"]', body).forEach(b => b.onclick = () => { const r = items[Number(b.dataset.i)].r; createLesson({ unit, topic: r.topic, reason: r.why, length: store.get('sh_len') || 'standard', focus: store.get('sh_focus') || '' }); });
-      $$('[data-act="custom"]', body).forEach(b => b.onclick = () => { const r = items[Number(b.dataset.i)].r; openMaker({ unit, topic: r.topic, reason: r.why }); });
+      $$('[data-act="custom"]', body).forEach(b => b.onclick = () => { const r = items[Number(b.dataset.i)].r; openMaker({ unit, topic: r.topic, reason: r.why, styleOnly: true }); });
       $$('[data-act="lock"]', body).forEach(b => b.onclick = () => lockedScreen());
       $$('[data-act="course"]', body).forEach(b => b.onclick = () => { S.pathMode = 'course'; store.set('sh_path_mode', 'course'); paintPath(); });
       $$('[data-new]', body).forEach(b => b.onclick = () => openMaker({ unit }));
@@ -572,7 +572,7 @@
     pop.className = 'sh-pop';
     const lessonBtn = (l) => `<button class="sh-btn ${l.status === 'done' ? 'gold' : 'pri'} wide" data-open="${esc(l.id)}">${l.status === 'done' ? 'Practise again' : l.status === 'in_progress' ? 'Continue' : 'Start lesson'}</button>`;
     const newBtns = (topic, reason) => st.can_create
-      ? `<button class="sh-btn pri wide" data-make-topic="${esc(topic)}" data-reason="${esc(reason || '')}">${I('sparkles', { size: 16 })} Start a lesson on this</button><button class="sh-btn ghost sm wide" data-custom="${esc(topic)}">Customise length &amp; focus</button>`
+      ? `<button class="sh-btn pri wide" data-make-topic="${esc(topic)}" data-reason="${esc(reason || '')}">${I('sparkles', { size: 16 })} Start a lesson on this</button><button class="sh-btn ghost sm wide" data-custom="${esc(topic)}">Choose length &amp; focus</button>`
       : `<button class="sh-btn gold wide" data-lock>${I('lock', { size: 16 })} Premium</button>`;
     if (info.lesson) {
       const l = info.lesson;
@@ -590,7 +590,7 @@
     row.appendChild(pop);
     $$('[data-open]', pop).forEach(b => b.onclick = () => openLesson(b.dataset.open));
     $$('[data-make-topic]', pop).forEach(b => b.onclick = () => { pop.remove(); createLesson({ unit, topic: b.dataset.makeTopic, reason: b.dataset.reason, length: store.get('sh_len') || 'standard', focus: store.get('sh_focus') || '' }); });
-    $$('[data-custom]', pop).forEach(b => b.onclick = () => { pop.remove(); openMaker({ unit, topic: b.dataset.custom }); });
+    $$('[data-custom]', pop).forEach(b => b.onclick = () => { pop.remove(); openMaker({ unit, topic: b.dataset.custom, styleOnly: true }); });
     $$('[data-lock]', pop).forEach(b => b.onclick = () => lockedScreen());
     setTimeout(() => document.addEventListener('click', function off(e) { if (!pop.contains(e.target)) { pop.remove(); row.classList.toggle('popped', false); document.removeEventListener('click', off); } }), 0);
   }
@@ -625,18 +625,21 @@
     const recent = ((S.plan && S.plan.units) || []).map(x => x.path);
     const units = UNITS().slice().sort((a, b) => { const ia = recent.indexOf(a.path), ib = recent.indexOf(b.path); return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib); });
     const seg = (key, opts) => `<div class="sh-seg" data-seg="${key}" role="radiogroup">${opts.map(([v, t, sub, ic]) => `<button type="button" role="radio" data-v="${v}" class="${M[key] === v ? 'on' : ''}" aria-checked="${M[key] === v}">${I(ic, { size: 22 })}<b>${t}</b><small>${sub}</small></button>`).join('')}</div>`;
+    const quick = !!preset.styleOnly && !!preset.topic;
+    const qu = unitOf(M.unit);
     const ov = document.createElement('div');
     ov.className = 'sh-modal';
-    ov.innerHTML = `<div class="sh-sheet" role="dialog" aria-modal="true" aria-label="Make a lesson">
-      <header class="sh-sheet-h"><span class="ic">${I('wand', { size: 26 })}</span><div><h2>Make a lesson</h2><p class="sh-muted">${st.premium ? 'As many as you like.' : 'This uses your one free lesson.'}</p></div><button class="sh-x" data-close aria-label="Close">${I('close', { size: 22 })}</button></header>
+    ov.innerHTML = `<div class="sh-sheet${quick ? ' quick' : ''}" role="dialog" aria-modal="true" aria-label="Make a lesson">
+      <header class="sh-sheet-h"><span class="ic">${I(quick ? 'gear' : 'wand', { size: 26 })}</span><div><h2 id="mk-title">${quick ? 'Choose length &amp; focus' : 'Make a lesson'}</h2><p class="sh-muted">${quick ? 'Set how long the lesson is and what it concentrates on.' : st.premium ? 'As many as you like.' : 'This uses your one free lesson.'}</p></div><button class="sh-x" data-close aria-label="Close">${I('close', { size: 22 })}</button></header>
       <div class="sh-sheet-b">
-        <section class="sh-msec"><h3><span class="n">1</span>Choose a unit</h3><div class="sh-units">${units.map(u => `<button type="button" class="sh-ucard${u.path === M.unit ? ' on' : ''}" data-u="${esc(u.path)}" style="--uc:${esc(u.color || '#5b4cf5')}"><span class="ub">${I(unitIcon(u.path), { size: 24 })}</span><span class="tx"><b>${esc(u.short)}</b><small>${esc(unitName(u))}</small></span><span class="tk">${I('check', { size: 20 })}</span></button>`).join('')}</div></section>
-        <section class="sh-msec"><h3><span class="n">2</span>Choose a topic</h3><label class="sh-search">${I('search', { size: 18 })}<input id="mk-q" type="search" placeholder="Search topics…" autocomplete="off"></label><div class="sh-topics" id="mk-topics"></div></section>
+        ${quick ? `<section class="sh-qsum" data-quick><span class="ub" style="--uc:${esc((qu && qu.color) || '#5b4cf5')}">${I(unitIcon(M.unit), { size: 22 })}</span><span class="tx"><small>${esc(qu ? qu.short : '')}</small><b>${esc(String(M.topic))}</b></span><button type="button" class="sh-btn ghost sm" data-editall>${I('pencil', { size: 16 })} Edit everything</button></section>` : ''}
+        <section class="sh-msec" data-full${quick ? ' hidden' : ''}><h3><span class="n">1</span>Choose a unit</h3><div class="sh-units">${units.map(u => `<button type="button" class="sh-ucard${u.path === M.unit ? ' on' : ''}" data-u="${esc(u.path)}" style="--uc:${esc(u.color || '#5b4cf5')}"><span class="ub">${I(unitIcon(u.path), { size: 24 })}</span><span class="tx"><b>${esc(u.short)}</b><small>${esc(unitName(u))}</small></span><span class="tk">${I('check', { size: 20 })}</span></button>`).join('')}</div></section>
+        <section class="sh-msec" data-full${quick ? ' hidden' : ''}><h3><span class="n">2</span>Choose a topic</h3><label class="sh-search">${I('search', { size: 18 })}<input id="mk-q" type="search" placeholder="Search topics…" autocomplete="off"></label><div class="sh-topics" id="mk-topics"></div></section>
         <section class="sh-msec"><h3><span class="n">3</span>Lesson style</h3>
           ${seg('length', [['quick', 'Quick', '≈ 4 min', 'bolt'], ['standard', 'Standard', '≈ 7 min', 'book'], ['deep', 'Deep dive', '≈ 11 min', 'brain']])}
           ${seg('focus', [['', 'Balanced', 'Teach + test', 'scales'], ['learn', 'Learn it', 'More explaining', 'bulb'], ['practise', 'Practise', 'More questions', 'target'], ['exam', 'Exam skills', 'Marks & command words', 'exam']])}
         </section>
-        <section class="sh-msec"><h3><span class="n">4</span>Anything specific? <small>optional</small></h3><textarea id="mk-req" class="sh-in" rows="2" maxlength="300" placeholder="e.g. Explain the CIA triad with real examples, I keep mixing it up"></textarea></section>
+        <section class="sh-msec" data-full${quick ? ' hidden' : ''}><h3><span class="n">4</span>Anything specific? <small>optional</small></h3><textarea id="mk-req" class="sh-in" rows="2" maxlength="300" placeholder="e.g. Explain the CIA triad with real examples, I keep mixing it up"></textarea></section>
       </div>
       <footer class="sh-sheet-f"><div class="sum" id="mk-sum"></div><button class="sh-btn pri lg" id="mk-go">${I('sparkles', { size: 20 })} Create lesson</button></footer></div>`;
     document.body.appendChild(ov);
@@ -652,6 +655,16 @@
     $$('.sh-ucard', ov).forEach(b => b.onclick = () => { M.unit = b.dataset.u; M.topic = null; store.set('sh_unit', M.unit); $$('.sh-ucard', ov).forEach(x => x.classList.toggle('on', x === b)); Snd.tap(); topics(); sum(); });
     $$('.sh-seg', ov).forEach(g => $$('button', g).forEach(b => b.onclick = () => { M[g.dataset.seg] = b.dataset.v; store.set(g.dataset.seg === 'length' ? 'sh_len' : 'sh_focus', b.dataset.v); $$('button', g).forEach(x => { x.classList.toggle('on', x === b); x.setAttribute('aria-checked', x === b); }); Snd.tap(); sum(); }));
     $('#mk-req', ov).oninput = (e) => { M.request = e.target.value; sum(); };
+    const editAll = $('[data-editall]', ov);
+    if (editAll) editAll.onclick = () => {
+      $('.sh-sheet', ov).classList.remove('quick');
+      $$('[data-full]', ov).forEach(x => { x.hidden = false; });
+      const q = $('[data-quick]', ov); if (q) q.remove();
+      $('#mk-title', ov).textContent = 'Make a lesson';
+      const sub = $('.sh-sheet-h p', ov); if (sub) sub.textContent = st.premium ? 'Change the unit, topic, style or add your own notes.' : 'This uses your one free lesson.';
+      const ic = $('.sh-sheet-h .ic', ov); if (ic) ic.innerHTML = I('wand', { size: 26 });
+      const sel = $('.sh-topic.on', ov); if (sel) sel.scrollIntoView({ block: 'nearest' });
+    };
     $('#mk-q', ov).oninput = (e) => { M.q = e.target.value; topics(true); };
     $('#mk-go', ov).onclick = () => {
       close();

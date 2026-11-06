@@ -763,3 +763,14 @@ body.sh-page .sh-plan-h { display: flex; align-items: center; gap: 8px; margin: 
   .sh-plan-list li .sh-btn { margin-left: 52px; }
   .sh-next-main .ic { width: 46px; height: 46px; }
 }
+/* maker: length & focus only */
+.sh-qsum { display: flex; align-items: center; gap: 12px; margin-top: 14px; padding: 12px 14px; border-radius: 16px; background: var(--card); border: 1px solid var(--line); }
+.sh-qsum .ub { flex: none; width: 42px; height: 42px; border-radius: 13px; display: grid; place-items: center; color: #fff; background: var(--uc); --ifo: .25; }
+.sh-qsum .tx { flex: 1; min-width: 0; }
+.sh-qsum small { display: block; font-size: .72rem; font-weight: 800; color: var(--ink-2); text-transform: uppercase; letter-spacing: .05em; }
+.sh-qsum b { display: block; font-size: .92rem; line-height: 1.35; }
+.sh-qsum .sh-btn { flex: none; }
+.sh-sheet.quick { width: min(620px, 100%); }
+.sh-sheet.quick .sh-msec { border-top: 0; }
+.sh-sheet.quick .sh-msec .n { display: none; }
+@media (max-width: 520px) { .sh-qsum { flex-wrap: wrap; } .sh-qsum .sh-btn { width: 100%; } }
