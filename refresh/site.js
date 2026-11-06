@@ -4728,6 +4728,14 @@ async function waitForRA10Sdk(timeoutMs) {
      _updateNavAuth();
      renderSignedInDashboard();
      updateTransitionSignInActions();
+     // Pages outside this shell (Study Hub, Schools) send people here to sign in; take them back afterwards.
+     try {
+       const back = sessionStorage.getItem('ra10_after_auth');
+       if (back && ra10.isLoggedIn()) {
+         sessionStorage.removeItem('ra10_after_auth');
+         if (/^\/(study-hub|school)(\/|$)/.test(back) && back !== location.pathname + location.search) location.href = back;
+       }
+     } catch (e) {}
    });
   ra10.on('creditschange', _updateNavAuth);
 

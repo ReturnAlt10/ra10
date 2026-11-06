@@ -31,7 +31,7 @@
 })();
 </script>
 <link rel="preload" href="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0/dist/umd/supabase.js" as="script" crossorigin>
-<link rel="preload" href="/refresh/site.js?v=20261122" as="script">
+<link rel="preload" href="/refresh/site.js?v=20261124" as="script">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>RA10 — Advanced Revision Site (BTEC, GCSE, A-LEVEL)</title>
 <meta name="description" content="Free BTEC IT, Business and Sport revision for Level 3 AAQ and A-Level. Flashcards, quizzes, predicted papers, study guides, wireframe and code tools, and AI assignment marking — all in one place.">
@@ -226,6 +226,83 @@
 #p-home .hx-exam-count{background:var(--hm-ink)!important;box-shadow:none!important;border:0!important}
 #p-home .hx-exam-water{background:color-mix(in srgb,var(--hm-red) 55%,transparent)!important}
 #p-home .hx-exam-count *{color:var(--hm-paper)!important}
+/* Feature tour: real screenshots with a tab list */
+.hm-tour{display:grid;grid-template-columns:minmax(0,.78fr) minmax(0,1.6fr);gap:clamp(18px,3vw,36px);align-items:start}
+.hm-tour-tabs{display:grid;gap:6px}
+.hm-tour-tabs button{position:relative;display:grid;gap:3px;width:100%;padding:14px 16px 14px 20px;border:0;border-radius:16px;background:transparent;color:var(--hm-ink);font:inherit;text-align:left;cursor:pointer;transition:background .2s,box-shadow .2s}
+.hm-tour-tabs button::before{content:"";position:absolute;left:6px;top:16px;bottom:16px;width:3px;border-radius:3px;background:var(--hm-line);transition:background .2s}
+.hm-tour-tabs button b{font-size:1rem;font-weight:700;letter-spacing:-.01em}
+.hm-tour-tabs button span{color:var(--hm-ink-2);font-size:.88rem;line-height:1.45}
+.hm-tour-tabs button:hover{background:color-mix(in srgb,var(--hm-ink) 4%,transparent)}
+.hm-tour-tabs button.on{background:var(--hm-paper);box-shadow:0 0 0 1px var(--hm-line),0 14px 30px -24px rgba(22,19,15,.5)}
+.hm-tour-tabs button.on::before{background:var(--hm-red)}
+.hm-tour-tabs button:focus-visible{outline:2px solid var(--hm-red);outline-offset:2px}
+.hm-shot{margin:0;overflow:hidden;border-radius:18px;background:var(--hm-paper);box-shadow:0 0 0 1px var(--hm-line),0 40px 80px -40px rgba(22,19,15,.45)}
+.hm-shot-bar{display:flex;align-items:center;gap:6px;height:34px;padding:0 14px;border-bottom:1px solid var(--hm-line);background:color-mix(in srgb,var(--hm-ink) 3%,var(--hm-paper))}
+.hm-shot-bar i{width:9px;height:9px;border-radius:50%;background:color-mix(in srgb,var(--hm-ink) 16%,transparent)}
+.hm-shot-bar span{margin:0 auto;padding:3px 14px;border-radius:8px;background:var(--hm-paper);color:var(--hm-ink-2);font-size:.72rem;font-weight:600;transform:translateX(-14px)}
+.hm-shot img{display:block;width:100%;height:auto;aspect-ratio:16/10;object-fit:cover;object-position:top center;background:#f4f2ee;transition:opacity .16s}
+.hm-shot img.swap{opacity:0}
+.hm-shot-note{margin:10px 0 0;color:var(--hm-ink-2);font-size:.78rem;text-align:right}
+
+/* Study Hub flagship */
+.hm-flag{--fl-a:#3f5bf0;--fl-b:#0ea5a4;position:relative;overflow:hidden;padding:clamp(26px,5vw,56px);border-radius:32px;color:#c9d2ea;background:#0d1330;background-image:radial-gradient(700px 380px at 100% 0%,rgba(63,91,240,.55),transparent 70%),radial-gradient(520px 320px at 0% 100%,rgba(14,165,164,.35),transparent 70%)}
+.hm-flag::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 1px 1px,rgba(255,255,255,.07) 1px,transparent 0) 0 0/22px 22px;pointer-events:none}
+.hm-flag>*{position:relative}
+.hm-flag-top{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.25fr);gap:clamp(24px,4vw,56px);align-items:center}
+.hm-flag-tag{display:inline-flex;align-items:center;gap:7px;padding:6px 12px;border-radius:999px;background:rgba(255,255,255,.1);box-shadow:inset 0 0 0 1px rgba(255,255,255,.16);color:#fff;font-size:.78rem;font-weight:700;letter-spacing:.02em}
+.hm-flag-tag svg{color:#7dd3fc}
+#p-home .hm-flag h2{margin:.9rem 0 .2rem;font-size:clamp(2.6rem,1.6rem + 4vw,4.4rem)!important;font-weight:800;line-height:1!important;letter-spacing:-.045em;color:#fff!important}
+.hm-flag-big{margin:0 0 1rem;font-family:var(--font-d);font-style:italic;font-size:clamp(1.4rem,1.1rem + 1.2vw,2rem);line-height:1.2;background:linear-gradient(90deg,#a5b4fc,#5eead4);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hm-flag-copy>p:not(.hm-flag-big){margin:0 0 1.6rem;max-width:32rem;font-size:1.02rem;line-height:1.65}
+.hm-btn-flag{background:linear-gradient(135deg,var(--fl-a),#2f7fe6 55%,var(--fl-b));color:#fff;text-decoration:none;box-shadow:0 14px 30px -14px rgba(63,91,240,.9)}
+.hm-btn-flag:hover{filter:brightness(1.08)}
+.hm-btn-flag span{transition:transform .2s}.hm-btn-flag:hover span{transform:translateX(3px)}
+.hm-flag .hm-flag-note{margin:1rem 0 0!important;font-size:.82rem!important;color:#8e9bc2}
+.hm-flag-stage{position:relative;padding:0 0 40px 0}
+.hm-shot-dark{box-shadow:0 0 0 1px rgba(255,255,255,.12),0 50px 90px -40px rgba(0,0,0,.8)}
+.hm-shot-dark img{aspect-ratio:1280/860}
+.hm-phone{position:absolute;right:-6px;bottom:0;width:min(30%,168px);margin:0;padding:6px;border-radius:30px;background:#05081a;box-shadow:0 0 0 1px rgba(255,255,255,.18),0 30px 60px -20px rgba(0,0,0,.8);transform:rotate(3deg)}
+.hm-phone img{display:block;width:100%;height:auto;border-radius:24px}
+.hm-flag-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin:clamp(28px,5vw,48px) 0 0;padding:0;list-style:none}
+.hm-flag-cards li{display:flex;flex-direction:column;padding:12px 12px 18px;border-radius:22px;background:rgba(255,255,255,.06);box-shadow:inset 0 0 0 1px rgba(255,255,255,.1);transition:transform .25s,background .25s}
+.hm-flag-cards li:hover{transform:translateY(-3px);background:rgba(255,255,255,.09)}
+.hm-flag-cards figure{margin:0 0 14px;overflow:hidden;border-radius:14px;background:#fff}
+.hm-flag-cards img{display:block;width:100%;height:auto;aspect-ratio:16/10;object-fit:cover;object-position:top center}
+.hm-flag-cards b{padding:0 6px;color:#fff;font-size:1.02rem;letter-spacing:-.01em}
+.hm-flag-cards p{margin:.35rem 0 0;padding:0 6px;font-size:.9rem;line-height:1.55}
+
+/* Schools */
+.hm-label-edu{color:#2563eb}
+[data-theme="dark"] .hm-label-edu{color:#7aa2ff}
+.hm-tour-edu .hm-tour-tabs button.on::before{background:#2563eb}
+.hm-edu-contact{display:flex;justify-content:space-between;align-items:center;gap:24px;margin-top:22px;padding:clamp(20px,3vw,30px);border-radius:24px;background:linear-gradient(135deg,color-mix(in srgb,#2563eb 10%,var(--hm-paper)),var(--hm-paper));box-shadow:0 0 0 1px color-mix(in srgb,#2563eb 22%,var(--hm-line))}
+#p-home .hm-edu-contact h3{margin:0 0 .35rem;font-size:1.3rem!important;font-weight:700;letter-spacing:-.02em}
+.hm-edu-contact p{margin:0;max-width:40rem;color:var(--hm-ink-2);line-height:1.55}
+.hm-edu-contact .hm-btn-primary{white-space:nowrap}
+
+@media (max-width:900px){
+  .hm-tour{grid-template-columns:1fr}
+  .hm-tour-tabs{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin:0 -16px;padding:2px 16px 4px;scroll-snap-type:x mandatory}
+  .hm-tour-tabs::-webkit-scrollbar{display:none}
+  .hm-tour-tabs button{flex:none;width:auto;max-width:78vw;padding:10px 14px;scroll-snap-align:start;box-shadow:inset 0 0 0 1px var(--hm-line)}
+  .hm-tour-tabs button::before{display:none}
+  .hm-tour-tabs button span{display:none}
+  .hm-tour-tabs button.on{background:var(--hm-ink);box-shadow:none}
+  .hm-tour-tabs button.on b{color:var(--hm-paper)}
+  .hm-flag-top{grid-template-columns:1fr}
+  .hm-flag-cards{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .hm-edu-contact{flex-direction:column;align-items:flex-start}
+}
+@media (max-width:560px){
+  .hm-flag{border-radius:24px;padding:24px 18px}
+  .hm-flag .hm-btn{flex:1 1 100%;justify-content:center}
+  .hm-flag-cards{grid-template-columns:1fr}
+  .hm-phone{width:34%;right:-4px}
+  .hm-shot-bar span{display:none}
+  .hm-edu-contact .hm-btn-primary{white-space:normal}
+}
+@media (prefers-reduced-motion:reduce){.hm-flag-cards li:hover{transform:none}.hm-shot img{transition:none}}
 @media (max-width:900px){
   .hm-hero{grid-template-columns:1fr}
   .hm-demo{max-width:460px;width:100%;margin-inline:auto}
@@ -1072,7 +1149,7 @@ body.home-signed-in #p-home .hx-home > :not(#signed-in-dashboard){display:none !
 
       <section class="hm-hero" aria-label="RA10 homepage hero">
         <div class="hm-hero-copy">
-          <button type="button" class="hm-pill" onclick="go('/revision/btec/level-3/IT-AAQ/unit-3')"><span class="hm-pill-tag">New</span>IT Unit 3 Website Development is live <span aria-hidden="true">→</span></button>
+          <button type="button" class="hm-pill" onclick="document.getElementById('study-hub-feature').scrollIntoView({behavior:'smooth',block:'start'})"><span class="hm-pill-tag">New</span>Study Hub: a daily lesson built for you <span aria-hidden="true">→</span></button>
           <h1 class="hm-title">Revise less.<br>Remember <em>more.</em></h1>
           <p class="hm-lede">Guides, flashcards, quizzes and real exam questions for every unit, all in one place. Get answers marked like the examiner would mark them, and see exactly what to revise next.</p>
           <div class="hm-actions">
@@ -1140,60 +1217,127 @@ body.home-signed-in #p-home .hx-home > :not(#signed-in-dashboard){display:none !
         <div class="hx-exams-grid" id="home-exams-grid"></div>
       </section>
 
-      <section class="hm-section" aria-labelledby="hm-feat-title">
+      <section class="hm-section hm-tour-sec" aria-labelledby="hm-tour-title">
         <div class="hm-head hm-head-stack">
-          <h2 id="hm-feat-title">Built for the way exams are actually marked</h2>
-          <p>Practise the questions that come up, get feedback against the mark scheme and keep going until it sticks.</p>
+          <span class="hm-tile-label">Inside RA10</span>
+          <h2 id="hm-tour-title">Everything you need to revise, in one place</h2>
+          <p>These are real screens from the site. Every unit comes with the same set of tools.</p>
         </div>
-        <div class="hm-bento">
-          <article class="hm-tile hm-tile-wide hm-tile-ink">
-            <div>
-              <span class="hm-tile-label">AI Examiner</span>
-              <h3>Marked like the real thing</h3>
-              <p>Write a long answer and get a mark, the level it reached and what would push it higher, in seconds.</p>
-            </div>
-            <div class="hm-viz-levels" aria-hidden="true">
-              <div><span>Knowledge</span><i style="--w:100%"></i></div>
-              <div><span>Application</span><i style="--w:85%"></i></div>
-              <div><span>Analysis</span><i style="--w:70%"></i></div>
-              <div><span>Evaluation</span><i style="--w:40%"></i></div>
-            </div>
-          </article>
-          <article class="hm-tile">
-            <span class="hm-tile-label">Recall</span>
-            <h3>Flashcards &amp; quizzes</h3>
-            <p>Short sessions for quick wins, built from the specification.</p>
-            <div class="hm-viz-cards" aria-hidden="true"><i></i><i></i><i>Gross profit margin = ?</i></div>
-          </article>
-          <article class="hm-tile">
-            <span class="hm-tile-label">Exam practice</span>
-            <h3>Predicted papers</h3>
-            <p>Full papers with mark schemes, so you build stamina before the real thing.</p>
-          </article>
-          <article class="hm-tile">
-            <span class="hm-tile-label">Coursework</span>
-            <h3>AI Assigner</h3>
-            <p>Hints and criteria checks for IT Unit 3 and Unit 4 tasks, from Pass to Distinction.</p>
-          </article>
-          <article class="hm-tile hm-tile-accent">
-            <span class="hm-tile-label">Motivation</span>
-            <h3>XP &amp; weekly leaderboard</h3>
-            <p>Every answer earns XP. Finish in the top three on Saturday to win credits.</p>
-            <ol class="hm-viz-board" aria-hidden="true"><li><b>1</b>mia_revises<em>410</em></li><li class="me"><b>2</b>you<em>395</em></li><li><b>3</b>sam.k<em>380</em></li></ol>
-          </article>
+        <div class="hm-tour" data-hm-tour data-auto="7000">
+          <div class="hm-tour-tabs" role="tablist" aria-label="RA10 features">
+            <button type="button" role="tab" class="on" aria-selected="true" data-shot="f-dashboard"><b>Unit dashboard</b><span>Your progress, streak and what to do next for each unit.</span></button>
+            <button type="button" role="tab" aria-selected="false" data-shot="f-guide"><b>Revision guides</b><span>Every topic in the specification, with diagrams and worked examples.</span></button>
+            <button type="button" role="tab" aria-selected="false" data-shot="f-examiner"><b>AI Examiner</b><span>Write a long answer and get a mark, a level and how to improve it.</span></button>
+            <button type="button" role="tab" aria-selected="false" data-shot="f-papers"><b>Past papers</b><span>Real papers in the exam layout, with a timer. Answer online or download a PDF.</span></button>
+            <button type="button" role="tab" aria-selected="false" data-shot="f-flashcards"><b>Flashcards</b><span>Flip through key terms and track what you know.</span></button>
+            <button type="button" role="tab" aria-selected="false" data-shot="f-quiz"><b>Quick-fire quizzes</b><span>Instant feedback and an explanation for every answer.</span></button>
+          </div>
+          <figure class="hm-shot" aria-live="polite">
+            <div class="hm-shot-bar" aria-hidden="true"><i></i><i></i><i></i><span>ra10.co.uk</span></div>
+            <img src="/refresh/home/f-dashboard.webp" width="1280" height="800" alt="An RA10 unit dashboard showing guide progress, questions answered and the exam papers panel" loading="lazy" decoding="async">
+          </figure>
         </div>
       </section>
 
-      <section class="hm-section" aria-labelledby="hm-steps-title">
-        <div class="hm-head hm-head-stack">
-          <h2 id="hm-steps-title">How a session works</h2>
+      <section class="hm-flag" id="study-hub-feature" aria-labelledby="hm-sh-title">
+        <div class="hm-flag-top">
+          <div class="hm-flag-copy">
+            <span class="hm-flag-tag"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/></svg>New · Our flagship feature</span>
+            <h2 id="hm-sh-title">Study Hub</h2>
+            <p class="hm-flag-big">A lesson made for you, every day.</p>
+            <p>Study Hub looks at what you've been revising on RA10: the questions you got wrong, the topics you've read and the units you're working on. Every day it builds a short, game-like lesson on exactly what you need next.</p>
+            <div class="hm-actions">
+              <a class="hm-btn hm-btn-flag" href="/study-hub/">Explore Study Hub <span aria-hidden="true">→</span></a>
+              <button class="hm-btn hm-btn-outline" type="button" onclick="try{sessionStorage.setItem('ra10_after_auth','/study-hub/')}catch(e){}openSignInOverlayFallback()">Try a free lesson</button>
+            </div>
+            <p class="hm-flag-note">Part of RA10 Premium. Every account can try one lesson free.</p>
+          </div>
+          <div class="hm-flag-stage" aria-hidden="true">
+            <figure class="hm-shot hm-shot-dark"><div class="hm-shot-bar"><i></i><i></i><i></i><span>ra10.co.uk/study-hub</span></div><img src="/refresh/home/sh-home.webp" width="1280" height="860" alt="" loading="lazy" decoding="async"></figure>
+            <figure class="hm-phone"><img src="/refresh/home/sh-phone.webp" width="390" height="844" alt="" loading="lazy" decoding="async"></figure>
+          </div>
         </div>
-        <ol class="hm-steps">
-          <li><b>01</b><h3>Open the unit</h3><p>Topics follow the specification, so you always know where you are.</p></li>
-          <li><b>02</b><h3>Practise</h3><p>Go from quick recall to full exam-style answers without leaving the page.</p></li>
-          <li><b>03</b><h3>See what's next</h3><p>Your weak topics, tasks and progress tell you what to do in the next session.</p></li>
-        </ol>
+        <ul class="hm-flag-cards">
+          <li><figure><img src="/refresh/home/sh-learn.webp" width="1100" height="700" alt="A Study Hub teaching card explaining malware with key points and a real example" loading="lazy" decoding="async"></figure><b>Learn it in bite-size cards</b><p>Short explanations with key points and real examples, so new ideas stick.</p></li>
+          <li><figure><img src="/refresh/home/sh-quiz.webp" width="1100" height="760" alt="A Study Hub quick-check question with the correct answer highlighted" loading="lazy" decoding="async"></figure><b>Quick checks as you go</b><p>Multiple choice, true or false, fill the gap, matching and ordering. Anything you get wrong comes back once more.</p></li>
+          <li><figure><img src="/refresh/home/sh-exam.webp" width="1100" height="900" alt="A real exam question in Study Hub, marked by the AI Examiner with feedback" loading="lazy" decoding="async"></figure><b>Real exam questions</b><p>Each lesson ends with an exam question, marked by the AI Examiner against the mark scheme.</p></li>
+          <li><figure><img src="/refresh/home/sh-plan.webp" width="1280" height="1000" alt="My plan in Study Hub: the next lesson to do and a numbered list of what comes after" loading="lazy" decoding="async"></figure><b>A plan for every subject</b><p>Follow your personal plan, or work through every topic in the course one by one.</p></li>
+          <li><figure><img src="/refresh/home/sh-maker.webp" width="1280" height="860" alt="The Make a lesson sheet with a choice of unit, topic, length and focus" loading="lazy" decoding="async"></figure><b>Make your own lessons</b><p>Pick any unit and topic, choose how long it is and what it focuses on, or ask for something specific.</p></li>
+          <li><figure><img src="/refresh/home/sh-finish.webp" width="1100" height="760" alt="Lesson complete screen showing XP earned, accuracy and time" loading="lazy" decoding="async"></figure><b>Streaks and XP</b><p>Finish a lesson each day to keep your streak going and climb the weekly leaderboard.</p></li>
+        </ul>
       </section>
+
+      <section class="hm-section hm-edu" id="schools" aria-labelledby="hm-edu-title">
+        <div class="hm-head hm-head-stack">
+          <span class="hm-tile-label hm-label-edu">New · RA10 for schools</span>
+          <h2 id="hm-edu-title">Run revision across your whole school</h2>
+          <p>Give every student RA10 and Study Hub, then see exactly how each class is getting on. Set work in minutes and let the AI point out who needs help.</p>
+        </div>
+        <div class="hm-tour hm-tour-edu" data-hm-tour>
+          <div class="hm-tour-tabs" role="tablist" aria-label="RA10 for schools features">
+            <button type="button" role="tab" class="on" aria-selected="true" data-shot="edu-overview"><b>School dashboard</b><span>Classes, students, staff and recent assignments at a glance.</span></button>
+            <button type="button" role="tab" aria-selected="false" data-shot="edu-class"><b>Classes and students</b><span>Add students from your school list, by email or from a CSV, and track each one.</span></button>
+            <button type="button" role="tab" aria-selected="false" data-shot="edu-builder"><b>Set assignments</b><span>Mix Study Hub lessons, exam questions, quizzes, guide sections and papers.</span></button>
+            <button type="button" role="tab" aria-selected="false" data-shot="edu-editor"><b>Study Hub lessons for your class</b><span>Generate one lesson for the class, then check, edit and refine it before you send it.</span></button>
+            <button type="button" role="tab" aria-selected="false" data-shot="edu-insights"><b>AI class insights</b><span>Who is doing well, who needs support and which topics the class finds hardest.</span></button>
+          </div>
+          <figure class="hm-shot" aria-live="polite">
+            <div class="hm-shot-bar" aria-hidden="true"><i></i><i></i><i></i><span>ra10.co.uk/school</span></div>
+            <img src="/refresh/home/edu-overview.webp" width="1280" height="800" alt="The RA10 Schools dashboard for a school, with classes, student numbers and recent assignments" loading="lazy" decoding="async">
+          </figure>
+        </div>
+        <div class="hm-edu-contact">
+          <div>
+            <h3>Interested in RA10 for your school?</h3>
+            <p>Tell us about your school and the subjects you teach. We'll show you round and answer any questions about pricing, setup and data protection.</p>
+          </div>
+          <div class="hm-actions">
+            <button class="hm-btn hm-btn-primary" type="button" onclick="openContactModal('Schools &amp; teachers')">Contact us about schools <span aria-hidden="true">→</span></button>
+          </div>
+        </div>
+        <p class="hm-shot-note">Screens show example data.</p>
+      </section>
+
+      <script>
+      (function () {
+        var tours = document.querySelectorAll('[data-hm-tour]');
+        var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+        Array.prototype.forEach.call(tours, function (tour) {
+          var tabs = tour.querySelectorAll('[data-shot]');
+          var img = tour.querySelector('.hm-shot img');
+          var cur = 0, timer = null, touched = false;
+          function show(i, focus) {
+            cur = (i + tabs.length) % tabs.length;
+            Array.prototype.forEach.call(tabs, function (t, k) { t.classList.toggle('on', k === cur); t.setAttribute('aria-selected', k === cur ? 'true' : 'false'); t.tabIndex = k === cur ? 0 : -1; });
+            var t = tabs[cur], src = '/refresh/home/' + t.dataset.shot + '.webp';
+            if (focus) t.focus();
+            if (img.getAttribute('src') === src) return;
+            var pre = new Image();
+            pre.onload = function () { img.classList.add('swap'); setTimeout(function () { img.src = src; img.alt = t.querySelector('b').textContent + ': ' + t.querySelector('span').textContent; img.classList.remove('swap'); }, 160); };
+            pre.src = src;
+          }
+          function stop() { touched = true; if (timer) clearInterval(timer); timer = null; }
+          Array.prototype.forEach.call(tabs, function (t, k) {
+            t.tabIndex = k === 0 ? 0 : -1;
+            t.addEventListener('click', function () { stop(); show(k); });
+            t.addEventListener('keydown', function (e) {
+              if (e.key === 'ArrowDown' || e.key === 'ArrowRight') { e.preventDefault(); stop(); show(cur + 1, true); }
+              else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') { e.preventDefault(); stop(); show(cur - 1, true); }
+            });
+          });
+          var auto = Number(tour.dataset.auto || 0);
+          if (auto && !reduce && 'IntersectionObserver' in window) {
+            new IntersectionObserver(function (es) {
+              es.forEach(function (en) {
+                if (touched) return;
+                if (en.isIntersecting && !timer) timer = setInterval(function () { show(cur + 1); }, auto);
+                else if (!en.isIntersecting && timer) { clearInterval(timer); timer = null; }
+              });
+            }, { threshold: 0.4 }).observe(tour);
+          }
+        });
+      })();
+      </script>
 
       <section class="hm-cta" aria-labelledby="hm-cta-title">
         <div>
@@ -3307,7 +3451,7 @@ body.home-signed-in #p-home .hx-home > :not(#signed-in-dashboard){display:none !
 ============================================================ -->
 <!-- Supabase loads here (not in <head>) so it no longer blocks the first paint; it still runs before site.js. -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0/dist/umd/supabase.js"></script>
-<script src="/refresh/site.js?v=20261122"></script>
+<script src="/refresh/site.js?v=20261124"></script>
 <script src="/refresh/ra10-units.js?v=20261104"></script>
 <script src="/refresh/ra10-edu.js?v=20261126" defer></script>
 
@@ -4337,9 +4481,15 @@ function contactSupportFromFooter() {
 
 const CONTACT_FORM_ID = 'xppzbror';
 
-function openContactModal() {
+function openContactModal(topic) {
   const overlay = document.getElementById('contact-overlay');
   if (!overlay) return;
+  const cat = document.getElementById('contact-category');
+  const msg = document.getElementById('contact-message');
+  if (cat && typeof topic === 'string' && Array.prototype.some.call(cat.options, o => o.value === topic)) {
+    cat.value = topic;
+    if (msg && topic === 'Schools & teachers') msg.placeholder = 'Tell us your school, your role, the subjects and roughly how many students you have…';
+  } else if (msg) msg.placeholder = 'Describe the issue or question…';
   overlay.classList.add('open');
   overlay.removeAttribute('hidden');
   document.body.classList.add('auth-popup-open');

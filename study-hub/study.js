@@ -190,9 +190,76 @@
   function fail(msg) { main.innerHTML = `<div class="sh-card sh-empty">${I('alert', { size: 40 })}<b>Something went wrong</b>${msg}</div>`; }
   function signedOut() {
     try { sessionStorage.setItem('ra10_after_auth', location.pathname + location.search); } catch (e) {}
-    main.innerHTML = `<div class="sh-lock"><div class="sh-lock-ic">${I('sparkles', { size: 56 })}</div><h1>Your daily lesson is waiting</h1>
-      <p>Study Hub looks at what you've been revising on RA10 and builds you a short, game-like lesson every day — focused on exactly what you need.</p>
-      <a class="sh-btn pri lg" href="/auth">Sign in to start</a></div>`;
+    document.body.classList.add('sh-out');
+    const shot = (name, w, h, alt) => `<img src="/refresh/home/${name}.webp" width="${w}" height="${h}" alt="${esc(alt)}" loading="lazy" decoding="async">`;
+    const frame = (name, w, h, alt, url) => `<figure class="sh-ov-shot"><div class="bar" aria-hidden="true"><i></i><i></i><i></i><span>${esc(url || 'ra10.co.uk/study-hub')}</span></div>${shot(name, w, h, alt)}</figure>`;
+    const units = UNITS();
+    const signIn = (label, cls) => `<a class="sh-btn ${cls || 'pri lg'}" href="/auth">${label}</a>`;
+    const rows = [
+      ['sun', 'A fresh lesson every day', 'Each morning Study Hub reads your last 30 days on RA10: quiz scores, written answers, the guide sections you read and the units you use. It picks the topic that will help most and tells you why it chose it.', 'sh-today', 609, 570, 'Today\'s lesson card explaining why Study Hub chose the topic', true],
+      ['puzzle', 'Bite-size and game-like', 'Teaching cards explain one idea at a time with a real example. Then you check it straight away with multiple choice, true or false, fill the gap, matching and ordering. Anything you get wrong comes back once more before the end.', 'sh-learn', 1100, 700, 'A Study Hub teaching card about malware'],
+      ['exam', 'Real exam questions, properly marked', 'Lessons finish with an exam-style question, often a real one from a past paper. The RA10 AI Examiner marks it against the mark scheme and tells you what you did well and how to pick up the missing marks.', 'sh-exam', 1100, 900, 'A Study Hub exam question marked by the AI Examiner'],
+      ['map', 'A page for every subject', 'Use <b>Full course</b> to work through every topic and subtopic in the specification and tick them off, or <b>My plan</b> for a step-by-step list of what to do next: what to fix, what to lock in and what is new.', 'sh-plan', 1280, 1000, 'My plan in Study Hub, showing what to do next'],
+      ['wand', 'Make as many lessons as you like', 'Pick any unit and topic, choose the length (about 4, 7 or 11 minutes) and the focus (learning, practice or exam skills), and add your own notes if you want something specific.', 'sh-maker', 1280, 860, 'The Make a lesson sheet']
+    ];
+    main.innerHTML = `<div class="sh-ov">
+      <section class="sh-ov-hero">
+        <div class="sh-ov-copy">
+          <p class="sh-eyebrow">${I('sparkles', { size: 16 })} Study Hub</p>
+          <h1>A lesson made for you, <em>every day.</em></h1>
+          <p class="lede">Study Hub looks at what you've been revising on RA10 and builds a short, game-like lesson on exactly what you need next. It takes about seven minutes, and you can make as many more as you like.</p>
+          <div class="sh-ov-acts">${signIn('Sign in to start ' + I('arrow', { size: 18 }))}<a class="sh-btn ghost lg" href="#sh-ov-how">See how it works</a></div>
+          <p class="sh-ov-note">${I('gift', { size: 18 })} Every account gets one free lesson. Study Hub is part of RA10 Premium and is included for schools on RA10 EDU.</p>
+        </div>
+        <div class="sh-ov-stage" aria-hidden="true">${frame('sh-home', 1280, 860, '')}<figure class="sh-ov-phone">${shot('sh-phone', 390, 844, '')}</figure></div>
+      </section>
+
+      <section class="sh-ov-sec" id="sh-ov-how" aria-labelledby="sh-ov-how-h">
+        <h2 id="sh-ov-how-h">How it works</h2>
+        <ol class="sh-ov-steps">
+          <li><span class="ic">${I('compass', { size: 26 })}</span><b>You revise on RA10</b><p>Guides, quizzes, flashcards and exam questions, the same as always.</p></li>
+          <li><span class="ic">${I('brain', { size: 26 })}</span><b>Study Hub spots what you need</b><p>It finds the topics you're finding hard, the ones you've just read about and what's coming next in the course.</p></li>
+          <li><span class="ic">${I('target', { size: 26 })}</span><b>You get a lesson built for you</b><p>Learn it, practise it, then answer a real exam question. Your plan updates as you go.</p></li>
+        </ol>
+      </section>
+
+      <section class="sh-ov-sec" aria-label="Features">
+        ${rows.map((r, i) => `<div class="sh-ov-row${i % 2 ? ' flip' : ''}"><div class="tx"><span class="ic">${I(r[0], { size: 26 })}</span><h2>${r[1]}</h2><p>${r[2]}</p></div>${r[7] ? `<figure class="sh-ov-card">${shot(r[3], r[4], r[5], r[6])}</figure>` : frame(r[3], r[4], r[5], r[6])}</div>`).join('')}
+      </section>
+
+      <section class="sh-ov-sec" aria-labelledby="sh-ov-more-h">
+        <h2 id="sh-ov-more-h">And there's more</h2>
+        <div class="sh-ov-grid">
+          <div>${I('flame', { size: 26 })}<b>Streaks and XP</b><p>Finish a lesson each day to keep your streak. XP counts towards the weekly leaderboard.</p></div>
+          <div>${I('retry', { size: 26 })}<b>Practise again</b><p>Every lesson you finish is saved, with your stars, so you can replay it before the exam.</p></div>
+          <div>${I('people', { size: 26 })}<b>Set by your teacher</b><p>On RA10 EDU, teachers can set Study Hub lessons as homework: one made for each student, or one they have checked for the whole class.</p></div>
+          <div>${I('check', { size: 26 })}<b>Checked for accuracy</b><p>Lessons are built from your unit's own content and real questions, and each answer is checked by a second AI examiner before you see it.</p></div>
+        </div>
+      </section>
+
+      ${units.length ? `<section class="sh-ov-sec" aria-labelledby="sh-ov-units-h"><h2 id="sh-ov-units-h">Works with every unit on RA10</h2><div class="sh-ov-units">${units.map(u => `<span style="--uc:${esc(u.color || '#5b4cf5')}">${I(unitIcon(u.path), { size: 18 })}${esc(u.short)}</span>`).join('')}</div></section>` : ''}
+
+      <section class="sh-ov-sec" aria-labelledby="sh-ov-plans-h">
+        <h2 id="sh-ov-plans-h">Who can use it</h2>
+        <div class="sh-ov-plans">
+          <div><small>Free account</small><b>One free lesson</b><p>Try a full lesson on any topic to see how it works.</p></div>
+          <div class="hi"><small>RA10 Premium</small><b>Everything</b><p>A new lesson every day, unlimited lessons on any topic, and your full plan for every subject.</p><span class="sh-badge gold">Coming soon</span></div>
+          <div><small>RA10 EDU</small><b>Included for schools</b><p>Students and teachers at RA10 EDU schools get the full Study Hub. <a href="/#schools">Find out about RA10 for schools</a></p></div>
+        </div>
+      </section>
+
+      <section class="sh-ov-sec sh-ov-faq" aria-labelledby="sh-ov-faq-h">
+        <h2 id="sh-ov-faq-h">Questions</h2>
+        <details><summary>Do I need to have used RA10 before?</summary><p>No. If Study Hub doesn't know much about you yet, it starts at the beginning of the course for your unit. The more you revise on RA10, the more personal your lessons become.</p></details>
+        <details><summary>How long does a lesson take?</summary><p>A standard lesson takes about seven minutes. When you make your own you can choose a quick one (about four minutes) or a deep dive (about eleven).</p></details>
+        <details><summary>How are the exam questions marked?</summary><p>By the RA10 AI Examiner, the same one used across the site. Where the lesson uses a real past-paper question, it marks your answer with that question's mark scheme.</p></details>
+        <details><summary>What does Study Hub use to choose my lesson?</summary><p>Only your own activity on RA10, such as quiz results, marked answers and the guide sections you've read. It isn't shared with other students.</p></details>
+      </section>
+
+      <section class="sh-ov-cta"><div><h2>Your first lesson is free</h2><p>Sign in and Study Hub will have a lesson ready in about half a minute.</p></div>${signIn('Sign in to start ' + I('arrow', { size: 18 }), 'gold lg')}</section>
+    </div>`;
+    const how = $('a[href="#sh-ov-how"]', main);
+    if (how) how.onclick = (e) => { e.preventDefault(); $('#sh-ov-how').scrollIntoView({ behavior: 'smooth', block: 'start' }); };
   }
 
   /* ───────────── home ───────────── */
