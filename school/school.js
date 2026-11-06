@@ -665,7 +665,7 @@
     const t = norm(topic), words = t.split(' ').filter(w => w.length > 3);
     const match = (s) => { const n = norm(s); if (!n || !t) return false; if (n.indexOf(t) >= 0 || t.indexOf(n) >= 0) return true; return words.length > 0 && words.filter(w => n.indexOf(w) >= 0).length >= Math.min(2, words.length); };
     const topics = [];
-    Object.keys((cat && cat.spec) || {}).sort().forEach(a => ((cat.spec[a] || {}).topics || []).forEach(x => topics.push(((x.code ? x.code + ' ' : '') + (x.name || '')).trim())));
+    Object.keys((cat && cat.spec) || {}).sort((x, y) => String(x).localeCompare(String(y), undefined, { numeric: true })).forEach(a => ((cat.spec[a] || {}).topics || []).forEach(x => topics.push(((x.code ? x.code + ' ' : '') + (x.name || '')).trim())));
     const L = 'ABCDEF';
     const quiz = ((cat && cat.quiz) || []).filter(q => !t || match(q.topic) || match(q.q)).slice(0, 8).map(q => {
       let c = q.correct; const choices = q.choices || [];
@@ -771,7 +771,7 @@
 
   function studyHubTab(pick, cat, B, add) {
     const topics = [];
-    Object.keys((cat && cat.spec) || {}).sort().forEach(a => ((cat.spec[a] || {}).topics || []).forEach(x => topics.push({ aim: a, aimTitle: cat.spec[a].title, label: ((x.code ? x.code + ' ' : '') + (x.name || '')).trim() })));
+    Object.keys((cat && cat.spec) || {}).sort((x, y) => String(x).localeCompare(String(y), undefined, { numeric: true })).forEach(a => ((cat.spec[a] || {}).topics || []).forEach(x => topics.push({ aim: a, aimTitle: cat.spec[a].title, label: ((x.code ? x.code + ' ' : '') + (x.name || '')).trim() })));
     B.sh = B.sh || { mode: 'personal', topic: '', length: 'standard', focus: '', request: '' };
     const sh = B.sh;
     const opts = (list, val) => list.map(([v, t]) => `<option value="${esc(v)}"${v === val ? ' selected' : ''}>${esc(t)}</option>`).join('');

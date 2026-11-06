@@ -105,7 +105,7 @@
   }
   function specTopics(cat) {
     const out = [];
-    Object.keys((cat && cat.spec) || {}).sort().forEach(a => ((cat.spec[a] || {}).topics || []).forEach(t => {
+    Object.keys((cat && cat.spec) || {}).sort((x, y) => String(x).localeCompare(String(y), undefined, { numeric: true })).forEach(a => ((cat.spec[a] || {}).topics || []).forEach(t => {
       const label = ((t.code ? t.code + ' ' : '') + (t.name || '')).trim();
       if (label) out.push({ aim: a, aimTitle: cat.spec[a].title || ('Aim ' + a), code: t.code || '', name: t.name || label, label });
     }));
@@ -395,7 +395,7 @@
   // the unit's specification as aims → topics → subtopics (codes like A1, A1.1)
   function courseTree(cat) {
     const aims = [];
-    Object.keys((cat && cat.spec) || {}).sort().forEach(a => {
+    Object.keys((cat && cat.spec) || {}).sort((x, y) => String(x).localeCompare(String(y), undefined, { numeric: true })).forEach(a => {
       const A = cat.spec[a] || {}, topics = [];
       (A.topics || []).forEach(t => {
         const code = String(t.code || ''), label = ((code ? code + ' ' : '') + (t.name || '')).trim();
@@ -489,7 +489,8 @@
       tree.forEach(a => {
         const inAim = []; a.topics.forEach(t => t.subs.length ? inAim.push(...t.subs) : inAim.push(t));
         const d = inAim.filter(x => states.get(x).state === 'done').length;
-        html += `<div class="sh-rsec"><span class="ai">${esc(a.aim || '•')}</span><span><small>Learning aim ${esc(a.aim)}</small><b>${esc(a.title)}</b></span><em>${d}/${inAim.length}</em></div>`;
+        const sec = (String(a.title).match(/^(\d+(?:\.\d+)+)\s+/) || [])[1];   // A-Level sections are titled "3.10 …"
+        html += `<div class="sh-rsec"><span class="ai${sec ? ' wide' : ''}">${esc(sec || a.aim || '•')}</span><span><small>${sec ? 'Section ' + esc(sec) : 'Learning aim ' + esc(a.aim)}</small><b>${esc(sec ? String(a.title).replace(/^\d+(?:\.\d+)+\s+/, '') : a.title)}</b></span><em>${d}/${inAim.length}</em></div>`;
         n = 0;
         a.topics.forEach(t => {
           const list = t.subs.length ? t.subs : [t];
@@ -504,29 +505,59 @@
         });
       });
     } else {
+      // My path: a clear, ordered plan — one thing to do next, then a numbered list, then what's done
+      const u = unitOf(unit);
       const lessons = ((st.lessons || []).filter(l => l.unit === unit)).slice().reverse();
-      const done = lessons.filter(l => l.status === 'done'), open = lessons.filter(l => l.status !== 'done');
-      if (done.length) {
-        html += `<div class="sh-rsec slim"><span class="ai">${I('check', { size: 16 })}</span><span><b>Where you've been</b></span><em>${done.length}</em></div>`;
-        done.forEach(l => { const key = 'l' + l.id; nodes[key] = { lesson: l }; html += nodeHtml({ cls: 'done', icon: iconOf(l), title: l.title, label: l.title, attrs: `data-rn="${key}"`, sub: stars(l.score, l.max_score, 13) + (l.kind === 'assigned' ? ' · Teacher' : '') }); });
-      }
-      // what to do next, from this learner's own progress
+      const done = lessons.filter(l => l.status === 'done').reverse(), open = lessons.filter(l => l.status !== 'done');
       const recs = [], used = new Set();
       const push = (r) => { const k = norm(r.topic); if (!k || used.has(k)) return; used.add(k); recs.push(r); };
       open.forEach(l => { used.add(norm(l.topic)); });
-      ((S.plan && S.plan.weak) || []).filter(t => t.unit === unit).forEach(t => push({ topic: t.topic, tag: 'Fix', why: `You're scoring ${t.pct}% on this — a lesson to turn it around.`, icon: 'target', cls: 'fix' }));
-      ((S.plan && S.plan.reading) || []).filter(t => t.unit === unit).forEach(t => push({ topic: t.topic, tag: 'Lock in', why: 'You read about this recently — practise it before it fades.', icon: 'book', cls: 'lock' }));
-      all.filter(x => states.get(x).state === 'todo' && !states.get(x).weak).slice(0, 3).forEach(x => push({ topic: x.label, title: x.short, code: x.code, tag: 'New', why: 'The next topic in the course that you haven\'t covered yet.', icon: SHIcons.forLesson({ topic: x.name, unit }), cls: 'new' }));
-      done.filter(l => Date.now() - new Date(l.created_at) > 7 * 864e5 && starCount(l.score, l.max_score) < 3).slice(0, 2).forEach(l => push({ topic: l.topic || l.title, title: l.title, tag: 'Review', why: 'Spaced review — coming back after a week makes it stick.', icon: 'retry', cls: 'review' }));
-      html += `<div class="sh-rsec slim next"><span class="ai">${I('compass', { size: 16 })}</span><span><b>Up next for you</b><small>Built from your quizzes, answers and reading in this unit</small></span></div>`;
-      n = 0;
-      if (S.building && st.daily == null) html += nodeHtml({ cls: 'open cur', cur: true, icon: 'brain', title: 'Building today\'s lesson…', label: 'Building today\'s lesson' });
-      open.forEach(l => { const key = 'l' + l.id; nodes[key] = { lesson: l }; html += nodeHtml({ cls: 'open cur', cur: true, icon: iconOf(l), title: l.title, label: l.title, attrs: `data-rn="${key}"`, sub: l.status === 'in_progress' ? 'Continue' : 'Ready to start' }); });
-      recs.slice(0, 6).forEach((r, i) => { const key = 'r' + i; nodes[key] = { rec: r }; html += nodeHtml({ cls: 'todo rec ' + r.cls, icon: r.icon, code: r.code || ((String(r.topic).match(CODE_RE) || [])[1] || ''), title: r.title || shortName(String(r.topic).replace(CODE_RE, '')), label: r.topic, attrs: `data-rn="${key}"`, badge: r.tag, badgeCls: 'tag ' + r.cls }); });
-      if (!recs.length && !open.length) html += `<div class="sh-empty sm"><b>Nothing to suggest yet</b>Answer some questions in ${esc((unitOf(unit) || {}).short || 'this unit')} and your path will fill up — or start the full course.</div>`;
-      if (st.can_create) html += nodeHtml({ cls: 'add', icon: 'plus', title: 'Make your own', label: 'Make a lesson', attrs: 'data-new' });
+      ((S.plan && S.plan.weak) || []).filter(t => t.unit === unit).forEach(t => push({ topic: t.topic, tag: 'Fix', why: `You're scoring ${t.pct}% on this in quizzes and answers — this lesson goes over it again.`, icon: 'target', cls: 'fix' }));
+      ((S.plan && S.plan.reading) || []).filter(t => t.unit === unit).forEach(t => push({ topic: t.topic, tag: 'Lock in', why: 'You read about this recently — practising it now helps you remember it.', icon: 'book', cls: 'lock' }));
+      all.filter(x => states.get(x).state === 'todo' && !states.get(x).weak).slice(0, 3).forEach(x => push({ topic: x.label, title: x.short, code: x.code, tag: 'New', why: 'The next topic in the course you haven\'t done a lesson on yet.', icon: SHIcons.forLesson({ topic: x.name, unit }), cls: 'new' }));
+      done.filter(l => Date.now() - new Date(l.created_at) > 7 * 864e5 && starCount(l.score, l.max_score) < 3).slice(0, 2).forEach(l => push({ topic: l.topic || l.title, title: l.title, tag: 'Review', why: 'You did this over a week ago and didn\'t get full marks — a quick review makes it stick.', icon: 'retry', cls: 'review' }));
+      const items = open.map(l => ({ kind: 'lesson', l })).concat(recs.slice(0, 6).map(r => ({ kind: 'rec', r })));
+      const can = !!st.can_create;
+      const titleOf = (it) => it.kind === 'lesson' ? it.l.title : (it.r.title || shortName(String(it.r.topic).replace(CODE_RE, '')));
+      const codeOf = (it) => it.kind === 'rec' ? (it.r.code || ((String(it.r.topic).match(CODE_RE) || [])[1] || '')) : ((String(it.l.topic || '').match(CODE_RE) || [])[1] || '');
+      const tagOf = (it) => it.kind === 'lesson' ? `<span class="sh-tag cont">${it.l.kind === 'assigned' ? 'From your teacher' : it.l.status === 'in_progress' ? 'Carry on' : 'Ready'}</span>` : `<span class="sh-tag ${it.r.cls}">${esc(it.r.tag)}</span>`;
+      const whyOf = (it) => it.kind === 'lesson' ? (it.l.status === 'in_progress' ? 'You started this lesson — pick up where you left off.' : 'This lesson is ready and waiting for you.') : it.r.why;
+      const goBtn = (it, i, big) => it.kind === 'lesson'
+        ? `<button class="sh-btn pri${big ? ' lg' : ' sm'}" data-act="open" data-id="${esc(it.l.id)}">${it.l.status === 'in_progress' ? 'Continue' : 'Start'}${big ? ' ' + I('arrow', { size: 18 }) : ''}</button>`
+        : can ? `<button class="sh-btn pri${big ? ' lg' : ' sm'}" data-act="rec" data-i="${i}">Start${big ? ' lesson ' + I('arrow', { size: 18 }) : ''}</button>`
+          : `<button class="sh-btn gold${big ? ' lg' : ' sm'}" data-act="lock">${I('lock', { size: 15 })} Premium</button>`;
+      let h = `<div class="sh-plan"><p class="sh-plan-intro">${I('compass', { size: 18 })}<span>Your personal plan for <b>${esc(u ? u.short : 'this unit')}</b>, built from your quiz scores, written answers and the guide sections you've read. Start at the top and work down.</span></p>`;
+      if (S.building && !st.daily) h += `<div class="sh-next building"><div class="sh-next-top"><span class="sh-stepn">${I('brain', { size: 18 })}</span><span class="sh-eyebrow2">Building today's lesson…</span></div><p class="sh-muted">This takes about half a minute — it will appear here when it's ready.</p></div>`;
+      if (items.length) {
+        const first = items[0];
+        h += `<section class="sh-next"><div class="sh-next-top"><span class="sh-stepn">1</span><span class="sh-eyebrow2">Do this next</span>${tagOf(first)}</div>
+          <div class="sh-next-main"><span class="ic">${I(first.kind === 'lesson' ? iconOf(first.l) : first.r.icon, { size: 30 })}</span><div>${codeOf(first) ? `<small>${esc(codeOf(first))}</small>` : ''}<h3>${esc(titleOf(first))}</h3><p>${esc(whyOf(first))}</p></div></div>
+          <div class="sh-next-acts">${goBtn(first, 0, true)}${first.kind === 'rec' && can ? `<button class="sh-btn ghost sm" data-act="custom" data-i="0">Choose length &amp; focus</button>` : ''}</div></section>`;
+        if (items.length > 1) {
+          h += `<h4 class="sh-plan-h">Then</h4><ol class="sh-plan-list">${items.slice(1).map((it, k) => `<li><span class="sh-stepn sm">${k + 2}</span><span class="ic">${I(it.kind === 'lesson' ? iconOf(it.l) : it.r.icon, { size: 20 })}</span>
+            <span class="tx"><b>${codeOf(it) ? `<small>${esc(codeOf(it))}</small> ` : ''}${esc(titleOf(it))}</b>${tagOf(it)}<span class="why">${esc(whyOf(it))}</span></span>${goBtn(it, k + 1, false)}</li>`).join('')}</ol>`;
+        }
+      } else {
+        h += `<div class="sh-plan-empty">${I('sparkles', { size: 34 })}<b>${done.length ? 'You\'re all caught up here' : 'Your plan builds as you revise'}</b><p>${done.length ? 'Nothing needs fixing right now. Pick a new topic from the full course, or make a lesson on anything you like.' : `Answer some questions or read the guide in ${esc(u ? u.short : 'this unit')} and we'll suggest what to do next. Until then, start from the beginning of the course.`}</p>
+          <div class="sh-row-c"><button class="sh-btn pri" data-act="course">Open the full course</button>${can ? '<button class="sh-btn ghost" data-new>Make a lesson</button>' : ''}</div></div>`;
+      }
+      if (done.length) {
+        const row = (l) => `<li><span class="ic done">${I(iconOf(l), { size: 18 })}</span><span class="tx"><b>${esc(l.title)}</b><span class="why">${stars(l.score, l.max_score, 13)} ${l.score}/${l.max_score} · ${esc(fmtDay(l.created_at))}${l.kind === 'assigned' ? ' · from your teacher' : ''}</span></span><button class="sh-btn ghost sm" data-act="open" data-id="${esc(l.id)}">Practise again</button></li>`;
+        h += `<h4 class="sh-plan-h">Completed in ${esc(u ? u.short : 'this unit')} <em>${done.length}</em></h4><ul class="sh-plan-list done">${done.slice(0, 4).map(row).join('')}</ul>`;
+        if (done.length > 4) h += `<details class="sh-more"><summary>Show ${done.length - 4} more</summary><ul class="sh-plan-list done">${done.slice(4).map(row).join('')}</ul></details>`;
+      }
+      if (items.length) h += `<div class="sh-legend"><span class="sh-tag fix">Fix</span> a topic you're finding hard <span class="sh-tag lock">Lock in</span> something you've just read <span class="sh-tag new">New</span> the next topic in the course <span class="sh-tag review">Review</span> worth revisiting</div>`;
+      if (can && items.length) h += `<div class="sh-row-c"><button class="sh-btn ghost sm" data-new>${I('plus', { size: 16 })} Make a lesson on something else</button></div>`;
+      body.innerHTML = h + '</div>';
+      $$('[data-act="open"]', body).forEach(b => b.onclick = () => openLesson(b.dataset.id));
+      $$('[data-act="rec"]', body).forEach(b => b.onclick = () => { const r = items[Number(b.dataset.i)].r; createLesson({ unit, topic: r.topic, reason: r.why, length: store.get('sh_len') || 'standard', focus: store.get('sh_focus') || '' }); });
+      $$('[data-act="custom"]', body).forEach(b => b.onclick = () => { const r = items[Number(b.dataset.i)].r; openMaker({ unit, topic: r.topic, reason: r.why }); });
+      $$('[data-act="lock"]', body).forEach(b => b.onclick = () => lockedScreen());
+      $$('[data-act="course"]', body).forEach(b => b.onclick = () => { S.pathMode = 'course'; store.set('sh_path_mode', 'course'); paintPath(); });
+      $$('[data-new]', body).forEach(b => b.onclick = () => openMaker({ unit }));
+      return;
     }
-    body.innerHTML = `<div class="sh-route">${html}</div>`;
+    body.innerHTML = `<p class="sh-plan-intro">${I('clipboard', { size: 18 })}<span>Every topic in the course, in order. <b>Tap a topic</b> to start a lesson on it. A tick means you've done it; <b>!</b> means you've been finding it hard.</span></p><div class="sh-route">${html}</div>`;
     $$('[data-rn]', body).forEach(b => b.onclick = (e) => { e.stopPropagation(); routePop(b, nodes[b.dataset.rn], unit); });
     $$('[data-new]', body).forEach(b => b.onclick = () => openMaker({ unit }));
   }

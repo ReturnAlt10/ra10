@@ -717,3 +717,49 @@ body.sh-page .sh-rail .sh-today h2 { font-size: clamp(1.15rem, 1rem + .5vw, 1.35
 .sh-setrow b { white-space: normal; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
 .sh-setrow small { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .sh-rail, .sh-rail > * { min-width: 0; }
+.sh-rsec .ai.wide { width: auto; min-width: 34px; padding: 0 8px; font-size: .8rem; }
+
+/* ── My path: a step-by-step plan ── */
+.sh-plan-intro { display: flex; gap: 10px; align-items: flex-start; margin: 10px 0 14px; padding: 10px 12px; border-radius: 14px; background: var(--soft); color: var(--ink-2); font-size: .86rem; line-height: 1.5; }
+.sh-plan-intro .shi { color: var(--pc); flex: none; margin-top: 2px; }
+.sh-plan-intro b { color: var(--ink); }
+.sh-next { padding: 18px; border-radius: 20px; border: 2px solid color-mix(in srgb, var(--pc) 45%, var(--line)); background: linear-gradient(160deg, color-mix(in srgb, var(--pc) 11%, var(--card)), var(--card)); box-shadow: 0 14px 30px -24px color-mix(in srgb, var(--pc) 80%, transparent); }
+.sh-next.building { border-style: dashed; margin-bottom: 12px; }
+.sh-next-top { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
+.sh-stepn { flex: none; width: 30px; height: 30px; border-radius: 10px; display: grid; place-items: center; background: var(--pc); color: #fff; font-weight: 800; font-size: .9rem; --ifo: .25; }
+.sh-stepn.sm { width: 24px; height: 24px; border-radius: 8px; font-size: .76rem; background: color-mix(in srgb, var(--pc) 16%, var(--card)); color: var(--pc); }
+.sh-eyebrow2 { font-size: .74rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--pc); }
+.sh-next-main { display: flex; gap: 14px; align-items: flex-start; }
+.sh-next-main .ic { flex: none; width: 56px; height: 56px; border-radius: 18px; display: grid; place-items: center; color: #fff; background: var(--pc); --ifo: .28; }
+.sh-next-main small { font-size: .74rem; font-weight: 800; color: var(--pc); }
+body.sh-page .sh-next-main h3 { margin: 2px 0 4px; font-size: 1.15rem; line-height: 1.3; }
+.sh-next-main p { margin: 0; color: var(--ink-2); font-size: .9rem; line-height: 1.5; }
+.sh-next-acts { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 16px; }
+.sh-tag { display: inline-flex; align-items: center; padding: 2px 9px; border-radius: 99px; font-size: .7rem; font-weight: 800; color: #fff; background: var(--ink-2); white-space: nowrap; vertical-align: 1px; }
+.sh-tag.fix { background: var(--bad); } .sh-tag.lock { background: #0e9f9e; } .sh-tag.new { background: var(--acc); } .sh-tag.review { background: #c98410; } .sh-tag.cont { background: var(--pc); }
+body.sh-page .sh-plan-h { display: flex; align-items: center; gap: 8px; margin: 20px 0 10px; font-size: .8rem; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; color: var(--ink-3); }
+.sh-plan-h em { font-style: normal; padding: 1px 8px; border-radius: 99px; background: var(--soft); color: var(--ink-2); letter-spacing: 0; }
+.sh-plan-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.sh-plan-list li { display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 16px; background: var(--card); border: 1px solid var(--line); min-width: 0; }
+.sh-plan-list .ic { flex: none; width: 40px; height: 40px; border-radius: 13px; display: grid; place-items: center; color: var(--pc); background: color-mix(in srgb, var(--pc) 12%, var(--card)); }
+.sh-plan-list .ic.done { color: #fff; background: var(--pc); --ifo: .28; }
+.sh-plan-list .tx { flex: 1; min-width: 0; display: grid; gap: 3px; }
+.sh-plan-list .tx b { font-size: .9rem; line-height: 1.3; }
+.sh-plan-list .tx b small { color: var(--pc); font-weight: 800; }
+.sh-plan-list .tx .sh-tag { justify-self: start; }
+.sh-plan-list .why { font-size: .78rem; color: var(--ink-2); line-height: 1.4; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.sh-plan-list .sh-btn { flex: none; }
+.sh-plan-list.done li { background: var(--soft); border-color: transparent; }
+.sh-more summary { cursor: pointer; margin-top: 8px; font-weight: 700; font-size: .84rem; color: var(--pc); }
+.sh-more .sh-plan-list { margin-top: 8px; }
+.sh-legend { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; margin-top: 16px; font-size: .76rem; color: var(--ink-2); }
+.sh-row-c { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 14px; }
+.sh-plan-empty { display: grid; justify-items: center; gap: 6px; text-align: center; padding: 24px 16px; border-radius: 20px; border: 2px dashed var(--line); color: var(--ink-2); }
+.sh-plan-empty .shi { color: var(--pc); }
+.sh-plan-empty b { color: var(--ink); font-size: 1.02rem; }
+.sh-plan-empty p { margin: 0; max-width: 440px; font-size: .88rem; line-height: 1.5; }
+@media (max-width: 520px) {
+  .sh-plan-list li { flex-wrap: wrap; }
+  .sh-plan-list li .sh-btn { margin-left: 52px; }
+  .sh-next-main .ic { width: 46px; height: 46px; }
+}
