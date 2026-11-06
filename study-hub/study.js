@@ -19,7 +19,7 @@
   const unitOf = (p) => (window.RA10Units ? RA10Units.byPath(p) : null);
   const unitName = (u) => (u ? u.name.replace(/^Unit \d+:\s*/, '').replace(/^Level 2 IT Unit \d+:\s*/, '') : '');
   const store = { get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} } };
-  const S = { sb: null, me: null, profile: null, status: null, plan: null, cat: {}, building: false, buildErr: null, pathAll: false };
+  const S = { sb: null, me: null, profile: null, status: null, plan: null, cat: {}, building: false, buildErr: null, pathUnit: null, pathMode: null };
 
   /* ───────────── helpers ───────────── */
   function toast(msg, ms) { const t = $('#sh-toast'); t.textContent = msg; t.classList.add('on'); clearTimeout(t._t); t._t = setTimeout(() => t.classList.remove('on'), ms || 3200); }
@@ -378,65 +378,189 @@
     $$('button[data-topic]', box).forEach(b => b.onclick = () => openMaker({ unit: b.dataset.unit, topic: b.dataset.topic, reason: b.classList.contains('weak') ? `You asked for help with ${b.dataset.topic}, one of the topics you've been finding tricky.` : `You read about ${b.dataset.topic} recently.` }));
   }
 
-  /* ───────────── the path (Duolingo-style) ───────────── */
-  const OFFSETS = [0, 52, 84, 52, 0, -52, -84, -52];
+  /* ───────────── learning paths: one page per subject, two paths each ─────────────
+     Full course — every topic / subtopic in the unit's specification, ticked off as you go.
+     My path     — your finished lessons, then what to do next from your own progress. */
+  const CODE_RE = /^\s*([A-Z]\d+(?:\.\d+)*)\b/i;
+  const shortName = (n) => { const s = String(n || '').split(/:\s|;\s| — | - /)[0].trim(); return s.length > 60 ? s.slice(0, 57) + '…' : s; };
+  function pathUnits() {
+    const st = S.status || {}, seen = [], add = (p) => { if (p && unitOf(p) && !seen.includes(unitOf(p).path)) seen.push(unitOf(p).path); };
+    (st.lessons || []).forEach(l => add(l.unit));
+    ((S.plan && S.plan.units) || []).forEach(u => add(u.path));
+    add(store.get('sh_unit')); add(S.plan && S.plan.focus && S.plan.focus.unit);
+    (store.get('sh_path_units') || '').split('|').forEach(add);
+    if (!seen.length && UNITS()[0]) add(UNITS()[0].path);
+    return seen;
+  }
+  // the unit's specification as aims → topics → subtopics (codes like A1, A1.1)
+  function courseTree(cat) {
+    const aims = [];
+    Object.keys((cat && cat.spec) || {}).sort().forEach(a => {
+      const A = cat.spec[a] || {}, topics = [];
+      (A.topics || []).forEach(t => {
+        const code = String(t.code || ''), label = ((code ? code + ' ' : '') + (t.name || '')).trim();
+        const node = { code, name: t.name || label, short: shortName(t.name || label), label, aim: a, subs: [] };
+        const parent = code.indexOf('.') > 0 ? topics.find(x => x.code === code.slice(0, code.lastIndexOf('.'))) : null;
+        if (parent) parent.subs.push(node); else topics.push(node);
+      });
+      if (topics.length) aims.push({ aim: a, title: A.title || ('Learning aim ' + a), topics });
+    });
+    if (!aims.length && cat) {
+      const seen = new Set(), topics = [];
+      (cat.quiz || []).concat(cat.questions || []).forEach(q => { const k = norm(q.topic); if (q.topic && !seen.has(k) && seen.size < 40) { seen.add(k); topics.push({ code: '', name: q.topic, short: shortName(q.topic), label: q.topic, aim: '', subs: [] }); } });
+      if (topics.length) aims.push({ aim: '', title: 'Topics', topics });
+    }
+    return aims;
+  }
+  // which lessons / activity belong to a topic node
+  function nodeMatch(node, text) {
+    const t = String(text || '');
+    const c = (t.match(CODE_RE) || [])[1];
+    if (node.code && c) return c.toUpperCase() === node.code.toUpperCase();
+    const a = norm(node.short), b = norm(t);
+    return !!a && a.length > 3 && (b.indexOf(a) >= 0 || (b.length > 3 && a.indexOf(b) >= 0));
+  }
+  function nodeState(unit, node) {
+    const ls = ((S.status && S.status.lessons) || []).filter(l => l.unit === unit && (nodeMatch(node, l.topic) || (!l.topic && nodeMatch(node, l.title))));
+    const done = ls.filter(l => l.status === 'done');
+    const best = done.reduce((b, l) => (!b || (l.score / (l.max_score || 1)) > (b.score / (b.max_score || 1)) ? l : b), null);
+    const open = ls.find(l => l.status !== 'done');
+    const weak = ((S.plan && S.plan.weak) || []).find(t => t.unit === unit && nodeMatch(node, t.topic));
+    const strong = ((S.plan && S.plan.strong) || []).find(t => t.unit === unit && nodeMatch(node, t.topic));
+    return { lessons: ls, done, best, open, weak, strong, state: done.length ? 'done' : open ? 'open' : 'todo' };
+  }
+
   function paintPath() {
     const box = $('#sh-pathcard'); if (!box) return;
-    const st = S.status || {};
-    const all = ((st.lessons || []).slice()).reverse(); // oldest first, newest at the bottom
-    const LIMIT = 14;
-    const hiddenCount = S.pathAll ? 0 : Math.max(0, all.length - LIMIT);
-    const list = all.slice(hiddenCount);
-    const daily = st.daily;
-    const current = (daily && daily.status !== 'done' && daily.id) || ((list.slice().reverse().find(l => l.status !== 'done')) || {}).id || null;
-    let html = '', lastUnit = null, n = 0, done = all.slice(0, hiddenCount).filter(l => l.status === 'done').length;
-    const node = (o) => {
-      const x = OFFSETS[n++ % OFFSETS.length];
-      return `<div class="sh-prow" style="--x:${x}px">${o.bubble ? `<div class="sh-bubble">${o.bubble}</div>` : ''}
-        <button class="sh-pnode ${o.state}" ${o.attrs || ''} aria-label="${esc(o.label)}">${o.ring ? `<span class="ring"></span>` : ''}${I(o.icon, { size: 34 })}</button>
-        ${o.stars != null ? `<div class="sh-pstars">${o.stars}</div>` : ''}<div class="sh-plabel">${esc(o.title)}</div></div>`;
-    };
-    const banner = (unitPath) => {
-      const u = unitOf(unitPath);
-      return `<div class="sh-uban" style="--uc:${esc((u && u.color) || '#5b4cf5')}"><span class="ub">${I(unitIcon(unitPath), { size: 26 })}</span><span><small>${esc(u ? u.qual : 'Lessons')}</small><b>${esc(u ? u.short + ' · ' + unitName(u) : 'Your lessons')}</b></span></div>`;
-    };
-    if (hiddenCount) html += `<button class="sh-btn ghost sm sh-earlier" id="sh-earlier">Show ${hiddenCount} earlier lesson${hiddenCount === 1 ? '' : 's'}</button>`;
-    list.forEach(l => {
-      if (l.unit !== lastUnit) { html += banner(l.unit); lastUnit = l.unit; n = 0; }
-      const isCur = l.id === current;
-      const state = l.status === 'done' ? 'done' : isCur ? 'cur' : l.status === 'in_progress' ? 'prog' : 'ready';
-      html += node({ state, icon: iconOf(l), title: l.title, label: l.title + (l.status === 'done' ? ', completed' : ''), attrs: `data-node="${esc(l.id)}"`, ring: state === 'cur' || state === 'prog',
-        bubble: isCur ? (l.status === 'in_progress' ? 'Continue' : 'Start') : '', stars: l.status === 'done' ? stars(l.score, l.max_score, 15) : null });
-      if (l.status === 'done' && ++done % 5 === 0) html += `<div class="sh-mile" style="--x:${-OFFSETS[(n + 2) % OFFSETS.length]}px">${I('trophy', { size: 54 })}<span>${done} lessons!</span></div>`;
-    });
-    if (S.building) html += node({ state: 'cur building', icon: 'brain', title: 'Building today\'s lesson…', label: 'Building today\'s lesson', bubble: 'Building', ring: true });
-    if (!list.length && !S.building) html += node({ state: 'cur', icon: 'sparkles', title: 'Your first lesson', label: 'Start your first lesson', attrs: 'data-first', bubble: 'Start', ring: true });
-    if (st.can_create) html += node({ state: 'add', icon: 'plus', title: 'New lesson', label: 'Make a new lesson', attrs: 'data-new' });
-    html += node({ state: 'locked', icon: st.premium ? 'clock' : 'crown', title: st.premium ? 'Tomorrow\'s lesson' : 'Daily lessons · Premium', label: st.premium ? 'Tomorrow\'s lesson unlocks tomorrow' : 'Daily lessons are a Premium feature', attrs: 'data-locked' });
-    box.innerHTML = `<div class="sh-path-head"><h2>${I('map', { size: 22 })} Your path</h2><span class="sh-muted sh-small">${st.total_done || 0} lesson${st.total_done === 1 ? '' : 's'} complete</span></div><div class="sh-path" id="sh-path">${html}</div>`;
-    const earlier = $('#sh-earlier', box); if (earlier) earlier.onclick = () => { S.pathAll = true; paintPath(); };
-    const byId = {}; (st.lessons || []).forEach(l => { byId[l.id] = l; });
-    $$('[data-node]', box).forEach(b => b.onclick = (e) => { e.stopPropagation(); nodePop(b, byId[b.dataset.node]); });
-    $$('[data-new]', box).forEach(b => b.onclick = () => openMaker());
-    $$('[data-first]', box).forEach(b => b.onclick = () => { const t = $('#sh-today'); if (t) t.scrollIntoView({ behavior: 'smooth', block: 'center' }); const go = $('#sh-today .sh-btn'); if (go) go.focus(); });
-    $$('[data-locked]', box).forEach(b => b.onclick = (e) => { e.stopPropagation(); if (!st.premium) return lockedScreen(); nodePop(b, null, 'Your next daily lesson is built for you tomorrow, from what you revise today.'); });
+    const units = pathUnits();
+    if (!S.pathUnit || !units.includes(S.pathUnit)) S.pathUnit = units.includes(store.get('sh_path_unit')) ? store.get('sh_path_unit') : units[0];
+    S.pathMode = S.pathMode || store.get('sh_path_mode') || 'course';
+    const u = unitOf(S.pathUnit);
+    const idx = units.indexOf(S.pathUnit);
+    const doneIn = (p) => ((S.status && S.status.lessons) || []).filter(l => l.unit === p && l.status === 'done').length;
+    box.style.setProperty('--pc', (u && u.color) || '#5b4cf5');
+    box.innerHTML = `<div class="sh-path-head"><h2>${I('map', { size: 22 })} Learning paths</h2>
+        <div class="sh-pmode" role="tablist" aria-label="Which path">${[['course', 'Full course', 'clipboard'], ['me', 'My path', 'compass']].map(([k, t, ic]) => `<button role="tab" data-pmode="${k}" aria-selected="${S.pathMode === k}" class="${S.pathMode === k ? 'on' : ''}">${I(ic, { size: 16 })} ${t}</button>`).join('')}</div></div>
+      <div class="sh-utabs-wrap"><button class="sh-uarrow" data-ustep="-1" aria-label="Previous subject" ${idx <= 0 ? 'disabled' : ''}>‹</button>
+        <div class="sh-utabs" role="tablist" aria-label="Subjects">${units.map(p => { const x = unitOf(p); return `<button role="tab" class="sh-utab${p === S.pathUnit ? ' on' : ''}" data-punit="${esc(p)}" style="--uc:${esc(x.color || '#5b4cf5')}" aria-selected="${p === S.pathUnit}"><span class="ub">${I(unitIcon(p), { size: 16 })}</span><span>${esc(x.short)}</span>${doneIn(p) ? `<small>${doneIn(p)}</small>` : ''}</button>`; }).join('')}
+          <button class="sh-utab add" data-uadd>${I('plus', { size: 16 })} Subject</button></div>
+        <button class="sh-uarrow" data-ustep="1" aria-label="Next subject" ${idx >= units.length - 1 ? 'disabled' : ''}>›</button></div>
+      <div class="sh-ubanner"><span class="ub">${I(unitIcon(S.pathUnit), { size: 26 })}</span><span><small>${esc(u ? u.qual : '')}</small><b>${esc(u ? unitName(u) : '')}</b></span><span class="sh-uprog" id="sh-uprog"></span></div>
+      <div id="sh-pbody" class="sh-pbody"><div class="sh-loading"><span class="sh-spin"></span> Loading ${esc(u ? u.short : 'the course')}…</div></div>`;
+    $$('[data-pmode]', box).forEach(b => b.onclick = () => { S.pathMode = b.dataset.pmode; store.set('sh_path_mode', S.pathMode); paintPath(); });
+    $$('[data-punit]', box).forEach(b => b.onclick = () => { S.pathUnit = b.dataset.punit; store.set('sh_path_unit', S.pathUnit); paintPath(); });
+    $$('[data-ustep]', box).forEach(b => b.onclick = () => { const n = units[idx + Number(b.dataset.ustep)]; if (n) { S.pathUnit = n; store.set('sh_path_unit', n); paintPath(); } });
+    const tabs = $('.sh-utabs', box), on = $('.sh-utab.on', box); if (tabs && on) tabs.scrollLeft = on.offsetLeft - tabs.clientWidth / 2 + on.clientWidth / 2;
+    $('[data-uadd]', box).onclick = () => addSubject(units);
+    renderPathBody(S.pathUnit, S.pathMode);
   }
-  function nodePop(btn, l, note) {
+  function addSubject(units) {
     $$('.sh-pop').forEach(p => p.remove());
-    $$('.sh-prow.popped').forEach(r => r.classList.toggle('popped', false));
-    const row = btn.closest('.sh-prow');
-    row.classList.add('popped');
+    const pop = document.createElement('div');
+    pop.className = 'sh-pop sh-addsub';
+    const rest = UNITS().filter(x => !units.includes(x.path));
+    pop.innerHTML = `<b>Add a subject</b>${rest.length ? rest.map(x => `<button class="sh-addrow" data-add="${esc(x.path)}" style="--uc:${esc(x.color)}"><span class="ub">${I(unitIcon(x.path), { size: 16 })}</span><span>${esc(x.short)} <small>${esc(unitName(x))}</small></span></button>`).join('') : '<p>You have every subject already.</p>'}`;
+    $('.sh-utabs-wrap').appendChild(pop);
+    $$('[data-add]', pop).forEach(b => b.onclick = () => { const list = (store.get('sh_path_units') || '').split('|').filter(Boolean); list.push(b.dataset.add); store.set('sh_path_units', list.join('|')); S.pathUnit = b.dataset.add; store.set('sh_path_unit', S.pathUnit); paintPath(); });
+    setTimeout(() => document.addEventListener('click', function off(e) { if (!pop.contains(e.target)) { pop.remove(); document.removeEventListener('click', off); } }), 0);
+  }
+
+  async function renderPathBody(unit, mode) {
+    const body = $('#sh-pbody'); if (!body) return;
+    let cat = null;
+    try { cat = await loadCatalog(unit); } catch (e) {}
+    if (unit !== S.pathUnit || mode !== S.pathMode || !document.body.contains(body)) return;
+    const tree = courseTree(cat);
+    const all = []; tree.forEach(a => a.topics.forEach(t => { if (t.subs.length) t.subs.forEach(s => all.push(s)); else all.push(t); }));
+    const states = new Map(all.map(n => [n, nodeState(unit, n)]));
+    const doneN = all.filter(n => states.get(n).state === 'done').length;
+    const prog = $('#sh-uprog');
+    if (prog) prog.innerHTML = all.length ? `<span class="ring" style="--p:${Math.round(doneN / all.length * 100)}"><b>${Math.round(doneN / all.length * 100)}%</b></span><small>${doneN}/${all.length} topics</small>` : '';
+    const st = S.status || {};
+    let n = 0;
+    const nodeHtml = (o) => `<div class="sh-rrow${n++ % 2 ? ' left' : ''}">
+        <button class="sh-rnode ${o.cls}" ${o.attrs || ''} aria-label="${esc(o.label)}">${o.cur ? '<span class="pulse"></span>' : ''}${I(o.icon, { size: 28 })}${o.badge ? `<i class="bdg ${o.badgeCls || ''}">${o.badge}</i>` : ''}</button>
+        <div class="sh-rlabel">${o.code ? `<small>${esc(o.code)}</small>` : ''}<b>${esc(o.title)}</b>${o.sub ? `<span>${o.sub}</span>` : ''}</div></div>`;
+    const nodes = {};
+    let html = '';
+    if (mode === 'course') {
+      if (!tree.length) { body.innerHTML = `<div class="sh-empty sm"><b>No topic list for this unit yet</b>Use “My path” or make a lesson on anything you like.</div>`; return; }
+      const firstTodo = all.find(x => states.get(x).state !== 'done');
+      tree.forEach(a => {
+        const inAim = []; a.topics.forEach(t => t.subs.length ? inAim.push(...t.subs) : inAim.push(t));
+        const d = inAim.filter(x => states.get(x).state === 'done').length;
+        html += `<div class="sh-rsec"><span class="ai">${esc(a.aim || '•')}</span><span><small>Learning aim ${esc(a.aim)}</small><b>${esc(a.title)}</b></span><em>${d}/${inAim.length}</em></div>`;
+        n = 0;
+        a.topics.forEach(t => {
+          const list = t.subs.length ? t.subs : [t];
+          if (t.subs.length) html += `<div class="sh-rtopic"><small>${esc(t.code)}</small> ${esc(t.short)}</div>`;
+          list.forEach(x => {
+            const s = states.get(x), key = 'n' + Object.keys(nodes).length; nodes[key] = { node: x, s };
+            const cur = x === firstTodo;
+            html += nodeHtml({ cls: s.state + (cur ? ' cur' : '') + (s.weak ? ' weak' : ''), cur, icon: SHIcons.forLesson({ topic: x.name, unit }), code: x.code, title: x.short, label: x.label,
+              attrs: `data-rn="${key}"`, badge: s.state === 'done' ? I('check', { size: 14, stroke: 2.6 }) : s.weak ? '!' : s.strong ? '★' : '', badgeCls: s.state === 'done' ? 'ok' : s.weak ? 'bad' : 'good',
+              sub: s.state === 'done' ? stars(s.best.score, s.best.max_score, 13) : s.open ? 'In progress' : cur ? 'Up next' : '' });
+          });
+        });
+      });
+    } else {
+      const lessons = ((st.lessons || []).filter(l => l.unit === unit)).slice().reverse();
+      const done = lessons.filter(l => l.status === 'done'), open = lessons.filter(l => l.status !== 'done');
+      if (done.length) {
+        html += `<div class="sh-rsec slim"><span class="ai">${I('check', { size: 16 })}</span><span><b>Where you've been</b></span><em>${done.length}</em></div>`;
+        done.forEach(l => { const key = 'l' + l.id; nodes[key] = { lesson: l }; html += nodeHtml({ cls: 'done', icon: iconOf(l), title: l.title, label: l.title, attrs: `data-rn="${key}"`, sub: stars(l.score, l.max_score, 13) + (l.kind === 'assigned' ? ' · Teacher' : '') }); });
+      }
+      // what to do next, from this learner's own progress
+      const recs = [], used = new Set();
+      const push = (r) => { const k = norm(r.topic); if (!k || used.has(k)) return; used.add(k); recs.push(r); };
+      open.forEach(l => { used.add(norm(l.topic)); });
+      ((S.plan && S.plan.weak) || []).filter(t => t.unit === unit).forEach(t => push({ topic: t.topic, tag: 'Fix', why: `You're scoring ${t.pct}% on this — a lesson to turn it around.`, icon: 'target', cls: 'fix' }));
+      ((S.plan && S.plan.reading) || []).filter(t => t.unit === unit).forEach(t => push({ topic: t.topic, tag: 'Lock in', why: 'You read about this recently — practise it before it fades.', icon: 'book', cls: 'lock' }));
+      all.filter(x => states.get(x).state === 'todo' && !states.get(x).weak).slice(0, 3).forEach(x => push({ topic: x.label, title: x.short, code: x.code, tag: 'New', why: 'The next topic in the course that you haven\'t covered yet.', icon: SHIcons.forLesson({ topic: x.name, unit }), cls: 'new' }));
+      done.filter(l => Date.now() - new Date(l.created_at) > 7 * 864e5 && starCount(l.score, l.max_score) < 3).slice(0, 2).forEach(l => push({ topic: l.topic || l.title, title: l.title, tag: 'Review', why: 'Spaced review — coming back after a week makes it stick.', icon: 'retry', cls: 'review' }));
+      html += `<div class="sh-rsec slim next"><span class="ai">${I('compass', { size: 16 })}</span><span><b>Up next for you</b><small>Built from your quizzes, answers and reading in this unit</small></span></div>`;
+      n = 0;
+      if (S.building && st.daily == null) html += nodeHtml({ cls: 'open cur', cur: true, icon: 'brain', title: 'Building today\'s lesson…', label: 'Building today\'s lesson' });
+      open.forEach(l => { const key = 'l' + l.id; nodes[key] = { lesson: l }; html += nodeHtml({ cls: 'open cur', cur: true, icon: iconOf(l), title: l.title, label: l.title, attrs: `data-rn="${key}"`, sub: l.status === 'in_progress' ? 'Continue' : 'Ready to start' }); });
+      recs.slice(0, 6).forEach((r, i) => { const key = 'r' + i; nodes[key] = { rec: r }; html += nodeHtml({ cls: 'todo rec ' + r.cls, icon: r.icon, code: r.code || ((String(r.topic).match(CODE_RE) || [])[1] || ''), title: r.title || shortName(String(r.topic).replace(CODE_RE, '')), label: r.topic, attrs: `data-rn="${key}"`, badge: r.tag, badgeCls: 'tag ' + r.cls }); });
+      if (!recs.length && !open.length) html += `<div class="sh-empty sm"><b>Nothing to suggest yet</b>Answer some questions in ${esc((unitOf(unit) || {}).short || 'this unit')} and your path will fill up — or start the full course.</div>`;
+      if (st.can_create) html += nodeHtml({ cls: 'add', icon: 'plus', title: 'Make your own', label: 'Make a lesson', attrs: 'data-new' });
+    }
+    body.innerHTML = `<div class="sh-route">${html}</div>`;
+    $$('[data-rn]', body).forEach(b => b.onclick = (e) => { e.stopPropagation(); routePop(b, nodes[b.dataset.rn], unit); });
+    $$('[data-new]', body).forEach(b => b.onclick = () => openMaker({ unit }));
+  }
+
+  function routePop(btn, info, unit) {
+    $$('.sh-pop').forEach(p => p.remove());
+    $$('.sh-rrow.popped').forEach(r => r.classList.toggle('popped', false));
+    if (!info) return;
+    const row = btn.closest('.sh-rrow'); row.classList.add('popped');
+    const st = S.status || {};
     const pop = document.createElement('div');
     pop.className = 'sh-pop';
-    if (!l) pop.innerHTML = `<p>${esc(note || '')}</p>`;
-    else {
-      const u = unitOf(l.unit), doneL = l.status === 'done';
-      pop.innerHTML = `<b>${esc(l.title)}</b><small>${esc([l.kind === 'daily' ? 'Daily lesson' : l.kind === 'assigned' ? 'Set by your teacher' : 'Your lesson', u && u.short, fmtDay(l.created_at)].filter(Boolean).join(' · '))}</small>
-        ${doneL ? `<div class="sh-pop-score">${stars(l.score, l.max_score, 18)}<span>${l.score}/${l.max_score} correct${l.xp ? ' · +' + l.xp + ' XP' : ''}</span></div>` : ''}
-        <button class="sh-btn ${doneL ? 'gold' : 'pri'} wide">${doneL ? 'Practise again' : l.status === 'in_progress' ? 'Continue' : 'Start lesson'}</button>`;
-      $('button', pop).onclick = () => openLesson(l.id);
+    const lessonBtn = (l) => `<button class="sh-btn ${l.status === 'done' ? 'gold' : 'pri'} wide" data-open="${esc(l.id)}">${l.status === 'done' ? 'Practise again' : l.status === 'in_progress' ? 'Continue' : 'Start lesson'}</button>`;
+    const newBtns = (topic, reason) => st.can_create
+      ? `<button class="sh-btn pri wide" data-make-topic="${esc(topic)}" data-reason="${esc(reason || '')}">${I('sparkles', { size: 16 })} Start a lesson on this</button><button class="sh-btn ghost sm wide" data-custom="${esc(topic)}">Customise length &amp; focus</button>`
+      : `<button class="sh-btn gold wide" data-lock>${I('lock', { size: 16 })} Premium</button>`;
+    if (info.lesson) {
+      const l = info.lesson;
+      pop.innerHTML = `<b>${esc(l.title)}</b><small>${esc([l.kind === 'daily' ? 'Daily lesson' : l.kind === 'assigned' ? 'Set by your teacher' : 'Your lesson', fmtDay(l.created_at)].join(' · '))}</small>
+        ${l.status === 'done' ? `<div class="sh-pop-score">${stars(l.score, l.max_score, 18)}<span>${l.score}/${l.max_score} correct${l.xp ? ' · +' + l.xp + ' XP' : ''}</span></div>` : ''}${lessonBtn(l)}`;
+    } else if (info.rec) {
+      const r = info.rec;
+      pop.innerHTML = `<span class="sh-badge ${r.cls === 'fix' ? 'bad' : 'acc'}">${esc(r.tag)}</span><b>${esc(String(r.topic))}</b><p>${esc(r.why)}</p>${newBtns(r.topic, r.why)}`;
+    } else {
+      const x = info.node, s = info.s;
+      pop.innerHTML = `${x.code ? `<span class="sh-badge acc">${esc(x.code)}</span>` : ''}<b>${esc(x.short)}</b>${x.name !== x.short ? `<p>${esc(x.name)}</p>` : ''}
+        <small>${s.done.length ? `Completed ${s.done.length}× · best ${s.best.score}/${s.best.max_score}` : s.open ? 'Lesson in progress' : 'Not started yet'}${s.weak ? ` · you score ${s.weak.pct}% on this in quizzes` : s.strong ? ` · you score ${s.strong.pct}% — strong` : ''}</small>
+        ${s.open ? lessonBtn(s.open) : ''}${s.best && !s.open ? lessonBtn(s.best) : ''}${s.open ? '' : newBtns(x.label, s.weak ? `You're scoring ${s.weak.pct}% on ${x.short}.` : `Next up in the course: ${x.short}.`)}`;
     }
     row.appendChild(pop);
+    $$('[data-open]', pop).forEach(b => b.onclick = () => openLesson(b.dataset.open));
+    $$('[data-make-topic]', pop).forEach(b => b.onclick = () => { pop.remove(); createLesson({ unit, topic: b.dataset.makeTopic, reason: b.dataset.reason, length: store.get('sh_len') || 'standard', focus: store.get('sh_focus') || '' }); });
+    $$('[data-custom]', pop).forEach(b => b.onclick = () => { pop.remove(); openMaker({ unit, topic: b.dataset.custom }); });
+    $$('[data-lock]', pop).forEach(b => b.onclick = () => lockedScreen());
     setTimeout(() => document.addEventListener('click', function off(e) { if (!pop.contains(e.target)) { pop.remove(); row.classList.toggle('popped', false); document.removeEventListener('click', off); } }), 0);
   }
 
