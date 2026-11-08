@@ -96,7 +96,21 @@ async function profile(ctx: Ctx) {
 }
 
 /* ───────────────────────────── lesson writing ───────────────────────────── */
-const STEP_TYPES = ['learn', 'mcq', 'truefalse', 'fill', 'match', 'order', 'exam', 'recap'];
+const STEP_TYPES = ['learn', 'mcq', 'truefalse', 'fill', 'match', 'order', 'exam', 'code', 'recap'];
+const CODE_LANGS = ['python', 'javascript', 'sql'];
+
+// Which programming language a lesson should practise (coding units, or a learner who asks for a language).
+function codingLang(unit: string, unitName: string, request: string, topic: string | null): string | null {
+  const t = (request + ' ' + (topic || '')).toLowerCase();
+  if (/\bsql\b|database quer|select statement/.test(t)) return 'sql';
+  if (/javascript|\bjs\b/.test(t)) return 'javascript';
+  if (/python/.test(t)) return 'python';
+  const u = (unit + ' ' + unitName).toLowerCase();
+  if (/computing-aaq\/unit-(1|4)\b|programming fundamentals|practical programming/.test(u)) return 'python';
+  if (/it-aaq\/unit-4\b|relational database/.test(u)) return 'sql';
+  if (/it-aaq\/unit-3\b|website development/.test(u)) return 'javascript';
+  return null;
+}
 
 function sanitiseStep(s: any, keepOrder = false): any | null {
   if (!s || typeof s !== 'object') return null;
@@ -143,6 +157,22 @@ function sanitiseStep(s: any, keepOrder = false): any | null {
     const points = (Array.isArray(s.points) ? s.points : []).map((p: unknown) => str(p, 220)).filter(Boolean).slice(0, 12);
     if (!str(s.q) || !points.length) return null;
     return { type: t, q: str(s.q, 900), context: str(s.context, 900) || undefined, marks, points, model: str(s.model, 1500), source: s.source === 'exam' ? 'exam' : 'practice', verb: str(s.verb, 20) || undefined };
+  }
+  if (t === 'code') {
+    // Checked by RUNNING it in the learner's browser: the model solution must pass every test before the step is shown,
+    // and expected outputs are produced from the solution itself, so no hand-written answer key can be wrong.
+    const lang = CODE_LANGS.includes(String(s.lang || '').toLowerCase()) ? String(s.lang).toLowerCase() : 'python';
+    const code = (x: unknown, n: number) => String(x == null ? '' : x).replace(/\r/g, '').slice(0, n);
+    const brief = str(s.brief, 700), solution = code(s.solution, 3000);
+    if (!brief || !solution.trim()) return null;
+    const tests = (Array.isArray(s.tests) ? s.tests : []).slice(0, 5).map((x: any) => ({
+      stdin: Array.isArray(x?.stdin) ? x.stdin.map((v: unknown) => String(v).slice(0, 200)).slice(0, 12) : [],
+      check: code(x?.check, 1500) || undefined,
+    }));
+    if (lang !== 'sql' && !tests.length) return null;
+    return { type: t, lang, title: str(s.title, 90) || 'Write the code', brief, starter: code(s.starter, 2000), solution,
+      setup: lang === 'sql' ? code(s.setup, 4000) : undefined, tests: lang === 'sql' ? [] : tests,
+      hints: (Array.isArray(s.hints) ? s.hints : []).map((h: unknown) => str(h, 240)).filter(Boolean).slice(0, 3), explain: str(s.explain, 400) };
   }
   if (t === 'recap') {
     const points = (Array.isArray(s.points) ? s.points : []).map((p: unknown) => str(p, 200)).filter(Boolean).slice(0, 5);
@@ -194,7 +224,13 @@ const FOCUS: Record<string, string> = {
   exam: 'Focus on EXAM TECHNIQUE: include learn cards on what the command words require and how marks are awarded, and include 2 exam steps instead of 1.',
 };
 
-async function writeLesson(input: { unitName: string; qual: string; topic: string | null; request: string; focusReason: string; prof: any; grounding: any; length?: string; focus?: string }) {
+const CODE_PROMPT: Record<string, string> = {
+  python: `This is a PROGRAMMING lesson in Python 3 (the language in the specification). Include exactly 2 "code" steps where the learner writes a short program (5–15 lines), placed after the learn cards that teach what they need. Use only the standard library. Programs read input with input() and write with print(). Each code step has 2–3 tests: each test gives the "stdin" lines to feed input() (or [] if none) and, for function tasks, an optional "check" of Python assert statements run after the program (eg "assert total([1,2]) == 3"). Do NOT write expected outputs — they are produced by running your "solution", which must be correct, complete and pass every check.`,
+  javascript: `This is a PROGRAMMING lesson in JavaScript for web development. Include exactly 2 "code" steps where the learner writes a short function (5–15 lines). Each test has a "check" of JavaScript statements using assert(condition, message), eg "assert(add(2, 3) === 5, 'add(2,3) should be 5')". Do not use the DOM or network. Your "solution" must pass every check.`,
+  sql: `This is a DATABASE lesson in SQL (SQLite dialect). Include exactly 2 "code" steps where the learner writes one SQL query. Each code step has "setup" (CREATE TABLE and INSERT statements for a small table of 5–8 realistic rows), a "starter" (eg "SELECT"), and a correct "solution" query. The learner's result is compared with the result of your solution, so the solution must be exactly right; include ORDER BY when the order matters.`,
+};
+
+async function writeLesson(input: { unitName: string; qual: string; topic: string | null; request: string; focusReason: string; prof: any; grounding: any; length?: string; focus?: string; coding?: string | null }) {
   const g = input.grounding || {};
   const bankQuiz = (Array.isArray(g.quiz) ? g.quiz : []).slice(0, 8);
   const realExam = (Array.isArray(g.exam) ? g.exam : []).map(trimReal).filter((q: any) => q && clean(q.question)).slice(0, 3);
@@ -222,7 +258,7 @@ If one of these real exam questions fits the topic, the exam step MUST be that q
 
 Write a ${len.minutes}-minute lesson of ${len.steps} steps that TEACHES the topic and then checks understanding. Alternate short "learn" cards with practice. Use at least ${len.learn} learn cards, at least 3 mcq, 1 truefalse, 1 fill, 1 match, 1 order (only if the topic has a genuine fixed sequence — otherwise another mcq), exactly 1 exam step near the end, and finish with 1 recap.
 ${focus}
-Answer-key rules (these are checked — be precise):
+${input.coding ? CODE_PROMPT[input.coding] + '\n' : ''}Answer-key rules (these are checked — be precise):
 - mcq: 4 choices, exactly ONE correct; distractors are plausible but definitely wrong (no "all of the above", no two choices that could both be argued). "answer" is the 0-based index of the correct choice.
 - truefalse: a single clear claim that is unambiguously true or false per the specification — no trick wording.
 - fill: a sentence from the learn cards with 1 (max 2) "___" gaps where the missing word is a specific KEY TERM; "blanks" are the exact words; "options" contain the blanks plus 2–3 distractors that DO NOT make the sentence true (never synonyms or near-synonyms of the answer).
@@ -241,7 +277,8 @@ Return JSON exactly like:
   {"type":"fill","text":"A ___ is ...","blanks":["word"],"options":["word","other","other"],"explain":""},
   {"type":"match","prompt":"Match each term to its meaning","pairs":[["term","meaning"]]},
   {"type":"order","prompt":"","items":["first","second","third","fourth"],"explain":""},
-  {"type":"exam","q":"","context":"optional short scenario","marks":4,"verb":"Explain","points":["",""],"model":"","source":"practice","ref":""},
+  {"type":"exam","q":"","context":"optional short scenario","marks":4,"verb":"Explain","points":["",""],"model":"","source":"practice","ref":""},${input.coding ? `
+  {"type":"code","lang":"${input.coding}","title":"","brief":"what to write, with an example","starter":"","solution":"",${input.coding === 'sql' ? '"setup":"CREATE TABLE ...; INSERT INTO ...;",' : '"tests":[{"stdin":[],"check":""}],'}"hints":["",""],"explain":"what the solution shows"},` : ''}
   {"type":"recap","title":"Key takeaways","points":["",""]}
  ]}`;
   const r = await askJson(sys, user, 70000, { preferStrong: true, temperature: 0.25, maxTokens: 6000 });
@@ -289,7 +326,7 @@ Return JSON exactly like:
 
 // Second pass: an examiner checks each answer key and either confirms it, corrects it or removes the item.
 async function verifySteps(steps: any[], unitName: string, qual: string): Promise<{ steps: any[]; verified: boolean }> {
-  const items = steps.map((s, i) => ({ s, i })).filter(({ s }) => !s.bank && s.type !== 'recap' && !(s.type === 'exam' && s.source === 'exam')).map(({ s, i }) => {
+  const items = steps.map((s, i) => ({ s, i })).filter(({ s }) => !s.bank && s.type !== 'recap' && s.type !== 'code' && !(s.type === 'exam' && s.source === 'exam')).map(({ s, i }) => {
     const base: any = { i, type: s.type };
     if (s.type === 'learn') Object.assign(base, { title: s.title, body: s.body, points: s.points, example: s.example });
     if (s.type === 'mcq') Object.assign(base, { q: s.q, choices: s.choices, answer: s.answer });
@@ -370,7 +407,7 @@ async function create(ctx: Ctx, body: any) {
     const reason = clean(body.reason, 300) || (topic ? `You picked ${topic}.` : '');
     let L: any = null;
     if (hasProviders()) {
-      try { L = await writeLesson({ unitName, qual, topic, request, focusReason: reason, prof, grounding: body.grounding, length: clean(body.length, 12), focus: clean(body.focus, 12) }); }
+      try { L = await writeLesson({ unitName, qual, topic, request, focusReason: reason, prof, grounding: body.grounding, length: clean(body.length, 12), focus: clean(body.focus, 12), coding: codingLang(unit, unitName, request, topic) }); }
       catch (e) { console.warn('study-hub write failed', e); }
     }
     if (!L) L = bankLesson(unitName, topic, body.grounding);
@@ -516,7 +553,7 @@ async function draft(ctx: Ctx, body: any) {
   if (!hasProviders()) return { ok: false, error: 'AI is not configured.' };
   let L: any;
   try {
-    L = await writeLesson({ unitName, qual, topic, request, focusReason: `A lesson for the class ${cls?.name || ''}, set by their teacher.`, prof: null, grounding: body.grounding, length: clean(body.length, 12), focus: clean(body.focus, 12) });
+    L = await writeLesson({ unitName, qual, topic, request, focusReason: `A lesson for the class ${cls?.name || ''}, set by their teacher.`, prof: null, grounding: body.grounding, length: clean(body.length, 12), focus: clean(body.focus, 12), coding: codingLang(unit, unitName, request, topic) });
   } catch (e) { return { ok: false, error: 'The lesson writer is busy right now. Please try again in a minute. (' + (e instanceof Error ? e.message : String(e)) + ')' }; }
   const { data: saved, error } = await ctx.admin.from('study_lessons').insert({
     user_id: ctx.userId, kind: 'template', unit, topic: L.topic || topic, title: L.title, emoji: L.icon || null, minutes: L.minutes,
@@ -589,7 +626,7 @@ async function refine(ctx: Ctx, body: any) {
     `Unit: ${unitName}. Lesson title: "${L.title}".
 Current steps: ${JSON.stringify(steps.map((s: any) => ({ ...s, real: undefined })))}
 Teacher's instruction: "${instruction}"
-Apply the instruction and return the whole revised lesson. Keep step shapes exactly as given (types: learn, mcq, truefalse, fill, match, order, exam, recap). Keep any exam step with "source":"exam" word-for-word unless the teacher asks otherwise.
+Apply the instruction and return the whole revised lesson. Keep step shapes exactly as given (types: learn, mcq, truefalse, fill, match, order, exam, code, recap). Keep any exam step with "source":"exam" word-for-word unless the teacher asks otherwise.
 Return {"title":"","steps":[...]}`, 70000, { preferStrong: true, temperature: 0.25, maxTokens: 6000 });
   let out = (Array.isArray(r.json?.steps) ? r.json.steps : []).map((raw: any) => {
     const s = sanitiseStep(raw);
@@ -627,7 +664,7 @@ async function assigned(ctx: Ctx, body: any) {
     const topic = clean(it.topic, 100) || clean(body.topic, 100) || (weak ? weak.topic : null);
     const reason = weak && topic === weak.topic ? `Set by your teacher, built around ${weak.topic} — you've been scoring ${weak.pct}% on it.` : `Set by your teacher: ${a.title}. Built from your own progress.`;
     let L: any = null;
-    try { L = await writeLesson({ unitName, qual, topic, request: clean(it.request, 300), focusReason: reason, prof, grounding: body.grounding, length: clean(it.length, 12), focus: clean(it.focus, 12) }); }
+    try { L = await writeLesson({ unitName, qual, topic, request: clean(it.request, 300), focusReason: reason, prof, grounding: body.grounding, length: clean(it.length, 12), focus: clean(it.focus, 12), coding: codingLang(unit, unitName, clean(it.request, 300), topic) }); }
     catch (e) { console.warn('assigned write failed', e); }
     if (!L) L = bankLesson(unitName, topic, body.grounding);
     if (!L) return { ok: false, error: 'The lesson writer is busy right now. Please try again in a minute.' };

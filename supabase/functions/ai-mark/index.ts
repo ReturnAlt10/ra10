@@ -3,6 +3,8 @@ import { BUSINESS_SYSTEM, buildBusinessPrompt, businessPostProcess, isALevelBusi
 import { BUSINESS_2026_SYSTEM, buildBusiness2026Prompt, business2026PostProcess, is2026Business } from "./business_2026_examiner.ts";
 import { BUSINESS_BTEC_SYSTEM, buildBusinessBtecPrompt, businessBtecPostProcess, isBusinessBtec } from "./business_btec_examiner.ts";
 import { SPORT_U2_SYSTEM, buildSportUnit2Prompt, sportUnit2PostProcess, isSportUnit2Task } from "./sport_unit2_examiner.ts";
+import { PSYCHOLOGY_SYSTEM, buildPsychologyPrompt, psychologyPostProcess, isPsychology } from "./psychology_examiner.ts";
+import { EDEXCEL_BUSINESS_SYSTEM, buildEdexcelBusinessPrompt, edexcelBusinessPostProcess, isEdexcelBusiness } from "./edexcel_business_examiner.ts";
 import { requireTermsAccepted } from "../_shared/legal.ts";
 
 const ALLOWED_ORIGINS = [
@@ -387,14 +389,20 @@ export default Deno.serve(async (req: Request) => {
     }
 
     const marksMax = clamp(Math.round(safeNum(question?.marks, 1)), 1, 60);
-    const b2026 = is2026Business(question);
-    const business = !b2026 && isALevelBusiness(question);
-    const sportU2 = !business && !b2026 && isSportUnit2Task(question);
-    const btec = !business && !b2026 && !sportU2 && isBusinessBtec(question);
-    const basePrompt = b2026 ? buildBusiness2026Prompt(question, answer) : business ? buildBusinessPrompt(question, answer) : sportU2 ? buildSportUnit2Prompt(question, answer) : btec ? buildBusinessBtecPrompt(question, answer) : buildPrompt(question, answer, []);
+    const edx = isEdexcelBusiness(question);
+    const psych = !edx && isPsychology(question);
+    const b2026 = !edx && !psych && is2026Business(question);
+    const business = !edx && !psych && !b2026 && isALevelBusiness(question);
+    const sportU2 = !edx && !psych && !business && !b2026 && isSportUnit2Task(question);
+    const btec = !edx && !psych && !business && !b2026 && !sportU2 && isBusinessBtec(question);
+    const basePrompt = edx ? buildEdexcelBusinessPrompt(question, answer) : psych ? buildPsychologyPrompt(question, answer) : b2026 ? buildBusiness2026Prompt(question, answer) : business ? buildBusinessPrompt(question, answer) : sportU2 ? buildSportUnit2Prompt(question, answer) : btec ? buildBusinessBtecPrompt(question, answer) : buildPrompt(question, answer, []);
     const prompt = image ? basePrompt + "\n" + DIAGRAM_NOTE : basePrompt;
 
-    const aiResponse = b2026
+    const aiResponse = edx
+      ? await callAnyProvider(prompt, { system: EDEXCEL_BUSINESS_SYSTEM, timeout: 50000, maxTokens: 2200, image }, true)
+      : psych
+      ? await callAnyProvider(prompt, { system: PSYCHOLOGY_SYSTEM, timeout: 50000, maxTokens: 2200, image }, true)
+      : b2026
       ? await callAnyProvider(prompt, { system: BUSINESS_2026_SYSTEM, timeout: 50000, maxTokens: 2200, image }, true)
       : business
       ? await callAnyProvider(prompt, { system: BUSINESS_SYSTEM, timeout: 45000, maxTokens: 1800, image }, true)
@@ -407,6 +415,8 @@ export default Deno.serve(async (req: Request) => {
     if (!parsed || typeof parsed !== "object") {
       throw new Error("AI response could not be parsed as JSON");
     }
+    if (edx) parsed = edexcelBusinessPostProcess(parsed, question, answer);
+    if (psych) parsed = psychologyPostProcess(parsed, question, answer);
     if (b2026) parsed = business2026PostProcess(parsed, question, answer);
     if (business) parsed = businessPostProcess(parsed, question, answer);
     if (sportU2) parsed = sportUnit2PostProcess(parsed, question);

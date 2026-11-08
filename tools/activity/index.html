@@ -10,7 +10,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/school/school.css?v=20261104">
 <script src="/ra10-sdk.js?v=20261106"></script>
-<script src="/refresh/ra10-units.js?v=20261104"></script>
+<script src="/refresh/ra10-units.js?v=20261212"></script>
 <script src="/refresh/ra10-activity-view.js?v=20261104"></script>
 </head>
 <body>
@@ -46,7 +46,7 @@
     const { data: sum, error } = await sb.rpc('edu_student_summary', { p_student: uid, p_days: 30 });
     main.innerHTML = `
       ${owner ? `<div class="sc-card"><h2>Owner tools <span class="sc-badge brand">Only you can see this</span></h2>
-        <div class="sc-row"><input class="sc-in" id="q" placeholder="Find a user by email, username or name" style="flex:1;min-width:220px"><button class="sc-btn pri" id="find">Search</button><button class="sc-btn" id="live">Live feed (everyone)</button><button class="sc-btn" id="mine">My own activity</button></div><div id="found" style="margin-top:10px"></div></div>` : ''}
+        <div class="sc-row"><input class="sc-in" id="q" placeholder="Find a user by email, username or name" style="flex:1;min-width:220px"><button class="sc-btn pri" id="find">Search</button><button class="sc-btn" id="live">Live feed (everyone)</button><button class="sc-btn" id="mine">My own activity</button><a class="sc-btn" href="/admin/quality/">Quality ratings</a></div><div id="found" style="margin-top:10px"></div></div>` : ''}
       <div class="sc-h"><div><h1>${mine ? 'Your activity' : esc((sum && sum.student && (sum.student.name || sum.student.email)) || label || 'User')}</h1><p>${mine ? 'Everything you have done on RA10 — every question, answer, mark and guide section. Only you' + ' and teachers of classes you joined can see this.' : esc((sum && sum.student && sum.student.email) || '')}</p></div>
         ${mine ? '<button class="sc-btn danger sm" id="wipe">Delete my activity history</button>' : ''}</div>
       ${error ? `<div class="sc-card"><p class="sc-muted">${esc(error.message)} — the activity database update may not be installed yet.</p></div>` : `<div class="sc-card"><h2>Last 30 days</h2>${RA10ActivityView.summary(sum)}</div>`}

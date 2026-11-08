@@ -300,7 +300,7 @@
     if (d.spec && typeof d.spec === 'object') {
       const aims = Object.keys(d.spec);
       const topics = aims.reduce((n, a) => n + ((d.spec[a] && d.spec[a].topics) || []).length, 0);
-      if (topics) { c.guide = topics + ' topics'; c.spec = aims.length + ' learning aims'; }
+      if (topics) { c.guide = topics + ' topics'; c.spec = aims.length + (window.AIM_WORD ? ' ' + String(window.AIM_WORD).toLowerCase() + 's' : ' learning aims'); }
     }
     return c;
   }
@@ -350,6 +350,18 @@
     return { title, eyebrow, lede, kind: meta ? meta.kind : '' };
   }
 
+  // practice tools that live outside the unit app (opened in the top window)
+  const EXT_TOOLS = [
+    { rx: /computing-aaq\/unit-(1|4)/i, k: 'Practice tool', h: 'Python Lab', href: '/tools/python-lab/',
+      p: '58 auto-marked Python 3 tasks covering every Unit 1 topic – operators, selection, loops, functions, recursion, data structures, files, searching and sorting, validation – plus trace-table practice and Unit 4 projects.', btn: 'Open Python Lab' }
+  ];
+  function extToolsHtml() {
+    const path = location.pathname;
+    return EXT_TOOLS.filter(t => t.rx.test(path)).map(t => `<section class="ux-papers" aria-label="${esc(t.h)}">
+        <span class="ux-papers-ico">${I.tools}</span>
+        <div class="ux-papers-txt"><p class="ux-papers-k">${esc(t.k)}</p><h2>${esc(t.h)}</h2><p>${esc(t.p)}</p></div>
+        <div class="ux-papers-btns"><a class="ux-pbtn pri" href="${esc(t.href)}" target="_top">${esc(t.btn)}</a></div></section>`).join('');
+  }
   function heroStatsHtml() {
     const s = stats();
     const guideSeen = Object.keys(s.guide || {}).length, guideTotal = Math.max(s.guideTotal || 0, guideSeen);
@@ -442,6 +454,7 @@
           ${pp.ra10 ? `<button type="button" class="ux-pbtn${pp.official ? '' : ' pri'}" data-ux-papers="ra10">RA10 papers <em>${pp.ra10}</em></button>` : ''}
           ${pp.ra10 ? `<button type="button" class="ux-pbtn ghost" data-ux-papers="mock">⏱ Timed mock</button>` : ''}
         </div></section>` : ''}
+      ${extToolsHtml()}
       <div class="ux-edu-slot" hidden></div>
       <div class="ux-lanes">${LANES.filter(l => lanes[l.k].length).map(l => `
         <section class="ux-lane ux-lane-${l.k}" aria-label="${esc(l.t)}">
@@ -638,6 +651,8 @@
           meta: { topic: q.topic || null, aim: q.learning_aim || null, paper: q.paper_id || null, verb: q.command_verb || null, image: !!(input && input.image) }
         });
         bump(s => { s.ai = (s.ai || 0) + 1; });
+        // unit-feedback.js asks "was this mark fair?" (quality ratings)
+        if (!quiet) window.dispatchEvent(new CustomEvent('ra10:ai-marked', { detail: { question: q, result: r, answer: (input && input.answer) || '' } }));
       } catch (e) {}
       return res;
     };
@@ -724,7 +739,17 @@
     eduLoading = true;
     const s = document.createElement('script');
     const me = Array.from(document.scripts).map(x => x.src).find(src => /\/shared\/unit-ui\.js/.test(src)) || '';
-    s.src = me ? me.replace(/unit-ui\.js(\?.*)?$/, 'unit-edu.js?v=20261126') : '/revision/shared/unit-edu.js?v=20261126';
+    s.src = me ? me.replace(/unit-ui\.js(\?.*)?$/, 'unit-edu.js?v=20261214') : '/revision/shared/unit-edu.js?v=20261214';
+    document.head.appendChild(s);
+  }
+
+  // Learner feedback for the quality ratings (guide "helpful?", report a mistake, "was this mark fair?").
+  function loadFeedback() {
+    if (params.has('ra10catalog') || params.has('ra10audit') || window.RA10UnitFeedback || document.getElementById('ux-fb-js')) return;
+    const s = document.createElement('script');
+    s.id = 'ux-fb-js';
+    const me = Array.from(document.scripts).map(x => x.src).find(src => /\/shared\/unit-ui\.js/.test(src)) || '';
+    s.src = me ? me.replace(/unit-ui\.js(\?.*)?$/, 'unit-feedback.js?v=20261209') : '/revision/shared/unit-feedback.js?v=20261209';
     document.head.appendChild(s);
   }
 
@@ -834,6 +859,7 @@
     if (eduNeeded()) loadEdu();
     else setTimeout(() => { if (eduNeeded()) loadEdu(); }, 3500);
     window.addEventListener('storage', (e) => { if (e.key === 'ra10_edu_pending' && e.newValue) loadEdu(); });
+    setTimeout(loadFeedback, 1200);
     try { window.RA10 && RA10.on && RA10.on('authchange', () => { scheduleHeroPaint(); if (eduNeeded()) loadEdu(); }); } catch (e) {}
     // Tell the site shell we're painted, so it can drop its loading skeleton.
     if (embedded) { try { window.parent.postMessage({ type: 'ra10:unit-ready' }, location.origin); } catch (e) {} }

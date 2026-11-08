@@ -103,15 +103,23 @@
     return unitFrame(unitPath, '?ra10catalog=1&full=' + encodeURIComponent(ids.join(',')), 'ra10:questions', 25000)
       .then(d => (d && Array.isArray(d.questions) ? d.questions : []), () => []);
   }
+  // A-Level units number their spec areas as chapters (1, 2, 3…); BTEC units use learning aims (A, B, C…)
+  function aimTag(cat, a, short) {
+    const keys = Object.keys((cat && cat.spec) || {}).sort((x, y) => String(x).localeCompare(String(y), undefined, { numeric: true }));
+    const alevel = (cat && cat.aimWord) || /\/revision\/a-level\//.test(String((cat && cat.unit) || ''));
+    if (!alevel) return short ? String(a) : 'Learning aim ' + a;
+    const lbl = (cat.aimLabels && cat.aimLabels[a]) || (keys.indexOf(a) >= 0 ? String(keys.indexOf(a) + 1) : String(a));
+    return short ? lbl : (cat.aimWord || 'Chapter') + ' ' + lbl;
+  }
   function specTopics(cat) {
     const out = [];
     Object.keys((cat && cat.spec) || {}).sort((x, y) => String(x).localeCompare(String(y), undefined, { numeric: true })).forEach(a => ((cat.spec[a] || {}).topics || []).forEach(t => {
       const label = ((t.code ? t.code + ' ' : '') + (t.name || '')).trim();
-      if (label) out.push({ aim: a, aimTitle: cat.spec[a].title || ('Aim ' + a), code: t.code || '', name: t.name || label, label });
+      if (label) out.push({ aim: a, aimTitle: cat.spec[a].title || aimTag(cat, a), code: t.code || '', name: t.name || label, label });
     }));
     if (!out.length && cat) {
       const seen = new Set();
-      (cat.quiz || []).concat(cat.questions || []).forEach(q => { const k = norm(q.topic); if (q.topic && !seen.has(k) && seen.size < 60) { seen.add(k); out.push({ aim: q.aim || '', aimTitle: q.aim ? 'Aim ' + q.aim : 'Topics', code: '', name: q.topic, label: q.topic }); } });
+      (cat.quiz || []).concat(cat.questions || []).forEach(q => { const k = norm(q.topic); if (q.topic && !seen.has(k) && seen.size < 60) { seen.add(k); out.push({ aim: q.aim || '', aimTitle: q.aim ? aimTag(cat, q.aim) : 'Topics', code: '', name: q.topic, label: q.topic }); } });
     }
     return out;
   }
@@ -456,8 +464,34 @@
     ((S.plan && S.plan.units) || []).forEach(u => add(u.path));
     add(store.get('sh_unit')); add(S.plan && S.plan.focus && S.plan.focus.unit);
     (store.get('sh_path_units') || '').split('|').forEach(add);
-    if (!seen.length && UNITS()[0]) add(UNITS()[0].path);
-    return seen;
+    const hidden = hiddenUnits(), shown = seen.filter(p => !hidden.includes(p));
+    if (!shown.length) { const first = UNITS().find(x => !hidden.includes(x.path)) || UNITS()[0]; if (first) shown.push(first.path); }
+    return shown;
+  }
+  // subjects the person removed from their path (their lessons are kept)
+  const hiddenUnits = () => (store.get('sh_path_hidden') || '').split('|').filter(Boolean);
+  function removeSubject(path, units) {
+    const u = unitOf(path); if (!u) return;
+    $$('.sh-pop').forEach(p => p.remove());
+    const pop = document.createElement('div');
+    pop.className = 'sh-pop sh-rmsub';
+    pop.setAttribute('role', 'dialog');
+    pop.setAttribute('aria-label', 'Remove subject');
+    const n = ((S.status && S.status.lessons) || []).filter(l => l.unit === path && l.status === 'done').length;
+    pop.innerHTML = `<b>Remove ${esc(u.short)} from your path?</b><p>${n ? `Your ${n} finished lesson${n === 1 ? ' is' : 's are'} kept in Practise again, and you` : 'You'} can add it back at any time with <b>+ Subject</b>.</p>
+      <div class="sh-rmacts"><button class="sh-btn ghost sm" data-rmno>Cancel</button><button class="sh-btn danger sm" data-rmyes>${I('trash', { size: 15 })} Remove</button></div>`;
+    $('.sh-utabs-wrap').appendChild(pop);
+    $('[data-rmno]', pop).onclick = () => pop.remove();
+    $('[data-rmyes]', pop).onclick = () => {
+      const hid = hiddenUnits(); if (!hid.includes(path)) hid.push(path);
+      store.set('sh_path_hidden', hid.join('|'));
+      store.set('sh_path_units', (store.get('sh_path_units') || '').split('|').filter(p => p && p !== path).join('|'));
+      const i = units.indexOf(path), next = units[i + 1] || units[i - 1] || null;
+      S.pathUnit = next; if (next) store.set('sh_path_unit', next);
+      pop.remove(); paintPath(); toast(`${u.short} removed from your path`);
+    };
+    $('[data-rmyes]', pop).focus();
+    setTimeout(() => document.addEventListener('click', function off(e) { if (!pop.contains(e.target)) { pop.remove(); document.removeEventListener('click', off); } }), 0);
   }
   // the unit's specification as aims → topics → subtopics (codes like A1, A1.1)
   function courseTree(cat) {
@@ -470,7 +504,7 @@
         const parent = code.indexOf('.') > 0 ? topics.find(x => x.code === code.slice(0, code.lastIndexOf('.'))) : null;
         if (parent) parent.subs.push(node); else topics.push(node);
       });
-      if (topics.length) aims.push({ aim: a, title: A.title || ('Learning aim ' + a), topics });
+      if (topics.length) aims.push({ aim: a, tag: aimTag(cat, a), short: aimTag(cat, a, true), title: A.title || aimTag(cat, a), topics });
     });
     if (!aims.length && cat) {
       const seen = new Set(), topics = [];
@@ -509,17 +543,48 @@
     box.innerHTML = `<div class="sh-path-head"><h2>${I('map', { size: 22 })} Your learning</h2>
         <div class="sh-pmode" role="tablist" aria-label="Which path">${[['course', 'Full course', 'clipboard'], ['me', 'My plan', 'compass']].map(([k, t, ic]) => `<button role="tab" data-pmode="${k}" aria-selected="${S.pathMode === k}" class="${S.pathMode === k ? 'on' : ''}">${I(ic, { size: 16 })} ${t}</button>`).join('')}</div></div>
       <div class="sh-utabs-wrap"><button class="sh-uarrow" data-ustep="-1" aria-label="Previous subject" ${idx <= 0 ? 'disabled' : ''}>‹</button>
-        <div class="sh-utabs" role="tablist" aria-label="Subjects">${units.map(p => { const x = unitOf(p); return `<button role="tab" class="sh-utab${p === S.pathUnit ? ' on' : ''}" data-punit="${esc(p)}" style="--uc:${esc(x.color || '#5b4cf5')}" aria-selected="${p === S.pathUnit}"><span class="ub">${I(unitIcon(p), { size: 16 })}</span><span>${esc(x.short)}</span>${doneIn(p) ? `<small>${doneIn(p)}</small>` : ''}</button>`; }).join('')}
+        <div class="sh-utabs" role="tablist" aria-label="Subjects">${units.map(p => { const x = unitOf(p); return `<button role="tab" class="sh-utab${p === S.pathUnit ? ' on' : ''}" data-punit="${esc(p)}" style="--uc:${esc(x.color || '#5b4cf5')}" aria-selected="${p === S.pathUnit}"><span class="ub">${I(unitIcon(p), { size: 16 })}</span><span>${esc(x.short)}</span>${doneIn(p) ? `<small>${doneIn(p)}</small>` : ''}${p === S.pathUnit && units.length > 1 ? `<span class="sh-urm" role="button" tabindex="0" data-urm="${esc(p)}" aria-label="Remove ${esc(x.short)} from your path" title="Remove from your path">${I('close', { size: 13 })}</span>` : ''}</button>`; }).join('')}
           <button class="sh-utab add" data-uadd>${I('plus', { size: 16 })} Subject</button></div>
         <button class="sh-uarrow" data-ustep="1" aria-label="Next subject" ${idx >= units.length - 1 ? 'disabled' : ''}>›</button></div>
       <div class="sh-ubanner"><span class="ub">${I(unitIcon(S.pathUnit), { size: 26 })}</span><span><small>${esc(u ? u.qual : '')}</small><b>${esc(u ? unitName(u) : '')}</b></span><span class="sh-uprog" id="sh-uprog"></span></div>
+      ${codingPanel(S.pathUnit)}
       <div id="sh-pbody" class="sh-pbody"><div class="sh-loading"><span class="sh-spin"></span> Loading ${esc(u ? u.short : 'the course')}…</div></div>`;
     $$('[data-pmode]', box).forEach(b => b.onclick = () => { S.pathMode = b.dataset.pmode; store.set('sh_path_mode', S.pathMode); paintPath(); });
     $$('[data-punit]', box).forEach(b => b.onclick = () => { S.pathUnit = b.dataset.punit; store.set('sh_path_unit', S.pathUnit); paintPath(); });
     $$('[data-ustep]', box).forEach(b => b.onclick = () => { const n = units[idx + Number(b.dataset.ustep)]; if (n) { S.pathUnit = n; store.set('sh_path_unit', n); paintPath(); } });
     const tabs = $('.sh-utabs', box), on = $('.sh-utab.on', box); if (tabs && on) tabs.scrollLeft = on.offsetLeft - tabs.clientWidth / 2 + on.clientWidth / 2;
     $('[data-uadd]', box).onclick = () => addSubject(units);
+    $$('[data-codelesson]', box).forEach(b => b.onclick = () => openMaker({ unit: S.pathUnit, topic: b.dataset.codelesson || null }));
+    $$('[data-urm]', box).forEach(x => {
+      const fire = (e) => { e.preventDefault(); e.stopPropagation(); removeSubject(x.dataset.urm, units); };
+      x.onclick = fire;
+      x.onkeydown = (e) => { if (e.key === 'Enter' || e.key === ' ') fire(e); };
+    });
     renderPathBody(S.pathUnit, S.pathMode);
+  }
+  /* Coding practice: Python Lab progress and the next tasks for this learner (Computing Units 1 and 4),
+     or a coding-lesson button for the web (JavaScript) and database (SQL) units. */
+  const CODE_TOPICS = { A1: ['number', 'binary', 'denary', 'overflow', 'shift'], A2: ['operator', 'data type', 'variable', 'constant', 'boolean'], A3: ['selection', 'iteration', 'loop', 'function', 'recursion', 'sequence', 'global', 'local'], B1: ['list', 'array', 'dictionar', 'tuple', 'stack', 'queue', 'data structure'], B2: ['string', 'random', 'file', 'round', 'built-in', 'input', 'output'], C1: ['algorithm', 'search', 'sort', 'trace', 'flowchart', 'pseudocode', 'computational'], C2: ['validation', 'readab', 'maintain', 'comment', 'naming', 'user interaction'] };
+  const LAB_ORDER = ['A1-01', 'A1-02', 'A2-01', 'A2-02', 'A2-03', 'A2-04', 'A2-05', 'A3-01', 'A3-02', 'A3-04', 'A3-05', 'A3-07', 'A3-03', 'A3-06', 'A3-08', 'A3-09', 'A3-10', 'B1-01', 'B1-03', 'B1-04', 'B2-01', 'B2-02', 'B2-03', 'B2-05', 'B2-06', 'C1-01', 'C1-05', 'C2-01', 'C2-04', 'A1-03', 'A1-04', 'B1-02', 'B1-05', 'B1-06', 'B2-04', 'B2-07', 'B2-08', 'B2-09', 'B2-10', 'C1-02', 'C1-03', 'C1-04', 'C1-06', 'C1-07', 'C1-09', 'C2-02', 'C2-03', 'C2-05', 'P-01', 'P-03', 'A1-05', 'A3-11', 'A3-12', 'B1-07', 'C1-08', 'C1-10', 'P-02', 'P-04'];
+  function codingPanel(unit) {
+    const path = String(unit || '');
+    if (/IT-AAQ\/unit-(3|4)\b/i.test(path)) {
+      const lang = /unit-4/.test(path) ? 'SQL' : 'JavaScript';
+      return `<div class="sh-codepanel"><span class="ci">${I('code', { size: 24 })}</span><div><b>Practise ${lang} by writing it</b><small>Make a lesson for this unit and Study Hub adds ${lang} exercises that are checked as you type them in – every exercise is tested before you see it.</small></div><button class="sh-btn pri" data-codelesson="">Make a ${lang} lesson</button></div>`;
+    }
+    if (!/computing-aaq\/unit-(1|4)\b/i.test(path)) return '';
+    let lab = {};
+    try { lab = JSON.parse(localStorage.getItem('ra10_pylab_v1') || '{}'); } catch (e) {}
+    const solved = lab.solved || {};
+    const n = LAB_ORDER.filter(id => solved[id]).length;
+    // weak topics from the learner's own results in this unit → matching Lab areas first
+    const weak = ((S.plan && S.plan.weak) || []).filter(t => t.unit === unit).map(t => String(t.topic || '').toLowerCase());
+    const weakAreas = Object.keys(CODE_TOPICS).filter(k => weak.some(w => w.startsWith(k.toLowerCase()) || CODE_TOPICS[k].some(word => w.includes(word))));
+    const unsolved = LAB_ORDER.filter(id => !solved[id]);
+    const picked = unsolved.filter(id => weakAreas.includes(id.slice(0, 2))).slice(0, 3);
+    unsolved.forEach(id => { if (picked.length < 3 && !picked.includes(id)) picked.push(id); });
+    const why = weakAreas.length ? 'Picked from your weaker topics' : n ? 'Your next tasks' : 'Start here';
+    return `<div class="sh-codepanel"><span class="ci">${I('code', { size: 24 })}</span><div><b>Python Lab · ${n}/${LAB_ORDER.length} tasks solved</b><small>${why}: ${picked.length ? picked.map(id => `<a href="/tools/python-lab/?task=${id}">${id}</a>`).join(' · ') : 'every task solved – try the free sandbox'}.</small></div><a class="sh-btn pri" href="/tools/python-lab/${picked.length ? '?task=' + picked[0] : '?sandbox=1'}">Open Python Lab</a><button class="sh-btn" data-codelesson="">Python lesson</button></div>`;
   }
   function addSubject(units) {
     $$('.sh-pop').forEach(p => p.remove());
@@ -528,7 +593,7 @@
     const rest = UNITS().filter(x => !units.includes(x.path));
     pop.innerHTML = `<b>Add a subject</b>${rest.length ? rest.map(x => `<button class="sh-addrow" data-add="${esc(x.path)}" style="--uc:${esc(x.color)}"><span class="ub">${I(unitIcon(x.path), { size: 16 })}</span><span>${esc(x.short)} <small>${esc(unitName(x))}</small></span></button>`).join('') : '<p>You have every subject already.</p>'}`;
     $('.sh-utabs-wrap').appendChild(pop);
-    $$('[data-add]', pop).forEach(b => b.onclick = () => { const list = (store.get('sh_path_units') || '').split('|').filter(Boolean); list.push(b.dataset.add); store.set('sh_path_units', list.join('|')); S.pathUnit = b.dataset.add; store.set('sh_path_unit', S.pathUnit); paintPath(); });
+    $$('[data-add]', pop).forEach(b => b.onclick = () => { const list = (store.get('sh_path_units') || '').split('|').filter(Boolean); list.push(b.dataset.add); store.set('sh_path_hidden', hiddenUnits().filter(p => p !== b.dataset.add).join('|')); store.set('sh_path_units', list.join('|')); S.pathUnit = b.dataset.add; store.set('sh_path_unit', S.pathUnit); paintPath(); });
     setTimeout(() => document.addEventListener('click', function off(e) { if (!pop.contains(e.target)) { pop.remove(); document.removeEventListener('click', off); } }), 0);
   }
 
@@ -556,8 +621,8 @@
       tree.forEach(a => {
         const inAim = []; a.topics.forEach(t => t.subs.length ? inAim.push(...t.subs) : inAim.push(t));
         const d = inAim.filter(x => states.get(x).state === 'done').length;
-        const sec = (String(a.title).match(/^(\d+(?:\.\d+)+)\s+/) || [])[1];   // A-Level sections are titled "3.10 …"
-        html += `<div class="sh-rsec"><span class="ai${sec ? ' wide' : ''}">${esc(sec || a.aim || '•')}</span><span><small>${sec ? 'Section ' + esc(sec) : 'Learning aim ' + esc(a.aim)}</small><b>${esc(sec ? String(a.title).replace(/^\d+(?:\.\d+)+\s+/, '') : a.title)}</b></span><em>${d}/${inAim.length}</em></div>`;
+        const sec = (String(a.title).match(/^(\d+(?:\.\d+)+)\s+/) || [])[1]; const chap = /^Chapter /.test(a.tag || '');   // A-Level sections are titled "3.10 …"
+        html += `<div class="sh-rsec"><span class="ai${sec && !chap ? ' wide' : ''}">${esc(chap ? a.short : (sec || a.short || a.aim || '•'))}</span><span><small>${chap ? esc(a.tag) + (sec ? ' · spec ' + esc(sec) : '') : sec ? 'Section ' + esc(sec) : esc(a.tag || 'Learning aim ' + a.aim)}</small><b>${esc(sec ? String(a.title).replace(/^\d+(?:\.\d+)+\s+/, '') : a.title)}</b></span><em>${d}/${inAim.length}</em></div>`;
         n = 0;
         a.topics.forEach(t => {
           const list = t.subs.length ? t.subs : [t];
@@ -809,8 +874,9 @@
   /* ═════════════════════════ lesson player ═════════════════════════ */
   const PRAISE = ['Nice one!', 'Spot on!', 'Brilliant!', 'Exactly right!', 'You\'ve got it!', 'Perfect!', 'Great work!'];
   const NOPE = ['Not quite', 'Almost!', 'Good try', 'So close'];
-  const CHECKABLE = ['mcq', 'truefalse', 'fill', 'match', 'order', 'exam'];
-  const KIND = { learn: ['book', 'New idea'], mcq: ['question', 'Quick check'], truefalse: ['scales', 'True or false?'], fill: ['pencil', 'Fill the gap'], match: ['puzzle', 'Match the pairs'], order: ['steps', 'Put it in order'], recap: ['flag', 'Recap'] };
+  const CHECKABLE = ['mcq', 'truefalse', 'fill', 'match', 'order', 'exam', 'code'];
+  const LANG = { python: 'Python', javascript: 'JavaScript', sql: 'SQL' };
+  const KIND = { learn: ['book', 'New idea'], mcq: ['question', 'Quick check'], truefalse: ['scales', 'True or false?'], fill: ['pencil', 'Fill the gap'], match: ['puzzle', 'Match the pairs'], order: ['steps', 'Put it in order'], code: ['code', 'Write the code'], recap: ['flag', 'Recap'] };
 
   // Mark a written answer with the real RA10 AI Examiner (same backend as the unit apps).
   async function examine(lesson, step, i, answer) {
@@ -998,6 +1064,53 @@
         $$('[data-l]', stage).forEach(b => b.onclick = () => { selL = Number(b.dataset.l); $$('[data-l]', stage).forEach(x => x.classList.toggle('sel', x === b)); Snd.tap(); tryPair(); });
         $$('[data-r]', stage).forEach(b => b.onclick = () => { selR = Number(b.dataset.r); $$('[data-r]', stage).forEach(x => x.classList.toggle('sel', x === b)); Snd.tap(); tryPair(); });
         footIdle('Match all the pairs', false, () => {});
+      } else if (s.type === 'code') {
+        const lang = LANG[s.lang] || 'Python';
+        wrap(`${kindHead('code', 'Write the code · ' + lang)}<h1 class="sh-q sm">${esc(s.title || 'Write the code')}</h1><p class="sh-code-brief">${esc(s.brief)}</p><div class="sh-code-body"><div class="sh-code-wait"><span class="sh-spin"></span> Getting ${lang} ready and checking this exercise…</div></div>`);
+        footIdle('Check', false, () => {});
+        if (!window.SHCode) { s._skip = true; record(item.i, { ok: true, score: 0, max: 0 }); footIdle('Continue', true, next); return; }
+        SHCode.verify(s).then(async (v) => {
+          if (P.cur !== item) return;
+          const body = $('.sh-code-body', stage);
+          if (!v.ok) {
+            // the exercise's own model solution failed its tests – never show an unverified exercise
+            s._skip = true; record(item.i, { ok: true, score: 0, max: 0 });
+            body.innerHTML = '<p class="sh-muted">This coding exercise could not be verified, so it has been skipped. Your score is not affected.</p>';
+            footIdle('Continue', true, next); return;
+          }
+          const tests = s.tests || [];
+          const firstIn = (tests[0] && tests[0].stdin) || [];
+          const tables = s.lang === 'sql' ? await SHCode.sqlTables(s.setup) : [];
+          const tbl = (t) => `<div class="sh-sqltable"><b>${esc(t.name)}</b><table><tr>${t.columns.map(c => `<th>${esc(c)}</th>`).join('')}</tr>${t.rows.slice(0, 8).map(r => `<tr>${r.map(x => `<td>${esc(x)}</td>`).join('')}</tr>`).join('')}</table>${t.rows.length > 8 ? `<small>${t.rows.length - 8} more rows</small>` : ''}</div>`;
+          body.innerHTML = `${tables.length ? `<div class="sh-sqltables">${tables.map(tbl).join('')}</div>` : ''}
+            <textarea class="sh-codeedit" id="c-code" spellcheck="false" autocapitalize="off" autocomplete="off" aria-label="Your ${lang} code">${esc(s.starter || '')}</textarea>
+            ${s.lang === 'python' && firstIn.length ? `<label class="sh-code-in">Program input (one value per line)<textarea id="c-in" rows="2" spellcheck="false">${esc(firstIn.join('\n'))}</textarea></label>` : ''}
+            <div class="sh-code-tools"><button class="sh-btn" id="c-run">Run</button>${(s.hints || []).length ? '<button class="sh-btn ghost" id="c-hint">Hint</button>' : ''}</div>
+            <pre class="sh-code-out" id="c-out" aria-live="polite"></pre><div id="c-hints"></div><div id="c-res"></div>`;
+          const ta = $('#c-code', body);
+          ta.addEventListener('keydown', (e) => { if (e.key === 'Tab') { e.preventDefault(); const st = ta.selectionStart, en = ta.selectionEnd; ta.value = ta.value.slice(0, st) + '    ' + ta.value.slice(en); ta.selectionStart = ta.selectionEnd = st + 4; } });
+          setTimeout(() => ta.focus({ preventScroll: true }), 200);
+          let hintN = 0;
+          const hb = $('#c-hint', body);
+          if (hb) hb.onclick = () => { if (hintN < s.hints.length) { $('#c-hints', body).insertAdjacentHTML('beforeend', `<div class="sh-code-hint">${I('bulb', { size: 16 })} ${esc(s.hints[hintN])}</div>`); hintN++; } if (hintN >= s.hints.length) hb.disabled = true; };
+          $('#c-run', body).onclick = async () => {
+            const out = $('#c-out', body); out.textContent = 'Running…';
+            const inEl = $('#c-in', body);
+            const r = await SHCode.run(s, ta.value, inEl ? inEl.value.split('\n').filter((x, i, a) => i < a.length - 1 || x !== '') : firstIn);
+            if (s.lang === 'sql') out.innerHTML = r.err ? `<span class="e">${esc(r.err)}</span>` : (r.columns.length ? `<table><tr>${r.columns.map(c => `<th>${esc(c)}</th>`).join('')}</tr>${r.rows.slice(0, 20).map(x => `<tr>${x.map(v2 => `<td>${esc(v2)}</td>`).join('')}</tr>`).join('')}</table>` : '(no rows)');
+            else out.innerHTML = esc(r.out || '') + (r.err ? `<span class="e">${r.out ? '\n' : ''}${esc(r.err)}</span>` : '') || '(no output)';
+          };
+          footIdle('Check', true, async () => {
+            primary.disabled = true; primary.innerHTML = '<span class="sh-spin light"></span> Running the tests…';
+            const res = await SHCode.check(s, ta.value);
+            const ok = res.total > 0 && res.passed === res.total;
+            $('#c-res', body).innerHTML = `<div class="sh-code-results">${res.details.map(d => `<div class="${d.ok ? 'ok' : 'bad'}">${I(d.ok ? 'check' : 'close', { size: 16 })} ${esc(d.label)}${d.detail ? `<pre>${esc(d.detail)}</pre>` : ''}</div>`).join('')}</div>`;
+            const sol = `<details class="sh-model"><summary>Model solution</summary><pre class="sh-code-sol">${esc(s.solution)}</pre></details>`;
+            track('study_code', { unit: lesson.unit || null, view: 'study-hub', ref: 'sh:' + lesson.id + ':' + item.i, title: (s.title || '').slice(0, 300), answer: ta.value, score: res.passed, max_score: res.total, meta: { lang: s.lang, topic: lesson.topic || null } });
+            judge(item, { ok, score: ok ? 1 : 0, max: 1 }, `${res.passed} of ${res.total} test${res.total === 1 ? '' : 's'} passed. ${sol}`, s.explain, ok ? 'All tests passed!' : 'Not quite – check the test results');
+          });
+        });
+        if (window.SHCode) SHCode.warm(s.lang);
       } else if (s.type === 'exam') {
         wrap(`<div class="sh-kind">${I('exam', { size: 18 })} ${s.source === 'exam' ? 'Real exam question' : 'Exam-style question'}</div>
           <div class="sh-exam-meta"><span class="sh-badge acc">${s.marks} mark${s.marks === 1 ? '' : 's'}</span>${s.verb ? `<span class="sh-badge">${esc(s.verb)}</span>` : ''}<span class="sh-badge ok">${I('check', { size: 13 })} Marked by the RA10 AI Examiner</span></div>
@@ -1054,7 +1167,7 @@
     async function finish() {
       P.finished = true;
       let score = 0, max = 0;
-      steps.forEach((s, i) => { if (!CHECKABLE.includes(s.type)) return; const m = s.type === 'exam' ? s.marks : 1; max += m; score += Math.min(m, Number((P.results[i] || {}).score) || 0); });
+      steps.forEach((s, i) => { if (!CHECKABLE.includes(s.type) || s._skip) return; const m = s.type === 'exam' ? s.marks : 1; max += m; score += Math.min(m, Number((P.results[i] || {}).score) || 0); });
       const secs = Math.round((Date.now() - P.t0) / 1000);
       const pct = max ? Math.round((score / max) * 100) : 100;
       foot.className = 'sh-foot'; footIn.innerHTML = '';

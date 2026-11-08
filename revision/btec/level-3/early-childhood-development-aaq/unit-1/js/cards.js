@@ -1,0 +1,95 @@
+/* BTEC Early Childhood Development (AAQ) Unit 1 — flashcards. */
+(function () {
+  'use strict';
+  const B = window.__BIZ_B, F = B.F;
+  // A
+  F('A', 'Growth', 'Increase in size – height, weight, head circumference. Measured on centile charts.');
+  F('A', 'Development', 'Gaining skills and abilities in a set sequence. Observed against milestones.');
+  F('A', 'Milestone', 'A skill most children achieve within an expected age range.');
+  F('A', 'Sequence vs rate', 'Sequence is the same for all children; the rate varies.');
+  F('A', 'Cephalocaudal', 'Development from head to toe – head control before sitting and walking.');
+  F('A', 'Proximodistal', 'Development from the centre of the body outwards – arms before fingers.');
+  F('A', 'Holistic development', 'All areas are interconnected – a delay in one area affects others.');
+  F('A', 'PILES', 'Physical · Intellectual (cognitive) · Language · Emotional · Social.');
+  F('A', 'Biological factors', 'Genetic conditions, prematurity, low birth weight, maternal health, disability, illness.');
+  F('A', 'Environmental factors', 'Poverty, housing, diet, family circumstances, parenting, education, culture, adverse experiences.');
+  F('A', 'Atypical development', 'Development that does not follow the expected pattern.');
+  F('A', 'Developmental delay', 'Milestones reached later than expected – may be temporary or ongoing.');
+  // B
+  F('B', 'Gross motor skills', 'Large movements of the whole body or limbs – crawling, walking, climbing.');
+  F('B', 'Fine motor skills', 'Small precise hand and finger movements – pincer grasp, threading, writing.');
+  F('B', '0–6 months physical', 'Head control, rolls over, palmar grasp, reaches for toys.');
+  F('B', '6–12 months physical', 'Sits (7–8 m), crawls, pulls to stand, pincer grasp (9–10 m).');
+  F('B', '1–2 years physical', 'Walks (12–15 m), climbs stairs with help, tower of 3–4 bricks, scribbles.');
+  F('B', '2–3 years physical', 'Runs, kicks a ball, jumps with feet together, turns single pages.');
+  F('B', '3–5 years physical', 'Pedals a tricycle, hops, catches a large ball, uses scissors, draws a person.');
+  F('B', '5–8 years physical', 'Skips, rides a bike, ties laces, neat handwriting, team games.');
+  F('B', 'Newborn reflexes', 'Rooting, sucking, grasp, Moro (startle), stepping.');
+  F('B', 'Myelination', 'Nerves gain a fatty sheath as the CNS matures – faster messages, better control.');
+  F('B', 'Hand–eye coordination', 'Using vision to guide hand movements – threading, catching, writing.');
+  F('B', 'Promoting physical development', 'Tummy time, treasure baskets, climbing, tricycles, dough, scissors, ball games, outdoor play.');
+  F('B', 'Adult role – physical', 'Safe but challenging environment, plan for stage, model, praise effort, time to practise, observe.');
+  // C
+  F('C', 'Object permanence', 'Knowing an object exists when out of sight – about 8–9 months.');
+  F('C', 'Schema', 'A mental concept/pattern of thought about the world.');
+  F('C', 'Assimilation', 'Fitting new information into an existing schema.');
+  F('C', 'Accommodation', 'Changing a schema because new information does not fit.');
+  F('C', 'Equilibrium', 'Balance between schemas and new experiences.');
+  F('C', 'Piaget’s stages', 'Sensorimotor 0–2 · Pre-operational 2–7 · Concrete operational 7–11 · Formal operational 11+.');
+  F('C', 'Egocentrism', 'Seeing the world only from your own viewpoint (pre-operational).');
+  F('C', 'Conservation', 'Understanding quantity stays the same when shape changes (~7 years).');
+  F('C', 'Zone of proximal development', 'Gap between what a child can do alone and with help from an MKO (Vygotsky).');
+  F('C', 'MKO', 'More Knowledgeable Other – an adult or peer who supports learning.');
+  F('C', 'Bruner’s modes', 'Enactive (action) · Iconic (images) · Symbolic (language/numbers).');
+  F('C', 'Scaffolding', 'Support matched to need and gradually withdrawn as the child becomes competent.');
+  F('C', 'Spiral curriculum', 'Revisiting topics at increasing levels of difficulty (Bruner).');
+  F('C', 'Information processing', 'Input → processing (working memory) → storage (long-term) → output/retrieval.');
+  F('C', 'Sustained shared thinking', 'Adult and child work together to solve a problem or extend thinking.');
+  F('C', 'Theory critique – Piaget', 'Underestimated young children; less focus on social/adult role.');
+  // D
+  F('D', 'Pre-linguistic stage', 'Crying, cooing (6–8 weeks), babbling (~6 months), gestures.');
+  F('D', 'Holophrase', 'One word with a whole meaning – “drink!”.');
+  F('D', 'Telegraphic speech', 'Two-/three-word key-word phrases – “Daddy gone”.');
+  F('D', 'Virtuous error', 'Over-applying a grammar rule – “I goed”. Supports Chomsky.');
+  F('D', 'Receptive language', 'Understanding language.');
+  F('D', 'Expressive language', 'Using words, signs or writing to communicate.');
+  F('D', 'EAL support', 'Visual aids, key home-language words, silent period, value home language, work with parents.');
+  F('D', 'Chomsky', 'Innate Language Acquisition Device; universal grammar.');
+  F('D', 'Skinner – language', 'Imitation and positive reinforcement (operant conditioning).');
+  F('D', 'Brown', 'Five stages measured by mean length of utterance (MLU).');
+  F('D', 'Bruner – LASS', 'Adults scaffold language through routines, joint attention and games.');
+  F('D', 'Recasting', 'Repeating a child’s utterance back correctly without correcting them.');
+  F('D', 'Promoting language', 'Narrate, open questions, songs, rhymes, stories, role play, quiet spaces, time to respond.');
+  // E
+  F('E', 'Social smile', 'About 6 weeks.');
+  F('E', 'Stranger/separation anxiety', 'Around 8 months, linked to specific attachment.');
+  F('E', 'Bowlby', 'Innate attachment, critical period, monotropy, internal working model, maternal deprivation.');
+  F('E', 'Internal working model', 'Mental template for relationships formed from first attachments.');
+  F('E', 'Ainsworth – Strange Situation', 'Secure · insecure-avoidant · insecure-resistant (+ disorganised).');
+  F('E', 'Schaffer and Emerson', 'Asocial → indiscriminate → specific (7–9 m) → multiple. Responsiveness matters.');
+  F('E', 'Key person', 'Named practitioner who builds a close bond with child and family – a secure base.');
+  F('E', 'Self-concept', 'How a child sees themselves – self-image and self-esteem.');
+  F('E', 'Self-regulation', 'Managing feelings and behaviour.');
+  F('E', 'Transitions', 'Starting nursery/school, new sibling, moving, separation, bereavement – may cause regression.');
+  F('E', 'Supporting feelings', 'Name emotions, stories, calm areas, model calm, settling-in visits, consistent routines.');
+  // F
+  F('F', 'Parten’s stages', 'Unoccupied · solitary · onlooker · parallel · associative · cooperative.');
+  F('F', 'Parallel play', 'Playing alongside others without interacting (2–3 years).');
+  F('F', 'Cooperative play', 'Playing together with shared goals and roles (4+).');
+  F('F', 'Social norms', 'Shared rules of behaviour – sharing, turn-taking, manners.');
+  F('F', 'Bandura', 'Social learning – observing and imitating models; Bobo doll.');
+  F('F', 'Bandura’s stages', 'Attention · retention · reproduction · motivation.');
+  F('F', 'Vicarious reinforcement', 'Learning from seeing someone else rewarded.');
+  F('F', 'Skinner – operant conditioning', 'Positive reinforcement increases behaviour; punishment decreases it.');
+  F('F', 'Bronfenbrenner', 'Micro · meso · exo · macro · chronosystem around the child.');
+  F('F', 'Mesosystem', 'Links between microsystems – e.g. parents and teacher.');
+  F('F', 'Exosystem', 'Settings that affect the child indirectly – parent’s work, local services.');
+  F('F', 'Nature vs nurture', 'Genes/biology vs environment/experience – they interact.');
+  F('F', '9-mark discuss technique', 'Name theory → key concepts → apply to the child → practitioner implications → limitations → judgement.');
+  F('F', '12-mark evaluate technique', 'Both sides/several areas with evidence from scenario → weigh importance → supported conclusion.');
+  F('F', 'Theorist → area', 'Piaget/Vygotsky/Bruner/Info processing → cognitive · Chomsky/Skinner/Brown/Bruner LASS → language · Bowlby/Ainsworth/Schaffer & Emerson → emotional · Bandura/Skinner/Bronfenbrenner → social.');
+  F('A', 'Applying a theory', 'Name the theorist → state the concept → link to the named child’s behaviour → say what the adult should do.');
+  F('C', 'Centration', 'Focusing on one feature only (e.g. height of the glass) – pre-operational.');
+  F('E', 'Secure base', 'A trusted adult the child returns to for comfort before exploring again.');
+  B.publish();
+})();

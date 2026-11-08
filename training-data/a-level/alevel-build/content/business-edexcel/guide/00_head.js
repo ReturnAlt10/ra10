@@ -1,0 +1,27 @@
+/* Pearson Edexcel A-level Business (9BS0) — RA10 revision guide. One part per theme; parts register into T / TITLE / SUB. */
+(function () {
+  'use strict';
+  const { svg: S, h: H } = window.BizGuide;
+  const { key, tip, warn, fig, table, ul, ol, example, stats, check, two, steps, cards, formula } = H;
+  const P = { blue: '#2563eb', sky: '#0284c7', teal: '#0d9488', green: '#16a34a', amber: '#d97706', orange: '#ea580c', red: '#dc2626', pink: '#db2777', violet: '#7c3aed', slate: '#64748b', navy: '#1e3a8a' };
+  const T = {}, TITLE = {}, SUB = {};
+  const p = (...xs) => xs.map(x => `<p>${x}</p>`).join('');
+  const h3 = (t) => `<h3>${t}</h3>`;
+  const eval2 = (pro, con, judge) => `<div class="g-callout g-key"><strong>Assessing it (analysis → evaluation)</strong><div>${two(`<h4>Arguments for</h4>${ul(pro)}`, `<h4>Counterbalance</h4>${ul(con)}`)}${judge ? `<p><b>Judgement depends on:</b> ${judge}</p>` : ''}</div></div>`;
+  const calc = (title, lines) => example(title, lines.map(l => `<div>${l}</div>`).join(''));
+
+  const setTask = () => `
+${stats([['3', 'papers, all compulsory'], ['2 hours', 'each paper'], ['100', 'marks per paper'], ['33⅓%', 'of the A-level each'], ['10%+', 'quantitative skills']])}
+${p('Every paper is built on <b>extracts</b> about real businesses: read them, then answer questions that must be <b>applied</b> to that business. Each paper has two sections of 50 marks (one question with parts (a)–(e) in each). Paper 3 is based on a <b>pre-released context</b> (an industry announced the November before the exam) and uses all four themes.')}
+${fig(S.ladder([['Paper 1 · Marketing, people and global businesses', 'Themes 1 and 4 · 100 marks · data response'], ['Paper 2 · Business activities, decisions and strategy', 'Themes 2 and 3 · 100 marks · data response'], ['Paper 3 · Investigating business in a competitive environment', 'All themes · 100 marks · pre-released context + unseen extracts']], { w: 700, rowH: 58, label: 'The three papers' }), 'All three papers: 2 hours, 100 marks, two sections of 50 marks.')}
+${h3('Question types and the four skills')}
+${table(['Marks', 'Command word', 'Skills (typical split)', 'What gets top marks'], [['4', 'Explain / Calculate', 'Knowledge 1, Application 2, Analysis 1 – or formula + working + answer', 'A definition, two points of context and one consequence (“so…”); calculations: formula, correct numbers, units and precision'], ['8', 'Analyse / Assess two', 'K2, A2, An2, Ev2 (Paper 3 “Assess two…”)', 'Two developed factors, each applied, with a brief weighing'], ['10', 'Assess', 'K2, A2, An3, Ev3', 'Developed chains of reasoning for and against, used with the extract data, and a supported judgement'], ['12', 'Assess', 'K2, A2, An4, Ev4', 'As 10 marks, with a wider-ranging balanced assessment'], ['20', 'Evaluate (two options / to what extent)', 'K4, A4, An6, Ev6', 'Both options analysed in context, weighed against each other, and a justified recommendation that says what it depends on']])}
+${fig(S.flow([['Knowledge', 'define the term accurately'], ['Application', 'use the extract: names, numbers, quotes'], ['Analysis', 'chains of reasoning: because… this means… so…'], ['Evaluation', 'weigh up, counterbalance, judge – “it depends on…”']], { w: 700, h: 88, label: 'The four assessment objectives' }), 'Each level of the mark scheme rewards all four – application must run through the whole answer.')}
+${h3('How the levels work')}
+${table(['Level', '10-mark band', 'Descriptor (summary)'], [['1', '1–2', 'Isolated knowledge; weak or no application; generic assertions'], ['2', '3–4', 'Knowledge applied to the business; chains of reasoning presented but incomplete; superficial assessment'], ['3', '5–6', 'Accurate knowledge; developed chains of reasoning; an attempt at an assessment using the data, but competing arguments not weighed'], ['4', '7–10', 'Coherent, logical chains; balanced, well-contextualised assessment showing competing arguments, leading to a supported judgement']])}
+${h3('The 20-mark recommendation')}
+${steps(['<b>Define</b> both options briefly (K).', '<b>Option 1:</b> two developed benefits using the extract data, then a drawback (A, An).', '<b>Option 2:</b> the same (A, An).', '<b>Weigh</b> them against the objective in the question – which one achieves it better, and why? (Ev)', '<b>Recommend</b> one option, justify it with the data, and say what the decision <b>depends on</b> (eg costs, competitors, time scale). (Ev)'])}
+${tip('Examiners report that the most common reason for missing Level 4 is a judgement that does not follow from the analysis. Your conclusion should add something new – a “depends on” factor or the most important reason – not repeat the paragraphs above.', 'Examiner advice')}
+${h3('Quantitative skills')}
+${check(['Percentages and percentage changes; market share; averages', 'Price and income elasticity', 'Break-even, contribution, margin of safety', 'Profit, profit margins and ratios (current, acid test, gearing, ROCE)', 'Labour productivity, turnover, capacity utilisation', 'Investment appraisal (payback, ARR, NPV), decision trees, critical path, moving averages', 'Interpreting index numbers, tables, charts and exchange rates'])}
+${warn('Always show your working and the formula: most 4-mark calculations give 1 mark for the formula/knowledge and 2 for the method, so a wrong final answer can still score 3. Give the units (%, £, units) and the precision asked for (eg 2 decimal places).', 'Calculations')}`;

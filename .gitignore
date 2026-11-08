@@ -25,3 +25,14 @@ training-data/a-level/aqa-build/out/
 
 # IT Unit 1 build output: extracted Pearson paper text (the site uses js/papers-data.js instead)
 training-data/btec/level-3/it/unit-1/build/*.json
+
+# Pearson BTEC National AAQ specs, SAMs, teaching guides and extracted text (copyrighted source material).
+# The site uses the generated revision/btec/level-3/<subject>-aaq/unit-N/ apps instead.
+training-data/btec/level-3/*-aaq/
+training-data/btec/level-3/aaq-build/out/
+
+# AQA A-level Psychology (7182) and Pearson Edexcel A-level Business (9BS0): papers, mark schemes,
+# examiner reports, case studies and extracted text (copyrighted source material)
+training-data/a-level/aqa-psychology/
+training-data/a-level/edexcel-business/
+training-data/a-level/alevel-build/out/

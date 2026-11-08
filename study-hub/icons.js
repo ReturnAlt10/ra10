@@ -57,6 +57,11 @@
     cloud: `<g class="a-drift"><path ${F} d="M7 18.5a4.5 4.5 0 0 1-.5-9 6 6 0 0 1 11.5 1.5 3.8 3.8 0 0 1-.5 7.5z"/><path d="M7 18.5a4.5 4.5 0 0 1-.5-9 6 6 0 0 1 11.5 1.5 3.8 3.8 0 0 1-.5 7.5z"/></g>`,
     gear: `<g class="a-spin-slow"><circle cx="12" cy="12" r="3"/><path ${F} d="M12 2.5l1.6 2.4 2.8-.6.6 2.8 2.4 1.6-1.2 2.6 1.2 2.6-2.4 1.6-.6 2.8-2.8-.6L12 21.5l-1.6-2.4-2.8.6-.6-2.8-2.4-1.6 1.2-2.6-1.2-2.6 2.4-1.6.6-2.8 2.8.6z"/><path d="M12 2.5l1.6 2.4 2.8-.6.6 2.8 2.4 1.6-1.2 2.6 1.2 2.6-2.4 1.6-.6 2.8-2.8-.6L12 21.5l-1.6-2.4-2.8.6-.6-2.8-2.4-1.6 1.2-2.6-1.2-2.6 2.4-1.6.6-2.8 2.8.6z"/></g>`,
     clipboard: `<rect x="4.5" y="4" width="15" height="17.5" rx="2.5" ${F}/><rect x="4.5" y="4" width="15" height="17.5" rx="2.5"/><rect x="8.5" y="2.5" width="7" height="3.5" rx="1.2"/><path class="a-draw" d="m8 12.5 2 2 4.5-4.5M8 17.5h8"/>`,
+    trash: `<path ${F} d="M6 7h12l-1 13.5H7z"/><path d="M6 7h12l-1 13.5H7zM4 7h16M10 7V4.5h4V7M10 11v6M14 11v6"/>`,
+    building: `<path ${F} d="M4 21V9l6-4v16zM10 21V3h10v18z"/><path d="M4 21V9l6-4v16M10 21V3h10v18M2.5 21h19"/><g class="a-tw1"><path d="M13 7h1.5M16 7h1.5M13 11h1.5M16 11h1.5M13 15h1.5M16 15h1.5"/></g>`,
+    blocks: `<rect x="3" y="13" width="8" height="8" rx="1.5" ${F}/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/><g class="a-bob"><rect x="8" y="3.5" width="8" height="8" rx="1.5" ${F}/><rect x="8" y="3.5" width="8" height="8" rx="1.5"/></g>`,
+    flask: `<path ${F} d="M9.5 3h5v6l5 9.5a2 2 0 0 1-1.8 2.9H6.3a2 2 0 0 1-1.8-2.9l5-9.5z"/><path d="M9.5 3h5v6l5 9.5a2 2 0 0 1-1.8 2.9H6.3a2 2 0 0 1-1.8-2.9l5-9.5zM8 3h8M7 15h10"/><g class="a-bob"><circle cx="10.5" cy="17.5" r=".8"/><circle cx="13.5" cy="18.5" r=".6"/></g>`,
+    wrench: `<g class="a-tilt"><path ${F} d="M14.5 3.5a5 5 0 0 0-4.6 6.9L3.5 16.8a1.9 1.9 0 0 0 2.7 2.7l6.4-6.4a5 5 0 0 0 6.9-4.6l-2.9 2.9-2.6-.6-.6-2.6z"/><path d="M14.5 3.5a5 5 0 0 0-4.6 6.9L3.5 16.8a1.9 1.9 0 0 0 2.7 2.7l6.4-6.4a5 5 0 0 0 6.9-4.6l-2.9 2.9-2.6-.6-.6-2.6z"/></g>`,
   };
   P.lightbulb = P.bulb;
   const ALIAS = { learn: 'book', mcq: 'question', truefalse: 'scales', fill: 'pencil', match: 'puzzle', order: 'steps', recap: 'flag', bank: 'target' };
@@ -92,6 +97,12 @@
     'IT-AAQ/unit-1': 'chip', 'IT-AAQ/unit-2': 'shield', 'IT-AAQ/unit-3': 'code', 'IT-AAQ/unit-4': 'database', 'level-2/it/unit-2': 'chip',
     'business/unit-2': 'megaphone', 'business/unit-3': 'coins', 'business/unit-6': 'people', 'business/unit-7': 'scales',
     'business-2023': 'chart', 'business-2026': 'chart', 'sport/unit-1': 'heart', 'sport/unit-2': 'dumbbell',
+    'computing-aaq/unit-1': 'code', 'computing-aaq/unit-2': 'lock', 'computing-aaq/unit-3': 'people', 'computing-aaq/unit-4': 'code',
+    'construction-aaq/unit-1': 'building', 'construction-aaq/unit-2': 'wrench', 'construction-aaq/unit-3': 'pencil', 'construction-aaq/unit-4': 'coins', 'construction-aaq/unit-5': 'globe', 'construction-aaq/unit-6': 'building',
+    'early-childhood-development-aaq/unit-1': 'blocks', 'early-childhood-development-aaq/unit-2': 'shield', 'early-childhood-development-aaq/unit-3': 'puzzle', 'early-childhood-development-aaq/unit-4': 'clipboard',
+    'engineering-aaq/unit-1': 'bolt', 'engineering-aaq/unit-2': 'gear', 'engineering-aaq/unit-3': 'pencil', 'engineering-aaq/unit-4': 'wrench',
+    'health-and-social-care-aaq/unit-1': 'people', 'health-and-social-care-aaq/unit-2': 'heart', 'health-and-social-care-aaq/unit-3': 'clipboard', 'health-and-social-care-aaq/unit-4': 'scales', 'health-and-social-care-aaq/unit-5': 'megaphone', 'health-and-social-care-aaq/unit-6': 'shield', 'health-and-social-care-aaq/unit-7': 'flask',
+    'medical-science-aaq/unit-1': 'lungs', 'medical-science-aaq/unit-2': 'chart', 'medical-science-aaq/unit-3': 'flask', 'medical-science-aaq/unit-4': 'heart', 'medical-science-aaq/unit-5': 'flask', 'medical-science-aaq/unit-6': 'people',
   };
   function forUnit(path) {
     const p = String(path || '');

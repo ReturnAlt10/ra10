@@ -1,0 +1,24 @@
+/* BTEC Health and Social Care (AAQ) Unit 6 — per-criterion assignment help (RA10’s guidance; your work must be your own). */
+(function () {
+  'use strict';
+  const CH = (means, evidence, next) => `<p><b>What it means:</b> ${means}</p><p><b>Evidence to include:</b></p><ul>${evidence.map(e => `<li>${e}</li>`).join('')}</ul>${next ? `<p><b>Reaching the next grade:</b> ${next}</p>` : ''}`;
+  window.AAQ_CRIT_HELP = {
+    _intro: '<h3>Before you start</h3><p>For learning aim A choose <b>two individuals at different life stages</b> (e.g. a child on a hospital ward and an older adult in a care home). For learning aims B and C choose <b>one health or social care setting</b> you know well (placement setting, anonymised) – read its latest CQC report for real evidence.</p>',
+    _tips: '<ul><li>Name the exact legislation and explain what it requires staff to do in your setting.</li><li>Use specific examples: a hoist (MHOR), cleaning-cupboard locks (COSHH), an incident report (RIDDOR).</li><li>Recommendations should be specific, realistic and linked to law or CQC standards; justify them with evidence and consider costs.</li><li>Keep everything anonymous and confidential.</li></ul>',
+    'group:A': 'Learning aim A: services and environments for two individuals at different life stages, the factors affecting their care and the challenges.',
+    'group:B': 'Learning aim B: health and safety legislation and duty of care in one selected setting.',
+    'group:C': 'Learning aim C: regulation, responsibilities, record keeping and poor practice in the same setting – ending with justified recommendations.',
+    'A.P1': CH('Explain the purpose of the services used by your two individuals and how they meet their needs.', ['Identify the services (acute, community, residential, hospice…).', 'Explain their purpose and how they meet PIES needs for each person.'], null),
+    'A.P2': CH('Describe the factors that contribute to service provision and influence the care each person receives.', ['Environmental (location, design, noise), impact of conditions, EDI, integrated care, family involvement, resources.'], 'For M1, assess how these factors affect provision and the challenges they create.'),
+    'A.M1': CH('Assess the impact of the factors and the challenges in providing appropriate care for both individuals.', ['Weigh which factors have the greatest impact and why.', 'Specific challenges for each life stage.'], 'For D1, evaluate the challenges and how well they are overcome.'),
+    'A.D1': CH('Evaluate the challenges of providing an appropriate care environment for both individuals.', ['Strengths and weaknesses of how challenges are managed.', 'Compare the two individuals.', 'Supported conclusion and improvements.'], null),
+    'B.P3': CH('Describe how health and safety legislation supports safe practice in your setting.', ['HASAWA, Management Regs, COSHH, MHOR, RIDDOR, PPE Regs – what each requires in your setting.', 'Risk assessment process with an example.'], 'For M2, analyse how legislation and duty of care influence practice.'),
+    'B.P4': CH('Describe how duty of care supports safe practice and protects vulnerable individuals in your setting.', ['Definition, duty of candour, standards, safer recruitment.', 'Balancing rights and duty of care; safeguarding procedures.'], null),
+    'B.M2': CH('Analyse how legislation and duty of care influence safe practice in the setting.', ['Break down specific impacts on daily practice (policies, training, equipment, culture).', 'Show links between laws, duty of care and outcomes.'], 'For D2, evaluate their effectiveness.'),
+    'B.D2': CH('Evaluate how effective legislation and duty of care are in ensuring safe practice in the setting.', ['Evidence of what works (e.g. CQC findings, incident trends).', 'Limitations – staffing, training gaps, compliance.', 'Justified conclusion.'], null),
+    'C.P5': CH('Describe employer and employee roles and responsibilities to meet regulatory, legal and ethical requirements.', ['CQC and professional regulators/codes.', 'Employer and employee duties.', 'Record-keeping obligations and GDPR.'], null),
+    'C.P6': CH('Describe the potential impact of poor practice on employers, employees and individuals in the setting.', ['Specific impacts on each group with examples.'], 'For M3, discuss stakeholder roles and make recommendations.'),
+    'C.M3': CH('Discuss the role of key stakeholders in maintaining safe practice and recommend improvements.', ['Stakeholders – managers, staff, CQC, regulators, service users, families.', 'Recommendations linked to identified weaknesses.'], 'For D3, justify the recommendations.'),
+    'C.D3': CH('Justify your recommendations for effective safe practice.', ['Why each recommendation is needed (evidence).', 'How it meets legislation/standards and benefits stakeholders.', 'Costs/barriers and why it is still worthwhile.'], null)
+  };
+})();

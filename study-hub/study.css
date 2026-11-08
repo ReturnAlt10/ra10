@@ -841,3 +841,38 @@ body.sh-page .sh-ov-cta h2 { margin: 0 0 6px; color: #fff; font-size: clamp(1.5r
 }
 .sh-ov-card { margin: 0 auto; max-width: 440px; width: 100%; overflow: hidden; border-radius: 26px; box-shadow: 0 0 0 1px var(--line), 0 40px 80px -42px rgba(30, 30, 80, .55); }
 .sh-ov-card img { display: block; width: 100%; height: auto; }
+
+/* Remove a subject from the path */
+.sh-utab .sh-urm { display: grid; place-items: center; width: 22px; height: 22px; margin: 0 -4px 0 2px; border-radius: 7px; color: var(--ink-3); cursor: pointer; }
+.sh-utab .sh-urm:hover, .sh-utab .sh-urm:focus-visible { background: color-mix(in srgb, #ef4444 14%, transparent); color: #dc2626; outline: none; }
+.sh-rmsub { top: 100%; left: 0; transform: none; width: 300px; }
+.sh-rmsub::before { display: none; }
+.sh-rmacts { display: flex; justify-content: flex-end; gap: 8px; margin-top: 6px; }
+.sh-btn.danger { --b: #dc2626; --bb: #991b1b; --c: #fff; }
+
+/* ---- code steps (Python / JavaScript / SQL) ---- */
+.sh-code-brief { line-height: 1.6; margin: 0 0 12px; }
+.sh-code-wait { display: flex; gap: 10px; align-items: center; padding: 14px; border-radius: 14px; background: var(--soft, rgba(37,99,235,.08)); }
+.sh-codeedit { width: 100%; min-height: 200px; box-sizing: border-box; border-radius: 14px; border: 1px solid rgba(148,163,184,.35); background: #0f172a; color: #e2e8f0; padding: 12px 14px; font: 14px/1.55 'JetBrains Mono', ui-monospace, Consolas, monospace; tab-size: 4; resize: vertical; }
+.sh-code-in { display: block; margin-top: 10px; font-size: .9rem; font-weight: 600; }
+.sh-code-in textarea { display: block; width: 100%; box-sizing: border-box; margin-top: 4px; border-radius: 10px; border: 1px solid rgba(148,163,184,.35); padding: 8px 10px; font: 13px/1.5 ui-monospace, Consolas, monospace; background: transparent; color: inherit; }
+.sh-code-tools { display: flex; gap: 8px; margin: 10px 0; }
+.sh-code-out { min-height: 44px; max-height: 220px; overflow: auto; margin: 0; padding: 10px 12px; border-radius: 12px; background: #0b1220; color: #e2e8f0; font: 13px/1.5 ui-monospace, Consolas, monospace; white-space: pre-wrap; }
+.sh-code-out:empty { display: none; }
+.sh-code-out .e { color: #fca5a5; }
+.sh-code-out table, .sh-sqltable table { border-collapse: collapse; font: 12.5px ui-monospace, Consolas, monospace; }
+.sh-code-out th, .sh-code-out td, .sh-sqltable th, .sh-sqltable td { border: 1px solid rgba(148,163,184,.35); padding: 3px 8px; text-align: left; }
+.sh-sqltables { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 10px; overflow-x: auto; }
+.sh-sqltable b { display: block; margin-bottom: 4px; font-size: .85rem; }
+.sh-code-hint { margin-top: 8px; padding: 8px 12px; border-radius: 10px; background: rgba(245,158,11,.12); display: flex; gap: 8px; align-items: flex-start; }
+.sh-code-results { display: grid; gap: 6px; margin-top: 10px; }
+.sh-code-results > div { padding: 8px 10px; border-radius: 10px; border: 1px solid rgba(148,163,184,.35); display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+.sh-code-results > div.ok { border-color: rgba(22,163,74,.6); } .sh-code-results > div.bad { border-color: rgba(220,38,38,.6); }
+.sh-code-results pre { flex-basis: 100%; margin: 4px 0 0; white-space: pre-wrap; font: 12px ui-monospace, Consolas, monospace; }
+.sh-code-sol { white-space: pre-wrap; font: 12.5px/1.5 ui-monospace, Consolas, monospace; background: #0b1220; color: #e2e8f0; padding: 8px 10px; border-radius: 10px; text-align: left; }
+.sh-codepanel { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin: 12px 0; padding: 12px 14px; border-radius: 16px; border: 1px solid var(--line); background: color-mix(in srgb, var(--pc, #2563eb) 8%, var(--card)); }
+.sh-codepanel .ci { width: 42px; height: 42px; border-radius: 12px; display: grid; place-items: center; background: color-mix(in srgb, var(--pc, #2563eb) 18%, transparent); flex: none; }
+.sh-codepanel > div { flex: 1 1 220px; min-width: 0; }
+.sh-codepanel b { display: block; }
+.sh-codepanel small { display: block; opacity: .8; margin-top: 2px; }
+.sh-codepanel a:not(.sh-btn) { color: inherit; font-weight: 700; }

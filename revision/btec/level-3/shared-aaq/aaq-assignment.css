@@ -1,0 +1,33 @@
+/* Assignment guide (internally assessed AAQ units) — appended to the unit's style.css by build_apps.py */
+#assignment-host { display: grid; gap: 18px; }
+.aq-banner { padding: 14px 16px; border-radius: 14px; background: #fef3c7; border: 1px solid #fcd34d; color: #78350f; font-size: .95rem; line-height: 1.55; }
+[data-theme="dark"] .aq-banner { background: rgba(245, 158, 11, .14); border-color: rgba(245, 158, 11, .4); color: #fde68a; }
+.aq-top { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 16px; }
+.aq-card { padding: 20px; border-radius: 18px; background: var(--surface); border: 1px solid var(--line); line-height: 1.6; }
+.aq-card h3 { margin: 0 0 8px; font-size: 1.1rem; }
+.aq-card p { margin: 0; color: var(--ink-2); }
+.aq-bar { height: 10px; border-radius: 99px; background: var(--surface-2, rgba(0,0,0,.06)); overflow: hidden; margin: 6px 0 10px; }
+.aq-bar i { display: block; height: 100%; background: var(--accent); border-radius: 99px; transition: width .3s; }
+.aq-group { padding: 20px; border-radius: 18px; background: var(--surface); border: 1px solid var(--line); }
+.aq-gh { display: flex; gap: 12px; align-items: center; margin: 0 0 16px; font-size: 1.12rem; line-height: 1.35; }
+.aq-gh span { flex: none; display: grid; place-items: center; min-width: 38px; height: 38px; padding: 0 8px; border-radius: 11px; background: var(--accent); color: #fff; font-size: .9rem; }
+.aq-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.aq-col h4 { margin: 0 0 10px; font-size: .78rem; letter-spacing: .07em; text-transform: uppercase; }
+.aq-P h4 { color: #0369a1; } .aq-M h4 { color: #7c3aed; } .aq-D h4 { color: #b45309; }
+[data-theme="dark"] .aq-P h4 { color: #7dd3fc; } [data-theme="dark"] .aq-M h4 { color: #c4b5fd; } [data-theme="dark"] .aq-D h4 { color: #fcd34d; }
+.aq-crit { margin-bottom: 10px; padding: 12px 13px; border-radius: 13px; border: 1px solid var(--line); background: var(--bg, transparent); font-size: .92rem; line-height: 1.5; }
+.aq-crit label { display: flex; gap: 10px; align-items: flex-start; cursor: pointer; }
+.aq-crit input { flex: none; width: 18px; height: 18px; margin-top: 3px; accent-color: var(--accent); }
+.aq-crit code { font-weight: 800; font-size: .8rem; margin-right: 4px; }
+.aq-crit.done { border-color: #22c55e; background: color-mix(in srgb, #22c55e 9%, transparent); }
+.aq-help, .aq-det { margin-top: 10px; }
+.aq-help summary, .aq-det summary { cursor: pointer; font-weight: 700; font-size: .85rem; color: var(--accent-ink, var(--accent)); }
+.aq-help > div, .aq-det > div { margin-top: 8px; font-size: .9rem; line-height: 1.6; color: var(--ink-2); }
+.aq-help ul, .aq-det ul, .aq-note ul { margin: 6px 0; padding-left: 1.2em; }
+.aq-det p { margin: 0 0 .7em; }
+.aq-note { margin-top: 12px; padding: 14px 16px; border-radius: 14px; background: color-mix(in srgb, var(--accent) 7%, transparent); border: 1px solid color-mix(in srgb, var(--accent) 25%, transparent); font-size: .93rem; line-height: 1.6; }
+.aq-none { color: var(--ink-3, #888); font-size: .86rem; margin: 0; }
+.aq-verbs { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: 10px; margin-top: 6px; }
+.aq-verbs div { padding: 12px 14px; border-radius: 13px; border: 1px solid var(--line); font-size: .9rem; line-height: 1.5; }
+.aq-verbs b { display: block; margin-bottom: 3px; }
+@media (max-width: 860px) { .aq-grid { grid-template-columns: 1fr; } }

@@ -31,21 +31,21 @@
 })();
 </script>
 <link rel="preload" href="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0/dist/umd/supabase.js" as="script" crossorigin>
-<link rel="preload" href="/refresh/site.js?v=20261124" as="script">
+<link rel="preload" href="/refresh/site.js?v=20261212" as="script">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>RA10 — Advanced Revision Site (BTEC, GCSE, A-LEVEL)</title>
-<meta name="description" content="Free BTEC IT, Business and Sport revision for Level 3 AAQ and A-Level. Flashcards, quizzes, predicted papers, study guides, wireframe and code tools, and AI assignment marking — all in one place.">
-<meta name="keywords" content="BTEC IT revision, BTEC Level 3 AAQ, BTEC Business revision, BTEC Sport revision, A-Level Business revision, predicted papers, flashcards, quizzes, study guide, RA10">
+<meta name="description" content="Free BTEC Level 3 revision for IT, Business, Sport, Computing, Construction, Early Childhood Development, Engineering, Health and Social Care and Medical Science, plus A-Level Business (AQA and Edexcel) and A-Level Psychology. Flashcards, quizzes, predicted papers, study guides, wireframe and code tools, and AI assignment marking — all in one place.">
+<meta name="keywords" content="BTEC IT revision, AQA A-Level Psychology revision, Edexcel A-Level Business revision, 9BS0 past papers, BTEC Level 3 AAQ, BTEC Business revision, BTEC Sport revision, BTEC Computing revision, BTEC Construction revision, BTEC Early Childhood Development revision, BTEC Engineering revision, BTEC Health and Social Care revision, BTEC Medical Science revision, A-Level Business revision, predicted papers, flashcards, quizzes, study guide, RA10">
 <link rel="canonical" href="https://ra10.co.uk/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="RA10">
 <meta property="og:title" content="RA10 — Advanced Revision Site (BTEC, GCSE, A-LEVEL)">
-<meta property="og:description" content="Free BTEC IT, Business and Sport revision for Level 3 AAQ and A-Level. Flashcards, quizzes, predicted papers, study guides and AI assignment marking.">
+<meta property="og:description" content="Free BTEC Level 3 revision for IT, Business, Sport, Computing, Construction, Early Childhood Development, Engineering, Health and Social Care and Medical Science, plus A-Level Business (AQA and Edexcel) and A-Level Psychology. Flashcards, quizzes, predicted papers, study guides and AI assignment marking.">
 <meta property="og:url" content="https://ra10.co.uk/">
 <meta property="og:image" content="https://ra10.co.uk/logo.png">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RA10 — Advanced Revision Site (BTEC, GCSE, A-LEVEL)">
-<meta name="twitter:description" content="Free BTEC IT, Business and Sport revision for Level 3 AAQ and A-Level. Flashcards, quizzes, predicted papers, study guides and AI assignment marking.">
+<meta name="twitter:description" content="Free BTEC Level 3 revision for IT, Business, Sport, Computing, Construction, Early Childhood Development, Engineering, Health and Social Care and Medical Science, plus A-Level Business (AQA and Edexcel) and A-Level Psychology. Flashcards, quizzes, predicted papers, study guides and AI assignment marking.">
 <meta name="twitter:image" content="https://ra10.co.uk/logo.png">
 <script type="application/ld+json">
 {
@@ -54,7 +54,7 @@
   "name": "RA10",
   "alternateName": "RA10 Advanced Revision Site",
   "url": "https://ra10.co.uk/",
-  "description": "Free BTEC IT, Business and Sport revision for Level 3 AAQ and A-Level. Flashcards, quizzes, predicted papers, study guides, wireframe and code tools, and AI assignment marking.",
+  "description": "Free BTEC Level 3 revision for IT, Business, Sport, Computing, Construction, Early Childhood Development, Engineering, Health and Social Care and Medical Science, plus A-Level Business (AQA and Edexcel) and A-Level Psychology. Flashcards, quizzes, predicted papers, study guides, wireframe and code tools, and AI assignment marking.",
   "publisher": { "@type": "Organization", "name": "RA10", "url": "https://ra10.co.uk" }
 }
 </script>
@@ -109,7 +109,7 @@
 })();
 </script>
 <!-- ra10-refresh: behaviour script (the stylesheets are linked statically at the end of <head>) -->
-<script src="/refresh/ra10-refresh.js?v=20261104" defer></script>
+<script src="/refresh/ra10-refresh.js?v=20261212" defer></script>
 <style id="hm-css">
 /* Homepage (signed-out) — one scoped system: ink, paper, one red accent. */
 #p-home{--hm-ink:#16130f;--hm-ink-2:#57534b;--hm-paper:#fffdf8;--hm-line:rgba(22,19,15,.09);--hm-red:#d20000;--hm-red-soft:#fde8e6;--hm-green:#15803d;--hm-r:22px}
@@ -432,6 +432,29 @@ body.home-signed-in #p-home .hx-home > :not(#signed-in-dashboard){display:none !
 .sd-resume.first .sd-app-ico{width:72px;height:72px;border-radius:22px;animation:sd-float 3.4s ease-in-out infinite}
 .sd-go{transition:transform .2s}.sd-resume:hover .sd-go{transform:translateX(5px)}
 .sd-pin.on{animation:sd-star .5s cubic-bezier(.3,1.6,.5,1)}
+/* subject-styled tiles: each subject's own icon and colour (from the subject registry) */
+.sd-app-ico.sd-subj{background:linear-gradient(140deg,var(--c) 0%,color-mix(in srgb,var(--c) 68%,#000) 100%);padding:0;display:grid;place-items:center}
+.sd-app-ico.sd-subj svg{width:28px;height:28px;margin-top:-6px;stroke:#fff}
+.sd-resume.first .sd-app-ico.sd-subj svg{width:34px;height:34px}
+.sd-app{border-left:4px solid var(--c0,var(--color-divider))}
+.sd-app:hover{border-color:var(--c0,var(--color-primary));box-shadow:0 10px 24px -16px var(--c0,rgba(0,0,0,.4))}
+.sd-app-copy strong{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.sd-all{display:block}
+.sd-filter{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-bottom:6px}
+.sd-chips{display:flex;flex-wrap:wrap;gap:6px}
+.sd-chip span{opacity:.55;margin-left:3px;font-weight:700}
+.sd-search{display:flex;align-items:center;gap:8px;min-width:230px;flex:0 1 300px;padding:8px 14px;border-radius:999px;border:1px solid var(--color-border);color:var(--color-text-muted)}
+.sd-search:focus-within{border-color:var(--color-primary)}
+.sd-search input{flex:1;min-width:0;border:0;outline:0;background:transparent;color:var(--color-text);font:500 .88rem var(--font-b)}
+.sd-subj-block{margin-top:18px}
+.sd-subj-head{display:flex;align-items:center;gap:12px;padding-bottom:10px;margin-bottom:12px;border-bottom:2px solid color-mix(in srgb,var(--c0) 30%,transparent)}
+.sd-subj-ico{flex:none;width:38px;height:38px;border-radius:12px;display:grid;place-items:center;color:var(--c0);background:color-mix(in srgb,var(--c0) 15%,transparent)}
+.sd-subj-ico svg{width:22px;height:22px}
+.sd-subj-head b{display:block;font:800 1.02rem var(--font-b);color:var(--color-text)}
+.sd-subj-head small{display:block;color:var(--color-text-muted);font-size:.8rem}
+.sd-new{margin-left:auto;padding:3px 9px;border-radius:999px;font:800 .66rem var(--font-b);letter-spacing:.06em;text-transform:uppercase;color:var(--c0);background:color-mix(in srgb,var(--c0) 14%,transparent)}
+.sd-subj-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+@media (max-width:560px){.sd-subj-grid{grid-template-columns:minmax(0,1fr)}.sd-search{flex:1 1 100%;min-width:0}}
 .sd-avatar{width:72px;height:72px;font-size:2rem;position:relative;animation:sd-float 4s ease-in-out infinite}
 .sd-avatar::after{content:'';position:absolute;inset:-5px;border-radius:25px;border:2px solid rgba(210,0,0,.35);animation:sd-ping 2.8s ease-out infinite}
 .sd-wave{display:inline-block;transform-origin:70% 70%;animation:sd-wave 2.4s ease-in-out 1s 2}
@@ -501,144 +524,12 @@ body.home-signed-in #p-home .hx-home > :not(#signed-in-dashboard){display:none !
       <a class="nav-link nav-studyhub" data-nav="study-hub" href="/study-hub/"><svg class="nu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 4.6L18.5 9.5l-4.6 1.9L12 16l-1.9-4.6L5.5 9.5l4.6-1.9z"/><path d="M19 15l.8 1.9 1.9.8-1.9.8L19 20.4l-.8-1.9-1.9-.8 1.9-.8z"/></svg>Study Hub</a>
       <div style="position:relative;display:inline-flex;" id="nav-rev-wrap">
         <button class="nav-link" data-nav="revision" onclick="go('/revision')"><svg class="nu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Revision</button>
-        <div id="rev-preview" style="display:none;position:absolute;
+        <div id="rev-preview" role="dialog" aria-label="Find a subject" style="display:none;position:absolute;
           top:calc(100% + 8px);left:50%;transform:translateX(-50%);
           background:var(--color-surface);border:1px solid var(--color-border);
           border-radius:var(--radius-xl);box-shadow:var(--shadow-lg);
           padding:var(--sp4);min-width:340px;z-index:10003;">
-          <div class="rev-preview-groups">
-
-            <div class="rev-preview-group">
-              <div class="rev-preview-group-head">
-                <span class="rev-subject-icon it">IT</span>
-                <div class="rev-preview-group-title">
-                  <strong>Information Technology</strong>
-                  <small>BTEC Level 3 · AAQ</small>
-                </div>
-              </div>
-              <div class="rev-preview-units">
-                <a class="rev-preview-unit" href="/btec/level-3/IT-AAQ/unit-1" onclick="go('/revision/btec/level-3/IT-AAQ/unit-1');hideRevPreview()">
-                  <span class="rev-preview-badge">Unit 1</span>
-                  <span class="rev-preview-copy"><strong>IT Systems</strong><small>Devices, networks, security &amp; impact</small></span>
-                  <em>Open</em>
-                </a>
-                <a class="rev-preview-unit" href="/btec/level-3/IT-AAQ/unit-2" onclick="go('/revision/btec/level-3/IT-AAQ/unit-2');hideRevPreview()">
-                  <span class="rev-preview-badge">Unit 2</span>
-                  <span class="rev-preview-copy"><strong>Cyber Security &amp; Incident Management</strong><small>Threats, protection &amp; response</small></span>
-                  <em>Open</em>
-                </a>
-                <a class="rev-preview-unit" href="/btec/level-3/IT-AAQ/unit-3" onclick="go('/revision/btec/level-3/IT-AAQ/unit-3');hideRevPreview()">
-                  <span class="rev-preview-badge">Unit 3</span>
-                  <span class="rev-preview-copy"><strong>Website Development</strong><small>Wireframes, code &amp; AI marking</small></span>
-                  <em>Open</em>
-                </a>
-                <a class="rev-preview-unit" href="/btec/level-3/IT-AAQ/unit-4" onclick="go('/revision/btec/level-3/IT-AAQ/unit-4');hideRevPreview()">
-                  <span class="rev-preview-badge">Unit 4</span>
-                  <span class="rev-preview-copy"><strong>Relational Database Development</strong><small>SQL, normalisation &amp; MS Access</small></span>
-                  <em>Open</em>
-                </a>
-              </div>
-            </div>
-
-            <div class="rev-preview-group">
-              <div class="rev-preview-group-head">
-                <span class="rev-subject-icon l2">IT</span>
-                <div class="rev-preview-group-title">
-                  <strong>IT Level 2</strong>
-                  <small>BTEC Level 2</small>
-                </div>
-              </div>
-              <div class="rev-preview-units">
-                <a class="rev-preview-unit" href="/btec/level-2/it/unit-2" onclick="go('/revision/btec/level-2/it/unit-2');hideRevPreview()">
-                  <span class="rev-preview-badge">Unit 2</span>
-                  <span class="rev-preview-copy"><strong>Technology Systems</strong><small>Practice Q&amp;A · AI marking</small></span>
-                  <em>Open</em>
-                </a>
-              </div>
-            </div>
-
-            <div class="rev-preview-group">
-              <div class="rev-preview-group-head">
-                <span class="rev-subject-icon business">BU</span>
-                <div class="rev-preview-group-title">
-                  <strong>Business</strong>
-                  <small>BTEC Level 3</small>
-                </div>
-              </div>
-              <div class="rev-preview-units">
-                <a class="rev-preview-unit" href="/btec/level-3/business/unit-2" onclick="go('/revision/btec/level-3/business/unit-2');hideRevPreview()">
-                  <span class="rev-preview-badge">Unit 2</span>
-                  <span class="rev-preview-copy"><strong>Marketing Campaign</strong><small>Research · Marketing mix</small></span>
-                  <em>Open</em>
-                </a>
-                <a class="rev-preview-unit" href="/btec/level-3/business/unit-3" onclick="go('/revision/btec/level-3/business/unit-3');hideRevPreview()">
-                  <span class="rev-preview-badge">Unit 3</span>
-                  <span class="rev-preview-copy"><strong>Business Finance</strong><small>Ratios · Break-even</small></span>
-                  <em>Open</em>
-                </a>
-                <a class="rev-preview-unit" href="/btec/level-3/business/unit-6" onclick="go('/revision/btec/level-3/business/unit-6');hideRevPreview()">
-                  <span class="rev-preview-badge">Unit 6</span>
-                  <span class="rev-preview-copy"><strong>Principles of Management</strong><small>Culture · Quality</small></span>
-                  <em>Open</em>
-                </a>
-                <a class="rev-preview-unit" href="/btec/level-3/business/unit-7" onclick="go('/revision/btec/level-3/business/unit-7');hideRevPreview()">
-                  <span class="rev-preview-badge">Unit 7</span>
-                  <span class="rev-preview-copy"><strong>Decision Making</strong><small>Options · Tools</small></span>
-                  <em>Open</em>
-                </a>
-              </div>
-            </div>
-
-            <div class="rev-preview-group">
-              <div class="rev-preview-group-head">
-                <span class="rev-subject-icon sport">SP</span>
-                <div class="rev-preview-group-title">
-                  <strong>Sport</strong>
-                  <small>BTEC Level 3</small>
-                </div>
-              </div>
-              <div class="rev-preview-units">
-                <a class="rev-preview-unit" href="/btec/level-3/sport/unit-1" onclick="go('/revision/btec/level-3/sport/unit-1');hideRevPreview()">
-                  <span class="rev-preview-badge">Unit 1</span>
-                  <span class="rev-preview-copy"><strong>Anatomy &amp; Physiology</strong><small>Flashcards · Mock papers</small></span>
-                  <em>Open</em>
-                </a>
-                <a class="rev-preview-unit" href="/btec/level-3/sport/unit-2" onclick="go('/revision/btec/level-3/sport/unit-2');hideRevPreview()">
-                  <span class="rev-preview-badge">Unit 2</span>
-                  <span class="rev-preview-copy"><strong>Fitness Training &amp; Programming</strong><small>Past papers · AI Examiner</small></span>
-                  <em>Open</em>
-                </a>
-              </div>
-            </div>
-
-            <div class="rev-preview-group">
-              <div class="rev-preview-group-head">
-                <span class="rev-subject-icon business">AL</span>
-                <div class="rev-preview-group-title">
-                  <strong>AQA Business</strong>
-                  <small>A-Level · 7132</small>
-                </div>
-              </div>
-              <div class="rev-preview-units">
-                <a class="rev-preview-unit" href="/a-level/business-2023" onclick="go('/revision/a-level/business-2023');hideRevPreview()">
-                  <span class="rev-preview-badge">2023</span>
-                  <span class="rev-preview-copy"><strong>Full Course</strong><small>Paper 1-3 · AI Examiner</small></span>
-                  <em>Open</em>
-                </a>
-                <a class="rev-preview-unit" href="/a-level/business-2026" onclick="go('/revision/a-level/business-2026');hideRevPreview()">
-                  <span class="rev-preview-badge">2026</span>
-                  <span class="rev-preview-copy"><strong>New specification (7138)</strong><small>Two case studies · AI Examiner</small></span>
-                  <em>Open</em>
-                </a>
-              </div>
-            </div>
-
-          </div>
-          <div style="margin-top:var(--sp3);padding-top:var(--sp3);
-            border-top:1px solid var(--color-divider);text-align:center;">
-            <button class="btn btn-g" style="width:100%;font-size:var(--tx-xs);"
-              onclick="go('/revision');hideRevPreview()">Browse all →</button>
-          </div>
+          <!-- filled by /refresh/ra10-subjects.js from the unit registry (ra10-units.js) -->
         </div>
       </div>
       <button class="nav-link" data-nav="community" onclick="go('/community')"><svg class="nu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>Community</button>
@@ -725,182 +616,13 @@ body.home-signed-in #p-home .hx-home > :not(#signed-in-dashboard){display:none !
   <div class="mobile-sheet-head">
     <div>
       <div class="mobile-sheet-title">Subjects</div>
-      <div class="mobile-sheet-copy">Jump straight into live revision apps, including A-Level Business.</div>
-      <div class="mobile-sheet-meta">
-        <span>7 live apps</span>
-        <span>BTEC + A-Level</span>
-      </div>
+      <div class="mobile-sheet-copy">Search or pick a subject, then open a unit.</div>
+      <div class="mobile-sheet-meta" id="rs-sheet-meta"></div>
     </div>
     <button class="mobile-sheet-close" id="mobile-sheet-close" aria-label="Close subjects">✕</button>
   </div>
   <div class="mobile-sheet-scroll">
-  <div class="mobile-subject-groups">
-
-    <div class="mobile-subject-group">
-      <div class="mobile-subject-group-head">
-        <span class="mobile-subject-icon it">IT</span>
-        <div class="mobile-subject-group-title">
-          <strong>Information Technology</strong>
-          <small>BTEC Level 3 · AAQ</small>
-        </div>
-      </div>
-      <div class="mobile-unit-list">
-        <button class="mobile-unit-link" type="button" data-mobile-subject="/revision/btec/level-3/IT-AAQ/unit-1">
-          <span class="mobile-unit-badge">Unit 1</span>
-          <span class="mobile-unit-copy">
-            <strong>IT Systems</strong>
-            <small>Devices, networks, security &amp; impact</small>
-          </span>
-          <em>Open</em>
-        </button>
-        <button class="mobile-unit-link" type="button" data-mobile-subject="/revision/btec/level-3/IT-AAQ/unit-2">
-          <span class="mobile-unit-badge">Unit 2</span>
-          <span class="mobile-unit-copy">
-            <strong>Cyber Security &amp; Incident Management</strong>
-            <small>Threats, protection &amp; response</small>
-          </span>
-          <em>Open</em>
-        </button>
-        <button class="mobile-unit-link" type="button" data-mobile-subject="/revision/btec/level-3/IT-AAQ/unit-3">
-          <span class="mobile-unit-badge">Unit 3</span>
-          <span class="mobile-unit-copy">
-            <strong>Website Development</strong>
-            <small>Wireframes, code &amp; AI marking</small>
-          </span>
-          <em>Open</em>
-        </button>
-        <button class="mobile-unit-link" type="button" data-mobile-subject="/revision/btec/level-3/IT-AAQ/unit-4">
-          <span class="mobile-unit-badge">Unit 4</span>
-          <span class="mobile-unit-copy">
-            <strong>Relational Database Development</strong>
-            <small>SQL, normalisation &amp; MS Access</small>
-          </span>
-          <em>Open</em>
-        </button>
-      </div>
-    </div>
-
-    <div class="mobile-subject-group">
-      <div class="mobile-subject-group-head">
-        <span class="mobile-subject-icon l2">IT</span>
-        <div class="mobile-subject-group-title">
-          <strong>IT Level 2</strong>
-          <small>BTEC Level 2</small>
-        </div>
-      </div>
-      <div class="mobile-unit-list">
-        <button class="mobile-unit-link" type="button" data-mobile-subject="/revision/btec/level-2/it/unit-2">
-          <span class="mobile-unit-badge">Unit 2</span>
-          <span class="mobile-unit-copy">
-            <strong>Technology Systems</strong>
-            <small>Practice Q&amp;A · AI marking</small>
-          </span>
-          <em>Open</em>
-        </button>
-      </div>
-    </div>
-
-    <div class="mobile-subject-group">
-      <div class="mobile-subject-group-head">
-        <span class="mobile-subject-icon business">BU</span>
-        <div class="mobile-subject-group-title">
-          <strong>Business</strong>
-          <small>BTEC Level 3</small>
-        </div>
-      </div>
-      <div class="mobile-unit-list">
-        <button class="mobile-unit-link" type="button" data-mobile-subject="/revision/btec/level-3/business/unit-2">
-          <span class="mobile-unit-badge">Unit 2</span>
-          <span class="mobile-unit-copy">
-            <strong>Marketing Campaign</strong>
-            <small>Research · Marketing mix</small>
-          </span>
-          <em>Open</em>
-        </button>
-        <button class="mobile-unit-link" type="button" data-mobile-subject="/revision/btec/level-3/business/unit-3">
-          <span class="mobile-unit-badge">Unit 3</span>
-          <span class="mobile-unit-copy">
-            <strong>Business Finance</strong>
-            <small>Ratios · Break-even</small>
-          </span>
-          <em>Open</em>
-        </button>
-        <button class="mobile-unit-link" type="button" data-mobile-subject="/revision/btec/level-3/business/unit-6">
-          <span class="mobile-unit-badge">Unit 6</span>
-          <span class="mobile-unit-copy">
-            <strong>Principles of Management</strong>
-            <small>Culture · Quality</small>
-          </span>
-          <em>Open</em>
-        </button>
-        <button class="mobile-unit-link" type="button" data-mobile-subject="/revision/btec/level-3/business/unit-7">
-          <span class="mobile-unit-badge">Unit 7</span>
-          <span class="mobile-unit-copy">
-            <strong>Decision Making</strong>
-            <small>Options · Tools</small>
-          </span>
-          <em>Open</em>
-        </button>
-      </div>
-    </div>
-
-    <div class="mobile-subject-group">
-      <div class="mobile-subject-group-head">
-        <span class="mobile-subject-icon sport">SP</span>
-        <div class="mobile-subject-group-title">
-          <strong>Sport</strong>
-          <small>BTEC Level 3</small>
-        </div>
-      </div>
-      <div class="mobile-unit-list">
-        <button class="mobile-unit-link" type="button" data-mobile-subject="/revision/btec/level-3/sport/unit-1">
-          <span class="mobile-unit-badge">Unit 1</span>
-          <span class="mobile-unit-copy">
-            <strong>Anatomy &amp; Physiology</strong>
-            <small>Flashcards · Mock papers</small>
-          </span>
-          <em>Open</em>
-        </button>
-        <button class="mobile-unit-link" type="button" data-mobile-subject="/revision/btec/level-3/sport/unit-2">
-          <span class="mobile-unit-badge">Unit 2</span>
-          <span class="mobile-unit-copy">
-            <strong>Fitness Training &amp; Programming</strong>
-            <small>Past papers · AI Examiner</small>
-          </span>
-          <em>Open</em>
-        </button>
-      </div>
-    </div>
-
-    <div class="mobile-subject-group">
-      <div class="mobile-subject-group-head">
-        <span class="mobile-subject-icon business">AL</span>
-        <div class="mobile-subject-group-title">
-          <strong>AQA Business</strong>
-          <small>A-Level · 7132</small>
-        </div>
-      </div>
-      <div class="mobile-unit-list">
-        <button class="mobile-unit-link" type="button" data-mobile-subject="/revision/a-level/business-2023">
-          <span class="mobile-unit-badge">2023</span>
-          <span class="mobile-unit-copy">
-            <strong>Full Course</strong>
-            <small>Paper 1-3 · AI Examiner</small>
-          </span>
-          <em>Open</em>
-        </button>
-        <button class="mobile-unit-link" type="button" data-mobile-subject="/revision/a-level/business-2026">
-          <span class="mobile-unit-badge">2026</span>
-          <span class="mobile-unit-copy">
-            <strong>New specification (7138)</strong>
-            <small>Two case studies · AI Examiner</small>
-          </span>
-          <em>Open</em>
-        </button>
-      </div>
-    </div>
-
-  </div>
+    <div id="rs-sheet-host"><!-- filled by /refresh/ra10-subjects.js --></div>
   </div>
 </div>
 
@@ -930,7 +652,7 @@ body.home-signed-in #p-home .hx-home > :not(#signed-in-dashboard){display:none !
         <span class="mobile-you-copy"><strong>Home</strong><small>Back to the homepage</small></span>
         <em>Open</em>
       </button>
-      <button class="mobile-you-item" type="button" data-mobile-you="/study-hub/">
+      <button class="mobile-you-item" type="button" data-mobile-you="/study-hub/" data-dock-item="studyhub">
         <span class="mobile-you-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 4.6L18.5 9.5l-4.6 1.9L12 16l-1.9-4.6L5.5 9.5l4.6-1.9z"/><path d="M19 15l.8 1.9 1.9.8-1.9.8L19 20.4l-.8-1.9-1.9-.8 1.9-.8z"/></svg></span>
         <span class="mobile-you-copy"><strong>Study Hub</strong><small>Your daily AI lesson</small></span>
         <em>Open</em>
@@ -1010,6 +732,9 @@ body.home-signed-in #p-home .hx-home > :not(#signed-in-dashboard){display:none !
     <span class="mobile-dock-pebble" data-pebble="subjects"></span>
     <span class="mobile-dock-pebble" data-pebble="exams"></span>
     <span class="mobile-dock-pebble" data-pebble="tasks"></span>
+    <span class="mobile-dock-pebble" data-pebble="studyhub"></span>
+    <span class="mobile-dock-pebble" data-pebble="community"></span>
+    <span class="mobile-dock-pebble" data-pebble="leaderboard"></span>
     <span class="mobile-dock-pebble" data-pebble="more"></span>
     <span class="mobile-dock-blob" id="mobile-dock-blob"></span>
   </div>
@@ -1157,7 +882,7 @@ body.home-signed-in #p-home .hx-home > :not(#signed-in-dashboard){display:none !
             <button class="hm-btn hm-btn-quiet" type="button" onclick="go('/leaderboard')">View the leaderboard</button>
           </div>
           <ul class="hm-boards" aria-label="Exam boards covered">
-            <li>Pearson BTEC</li><li>AQA A-Level</li><li>Level 2 &amp; Level 3</li>
+            <li>Pearson BTEC</li><li>AQA A-Level</li><li>Edexcel A-Level</li><li>Level 2 &amp; Level 3</li>
           </ul>
         </div>
 
@@ -1178,35 +903,12 @@ body.home-signed-in #p-home .hx-home > :not(#signed-in-dashboard){display:none !
       </section>
 
       <section class="hm-section" aria-labelledby="hm-units-title">
-        <div class="hm-head">
-          <h2 id="hm-units-title">Choose your unit</h2>
-          <a class="hm-link" href="javascript:void(0)" onclick="go('/revision')">All revision <span aria-hidden="true">→</span></a>
+        <div class="hm-head hm-head-stack">
+          <span class="hm-tile-label">Subjects</span>
+          <h2 id="hm-units-title">Find your subject</h2>
+          <p>Pick your qualification, then your subject and unit. Search works on topics too.</p>
         </div>
-        <div class="hm-units">
-          <div class="hm-unit-col it">
-            <h3>IT &amp; Digital</h3>
-            <button type="button" onclick="go('/revision/btec/level-3/IT-AAQ/unit-1')"><span>Unit 1</span>Information Technology<i>BTEC L3</i></button>
-            <button type="button" onclick="go('/revision/btec/level-3/IT-AAQ/unit-2')"><span>Unit 2</span>Cyber Security &amp; Incident Management<i>BTEC L3</i></button>
-            <button type="button" onclick="go('/revision/btec/level-3/IT-AAQ/unit-3')"><span>Unit 3</span>Website Development<i>BTEC L3</i></button>
-            <button type="button" onclick="go('/revision/btec/level-3/IT-AAQ/unit-4')"><span>Unit 4</span>IT AAQ Unit 4<i>BTEC L3</i></button>
-            <button type="button" onclick="go('/revision/btec/level-2/it/unit-2')"><span>Unit 2</span>Technology Systems<i>BTEC L2</i></button>
-          </div>
-          <div class="hm-unit-col business">
-            <h3>Business</h3>
-            <button type="button" onclick="go('/revision/btec/level-3/business/unit-2')"><span>Unit 2</span>Developing a Marketing Campaign<i>BTEC L3</i></button>
-            <button type="button" onclick="go('/revision/btec/level-3/business/unit-3')"><span>Unit 3</span>Personal &amp; Business Finance<i>BTEC L3</i></button>
-            <button type="button" onclick="go('/revision/btec/level-3/business/unit-6')"><span>Unit 6</span>Principles of Management<i>BTEC L3</i></button>
-            <button type="button" onclick="go('/revision/btec/level-3/business/unit-7')"><span>Unit 7</span>Business Decision Making<i>BTEC L3</i></button>
-            <button type="button" onclick="go('/revision/a-level/business-2023')"><span>7132</span>Business<i>AQA A-Level</i></button>
-            <button type="button" onclick="go('/revision/a-level/business-2026')"><span>7138</span>Business (2026 spec)<i>AQA A-Level</i></button>
-          </div>
-          <div class="hm-unit-col sport">
-            <h3>Sport</h3>
-            <button type="button" onclick="go('/revision/btec/level-3/sport/unit-1')"><span>Unit 1</span>Anatomy &amp; Physiology<i>BTEC L3</i></button>
-            <button type="button" onclick="go('/revision/btec/level-3/sport/unit-2')"><span>Unit 2</span>Fitness Training &amp; Programming<i>BTEC L3</i></button>
-            <p class="hm-unit-note">More subjects are on the way. <a href="javascript:void(0)" onclick="openContactModal()">Request one</a></p>
-          </div>
-        </div>
+        <div id="hm-subjects"><!-- filled by RA10Subjects.renderHome() from the unit registry (ra10-units.js) --></div>
       </section>
 
       <section class="hm-section" aria-labelledby="hm-exams-title">
@@ -1359,63 +1061,12 @@ body.home-signed-in #p-home .hx-home > :not(#signed-in-dashboard){display:none !
 ============================================================ -->
 <div class="page" id="p-revision">
   <div class="cd">
-    <nav class="bc">
+    <nav class="bc" id="rs-page-bc">
       <button class="bc-item" onclick="go('/')">Home</button>
       <span class="bc-sep">›</span>
-      <span class="bc-item cur">Revision</span>
+      <span class="bc-item cur">Subjects</span>
     </nav>
-    <div class="revision-showcase">
-      <div>
-        <div class="revision-kicker">Revision Studio · Pick your path</div>
-        <h1>Choose qualification, level, then launch your subject app</h1>
-        <p>Everything on one page and in the right order: start with qualification type, move to level, then jump into the subject app you need for this week.</p>
-        <div class="ctas" style="margin-top:var(--sp4)">
-          <button class="btn btn-p btn-lg" onclick="go('/revision/btec')">Start with BTEC</button>
-          <button class="btn btn-s btn-lg" onclick="go('leaderboard')">See Weekly Race</button>
-        </div>
-        <div class="revision-stat-row">
-          <span class="revision-stat">4 Live Apps</span>
-          <span class="revision-stat">BTEC AAQ Aligned</span>
-          <span class="revision-stat">Daily XP + Weekly Rewards</span>
-        </div>
-      </div>
-      <div class="revision-showcase-media">
-        <img src="https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=1200&q=80" alt="Student revision desk">
-      </div>
-    </div>
-
-    <div class="rev-flow">
-      <section class="rev-flow-row">
-        <div class="rev-flow-head">
-          <div class="rev-flow-title"><span class="rev-step">1</span>Choose qualification type</div>
-          <span class="rev-flow-chip ok">Start here</span>
-        </div>
-        <div class="rev-flow-grid">
-          <article class="rev-flow-card" onclick="go('/revision/btec')">
-            <span class="rev-flow-chip ok">Live now</span>
-            <h3>BTEC</h3>
-            <p>AAQ-focused revision tracks with live subject apps and exam-ready tools.</p>
-            <button class="btn btn-g" onclick="event.stopPropagation();go('/revision/btec')">Open BTEC</button>
-          </article>
-          <article class="rev-flow-card" onclick="go('/revision/a-level')">
-            <span class="rev-flow-chip ok">Live now</span>
-            <h3>A-Level</h3>
-            <p>AQA Business (2023) and the new 2026 specification (7138) are live, with past papers, RA10 practice papers, a full visual guide and an AI Examiner.</p>
-            <button class="btn btn-g" onclick="event.stopPropagation();go('/revision/a-level')">Open A-Level</button>
-          </article>
-        </div>
-      </section>
-
-    </div>
-
-    <div class="card" style="margin-top:var(--sp6);background:linear-gradient(135deg,#e0f2fe,#f0f9ff 45%,#ede9fe);border-color:rgba(59,130,246,.18)">
-      <div class="card-tag" style="color:#1d4ed8">Next step</div>
-      <h3 style="margin:0">After this, choose your level on the BTEC page</h3>
-      <p style="color:#475569">You asked for cleaner navigation, so levels now live on their own page and subjects live on the Level 3 page.</p>
-      <div class="card-ft" style="margin-top:var(--sp2)">
-        <button class="btn btn-p" onclick="go('/revision/btec')">Go to BTEC levels</button>
-      </div>
-    </div>
+    <div id="rs-page-host"><!-- filled by /refresh/ra10-subjects.js --></div>
   </div>
 </div>
 
@@ -3451,13 +3102,53 @@ body.home-signed-in #p-home .hx-home > :not(#signed-in-dashboard){display:none !
 ============================================================ -->
 <!-- Supabase loads here (not in <head>) so it no longer blocks the first paint; it still runs before site.js. -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0/dist/umd/supabase.js"></script>
-<script src="/refresh/site.js?v=20261124"></script>
-<script src="/refresh/ra10-units.js?v=20261104"></script>
+<script src="/refresh/ra10-units.js?v=20261212"></script>
+<script src="/refresh/ra10-subjects.js?v=20261212"></script>
+<script>(function(){var el=document.getElementById('hm-subjects');if(el&&window.RA10Subjects&&RA10Subjects.renderHome)RA10Subjects.renderHome(el);})();</script>
+<script src="/refresh/site.js?v=20261212"></script>
 <script src="/refresh/ra10-edu.js?v=20261126" defer></script>
 
 <!-- ============================================================
      NEWS PAGE  /news
 ============================================================ -->
+<!-- ============================================================
+     ANY SUBJECT  (e.g. /revision/btec/level-3/computing-aaq) — built from ra10-units.js
+============================================================ -->
+<div class="page" id="p-subject-dyn">
+  <div class="cd">
+    <nav class="bc">
+      <button class="bc-item" onclick="go('/')">Home</button>
+      <span class="bc-sep">›</span>
+      <button class="bc-item" onclick="go('/revision')">Subjects</button>
+      <span class="bc-sep">›</span>
+      <span class="bc-item cur" id="rs-subject-crumb">Subject</span>
+    </nav>
+    <div id="rs-subject-host"></div>
+  </div>
+</div>
+
+<!-- ============================================================
+     ANY UNIT APP  (e.g. /revision/btec/level-3/computing-aaq/unit-1) — built from ra10-units.js
+============================================================ -->
+<div class="page page-iframe" id="p-unit-dyn">
+  <div class="cd">
+    <nav class="bc">
+      <button class="bc-item" onclick="go('/')">Home</button>
+      <span class="bc-sep">›</span>
+      <button class="bc-item" onclick="go('/revision')">Subjects</button>
+      <span class="bc-sep">›</span>
+      <button class="bc-item" id="dyn-subject-crumb" onclick="go(this.dataset.path || '/revision')">Subject</button>
+      <span class="bc-sep">›</span>
+      <span class="bc-item cur" id="dyn-unit-crumb">Unit</span>
+    </nav>
+  </div>
+  <div class="cf">
+    <div class="iframe-wrap">
+      <iframe id="dyn-unit-frame" title="Unit revision app" loading="eager" allowfullscreen></iframe>
+    </div>
+  </div>
+</div>
+
 <!-- ============================================================
      NOT FOUND  (any unknown path)
 ============================================================ -->
@@ -3522,6 +3213,12 @@ body.home-signed-in #p-home .hx-home > :not(#signed-in-dashboard){display:none !
       <aside class="news-sidebar">
         <h3>Contents</h3>
         <ul>
+          <li><a href="#news-new-alevels">NEW: AQA A-Level Psychology and Pearson Edexcel A-Level Business</a></li>
+          <li><a href="#news-aaq-subjects">NEW: six more BTEC Level 3 subjects (31 units)</a></li>
+          <li><a href="#news-python-lab">Python Lab: write and run real Python in your browser</a></li>
+          <li><a href="#news-study-hub">Study Hub: AI daily lessons, now with coding steps</a></li>
+          <li><a href="#news-dashboard-apps">A clearer "All apps" section and chapter numbering for A-Levels</a></li>
+          <li><a href="#news-podium">Leaderboard podium awards</a></li>
           <li><a href="#news-forums">The Community is now a proper forum</a></li>
           <li><a href="#news-ai-moderator">An AI moderator keeps the forums friendly</a></li>
           <li><a href="#news-moderators">Community moderators, Admin badges and announcement alerts</a></li>
@@ -3559,12 +3256,84 @@ body.home-signed-in #p-home .hx-home > :not(#signed-in-dashboard){display:none !
         <div class="news-spec">
           <div><span>Project</span><strong>RA10</strong></div>
           <div><span>Status</span><strong>Live</strong></div>
-          <div><span>Coverage</span><strong>BTEC L2/L3</strong></div>
-          <div><span>Last sync</span><strong>25.10.2026</strong></div>
+          <div><span>Coverage</span><strong>BTEC + A-Level</strong></div>
+          <div><span>Last sync</span><strong>08.11.2026</strong></div>
         </div>
       </aside>
 
       <section class="news-feed">
+        <article class="news-article" id="news-new-alevels" data-category="revision" data-status="live" data-date="2026-11-08">
+          <div class="news-media" style="background:linear-gradient(120deg,#4c1d95,#7c3aed,#ec4899)">
+            <svg viewBox="0 0 1200 300" aria-hidden="true"><rect width="1200" height="300" fill="none"/><circle cx="600" cy="150" r="104" fill="#fff" opacity=".16"/><text x="600" y="190" text-anchor="middle" font-size="120">🧠</text></svg>
+          </div>
+          <div class="news-content">
+            <div class="news-meta"><span>08.11.2026</span><span>A-Level</span></div>
+            <h2>NEW: AQA A-Level Psychology and Pearson Edexcel A-Level Business</h2>
+            <p>Two new A-Levels are live. AQA Psychology (7182) and Pearson Edexcel Business (9BS0) each come with a full study guide, a question bank, quizzes, flashcards and RA10 practice papers laid out exactly like the real exam papers. The AI Examiner marks your answers against each board's own mark-scheme style, from short answers to the long essays.</p>
+            <div class="news-tags"><span class="news-tag">Live</span><span class="news-tag">A-Level</span><span class="news-tag">Psychology</span><span class="news-tag">Edexcel Business</span></div>
+          </div>
+        </article>
+
+        <article class="news-article" id="news-aaq-subjects" data-category="revision" data-status="live" data-date="2026-11-08">
+          <div class="news-media" style="background:linear-gradient(120deg,#0f766e,#14b8a6,#22d3ee)">
+            <svg viewBox="0 0 1200 300" aria-hidden="true"><rect width="1200" height="300" fill="none"/><circle cx="600" cy="150" r="104" fill="#fff" opacity=".16"/><text x="600" y="190" text-anchor="middle" font-size="120">📚</text></svg>
+          </div>
+          <div class="news-content">
+            <div class="news-meta"><span>08.11.2026</span><span>BTEC</span></div>
+            <h2>NEW: six more BTEC Level 3 subjects (31 units)</h2>
+            <p>BTEC Nationals in Computing, Construction, Early Childhood Development, Engineering, Health and Social Care and Medical Science are now on RA10. That is 31 units in total. Exam units get six RA10 predicted papers each, and assignment units get criterion-by-criterion help, guides, quizzes and flashcards.</p>
+            <div class="news-tags"><span class="news-tag">Live</span><span class="news-tag">BTEC L3</span><span class="news-tag">New subjects</span><span class="news-tag">31 units</span></div>
+          </div>
+        </article>
+
+        <article class="news-article" id="news-python-lab" data-category="revision" data-status="live" data-date="2026-11-08">
+          <div class="news-media" style="background:linear-gradient(120deg,#1e3a8a,#2563eb,#facc15)">
+            <svg viewBox="0 0 1200 300" aria-hidden="true"><rect width="1200" height="300" fill="none"/><circle cx="600" cy="150" r="104" fill="#fff" opacity=".16"/><text x="600" y="190" text-anchor="middle" font-size="120">🐍</text></svg>
+          </div>
+          <div class="news-content">
+            <div class="news-meta"><span>08.11.2026</span><span>Tools</span></div>
+            <h2>Python Lab: write and run real Python in your browser</h2>
+            <p>The new Python Lab under Tools runs real Python in your browser, so there is nothing to install. It has 58 graded tasks, from first print statements to algorithms and files, and every task is checked automatically. Computing units link straight to it.</p>
+            <div class="news-tags"><span class="news-tag">Live</span><span class="news-tag">Python</span><span class="news-tag">Computing</span><span class="news-tag">Tools</span></div>
+          </div>
+        </article>
+
+        <article class="news-article" id="news-study-hub" data-category="ai" data-status="live" data-date="2026-11-08">
+          <div class="news-media" style="background:linear-gradient(120deg,#7a0000,#d20000,#f97316)">
+            <svg viewBox="0 0 1200 300" aria-hidden="true"><rect width="1200" height="300" fill="none"/><circle cx="600" cy="150" r="104" fill="#fff" opacity=".16"/><text x="600" y="190" text-anchor="middle" font-size="120">✨</text></svg>
+          </div>
+          <div class="news-content">
+            <div class="news-meta"><span>08.11.2026</span><span>Study Hub</span></div>
+            <h2>Study Hub: AI daily lessons, now with coding steps</h2>
+            <p>Study Hub builds you a short, game-style lesson every day from your own units, with quick quizzes, matching, ordering and an AI-marked exam question at the end. You can also make a lesson on any topic. For Computing and IT units, lessons can now include coding steps that you run and check right on the page. Everyone gets a free trial lesson.</p>
+            <div class="news-tags"><span class="news-tag">Live</span><span class="news-tag">Study Hub</span><span class="news-tag">AI lessons</span><span class="news-tag">Coding</span></div>
+          </div>
+        </article>
+
+        <article class="news-article" id="news-dashboard-apps" data-category="roadmap" data-status="live" data-date="2026-11-08">
+          <div class="news-media" style="background:linear-gradient(120deg,#9a3412,#ea580c,#fbbf24)">
+            <svg viewBox="0 0 1200 300" aria-hidden="true"><rect width="1200" height="300" fill="none"/><circle cx="600" cy="150" r="104" fill="#fff" opacity=".16"/><text x="600" y="190" text-anchor="middle" font-size="120">🗂️</text></svg>
+          </div>
+          <div class="news-content">
+            <div class="news-meta"><span>08.11.2026</span><span>Dashboard</span></div>
+            <h2>A clearer "All apps" section and chapter numbering for A-Levels</h2>
+            <p>The All apps section on your signed-in dashboard groups apps by subject. Each subject has its own icon and colour, and you can filter by qualification or search for an app. A-Level apps now number topics as chapters (1, 2, 3…) instead of BTEC-style learning aims.</p>
+            <div class="news-tags"><span class="news-tag">Live</span><span class="news-tag">Dashboard</span><span class="news-tag">A-Level</span><span class="news-tag">Design</span></div>
+          </div>
+        </article>
+
+        <article class="news-article" id="news-podium" data-category="roadmap" data-status="live" data-date="2026-11-08">
+          <div class="news-media" style="background:linear-gradient(120deg,#713f12,#ca8a04,#fde047)">
+            <svg viewBox="0 0 1200 300" aria-hidden="true"><rect width="1200" height="300" fill="none"/><circle cx="600" cy="150" r="104" fill="#fff" opacity=".16"/><text x="600" y="190" text-anchor="middle" font-size="120">🏆</text></svg>
+          </div>
+          <div class="news-content">
+            <div class="news-meta"><span>08.11.2026</span><span>Leaderboard</span></div>
+            <h2>Leaderboard podium awards</h2>
+            <p>The top three on the leaderboard now stand on a podium with gold, silver and bronze awards.</p>
+            <div class="news-tags"><span class="news-tag">Live</span><span class="news-tag">Leaderboard</span><span class="news-tag">XP</span></div>
+          </div>
+        </article>
+
         <article class="news-article" id="news-forums" data-category="roadmap" data-status="live" data-date="2026-10-25">
           <div class="news-media" style="background:linear-gradient(120deg,#7a0000,#d20000,#f97316)">
             <svg viewBox="0 0 1200 300" aria-hidden="true"><rect width="1200" height="300" fill="none"/><circle cx="600" cy="150" r="104" fill="#fff" opacity=".16"/><text x="600" y="190" text-anchor="middle" font-size="120">📣</text></svg>

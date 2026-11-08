@@ -110,7 +110,7 @@
   async function catalog() {
     const d = await dataReady(12000);
     const spec = {};
-    try { Object.keys(d.spec || {}).forEach(a => { spec[a] = { title: (d.spec[a] && (d.spec[a].title || d.spec[a].short)) || ('Aim ' + a), topics: ((d.spec[a] && d.spec[a].topics) || []).map(t => ({ code: t.code, name: t.name })) }; }); } catch (e) {}
+    try { Object.keys(d.spec || {}).forEach(a => { spec[a] = { title: (d.spec[a] && (d.spec[a].title || d.spec[a].short)) || ((window.AIM_WORD || 'Aim') + ' ' + ((window.AIM_LABEL || {})[a] || a)), topics: ((d.spec[a] && d.spec[a].topics) || []).map(t => ({ code: t.code, name: t.name })) }; }); } catch (e) {}
     // render the guide once so its section headings exist, then list them
     let guide = [];
     try {
@@ -136,10 +136,122 @@
       questions: (d.questions || []).slice(0, 2500).map(q => ({ id: q.id, aim: q.learning_aim || q.aim || '', topic: short(q.topic, 80), marks: q.marks || null, verb: q.command_verb || '', type: q.type || '', paper: q.paper_id || null, q: short(q.question, 320) })),
       quiz: (d.quiz || []).slice(0, 2000).map(q => ({ id: q.id, aim: q.learning_aim || '', topic: short(q.topic, 80), q: short(q.question, 260), choices: (q.choices || q.options || []).map(c => short(c, 140)), correct: q.correct_index != null ? q.correct_index : q.answer })),
       papers: (d.papers || []).map(p => ({ id: p.id, title: p.title, series: p.series, source: p.source, total: p.total })),
-      guide, spec
+      guide, spec,
+      aimWord: window.AIM_WORD || null, aimLabels: window.AIM_LABEL || null
     };
   }
-  if (params.has('ra10catalog')) {
+  /* ───────────────────── content audit (owner's Quality dashboard) ─────────────────────
+     ?ra10catalog=1&audit=1 → posts { type:'ra10:audit', unit, audit } with measurable facts about this
+     unit's content. The dashboard turns them into the Content and Exam-style scores. */
+  const hasText = (v) => {
+    if (v == null) return false;
+    if (typeof v === 'string') return v.trim().length > 2;
+    if (Array.isArray(v)) return v.some(hasText);
+    if (typeof v === 'object') return Object.keys(v).some(k => k !== 'instruction' && hasText(v[k]));
+    return false;
+  };
+  async function audit() {
+    const t0 = Date.now();
+    let d = await dataReady(15000);
+    const dests = UI.destinations ? UI.destinations().map(x => x.name) : [];
+    // papers are lazy-loaded in some apps (AQA 7132 keeps them in "pastpapers"): open the library so the data arrives
+    for (const v of ['pastpapers', 'papers']) {
+      if ((d.papers || []).length || dests.indexOf(v) < 0) continue;
+      try { UI.go(v); } catch (e) {}
+      for (let i = 0; i < 16 && !(UI.appData().papers || []).length; i++) await sleep(500);
+      d = UI.appData();
+    }
+    // older apps keep their bank inside app.js and load JSON files (BTEC Level 2 IT): read the same files
+    if (!(d.questions || []).length) {
+      const getJson = async (f) => { try { const r = await fetch(f, { cache: 'no-store' }); return r.ok ? JSON.parse((await r.text()).replace(/^﻿/, '')) : null; } catch (e) { return null; } };
+      const qs = [];
+      for (const a of ['A', 'B', 'C', 'D', 'E']) { const r = await getJson('data/aim_' + a + '.json'); if (Array.isArray(r)) qs.push(...r.map(q => Object.assign({ learning_aim: a }, q))); }
+      if (qs.length) {
+        const quiz = await getJson('data/quiz.json'), flash = await getJson('data/flashcards.json');
+        d = Object.assign({}, d, { questions: qs, quiz: d.quiz.length ? d.quiz : (Array.isArray(quiz) ? quiz : []), flash: d.flash.length ? d.flash : (Array.isArray(flash) ? flash : []) });
+      }
+    }
+    const Q = d.questions || [], QZ = d.quiz || [], FL = d.flash || [], PP = d.papers || [];
+    const marksOf = (q) => Number(q.marks) || 0;
+    const msOf = (q) => q.mark_scheme || q.markScheme || q.ms || q.guidance || (Array.isArray(q.answers) && q.answers.some(a => a && a.correct) ? 'mcq' : null);
+    const tariffs = {};
+    Q.forEach(q => { const m = marksOf(q); if (m) tariffs[m] = (tariffs[m] || 0) + 1; });
+    const verbs = {};
+    Q.forEach(q => { const v = String(q.command_verb || '').trim().toLowerCase(); if (v) verbs[v] = (verbs[v] || 0) + 1; });
+    // specification coverage: share of top-level spec topics with at least one practice item (bank or quiz),
+    // matched by topic code ("A1 …", "3.1.2 …") or by the topic's name
+    const topics = [];
+    // numeric codes: the shallowest depth used by this spec counts as top level (AQA Business "3.1" vs A-level Psychology "4.1.1.1")
+    let minDots = 1;
+    try { const ds = []; Object.keys(d.spec || {}).forEach(a => ((d.spec[a] && d.spec[a].topics) || []).forEach(t => { const c = String((t && t.code) || '').trim(); if (c && !/^[A-Z]/i.test(c)) ds.push((c.match(/\./g) || []).length); })); if (ds.length) minDots = Math.max(1, Math.min.apply(null, ds)); } catch (e) {}
+    const topLevel = (code) => { const c = String(code || '').trim(), dots = (c.match(/\./g) || []).length; return c && (/^[A-Z]/i.test(c) ? dots === 0 : dots <= minDots); };
+    try { Object.keys(d.spec || {}).forEach(a => ((d.spec[a] && d.spec[a].topics) || []).forEach(t => { if (t && topLevel(t.code)) topics.push({ code: String(t.code).toUpperCase(), name: String(t.name || '').toLowerCase().replace(/[^a-z0-9 ]+/g, ' ').trim() }); })); } catch (e) {}
+    const tags = Q.concat(QZ).map(q => String(q.topic || q.spec_ref || '').toUpperCase());
+    const tagsLow = tags.map(t => t.toLowerCase().replace(/[^a-z0-9 ]+/g, ' '));
+    const isCovered = (t) => tags.some(x => x === t.code || x.indexOf(t.code + ' ') === 0 || x.indexOf(t.code + '.') === 0 || x.indexOf(t.code + ':') === 0)
+      || (t.name.length > 5 && tagsLow.some(x => x.indexOf(t.name) >= 0 || (x.length > 5 && t.name.indexOf(x.trim()) >= 0)));
+    const covered = topics.filter(isCovered).map(t => t.code);
+    // papers
+    const real = PP.filter(p => p.source && p.source !== 'ra10');
+    const ra10 = PP.filter(p => p.source === 'ra10');
+    const items = [].concat(...PP.map(p => p.items || []));
+    const itemHasMs = (it) => hasText(it.ms && (it.ms.body || it.ms.points || it.ms.levels || it.ms.answer || it.ms.for || it.ms.raw)) || hasText(it.ms);
+    // revision guide
+    let guide = { available: dests.indexOf('guide') >= 0 || dests.indexOf('revise') >= 0, words: 0, headings: 0, diagrams: 0, tables: 0, images: 0 };
+    if (guide.available) {
+      try {
+        UI.go(dests.indexOf('guide') >= 0 ? 'guide' : 'revise');
+        await sleep(2200);
+        // Shared guide engine: measure the guide data itself (every aim, even ones locked for this viewer).
+        // Other apps: measure the rendered guide; textContent includes collapsed/hidden sections.
+        let root = null;
+        if (window.BIZ_GUIDE_DATA && BIZ_GUIDE_DATA.topics) {
+          const G = BIZ_GUIDE_DATA, call = (f) => { try { return typeof f === 'function' ? f() : (f || ''); } catch (e) { return ''; } };
+          let html = call(G.setTask);
+          Object.keys(G.topics).forEach(a => (G.topics[a] || []).forEach(t => { html += '<h3>' + (t.name || '') + '</h3>' + call(t.html); }));
+          root = document.createElement('div');
+          root.innerHTML = html;
+        } else {
+          root = $('#view-guide') || $('section.view.active[id*="guide"]') || $('section.view.active');
+          if (root) $$('details', root).forEach(x => { x.open = true; });
+        }
+        if (root) {
+          const skip = (el) => el.closest && el.closest('nav, .guide-sidebar, .guide-toc, .ux-crumb, .ux-hub, button');
+          const words = []; const walk = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+          for (let n = walk.nextNode(); n; n = walk.nextNode()) if (!(n.parentElement && skip(n.parentElement))) words.push(n.nodeValue);
+          guide.words = words.join(' ').split(/\s+/).filter(w => /[a-z]/i.test(w)).length;
+          guide.headings = $$('h2, h3', root).filter(h => !skip(h) && h.textContent.trim().length > 2).length;
+          guide.diagrams = $$('svg', root).filter(s => { const vb = (s.getAttribute('viewBox') || '').split(/[\s,]+/).map(Number); const w = vb.length === 4 ? vb[2] : Number(s.getAttribute('width')) || 0; return w >= 120 || (s.isConnected && s.getBoundingClientRect().width >= 120); }).length;
+          guide.tables = $$('table', root).length;
+          guide.images = $$('img', root).filter(i => !skip(i) && ((i.naturalWidth || Number(i.getAttribute('width')) || i.width) >= 120)).length;
+          guide.source = window.BIZ_GUIDE_DATA ? 'data' : 'page';
+        }
+      } catch (e) {}
+    }
+    return {
+      v: 1, unit: UNIT_PATH, title: unit ? unit.name : document.title, at: new Date().toISOString(), ms: Date.now() - t0,
+      questions: {
+        n: Q.length,
+        with_verb: Q.filter(q => String(q.command_verb || '').trim()).length,
+        with_marks: Q.filter(q => marksOf(q) > 0).length,
+        with_ms: Q.filter(q => hasText(msOf(q))).length,
+        extended: Q.filter(q => marksOf(q) >= 6).length,
+        levels: Q.filter(q => /levels|extended/i.test(String(q.type || '')) || hasText(q.mark_scheme && (q.mark_scheme.level_descriptors || q.mark_scheme.levels))).length,
+        with_context: Q.filter(q => hasText(q.scenario) || hasText(q.source_material) || hasText(q.context)).length,
+        tariffs, verbs
+      },
+      quiz: { n: QZ.length, with_why: QZ.filter(q => hasText(q.explanation || q.why)).length, four_plus: QZ.filter(q => ((q.choices || q.options || q.answers || []).length) >= 4).length },
+      flash: { n: FL.length },
+      papers: { n: PP.length, real: real.length, ra10: ra10.length, items: items.length, items_ms: items.filter(itemHasMs).length, marks: PP.reduce((s, p) => s + (Number(p.total) || 0), 0) },
+      spec: { topics: topics.length, covered: covered.length, missing: topics.filter(t => covered.indexOf(t.code) < 0).map(t => t.code).slice(0, 40) },
+      guide, views: dests
+    };
+  }
+
+  if (params.has('ra10catalog') && params.has('audit')) {
+    audit().then(a => { try { window.parent.postMessage({ type: 'ra10:audit', unit: UNIT_PATH, audit: a }, location.origin); } catch (e) {} },
+      e => { try { window.parent.postMessage({ type: 'ra10:audit', unit: UNIT_PATH, error: String(e && e.message || e) }, location.origin); } catch (x) {} });
+  } else if (params.has('ra10catalog')) {
     const full = String(params.get('full') || '').split(',').map(x => x.trim()).filter(Boolean).slice(0, 6);
     if (full.length) {
       // Study Hub: the complete question objects (mark scheme, spec code, scenario…) for these ids,
@@ -380,7 +492,7 @@ html[data-theme="dark"] .ws-chip.due{background:#3a2a10;color:#fcd34d}html[data-
         if (!pool.length && it.aim) pool = (d.questions || []).filter(q => String(q.learning_aim || '').toUpperCase().indexOf(String(it.aim).toUpperCase()) === 0);
         let seed = 0; String(a.id + it.id).split('').forEach(ch => { seed = (seed * 31 + ch.charCodeAt(0)) >>> 0; });   // same questions every time for this assignment
         const picked = pool.slice().sort((x, y) => ((seed ^ hash(x.id)) % 997) - ((seed ^ hash(y.id)) % 997)).slice(0, Math.max(1, Math.min(20, it.count || 5)));
-        const group = (it.title || ('Practise: ' + (it.topic || ('Aim ' + it.aim)))).replace(/^\d+\s+questions:\s*/i, '');
+        const group = (it.title || ('Practise: ' + (it.topic || ((window.AIM_WORD || 'Aim') + ' ' + ((window.AIM_LABEL || {})[it.aim] || it.aim))))).replace(/^\d+\s+questions:\s*/i, '');
         picked.forEach(q => out.push({ type: 'question', id: it.id + ':' + q.id, ref: q.id, q, group }));
         return;
       }

@@ -1,0 +1,93 @@
+/* BTEC Early Childhood Development (AAQ) Unit 1 — multiple-choice and true/false quiz. */
+(function () {
+  'use strict';
+  const { M, TF } = window.__BIZ_B;
+  // A
+  M('A', 'Principles', 'An increase in height and weight is called…', 'growth', ['development', 'maturation only', 'a milestone'], 'Growth is measured; development is observed.');
+  M('A', 'Principles', 'Head control before sitting is an example of…', 'cephalocaudal development', ['proximodistal development', 'fine motor development', 'regression'], 'Head to toe.');
+  M('A', 'Principles', 'Arm control before finger control is an example of…', 'proximodistal development', ['cephalocaudal development', 'object permanence', 'conservation'], 'Centre outwards.');
+  M('A', 'Principles', 'Which statement is true about milestones?', 'The sequence is the same but the rate varies', ['The rate is the same for all children', 'The sequence varies between cultures', 'Milestones are fixed dates'], 'Children reach milestones in the same order at different ages.');
+  M('A', 'Factors', 'Which is a biological factor affecting development?', 'Prematurity', ['Poverty', 'Housing', 'Parenting style'], 'Biological factors come from the body or genes.');
+  M('A', 'Factors', 'Which is an environmental factor affecting development?', 'Access to play opportunities', ['Down syndrome', 'Cystic fibrosis', 'Low birth weight'], 'Environment = experiences and surroundings.');
+  M('A', 'Areas', 'PILES stands for physical, intellectual, language, emotional and…', 'social', ['sensory', 'spiritual', 'skeletal'], 'The five areas of development.');
+  TF('A', 'Areas', 'Areas of development are interconnected.', true, 'A delay in one area affects others.');
+  TF('A', 'Delay', 'A developmental delay is always permanent.', false, 'Delays can be temporary, e.g. after illness.');
+  M('A', 'Growth', 'Growth is usually recorded on…', 'centile charts', ['milestone checklists', 'running records', 'sociograms'], 'Centile charts compare with the population.');
+  // B
+  M('B', 'Gross motor', 'Which is a gross motor skill?', 'Climbing stairs', ['Threading beads', 'Pincer grasp', 'Using scissors'], 'Large movements of the body.');
+  M('B', 'Fine motor', 'Which is a fine motor skill?', 'Turning pages of a book', ['Running', 'Kicking a ball', 'Pedalling'], 'Small precise hand movements.');
+  M('B', 'Milestones', 'Most babies sit unsupported at about…', '7–8 months', ['2 months', '15 months', '2 years'], 'Sitting before crawling.');
+  M('B', 'Milestones', 'Most children walk independently at about…', '12–15 months', ['6 months', '2½ years', '3 years'], 'Range 9–18 months.');
+  M('B', 'Milestones', 'The pincer grasp develops at around…', '9–10 months', ['3 months', '2 years', '4 years'], 'Thumb and forefinger.');
+  M('B', 'Milestones', 'A typical 3-year-old can…', 'pedal a tricycle', ['ride a two-wheel bike', 'tie shoelaces', 'skip with a rope'], 'Bikes and laces come later.');
+  M('B', 'Milestones', 'Which skill is typical of a 6–7-year-old?', 'Riding a bicycle without stabilisers', ['Rolling over', 'Crawling', 'Scribbling only'], '5–8 years.');
+  M('B', 'Reflexes', 'Which is a newborn reflex?', 'Rooting', ['Pincer grasp', 'Hopping', 'Waving'], 'Turns head towards touch on the cheek.');
+  M('B', 'Reflexes', 'The Moro reflex is also called the…', 'startle reflex', ['stepping reflex', 'sucking reflex', 'grasp reflex'], 'Arms fling out to sudden noise or movement.');
+  TF('B', 'Aspects', 'Myelination of nerves helps improve coordination.', true, 'Faster nerve messages.');
+  TF('B', 'Promoting', 'Dough and threading activities help fine motor development.', true, 'Strengthen hand muscles.');
+  M('B', 'Promoting', 'Tummy time mainly helps a baby develop…', 'head and upper-body strength', ['language', 'conservation', 'cooperative play'], 'Prepares for rolling and crawling.');
+  // C
+  M('C', 'Milestones', 'Object permanence develops at about…', '8–9 months', ['3 years', '7 years', 'birth'], 'Piaget’s sensorimotor stage.');
+  M('C', 'Piaget', 'Piaget’s first stage is…', 'sensorimotor', ['pre-operational', 'concrete operational', 'formal operational'], '0–2 years.');
+  M('C', 'Piaget', 'Piaget’s pre-operational stage covers…', '2–7 years', ['0–2 years', '7–11 years', '11+ years'], 'Symbolic play and egocentrism.');
+  M('C', 'Piaget', 'Fitting new information into an existing schema is called…', 'assimilation', ['accommodation', 'equilibrium', 'scaffolding'], 'Accommodation changes the schema.');
+  M('C', 'Piaget', 'Changing a schema to fit new information is…', 'accommodation', ['assimilation', 'conservation', 'centration'], 'E.g. learning a cow is not a dog.');
+  M('C', 'Piaget', 'Understanding that quantity stays the same when shape changes is…', 'conservation', ['egocentrism', 'object permanence', 'animism'], 'Usually around 7 years.');
+  M('C', 'Piaget', 'The three mountains task tested…', 'egocentrism', ['conservation', 'attachment', 'object permanence'], 'Seeing another viewpoint.');
+  M('C', 'Vygotsky', 'The gap between what a child can do alone and with help is the…', 'zone of proximal development', ['critical period', 'microsystem', 'LAD'], 'Vygotsky.');
+  M('C', 'Vygotsky', 'In Vygotsky’s theory, MKO stands for…', 'More Knowledgeable Other', ['Most Key Observer', 'Motor Knowledge Outcome', 'Main Key Organiser'], 'Adult or peer who knows more.');
+  M('C', 'Bruner', 'Learning through action (e.g. shaking a rattle) is Bruner’s…', 'enactive mode', ['iconic mode', 'symbolic mode', 'concrete stage'], '0–1 years.');
+  M('C', 'Bruner', 'Using pictures to represent ideas is Bruner’s…', 'iconic mode', ['enactive mode', 'symbolic mode', 'sensorimotor stage'], '1–6 years.');
+  M('C', 'Bruner', 'Revisiting topics at increasing difficulty is Bruner’s…', 'spiral curriculum', ['ZPD', 'LASS', 'chronosystem'], 'Builds on prior learning.');
+  M('C', 'Information processing', 'Information Processing Theory compares the mind to…', 'a computer', ['a sponge', 'a ladder', 'a garden'], 'Input – processing – storage – output.');
+  M('C', 'Information processing', 'Repeating a song every day helps move it into…', 'long-term memory', ['sensory memory only', 'the LAD', 'the exosystem'], 'Rehearsal aids storage.');
+  TF('C', 'Vygotsky', 'Vygotsky believed learning is mainly a social process.', true, 'Learning happens through interaction.');
+  TF('C', 'Piaget', 'Piaget said children learn mainly by being told information.', false, 'They actively construct knowledge.');
+  TF('C', 'Scaffolding', 'Scaffolding means gradually withdrawing support as competence grows.', true, 'Bruner / Wood, Bruner and Ross.');
+  // D
+  M('D', 'Milestones', 'Babbling typically begins at about…', '6 months', ['1 month', '18 months', '3 years'], 'Repeated syllables “ba-ba”.');
+  M('D', 'Milestones', 'A single word with a whole meaning is a…', 'holophrase', ['virtuous error', 'telegraphic phrase', 'babble'], '“Up!” = “pick me up”.');
+  M('D', 'Milestones', '“Daddy gone” is an example of…', 'telegraphic speech', ['a holophrase', 'cooing', 'echolalia'], 'Key words only.');
+  M('D', 'Milestones', '“I runned” is an example of…', 'a virtuous error', ['a holophrase', 'stammering', 'echolalia'], 'Over-applying a grammar rule.');
+  M('D', 'Receptive', 'Understanding what others say is…', 'receptive language', ['expressive language', 'non-verbal communication', 'telegraphic speech'], 'Receptive = receiving.');
+  M('D', 'Chomsky', 'Chomsky proposed the…', 'Language Acquisition Device', ['Language Acquisition Support System', 'zone of proximal development', 'mean length of utterance'], 'LAD – innate.');
+  M('D', 'Bruner', 'LASS was proposed by…', 'Bruner', ['Chomsky', 'Skinner', 'Bowlby'], 'Language Acquisition Support System.');
+  M('D', 'Skinner', 'Skinner explained language through…', 'imitation and reinforcement', ['an innate device', 'attachment', 'schemas'], 'Behaviourist.');
+  M('D', 'Brown', 'Brown measured language stages using…', 'mean length of utterance', ['centile charts', 'the Strange Situation', 'reflexes'], 'MLU in morphemes.');
+  M('D', 'EAL', 'A quiet period when a child new to English mostly listens is the…', 'silent period', ['critical period', 'sensitive period', 'latent period'], 'Normal for EAL learners.');
+  M('D', 'Non-verbal', 'Makaton is…', 'a signing and symbol system', ['a reading scheme', 'a hearing test', 'a type of play'], 'Supports communication.');
+  M('D', 'Promoting', 'Repeating a child’s words back correctly is called…', 'recasting / modelling', ['reinforcing errors', 'correcting harshly', 'babbling'], 'Avoids discouraging the child.');
+  TF('D', 'Chomsky', 'Virtuous errors support Chomsky’s theory.', true, 'Children are not copying adults.');
+  TF('D', 'Skinner', 'Skinner’s theory easily explains why children create sentences they have never heard.', false, 'This is a key criticism.');
+  TF('D', 'EAL', 'Children with EAL should be discouraged from using their home language.', false, 'The home language should be valued.');
+  // E
+  M('E', 'Milestones', 'The social smile usually appears at about…', '6 weeks', ['6 months', '1 year', '3 days'], 'Response to faces.');
+  M('E', 'Milestones', 'Stranger anxiety typically appears at around…', '8 months', ['2 weeks', '3 years', '5 years'], 'Linked to specific attachment.');
+  M('E', 'Bowlby', 'Bowlby believed attachment must form during a…', 'critical period', ['concrete stage', 'silent period', 'sensorimotor stage'], 'First 2–3 years.');
+  M('E', 'Bowlby', 'A mental template for future relationships is the…', 'internal working model', ['LAD', 'schema', 'ZPD'], 'Bowlby.');
+  M('E', 'Ainsworth', 'Ainsworth’s study of attachment types is called…', 'the Strange Situation', ['the Bobo doll study', 'the three mountains task', 'the Glasgow study'], 'Observed reactions to separation and reunion.');
+  M('E', 'Ainsworth', 'A child who is distressed at separation and easily comforted on reunion shows…', 'secure attachment', ['insecure-avoidant attachment', 'insecure-resistant attachment', 'no attachment'], 'Uses carer as a secure base.');
+  M('E', 'Ainsworth', 'A child who ignores the carer on reunion shows…', 'insecure-avoidant attachment', ['secure attachment', 'insecure-resistant attachment', 'multiple attachment'], 'Avoids contact.');
+  M('E', 'Schaffer and Emerson', 'In Schaffer and Emerson’s stages, specific attachments form at about…', '7–9 months', ['0–6 weeks', '2 years', '5 years'], 'Then multiple attachments.');
+  M('E', 'Key person', 'The key person approach mainly supports…', 'secure attachment in the setting', ['fine motor skills', 'conservation', 'phonics'], 'A secure base.');
+  M('E', 'Transitions', 'Returning to earlier behaviour (e.g. bedwetting) after a transition is…', 'regression', ['accommodation', 'conservation', 'reinforcement'], 'A common response to stress.');
+  TF('E', 'Schaffer and Emerson', 'Schaffer and Emerson found babies attach most to whoever is most responsive, not just who feeds them.', true, 'Sensitive responsiveness matters.');
+  TF('E', 'Self', 'Self-esteem is how a child values themselves.', true, 'Self-image is how they see themselves.');
+  // F
+  M('F', 'Parten', 'Playing alongside but not with others is…', 'parallel play', ['cooperative play', 'associative play', 'onlooker play'], 'Typical of 2–3-year-olds.');
+  M('F', 'Parten', 'Playing together with shared goals and roles is…', 'cooperative play', ['solitary play', 'parallel play', 'onlooker play'], 'Typical from 4+.');
+  M('F', 'Parten', 'Watching others play without joining in is…', 'onlooker play', ['parallel play', 'associative play', 'cooperative play'], 'Parten.');
+  M('F', 'Bandura', 'Bandura’s famous study used a…', 'Bobo doll', ['strange situation', 'water jug', 'three mountains'], 'Children imitated aggression.');
+  M('F', 'Bandura', 'Learning by watching someone else be rewarded is…', 'vicarious reinforcement', ['negative reinforcement', 'accommodation', 'scaffolding'], 'Bandura.');
+  M('F', 'Bandura', 'Which is NOT one of Bandura’s stages of modelling?', 'Accommodation', ['Attention', 'Retention', 'Motivation'], 'Accommodation is Piaget.');
+  M('F', 'Skinner', 'Giving a sticker to encourage tidying up is…', 'positive reinforcement', ['punishment', 'modelling', 'scaffolding'], 'Operant conditioning.');
+  M('F', 'Bronfenbrenner', 'A child’s family and school are in Bronfenbrenner’s…', 'microsystem', ['macrosystem', 'exosystem', 'chronosystem'], 'Direct contact.');
+  M('F', 'Bronfenbrenner', 'A parent’s workplace is part of the…', 'exosystem', ['microsystem', 'mesosystem', 'macrosystem'], 'Indirect influence.');
+  M('F', 'Bronfenbrenner', 'Cultural values and laws are in the…', 'macrosystem', ['microsystem', 'mesosystem', 'exosystem'], 'Wider society.');
+  M('F', 'Bronfenbrenner', 'Changes over time, such as divorce, are in the…', 'chronosystem', ['mesosystem', 'exosystem', 'microsystem'], 'Time dimension.');
+  M('F', 'Nature/nurture', 'Chomsky’s LAD supports which side of the debate?', 'Nature', ['Nurture', 'Neither', 'Behaviourism'], 'Innate ability.');
+  M('F', 'Nature/nurture', 'Skinner’s theory supports which side of the debate?', 'Nurture', ['Nature', 'Neither', 'Maturation'], 'Environment shapes behaviour.');
+  TF('F', 'Nature/nurture', 'Most psychologists agree development results from an interaction of nature and nurture.', true, 'Genes and environment interact.');
+  TF('F', 'Social norms', 'Children learn social norms only from their parents.', false, 'Also peers, practitioners, media, culture.');
+  TF('F', 'Routines', 'Consistent boundaries help children feel secure.', true, 'Predictability supports emotional development.');
+})();

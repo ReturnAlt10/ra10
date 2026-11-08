@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Python Lab · RA10</title>
+<meta name="description" content="Practise Python 3 in your browser: 58 auto-marked tasks for BTEC Level 3 Computing Unit 1 Programming Fundamentals and Unit 4 Practical Programming, with hints, model solutions and trace-table practice.">
+<link rel="icon" href="/logo.png" type="image/png">
+<script>(function () { try { var t = localStorage.getItem('ra10-theme'); if (!t) t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'; document.documentElement.setAttribute('data-theme', t === 'dark' ? 'dark' : 'light'); } catch (e) {} })();</script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/school/school.css?v=20261104">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
+<link rel="stylesheet" href="lab.css?v=20261211">
+<script src="/ra10-sdk.js?v=20261106"></script>
+<script src="/refresh/ra10-track.js?v=20261210"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/python/python.min.js"></script>
+</head>
+<body>
+<header class="sc-top">
+  <a class="sc-brand" href="/"><img src="/logo.png" alt="" width="30" height="30"><span>RA10 <b>Python Lab</b></span></a>
+  <div class="sc-top-actions">
+    <a class="sc-btn ghost sm" href="/btec/level-3/computing-aaq/unit-1">Computing Unit 1</a>
+    <a class="sc-btn ghost sm" href="/study-hub">Study Hub</a>
+  </div>
+</header>
+<div class="pl-shell">
+  <aside class="pl-side" id="side">
+    <div class="pl-progress"><div><b id="solved">0</b> / <span id="total">0</span> solved</div><div class="pl-bar"><i id="bar"></i></div></div>
+    <div class="pl-filters" role="group" aria-label="Filter by level">
+      <button class="on" data-l="0">All</button><button data-l="1">Starter</button><button data-l="2">Core</button><button data-l="3">Challenge</button>
+    </div>
+    <nav id="list" aria-label="Tasks"></nav>
+    <button class="pl-sandbox" id="sandboxBtn">▶ Free coding sandbox</button>
+  </aside>
+  <main class="pl-main">
+    <div class="pl-head">
+      <div>
+        <div class="pl-chips" id="chips"></div>
+        <h1 id="title">Loading…</h1>
+      </div>
+      <div class="pl-nav"><button class="sc-btn sm" id="prev" aria-label="Previous task">←</button><button class="sc-btn sm" id="next" aria-label="Next task">→</button></div>
+    </div>
+    <div class="pl-brief" id="brief"></div>
+    <div id="workArea">
+      <div class="pl-editor-wrap"><div class="pl-filebar"><span>main.py</span><span class="pl-status" id="status">Starting Python…</span></div><textarea id="editor"></textarea></div>
+      <div class="pl-predict" id="predictWrap" hidden>
+        <pre class="pl-code" id="predictCode"></pre>
+        <label for="predict"><b>Your predicted output</b> (exactly as it would be printed)</label>
+        <textarea id="predict" rows="5" spellcheck="false"></textarea>
+      </div>
+      <div class="pl-actions">
+        <button class="sc-btn pri" id="runBtn">▶ Run</button>
+        <button class="sc-btn pri alt" id="checkBtn">✓ Check answer</button>
+        <button class="sc-btn" id="hintBtn">💡 Hint</button>
+        <button class="sc-btn" id="solBtn">Show solution</button>
+        <button class="sc-btn ghost" id="resetBtn">Reset code</button>
+      </div>
+      <div class="pl-io">
+        <div class="pl-input"><label for="stdin"><b>Program input</b> <small>one value per line – used when you press Run</small></label><textarea id="stdin" rows="4" spellcheck="false" placeholder="eg&#10;125"></textarea></div>
+        <div class="pl-console"><div class="pl-console-h">Output</div><pre id="out" aria-live="polite"></pre></div>
+      </div>
+      <div id="hints" class="pl-hints"></div>
+      <div id="results" class="pl-results" aria-live="polite"></div>
+      <div id="solution" class="pl-solution" hidden></div>
+    </div>
+  </main>
+</div>
+<script src="tasks.js?v=20261211"></script>
+<script src="lab.js?v=20261211"></script>
+</body>
+</html>

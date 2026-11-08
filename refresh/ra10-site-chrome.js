@@ -10,7 +10,7 @@
   var mount = document.getElementById('ra10-site-chrome');
   if (!mount) return;
   var ACTIVE = mount.getAttribute('data-active') || '';
-  var CACHE_KEY = 'ra10_site_chrome_v2';
+  var CACHE_KEY = 'ra10_site_chrome_v3';
   var PARTS = ['nav.nav', '#mobile-sheet-backdrop', '#mobile-subject-sheet', '.mobile-top-nav', '#mobile-you-sheet', 'nav.mobile-bottom-nav'];
 
   function toPublic(p) {
@@ -101,6 +101,13 @@
     var reset = $('#dropdown-reset-pw'); if (reset) reset.addEventListener('click', function () { location.href = '/account'; });
     var a11y = $('[data-open-a11y]', dd || document); if (a11y && !window.RA10A11y) a11y.addEventListener('click', function () { location.href = '/account'; });
 
+    // the Subjects sheet is built from the unit registry (ra10-subjects.js)
+    var sh = document.getElementById('rs-sheet-host');
+    if (sh && window.RA10Subjects) RA10Subjects.renderSheet(sh);
+
+    // mobile dock: follow the layout the person picked on the main site (Edit dock)
+    applyDock();
+
     // mobile chrome
     var mq = matchMedia('(max-width: 640px) and (hover: none) and (pointer: coarse)');
     function sync() { document.body.classList.toggle('mobile-ui', mq.matches); }
@@ -126,6 +133,39 @@
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { closeAll(); show(false); } });
 
     syncUser();
+  }
+
+  function applyDock() {
+    var nav = $('nav.mobile-bottom-nav');
+    if (!nav) return;
+    var order = null;
+    try { order = JSON.parse(localStorage.getItem('ra10-mobile-dock-v1') || 'null'); } catch (e) {}
+    var LINKS = { home: '/', studyhub: '/study-hub/', exams: '/exams', tasks: '/tasks', community: '/community', leaderboard: '/leaderboard' };
+    var SVG = {
+      studyhub: '<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 4.6L18.5 9.5l-4.6 1.9L12 16l-1.9-4.6L5.5 9.5l4.6-1.9z"/><path d="M19 15l.8 1.9 1.9.8-1.9.8L19 20.4l-.8-1.9-1.9-.8 1.9-.8z"/></svg>',
+      community: '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"></path></svg>',
+      leaderboard: '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M8 21h8"></path><path d="M12 17v4"></path><path d="M7 4h10v3a5 5 0 0 1-10 0z"></path><path d="M7 6H4a2 2 0 0 0 2 3M17 6h3a2 2 0 0 1-2 3"></path></svg>'
+    };
+    var LABEL = { studyhub: 'Study Hub', community: 'Community', leaderboard: 'Leaderboard' };
+    if (!Array.isArray(order) || !order.length) order = ['home', 'subjects', 'exams', 'tasks'];
+    if (order.indexOf('home') < 0) order.unshift('home');
+    var more = $('#mobile-you-btn', nav), have = {};
+    $$('.mobile-nav-btn[data-dock-id]', nav).forEach(function (b) { if (b.dataset.dockId !== 'more') have[b.dataset.dockId] = b; });
+    order.forEach(function (id) {
+      var b = have[id];
+      if (!b) {
+        if (!SVG[id]) return;
+        b = document.createElement('button');
+        b.type = 'button'; b.className = 'mobile-nav-btn'; b.dataset.dockId = id; b.dataset.mobileNav = id;
+        b.innerHTML = SVG[id] + '<span>' + LABEL[id] + '</span>';
+      }
+      if (LINKS[id]) { b.removeAttribute('onclick'); b.onclick = (function (href) { return function () { location.href = href; }; })(LINKS[id]); }
+      nav.appendChild(b);
+    });
+    if (more) nav.appendChild(more);
+    $$('.mobile-nav-btn[data-dock-id]', nav).forEach(function (b) { var id = b.dataset.dockId; if (id !== 'more' && order.indexOf(id) < 0) b.parentNode.removeChild(b); });
+    var on = ACTIVE === 'study-hub' ? 'studyhub' : ACTIVE;
+    $$('.mobile-nav-btn', nav).forEach(function (b) { var a = b.dataset.dockId === on; b.classList.toggle('active', a); if (a) b.setAttribute('aria-current', 'page'); });
   }
 
   function signOut() {

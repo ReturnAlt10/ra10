@@ -1,0 +1,92 @@
+/* BTEC Health and Social Care (AAQ) Unit 1 — multiple-choice and true/false quiz. */
+(function () {
+  'use strict';
+  const { M, TF } = window.__BIZ_B;
+
+  // A — life stages and PIES
+  M('A', 'Life stages', 'What is the age range of adolescence in this unit?', '9–18 years', ['13–19 years', '11–16 years', '9–21 years'], 'The specification uses 9–18.');
+  M('A', 'Life stages', 'Which life stage is 46–69 years?', 'Middle adulthood', ['Early adulthood', 'Late adulthood', 'Later adulthood'], 'Early 19–45, middle 46–69, late 70–84, later 85+.');
+  M('A', 'Life stages', 'Which life stage begins at 85?', 'Later adulthood', ['Late adulthood', 'Middle adulthood', 'Old age stage 3'], 'Late adulthood is 70–84; later adulthood is 85+.');
+  M('A', 'Growth vs development', 'Which is an example of growth rather than development?', 'An increase in height', ['Learning to walk', 'Saying first words', 'Making friends'], 'Growth is a measurable increase in size.');
+  M('A', 'PIES', 'What does the “I” in PIES stand for?', 'Intellectual', ['Independence', 'Identity', 'Interaction'], 'Physical, Intellectual, Emotional, Social.');
+  M('A', 'Infancy', 'At about what age do most infants walk alone?', '12–15 months', ['6 months', '24 months', '3 years'], 'Walking alone usually happens around the first birthday.');
+  M('A', 'Infancy', 'Which is a fine motor skill?', 'Pincer grasp', ['Crawling', 'Sitting up', 'Walking'], 'Fine motor skills use small muscles of the hands and fingers.');
+  M('A', 'Infancy', 'Understanding that an object still exists when out of sight is…', 'object permanence', ['abstract thinking', 'egocentrism', 'conservation'], 'It develops around 8 months.');
+  M('A', 'Attachment', 'Which theorist said a strong early bond with a primary caregiver is essential for emotional security?', 'Bowlby', ['Ainsworth', 'Erikson', 'Skinner'], 'Ainsworth tested attachment types with the Strange Situation.');
+  M('A', 'Attachment', 'In Ainsworth’s research, an infant upset when the carer leaves and easily comforted on return is…', 'securely attached', ['insecure-avoidant', 'insecure-resistant', 'detached'], 'Secure attachment is the most common type.');
+  M('A', 'Early childhood', 'Which is typical gross motor development at 3–8 years?', 'Hopping and skipping', ['Pincer grasp', 'Holding head up', 'Rolling over'], 'Hopping and skipping develop in early childhood.');
+  M('A', 'Early childhood', 'Which describes emotional development in early childhood?', 'Learning to manage own emotions and understand others’', ['Developing abstract thinking', 'Puberty', 'Re-evaluating priorities'], 'Empathy and self-regulation grow.');
+  M('A', 'Puberty', 'Which hormone causes most male puberty changes?', 'Testosterone', ['Oestrogen', 'Insulin', 'Adrenaline'], 'Testosterone deepens the voice and increases muscle.');
+  M('A', 'Puberty', 'Which is a primary sexual characteristic?', 'Maturing testes', ['Facial hair', 'Breast development', 'Widening hips'], 'Primary characteristics are the sex organs.');
+  M('A', 'Puberty', 'Which is a secondary sexual characteristic in females?', 'Breasts developing', ['Ovaries maturing', 'The uterus', 'The vagina'], 'Secondary characteristics develop at puberty and are not the sex organs.');
+  M('A', 'Adolescence', 'Abstract thinking typically develops in…', 'adolescence', ['infancy', 'early childhood', 'later adulthood'], 'Adolescents can reason about ideas and possibilities.');
+  M('A', 'Self-concept', 'Self-concept is made up of…', 'self-image and self-esteem', ['height and weight', 'friends and family', 'genes and lifestyle'], 'How you see yourself and how you value yourself.');
+  M('A', 'Early adulthood', 'When does physical strength usually peak?', 'Early adulthood', ['Adolescence', 'Middle adulthood', 'Late adulthood'], 'Fitness and fertility peak in the twenties.');
+  M('A', 'Middle adulthood', 'Which is a symptom of the menopause?', 'Hot flushes', ['Voice breaking', 'Growth spurt', 'Pincer grasp'], 'Falling oestrogen causes hot flushes and night sweats.');
+  M('A', 'Middle adulthood', 'Sadness when grown-up children leave home is called…', 'empty nest syndrome', ['peer pressure', 'separation anxiety', 'stranger anxiety'], 'It affects some parents in middle adulthood.');
+  M('A', 'Late adulthood', 'Which physical change is typical in late adulthood?', 'Reduced lung capacity', ['Increased bone density', 'Growth spurt', 'Improved reaction times'], 'Lungs and arteries become less efficient.');
+  M('A', 'Later adulthood', 'Which is a positive emotional change often seen in later adulthood?', 'Better emotional regulation', ['More mood swings', 'Stronger peer pressure', 'Puberty'], 'Many older people manage emotions well.');
+  TF('A', 'Milestones', 'All children reach milestones in the same order but at different ages.', true, 'The sequence is fixed; the rate varies.');
+  TF('A', 'Growth', 'Growth is fastest in middle adulthood.', false, 'Growth is fastest in infancy, with a second spurt in adolescence.');
+  TF('A', 'Intellectual', 'Older adults cannot learn new skills.', false, 'They can, although it may take longer.');
+  TF('A', 'Social', 'Retirement can increase social contact for some people.', true, 'More free time for friends, clubs and volunteering.');
+
+  // B — factors
+  M('B', 'Genetic factors', 'An increased chance of developing a disease because of your genes is called…', 'genetic predisposition', ['genetic disorder', 'congenital defect', 'lifestyle factor'], 'It is a risk, not a certainty.');
+  M('B', 'Genetic disorders', 'Huntington’s disease is caused by…', 'a dominant faulty gene', ['two recessive faulty genes', 'an infection', 'poor diet'], 'One copy is enough.');
+  M('B', 'Genetic disorders', 'Cystic fibrosis mainly affects the…', 'lungs and digestive system', ['skin and hair', 'bones and joints', 'eyes and ears'], 'Thick mucus blocks airways and the pancreas.');
+  M('B', 'Genetic disorders', 'Sickle cell anaemia affects the…', 'red blood cells', ['white blood cells', 'nerve cells', 'skin cells'], 'Cells become crescent-shaped and block vessels.');
+  M('B', 'Genetic predisposition', 'Which genes greatly increase the risk of breast cancer?', 'BRCA1 and BRCA2', ['CFTR', 'HTT', 'HbS'], 'Women with these may be offered extra screening.');
+  M('B', 'Lifestyle', 'Which lifestyle factor most increases the risk of COPD?', 'Smoking', ['Eating fruit', 'Sleeping well', 'Regular exercise'], 'Smoking damages the airways and alveoli.');
+  M('B', 'Lifestyle', 'Drinking alcohol during pregnancy can cause…', 'foetal alcohol syndrome', ['sickle cell anaemia', 'Huntington’s disease', 'cystic fibrosis'], 'Alcohol crosses the placenta.');
+  M('B', 'Lifestyle', 'A baby born before 37 weeks is…', 'premature', ['post-term', 'low risk', 'full term'], 'Smoking and poor diet increase the risk.');
+  M('B', 'Lifestyle', 'Which hormone is mainly released during deep sleep and supports growth?', 'Growth hormone', ['Insulin', 'Adrenaline', 'Oestrogen'], 'Sleep is essential for growth in children.');
+  M('B', 'Health inequalities', 'The NHS describes health inequalities as…', 'unfair and avoidable differences in health between groups', ['differences in genes', 'private versus NHS care', 'differences in height'], 'They can be reduced.');
+  M('B', 'Health inequalities', 'Compared with the least deprived areas, life expectancy in the most deprived areas is…', 'lower', ['higher', 'the same', 'impossible to measure'], 'The gap is several years.');
+  M('B', 'Environmental', 'Damp and mouldy housing is most linked to…', 'asthma', ['sickle cell', 'menopause', 'Huntington’s'], 'Mould spores irritate the airways.');
+  M('B', 'Occupational', 'Shift work is most linked to…', 'disrupted sleep and stress', ['better sleep', 'genetic disorders', 'puberty'], 'It disrupts the body clock.');
+  M('B', 'Occupational', 'Working in a dusty factory without a mask increases the risk of…', 'COPD', ['diabetes type 1', 'chicken pox', 'cystic fibrosis'], 'Dust damages the lungs.');
+  TF('B', 'Genetic predisposition', 'Having a genetic predisposition means you will definitely develop the condition.', false, 'It only increases the risk.');
+  TF('B', 'Health inequalities', 'Discrimination can be a cause of health inequalities.', true, 'It affects access to and experience of services.');
+  TF('B', 'Lifestyle', 'Regular exercise can improve mental health as well as physical health.', true, 'Exercise releases endorphins and reduces stress.');
+  TF('B', 'Oral health', 'Poor oral health can affect self-esteem.', true, 'Missing or decayed teeth affect confidence.');
+
+  // C — promotion, prevention, treatment, professionals, care
+  M('C', 'Prevalent conditions', 'Dental caries means…', 'tooth decay', ['gum disease', 'a broken tooth', 'mouth cancer'], 'Common in young children.');
+  M('C', 'Prevalent conditions', 'A rash that does not fade under a glass can be a sign of…', 'meningitis', ['chicken pox', 'conjunctivitis', 'an ear infection'], 'It needs urgent medical help.');
+  M('C', 'Prevalent conditions', 'Which condition is described as affecting all life stages in the specification?', 'Obesity', ['Dementia', 'Chicken pox', 'Menopause'], 'Obesity is covered across the lifespan.');
+  M('C', 'Prevalent conditions', 'Acquired brain injury in adulthood is often linked to…', 'risk-taking behaviour and accidents', ['puberty', 'menopause', 'genetic disorders only'], 'E.g. road accidents or falls.');
+  M('C', 'Vaccination', 'Herd immunity occurs when…', 'enough people are immune that a disease cannot spread easily', ['only animals are vaccinated', 'everyone is ill at once', 'one person is vaccinated'], 'It protects people who cannot be vaccinated.');
+  M('C', 'Screening', 'Which screening is offered to all newborns?', 'Hearing screening', ['Bowel screening', 'Breast screening', 'NHS Health Check'], 'It detects hearing loss early.');
+  M('C', 'Screening', 'The NHS Health Check is offered to adults aged…', '40–74', ['18–25', '5–11', '85+ only'], 'It checks risk of heart disease, stroke and diabetes.');
+  M('C', 'Prevention', 'Fitting stair gates for toddlers is an example of…', 'accident prevention', ['screening', 'vaccination', 'treatment'], 'It prevents falls.');
+  M('C', 'Professionals', 'Which professional uses exercise and movement to help recovery after injury?', 'Physiotherapist', ['Radiographer', 'Podiatrist', 'Dietitian'], 'Physiotherapists restore movement and function.');
+  M('C', 'Professionals', 'Which nursing branch assesses health in the workplace?', 'Occupational health', ['Midwifery', 'Mental health', 'Children and young people'], 'Occupational health nurses support workers’ health.');
+  M('C', 'Professionals', 'A health visitor mainly supports…', 'families with children under five', ['older people in care homes', 'surgery patients', 'teenagers in custody'], 'They carry out development checks.');
+  M('C', 'Professionals', 'Who adapts a person’s home so they can live independently?', 'Occupational therapist', ['Surgeon', 'Radiographer', 'Midwife'], 'OTs provide aids and adaptations.');
+  M('C', 'Professionals', 'A radiographer…', 'takes and interprets medical images', ['treats feet', 'plans diets', 'delivers babies'], 'X-rays, CT and MRI.');
+  M('C', 'Professionals', 'Which professional specialises in feet?', 'Podiatrist', ['Physiotherapist', 'Dentist', 'Psychiatrist'], 'Important for people with diabetes.');
+  M('C', 'Professionals', 'A social prescriber…', 'links people to community activities and groups', ['prescribes medication', 'performs surgery', 'tests hearing'], 'It tackles social causes of poor health.');
+  M('C', 'Professionals', 'Which professional treats mental illness and can prescribe medication?', 'Psychiatrist', ['Counsellor', 'Youth worker', 'Care worker'], 'Psychiatrists are medical doctors.');
+  M('C', 'Integrated care', 'Integrated Care Systems bring together…', 'NHS, local councils and voluntary organisations', ['only hospitals', 'only private companies', 'schools and police only'], 'They plan joined-up care.');
+  M('C', 'Roper, Logan and Tierney', 'How many activities of daily living are in the Roper, Logan and Tierney model?', '12', ['5', '8', '20'], 'From maintaining a safe environment to dying.');
+  M('C', 'Roper, Logan and Tierney', 'Which is one of Roper, Logan and Tierney’s activities of daily living?', 'Mobilising', ['Shopping online', 'Driving', 'Budgeting'], 'Others include eating and drinking, breathing and sleeping.');
+  M('C', 'Multidisciplinary working', 'Which is a key feature of multidisciplinary working?', 'Shared decision making with the service user at the centre', ['Each professional keeps their own care plan secret', 'Families are excluded', 'Only doctors make decisions'], 'It gives seamless care.');
+  M('C', 'Person-centred care', 'Person-centred care means…', 'care is built around the individual’s needs, wishes and choices', ['everyone gets identical care', 'the doctor decides everything', 'care is based only on age'], 'The person is involved in decisions.');
+  TF('C', 'Vaccination', 'Vaccination protects only the person who is vaccinated.', false, 'Herd immunity protects the wider community.');
+  TF('C', 'Youth worker', 'Youth workers can work in schools, faith groups and community centres.', true, 'Youth clubs are only one setting.');
+  TF('C', 'Health visitor', 'Health visitors check infants’ growth and development milestones.', true, 'They support families of under-5s.');
+  TF('C', 'Integrated care', 'Holistic care considers only a person’s physical needs.', false, 'It considers all PIES needs.');
+  TF('C', 'Screening', 'Screening tests people who already have symptoms.', false, 'Screening checks people without symptoms to find problems early.');
+  M('C', 'Health education', 'Which is the best example of health education?', 'A school campaign on the effects of vaping', ['A hip replacement operation', 'A blood transfusion', 'A dental filling'], 'Education helps people make informed choices.');
+  M('C', 'Prevalent conditions', 'Which condition is especially common in late adulthood?', 'Dementia', ['Chicken pox', 'Puberty', 'Dental caries in infants'], 'Risk rises sharply with age.');
+  M('A', 'Infancy', 'Which skill usually develops first?', 'Holding the head up', ['Sitting unsupported', 'Crawling', 'Walking'], 'Development is cephalocaudal – head to toe.');
+  M('A', 'Adolescence', 'Which is an example of a social change in adolescence?', 'Growing independence from family', ['Pincer grasp', 'Menopause', 'Object permanence'], 'Friendships and independence increase.');
+  M('A', 'Late adulthood', 'Which is a common intellectual strength of older adults?', 'Wisdom from experience', ['Faster reaction times', 'A growth spurt', 'Better short-term recall than at 20'], 'Experience supports judgement.');
+  M('B', 'Lifestyle', 'Which is NOT one of the lifestyle factors named in this unit?', 'Height', ['Sleep', 'Oral health', 'Exercise'], 'Height is a measure of growth, not a lifestyle factor.');
+  M('B', 'Economic', 'How can low income affect health?', 'It can limit access to healthy food, heating and good housing', ['It always improves sleep', 'It causes genetic disorders', 'It has no effect'], 'Economic factors drive health inequalities.');
+  M('C', 'Screening', 'Breast screening in England is offered to women aged…', '50–71', ['18–30', '30–40', '85+ only'], 'Every three years.');
+  M('C', 'Professionals', 'Which professional would most likely support a person who drinks too much alcohol to access community groups?', 'Social prescriber', ['Radiographer', 'Podiatrist', 'Midwife'], 'Social prescribers link people to non-medical support.');
+  TF('C', 'Multidisciplinary working', 'In integrated care the service user should be at the centre of decision making.', true, 'Shared decision making.');
+  M('A', 'Holistic', 'A 9-mark “assess the impact on holistic development” answer should cover…', 'physical, intellectual, emotional and social effects with links and a conclusion', ['only physical effects', 'a list of milestones', 'the definition of growth only'], 'Holistic means the whole person.');
+})();

@@ -52,9 +52,10 @@ const ROUTES = {
   '/revision':                            'p-revision',
   '/revision/a-level/business-2023':      'p-aqa-business-2023',
   '/revision/a-level/business-2026':      'p-aqa-business-2026',
-  '/revision/btec':                       'p-btec',
-  '/revision/a-level':                    'p-alevel',
-  '/revision/btec/level-3':              'p-btec-l3',
+  // the qualification / level hubs are the subject finder with a filter applied (see renderSubjectHub)
+  '/revision/btec':                       'p-revision',
+  '/revision/a-level':                    'p-revision',
+  '/revision/btec/level-3':              'p-revision',
   '/revision/btec/level-3/business':     'p-btec-business-l3',
   '/revision/btec/level-3/business/unit-2': 'p-bus-u2',
   '/revision/btec/level-3/business/unit-3': 'p-bus-u3',
@@ -68,7 +69,7 @@ const ROUTES = {
   '/revision/btec/level-3/IT-AAQ/unit-2':'p-unit2',
   '/revision/btec/level-3/IT-AAQ/unit-3':'p-unit3',
   '/revision/btec/level-3/IT-AAQ/unit-4':'p-unit4',
-  '/revision/btec/level-2':              'p-btec-l2',
+  '/revision/btec/level-2':              'p-revision',
   '/revision/btec/level-2/it':           'p-btec-l2-it',
   '/revision/btec/level-2/it/unit-2':    'p-it-l2-u2',
   '/community':                           'p-community',
@@ -570,6 +571,7 @@ const MOBILE_DOCK_DEFAULT = ['home', 'subjects', 'exams', 'tasks'];
 // Items that live in the "More" drawer and can be promoted into the dock.
 const MOBILE_DOCK_POOL = [
   { id: 'home', label: 'Home' },
+  { id: 'studyhub', label: 'Study Hub' },
   { id: 'subjects', label: 'Subjects' },
   { id: 'exams', label: 'Exams' },
   { id: 'tasks', label: 'Tasks' },
@@ -662,7 +664,8 @@ function dockButtonInner(id, label) {
     exams: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 7V3h8v4"/><path d="M4 21V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v15l-2-1.5L16 21l-2-1.5L12 21l-2-1.5L8 21l-2-1.5L4 21z"/><path d="M9 11h6"/><path d="M9 15h4"/></svg>',
     tasks: '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M9 6h11"></path><path d="M9 12h11"></path><path d="M9 18h11"></path><path d="M4 6l1.5 1.5L7.5 5.5"></path><path d="M4 12l1.5 1.5L7.5 11.5"></path><path d="M4 18l1.5 1.5L7.5 17.5"></path></svg>',
     community: '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"></path></svg>',
-    leaderboard: '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M8 21h8"></path><path d="M12 17v4"></path><path d="M7 4h10v3a5 5 0 0 1-10 0z"></path><path d="M7 6H4a2 2 0 0 0 2 3M17 6h3a2 2 0 0 1-2 3"></path></svg>',
+    leaderboard: '<svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M8 21h8"></path><path d="M12 17v4"></path><path d="M7 4h10v3a5 5 0 0 1-10 0z"></path><path d="M7 6H4a2 2 0 0 0 2 3M17 6h32a4 4 0 0 1-2 3"></path></svg>',
+    studyhub: '<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 4.6L18.5 9.5l-4.6 1.9L12 16l-1.9-4.6L5.5 9.5l4.6-1.9z"/><path d="M19 15l.8 1.9 1.9.8-1.9.8L19 20.4l-.8-1.9-1.9-.8 1.9-.8z"/></svg>',
   };
   return (svgs[id] || '') + '<span>' + label + '</span>';
 }
@@ -681,6 +684,7 @@ function bindDockButton(btn, id) {
     else if (id === 'tasks') go('/tasks');
     else if (id === 'community') go('/community');
     else if (id === 'leaderboard') go('leaderboard');
+    else if (id === 'studyhub') location.href = '/study-hub/';
   };
 }
 
@@ -1090,7 +1094,7 @@ function getLeaderboardBadgeEmoji(profile) {
   const personalBadge = String((profile && (profile.badge_emoji || profile.emoji_badge)) || '').trim();
   if (personalBadge) return personalBadge;
   const historicalBadge = String((profile && profile.leaderboard_badge) || '').trim();
-  const match = historicalBadge.match(/^[\u{1F947}\u{1F948}\u{1F949}]/u);
+  const match = historicalBadge.match(/^[🥇🥈🥉]/u);
   return match ? match[0] : '';
 }
 
@@ -1453,7 +1457,6 @@ function showLeaderboardWinnerPopup(profile, creditsReward) {
   popup.style.display = 'block';
 }
 
-
 function showLeaderboardPodiumPopup(result) {
   const popup = document.getElementById('leaderboard-win-popup');
   if (!popup || !result) return;
@@ -1463,14 +1466,15 @@ function showLeaderboardPodiumPopup(result) {
   const titleEl = popup.querySelector('[data-lb-win-title]');
   const bodyEl = popup.querySelector('[data-lb-win-body]');
   const rank = Number(result.rank);
-  const badge = result.badge || (rank === 1 ? '\u{1F947} 1st' : rank === 2 ? '\u{1F948} 2nd' : '\u{1F949} 3rd');
+  const badge = result.badge || (rank === 1 ? '🥇 1st' : rank === 2 ? '🥈 2nd' : '🥉 3rd');
   const credits = Number(result.credits_awarded || 0);
   if (titleEl) titleEl.textContent = 'Congratulations!';
   if (bodyEl) {
-    bodyEl.textContent = 'You finished ' + badge + ' on last week\u2019s leaderboard and earned ' + credits + ' credits.';
+    bodyEl.textContent = 'You finished ' + badge + ' on last week’s leaderboard and earned ' + credits + ' credits.';
   }
   popup.style.display = 'block';
 }
+
 async function loadLbPreview() {
   const listEl = document.getElementById('lb-preview-list');
   if (!listEl || !window.supabase) return;
@@ -3648,6 +3652,36 @@ function renderSdNext(ne) {
     + (ne.exam.appPath ? '<button class="sd-btn sd-btn-primary sm" type="button" onclick="go(\'' + ne.exam.appPath + '\')">Revise this</button>' : '<button class="sd-btn sm" type="button" onclick="go(\'/exams\')">Exam calendar</button>') + '</div></div>';
 }
 
+// Subject look for a unit path: the subject's own icon and colour (from the registry), shaded per unit so
+// units in one subject are related but distinguishable, and different subjects never share a look.
+function sdUnitMeta(path) {
+  if (!window.RA10Subjects || !window.RA10Units) return null;
+  const groups = RA10Subjects.groups();
+  for (const g of groups) {
+    const i = g.units.findIndex(u => u.path === path);
+    if (i < 0) continue;
+    const u = g.units[i];
+    const m = String(u.name).match(/Unit (\d+)/);
+    const code = (String(u.name).match(/\((7\d{3}|9[A-Z]{2}\d)\b/) || [])[1];
+    const shade = [0, 18, -14, 30, -24, 40, -32][i % 7];
+    return {
+      g, u, color: g.color || '#2563eb', shade,
+      svg: (RA10Subjects.icons && RA10Subjects.icons[g.icon]) || '',
+      badge: m ? 'U' + m[1] : (code || 'AL'),
+      title: String(u.name).replace(/^(Level 2 IT )?Unit \d+:\s*/, '').replace(/^(AQA|Pearson Edexcel) A-Level /, ''),
+      board: /A-?Level/i.test(g.qual) ? (String(g.qual).match(/^(.+?)\s+A-?Level/) || [0, 'AQA'])[1].replace(/^Pearson\s+/, '') + ' A-Level' : g.qual,
+      kind: /exam/i.test(u.kind) ? 'Exam' : /set task/i.test(u.kind) ? 'Set task' : 'Assignment'
+    };
+  }
+  return null;
+}
+function sdIcoHtml(app, cls) {
+  const m = sdUnitMeta(app.path);
+  if (!m) return '<span class="sd-app-ico ' + app.icon + (cls ? ' ' + cls : '') + '">' + sdIcon(app.icon) + '<em>' + app.label + '</em></span>';
+  const c = m.shade >= 0 ? 'color-mix(in srgb,' + m.color + ' ' + (100 - m.shade) + '%,#fff)' : 'color-mix(in srgb,' + m.color + ' ' + (100 + m.shade) + '%,#000)';
+  return '<span class="sd-app-ico sd-subj' + (cls ? ' ' + cls : '') + '" style="--c:' + c + ';--c0:' + m.color + '">' + m.svg + '<em>' + m.badge + '</em></span>';
+}
+
 function renderSignedInDashboard() {
   document.querySelectorAll('#signed-in-dashboard .sd-ql').forEach(el => { const n = el.className.replace('sd-ql', '').trim(); if (!el.firstElementChild && el.textContent.indexOf('ICON_') === 0) el.innerHTML = sdIcon(n); });
   const dash = document.getElementById('signed-in-dashboard');
@@ -3731,9 +3765,14 @@ function renderSignedInDashboard() {
 
   const cardHtml = (app) => {
     const isPinned = pinned.includes(app.path);
-    return '<div class="sd-app" style="--i:' + ((window._sdI = (window._sdI || 0) + 1) % 14) + '" role="link" tabindex="0" onclick="go(\'' + app.path + '\')" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();go(\'' + app.path + '\')}">'
-      + '<span class="sd-app-ico ' + app.icon + '">' + sdIcon(app.icon) + '<em>' + app.label + '</em></span>'
-      + '<span class="sd-app-copy"><strong>' + app.name + '</strong><small>' + app.desc + '</small></span>'
+    const m = sdUnitMeta(app.path);
+    const grouped = !!window._sdGrouped;
+    const unitNo = m && m.u.name.match(/^Unit \d+/) ? m.u.name.match(/^Unit \d+/)[0] : '';
+    const name = m ? (grouped || !unitNo ? m.title : unitNo + ' · ' + m.title) : app.name;
+    const desc = m ? (grouped ? (unitNo ? unitNo + ' · ' : '') + m.kind : m.g.name + ' · ' + m.board + ' · ' + m.kind) : app.desc;
+    return '<div class="sd-app" style="--i:' + ((window._sdI = (window._sdI || 0) + 1) % 14) + (m ? ';--c0:' + m.color : '') + '" role="link" tabindex="0" onclick="go(\'' + app.path + '\')" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();go(\'' + app.path + '\')}">'
+      + sdIcoHtml(app)
+      + '<span class="sd-app-copy"><strong>' + name + '</strong><small>' + desc + '</small></span>'
       + '<button class="sd-pin' + (isPinned ? ' on' : '') + '" type="button" aria-pressed="' + isPinned + '" aria-label="' + (isPinned ? 'Unpin ' : 'Pin ') + app.name + '" onclick="event.stopPropagation();togglePinnedApp(\'' + app.path + '\')">' + (isPinned ? '★' : '☆') + '</button>'
       + '</div>';
   };
@@ -3742,7 +3781,7 @@ function renderSignedInDashboard() {
   const recentHost = document.getElementById('sd-recent');
   if (recentHost) {
     if (recent.length) {
-      recentHost.innerHTML = recent.map((app, i) => '<button type="button" class="sd-resume' + (i === 0 ? ' first' : '') + '" onclick="go(\'' + app.path + '\')"><span class="sd-app-ico ' + app.icon + '">' + sdIcon(app.icon) + '<em>' + app.label + '</em></span><span class="sd-resume-copy"><small>' + (i === 0 ? 'Last opened' : 'Recently opened') + '</small><strong>' + app.name + '</strong><em>' + app.desc + '</em></span><span class="sd-go" aria-hidden="true">' + (i === 0 ? 'Continue →' : '→') + '</span></button>').join('');
+      recentHost.innerHTML = recent.map((app, i) => '<button type="button" class="sd-resume' + (i === 0 ? ' first' : '') + '" onclick="go(\'' + app.path + '\')">' + sdIcoHtml(app) + '<span class="sd-resume-copy"><small>' + (i === 0 ? 'Last opened' : 'Recently opened') + '</small><strong>' + app.name + '</strong><em>' + app.desc + '</em></span><span class="sd-go" aria-hidden="true">' + (i === 0 ? 'Continue →' : '→') + '</span></button>').join('');
     } else {
       const picks = ALL_APPS.filter(a => /business-2026|business\/unit-3|sport\/unit-2/.test(a.path)).slice(0, 3);
       recentHost.innerHTML = '<p class="sd-empty">Nothing opened yet. Good places to start:</p>' + picks.map(cardHtml).join('');
@@ -3752,18 +3791,44 @@ function renderSignedInDashboard() {
   const pinnedHost = document.getElementById('signed-in-pinned-grid');
   if (pinnedHost) pinnedHost.innerHTML = pinnedApps.length ? pinnedApps.map(cardHtml).join('') : '<p class="sd-empty">No pinned subjects yet. Tap the star on any subject below to keep it here.</p>';
 
-  const groups = [['all', 'All'], ['business', 'Business'], ['sport', 'Sport'], ['it', 'IT'], ['l2', 'Level 2']];
-  const filter = window._sdFilter || 'all';
-  const filterHost = document.getElementById('sd-filter');
-  if (filterHost) {
-    filterHost.innerHTML = groups.map(([k, l]) => '<button type="button" class="sd-chip' + (k === filter ? ' on' : '') + '" aria-pressed="' + (k === filter) + '" onclick="window._sdFilter=\'' + k + '\';renderSignedInDashboard()">' + l + '</button>').join('');
-  }
-  const allHost = document.getElementById('signed-in-all-grid');
-  if (allHost) allHost.innerHTML = ALL_APPS.filter(a => filter === 'all' || a.icon === filter).map(cardHtml).join('');
+  sdRenderAll(cardHtml);
 
   renderSdNext(nextExam);
   sdCountUp(dash);
   renderExamTimes();
+}
+
+function sdRenderAll(cardHtml) {
+  const filterHost = document.getElementById('sd-filter');
+  const allHost = document.getElementById('signed-in-all-grid');
+  if (!allHost) return;
+  const SG = window.RA10Subjects ? RA10Subjects.groups() : [];
+  if (!SG.length) { allHost.innerHTML = ALL_APPS.map(cardHtml).join(''); return; }
+  const fams = [['all', 'All'], ['btec3', 'BTEC Level 3'], ['btec2', 'BTEC Level 2'], ['alevel', 'A-Level']].filter(([k]) => k === 'all' || SG.some(g => g.family === k));
+  const filter = fams.some(f => f[0] === window._sdFilter) ? window._sdFilter : 'all';
+  const q = String(window._sdQuery || '').trim().toLowerCase();
+  if (filterHost && !filterHost.dataset.ready) {
+    filterHost.dataset.ready = '1';
+    filterHost.innerHTML = '<div class="sd-chips" role="group" aria-label="Filter by qualification"></div><label class="sd-search"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input type="search" placeholder="Search subjects or units" aria-label="Search subjects or units"></label>';
+    const inp = filterHost.querySelector('input');
+    inp.value = window._sdQuery || '';
+    inp.addEventListener('input', () => { window._sdQuery = inp.value; sdRenderAll(cardHtml); });
+  }
+  if (filterHost) {
+    const chips = filterHost.querySelector('.sd-chips');
+    chips.innerHTML = fams.map(([k, l]) => { const n = k === 'all' ? SG.length : SG.filter(g => g.family === k).length; return '<button type="button" class="sd-chip' + (k === filter ? ' on' : '') + '" aria-pressed="' + (k === filter) + '" data-fam="' + k + '">' + l + ' <span>' + n + '</span></button>'; }).join('');
+    chips.querySelectorAll('[data-fam]').forEach(b => b.onclick = () => { window._sdFilter = b.dataset.fam; sdRenderAll(cardHtml); });
+  }
+  const famName = { btec3: 'BTEC Level 3', btec2: 'BTEC Level 2', alevel: 'A-Level' };
+  const blocks = SG.filter(g => filter === 'all' || g.family === filter).map(g => {
+    const units = g.units.filter(u => !q || [g.name, g.qual, u.name, u.short, (u.keywords || []).join(' ')].join(' ').toLowerCase().indexOf(q) >= 0);
+    if (!units.length) return '';
+    const apps = units.map(u => ALL_APPS.find(a => a.path === u.path) || { path: u.path, icon: 'books', label: '', name: u.short, desc: u.name });
+    const board = /A-?Level/i.test(g.qual) ? (String(g.qual).match(/^(.+?)\s+A-?Level/) || [0, 'AQA'])[1].replace(/^Pearson\s+/, '') + ' A-Level' : (famName[g.family] || g.qual) + (/\bAAQ\b/.test(g.qual) ? ' · AAQ' : '');
+    return '<section class="sd-subj-block" style="--c0:' + g.color + '"><header class="sd-subj-head"><span class="sd-subj-ico">' + ((RA10Subjects.icons && RA10Subjects.icons[g.icon]) || '') + '</span><span><b>' + g.name + '</b><small>' + board + ' · ' + g.units.length + (g.units.length === 1 ? ' course' : ' units') + '</small></span>' + (g.isNew ? '<span class="sd-new">New</span>' : '') + '</header><div class="sd-subj-grid">' + (window._sdGrouped = true, apps.map(cardHtml).join('')) + '</div></section>';
+  }).join('');
+  window._sdGrouped = false;
+  allHost.innerHTML = blocks || '<p class="sd-empty">No subjects match “' + q.replace(/[<>&"]/g, '') + '”.</p>';
 }
 
 let _examsFilter = { board: 'all', level: 'all', subject: 'all', pinnedOnly: false, search: '', sort: 'date', view: 'calendar' };
@@ -4362,6 +4427,74 @@ function ra10SkipToMain(event) {
   return false;
 }
 
+// ── Subjects from the unit registry (ra10-units.js + ra10-subjects.js) ──────────
+const SUBJECT_HUBS = {
+  '/revision': { family: 'all' },
+  '/revision/btec': { family: 'all', title: 'BTEC subjects', crumb: 'BTEC' },
+  '/revision/btec/level-3': { family: 'btec3', title: 'BTEC Level 3 subjects', crumb: 'BTEC Level 3' },
+  '/revision/btec/level-2': { family: 'btec2', title: 'BTEC Level 2 subjects', crumb: 'BTEC Level 2' },
+  '/revision/a-level': { family: 'alevel', title: 'A-Level subjects', crumb: 'A-Level' },
+};
+let _subjectHubKey = '';
+function renderSubjectHub(path) {
+  const host = document.getElementById('rs-page-host');
+  if (!host || !window.RA10Subjects) return;
+  const hub = SUBJECT_HUBS[path] || SUBJECT_HUBS['/revision'];
+  if (_subjectHubKey !== path || !host.childElementCount) {
+    _subjectHubKey = path;
+    RA10Subjects.renderPage(host, { family: hub.family, title: hub.title });
+  }
+  const bc = document.getElementById('rs-page-bc');
+  if (bc) bc.innerHTML = '<button class="bc-item" onclick="go(\'/\')">Home</button><span class="bc-sep">›</span>'
+    + (hub.crumb ? '<button class="bc-item" onclick="go(\'/revision\')">Subjects</button><span class="bc-sep">›</span><span class="bc-item cur">' + hub.crumb + '</span>' : '<span class="bc-item cur">Subjects</span>');
+  document.title = (hub.title || 'Subjects') + ' · RA10';
+}
+function resolveDynamicPage(path) {
+  if (!window.RA10Units) return null;
+  const u = RA10Units.byPath(path);
+  if (u) {
+    const frame = document.getElementById('dyn-unit-frame');
+    if (!frame) return null;
+    const src = u.app + '?v=20261201';
+    if (frame.getAttribute('src') !== src) { delete frame.dataset.ready; frame.setAttribute('src', src); }
+    frame.title = u.short + ': ' + u.name;
+    const g = window.RA10Subjects ? RA10Subjects.groups().find(x => x.units.some(y => y.path === u.path)) : null;
+    const sc = document.getElementById('dyn-subject-crumb');
+    if (sc) { sc.textContent = g ? g.name : u.subject; sc.dataset.path = g ? g.path : '/revision'; }
+    const uc = document.getElementById('dyn-unit-crumb');
+    if (uc) uc.textContent = (u.name.match(/^Unit \d+/) || [u.short])[0];
+    document.title = u.short + ' · RA10';
+    return 'p-unit-dyn';
+  }
+  const host = document.getElementById('rs-subject-host');
+  const g = host && window.RA10Subjects ? RA10Subjects.renderSubject(host, path) : null;
+  if (g) {
+    const c = document.getElementById('rs-subject-crumb'); if (c) c.textContent = g.name;
+    document.title = g.name + ' · RA10';
+    return 'p-subject-dyn';
+  }
+  return null;
+}
+// The navbar hover menu and the mobile Subjects sheet are built from the same registry.
+function renderSubjectMenus() {
+  if (!window.RA10Subjects) return;
+  const menu = document.getElementById('rev-preview');
+  if (menu && !menu.dataset.rsReady) { menu.dataset.rsReady = '1'; RA10Subjects.renderMenu(menu); }
+  const sheet = document.getElementById('rs-sheet-host');
+  if (sheet && !sheet.dataset.rsReady) { sheet.dataset.rsReady = '1'; RA10Subjects.renderSheet(sheet); }
+  const meta = document.getElementById('rs-sheet-meta');
+  if (meta) { const gs = RA10Subjects.groups(); meta.innerHTML = '<span>' + gs.length + ' subjects</span><span>' + gs.reduce((n, g) => n + g.units.length, 0) + ' units</span>'; }
+}
+document.addEventListener('DOMContentLoaded', renderSubjectMenus);
+// every registry unit can be pinned / shows in "recent", not only the hand-listed ones
+(function addRegistryApps() {
+  if (!window.RA10Units) return;
+  RA10Units.all().forEach(u => {
+    if (ALL_APPS.some(a => a.path === u.path)) return;
+    ALL_APPS.push({ path: u.path, icon: 'l2', label: String(u.short || '').slice(0, 2).toUpperCase(), name: u.short, desc: u.name });
+  });
+})();
+
 function route(){
   closeMobileSubjectSheet();
   document.body.classList.remove('iframe-fullscreen-mode');
@@ -4378,8 +4511,9 @@ function route(){
     setTimeout(() => { if (window.RA10Onboarding) RA10Onboarding.openTerms({}); }, 800);
     return;
   }
-  // Unknown paths get the 404 page (the home page only for '/').
-  const id   = ROUTES[path] || (path === '/' || path === '' ? 'p-home' : 'p-notfound');
+  // Unknown paths get the 404 page (the home page only for '/'). Units and subjects in the registry
+  // (ra10-units.js) that have no hand-written page use the generic subject / unit pages.
+  const id   = ROUTES[path] || resolveDynamicPage(path) || (path === '/' || path === '' ? 'p-home' : 'p-notfound');
   if (id === 'p-notfound') {
     const np = document.getElementById('nf-path');
     if (np) np.textContent = location.pathname;
@@ -4399,6 +4533,7 @@ function route(){
     _routeAnnounceReady = true;
   }
   recordRecentApp(path);
+  if (id === 'p-revision') renderSubjectHub(path);
   if (id === 'p-home') {
     renderSignedInDashboard();
     renderHomeExams();

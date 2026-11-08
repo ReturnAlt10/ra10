@@ -33,7 +33,7 @@
   function cut(s, n) { s = s == null ? '' : String(s); return s.length > n ? s.slice(0, n) : s; }
   function unitPath() {
     try { var u = window.RA10Units && RA10Units.fromLocation(location.pathname); if (u) return u.path; } catch (e) {}
-    var m = String(location.pathname).match(/\/revision\/(?:btec|a-level)\/[^?#]*?(?:unit-\d+|business-\d{4})/i);
+    var m = String(location.pathname).match(/\/revision\/(?:btec\/[^?#]*?unit-\d+|a-level\/[^\/?#]+)/i);
     return m ? m[0] : null;
   }
   function context() {
