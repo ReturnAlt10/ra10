@@ -38,6 +38,8 @@ jobs:
             --exclude='tools' \
             --exclude='node_modules' \
             ./ _site/
+          mkdir -p _site/tools
+          rsync -a tools/activity/ _site/tools/activity/
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
