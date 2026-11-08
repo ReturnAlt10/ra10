@@ -1087,8 +1087,11 @@ document.addEventListener('click', (event) => {
 });
 
 function getLeaderboardBadgeEmoji(profile) {
-  // leaderboard_badge is historical podium metadata and must not decorate the current week's name.
-  return String((profile && (profile.badge_emoji || profile.emoji_badge)) || '').trim();
+  const personalBadge = String((profile && (profile.badge_emoji || profile.emoji_badge)) || '').trim();
+  if (personalBadge) return personalBadge;
+  const historicalBadge = String((profile && profile.leaderboard_badge) || '').trim();
+  const match = historicalBadge.match(/^[\u{1F947}\u{1F948}\u{1F949}]/u);
+  return match ? match[0] : '';
 }
 
 function getLeaderboardDisplayName(profile) {
@@ -1450,6 +1453,24 @@ function showLeaderboardWinnerPopup(profile, creditsReward) {
   popup.style.display = 'block';
 }
 
+
+function showLeaderboardPodiumPopup(result) {
+  const popup = document.getElementById('leaderboard-win-popup');
+  if (!popup || !result) return;
+  const key = 'ra10_leaderboard_podium_seen_' + String(result.week_start);
+  if (localStorage.getItem(key) === '1') return;
+  localStorage.setItem(key, '1');
+  const titleEl = popup.querySelector('[data-lb-win-title]');
+  const bodyEl = popup.querySelector('[data-lb-win-body]');
+  const rank = Number(result.rank);
+  const badge = result.badge || (rank === 1 ? '\u{1F947} 1st' : rank === 2 ? '\u{1F948} 2nd' : '\u{1F949} 3rd');
+  const credits = Number(result.credits_awarded || 0);
+  if (titleEl) titleEl.textContent = 'Congratulations!';
+  if (bodyEl) {
+    bodyEl.textContent = 'You finished ' + badge + ' on last week\u2019s leaderboard and earned ' + credits + ' credits.';
+  }
+  popup.style.display = 'block';
+}
 async function loadLbPreview() {
   const listEl = document.getElementById('lb-preview-list');
   if (!listEl || !window.supabase) return;
@@ -1655,6 +1676,15 @@ async function renderLeaderboard() {
       </div>
     `;
     updateLeaderboardCountdown();
+    if (currentId) {
+      const { data: podiumResult } = await sb.from('leaderboard_weekly_results')
+        .select('week_start, rank, credits_awarded, badge')
+        .eq('profile_id', currentId)
+        .order('week_start', { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      if (podiumResult) showLeaderboardPodiumPopup(podiumResult);
+    }
     if (currentId && winner && winner.id === currentId) {
       showLeaderboardWinnerPopup(winner, 30);
     } else if (currentId && !data.find(u => u.id === currentId)) {

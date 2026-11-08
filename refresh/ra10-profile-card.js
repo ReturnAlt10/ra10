@@ -119,8 +119,9 @@
     if (isMe) chips += '<span class="rpc-chip you">This is you</span>';
     var streak = Number(p.streak || 0), best = Number(p.best_streak || 0);
     var wins = Number(p.wins || 0), pods = Number(p.podiums || 0);
+    var bestLabel = p.best_rank === 1 ? '🥇 1st place' : p.best_rank === 2 ? '🥈 2nd place' : p.best_rank === 3 ? '🥉 3rd place' : '';
     var foot = wins
-      ? '🏆 <b>' + wins + '× weekly champion</b>' + (p.last_win_week ? ' · last won the week of ' + esc(weekLabel(p.last_win_week)) : '')
+      ? '🏆 <b>' + wins + '× weekly champion</b>' + (bestLabel ? ' · ' + bestLabel : '') + (p.last_win_week ? ' · last won the week of ' + esc(weekLabel(p.last_win_week)) : '')
       : pods
         ? '🥈 Best finish: <b>' + (p.best_rank === 2 ? '2nd' : '3rd') + ' place</b> on the weekly leaderboard'
         : (isMe ? 'Finish in the weekly top three to start your trophy cabinet!' : 'No leaderboard trophies yet — the race resets every Saturday.');
