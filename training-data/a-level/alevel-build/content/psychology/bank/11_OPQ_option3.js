@@ -1,7 +1,7 @@
   /* ===== Paper 3 Option 3 (Section D): O Aggression · P Forensic Psychology · Q Addiction ===== */
-  const O1 = '4.3.8.1 Neural, hormonal & genetic', O2 = '4.3.8.2 Ethological & evolutionary', O3 = '4.3.8.3 Social psychological', O4 = '4.3.8.4 Institutional aggression', O5 = '4.3.8.5 Media influences';
-  const P1 = '4.3.9.1 Offender profiling', P2 = '4.3.9.2 Biological explanations', P3 = '4.3.9.3 Psychological explanations', P4 = '4.3.9.4 Dealing with offending';
-  const Q1 = '4.3.10.1 Describing addiction', Q2 = '4.3.10.2 Risk factors', Q3 = '4.3.10.3 Nicotine addiction', Q4 = '4.3.10.4 Gambling addiction', Q5 = '4.3.10.5 Reducing addiction', Q6 = '4.3.10.6 Prochaska’s model';
+  const O1 = '3.8.1 Neural, hormonal & genetic', O2 = '3.8.2 Ethological & evolutionary', O3 = '3.8.3 Social psychological', O4 = '3.8.4 Institutional aggression', O5 = '3.8.5 Media influences';
+  const P1 = '3.9.1 Offender profiling', P2 = '3.9.2 Biological explanations', P3 = '3.9.3 Psychological explanations', P4 = '3.9.4 Dealing with offending';
+  const Q1 = '3.10.1 Describing addiction', Q2 = '3.10.2 Risk factors', Q3 = '3.10.3 Nicotine addiction', Q4 = '3.10.4 Gambling addiction', Q5 = '3.10.5 Reducing addiction', Q6 = '3.10.6 Prochaska’s model';
 
   /* --- O Aggression --- */
   K('O', O1, 'Outline', 4, 'Outline the roles of the limbic system and serotonin in aggression.', [

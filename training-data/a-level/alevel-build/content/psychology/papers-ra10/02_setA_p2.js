@@ -38,7 +38,7 @@
     AOs('AO3 = 2') + '• so all participants were measured in the same way / the questionnaire has known reliability and validity (1)\n• so differences in scores are due to the IV rather than to how anxiety was measured – improves reliability/validity/replicability (1).');
   const dataA = [p('Table 1 Anxiety scores (0–40) for ten of the students in each condition'), grid(['Student', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'], [['Mindfulness', '14', '18', '9', '22', '15', '11', '16', '20', '12', '13'], ['Sports podcast', '19', '21', '12', '20', '22', '17', '16', '25', '18', '20']])];
   Q(13, 2, 'C', 'G', 'Calculate the median anxiety score for the mindfulness condition for these ten students. Show your workings.',
-    AOs('AO2 = 2') + '• ordered scores: 9, 11, 12, 13, 14, 15, 16, 18, 20, 22 – median is the mean of the 5th and 6th scores (14 + 15) ÷ 2 (1)\n• = 14.5 (1).', { ctx: dataA });
+    AOs('AO2 = 2') + '• ordered scores: 9, 11, 12, 13, 14, 15, 16, 18, 20, 22 – median is the mean of the 5th and 6th scores (14 + 15) ÷ 2 (1)\n• = 15 (1).', { ctx: dataA });
   Q(14, 3, 'C', 'G', 'Calculate the percentage of these ten students whose anxiety score was lower after mindfulness than after the sports podcast. Show your workings.',
     AOs('AO2 = 3') + '• count: students 1, 2, 3, 5, 6, 8, 9, 10 scored lower after mindfulness = 8; student 4 scored higher; student 7 the same (1)\n• 8 ÷ 10 × 100 (1)\n• = 80% (1).');
   Q(15, 4, 'C', 'G', 'The psychologist used a sign test to analyse the data for these ten students. Calculate the value of S and state whether the result is significant. Use Table 2 and justify your answer.',

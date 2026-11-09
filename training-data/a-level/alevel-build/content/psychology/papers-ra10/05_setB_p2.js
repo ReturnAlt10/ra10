@@ -31,7 +31,7 @@
   Q(9, 2, 'C', 'G', 'Explain what is meant by a behavioural category. Use an example from this study.',
     AOs('AO2 = 2') + '• a behavioural category is a target behaviour broken down into specific, observable, measurable components (1)\n• eg “caring/domestic” – shown cooking, cleaning or looking after children (1).', { ctx: rmB });
   Q(10, 3, 'C', 'G', 'Calculate the percentage of adverts with a female main character that showed her in a caring/domestic role. Show your workings and give your answer to one decimal place.',
-    AOs('AO2 = 3') + '• total female adverts = 18 + 6 + 4 = 28 (1)\n• 18 ÷ 28 × 100 = 64.2857… (1)\n• = 64.3% (1).');
+    AOs('AO2 = 3') + '• total female adverts = 18 + 6 + 4 = 28 (1)\n• 18 ÷ 28 × 100 = 62857… (1)\n• = 63% (1).');
   Q(11, 2, 'C', 'G', 'Express the ratio of male to female main characters in the active/sporty category in its simplest form.',
     AOs('AO2 = 2') + '• 20 : 6 (1)\n• = 10 : 3 (1).');
   Q(12, 4, 'C', 'G', 'Explain how the researcher could have assessed the inter-observer reliability of the coding.',

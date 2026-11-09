@@ -1,5 +1,5 @@
-  /* ===== H · 4.3.1 Issues and debates in Psychology (Paper 3 Section A) ===== */
-  const H1 = '4.3.1.1 Gender and culture bias', H2 = '4.3.1.2 Free will and determinism', H3 = '4.3.1.3 Nature–nurture', H4 = '4.3.1.4 Holism and reductionism', H5 = '4.3.1.5 Idiographic and nomothetic', H6 = '4.3.1.6 Social sensitivity';
+  /* ===== H · 3.1 Issues and debates in Psychology (Paper 3 Section A) ===== */
+  const H1 = '3.1.1 Gender and culture bias', H2 = '3.1.2 Free will and determinism', H3 = '3.1.3 Nature–nurture', H4 = '3.1.4 Holism and reductionism', H5 = '3.1.5 Idiographic and nomothetic', H6 = '3.1.6 Social sensitivity';
 
   K('H', H1, 'Distinguish', 4, 'Distinguish between alpha bias and beta bias. Give an example of each.', [
     'Alpha bias exaggerates/overestimates differences between men and women (1)',

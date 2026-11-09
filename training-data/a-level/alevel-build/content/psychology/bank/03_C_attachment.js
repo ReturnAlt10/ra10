@@ -1,5 +1,5 @@
-  /* ===== C · 4.1.3 Attachment (Paper 1 Section C) ===== */
-  const C1 = '4.1.3.1 Animal studies', C2 = '4.1.3.2 Explanations of attachment', C3 = '4.1.3.3 Strange Situation & culture', C4 = '4.1.3.4 Deprivation & institutionalisation', C5 = '4.1.3.5 Later relationships';
+  /* ===== C · 1.3 Attachment (Paper 1 Section C) ===== */
+  const C1 = '1.3.1 Animal studies', C2 = '1.3.2 Explanations of attachment', C3 = '1.3.3 Strange Situation & culture', C4 = '1.3.4 Deprivation & institutionalisation', C5 = '1.3.5 Later relationships';
 
   K('C', C1, 'Outline', 4, 'Outline Lorenz’s research into imprinting.', [
     'Lorenz (1935) split a clutch of goose eggs: half hatched with the mother, half in an incubator where Lorenz was the first moving object they saw (1)',

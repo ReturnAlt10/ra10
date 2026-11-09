@@ -1,7 +1,7 @@
   /* ===== Paper 3 Option 2 (Section C): L Schizophrenia · M Eating behaviour · N Stress ===== */
-  const L1 = '4.3.5.1 Symptoms & diagnosis', L2 = '4.3.5.2 Biological explanations', L3 = '4.3.5.3 Psychological explanations', L4 = '4.3.5.4 Drug therapy', L5 = '4.3.5.5 CBT & family therapy', L6 = '4.3.5.6 Interactionist approach';
-  const M1 = '4.3.6.1 Food preferences', M2 = '4.3.6.2 Neural & hormonal control', M3 = '4.3.6.3 Anorexia: biological', M4 = '4.3.6.4 Anorexia: psychological', M5 = '4.3.6.5 Obesity: biological', M6 = '4.3.6.6 Obesity: psychological';
-  const N1 = '4.3.7.1 Physiology of stress', N2 = '4.3.7.2 Stress and illness', N3 = '4.3.7.3 Sources of stress', N4 = '4.3.7.4 Measuring stress', N5 = '4.3.7.5 Individual differences', N6 = '4.3.7.6 Managing and coping';
+  const L1 = '3.5.1 Symptoms & diagnosis', L2 = '3.5.2 Biological explanations', L3 = '3.5.3 Psychological explanations', L4 = '3.5.4 Drug therapy', L5 = '3.5.5 CBT & family therapy', L6 = '3.5.6 Interactionist approach';
+  const M1 = '3.6.1 Food preferences', M2 = '3.6.2 Neural & hormonal control', M3 = '3.6.3 Anorexia: biological', M4 = '3.6.4 Anorexia: psychological', M5 = '3.6.5 Obesity: biological', M6 = '3.6.6 Obesity: psychological';
+  const N1 = '3.7.1 Physiology of stress', N2 = '3.7.2 Stress and illness', N3 = '3.7.3 Sources of stress', N4 = '3.7.4 Measuring stress', N5 = '3.7.5 Individual differences', N6 = '3.7.6 Managing and coping';
 
   /* --- L Schizophrenia --- */
   K('L', L1, 'Distinguish', 4, 'Distinguish between positive and negative symptoms of schizophrenia. Give an example of each.', [

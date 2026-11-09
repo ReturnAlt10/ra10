@@ -1,5 +1,5 @@
-  /* ===== B · 4.1.2 Memory (Paper 1 Section B) ===== */
-  const B1 = '4.1.2.1 Multi-store model', B2 = '4.1.2.2 Working memory model', B3 = '4.1.2.3 Forgetting', B4 = '4.1.2.4 Eyewitness testimony';
+  /* ===== B · 1.2 Memory (Paper 1 Section B) ===== */
+  const B1 = '1.2.1 Multi-store model', B2 = '1.2.2 Working memory model', B3 = '1.2.3 Forgetting', B4 = '1.2.4 Eyewitness testimony';
 
   K('B', B1, 'Outline', 6, 'Outline the multi-store model of memory. Refer to coding, capacity and duration in your answer.', [
     'Sensory register: coding modality-specific (eg iconic, echoic); very large capacity; duration under half a second (1)',

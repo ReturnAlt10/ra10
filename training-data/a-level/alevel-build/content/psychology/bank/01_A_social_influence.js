@@ -1,5 +1,5 @@
-  /* ===== A · 4.1.1 Social influence (Paper 1 Section A) ===== */
-  const A1 = '4.1.1.1 Conformity', A2 = '4.1.1.2 Obedience', A3 = '4.1.1.3 Resistance', A4 = '4.1.1.4 Minority influence';
+  /* ===== A · 1.1 Social influence (Paper 1 Section A) ===== */
+  const A1 = '1.1.1 Conformity', A2 = '1.1.2 Obedience', A3 = '1.1.3 Resistance', A4 = '1.1.4 Minority influence';
 
   K('A', A1, 'Distinguish', 2, 'Distinguish between internalisation and compliance.', [
     'Internalisation is a deep, permanent change in both public behaviour and private beliefs/attitudes – the person genuinely accepts the group view (1)',

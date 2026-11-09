@@ -1861,6 +1861,7 @@ function writeDailyTaskXpSyncState(state) {
 }
 
 async function awardTaskXpToProfile(amount) {
+  if (window.RA10Track && typeof RA10Track.flush === 'function') await RA10Track.flush();
   if (!window.RA10 || !RA10.isLoggedIn()) return false;
   const session = RA10.getSession ? RA10.getSession() : null;
   if (!session || !session.access_token) return false;

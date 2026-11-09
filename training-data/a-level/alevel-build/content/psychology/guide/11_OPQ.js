@@ -1,58 +1,58 @@
-  /* ===== O · 4.3.8 Aggression (Option 3) ===== */
+  /* ===== O · 3.8 Aggression (Option 3) ===== */
   TITLE.O = 'Aggression'; SUB.O = 'Paper 3 · Section D option · 24 marks — biological, ethological, evolutionary, social, institutional and media explanations';
   T.O = [
-    { code: '4.3.8.1', name: 'Neural, hormonal and genetic mechanisms', html: () => `
+    { code: '3.8.1', name: 'Neural, hormonal and genetic mechanisms', html: () => `
 ${table(['Mechanism', 'Role in aggression', 'Evidence'], [['Limbic system', 'Amygdala assesses threat; hypothalamus and hippocampus also involved', 'Gospic et al. (2011): faster amygdala response predicted aggression in an ultimatum game; benzodiazepine reduced both'], ['Serotonin', 'Normal levels inhibit the amygdala, aiding self-control; low levels → impulsive aggression', 'Virkkunen et al. (1994): lower serotonin breakdown products in impulsive violent offenders'], ['Testosterone', 'Androgen linked to aggression from adolescence; dual-hormone hypothesis – only when cortisol is low', 'Giammanco et al. (2005) review; Carré & Mehta (2011)'], ['MAOA gene', 'Breaks down serotonin; low-activity variant (MAOA-L, “warrior gene”) linked to aggression', 'Brunner et al. (1993): Dutch family; Caspi et al. (2002): only with childhood maltreatment']])}
 ${ao3(['<b>Twin studies:</b> Coccaro et al. (1997) – heritability of physical aggression about 50%.', '<b>Gene–environment interaction</b> (Caspi) – diathesis-stress view.', '<b>Testosterone research mixed</b> – Carré & Mehta: interacts with cortisol and social context.'])}` },
-    { code: '4.3.8.2', name: 'Ethological and evolutionary explanations', html: () => `
+    { code: '3.8.2', name: 'Ethological and evolutionary explanations', html: () => `
 ${fig(S.flow([['Sign stimulus', 'eg red belly of a rival stickleback'], ['Innate releasing mechanism', 'neural network'], ['Fixed action pattern', 'stereotyped, universal, ballistic, single-purpose']], { w: 700, h: 86, label: 'Ethology (Lorenz; Tinbergen, 1951)' }), 'Ritualistic aggression (threat displays) means within-species aggression rarely ends in death.')}
 ${p('<b>Evolutionary explanations of human aggression:</b> male aggression evolved to deal with <b>sexual jealousy</b> and paternity uncertainty – mate retention strategies such as direct guarding and negative inducements (Buss & Shackelford, 1997); bullying may increase status and access to partners.')}
 ${ao3(['<b>Ethology – support:</b> Tinbergen’s stickleback studies; but FAPs are modified by experience in humans.', '<b>Evolutionary – explains gender differences</b>; but cultural differences (!Kung San) suggest learning matters.', '<b>Hard to test</b>; socially sensitive (may excuse violence).'])}` },
-    { code: '4.3.8.3', name: 'Social psychological explanations', html: () => `
+    { code: '3.8.3', name: 'Social psychological explanations', html: () => `
 ${fig(S.flow([['Frustration', 'goal blocked'], ['Aggressive drive', 'arousal'], ['Aggression', 'cathartic – or displaced']], { w: 680, h: 80, label: 'Frustration-aggression hypothesis (Dollard et al., 1939)' }), 'Berkowitz (1989) revised it: frustration creates negative emotion; environmental cues (eg weapons) make aggression more likely (Berkowitz & LePage, 1967).')}
 ${p('<b>Social learning theory:</b> aggression learned by observing and imitating models; vicarious reinforcement; self-efficacy (Bandura et al., 1961, 1963).')}
 ${p('<b>De-individuation:</b> anonymity in crowds reduces private and public self-awareness and normal restraints. Zimbardo (1969): hooded participants gave twice as many shocks as identifiable participants.')}
 ${ao3(['<b>Frustration:</b> Green (1968) – frustrated participants gave stronger shocks; but catharsis is not supported (Bushman, 2002).', '<b>De-individuation:</b> Dodd (1985) – 36% of anonymous responses were antisocial; but sometimes leads to pro-social behaviour (Johnson & Downing, 1979).'])}` },
-    { code: '4.3.8.4', name: 'Institutional aggression in prisons', html: () => `
+    { code: '3.8.4', name: 'Institutional aggression in prisons', html: () => `
 ${two(`<h4>Dispositional: importation model</h4>${p('Irwin & Cressey (1962): prisoners bring norms, values and violent histories from outside (a “subculture of violence”).')}${ul(['Camp & Gaes (2005): no difference in misconduct between high- and low-security prisons – supports importation'])}`, `<h4>Situational: deprivation model</h4>${p('Clemmer (1940) and Sykes (1958): aggression results from prison conditions – the pains of imprisonment: loss of liberty, autonomy, goods and services, heterosexual relationships and security.')}${ul(['Steiner (2009): aggression predicted by prison-level factors such as overcrowding'])}`)}
 ${tip('Most researchers now take an interactionist view: imported characteristics + deprivation.')}` },
-    { code: '4.3.8.5', name: 'Media influences on aggression', html: () => `
+    { code: '3.8.5', name: 'Media influences on aggression', html: () => `
 ${fig(S.tiles([['Desensitisation', 'Repeated exposure reduces physiological arousal to violence; violence seems normal', P.red], ['Disinhibition', 'Violent media weakens social restraints; aggression seems acceptable', P.amber], ['Cognitive priming', 'Violent media provides scripts; aggressive ideas activated later', P.violet]], { cols: 3, th: 92, w: 700, label: 'Explanations of media effects' }), 'Computer games involve active participation and reinforcement, which may make effects stronger than passive TV.')}
 ${ao3(['<b>Lab experiments:</b> Bartholow & Anderson (2002) – violent game players gave more intense noise blasts; low ecological validity.', '<b>Meta-analyses disagree:</b> Anderson et al. (2010) found effects; Ferguson (2015) found minimal effects.', '<b>Carnagey et al. (2007)</b> – lower heart rate and GSR to real violence after violent games (desensitisation).'])}` }
   ];
 
-  /* ===== P · 4.3.9 Forensic Psychology (Option 3) ===== */
+  /* ===== P · 3.9 Forensic Psychology (Option 3) ===== */
   TITLE.P = 'Forensic Psychology'; SUB.P = 'Paper 3 · Section D option · 24 marks — profiling, explanations of offending and dealing with offending';
   T.P = [
-    { code: '4.3.9.1', name: 'Offender profiling', html: () => `
+    { code: '3.9.1', name: 'Offender profiling', html: () => `
 ${two(`<h4>Typology (top-down, FBI)</h4>${p('Match crime-scene evidence to a pre-existing type, based on interviews with 36 sexually motivated murderers.')}${table(['Organised', 'Disorganised'], [['Planned; victim targeted', 'Impulsive; little planning'], ['Controlled scene; few clues', 'Chaotic scene; evidence left'], ['High IQ, skilled job, married', 'Low IQ, unskilled, lives alone']])}`, `<h4>Data-driven (bottom-up)</h4>${ul(['<b>Investigative psychology</b> (Canter): statistical analysis of crime databases; interpersonal coherence; time and place; forensic awareness', '<b>Geographical profiling</b>: crime locations suggest a base – <b>marauders</b> offend near home; <b>commuters</b> travel away (circle theory)'])}`)}
 ${fig(S.flow([['Data assimilation', 'evidence: photos, reports'], ['Crime scene classification', 'organised or disorganised'], ['Crime reconstruction', 'sequence of events'], ['Profile generation', 'likely characteristics']], { w: 700, h: 84, label: 'Constructing an FBI (top-down) profile' }), 'The four stages used by the FBI to build a profile.')}
 ${ao3(['<b>Top-down</b> – based on a small, unrepresentative sample; only useful for certain crimes.', '<b>Bottom-up</b> – Canter & Heritage (1990): 100 sexual offences showed consistent behaviour patterns; Lundrigan & Canter (2001): spatial consistency.', '<b>Profiling success mixed:</b> Copson (1995) – profiles led to an arrest in only 3% of cases.'])}` },
-    { code: '4.3.9.2', name: 'Biological explanations of offending', html: () => `
+    { code: '3.9.2', name: 'Biological explanations of offending', html: () => `
 ${ul(['<b>Genetic:</b> Lange (1929): 10 of 13 MZ co-twins vs 2 of 17 DZ had been in prison; candidate genes MAOA and CDH13 (Tiihonen et al., 2015)', '<b>Neural:</b> Raine et al. (2000) – people with antisocial personality disorder had 11% less grey matter in the prefrontal cortex; Keysers (2011) – mirror neurons in psychopaths activated only when asked to empathise'])}
 ${ao3(['<b>Diathesis-stress</b>: genetic vulnerability + environmental triggers.', '<b>Biological determinism</b> raises issues of legal responsibility.', '<b>Twin studies</b> confound genes and shared environment.'])}` },
-    { code: '4.3.9.3', name: 'Psychological explanations of offending', html: () => `
+    { code: '3.9.3', name: 'Psychological explanations of offending', html: () => `
 ${fig(S.tiles([['Eysenck’s criminal personality', 'High extraversion, neuroticism and psychoticism; hard to condition', P.blue], ['Moral reasoning', 'Kohlberg: offenders at the pre-conventional level (avoid punishment, gain reward)', P.teal], ['Cognitive distortions', 'Hostile attribution bias; minimalisation', P.amber], ['Differential association', 'Sutherland (1939): offending learned from pro-criminal attitudes and techniques', P.violet]], { cols: 2, th: 90, w: 680, label: 'Psychological explanations' }), 'Barbaree (1991): 54% of rapists denied an offence and 40% minimised the harm.')}
 ${ao3(['<b>Eysenck:</b> Dunlop et al. (2012) – E and P predicted offending; but personality may not be a stable trait.', '<b>Moral reasoning:</b> Palmer & Hollin (1998) – offenders showed less mature moral reasoning.', '<b>Differential association:</b> Osborn & West (1979) – 40% of sons of criminal fathers were convicted by 18 vs 13%; hard to measure attitudes.'])}` },
-    { code: '4.3.9.4', name: 'Dealing with offending behaviour', html: () => `
+    { code: '3.9.4', name: 'Dealing with offending behaviour', html: () => `
 ${table(['Approach', 'What it involves', 'Evaluation'], [['Custodial sentencing', 'Aims: deterrence, incapacitation, retribution, rehabilitation. Psychological effects: stress, depression, institutionalisation, “university of crime”', 'Recidivism is high – roughly 4 in 10 adults released from custody in England and Wales reoffend within a year'], ['Behaviour modification', 'Token economy – tokens (secondary reinforcers) for desirable behaviour, exchanged for privileges', 'Easy to implement; effects may not transfer outside prison'], ['Anger management (Novaco)', 'Cognitive preparation → skill acquisition → application practice', 'Keen et al. (2000) – improvements; Blacker et al. (2008) – no reduction in reoffending'], ['Restorative justice', 'Offender meets victim via a mediator; takes responsibility; may repair harm', 'Victim satisfaction; Shapland et al. (2008) – 14% reduction in the frequency of reoffending']])}` }
   ];
 
-  /* ===== Q · 4.3.10 Addiction (Option 3) ===== */
+  /* ===== Q · 3.10 Addiction (Option 3) ===== */
   TITLE.Q = 'Addiction'; SUB.Q = 'Paper 3 · Section D option · 24 marks — describing addiction, risk factors, explanations and reducing addiction';
   T.Q = [
-    { code: '4.3.10.1', name: 'Describing addiction', html: () => `
+    { code: '3.10.1', name: 'Describing addiction', html: () => `
 ${table(['Term', 'Meaning'], [['Physical dependence', 'The body needs the substance; withdrawal symptoms when stopped'], ['Psychological dependence', 'A compulsion to continue for its pleasurable effects; cravings'], ['Tolerance', 'Needing increasingly larger doses for the same effect'], ['Withdrawal syndrome', 'Physical and psychological symptoms when the substance or behaviour stops (eg sweating, anxiety)']])}` },
-    { code: '4.3.10.2', name: 'Risk factors', html: () => `
+    { code: '3.10.2', name: 'Risk factors', html: () => `
 ${fig(S.tiles([['Genetic vulnerability', 'Heritability 40–60% (Agrawal & Lynskey, 2008); DRD2 gene', P.blue], ['Stress', 'Self-medication; childhood trauma', P.red], ['Personality', 'High N and P (Eysenck); sensation seeking', P.violet], ['Family influences', 'Parental attitudes and use', P.amber], ['Peers', 'Social norms; peer pressure (social identity)', P.teal]], { cols: 3, th: 86, w: 700, label: 'Risk factors in addiction' }), 'Risk factors interact – a diathesis-stress view.')}` },
-    { code: '4.3.10.3', name: 'Nicotine addiction', html: () => `
+    { code: '3.10.3', name: 'Nicotine addiction', html: () => `
 ${fig(S.flow([['Nicotine', 'binds to nAChRs'], ['VTA', 'neurons activated'], ['Dopamine', 'released in nucleus accumbens'], ['Reward', 'pleasure “hit” ~40 min'], ['Desensitisation', 'tolerance; withdrawal']], { w: 700, h: 84, label: 'Brain neurochemistry of nicotine' }), 'The mesolimbic dopamine pathway (reward pathway).')}
 ${p('<b>Learning theory:</b> positive reinforcement (dopamine “hit”), negative reinforcement (avoiding withdrawal). <b>Cue reactivity</b>: cues associated with smoking (lighter, coffee) become secondary reinforcers through classical conditioning and trigger cravings (Carter & Tiffany, 1999).')}` },
-    { code: '4.3.10.4', name: 'Gambling addiction', html: () => `
+    { code: '3.10.4', name: 'Gambling addiction', html: () => `
 ${two(`<h4>Learning theory</h4>${ul(['<b>Partial reinforcement</b>: only some bets win', '<b>Variable-ratio schedule</b>: unpredictable wins – most resistant to extinction', 'Near misses rewarding; cue reactivity'])}`, `<h4>Cognitive theory</h4>${ul(['<b>Cognitive bias</b>: irrational beliefs', '<b>Illusion of control</b> – skill or rituals', '<b>Gambler’s fallacy</b> – a win is “due”', 'Griffiths (1994): regular gamblers made 14% irrational verbalisations vs 2.5% non-regular'])}`)}` },
-    { code: '4.3.10.5', name: 'Reducing addiction', html: () => `
+    { code: '3.10.5', name: 'Reducing addiction', html: () => `
 ${table(['Method', 'How', 'Evaluation'], [['Drug therapy', 'Agonists (nicotine replacement, varenicline), antagonists (naltrexone)', 'Stead et al. (2012): NRT increases quitting by 50–70%; side effects'], ['Aversion therapy', 'Addictive behaviour paired with an unpleasant stimulus (Antabuse with alcohol) – classical conditioning', 'Ethical issues; high dropout'], ['Covert sensitisation', 'The unpleasant stimulus is imagined', 'More ethical; McConaghy et al. (1983) gambling'], ['CBT', 'Challenge irrational beliefs (gambler’s fallacy); skills training; relapse prevention', 'Petry et al. (2006): CBT reduced gambling']])}` },
-    { code: '4.3.10.6', name: 'Prochaska’s six-stage model', html: () => `
+    { code: '3.10.6', name: 'Prochaska’s six-stage model', html: () => `
 ${fig(S.ladder([['Precontemplation', 'no intention to change in the next 6 months'], ['Contemplation', 'considering change within 6 months'], ['Preparation', 'planning to change within a month'], ['Action', 'changed within the last 6 months'], ['Maintenance', 'changed for over 6 months – avoiding relapse'], ['Termination', 'no temptation; full confidence']], { w: 660, rowH: 44, label: 'Prochaska & DiClemente’s stages of change' }), 'Interventions should match the stage – eg information for precontemplators, support plans for preparation.')}
 ${ao3(['<b>Applications:</b> stage-matched interventions.', '<b>Arbitrary time limits</b> between stages; people may skip stages.', '<b>Mixed evidence:</b> Velicer et al. (2007) support; others find stage-matching no better.'])}` }
   ];

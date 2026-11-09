@@ -1,75 +1,75 @@
-  /* ===== L · 4.3.5 Schizophrenia (Option 2) ===== */
+  /* ===== L · 3.5 Schizophrenia (Option 2) ===== */
   TITLE.L = 'Schizophrenia'; SUB.L = 'Paper 3 · Section C option · 24 marks — symptoms, diagnosis, explanations and treatments';
   T.L = [
-    { code: '4.3.5.1', name: 'Symptoms and issues in diagnosis', html: () => `
+    { code: '3.5.1', name: 'Symptoms and issues in diagnosis', html: () => `
 ${two(`<h4>Positive symptoms</h4>${p('Additional experiences beyond ordinary existence.')}${ul(['<b>Hallucinations</b> – unusual sensory experiences, eg hearing voices', '<b>Delusions</b> – irrational beliefs, eg paranoia, delusions of grandeur'])}`, `<h4>Negative symptoms</h4>${p('Loss of usual abilities and experiences.')}${ul(['<b>Speech poverty (alogia)</b> – reduced amount and quality of speech', '<b>Avolition</b> – loss of motivation for goal-directed activity (hygiene, work)'])}`)}
 ${table(['Issue', 'Meaning', 'Evidence'], [['Co-morbidity', 'Schizophrenia often occurs with other disorders', 'Buckley et al. (2009): about 50% also have depression; 47% substance abuse'], ['Symptom overlap', 'Symptoms shared with other disorders (bipolar)', 'Ellason & Ross (1995): people with dissociative identity disorder had more schizophrenia symptoms than people with schizophrenia'], ['Culture bias', 'Over-diagnosis in some ethnic groups', 'African-Caribbean people in the UK up to 9 times more likely to be diagnosed (Escobar, 2012)'], ['Gender bias', 'Men diagnosed more often', 'Cotton et al. (2009): women function better, may be under-diagnosed']])}
 ${ao3(['<b>Reliability:</b> Cheniaux et al. (2009) – psychiatrists agreed on only 26/100 (DSM) and 44/100 (ICD) diagnoses.', '<b>Validity:</b> co-morbidity and symptom overlap suggest schizophrenia may not be a single disorder.'])}` },
-    { code: '4.3.5.2', name: 'Biological explanations', html: () => `
+    { code: '3.5.2', name: 'Biological explanations', html: () => `
 ${fig(S.bars([['MZ twins', 48, P.violet], ['Children of two parents', 46, P.blue], ['DZ twins', 17, P.sky], ['Siblings', 9, P.teal], ['General population', 1, P.slate]], { w: 640, h: 230, max: 60, ticks: 3, fmt: v => v + '%', label: 'Risk of schizophrenia by relationship (Gottesman, 1991)' }), 'Risk rises with genetic similarity – but MZ concordance is not 100%.')}
 ${ul(['<b>Polygenic:</b> Ripke et al. (2014) – 108 genetic variations linked to increased risk', '<b>Mutation:</b> paternal age linked to sperm mutation', '<b>Neural correlates:</b> reduced activity in the ventral striatum linked to avolition (Juckel et al., 2006); low activity in the superior temporal gyrus linked to hallucinations (Allen et al., 2007)'])}
 ${fig(S.flow([['Original dopamine hypothesis', 'hyperdopaminergia in subcortex → positive symptoms'], ['Revised hypothesis', 'hypodopaminergia in prefrontal cortex → negative symptoms (Goldman-Rakic, 2004)']], { w: 700, h: 90, label: 'The dopamine hypothesis' }), 'Evidence: amphetamines increase dopamine and mimic symptoms; antipsychotics reduce dopamine activity.')}
 ${ao3(['<b>Strong genetic evidence</b> from family and twin studies (Hilker et al., 2018: heritability 79%).', '<b>Environmental factors</b> also matter (birth complications, cannabis, childhood trauma).', '<b>Dopamine</b> may be a result not a cause; glutamate also involved.'])}` },
-    { code: '4.3.5.3', name: 'Psychological explanations', html: () => `
+    { code: '3.5.3', name: 'Psychological explanations', html: () => `
 ${two(`<h4>Family dysfunction</h4>${ul(['<b>Schizophrenogenic mother</b> (Fromm-Reichmann, 1948): cold, rejecting, controlling', '<b>Double-bind theory</b> (Bateson et al., 1956): contradictory messages; child punished whatever they do', '<b>Expressed emotion</b>: criticism, hostility, emotional over-involvement – a source of stress that triggers relapse'])}`, `<h4>Cognitive explanations</h4>${ul(['<b>Dysfunctional thought processing</b> – Frith et al. (1992): <b>metarepresentation</b> dysfunction (cannot recognise thoughts as their own → voices, delusions) and <b>central control</b> dysfunction (cannot suppress automatic responses → speech poverty, derailment)', 'Stirling et al. (2006): slower on the Stroop test'])}`)}
 ${ao3(['<b>Family dysfunction – support:</b> Read et al. (2005) – a review found childhood trauma, eg abuse, was very common in adults with schizophrenia.', '<b>Socially sensitive</b> – blames parents (especially mothers).', '<b>Cognitive – explains symptoms but not origins</b> of the dysfunction.'])}` },
-    { code: '4.3.5.4', name: 'Drug therapy', html: () => `
+    { code: '3.5.4', name: 'Drug therapy', html: () => `
 ${table(['', 'Typical antipsychotics', 'Atypical antipsychotics'], [['Example', 'Chlorpromazine (1950s)', 'Clozapine, risperidone'], ['Action', 'Dopamine antagonists – block D2 receptors (also sedative via histamine)', 'Act on dopamine, serotonin and glutamate receptors; clozapine binds briefly to D2'], ['Targets', 'Mainly positive symptoms', 'Positive and negative symptoms, mood; clozapine for treatment-resistant cases'], ['Side effects', 'Tardive dyskinesia, NMS, weight gain', 'Fewer; clozapine – agranulocytosis (blood tests needed)']])}
 ${ao3(['<b>Effective:</b> Thornley et al. (2003) – chlorpromazine better than placebo; Meltzer (2012) – clozapine effective in 30–50% of treatment-resistant cases.', '<b>Side effects</b> reduce compliance; ethical “chemical cosh” argument.', '<b>Publication bias</b> and drug-company funding.'])}` },
-    { code: '4.3.5.5', name: 'CBT and family therapy', html: () => `
+    { code: '3.5.5', name: 'CBT and family therapy', html: () => `
 ${two(`<h4>CBT (5–20 sessions)</h4>${steps(['Identify irrational thoughts and their effects', 'Trace origins of symptoms (normalisation)', 'Reality testing – challenge delusions', 'Coping strategies to reduce distress'])}`, `<h4>Family therapy (Pharoah et al., 2010)</h4>${steps(['Form a therapeutic alliance with the family', 'Reduce stress and expressed emotion', 'Improve communication and problem solving', 'Help carers balance care with their own lives'])}`)}
 ${ao3(['<b>CBT evidence:</b> Jauhar et al. (2014) meta-analysis – small but significant effect on symptoms.', '<b>Family therapy:</b> McFarlane (2016) – reduces relapse by 50–60%.', '<b>Both</b> improve quality of life rather than cure; cost-effective long term.'])}` },
-    { code: '4.3.5.6', name: 'The interactionist approach', html: () => `
+    { code: '3.5.6', name: 'The interactionist approach', html: () => `
 ${fig(S.flow([['Diathesis', 'genetic vulnerability; early trauma'], ['+', ''], ['Stressor', 'family conflict, cannabis, life events'], ['=', ''], ['Schizophrenia', 'onset or relapse']], { w: 700, h: 80, label: 'The diathesis-stress model' }), 'Meehl (1962): a single “schizogene” + schizophrenogenic mother. The modern view: many genes and many stressors.')}
 ${p('<b>Interactionist treatment</b> combines antipsychotics with psychological therapies (CBT, family therapy).')}
 ${ao3(['<b>Support:</b> Tienari et al. (2004) – adoptees of mothers with schizophrenia developed it more often if their adoptive family was dysfunctional.', '<b>Combined treatments more effective:</b> Tarrier et al. (2004).', '<b>Oversimplified original model</b>; unclear how stress triggers symptoms; treatment–aetiology fallacy.'])}` }
   ];
 
-  /* ===== M · 4.3.6 Eating behaviour (Option 2) ===== */
+  /* ===== M · 3.6 Eating behaviour (Option 2) ===== */
   TITLE.M = 'Eating behaviour'; SUB.M = 'Paper 3 · Section C option · 24 marks — food preferences, control of eating, anorexia nervosa and obesity';
   T.M = [
-    { code: '4.3.6.1', name: 'Explanations for food preferences', html: () => `
+    { code: '3.6.1', name: 'Explanations for food preferences', html: () => `
 ${two(`<h4>Evolutionary explanation</h4>${ul(['Preference for <b>sweet</b> (energy) and <b>salty</b> (sodium) foods; dislike of <b>bitter</b> and <b>sour</b> (toxins, unripe)', '<b>Neophobia</b> – innate reluctance to try new foods; peaks 2–6 years', '<b>Taste aversion</b> – learned after one pairing with illness (Garcia et al., 1955)'])}`, `<h4>The role of learning</h4>${ul(['<b>Social influences</b> – parents (Birch et al., 1980), peers, modelling', '<b>Media</b> – advertising unhealthy foods', '<b>Culture</b> – cuisine, availability, religious rules'])}`)}
 ${ao3(['<b>Support for neophobia:</b> Birch & Marlin (1982) – repeated exposure increased preference.', '<b>Learning – cultural change</b> (eg food globalisation) supports environmental influences.', '<b>Evolutionary explanations</b> are difficult to test.'])}` },
-    { code: '4.3.6.2', name: 'Neural and hormonal control of eating', html: () => `
+    { code: '3.6.2', name: 'Neural and hormonal control of eating', html: () => `
 ${fig(S.cycle([['Stomach empty', 'ghrelin released'], ['Lateral hypothalamus', 'hunger → eat'], ['Fat stores ↑', 'leptin released'], ['Ventromedial hypothalamus', 'satiety → stop']], { center: 'Homeostasis', label: 'Control of eating', h: 300 }), 'Damage to the VMH → overeating; damage to the LH → undereating (Hetherington & Ranson; Anand & Brobeck).')}
 ${ao3(['<b>Animal evidence</b> may not generalise to humans.', '<b>Leptin resistance</b> may explain why some obese people do not stop eating.', '<b>Reductionist:</b> ignores social and emotional eating.'])}` },
-    { code: '4.3.6.3', name: 'Biological explanations of anorexia nervosa', html: () => `
+    { code: '3.6.3', name: 'Biological explanations of anorexia nervosa', html: () => `
 ${ul(['<b>Genetic:</b> Holland et al. (1984) – concordance 56% MZ vs 5% DZ; candidate genes eg EPHX2', '<b>Serotonin:</b> high levels may cause anxiety; restricting food lowers serotonin (Bailer & Kaye, 2003)', '<b>Dopamine:</b> increased D2 receptors in the caudate nucleus; food becomes aversive (Kaye et al., 2005)'])}
 ${ao3(['<b>Twin evidence</b> supports a genetic component but environments are also shared.', '<b>Neurotransmitter changes</b> may be a result of starvation.', '<b>Diathesis-stress</b> explanation more likely.'])}` },
-    { code: '4.3.6.4', name: 'Psychological explanations of anorexia nervosa', html: () => `
+    { code: '3.6.4', name: 'Psychological explanations of anorexia nervosa', html: () => `
 ${fig(S.tiles([['Family systems theory', 'Minuchin et al. (1978): enmeshment, struggle for autonomy, food refusal as control', P.blue], ['Social learning theory', 'Modelling of thin role models, reinforcement for weight loss, media images', P.teal], ['Cognitive theory', 'Distortions (body image) and irrational beliefs (perfectionism)', P.violet]], { cols: 3, th: 100, w: 700, label: 'Psychological explanations' }), 'Becker et al. (2002): after TV arrived in Fiji, girls who reported dieting increased.')}
 ${ao3(['<b>Family systems:</b> Kog & Vandereycken (1989) found little support; blames families.', '<b>SLT:</b> explains cultural and gender differences – but most people exposed to media do not develop AN.', '<b>Cognitive:</b> Lang et al. (2014) – weak central coherence; distortions may follow AN rather than cause it.'])}` },
-    { code: '4.3.6.5', name: 'Biological explanations of obesity', html: () => `
+    { code: '3.6.5', name: 'Biological explanations of obesity', html: () => `
 ${ul(['<b>Genetic:</b> twin heritability 40–70% (Maes et al., 1997); FTO gene (Frayling et al., 2007)', '<b>Neural:</b> damage or disruption to the VMH; leptin resistance', '<b>Neurotransmitters:</b> low serotonin – craving carbohydrates; reduced dopamine D2 receptors (Wang et al., 2001)'])}
 ${ao3(['<b>Cannot explain rapid rise in obesity</b> – genes do not change in a generation.', '<b>Applications:</b> leptin therapy for rare congenital leptin deficiency.', '<b>Diathesis-stress</b> – genetic vulnerability with an obesogenic environment.'])}` },
-    { code: '4.3.6.6', name: 'Psychological explanations of obesity', html: () => `
+    { code: '3.6.6', name: 'Psychological explanations of obesity', html: () => `
 ${fig(S.layers([['Hunger boundary', 'below this, aversive hunger drives eating', P.red], ['Zone of biological indifference', 'normal eaters: narrow zone; dieters: wide zone', P.amber], ['Self-imposed diet boundary', 'restrained eaters stop here… unless crossed', P.violet], ['Satiety boundary', 'above this, aversive fullness stops eating', P.green]], { label: 'The boundary model (Herman & Polivy, 1984)' }), 'Crossing the diet boundary leads to eating until satiety – the “what the hell” effect.')}
 ${ul(['<b>Restraint theory</b> (Herman & Mack, 1975): restricting intake leads to overeating', '<b>Disinhibition</b>: loss of restraint triggered by emotions, alcohol, situations, or a diet violation'])}
 ${ao3(['<b>Wardle & Beales (1988):</b> women on a restraint diet ate more after a stressor.', '<b>Contradictory evidence:</b> some dieters lose weight successfully.', '<b>Applications:</b> explains why dieting can fail and supports moderation.'])}` }
   ];
 
-  /* ===== N · 4.3.7 Stress (Option 2) ===== */
+  /* ===== N · 3.7 Stress (Option 2) ===== */
   TITLE.N = 'Stress'; SUB.N = 'Paper 3 · Section C option · 24 marks — physiology, illness, sources, measurement, individual differences and coping';
   T.N = [
-    { code: '4.3.7.1', name: 'The physiology of stress', html: () => `
+    { code: '3.7.1', name: 'The physiology of stress', html: () => `
 ${fig(S.flow([['Alarm reaction', 'threat recognised; adrenaline'], ['Resistance', 'body adapts; resources depleted'], ['Exhaustion', 'system fails; illness']], { w: 680, h: 84, label: 'General adaptation syndrome (Selye, 1936)' }), 'Selye’s research on rats exposed to stressors.')}
 ${two(`<h4>Acute stress: SAM pathway</h4>${ul(['Hypothalamus activates sympathetic NS', 'Adrenal medulla releases adrenaline (and noradrenaline)', 'Fight or flight: ↑ heart rate, blood pressure, glucose'])}`, `<h4>Chronic stress: HPA axis</h4>${ul(['Hypothalamus releases CRH', 'Pituitary releases ACTH', 'Adrenal cortex releases cortisol', 'Cortisol: energy, ↓ pain sensitivity – but immunosuppression; negative feedback'])}`)}
 ${ao3(['<b>GAS based on rats</b> – humans’ cognitive appraisal matters (Lazarus).', '<b>Gender bias</b> – tend-and-befriend (Taylor et al., 2000).'])}` },
-    { code: '4.3.7.2', name: 'Stress and illness', html: () => `
+    { code: '3.7.2', name: 'Stress and illness', html: () => `
 ${table(['Effect', 'Evidence'], [['Immunosuppression (short-term)', 'Kiecolt-Glaser et al. (1984): medical students’ NK cell activity fell during exams'], ['Immunosuppression (chronic)', 'Kiecolt-Glaser et al. (1995): wounds of carers of dementia patients took 9 days longer to heal'], ['Cardiovascular disorders', 'Williams (2000): people with the highest anger scores had over twice the risk of a heart attack; Orth-Gomér (2000): marital stress in women → 3× risk of further coronary events']])}
 ${ao3(['<b>Correlational</b>; stress may also cause unhealthy behaviours (smoking, poor diet).', '<b>Some short-term stress enhances immunity</b> (Segerstrom & Miller, 2004 meta-analysis).'])}` },
-    { code: '4.3.7.3', name: 'Sources of stress', html: () => `
+    { code: '3.7.3', name: 'Sources of stress', html: () => `
 ${two(`<h4>Life changes</h4>${p('Major events requiring adjustment, measured in life change units (LCUs). Rahe et al. (1970): naval personnel – positive correlation (+0.118) between LCUs and illness.')}`, `<h4>Daily hassles</h4>${p('Everyday irritations that accumulate. DeLongis et al. (1982): hassles were a better predictor of illness than life events; uplifts can offset them.')}`)}
 ${h3('Workplace stress')}
 ${p('<b>Workload</b> (long hours, demands) and <b>control</b> (influence over work). Marmot et al. (1997) – Whitehall II: civil servants with low job control had a higher risk of CHD; Johansson et al. (1978): Swedish sawmill “finishers” (repetitive, machine-paced) had higher adrenaline and absence.')}
 ${ao3(['<b>Retrospective recall</b> of life events is unreliable.', '<b>Correlational</b> – cannot show cause.', '<b>Individual differences</b> – workload may be stimulating for some.'])}` },
-    { code: '4.3.7.4', name: 'Measuring stress', html: () => `
+    { code: '3.7.4', name: 'Measuring stress', html: () => `
 ${table(['Measure', 'What it is', 'Evaluation'], [['Social Readjustment Rating Scale (Holmes & Rahe, 1967)', '43 life events, each with LCUs (death of spouse = 100; minor violations of the law = 11); 300+ LCUs in a year = high risk', 'Ignores individual meaning of events; mixes positive and negative'], ['Hassles and Uplifts Scale (Kanner et al., 1981)', '117 hassles, 135 uplifts rated for severity', 'More relevant to daily life; long to complete'], ['Skin conductance response (SCR)', 'Electrodes on fingers measure sweat (sympathetic arousal)', 'Objective; but labile vs stabile individual differences']])}` },
-    { code: '4.3.7.5', name: 'Individual differences in stress', html: () => `
+    { code: '3.7.5', name: 'Individual differences in stress', html: () => `
 ${fig(S.tiles([['Type A', 'Competitive, time-urgent, hostile – Friedman & Rosenman (1959)', P.red], ['Type B', 'Relaxed, patient, less competitive', P.green], ['Type C', 'Suppresses emotion, people-pleasing – linked to cancer (Temoshok, 1987)', P.violet], ['Hardiness', 'Kobasa (1979): commitment, challenge and control – buffer stress', P.blue]], { cols: 2, th: 90, w: 680, label: 'Personality and stress' }), 'Western Collaborative Group Study: Type A men twice as likely to develop CHD after 8.5 years.')}
 ${ao3(['<b>Mixed evidence:</b> Ragland & Brand (1988) found no link between Type A and CHD mortality after 22 years; hostility may be the toxic element.', '<b>Hardiness</b> is hard to measure; may overlap with neuroticism (Funk, 1992).'])}` },
-    { code: '4.3.7.6', name: 'Managing and coping with stress', html: () => `
+    { code: '3.7.6', name: 'Managing and coping with stress', html: () => `
 ${table(['Method', 'How it works', 'Evaluation'], [['Drug therapy', 'Benzodiazepines enhance GABA (inhibitory); beta-blockers block adrenaline receptors', 'Quick, easy; side effects, dependence, treat symptoms'], ['Stress inoculation therapy (Meichenbaum, 1985)', 'CBT: conceptualisation → skills acquisition and rehearsal → real-life application', 'Long-lasting, prepares for future stressors; time-consuming'], ['Biofeedback', 'Physiological responses shown to the person; relaxation; operant reinforcement; transfer to real life', 'No side effects; needs equipment; relaxation may be the active part']])}
 ${p('<b>Gender differences in coping:</b> women more likely to use emotion-focused coping and tend-and-befriend (Taylor et al., 2000); men more problem-focused.')}
 ${p('<b>Social support:</b> <b>instrumental</b> (practical help, information), <b>emotional</b> (warmth, concern) and <b>esteem</b> (boosting belief in ability to cope). Cohen et al. (2015): people who reported more social support (including hugs) were less likely to show cold symptoms after being exposed to a virus.')}` }

@@ -380,6 +380,7 @@ async function renderYou() {
 }
 
 async function awardXP(amount, label) {
+  if (window.RA10Track && typeof RA10Track.flush === 'function') await RA10Track.flush();
   if (!window.RA10 || !RA10.isLoggedIn()) return;
   const session = RA10.getSession();
   if (!session?.user?.id) return;

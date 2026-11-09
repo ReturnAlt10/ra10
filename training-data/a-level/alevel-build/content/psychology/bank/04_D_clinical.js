@@ -1,5 +1,5 @@
-  /* ===== D · 4.1.4 Clinical Psychology and Mental Health (Paper 1 Section D) ===== */
-  const D1 = '4.1.4.1 Definitions of mental health', D2 = '4.1.4.2 Characteristics', D3 = '4.1.4.3 Behavioural approach: phobias', D4 = '4.1.4.4 Cognitive approach: depression', D5 = '4.1.4.5 Biological approach: OCD';
+  /* ===== D · 1.4 Clinical Psychology and Mental Health (Paper 1 Section D) ===== */
+  const D1 = '1.1 Definitions of mental health', D2 = '1.2 Characteristics', D3 = '1.3 Behavioural approach: phobias', D4 = '1.4 Cognitive approach: depression', D5 = '1.5 Biological approach: OCD';
 
   K('D', D1, 'Outline', 3, 'Outline the statistical infrequency definition of abnormality. Give an example.', [
     'Behaviour is abnormal if it is statistically rare/uncommon in the population – it deviates from the average (1)',

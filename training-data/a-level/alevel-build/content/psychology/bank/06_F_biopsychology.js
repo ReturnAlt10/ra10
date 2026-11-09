@@ -1,5 +1,5 @@
-  /* ===== F · 4.2.2 Biopsychology (Paper 2 Section B) ===== */
-  const F1 = '4.2.2.1 Nervous system', F2 = '4.2.2.2 Neurons & synaptic transmission', F3 = '4.2.2.3 Endocrine system', F4 = '4.2.2.4 Fight or flight', F5 = '4.2.2.5 Ways of studying the brain', F6 = '4.2.2.6 Localisation, lateralisation & plasticity';
+  /* ===== F · 2.2 Biopsychology (Paper 2 Section B) ===== */
+  const F1 = '2.2.1 Nervous system', F2 = '2.2.2 Neurons & synaptic transmission', F3 = '2.2.3 Endocrine system', F4 = '2.2.4 Fight or flight', F5 = '2.2.5 Ways of studying the brain', F6 = '2.2.6 Localisation, lateralisation & plasticity';
 
   K('F', F1, 'Outline', 4, 'Outline the divisions of the nervous system.', [
     'The central nervous system (CNS) is the brain and spinal cord – the brain is the centre of conscious awareness; the spinal cord relays information and controls reflexes (1)',

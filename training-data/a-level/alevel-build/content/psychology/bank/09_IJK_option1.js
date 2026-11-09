@@ -1,7 +1,7 @@
   /* ===== Paper 3 Option 1 (Section B): I Relationships · J Gender · K Cognition and development ===== */
-  const I1 = '4.3.2.1 Attraction', I2 = '4.3.2.2 Theories of relationships', I3 = '4.3.2.3 Online relationships', I4 = '4.3.2.4 Parasocial relationships';
-  const J1 = '4.3.3.1 Chromosomes, hormones & diversity in sex development', J2 = '4.3.3.2 Gender identities & BSRI', J3 = '4.3.3.3 Biological explanations', J4 = '4.3.3.4 Cognitive explanations', J5 = '4.3.3.5 Social learning, culture & media', J6 = '4.3.3.6 Gender incongruence';
-  const K1 = '4.3.4.1 Piaget', K2 = '4.3.4.2 Vygotsky', K3 = '4.3.4.3 Baillargeon', K4 = '4.3.4.4 Social cognition';
+  const I1 = '3.2.1 Attraction', I2 = '3.2.2 Theories of relationships', I3 = '3.2.3 Online relationships', I4 = '3.2.4 Parasocial relationships';
+  const J1 = '3.3.1 Chromosomes, hormones & diversity in sex development', J2 = '3.3.2 Gender identities & BSRI', J3 = '3.3.3 Biological explanations', J4 = '3.3.4 Cognitive explanations', J5 = '3.3.5 Social learning, culture & media', J6 = '3.3.6 Gender incongruence';
+  const K1 = '3.1 Piaget', K2 = '3.2 Vygotsky', K3 = '3.3 Baillargeon', K4 = '3.4 Social cognition';
 
   /* --- I Relationships --- */
   K('I', I1, 'Outline', 4, 'Outline filter theory as an explanation of attraction.', [

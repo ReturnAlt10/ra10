@@ -1,5 +1,5 @@
-  /* ===== E · 4.2.1 Approaches in Psychology (Paper 2 Section A) ===== */
-  const E1 = '4.2.1.1 Learning approaches', E2 = '4.2.1.2 Cognitive approach', E3 = '4.2.1.3 Biological approach', E4 = '4.2.1.4 Psychodynamic approach', E5 = '4.2.1.5 Humanistic Psychology', E6 = '4.2.1.6 Comparison of approaches';
+  /* ===== E · 2.1 Approaches in Psychology (Paper 2 Section A) ===== */
+  const E1 = '2.1.1 Learning approaches', E2 = '2.1.2 Cognitive approach', E3 = '2.1.3 Biological approach', E4 = '2.1.4 Psychodynamic approach', E5 = '2.1.5 Humanistic Psychology', E6 = '2.1.6 Comparison of approaches';
 
   K('E', E1, 'Outline', 4, 'Outline Pavlov’s research into classical conditioning.', [
     'Pavlov rang a bell (neutral stimulus) whenever he gave food (unconditioned stimulus) to dogs (1)',
