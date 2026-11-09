@@ -32,6 +32,9 @@
   function showIntegrityWarning() {
     if (Date.now() - lastIntegrityWarning < 15000 || document.querySelector('.rxp-integrity-warning')) return;
     lastIntegrityWarning = Date.now();
+    document.querySelectorAll('#xp-toast, .xp-toast').forEach(function (el) {
+      if (el.parentNode) el.parentNode.removeChild(el);
+    });
     var t = document.createElement('div');
     t.className = 'rxp-toast rxp-integrity-warning';
     t.setAttribute('role', 'status');
