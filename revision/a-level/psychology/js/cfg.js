@@ -97,4 +97,4 @@
   });
 })();
 window.AIM_WORD = "Chapter";
-window.AIM_LABEL = {"A":"1.1 Social influence","B":"1.2 Memory","C":"1.3 Attachment","D":"1.4 Clinical Psychology and Mental Health","E":"2.1 Approaches in Psychology","F":"2.2 Biopsychology","G":"2.3 Research methods","H":"3.1 Issues and debates in Psychology","I":"3.2 Relationships","J":"3.3 Gender","K":"3.4 Cognition and development","L":"3.5 Schizophrenia","M":"3.6 Eating behaviour","N":"3.7 Stress","O":"3.8 Aggression","P":"3.9 Forensic Psychology","Q":"3.10 Addiction"};
+window.AIM_LABEL = {"A":"1.1","B":"1.2","C":"1.3","D":"1.4","E":"2.1","F":"2.2","G":"2.3","H":"3.1","I":"3.2","J":"3.3","K":"3.4","L":"3.5","M":"3.6","N":"3.7","O":"3.8","P":"3.9","Q":"3.10"};
