@@ -58,6 +58,7 @@ begin
       from public.activity_events e
       where e.user_id = v_uid
         and e.created_at > now() - interval '5 minutes'
+        and (v_row.last_award_at is null or e.created_at > v_row.last_award_at)
         and (
           (e.kind in ('answer', 'ai_examine', 'flashcard')
             and public.xp_answer_is_meaningful(e.answer, e.kind))
