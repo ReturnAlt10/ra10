@@ -28,6 +28,17 @@
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
   function emit() { state.listeners.forEach(function (fn) { try { fn(state); } catch (e) {} }); }
   function missing(err) { var m = String((err && (err.message || err.code)) || ''); return /does not exist|Could not find|PGRST20[2-5]|42883|42P01/.test(m); }
+  var lastIntegrityWarning = 0;
+  function showIntegrityWarning() {
+    if (Date.now() - lastIntegrityWarning < 15000 || document.querySelector('.rxp-integrity-warning')) return;
+    lastIntegrityWarning = Date.now();
+    var t = document.createElement('div');
+    t.className = 'rxp-toast rxp-integrity-warning';
+    t.setAttribute('role', 'status');
+    t.textContent = 'XP was not awarded: please do genuine revision work. Random or rushed answers and starting/ending sessions just to farm XP are not acceptable.';
+    document.body.appendChild(t);
+    setTimeout(function () { if (t.parentNode) t.parentNode.removeChild(t); }, 6500);
+  }
 
   /* ── Styles ─────────────────────────────────────────────────────────── */
   (function css() {
@@ -74,6 +85,7 @@
       '.rxp-confetti i{position:absolute;top:-12px;width:8px;height:14px;border-radius:2px;animation:rxpFall 1.6s ease-in forwards}',
       '@keyframes rxpFall{to{transform:translateY(520px) rotate(540deg);opacity:0}}',
       '.rxp-toast{position:fixed;left:50%;top:18px;z-index:2147483645;transform:translateX(-50%);padding:9px 16px;border-radius:999px;color:#fff;font:800 .85rem/1.2 var(--font-b,system-ui);background:linear-gradient(135deg,#f59e0b,#ef4444);box-shadow:0 10px 24px -8px rgba(239,68,68,.6);animation:rxpIn .35s ease both}',
+      '.rxp-integrity-warning{width:min(520px,calc(100vw - 32px));border-radius:16px;text-align:center}',
       '@media (prefers-reduced-motion:reduce){.rxp-card,.rxp-rank,.rxp-pill,.rxp-row{animation:none!important;transition:none!important}.rxp-confetti{display:none}}',
     ].join('\n');
     (document.head || document.documentElement).appendChild(st);
@@ -123,7 +135,16 @@
       if (/\/rest\/v1\/rpc\/increment_xp(\?|$)/.test(url) && init && init.body && !window.__rxpInternal) {
         var amount = 0;
         try { amount = Number(JSON.parse(init.body).amount) || 0; } catch (e) {}
-        p.then(function (res) { if (res && res.ok && amount > 0) onAward(amount); }, function () {});
+        p.then(function (res) {
+          if (!res || !res.ok || amount <= 0) return;
+          if (amount >= 10) {
+            res.clone().json().then(function (value) {
+              var granted = Number(Array.isArray(value) ? value[0] : value);
+              if (!Number.isFinite(granted) || granted <= 0) showIntegrityWarning();
+              else onAward(amount);
+            }, function () { onAward(amount); });
+          } else onAward(amount);
+        }, function () {});
       }
       return p;
     };

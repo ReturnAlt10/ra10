@@ -14,6 +14,9 @@ as $$
     when length(btrim(p_answer)) < 3 then false
     when btrim(p_answer) ~* '^(.)\1{3,}$' then false
     when btrim(p_answer) ~* '(asdf|qwer|zxcv|aidsus|susdis|testtest|blahblah)' then false
+    when length(btrim(p_answer)) >= 6
+         and btrim(p_answer) ~* '^[^aeiou]+$' then false
+    when btrim(p_answer) ~* '[bcdfghjklmnpqrstvwxz]{5,}' then false
     when p_kind = 'answer' and length(btrim(p_answer)) >= 10
          and btrim(p_answer) !~ '\s'
          and btrim(p_answer) !~* '(the|and|ing|ion|ate|ent|ers|ous|ive|ity|ism|psy|mem|con|beh|res|neu|bra|eco|soc|inf|att|cli)' then false
@@ -49,15 +52,16 @@ begin
   end if;
 
   -- Completion/session rewards must follow a real recent learning action.
-  if v_amt >= 20 then
+  if v_amt >= 10 then
     select exists (
       select 1
       from public.activity_events e
       where e.user_id = v_uid
         and e.created_at > now() - interval '5 minutes'
         and (
-          (e.kind in ('answer', 'mcq', 'ai_examine', 'flashcard')
+          (e.kind in ('answer', 'ai_examine', 'flashcard')
             and public.xp_answer_is_meaningful(e.answer, e.kind))
+          or (e.kind = 'mcq' and nullif(btrim(coalesce(e.answer, '')), '') is not null)
           or (e.kind in ('guide_section', 'view') and coalesce(e.duration_s, 0) >= 20)
         )
     ) into v_has_recent_learning;
@@ -66,8 +70,8 @@ begin
     end if;
   end if;
 
-  -- Do not let start/end session loops repeatedly claim large rewards.
-  if v_amt >= 20 and v_row.last_award_at > now() - interval '30 seconds' then
+  -- Do not let start/end session loops repeatedly claim completion rewards.
+  if v_amt >= 10 and v_row.last_award_at > now() - interval '30 seconds' then
     update public.xp_rate
        set blocked = blocked + 1,
            minute_start = v_row.minute_start,
@@ -96,7 +100,7 @@ begin
          minute_xp = v_row.minute_xp + v_amt,
          day = v_row.day,
          day_xp = v_row.day_xp + v_amt,
-         last_award_at = case when v_amt >= 20 then now() else last_award_at end
+         last_award_at = case when v_amt >= 10 then now() else last_award_at end
    where user_id = v_uid;
   perform public.increment_xp_unguarded(v_amt);
   return v_amt;
