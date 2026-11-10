@@ -31,7 +31,7 @@
 })();
 </script>
 <link rel="preload" href="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0/dist/umd/supabase.js" as="script" crossorigin>
-<link rel="preload" href="/refresh/site.js?v=20261212" as="script">
+<link rel="preload" href="/refresh/site.js?v=20270110" as="script">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>RA10 — Advanced Revision Site (BTEC, GCSE, A-LEVEL)</title>
 <meta name="description" content="Free BTEC Level 3 revision for IT, Business, Sport, Computing, Construction, Early Childhood Development, Engineering, Health and Social Care and Medical Science, plus A-Level Business (AQA and Edexcel) and A-Level Psychology. Flashcards, quizzes, predicted papers, study guides, wireframe and code tools, and AI assignment marking — all in one place.">
@@ -109,7 +109,7 @@
 })();
 </script>
 <!-- ra10-refresh: behaviour script (the stylesheets are linked statically at the end of <head>) -->
-<script src="/refresh/ra10-refresh.js?v=20261212" defer></script>
+<script src="/refresh/ra10-refresh.js?v=20270110" defer></script>
 <style id="hm-css">
 /* Homepage (signed-out) — one scoped system: ink, paper, one red accent. */
 #p-home{--hm-ink:#16130f;--hm-ink-2:#57534b;--hm-paper:#fffdf8;--hm-line:rgba(22,19,15,.09);--hm-red:#d20000;--hm-red-soft:#fde8e6;--hm-green:#15803d;--hm-r:22px}
@@ -2067,6 +2067,25 @@ body.home-signed-in #p-home .hx-home > :not(#signed-in-dashboard){display:none !
           </div>
           <div class="account-row account-row-top">
             <div class="account-meta">
+              <div class="account-row-label">I am a…</div>
+              <div id="account-role-current">Not set</div>
+            </div>
+            <button class="btn account-btn account-btn-change" id="account-change-role-btn" type="button">Change</button>
+          </div>
+          <div id="account-role-edit" class="account-edit-block">
+            <div class="account-inline-input">
+              <select id="account-role-input" class="auth-input" style="flex:1;">
+                <option value="student">Student</option>
+                <option value="teacher">Teacher</option>
+                <option value="educator">Educator</option>
+                <option value="other">Other</option>
+              </select>
+              <button class="btn account-btn account-btn-save-role" id="account-save-role-btn" type="button">Save</button>
+            </div>
+            <div class="auth-error" id="account-role-error" style="margin-top:var(--sp2)"></div>
+          </div>
+          <div class="account-row account-row-top">
+            <div class="account-meta">
               <div class="account-row-label">Profile picture (image URL)</div>
               <div id="account-profile-pic-current">No profile picture set</div>
             </div>
@@ -2291,6 +2310,7 @@ body.home-signed-in #p-home .hx-home > :not(#signed-in-dashboard){display:none !
       <h1>Exams</h1>
       <p>All your exam dates in one place. Pin the ones that matter and they'll show up as goals in your unit apps.</p>
     </div>
+    <div id="exams-my-subjects" class="exams-my-subjects"></div>
     <div class="exams-toolbar">
       <div class="exams-filters">
         <select id="exams-filter-board" class="exams-filter">
@@ -3102,10 +3122,10 @@ body.home-signed-in #p-home .hx-home > :not(#signed-in-dashboard){display:none !
 ============================================================ -->
 <!-- Supabase loads here (not in <head>) so it no longer blocks the first paint; it still runs before site.js. -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0/dist/umd/supabase.js"></script>
-<script src="/refresh/ra10-units.js?v=20261212"></script>
-<script src="/refresh/ra10-subjects.js?v=20261212"></script>
+<script src="/refresh/ra10-units.js?v=20270110"></script>
+<script src="/refresh/ra10-subjects.js?v=20270110"></script>
 <script>(function(){var el=document.getElementById('hm-subjects');if(el&&window.RA10Subjects&&RA10Subjects.renderHome)RA10Subjects.renderHome(el);})();</script>
-<script src="/refresh/site.js?v=20261212"></script>
+<script src="/refresh/site.js?v=20270110"></script>
 <script src="/refresh/ra10-edu.js?v=20261126" defer></script>
 
 <!-- ============================================================

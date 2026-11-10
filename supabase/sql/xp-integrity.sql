@@ -51,28 +51,30 @@ begin
     v_row.minute_xp := 0;
   end if;
 
-  -- Completion/session rewards must follow a real recent learning action.
+  -- Completion/session rewards must follow genuinely recent learning. We ask
+  -- for at least two distinct learning actions (or one examined answer) so a
+  -- session started, touched once and ended cannot fund its own bonus.
   if v_amt >= 10 then
-    select exists (
-      select 1
-      from public.activity_events e
-      where e.user_id = v_uid
-        and e.created_at > now() - interval '5 minutes'
-        and (v_row.last_award_at is null or e.created_at > v_row.last_award_at)
-        and (
-          (e.kind in ('answer', 'ai_examine', 'flashcard')
-            and public.xp_answer_is_meaningful(e.answer, e.kind))
-          or (e.kind = 'mcq' and nullif(btrim(coalesce(e.answer, '')), '') is not null)
-          or (e.kind in ('guide_section', 'view') and coalesce(e.duration_s, 0) >= 20)
-        )
-    ) into v_has_recent_learning;
+    select count(*) >= 2
+      or coalesce(bool_or(e.kind = 'ai_examine' and public.xp_answer_is_meaningful(e.answer, e.kind)), false)
+    into v_has_recent_learning
+    from public.activity_events e
+    where e.user_id = v_uid
+      and e.created_at > now() - interval '5 minutes'
+      and (v_row.last_award_at is null or e.created_at > v_row.last_award_at)
+      and (
+        (e.kind in ('answer', 'ai_examine', 'flashcard')
+          and public.xp_answer_is_meaningful(e.answer, e.kind))
+        or (e.kind = 'mcq' and nullif(btrim(coalesce(e.answer, '')), '') is not null)
+        or (e.kind in ('guide_section', 'view') and coalesce(e.duration_s, 0) >= 20)
+      );
     if not v_has_recent_learning then
       return 0;
     end if;
   end if;
 
   -- Do not let start/end session loops repeatedly claim completion rewards.
-  if v_amt >= 10 and v_row.last_award_at > now() - interval '30 seconds' then
+  if v_amt >= 10 and v_row.last_award_at > now() - interval '15 seconds' then
     update public.xp_rate
        set blocked = blocked + 1,
            minute_start = v_row.minute_start,

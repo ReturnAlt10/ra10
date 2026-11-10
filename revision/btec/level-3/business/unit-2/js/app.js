@@ -420,9 +420,16 @@ async function awardXP(amount, label) {
       body: JSON.stringify({ amount })
     });
     if (res.ok) {
-      incrementCounter('ra10_xp_today', Number(amount || 0));
-      showXPToast(label || ('+' + amount + ' XP'));
-      await refreshProgressSidebar(true);
+      // Only celebrate what the server actually granted: increment_xp returns 0
+      // when an award is held back (rushed answers, or a session started and
+      // ended just for the completion XP), so read the value it returns.
+      let granted = Number(amount || 0);
+      try { const v = await res.json(); const g = Number(Array.isArray(v) ? v[0] : v); if (Number.isFinite(g)) granted = g; } catch (e) {}
+      if (granted > 0) {
+        incrementCounter('ra10_xp_today', granted);
+        showXPToast(label || ('+' + granted + ' XP'));
+        await refreshProgressSidebar(true);
+      }
     }
   } catch(e) { console.warn('XP award failed', e); }
 }
@@ -1697,7 +1704,11 @@ async function endPracticeSession() {
     alert('No practice attempts to save yet.');
     return;
   }
-  const practiceQ = window._practiceSession?.total || 0;
+  const practiceQ = ps.total || 0;
+  // Completion XP only lands once a few questions have actually been answered.
+  // Starting a session, marking one question and ending it should not pay out.
+  const MIN_PRACTICE = 5;
+  const earned = practiceQ >= MIN_PRACTICE ? Math.min(practiceQ * 10, 50) : 0;
   await saveSession('practice_bus_u2', {
     aims: Object.keys(ps.aimBreakdown),
     total: ps.total,
@@ -1705,7 +1716,11 @@ async function endPracticeSession() {
     aimBreakdown: ps.aimBreakdown,
     attemptedIds: ps.attemptedIds
   });
-  awardXP(Math.min(practiceQ * 10, 50), '+' + Math.min(practiceQ * 10, 50) + ' XP — Practice done!');
+  if (earned > 0) {
+    awardXP(earned, '+' + earned + ' XP - Practice done!');
+  } else if (typeof showXPToast === "function") {
+    showXPToast('Answer ' + MIN_PRACTICE + ' questions to bank the session XP.');
+  }
   window._practiceSession = null;
 }
 

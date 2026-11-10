@@ -2795,6 +2795,15 @@ html body #community-share-sheet .community-share-panel{
 .signed-in-ai-tip b{color:#7c3aed;font-size:12px;text-transform:uppercase;letter-spacing:.05em}
 .signed-in-ai-tip p{margin:2px 0 0;font-size:var(--tx-sm);color:#4a463e;line-height:1.5}
 .signed-in-exams{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:var(--sp3)}
+.exams-my-subjects{margin:var(--sp4) 0 0}
+.exams-my-subjects .ems-card{border:1px solid var(--color-divider);border-radius:16px;background:var(--color-surface);padding:var(--sp4)}
+.exams-my-subjects .ems-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:var(--sp2);margin:0 0 var(--sp2)}
+.exams-my-subjects .ems-head h3{margin:0;font-size:var(--tx-base)}
+.exams-my-subjects .ems-head p{margin:0;font-size:var(--tx-sm);color:var(--color-text-muted)}
+.exams-my-subjects .ems-chips{display:flex;flex-wrap:wrap;gap:var(--sp2);margin:0 0 var(--sp3)}
+.exams-my-subjects .ems-chip{display:inline-flex;align-items:center;gap:6px;min-height:38px;padding:6px 12px;border:1px solid var(--color-border);border-radius:999px;background:var(--color-surface-offset);color:inherit;font:inherit;font-size:var(--tx-sm);font-weight:600;cursor:pointer;transition:background .15s,border-color .15s}
+.exams-my-subjects .ems-chip[aria-pressed="true"]{border-color:var(--color-primary);background:color-mix(in srgb,var(--color-primary) 14%,transparent)}
+.exams-my-subjects .ems-chip .ems-board{font-size:var(--tx-xs);color:var(--color-text-muted);font-weight:500}
 .exams-toolbar{display:flex;flex-wrap:wrap;gap:var(--sp3);align-items:center;justify-content:space-between;margin:var(--sp4) 0}
 .exams-filters{display:flex;flex-wrap:wrap;gap:var(--sp2);align-items:center}
 .exams-filter{

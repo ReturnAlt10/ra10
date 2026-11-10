@@ -422,9 +422,16 @@ async function awardXP(amount, label) {
       body: JSON.stringify({ amount })
     });
     if (res.ok) {
-      incrementCounter('ra10_xp_today', Number(amount || 0));
-      showXPToast(label || ('+' + amount + ' XP'));
-      await refreshProgressSidebar(true);
+      // Only celebrate what the server actually granted: increment_xp returns 0
+      // when an award is held back (rushed answers, or a session started and
+      // ended just for the completion XP), so read the value it returns.
+      let granted = Number(amount || 0);
+      try { const v = await res.json(); const g = Number(Array.isArray(v) ? v[0] : v); if (Number.isFinite(g)) granted = g; } catch (e) {}
+      if (granted > 0) {
+        incrementCounter('ra10_xp_today', granted);
+        showXPToast(label || ('+' + granted + ' XP'));
+        await refreshProgressSidebar(true);
+      }
     }
   } catch(e) { console.warn('XP award failed', e); }
 }
@@ -1699,15 +1706,25 @@ async function endPracticeSession() {
     alert('No practice attempts to save yet.');
     return;
   }
-  const practiceQ = window._practiceSession?.total || 0;
+  const practiceQ = ps.total || 0;
+  // A session only counts as "done" once a few questions have actually been
+  // answered. Starting a session, marking one question and ending it should
+  // not pay out a completion reward.
+  const MIN_PRACTICE = 5;
+  const earned = practiceQ >= MIN_PRACTICE ? Math.min(practiceQ * 10, 50) : 0;
   await saveSession('practice_aqa_psy_7182', {
     aims: Object.keys(ps.aimBreakdown),
     total: ps.total,
     correct: ps.correct,
     aimBreakdown: ps.aimBreakdown,
-    attemptedIds: ps.attemptedIds
+    attemptedIds: ps.attemptedIds,
+    practiceCount: practiceQ
   });
-  awardXP(Math.min(practiceQ * 10, 50), '+' + Math.min(practiceQ * 10, 50) + ' XP — Practice done!');
+  if (earned > 0) {
+    awardXP(earned, '+' + earned + ' XP - Practice done!');
+  } else {
+    showXPToast('Answer ' + MIN_PRACTICE + ' questions to bank the session XP.');
+  }
   window._practiceSession = null;
 }
 
@@ -3079,13 +3096,18 @@ function showQuizResults() {
       aimBreakdown
     });
     incrementCounter('ra10_questions_today', total);
-    awardXP(20, '+20 XP — Quiz complete!');
-    if (window._isDailyQuiz) {
-      window._isDailyQuiz = false;
-      if (completeDailyTask('dailyQuiz')) {
-        awardXP(25, '+25 XP — Daily quiz done!');
+    // Completion XP needs a real quiz, not one tapped answer.
+    if (total >= 5) {
+      awardXP(20, '+20 XP — Quiz complete!');
+      if (window._isDailyQuiz) {
+        window._isDailyQuiz = false;
+        if (completeDailyTask('dailyQuiz')) {
+          awardXP(25, '+25 XP — Daily quiz done!');
+        }
+        if (document.getElementById('view-you')?.classList.contains('active')) renderYou();
       }
-      if (document.getElementById('view-you')?.classList.contains('active')) renderYou();
+    } else if (window._isDailyQuiz) {
+      window._isDailyQuiz = false;
     }
   } else if (window._isDailyQuiz) {
     window._isDailyQuiz = false;
@@ -3550,7 +3572,8 @@ async function endFlashSession() {
     aimBreakdown: fs.aimBreakdown,
     attemptedIds: fs.attemptedIds
   });
-  awardXP(5, '+5 XP — Flashcards done!');
+  // Require a real review pass — a few cards — before the completion XP.
+  if (Number(fs.total || 0) >= 5) awardXP(5, '+5 XP — Flashcards done!');
   window._flashSession = null;
 }
 

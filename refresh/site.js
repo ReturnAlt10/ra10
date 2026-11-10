@@ -3625,11 +3625,37 @@ function recordRecentApp(path) {
     localStorage.setItem(RECENT_APPS_KEY, JSON.stringify(list.slice(0, 8)));
   } catch (_) {}
 }
-function sdUpcomingExams() {
+// The exams a learner has actually chosen to sit (from onboarding or the
+// Exams page). Kept on the profile and mirrored locally so the dashboard can
+// read it immediately. We never infer a learner's exams from what they open.
+const MY_EXAMS_KEY = 'ra10_my_exam_subjects_v1';
+function getMyExamSubjectIds() {
+  let list = null;
+  try {
+    const p = (window.RA10 && RA10.getProfile && RA10.getProfile()) || {};
+    if (Array.isArray(p.exam_subjects)) list = p.exam_subjects;
+  } catch (_) {}
+  if (!Array.isArray(list) || !list.length) {
+    try {
+      const raw = JSON.parse(localStorage.getItem(MY_EXAMS_KEY) || '[]');
+      if (Array.isArray(raw)) list = raw;
+    } catch (_) {}
+  }
+  return Array.isArray(list) ? list.filter(x => typeof x === 'string') : [];
+}
+function setMyExamSubjectIds(list) {
+  const clean = Array.from(new Set((list || []).filter(x => typeof x === 'string')));
+  try { localStorage.setItem(MY_EXAMS_KEY, JSON.stringify(clean)); } catch (_) {}
+  return clean;
+}
+function sdUpcomingExams(opts) {
+  opts = opts || {};
   const now = new Date();
   const pinnedPaths = getPinnedApps();
+  const mine = getMyExamSubjectIds();
+  const source = (opts.mineOnly && mine.length) ? EXAM_DATA.filter(e => mine.includes(e.id)) : EXAM_DATA;
   const out = [];
-  EXAM_DATA.forEach(e => {
+  source.forEach(e => {
     const next = (e.dates || []).map(d => new Date(d + 'T09:00:00')).filter(d => d.getTime() >= now.getTime() - 86400000).sort((a, b) => a - b)[0];
     if (!next) return;
     out.push({ exam: e, date: next, days: Math.max(0, Math.ceil((next.getTime() - now.getTime()) / 86400000)), subject: e.subject, pinned: !!(e.appPath && pinnedPaths.includes(e.appPath)) });
@@ -3638,13 +3664,24 @@ function sdUpcomingExams() {
   return out;
 }
 function sdNextExam() {
-  const list = sdUpcomingExams();
+  // Only show a "next exam" that belongs to a subject the learner has chosen.
+  // Without a choice we show a prompt rather than guessing from the global list.
+  const mine = getMyExamSubjectIds();
+  if (!mine.length) return null;
+  const list = sdUpcomingExams({ mineOnly: true });
   return list.length ? list[0] : null;
 }
 function renderSdNext(ne) {
   const host = document.getElementById('sd-next');
   if (!host) return;
-  if (!ne) { host.innerHTML = '<div class="sd-card-head"><h3>Next exam</h3></div><p class="sd-empty">No upcoming exams found.</p>'; return; }
+  if (!ne) {
+    const hasSubjects = getMyExamSubjectIds().length > 0;
+    host.innerHTML = hasSubjects
+      ? '<div class="sd-card-head"><h3>Next exam</h3></div><p class="sd-empty">No upcoming exams for your subjects.</p>'
+      : '<div class="sd-card-head"><h3>Next exam</h3></div><p class="sd-empty">Pick your subjects to see your exam countdown.</p>'
+        + '<button class="sd-btn sd-btn-primary sm" type="button" onclick="go(\'/exams\')">Choose subjects</button>';
+    return;
+  }
   const total = 120, pct = Math.max(4, Math.min(100, Math.round((1 - Math.min(ne.days, total) / total) * 100)));
   const dateStr = ne.date.toLocaleDateString(undefined, { weekday: 'long', day: 'numeric', month: 'long' });
   host.innerHTML = '<div class="sd-card-head"><h3>Next exam</h3><span>' + (ne.pinned ? 'From your pinned subjects' : 'Soonest overall') + '</span></div>'
@@ -3972,9 +4009,57 @@ function showExamToast(msg) {
   t._hide = setTimeout(function () { t.style.opacity = '0'; t.style.transform = 'translateX(-50%) translateY(20px)'; }, 2800);
 }
 
+function renderExamsMySubjects() {
+  const host = document.getElementById('exams-my-subjects');
+  if (!host) return;
+  const mine = getMyExamSubjectIds();
+  const subjects = Array.from(new Set(EXAM_DATA.map(e => e.subject))).sort();
+  const chips = subjects.map(s => {
+    const exam = EXAM_DATA.find(e => e.subject === s) || {};
+    const on = mine.includes(exam.id) || (exam.id && mine.includes(exam.id));
+    return '<button type="button" class="ems-chip" data-ems-id="' + escapeHtmlAttr(exam.id || '') + '" data-ems-subject="' + escapeHtmlAttr(s) + '" aria-pressed="' + (on ? 'true' : 'false') + '">' + escapeHtmlAttr(s) + '<span class="ems-board">' + escapeHtmlAttr(exam.board || '') + '</span></button>';
+  }).join('');
+  host.innerHTML = '<div class="ems-card"><div class="ems-head"><h3>My subjects</h3>'
+    + '<p>Pick the subjects you\'re sitting — only these shape your exam countdown.</p></div>'
+    + '<div class="ems-chips" role="group" aria-label="My subjects">' + chips + '</div>'
+    + '<p class="ems-hint" style="margin:0;font-size:var(--tx-sm);color:var(--color-text-muted)" data-ems-hint></p></div>';
+  const hint = host.querySelector('[data-ems-hint]');
+  if (hint) hint.textContent = mine.length ? 'Selected: ' + mine.length + ' subject' + (mine.length === 1 ? '' : 's') + '. Your dashboard shows your next one.' : 'Nothing selected yet — tap the subjects you\'re sitting.';
+  host.querySelectorAll('[data-ems-id]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id = btn.getAttribute('data-ems-id');
+      if (!id) return;
+      const cur = getMyExamSubjectIds();
+      const next = cur.includes(id) ? cur.filter(x => x !== id) : cur.concat(id);
+      setMyExamSubjectIds(next);
+      saveMyExamSubjectsToProfile(next);
+      btn.setAttribute('aria-pressed', next.includes(id) ? 'true' : 'false');
+      if (hint) hint.textContent = next.length ? 'Selected: ' + next.length + ' subject' + (next.length === 1 ? '' : 's') + '. Your dashboard shows your next one.' : 'Nothing selected yet — tap the subjects you\'re sitting.';
+      try { renderSignedInDashboard(); } catch (_) {}
+    });
+  });
+}
+async function saveMyExamSubjectsToProfile(ids) {
+  try {
+    if (!window.RA10 || !RA10.isLoggedIn()) return;
+    const session = RA10.getSession ? RA10.getSession() : null;
+    if (!session || !session.access_token) return;
+    const sb = RA10.getClient ? RA10.getClient() : null;
+    if (sb && sb.rpc) {
+      const res = await sb.rpc('set_exam_subjects', { p_ids: ids });
+      if (!res.error) return;
+      if (!/function|does not exist|PGRST202/i.test(String(res.error.message || res.error.code || ''))) return;
+    }
+    const ra = RA10._raw || {};
+    const url = (ra.SUPABASE_URL || '') + '/rest/v1/profiles?id=eq.' + encodeURIComponent(session.user.id);
+    await fetch(url, { method: 'PATCH', headers: { 'Content-Type': 'application/json', apikey: ra.SUPABASE_ANON_KEY || '', Authorization: 'Bearer ' + session.access_token, Prefer: 'return=minimal' }, body: JSON.stringify({ exam_subjects: ids }) });
+  } catch (_) {}
+}
+
 function renderExamsPage() {
   const list = document.getElementById('exams-list');
   if (!list) return;
+  renderExamsMySubjects();
 
   // Populate subject filter options once.
   const subjectSel = document.getElementById('exams-filter-subject');
@@ -4301,8 +4386,12 @@ function renderHomeExams() {
   if (!host) return;
   const now = new Date();
   const pinned = getPinnedExams();
+  // Signed-in learners who have chosen their subjects only see those; everyone
+  // else sees the full timetable. We never infer subjects from opened modules.
+  const mine = (window.RA10 && RA10.isLoggedIn && RA10.isLoggedIn()) ? getMyExamSubjectIds() : [];
+  const source = mine.length ? EXAM_DATA.filter(e => mine.includes(e.id)) : EXAM_DATA;
   // Show the next 6 upcoming exams, pinned ones first.
-  const withNext = EXAM_DATA.map((exam) => {
+  const withNext = source.map((exam) => {
     const upcoming = (exam.dates || []).map(d => new Date(d + 'T09:00:00')).filter(d => d.getTime() >= now.getTime()).sort((a, b) => a - b);
     return { exam, next: upcoming[0] || null };
   }).filter(x => x.next).sort((a, b) => {
@@ -4405,13 +4494,20 @@ const EXAM_TIMES = [
 function renderExamTimes() {
   const host = document.getElementById('signed-in-exams');
   if (!host) return;
-  const list = sdUpcomingExams().slice(0, 5);
-  host.innerHTML = list.length ? list.map(x => {
+  const mine = getMyExamSubjectIds();
+  const list = sdUpcomingExams({ mineOnly: !!mine.length }).slice(0, 5);
+  if (!list.length) {
+    host.innerHTML = mine.length
+      ? '<p class="sd-empty">No upcoming exams.</p>'
+      : '<p class="sd-empty">Choose your subjects to see your exam dates.</p>';
+    return;
+  }
+  host.innerHTML = list.map(x => {
     const cls = x.days <= 7 ? 'soon' : x.days <= 30 ? 'near' : '';
     return '<div class="sd-exam"><div class="sd-exam-date"><b>' + x.date.getDate() + '</b><span>' + x.date.toLocaleDateString(undefined, { month: 'short' }) + '</span></div>'
       + '<div class="sd-exam-copy"><strong>' + x.subject + '</strong><small>' + x.exam.board + ' · ' + (x.exam.name || '') + '</small></div>'
       + '<span class="sd-exam-days ' + cls + '">' + (x.days === 0 ? 'Today' : x.days + 'd') + '</span></div>';
-  }).join('') : '<p class="sd-empty">No upcoming exams.</p>';
+  }).join('');
 }
 
 const LEGAL_ROUTES = { '/terms': 'terms', '/privacy': 'privacy', '/cookies': 'cookies', '/accessibility': 'accessibility' };
@@ -5339,6 +5435,11 @@ async function waitForRA10Sdk(timeoutMs) {
         const accountPicInput = document.getElementById('account-pic-input');
         document.getElementById('account-username-current').textContent = profile.username ? ('@' + profile.username) : 'No username set';
         document.getElementById('account-badge-current').textContent = getLeaderboardBadgeEmoji(profile) || 'No badge set';
+        const ACCOUNT_ROLE_LABELS = { student: 'Student', teacher: 'Teacher', educator: 'Educator', other: 'Other' };
+        const accountRoleCurrent = document.getElementById('account-role-current');
+        const accountRoleInput = document.getElementById('account-role-input');
+        if (accountRoleCurrent) accountRoleCurrent.textContent = ACCOUNT_ROLE_LABELS[profile.user_role] || 'Not set';
+        if (accountRoleInput && profile.user_role && ACCOUNT_ROLE_LABELS[profile.user_role]) accountRoleInput.value = profile.user_role;
         const earnedBadgeEl = document.getElementById('account-earned-leaderboard-badge');
         if (earnedBadgeEl) {
           earnedBadgeEl.textContent = getEarnedLeaderboardBadge(profile) || 'No weekly podium finish yet';
@@ -7096,6 +7197,14 @@ async function waitForRA10Sdk(timeoutMs) {
       document.getElementById('account-badge-input')?.focus();
     });
 
+    document.getElementById('account-change-role-btn')?.addEventListener('click', () => {
+      const edit = document.getElementById('account-role-edit');
+      if (!edit) return;
+      edit.style.display = 'block';
+      document.getElementById('account-role-error')?.classList.remove('show');
+      document.getElementById('account-role-input')?.focus();
+    });
+
     document.getElementById('account-change-pic-btn')?.addEventListener('click', () => {
       document.getElementById('account-pic-edit').style.display = 'block';
       document.getElementById('account-pic-error').classList.remove('show');
@@ -7287,6 +7396,47 @@ async function waitForRA10Sdk(timeoutMs) {
       } finally {
         btn.disabled = false;
         btn.textContent = 'Save';
+      }
+    });
+
+    document.getElementById('account-save-role-btn')?.addEventListener('click', async () => {
+      const err = document.getElementById('account-role-error');
+      const btn = document.getElementById('account-save-role-btn');
+      const select = document.getElementById('account-role-input');
+      const allowed = ['student', 'teacher', 'educator', 'other'];
+      const role = String((select && select.value) || '').trim();
+      err?.classList.remove('show');
+      if (!allowed.includes(role)) {
+        if (err) { err.textContent = 'Pick one of the options.'; err.classList.add('show'); }
+        return;
+      }
+      if (btn) { btn.disabled = true; btn.textContent = 'Saving...'; }
+      try {
+        const sb = RA10.getClient();
+        const session = RA10.getSession();
+        const currentUserId = session?.user?.id || RA10.getProfile()?.id || '';
+        if (!currentUserId) throw new Error('You are not signed in. Please refresh and try again.');
+        let saved = false;
+        if (sb && sb.rpc) {
+          const res = await sb.rpc('set_user_role', { p_role: role });
+          if (!res.error) saved = true;
+          else if (!/function|does not exist|PGRST202/i.test(String(res.error.message || res.error.code || ''))) throw res.error;
+        }
+        if (!saved) {
+          const { error } = await sb.from('profiles').update({ user_role: role }).eq('id', currentUserId);
+          if (error) throw error;
+        }
+        await RA10.init();
+        _updateNavAuth();
+        document.getElementById('account-role-edit').style.display = 'none';
+        const ROLE_LABELS = { student: 'Student', teacher: 'Teacher', educator: 'Educator', other: 'Other' };
+        const cur = document.getElementById('account-role-current');
+        if (cur) cur.textContent = ROLE_LABELS[role] || 'Not set';
+        showMiniToast('Role updated');
+      } catch (e) {
+        if (err) { err.textContent = e.message || 'Could not save role.'; err.classList.add('show'); }
+      } finally {
+        if (btn) { btn.disabled = false; btn.textContent = 'Save'; }
       }
     });
 

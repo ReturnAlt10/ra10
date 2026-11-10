@@ -29,8 +29,12 @@
   function emit() { state.listeners.forEach(function (fn) { try { fn(state); } catch (e) {} }); }
   function missing(err) { var m = String((err && (err.message || err.code)) || ''); return /does not exist|Could not find|PGRST20[2-5]|42883|42P01/.test(m); }
   var lastIntegrityWarning = 0;
+  // Shown when the server holds an award back (rushed/random answers, or a
+  // session started and ended just for the completion XP). Kept quiet, calm
+  // and short — it is a gentle nudge, not a telling-off, and it never
+  // contradicts a success toast because the app only toasts on a real award.
   function showIntegrityWarning() {
-    if (Date.now() - lastIntegrityWarning < 15000 || document.querySelector('.rxp-integrity-warning')) return;
+    if (Date.now() - lastIntegrityWarning < 60000 || document.querySelector('.rxp-integrity-warning')) return;
     lastIntegrityWarning = Date.now();
     document.querySelectorAll('#xp-toast, .xp-toast').forEach(function (el) {
       if (el.parentNode) el.parentNode.removeChild(el);
@@ -38,9 +42,9 @@
     var t = document.createElement('div');
     t.className = 'rxp-toast rxp-integrity-warning';
     t.setAttribute('role', 'status');
-    t.textContent = 'XP was not awarded: please do genuine revision work. Random or rushed answers and starting/ending sessions just to farm XP are not acceptable.';
+    t.textContent = 'Taking a quick XP breather — answer a few real questions and it will pick back up.';
     document.body.appendChild(t);
-    setTimeout(function () { if (t.parentNode) t.parentNode.removeChild(t); }, 6500);
+    setTimeout(function () { if (t.parentNode) t.parentNode.removeChild(t); }, 5000);
   }
 
   /* ── Styles ─────────────────────────────────────────────────────────── */
@@ -87,8 +91,8 @@
       '.rxp-confetti{position:absolute;inset:0;pointer-events:none;overflow:hidden}',
       '.rxp-confetti i{position:absolute;top:-12px;width:8px;height:14px;border-radius:2px;animation:rxpFall 1.6s ease-in forwards}',
       '@keyframes rxpFall{to{transform:translateY(520px) rotate(540deg);opacity:0}}',
-      '.rxp-toast{position:fixed;left:50%;top:18px;z-index:2147483645;transform:translateX(-50%);padding:9px 16px;border-radius:999px;color:#fff;font:800 .85rem/1.2 var(--font-b,system-ui);background:linear-gradient(135deg,#f59e0b,#ef4444);box-shadow:0 10px 24px -8px rgba(239,68,68,.6);animation:rxpIn .35s ease both}',
-      '.rxp-integrity-warning{width:min(520px,calc(100vw - 32px));border-radius:16px;text-align:center}',
+      '.rxp-toast{position:fixed;left:50%;top:18px;z-index:2147483645;transform:translateX(-50%);padding:9px 18px;border-radius:999px;color:#3a3325;font:700 .84rem/1.3 var(--font-b,system-ui);background:linear-gradient(135deg,#fef3c7,#fde68a);border:1px solid rgba(120,90,0,.18);box-shadow:0 10px 26px -12px rgba(120,90,0,.4);max-width:calc(100vw - 32px);text-align:center;animation:rxpIn .35s ease both}',
+      '[data-theme="dark"] .rxp-toast{color:#fde68a;background:linear-gradient(135deg,#3a2f10,#4a3a12);border-color:rgba(253,230,138,.25)}',
       '@media (prefers-reduced-motion:reduce){.rxp-card,.rxp-rank,.rxp-pill,.rxp-row{animation:none!important;transition:none!important}.rxp-confetti{display:none}}',
     ].join('\n');
     (document.head || document.documentElement).appendChild(st);
@@ -140,12 +144,14 @@
         try { amount = Number(JSON.parse(init.body).amount) || 0; } catch (e) {}
         p.then(function (res) {
           if (!res || !res.ok || amount <= 0) return;
+          // Read the value the server actually gave back. It returns 0 when an
+          // award is held (rushed/random work, or too soon after the last one).
           if (amount >= 10) {
             res.clone().json().then(function (value) {
               var granted = Number(Array.isArray(value) ? value[0] : value);
               if (!Number.isFinite(granted) || granted <= 0) showIntegrityWarning();
-              else onAward(amount);
-            }, function () { onAward(amount); });
+              else onAward(granted);
+            }, function () {});
           } else onAward(amount);
         }, function () {});
       }

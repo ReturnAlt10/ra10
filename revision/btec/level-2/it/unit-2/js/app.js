@@ -958,9 +958,16 @@ function awardXP(amount, message) {
     },
     body: JSON.stringify({ amount })
   }).then(res => {
-    if (!res.ok) return;
-    incrementCounter('ra10_xp_today', Number(amount || 0));
-    showXPToast(message || ('+' + amount + ' XP'));
+    if (!res.ok) return null;
+    // Only celebrate what the server granted (it returns 0 for held awards).
+    return res.json().then(v => {
+      const g = Number(Array.isArray(v) ? v[0] : v);
+      const granted = Number.isFinite(g) ? g : Number(amount || 0);
+      if (granted > 0) {
+        incrementCounter('ra10_xp_today', granted);
+        showXPToast(message || ('+' + granted + ' XP'));
+      }
+    }, () => {});
   }).catch(() => {});
 }
 
