@@ -50,6 +50,49 @@ function shuffle(arr, rng) { arr = arr.slice(); for (let i = arr.length - 1; i >
 
 const SB_URL = 'https://tcrrgsylxbyyrmnouihl.supabase.co';
 const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRjcnJnc3lseGJ5eXJtbm91aWhsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4ODUyMTEsImV4cCI6MjA5MzQ2MTIxMX0.eOp6ma-mfgh8F20nM7E2OaBW28LlZlwuEEWr6k2zDWw';
+function jsAnswerCredibility(raw, q, automarkHost) {
+  const s = String(raw == null ? '' : raw).trim();
+  const marks = Number((q && q.marks) || 4);
+  if (s.length < 2) return { score: 0.6, reason: 'no-answer' };
+  if (/\b(ai|assistant|chatgpt|as an ai|copilot|here'?s a|overall this|mark scheme|markscheme)\b/i.test(s)) return { score: 0, reason: 'ai-style' };
+  if (/\b(lorem ipsum|dolor sit amet|hello world|test test|blah blah|ijustwantxp)\b/i.test(s)) return { score: 0, reason: 'filler' };
+  if (/(.)\1{3,}/i.test(s)) return { score: 0, reason: 'repeated' };
+  const letters = s.replace(/[^A-Za-z]/g, '');
+  const vocab = s.match(/[A-Za-z]{2,}/g) || [];
+  if (letters.length >= 6) {
+    const v = (letters.match(/[aeiou]/gi) || []).length / letters.length;
+    if (v < 0.08) return { score: 0, reason: 'no-vowels' };
+    if (v > (letters.length <= 40 ? 0.72 : 0.55)) return { score: 0, reason: 'vowel-spam' };
+    if (letters.length <= 40 && new Set(letters.toLowerCase()).size / letters.length < 0.35) return { score: 0, reason: 'gibberish' };
+  }
+  if (vocab.length >= 6) {
+    const uniq = new Set(vocab.map(function (w) { return w.toLowerCase(); }));
+    if (uniq.size / vocab.length < 0.45) return { score: 0, reason: 'repetitive' };
+  }
+  const coverage = jsMarkSchemeCoverage(s, q, automarkHost);
+  if (coverage >= 0.9 && vocab.length >= 12) return { score: 0, reason: 'copied-mark-scheme' };
+  if (coverage >= 0.7 && vocab.length >= 14) return { score: 0.5, reason: 'near-copy' };
+  const minChars = Math.max(8, Math.min(60, marks * 6));
+  if (s.length < minChars) return { score: 0.5, reason: 'very-short' };
+  return { score: 1, reason: 'ok' };
+}
+function jsTextTokens(t) {
+  return new Set((String(t || '').toLowerCase().match(/[a-z]{4,}/g) || []));
+}
+function jsMarkSchemeCoverage(answer, q, automarkHost) {
+  let ms = '';
+  try {
+    const node = (automarkHost && automarkHost.querySelector) ? automarkHost.querySelector('.practice-msbox, .ms-block') : null;
+    if (node) ms = node.textContent || '';
+  } catch (e) {}
+  if (!ms && q && q.mark_scheme) { try { ms = JSON.stringify(q.mark_scheme); } catch (e) {} }
+  const aT = jsTextTokens(answer);
+  const mT = jsTextTokens(ms);
+  if (!aT.size || mT.size < 8) return 0;
+  let hit = 0;
+  aT.forEach(function (w) { if (mT.has(w)) hit++; });
+  return hit / aT.size;
+}
 const DAILY_TASKS_KEY = 'ra10-daily-tasks-v2';
 const STREAK_DATES_KEY = 'ra10_streak_dates';
 const SESSION_TYPES = [
@@ -1663,7 +1706,9 @@ async function startPractice() {
     correct: 0,
     aimBreakdown: {},
     attemptedIds: new Set(),
-    scoreByQuestion: {}
+    scoreByQuestion: {},
+    creditTotal: 0,
+    qualityCredit: {}
   };
   practiceQueue = shuffle(pool);
   practiceIdx = 0;
@@ -1687,13 +1732,11 @@ function updatePracticeSessionFromUi(q, automarkHost) {
     const scoreNum = parseInt(automarkHost.querySelector('.value')?.textContent || '0', 10);
     const wasCorrect = !!ps.scoreByQuestion[qid];
     const nowCorrect = scoreNum >= Math.ceil(q.marks / 2);
-    if (!wasCorrect && nowCorrect) {
-      ps.correct++;
-      ps.aimBreakdown[aim].correct++;
-    } else if (wasCorrect && !nowCorrect) {
-      ps.correct = Math.max(0, ps.correct - 1);
-      ps.aimBreakdown[aim].correct = Math.max(0, ps.aimBreakdown[aim].correct - 1);
-    }
+    // AI-worthy answers earn full XP; gibberish or a copied mark scheme is discredited.
+    ps.qualityCredit = ps.qualityCredit || {};
+    ps.qualityCredit[qid] = jsAnswerCredibility((window._practiceSession && window._practiceSession._lastAnswer) || '', q, automarkHost).score;
+    if (!wasCorrect && nowCorrect) { ps.correct++; ps.aimBreakdown[aim].correct++; }
+    else if (wasCorrect && !nowCorrect) { ps.correct = Math.max(0, ps.correct - 1); ps.aimBreakdown[aim].correct = Math.max(0, ps.aimBreakdown[aim].correct - 1); }
     ps.scoreByQuestion[qid] = nowCorrect;
   }
 }
@@ -1708,7 +1751,13 @@ async function endPracticeSession() {
   // Completion XP only lands once a few questions have actually been answered.
   // Starting a session, marking one question and ending it should not pay out.
   const MIN_PRACTICE = 5;
-  const earned = practiceQ >= MIN_PRACTICE ? Math.min(practiceQ * 10, 50) : 0;
+  const _creditOf = ps.qualityCredit || {};
+  const _qs = Object.keys(_creditOf).map(function (k) { return Number(_creditOf[k]); });
+  const _qSum = _qs.reduce(function (a, b) { return a + b; }, 0);
+  const _qQuality = _qs.length ? (_qSum / _qs.length) : 1;
+  const _base = practiceQ >= MIN_PRACTICE ? Math.min(practiceQ * 10, 50) : 0;
+  const earned = _qQuality < 0.999 ? Math.round(_base * _qQuality) : _base;
+  const gated = _qQuality < 0.999 && _base > 0;
   await saveSession('practice_bus_u2', {
     aims: Object.keys(ps.aimBreakdown),
     total: ps.total,
@@ -1720,7 +1769,7 @@ async function endPracticeSession() {
     awardXP(earned, '+' + earned + ' XP - Practice done!');
   }
   window._practiceSession = null;
-  renderPracticeSummary({ answered: practiceQ, correct: ps.correct, earned: earned });
+  renderPracticeSummary({ answered: practiceQ, correct: ps.correct, earned: earned, gated: gated });
 }
 
 function renderPracticeSummary(sum) {
@@ -1738,6 +1787,7 @@ function renderPracticeSummary(sum) {
   card.appendChild(el('h3', null, 'Session complete'));
   card.appendChild(el('p', { class: 'muted' }, answered + (answered === 1 ? ' question answered' : ' questions answered') + ' \u00b7 ' + correct + ' correct (' + pct + '%)'));
   card.appendChild(el('p', { class: 'practice-summary-xp' }, earned > 0 ? ('+' + earned + ' XP added to your total') : 'Answer at least 5 questions in a session to earn session XP.'));
+  if (sum.gated) card.appendChild(el('p', { class: 'practice-summary-note' }, 'XP reduced: some answers were too short or did not reflect real working.'));
   const again = el('button', { class: 'btn primary', type: 'button' }, 'Practice again');
   again.addEventListener('click', () => startPractice());
   card.appendChild(again);
@@ -1845,6 +1895,8 @@ function renderPracticeCard() {
       } else {
         automarkHost.appendChild(el('p', { style: 'color:var(--color-error);' }, 'AI Examiner response was empty. Please try again.'));
       }
+      try { if (typeof answer === 'string' && answer && window._practiceSession) window._practiceSession._lastAnswer = answer; } catch (e) {}
+      try { if (mcChoice && mcChoice.value != null && window._practiceSession) window._practiceSession._lastAnswer = String(mcChoice.value); } catch (e) {}
       updatePracticeSessionFromUi(q, automarkHost);
       automarkHost.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     } catch (err) {
@@ -1875,6 +1927,8 @@ function renderPracticeCard() {
       if (!mcChoice.value) { alert('Pick an answer (A–D) first.'); return; }
       automarkHost.innerHTML = '';
       automarkHost.appendChild(buildMcResultUI(q, mcChoice.value));
+      try { if (typeof answer === 'string' && answer && window._practiceSession) window._practiceSession._lastAnswer = answer; } catch (e) {}
+      try { if (mcChoice && mcChoice.value != null && window._practiceSession) window._practiceSession._lastAnswer = String(mcChoice.value); } catch (e) {}
       updatePracticeSessionFromUi(q, automarkHost);
       automarkHost.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       return;
@@ -1894,7 +1948,9 @@ function renderPracticeCard() {
       jump.addEventListener('click', () => openRevisionGuideForQuestion(q));
       automarkHost.appendChild(el('div', { style: 'margin-top:10px;' }, jump));
     }
-    updatePracticeSessionFromUi(q, automarkHost);
+    try { if (typeof answer === 'string' && answer && window._practiceSession) window._practiceSession._lastAnswer = answer; } catch (e) {}
+      try { if (mcChoice && mcChoice.value != null && window._practiceSession) window._practiceSession._lastAnswer = String(mcChoice.value); } catch (e) {}
+      updatePracticeSessionFromUi(q, automarkHost);
     automarkHost.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     } finally {
       btnAutoMark.disabled = false;
@@ -3375,7 +3431,9 @@ function startWeakPractice(aims) {
     correct: 0,
     aimBreakdown: {},
     attemptedIds: new Set(),
-    scoreByQuestion: {}
+    scoreByQuestion: {},
+    creditTotal: 0,
+    qualityCredit: {}
   };
   practiceQueue = shuffle(pool);
   practiceIdx = 0;
@@ -3604,4 +3662,4 @@ let renderPapers = function () { const h = $('#papers-host'); if (h) h.innerHTML
 })();
 
 })();
-// CACHE: 3fbf459ee9
+// CACHE: 3811d26197

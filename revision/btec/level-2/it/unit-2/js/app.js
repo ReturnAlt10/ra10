@@ -48,6 +48,49 @@ let flashXpAwarded = false;
 
 const SB_URL = 'https://tcrrgsylxbyyrmnouihl.supabase.co';
 const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRjcnJnc3lseGJ5eXJtbm91aWhsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4ODUyMTEsImV4cCI6MjA5MzQ2MTIxMX0.eOp6ma-mfgh8F20nM7E2OaBW28LlZlwuEEWr6k2zDWw';
+function jsAnswerCredibility(raw, q, automarkHost) {
+  const s = String(raw == null ? '' : raw).trim();
+  const marks = Number((q && q.marks) || 4);
+  if (s.length < 2) return { score: 0.6, reason: 'no-answer' };
+  if (/\b(ai|assistant|chatgpt|as an ai|copilot|here'?s a|overall this|mark scheme|markscheme)\b/i.test(s)) return { score: 0, reason: 'ai-style' };
+  if (/\b(lorem ipsum|dolor sit amet|hello world|test test|blah blah|ijustwantxp)\b/i.test(s)) return { score: 0, reason: 'filler' };
+  if (/(.)\1{3,}/i.test(s)) return { score: 0, reason: 'repeated' };
+  const letters = s.replace(/[^A-Za-z]/g, '');
+  const vocab = s.match(/[A-Za-z]{2,}/g) || [];
+  if (letters.length >= 6) {
+    const v = (letters.match(/[aeiou]/gi) || []).length / letters.length;
+    if (v < 0.08) return { score: 0, reason: 'no-vowels' };
+    if (v > (letters.length <= 40 ? 0.72 : 0.55)) return { score: 0, reason: 'vowel-spam' };
+    if (letters.length <= 40 && new Set(letters.toLowerCase()).size / letters.length < 0.35) return { score: 0, reason: 'gibberish' };
+  }
+  if (vocab.length >= 6) {
+    const uniq = new Set(vocab.map(function (w) { return w.toLowerCase(); }));
+    if (uniq.size / vocab.length < 0.45) return { score: 0, reason: 'repetitive' };
+  }
+  const coverage = jsMarkSchemeCoverage(s, q, automarkHost);
+  if (coverage >= 0.9 && vocab.length >= 12) return { score: 0, reason: 'copied-mark-scheme' };
+  if (coverage >= 0.7 && vocab.length >= 14) return { score: 0.5, reason: 'near-copy' };
+  const minChars = Math.max(8, Math.min(60, marks * 6));
+  if (s.length < minChars) return { score: 0.5, reason: 'very-short' };
+  return { score: 1, reason: 'ok' };
+}
+function jsTextTokens(t) {
+  return new Set((String(t || '').toLowerCase().match(/[a-z]{4,}/g) || []));
+}
+function jsMarkSchemeCoverage(answer, q, automarkHost) {
+  let ms = '';
+  try {
+    const node = (automarkHost && automarkHost.querySelector) ? automarkHost.querySelector('.practice-msbox, .ms-block') : null;
+    if (node) ms = node.textContent || '';
+  } catch (e) {}
+  if (!ms && q && q.mark_scheme) { try { ms = JSON.stringify(q.mark_scheme); } catch (e) {} }
+  const aT = jsTextTokens(answer);
+  const mT = jsTextTokens(ms);
+  if (!aT.size || mT.size < 8) return 0;
+  let hit = 0;
+  aT.forEach(function (w) { if (mT.has(w)) hit++; });
+  return hit / aT.size;
+}
 const DAILY_TASKS_KEY = 'ra10-daily-tasks-v2';
 const STREAK_DATES_KEY = 'ra10_streak_dates';
 const SESSION_TYPES = [

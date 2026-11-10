@@ -2607,7 +2607,13 @@ main {
     padding: 12px;
   }
 }
-/* Practice session summary */
-.practice-summary{border:1px solid var(--line,#d9d5cc);border-radius:14px;padding:22px;background:var(--panel,#fff);text-align:center}
-.practice-summary h3{margin:0 0 6px}
-.practice-summary .practice-summary-xp{margin:10px 0 16px;font-weight:700}
+
+/* Practice session summary (dark-mode aware) */
+.practice-summary{border:1px solid var(--line,#e2e5df);border-radius:14px;padding:22px;background:var(--surface,#fff);color:var(--ink,#14201e);text-align:center}
+.practice-summary h3{margin:0 0 6px;color:var(--ink,#14201e)}
+.practice-summary .practice-summary-xp{margin:10px 0 16px;font-weight:700;color:var(--ink,#14201e)}
+.practice-summary .practice-summary-note{margin:0 0 16px;font-size:.9rem;color:#b45309!important}
+[data-theme="dark"] .practice-summary{border-color:var(--line,#2a3732);background:var(--surface,#18201d);color:var(--ink,#edf4f0)}
+[data-theme="dark"] .practice-summary h3{color:var(--ink,#edf4f0)}
+[data-theme="dark"] .practice-summary .practice-summary-xp{color:var(--ink,#edf4f0)}
+[data-theme="dark"] .practice-summary .practice-summary-note{color:#fbbf24!important}
