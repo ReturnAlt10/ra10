@@ -1718,10 +1718,30 @@ async function endPracticeSession() {
   });
   if (earned > 0) {
     awardXP(earned, '+' + earned + ' XP - Practice done!');
-  } else if (typeof showXPToast === "function") {
-    showXPToast('Answer ' + MIN_PRACTICE + ' questions to bank the session XP.');
   }
   window._practiceSession = null;
+  renderPracticeSummary({ answered: practiceQ, correct: ps.correct, earned: earned });
+}
+
+function renderPracticeSummary(sum) {
+  const wrap = $('#practice-card');
+  if (!wrap) return;
+  sum = sum || {};
+  const answered = Number(sum.answered || 0);
+  const correct = Number(sum.correct || 0);
+  const earned = Number(sum.earned || 0);
+  const pct = answered ? Math.round((correct / answered) * 100) : 0;
+  const prog = $('#practice-progress');
+  if (prog) prog.textContent = '';
+  wrap.innerHTML = '';
+  const card = el('div', { class: 'practice-summary' });
+  card.appendChild(el('h3', null, 'Session complete'));
+  card.appendChild(el('p', { class: 'muted' }, answered + (answered === 1 ? ' question answered' : ' questions answered') + ' \u00b7 ' + correct + ' correct (' + pct + '%)'));
+  card.appendChild(el('p', { class: 'practice-summary-xp' }, earned > 0 ? ('+' + earned + ' XP added to your total') : 'Answer at least 5 questions in a session to earn session XP.'));
+  const again = el('button', { class: 'btn primary', type: 'button' }, 'Practice again');
+  again.addEventListener('click', () => startPractice());
+  card.appendChild(again);
+  wrap.appendChild(card);
 }
 
 function renderPracticeCard() {
@@ -3584,3 +3604,4 @@ let renderPapers = function () { const h = $('#papers-host'); if (h) h.innerHTML
 })();
 
 })();
+// CACHE: 7e2b24f406

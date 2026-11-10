@@ -2730,3 +2730,7 @@ main {
    toolbar pins to the very top of the frame and the question list just below it. */
 html.ux-embedded .pp-toolbar { top: 10px; }
 html.ux-embedded .pp-side { top: 92px; }
+/* Practice session summary */
+.practice-summary{border:1px solid var(--line,#d9d5cc);border-radius:14px;padding:22px;background:var(--panel,#fff);text-align:center}
+.practice-summary h3{margin:0 0 6px}
+.practice-summary .practice-summary-xp{margin:10px 0 16px;font-weight:700}

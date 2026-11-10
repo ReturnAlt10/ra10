@@ -2484,4 +2484,7 @@ main {
 .trait-list { margin: 6px 0 0; padding-left: 18px; font-size: 0.82rem; }
 .set-task-score { font-weight: 800; color: var(--accent); }
 @media (max-width: 640px) { .activity-card { padding: 12px; } }
-
+/* Practice session summary */
+.practice-summary{border:1px solid var(--line,#d9d5cc);border-radius:14px;padding:22px;background:var(--panel,#fff);text-align:center}
+.practice-summary h3{margin:0 0 6px}
+.practice-summary .practice-summary-xp{margin:10px 0 16px;font-weight:700}

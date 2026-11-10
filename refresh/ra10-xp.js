@@ -135,13 +135,26 @@
 
   /* ── Award hook ─────────────────────────────────────────────────────── */
   var origFetch = window.fetch ? window.fetch.bind(window) : null;
+  var lastSessionAwardAt = 0;       // when a completion-sized award was last granted
+  var CLIENT_COOLDOWN_MS = 8000;    // rapid start/end session farming guard (pre-server)
   if (origFetch) {
     window.fetch = function (input, init) {
       var url = typeof input === 'string' ? input : (input && input.url) || '';
+      var isXpCall = /\/rest\/v1\/rpc\/increment_xp(\?|$)/.test(url) && init && init.body && !window.__rxpInternal;
+      var amount = 0;
+      if (isXpCall) { try { amount = Number(JSON.parse(init.body).amount) || 0; } catch (e) {} }
+
+      // Client-side anti-farm: if a completion-sized award landed a moment ago,
+      // don't send the next one. Stops the start/practice/end loop immediately —
+      // even before xp-integrity.sql is applied — and never affects small
+      // per-answer awards (those are < 10 and pass straight through).
+      if (isXpCall && amount >= 10 && Date.now() - lastSessionAwardAt < CLIENT_COOLDOWN_MS) {
+        showIntegrityWarning();
+        return Promise.resolve(new Response('0', { status: 200, headers: { 'Content-Type': 'application/json' } }));
+      }
+
       var p = origFetch(input, init);
-      if (/\/rest\/v1\/rpc\/increment_xp(\?|$)/.test(url) && init && init.body && !window.__rxpInternal) {
-        var amount = 0;
-        try { amount = Number(JSON.parse(init.body).amount) || 0; } catch (e) {}
+      if (isXpCall) {
         p.then(function (res) {
           if (!res || !res.ok || amount <= 0) return;
           // Read the value the server actually gave back. It returns 0 when an
@@ -150,7 +163,7 @@
             res.clone().json().then(function (value) {
               var granted = Number(Array.isArray(value) ? value[0] : value);
               if (!Number.isFinite(granted) || granted <= 0) showIntegrityWarning();
-              else onAward(granted);
+              else { lastSessionAwardAt = Date.now(); onAward(granted); }
             }, function () {});
           } else onAward(amount);
         }, function () {});

@@ -2519,3 +2519,7 @@ main {
 .aq-verbs div { padding: 12px 14px; border-radius: 13px; border: 1px solid var(--line); font-size: .9rem; line-height: 1.5; }
 .aq-verbs b { display: block; margin-bottom: 3px; }
 @media (max-width: 860px) { .aq-grid { grid-template-columns: 1fr; } }
+/* Practice session summary */
+.practice-summary{border:1px solid var(--line,#d9d5cc);border-radius:14px;padding:22px;background:var(--panel,#fff);text-align:center}
+.practice-summary h3{margin:0 0 6px}
+.practice-summary .practice-summary-xp{margin:10px 0 16px;font-weight:700}
