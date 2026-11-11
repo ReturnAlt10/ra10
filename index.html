@@ -318,6 +318,49 @@
   .hm-float-mark{display:none}
 }
 @media (prefers-reduced-motion:reduce){.hm-float{animation:none}.hm-tile:hover{transform:none}}
+
+/* Timeline & Roadmap */
+.hm-timeline-sec{position:relative}
+.hm-timeline-switch{display:inline-flex;align-items:center;gap:6px;padding:4px;border-radius:999px;background:var(--hm-paper);box-shadow:0 0 0 1px var(--hm-line);margin-bottom:2rem}
+.hm-timeline-switch button{display:inline-flex;align-items:center;gap:8px;padding:8px 18px;border-radius:999px;border:0;background:transparent;color:var(--hm-ink-2);font:600 .85rem/1 var(--font-b);cursor:pointer;transition:background .2s,color .2s,box-shadow .2s}
+.hm-timeline-switch button.on{background:var(--hm-ink);color:var(--hm-paper);box-shadow:0 4px 14px -6px rgba(22,19,15,.5)}
+.hm-timeline-switch button .count{padding:2px 7px;border-radius:999px;font-size:.72rem;background:rgba(255,255,255,.2)}
+.hm-timeline-switch button:not(.on) .count{background:color-mix(in srgb,var(--hm-ink) 8%,transparent);color:var(--hm-ink)}
+
+.hm-timeline{position:relative;display:grid;grid-template-columns:1fr;gap:20px;padding:8px 0 0}
+.hm-timeline::before{content:"";position:absolute;left:23px;top:24px;bottom:24px;width:2px;background:linear-gradient(180deg,var(--hm-red),var(--hm-line) 85%)}
+
+.hm-timeline-node{position:relative;display:grid;grid-template-columns:48px minmax(0,1fr);gap:18px;align-items:start}
+.hm-timeline-marker{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;background:var(--hm-paper);box-shadow:0 0 0 2px var(--hm-line),0 6px 16px -6px rgba(22,19,15,.25);font-size:1.1rem;z-index:1;transition:transform .2s,box-shadow .2s}
+.hm-timeline-node:hover .hm-timeline-marker{transform:scale(1.08);box-shadow:0 0 0 2px var(--hm-red),0 8px 20px -6px rgba(210,0,0,.35)}
+.hm-timeline-node.done .hm-timeline-marker{box-shadow:0 0 0 2px var(--hm-red);background:linear-gradient(135deg,var(--hm-red-soft),var(--hm-paper))}
+.hm-timeline-node.next .hm-timeline-marker{box-shadow:0 0 0 2px #2563eb;background:linear-gradient(135deg,#e0edff,var(--hm-paper))}
+.hm-timeline-node.plan .hm-timeline-marker{box-shadow:0 0 0 2px var(--hm-line);background:var(--hm-paper);opacity:.9}
+
+.hm-timeline-card{position:relative;padding:22px 24px;border-radius:var(--hm-r);background:var(--hm-paper);box-shadow:0 0 0 1px var(--hm-line);transition:transform .2s,box-shadow .2s}
+.hm-timeline-card:hover{transform:translateY(-2px);box-shadow:0 0 0 1px var(--hm-line),0 20px 36px -24px rgba(22,19,15,.35)}
+.hm-timeline-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:8px;flex-wrap:wrap}
+.hm-timeline-tag{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:999px;font:700 .72rem/1.2 var(--font-b);letter-spacing:.04em;text-transform:uppercase}
+.hm-timeline-tag.done{background:var(--hm-red-soft);color:var(--hm-red)}
+.hm-timeline-tag.now{background:#dcfce7;color:#15803d}
+.hm-timeline-tag.plan{background:color-mix(in srgb,var(--hm-ink) 7%,transparent);color:var(--hm-ink-2)}
+.hm-timeline-tag.future{background:#eff6ff;color:#1d4ed8}
+.hm-timeline-date{font:600 .85rem var(--font-b);color:var(--hm-ink-2)}
+
+.hm-timeline-card h3{margin:0 0 6px;font-size:1.22rem!important;font-weight:700;letter-spacing:-.02em}
+.hm-timeline-card p{margin:0 0 14px;color:var(--hm-ink-2);font-size:.95rem;line-height:1.55}
+.hm-timeline-chips{display:flex;flex-wrap:wrap;gap:6px;list-style:none;margin:0;padding:0}
+.hm-timeline-chips li{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:8px;background:color-mix(in srgb,var(--hm-ink) 5%,transparent);color:var(--hm-ink);font:500 .78rem var(--font-b)}
+.hm-timeline-chips li.hl{background:color-mix(in srgb,var(--hm-red) 10%,transparent);color:var(--hm-red);font-weight:600}
+.hm-timeline-chips li.hl-blue{background:color-mix(in srgb,#2563eb 10%,transparent);color:#2563eb;font-weight:600}
+
+@media (max-width:640px){
+  .hm-timeline::before{left:17px}
+  .hm-timeline-node{grid-template-columns:36px minmax(0,1fr);gap:12px}
+  .hm-timeline-marker{width:36px;height:36px;font-size:.9rem}
+  .hm-timeline-card{padding:16px 18px}
+  .hm-timeline-card h3{font-size:1.05rem!important}
+}
 </style>
 <style id="sd-style">
 /* ===== Signed-in landing dashboard ===== */
@@ -866,6 +909,7 @@ body.home-signed-in #p-home .hx-home > :not(#signed-in-dashboard){display:none !
                 <button type="button" onclick="go('/leaderboard')"><span class="sd-ql trophy">ICON_trophy</span><b>Leaderboard</b><small>Weekly race</small></button>
                 <button type="button" onclick="go('/community')"><span class="sd-ql people">ICON_people</span><b>Community</b><small>Shared study apps</small></button>
                 <button type="button" onclick="go('/revision')"><span class="sd-ql books">ICON_books</span><b>All revision</b><small>Browse every course</small></button>
+                <button type="button" onclick="document.getElementById('roadmap')?.scrollIntoView({behavior:'smooth'})"><span class="sd-ql roadmap">🗺️</span><b>Roadmap</b><small>Where we're heading</small></button>
               </div>
             </section>
           </aside>
@@ -880,6 +924,7 @@ body.home-signed-in #p-home .hx-home > :not(#signed-in-dashboard){display:none !
           <div class="hm-actions">
             <button class="hm-btn hm-btn-primary" type="button" onclick="go('/revision')">Start revising <span aria-hidden="true">→</span></button>
             <button class="hm-btn hm-btn-quiet" type="button" onclick="go('/leaderboard')">View the leaderboard</button>
+            <button class="hm-btn hm-btn-quiet" type="button" onclick="document.getElementById('roadmap')?.scrollIntoView({behavior:'smooth'})">Roadmap</button>
           </div>
           <ul class="hm-boards" aria-label="Exam boards covered">
             <li>Pearson BTEC</li><li>AQA A-Level</li><li>Edexcel A-Level</li><li>Level 2 &amp; Level 3</li>
@@ -1037,6 +1082,197 @@ body.home-signed-in #p-home .hx-home > :not(#signed-in-dashboard){display:none !
               });
             }, { threshold: 0.4 }).observe(tour);
           }
+        });
+      })();
+      </script>
+
+      <section class="hm-section hm-timeline-sec" id="roadmap" aria-labelledby="hm-roadmap-title">
+        <div class="hm-head hm-head-stack">
+          <span class="hm-tile-label">Our Journey</span>
+          <h2 id="hm-roadmap-title">Where we've been, and where we're heading</h2>
+          <p>From pioneering the very first BTEC AAQ revision tools to expanding across A-Levels, GCSEs, Study Hub and upcoming V-Levels — track our public journey and future roadmap.</p>
+        </div>
+
+        <div class="hm-timeline-switch" role="tablist" aria-label="Roadmap view filter">
+          <button type="button" class="on" role="tab" aria-selected="true" data-filter="all">All milestones <span class="count">8</span></button>
+          <button type="button" role="tab" aria-selected="false" data-filter="shipped">Shipped so far <span class="count">5</span></button>
+          <button type="button" role="tab" aria-selected="false" data-filter="upcoming">Coming up <span class="count">3</span></button>
+        </div>
+
+        <div class="hm-timeline" id="hm-timeline-list">
+          <!-- May 2026 -->
+          <article class="hm-timeline-node done" data-status="shipped">
+            <div class="hm-timeline-marker" aria-hidden="true">🚀</div>
+            <div class="hm-timeline-card">
+              <div class="hm-timeline-top">
+                <span class="hm-timeline-tag done">Shipped · Founding</span>
+                <span class="hm-timeline-date">May 2026</span>
+              </div>
+              <h3>RA10 Launches with BTEC IT AAQ</h3>
+              <p>Created RA10 to solve a real student problem: being one of the first platforms in the UK to recognise the new BTEC AAQ specifications and build dedicated, syllabus-accurate revision resources from day one.</p>
+              <ul class="hm-timeline-chips">
+                <li class="hl">Platform Launch</li>
+                <li>BTEC IT AAQ Unit 1</li>
+                <li>First-to-market AAQ support</li>
+              </ul>
+            </div>
+          </article>
+
+          <!-- June 2026 -->
+          <article class="hm-timeline-node done" data-status="shipped">
+            <div class="hm-timeline-marker" aria-hidden="true">🤖</div>
+            <div class="hm-timeline-card">
+              <div class="hm-timeline-top">
+                <span class="hm-timeline-tag done">Shipped</span>
+                <span class="hm-timeline-date">June 2026</span>
+              </div>
+              <h3>AI Examiner &amp; Early Subject Expansion</h3>
+              <p>Introduced our proprietary AI Examiner and active improvement tools to evaluate essay answers against official mark schemes. Expanded coverage across BTEC Business Unit 2, IT Level 2 Unit 2, and BTEC Level 3 Sport Unit 1.</p>
+              <ul class="hm-timeline-chips">
+                <li class="hl">AI Examiner v1</li>
+                <li>AI Improvement Suggestions</li>
+                <li>BTEC Business Unit 2</li>
+                <li>BTEC IT L2 Unit 2</li>
+                <li>BTEC Sport Unit 1</li>
+              </ul>
+            </div>
+          </article>
+
+          <!-- July - August 2026 -->
+          <article class="hm-timeline-node done" data-status="shipped">
+            <div class="hm-timeline-marker" aria-hidden="true">🏆</div>
+            <div class="hm-timeline-card">
+              <div class="hm-timeline-top">
+                <span class="hm-timeline-tag done">Shipped</span>
+                <span class="hm-timeline-date">July – August 2026</span>
+              </div>
+              <h3>Gamification, Community &amp; Tool Upgrades</h3>
+              <p>Rolled out the weekly competitive leaderboard, customizable learner profiles, community hubs, and deep performance overhauls to core revision tools including smart flashcards and interactive visual study guides.</p>
+              <ul class="hm-timeline-chips">
+                <li class="hl">Weekly Leaderboards &amp; XP</li>
+                <li>Profile Customisation</li>
+                <li>Community Tools</li>
+                <li>Upgraded Flashcards &amp; Guides</li>
+              </ul>
+            </div>
+          </article>
+
+          <!-- September 2026 -->
+          <article class="hm-timeline-node done" data-status="shipped">
+            <div class="hm-timeline-marker" aria-hidden="true">🎓</div>
+            <div class="hm-timeline-card">
+              <div class="hm-timeline-top">
+                <span class="hm-timeline-tag done">Shipped</span>
+                <span class="hm-timeline-date">September 2026</span>
+              </div>
+              <h3>First A-Level &amp; Higher-Unit AAQs</h3>
+              <p>Launched our very first A-Level course with AQA A-Level Business. Expanded BTEC AAQ into advanced units: IT Units 2, 3, and 4, plus Business Units 2, 6, and 7. Upgraded the AI Examiner with personalized revision recommendation models.</p>
+              <ul class="hm-timeline-chips">
+                <li class="hl">AQA A-Level Business (First A-Level)</li>
+                <li>BTEC IT AAQ Units 2, 3 &amp; 4</li>
+                <li>BTEC Business Units 6 &amp; 7</li>
+                <li>AI Recommendations Engine</li>
+              </ul>
+            </div>
+          </article>
+
+          <!-- October - November 2026 -->
+          <article class="hm-timeline-node done" data-status="shipped">
+            <div class="hm-timeline-marker" aria-hidden="true">✨</div>
+            <div class="hm-timeline-card">
+              <div class="hm-timeline-top">
+                <span class="hm-timeline-tag now">Live Now · November 2026</span>
+                <span class="hm-timeline-date">Oct – Nov 2026</span>
+              </div>
+              <h3>All BTEC AAQs, Study Hub, Real Exam Papers &amp; A-Level Growth</h3>
+              <p>Achieved full coverage of every single BTEC Level 3 AAQ subject. Shipped the authentic Past Paper &amp; RA10 Set Paper simulator with instant feedback, the flagship Study Hub AI daily tutor, and welcomed AQA Psychology and Edexcel Business to A-Levels.</p>
+              <ul class="hm-timeline-chips">
+                <li class="hl">Every Single BTEC L3 AAQ Subject</li>
+                <li class="hl-blue">Study Hub AI Lessons</li>
+                <li>Exam &amp; RA10 Practice Papers</li>
+                <li>AQA A-Level Psychology</li>
+                <li>Edexcel A-Level Business</li>
+              </ul>
+            </div>
+          </article>
+
+          <!-- Next 1-2 Months (Dec 2026 - Jan 2027) -->
+          <article class="hm-timeline-node next" data-status="upcoming">
+            <div class="hm-timeline-marker" aria-hidden="true">⚡</div>
+            <div class="hm-timeline-card">
+              <div class="hm-timeline-top">
+                <span class="hm-timeline-tag future">Next 1–2 Months · Near-term</span>
+                <span class="hm-timeline-date">Dec 2026 – Jan 2027</span>
+              </div>
+              <h3>First GCSE Subjects: Business &amp; Computer Science</h3>
+              <p>Bringing RA10's signature AI marking, exam question simulators and bite-sized learning to GCSE learners. Rolling out our first GCSE courses — Business and Computer Science — followed closely by other high-demand GCSE subjects.</p>
+              <ul class="hm-timeline-chips">
+                <li class="hl-blue">GCSE Business (First GCSE)</li>
+                <li class="hl-blue">GCSE Computer Science</li>
+                <li>More popular GCSEs on the way</li>
+              </ul>
+            </div>
+          </article>
+
+          <!-- Next 6 Months (Spring - Summer 2027) -->
+          <article class="hm-timeline-node plan" data-status="upcoming">
+            <div class="hm-timeline-marker" aria-hidden="true">📚</div>
+            <div class="hm-timeline-card">
+              <div class="hm-timeline-top">
+                <span class="hm-timeline-tag plan">Next 6 Months · Spring – Summer 2027</span>
+                <span class="hm-timeline-date">Feb – July 2027</span>
+              </div>
+              <h3>Major A-Level Expansion: 6 New Subjects</h3>
+              <p>Rolling out an ambitious, phased release of six high-demand A-Level subjects with full syllabus coverage, past papers and AI Examiner rubrics: Biology, Mathematics, Law, Politics, History, and French.</p>
+              <ul class="hm-timeline-chips">
+                <li>A-Level Biology (Feb–Mar)</li>
+                <li>A-Level Mathematics (Mar–Apr)</li>
+                <li>A-Level Law &amp; Politics (Apr–May)</li>
+                <li>A-Level History &amp; French (May–June)</li>
+              </ul>
+            </div>
+          </article>
+
+          <!-- Future: V-Level Pioneer -->
+          <article class="hm-timeline-node plan" data-status="upcoming">
+            <div class="hm-timeline-marker" aria-hidden="true">🏆</div>
+            <div class="hm-timeline-card">
+              <div class="hm-timeline-top">
+                <span class="hm-timeline-tag plan">Future Pioneer · As Specs Release</span>
+                <span class="hm-timeline-date">2027 &amp; Beyond</span>
+              </div>
+              <h3>First V-Level Ready Courses</h3>
+              <p>As the new vocational V-Level qualifications replace certain BTEC AAQ and single qualifications across England, RA10 will pioneer V-Level revision from day one — giving students and teachers dedicated curriculum resources, practice papers and AI tools the moment specifications drop.</p>
+              <ul class="hm-timeline-chips">
+                <li class="hl">Day-One V-Level Support</li>
+                <li>Dedicated Teacher &amp; School Tools</li>
+                <li>Pioneering New Vocational Standards</li>
+              </ul>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <script>
+      (function () {
+        var sec = document.querySelector('.hm-timeline-sec');
+        if (!sec) return;
+        var buttons = sec.querySelectorAll('.hm-timeline-switch button');
+        var nodes = sec.querySelectorAll('.hm-timeline-node');
+        buttons.forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            buttons.forEach(function (b) { b.classList.remove('on'); b.setAttribute('aria-selected', 'false'); });
+            btn.classList.add('on');
+            btn.setAttribute('aria-selected', 'true');
+            var f = btn.dataset.filter;
+            nodes.forEach(function (node) {
+              if (f === 'all' || node.dataset.status === f) {
+                node.style.display = '';
+              } else {
+                node.style.display = 'none';
+              }
+            });
+          });
         });
       })();
       </script>
@@ -4384,6 +4620,7 @@ function bindContactModal() {
       <span class="footer-copy">&copy; 2026 RA10 &middot; Built for revision, tools and more. Not affiliated with Pearson, AQA or OCR.</span>
     </div>
     <nav class="footer-legal" aria-label="Legal and accessibility">
+      <a href="javascript:void(0)" onclick="go('/');setTimeout(function(){document.getElementById('roadmap')?.scrollIntoView({behavior:'smooth'})},120)">Roadmap</a>
       <a href="legal/terms.html">Terms of Service</a>
       <a href="legal/privacy.html">Privacy Policy</a>
       <a href="legal/cookies.html">Cookies</a>
