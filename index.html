@@ -75,7 +75,7 @@
 (function(){
   var isFile = location.protocol === 'file:';
   var isLocalHost = location.hostname === '127.0.0.1' || location.hostname === 'localhost';
-  var SDK_V = '?v=20261112';
+  var SDK_V = '?v=20261113';
   var candidates = isFile
     ? ['file:///C:/Users/mistr/Downloads/ra10/ra10-sdk.js' + SDK_V, 'https://ra10.co.uk/ra10-sdk.js' + SDK_V]
     : (isLocalHost
@@ -326,6 +326,7 @@
 .hm-timeline-switch button.on{background:var(--hm-ink);color:var(--hm-paper);box-shadow:0 4px 14px -6px rgba(22,19,15,.5)}
 .hm-timeline-switch button .count{padding:2px 7px;border-radius:999px;font-size:.72rem;background:rgba(255,255,255,.2)}
 .hm-timeline-switch button:not(.on) .count{background:color-mix(in srgb,var(--hm-ink) 8%,transparent);color:var(--hm-ink)}
+@media (max-width:560px){.hm-timeline-switch{display:flex;max-width:100%;gap:2px}.hm-timeline-switch button{flex:1 1 0;min-width:0;justify-content:center;text-align:center;padding:9px 6px;gap:6px;font-size:.8rem;white-space:nowrap}.hm-timeline-switch button .count{flex:none}.hm-ts-long{display:none}}
 
 .hm-timeline{position:relative;display:grid;grid-template-columns:1fr;gap:20px;padding:8px 0 0}
 .hm-timeline::before{content:"";position:absolute;left:23px;top:24px;bottom:24px;width:2px;background:linear-gradient(180deg,var(--hm-red),var(--hm-line) 85%)}
@@ -1094,8 +1095,8 @@ body.home-signed-in #p-home .hx-home > :not(#signed-in-dashboard){display:none !
         </div>
 
         <div class="hm-timeline-switch" role="tablist" aria-label="Roadmap view filter">
-          <button type="button" class="on" role="tab" aria-selected="true" data-filter="all">All milestones <span class="count">8</span></button>
-          <button type="button" role="tab" aria-selected="false" data-filter="shipped">Shipped so far <span class="count">5</span></button>
+          <button type="button" class="on" role="tab" aria-selected="true" data-filter="all">All<span class="hm-ts-long"> milestones</span> <span class="count">8</span></button>
+          <button type="button" role="tab" aria-selected="false" data-filter="shipped">Shipped<span class="hm-ts-long"> so far</span> <span class="count">5</span></button>
           <button type="button" role="tab" aria-selected="false" data-filter="upcoming">Coming up <span class="count">3</span></button>
         </div>
 

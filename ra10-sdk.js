@@ -2119,6 +2119,21 @@ html[data-theme="dark"] .ra10u-root{--u-bg:#1c1b19;--u-card:#232220;--u-text:#e7
 .ra10u-pill.unl{background:var(--u-ext-bg);color:var(--u-ext-text)}
 .ra10u-card .ra10u-meter{background:transparent;border:0;padding:10px 0 0;border-radius:0}
 .ra10u-card .ra10u-meters{margin-top:6px;gap:4px}
+.ra10u-nav{position:relative;flex:0 0 auto;width:36px;height:36px;display:inline-grid;place-items:center;padding:0;margin:0;border:0;border-radius:var(--radius-md,10px);background:transparent;color:var(--u-text);cursor:pointer;--u-arc:var(--u-text);-webkit-tap-highlight-color:transparent}
+.ra10u-nav[hidden]{display:none!important}
+.ra10u-nav:hover{background:var(--u-track)}
+.ra10u-nav:focus-visible{outline:2px solid var(--u-full);outline-offset:2px}
+.ra10u-nav svg,.ra10u-nav-num{grid-area:1/1}
+.ra10u-nav svg{display:block}
+.ra10u-nav-track{fill:none;stroke:var(--u-track);stroke-width:3}
+.ra10u-nav-arc{fill:none;stroke:var(--u-arc);stroke-width:3;stroke-linecap:round;transition:stroke-dashoffset .6s cubic-bezier(.16,1,.3,1),stroke .3s}
+.ra10u-nav[data-state="low"]{--u-arc:var(--u-warn)}
+.ra10u-nav[data-state="full"]{--u-arc:var(--u-full)}
+.ra10u-nav-num{font:700 10.5px/1 "DM Sans",system-ui,sans-serif;font-variant-numeric:tabular-nums;letter-spacing:-.01em;color:var(--u-text)}
+.ra10u-nav-num.sm{font-size:9px;letter-spacing:-.03em}
+.ra10u-nav[data-state="full"] .ra10u-nav-num{color:var(--u-full)}
+@media screen and (max-width:840px){.ra10u-nav.desk{display:none!important}}
+.mobile-top-nav .ra10u-nav.mob{width:34px;height:34px}
 @keyframes ra10uFade{from{opacity:0}to{opacity:1}}
 @keyframes ra10uRise{from{opacity:0;transform:translate(var(--u-tx,0),12px)}to{opacity:1;transform:translate(var(--u-tx,0),0)}}
 .ra10u-toast{--u-tx:-50%}
@@ -2128,7 +2143,7 @@ html[data-theme="dark"] .ra10u-root{--u-bg:#1c1b19;--u-card:#232220;--u-text:#e7
   .ra10u-title{font-size:1.4rem}
   .ra10u-toast{--u-tx:0;left:12px;right:12px;transform:none;max-width:none;justify-content:space-between;border-radius:16px;bottom:calc(76px + env(safe-area-inset-bottom,0px))}
 }
-@media (prefers-reduced-motion:reduce){.ra10u-overlay,.ra10u-sheet,.ra10u-toast{animation:none}.ra10u-bar i{transition:none}}`;
+@media (prefers-reduced-motion:reduce){.ra10u-overlay,.ra10u-sheet,.ra10u-toast{animation:none}.ra10u-bar i,.ra10u-nav-arc{transition:none}}`;
     const style = document.createElement('style');
     style.id = USAGE_STYLE_ID;
     style.textContent = css;
@@ -2190,11 +2205,14 @@ html[data-theme="dark"] .ra10u-root{--u-bg:#1c1b19;--u-card:#232220;--u-text:#e7
     root.setAttribute('role', 'dialog');
     root.setAttribute('aria-modal', 'true');
     root.setAttribute('aria-labelledby', 'ra10u-title');
+    root.setAttribute('data-u-mode', mode);
+    const opener = document.activeElement;
     root.innerHTML =
       '<div class="ra10u-sheet">' +
         '<div class="ra10u-head">' +
           '<span class="ra10u-ico' + (mode === 'limit' ? '' : ' ok') + '">' + USAGE_ICON_GAUGE + '</span>' +
-          '<div><h2 class="ra10u-title" id="ra10u-title">' + _usageEsc(title) + '</h2><p class="ra10u-sub">' + _usageEsc(sub) + '</p></div>' +
+          '<div><h2 class="ra10u-title" id="ra10u-title">' + _usageEsc(title) + '</h2><p class="ra10u-sub">' + _usageEsc(sub) + '</p>' +
+            (mode === 'info' ? '<span class="ra10u-pill' + (u.unlimited ? ' unl' : '') + '" style="margin-top:8px">' + _usageEsc(_usagePlanLabel(u)) + '</span>' : '') + '</div>' +
           '<button type="button" class="ra10u-x" data-u-close aria-label="Close">✕</button>' +
         '</div>' +
         (u.unlimited ? '' :
@@ -2209,6 +2227,7 @@ html[data-theme="dark"] .ra10u-root{--u-bg:#1c1b19;--u-card:#232220;--u-text:#e7
     const close = function () {
       document.removeEventListener('keydown', onKey, true);
       root.remove();
+      if (opener && opener.focus && document.contains(opener)) { try { opener.focus(); } catch (e) {} }
     };
     const onKey = function (e) { if (e.key === 'Escape') { e.preventDefault(); close(); } };
     root.addEventListener('click', function (e) {
@@ -2274,6 +2293,133 @@ html[data-theme="dark"] .ra10u-root{--u-bg:#1c1b19;--u-card:#232220;--u-text:#e7
     getAiUsage({ force: true }).then(paint);
     return function () { off('usagechange', paint); };
   }
+
+  // Navbar usage ring, next to the avatar. Only signed-in accounts with limits see it;
+  // Premium and EDU (unlimited) never do. Clicking it opens the detailed usage popup.
+  const USAGE_NAV_CLASS = 'ra10u-nav';
+  const USAGE_NAV_R = 12;
+  const USAGE_NAV_C = 2 * Math.PI * USAGE_NAV_R;
+  let _usageNavStarted = false;
+
+  // The ring shows how many marks can be used right now: the window with fewest left (hour wins a tie).
+  function _usageBinding(u) {
+    let best = null;
+    ['hour', 'day'].forEach(function (k) {
+      const w = u && u[k];
+      if (!w) return;
+      const limit = Math.max(1, Number(w.limit) || 1);
+      const left = Math.max(0, limit - (Number(w.used) || 0));
+      const frac = left / limit;
+      if (!best || left < best.left) {
+        best = { key: k, left: left, limit: limit, frac: frac };
+      }
+    });
+    return best;
+  }
+
+  function _usageNavPaint() {
+    if (typeof document === 'undefined') return;
+    const btns = document.querySelectorAll('.' + USAGE_NAV_CLASS);
+    if (!btns.length) return;
+    const u = _usage;
+    const b = (isLoggedIn() && u && !u.unlimited && u.plan !== 'none') ? _usageBinding(u) : null;
+    btns.forEach(function (btn) {
+      btn.hidden = !b;
+      if (!b) return;
+      const threshold = Math.max(2, Math.ceil(b.limit * 0.2));
+      btn.setAttribute('data-state', b.left === 0 ? 'full' : b.left <= threshold ? 'low' : 'ok');
+      const arc = btn.querySelector('.ra10u-nav-arc');
+      if (arc) arc.style.strokeDashoffset = (USAGE_NAV_C * (1 - b.frac)).toFixed(2);
+      const num = btn.querySelector('.ra10u-nav-num');
+      if (num) {
+        num.textContent = String(b.left);
+        num.classList.toggle('sm', b.left >= 100);
+      }
+      const label = (u.label || 'AI Examiner') + ': ' + b.left + ' of ' + b.limit +
+        (b.limit === 1 ? ' mark' : ' marks') + ' left ' + (b.key === 'hour' ? 'this hour' : 'today');
+      btn.title = label;
+      btn.setAttribute('aria-label', label + '. Show usage details');
+    });
+  }
+
+  function _usageNavOpen() {
+    if (!_usage) return;
+    showUsageLimit(_usage, { mode: 'info' });
+    // Refresh in the background and update the open popup's meters in place.
+    getAiUsage({ force: true }).then(function (u) {
+      const sheet = document.querySelector('.ra10u-overlay[data-u-mode="info"]');
+      const meters = sheet && sheet.querySelector('.ra10u-meters');
+      if (u && meters && !u.unlimited) {
+        meters.innerHTML = _usageMeterHtml('This hour', u.hour, 'hour') + _usageMeterHtml('Today', u.day, '24 hours');
+      }
+    });
+  }
+
+  function _usageNavMake(where) {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'ra10u-root ' + USAGE_NAV_CLASS + ' ' + where;
+    btn.hidden = true;
+    btn.setAttribute('aria-haspopup', 'dialog');
+    btn.innerHTML =
+      '<svg viewBox="0 0 32 32" width="30" height="30" aria-hidden="true" focusable="false">' +
+        '<circle class="ra10u-nav-track" cx="16" cy="16" r="' + USAGE_NAV_R + '"/>' +
+        '<circle class="ra10u-nav-arc" cx="16" cy="16" r="' + USAGE_NAV_R + '" transform="rotate(-90 16 16)" ' +
+          'stroke-dasharray="' + USAGE_NAV_C.toFixed(2) + '" stroke-dashoffset="' + USAGE_NAV_C.toFixed(2) + '"/>' +
+      '</svg><span class="ra10u-nav-num" aria-hidden="true"></span>';
+    btn.addEventListener('click', function (e) { e.stopPropagation(); _usageNavOpen(); });
+    return btn;
+  }
+
+  // Inserts the ring before the avatar (desktop) and before the theme toggle (phone top bar).
+  // Returns true once the desktop navbar has been found.
+  function _usageNavMount() {
+    const wrap = document.getElementById('nav-user-wrap');
+    const mobileAnchor = document.getElementById('mobile-theme-toggle');
+    if (!wrap && !mobileAnchor) return false;
+    _ensureUsageStyles();
+    if (wrap && wrap.parentNode && !wrap.parentNode.querySelector('.' + USAGE_NAV_CLASS + '.desk')) {
+      wrap.parentNode.insertBefore(_usageNavMake('desk'), wrap);
+    }
+    if (mobileAnchor && mobileAnchor.parentNode && !mobileAnchor.parentNode.querySelector('.' + USAGE_NAV_CLASS + '.mob')) {
+      mobileAnchor.parentNode.insertBefore(_usageNavMake('mob'), mobileAnchor);
+    }
+    _usageNavPaint();
+    if (isLoggedIn() && !_usage) getAiUsage();
+    return !!wrap;
+  }
+
+  (function startUsageNav() {
+    if (typeof window === 'undefined' || typeof document === 'undefined' || _usageNavStarted) return;
+    _usageNavStarted = true;
+    on('usagechange', _usageNavPaint);
+    on('authchange', function () {
+      if (isLoggedIn()) {
+        getAiUsage({ force: true }).then(_usageNavPaint);
+      } else {
+        _usage = null;
+        _usageFetchedAt = 0;
+        _usageNavPaint();
+      }
+    });
+    // The shell has the navbar straight away; standalone pages copy it in a moment later.
+    let tries = 0;
+    const tryMount = function () {
+      if (_usageNavMount() || ++tries > 60) return;
+      setTimeout(tryMount, 500);
+    };
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', tryMount);
+    else tryMount();
+    // Rolling windows give marks back over time, so keep the ring current while the tab is open.
+    const refresh = function () {
+      if (document.visibilityState !== 'visible' || !isLoggedIn()) return;
+      if (!document.querySelector('.' + USAGE_NAV_CLASS)) return;
+      if (_usage && _usage.unlimited) return;
+      getAiUsage({ force: true });
+    };
+    setInterval(refresh, 90000);
+    document.addEventListener('visibilitychange', refresh);
+  })();
 
   // Unit apps show AI Examiner errors with alert(); the usage sheet already explains a limit,
   // so the matching alert is skipped (only that exact message, only for a few seconds).
@@ -2604,6 +2750,7 @@ html[data-theme="dark"] .ra10u-root{--u-bg:#1c1b19;--u-card:#232220;--u-text:#e7
     getAiUsage,
     showUsageLimit,
     renderUsageCard,
+    refreshUsageNav: _usageNavMount,
     askAiAssigner,
     markAssignment,
     transcribeWork,
