@@ -308,10 +308,42 @@ async function callAnyProvider(prompt: string, opts: CallOptions = {}, preferStr
   throw new Error(errorMsg);
 }
 
+// ── AI usage limits (supabase/sql/ai-usage.sql) ──────────────────────────────────────────────
+// One use is taken BEFORE any AI provider is called and refunded if marking fails. Premium and
+// EDU plans are never counted. If the usage SQL has not been applied yet we fail open (allow),
+// so deploying this function first never blocks marking.
+type UsageJson = Record<string, any>;
+type UsageCtx = { supabase: any; userId: string; eventId: number | null };
+
+async function consumeUsage(supabase: any, userId: string): Promise<UsageJson | null> {
+  const { data, error } = await supabase.rpc("ai_usage_consume", { p_user: userId, p_feature: "ai_mark" });
+  if (error) {
+    console.warn("ai-mark: usage check unavailable, allowing request:", error.message);
+    return null;
+  }
+  return data as UsageJson;
+}
+
+async function refundUsage(ctx: UsageCtx | null): Promise<UsageJson | null> {
+  if (!ctx || !ctx.eventId) return null;
+  const { data, error } = await ctx.supabase.rpc("ai_usage_refund", { p_user: ctx.userId, p_event_id: ctx.eventId });
+  if (error) console.warn("ai-mark: usage refund failed:", error.message);
+  ctx.eventId = null;
+  return error ? null : (data as UsageJson);
+}
+
+function usageLimitMessage(usage: UsageJson): string {
+  const label = String(usage?.label || "AI Examiner");
+  return usage?.blocked_by === "day"
+    ? `You've reached today's ${label} limit.`
+    : `You've reached this hour's ${label} limit.`;
+}
+
 export default Deno.serve(async (req: Request) => {
   initProviders();
   const origin = req.headers.get("origin") || "";
   const corsHeaders = getCorsHeaders(origin);
+  let usageCtx: UsageCtx | null = null;
 
   if (req.method === "OPTIONS") {
     return new Response(null, { status: 200, headers: corsHeaders });
@@ -388,6 +420,16 @@ export default Deno.serve(async (req: Request) => {
       });
     }
 
+    // Usage limits: take one use now (server-side, synced per account).
+    const usage = await consumeUsage(supabase, userId);
+    if (usage && usage.allowed === false) {
+      return new Response(JSON.stringify({ error: usageLimitMessage(usage), code: "usage_limit", usage }), {
+        status: 429,
+        headers: corsHeaders,
+      });
+    }
+    usageCtx = { supabase, userId, eventId: usage && usage.event_id ? Number(usage.event_id) : null };
+
     const marksMax = clamp(Math.round(safeNum(question?.marks, 1)), 1, 60);
     const edx = isEdexcelBusiness(question);
     const psych = !edx && isPsychology(question);
@@ -424,14 +466,17 @@ export default Deno.serve(async (req: Request) => {
 
     const result = ensureResultShape(parsed, marksMax);
 
-    return new Response(JSON.stringify({ ok: true, result, provider: aiResponse.provider }), {
+    const usageOut = usage ? (({ event_id: _e, ...rest }) => rest)(usage) : null;
+    return new Response(JSON.stringify({ ok: true, result, provider: aiResponse.provider, usage: usageOut }), {
       status: 200,
       headers: corsHeaders,
     });
   } catch (error) {
     console.error("ai-mark error:", error);
+    // Marking failed after a use was taken: give it back so failures never cost the learner.
+    const refunded = await refundUsage(usageCtx).catch(() => null);
     return new Response(
-      JSON.stringify({ error: error instanceof Error ? error.message : "Internal server error" }),
+      JSON.stringify({ error: error instanceof Error ? error.message : "Internal server error", usage: refunded }),
       { status: 500, headers: getCorsHeaders(req.headers.get("origin") || "") },
     );
   }

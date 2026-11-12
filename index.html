@@ -31,7 +31,7 @@
 })();
 </script>
 <link rel="preload" href="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0/dist/umd/supabase.js" as="script" crossorigin>
-<link rel="preload" href="/refresh/site.js?v=20270110" as="script">
+<link rel="preload" href="/refresh/site.js?v=20270111" as="script">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>RA10 — Advanced Revision Site (BTEC, GCSE, A-LEVEL)</title>
 <meta name="description" content="Free BTEC Level 3 revision for IT, Business, Sport, Computing, Construction, Early Childhood Development, Engineering, Health and Social Care and Medical Science, plus A-Level Business (AQA and Edexcel) and A-Level Psychology. Flashcards, quizzes, predicted papers, study guides, wireframe and code tools, and AI assignment marking — all in one place.">
@@ -75,7 +75,7 @@
 (function(){
   var isFile = location.protocol === 'file:';
   var isLocalHost = location.hostname === '127.0.0.1' || location.hostname === 'localhost';
-  var SDK_V = '?v=20261106';
+  var SDK_V = '?v=20261112';
   var candidates = isFile
     ? ['file:///C:/Users/mistr/Downloads/ra10/ra10-sdk.js' + SDK_V, 'https://ra10.co.uk/ra10-sdk.js' + SDK_V]
     : (isLocalHost
@@ -2349,6 +2349,7 @@ body.home-signed-in #p-home .hx-home > :not(#signed-in-dashboard){display:none !
         <p>Subscription status: <strong id="account-sub-status">—</strong></p>
         <p>Next billing: <strong id="account-next-billing">—</strong></p>
         <p>Credits renew on: <strong id="account-reset-date">—</strong></p>
+        <div id="account-ai-usage" class="account-ai-usage" style="margin:var(--sp3,12px) 0" hidden></div>
         <div id="account-legal-panel" class="account-gift-panel account-legal-panel">
           <h4 class="account-gift-title">Terms &amp; privacy</h4>
           <div class="account-legal-row">
@@ -3361,7 +3362,7 @@ body.home-signed-in #p-home .hx-home > :not(#signed-in-dashboard){display:none !
 <script src="/refresh/ra10-units.js?v=20270110"></script>
 <script src="/refresh/ra10-subjects.js?v=20270110"></script>
 <script>(function(){var el=document.getElementById('hm-subjects');if(el&&window.RA10Subjects&&RA10Subjects.renderHome)RA10Subjects.renderHome(el);})();</script>
-<script src="/refresh/site.js?v=20270110"></script>
+<script src="/refresh/site.js?v=20270111"></script>
 <script src="/refresh/ra10-edu.js?v=20261126" defer></script>
 
 <!-- ============================================================

@@ -55,7 +55,7 @@
   "mark_scheme": {
    "instruction": "Award up to two marks.",
    "points": [
-    "Ransomware â€” malware that encrypts the victim's files/data (1)",
+    "Ransomware — malware that encrypts the victim's files/data (1)",
     "The attacker demands a ransom payment (usually cryptocurrency) in exchange for the decryption key (1)"
    ],
    "additional_guidance": "Accept any two relevant points. Do not accept: virus (too generic)."
@@ -75,7 +75,7 @@
   "mark_scheme": {
    "instruction": "Award up to three marks.",
    "points": [
-    "This is a keylogger â€” malware that secretly records every keystroke typed by the user (1)",
+    "This is a keylogger — malware that secretly records every keystroke typed by the user (1)",
     "It can capture usernames, passwords, bank account details and other sensitive information (1)",
     "Risk: financial fraud, data breach leading to GDPR fines, reputational damage, loss of customer trust (1)"
    ],
@@ -130,7 +130,7 @@
   "mark_scheme": {
    "instruction": "Award up to two marks.",
    "points": [
-    "Whaling / spear phishing â€” a targeted phishing attack aimed at senior executives (1)",
+    "Whaling / spear phishing — a targeted phishing attack aimed at senior executives (1)",
     "The attacker impersonates a high-level authority figure (CEO) to pressure the victim into taking urgent action without verification (1)"
    ],
    "additional_guidance": "Accept spear phishing with explanation. Do not accept: phishing (too generic without targeting context)."
@@ -167,10 +167,10 @@
   "mark_scheme": {
    "instruction": "Award up to four marks.",
    "points": [
-    "This is a Distributed Denial of Service (DDoS) attack â€” multiple compromised devices (botnet) flood the server with traffic (1)",
+    "This is a Distributed Denial of Service (DDoS) attack — multiple compromised devices (botnet) flood the server with traffic (1)",
     "The server becomes overwhelmed and cannot respond to legitimate customer requests (1)",
     "Impact: loss of sales revenue during downtime, customer frustration and potential loss of future business (1)",
-    "Reputational damage â€” customers may perceive the business as unreliable or insecure and switch to competitors (1)"
+    "Reputational damage — customers may perceive the business as unreliable or insecure and switch to competitors (1)"
    ]
   }
  },
@@ -242,9 +242,9 @@
    "instruction": "Award one mark each for two valid practices described.",
    "points": [
     "Using weak/short passwords that are easily guessed or cracked by brute force (1)",
-    "Reusing the same password across multiple systems â€” if one system is compromised, all accounts become vulnerable (1)",
-    "Writing passwords down on sticky notes near the workstation â€” visible to passers-by (1)",
-    "Sharing passwords with colleagues â€” no accountability for actions taken (1)"
+    "Reusing the same password across multiple systems — if one system is compromised, all accounts become vulnerable (1)",
+    "Writing passwords down on sticky notes near the workstation — visible to passers-by (1)",
+    "Sharing passwords with colleagues — no accountability for actions taken (1)"
    ]
   }
  },
@@ -321,7 +321,7 @@
   "mark_scheme": {
    "instruction": "Award up to three marks.",
    "points": [
-    "Signature-based detection compares files against a database of known malware signatures/patterns â€” it can only detect previously identified threats (1)",
+    "Signature-based detection compares files against a database of known malware signatures/patterns — it can only detect previously identified threats (1)",
     "Heuristic analysis examines the behaviour and characteristics of files to identify potentially malicious code even if no signature exists (1)",
     "Heuristic analysis can detect new/unknown malware (zero-day threats), but may produce false positives, while signature-based is more reliable for known threats but ineffective against new variants (1)"
    ]
@@ -359,10 +359,10 @@
   "mark_scheme": {
    "instruction": "Award up to four marks.",
    "points": [
-    "Something you know â€” e.g. password, PIN, security question answer (1)",
-    "Something you have â€” e.g. smartphone (for authenticator app), security token, smart card (1)",
-    "Something you are â€” e.g. fingerprint, facial recognition, iris scan (biometrics) (1)",
-    "Using multiple factors means that even if an attacker obtains one factor (e.g. steals password), they still cannot access the system without the other factor(s) â€” defence in depth (1)"
+    "Something you know — e.g. password, PIN, security question answer (1)",
+    "Something you have — e.g. smartphone (for authenticator app), security token, smart card (1)",
+    "Something you are — e.g. fingerprint, facial recognition, iris scan (biometrics) (1)",
+    "Using multiple factors means that even if an attacker obtains one factor (e.g. steals password), they still cannot access the system without the other factor(s) — defence in depth (1)"
    ]
   }
  },
@@ -380,7 +380,7 @@
    "instruction": "Award up to two marks.",
    "points": [
     "Users are granted only the minimum level of access/permissions necessary to perform their job role (1)",
-    "This limits the potential damage from compromised accounts, accidental changes, or insider threats â€” an attacker who gains access to a user account can only access what that user can access (1)"
+    "This limits the potential damage from compromised accounts, accidental changes, or insider threats — an attacker who gains access to a user account can only access what that user can access (1)"
    ]
   }
  },
@@ -397,8 +397,8 @@
   "mark_scheme": {
    "instruction": "Award up to three marks.",
    "points": [
-    "Symmetric encryption uses the same key for both encryption and decryption â€” it is fast and efficient for bulk data (1)",
-    "Asymmetric encryption uses a key pair: a public key for encryption and a private key for decryption â€” it is more secure for key exchange but slower (1)",
+    "Symmetric encryption uses the same key for both encryption and decryption — it is fast and efficient for bulk data (1)",
+    "Asymmetric encryption uses a key pair: a public key for encryption and a private key for decryption — it is more secure for key exchange but slower (1)",
     "In practice, asymmetric encryption (e.g. RSA) is often used to securely exchange a symmetric session key, which is then used for the actual data transfer (e.g. in TLS/HTTPS) (1)"
    ]
   }

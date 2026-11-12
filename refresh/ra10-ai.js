@@ -475,7 +475,7 @@
       var n = normText(t);
       if (!n || /^ai (assigner|helper|examiner)$/.test(n) || /^(dashboard|home|your progress|progress)$/.test(n)) continue;
       if (unitName && n.indexOf(unitName) !== -1) continue;
-      if (/^unit \d+/.test(n)) continue;   // page titles like 'Unit 4 - ...' repeat the unit chip
+      if (/^unit \d+\b/.test(n)) continue;   // page titles like 'Unit 4 - ...' repeat the unit chip
       return t;
     }
     return '';

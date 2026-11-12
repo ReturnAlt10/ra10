@@ -37,9 +37,14 @@ jobs:
             --exclude='training-data' \
             --exclude='tools' \
             --exclude='node_modules' \
+            --exclude='enterprise' \
+            --exclude='specs' \
+            --exclude='.specify' \
+            --exclude='CLAUDE.md' \
             ./ _site/
           mkdir -p _site/tools
           rsync -a tools/activity/ _site/tools/activity/
+          rsync -a tools/python-lab/ _site/tools/python-lab/
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

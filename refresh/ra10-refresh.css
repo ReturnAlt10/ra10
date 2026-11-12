@@ -510,7 +510,7 @@
    share one visual language and interaction model.
    ============================================================ */
 
-/* Nav icon baseline â€” every inline `.nu` SVG in a nav/link gets an explicit
+/* Nav icon baseline — every inline `.nu` SVG in a nav/link gets an explicit
    box size at ALL viewport widths. Without this, an SVG with only a viewBox
    collapses to the browser default (huge), which is what makes the desktop
    navbar icons blow up on smaller/squarer displays. */

@@ -604,7 +604,7 @@
             stateBind(p, st, key, 'A', a);
             page.appendChild(w); page.appendChild(el('div', { class: 'pp-ans-row' }, el('label', null, 'Answer'), a));
           } else {
-            const ta = el('textarea', { 'data-rmt': 'off', class: 'pp-lines', placeholder: /^draw/i.test(it.text) ? 'Describe your diagram: every device, how each one connects (wired / wireless / VPN …) and your annotations…' : 'Write your answer here…', rows: String(Math.max(4, Math.min(24, it.marks * 2))) });
+            const ta = el('textarea', { 'data-rmt': 'off', class: 'pp-lines', placeholder: /^draw\b/i.test(it.text) ? 'Describe your diagram: every device, how each one connects (wired / wireless / VPN …) and your annotations…' : 'Write your answer here…', rows: String(Math.max(4, Math.min(24, it.marks * 2))) });
             stateBind(p, st, key, 'A', ta);
             const count = el('span', { class: 'pp-wc' });
             const wc = () => { const n = ta.value.trim().split(/\s+/).filter(Boolean).length; count.textContent = n + ' words'; };

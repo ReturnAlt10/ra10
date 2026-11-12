@@ -5511,6 +5511,12 @@ async function waitForRA10Sdk(timeoutMs) {
           if (accountNextBillingEl && tier === 'free') accountNextBillingEl.textContent = 'No active subscription';
           if (accountNextBillingEl && isRecurringPaidTier(tier)) accountNextBillingEl.textContent = 'Loading billing date...';
         }
+        // AI Examiner usage (hourly + daily limits, synced per account) — live card from the SDK
+        const usageEl = document.getElementById('account-ai-usage');
+        if (usageEl && window.RA10 && typeof RA10.renderUsageCard === 'function') {
+          if (!usageEl.dataset.mounted) { usageEl.dataset.mounted = '1'; RA10.renderUsageCard(usageEl); }
+          else if (typeof RA10.getAiUsage === 'function') RA10.getAiUsage({ force: true });
+        }
         const subStatusEl = document.getElementById('account-sub-status');
         if (subStatusEl) {
           if (tier === 'free') {

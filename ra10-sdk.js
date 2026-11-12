@@ -80,7 +80,7 @@
     revision_guide_full: 10,
     flashcard_flip: 0,
     mock_paper_gen: 5,
-    ai_mark: 3,
+    ai_mark: 0, // AI Examiner uses hourly/daily usage limits now, not credits (supabase/sql/ai-usage.sql)
     whatsapp_export: 2,
     whatsapp_pdf: 3,
     wireframe_export: 1,
@@ -118,6 +118,7 @@
     streakchange: [],
     legalchange: [],
     termsrequired: [],
+    usagechange: [],
   };
 
   // Only used when the legal_documents table can't be reached (e.g. before
@@ -1991,12 +1992,351 @@
     return result;
   }
 
-  function canUseAiMarking() {
-    if (TRANSITION_MODE && isLoggedIn()) {
-      return true;
+  /* ── AI usage limits ─────────────────────────────────────────────────────────────────────
+     The AI Examiner is limited by USAGE, not credits: a rolling hourly limit and a rolling daily
+     limit, enforced server-side by the ai-mark edge function and synced per account
+     (supabase/sql/ai-usage.sql). Premium (Pro / Ultra) and EDU (school) plans have no limits.
+     While the launch extension is on, Standard limits are multiplied (shown in the UI).
+     UI: a limit sheet when a limit is reached, a heads-up toast when running low, and
+     RA10.renderUsageCard(el) for the account page. */
+  const USAGE_FEATURE = 'ai_mark';
+  const USAGE_STYLE_ID = 'ra10-usage-css';
+  let _usage = null;
+  let _usageFetchedAt = 0;
+  let _usageClockSkew = 0;
+  let _usageNudgeKey = '';
+  let _usageSuppressAlert = { text: '', until: 0 };
+
+  function _usageSet(u) {
+    if (!u || typeof u !== 'object' || !u.feature) return;
+    _usage = u;
+    _usageFetchedAt = Date.now();
+    const serverNow = Date.parse(u.now || '');
+    if (serverNow) _usageClockSkew = serverNow - Date.now();
+    _emit('usagechange', _usage);
+  }
+
+  async function getAiUsage(options) {
+    const force = !!(options && options.force);
+    if (!isLoggedIn()) return null;
+    if (!force && _usage && Date.now() - _usageFetchedAt < 30000) return _usage;
+    try {
+      const client = await _ensureSupabaseClient();
+      const res = await client.rpc('ai_usage_status', { p_feature: USAGE_FEATURE });
+      if (res.error || !res.data) return _usage; // usage SQL not applied yet → no limits shown
+      _usageSet(res.data);
+      return _usage;
+    } catch (err) {
+      return _usage;
     }
-    const tier = _normalizeTier(getTier());
-    return tier === 'ultra' || tier === 'owner' || UNLIMITED_TIERS.has(tier);
+  }
+
+  function _usageNow() { return Date.now() + _usageClockSkew; }
+
+  function _usageClock(iso) {
+    const t = Date.parse(iso || '');
+    if (!t) return '';
+    const d = new Date(t - _usageClockSkew);
+    const now = new Date();
+    const time = d.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+    if (d.toDateString() === now.toDateString()) return time;
+    if (new Date(now.getTime() + 864e5).toDateString() === d.toDateString()) return 'tomorrow at ' + time;
+    return d.toLocaleDateString([], { weekday: 'long' }) + ' at ' + time;
+  }
+
+  function _usageIn(iso) {
+    const ms = Date.parse(iso || '') - _usageNow();
+    if (!(ms > 0)) return 'a moment';
+    const m = Math.ceil(ms / 60000);
+    if (m < 60) return m + (m === 1 ? ' minute' : ' minutes');
+    const h = Math.floor(m / 60);
+    const r = m % 60;
+    return h + (h === 1 ? ' hour' : ' hours') + (r ? ' ' + r + ' min' : '');
+  }
+
+  function _usageEsc(v) {
+    return String(v == null ? '' : v).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
+  function _usagePlanLabel(u) {
+    if (!u) return '';
+    if (u.plan === 'premium') return 'Premium · no limits';
+    if (u.plan === 'edu') return 'School · no limits';
+    return 'Standard plan';
+  }
+
+  function _usageLimitText(u) {
+    const label = (u && u.label) || 'AI Examiner';
+    const win = u && u.blocked_by === 'day' ? u.day : (u && u.hour);
+    const when = win && win.resets_at ? ' You can mark again at ' + _usageClock(win.resets_at) + '.' : '';
+    return (u && u.blocked_by === 'day' ? "You've reached today's " : "You've reached this hour's ") + label + ' limit.' + when;
+  }
+
+  function _ensureUsageStyles() {
+    if (document.getElementById(USAGE_STYLE_ID)) return;
+    const css = `
+.ra10u-root{--u-bg:#fbfaf7;--u-card:#ffffff;--u-text:#28251d;--u-muted:#6f6d67;--u-line:#e3e0da;--u-track:#ece9e3;--u-fill:#28251d;--u-warn:#c2410c;--u-full:#d20000;--u-ext-bg:#eef6ff;--u-ext-text:#1d4ed8;--u-shadow:0 24px 64px rgba(20,16,8,.22);
+  font-family:"DM Sans","Helvetica Neue",system-ui,sans-serif;color:var(--u-text);line-height:1.5;-webkit-font-smoothing:antialiased}
+html[data-theme="dark"] .ra10u-root{--u-bg:#1c1b19;--u-card:#232220;--u-text:#e7e5e1;--u-muted:#9b9994;--u-line:#34332f;--u-track:#2f2e2b;--u-fill:#e7e5e1;--u-warn:#fb923c;--u-full:#ff5a5a;--u-ext-bg:rgba(59,130,246,.14);--u-ext-text:#93c5fd;--u-shadow:0 24px 64px rgba(0,0,0,.55)}
+.ra10u-root *{box-sizing:border-box}
+.ra10u-overlay{position:fixed!important;inset:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(20,18,14,.42);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);animation:ra10uFade .18s ease-out}
+.ra10u-sheet{width:min(460px,100%);max-height:calc(100dvh - 40px);overflow:auto;background:var(--u-bg);border:1px solid var(--u-line);border-radius:20px;box-shadow:var(--u-shadow);padding:22px 22px 18px;animation:ra10uRise .26s cubic-bezier(.16,1,.3,1)}
+.ra10u-head{display:flex;gap:14px;align-items:flex-start}
+.ra10u-ico{flex:0 0 auto;width:42px;height:42px;border-radius:12px;display:grid;place-items:center;background:var(--u-card);border:1px solid var(--u-line);color:var(--u-full)}
+.ra10u-ico.ok{color:var(--u-text)}
+.ra10u-title{margin:0;font-family:"Instrument Serif",Georgia,serif;font-weight:400;font-size:1.55rem;line-height:1.15;letter-spacing:-.01em;color:var(--u-text)}
+.ra10u-sub{margin:4px 0 0;color:var(--u-muted);font-size:.95rem}
+.ra10u-x{margin-left:auto;flex:0 0 auto;width:32px;height:32px;border-radius:999px;border:0;background:transparent;color:var(--u-muted);font-size:18px;line-height:1;cursor:pointer}
+.ra10u-x:hover,.ra10u-x:focus-visible{background:var(--u-card);color:var(--u-text);outline:none}
+.ra10u-meters{margin-top:18px;display:grid;gap:10px}
+.ra10u-meter{background:var(--u-card);border:1px solid var(--u-line);border-radius:14px;padding:12px 14px}
+.ra10u-mrow{display:flex;justify-content:space-between;align-items:baseline;gap:10px;font-size:.92rem}
+.ra10u-mrow b{font-weight:600}
+.ra10u-mrow span{color:var(--u-muted);font-variant-numeric:tabular-nums}
+.ra10u-bar{margin-top:8px;height:8px;border-radius:999px;background:var(--u-track);overflow:hidden}
+.ra10u-bar i{display:block;height:100%;border-radius:inherit;background:var(--u-fill);transition:width .5s cubic-bezier(.16,1,.3,1)}
+.ra10u-meter.low .ra10u-bar i{background:var(--u-warn)}
+.ra10u-meter.full .ra10u-bar i{background:var(--u-full)}
+.ra10u-note{margin-top:6px;font-size:.82rem;color:var(--u-muted)}
+.ra10u-ext{margin-top:12px;display:flex;gap:8px;align-items:flex-start;padding:10px 12px;border-radius:12px;background:var(--u-ext-bg);color:var(--u-ext-text);font-size:.86rem}
+.ra10u-ext svg{flex:0 0 auto;margin-top:2px}
+.ra10u-keep{margin:14px 2px 0;font-size:.88rem;color:var(--u-muted)}
+.ra10u-actions{margin-top:16px;display:flex;gap:10px;flex-wrap:wrap}
+.ra10u-btn{flex:1 1 auto;display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:10px 16px;border-radius:999px;font:600 .95rem/1 "DM Sans","Helvetica Neue",system-ui,sans-serif;text-decoration:none;cursor:pointer;border:1px solid var(--u-line);background:var(--u-card);color:var(--u-text)}
+.ra10u-btn.primary{background:var(--u-text);border-color:var(--u-text);color:var(--u-bg)}
+.ra10u-btn:hover{filter:brightness(1.06)}
+.ra10u-btn:focus-visible{outline:2px solid var(--u-full);outline-offset:2px}
+.ra10u-toast{position:fixed!important;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:2147483000;display:flex;align-items:center;gap:10px;max-width:min(520px,calc(100vw - 24px));padding:10px 10px 10px 14px;border-radius:999px;background:var(--u-card);border:1px solid var(--u-line);box-shadow:0 10px 30px rgba(20,16,8,.16);font-size:.9rem;animation:ra10uRise .26s cubic-bezier(.16,1,.3,1)}
+.ra10u-toast .dot{width:8px;height:8px;border-radius:50%;background:var(--u-warn);flex:0 0 auto}
+.ra10u-toast button{border:0;background:transparent;color:var(--u-text);font:600 .88rem "DM Sans",system-ui,sans-serif;padding:6px 10px;border-radius:999px;cursor:pointer;white-space:nowrap}
+.ra10u-toast button:hover,.ra10u-toast button:focus-visible{background:var(--u-track);outline:none}
+.ra10u-card{background:var(--u-card);border:1px solid var(--u-line);border-radius:16px;padding:16px 18px}
+.ra10u-card-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.ra10u-card-head h4{margin:0;font-size:1rem;font-weight:600;color:var(--u-text)}
+.ra10u-pill{display:inline-flex;align-items:center;padding:3px 10px;border-radius:999px;font-size:.78rem;font-weight:600;background:var(--u-track);color:var(--u-text)}
+.ra10u-pill.unl{background:var(--u-ext-bg);color:var(--u-ext-text)}
+.ra10u-card .ra10u-meter{background:transparent;border:0;padding:10px 0 0;border-radius:0}
+.ra10u-card .ra10u-meters{margin-top:6px;gap:4px}
+@keyframes ra10uFade{from{opacity:0}to{opacity:1}}
+@keyframes ra10uRise{from{opacity:0;transform:translate(var(--u-tx,0),12px)}to{opacity:1;transform:translate(var(--u-tx,0),0)}}
+.ra10u-toast{--u-tx:-50%}
+@media (max-width:560px){
+  .ra10u-overlay{align-items:flex-end;padding:0}
+  .ra10u-sheet{width:100%;border-radius:22px 22px 0 0;border-bottom:0;padding:20px 18px calc(18px + env(safe-area-inset-bottom,0px))}
+  .ra10u-title{font-size:1.4rem}
+  .ra10u-toast{--u-tx:0;left:12px;right:12px;transform:none;max-width:none;justify-content:space-between;border-radius:16px;bottom:calc(76px + env(safe-area-inset-bottom,0px))}
+}
+@media (prefers-reduced-motion:reduce){.ra10u-overlay,.ra10u-sheet,.ra10u-toast{animation:none}.ra10u-bar i{transition:none}}`;
+    const style = document.createElement('style');
+    style.id = USAGE_STYLE_ID;
+    style.textContent = css;
+    (document.head || document.documentElement).appendChild(style);
+  }
+
+  const USAGE_ICON_GAUGE = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.9 18.1A9 9 0 1 1 19.1 18.1"/><path d="M12 13l3.5-4.5"/><circle cx="12" cy="13" r="1.4" fill="currentColor" stroke="none"/></svg>';
+  const USAGE_ICON_SPARK = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/></svg>';
+
+  function _usageMeterHtml(name, win, windowWord) {
+    if (!win) return '';
+    const used = Math.max(0, Number(win.used) || 0);
+    const limit = Math.max(1, Number(win.limit) || 1);
+    const pct = Math.min(100, Math.round((used / limit) * 100));
+    const full = used >= limit;
+    const low = !full && (limit - used) <= Math.max(2, Math.ceil(limit * 0.2));
+    let note;
+    if (full && win.resets_at) note = 'Available again at ' + _usageClock(win.resets_at) + ' (in ' + _usageIn(win.resets_at) + ')';
+    else if (used === 0) note = 'Nothing used in the last ' + windowWord;
+    else note = (limit - used) + ' left · each mark comes back ' + (windowWord === 'hour' ? 'an hour' : '24 hours') + ' after you use it';
+    return '<div class="ra10u-meter' + (full ? ' full' : low ? ' low' : '') + '">' +
+      '<div class="ra10u-mrow"><b>' + name + '</b><span>' + used + ' / ' + limit + ' used</span></div>' +
+      '<div class="ra10u-bar" role="progressbar" aria-label="' + _usageEsc(name) + ' usage" aria-valuemin="0" aria-valuemax="' + limit + '" aria-valuenow="' + used + '"><i style="width:' + pct + '%"></i></div>' +
+      '<div class="ra10u-note">' + _usageEsc(note) + '</div></div>';
+  }
+
+  function _usageExtensionHtml(u) {
+    const ext = u && u.extension;
+    if (!ext || !ext.active || u.unlimited) return '';
+    const mult = Number(ext.multiplier) || 1;
+    const text = (ext.note ? ext.note : 'Launch extension: ' + mult + '× limits') +
+      (u.base ? ' (normally ' + u.base.hour + ' an hour, ' + u.base.day + ' a day).' : '.');
+    return '<div class="ra10u-ext">' + USAGE_ICON_SPARK + '<span>' + _usageEsc(text) + '</span></div>';
+  }
+
+  function _usageCloseAll() {
+    document.querySelectorAll('.ra10u-overlay').forEach(function (n) { n.remove(); });
+  }
+
+  // Shows the usage sheet. mode 'limit' (default when blocked) or 'info'.
+  function showUsageLimit(usage, options) {
+    const u = usage || _usage;
+    if (!u || typeof document === 'undefined') return;
+    _ensureUsageStyles();
+    _usageCloseAll();
+    const blocked = u.allowed === false && !!u.blocked_by;
+    const mode = (options && options.mode) || (blocked ? 'limit' : 'info');
+    const win = u.blocked_by === 'day' ? u.day : u.hour;
+    const label = u.label || 'AI Examiner';
+    const title = mode === 'limit'
+      ? (u.blocked_by === 'day' ? "You've reached today's " + label + ' limit' : "You've reached this hour's " + label + ' limit')
+      : label + ' usage';
+    const sub = mode === 'limit'
+      ? (win && win.resets_at ? 'You can mark again at ' + _usageClock(win.resets_at) + ' — in ' + _usageIn(win.resets_at) + '.' : 'You can mark again soon.')
+      : (u.unlimited ? 'Your plan has no ' + label + ' limits.' : 'Limits are rolling: every mark comes back after its window passes.');
+
+    const root = document.createElement('div');
+    root.className = 'ra10u-root ra10u-overlay';
+    root.setAttribute('role', 'dialog');
+    root.setAttribute('aria-modal', 'true');
+    root.setAttribute('aria-labelledby', 'ra10u-title');
+    root.innerHTML =
+      '<div class="ra10u-sheet">' +
+        '<div class="ra10u-head">' +
+          '<span class="ra10u-ico' + (mode === 'limit' ? '' : ' ok') + '">' + USAGE_ICON_GAUGE + '</span>' +
+          '<div><h2 class="ra10u-title" id="ra10u-title">' + _usageEsc(title) + '</h2><p class="ra10u-sub">' + _usageEsc(sub) + '</p></div>' +
+          '<button type="button" class="ra10u-x" data-u-close aria-label="Close">✕</button>' +
+        '</div>' +
+        (u.unlimited ? '' :
+          '<div class="ra10u-meters">' + _usageMeterHtml('This hour', u.hour, 'hour') + _usageMeterHtml('Today', u.day, '24 hours') + '</div>') +
+        _usageExtensionHtml(u) +
+        (mode === 'limit' ? '<p class="ra10u-keep">While you wait, everything else stays unlimited: mark schemes, practice questions, papers, guides and flashcards.</p>' : '') +
+        '<div class="ra10u-actions">' +
+          '<button type="button" class="ra10u-btn primary" data-u-close>' + (mode === 'limit' ? 'Keep revising' : 'Done') + '</button>' +
+          (u.unlimited ? '' : '<a class="ra10u-btn" href="/upgrade" target="_top" data-u-upgrade>Premium has no limits</a>') +
+        '</div>' +
+      '</div>';
+    const close = function () {
+      document.removeEventListener('keydown', onKey, true);
+      root.remove();
+    };
+    const onKey = function (e) { if (e.key === 'Escape') { e.preventDefault(); close(); } };
+    root.addEventListener('click', function (e) {
+      if (e.target === root || (e.target.closest && e.target.closest('[data-u-close]'))) close();
+    });
+    document.addEventListener('keydown', onKey, true);
+    document.documentElement.appendChild(root);
+    const first = root.querySelector('[data-u-close].primary') || root.querySelector('[data-u-close]');
+    if (first) setTimeout(function () { try { first.focus(); } catch (e) {} }, 30);
+  }
+
+  // A small heads-up when a learner is close to a limit (once per remaining count per window).
+  function _usageNudge(u) {
+    if (!u || u.unlimited || typeof document === 'undefined') return;
+    const pick = [['hour', 'this hour'], ['day', 'today']].map(function (p) {
+      const w = u[p[0]];
+      if (!w) return null;
+      const left = Math.max(0, (Number(w.limit) || 0) - (Number(w.used) || 0));
+      const threshold = Math.max(2, Math.ceil((Number(w.limit) || 0) * 0.2));
+      return left <= threshold ? { key: p[0], word: p[1], left: left, win: w } : null;
+    }).filter(Boolean).sort(function (a, b) { return a.left - b.left; })[0];
+    if (!pick) return;
+    const key = pick.key + ':' + pick.left + ':' + (pick.win.limit || '');
+    if (key === _usageNudgeKey) return;
+    _usageNudgeKey = key;
+    _ensureUsageStyles();
+    document.querySelectorAll('.ra10u-toast').forEach(function (n) { n.remove(); });
+    const label = u.label || 'AI Examiner';
+    const text = pick.left === 0
+      ? 'That was your last ' + label + ' mark ' + pick.word + '.'
+      : pick.left + ' ' + label + (pick.left === 1 ? ' mark' : ' marks') + ' left ' + pick.word + '.';
+    const toast = document.createElement('div');
+    toast.className = 'ra10u-root ra10u-toast';
+    toast.setAttribute('role', 'status');
+    toast.innerHTML = '<span class="dot" aria-hidden="true"></span><span>' + _usageEsc(text) + '</span><button type="button">View usage</button>';
+    toast.querySelector('button').addEventListener('click', function () { toast.remove(); showUsageLimit(u, { mode: 'info' }); });
+    document.documentElement.appendChild(toast);
+    setTimeout(function () { toast.remove(); }, 7000);
+  }
+
+  // Renders a live usage card into `el` (account page). Returns an unsubscribe function.
+  function renderUsageCard(el) {
+    if (!el) return function () {};
+    _ensureUsageStyles();
+    const paint = function (u) {
+      if (!u || u.plan === 'none') {
+        el.innerHTML = '';
+        el.hidden = true;
+        return;
+      }
+      el.hidden = false;
+      el.innerHTML =
+        '<div class="ra10u-root ra10u-card">' +
+          '<div class="ra10u-card-head"><h4>' + _usageEsc((u.label || 'AI Examiner') + ' usage') + '</h4>' +
+          '<span class="ra10u-pill' + (u.unlimited ? ' unl' : '') + '">' + _usageEsc(_usagePlanLabel(u)) + '</span></div>' +
+          (u.unlimited
+            ? '<p class="ra10u-note" style="margin-top:8px">Your plan has no hourly or daily limits.</p>'
+            : '<div class="ra10u-meters">' + _usageMeterHtml('This hour', u.hour, 'hour') + _usageMeterHtml('Today', u.day, '24 hours') + '</div>' + _usageExtensionHtml(u)) +
+        '</div>';
+    };
+    paint(_usage);
+    on('usagechange', paint);
+    getAiUsage({ force: true }).then(paint);
+    return function () { off('usagechange', paint); };
+  }
+
+  // Unit apps show AI Examiner errors with alert(); the usage sheet already explains a limit,
+  // so the matching alert is skipped (only that exact message, only for a few seconds).
+  (function installUsageAlertFilter() {
+    if (typeof window === 'undefined' || typeof window.alert !== 'function' || window.alert.__ra10Usage) return;
+    const nativeAlert = window.alert;
+    const filtered = function (msg) {
+      if (_usageSuppressAlert.text && Date.now() < _usageSuppressAlert.until &&
+          String(msg == null ? '' : msg).indexOf(_usageSuppressAlert.text) >= 0) {
+        _usageSuppressAlert = { text: '', until: 0 };
+        return undefined;
+      }
+      return nativeAlert.apply(window, arguments);
+    };
+    filtered.__ra10Usage = true;
+    window.alert = filtered;
+  })();
+
+  function _usageLimitError(usage) {
+    _usageSet(usage);
+    showUsageLimit(usage, { mode: 'limit' });
+    const msg = _usageLimitText(usage);
+    _usageSuppressAlert = { text: msg, until: Date.now() + 4000 };
+    const err = new Error(msg);
+    err.code = 'usage_limit';
+    err.usage = usage;
+    return err;
+  }
+
+  // Shared request for both AI marking entry points.
+  async function _postAiMark(payload, unavailableText) {
+    const session = getSession();
+    const token = session && session.access_token ? session.access_token : '';
+    if (!token) {
+      throw new Error('Missing auth session token. Please sign in again.');
+    }
+    const response = await fetch(SUPABASE_URL + '/functions/v1/ai-mark', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token,
+      },
+      body: JSON.stringify(payload),
+    });
+    const result = await response.json().catch(function () { return {}; });
+    _throwIfTermsRequired(response, result, 'ai');
+    if (response.status === 429 && result && result.code === 'usage_limit' && result.usage) {
+      throw _usageLimitError(result.usage);
+    }
+    if (result && result.usage) _usageSet(result.usage);
+    if (!response.ok) {
+      throw new Error(result && result.error ? String(result.error) : unavailableText);
+    }
+    if (!result || !result.result) {
+      throw new Error(unavailableText.replace('is unavailable right now', 'returned an invalid response'));
+    }
+    if (result.usage) _usageNudge(result.usage);
+    return result;
+  }
+
+  function canUseAiMarking() {
+    // Every signed-in account can use AI marking; limits are applied server-side.
+    return isLoggedIn();
   }
 
   async function aiMarkAnswer(input) {
@@ -2004,43 +2344,14 @@
       throw new Error('You need to sign in before AI marking.');
     }
     _assertTermsAccepted('ai_mark');
-    if (!canUseAiMarking()) {
-      throw new Error('AI marking is available on Ultra only.');
-    }
-
-    const session = getSession();
-    const token = session && session.access_token ? session.access_token : '';
-    if (!token) {
-      throw new Error('Missing auth session token. Please sign in again.');
-    }
-
     const payload = {
       question: input && input.question ? input.question : null,
       answer: input && typeof input.answer === 'string' ? input.answer : '',
     };
-
     if (!payload.question || !payload.answer.trim()) {
       throw new Error('Question and answer are required for AI marking.');
     }
-
-    const response = await fetch(SUPABASE_URL + '/functions/v1/ai-mark', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + token,
-      },
-      body: JSON.stringify(payload),
-    });
-
-    const result = await response.json().catch(function () { return {}; });
-    _throwIfTermsRequired(response, result, 'ai');
-    if (!response.ok) {
-      throw new Error(result && result.error ? String(result.error) : 'AI marking is unavailable right now.');
-    }
-    if (!result || !result.result) {
-      throw new Error('AI marking returned an invalid response.');
-    }
-    return result;
+    return _postAiMark(payload, 'AI marking is unavailable right now.');
   }
 
   async function examineAnswer(input) {
@@ -2048,122 +2359,16 @@
       throw new Error('You need to sign in before using AI Examiner.');
     }
     _assertTermsAccepted('ai_examiner');
-
-    const tier = _normalizeTier(getTier());
-    const isUltra = tier === 'ultra' || tier === 'owner' || UNLIMITED_TIERS.has(tier);
-    const isPro = tier === 'all_subjects';
-
-    const isSchool = tier === 'school_student' || tier === 'school_teacher' || tier === 'school_admin';
-    let costToDeduct = 3;
-    if (TRANSITION_MODE) costToDeduct = 0;
-    else if (tier === 'free') costToDeduct = 5;
-    else if (isPro) costToDeduct = 1;
-    else if (isSchool) costToDeduct = 2;
-    else if (isUltra) costToDeduct = 0;
-
-    const session = getSession();
-    const token = session && session.access_token ? session.access_token : '';
-    if (!token) {
-      throw new Error('Missing auth session token. Please sign in again.');
-    }
-
     const payload = {
       question: input && input.question ? input.question : null,
       answer: input && typeof input.answer === 'string' ? input.answer : '',
     };
     // Diagram questions can send a drawn / photographed answer as a data-URL image.
     if (input && typeof input.image === 'string' && /^data:image\/(png|jpeg|webp);base64,/.test(input.image)) payload.image = input.image;
-
     if (!payload.question || (!payload.answer.trim() && !payload.image)) {
       throw new Error('Question and answer are required for AI Examiner.');
     }
-
-    const response = await fetch(SUPABASE_URL + '/functions/v1/ai-mark', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + token,
-      },
-      body: JSON.stringify(payload),
-    });
-
-    const result = await response.json().catch(function () { return {}; });
-    _throwIfTermsRequired(response, result, 'ai');
-    if (!response.ok) {
-      throw new Error(result && result.error ? String(result.error) : 'AI Examiner is unavailable right now.');
-    }
-    if (!result || !result.result) {
-      throw new Error('AI Examiner returned an invalid response.');
-    }
-
-    // Only deduct credits AFTER successful API response
-    if (costToDeduct > 0) {
-      const currentBase = _getStoredCredits();
-      const bonusRemaining = _getExamBonusRemaining();
-      const totalCredit = currentBase + bonusRemaining;
-      
-      if (totalCredit >= costToDeduct) {
-        const fromBonus = Math.min(costToDeduct, bonusRemaining);
-        const fromBase = costToDeduct - fromBonus;
-        
-        const newBase = currentBase - fromBase;
-        const newBonus = bonusRemaining - fromBonus;
-        const prevBonusUsed = _getExamBonusUsed();
-        if (fromBonus > 0) {
-          _setExamBonusUsed(prevBonusUsed + fromBonus);
-        }
-        
-        const client = await _ensureSupabaseClient();
-        const updateRes = await client.from('profiles').update({ credits: newBase }).eq('id', _profile.id).select().single();
-        
-        if (updateRes.error) {
-          if (fromBonus > 0) {
-            _setExamBonusUsed(prevBonusUsed);
-          }
-          console.error('RA10 examineAnswer credit deduction failed:', updateRes.error);
-          throw new Error('Your answer was marked, but we failed to deduct credits. Please try again or contact support.');
-        } else if (updateRes.data) {
-          _profile = updateRes.data;
-          _writeCreditSnapshot(_profile);
-          if (fromBonus > 0) {
-            _appendCreditActivity({
-              type: 'spend',
-              source: 'exam_season_bonus',
-              action: 'ai_examiner_use',
-              amount: -fromBonus,
-              note: 'AI Examiner spent exam-season bonus credits',
-            });
-          }
-          if (fromBase > 0) {
-            _appendCreditActivity({
-              type: 'spend',
-              source: 'stored_credits',
-              action: 'ai_examiner_use',
-              amount: -fromBase,
-              note: 'AI Examiner spent account credits',
-            });
-          }
-          _appendCreditActivity({
-            type: 'spend',
-            source: 'ai_examiner',
-            action: 'ai_examiner_use',
-            amount: -costToDeduct,
-            note: 'AI Examiner used',
-            balanceAfter: newBase + newBonus,
-          });
-          _emit('creditschange', _profile);
-        } else {
-          if (fromBonus > 0) {
-            _setExamBonusUsed(prevBonusUsed);
-          }
-          throw new Error('Credit deduction update returned no data. Please try again.');
-        }
-      } else {
-        throw new Error('Not enough credits. AI Examiner costs ' + costToDeduct + ' credit(s).');
-      }
-    }
-
-    return result;
+    return _postAiMark(payload, 'AI Examiner is unavailable right now.');
   }
 
   function _tierCost(costMap) {
@@ -2396,6 +2601,9 @@
     canUseAiMarking,
     aiMarkAnswer,
     examineAnswer,
+    getAiUsage,
+    showUsageLimit,
+    renderUsageCard,
     askAiAssigner,
     markAssignment,
     transcribeWork,
@@ -2419,6 +2627,9 @@
       SUPABASE_ANON_KEY,
       OWNER_EMAIL,
       TRANSITION_MODE,
+      // Display-only previews of the usage UI (limits are enforced server-side, so these grant nothing).
+      previewUsage: function (u) { _usageSet(u); _usageNudge(u); },
+      previewUsageLimit: function (u) { return _usageLimitError(u); },
     },
   };
 

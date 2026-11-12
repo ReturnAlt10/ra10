@@ -196,9 +196,9 @@
    "mark_scheme": {
     "instruction": "Award up to three marks.",
     "points": [
-     "Advantage: if one device/cable fails, only that device is affected â€” the rest of the network continues to function (1)",
+     "Advantage: if one device/cable fails, only that device is affected — the rest of the network continues to function (1)",
      "Advantage: easy to add or remove devices without disrupting the network (1)",
-     "Disadvantage: the central switch/hub is a single point of failure â€” if it fails, the entire network goes down (1)"
+     "Disadvantage: the central switch/hub is a single point of failure — if it fails, the entire network goes down (1)"
     ]
    }
   },
@@ -216,7 +216,7 @@
     "points": [
      "Centralised management of users, files and security policies (1)",
      "Centralised backup of all data on the server (1)",
-     "Better scalability â€” can support many more users (1)",
+     "Better scalability — can support many more users (1)",
      "Stronger security through centralised access control (1)"
     ],
     "additional_guidance": "Accept any one valid advantage."
@@ -236,7 +236,7 @@
    "mark_scheme": {
     "instruction": "Award up to four marks.",
     "points": [
-     "Issue: organisational data stored on personal devices may be accessed by family members or others â€” risk of data breach (1)",
+     "Issue: organisational data stored on personal devices may be accessed by family members or others — risk of data breach (1)",
      "Issue: personal devices may not have up-to-date security patches or antivirus, increasing vulnerability (1)",
      "Mitigation: implement Mobile Device Management (MDM) to enforce security policies, remote wipe capability, and separate work/personal profiles (1)",
      "Mitigation: require VPN for all work connections and encrypt all organisational data on the device (1)"
@@ -257,7 +257,7 @@
     "instruction": "Award up to two marks.",
     "points": [
      "Many IoT devices ship with default passwords/security settings that users never change, making them easy targets for attackers (1)",
-     "IoT devices often lack regular security updates/patches, leaving known vulnerabilities permanently exploitable â€” compromised devices can be recruited into botnets for DDoS attacks (1)"
+     "IoT devices often lack regular security updates/patches, leaving known vulnerabilities permanently exploitable — compromised devices can be recruited into botnets for DDoS attacks (1)"
     ]
    }
   },
@@ -290,7 +290,7 @@
    "mark_scheme": {
     "instruction": "Award up to three marks.",
     "points": [
-     "An unmanaged switch is plug-and-play â€” it simply connects devices and forwards data automatically without any configuration (1)",
+     "An unmanaged switch is plug-and-play — it simply connects devices and forwards data automatically without any configuration (1)",
      "A managed switch allows administrators to configure settings such as VLANs, port security, bandwidth control, and Quality of Service (QoS) (1)",
      "Managed switches provide greater security (e.g. MAC address filtering, disabling unused ports) and monitoring (SNMP) but cost more and require skilled administration (1)"
     ]
@@ -307,12 +307,12 @@
    "guidance": "(4)",
    "type": "short",
    "mark_scheme": {
-    "instruction": "Award up to four marks â€” must include at least one security point.",
+    "instruction": "Award up to four marks — must include at least one security point.",
     "points": [
-     "Ethernet is faster and more reliable â€” less susceptible to interference, consistent speeds up to 10 Gbps on Cat 6a (1)",
-     "Wi-Fi offers mobility and flexibility â€” no cabling required, supports BYOD, but speeds are variable and affected by distance/walls/interference (1)",
-     "Ethernet is inherently more secure â€” physical access to the network is required to intercept data (1)",
-     "Wi-Fi is more vulnerable â€” signals broadcast through the air can be intercepted; requires encryption (WPA3), strong passwords, MAC filtering and hidden SSID to mitigate (1)"
+     "Ethernet is faster and more reliable — less susceptible to interference, consistent speeds up to 10 Gbps on Cat 6a (1)",
+     "Wi-Fi offers mobility and flexibility — no cabling required, supports BYOD, but speeds are variable and affected by distance/walls/interference (1)",
+     "Ethernet is inherently more secure — physical access to the network is required to intercept data (1)",
+     "Wi-Fi is more vulnerable — signals broadcast through the air can be intercepted; requires encryption (WPA3), strong passwords, MAC filtering and hidden SSID to mitigate (1)"
     ]
    }
   },
@@ -345,8 +345,8 @@
    "mark_scheme": {
     "instruction": "Award up to two marks.",
     "points": [
-     "TCP is connection-oriented â€” it establishes a connection, guarantees delivery, and reorders packets if they arrive out of sequence (reliable) (1)",
-     "UDP is connectionless â€” it sends data without establishing a connection first, no guarantee of delivery, no reordering; it is faster but less reliable, suitable for streaming/voice/video where some packet loss is acceptable (1)"
+     "TCP is connection-oriented — it establishes a connection, guarantees delivery, and reorders packets if they arrive out of sequence (reliable) (1)",
+     "UDP is connectionless — it sends data without establishing a connection first, no guarantee of delivery, no reordering; it is faster but less reliable, suitable for streaming/voice/video where some packet loss is acceptable (1)"
     ]
    }
   },
@@ -381,7 +381,7 @@
     "points": [
      "The browser checks its local DNS cache; if not found, the query is sent to the configured DNS resolver/recursive server (1)",
      "The DNS resolver queries the root server, then the TLD (.com) server, then the authoritative name server for example.com (1)",
-     "The authoritative server returns the IP address, which is cached by the resolver and returned to the browser â€” the browser then connects to that IP address (1)"
+     "The authoritative server returns the IP address, which is cached by the resolver and returned to the browser — the browser then connects to that IP address (1)"
     ]
    }
   },
