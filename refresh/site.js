@@ -131,7 +131,7 @@ function buildCountdownPill(el) {
     <span class="lb-count-grid" aria-hidden="true">${block('days', 'Days', 'd1', 'd2')}${block('hours', 'Hours', 'h1', 'h2')}${block('mins', 'Mins', 'm1', 'm2')}${block('secs', 'Secs', 's1', 's2')}</span>
     <span class="lbt-foot">
       <span class="lbt-bar" aria-hidden="true"><i data-slot="bar"></i></span>
-      <span class="lbt-caption"><span data-slot="pct"></span><span>Top 3 win <b>credits</b> at reset</span></span>
+      <span class="lbt-caption"><span data-slot="pct"></span><span>Top 3 win <b>badges + 3x XP</b></span></span>
     </span>
     <span class="lb-visually-hidden" data-slot="aria"></span>
   `;
@@ -1107,9 +1107,8 @@ function getLeaderboardDisplayName(profile) {
 function getEarnedLeaderboardBadge(profile) {
   const badge = getLeaderboardBadgeEmoji(profile);
   const week = String(profile?.leaderboard_badge_week || '').trim();
-  const credits = Number(profile?.leaderboard_award_credits || 0);
   if (!badge || !week) return '';
-  return badge + ' · Week of ' + week + (credits > 0 ? ' · +' + credits + ' credits' : '');
+  return badge + ' · Week of ' + week;
 }
 
 function getLeaderboardInitials(profile) {
@@ -1441,7 +1440,7 @@ function getLeaderboardTheme() {
   return themes[Math.abs(weekIndex) % themes.length];
 }
 
-function showLeaderboardWinnerPopup(profile, creditsReward) {
+function showLeaderboardWinnerPopup(profile) {
   const popup = document.getElementById('leaderboard-win-popup');
   if (!popup) return;
   const key = 'ra10_leaderboard_win_seen_' + getLeaderboardWeekKey();
@@ -1452,7 +1451,7 @@ function showLeaderboardWinnerPopup(profile, creditsReward) {
   const name = getLeaderboardDisplayName(profile);
   if (titleEl) titleEl.textContent = 'Top spot';
   if (bodyEl) {
-    bodyEl.textContent = name + ' is currently in first place. You will get ' + creditsReward + ' credits when the leaderboard resets at the end of Saturday.';
+    bodyEl.textContent = name + ' is currently in first place. Hold on until the end of Saturday to win the gold podium badge and a 3x XP boost.';
   }
   popup.style.display = 'block';
 }
@@ -1467,10 +1466,9 @@ function showLeaderboardPodiumPopup(result) {
   const bodyEl = popup.querySelector('[data-lb-win-body]');
   const rank = Number(result.rank);
   const badge = result.badge || (rank === 1 ? '🥇 1st' : rank === 2 ? '🥈 2nd' : '🥉 3rd');
-  const credits = Number(result.credits_awarded || 0);
   if (titleEl) titleEl.textContent = 'Congratulations!';
   if (bodyEl) {
-    bodyEl.textContent = 'You finished ' + badge + ' on last week’s leaderboard and earned ' + credits + ' credits.';
+    bodyEl.textContent = 'You finished ' + badge + ' on last week’s leaderboard. You’ve earned the podium badge and a 3x XP boost: claim it from the boosts panel on this page.';
   }
   popup.style.display = 'block';
 }
@@ -1554,7 +1552,7 @@ async function renderLeaderboard() {
       if (myRankEl) myRankEl.innerHTML = '';
       updateLeaderboardCountdown();
       const lbWinner = Array.isArray(data) ? data[0] : null;
-      if (lbCurrentId && lbWinner && lbWinner.id === lbCurrentId) showLeaderboardWinnerPopup(lbWinner, 30);
+      if (lbCurrentId && lbWinner && lbWinner.id === lbCurrentId) showLeaderboardWinnerPopup(lbWinner);
       return;
     }
     tableEl.style.display = 'block';
@@ -1676,7 +1674,7 @@ async function renderLeaderboard() {
           }).join('')}
         </div>
 
-        <div class="lb-rules-card">🏆 First place wins <strong>30 credits</strong>, second gets <strong>20</strong> and third gets <strong>10</strong> when the week ends on Saturday.</div>
+        <div class="lb-rules-card">🏆 The top three when the week ends on Saturday win a podium badge (🥇 🥈 🥉) and a <strong>3x XP boost</strong>. XP only comes from real learning, so every point on this board was earned.</div>
       </div>
     `;
     updateLeaderboardCountdown();
@@ -1690,7 +1688,7 @@ async function renderLeaderboard() {
       if (podiumResult) showLeaderboardPodiumPopup(podiumResult);
     }
     if (currentId && winner && winner.id === currentId) {
-      showLeaderboardWinnerPopup(winner, 30);
+      showLeaderboardWinnerPopup(winner);
     } else if (currentId && !data.find(u => u.id === currentId)) {
       const { data: me } = await sb.from('profiles')
         .select('username, full_name, leaderboard_badge, badge_emoji, emoji_badge, profile_pic_url, xp_this_week, xp_total')
@@ -2001,7 +1999,17 @@ async function shareGlobalDailyLink() {
   }
 }
 
-async function renderGlobalTasksPage() {
+// Tasks page (refresh/ra10-tasks.js + supabase/sql/xp-v3.sql): five rotating tasks checked
+// on the server, plus daily AI games. The old local tasks below are only used until
+// xp-v3.sql is applied (RA10Tasks falls back to them when get_daily_tasks is missing).
+function renderGlobalTasksPage() {
+  const host = document.getElementById('global-tasks-host');
+  if (!host) return;
+  if (window.RA10Tasks) return window.RA10Tasks.render(host);
+  return renderLegacyGlobalTasksPage();
+}
+
+async function renderLegacyGlobalTasksPage() {
   const host = document.getElementById('global-tasks-host');
   if (!host) return;
   if (!window.RA10 || !RA10.isLoggedIn()) {

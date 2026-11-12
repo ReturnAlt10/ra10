@@ -6,7 +6,7 @@
 
   // Everything else lives next to this script. Resolving from our own URL
   // works on the live site, localhost and file:// alike.
-  var V = "52d51e261d";
+  var V = "x3a20261112";
   var DIR = "/refresh/";
   try {
     var me = document.currentScript && document.currentScript.src;
@@ -31,8 +31,14 @@
       lq.src = DIR + "ra10-liquid.js?v=" + V;
       (document.head || document.documentElement).appendChild(lq);
     }
+  })();
+
+  // Feature scripts for every page. (These used to sit inside injectGlass, which returns
+  // early on the main site because index.html links the glass stylesheet itself — so the
+  // XP layer and activity tracking never loaded there.)
+  (function injectFeatures() {
     // XP boosts, overtake popups and the boost countdown (all pages).
-    if (!document.getElementById("ra10-xp-js")) {
+    if (!document.getElementById("ra10-xp-js") && !window.RA10XP) {
       var xp = document.createElement("script");
       xp.id = "ra10-xp-js";
       xp.src = DIR + "ra10-xp.js?v=" + V;
@@ -41,6 +47,8 @@
     // Unit catalogue + activity tracking (progress monitoring) on every page.
     [["ra10-units-js", "ra10-units.js"], ["ra10-track-js", "ra10-track.js"]].forEach(function (s) {
       if (document.getElementById(s[0])) return;
+      if (s[0] === "ra10-units-js" && window.RA10Units) return;   // the main site loads it itself
+      if (s[0] === "ra10-track-js" && window.RA10Track) return;
       var el = document.createElement("script");
       el.id = s[0];
       el.src = DIR + s[1] + "?v=" + V;

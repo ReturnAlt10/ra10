@@ -27,6 +27,7 @@ create policy "Leaderboard results are publicly readable"
   using (true);
 grant select on public.leaderboard_weekly_results to anon, authenticated;
 
+-- ⚠ Superseded by xp-v3.sql. If you re-run this file, run xp-v3.sql again afterwards.
 create or replace function public.settle_previous_leaderboard()
 returns json
 language plpgsql

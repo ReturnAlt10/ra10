@@ -466,6 +466,16 @@ export default Deno.serve(async (req: Request) => {
 
     const result = ensureResultShape(parsed, marksMax);
 
+    // XP v3 (xp-v3.sql): record the real score so AI Examiner XP is based on what was actually marked.
+    try {
+      await supabase.rpc("xp_record_mark", {
+        p_user: userId,
+        p_ref: String(question?.id ?? "").slice(0, 160),
+        p_score: Number(result.earned) || 0,
+        p_max: Number(result.max) || marksMax,
+      });
+    } catch (_) { /* XP is a bonus; marking must never fail because of it */ }
+
     const usageOut = usage ? (({ event_id: _e, ...rest }) => rest)(usage) : null;
     return new Response(JSON.stringify({ ok: true, result, provider: aiResponse.provider, usage: usageOut }), {
       status: 200,

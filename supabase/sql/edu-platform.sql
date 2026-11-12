@@ -839,6 +839,7 @@ alter table public.xp_rate enable row level security;
 drop policy if exists xp_rate_own on public.xp_rate;
 create policy xp_rate_own on public.xp_rate for select to authenticated using (user_id = auth.uid());
 
+-- ⚠ Superseded by xp-v3.sql. If you re-run this file, run xp-v3.sql again afterwards.
 create or replace function public.increment_xp(amount integer)
 returns integer language plpgsql security definer set search_path = public as $$
 declare

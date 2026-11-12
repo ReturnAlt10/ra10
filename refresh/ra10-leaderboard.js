@@ -171,8 +171,8 @@
 
     var html = '<div class="lbx">';
     html += '<section class="lbx-hero"><div class="lbx-eyebrow">Weekly XP League</div><h1>Climb the leaderboard</h1>' +
-      '<p>This board shows XP earned this week. Every question, quiz and flashcard earns XP, so overtake friends, grab an XP boost and finish in the top three for credits before the Saturday reset.</p>' +
-      '<div class="lbx-prizes"><span class="lbx-prize">🥇 30 credits</span><span class="lbx-prize">🥈 20 credits</span><span class="lbx-prize">🥉 10 credits</span></div>' +
+      '<p>This board shows XP earned this week. XP comes from real learning: written answers, correct quiz answers, AI Examiner marks, guide sections, daily tasks and games. Overtake friends, grab an XP boost and finish in the top three before the Saturday reset.</p>' +
+      '<div class="lbx-prizes"><span class="lbx-prize">🥇 Gold badge</span><span class="lbx-prize">🥈 Silver badge</span><span class="lbx-prize">🥉 Bronze badge</span><span class="lbx-prize">⚡ 3x XP boost</span></div>' +
       '<div id="lb-countdown-inline" class="lb-countdown-pill">Resets in --:--:--</div></section>';
 
     if (currentId) html += '<div data-lbx-me></div><div data-lbx-boosts></div>';
@@ -206,7 +206,7 @@
           '<span class="pts">' + Number(u.xp_this_week || 0).toLocaleString('en-GB') + '<small>XP</small></span></div>';
       }).join('') + '</section>';
     }
-    html += '<p class="lbx-rules">🏆 Top three on Saturday win 30, 20 and 10 credits. XP boosts multiply the XP you earn while they run.</p></div>';
+    html += '<p class="lbx-rules">🏆 The top three on Saturday win a podium badge and a 3x XP boost. XP boosts multiply the XP you earn while they run.</p></div>';
     host.innerHTML = html;
     host.style.display = 'block';
 

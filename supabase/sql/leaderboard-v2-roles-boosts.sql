@@ -121,6 +121,7 @@ revoke all on function public.get_my_boosts() from public, anon;
 grant execute on function public.get_my_boosts() to authenticated;
 
 -- Claim a reward boost. Conditions are checked against real activity where possible.
+-- ⚠ Superseded by xp-v3.sql. If you re-run this file, run xp-v3.sql again afterwards.
 create or replace function public.claim_xp_boost(p_source text)
 returns public.xp_boosts
 language plpgsql

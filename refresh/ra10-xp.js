@@ -3,7 +3,7 @@
 
    Every app awards XP with POST /rest/v1/rpc/increment_xp. We watch for those
    calls (instead of editing every app), then:
-     1. if a boost is running, call xp_boost_bonus(base) for the extra XP;
+     1. route it through xp_claim: the server pays what was really earned (+ boost bonus);
      2. compare the leaderboard before/after and, if you moved up past someone,
         show the overtake popup.
    window.RA10XP: boosts(), claim(source), activate(id), refresh(), onChange(fn),
@@ -134,68 +134,110 @@
   }
 
   /* ── Award hook ─────────────────────────────────────────────────────── */
+  // Every app still calls POST /rest/v1/rpc/increment_xp {amount}. Since XP v3
+  // (supabase/sql/xp-v3.sql) the server only pays what real learning earned, so:
+  //   1. queued activity is sent first, so the server can see the work behind the award;
+  //   2. the call goes to xp_claim instead, which returns what was granted plus any
+  //      boost bonus (added on the server); the app still receives a plain number;
+  //   3. the app's own "+50 XP" toast is corrected to what was really granted.
+  // Until xp-v3.sql is applied, xp_claim is missing (404) and the original call is used.
+  // Every couple of minutes the rest of the earned XP is paid out too (reading the
+  // guide, quiz answers in apps that never call increment_xp).
   var origFetch = window.fetch ? window.fetch.bind(window) : null;
-  var lastSessionAwardAt = 0;       // when a completion-sized award was last granted
-  var CLIENT_COOLDOWN_MS = 8000;    // rapid start/end session farming guard (pre-server)
+  var isTop = (function () { try { return window.top === window; } catch (e) { return false; } })();
+  var v3 = true;
+  var lastSettleGrantAt = 0;
+  function flushTrack() {
+    try { return window.RA10Track && RA10Track.flush ? Promise.resolve(RA10Track.flush()).catch(function () {}) : Promise.resolve(); }
+    catch (e) { return Promise.resolve(); }
+  }
+  function numberResponse(v) { return new Response(JSON.stringify(v), { status: 200, headers: { 'Content-Type': 'application/json' } }); }
+
+  // Unit apps show "+50 XP — Practice 5 complete!" in #xp-toast; make the number honest.
+  var toastFix = null;
+  function fixAppToast(asked, granted) {
+    if (!(asked > 0) || asked === granted || !document.body || typeof MutationObserver === 'undefined') return;
+    var re = new RegExp('\\+\\s?' + asked + '\\s?XP');
+    function apply() {
+      document.querySelectorAll('#xp-toast, .xp-toast').forEach(function (el) {
+        if (re.test(el.textContent)) el.textContent = el.textContent.replace(re, '+' + granted + ' XP');
+      });
+    }
+    if (toastFix) toastFix.disconnect();
+    toastFix = new MutationObserver(apply);
+    toastFix.observe(document.body, { childList: true, subtree: true, characterData: true });
+    setTimeout(function () { if (toastFix) { toastFix.disconnect(); toastFix = null; } }, 3000);
+  }
+
   if (origFetch) {
     window.fetch = function (input, init) {
       var url = typeof input === 'string' ? input : (input && input.url) || '';
       var isXpCall = /\/rest\/v1\/rpc\/increment_xp(\?|$)/.test(url) && init && init.body && !window.__rxpInternal;
+      if (!isXpCall) return origFetch(input, init);
       var amount = 0;
-      if (isXpCall) { try { amount = Number(JSON.parse(init.body).amount) || 0; } catch (e) {} }
+      try { amount = Number(JSON.parse(init.body).amount) || 0; } catch (e) {}
+      if (!v3 || amount <= 0) return origFetch(input, init).then(legacyResult);
 
-      // Client-side anti-farm: if a completion-sized award landed a moment ago,
-      // don't send the next one. Stops the start/practice/end loop immediately —
-      // even before xp-integrity.sql is applied — and never affects small
-      // per-answer awards (those are < 10 and pass straight through).
-      if (isXpCall && amount >= 10 && Date.now() - lastSessionAwardAt < CLIENT_COOLDOWN_MS) {
-        showIntegrityWarning();
-        return Promise.resolve(new Response('0', { status: 200, headers: { 'Content-Type': 'application/json' } }));
-      }
-
-      var p = origFetch(input, init);
-      if (isXpCall) {
-        p.then(function (res) {
-          if (!res || !res.ok || amount <= 0) return;
-          // Read the value the server actually gave back. It returns 0 when an
-          // award is held (rushed/random work, or too soon after the last one).
-          if (amount >= 10) {
-            res.clone().json().then(function (value) {
-              var granted = Number(Array.isArray(value) ? value[0] : value);
-              if (!Number.isFinite(granted) || granted <= 0) showIntegrityWarning();
-              else { lastSessionAwardAt = Date.now(); onAward(granted); }
-            }, function () {});
-          } else onAward(amount);
-        }, function () {});
-      }
-      return p;
+      return flushTrack().then(function () {
+        var claimInit = Object.assign({}, init, { body: JSON.stringify({ p_amount: Math.min(100, Math.round(amount)), p_reason: 'app' }) });
+        return origFetch(url.replace(/\/rpc\/increment_xp(\?.*)?$/, '/rpc/xp_claim'), claimInit);
+      }).then(function (res) {
+        if (res.status === 404) { v3 = false; return origFetch(input, init).then(legacyResult); }
+        if (!res.ok) return res;
+        return res.json().then(function (j) {
+          var granted = Number(j && j.granted) || 0;
+          var bonus = Number(j && j.bonus) || 0;
+          if (granted > 0) { fixAppToast(amount, granted); onAward(granted, bonus, Number(j.multiplier) || 1); }
+          else if (amount >= 10 && Date.now() - lastSettleGrantAt > 300000) showIntegrityWarning();
+          return numberResponse(granted);
+        }, function () { return numberResponse(0); });
+      });
     };
+  }
+  function legacyResult(res) {
+    if (res && res.ok) {
+      res.clone().json().then(function (v) {
+        var g = Number(Array.isArray(v) ? v[0] : v);
+        if (Number.isFinite(g) && g > 0) onAward(g, 0, 1);
+      }, function () {});
+    }
+    return res;
+  }
+
+  // Pay out the rest of what was earned (top window only, while the tab is open).
+  var settling = false;
+  function settle() {
+    if (!v3 || settling || !isTop || !loggedIn() || document.visibilityState !== 'visible') return;
+    settling = true;
+    flushTrack().then(function () { return rpc('xp_claim', { p_amount: 0, p_reason: 'revision' }); }).then(function (j) {
+      var g = Number(j && j.granted) || 0, b = Number(j && j.bonus) || 0;
+      if (g > 0) {
+        lastSettleGrantAt = Date.now();
+        toast('+' + (g + b) + ' XP for your revision' + (b ? ' · ' + j.multiplier + 'x boost' : ''));
+        onAward(g, b, Number(j.multiplier) || 1, true);
+      }
+    }, function (err) { if (missing(err)) v3 = false; }).then(function () { settling = false; }, function () { settling = false; });
   }
 
   var awardQueue = Promise.resolve();
-  function onAward(base) {
-    awardQueue = awardQueue.then(function () { return handleAward(base); }).catch(function () {});
+  function onAward(base, bonus, mult, quiet) {
+    awardQueue = awardQueue.then(function () { return handleAward(base, bonus || 0, mult || 1, quiet); }).catch(function () {});
+    try { window.dispatchEvent(new CustomEvent('ra10:xp', { detail: { granted: base, bonus: bonus || 0 } })); } catch (e) {}
   }
 
-  function handleAward(base) {
+  function handleAward(base, extra, mult, quiet) {
     var before = state.board ? state.board.slice() : null;
     var beforeMe = state.me ? Object.assign({}, state.me) : null;
     var boost = activeBoost();
-    var bonusP = boost && state.available
-      ? rpc('xp_boost_bonus', { p_base: base }).then(function (r) { var row = Array.isArray(r) ? r[0] : r; return row || null; }, function () { return null; })
-      : Promise.resolve(null);
-    return bonusP.then(function (bonus) {
-      var extra = bonus && bonus.bonus ? Number(bonus.bonus) : 0;
-      if (extra > 0) toast('+' + extra + ' bonus XP · ' + bonus.multiplier + 'x boost');
-      return snapshot().then(function (after) {
-        if (!after || !before || !beforeMe || !after.me) return;
-        var oldRank = Number(beforeMe.rank) || 0;
-        var newRank = Number(after.me.rank) || 0;
-        if (!oldRank || !newRank || newRank >= oldRank) return;
-        if (Date.now() - state.lastPopup < 15000) return;
-        state.lastPopup = Date.now();
-        showOvertake(before, after.rows || [], oldRank, newRank, base + extra, boost);
-      });
+    if (extra > 0 && !quiet) toast('+' + extra + ' bonus XP · ' + mult + 'x boost');
+    return snapshot().then(function (after) {
+      if (!after || !before || !beforeMe || !after.me) return;
+      var oldRank = Number(beforeMe.rank) || 0;
+      var newRank = Number(after.me.rank) || 0;
+      if (!oldRank || !newRank || newRank >= oldRank) return;
+      if (Date.now() - state.lastPopup < 15000) return;
+      state.lastPopup = Date.now();
+      showOvertake(before, after.rows || [], oldRank, newRank, base + extra, boost);
     });
   }
 
@@ -369,6 +411,9 @@
         if (loggedIn()) { loadBoosts(); snapshot(); }
         if (typeof r.on === 'function') r.on('authchange', function () { state.boosts = []; renderPill(); if (loggedIn()) { loadBoosts(); snapshot(); } });
         setInterval(function () { if (loggedIn() && document.visibilityState === 'visible') snapshot(); }, 120000);
+        setInterval(settle, 120000);
+        document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'visible') setTimeout(settle, 1500); });
+        setTimeout(settle, 8000);
         return;
       }
       if (++tries < 80) setTimeout(wait, 250);
@@ -380,6 +425,7 @@
     boosts: function () { return state.boosts.slice(); },
     active: activeBoost,
     available: function () { return state.available; },
+    settle: settle,
     claim: claim,
     activate: activate,
     refresh: function () { return Promise.all([loadBoosts(), snapshot()]); },

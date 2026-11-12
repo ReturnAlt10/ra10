@@ -471,7 +471,7 @@ Return JSON: {"score":0,"got":[indices of mark scheme points the answer earns],"
 /* ───────────────────────────── complete ───────────────────────────── */
 async function complete(ctx: Ctx, body: any) {
   const id = clean(body.lessonId, 60);
-  const { data: L } = await ctx.admin.from('study_lessons').select('id, user_id, status, content, xp, kind, title, assignment_id, item_id').eq('id', id).maybeSingle();
+  const { data: L } = await ctx.admin.from('study_lessons').select('id, user_id, status, content, xp, kind, title, assignment_id, item_id, created_at').eq('id', id).maybeSingle();
   if (!L || L.user_id !== ctx.userId) return { ok: false, error: 'Lesson not found.' };
   if (L.kind === 'template') return { ok: true, xp: 0, preview: true };
   const steps = L.content?.steps || [];
@@ -487,14 +487,30 @@ async function complete(ctx: Ctx, body: any) {
   if (L.status === 'done') {
     return { ok: true, xp: 0, score, max, replay: true };
   }
-  const xp = Math.min(60, 15 + Math.round((max ? score / max : 0) * 30) + (Number(body.bestCombo) >= 5 ? 5 : 0));
+  // A lesson rushed through faster than anyone could read it earns no XP (it still counts as done).
+  const checkable = steps.filter((s: any) => s.type !== 'learn' && s.type !== 'recap').length;
+  const minSeconds = Math.max(45, checkable * 6);
+  const started = Date.parse(String(L.created_at || ''));
+  const rushed = Number.isFinite(started) && (Date.now() - started) / 1000 < minSeconds;
+  const xp = rushed ? 0 : Math.min(60, 15 + Math.round((max ? score / max : 0) * 30) + (Number(body.bestCombo) >= 5 ? 5 : 0));
   const { error } = await ctx.admin.from('study_lessons').update({
     status: 'done', score, max_score: max, xp, completed_at: new Date().toISOString(),
     progress: { i: steps.length, results: res },
   }).eq('id', id).neq('status', 'done');
   if (error) return { ok: false, error: error.message };
+  // XP goes through the server-only award (xp-v3.sql: Study Hub cap 150 a day). Until that SQL is
+  // applied, fall back to the old guarded increment_xp.
   let awarded = 0;
-  try { const { error: xe } = await ctx.user.rpc('increment_xp', { amount: xp }); if (!xe) awarded = xp; } catch (_) { /* XP is a bonus */ }
+  if (xp > 0) {
+    try {
+      const { data: xa, error: xe } = await ctx.admin.rpc('xp_award_server', { p_user: ctx.userId, p_source: 'study_hub', p_amount: xp, p_ref: `lesson:${id}` });
+      if (!xe && xa) awarded = (Number(xa.granted) || 0) + (Number(xa.bonus) || 0);
+      else if (xe && /PGRST202|42883|Could not find/.test(String(xe.code || '') + ' ' + String(xe.message || ''))) {
+        const { data: old, error: oe } = await ctx.user.rpc('increment_xp', { amount: xp });
+        if (!oe) awarded = Number(old) || 0;
+      }
+    } catch (_) { /* XP is a bonus */ }
+  }
   // a lesson set as homework counts as the student's submission for that assignment item
   if (L.assignment_id && L.item_id) {
     const pct = max ? Math.round((score / max) * 100) : 100;
@@ -506,7 +522,7 @@ async function complete(ctx: Ctx, body: any) {
       feedback: { summary: `Study Hub lesson: ${pct}% (${score}/${max})${Number(body.bestCombo) >= 3 ? ` · best streak ${Number(body.bestCombo)} in a row` : ''}`, lesson_id: L.id, missed: wrong },
     }, { onConflict: 'assignment_id,user_id,item_id' });
   }
-  return { ok: true, xp: awarded || xp, score, max };
+  return { ok: true, xp: awarded, score, max, ...(rushed ? { note: 'Finished too quickly to earn XP. Take your time on the next one.' } : {}) };
 }
 
 /* ───────────────────────────── RA10 EDU: lessons set by teachers ─────────────────────────────
