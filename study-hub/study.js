@@ -410,23 +410,21 @@
     const premium = !!st.premium;
     if (!premium && st.trial_used && !(st.lessons || []).length) return lockedScreen();
     const banner = premium ? '' : !st.trial_used
-      ? `<div class="sh-banner">${I('gift', { size: 26 })}<span><b>Try Study Hub free.</b> You can make one free lesson to see how it works. Study Hub is part of RA10 Premium.</span></div>`
-      : `<div class="sh-banner">${I('lock', { size: 24 })}<span>You've used your free lesson. Daily lessons and unlimited lessons are part of <b>RA10 Premium</b>, coming soon.</span><button class="sh-btn sm gold" id="sh-why">What's included</button></div>`;
+      ? `<div class="sh-banner">${I('gift', { size: 26 })}<span><b>Your first lesson is free.</b> The AI tools below have free tries too.</span></div>`
+      : `<div class="sh-banner">${I('lock', { size: 24 })}<span>Daily lessons are part of <b>RA10 Premium</b>.</span><button class="sh-btn sm gold" id="sh-why">What's included</button></div>`;
     main.innerHTML = `${banner}
-      <section class="sh-hero">
-        <div class="sh-hero-copy"><p class="sh-eyebrow">${I('sparkles', { size: 16 })} Study Hub</p><h1>${esc(greet())}${firstName() ? ', ' + esc(firstName()) : ''}</h1><p class="sh-muted">${st.streak ? `You're on a <b>${st.streak}-day streak</b>. Keep it going!` : 'Finish a lesson today to start a streak.'}</p></div>
-        <div class="sh-statrow">
-          <div class="sh-statc fire">${I('flame', { size: 30 })}<span><b>${st.streak || 0}</b><small>day streak</small></span></div>
-          <div class="sh-statc xp">${I('bolt', { size: 30 })}<span><b>${st.total_xp || 0}</b><small>XP earned</small></span></div>
-          <div class="sh-statc done">${I('trophy', { size: 30 })}<span><b>${st.total_done || 0}</b><small>lessons done</small></span></div>
-        </div>
+      <section class="sh-hero2">
+        <div class="sh-mascot">${window.RA10Tools ? RA10Tools.mascot(st.done_today ? 'cheer' : 'wave', 84) : ''}</div>
+        <div class="sh-hello"><h1>${esc(greet())}${firstName() ? ', ' + esc(firstName()) : ''}</h1>
+          <p class="sh-muted">${st.done_today ? 'Today\'s done. Nice work.' : st.streak ? `<b>${st.streak}-day streak</b> — one lesson keeps it going.` : 'One lesson today starts your streak.'}</p>
+          <div class="sh-chips2"><span class="fire">${I('flame', { size: 18 })}<b>${st.streak || 0}</b> day streak</span><span class="xp">${I('bolt', { size: 18 })}<b>${st.total_xp || 0}</b> XP</span><span class="done">${I('trophy', { size: 18 })}<b>${st.total_done || 0}</b> lessons</span></div></div>
       </section>
       <div class="sh-layout">
         <section class="sh-pathcol" id="sh-pathcard"></section>
-        <aside class="sh-rail"><section id="sh-set" class="sh-card sh-set sh-r-set" hidden></section><section id="sh-today" class="sh-r-today"></section><section class="sh-card sh-make sh-r-make" id="sh-make"></section><section class="sh-card sh-r-week" id="sh-week"></section><section class="sh-card sh-r-ins" id="sh-insights"></section></aside>
+        <aside class="sh-rail"><section id="sh-set" class="sh-card sh-set sh-r-set" hidden></section><section id="sh-today" class="sh-r-today"></section><section class="sh-card sh-tools sh-r-make" id="sh-make"></section><section class="sh-card sh-r-week" id="sh-week"></section></aside>
       </div>`;
     const why = $('#sh-why'); if (why) why.onclick = lockedScreen;
-    paintSet(); paintToday(); paintMake(); paintWeek(); paintInsights(); paintPath();
+    paintSet(); paintToday(); paintMake(); paintWeek(); paintPath();
     if (premium && !st.daily && !S.building && !S.buildErr && (S.plan && S.plan.focus || store.get('sh_unit'))) buildDaily();
   }
 
@@ -444,7 +442,7 @@
       const u = unitOf(d.unit), doneNow = d.status === 'done';
       box.innerHTML = card(doneNow ? 'done' : '', doneNow ? I('check', { size: 15 }) + ' Done for today' : I('sun', { size: 15 }) + ' Today\'s lesson', I(iconOf(d), { size: 44 }), esc(d.title),
         esc([u && u.short, d.minutes ? '≈ ' + d.minutes + ' min' : '', doneNow && d.max_score ? d.score + '/' + d.max_score + ' correct' : ''].filter(Boolean).join(' · ')),
-        d.reason && !doneNow ? `<div class="why"><b>Why this lesson</b>${esc(d.reason)}</div>` : doneNow ? `<div class="why"><b>Great work</b>Come back tomorrow for a new lesson${st.streak ? ' and keep your ' + st.streak + '-day streak' : ''}.</div>` : '',
+        d.reason && !doneNow ? `<div class="why"><b>Why this lesson</b>${esc(String(d.reason).length > 120 ? String(d.reason).slice(0, 117).replace(/\s+\S*$/, '') + '…' : d.reason)}</div>` : doneNow ? `<div class="why"><b>Great work</b>Come back tomorrow for a new lesson${st.streak ? ' and keep your ' + st.streak + '-day streak' : ''}.</div>` : '',
         doneNow ? `<button class="sh-btn light" data-open="${esc(d.id)}">Replay</button>${st.can_create ? `<button class="sh-btn clear" data-make>Make another</button>` : ''}` : `<button class="sh-btn light lg" data-open="${esc(d.id)}">${d.status === 'in_progress' ? 'Continue lesson' : 'Start lesson'} ${I('arrow', { size: 18 })}</button>`);
       $$('[data-open]', box).forEach(b => b.onclick = () => openLesson(b.dataset.open));
       $$('[data-make]', box).forEach(b => b.onclick = () => openMaker());
@@ -558,18 +556,33 @@
     }
   }
 
+  // AI study tools (Premium with free tries; the scanner is free) — see refresh/ra10-ai-tools.js
   function paintMake() {
     const box = $('#sh-make'); if (!box) return;
     const st = S.status || {};
-    box.innerHTML = `<div class="sh-make-ic">${I('wand', { size: 34 })}</div><div class="sh-make-copy"><h2>Make your own lesson</h2><p class="sh-muted">Any unit, any topic — pick how long and what to focus on.</p></div>
-      <button class="sh-btn pri wide" id="sh-make-go" ${st.can_create ? '' : 'disabled'}>${st.can_create ? (st.premium ? 'Make a lesson' : 'Use my free lesson') : I('lock', { size: 16 }) + ' Premium'}</button>`;
-    $('#sh-make-go').onclick = () => openMaker();
+    const RT = window.RA10Tools;
+    const tools = [
+      { k: 'make', ic: 'wand', t: 'Make a lesson', d: 'Any topic, your length', badge: st.can_create ? (st.premium ? '' : '<span class="rtl-pill try">1 free</span>') : '<span class="rtl-pill prem">Premium</span>' },
+      { k: 'blurt', ic: 'mic', t: 'Blurt & Grill', d: 'Say it all, see the gaps', f: 'blurt' },
+      { k: 'pre', ic: 'clipboard', t: 'Part A / B', d: 'Mock pre-release pack', f: 'prerelease', href: '/tools/prerelease/' },
+      { k: 'bug', ic: 'code', t: 'Bug Hunt', d: 'Fix the logic', f: 'bughunt', href: '/tools/bug-hunt/' },
+      { k: 'scan', ic: 'camera', t: 'Scan work', d: 'Mark handwriting', free: true, href: '/tools/scan/' },
+    ];
+    const tile = (x) => `<${x.href ? 'a href="' + x.href + '"' : 'button type="button"'} class="sh-tool" data-tool="${x.k}"><span class="ic">${I(x.ic, { size: 26 })}</span><b>${esc(x.t)}</b><small>${esc(x.d)}</small><span class="bd" data-bd="${x.f || ''}">${x.free ? '<span class="rtl-pill free">Free</span>' : x.badge || ''}</span></${x.href ? 'a' : 'button'}>`;
+    box.innerHTML = `<h2>${I('sparkles', { size: 20 })} Study tools</h2><div class="sh-tools-grid">${tools.map(tile).join('')}</div>`;
+    const mk = $('[data-tool="make"]', box); if (mk) mk.onclick = () => (st.can_create ? openMaker() : lockedScreen());
+    const bl = $('[data-tool="blurt"]', box); if (bl) bl.onclick = () => { if (window.SHBlurt) SHBlurt.open({ unit: S.pathUnit || store.get('sh_unit') }); };
+    if (RT) RT.status().then((ts) => $$('[data-bd]', box).forEach((el) => { if (el.dataset.bd) el.innerHTML = RT.badge(el.dataset.bd, ts); }));
   }
   function paintWeek() {
     const box = $('#sh-week'); if (!box) return;
     const st = S.status || {};
     const days = (st.week || []).map((d, i, a) => { const dt = new Date(d.day + 'T12:00:00'); return `<span class="sh-day${d.done ? ' done' : ''}${i === a.length - 1 ? ' today' : ''}"><i>${d.done ? I('flame', { size: 18 }) : ''}</i>${'SMTWTFS'[dt.getDay()]}</span>`; }).join('');
-    box.innerHTML = `<h2>${I('flame', { size: 20, cls: 'c-fire' })} This week</h2><div class="sh-week" aria-label="This week">${days}</div><p class="sh-muted sh-small" style="margin:10px 0 0">${st.done_today ? 'Today is done — see you tomorrow.' : 'Finish a lesson today to keep your streak.'}</p>`;
+    const can = !!st.can_create;
+    const weak = ((S.plan && S.plan.weak) || []).slice(0, 3);
+    box.innerHTML = `<h2>${I('flame', { size: 20, cls: 'c-fire' })} This week</h2><div class="sh-week" aria-label="This week">${days}</div>` +
+      (weak.length ? `<div class="sh-ins-h" style="margin-top:14px">Focus next</div><div class="sh-chips">${weak.map(t => `<button class="sh-chip weak" data-unit="${esc(t.unit)}" data-topic="${esc(t.topic)}" ${can ? '' : 'disabled'}>${esc(t.topic)} <small>${t.pct}%</small></button>`).join('')}</div>` : '');
+    $$('button[data-topic]', box).forEach(b => b.onclick = () => openMaker({ unit: b.dataset.unit, topic: b.dataset.topic, reason: `You asked for help with ${b.dataset.topic}, one of the topics you've been finding tricky.` }));
   }
 
   function paintInsights() {
@@ -755,19 +768,25 @@
         const inAim = []; a.topics.forEach(t => t.subs.length ? inAim.push(...t.subs) : inAim.push(t));
         const d = inAim.filter(x => states.get(x).state === 'done').length;
         const sec = (String(a.title).match(/^(\d+(?:\.\d+)+)\s+/) || [])[1]; const chap = /^Chapter /.test(a.tag || '');   // A-Level sections are titled "3.10 …"
-        html += `<div class="sh-rsec"><span class="ai${sec && !chap ? ' wide' : ''}">${esc(chap ? a.short : (sec || a.short || a.aim || '•'))}</span><span><small>${chap ? esc(a.tag) + (sec ? ' · spec ' + esc(sec) : '') : sec ? 'Section ' + esc(sec) : esc(a.tag || 'Learning aim ' + a.aim)}</small><b>${esc(sec ? String(a.title).replace(/^\d+(?:\.\d+)+\s+/, '') : a.title)}</b></span><em>${d}/${inAim.length}</em></div>`;
+        const hasCur = inAim.includes(firstTodo) || (!firstTodo && a === tree[0]);
+        html += `<details class="sh-raim"${hasCur ? ' open' : ''}><summary class="sh-rsec"><span class="ai${sec && !chap ? ' wide' : ''}">${esc(chap ? a.short : (sec || a.short || a.aim || '•'))}</span><span><small>${chap ? esc(a.tag) + (sec ? ' · spec ' + esc(sec) : '') : sec ? 'Section ' + esc(sec) : esc(a.tag || 'Learning aim ' + a.aim)}</small><b>${esc(sec ? String(a.title).replace(/^\d+(?:\.\d+)+\s+/, '') : a.title)}</b></span><em>${d}/${inAim.length}</em></summary><div class="sh-raim-body">`;
         n = 0;
+        let shown = 0, extra = 0;
+        const curIdx = Math.max(0, inAim.indexOf(firstTodo));
         a.topics.forEach(t => {
           const list = t.subs.length ? t.subs : [t];
-          if (t.subs.length) html += `<div class="sh-rtopic"><small>${esc(t.code)}</small> ${esc(t.short)}</div>`;
+          if (t.subs.length) html += `<div class="sh-rtopic${hasCur && inAim.indexOf(list[0]) > curIdx + 5 ? ' sh-xtra' : ''}"><small>${esc(t.code)}</small> ${esc(t.short)}</div>`;
           list.forEach(x => {
             const s = states.get(x), key = 'n' + Object.keys(nodes).length; nodes[key] = { node: x, s };
             const cur = x === firstTodo;
-            html += nodeHtml({ cls: s.state + (cur ? ' cur' : '') + (s.weak ? ' weak' : ''), cur, icon: SHIcons.forLesson({ topic: x.name, unit }), code: x.code, title: x.short, label: x.label,
+            const pos = inAim.indexOf(x), hide = hasCur && (pos > curIdx + 5 || pos < curIdx - 1);
+            if (hide) extra++; else shown++;
+            html += (hide ? '<div class="sh-xtra">' : '') + nodeHtml({ cls: s.state + (cur ? ' cur' : '') + (s.weak ? ' weak' : ''), cur, icon: SHIcons.forLesson({ topic: x.name, unit }), code: x.code, title: x.short, label: x.label,
               attrs: `data-rn="${key}"`, badge: s.state === 'done' ? I('check', { size: 14, stroke: 2.6 }) : s.weak ? '!' : s.strong ? '★' : '', badgeCls: s.state === 'done' ? 'ok' : s.weak ? 'bad' : 'good',
-              sub: s.state === 'done' ? stars(s.best.score, s.best.max_score, 13) : s.open ? 'In progress' : cur ? 'Up next' : '' });
+              sub: s.state === 'done' ? stars(s.best.score, s.best.max_score, 13) : s.open ? 'In progress' : cur ? 'Up next' : '' }) + (hide ? '</div>' : '');
           });
         });
+        html += (extra ? `<button type="button" class="sh-btn ghost sm sh-showall" data-showall>Show all ${inAim.length} topics</button>` : '') + '</div></details>';
       });
     } else {
       // My path: a clear, ordered plan — one thing to do next, then a numbered list, then what's done
@@ -791,7 +810,7 @@
         ? `<button class="sh-btn pri${big ? ' lg' : ' sm'}" data-act="open" data-id="${esc(it.l.id)}">${it.l.status === 'in_progress' ? 'Continue' : 'Start'}${big ? ' ' + I('arrow', { size: 18 }) : ''}</button>`
         : can ? `<button class="sh-btn pri${big ? ' lg' : ' sm'}" data-act="rec" data-i="${i}">Start${big ? ' lesson ' + I('arrow', { size: 18 }) : ''}</button>`
           : `<button class="sh-btn gold${big ? ' lg' : ' sm'}" data-act="lock">${I('lock', { size: 15 })} Premium</button>`;
-      let h = `<div class="sh-plan"><p class="sh-plan-intro">${I('compass', { size: 18 })}<span>Your personal plan for <b>${esc(u ? u.short : 'this unit')}</b>, built from your quiz scores, written answers and the guide sections you've read. Start at the top and work down.</span></p>`;
+      let h = `<div class="sh-plan"><p class="sh-legend1">Built from your scores in ${esc(u ? u.short : 'this unit')} · start at the top</p>`;
       if (S.building && !st.daily) h += `<div class="sh-next building"><div class="sh-next-top"><span class="sh-stepn">${I('brain', { size: 18 })}</span><span class="sh-eyebrow2">Building today's lesson…</span></div><p class="sh-muted">This takes about half a minute — it will appear here when it's ready.</p></div>`;
       if (items.length) {
         const first = items[0];
@@ -811,7 +830,6 @@
         h += `<h4 class="sh-plan-h">Completed in ${esc(u ? u.short : 'this unit')} <em>${done.length}</em></h4><ul class="sh-plan-list done">${done.slice(0, 4).map(row).join('')}</ul>`;
         if (done.length > 4) h += `<details class="sh-more"><summary>Show ${done.length - 4} more</summary><ul class="sh-plan-list done">${done.slice(4).map(row).join('')}</ul></details>`;
       }
-      if (items.length) h += `<div class="sh-legend"><span class="sh-tag fix">Fix</span> a topic you're finding hard <span class="sh-tag lock">Lock in</span> something you've just read <span class="sh-tag new">New</span> the next topic in the course <span class="sh-tag review">Review</span> worth revisiting</div>`;
       if (can && items.length) h += `<div class="sh-row-c"><button class="sh-btn ghost sm" data-new>${I('plus', { size: 16 })} Make a lesson on something else</button></div>`;
       body.innerHTML = h + '</div>';
       $$('[data-act="open"]', body).forEach(b => b.onclick = () => openLesson(b.dataset.id));
@@ -822,7 +840,8 @@
       $$('[data-new]', body).forEach(b => b.onclick = () => openMaker({ unit }));
       return;
     }
-    body.innerHTML = `<p class="sh-plan-intro">${I('clipboard', { size: 18 })}<span>Every topic in the course, in order. <b>Tap a topic</b> to start a lesson on it. A tick means you've done it; <b>!</b> means you've been finding it hard.</span></p><div class="sh-route">${html}</div>`;
+    body.innerHTML = `<p class="sh-legend1">Tap a topic for a lesson · <span class="ok">✓</span> done · <span class="bad">!</span> tricky</p><div class="sh-route">${html}</div>`;
+    $$('[data-showall]', body).forEach(b => b.onclick = () => { const g = b.closest('.sh-raim-body'); if (g) g.classList.add('all'); b.remove(); });
     $$('[data-rn]', body).forEach(b => b.onclick = (e) => { e.stopPropagation(); routePop(b, nodes[b.dataset.rn], unit); });
     $$('[data-new]', body).forEach(b => b.onclick = () => openMaker({ unit }));
   }

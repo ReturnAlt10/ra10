@@ -120,6 +120,8 @@
       '.rt-how{margin-top:28px;padding:18px 20px;border-radius:20px;border:1px solid var(--rt-line);background:var(--rt-card)}',
       '.rt-how h3{margin:0 0 8px;font-size:1rem}',
       '.rt-how ul{margin:0;padding-left:18px;color:var(--rt-muted);font-size:.88rem;line-height:1.6}',
+      '.rt-gap{margin:6px 0 0!important;padding:8px 10px;border-radius:10px;background:#fef3c7;color:#92400e!important;font-size:.84rem!important}',
+      'html[data-theme="dark"] .rt-gap{background:rgba(245,158,11,.16);color:#fcd34d!important}',
       '.rt-toast{position:fixed!important;left:50%;top:18px;transform:translateX(-50%);z-index:2147483300;padding:10px 18px;border-radius:999px;background:var(--color-text,#28251d);color:var(--color-bg,#fff);font:700 .88rem var(--font-b,system-ui);box-shadow:0 12px 30px rgba(0,0,0,.25);animation:rtIn .3s ease both;max-width:calc(100vw - 32px);text-align:center}',
       '@keyframes rtIn{from{opacity:0;transform:translate(-50%,-8px)}to{opacity:1;transform:translate(-50%,0)}}',
       /* game player */
@@ -314,10 +316,12 @@
     var right;
     if (t.claimed) right = '<span class="rt-done">' + icon('check', 16) + 'Done</span>';
     else if (t.claimable) right = '<button class="rt-btn primary" type="button" data-rt-claim="' + esc(t.key) + '">Claim +' + t.xp + ' XP</button>';
+    else if (t.key === 'gap_drill' && t.gap) right = '<button class="rt-btn primary" type="button" data-rt-gap>Start 3-min drill</button>';
     else right = '<button class="rt-btn" type="button" data-rt-go="' + esc(t.slot) + '" data-rt-key="' + esc(t.key) + '">' + esc(t.key === 'study_hub' ? 'Open Study Hub' : SLOT_GO[t.slot] || 'Go') + '</button>';
+    var gapLine = t.key === 'gap_drill' && t.gap ? '<p class="rt-gap">You scored <b>' + esc(t.gap.score) + '/' + esc(t.gap.max) + '</b> on <b>' + esc(t.gap.topic) + '</b> — let\u2019s fix it.</p>' : '';
     return '<div class="rt-task' + (t.claimed ? ' done' : t.claimable ? ' claimable' : '') + '" role="listitem">' +
       '<span class="rt-ico">' + icon(t.claimed ? 'check' : t.slot, 21) + '</span>' +
-      '<div><h3>' + esc(t.title) + '</h3><p>' + esc(t.detail) + '</p>' +
+      '<div><h3>' + esc(t.title) + '</h3><p>' + esc(t.detail) + '</p>' + gapLine +
         '<div class="rt-prog"><span class="bar"><i style="width:' + pct + '%"></i></span><span>' + t.progress + ' / ' + t.target + '</span></div></div>' +
       '<div class="rt-side"><span class="rt-xp">' + icon('bolt', 14) + t.xp + ' XP</span>' + right + '</div>' +
     '</div>';
@@ -360,6 +364,8 @@
         }, function (e) { b.disabled = false; toast((e && e.message) || 'Not finished yet.'); });
       };
     });
+    var gb = $('[data-rt-gap]', host);
+    if (gb) gb.onclick = function () { var t = (S.data.tasks || []).filter(function (x) { return x.key === 'gap_drill'; })[0]; if (t && t.gap) gapDrill(t.gap); };
     $$('[data-rt-go]', host).forEach(function (b) {
       b.onclick = function () {
         var slot = b.getAttribute('data-rt-go');
@@ -443,7 +449,7 @@
     }).join('') + '</div>';
     $$('[data-rt-play]', box).forEach(function (b) { b.onclick = function () { play(set, b.getAttribute('data-rt-play')); }; });
   }
-  function gameXp(id) { return id === 'truefalse' ? 20 : 25; }
+  function gameXp(id) { return id === 'truefalse' ? 24 : 30; }
 
   function build() {
     var box = $('#rt-games', S.host);
@@ -625,6 +631,68 @@
     }
   }
   function shuffled(a) { var b = a.slice(); for (var i = b.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = b[i]; b[i] = b[j]; b[j] = t; } return b; }
+
+  /* ── spec-gap micro-drill: 3 questions on a topic the learner lost marks on ── */
+  function gapDrill(gap) {
+    css();
+    var ov = document.createElement('div');
+    ov.className = 'rtg'; ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-modal', 'true'); ov.setAttribute('aria-label', 'Weak spot drill');
+    ov.style.setProperty('--g', '#d97706');
+    ov.innerHTML = '<div class="rtg-card"><div class="rtg-top"><span class="gi">' + icon('ai', 20) + '</span><h3>Fix your weak spot<small>' + esc(gap.topic) + '</small></h3><button class="rtg-x" type="button" aria-label="Close">' + icon('x', 20) + '</button></div><div class="rtg-bar"><i style="width:0%"></i></div><div class="rtg-body"><div class="rt-build" style="border:0;background:transparent">' + (window.RA10Tools ? RA10Tools.mascot('think', 72) : '<div class="rt-spin"></div>') + '<div>Building your drill…</div></div></div></div>';
+    document.documentElement.appendChild(ov);
+    var body = $('.rtg-body', ov), bar = $('.rtg-bar i', ov);
+    var close = function () { ov.remove(); };
+    $('.rtg-x', ov).onclick = close;
+    ov.addEventListener('click', function (e) { if (e.target === ov) close(); });
+    var u = unitOf(gap.unit);
+    var words = String(gap.topic || '').toLowerCase().split(/[^a-z0-9]+/).filter(function (w) { return w.length > 3; });
+    var bankP = u ? loadCatalog(gap.unit).then(function (cat) {
+      return grounding(cat).quiz.filter(function (q) { var t = String(q.q).toLowerCase(); return words.filter(function (w) { return t.indexOf(w) >= 0; }).length >= Math.min(2, words.length); }).slice(0, 12);
+    }, function () { return []; }) : Promise.resolve([]);
+    bankP.then(function (bank) {
+      if (!window.RA10Tools) throw new Error('Please refresh the page and try again.');
+      return RA10Tools.api('drill', { topic: gap.topic, unit: gap.unit, unitName: u ? u.name : '', qual: u ? u.qual : '', question: gap.question, bank: bank });
+    }).then(function (r) {
+      var items = r.items, i = 0, right = 0, locked = false;
+      function show() {
+        if (i >= items.length) return done();
+        locked = false; bar.style.width = Math.round(i / items.length * 100) + '%';
+        body.innerHTML = '<div class="rtg-big" style="font-size:1rem;min-height:90px">' + esc(items[i].q) + '</div><div class="rtg-opts">' + items[i].choices.map(function (c, k) { return '<button type="button" class="rtg-opt" data-k="' + k + '">' + (k + 1) + '. ' + esc(c) + '</button>'; }).join('') + '</div><div data-ex></div><div class="rtg-meta"><span>' + (i + 1) + ' of ' + items.length + '</span><span>' + right + ' right</span></div>';
+        $$('[data-k]', body).forEach(function (b) { b.onclick = function () { pick(Number(b.dataset.k)); }; });
+      }
+      function pick(k) {
+        if (locked) return; locked = true;
+        var it = items[i], ok = k === it.answer; if (ok) right++;
+        $$('[data-k]', body).forEach(function (b) { var n = Number(b.dataset.k); if (n === it.answer) b.classList.add('ok'); else if (n === k) b.classList.add('bad'); b.disabled = true; });
+        var ex = $('[data-ex]', body);
+        ex.innerHTML = (it.explain ? '<p class="rtg-note" style="margin:10px 0 0">' + esc(it.explain) + '</p>' : '') + '<div class="rtg-actions"><button class="rt-btn dark" type="button" data-next>' + (i + 1 < items.length ? 'Next' : 'Finish') + '</button></div>';
+        $('[data-next]', ex).onclick = function () { i++; show(); };
+        $('[data-next]', ex).focus();
+      }
+      function done() {
+        bar.style.width = '100%';
+        var pass = right >= 2;
+        try { if (window.RA10Track) { RA10Track.log('gap_drill', { ref: String(gap.topic).slice(0, 150), title: gap.topic, unit: gap.unit || null, score: right, max_score: items.length }); } } catch (e) {}
+        body.innerHTML = '<div class="rtg-res">' + (window.RA10Tools ? RA10Tools.mascot(pass ? 'cheer' : 'think', 84) : '') + '<div class="rtg-score">' + right + '/' + items.length + '</div><p class="rtg-note">' + (pass ? 'Weak spot fixed. Claim your task XP.' : 'Nearly — try the drill again.') + '</p><div class="rtg-actions">' + (pass ? '<button class="rt-btn primary" type="button" data-claim>Claim task XP</button>' : '<button class="rt-btn dark" type="button" data-again>Try again</button>') + '<button class="rt-btn" type="button" data-close>Close</button></div></div>';
+        $('[data-close]', body).onclick = function () { close(); refresh(); };
+        var ag = $('[data-again]', body); if (ag) ag.onclick = function () { close(); gapDrill(gap); };
+        var cl = $('[data-claim]', body);
+        if (cl) cl.onclick = function () {
+          cl.disabled = true; cl.textContent = 'Claiming…';
+          Promise.resolve(window.RA10Track && RA10Track.flush ? RA10Track.flush() : null).then(function () { return rpc('claim_daily_task', { p_key: 'gap_drill' }); }).then(function (res) {
+            var g = (Number(res && res.granted) || 0) + (Number(res && res.bonus) || 0);
+            toast(g > 0 ? '+' + g + ' XP — weak spot fixed!' : 'Task complete!');
+            close(); refresh();
+          }, function (e) { cl.disabled = false; cl.textContent = 'Claim task XP'; toast((e && e.message) || 'Try again in a moment.'); });
+        };
+      }
+      show();
+    }).catch(function (e) {
+      if (e && e.handled) return close();
+      body.innerHTML = '<div class="rtg-res"><p>' + esc((e && e.message) || 'Could not build the drill.') + '</p><div class="rtg-actions"><button class="rt-btn" type="button" data-close>Close</button></div></div>';
+      $('[data-close]', body).onclick = close;
+    });
+  }
 
   // Live progress: refresh the task list when XP lands or the learner comes back.
   window.addEventListener('ra10:xp', function () { if (S.host && document.body.contains(S.host) && S.data) setTimeout(refresh, 600); });

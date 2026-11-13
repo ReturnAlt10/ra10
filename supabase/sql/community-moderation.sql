@@ -188,7 +188,10 @@ create trigger forum_comments_enqueue after insert on public.forum_comments for 
 create or replace function public.forum_requeue_on_edit()
 returns trigger language plpgsql security definer set search_path = public as $$
 begin
-  if new.body is distinct from old.body or (tg_table_name = 'forum_posts' and new.title is distinct from old.title) then
+  -- forum_comments has no "title" column, so it is read through jsonb (new.title raised
+  -- "record new has no field title" on every comment update, which broke comment edits and comment likes).
+  if new.body is distinct from old.body
+     or (tg_table_name = 'forum_posts' and (to_jsonb(new) ->> 'title') is distinct from (to_jsonb(old) ->> 'title')) then
     insert into public.forum_mod_queue (kind, target_id, status)
     values (case when tg_table_name = 'forum_posts' then 'post' else 'comment' end, new.id, 'pending')
     on conflict (kind, target_id) do update set status = 'pending', attempts = 0, processed_at = null;

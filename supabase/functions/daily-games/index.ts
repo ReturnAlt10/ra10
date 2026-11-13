@@ -42,9 +42,9 @@ const londonDate = () => new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Lo
 const shuffle = <T,>(a: T[]) => { const b = a.slice(); for (let i = b.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [b[i], b[j]] = [b[j], b[i]]; } return b; };
 
 const GAMES = {
-  match: { title: 'Match-up', xp: 25, minSeconds: 12 },
-  truefalse: { title: 'True or False', xp: 20, minSeconds: 10 },
-  quickfire: { title: 'Quickfire', xp: 25, minSeconds: 15 },
+  match: { title: 'Match-up', xp: 30, minSeconds: 12 },
+  truefalse: { title: 'True or False', xp: 24, minSeconds: 10 },
+  quickfire: { title: 'Quickfire', xp: 30, minSeconds: 15 },
 } as const;
 type GameId = keyof typeof GAMES;
 const MAX_SETS_PER_DAY = 3;

@@ -45,6 +45,10 @@ jobs:
           mkdir -p _site/tools
           rsync -a tools/activity/ _site/tools/activity/
           rsync -a tools/python-lab/ _site/tools/python-lab/
+          rsync -a tools/prerelease/ _site/tools/prerelease/
+          rsync -a tools/bug-hunt/ _site/tools/bug-hunt/
+          rsync -a tools/scan/ _site/tools/scan/
+          cp tools/ai-tools.css _site/tools/ai-tools.css
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

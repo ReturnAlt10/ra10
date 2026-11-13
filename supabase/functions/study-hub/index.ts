@@ -569,7 +569,7 @@ async function complete(ctx: Ctx, body: any) {
   const minSeconds = Math.max(45, checkable * 6);
   const started = Date.parse(String(L.created_at || ''));
   const rushed = Number.isFinite(started) && (Date.now() - started) / 1000 < minSeconds;
-  const xp = rushed ? 0 : Math.min(60, 15 + Math.round((max ? score / max : 0) * 30) + (Number(body.bestCombo) >= 5 ? 5 : 0));
+  const xp = rushed ? 0 : Math.min(70, 18 + Math.round((max ? score / max : 0) * 36) + (Number(body.bestCombo) >= 5 ? 6 : 0));
   const { error } = await ctx.admin.from('study_lessons').update({
     status: 'done', score, max_score: max, xp, completed_at: new Date().toISOString(),
     progress: { i: steps.length, results: res },

@@ -6,7 +6,7 @@
 
   // Everything else lives next to this script. Resolving from our own URL
   // works on the live site, localhost and file:// alike.
-  var V = "x3a20261112";
+  var V = "x4a20261113";
   var DIR = "/refresh/";
   try {
     var me = document.currentScript && document.currentScript.src;
@@ -45,10 +45,12 @@
       (document.head || document.documentElement).appendChild(xp);
     }
     // Unit catalogue + activity tracking (progress monitoring) on every page.
-    [["ra10-units-js", "ra10-units.js"], ["ra10-track-js", "ra10-track.js"]].forEach(function (s) {
+    // AI study tools helper + answer coaching (AJIM checklist, "fix the weak link") in unit apps.
+    [["ra10-units-js", "ra10-units.js"], ["ra10-track-js", "ra10-track.js"], ["ra10-ai-tools-js", "ra10-ai-tools.js"], ["ra10-coach-js", "ra10-coach.js"]].forEach(function (s) {
       if (document.getElementById(s[0])) return;
       if (s[0] === "ra10-units-js" && window.RA10Units) return;   // the main site loads it itself
       if (s[0] === "ra10-track-js" && window.RA10Track) return;
+      if (s[0] === "ra10-ai-tools-js" && window.RA10Tools) return;
       var el = document.createElement("script");
       el.id = s[0];
       el.src = DIR + s[1] + "?v=" + V;

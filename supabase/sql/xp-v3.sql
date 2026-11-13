@@ -10,18 +10,20 @@
 --   • The browser never decides an amount. Every app still calls
 --     increment_xp(amount), but the server only pays out of an "earned bank"
 --     filled from the learner's own activity_events, scored here:
---         written answer (4+ real words, not gibberish, not the question pasted back)  3–8
+--         written answer (4+ real words, not gibberish, not the question pasted back)  4–9
 --         quiz question answered correctly                                              2
---         AI Examiner mark (score checked against the server's own record)            2–10
+--         AI Examiner mark (score checked against the server's own record)            3–11
 --         revision-guide section read (max 25 a day)                                    1
---         Python task passed                                                            5
---     Each question / section counts once a day, and at most 40 points are
+--         Python task passed                                                            6
+--     Each question / section counts once a day, and at most 48 points are
 --     credited per minute, so tapping through or pasting the same answer pays nothing.
 --   • Daily tasks (5 a day, rotating per learner) and daily games are checked
 --     against real evidence on the server before they pay.
 --   • Boost bonuses are added on the server to XP that was really earned.
---   • Caps per London day: activity 600, tasks 250, games 90, Study Hub 150,
---     boost bonus 300, everything together 1,000. Plus 150 XP a minute.
+--   • Caps per London day: activity 720, tasks 300, games 110, Study Hub 180,
+--     boost bonus 360, everything together 1,200. Plus 150 XP a minute.
+--   • v3.1 (13 Nov 2026): about 20 % more XP per action, and a personalised
+--     "spec-gap" task: a weak AI Examiner mark becomes tomorrow's micro-drill.
 --   • profiles.xp_total / xp_this_week / leaderboard results can no longer be
 --     written from the browser; every grant is recorded in xp_ledger.
 --   • The weekly leaderboard closes at the end of Saturday (UK time), matching
@@ -182,7 +184,7 @@ begin
     if e.kind = 'answer' then
       if v_words >= 4 and public.xp_answer_is_meaningful(v_txt, 'answer')
          and lower(v_txt) <> lower(btrim(coalesce(e.title, ''))) then
-        v_pts := least(8, 3 + v_words / 15);
+        v_pts := least(9, 4 + v_words / 15);
         v_key := 'a:' || coalesce(nullif(e.ref, ''), md5(lower(v_txt)));
       end if;
     elsif e.kind = 'mcq' then
@@ -198,11 +200,11 @@ begin
          order by created_at desc limit 1;
         if m.id is not null then
           update public.xp_marks set used = true where id = m.id;
-          v_pts := 2 + round(8 * least(1, greatest(0, m.score / nullif(m.max_score, 0))))::integer;
+          v_pts := 3 + round(8 * least(1, greatest(0, m.score / nullif(m.max_score, 0))))::integer;
           v_key := 'x:' || coalesce(nullif(e.ref, ''), md5(lower(v_txt)));
         else
           -- not marked by our server: worth the same as a written answer, once
-          v_pts := least(8, 3 + v_words / 15);
+          v_pts := least(9, 4 + v_words / 15);
           v_key := 'a:' || coalesce(nullif(e.ref, ''), md5(lower(v_txt)));
         end if;
       end if;
@@ -214,7 +216,7 @@ begin
       end if;
     elsif e.kind = 'code_task' then
       if coalesce(e.score, 0) > 0 and coalesce(e.score, 0) >= coalesce(e.max_score, 1) then
-        v_pts := 5;
+        v_pts := 6;
         v_key := 'c:' || coalesce(nullif(e.ref, ''), md5(coalesce(e.title, '')));
       end if;
     end if;
@@ -222,7 +224,7 @@ begin
     if v_pts > 0 and v_key is not null then
       select coalesce(sum(points), 0) into v_minute from public.xp_credited
        where user_id = p_uid and created_at > e.created_at - interval '60 seconds' and created_at <= e.created_at;
-      v_pts := least(v_pts, greatest(0, 40 - v_minute));
+      v_pts := least(v_pts, greatest(0, 48 - v_minute));
       if v_pts > 0 then
         insert into public.xp_credited (user_id, day, k, points, event_id, created_at)
         values (p_uid, v_day, v_key, v_pts, e.id, e.created_at)
@@ -268,9 +270,9 @@ begin
     from public.xp_ledger where user_id = p_uid and day = v_day;
 
   if p_source <> 'admin' then
-    v_cap := case p_source when 'activity' then 600 when 'task' then 250 when 'game' then 90 when 'study_hub' then 150 else 0 end;
+    v_cap := case p_source when 'activity' then 720 when 'task' then 300 when 'game' then 110 when 'study_hub' then 180 else 0 end;
     if r.minute_start is null or r.minute_start < now() - interval '1 minute' then r.minute_start := now(); r.minute_xp := 0; end if;
-    v_amt := least(v_amt, v_cap - v_src_today, 1000 - v_all_today, 150 - coalesce(r.minute_xp, 0));
+    v_amt := least(v_amt, v_cap - v_src_today, 1200 - v_all_today, 150 - coalesce(r.minute_xp, 0));
   end if;
   if v_amt <= 0 then
     update public.xp_rate set blocked = blocked + 1 where user_id = p_uid;
@@ -282,7 +284,7 @@ begin
      where user_id = p_uid and expires_at > now()
      order by expires_at desc limit 1 for update;
     if v_boost.id is not null then
-      v_bonus := greatest(0, least(v_amt * (v_boost.multiplier - 1), 600 - v_boost.bonus_awarded, 300 - v_bonus_today));
+      v_bonus := greatest(0, least(v_amt * (v_boost.multiplier - 1), 600 - v_boost.bonus_awarded, 360 - v_bonus_today));
       if v_bonus > 0 then
         update public.xp_boosts set bonus_awarded = bonus_awarded + v_bonus where id = v_boost.id;
       end if;
@@ -404,7 +406,7 @@ begin
   end if;
   insert into public.xp_rate (user_id) values (p_user) on conflict (user_id) do nothing;
   perform 1 from public.xp_rate where user_id = p_user for update;
-  return public.xp_grant(p_user, p_source, least(greatest(coalesce(p_amount, 0), 0), 60), p_ref);
+  return public.xp_grant(p_user, p_source, least(greatest(coalesce(p_amount, 0), 0), 70), p_ref);
 end;
 $$;
 revoke all on function public.xp_award_server(uuid, text, integer, text) from public, anon, authenticated;
@@ -422,7 +424,7 @@ as $$
     'day', (now() at time zone 'Europe/London')::date,
     'total', coalesce(sum(s.amt), 0),
     'by_source', coalesce(jsonb_object_agg(s.source, s.amt), '{}'::jsonb),
-    'cap', 1000)
+    'cap', 1200)
   from (select x.source, sum(x.amount)::int as amt from public.xp_ledger x
          where x.user_id = auth.uid() and x.day = (now() at time zone 'Europe/London')::date
          group by x.source) s;
@@ -449,23 +451,26 @@ create policy daily_task_catalog_read on public.daily_task_catalog for select to
 grant select on public.daily_task_catalog to authenticated;
 
 insert into public.daily_task_catalog (key, slot, title, detail, metric, target, min_pct, xp, premium_only) values
-  ('answers_3',   'write',   'Write 3 exam-style answers',            'Answer 3 written questions in any unit. Real sentences only.',                 'answers',      3, null, 40, false),
-  ('answers_6',   'write',   'Write 6 exam-style answers',            'Answer 6 different written questions today.',                                  'answers',      6, null, 60, false),
-  ('long_answer', 'write',   'Write a developed answer',              'Write one answer of 60 words or more: explain, then apply it.',                'long_answer',  1, null, 35, false),
-  ('ai_mark_1',   'ai',      'Get marked by the AI Examiner',         'Send one real answer to the AI Examiner and read the feedback.',               'ai_marks',     1, null, 30, false),
+  ('answers_3',   'write',   'Write 3 exam-style answers',            'Answer 3 written questions in any unit. Real sentences only.',                 'answers',      3, null, 45, false),
+  ('answers_6',   'write',   'Write 6 exam-style answers',            'Answer 6 different written questions today.',                                  'answers',      6, null, 65, false),
+  ('long_answer', 'write',   'Write a developed answer',              'Write one answer of 60 words or more: explain, then apply it.',                'long_answer',  1, null, 40, false),
+  ('ai_mark_1',   'ai',      'Get marked by the AI Examiner',         'Send one real answer to the AI Examiner and read the feedback.',               'ai_marks',     1, null, 35, false),
   ('ai_good',     'ai',      'Score 60%+ with the AI Examiner',       'Get at least 60% on one AI-marked answer.',                                    'ai_good',      1, 60,   50, false),
-  ('mcq_10',      'quiz',    'Get 10 quiz questions right',           'Correct answers in any unit quiz count.',                                      'mcq_correct', 10, null, 30, false),
-  ('mcq_25',      'quiz',    'Get 25 quiz questions right',           'A longer quiz streak: 25 correct answers today.',                              'mcq_correct', 25, null, 55, false),
-  ('guide_3',     'explore', 'Read 3 revision-guide sections',        'Spend time on 3 sections of a revision guide.',                                'guide',        3, null, 20, false),
-  ('guide_6',     'explore', 'Read 6 revision-guide sections',        'Work through 6 sections of a revision guide.',                                 'guide',        6, null, 35, false),
-  ('units_2',     'explore', 'Revise in 2 different units',           'Answer or read in two units today (3+ actions in each).',                      'units',        2, null, 30, false),
-  ('study_hub',   'explore', 'Finish a Study Hub lesson',             'Complete one of your Study Hub lessons.',                                      'study_hub',    1, null, 40, true),
-  ('game_play',   'game',    'Play one of today''s AI games',         'Finish any of today''s three games.',                                          'games',        1, null, 20, false),
+  ('mcq_10',      'quiz',    'Get 10 quiz questions right',           'Correct answers in any unit quiz count.',                                      'mcq_correct', 10, null, 35, false),
+  ('mcq_25',      'quiz',    'Get 25 quiz questions right',           'A longer quiz streak: 25 correct answers today.',                              'mcq_correct', 25, null, 60, false),
+  ('guide_3',     'explore', 'Read 3 revision-guide sections',        'Spend time on 3 sections of a revision guide.',                                'guide',        3, null, 25, false),
+  ('guide_6',     'explore', 'Read 6 revision-guide sections',        'Work through 6 sections of a revision guide.',                                 'guide',        6, null, 40, false),
+  ('units_2',     'explore', 'Revise in 2 different units',           'Answer or read in two units today (3+ actions in each).',                      'units',        2, null, 35, false),
+  ('study_hub',   'explore', 'Finish a Study Hub lesson',             'Complete one of your Study Hub lessons.',                                      'study_hub',    1, null, 45, true),
+  ('game_play',   'game',    'Play one of today''s AI games',         'Finish any of today''s three games.',                                          'games',        1, null, 25, false),
   ('game_score',  'game',    'Score 80%+ in a daily game',            'Get 80% or more in one of today''s games.',                                    'game_score',   1, 80,   35, false),
-  ('game_all',    'game',    'Finish all three daily games',          'Match-up, True or False and Quickfire.',                                       'games',        3, null, 45, false)
+  ('game_all',    'game',    'Finish all three daily games',          'Match-up, True or False and Quickfire.',                                       'games',        3, null, 50, false),
+  ('gap_drill',   'ai',      'Fix your weak spot',                    'A 3-question drill on a topic you lost marks on. Get 2 or more right.',        'gap_drill',    1, null, 45, false)
 on conflict (key) do update set
   slot = excluded.slot, title = excluded.title, detail = excluded.detail, metric = excluded.metric,
   target = excluded.target, min_pct = excluded.min_pct, xp = excluded.xp, premium_only = excluded.premium_only;
+-- the gap drill is only ever offered by get_daily_tasks (when a recent AI mark was weak)
+update public.daily_task_catalog set active = false where key = 'gap_drill';
 
 create table if not exists public.daily_task_claims (
   user_id uuid not null references auth.users (id) on delete cascade,
@@ -575,6 +580,10 @@ begin
     select count(*) into v from public.daily_game_plays
      where user_id = p_uid and day = p_day and finished_at is not null and max_score > 0
        and score * 100 >= coalesce(p_min_pct, 80) * max_score;
+  elsif p_metric = 'gap_drill' then
+    select count(*) into v from public.activity_events
+     where user_id = p_uid and created_at >= v_from and created_at < v_to
+       and kind = 'gap_drill' and coalesce(score, 0) >= 2;
   elsif p_metric = 'study_hub' and to_regclass('public.study_lessons') is not null then
     execute 'select count(*) from public.study_lessons where user_id = $1 and status = ''done'' and kind is distinct from ''template'' and completed_at >= $2 and completed_at < $3'
       into v using p_uid, v_from, v_to;
@@ -603,6 +612,25 @@ as $$
 $$;
 revoke all on function public.xp_daily_picks(uuid, date) from public, anon, authenticated;
 
+-- A weak AI Examiner mark in the last 7 days (under 60 %, a real answer) becomes a micro-drill.
+create or replace function public.xp_gap(p_uid uuid)
+returns jsonb
+language sql
+stable
+security definer
+set search_path = public
+as $$
+  select jsonb_build_object('topic', coalesce(nullif(e.meta ->> 'topic', ''), left(e.title, 120)), 'unit', e.unit,
+                            'question', left(e.title, 300), 'score', e.score, 'max', e.max_score, 'ref', e.ref)
+    from public.activity_events e
+   where e.user_id = p_uid and e.kind = 'ai_examine' and e.created_at > now() - interval '7 days'
+     and e.max_score > 0 and e.score is not null and e.score < 0.6 * e.max_score
+     and coalesce(e.title, '') <> '' and public.xp_answer_is_meaningful(e.answer, 'ai_examine')
+   order by e.score / e.max_score asc, e.created_at desc
+   limit 1;
+$$;
+revoke all on function public.xp_gap(uuid) from public, anon, authenticated;
+
 create or replace function public.get_daily_tasks()
 returns jsonb
 language plpgsql
@@ -617,18 +645,24 @@ declare
   v_prog integer;
   v_claimed boolean;
   v_recent jsonb;
+  v_gap jsonb;
 begin
   if v_uid is null then raise exception 'Not signed in' using errcode = '28000'; end if;
   insert into public.xp_rate (user_id) values (v_uid) on conflict (user_id) do nothing;
   perform 1 from public.xp_rate where user_id = v_uid for update;
   perform public.xp_refresh_bank(v_uid);
+  v_gap := public.xp_gap(v_uid);
   for t in select * from public.xp_daily_picks(v_uid, v_day) loop
+    if t.slot = 'ai' and v_gap is not null then
+      select * into t from public.daily_task_catalog where key = 'gap_drill';
+    end if;
     v_prog := public.xp_task_progress(v_uid, t.metric, t.min_pct, v_day);
     v_claimed := exists (select 1 from public.daily_task_claims where user_id = v_uid and day = v_day and key = t.key);
     v_tasks := v_tasks || jsonb_build_object(
       'key', t.key, 'slot', t.slot, 'title', t.title, 'detail', t.detail, 'target', t.target,
       'progress', least(v_prog, t.target), 'xp', t.xp, 'claimed', v_claimed,
-      'claimable', not v_claimed and v_prog >= t.target);
+      'claimable', not v_claimed and v_prog >= t.target,
+      'gap', case when t.key = 'gap_drill' then v_gap end);
   end loop;
   select coalesce(jsonb_agg(unit order by last desc), '[]'::jsonb) into v_recent from (
     select unit, max(created_at) as last from public.activity_events
@@ -639,7 +673,7 @@ begin
     'tasks', v_tasks,
     'all_done', not exists (select 1 from jsonb_array_elements(v_tasks) x where not (x ->> 'claimed')::boolean),
     'xp_today', coalesce((select sum(amount) from public.xp_ledger where user_id = v_uid and day = v_day), 0),
-    'xp_cap', 1000,
+    'xp_cap', 1200,
     'recent_units', v_recent);
 end;
 $$;
@@ -663,7 +697,11 @@ begin
   if v_uid is null then raise exception 'Not signed in' using errcode = '28000'; end if;
   insert into public.xp_rate (user_id) values (v_uid) on conflict (user_id) do nothing;
   perform 1 from public.xp_rate where user_id = v_uid for update;
-  select * into t from public.xp_daily_picks(v_uid, v_day) p where p.key = p_key;
+  if p_key = 'gap_drill' and public.xp_gap(v_uid) is not null then
+    select * into t from public.daily_task_catalog where key = 'gap_drill';
+  else
+    select * into t from public.xp_daily_picks(v_uid, v_day) p where p.key = p_key;
+  end if;
   if t.key is null then raise exception 'That task is not one of today''s tasks.' using errcode = 'P0001'; end if;
   perform public.xp_refresh_bank(v_uid);
   v_prog := public.xp_task_progress(v_uid, t.metric, t.min_pct, v_day);
@@ -712,7 +750,7 @@ begin
     v_key := v_today::text; v_mult := 2; v_min := 15;
   elsif p_source = 'daily_tasks' then
     select count(*) into v_n from public.daily_task_claims c
-     where c.user_id = v_uid and c.day = v_today and c.key in (select key from public.xp_daily_picks(v_uid, v_today));
+     where c.user_id = v_uid and c.day = v_today and (c.key = 'gap_drill' or c.key in (select key from public.xp_daily_picks(v_uid, v_today)));
     if v_n < 5 then raise exception 'Finish all 5 of today''s tasks to unlock this boost (% of 5).', v_n using errcode = 'P0001'; end if;
     v_key := v_today::text; v_mult := 2; v_min := 30;
   elsif p_source = 'streak_7' then
