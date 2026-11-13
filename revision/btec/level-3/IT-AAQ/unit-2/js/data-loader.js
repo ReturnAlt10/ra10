@@ -44,8 +44,11 @@ function postProcessQuestions() {
     });
   });
   QUESTIONS.forEach((q) => {
-    if (!q || !q.scenario) return;
-    q.scenario = genericiseScenario(q.scenario);
+    if (!q) return;
+    // Routes every bank question to the Unit 2 AI Examiner (ai-mark it_unit2_examiner.ts).
+    q.spec_code = q.spec_code || 'AAQ Unit 2';
+    q.subject = q.subject || 'Information Technology';
+    if (q.scenario) q.scenario = genericiseScenario(q.scenario);
   });
 }
 

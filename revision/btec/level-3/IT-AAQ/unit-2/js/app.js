@@ -2959,7 +2959,7 @@ function normaliseAiMarkResult(raw, q, isExt, answer) {
     coverage: Number.isFinite(Number(raw.coverage)) ? Math.max(0, Math.min(1, Number(raw.coverage))) : 0,
     wordCount: Number.isFinite(Number(raw.wordCount)) ? Math.max(0, Math.round(Number(raw.wordCount))) : words,
     level: Number.isFinite(Number(raw.level)) ? Math.max(0, Math.round(Number(raw.level))) : 0,
-    levelMarks: String(raw.levelMarks || '').trim(),
+    levelMarks: String(raw.levelMarks || raw.level_marks || '').trim(),
   };
   return result;
 }
@@ -3882,13 +3882,39 @@ function advanceFlash() {
   renderFlashCard();
 }
 
+// The AI Examiner (ai-mark it_unit2_examiner.ts) marks every Unit 2 answer against the paper's scenario, so each
+// paper question carries the whole case study up to that question (with figures described in words), the subject
+// that routes it to the IT examiner, and whether it is a "complete the diagram" question.
+function itExaminerContext(qs) {
+  const figs = window.BIZ_FIGURES || {};
+  const figText = (id) => { const f = figs[id]; return f ? `[${f.cap}: ${f.alt}]` : ''; };
+  const line = (l) => { const m = String(l).match(/^\[\[fig:([\w-]+)\]\]$/); return m ? figText(m[1]) : String(l); };
+  const VERB = /\b(State|Give|Identify|Name|Label|Outline|Explain|Describe|Discuss|Evaluate|Assess|Analyse|Justify|Compare|Complete|Annotate|Draw|Calculate)\b/;
+  (qs || []).forEach((q) => {
+    q.subject = 'Information Technology';
+    const v = String(q.question || '').match(VERB);   // the shared engine takes the first word ("BCTAA …")
+    if (v) q.command_verb = v[1];
+    const p = (window.BIZ_PAPERS || []).find((x) => x.id === q.paper_id);
+    if (!p || !Array.isArray(p.items)) return;
+    const at = p.items.findIndex((it) => String(it.q) === String(q.item_q) && String(it.sub || '') === String(q.item_sub || ''));
+    if (at < 0) return;
+    const ctx = [];
+    p.items.slice(0, at + 1).forEach((it) => (it.ctx || []).forEach((l) => { const t = line(l); if (t) ctx.push(t); }));
+    q.case_context = ctx.join('\n');
+    const it = p.items[at];
+    q.figure_text = [it.fig, it.padFig].filter(Boolean).filter((v, i, a) => a.indexOf(v) === i).map(figText).filter(Boolean).join('\n');
+    q.diagram = !!(it.diagram || it.padFig);
+  });
+  return qs;
+}
+
 // ---------- Past Papers & RA10 Papers (shared BizPapers viewer) ----------
 // Paper questions are built separately from the question bank so the bank stays unchanged.
 var pastPapersApi = null, pastPaperQs = null;
 function renderPastPapers() {
   if (!window.BizPapers) { const h = $('#papers-host'); if (h) h.innerHTML = '<p class="muted" style="padding:24px">Past papers could not be loaded. Please refresh the page.</p>'; return; }
   if (!pastPapersApi) {
-    const getQuestions = () => pastPaperQs || (pastPaperQs = BizPapers.buildQuestions(window.BIZ_PAPERS || [], window.BIZ_UNIT));
+    const getQuestions = () => pastPaperQs || (pastPaperQs = itExaminerContext(BizPapers.buildQuestions(window.BIZ_PAPERS || [], window.BIZ_UNIT)));
     pastPapersApi = BizPapers.init({ $, el, renderMarkScheme, buildAutoMarkUI, normaliseAiMarkResult, awardXP, getQuestions });
   }
   pastPapersApi.renderPapers();

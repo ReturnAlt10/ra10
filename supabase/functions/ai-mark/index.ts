@@ -5,6 +5,7 @@ import { BUSINESS_BTEC_SYSTEM, buildBusinessBtecPrompt, businessBtecPostProcess,
 import { SPORT_U2_SYSTEM, buildSportUnit2Prompt, sportUnit2PostProcess, isSportUnit2Task } from "./sport_unit2_examiner.ts";
 import { PSYCHOLOGY_SYSTEM, buildPsychologyPrompt, psychologyPostProcess, isPsychology } from "./psychology_examiner.ts";
 import { EDEXCEL_BUSINESS_SYSTEM, buildEdexcelBusinessPrompt, edexcelBusinessPostProcess, isEdexcelBusiness } from "./edexcel_business_examiner.ts";
+import { IT_U2_SYSTEM, buildItUnit2Prompt, itUnit2PostProcess, isItUnit2 } from "./it_unit2_examiner.ts";
 import { requireTermsAccepted } from "../_shared/legal.ts";
 
 const ALLOWED_ORIGINS = [
@@ -25,6 +26,8 @@ type ProviderConfig = {
 const PROVIDERS: ProviderConfig[] = [];
 
 function initProviders() {
+  // Called on every request: start from an empty list, or a warm instance keeps appending duplicate providers.
+  PROVIDERS.length = 0;
   const openrouterKey = Deno.env.get("OPENROUTER_API_KEY") || "";
   const deepseekKey = Deno.env.get("DEEPSEEK_API_KEY") || "";
   const openaiKey = Deno.env.get("OPENAI_API_KEY") || "";
@@ -199,7 +202,9 @@ function buildPrompt(question: any, answer: string, learnedHints: string[]) {
   ].filter(Boolean).join("\n");
 }
 
-type CallOptions = { system?: string; timeout?: number; maxTokens?: number; image?: string };
+// rotate: start from the n-th provider in the ranked order (the ensemble's second opinion uses a different model).
+// only: restrict to these provider names (the ensemble never falls back to small free models).
+type CallOptions = { system?: string; timeout?: number; maxTokens?: number; image?: string; temperature?: number; rotate?: number; only?: string[] };
 
 // A drawn / photographed diagram arrives as a data URL; only small PNG / JPEG / WebP images are accepted.
 function validImage(v: unknown): string {
@@ -221,7 +226,7 @@ async function callProvider(provider: ProviderConfig, prompt: string, opts: Call
   for (const model of provider.models) {
     const payload: Record<string, unknown> = {
       model,
-      temperature: opts.system ? 0 : 0.1,
+      temperature: opts.temperature ?? (opts.system ? 0 : 0.1),
       response_format: { type: "json_object" },
       messages: [
         {
@@ -290,9 +295,12 @@ async function callAnyProvider(prompt: string, opts: CallOptions = {}, preferStr
   // small free OpenRouter models when preferStrong is set.
   const rank: Record<string, number> = { openai: 0, gemini: 1, openrouter: 2, deepseek: 3 };
   // Images need a vision model: DeepSeek's chat API has none, and the strongest providers go first.
-  const pool = opts.image ? PROVIDERS.filter((p) => p.name !== "deepseek") : PROVIDERS;
+  let pool = opts.image ? PROVIDERS.filter((p) => p.name !== "deepseek") : PROVIDERS;
+  if (opts.only) pool = pool.filter((p) => opts.only!.includes(p.name));
   if (pool.length === 0) throw new Error("No AI provider that can read images is configured");
-  const ordered = preferStrong || opts.image ? pool.slice().sort((a, b) => (rank[a.name] ?? 9) - (rank[b.name] ?? 9)) : pool;
+  let ordered = preferStrong || opts.image ? pool.slice().sort((a, b) => (rank[a.name] ?? 9) - (rank[b.name] ?? 9)) : pool;
+  const rot = (opts.rotate || 0) % ordered.length;
+  if (rot) ordered = ordered.slice(rot).concat(ordered.slice(0, rot));
 
   const errors: string[] = [];
   for (const provider of ordered) {
@@ -306,6 +314,52 @@ async function callAnyProvider(prompt: string, opts: CallOptions = {}, preferStr
 
   const errorMsg = `All providers failed: ${errors.join(" | ")}`;
   throw new Error(errorMsg);
+}
+
+// ── Ensemble marking ────────────────────────────────────────────────────────────────────────────
+// AI_MARK_ENSEMBLE=off turns it off (halves AI cost for long answers).
+const ENSEMBLE_ON = () => (Deno.env.get("AI_MARK_ENSEMBLE") || "on").toLowerCase() !== "off";
+
+async function oneOpinion(prompt: string, opts: CallOptions, post: (raw: any) => any): Promise<{ parsed: any; provider: string }> {
+  const r = await callAnyProvider(prompt, opts, true);
+  const raw = extractJsonObject(r.content);
+  if (!raw || typeof raw !== "object") throw new Error("AI response could not be parsed as JSON");
+  return { parsed: post(raw), provider: r.provider };
+}
+
+async function markWithEnsemble(prompt: string, opts: CallOptions, post: (raw: any) => any, max: number): Promise<{ parsed: any; provider: string }> {
+  // A second opinion from a different strong model when one is configured; otherwise a second sample of the same one.
+  const STRONG = ["openai", "gemini"];
+  const strong = PROVIDERS.filter((p) => STRONG.includes(p.name)).map((p) => p.name);
+  if (!strong.length) return await oneOpinion(prompt, opts, post);   // no capable second model: one opinion only
+  const second: CallOptions = strong.length >= 2 ? { ...opts, rotate: 1, only: STRONG } : { ...opts, temperature: 0.4, only: STRONG };
+  const runs = (await Promise.allSettled([oneOpinion(prompt, opts, post), oneOpinion(prompt, second, post)]))
+    .filter((r): r is PromiseFulfilledResult<{ parsed: any; provider: string }> => r.status === "fulfilled").map((r) => r.value);
+  if (!runs.length) return await oneOpinion(prompt, opts, post);   // both failed: one ordinary attempt (throws on failure)
+  if (runs.length === 1) return runs[0];
+  const mark = (r: { parsed: any }) => Math.max(0, Math.min(max, Math.round(Number(r.parsed?.earned) || 0)));
+  // Opinions more than a level apart: ask a third time and take the median.
+  const spread = Math.abs(mark(runs[0]) - mark(runs[1]));
+  if (spread > Math.max(2, Math.round(max / 5))) {
+    try { runs.push(await oneOpinion(prompt, { ...opts, temperature: 0.2, only: STRONG }, post)); } catch (_) { /* two opinions still stand */ }
+  }
+  const marks = runs.map(mark).sort((a, b) => a - b);
+  let final: number;
+  if (marks.length === 3) final = marks[1];
+  else {
+    const mean = (marks[0] + marks[1]) / 2;
+    // A .5 tie goes the way of the primary (strongest) model.
+    final = Number.isInteger(mean) ? mean : (mark(runs[0]) > mean ? Math.ceil(mean) : Math.floor(mean));
+  }
+  // Use the written feedback of the opinion closest to the final mark, re-banded to that mark.
+  const best = runs.slice().sort((a, b) => Math.abs(mark(a) - final) - Math.abs(mark(b) - final))[0];
+  const merged = { ...best.parsed, earned: final, level: undefined, level_marks: undefined };
+  const reposted = post(merged);
+  // Keep the explanation honest when the mark moved away from what that opinion said.
+  if (mark(best) !== final && reposted.examiner_comment) {
+    reposted.examiner_comment = String(reposted.examiner_comment).replace(/\bLevel \d\b/, "Level " + (reposted.level ?? ""));
+  }
+  return { parsed: reposted, provider: runs.map((r) => r.provider).join(" + ") };
 }
 
 // ── AI usage limits (supabase/sql/ai-usage.sql) ──────────────────────────────────────────────
@@ -437,32 +491,45 @@ export default Deno.serve(async (req: Request) => {
     const business = !edx && !psych && !b2026 && isALevelBusiness(question);
     const sportU2 = !edx && !psych && !business && !b2026 && isSportUnit2Task(question);
     const btec = !edx && !psych && !business && !b2026 && !sportU2 && isBusinessBtec(question);
-    const basePrompt = edx ? buildEdexcelBusinessPrompt(question, answer) : psych ? buildPsychologyPrompt(question, answer) : b2026 ? buildBusiness2026Prompt(question, answer) : business ? buildBusinessPrompt(question, answer) : sportU2 ? buildSportUnit2Prompt(question, answer) : btec ? buildBusinessBtecPrompt(question, answer) : buildPrompt(question, answer, []);
-    const prompt = image ? basePrompt + "\n" + DIAGRAM_NOTE : basePrompt;
+    const it2 = !edx && !psych && !business && !b2026 && !sportU2 && !btec && isItUnit2(question);
+    const basePrompt = edx ? buildEdexcelBusinessPrompt(question, answer) : psych ? buildPsychologyPrompt(question, answer) : b2026 ? buildBusiness2026Prompt(question, answer) : business ? buildBusinessPrompt(question, answer) : sportU2 ? buildSportUnit2Prompt(question, answer) : btec ? buildBusinessBtecPrompt(question, answer) : it2 ? buildItUnit2Prompt(question, answer, !!image) : buildPrompt(question, answer, []);
+    // The IT module writes its own diagram instructions.
+    const prompt = image && !it2 ? basePrompt + "\n" + DIAGRAM_NOTE : basePrompt;
 
-    const aiResponse = edx
-      ? await callAnyProvider(prompt, { system: EDEXCEL_BUSINESS_SYSTEM, timeout: 50000, maxTokens: 2200, image }, true)
-      : psych
-      ? await callAnyProvider(prompt, { system: PSYCHOLOGY_SYSTEM, timeout: 50000, maxTokens: 2200, image }, true)
-      : b2026
-      ? await callAnyProvider(prompt, { system: BUSINESS_2026_SYSTEM, timeout: 50000, maxTokens: 2200, image }, true)
-      : business
-      ? await callAnyProvider(prompt, { system: BUSINESS_SYSTEM, timeout: 45000, maxTokens: 1800, image }, true)
-      : sportU2
-        ? await callAnyProvider(prompt, { system: SPORT_U2_SYSTEM, timeout: 45000, maxTokens: 1800, image }, true)
-        : btec
-          ? await callAnyProvider(prompt, { system: BUSINESS_BTEC_SYSTEM, timeout: 55000, maxTokens: 2400, image }, true)
-          : await callAnyProvider(prompt, image ? { timeout: 50000, image } : {});
-    let parsed = extractJsonObject(aiResponse.content);
-    if (!parsed || typeof parsed !== "object") {
-      throw new Error("AI response could not be parsed as JSON");
+    const callOpts: CallOptions | null = edx ? { system: EDEXCEL_BUSINESS_SYSTEM, timeout: 50000, maxTokens: 2200, image }
+      : psych ? { system: PSYCHOLOGY_SYSTEM, timeout: 50000, maxTokens: 2200, image }
+      : b2026 ? { system: BUSINESS_2026_SYSTEM, timeout: 50000, maxTokens: 2200, image }
+      : business ? { system: BUSINESS_SYSTEM, timeout: 45000, maxTokens: 1800, image }
+      : sportU2 ? { system: SPORT_U2_SYSTEM, timeout: 45000, maxTokens: 1800, image }
+      : btec ? { system: BUSINESS_BTEC_SYSTEM, timeout: 55000, maxTokens: 2400, image }
+      : it2 ? { system: IT_U2_SYSTEM, timeout: 45000, maxTokens: 1800, image }
+      : null;
+    const post = (raw: any) => edx ? edexcelBusinessPostProcess(raw, question, answer)
+      : psych ? psychologyPostProcess(raw, question, answer)
+      : b2026 ? business2026PostProcess(raw, question, answer)
+      : business ? businessPostProcess(raw, question, answer)
+      : sportU2 ? sportUnit2PostProcess(raw, question)
+      : btec ? businessBtecPostProcess(raw, question)
+      : it2 ? itUnit2PostProcess(raw, question, answer, !!image)
+      : raw;
+
+    let parsed: any;
+    let aiResponse: { content: string; provider: string };
+    // Levels-marked long answers (AQA 7132 / 7138, IT Unit 2) get a second, independent opinion: single model
+    // runs scatter by a level or more on the same answer, and two opinions combined track examiners more closely.
+    const ensemble = !!callOpts && !image && marksMax >= 9 && (business || b2026 || it2) && ENSEMBLE_ON();
+    if (ensemble && callOpts) {
+      const r = await markWithEnsemble(prompt, callOpts, post, marksMax);
+      parsed = r.parsed;
+      aiResponse = { content: "", provider: r.provider };
+    } else {
+      aiResponse = callOpts ? await callAnyProvider(prompt, callOpts, true) : await callAnyProvider(prompt, image ? { timeout: 50000, image } : {});
+      parsed = extractJsonObject(aiResponse.content);
+      if (!parsed || typeof parsed !== "object") {
+        throw new Error("AI response could not be parsed as JSON");
+      }
+      parsed = post(parsed);
     }
-    if (edx) parsed = edexcelBusinessPostProcess(parsed, question, answer);
-    if (psych) parsed = psychologyPostProcess(parsed, question, answer);
-    if (b2026) parsed = business2026PostProcess(parsed, question, answer);
-    if (business) parsed = businessPostProcess(parsed, question, answer);
-    if (sportU2) parsed = sportUnit2PostProcess(parsed, question);
-    if (btec) parsed = businessBtecPostProcess(parsed, question);
 
     const result = ensureResultShape(parsed, marksMax);
 

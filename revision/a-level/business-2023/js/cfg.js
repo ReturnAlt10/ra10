@@ -7,7 +7,7 @@
     ['Advice', n === 1 ? ['Multiple choice: about 1 minute per question. Analyse (9 marks): about 11 minutes. Essays (25 marks): about 30 minutes each.', 'Analyse questions need no conclusion; essays need a judgement.'] : n === 2 ? ['About 36 minutes per question. Calculate: show your working. Analyse (9): developed chains in context. Evaluate (16): balance and a supported judgement.'] : ['About 20 minutes per 12-mark question, 25 per 16, 30 per 20 and 35 for the 24-mark question. Use the case study and appendices in every answer.']]
   ];
   window.AQA_UNIT = {
-    key: 'aqa_biz_2023', code: '7132', subjectName: 'A-Level Business', qualLine: 'A-level', subjectLine: 'Business', fileStem: 'AQA-A-level-Business-7132', dataSrc: 'js/papers-data.js',
+    key: 'aqa_biz_2023', code: '7132', subjectName: 'A-Level Business', qualLine: 'A-level', subjectLine: 'Business', fileStem: 'AQA-A-level-Business-7132', dataSrc: 'js/papers-data.js?v=20261113',
     pastLabel: 'Past Papers',
     howto: ['Choose a paper. Past papers are the real AQA questions; RA10 papers are fresh practice sets in the same format.',
       'Switch to “Answer online”: tap an option for instant multiple-choice marking, type short answers and essays, and use the case-study button beside your answer.',

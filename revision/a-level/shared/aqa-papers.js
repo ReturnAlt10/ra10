@@ -57,9 +57,21 @@
   }
 
   /* ───────────────────────── question bank from papers ───────────────────────── */
+  // A level ladder is usable only if its bands run 1..marks with no gaps or repeats.
+  function ladderOk(lv, marks) {
+    let lo = 1;
+    for (const d of lv.slice().sort((a, b) => a.level - b.level)) {
+      const m = String(d.marks).split(/\s*[–-]\s*/).map(Number);
+      if (m[0] !== lo || !(m[m.length - 1] >= m[0])) return false;
+      lo = m[m.length - 1] + 1;
+    }
+    return lv.length > 0 && lo - 1 === Number(marks);
+  }
   function levelsFor(it) {
     const L = window.AQA_LEVELS || {};
-    const lv = (it.ms && it.ms.levels) || L[String(it.marks)] || [];
+    const own = (it.ms && it.ms.levels) || [];
+    const std = L[String(it.marks)] || [];
+    const lv = ladderOk(own, it.marks) ? own : (ladderOk(std, it.marks) ? std : own);
     return lv.map(d => ({ level: d.level, marks: String(d.marks).replace('–', '-'), descriptor: d.descriptor }));
   }
 

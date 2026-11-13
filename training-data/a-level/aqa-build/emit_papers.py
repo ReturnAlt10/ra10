@@ -86,6 +86,20 @@ def company_of(blocks, items):
     return m.group(1) if m else None
 
 
+def levels_ok(lv, marks):
+    """Bands must be distinct, contiguous from 1 and end at the question's marks."""
+    try:
+        bands = [tuple(int(x) for x in re.split(r'\s*[–-]\s*', str(l['marks']))) for l in sorted(lv, key=lambda d: d['level'])]
+    except (ValueError, KeyError):
+        return False
+    lo = 1
+    for b in bands:
+        if b[0] != lo or b[-1] < b[0]:
+            return False
+        lo = b[-1] + 1
+    return lo - 1 == marks
+
+
 def norm_item(it, levels):
     it = dict(it)
     it['kind'] = kind_of(it)
@@ -94,6 +108,9 @@ def norm_item(it, levels):
     if not ms.get('ao'):
         ms['ao'] = AO.get(it['marks'], '')
     ms['ao'] = re.sub(r'\s+and\s+', ', ', ms['ao']).rstrip('.;').replace('; ', ', ').replace('AO2= ', 'AO2 = ')
+    # A level table the PDF parser mangled (duplicate bands, missing top level) is replaced by the standard grid.
+    if ms.get('levels') and not levels_ok(ms['levels'], it['marks']):
+        ms['levels'] = None
     if it['marks'] >= 6 and it['kind'] in ('analyse', 'evaluate') and not ms.get('levels'):
         lv = levels.get(str(it['marks']))
         if lv:
@@ -122,6 +139,8 @@ def build(spec_code='7132'):
         p['source'] = 'aqa'
         papers.append(p)
     for f in sorted(glob.glob(os.path.join(OUT, 'ra10_*.json'))):
+        if os.path.basename(f).startswith('ra10_26_'):
+            continue   # 7138 (2026 spec) papers belong to business-2026 (emit26.py), not the 7132 app
         papers += json.load(open(f, encoding='utf-8'))
     final = []
     for p in papers:
