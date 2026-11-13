@@ -68,6 +68,139 @@
     done() { [523, 659, 784, 1047].forEach((f, i) => this.tone(f, i * .12, .3, 'triangle', .16)); }
   };
 
+  /* ───────────── diagrams on learn cards ─────────────
+     The lesson stores a diagram as data (supabase/functions/study-hub: sanitiseDiagram); it is drawn here so it is
+     always tidy, readable on a phone and follows light / dark mode. Types: flow (or cycle), concept, table,
+     network, breakeven (the break-even point is calculated here, never taken from the AI). */
+  function diagramHtml(d) {
+    if (!d || typeof d !== 'object') return '';
+    let inner = '';
+    try {
+      if (d.type === 'flow') inner = d.cycle ? dgCycle(d.steps || []) : dgFlow(d.steps || []);
+      else if (d.type === 'concept') inner = dgConcept(d);
+      else if (d.type === 'table') inner = dgTable(d);
+      else if (d.type === 'network') inner = dgNetwork(d);
+      else if (d.type === 'breakeven') inner = dgBreakeven(d);
+    } catch (e) { inner = ''; }
+    if (!inner) return '';
+    return `<figure class="sh-dg sh-dg-${esc(d.type)}">${inner}${d.title ? `<figcaption>${esc(d.title)}</figcaption>` : ''}</figure>`;
+  }
+  // wrap text into lines of at most n characters (for SVG labels)
+  function dgWrap(s, n, maxLines) {
+    const words = String(s || '').split(/\s+/).filter(Boolean), out = [];
+    let cur = '';
+    words.forEach(w => { if ((cur + ' ' + w).trim().length > n && cur) { out.push(cur); cur = w; } else cur = (cur + ' ' + w).trim(); });
+    if (cur) out.push(cur);
+    if (out.length > (maxLines || 3)) { out.length = maxLines || 3; out[out.length - 1] = out[out.length - 1].replace(/.{0,2}$/, '…'); }
+    return out;
+  }
+  function dgText(x, y, s, n, cls, maxLines) {
+    const ls = dgWrap(s, n, maxLines);
+    const y0 = y - (ls.length - 1) * 7.5;
+    return `<text x="${x}" y="${y0}" class="${cls || 'dg-t'}" text-anchor="middle">${ls.map((l, i) => `<tspan x="${x}" dy="${i ? 15 : 0}">${esc(l)}</tspan>`).join('')}</text>`;
+  }
+  const DG_ARROW = (id) => `<defs><marker id="${id}" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="dg-ah"/></marker></defs>`;
+  let dgSeq = 0;
+
+  function dgFlow(steps) {
+    return `<ol class="dg-flow">${steps.map((s, i) => `<li><span class="n">${i + 1}</span><span class="tx">${esc(s)}</span></li>`).join('')}</ol>`;
+  }
+  function dgCycle(steps) {
+    const n = steps.length, W = 420, H = 360, cx = W / 2, cy = H / 2, R = 128, bw = 132, bh = 54;
+    const id = 'dgah' + (++dgSeq);
+    const pos = steps.map((_, i) => { const a = -Math.PI / 2 + i * 2 * Math.PI / n; return { a, x: cx + R * Math.cos(a), y: cy + R * Math.sin(a) }; });
+    const gap = Math.min(0.42, Math.PI / n * 0.62);
+    const arcs = pos.map((p, i) => {
+      const a1 = p.a + gap, a2 = pos[(i + 1) % n].a - gap + (i === n - 1 ? 2 * Math.PI : 0);
+      const r = R + 2, x1 = cx + r * Math.cos(a1), y1 = cy + r * Math.sin(a1), x2 = cx + r * Math.cos(a2), y2 = cy + r * Math.sin(a2);
+      return `<path d="M${x1.toFixed(1)} ${y1.toFixed(1)}A${r} ${r} 0 0 1 ${x2.toFixed(1)} ${y2.toFixed(1)}" class="dg-arc" marker-end="url(#${id})"/>`;
+    }).join('');
+    const boxes = pos.map((p, i) => `<rect x="${(p.x - bw / 2).toFixed(1)}" y="${(p.y - bh / 2).toFixed(1)}" width="${bw}" height="${bh}" rx="14" class="dg-box"/>` + dgText(p.x, p.y + 5, steps[i], 18, 'dg-t', 3)).join('');
+    return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc('Cycle: ' + steps.join(', then '))}">${DG_ARROW(id)}${arcs}${boxes}</svg>`;
+  }
+  function dgConcept(d) {
+    return `<div class="dg-concept"><div class="c">${esc(d.centre)}</div><div class="parts">${(d.parts || []).map(p => `<div class="p"><b>${esc(p.label)}</b>${p.note ? `<span>${esc(p.note)}</span>` : ''}</div>`).join('')}</div></div>`;
+  }
+  function dgTable(d) {
+    return `<div class="dg-tablewrap"><table class="dg-table"><thead><tr>${d.headers.map(h => `<th>${esc(h)}</th>`).join('')}</tr></thead><tbody>${d.rows.map(r => `<tr>${r.map((c, i) => i ? `<td>${esc(c)}</td>` : `<th scope="row">${esc(c)}</th>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+  }
+
+  const DG_ICON = {
+    internet: () => `<path d="M-30 10c-9 0-15-6-15-13s6-12 13-12c2-7 9-11 16-10 4-5 13-6 19-1 7-1 14 3 15 10 6 1 10 6 10 12 0 8-6 14-14 14z" class="dg-cloud"/>`,
+    cloud: () => DG_ICON.internet(),
+    router: () => `<rect x="-24" y="-9" width="48" height="20" rx="6" class="dg-ic"/><path d="M-12 -9v-9M12 -9v-9" class="dg-ln"/><circle cx="-12" cy="1" r="2.4" class="dg-dot"/><circle cx="-4" cy="1" r="2.4" class="dg-dot"/><path d="M6 1h11" class="dg-ln"/>`,
+    firewall: () => `<rect x="-24" y="-15" width="48" height="30" rx="3" class="dg-fw"/><path d="M-24 -5h48M-24 5h48M-10 -15v10M10 -15v10M-18 -5v10M0 -5v10M18 -5v10M-10 5v10M10 5v10" class="dg-fwl"/>`,
+    switch: () => `<rect x="-30" y="-10" width="60" height="20" rx="4" class="dg-sw"/>${[-22, -13, -4, 5, 14].map(x => `<rect x="${x}" y="-4" width="7" height="7" rx="1" class="dg-port"/>`).join('')}`,
+    server: () => [-17, -4, 9].map(y => `<rect x="-17" y="${y}" width="34" height="11" rx="2.5" class="dg-ic"/><circle cx="-10" cy="${y + 5.5}" r="1.8" class="dg-dot"/>`).join(''),
+    pc: () => `<rect x="-19" y="-16" width="38" height="25" rx="3" class="dg-ic"/><rect x="-14" y="-11" width="28" height="15" class="dg-scr"/><path d="M-4 9v5h8v-5M-10 15h20" class="dg-ln"/>`,
+    laptop: () => `<rect x="-15" y="-15" width="30" height="20" rx="2" class="dg-ic"/><rect x="-11" y="-11" width="22" height="12" class="dg-scr"/><path d="M-21 9h42l-4 5h-34z" class="dg-ic"/>`,
+    wap: () => `<rect x="-21" y="-2" width="42" height="15" rx="7.5" class="dg-ic"/><path d="M-9 -8a13 13 0 0 1 18 0M-5 -4a7 7 0 0 1 10 0" class="dg-wifi"/><circle cx="0" cy="5" r="2" class="dg-dot"/>`,
+    phone: () => `<rect x="-8" y="-15" width="16" height="29" rx="3.5" class="dg-ic"/><circle cx="0" cy="9" r="1.6" class="dg-dot"/>`,
+    iot: () => `<circle r="11" class="dg-ic"/><circle r="3.6" class="dg-dot"/><path d="M14 -7a14 14 0 0 1 0 14" class="dg-wifi"/>`,
+  };
+  function dgNetwork(d) {
+    const nodes = d.nodes || [], links = d.links || [];
+    const rows = Array.from(new Set(nodes.map(n => n.row))).sort((a, b) => a - b);
+    // width follows the busiest row, so a small network stays readable on a phone
+    const most = Math.max(...rows.map(r => nodes.filter(n => n.row === r).length));
+    const W = Math.max(360, most * 132), RH = 112, H = 30 + rows.length * RH;
+    const at = {};
+    rows.forEach((r, ri) => {
+      const inRow = nodes.filter(n => n.row === r);
+      inRow.forEach((n, k) => { at[n.id] = { x: Math.round(W * (k + 1) / (inRow.length + 1)), y: 46 + ri * RH, n }; });
+    });
+    const id = 'dgah' + (++dgSeq);
+    const lk = links.map(l => {
+      const a = at[l.from], b = at[l.to];
+      if (!a || !b) return '';
+      let x1 = a.x, y1 = a.y, x2 = b.x, y2 = b.y;
+      // leave from below a node's label (or the top of its icon) so lines never run through text
+      const below = (p) => p.y + 26 + dgWrap(p.n.label, 16, 2).length * 15 + (p.n.sub ? 14 : 0);
+      if (a.y === b.y) { const s = x2 > x1 ? 1 : -1; x1 += 30 * s; x2 -= 30 * s; }
+      else if (y2 > y1) { y1 = below(a); y2 -= 24; }
+      else { y1 -= 24; y2 = below(b); }
+      const mid = l.label ? `<g class="dg-ll"><rect x="${((x1 + x2) / 2 - l.label.length * 3.4 - 6).toFixed(1)}" y="${((y1 + y2) / 2 - 10).toFixed(1)}" width="${(l.label.length * 6.8 + 12).toFixed(1)}" height="18" rx="9"/><text x="${((x1 + x2) / 2).toFixed(1)}" y="${((y1 + y2) / 2 + 3.5).toFixed(1)}" text-anchor="middle">${esc(l.label)}</text></g>` : '';
+      return `<path d="M${x1} ${y1}L${x2} ${y2}" class="dg-l dg-l-${esc(l.kind)}"/>` + mid;
+    }).join('');
+    const nd = Object.keys(at).map(k => {
+      const { x, y, n } = at[k];
+      return `<g transform="translate(${x} ${y})">${(DG_ICON[n.kind] || DG_ICON.server)()}</g>` + dgText(x, y + 36, n.label, 16, 'dg-t', 2) + (n.sub ? `<text x="${x}" y="${y + (dgWrap(n.label, 16, 2).length > 1 ? 66 : 51)}" text-anchor="middle" class="dg-sub">${esc(n.sub)}</text>` : '');
+    }).join('');
+    const kinds = Array.from(new Set(links.map(l => l.kind)));
+    const KL = { wired: 'Cable', wireless: 'Wireless', vpn: 'VPN tunnel', internet: 'Internet link' };
+    const legend = kinds.length > 1 ? `<div class="dg-legend">${kinds.map(k => `<span><svg width="28" height="8" aria-hidden="true"><path d="M2 4H26" class="dg-l dg-l-${esc(k)}"/></svg>${KL[k] || k}</span>`).join('')}</div>` : '';
+    return `<svg viewBox="0 0 ${W} ${H}" style="max-width:${Math.round(W * 1.15)}px;margin:0 auto" role="img" aria-label="${esc('Network diagram: ' + nodes.map(n => n.label).join(', '))}">${DG_ARROW(id)}${lk}${nd}</svg>${legend}`;
+  }
+  function dgNice(max) {
+    const raw = max / 5, p = Math.pow(10, Math.floor(Math.log10(raw))), m = raw / p;
+    const step = (m <= 1 ? 1 : m <= 2 ? 2 : m <= 2.5 ? 2.5 : m <= 5 ? 5 : 10) * p;
+    return { step, top: Math.ceil(max / step) * step };
+  }
+  function dgBreakeven(d) {
+    const F = Number(d.fixed), V = Number(d.variable), P = Number(d.price);
+    if (!(F > 0 && P > V && V >= 0)) return '';
+    const q = F / (P - V), Q = Number(d.maxUnits) > q ? Number(d.maxUnits) : Math.ceil(q * 2);
+    const yx = dgNice(Math.max(P * Q, F + V * Q)), xx = dgNice(Q);
+    const W = 560, H = 330, l = 72, r = 18, t = 18, b = 50, pw = W - l - r, ph = H - t - b;
+    const X = (u) => l + u / xx.top * pw, Y = (v) => t + ph - v / yx.top * ph;
+    const whole = (v) => Math.abs(v - Math.round(v)) < 1e-9;
+    const money = (v) => '£' + (whole(v) ? Math.round(v).toLocaleString('en-GB') : v.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+    const ticksX = [], ticksY = [];
+    for (let v = 0; v <= xx.top + 1e-9; v += xx.step) ticksX.push(`<path d="M${X(v)} ${t + ph}v5" class="dg-ax"/><text x="${X(v)}" y="${t + ph + 18}" text-anchor="middle" class="dg-sub">${Math.round(v).toLocaleString('en-GB')}</text>`);
+    for (let v = 0; v <= yx.top + 1e-9; v += yx.step) ticksY.push(`<path d="M${l} ${Y(v)}H${l + pw}" class="dg-grid"/><text x="${l - 8}" y="${Y(v) + 4}" text-anchor="end" class="dg-sub">${money(v)}</text>`);
+    const qs = whole(q) ? Math.round(q).toLocaleString('en-GB') : q.toFixed(1) + ' (round up to ' + Math.ceil(q).toLocaleString('en-GB') + ')';
+    const ln = (v0, v1, cls) => `<path d="M${X(0)} ${Y(v0)}L${X(xx.top)} ${Y(v1)}" class="${cls}"/>`;
+    const svg = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(`Break-even chart: fixed costs ${money(F)}, variable cost ${money(V)} per unit, price ${money(P)}. Break-even at ${qs} ${d.unit || 'units'}.`)}">` +
+      ticksY.join('') + ticksX.join('') +
+      `<path d="M${l} ${t}V${t + ph}H${l + pw}" class="dg-ax"/>` +
+      ln(F, F, 'dg-fc') + ln(F, F + V * xx.top, 'dg-tc') + ln(0, P * xx.top, 'dg-tr') +
+      `<path d="M${X(q)} ${Y(P * q)}V${t + ph}M${X(q)} ${Y(P * q)}H${l}" class="dg-drop"/><circle cx="${X(q)}" cy="${Y(P * q)}" r="5.5" class="dg-be"/>` +
+      `<text x="${l + pw / 2}" y="${H - 8}" text-anchor="middle" class="dg-t">Output (${esc(d.unit || 'units')})</text>` +
+      `<text transform="translate(16 ${t + ph / 2}) rotate(-90)" text-anchor="middle" class="dg-t">Costs and revenue (£)</text></svg>`;
+    return svg + `<div class="dg-legend"><span><i class="k tr"></i>Total revenue (${money(P)} × output)</span><span><i class="k tc"></i>Total costs</span><span><i class="k fc"></i>Fixed costs (${money(F)})</span></div>` +
+      `<p class="dg-note"><b>Break-even:</b> ${qs} ${esc(d.unit || 'units')} = ${money(F)} ÷ (${money(P)} − ${money(V)})</p>`;
+  }
+
   /* ───────────── unit content (read from the unit app in a hidden frame) ───────────── */
   function unitFrame(unitPath, query, type, ms) {
     const u = unitOf(unitPath);
@@ -978,7 +1111,7 @@
       const head = item.retry ? `<div class="sh-kind retry">${I('retry', { size: 18 })} Let's try that again</div>` : '';
       const wrap = (html) => { stage.innerHTML = `<div class="sh-step">${head}${html}</div>`; };
       if (s.type === 'learn') {
-        wrap(`${kindHead('learn')}<div class="sh-learn"><div class="emo">${I(lessonIcon, { size: 40 })}</div>${s.title ? `<h2>${esc(s.title)}</h2>` : ''}<p>${esc(s.body)}</p>${(s.points || []).length ? `<ul>${s.points.map(p => `<li>${esc(p)}</li>`).join('')}</ul>` : ''}${s.example ? `<div class="sh-ex"><b>Example</b>${esc(s.example)}</div>` : ''}</div>`);
+        wrap(`${kindHead('learn')}<div class="sh-learn"><div class="emo">${I(lessonIcon, { size: 40 })}</div>${s.title ? `<h2>${esc(s.title)}</h2>` : ''}<p>${esc(s.body)}</p>${diagramHtml(s.diagram)}${(s.points || []).length ? `<ul>${s.points.map(p => `<li>${esc(p)}</li>`).join('')}</ul>` : ''}${s.example ? `<div class="sh-ex"><b>Example</b>${esc(s.example)}</div>` : ''}</div>`);
         footIdle('Continue', true, () => { record(item.i, { ok: true, score: 0, max: 0 }); next(); });
       } else if (s.type === 'recap') {
         wrap(`${kindHead('recap')}<h1 class="sh-q">${esc(s.title || 'Key takeaways')}</h1><div class="sh-recap">${s.points.map((p, i) => `<div style="animation-delay:${i * 90}ms">${I('check', { size: 26, stroke: 2.2 })}<span>${esc(p)}</span></div>`).join('')}</div>`);

@@ -40,7 +40,7 @@
     const lbl = { cat6: 'CAT6 cable', fibre: 'Optical fibre', wifi: 'Wireless', vpn: 'VPN tunnel', net: 'Internet link' }[k];
     return link(X, -2, X + 34, -2, k) + t(X + 42, 2, lbl, { anchor: 'start', size: 11.5, w: 500 });
   }).join('')}</g>`;
-  const svg = (w, h, body, title) => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" role="img" aria-label="${title.replace(/"/g, '&quot;')}"><rect width="${w}" height="${h}" fill="#ffffff"/>${body}</svg>`;
+  const svg = (w, h, body, title) => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" role="img" aria-label="${title.replace(/&/g, '&amp;').replace(/"/g, '&quot;')}"><rect width="${w}" height="${h}" fill="#ffffff"/>${body}</svg>`;
   const zone = (x, y, w, h, label, fill = '#f8fafc', right) => `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="14" fill="${fill}" stroke="#94a3b8" stroke-dasharray="5 4"/>` + (label ? (right ? t(x + w - 12, y + 20, label, { anchor: 'end', size: 12, w: 700, fill: '#475569' }) : t(x + 12, y + 20, label, { anchor: 'start', size: 12, w: 700, fill: '#475569' })) : '');
 
   const FIG = {};
@@ -175,6 +175,93 @@
       legend(150, 492, ['cat6', 'fibre', 'vpn', 'net'])
     ].join(''), 'Figure 1: Hale & Sutton offices')
   };
+
+  /* ── RA10 Paper 1: Northgate Health main clinic (incomplete — learners add the firewall / DMZ links) ──
+     Addresses use private ranges and the RFC 5737 documentation range (203.0.113.0/24). */
+  const small = (x, y, arr, o = {}) => lines(x, y, arr, Object.assign({ size: 11, w: 500, fill: '#334155', lh: 14 }, o));
+  FIG['it2-r01-f1'] = {
+    cap: 'Figure 1: Northgate Health main clinic network (incomplete)',
+    alt: 'Incomplete network diagram for the Northgate Health main clinic. The internet connects by optical fibre to a router (public WAN address 203.0.113.14). The two branch clinics reach the internet over ordinary internet links. Inside the clinic, the internal LAN has a core switch connected by CAT6 to: reception PCs on VLAN 10 (192.168.10.21 to .24); the patient database server on VLAN 20 (192.168.20.10); a NAS backup drive (192.168.20.20); and a consultation-room wireless access point used by doctors’ laptops on VLAN 20. A separate DMZ segment (172.16.0.0/24) contains the bookings web server (172.16.0.10, HTTPS on port 443). The router is not connected to the core switch or to the DMZ: the device and connections between them are missing.',
+    svg: svg(780, 625, [
+      zone(20, 20, 200, 104, 'Branch clinics (×2)'), node('pc', 75, 86, ''), node('pc', 150, 86, ''),
+      link(220, 72, 304, 64, 'net'),
+      node('cloud', 390, 62, '', { w: 180 }), t(390, 66, 'Internet', { size: 14, w: 700 }),
+      link(390, 96, 390, 152, 'fibre'),
+      node('router', 390, 168, '', {}), lines(432, 166, ['Router'], { anchor: 'start', size: 12.5 }), small(432, 182, ['WAN 203.0.113.14'], { anchor: 'start' }),
+      zone(560, 196, 200, 150, 'DMZ · 172.16.0.0/24', '#fff7ed', true),
+      node('server', 660, 270, ''), small(660, 314, ['Bookings web server', '172.16.0.10 · HTTPS (443)']),
+      zone(20, 300, 520, 270, 'Internal LAN', '#f8fafc'),
+      node('switch', 270, 344, '', { w: 150 }), t(356, 349, 'Core switch', { anchor: 'start', size: 12.5 }),
+      link(215, 358, 85, 418, 'cat6'), node('pc', 60, 440, ''), node('pc', 112, 440, ''), small(86, 476, ['Reception PCs', 'VLAN 10', '192.168.10.21–.24']),
+      link(250, 358, 215, 418, 'cat6'), node('server', 215, 444, ''), small(215, 490, ['Patient database', 'VLAN 20 · 192.168.20.10']),
+      link(290, 358, 335, 418, 'cat6'), node('server', 335, 444, ''), small(335, 490, ['NAS backup', '192.168.20.20']),
+      link(325, 358, 460, 398, 'cat6'), node('wap', 460, 420, ''),
+      link(446, 440, 432, 484, 'wifi'), link(474, 440, 490, 484, 'wifi'), node('laptop', 430, 506, ''), node('laptop', 492, 506, ''),
+      small(462, 548, ['Doctors’ laptops · VLAN 20']),
+      legend(150, 606, ['cat6', 'fibre', 'wifi', 'net'])
+    ].join(''), 'Figure 1: Northgate Health main clinic network (incomplete)')
+  };
+
+  /* ── RA10 Paper 5: Apex Components (incomplete — learners add the firewall that separates the segments) ── */
+  const robot = (x, y) => `<g transform="translate(${x - 26} ${y - 30})"><rect x="4" y="44" width="44" height="12" rx="3" fill="${SOFT}" stroke="${INK}" stroke-width="1.5"/><path d="M26 44V30L40 14L52 20" fill="none" stroke="${INK}" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><path d="M26 44V30L40 14L52 20" fill="none" stroke="#fbbf24" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="26" cy="30" r="4" fill="#fff" stroke="${INK}" stroke-width="1.5"/><circle cx="40" cy="14" r="4" fill="#fff" stroke="${INK}" stroke-width="1.5"/><path d="M52 20l4 6M52 20l6-2" stroke="${INK}" stroke-width="2" stroke-linecap="round"/></g>`;
+  const sensor = (x, y) => `<g transform="translate(${x - 12} ${y - 12})"><circle cx="12" cy="12" r="10" fill="${TEAL}" stroke="${INK}" stroke-width="1.5"/><circle cx="12" cy="12" r="3.5" fill="${INK}"/><path d="M24 4a12 12 0 0 1 0 16" fill="none" stroke="#7c3aed" stroke-width="1.6"/></g>`;
+  FIG['it2-r05-f1'] = {
+    cap: 'Figure 1: Apex Components network (incomplete)',
+    alt: 'Incomplete network diagram for Apex Components. The internet connects by optical fibre to a router (WAN 198.51.100.7). Remote engineers and a cloud file-sharing service are reached over the internet. The office network (VLAN 10, 10.10.10.0/24) has an office switch connected to office PCs (10.10.10.21 to .40), a monitoring PC (10.10.10.50) and the design file server (10.10.10.20). The factory network (VLAN 20, 10.10.20.0/24) has a factory switch connected to two robotic machines with PLCs (10.10.20.11 and .12), the machine control system (10.10.20.5) and a wireless access point for IoT sensors (10.10.20.100 upwards). Neither switch is connected to the router or to each other: the device and connections that join them are missing.',
+    svg: svg(780, 625, [
+      zone(20, 20, 200, 104, 'Remote engineers'), node('laptop', 80, 84, ''), node('laptop', 155, 84, ''),
+      link(220, 72, 304, 64, 'net'),
+      node('cloud', 390, 62, '', { w: 180 }), t(390, 66, 'Internet', { size: 14, w: 700 }),
+      link(476, 64, 560, 72, 'net'),
+      zone(560, 20, 200, 104, 'Cloud file sharing', '#f8fafc', true), node('server', 660, 82, ''),
+      link(390, 96, 390, 152, 'fibre'),
+      node('router', 390, 168, '', {}), lines(432, 166, ['Router'], { anchor: 'start', size: 12.5 }), small(432, 182, ['WAN 198.51.100.7'], { anchor: 'start' }),
+      zone(20, 300, 350, 280, 'Office · VLAN 10 · 10.10.10.0/24', '#f8fafc'),
+      node('switch', 195, 348, '', { w: 120 }), t(264, 353, 'Office switch', { anchor: 'start', size: 12.5 }),
+      link(150, 362, 98, 418, 'cat6'), node('pc', 72, 440, ''), node('pc', 124, 440, ''), small(98, 476, ['Office PCs', '10.10.10.21–.40']),
+      link(195, 362, 215, 418, 'cat6'), node('display', 215, 442, ''), small(215, 484, ['Monitoring PC', '10.10.10.50']),
+      link(235, 362, 310, 418, 'cat6'), node('server', 310, 444, ''), small(310, 490, ['Design files', '10.10.10.20']),
+      zone(410, 300, 350, 280, 'Factory · VLAN 20 · 10.10.20.0/24', '#fffbeb', true),
+      node('switch', 585, 348, '', { w: 120 }), t(516, 353, 'Factory switch', { anchor: 'end', size: 12.5 }),
+      link(545, 362, 470, 420, 'cat6'), link(565, 362, 545, 420, 'cat6'), robot(470, 446), robot(545, 446), small(508, 492, ['Robotic machines (PLC)', '10.10.20.11 and .12']),
+      link(605, 362, 640, 418, 'cat6'), node('server', 640, 444, ''), small(640, 490, ['Machine control', '10.10.20.5']),
+      link(625, 362, 718, 400, 'cat6'), node('wap', 718, 420, ''),
+      link(706, 440, 694, 488, 'wifi'), link(730, 440, 738, 488, 'wifi'), sensor(692, 502), sensor(738, 502), small(712, 540, ['IoT sensors', '10.10.20.100+']),
+      legend(150, 606, ['cat6', 'fibre', 'wifi', 'net'])
+    ].join(''), 'Figure 1: Apex Components network (incomplete)')
+  };
+
+  /* ── RA10 Paper 5, Q4: incident response flowchart with two blanks (A, B) ── */
+  (function () {
+    const AH = `<defs><marker id="it2r05ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="${INK}"/></marker></defs>`;
+    const arrow = (x1, y1, x2, y2) => `<path d="M${x1} ${y1}L${x2} ${y2}" stroke="${INK}" stroke-width="2" marker-end="url(#it2r05ah)"/>`;
+    const box = (cx, cy, w, h, label, o = {}) => `<rect x="${cx - w / 2}" y="${cy - h / 2}" width="${w}" height="${h}" rx="${o.round ? h / 2 : 8}" fill="${o.fill || '#fff'}" stroke="${o.blank ? '#64748b' : INK}" stroke-width="${o.blank ? 1.8 : 2}"${o.blank ? ' stroke-dasharray="7 5"' : ''}/>` + (label ? lines(cx, cy + 5 - ((label.length - 1) * 8), label, { size: 13 }) : '');
+    const diamond = (cx, cy, w, h) => `<path d="M${cx} ${cy - h / 2}L${cx + w / 2} ${cy}L${cx} ${cy + h / 2}L${cx - w / 2} ${cy}Z" fill="#f8fafc" stroke="#64748b" stroke-width="1.8" stroke-dasharray="7 5"/>`;
+    const tag = (x, y, s) => `<circle cx="${x}" cy="${y}" r="13" fill="${INK}"/>` + t(x, y + 5, s, { size: 13, w: 700, fill: '#fff' });
+    const X = 290;
+    const body = [
+      AH,
+      box(X, 46, 330, 52, ['Machines stop and a', 'ransom message appears'], { round: true, fill: AMBER }),
+      arrow(X, 72, X, 104),
+      box(X, 132, 330, 52, ['Report to the incident', 'response team'], { fill: BLUE }),
+      arrow(X, 158, X, 192),
+      diamond(X, 250, 260, 112), tag(X - 150, 250, 'A'),
+      arrow(X + 130, 250, 530, 250), t(470, 240, 'No', { size: 13, w: 700 }),
+      box(640, 250, 210, 60, ['Log the event and', 'keep monitoring'], { fill: '#f1f5f9' }),
+      arrow(X, 306, X, 344), t(X + 18, 330, 'Yes', { size: 13, w: 700, anchor: 'start' }),
+      box(X, 376, 330, 60, null, { blank: true, fill: '#f8fafc' }), tag(X - 186, 376, 'B'),
+      arrow(X, 406, X, 440),
+      box(X, 470, 330, 56, ['Inform management, customers,', 'the insurer and regulators'], { fill: BLUE }),
+      arrow(X, 498, X, 532),
+      box(X, 562, 330, 56, ['Recover from clean backups', 'and investigate'], { fill: TEAL }),
+    ].join('');
+    FIG['it2-r05-f2'] = {
+      cap: 'Figure 2: the start of Apex’s incident response (incomplete)',
+      alt: 'Incomplete flowchart. Start: machines stop and a ransom message appears. Next: report to the incident response team. Then an empty decision diamond labelled A. The No path from A goes to: log the event and keep monitoring. The Yes path from A goes to an empty process box labelled B. After B: inform management, customers, the insurer and regulators. Then: recover from clean backups and investigate.',
+      svg: svg(780, 610, body, 'Figure 2: Apex incident response flowchart (incomplete)')
+    };
+  })();
+
 
   window.BIZ_FIGURES = Object.assign(window.BIZ_FIGURES || {}, FIG);
 })();

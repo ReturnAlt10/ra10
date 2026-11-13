@@ -112,14 +112,89 @@ function codingLang(unit: string, unitName: string, request: string, topic: stri
   return null;
 }
 
-function sanitiseStep(s: any, keepOrder = false): any | null {
+/* ───────────── diagrams on learn cards ─────────────
+   The AI describes a diagram as data; the Study Hub page draws it (study.js diagramHtml), so it is always
+   tidy and readable. Every diagram is checked by the second (examiner) pass with the rest of the lesson.
+   Which types a unit gets is decided by diagramPlan(). */
+const DIAGRAM_TYPES = ['flow', 'concept', 'table', 'network', 'breakeven'];
+const NET_KINDS = ['internet', 'router', 'firewall', 'switch', 'server', 'pc', 'laptop', 'wap', 'phone', 'cloud', 'iot'];
+const NET_LINKS = ['wired', 'wireless', 'vpn', 'internet'];
+function sanitiseDiagram(d: any, allowed: string[] = DIAGRAM_TYPES): any | null {
+  if (!d || typeof d !== 'object') return null;
+  const type = String(d.type || '').toLowerCase();
+  if (!allowed.includes(type)) return null;
+  const s = (x: unknown, n: number) => clean(x, n);
+  const title = s(d.title, 80) || undefined;
+  if (type === 'flow') {
+    const steps = (Array.isArray(d.steps) ? d.steps : []).map((x: unknown) => s(x, 60)).filter(Boolean).slice(0, 7);
+    if (steps.length < 2) return null;
+    return { type, title, steps, cycle: d.cycle === true && steps.length >= 3 };
+  }
+  if (type === 'concept') {
+    const centre = s(d.centre ?? d.center, 40);
+    const parts = (Array.isArray(d.parts) ? d.parts : []).map((p: any) => ({ label: s(p?.label, 30), note: s(p?.note, 80) || undefined })).filter((p: any) => p.label).slice(0, 6);
+    if (!centre || parts.length < 3) return null;
+    return { type, title, centre, parts };
+  }
+  if (type === 'table') {
+    const headers = (Array.isArray(d.headers) ? d.headers : []).map((h: unknown) => s(h, 30)).filter(Boolean).slice(0, 3);
+    if (headers.length < 2) return null;
+    const rows = (Array.isArray(d.rows) ? d.rows : []).filter(Array.isArray).map((r: any[]) => headers.map((_: string, i: number) => s(r[i], 90))).filter((r: string[]) => r.some(Boolean)).slice(0, 6);
+    if (rows.length < 2) return null;
+    return { type, title, headers, rows };
+  }
+  if (type === 'network') {
+    const ids = new Set<string>();
+    const perRow = [0, 0, 0, 0];
+    const nodes = (Array.isArray(d.nodes) ? d.nodes : []).map((n: any) => ({
+      id: s(n?.id, 20), kind: NET_KINDS.includes(String(n?.kind)) ? String(n.kind) : '', label: s(n?.label, 24), sub: s(n?.sub, 28) || undefined,
+      row: Math.max(0, Math.min(3, Math.round(Number(n?.row) || 0))),
+    })).filter((n: any) => n.id && n.kind && n.label && !ids.has(n.id) && ids.add(n.id) && ++perRow[n.row] <= 5).slice(0, 12);
+    const keep = new Set(nodes.map((n: any) => n.id));
+    const links = (Array.isArray(d.links) ? d.links : []).map((l: any) => ({ from: s(l?.from, 20), to: s(l?.to, 20), kind: NET_LINKS.includes(String(l?.kind)) ? String(l.kind) : 'wired', label: s(l?.label, 18) || undefined }))
+      .filter((l: any) => keep.has(l.from) && keep.has(l.to) && l.from !== l.to).slice(0, 16);
+    if (nodes.length < 2 || !links.length) return null;
+    return { type, title, nodes, links };
+  }
+  if (type === 'breakeven') {
+    const fixed = Number(d.fixed), variable = Number(d.variable), price = Number(d.price);
+    if (!(fixed > 0 && fixed <= 1e9 && variable >= 0 && price > variable && price <= 1e6)) return null;
+    const be = fixed / (price - variable);
+    let maxUnits = Math.round(Number(d.maxUnits));
+    if (!(maxUnits > be * 1.2 && maxUnits <= be * 4)) maxUnits = Math.max(2, Math.ceil(be * 2));
+    return { type, title, fixed, variable, price, maxUnits, unit: s(d.unit, 16) || 'units' };
+  }
+  return null;
+}
+const DIAGRAM_SHAPES: Record<string, string> = {
+  flow: '{"type":"flow","title":"","steps":["first","second","third"],"cycle":false}',
+  concept: '{"type":"concept","title":"","centre":"","parts":[{"label":"","note":""}]}',
+  table: '{"type":"table","title":"","headers":["",""],"rows":[["",""],["",""]]}',
+  network: '{"type":"network","title":"","nodes":[{"id":"net","kind":"internet","label":"Internet","row":0},{"id":"fw","kind":"firewall","label":"Firewall","row":1},{"id":"sw","kind":"switch","label":"Switch","sub":"192.168.1.0/24","row":2},{"id":"pc1","kind":"pc","label":"Staff PC","row":3}],"links":[{"from":"net","to":"fw","kind":"internet"},{"from":"fw","to":"sw","kind":"wired"},{"from":"sw","to":"pc1","kind":"wired"}]}',
+  breakeven: '{"type":"breakeven","title":"","fixed":12000,"variable":4,"price":10,"unit":"units"}',
+};
+function diagramPlan(unit: string, unitName: string): { types: string[]; hint: string } {
+  const u = `${unit} ${unitName}`.toLowerCase();
+  if (/it-aaq|computing|\/it\/|information technology|cyber|network|database|website/.test(u)) {
+    return { types: ['network', 'flow', 'concept', 'table'], hint: 'Use a "network" diagram for any networking or security topic (devices, segments, firewalls, VPNs, DMZs, Wi-Fi; node kinds: ' + NET_KINDS.join(', ') + '; link kinds: ' + NET_LINKS.join(', ') + '; "row" 0 = internet at the top down to 3 = end devices; put an IP address, subnet or port in "sub" where it teaches something). Use a "flow" for processes (incident response, the forensic procedure, algorithms), a "concept" map for categories, and a "table" to compare.' };
+  }
+  if (/business/.test(u)) {
+    return { types: ['breakeven', 'flow', 'concept', 'table'], hint: 'Use "breakeven" only for break-even, contribution or cost topics: give realistic whole-number fixed costs, variable cost per unit and selling price, and make the learn card\'s numbers match them (the page calculates the lines and the break-even point). Use a "flow" for processes (e.g. recruitment, the marketing planning process), a "concept" map for factors or stakeholders, and a "table" to compare options.' };
+  }
+  if (/sport|health|medical|childhood|psychology|anatomy/.test(u)) {
+    return { types: ['flow', 'concept', 'table'], hint: 'Use a "flow" for processes and pathways (set "cycle": true only for a genuine cycle such as the cardiac cycle), a "concept" map for components (e.g. components of fitness), and a "table" to compare (e.g. types, studies, strengths and weaknesses).' };
+  }
+  return { types: ['flow', 'concept', 'table'], hint: 'Use a "flow" for processes, a "concept" map for components and a "table" to compare.' };
+}
+
+function sanitiseStep(s: any, keepOrder = false, diagramTypes: string[] = DIAGRAM_TYPES): any | null {
   if (!s || typeof s !== 'object') return null;
   const t = String(s.type || '').toLowerCase();
   if (!STEP_TYPES.includes(t)) return null;
   const str = (x: unknown, n = 600) => clean(x, n);
   if (t === 'learn') {
     const body = str(s.body, 900); if (!body) return null;
-    return { type: t, title: str(s.title, 90), body, points: (Array.isArray(s.points) ? s.points : []).map((p: unknown) => str(p, 200)).filter(Boolean).slice(0, 4), example: str(s.example, 400) || undefined };
+    return { type: t, title: str(s.title, 90), body, points: (Array.isArray(s.points) ? s.points : []).map((p: unknown) => str(p, 200)).filter(Boolean).slice(0, 4), example: str(s.example, 400) || undefined, diagram: sanitiseDiagram(s.diagram, diagramTypes) || undefined };
   }
   if (t === 'mcq') {
     const choices = (Array.isArray(s.choices) ? s.choices : []).map((c: unknown) => str(c, 200)).filter(Boolean);
@@ -230,7 +305,7 @@ const CODE_PROMPT: Record<string, string> = {
   sql: `This is a DATABASE lesson in SQL (SQLite dialect). Include exactly 2 "code" steps where the learner writes one SQL query. Each code step has "setup" (CREATE TABLE and INSERT statements for a small table of 5–8 realistic rows), a "starter" (eg "SELECT"), and a correct "solution" query. The learner's result is compared with the result of your solution, so the solution must be exactly right; include ORDER BY when the order matters.`,
 };
 
-async function writeLesson(input: { unitName: string; qual: string; topic: string | null; request: string; focusReason: string; prof: any; grounding: any; length?: string; focus?: string; coding?: string | null }) {
+async function writeLesson(input: { unit?: string; unitName: string; qual: string; topic: string | null; request: string; focusReason: string; prof: any; grounding: any; length?: string; focus?: string; coding?: string | null }) {
   const g = input.grounding || {};
   const bankQuiz = (Array.isArray(g.quiz) ? g.quiz : []).slice(0, 8);
   const realExam = (Array.isArray(g.exam) ? g.exam : []).map(trimReal).filter((q: any) => q && clean(q.question)).slice(0, 3);
@@ -240,6 +315,7 @@ async function writeLesson(input: { unitName: string; qual: string; topic: strin
   const specTopics = (Array.isArray(g.topics) ? g.topics : []).slice(0, 60).map((t: unknown) => clean(t, 90));
   const len = LENGTHS[String(input.length || '')] || LENGTHS.standard;
   const focus = FOCUS[String(input.focus || '')] || '';
+  const plan = diagramPlan(String(input.unit || ''), input.unitName);
   const sys = `You are an expert ${input.qual} teacher and examiner who writes bite-size, game-like revision lessons (like Duolingo). Accuracy is the top priority: every fact and every answer key must be correct for the ${input.qual} specification, and every question must have exactly one defensible correct answer. British English. Reply with JSON only.`;
   const learner = {
     weak_topics: (input.prof?.weak || []).map((t: any) => `${t.topic} (${t.pct}%)`),
@@ -266,12 +342,13 @@ ${input.coding ? CODE_PROMPT[input.coding] + '\n' : ''}Answer-key rules (these a
 - order: items listed in the CORRECT order of a recognised sequence (process stages, steps of a model), not a matter of opinion.
 - exam: marks 2–6, "points" are mark-scheme points as an examiner would write them, "model" is a full-mark answer.
 - learn cards: 2–4 short sentences (max 70 words), 2–3 bullet points, and a concrete example where useful. Every check must be answerable from the learn cards.
+- diagrams: give 2–3 learn cards a "diagram" where a picture genuinely helps (otherwise "diagram": null). Allowed types for this unit: ${plan.types.join(', ')}. ${plan.hint} Labels are short and must be accurate for the specification. Shapes: ${plan.types.map((k) => DIAGRAM_SHAPES[k]).join(' | ')}
 Every check has a one-sentence "explain" that teaches.
 Pick "icon" for the lesson from: ${ICONS.join(', ')}.
 Return JSON exactly like:
 {"title":"short catchy lesson title","icon":"shield","topic":"the specific topic","summary":"one sentence: what you'll be able to do","minutes":${len.minutes},
  "steps":[
-  {"type":"learn","title":"","body":"","points":["",""],"example":""},
+  {"type":"learn","title":"","body":"","points":["",""],"example":"","diagram":null},
   {"type":"mcq","q":"","choices":["","","",""],"answer":0,"explain":""},
   {"type":"truefalse","statement":"","answer":true,"explain":""},
   {"type":"fill","text":"A ___ is ...","blanks":["word"],"options":["word","other","other"],"explain":""},
@@ -287,7 +364,7 @@ Return JSON exactly like:
   // keep the AI's ref next to each sanitised step
   let steps: any[] = [];
   rawSteps.forEach((raw: any) => {
-    const s = sanitiseStep(raw);
+    const s = sanitiseStep(raw, false, plan.types);
     if (!s) return;
     if (s.type === 'exam') {
       const ref = clean(raw?.ref, 80);
@@ -328,7 +405,7 @@ Return JSON exactly like:
 async function verifySteps(steps: any[], unitName: string, qual: string): Promise<{ steps: any[]; verified: boolean }> {
   const items = steps.map((s, i) => ({ s, i })).filter(({ s }) => !s.bank && s.type !== 'recap' && s.type !== 'code' && !(s.type === 'exam' && s.source === 'exam')).map(({ s, i }) => {
     const base: any = { i, type: s.type };
-    if (s.type === 'learn') Object.assign(base, { title: s.title, body: s.body, points: s.points, example: s.example });
+    if (s.type === 'learn') Object.assign(base, { title: s.title, body: s.body, points: s.points, example: s.example, diagram: s.diagram });
     if (s.type === 'mcq') Object.assign(base, { q: s.q, choices: s.choices, answer: s.answer });
     if (s.type === 'truefalse') Object.assign(base, { statement: s.statement, answer: s.answer });
     if (s.type === 'fill') Object.assign(base, { text: s.text, blanks: s.blanks, options: s.options });
@@ -342,7 +419,7 @@ async function verifySteps(steps: any[], unitName: string, qual: string): Promis
     `You are a meticulous senior ${qual} examiner checking a revision lesson before students see it. You are strict: anything factually wrong, ambiguous, or with more than one defensible answer must be fixed or removed. Reply with JSON only.`,
     `Unit: ${unitName}
 Check each item:
-- learn: are all statements accurate for the specification? Fix wrong facts.
+- learn: are all statements accurate for the specification? Fix wrong facts. If it has a "diagram", check every label, step order, connection and number (for "breakeven", that the card's figures match fixed / variable / price); return a corrected "diagram" of the same shape, or "diagram": null to remove one that is wrong or unhelpful.
 - mcq: is "answer" (0-based index into "choices" exactly as given) the ONE correct choice? Could any other choice also be argued correct?
 - truefalse: is the keyed true/false definitely right and unambiguous?
 - fill: put each option into each gap — does ONLY the keyed word make the sentence correct? A distractor that also fits (a synonym, a broader or narrower correct term) makes the item invalid: replace that distractor.
@@ -364,7 +441,7 @@ Return {"items":[{"i":0,"verdict":"ok"|"fix"|"drop","reason":"short", ...correct
     if (verdict !== 'fix') continue;
     const s = out[i];
     const patch: any = {};
-    ['answer', 'choices', 'blanks', 'options', 'pairs', 'items', 'statement', 'text', 'body', 'points', 'model', 'q'].forEach((f) => { if (v[f] !== undefined) patch[f] = v[f]; });
+    ['answer', 'choices', 'blanks', 'options', 'pairs', 'items', 'statement', 'text', 'body', 'points', 'model', 'q', 'diagram'].forEach((f) => { if (v[f] !== undefined) patch[f] = v[f]; });
     const fixed = sanitiseStep({ ...s, ...patch, type: s.type });
     if (fixed) out[i] = s.type === 'exam' ? { ...s, ...fixed } : fixed; else drop.add(i);
   }
@@ -407,7 +484,7 @@ async function create(ctx: Ctx, body: any) {
     const reason = clean(body.reason, 300) || (topic ? `You picked ${topic}.` : '');
     let L: any = null;
     if (hasProviders()) {
-      try { L = await writeLesson({ unitName, qual, topic, request, focusReason: reason, prof, grounding: body.grounding, length: clean(body.length, 12), focus: clean(body.focus, 12), coding: codingLang(unit, unitName, request, topic) }); }
+      try { L = await writeLesson({ unitName, qual, topic, request, focusReason: reason, prof, grounding: body.grounding, length: clean(body.length, 12), focus: clean(body.focus, 12), unit, coding: codingLang(unit, unitName, request, topic) }); }
       catch (e) { console.warn('study-hub write failed', e); }
     }
     if (!L) L = bankLesson(unitName, topic, body.grounding);
@@ -569,7 +646,7 @@ async function draft(ctx: Ctx, body: any) {
   if (!hasProviders()) return { ok: false, error: 'AI is not configured.' };
   let L: any;
   try {
-    L = await writeLesson({ unitName, qual, topic, request, focusReason: `A lesson for the class ${cls?.name || ''}, set by their teacher.`, prof: null, grounding: body.grounding, length: clean(body.length, 12), focus: clean(body.focus, 12), coding: codingLang(unit, unitName, request, topic) });
+    L = await writeLesson({ unitName, qual, topic, request, focusReason: `A lesson for the class ${cls?.name || ''}, set by their teacher.`, prof: null, grounding: body.grounding, length: clean(body.length, 12), focus: clean(body.focus, 12), unit, coding: codingLang(unit, unitName, request, topic) });
   } catch (e) { return { ok: false, error: 'The lesson writer is busy right now. Please try again in a minute. (' + (e instanceof Error ? e.message : String(e)) + ')' }; }
   const { data: saved, error } = await ctx.admin.from('study_lessons').insert({
     user_id: ctx.userId, kind: 'template', unit, topic: L.topic || topic, title: L.title, emoji: L.icon || null, minutes: L.minutes,
@@ -680,7 +757,7 @@ async function assigned(ctx: Ctx, body: any) {
     const topic = clean(it.topic, 100) || clean(body.topic, 100) || (weak ? weak.topic : null);
     const reason = weak && topic === weak.topic ? `Set by your teacher, built around ${weak.topic} — you've been scoring ${weak.pct}% on it.` : `Set by your teacher: ${a.title}. Built from your own progress.`;
     let L: any = null;
-    try { L = await writeLesson({ unitName, qual, topic, request: clean(it.request, 300), focusReason: reason, prof, grounding: body.grounding, length: clean(it.length, 12), focus: clean(it.focus, 12), coding: codingLang(unit, unitName, clean(it.request, 300), topic) }); }
+    try { L = await writeLesson({ unitName, qual, topic, request: clean(it.request, 300), focusReason: reason, prof, grounding: body.grounding, length: clean(it.length, 12), focus: clean(it.focus, 12), unit, coding: codingLang(unit, unitName, clean(it.request, 300), topic) }); }
     catch (e) { console.warn('assigned write failed', e); }
     if (!L) L = bankLesson(unitName, topic, body.grounding);
     if (!L) return { ok: false, error: 'The lesson writer is busy right now. Please try again in a minute.' };
