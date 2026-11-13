@@ -364,10 +364,13 @@
     if (!g) return false;
     el.classList.add('rs', 'rs-page');
     const ex = g.units.filter(u => /exam/i.test(u.kind)).length;
+    const st = g.units.filter(u => /set task/i.test(u.kind)).length;   // externally set and marked: not assignments
+    const as = g.units.length - ex - st;
+    const lede = [ex ? `${ex} exam unit${ex === 1 ? '' : 's'} with sample papers, exam questions and the AI Examiner` : '', st ? `${st} set-task unit${st === 1 ? '' : 's'} with the Pearson set tasks and the AI Examiner on every activity` : '', as ? `${as} assignment unit${as === 1 ? '' : 's'} that teach the theory behind your assignment and explain every grading criterion` : ''].filter(Boolean);
     el.innerHTML = `<div class="rs-top" style="--sc:${esc(g.color)}"><div style="display:flex;gap:14px;align-items:center"><span class="rs-ico" style="width:56px;height:56px;border-radius:16px">${ICONS[g.icon]}</span><div><small style="color:var(--rs-ink2);font-weight:700">${esc(g.qual)}</small><h1>${esc(g.name)}${g.isNew ? '<span class="rs-new">New</span>' : ''}</h1></div></div>
-      <p class="rs-lede">${g.units.length} units: ${ex} exam unit${ex === 1 ? '' : 's'} with sample papers, exam questions and the AI Examiner, and ${g.units.length - ex} assignment unit${g.units.length - ex === 1 ? '' : 's'} that teach the theory behind your assignment and explain every grading criterion.</p></div>
+      <p class="rs-lede">${g.units.length} unit${g.units.length === 1 ? '' : 's'}: ${lede.length > 1 ? lede.slice(0, -1).join(', ') + ' and ' + lede[lede.length - 1] : lede[0] || ''}.</p></div>
       <div class="rs-grid">${g.units.map(u => `<article class="rs-card" style="--sc:${esc(u.color || g.color)}"><button type="button" class="rs-card-h" data-rs-go="${esc(u.path)}"><span class="rs-ico">${ICONS[g.icon]}</span><span><small>${esc(unitBadge(u))} · ${kindLabel(u.kind)}</small><b>${esc(unitTitle(u))}</b></span><span class="rs-go">${ICONS.arrow}</span></button>
-        <div class="rs-units" style="padding:0 16px 16px;color:var(--rs-ink2);font-size:.9rem">${esc(u.blurb || (/exam/i.test(u.kind) ? 'Revision guide, flashcards, quiz, exam questions with the AI Examiner and the full sample paper.' : 'Revision guide for the theory, flashcards, quiz and an assignment guide to every Pass, Merit and Distinction criterion.'))}</div></article>`).join('')}</div>`;
+        <div class="rs-units" style="padding:0 16px 16px;color:var(--rs-ink2);font-size:.9rem">${esc(u.blurb || (/exam/i.test(u.kind) ? 'Revision guide, flashcards, quiz, exam questions with the AI Examiner and the full sample paper.' : /set task/i.test(u.kind) ? 'Revision guide, flashcards, quiz and the Pearson set tasks, with the AI Examiner marking every activity against the band grid.' : 'Revision guide for the theory, flashcards, quiz and an assignment guide to every Pass, Merit and Distinction criterion.'))}</div></article>`).join('')}</div>`;
     wire(el, () => {});
     return g;
   }

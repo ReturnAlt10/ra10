@@ -6,6 +6,7 @@ import { SPORT_U2_SYSTEM, buildSportUnit2Prompt, sportUnit2PostProcess, isSportU
 import { PSYCHOLOGY_SYSTEM, buildPsychologyPrompt, psychologyPostProcess, isPsychology } from "./psychology_examiner.ts";
 import { EDEXCEL_BUSINESS_SYSTEM, buildEdexcelBusinessPrompt, edexcelBusinessPostProcess, isEdexcelBusiness } from "./edexcel_business_examiner.ts";
 import { IT_U2_SYSTEM, buildItUnit2Prompt, itUnit2PostProcess, isItUnit2 } from "./it_unit2_examiner.ts";
+import { IT_U14_SYSTEM, buildItUnit14Prompt, itUnit14PostProcess, isItUnit14 } from "./it_unit14_examiner.ts";
 import { requireTermsAccepted } from "../_shared/legal.ts";
 
 const ALLOWED_ORIGINS = [
@@ -353,7 +354,7 @@ async function markWithEnsemble(prompt: string, opts: CallOptions, post: (raw: a
   }
   // Use the written feedback of the opinion closest to the final mark, re-banded to that mark.
   const best = runs.slice().sort((a, b) => Math.abs(mark(a) - final) - Math.abs(mark(b) - final))[0];
-  const merged = { ...best.parsed, earned: final, level: undefined, level_marks: undefined };
+  const merged = { ...best.parsed, earned: final, level: undefined, level_marks: undefined, band: undefined };
   const reposted = post(merged);
   // Keep the explanation honest when the mark moved away from what that opinion said.
   if (mark(best) !== final && reposted.examiner_comment) {
@@ -492,7 +493,8 @@ export default Deno.serve(async (req: Request) => {
     const sportU2 = !edx && !psych && !business && !b2026 && isSportUnit2Task(question);
     const btec = !edx && !psych && !business && !b2026 && !sportU2 && isBusinessBtec(question);
     const it2 = !edx && !psych && !business && !b2026 && !sportU2 && !btec && isItUnit2(question);
-    const basePrompt = edx ? buildEdexcelBusinessPrompt(question, answer) : psych ? buildPsychologyPrompt(question, answer) : b2026 ? buildBusiness2026Prompt(question, answer) : business ? buildBusinessPrompt(question, answer) : sportU2 ? buildSportUnit2Prompt(question, answer) : btec ? buildBusinessBtecPrompt(question, answer) : it2 ? buildItUnit2Prompt(question, answer, !!image) : buildPrompt(question, answer, []);
+    const it14 = !edx && !psych && !business && !b2026 && !sportU2 && !btec && !it2 && isItUnit14(question);
+    const basePrompt = edx ? buildEdexcelBusinessPrompt(question, answer) : psych ? buildPsychologyPrompt(question, answer) : b2026 ? buildBusiness2026Prompt(question, answer) : business ? buildBusinessPrompt(question, answer) : sportU2 ? buildSportUnit2Prompt(question, answer) : btec ? buildBusinessBtecPrompt(question, answer) : it2 ? buildItUnit2Prompt(question, answer, !!image) : it14 ? buildItUnit14Prompt(question, answer) : buildPrompt(question, answer, []);
     // The IT module writes its own diagram instructions.
     const prompt = image && !it2 ? basePrompt + "\n" + DIAGRAM_NOTE : basePrompt;
 
@@ -503,6 +505,7 @@ export default Deno.serve(async (req: Request) => {
       : sportU2 ? { system: SPORT_U2_SYSTEM, timeout: 45000, maxTokens: 1800, image }
       : btec ? { system: BUSINESS_BTEC_SYSTEM, timeout: 55000, maxTokens: 2400, image }
       : it2 ? { system: IT_U2_SYSTEM, timeout: 45000, maxTokens: 1800, image }
+      : it14 ? { system: IT_U14_SYSTEM, timeout: 55000, maxTokens: 2400, image }
       : null;
     const post = (raw: any) => edx ? edexcelBusinessPostProcess(raw, question, answer)
       : psych ? psychologyPostProcess(raw, question, answer)
@@ -511,13 +514,16 @@ export default Deno.serve(async (req: Request) => {
       : sportU2 ? sportUnit2PostProcess(raw, question)
       : btec ? businessBtecPostProcess(raw, question)
       : it2 ? itUnit2PostProcess(raw, question, answer, !!image)
+      : it14 ? itUnit14PostProcess(raw, question, answer)
       : raw;
 
     let parsed: any;
     let aiResponse: { content: string; provider: string };
     // Levels-marked long answers (AQA 7132 / 7138, IT Unit 2) get a second, independent opinion: single model
     // runs scatter by a level or more on the same answer, and two opinions combined track examiners more closely.
-    const ensemble = !!callOpts && !image && marksMax >= 9 && (business || b2026 || it2) && ENSEMBLE_ON();
+    // IT Unit 14 set-task activities (8–20 marks) are holistic band judgements, so they get the second opinion too.
+    const it14Activity = it14 && Array.isArray(question?.mark_scheme?.afs) && question.mark_scheme.afs.length > 0;
+    const ensemble = !!callOpts && !image && ((marksMax >= 9 && (business || b2026 || it2)) || it14Activity) && ENSEMBLE_ON();
     if (ensemble && callOpts) {
       const r = await markWithEnsemble(prompt, callOpts, post, marksMax);
       parsed = r.parsed;

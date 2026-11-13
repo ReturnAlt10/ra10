@@ -197,8 +197,8 @@ export function buildItUnit2Prompt(q: AnyObj, answer: string, hasImage = false):
 // ── post-processing ────────────────────────────────────────────────────────────────────────────────
 const words = (s: string): string[] => Array.from(String(s || "").toLowerCase().replace(/[’']/g, "").match(/[a-z0-9]+/g) || []);
 
-// The evidence must really be in the answer (allowing for small copying slips).
-function evidenceFound(evidence: string, answer: string): boolean {
+// The evidence must really be in the answer (allowing for small copying slips). Shared with it_unit14_examiner.ts.
+export function evidenceFound(evidence: string, answer: string): boolean {
   let ev = words(evidence);
   const long = ev.filter((w) => w.length > 2);
   if (long.length) ev = long;   // very short answers ("IP", "2FA") keep every word
@@ -208,7 +208,7 @@ function evidenceFound(evidence: string, answer: string): boolean {
   return hit / ev.length >= 0.6;
 }
 
-function meaningless(answer: string): boolean {
+export function meaningless(answer: string): boolean {
   const w = words(answer).filter((x) => /[a-z]/.test(x));
   return w.length < 2;
 }

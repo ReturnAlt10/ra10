@@ -1,0 +1,105 @@
+/* BTEC Nationals IT (2016 spec, 20161K) Unit 14: IT Service Delivery — flashcards. Not the AAQ. */
+(function () {
+  'use strict';
+  const B = window.__BIZ_B, F = B.F;
+  /* The task */
+  F('A', 'Unit 14 at a glance', 'Set task · Part A: up to 3 h research (no marks) · Part B: 8 supervised hours, 5 activities · 68 marks.');
+  F('A', 'Marks per activity', 'A1 strategy 8 · A2 catalogue 8 · A3 solution 20 · A4 evaluation 12 · A5 implications 16 · technical language 4.');
+  F('A', 'Templates', 'Activities 1, 2 and 5: Outline_Service_Strategy.rtf, Define_IT_Service_Catalogue.rtf, IT_Service_Management_Implications.rtf.');
+  F('A', 'Part A notes', 'Two sides of individually prepared hard-copy A4 notes may be taken into Part B. No internet in Part B.');
+  F('A', 'How each activity is marked', 'Holistically: judge every trait, place the whole activity in ONE best-fit band, then a mark within it.');
+  F('A', 'Same every series', 'The five activities and mark grid never change — only the organisation and sector.');
+  F('A', '“I” not “we”', 'Write “I have chosen…”. “We” can suggest work was not independent (Lead Examiner).');
+  /* A1 */
+  F('A', 'IT service life cycle', 'Service identification → service delivery design → service management (continual review and refinement).');
+  F('A', 'Service identification', 'Outline IT service strategy · identify and prioritise needs of organisation, users, customers · outline service catalogue.');
+  F('A', 'Service delivery design', 'Defining the technical requirements and planning solutions to meet identified needs.');
+  F('A', 'Service management', 'Benefits/drawbacks · alternatives + justification · impact of implementation and operation · evaluate success, justify improvements.');
+  F('A', 'Methodologies', 'PRINCE2 · Agile · RAD · lean · waterfall — the life cycle can be applied in any of them.');
+  F('A', 'Waterfall', 'Sequential phases; each finished and signed off before the next. Clear plan, hard to change late.');
+  F('A', 'Agile', 'Short iterations (sprints) with user feedback; requirements can change.');
+  F('A', 'RAD', 'Rapid application development: quick prototypes, user testing, time-boxing.');
+  F('A', 'Lean', 'Remove waste — anything that does not add value for the customer.');
+  F('A', 'PRINCE2', 'PRojects IN Controlled Environments: stages, roles, business case, controlled change.');
+  F('A', 'Benefits of the life cycle', 'Standards · automation · continuity/availability · customer attraction/retention · disaster recovery · integrity · interoperability · security · lower costs · simpler processes.');
+  F('A', 'Key staff roles', 'Architects · developers · project managers · technicians · service desk personnel.');
+  F('A', 'Service desk', 'First point of contact: logs, prioritises, resolves or escalates incidents and requests.');
+  /* A2/A3 */
+  F('A', 'Functions needing IT', 'Manufacturing · delivering services · supply chain · marketing and sales · customer relations · resources · recruitment · staff management · support and finance.');
+  F('A', 'Product v service', 'Product: production, stock, distribution. Service: bookings, scheduling, rotas, customer records.');
+  F('A', 'Defining requirements from…', 'Purpose/type · aims · customer experience · staff needs and working patterns · location.');
+  F('A', 'Diagrams', 'Functional charts · data flow diagrams · building/floor plans · network diagrams.');
+  F('A', 'Contextual factors', 'User/customer needs · demand changes · scalability · ethics · legislation · security · new technology · standard ways of working.');
+  F('A', 'Moral and ethical issues', 'Staff monitoring · privacy · environmental impact · freedom of speech/censorship · acceptable use policies.');
+  F('A', 'Acceptable use policy', 'Rules for using IT systems (passwords, personal use, social media, monitoring) and sanctions if broken.');
+  /* Legislation */
+  F('A', 'Computer Misuse Act 1990', 'Unauthorised access; access with intent to commit further offences; unauthorised acts impairing a computer (e.g. malware).');
+  F('A', 'Copyright, Designs and Patents Act 1988', 'Protects software and content — use only under licence; no unlicensed copies.');
+  F('A', 'Data protection (DPA 2018 / UK GDPR)', 'Lawful, fair, secure processing; only what is needed; kept no longer than necessary; serious breaches to the ICO within 72 hours.');
+  F('A', 'Health and Safety at Work etc. Act 1974', 'Employer’s general duty for staff health, safety and welfare — includes IT equipment and cabling.');
+  F('A', 'DSE regulations', 'Workstation assessments, breaks/changes of activity, eye tests on request for regular screen users.');
+  F('A', 'Lawful business practice regulations', 'Allow monitoring of communications on the organisation’s own systems for legitimate purposes if users are told.');
+  F('A', 'WEEE regulations', 'Waste electrical and electronic equipment must go to approved recycling/treatment, not general waste.');
+  F('A', 'Telecommunications / interception', 'Rules on the use of communications networks and when communications may lawfully be intercepted.');
+  /* B */
+  F('B', 'IT service catalogue — columns', 'Function · service name · service description.');
+  F('B', 'Service description includes', 'What must be achieved · information and data needed and by whom · technologies needed.');
+  F('B', 'Catalogue top band', 'Fully appropriate services for EVERY function; accurate names and descriptions; clear to a non-IT specialist.');
+  F('B', 'Catalogue mistakes', 'Generic services · missing roles (e.g. drivers) · invented roles · non-IT items (spanners, security guard).');
+  F('B', 'B2 considerations', 'Technology · cost · environment · ethics · legal · location · moral · risks · scalability · security · sustainability.');
+  F('B', 'Activity 3 four areas', 'Information requirements · data requirements · hardware and software service options · managing infrastructure and users.');
+  F('B', 'Activity 3 evidence', 'Written + tabular + annotated diagrams (network diagram, data flow, floor plan). One or more documents.');
+  F('B', 'Activity 3 hardware AND software', 'Leave out software and the hardware/software trait cannot get above Band 1.');
+  F('B', 'Activity 3 no credit', 'Organisation charts and Gantt charts — they are not required.');
+  F('B', 'Network diagram checklist', 'Internet/ISP → router → firewall → switch(es) → server, WAPs, printers, every room’s devices; label locations; clear links.');
+  F('B', 'Firewall', 'Filters traffic between the LAN and the internet using rules.');
+  F('B', 'Switch', 'Connects wired devices in a LAN and forwards data to the right device.');
+  F('B', 'Wireless access point', 'Gives Wi-Fi coverage to tablets/laptops in an area (e.g. workshop, depot).');
+  F('B', 'PoE', 'Power over Ethernet — power and data on one cable (cameras, WAPs).');
+  F('B', 'UPS', 'Battery backup so servers keep running briefly and shut down safely in a power cut.');
+  F('B', 'NVR', 'Network video recorder — stores IP camera footage; remote viewing via secure app.');
+  F('B', 'Selecting hardware/software', 'Availability · cost · connectivity · capacity · ease of use · features · privacy · scalability · usability.');
+  F('B', 'Managing delivery', 'Asset management · updates/upgrades · deployment · security · legislation · ethics · training · customer support · responding to change.');
+  F('B', 'Asset register', 'Every device/licence with location, user, age, warranty — tracking, updates and replacement.');
+  F('B', 'Mobile device security', 'Encryption · PIN/biometrics · mobile device management · remote wipe · AUP.');
+  F('B', 'MFA', 'Multi-factor authentication: two or more types — know (password), have (phone/token), are (fingerprint).');
+  F('B', '3-2-1 backup', '3 copies · 2 different media · 1 off-site (e.g. cloud).');
+  F('B', 'RAID 1', 'Mirroring — survives one drive failing. Not a backup: deletion and ransomware are mirrored too.');
+  F('B', 'Activity 4 must include', 'Appropriateness of the solution · comparison with alternatives · rationale for choosing it.');
+  F('B', 'Activity 4 valid alternatives', 'Genuine replacements: laptops v desktops, cloud v on-site server, managed v in-house support, app v mobile website.');
+  F('B', 'Activity 4 not credited', '“Don’t follow the law” · staff bring own devices · an extra item instead of an alternative · alternatives to the whole idea (no CCTV).');
+  F('B', 'Activity 4 top band', 'Developed, convincing justification using several arguments (not just cost) for a range of aspects; full awareness of the scenario.');
+  /* C */
+  F('C', 'Information levels', 'Strategic (long-term, senior managers) · management/tactical (short-term planning) · operational (day-to-day).');
+  F('C', 'Strategic information', 'Summarised, often external, long-term — e.g. five-year booking trends to decide on new vehicles.');
+  F('C', 'Management information', 'Medium/short-term planning — e.g. weekly rota, monthly servicing schedule.');
+  F('C', 'Operational information', 'Detailed, day-to-day — e.g. today’s jobs, bookings, stock to pick.');
+  F('C', 'Why information is used', 'Scope customer needs · day-to-day tasks · continuity of service · improvements and policy · communication.');
+  F('C', 'Sources of information', 'Customers/clients · IT support team · management/team leaders · other staff.');
+  F('C', 'Data v information', 'Data = raw facts (14, BK2231). Information = processed data in context (booking BK2231 for 14 people).');
+  F('C', 'Volume', 'The quantity of data generated.');
+  F('C', 'Velocity', 'The speed at which data is generated (e.g. GPS updates every few seconds).');
+  F('C', 'Variety', 'The mixture of data types (text, images, video, sensor readings).');
+  F('C', 'Data in Activity 3', 'List data items per role (fields, source, storage) — “without data, none of the processes can take place”.');
+  /* D */
+  F('D', 'Software services', 'Communication · collaboration · virtualisation · production/service · payments · storage/transfer · hosting · productivity · remote access · creativity · customer access · data and performance analysis.');
+  F('D', 'Types of software', 'Operating systems · utility software · application software (CMS, expert systems) · combined tools.');
+  F('D', 'Utility software', 'Maintains/protects the system: antivirus, backup, compression, disk tools.');
+  F('D', 'CMS', 'Content management system — update a website through templates without coding.');
+  F('D', 'Expert system', 'Knowledge base (facts + rules) + inference engine → advice/decisions.');
+  F('D', 'Open source v proprietary', 'Open: free licence, customisable, community support. Proprietary: licence cost, vendor support and updates.');
+  F('D', 'Virtualisation', 'Several virtual servers on one host via a hypervisor — fewer machines, easy to scale.');
+  F('D', 'Containerisation', 'Apps in containers that share the host OS kernel — lighter than VMs.');
+  F('D', 'Hardware factors', 'User (number, location, experience) · organisational (size, layout, tasks) · technological (existing kit, capacity) · general (budget, security, scalability, implementation).');
+  F('D', 'EPOS', 'Electronic point of sale — records items, payments and updates stock.');
+  F('D', 'VPN', 'Encrypted tunnel over the internet for secure remote access.');
+  F('D', 'Managing solutions', 'Users · customers · delivery · assets · change · incidents · performance metrics.');
+  F('D', 'SLA', 'Service-level agreement: services, availability, response/fix times, responsibilities, penalties.');
+  F('D', '99.9% availability', '0.1% of 8,760 h = 8.76 hours downtime a year.');
+  F('D', 'In-house v external', 'SLAs · requirements · cost · availability · scalability · data ownership and jurisdiction · implementation.');
+  F('D', 'Activity 5 areas', 'Implementing/delivering services · staff · customers · IT assets — each against constraints and change.');
+  F('D', 'Activity 5 implications', 'Training · support · downtime · data migration · testing · costs · policies · legal duties · asset management.');
+  F('D', 'Capacity to respond to change', 'Future developments · growth/seasonal peaks · new legislation · new technology — realistically explained.');
+  F('D', 'Activity 5 mistake', 'Writing a second evaluation instead of the implications of installing and running the system.');
+  B.publish();
+})();

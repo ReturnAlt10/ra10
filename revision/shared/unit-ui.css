@@ -365,3 +365,22 @@ html.ux-embedded.ux-unit body .topbar, html.ux-embedded.ux-unit body.ra10-refres
   html.ux-unit pre, html.ux-unit code { white-space: pre-wrap; word-break: break-word; }
 }
 a.ux-pbtn { text-decoration: none; display: inline-flex; align-items: center; }
+
+/* ───── readable text (unit-ui.js formatRich / formatCard) ───── */
+.ux-rich { display: grid; gap: 6px; text-align: left; }
+.ux-rich .ux-line { line-height: 1.55; }
+.ux-rich .ux-list { margin: 0; padding-left: 1.25em; display: grid; gap: 3px; }
+.ux-table-wrap { max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 4px 0; }
+.ux-table { border-collapse: collapse; font-size: .92em; min-width: 60%; }
+.ux-table th, .ux-table td { border: 1px solid var(--line, #d9dde5); padding: 6px 9px; text-align: left; vertical-align: top; }
+.ux-table th { background: color-mix(in srgb, var(--accent, #4f46e5) 10%, transparent); font-weight: 700; }
+.ux-table tr:nth-child(even) td { background: color-mix(in srgb, currentColor 4%, transparent); }
+.ux-pre { margin: 4px 0; padding: 8px 10px; border-radius: 8px; background: color-mix(in srgb, currentColor 6%, transparent); font-size: .8em; overflow-x: auto; white-space: pre; }
+.ux-brief { border: 1px solid var(--line, #d9dde5); border-radius: 12px; padding: 8px 12px; }
+.ux-brief > summary { cursor: pointer; font-weight: 700; color: var(--accent-ink, var(--accent, inherit)); }
+.ux-brief[open] > summary { margin-bottom: 8px; }
+.flash-face .face-content.ux-card-multi { max-height: calc(100% - 64px); overflow-y: auto; width: 100%; }
+.ux-card-lines { display: grid; gap: 7px; text-align: left; font-size: .94em; line-height: 1.45; }
+.ux-card-line.item { position: relative; padding-left: 1.05em; }
+.ux-card-line.item::before { content: '•'; position: absolute; left: 0; opacity: .75; }
+.ux-card-lines.many { gap: 3px; font-size: .84em; line-height: 1.35; }

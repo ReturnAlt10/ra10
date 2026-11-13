@@ -91,7 +91,10 @@
     return {
       id: p.id + '-A' + a.n, learning_aim: aim, topic: (c.activityTitles && c.activityTitles[a.n]) || ('Activity ' + a.n),
       command_verb: a.kind === 'presentation' ? 'Present' : a.kind === 'plan' ? 'Plan' : a.kind === 'rationale' ? 'Rationale' : 'Report',
-      marks: a.marks, ao: 'AO3/AO4', scenario: '', question: a.text.replace(/\n• /g, ' • ').replace(/\n\s*– /g, ' – '),
+      // Opt-in (unit cfg): practiceText rewrites the activity for practice mode (e.g. a template the learner doesn't
+      // have becomes a layout to follow, keeping line breaks); practiceScenario shows the Part B brief with it.
+      marks: a.marks, ao: 'AO3/AO4', scenario: c.practiceScenario ? caseText({ partB: p.partB }, 12000) : '',
+      question: c.practiceText ? c.practiceText(a, p) : a.text.replace(/\n• /g, ' • ').replace(/\n\s*– /g, ' – '),
       type: 'extended_levels', origin: p.source, series: p.series, spec_code: c.code, unit: c.n, paper_id: p.id, activity: a.n, case_title: p.title,
       case_text: caseText(p, 16000),
       mark_scheme: {
@@ -458,6 +461,14 @@
       const page = el('section', { class: 'pp-page', id: 'pp-partb' });
       page.appendChild(runHead(p, 'Part B'));
       page.appendChild(el('h3', { class: 'pp-section' }, 'Part B — Set task'));
+      // C.partBBriefFirst: the scenario (brief, staff, premises) is printed before the activities, as in papers
+      // where it IS the case study (e.g. IT Unit 14). Otherwise it follows them as additional information.
+      const briefFirst = !!C.partBBriefFirst;
+      if (briefFirst && p.partB && p.partB.length) {
+        page.appendChild(el('h3', { class: 'pp-section', style: 'margin-top:6px' }, C.partBInfoLabel || 'Set task brief'));
+        renderBlocks(p.partB, page);
+        page.appendChild(el('h3', { class: 'pp-section', style: 'margin-top:22px' }, 'Activities'));
+      }
       p.acts.forEach(a => {
         const box = el('div', { class: 'pp-actbox' });
         box.appendChild(el('h4', { class: 'pp-qhead' }, `Activity ${a.n}`));
@@ -469,6 +480,7 @@
         box.appendChild(el('p', { class: 'pp-total-line' }, `(Total for Activity ${a.n} = ${a.marks} marks)`));
         page.appendChild(box);
       });
+      if (briefFirst) return page;
       const info = (p.partB || []).filter(b => !(b.t === 'h' && /^(Set Task|Activity)/i.test(b.x)));
       const filtered = [];
       let skipping = true;
@@ -916,6 +928,7 @@
         if (p.kind === 'set') {
           if (p.partA && p.partA.length) { newPage('Part A'); heading(C.partALabel || 'Part A', 'Part A'); pdfBlocks(p.partA, 'Part A'); }
           newPage('Part B'); heading('Part B - Set task', 'Part B');
+          if (C.partBBriefFirst && p.partB && p.partB.length) { heading(C.partBInfoLabel || 'Set task brief', 'Part B'); pdfBlocks(p.partB, 'Part B'); heading('Activities', 'Part B'); }
           p.acts.forEach(a => {
             para('Activity ' + a.n, 11.5, 'bold', 1, 'Part B');
             a.text.split('\n').forEach(l => para(l.replace(/^\s*–/, '  -'), 10.5, 'normal', 1.2, 'Part B'));
@@ -924,7 +937,7 @@
           const info = (p.partB || []).filter(b => !(b.t === 'h' && /^(Set Task|Activity)/i.test(b.x)));
           const rest = []; let skip = true;
           info.forEach(b => { const t = blockText(b); if (skip && (/^You must complete|^You will need|^Using appropriate|^Based on your|^Prepare a|^With reference to|^You are to produce|^Your report|^The (rationale|plan|presentation|report) should|^The report should|^Your rationale|^This (should|must)|^You must produce|^You should present/i.test(t) || b.t === 'li')) return; skip = false; rest.push(b); });
-          if (rest.length) { heading('Additional task information', 'Part B'); pdfBlocks(rest, 'Part B'); }
+          if (rest.length && !C.partBBriefFirst) { heading('Additional task information', 'Part B'); pdfBlocks(rest, 'Part B'); }
           p.acts.forEach(a => {
             newPage('Taskbook');
             doc.setFont('helvetica', 'bold'); doc.setFontSize(12);

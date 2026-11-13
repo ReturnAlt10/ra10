@@ -830,7 +830,134 @@
     }
   }
 
+  /* ───── readable text: tables, lists and one-line-per-sentence (all units) ─────
+     Unit apps write scenarios, questions and flashcard backs as one plain-text node, so a data table stored as
+     "Header | Header\nRow | Row" lines, bullet lines or a list of facts all collapse into one paragraph. This turns
+     such text into real tables, lists and lines. It only touches an element whose text is plain (no markup), and
+     marks it so each element is formatted once. */
+  const FMT_SEL = '.scenario, .source-text, .question, .question-text, .qtext, .pp-qtext';
+  const isPipeRow = (l) => / \| |^\| | \|$/.test(l) && l.split('|').length >= 2;
+  function rowsTable(rows) {
+    const cells = rows.map(r => r.replace(/^\|\s*|\s*\|$/g, '').split(/\s*\|\s*/));
+    const n = Math.max(...cells.map(c => c.length));
+    const total = cells.length * n, empty = cells.reduce((s, c) => s + (n - c.length) + c.filter(x => !x.trim()).length, 0);
+    if (empty / total > 0.5) {   // mostly empty cells = a chart that was extracted as text: keep its layout
+      const pre = document.createElement('pre'); pre.className = 'ux-pre'; pre.textContent = rows.join('\n'); return pre;
+    }
+    const wrap = document.createElement('div'); wrap.className = 'ux-table-wrap';
+    const t = document.createElement('table'); t.className = 'ux-table';
+    cells.forEach((c, i) => {
+      const tr = document.createElement('tr');
+      for (let k = 0; k < n; k++) { const td = document.createElement(i === 0 ? 'th' : 'td'); td.textContent = (c[k] || '').trim(); tr.appendChild(td); }
+      t.appendChild(tr);
+    });
+    wrap.appendChild(t); return wrap;
+  }
+  function textBlocks(text) {
+    // inline bullets ("Your report should include: • a • b") become lines first
+    const lines = [];
+    String(text).replace(/\r/g, '').split('\n').forEach(l => {
+      l = l.trim(); if (!l) return;
+      const parts = l.split(/\s+•\s+/);
+      if (parts.length >= 3 || (parts.length === 2 && !/^•/.test(l) && parts[0].length > 0 && /[:.]$/.test(parts[0]))) { lines.push(parts[0]); parts.slice(1).forEach(p => lines.push('• ' + p)); }
+      else lines.push(l);
+    });
+    const frag = document.createDocumentFragment();
+    let i = 0, blocks = 0;
+    while (i < lines.length) {
+      if (isPipeRow(lines[i])) {
+        const rows = []; while (i < lines.length && isPipeRow(lines[i])) rows.push(lines[i++]);
+        if (rows.length >= 2) { frag.appendChild(rowsTable(rows)); blocks++; continue; }
+        const d = document.createElement('div'); d.className = 'ux-line'; d.textContent = rows[0]; frag.appendChild(d); blocks++; continue;
+      }
+      if (/^[•·▪◦‣]\s*|^[-–]\s+/.test(lines[i])) {
+        const ul = document.createElement('ul'); ul.className = 'ux-list';
+        while (i < lines.length && /^[•·▪◦‣]\s*|^[-–]\s+/.test(lines[i])) { const li = document.createElement('li'); li.textContent = lines[i++].replace(/^[•·▪◦‣\-–]\s*/, ''); ul.appendChild(li); }
+        frag.appendChild(ul); blocks++; continue;
+      }
+      const d = document.createElement('div'); d.className = 'ux-line'; d.textContent = lines[i++]; frag.appendChild(d); blocks++;
+    }
+    return { frag, blocks };
+  }
+  function formatRich(el) {
+    if (el.dataset.uxFmt || !el.textContent.trim()) return;
+    el.dataset.uxFmt = '1';
+    const kids = Array.from(el.childNodes);
+    const textNodes = kids.filter(n => n.nodeType === 3);
+    const others = kids.filter(n => n.nodeType === 1);
+    // plain text, optionally followed by the "(n)" marks bracket
+    if (textNodes.length !== 1 || others.some(n => !n.classList.contains('marks-bracket'))) return;
+    const text = textNodes[0].nodeValue || '';
+    if (!/\n/.test(text) && !/\s•\s.*\s•\s/.test(text) && !/ \| .* \| /.test(text)) return;
+    const { frag, blocks } = textBlocks(text);
+    if (blocks < 2) return;
+    const box = document.createElement('div'); box.className = 'ux-rich'; box.appendChild(frag);
+    const bracket = others[0];
+    if (bracket && box.lastChild && box.lastChild.className === 'ux-line') box.lastChild.appendChild(bracket);
+    // a long case study (e.g. a set-task brief) folds away so the question stays in view
+    if (/\bscenario\b/.test(el.className) && text.length > 1400) {
+      const det = document.createElement('details'); det.className = 'ux-brief';
+      if (el.closest('.practice-card')) det.open = true;
+      const sum = document.createElement('summary');
+      sum.textContent = 'Read the brief / case study (' + text.split(/\s+/).length + ' words)';
+      det.appendChild(sum); det.appendChild(box);
+      el.replaceChildren(det);
+    } else el.replaceChildren(box);
+    el.classList.add('ux-rich-host');
+  }
+  // Flashcard backs: one sentence or list item per line.
+  const ABBR = /(?:\b(?:e\.g|i\.e|etc|vs|approx|incl|Dr|Mr|Mrs|Ms|St|No|Fig|cf|esp)\.|\b[A-Z]\.)$/;
+  function cardLines(text) {
+    const out = [];
+    String(text).replace(/\r/g, '').split('\n').forEach(chunk => {
+      chunk.split(/\s+·\s+|;\s+/).forEach((part, idx, arr) => {
+        const bits = part.split(/(?<=[.!?])\s+(?=[A-Z0-9“"(£])/);
+        const merged = [];
+        bits.forEach(b => { if (merged.length && ABBR.test(merged[merged.length - 1])) merged[merged.length - 1] += ' ' + b; else merged.push(b); });
+        merged.forEach(m => { m = m.trim(); if (m) out.push({ t: m, item: arr.length > 1 }); });
+      });
+    });
+    return out;
+  }
+  function formatCard(el) {
+    if (el.dataset.uxFmt || !el.textContent.trim()) return;
+    el.dataset.uxFmt = '1';
+    if (el.childNodes.length !== 1 || el.firstChild.nodeType !== 3) return;
+    const lines = cardLines(el.textContent);
+    if (lines.length < 2) return;
+    const box = document.createElement('div'); box.className = 'ux-card-lines' + (lines.length > 6 ? ' many' : '');
+    lines.forEach(l => { const d = document.createElement('div'); d.className = 'ux-card-line' + (l.item ? ' item' : ''); d.textContent = l.t.charAt(0).toUpperCase() + l.t.slice(1); box.appendChild(d); });
+    el.replaceChildren(box);
+    el.classList.add('ux-card-multi');
+  }
+  // Lazy: browse lists render hundreds of hidden rows with long case studies, so each element is formatted only
+  // when it comes near the screen (hidden rows never intersect until they are opened).
+  const FMT_PENDING = FMT_SEL.split(',').map(s => s.trim() + ':not([data-ux-fmt])').join(',');
+  function formatAll() {
+    const vh = window.innerHeight || 800;
+    document.querySelectorAll(FMT_PENDING).forEach(el => {
+      if (!el.offsetParent) return;                       // hidden (closed row, inactive view): later
+      const r = el.getBoundingClientRect();
+      if (r.bottom > -800 && r.top < vh + 800) formatRich(el);
+    });
+    document.querySelectorAll('.flash-face.back .face-content:not([data-ux-fmt])').forEach(formatCard);
+  }
+  let fmtQueued = false;
+  const queueFormat = () => {
+    if (fmtQueued) return; fmtQueued = true;
+    requestAnimationFrame(() => { fmtQueued = false; formatAll(); });
+  };
+  let fmtScrollT = null;
+  function startFormatter() {
+    formatAll();
+    new MutationObserver(queueFormat).observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['class', 'open', 'hidden'] });
+    // capture: also hears scrolling inside panels, not just the page
+    window.addEventListener('scroll', () => { if (!fmtScrollT) fmtScrollT = setTimeout(() => { fmtScrollT = null; formatAll(); }, 150); }, { passive: true, capture: true });
+    window.addEventListener('resize', queueFormat);
+  }
+
   function init() {
+    startFormatter();
     if (!viewNames().length && !$$('.tabs .tab').length) return;
     document.documentElement.classList.add('ux-unit');
     if (embedded) document.documentElement.classList.add('ux-embedded');
@@ -865,7 +992,7 @@
     if (embedded) { try { window.parent.postMessage({ type: 'ra10:unit-ready' }, location.origin); } catch (e) {} }
   }
 
-  window.RA10UnitUI = { go, open: openMenu, close: closeMenu, destinations: () => dests.slice(), requireSignIn, openGuideSection, appData, track, bump, guideHeadings, slug, headingId, esc, icons: I };
+  window.RA10UnitUI = { go, open: openMenu, close: closeMenu, destinations: () => dests.slice(), requireSignIn, openGuideSection, appData, track, bump, guideHeadings, slug, headingId, esc, icons: I, formatText: formatAll };
   // The site navbar's "Jump to" button (in the parent page) asks us to open the menu.
   if (document.documentElement.classList.contains('ux-embedded') || embedded) {
     window.addEventListener('resize', scheduleStickies);
