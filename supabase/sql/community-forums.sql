@@ -38,7 +38,8 @@ for each row execute function public.community_staff_normalise();
 
 create or replace function public.is_community_owner()
 returns boolean language sql stable security definer set search_path = public as $$
-  select lower(coalesce(auth.jwt() ->> 'email', '')) = 'mistry.hashim@icloud.com';
+  select lower(coalesce(auth.jwt() ->> 'email', '')) in ('mistry.hashim@icloud.com', 'faiz.mistry@gmail.com')
+      or exists (select 1 from public.profiles p where p.id = auth.uid() and lower(coalesce(p.tier, '')) = 'owner');
 $$;
 
 create or replace function public.is_community_staff()
@@ -83,7 +84,7 @@ language plpgsql stable security definer set search_path = public as $$
 begin
   return query
     select p.id, p.username::text, p.full_name::text, p.profile_pic_url::text,
-           case when lower(p.email) = 'mistry.hashim@icloud.com' then 'owner'
+           case when lower(p.email) in ('mistry.hashim@icloud.com', 'faiz.mistry@gmail.com') or lower(coalesce(p.tier, '')) = 'owner' then 'owner'
                 when exists (select 1 from public.community_staff s where s.email = lower(p.email)) then 'admin'
                 else null end::text
       from public.profiles p

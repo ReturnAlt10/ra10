@@ -22,6 +22,7 @@ const RESEND_KEY = Deno.env.get('RESEND_API_KEY') || '';
 const FROM_EMAIL = Deno.env.get('EDU_FROM_EMAIL') || 'RA10 Schools <schools@ra10.co.uk>';
 const SITE = (Deno.env.get('SITE_URL') || 'https://ra10.co.uk').replace(/\/$/, '');
 const OWNER_EMAIL = 'mistry.hashim@icloud.com';
+const OWNER_EMAILS = ['mistry.hashim@icloud.com', 'faiz.mistry@gmail.com'];
 
 const ALLOWED_ORIGINS = new Set([
   'https://ra10.co.uk', 'https://www.ra10.co.uk',
@@ -47,7 +48,7 @@ async function rpcBool(ctx: Ctx, fn: string, args: Record<string, unknown>) {
   const { data, error } = await ctx.user.rpc(fn, args);
   return !error && data === true;
 }
-const isOwner = (ctx: Ctx) => ctx.email === OWNER_EMAIL || ctx.tier === 'owner';
+const isOwner = (ctx: Ctx) => OWNER_EMAILS.includes(ctx.email) || ctx.tier === 'owner';
 const isSchoolAdmin = (ctx: Ctx, school: string) => isOwner(ctx) || rpcBool(ctx, 'edu_is_school_admin', { p_school: school });
 const isSchoolStaff = (ctx: Ctx, school: string) => isOwner(ctx) || rpcBool(ctx, 'edu_is_school_staff', { p_school: school });
 

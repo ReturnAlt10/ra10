@@ -1836,6 +1836,7 @@ function exitIframeFullscreen(){
 
 const DAILY_TASK_XP_SYNC_KEY = 'ra10-daily-task-xp-sync-v1';
 const CREDIT_GIFT_OWNER_EMAIL = 'mistry.hashim@icloud.com';
+const CREDIT_GIFT_OWNER_EMAILS = ['mistry.hashim@icloud.com', 'faiz.mistry@gmail.com'];
 const CREDIT_GIFT_POPUP_SEEN_KEY = 'ra10_credit_gift_popup_seen_ids_v1';
 const CREDIT_GIFT_SENT_REFRESH_MS = 20000;
 const DAILY_TASK_XP_VALUES = { dailyQuiz: 25, practice5: 50, practice10: 30, practice15: 45, flashReview: 15, share: 30, leaderboard: 10, hub: 10, login: 5 };
@@ -1854,7 +1855,7 @@ function isOwnerAccount(profile) {
   try {
     if (window.RA10 && typeof RA10.isOwner === 'function' && RA10.isOwner()) return true;
   } catch (e) {}
-  return email === CREDIT_GIFT_OWNER_EMAIL;
+  return CREDIT_GIFT_OWNER_EMAILS.includes(email);
 }
 
 function readDailyTaskXpSyncState(today) {
@@ -5423,7 +5424,7 @@ async function waitForRA10Sdk(timeoutMs) {
         if (eduLink) {
           const t = RA10.getTier();
           const em = (profile?.email || '').toLowerCase();
-          const show = (t === 'school_admin' || t === 'school_teacher') && em !== 'mistry.hashim@icloud.com';   // the RA10 owner account has no EDU role
+          const show = (t === 'school_admin' || t === 'school_teacher') && !CREDIT_GIFT_OWNER_EMAILS.includes(em);   // the RA10 owner account has no EDU role
           eduLink.textContent = t === 'school_admin' ? 'School dashboard (EDU Admin)' : 'School dashboard';
           eduLink.style.display = show ? '' : 'none';
         }

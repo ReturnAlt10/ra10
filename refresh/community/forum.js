@@ -5,6 +5,7 @@
 
   var PAGE = 20;
   var OWNER_EMAIL = 'mistry.hashim@icloud.com';
+  var OWNER_EMAILS = ['mistry.hashim@icloud.com', 'faiz.mistry@gmail.com'];
   var host = null;            // #cf-pane-forum
   var state = { view: 'home', cat: null, postId: null, sort: 'active', q: '', loaded: false };
   var cats = [];              // forum_categories
@@ -170,7 +171,7 @@
   }
   function refreshStaff() {
     var c = client();
-    owner = !!(window.RA10 && RA10.isOwner && RA10.isOwner()) || myEmail() === OWNER_EMAIL;
+    owner = !!(window.RA10 && RA10.isOwner && RA10.isOwner()) || OWNER_EMAILS.includes(myEmail());
     staff = owner;
     banned = null;
     if (!loggedIn() || !c) { staffChecked = true; applyStaffUi(); return Promise.resolve(); }

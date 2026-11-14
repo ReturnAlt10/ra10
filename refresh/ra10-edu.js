@@ -285,7 +285,8 @@ html.ei-lock,html.ei-lock body{overflow:hidden!important}
     const host = document.getElementById('edu-home');
     if (!c || !c.signed_in) { if (host) host.remove(); return; }
     // the RA10 owner account never gets EDU screens or school invitations
-    if (String(c.email || '').toLowerCase() === 'mistry.hashim@icloud.com') { if (host) host.remove(); document.body.classList.remove('edu-home-on'); return; }
+    const emLower = String(c.email || '').toLowerCase();
+    if (emLower === 'mistry.hashim@icloud.com' || emLower === 'faiz.mistry@gmail.com') { if (host) host.remove(); document.body.classList.remove('edu-home-on'); return; }
     (c.invites || []).slice(0, 1).forEach(showInvite);
     // safety net: anyone who teaches a class gets the teacher homepage, whatever their membership says
     if ((c.role === 'student' || !c.role) && (c.classes || []).some(k => k.my_role === 'teacher')) c.role = 'teacher';

@@ -36,7 +36,8 @@
     if (!RA10.isLoggedIn()) { main.innerHTML = '<div class="sc-card"><h2>Sign in</h2><p class="sc-muted">The Quality dashboard is for the RA10 owner account.</p><a class="sc-btn pri" href="/auth">Sign in</a></div>'; return; }
     sb = RA10.getClient();
     const me = RA10.getSession().user;
-    const owner = (me.email || '').toLowerCase() === 'mistry.hashim@icloud.com' || RA10.getTier() === 'owner';
+    const em = (me.email || '').toLowerCase();
+    const owner = em === 'mistry.hashim@icloud.com' || em === 'faiz.mistry@gmail.com' || RA10.getTier() === 'owner';
     if (!owner) { main.innerHTML = '<div class="sc-card"><h2>Owner only</h2><p class="sc-muted">This page is only available to the RA10 owner.</p></div>'; return; }
     n = 0; while (!(window.RA10Units && RA10Units.all().length) && n++ < 50) await sleep(100);
     S.units = (window.RA10Units ? RA10Units.all() : []).filter(u => !/booklets/.test(u.path));

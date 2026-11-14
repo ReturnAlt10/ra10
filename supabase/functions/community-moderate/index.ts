@@ -10,7 +10,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL') || '';
 const SERVICE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || '';
-const OWNER_EMAIL = 'mistry.hashim@icloud.com';
+const OWNER_EMAILS = ['mistry.hashim@icloud.com', 'faiz.mistry@gmail.com'];
 
 const ALLOWED_ORIGINS = new Set([
   'https://ra10.co.uk', 'https://www.ra10.co.uk',
@@ -132,7 +132,7 @@ serve(async (req) => {
   try { payload = await req.json(); } catch (_e) { /* empty */ }
 
   const isStaff = async () => {
-    if (callerEmail === OWNER_EMAIL) return true;
+    if (OWNER_EMAILS.includes(callerEmail)) return true;
     const { data } = await admin.from('community_staff').select('email').eq('email', callerEmail).maybeSingle();
     return !!data;
   };

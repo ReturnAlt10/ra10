@@ -35,7 +35,8 @@
     try { await RA10.init(); } catch (e) {}
     if (!RA10.isLoggedIn()) { main.innerHTML = '<div class="sc-coming"><h1>Sign in to see your activity</h1><p class="sc-muted">RA10 keeps a record of what you study so you can see your progress.</p><a class="sc-btn pri" href="/auth">Sign in</a></div>'; return; }
     sb = RA10.getClient(); me = RA10.getSession().user;
-    owner = (me.email || '').toLowerCase() === 'mistry.hashim@icloud.com' || RA10.getTier() === 'owner';
+    const em = (me.email || '').toLowerCase();
+    owner = em === 'mistry.hashim@icloud.com' || em === 'faiz.mistry@gmail.com' || RA10.getTier() === 'owner';
     const u = new URLSearchParams(location.search).get('user');
     showUser(owner && u ? u : me.id);
   }

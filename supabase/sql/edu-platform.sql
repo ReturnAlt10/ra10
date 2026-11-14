@@ -30,7 +30,7 @@ $$;
 
 create or replace function public.edu_is_owner()
 returns boolean language sql stable security definer set search_path = public as $$
-  select public.edu_my_email() = 'mistry.hashim@icloud.com'
+  select public.edu_my_email() in ('mistry.hashim@icloud.com', 'faiz.mistry@gmail.com')
       or exists (select 1 from public.profiles p where p.id = auth.uid() and lower(coalesce(p.tier, '')) = 'owner');
 $$;
 

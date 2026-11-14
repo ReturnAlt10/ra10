@@ -10,7 +10,7 @@
   var mount = document.getElementById('ra10-site-chrome');
   if (!mount) return;
   var ACTIVE = mount.getAttribute('data-active') || '';
-  var CACHE_KEY = 'ra10_site_chrome_v4';
+  var CACHE_KEY = 'ra10_site_chrome_v5';
   var PARTS = ['nav.nav', '#mobile-sheet-backdrop', '#mobile-subject-sheet', '.mobile-top-nav', '#mobile-you-sheet', 'nav.mobile-bottom-nav'];
 
   function toPublic(p) {
@@ -200,7 +200,7 @@
     ['#dd-plan', '#myp-plan'].forEach(function (s) { var e = $(s); if (e) { e.textContent = plan; e.hidden = !plan; } });
     var mp = $('#mobile-you-profile'); if (mp) mp.classList.toggle('signed-out', !on);
     var edu = $('#dropdown-edu-admin');
-    if (edu) edu.style.display = on && /^(school_admin|school_teacher)$/.test(String(p.tier || '')) && email.toLowerCase() !== 'mistry.hashim@icloud.com' ? '' : 'none';
+    if (edu) edu.style.display = on && /^(school_admin|school_teacher)$/.test(String(p.tier || '')) && email.toLowerCase() !== 'mistry.hashim@icloud.com' && email.toLowerCase() !== 'faiz.mistry@gmail.com' ? '' : 'none';
     var so = $('#mobile-you-signout'); if (so) so.style.display = on ? '' : 'none';
     var lbl = $('#mobile-you-account-label'); if (lbl) lbl.textContent = on ? 'My Account' : 'Sign in';
   }

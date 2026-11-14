@@ -68,7 +68,7 @@ returns text language sql stable security definer set search_path = public as $$
       where p.id = p_user
         and (lower(coalesce(p.tier, '')) in ('all_subjects', 'ultra', 'owner')
              or coalesce(p.unlimited_credits, false)
-             or lower(coalesce(u.email, '')) = 'mistry.hashim@icloud.com')) then 'premium'
+             or lower(coalesce(u.email, '')) in ('mistry.hashim@icloud.com', 'faiz.mistry@gmail.com'))) then 'premium'
     when exists (
       select 1 from public.profiles p
       where p.id = p_user and lower(coalesce(p.tier, '')) in ('school_student', 'school_teacher', 'school_admin'))

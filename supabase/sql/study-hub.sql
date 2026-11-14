@@ -110,7 +110,7 @@ returns boolean language sql stable security definer set search_path = public as
     where p.id = p_user
       and (lower(coalesce(p.tier, '')) in ('all_subjects', 'ultra', 'owner', 'school_student', 'school_teacher', 'school_admin')
            or coalesce(p.unlimited_credits, false)
-           or lower(coalesce(u.email, '')) = 'mistry.hashim@icloud.com'))
+           or lower(coalesce(u.email, '')) in ('mistry.hashim@icloud.com', 'faiz.mistry@gmail.com')))
   or exists (
     select 1 from public.school_members m
     join auth.users u on lower(u.email) = lower(m.email)

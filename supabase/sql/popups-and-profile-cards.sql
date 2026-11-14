@@ -90,7 +90,7 @@ begin
      where r.profile_id = v_id
   )
   select p.id, p.username::text, p.full_name::text, p.profile_pic_url::text,
-         case when lower(p.email) = 'mistry.hashim@icloud.com' then 'owner'
+         case when lower(p.email) in ('mistry.hashim@icloud.com', 'faiz.mistry@gmail.com') or lower(coalesce(p.tier, '')) = 'owner' then 'owner'
               when exists (select 1 from public.community_staff s where s.email = lower(p.email)) then 'admin'
               else null end::text,
          p.user_role::text,

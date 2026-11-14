@@ -7,7 +7,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL') || '';
 const SERVICE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || '';
-const OWNER_EMAIL = 'mistry.hashim@icloud.com';
+const OWNER_EMAILS = ['mistry.hashim@icloud.com', 'faiz.mistry@gmail.com'];
 
 const ALLOWED_ORIGINS = new Set([
   'https://ra10.co.uk', 'https://www.ra10.co.uk',
@@ -103,7 +103,7 @@ serve(async (req) => {
   const admin = createClient(SUPABASE_URL, SERVICE_KEY, { auth: { persistSession: false } });
   const token = (req.headers.get('authorization') || '').replace(/^Bearer\s+/i, '');
   const { data: auth } = await admin.auth.getUser(token);
-  if (String(auth?.user?.email || '').toLowerCase() !== OWNER_EMAIL) return json(403, { error: 'Owner only.' });
+  if (!OWNER_EMAILS.includes(String(auth?.user?.email || '').toLowerCase())) return json(403, { error: 'Owner only.' });
 
   let payload: any = {};
   try { payload = await req.json(); } catch (_e) { /* empty */ }

@@ -4,6 +4,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL') || '';
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || '';
 const OWNER_EMAIL = 'mistry.hashim@icloud.com';
+const OWNER_EMAILS = ['mistry.hashim@icloud.com', 'faiz.mistry@gmail.com'];
 const BUCKET_NAME = 'public-config';
 const OBJECT_PATH = 'site-announcement.json';
 
@@ -44,7 +45,7 @@ async function hasOwnerAccess(supabase: any, requesterId: string, authEmail: str
   // Trust the JWT email only — never the client-editable profiles.email column
   // (which a logged-in user could overwrite to impersonate the owner).
   const email = String(authEmail || '').toLowerCase();
-  if (email === OWNER_EMAIL) return true;
+  if (OWNER_EMAILS.includes(email)) return true;
 
   const { data } = await supabase
     .from('profiles')

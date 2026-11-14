@@ -117,7 +117,7 @@ revoke all on public.quality_snapshots from anon, authenticated;
 -- Accounts whose activity is left out of the statistics (the owner and owner-tier accounts).
 create or replace function public.quality_excluded_users()
 returns setof uuid language sql stable security definer set search_path = public as $$
-  select u.id from auth.users u where lower(coalesce(u.email, '')) = 'mistry.hashim@icloud.com'
+  select u.id from auth.users u where lower(coalesce(u.email, '')) in ('mistry.hashim@icloud.com', 'faiz.mistry@gmail.com')
   union
   select p.id from public.profiles p where lower(coalesce(p.tier, '')) = 'owner';
 $$;
