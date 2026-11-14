@@ -31,7 +31,7 @@
 })();
 </script>
 <link rel="preload" href="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0/dist/umd/supabase.js" as="script" crossorigin>
-<link rel="preload" href="/refresh/site.js?v=20270112" as="script">
+<link rel="preload" href="/refresh/site.js?v=20270114" as="script">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>RA10 — Advanced Revision Site (BTEC, GCSE, A-LEVEL)</title>
 <meta name="description" content="Free BTEC Level 3 revision for IT, Business, Sport, Computing, Construction, Early Childhood Development, Engineering, Health and Social Care and Medical Science, plus A-Level Business (AQA and Edexcel) and A-Level Psychology. Flashcards, quizzes, predicted papers, study guides, wireframe and code tools, and AI assignment marking — all in one place.">
@@ -70,7 +70,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/refresh/site.css?v=20261123">
+<link rel="stylesheet" href="/refresh/site.css?v=20270114">
 <script>
 (function(){
   var isFile = location.protocol === 'file:';
@@ -271,6 +271,19 @@
 .hm-flag-cards img{display:block;width:100%;height:auto;aspect-ratio:16/10;object-fit:cover;object-position:top center}
 .hm-flag-cards b{padding:0 6px;color:#fff;font-size:1.02rem;letter-spacing:-.01em}
 .hm-flag-cards p{margin:.35rem 0 0;padding:0 6px;font-size:.9rem;line-height:1.55}
+.hm-flag-tools{margin-top:clamp(24px,4vw,40px);padding-top:clamp(20px,3vw,32px);border-top:1px solid rgba(255,255,255,.1)}
+.hm-flag .hm-flag-tools h3{display:flex;align-items:center;gap:10px;margin:0 0 16px;color:#fff;font-size:1.15rem;letter-spacing:-.01em}
+.hm-flag-tools h3 span{padding:3px 10px;border-radius:99px;font-size:.7rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#0d1330;background:linear-gradient(90deg,#a5b4fc,#5eead4)}
+.hm-flag-tools ul{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin:0;padding:0;list-style:none}
+.hm-flag-tools li{position:relative;display:flex;flex-direction:column;gap:4px;padding:16px;border-radius:18px;background:rgba(255,255,255,.05);box-shadow:inset 0 0 0 1px rgba(255,255,255,.1)}
+.hm-flag-tools svg{width:38px;height:38px;padding:9px;margin-bottom:6px;border-radius:12px;color:#fff;background:linear-gradient(135deg,#3f5bf0,#7c3aed);box-sizing:border-box}
+.hm-flag-tools li.free svg{background:linear-gradient(135deg,#10b981,#0e7490)}
+.hm-flag-tools b{color:#fff;font-size:.95rem}
+.hm-flag-tools em{position:absolute;top:16px;right:14px;font-style:normal;font-size:.68rem;font-weight:800;color:#a5b4fc}
+.hm-flag-tools li.free em{color:#6ee7b7}
+.hm-flag .hm-flag-tools p{margin:0;font-size:.84rem;line-height:1.5;color:#aab4d4}
+@media (max-width:980px){.hm-flag-tools ul{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:560px){.hm-flag-tools ul{grid-template-columns:minmax(0,1fr)}}
 
 /* Schools */
 .hm-label-edu{color:#2563eb}
@@ -617,19 +630,22 @@ body.home-signed-in #p-home .hx-home > :not(#signed-in-dashboard){display:none !
           <span id="nav-display-name"></span>
           <span id="nav-tier-badge" class="nav-tier-badge"></span>
         </button>
-        <div class="nav-user-dropdown" id="nav-user-dropdown">
-          <div class="dropdown-header" id="dropdown-email"></div>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" onclick="go('/account')">My Account</a>
-          <a class="dropdown-item" id="dropdown-edu-admin" href="/school/" style="display:none">School dashboard</a>
-          <a class="dropdown-item" href="/tools/activity/">My activity</a>
-          <a class="dropdown-item" id="dropdown-upgrade" onclick="go('/upgrade')" style="display:none">⚡ Upgrade</a>
-          <div class="dropdown-divider"></div>
-          <button class="dropdown-item" id="dropdown-reset-pw">Reset password</button>
-          <button class="dropdown-item" type="button" data-open-a11y>Accessibility settings</button>
-          <a class="dropdown-item" href="legal/privacy.html">Privacy &amp; terms</a>
-          <div class="dropdown-divider"></div>
-          <button class="dropdown-item danger" id="nav-signout-btn">Sign out</button>
+        <div class="nav-user-dropdown acct-menu" id="nav-user-dropdown" role="menu" aria-label="Account menu">
+          <div class="acct-head"><span class="acct-ava" id="dd-avatar" aria-hidden="true">?</span><span class="acct-who"><b id="dd-name">Your account</b><span class="dropdown-header" id="dropdown-email"></span></span><span class="acct-plan" id="dd-plan" hidden></span></div>
+          <div class="acct-grid">
+            <a class="acct-tile" role="menuitem" href="/account" onclick="if(window.go){event.preventDefault();go('/account')}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1"/></svg><b>My account</b><small>Profile &amp; settings</small></a>
+            <a class="acct-tile hot" role="menuitem" href="/tools/activity/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l3 8 4-16 3 8h4"/></svg><b>My activity</b><small>Time, answers &amp; progress</small></a>
+            <a class="acct-tile" role="menuitem" href="/study-hub/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 4.6L18.5 9.5l-4.6 1.9L12 16l-1.9-4.6L5.5 9.5l4.6-1.9z"/><path d="M19 15l.8 1.9 1.9.8-1.9.8L19 20.4l-.8-1.9-1.9-.8 1.9-.8z"/></svg><b>Study Hub</b><small>Lessons &amp; flashcards</small></a>
+            <a class="acct-tile" role="menuitem" href="/tasks" onclick="if(window.go){event.preventDefault();go('/tasks')}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6h11M9 12h11M9 18h11"/><path d="m4 6 1.5 1.5L7.5 5.5M4 12l1.5 1.5 2-2M4 18l1.5 1.5 2-2"/></svg><b>Tasks &amp; XP</b><small>Today's tasks</small></a>
+          </div>
+          <a class="acct-row" role="menuitem" id="dropdown-edu-admin" href="/school/" style="display:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m2 9 10-5 10 5-10 5z"/><path d="M6 11v5c3 2 9 2 12 0v-5"/></svg><span>School dashboard</span></a>
+          <a class="acct-row up" role="menuitem" id="dropdown-upgrade" onclick="go('/upgrade')" style="display:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z"/></svg><span>Upgrade</span></a>
+          <div class="acct-sep"></div>
+          <button class="acct-row" role="menuitem" type="button" id="dropdown-reset-pw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="8" cy="15" r="4"/><path d="m11 12 9-9M17 6l3 3"/></svg><span>Reset password</span></button>
+          <button class="acct-row" role="menuitem" type="button" data-open-a11y><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4" r="2"/><path d="M4 8l8 2 8-2M12 10v5l-3 6M12 15l3 6"/></svg><span>Accessibility settings</span></button>
+          <a class="acct-row" role="menuitem" href="/legal/privacy.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M8 13h8M8 17h5"/></svg><span>Privacy &amp; terms</span></a>
+          <div class="acct-sep"></div>
+          <button class="acct-row danger" role="menuitem" type="button" id="nav-signout-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg><span>Sign out</span></button>
         </div>
       </div>
       <button class="news-toggle" id="news-toggle" onclick="go('/news')" aria-label="View news and updates" title="Latest news">
@@ -680,17 +696,19 @@ body.home-signed-in #p-home .hx-home > :not(#signed-in-dashboard){display:none !
     <button class="mobile-sheet-close" id="mobile-you-close" aria-label="Close menu">✕</button>
   </div>
   <div class="mobile-you-scroll">
+    <div class="mobile-you-profile" id="mobile-you-profile">
+      <span class="acct-ava lg" id="myp-avatar" aria-hidden="true">?</span>
+      <span class="myp-who"><b id="myp-name">Your account</b><small id="myp-email">Sign in to save your progress</small></span>
+      <span class="acct-plan" id="myp-plan" hidden></span>
+      <div class="myp-acts"><button class="myp-btn" type="button" data-mobile-you="/account"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1"/></svg><span id="myp-account-label">My account</span></button><button class="myp-btn hot" type="button" data-mobile-you="/tools/activity/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l3 8 4-16 3 8h4"/></svg><span>My activity</span></button></div>
+    </div>
     <button class="mobile-you-edit" id="mobile-you-edit" type="button">
       <svg class="edit-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4z"></path></svg>
       <svg class="done-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:none"><path d="M20 6 9 17l-5-5"/></svg>
       <span id="mobile-you-edit-label">Edit dock</span>
     </button>
     <div class="mobile-you-list">
-      <button class="mobile-you-item" type="button" data-mobile-you="/account">
-        <span class="mobile-you-icon" id="mobile-you-account-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"></circle><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1"></path></svg></span>
-        <span class="mobile-you-copy"><strong id="mobile-you-account-label">My Account</strong><small>Profile, credits &amp; settings</small></span>
-        <em>Open</em>
-      </button>
+      <div class="mobile-you-sec">Go to</div>
       <button class="mobile-you-item" type="button" data-mobile-you="/" data-dock-item="home">
         <span class="mobile-you-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 10.5 12 3l9 7.5"></path><path d="M5 9.5V21h14V9.5"></path></svg></span>
         <span class="mobile-you-copy"><strong>Home</strong><small>Back to the homepage</small></span>
@@ -731,6 +749,7 @@ body.home-signed-in #p-home .hx-home > :not(#signed-in-dashboard){display:none !
         <span class="mobile-you-copy"><strong>Upgrade</strong><small>Unlock more credits &amp; features</small></span>
         <em>Open</em>
       </button>
+      <div class="mobile-you-sec">More</div>
       <button class="mobile-you-item" type="button" data-mobile-you="/news">
         <span class="mobile-you-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"></rect><path d="M7 7h10"></path><path d="M7 12h10"></path><path d="M7 17h4"></path></svg></span>
         <span class="mobile-you-copy"><strong>News</strong><small>What&rsquo;s new on RA10</small></span>
@@ -1013,6 +1032,16 @@ body.home-signed-in #p-home .hx-home > :not(#signed-in-dashboard){display:none !
           <li><figure><img src="/refresh/home/sh-maker.webp" width="1280" height="860" alt="The Make a lesson sheet with a choice of unit, topic, length and focus" loading="lazy" decoding="async"></figure><b>Make your own lessons</b><p>Pick any unit and topic, choose how long it is and what it focuses on, or ask for something specific.</p></li>
           <li><figure><img src="/refresh/home/sh-finish.webp" width="1100" height="760" alt="Lesson complete screen showing XP earned, accuracy and time" loading="lazy" decoding="async"></figure><b>Streaks and XP</b><p>Finish a lesson each day to keep your streak going and climb the weekly leaderboard.</p></li>
         </ul>
+        <div class="hm-flag-tools" aria-labelledby="hm-sh-tools">
+          <h3 id="hm-sh-tools"><span>New</span> AI study tools in Study Hub</h3>
+          <ul>
+            <li class="free"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="14" height="11" rx="2"/><path d="M7 19h12a2 2 0 0 0 2-2V8"/></svg><b>Flashcards</b><em>Free</em><p>Make your own decks, add pictures, synced to your account.</p></li>
+            <li class="free"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5a2 2 0 0 1 2-2h2.5l1.6-2.5h5.8l1.6 2.5H19a2 2 0 0 1 2 2V18a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><circle cx="12" cy="13" r="3.5"/></svg><b>Scan your work</b><em>Free</em><p>Photograph handwritten work to get it marked or turned into flashcards.</p></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg><b>Blurt &amp; Grill</b><em>Free tries</em><p>Type, write with a stylus or say everything you know about a topic, then fill the gaps.</p></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 3h6v3H9zM8.5 12.5l2 2 4.5-4.5"/></svg><b>Part A / B practice</b><em>Free tries</em><p>Mock pre-release packs with AI-marked Part B tasks.</p></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 8-4 4 4 4M15 8l4 4-4 4"/></svg><b>Bug Hunt</b><em>Free tries</em><p>Find and fix the bug in a short program for Computing and IT.</p></li>
+          </ul>
+        </div>
       </section>
 
       <section class="hm-section hm-edu" id="schools" aria-labelledby="hm-edu-title">
@@ -2231,30 +2260,45 @@ body.home-signed-in #p-home .hx-home > :not(#signed-in-dashboard){display:none !
 
 <!-- ACCOUNT PAGE -->
 <div class="page" id="p-account">
-  <div class="c">
+  <div class="c acx">
     <nav class="bc">
       <button class="bc-item" onclick="go('/')">Home</button>
       <span class="bc-sep">›</span>
       <span class="bc-item cur">Account</span>
     </nav>
-    <div class="hero">
-      <div class="hero-label">Account</div>
-      <h1>Account details</h1>
-      <p>Manage your subscription, credits and access.</p>
-    </div>
-    <div class="grid account-grid">
-      <div class="card account-card-main">
-        <div class="card-tag">Profile</div>
-        <h3 id="account-display-name">Your name</h3>
-        <p id="account-email">your@email.com</p>
-        <p id="account-school" class="account-muted" style="display:none"></p>
-        <p id="account-username" class="account-muted">No username set</p>
+    <section class="acx-hero" aria-labelledby="account-display-name">
+      <span class="acx-ava" id="acx-avatar" aria-hidden="true">?</span>
+      <div class="acx-id">
+        <span class="acx-kicker">My account</span>
+        <h1 id="account-display-name">Your name</h1>
+        <p class="acx-handle"><span id="account-username">No username set</span><span class="acx-dot" aria-hidden="true">·</span><span id="account-email">your@email.com</span></p>
+        <p id="account-school" class="acx-school" style="display:none"></p>
+        <div class="acx-pills"><span class="pill" id="account-tier-badge">Tier</span><span class="pill" id="account-credits">Credits remaining</span></div>
+      </div>
+      <div class="acx-quick">
+        <a class="acx-qbtn" href="/tools/activity/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l3 8 4-16 3 8h4"/></svg><span>My activity</span></a>
+        <a class="acx-qbtn" href="/study-hub/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 4.6L18.5 9.5l-4.6 1.9L12 16l-1.9-4.6L5.5 9.5l4.6-1.9z"/></svg><span>Study Hub</span></a>
+      </div>
+    </section>
+    <div class="acx-layout">
+      <nav class="acx-nav" aria-label="Account sections">
+        <a href="#acx-profile" data-acx="acx-profile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1"/></svg><span>Profile</span></a>
+        <a href="#acx-plan" data-acx="acx-plan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.4 6.8 19.1l1-5.8L3.5 9.2l5.9-.9z"/></svg><span>Plan &amp; usage</span></a>
+        <a href="#account-legal-panel" data-acx="account-legal-panel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="m9 12 2 2 4-4"/></svg><span>Privacy &amp; terms</span></a>
+        <a href="#acx-credits" data-acx="acx-credits"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M14.5 9.5c-.5-1-1.5-1.5-2.5-1.5-1.7 0-3 1-3 2.2 0 2.8 6 1.4 6 4.3 0 1.2-1.3 2.2-3 2.2-1.1 0-2.2-.6-2.7-1.6M12 6v2M12 16v2"/></svg><span>Credit activity</span></a>
+        <a href="#account-credit-gift-panel" data-acx="account-credit-gift-panel" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M14.5 9.5c-.5-1-1.5-1.5-2.5-1.5-1.7 0-3 1-3 2.2 0 2.8 6 1.4 6 4.3 0 1.2-1.3 2.2-3 2.2-1.1 0-2.2-.6-2.7-1.6M12 6v2M12 16v2"/></svg><span>Gift credits</span></a>
+        <a href="#account-owner-pic-panel" data-acx="account-owner-pic-panel" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.6 2.6-2.4-.6-.6-2.4z"/></svg><span>Owner tools</span></a>
+        <a href="#account-community-staff-panel" data-acx="account-community-staff-panel" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1"/></svg><span>Moderators</span></a>
+        <a href="#acx-danger" data-acx="acx-danger" class="danger"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg><span>Danger zone</span></a>
+      </nav>
+      <div class="acx-main">
+        <section class="acx-card" id="acx-profile">
+          <header class="acx-h"><span class="acx-hi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1"/></svg></span><div><h2>Profile</h2><p>How you appear on RA10, the leaderboard and the Community.</p></div></header>
         <div id="account-profile-pic-display-wrap" class="account-pic-preview" style="display:none;">
           <img id="account-profile-pic-display" alt="Current profile picture" loading="lazy">
           <span>Current picture</span>
         </div>
-        <div class="account-editor">
-          <h4 class="account-editor-title">Edit profile</h4>
+          <div class="account-editor acx-rows">
           <div class="account-row">
             <div class="account-meta">
               <div class="account-row-label">Display name</div>
@@ -2345,14 +2389,20 @@ body.home-signed-in #p-home .hx-home > :not(#signed-in-dashboard){display:none !
             </div>
             <div class="auth-error" id="account-pic-error" style="margin-top:var(--sp2)"></div>
           </div>
-        </div>
-        <div class="card-ft"><span class="pill" id="account-tier-badge">Tier</span><span class="pill" id="account-credits">Credits remaining</span></div>
-        <p>Subscription status: <strong id="account-sub-status">—</strong></p>
-        <p>Next billing: <strong id="account-next-billing">—</strong></p>
-        <p>Credits renew on: <strong id="account-reset-date">—</strong></p>
-        <div id="account-ai-usage" class="account-ai-usage" style="margin:var(--sp3,12px) 0" hidden></div>
-        <div id="account-legal-panel" class="account-gift-panel account-legal-panel">
-          <h4 class="account-gift-title">Terms &amp; privacy</h4>
+          </div>
+        </section>
+        <section class="acx-card" id="acx-plan">
+          <header class="acx-h"><span class="acx-hi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.4 6.8 19.1l1-5.8L3.5 9.2l5.9-.9z"/></svg></span><div><h2>Plan &amp; usage</h2><p>Your plan, billing and AI usage.</p></div></header>
+          <div class="acx-stats">
+            <div><span>Subscription</span><strong id="account-sub-status">—</strong></div>
+            <div><span>Next billing</span><strong id="account-next-billing">—</strong></div>
+            <div><span>Credits renew</span><strong id="account-reset-date">—</strong></div>
+          </div>
+          <div id="account-ai-usage" class="account-ai-usage" hidden></div>
+          <div class="acx-actions"><button class="btn account-btn account-btn-billing" id="btn-manage-billing" type="button">Manage billing</button></div>
+        </section>
+        <div id="account-legal-panel" class="acx-card account-gift-panel account-legal-panel">
+          <header class="acx-h"><span class="acx-hi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="m9 12 2 2 4-4"/></svg></span><div><h2>Privacy &amp; terms</h2><p>Your agreements, data and accessibility.</p></div></header>
           <div class="account-legal-row">
             <span class="account-legal-icon" id="account-terms-icon" aria-hidden="true"></span>
             <div class="account-meta">
@@ -2362,14 +2412,22 @@ body.home-signed-in #p-home .hx-home > :not(#signed-in-dashboard){display:none !
             <button class="btn account-btn account-btn-save-user" id="account-accept-terms-btn" type="button" hidden>Review &amp; accept</button>
           </div>
           <p class="account-legal-links">
-            <a href="legal/terms.html">Terms of Service</a>
-            <a href="legal/privacy.html">Privacy Policy</a>
-            <a href="legal/cookies.html">Cookies</a>
+            <a href="/legal/terms.html">Terms of Service</a>
+            <a href="/legal/privacy.html">Privacy Policy</a>
+            <a href="/legal/cookies.html">Cookies</a>
             <button type="button" class="account-legal-link-btn" data-open-a11y>Accessibility settings</button>
           </p>
         </div>
-        <div id="account-credit-gift-panel" class="account-gift-panel">
-          <h4 class="account-gift-title">Send Gift Credits</h4>
+        <section class="acx-card" id="acx-credits">
+          <header class="acx-h"><span class="acx-hi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M14.5 9.5c-.5-1-1.5-1.5-2.5-1.5-1.7 0-3 1-3 2.2 0 2.8 6 1.4 6 4.3 0 1.2-1.3 2.2-3 2.2-1.1 0-2.2-.6-2.7-1.6M12 6v2M12 16v2"/></svg></span><div><h2>Credit activity</h2><p>Recent credits spent and added to your account.</p></div></header>
+          <div class="account-credit-log">
+          <div id="account-credit-log" class="credit-log-list">
+            <div class="credit-log-note">No recent credit activity yet.</div>
+          </div>
+          </div>
+        </section>
+        <div id="account-credit-gift-panel" class="acx-card account-gift-panel">
+          <header class="acx-h"><span class="acx-hi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M14.5 9.5c-.5-1-1.5-1.5-2.5-1.5-1.7 0-3 1-3 2.2 0 2.8 6 1.4 6 4.3 0 1.2-1.3 2.2-3 2.2-1.1 0-2.2-.6-2.7-1.6M12 6v2M12 16v2"/></svg></span><div><h2>Send gift credits</h2><p>Give credits to another learner.</p></div></header>
           <div class="account-gift-grid">
             <div class="account-field-grow">
               <label class="auth-label" for="gift-credit-email">Recipient email</label>
@@ -2394,8 +2452,9 @@ body.home-signed-in #p-home .hx-home > :not(#signed-in-dashboard){display:none !
             </div>
           </div>
         </div>
-        <div id="account-owner-pic-panel" class="account-gift-panel" style="display:none">
-          <h4 class="account-gift-title">Owner announcement bar</h4>
+        <div id="account-owner-pic-panel" class="acx-card account-gift-panel" style="display:none">
+          <header class="acx-h"><span class="acx-hi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.6 2.6-2.4-.6-.6-2.4z"/></svg></span><div><h2>Owner tools</h2><p>Announcement bar and moderation.</p></div></header>
+          <h4 class="account-gift-title">Announcement bar</h4>
           <div class="account-gift-grid">
             <div class="account-field-sm">
               <label class="auth-label" for="owner-announcement-emoji">Emoji</label>
@@ -2486,31 +2545,16 @@ body.home-signed-in #p-home .hx-home > :not(#signed-in-dashboard){display:none !
           <div class="auth-error" id="owner-profile-pic-error" style="margin-top:var(--sp2);"></div>
           <div class="auth-success" id="owner-profile-pic-success" style="margin-top:var(--sp2);"></div>
         </div>
-        <div id="account-community-staff-panel" class="account-gift-panel" style="display:none">
-          <h4 class="account-gift-title">Community moderators</h4>
+        <div id="account-community-staff-panel" class="acx-card account-gift-panel" style="display:none">
+          <header class="acx-h"><span class="acx-hi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1"/></svg></span><div><h2>Community moderators</h2><p>People who help run the Community.</p></div></header>
           <div id="account-community-staff-body"></div>
         </div>
-        <div class="card-ft account-actions" style="flex-wrap:wrap;gap:var(--sp3)">
-          <button class="btn account-btn account-btn-billing" id="btn-manage-billing" type="button">Manage billing</button>
-          <button class="btn account-btn account-btn-signout" id="btn-account-signout">Sign out</button>
-        </div>
-      </div>
-      <div class="card account-card-danger" style="border-color:var(--color-error-soft);">
-        <div class="card-tag" style="background:var(--color-error-soft);color:var(--color-error);">Danger zone</div>
-        <h3 style="margin-bottom:var(--sp2);">Delete account</h3>
-        <p style="margin-bottom:var(--sp4);">Request account deletion and sign out from this device.</p>
-        <button class="btn account-btn account-btn-danger" id="btn-account-delete" type="button">Delete my account</button>
-        <div id="account-delete-message" style="display:none;margin-top:var(--sp3);color:var(--color-success);font-weight:700;"></div>
-      </div>
-      <div class="card account-credit-card">
-        <div class="card-tag">Credits</div>
-        <h3 style="margin-bottom:var(--sp2);">Credit activity</h3>
-        <p class="account-muted" style="margin-bottom:var(--sp4);">Recent credits spent and added to your account.</p>
-        <div class="account-credit-log">
-          <div id="account-credit-log" class="credit-log-list">
-            <div class="credit-log-note">No recent credit activity yet.</div>
-          </div>
-        </div>
+        <section class="acx-card acx-danger" id="acx-danger">
+          <header class="acx-h"><span class="acx-hi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg></span><div><h2>Danger zone</h2><p>Sign out, or ask us to delete your account.</p></div></header>
+          <div class="acx-drow"><div><b>Sign out</b><p>Log out of RA10 on this device.</p></div><button class="btn account-btn account-btn-signout" id="btn-account-signout"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg> Sign out</button></div>
+          <div class="acx-drow"><div><b>Delete account</b><p>Request account deletion and sign out from this device.</p></div><button class="btn account-btn account-btn-danger" id="btn-account-delete" type="button">Delete my account</button></div>
+          <div id="account-delete-message" style="display:none;margin-top:var(--sp3);color:var(--color-success);font-weight:700;"></div>
+        </section>
       </div>
     </div>
   </div>
@@ -3364,7 +3408,7 @@ body.home-signed-in #p-home .hx-home > :not(#signed-in-dashboard){display:none !
 <script src="/refresh/ra10-subjects.js?v=20270111"></script>
 <script>(function(){var el=document.getElementById('hm-subjects');if(el&&window.RA10Subjects&&RA10Subjects.renderHome)RA10Subjects.renderHome(el);})();</script>
 <script src="/refresh/ra10-tasks.js?v=20261113"></script>
-<script src="/refresh/site.js?v=20270112"></script>
+<script src="/refresh/site.js?v=20270114"></script>
 <script src="/refresh/ra10-edu.js?v=20261126" defer></script>
 
 <!-- ============================================================

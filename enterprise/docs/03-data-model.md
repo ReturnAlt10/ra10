@@ -38,7 +38,7 @@
 | `xp_credited` | What has been credited today (one row per question / guide section / mark), for de-duplication and the 40-points-a-minute pace limit |
 | `xp_marks` | Real AI Examiner scores written by `ai-mark` (service role) |
 | `daily_task_catalog`, `daily_task_claims` | The task pool (5 slots) and what each learner has claimed |
-| `ai_tool_trials`, `user_flashcards`, `prerelease_packs` | AI study tools (`ai-tools.sql`): free tries per tool, learners' scanned flashcard decks (own rows only), and Part A packs (edge function only) |
+| `ai_tool_trials`, `user_flashcards`, `prerelease_packs` | AI study tools (`ai-tools.sql`): free tries per tool, learners' flashcard decks — typed in Study Hub or scanned, with optional https picture links `front_image` / `back_image` (own rows only), and Part A packs (edge function only) |
 | `daily_games`, `daily_game_plays` | Each learner's daily game set (with answer keys; edge function only) and their plays |
 | `increment_xp(amount)`, `xp_claim(amount)` | Apps ask for an amount; the server pays only what the learner's own `activity_events` earned (`xp_refresh_bank`), through `xp_grant`, the single place XP is added (caps, boost bonus, ledger, profile update). `xp_award_server` is the service-role path for games and Study Hub. **Live definition: `xp-v3.sql`** |
 | `get_daily_tasks()`, `claim_daily_task(key)` | Five rotating tasks per learner per day, progress measured on the server |

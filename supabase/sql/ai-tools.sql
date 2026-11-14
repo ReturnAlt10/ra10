@@ -118,12 +118,22 @@ create policy user_flashcards_own on public.user_flashcards for all to authentic
   using (user_id = auth.uid()) with check (user_id = auth.uid());
 grant select, insert, update, delete on public.user_flashcards to authenticated;
 
+-- Pictures on cards (Study Hub flashcards): an https link only (e.g. Wikimedia Commons). Nothing is uploaded.
+alter table public.user_flashcards add column if not exists front_image text;
+alter table public.user_flashcards add column if not exists back_image text;
+alter table public.user_flashcards drop constraint if exists user_flashcards_images_chk;
+alter table public.user_flashcards add constraint user_flashcards_images_chk check (
+  (front_image is null or (char_length(front_image) <= 600 and front_image ~ '^https://[^[:space:]<>"''`]+$'))
+  and (back_image is null or (char_length(back_image) <= 600 and back_image ~ '^https://[^[:space:]<>"''`]+$')));
+
 create or replace function public.user_flashcards_guard()
 returns trigger language plpgsql security definer set search_path = public as $$
 begin
   new.user_id := coalesce(auth.uid(), new.user_id);
   new.front := left(btrim(new.front), 300);
   new.back := left(btrim(new.back), 600);
+  new.front_image := nullif(btrim(coalesce(new.front_image, '')), '');
+  new.back_image := nullif(btrim(coalesce(new.back_image, '')), '');
   new.deck := left(coalesce(nullif(btrim(new.deck), ''), 'My cards'), 60);
   if tg_op = 'INSERT' then
     new.created_at := now();

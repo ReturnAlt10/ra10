@@ -10,7 +10,7 @@
   var mount = document.getElementById('ra10-site-chrome');
   if (!mount) return;
   var ACTIVE = mount.getAttribute('data-active') || '';
-  var CACHE_KEY = 'ra10_site_chrome_v3';
+  var CACHE_KEY = 'ra10_site_chrome_v4';
   var PARTS = ['nav.nav', '#mobile-sheet-backdrop', '#mobile-subject-sheet', '.mobile-top-nav', '#mobile-you-sheet', 'nav.mobile-bottom-nav'];
 
   function toPublic(p) {
@@ -188,6 +188,17 @@
       else ini.textContent = String(p.display_name || p.username || email || '?').replace(/@.*/, '').split(/[\s._-]+/).map(function (w) { return w.charAt(0); }).join('').slice(0, 2).toUpperCase() || '?';
     }
     var de = $('#dropdown-email'); if (de) de.textContent = email;
+    // account menu header + mobile profile card
+    var name = on ? (p.display_name || p.username || email.replace(/@.*/, '') || 'Your account') : 'Your account';
+    var ava = ini ? ini.innerHTML : '?';
+    ['#dd-avatar', '#myp-avatar'].forEach(function (s) { var e = $(s); if (e) e.innerHTML = on ? ava : '?'; });
+    var t = function (s, v) { var e = $(s); if (e) e.textContent = v; };
+    t('#dd-name', name); t('#myp-name', on ? name : 'You’re not signed in');
+    t('#myp-email', on ? email : 'Sign in to save your progress and streaks');
+    t('#myp-account-label', on ? 'My account' : 'Sign in');
+    var plan = on && R.getTierInfo ? ((R.getTierInfo() || {}).label || '') : '';
+    ['#dd-plan', '#myp-plan'].forEach(function (s) { var e = $(s); if (e) { e.textContent = plan; e.hidden = !plan; } });
+    var mp = $('#mobile-you-profile'); if (mp) mp.classList.toggle('signed-out', !on);
     var edu = $('#dropdown-edu-admin');
     if (edu) edu.style.display = on && /^(school_admin|school_teacher)$/.test(String(p.tier || '')) && email.toLowerCase() !== 'mistry.hashim@icloud.com' ? '' : 'none';
     var so = $('#mobile-you-signout'); if (so) so.style.display = on ? '' : 'none';

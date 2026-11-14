@@ -55,7 +55,7 @@
   function answerPane() {
     const pane = $('#pane');
     pane.innerHTML = `<div class="at-card"><h2>1. The question</h2><p class="at-mut at-small" style="margin:0 0 10px">Type the question exactly as it is on the paper.</p>
-        <textarea id="q" rows="3" placeholder="e.g. Assess the impact on Tesco of a rise in interest rates."></textarea>
+        <textarea id="q" data-voice="Say the question" rows="3" placeholder="e.g. Assess the impact on Tesco of a rise in interest rates."></textarea>
         <div class="at-row" style="margin-top:10px"><label class="at-label" for="marks" style="margin:0">Marks</label><input class="at-in" id="marks" type="number" min="1" max="40" value="9" style="width:90px"><input class="at-in" id="ctx" placeholder="Case study or scenario (optional)" style="flex:1;min-width:200px"></div></div>
       <div class="at-card"><h2>2. Your handwritten answer</h2><p class="at-mut at-small" style="margin:0 0 10px">Good light, flat page, whole answer in the photo.</p><div class="at-row">${photoBtn('ph', 'Take a photo')}</div><div id="read"></div></div>
       <div id="res"></div>`;

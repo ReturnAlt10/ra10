@@ -442,6 +442,19 @@ function ensureNavFlyoutPortal(flyoutId) {
 
 let _accountHideTimeout = null;
 
+// Account menu header (desktop dropdown) and profile card (mobile "You" sheet): avatar, name, email, plan.
+function paintAcctCards(on, profile, picUrl, initials, plan) {
+  const set = (id, fn) => { const e = document.getElementById(id); if (e) fn(e); };
+  ['dd-avatar', 'myp-avatar'].forEach(id => set(id, e => renderCircleAvatar(e, on ? picUrl : '', on ? initials : '?')));
+  const name = on ? (profile.display_name || profile.username || String(profile.email || '').replace(/@.*/, '') || 'Your account') : 'Your account';
+  set('dd-name', e => { e.textContent = name; });
+  set('myp-name', e => { e.textContent = on ? name : 'You’re not signed in'; });
+  set('myp-email', e => { e.textContent = on ? (profile.email || '') : 'Sign in to save your progress and streaks'; });
+  set('myp-account-label', e => { e.textContent = on ? 'My account' : 'Sign in'; });
+  ['dd-plan', 'myp-plan'].forEach(id => set(id, e => { e.textContent = on && plan ? plan : ''; e.hidden = !(on && plan); }));
+  set('mobile-you-profile', e => e.classList.toggle('signed-out', !on));
+}
+
 function showAccountDropdown() {
   clearTimeout(_accountHideTimeout);
   const wrap = document.getElementById('nav-user-wrap');
@@ -5296,9 +5309,11 @@ async function waitForRA10Sdk(timeoutMs) {
       if (mobileYouAccountLabel) mobileYouAccountLabel.textContent = loggedIn ? 'My Account' : 'Sign in';
       updateYouAccountIcon(loggedIn ? profile : null);
       renderCircleAvatar(document.getElementById('nav-avatar-initials'), '', '?');
+      if (!(loggedIn && profile)) paintAcctCards(false);
       if (loggedIn && profile) {
         const initials = (profile.display_name || profile.email || '?').slice(0,2).toUpperCase();
         const profilePicUrl = getProfilePictureUrl(profile);
+        try { paintAcctCards(true, profile, profilePicUrl, initials, RA10.getTierInfo().label); } catch (e) {}
         renderCircleAvatar(document.getElementById('nav-avatar-initials'), profilePicUrl, initials);
         document.getElementById('nav-display-name').textContent = profile.display_name || profile.email;
         document.getElementById('dropdown-email').textContent = profile.email;
@@ -7916,3 +7931,93 @@ async function waitForRA10Sdk(timeoutMs) {
       setTimeout(() => openAuthModal('signin'), 100);
     }
   });
+
+/* My Account page v2: hero avatar, section nav (hides links for hidden panels), scroll-spy */
+(function initAccountPageV2() {
+  function setup() {
+    var page = document.getElementById('p-account');
+    if (!page || page.dataset.acx === '1') return;
+    page.dataset.acx = '1';
+    var ava = document.getElementById('acx-avatar');
+    var nameEl = document.getElementById('account-display-name');
+    var picImg = document.getElementById('account-profile-pic-display');
+    var picWrap = document.getElementById('account-profile-pic-display-wrap');
+    var nav = page.querySelector('.acx-nav');
+    var links = nav ? Array.prototype.slice.call(nav.querySelectorAll('a[data-acx]')) : [];
+
+    function initials(name) {
+      var parts = String(name || '').trim().split(/\s+/).filter(Boolean);
+      if (!parts.length || name === 'Your name') return '?';
+      return (parts[0].charAt(0) + (parts.length > 1 ? parts[parts.length - 1].charAt(0) : '')).toUpperCase();
+    }
+    function paintAvatar() {
+      if (!ava) return;
+      var src = picImg && picWrap && picWrap.style.display !== 'none' ? picImg.getAttribute('src') : '';
+      ava.textContent = initials(nameEl ? nameEl.textContent : '');
+      if (src) {
+        ava.style.backgroundImage = 'url("' + src.replace(/["\\]/g, '') + '")';
+        ava.classList.add('has-pic');
+      } else {
+        ava.style.backgroundImage = '';
+        ava.classList.remove('has-pic');
+      }
+    }
+    function syncNav() {
+      links.forEach(function (a) {
+        var target = document.getElementById(a.getAttribute('data-acx'));
+        var shown = !!target && !target.hidden && getComputedStyle(target).display !== 'none';
+        a.hidden = !shown;
+      });
+    }
+    function sync() { paintAvatar(); syncNav(); }
+
+    if (window.MutationObserver) {
+      var mo = new MutationObserver(sync);
+      [nameEl, picImg, picWrap].forEach(function (el) {
+        if (el) mo.observe(el, { attributes: true, childList: true, characterData: true, subtree: true });
+      });
+      links.forEach(function (a) {
+        var t = document.getElementById(a.getAttribute('data-acx'));
+        if (t) mo.observe(t, { attributes: true, attributeFilter: ['style', 'hidden', 'class'] });
+      });
+    }
+
+    links.forEach(function (a) {
+      a.addEventListener('click', function (e) {
+        var t = document.getElementById(a.getAttribute('data-acx'));
+        if (!t) return;
+        e.preventDefault();
+        t.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
+        mark(a);
+      });
+    });
+    function mark(on) {
+      links.forEach(function (a) { a.classList.toggle('on', a === on); });
+      if (on && nav && nav.scrollWidth > nav.clientWidth) {
+        nav.scrollTo({ left: on.offsetLeft - 12, behavior: 'smooth' });
+      }
+    }
+    var ticking = false;
+    function spy() {
+      ticking = false;
+      if (!page.classList.contains('active') && page.offsetParent === null) return;
+      var best = null;
+      var line = Math.max(160, (nav ? nav.getBoundingClientRect().bottom : 0) + 100);
+      links.forEach(function (a) {
+        if (a.hidden) return;
+        var t = document.getElementById(a.getAttribute('data-acx'));
+        if (t && t.getBoundingClientRect().top < line) best = a;
+      });
+      if (!best) best = links.filter(function (a) { return !a.hidden; })[0] || null;
+      if (best && !best.classList.contains('on')) mark(best);
+    }
+    // capture: on mobile the body (not the window) is the scroll container
+    document.addEventListener('scroll', function () {
+      if (!ticking) { ticking = true; requestAnimationFrame(spy); }
+    }, { passive: true, capture: true });
+    sync();
+    spy();
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', setup);
+  else setup();
+})();

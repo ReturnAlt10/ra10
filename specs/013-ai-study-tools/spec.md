@@ -71,3 +71,19 @@ Tools that help learners **before** they can write a full extended answer, as we
 
 - **SC-001**: No Premium tool runs for a non-Premium learner who has used all their free tries.
 - **SC-002**: No Bug Hunt challenge is shown whose bug was not demonstrated by a failing test.
+
+## Additions (14 Nov 2026)
+
+- **Blurt a topic:** the picker lists the topics inside each learning aim or chapter.
+  - A topic with sub-points (for example A1 → A1.1, A1.2) uses them as the checklist.
+  - A topic with none gets a 5–8 point checklist written by the AI from the topic's specification wording.
+- **Blurt by pen:** the Type / Write / Talk modes can be mixed.
+  - **Write:** a stylus pad (`refresh/ra10-ink.js`) with pressure, palm rejection, eraser and undo. The handwriting is read by `ai-transcribe` when the blurt ends.
+  - **Grill:** answers can also be written with the pen.
+- **Voice:** every speech button uses `refresh/ra10-voice.js` (`RA10Voice`), a glass AI orb that reacts to the microphone level (Web Audio) while the Web Speech API transcribes.
+  - Any `<textarea data-voice>` gets a voice button automatically; the scanner and Part A/B use this.
+- **Flashcards (free, Study Hub):** `study-hub/flashcards.js` (`SHCards`).
+  - Decks are typed (Ctrl+Enter quick add, or paste a list) and revised with Leitner spaced repetition.
+  - **Pictures:** a Wikimedia Commons search or a pasted https link; only the link is stored.
+  - **Sync:** cards sync through `user_flashcards` (own rows only).
+- **Part A / Part B:** IT AAQ Unit 2 is removed (it is an exam); BTEC Nationals IT (2016) Unit 14 is added.

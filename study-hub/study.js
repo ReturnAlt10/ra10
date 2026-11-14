@@ -368,6 +368,19 @@
         ${rows.map((r, i) => `<div class="sh-ov-row${i % 2 ? ' flip' : ''}"><div class="tx"><span class="ic">${I(r[0], { size: 26 })}</span><h2>${r[1]}</h2><p>${r[2]}</p></div>${r[7] ? `<figure class="sh-ov-card">${shot(r[3], r[4], r[5], r[6])}</figure>` : frame(r[3], r[4], r[5], r[6])}</div>`).join('')}
       </section>
 
+      <section class="sh-ov-sec sh-ov-new" aria-labelledby="sh-ov-tools-h">
+        <p class="sh-eyebrow">${I('sparkles', { size: 16 })} New in Study Hub</p>
+        <h2 id="sh-ov-tools-h">AI study tools</h2>
+        <p class="sh-ov-sub">More ways to revise, beyond your daily lesson. Some are free for everyone; the rest come with free tries.</p>
+        <div class="sh-ov-tools">
+          <div class="free">${I('book', { size: 26 })}<span class="tag">Free</span><b>Flashcards</b><p>Type your own cards, add a picture from the web, and study them by deck. Your decks are saved to your account on every device.</p></div>
+          <div class="free">${I('camera', { size: 26 })}<span class="tag">Free</span><b>Scan your work</b><p>Take a photo of handwritten notes or an answer. RA10 reads it, marks it, and can turn your notes into flashcards.</p></div>
+          <div>${I('mic', { size: 26 })}<span class="tag">3 free tries</span><b>Blurt &amp; Grill</b><p>Pick a learning aim or a single topic and write down everything you remember. You can type it, write it with a stylus or say it out loud. Then see what you missed and answer quick questions on the gaps.</p></div>
+          <div>${I('clipboard', { size: 26 })}<span class="tag">2 free tries</span><b>Part A / B practice</b><p>A mock pre-release pack for set-task units. Make your notes on Part A, then answer Part B tasks marked by the AI Examiner.</p></div>
+          <div>${I('code', { size: 26 })}<span class="tag">3 free tries</span><b>Bug Hunt</b><p>For Computing and IT. Find and fix the bug in a short program, run the tests and see why it went wrong.</p></div>
+        </div>
+      </section>
+
       <section class="sh-ov-sec" aria-labelledby="sh-ov-more-h">
         <h2 id="sh-ov-more-h">And there's more</h2>
         <div class="sh-ov-grid">
@@ -383,7 +396,7 @@
       <section class="sh-ov-sec" aria-labelledby="sh-ov-plans-h">
         <h2 id="sh-ov-plans-h">Who can use it</h2>
         <div class="sh-ov-plans">
-          <div><small>Free account</small><b>One free lesson</b><p>Try a full lesson on any topic to see how it works.</p></div>
+          <div><small>Free account</small><b>One free lesson</b><p>Try a full lesson on any topic to see how it works. Flashcards and Scan your work are free, and the other study tools come with free tries.</p></div>
           <div class="hi"><small>RA10 Premium</small><b>Everything</b><p>A new lesson every day, unlimited lessons on any topic, and your full plan for every subject.</p><span class="sh-badge gold">Coming soon</span></div>
           <div><small>RA10 EDU</small><b>Included for schools</b><p>Students and teachers at RA10 EDU schools get the full Study Hub. <a href="/#schools">Find out about RA10 for schools</a></p></div>
         </div>
@@ -421,10 +434,11 @@
       </section>
       <div class="sh-layout">
         <section class="sh-pathcol" id="sh-pathcard"></section>
-        <aside class="sh-rail"><section id="sh-set" class="sh-card sh-set sh-r-set" hidden></section><section id="sh-today" class="sh-r-today"></section><section class="sh-card sh-tools sh-r-make" id="sh-make"></section><section class="sh-card sh-r-week" id="sh-week"></section></aside>
+        <aside class="sh-rail"><section id="sh-set" class="sh-card sh-set sh-r-set" hidden></section><section id="sh-today" class="sh-r-today"></section><section class="sh-card sh-tools sh-r-make" id="sh-make"></section><section class="sh-card sh-r-cards" id="sh-cards"></section><section class="sh-card sh-r-week" id="sh-week"></section></aside>
       </div>`;
     const why = $('#sh-why'); if (why) why.onclick = lockedScreen;
     paintSet(); paintToday(); paintMake(); paintWeek(); paintPath();
+    if (window.SHCards) SHCards.section($('#sh-cards'));
     if (premium && !st.daily && !S.building && !S.buildErr && (S.plan && S.plan.focus || store.get('sh_unit'))) buildDaily();
   }
 
@@ -567,10 +581,16 @@
       { k: 'pre', ic: 'clipboard', t: 'Part A / B', d: 'Mock pre-release pack', f: 'prerelease', href: '/tools/prerelease/' },
       { k: 'bug', ic: 'code', t: 'Bug Hunt', d: 'Fix the logic', f: 'bughunt', href: '/tools/bug-hunt/' },
       { k: 'scan', ic: 'camera', t: 'Scan work', d: 'Mark handwriting', free: true, href: '/tools/scan/' },
+      { k: 'cards', ic: 'book', t: 'Flashcards', d: 'Make your own decks', free: true },
     ];
     const tile = (x) => `<${x.href ? 'a href="' + x.href + '"' : 'button type="button"'} class="sh-tool" data-tool="${x.k}"><span class="ic">${I(x.ic, { size: 26 })}</span><b>${esc(x.t)}</b><small>${esc(x.d)}</small><span class="bd" data-bd="${x.f || ''}">${x.free ? '<span class="rtl-pill free">Free</span>' : x.badge || ''}</span></${x.href ? 'a' : 'button'}>`;
-    box.innerHTML = `<h2>${I('sparkles', { size: 20 })} Study tools</h2><div class="sh-tools-grid">${tools.map(tile).join('')}</div>`;
+    // "Make a lesson" is the headline action: a full-width gradient call to action above the other tools
+    const make = tools[0];
+    box.innerHTML = `<h2>${I('sparkles', { size: 20 })} Study tools</h2>
+      <button type="button" class="sh-make-cta" data-tool="make"><span class="glow" aria-hidden="true"></span><span class="ic">${I('wand', { size: 28 })}</span><span class="tx"><b>Make a lesson</b><small>Any topic, any unit — ready in about 30 seconds</small></span><span class="bd">${make.badge || ''}</span><span class="go" aria-hidden="true">${I('arrow', { size: 22 })}</span></button>
+      <div class="sh-tools-grid">${tools.slice(1).map(tile).join('')}</div>`;
     const mk = $('[data-tool="make"]', box); if (mk) mk.onclick = () => (st.can_create ? openMaker() : lockedScreen());
+    const fc = $('[data-tool="cards"]', box); if (fc) fc.onclick = () => { if (window.SHCards) SHCards.open('decks'); };
     const bl = $('[data-tool="blurt"]', box); if (bl) bl.onclick = () => { if (window.SHBlurt) SHBlurt.open({ unit: S.pathUnit || store.get('sh_unit') }); };
     if (RT) RT.status().then((ts) => $$('[data-bd]', box).forEach((el) => { if (el.dataset.bd) el.innerHTML = RT.badge(el.dataset.bd, ts); }));
   }
@@ -895,7 +915,9 @@
         <button class="sh-btn gold lg" disabled>Premium is coming soon</button>
         ${trialLesson ? `<button class="sh-btn lg" data-open="${esc(trialLesson.id)}">Replay your free lesson</button>` : ''}
         ${(st.lessons || []).length ? '<button class="sh-btn ghost lg" id="sh-back-home">Back</button>' : ''}
-      </div></div>`;
+      </div>
+      <div class="sh-free-strip"><b>Free for everyone</b><div><button class="sh-btn" id="sh-free-cards">${I('book', { size: 18 })} Flashcards</button><a class="sh-btn" href="/tools/scan/">${I('camera', { size: 18 })} Scan your work</a></div></div></div>`;
+    const fcb = $('#sh-free-cards'); if (fcb) fcb.onclick = () => { if (window.SHCards) SHCards.open('decks'); };
     $$('[data-open]', main).forEach(b => b.onclick = () => openLesson(b.dataset.open));
     const back = $('#sh-back-home'); if (back) back.onclick = home;
   }

@@ -148,12 +148,23 @@ Return {"A":{"ok":true|false,"tip":"max 18 words"},"J":{...},"I":{...},"M":{...}
 
 /* ───────────── 3. Blurt & Grill ───────────── */
 async function blurt(ctx: Ctx, b: any) {
-  const points = arr(b.points).map((p: unknown) => clean(p, 140)).filter(Boolean).slice(0, 30);
+  let points = arr(b.points).map((p: unknown) => clean(p, 140)).filter(Boolean).slice(0, 30);
   const text = cleanBlock(b.text, 5000);
-  if (points.length < 2) return { ok: false, error: 'This learning aim has no checklist yet. Pick another one.' };
+  const topic = clean(b.topic, 200);
+  if (points.length < 2 && !topic) return { ok: false, error: 'This learning aim has no checklist yet. Pick another one.' };
   if (text.split(/\s+/).length < 8) return { ok: false, error: 'Say or type a bit more — at least a couple of sentences.' };
   await terms(ctx); await takeTry(ctx, 'blurt'); await useAI(ctx);
   const qual = clean(b.qual, 80) || 'BTEC / A-Level';
+  // One topic with no sub-points: write a short checklist for that topic first, grounded in its specification wording.
+  if (topic && points.length < 3) {
+    const c = await askJson(`You are an expert ${qual} examiner. British English. Reply with JSON only.`,
+      `Unit: ${clean(b.unitName, 120)}. Specification topic: "${topic}"${points.length ? ` (specification wording: ${JSON.stringify(points)})` : ''}.
+List the 5-8 key points a student must be able to recall for THIS topic at this level. Only standard, accurate content that the specification topic covers - no statistics, no invented facts, nothing from other topics. Each point max 16 words.
+Return {"checklist":["",""]}`, 30000, { preferStrong: true, temperature: 0.1, maxTokens: 600 });
+    const list = arr(c.json?.checklist).map((p: unknown) => clean(p, 140)).filter(Boolean).slice(0, 8);
+    if (list.length >= 3) points = list;
+    if (points.length < 2) return { ok: false, error: 'We could not build a checklist for that topic. Try the whole learning aim.' };
+  }
   const r = await askJson(
     `You are an expert ${qual} teacher checking a student's "blurt" (everything they remember) against the specification checklist. Be fair: credit ideas in the student's own words; do not credit vague mentions. British English. Reply with JSON only.`,
     `Unit: ${clean(b.unitName, 120)} — ${clean(b.aim, 160)}
@@ -187,7 +198,7 @@ const PACKS: Record<string, { name: string; qual: string; brief: string; partB: 
   '/revision/btec/level-3/business/unit-6': { name: 'Unit 6: Principles of Management', qual: 'BTEC Level 3 Business', brief: 'a UK organisation facing a management challenge: staffing data (turnover, absence, training), structure, a staff survey, quality issues and a planned change', partB: 'analysing management and leadership, motivation, workforce planning, quality and change management in the organisation, with recommendations' },
   '/revision/btec/level-3/business/unit-7': { name: 'Unit 7: Business Decision Making', qual: 'BTEC Level 3 Business', brief: 'a UK business choosing between options: sales and cost figures, a cash-flow extract, market data and the owner\'s objectives', partB: 'using the data to compare options (e.g. break-even, investment appraisal, ratios) and making a justified decision' },
   '/revision/btec/level-3/sport/unit-2': { name: 'Unit 2: Fitness Training and Programming for Health, Sport and Well-being', qual: 'BTEC Level 3 Sport', brief: 'a client case study: age, lifestyle, diet diary, health screening results (blood pressure, resting heart rate, BMI), activity levels and goals', partB: 'interpreting the screening data, recommending lifestyle changes and nutrition, and designing a safe, progressive training programme' },
-  '/revision/btec/level-3/IT-AAQ/unit-2': { name: 'Unit 2: Cyber Security and Incident Management', qual: 'BTEC Level 3 IT (AAQ)', brief: 'a UK organisation\'s IT set-up: network description, devices and users, current security measures, a log extract or incident timeline, and recent threats', partB: 'identifying threats and vulnerabilities, evaluating protection measures, planning incident response and writing part of a security policy' },
+  '/revision/btec/level-3/IT-2016/unit-14': { name: 'Unit 14: IT Service Delivery (2016 Nationals, not AAQ)', qual: 'BTEC Level 3 National Extended Diploma in IT (2016 specification, 20161K)', brief: 'a fictional UK organisation whose IT is old and must be replaced: what it does, its staff and their duties, its premises and current computers, and three planned future developments (e.g. an app, remote cameras, online sales)', partB: 'the five fixed Unit 14 activities: an outline IT service strategy (prioritised requirements), an IT service catalogue (function, service name, description), an IT service delivery solution design (information, data, hardware and software, managing infrastructure and users), a management report evaluating the solution against alternatives, and an IT service management implications report' },
 };
 function sanitisePack(raw: any) {
   const tables = arr(raw?.tables).map((t: any) => {

@@ -16,7 +16,7 @@
     { path: '/revision/btec/level-3/business/unit-6', short: 'Business Unit 6', name: 'Principles of Management', ic: '🧭', c: '#c2410c' },
     { path: '/revision/btec/level-3/business/unit-7', short: 'Business Unit 7', name: 'Business Decision Making', ic: '📊', c: '#b45309' },
     { path: '/revision/btec/level-3/sport/unit-2', short: 'Sport Unit 2', name: 'Fitness Training and Programming', ic: '🏋️', c: '#15803d' },
-    { path: '/revision/btec/level-3/IT-AAQ/unit-2', short: 'IT Unit 2', name: 'Cyber Security and Incident Management', ic: '🛡️', c: '#0f766e' },
+    { path: '/revision/btec/level-3/IT-2016/unit-14', short: 'IT Unit 14 (2016)', name: 'IT Service Delivery', ic: '🖧', c: '#4338ca' },
   ];
   const S = { st: null, pack: null, timer: null, notesMins: 45, partbEnd: 0, notesEnd: 0 };
   const store = { get: (k) => { try { return JSON.parse(localStorage.getItem(k) || 'null'); } catch (e) { return null; } }, set: (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} } };
@@ -104,7 +104,7 @@
       <div class="at-card at-sticky"><div class="at-row" style="justify-content:space-between"><h2 style="margin:0">Your Part A notes</h2><span class="at-timer" id="tm">${S.notesMins}:00</span></div>
         <p class="at-mut at-small">One page: key figures, trends, SWOT points, risks — anything you'd want in Part B.</p>
         <div class="at-seg" role="group" aria-label="Time"><button class="at-chip${S.notesMins === 45 ? ' on' : ''}" data-mins="45">45 min (real)</button><button class="at-chip${S.notesMins === 20 ? ' on' : ''}" data-mins="20">20 min (quick)</button></div>
-        <textarea id="notes" rows="16" style="margin-top:10px" placeholder="e.g. Sales down 12% since 2024 — main competitor cheaper by £4…">${esc(P.notes || (saved && saved.text) || '')}</textarea>
+        <textarea id="notes" data-voice="Say your notes" rows="16" style="margin-top:10px" placeholder="e.g. Sales down 12% since 2024 — main competitor cheaper by £4…">${esc(P.notes || (saved && saved.text) || '')}</textarea>
         <div class="at-row end" style="margin-top:10px"><span class="at-mut at-small" id="wc"></span><button class="at-btn pri" id="sub">Check my notes</button></div></div></div>`;
     const ta = $('#notes'), wc = $('#wc');
     const words = () => ta.value.trim().split(/\s+/).filter(Boolean).length;
@@ -141,7 +141,7 @@
     const mins = Math.max(15, P.tasks.reduce((s, t) => s + t.marks, 0) * 2);
     const saved = store.get('ra10_pre_b_' + P.id) || [];
     main.innerHTML = `${steps(3)}<div class="at-split"><div class="at-card"><div class="at-row" style="justify-content:space-between"><h2 style="margin:0">Part B</h2><span class="at-timer" id="tm">${mins}:00</span></div>
-        ${P.tasks.map((t, i) => `<div style="margin-top:16px"><p style="margin:0 0 6px"><b>Task ${i + 1}</b> <span class="at-mut">(${t.marks} marks)</span></p><p style="margin:0 0 8px">${esc(t.q)}</p><textarea rows="${Math.min(14, 4 + t.marks)}" data-a="${i}">${esc((P.partb_answers || saved)[i] || '')}</textarea></div>`).join('')}
+        ${P.tasks.map((t, i) => `<div style="margin-top:16px"><p style="margin:0 0 6px"><b>Task ${i + 1}</b> <span class="at-mut">(${t.marks} marks)</span></p><p style="margin:0 0 8px">${esc(t.q)}</p><textarea rows="${Math.min(14, 4 + t.marks)}" data-a="${i}" data-voice="Say your answer">${esc((P.partb_answers || saved)[i] || '')}</textarea></div>`).join('')}
         <div class="at-row end" style="margin-top:14px"><button class="at-btn pri" id="mark">Hand in for marking</button></div></div>
       <div class="at-card at-sticky"><h3>Your Part A notes</h3><pre class="at-out" style="max-height:60vh">${esc(P.notes || 'No notes.')}</pre><details style="margin-top:10px"><summary class="at-small" style="cursor:pointer">Look back at the pack</summary>${packHtml(P)}</details></div></div>`;
     const end = Date.now() + mins * 60000;
