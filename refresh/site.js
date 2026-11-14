@@ -3608,6 +3608,7 @@ const SD_ICONS = {
   bolt: SD_SVG('<path class="a-bolt" d="M27 4 10 27h12l-3 17 19-25H26z" fill="currentColor" fill-opacity=".2"/><path class="a-spark" d="M38 6v6M35 9h6M9 38v5M6.5 40.5h5" stroke-width="2"/>'),
   cap: SD_SVG('<path class="a-cap" d="M3 18 24 8l21 10-21 10z" fill="currentColor" fill-opacity=".18"/><path d="M11 23v9c0 3 6 6 13 6s13-3 13-6v-9"/><path class="a-tassel" d="M42 20v12"/>'),
   cal: SD_SVG('<rect x="6" y="9" width="36" height="33" rx="7" fill="currentColor" fill-opacity=".12"/><path d="M6 19h36M16 5v8M32 5v8"/><path class="a-tick" d="m16 30 6 6 11-12" stroke-dasharray="40" stroke-dashoffset="40"/>'),
+  roadmap: SD_SVG('<path d="M6 11 17 6l14 5 11-5v31l-11 5-14-5-11 5z" fill="currentColor" fill-opacity=".14"/><path d="M17 6v31M31 11v31"/><path class="a-t1" d="M36 16c0 3.5-4 7-4 7s-4-3.5-4-7a4 4 0 0 1 8 0z" fill="currentColor" fill-opacity=".35"/>'),
   tasks: SD_SVG('<rect x="8" y="6" width="32" height="36" rx="7" fill="currentColor" fill-opacity=".12"/><path class="a-t1" d="m15 17 3 3 6-7" stroke-dasharray="20"/><path d="M28 17h7"/><path class="a-t2" d="m15 30 3 3 6-7" stroke-dasharray="20"/><path d="M28 30h7"/>'),
   trophy: SD_SVG('<path d="M14 6h20v12a10 10 0 0 1-20 0z" fill="currentColor" fill-opacity=".18"/><path d="M14 10H6c0 8 3 11 8 11M34 10h8c0 8-3 11-8 11M24 28v8M15 42h18M18 36h12"/><path class="a-shine" d="M19 12v6" stroke-width="2"/>'),
   people: SD_SVG('<circle class="a-p1" cx="17" cy="16" r="6" fill="currentColor" fill-opacity=".18"/><circle class="a-p2" cx="33" cy="19" r="5" fill="currentColor" fill-opacity=".12"/><path d="M5 40c0-7 5-11 12-11s12 4 12 11M31 30c6 0 11 3 11 10"/>'),
@@ -3618,6 +3619,19 @@ const SD_ICONS = {
   l2: SD_SVG('<path class="a-page" d="M6 10c7-3 13-2 18 2 5-4 11-5 18-2v28c-7-3-13-2-18 2-5-4-11-5-18-2z" fill="currentColor" fill-opacity=".16"/><path d="M24 12v28"/>')
 };
 function sdIcon(name) { return SD_ICONS[name] || SD_ICONS.books; }
+
+/* The roadmap lives on the home page. Signed-in users only see the dashboard there,
+   so reveal the roadmap section below it before scrolling to it. */
+function openRoadmap() {
+  const onHome = !!document.querySelector('#p-home.active') || location.pathname === '/' || /index\.html$/.test(location.pathname);
+  if (!onHome && typeof go === 'function') go('/');
+  document.body.classList.add('show-roadmap');
+  setTimeout(() => {
+    const sec = document.getElementById('roadmap');
+    if (sec) sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, onHome ? 30 : 160);
+}
+window.openRoadmap = openRoadmap;
 
 function sdCountUp(root) {
   const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;

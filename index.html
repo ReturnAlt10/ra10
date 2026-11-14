@@ -31,7 +31,7 @@
 })();
 </script>
 <link rel="preload" href="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0/dist/umd/supabase.js" as="script" crossorigin>
-<link rel="preload" href="/refresh/site.js?v=20270114" as="script">
+<link rel="preload" href="/refresh/site.js?v=20270115" as="script">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>RA10 — Advanced Revision Site (BTEC, GCSE, A-LEVEL)</title>
 <meta name="description" content="Free BTEC Level 3 revision for IT, Business, Sport, Computing, Construction, Early Childhood Development, Engineering, Health and Social Care and Medical Science, plus A-Level Business (AQA and Edexcel) and A-Level Psychology. Flashcards, quizzes, predicted papers, study guides, wireframe and code tools, and AI assignment marking — all in one place.">
@@ -70,7 +70,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/refresh/site.css?v=20270114">
+<link rel="stylesheet" href="/refresh/site.css?v=20270115">
 <script>
 (function(){
   var isFile = location.protocol === 'file:';
@@ -379,6 +379,8 @@
 <style id="sd-style">
 /* ===== Signed-in landing dashboard ===== */
 body.home-signed-in #p-home .hx-home > :not(#signed-in-dashboard){display:none !important}
+body.home-signed-in.show-roadmap #p-home .hx-home > #roadmap{display:block !important;margin-top:var(--sp8,32px)}
+#roadmap{scroll-margin-top:88px}
 .sd{max-width:1160px;margin:0 auto;width:100%;color:var(--color-text)}
 .sd-top{display:flex;align-items:center;justify-content:space-between;gap:var(--sp4);flex-wrap:wrap;margin-bottom:var(--sp5)}
 .sd-who{display:flex;align-items:center;gap:var(--sp4);min-width:0}
@@ -518,7 +520,7 @@ body.home-signed-in #p-home .hx-home > :not(#signed-in-dashboard){display:none !
 .sd-ring{width:112px;height:112px;animation:sd-spin-in 1.2s cubic-bezier(.2,.8,.2,1) both}
 .sd-ring b{font-size:2.2rem}
 .sd-ql{display:grid;place-items:center;width:46px;height:46px;border-radius:14px;padding:9px;margin-bottom:6px;color:#fff;transition:transform .25s cubic-bezier(.3,1.6,.5,1)}
-.sd-ql.tasks{background:linear-gradient(135deg,#16a34a,#0f766e)}.sd-ql.trophy{background:linear-gradient(135deg,#f59e0b,#d97706)}.sd-ql.people{background:linear-gradient(135deg,#2563eb,#7c3aed)}.sd-ql.books{background:linear-gradient(135deg,#d20000,#7a0000)}
+.sd-ql.tasks{background:linear-gradient(135deg,#16a34a,#0f766e)}.sd-ql.trophy{background:linear-gradient(135deg,#f59e0b,#d97706)}.sd-ql.people{background:linear-gradient(135deg,#2563eb,#7c3aed)}.sd-ql.books{background:linear-gradient(135deg,#d20000,#7a0000)}.sd-ql.roadmap{background:linear-gradient(135deg,#0ea5e9,#4f46e5)}
 .sd-links button:hover .sd-ql{transform:translateY(-3px) rotate(-5deg) scale(1.08)}
 .sd-links button{padding:14px}
 /* icon-internal animations */
@@ -929,7 +931,7 @@ body.home-signed-in #p-home .hx-home > :not(#signed-in-dashboard){display:none !
                 <button type="button" onclick="go('/leaderboard')"><span class="sd-ql trophy">ICON_trophy</span><b>Leaderboard</b><small>Weekly race</small></button>
                 <button type="button" onclick="go('/community')"><span class="sd-ql people">ICON_people</span><b>Community</b><small>Shared study apps</small></button>
                 <button type="button" onclick="go('/revision')"><span class="sd-ql books">ICON_books</span><b>All revision</b><small>Browse every course</small></button>
-                <button type="button" onclick="document.getElementById('roadmap')?.scrollIntoView({behavior:'smooth'})"><span class="sd-ql roadmap">🗺️</span><b>Roadmap</b><small>Where we're heading</small></button>
+                <button type="button" onclick="openRoadmap()"><span class="sd-ql roadmap">ICON_roadmap</span><b>Roadmap</b><small>Where we're heading</small></button>
               </div>
             </section>
           </aside>
@@ -944,7 +946,7 @@ body.home-signed-in #p-home .hx-home > :not(#signed-in-dashboard){display:none !
           <div class="hm-actions">
             <button class="hm-btn hm-btn-primary" type="button" onclick="go('/revision')">Start revising <span aria-hidden="true">→</span></button>
             <button class="hm-btn hm-btn-quiet" type="button" onclick="go('/leaderboard')">View the leaderboard</button>
-            <button class="hm-btn hm-btn-quiet" type="button" onclick="document.getElementById('roadmap')?.scrollIntoView({behavior:'smooth'})">Roadmap</button>
+            <button class="hm-btn hm-btn-quiet" type="button" onclick="openRoadmap()">Roadmap</button>
           </div>
           <ul class="hm-boards" aria-label="Exam boards covered">
             <li>Pearson BTEC</li><li>AQA A-Level</li><li>Edexcel A-Level</li><li>Level 2 &amp; Level 3</li>
@@ -1020,17 +1022,17 @@ body.home-signed-in #p-home .hx-home > :not(#signed-in-dashboard){display:none !
             <p class="hm-flag-note">Part of RA10 Premium. Every account can try one lesson free.</p>
           </div>
           <div class="hm-flag-stage" aria-hidden="true">
-            <figure class="hm-shot hm-shot-dark"><div class="hm-shot-bar"><i></i><i></i><i></i><span>ra10.co.uk/study-hub</span></div><img src="/refresh/home/sh-home.webp" width="1280" height="860" alt="" loading="lazy" decoding="async"></figure>
-            <figure class="hm-phone"><img src="/refresh/home/sh-phone.webp" width="390" height="844" alt="" loading="lazy" decoding="async"></figure>
+            <figure class="hm-shot hm-shot-dark"><div class="hm-shot-bar"><i></i><i></i><i></i><span>ra10.co.uk/study-hub</span></div><img src="/refresh/home/sh-home.webp?v=2" width="1280" height="860" alt="" loading="lazy" decoding="async"></figure>
+            <figure class="hm-phone"><img src="/refresh/home/sh-phone.webp?v=2" width="390" height="844" alt="" loading="lazy" decoding="async"></figure>
           </div>
         </div>
         <ul class="hm-flag-cards">
-          <li><figure><img src="/refresh/home/sh-learn.webp" width="1100" height="700" alt="A Study Hub teaching card explaining malware with key points and a real example" loading="lazy" decoding="async"></figure><b>Learn it in bite-size cards</b><p>Short explanations with key points and real examples, so new ideas stick.</p></li>
-          <li><figure><img src="/refresh/home/sh-quiz.webp" width="1100" height="760" alt="A Study Hub quick-check question with the correct answer highlighted" loading="lazy" decoding="async"></figure><b>Quick checks as you go</b><p>Multiple choice, true or false, fill the gap, matching and ordering. Anything you get wrong comes back once more.</p></li>
-          <li><figure><img src="/refresh/home/sh-exam.webp" width="1100" height="900" alt="A real exam question in Study Hub, marked by the AI Examiner with feedback" loading="lazy" decoding="async"></figure><b>Real exam questions</b><p>Each lesson ends with an exam question, marked by the AI Examiner against the mark scheme.</p></li>
-          <li><figure><img src="/refresh/home/sh-plan.webp" width="1280" height="1000" alt="My plan in Study Hub: the next lesson to do and a numbered list of what comes after" loading="lazy" decoding="async"></figure><b>A plan for every subject</b><p>Follow your personal plan, or work through every topic in the course one by one.</p></li>
-          <li><figure><img src="/refresh/home/sh-maker.webp" width="1280" height="860" alt="The Make a lesson sheet with a choice of unit, topic, length and focus" loading="lazy" decoding="async"></figure><b>Make your own lessons</b><p>Pick any unit and topic, choose how long it is and what it focuses on, or ask for something specific.</p></li>
-          <li><figure><img src="/refresh/home/sh-finish.webp" width="1100" height="760" alt="Lesson complete screen showing XP earned, accuracy and time" loading="lazy" decoding="async"></figure><b>Streaks and XP</b><p>Finish a lesson each day to keep your streak going and climb the weekly leaderboard.</p></li>
+          <li><figure><img src="/refresh/home/sh-learn.webp?v=2" width="1100" height="700" alt="A Study Hub teaching card explaining malware with key points and a real example" loading="lazy" decoding="async"></figure><b>Learn it in bite-size cards</b><p>Short explanations with key points and real examples, so new ideas stick.</p></li>
+          <li><figure><img src="/refresh/home/sh-quiz.webp?v=2" width="1100" height="760" alt="A Study Hub quick-check question with the correct answer highlighted" loading="lazy" decoding="async"></figure><b>Quick checks as you go</b><p>Multiple choice, true or false, fill the gap, matching and ordering. Anything you get wrong comes back once more.</p></li>
+          <li><figure><img src="/refresh/home/sh-exam.webp?v=2" width="1100" height="900" alt="A real exam question in Study Hub, marked by the AI Examiner with feedback" loading="lazy" decoding="async"></figure><b>Real exam questions</b><p>Each lesson ends with an exam question, marked by the AI Examiner against the mark scheme.</p></li>
+          <li><figure><img src="/refresh/home/sh-plan.webp?v=2" width="1280" height="1000" alt="My plan in Study Hub: the next lesson to do and a numbered list of what comes after" loading="lazy" decoding="async"></figure><b>A plan for every subject</b><p>Follow your personal plan, or work through every topic in the course one by one.</p></li>
+          <li><figure><img src="/refresh/home/sh-maker.webp?v=2" width="1280" height="860" alt="The Make a lesson sheet with a choice of unit, topic, length and focus" loading="lazy" decoding="async"></figure><b>Make your own lessons</b><p>Pick any unit and topic, choose how long it is and what it focuses on, or ask for something specific.</p></li>
+          <li><figure><img src="/refresh/home/sh-finish.webp?v=2" width="1100" height="760" alt="Lesson complete screen showing XP earned, accuracy and time" loading="lazy" decoding="async"></figure><b>Streaks and XP</b><p>Finish a lesson each day to keep your streak going and climb the weekly leaderboard.</p></li>
         </ul>
         <div class="hm-flag-tools" aria-labelledby="hm-sh-tools">
           <h3 id="hm-sh-tools"><span>New</span> AI study tools in Study Hub</h3>
@@ -3408,7 +3410,7 @@ body.home-signed-in #p-home .hx-home > :not(#signed-in-dashboard){display:none !
 <script src="/refresh/ra10-subjects.js?v=20270111"></script>
 <script>(function(){var el=document.getElementById('hm-subjects');if(el&&window.RA10Subjects&&RA10Subjects.renderHome)RA10Subjects.renderHome(el);})();</script>
 <script src="/refresh/ra10-tasks.js?v=20261113"></script>
-<script src="/refresh/site.js?v=20270114"></script>
+<script src="/refresh/site.js?v=20270115"></script>
 <script src="/refresh/ra10-edu.js?v=20261126" defer></script>
 
 <!-- ============================================================
@@ -4667,7 +4669,7 @@ function bindContactModal() {
       <span class="footer-copy">&copy; 2026 RA10 &middot; Built for revision, tools and more. Not affiliated with Pearson, AQA or OCR.</span>
     </div>
     <nav class="footer-legal" aria-label="Legal and accessibility">
-      <a href="javascript:void(0)" onclick="go('/');setTimeout(function(){document.getElementById('roadmap')?.scrollIntoView({behavior:'smooth'})},120)">Roadmap</a>
+      <a href="/#roadmap" onclick="event.preventDefault();openRoadmap()">Roadmap</a>
       <a href="legal/terms.html">Terms of Service</a>
       <a href="legal/privacy.html">Privacy Policy</a>
       <a href="legal/cookies.html">Cookies</a>

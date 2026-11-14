@@ -1012,3 +1012,87 @@ body.sh-page .sh-ov-cta h2 { margin: 0 0 6px; color: #fff; font-size: clamp(1.5r
 @media (max-width: 900px) { .sh-ov-tools { grid-template-columns: repeat(2, minmax(0, 1fr)); } .sh-ov-tools > div, .sh-ov-tools > div:nth-child(-n+2) { grid-column: span 1; } }
 @media (max-width: 560px) { .sh-ov-tools { grid-template-columns: minmax(0, 1fr); } }
 @media (prefers-reduced-motion: reduce) { .sh-ov-tools > div { transition: none; } }
+
+/* ══ Lesson player v2: RA10 "aurora" look (scoped to .sh-play) ══
+   Teal for correct, rose for wrong, violet→cyan progress, flat glassy controls,
+   floating feedback card instead of a full-width banner. */
+.sh-play {
+  --ok: #0d9488; --ok-2: #0f766e; --ok-soft: #e3f6f3; --ok-ink: #0b5e57;
+  --bad: #e0436b; --bad-2: #be2a52; --bad-soft: #fdebf0; --bad-ink: #9d1d40;
+  --aur-a: #6d5df6; --aur-b: #22c3e6;
+  background:
+    radial-gradient(900px 420px at 0% -10%, rgba(109, 93, 246, .10), transparent 65%),
+    radial-gradient(800px 420px at 100% 110%, rgba(34, 195, 230, .10), transparent 65%),
+    var(--bg);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .sh-play {
+    --ok: #2dd4bf; --ok-2: #14b8a6; --ok-soft: #0c2a29; --ok-ink: #8ff0e1;
+    --bad: #fb6f92; --bad-2: #e0436b; --bad-soft: #36121d; --bad-ink: #ffb0c4;
+    background: radial-gradient(900px 420px at 0% -10%, rgba(109, 93, 246, .2), transparent 65%), radial-gradient(800px 420px at 100% 110%, rgba(34, 195, 230, .14), transparent 65%), var(--bg);
+  }
+}
+:root[data-theme="dark"] .sh-play {
+  --ok: #2dd4bf; --ok-2: #14b8a6; --ok-soft: #0c2a29; --ok-ink: #8ff0e1;
+  --bad: #fb6f92; --bad-2: #e0436b; --bad-soft: #36121d; --bad-ink: #ffb0c4;
+  background: radial-gradient(900px 420px at 0% -10%, rgba(109, 93, 246, .2), transparent 65%), radial-gradient(800px 420px at 100% 110%, rgba(34, 195, 230, .14), transparent 65%), var(--bg);
+}
+
+/* progress: slim aurora line with a glowing head */
+.sh-play .sh-bar { height: 10px; background: color-mix(in srgb, var(--acc) 12%, var(--line)); overflow: visible; }
+.sh-play .sh-bar i { background: linear-gradient(90deg, var(--aur-a), var(--aur-b)); box-shadow: 0 0 14px -2px rgba(34, 195, 230, .65); }
+.sh-play .sh-bar i::after { left: auto; right: -3px; top: 50%; width: 16px; height: 16px; margin-top: -8px; border-radius: 50%; background: #fff; border: 3px solid var(--aur-b); box-sizing: border-box; box-shadow: 0 0 0 4px rgba(34, 195, 230, .18); }
+.sh-play .sh-bar i[style*="width: 0"]::after, .sh-play .sh-bar i[style*="width:0"]::after { display: none; }
+
+/* buttons: flat, gradient, soft glow (no 3D ledge) */
+.sh-play .sh-btn { border-width: 1px; border-radius: 14px; box-shadow: 0 1px 2px rgba(20, 16, 60, .08); transition: transform .12s, box-shadow .15s, filter .15s; }
+.sh-play .sh-btn:active:not(:disabled) { transform: scale(.98); box-shadow: none; }
+.sh-play .sh-btn.pri { background: linear-gradient(135deg, var(--aur-a), #4f46e5); border-color: transparent; box-shadow: 0 10px 24px -12px rgba(79, 70, 229, .8); }
+.sh-play .sh-btn.go { background: linear-gradient(135deg, #14b8a6, #0e7490); border-color: transparent; box-shadow: 0 10px 24px -12px rgba(13, 148, 136, .8); }
+.sh-play .sh-btn.bad { background: linear-gradient(135deg, #f0577d, #be2a52); border-color: transparent; box-shadow: 0 10px 24px -12px rgba(224, 67, 107, .8); }
+.sh-play .sh-btn:disabled { box-shadow: none; background: var(--soft); }
+
+/* question kind label: a small chip */
+.sh-play .sh-kind { padding: 5px 10px 5px 8px; border-radius: 99px; background: color-mix(in srgb, var(--acc) 10%, transparent); }
+.sh-play .sh-kind.retry { background: color-mix(in srgb, var(--fire) 12%, transparent); }
+
+/* learn card: thin border, aurora top edge */
+.sh-play .sh-learn { position: relative; overflow: hidden; border-width: 1px; border-radius: 22px; box-shadow: 0 24px 50px -36px rgba(40, 30, 120, .55); }
+.sh-play .sh-learn::before { content: ''; position: absolute; inset: 0 0 auto; height: 4px; background: linear-gradient(90deg, var(--aur-a), var(--aur-b)); }
+.sh-play .sh-learn li::before { width: 8px; height: 8px; margin-top: 8px; border-radius: 50%; transform: none; background: linear-gradient(135deg, var(--aur-a), var(--aur-b)); }
+.sh-play .sh-ex { border-left: 3px solid var(--aur-b); border-radius: 4px 14px 14px 4px; background: color-mix(in srgb, var(--aur-b) 9%, var(--card)); }
+.sh-play .sh-ex b { color: color-mix(in srgb, var(--aur-b) 70%, var(--ink)); }
+
+/* options & tiles: flat cards, accent bar on the left when chosen */
+.sh-play .sh-opt, .sh-play .sh-tile { border-width: 1.5px; border-bottom-width: 1.5px; box-shadow: 0 1px 2px rgba(20, 16, 60, .05); }
+.sh-play .sh-opt { border-radius: 16px; transition: border-color .12s, background .12s, box-shadow .15s, transform .12s; }
+.sh-play .sh-opt:hover:not(:disabled) { background: var(--card); border-color: color-mix(in srgb, var(--acc) 45%, var(--line)); transform: translateX(2px); }
+.sh-play .sh-opt:active:not(:disabled) { transform: scale(.99); border-bottom-width: 1.5px; margin-bottom: 0; }
+.sh-play .sh-opt .k { border-radius: 50%; border-width: 1.5px; }
+.sh-play .sh-opt.sel { box-shadow: inset 4px 0 0 var(--acc), 0 8px 20px -14px rgba(79, 70, 229, .6); }
+.sh-play .sh-opt.sel .k { background: var(--acc); color: #fff; }
+.sh-play .sh-opt.ok { box-shadow: inset 4px 0 0 var(--ok); }
+.sh-play .sh-opt.bad { box-shadow: inset 4px 0 0 var(--bad); }
+.sh-play .sh-statement, .sh-play .sh-sentence { border-width: 1px; }
+
+/* feedback: a floating card, not a full-width banner */
+.sh-play .sh-foot { border-top: 1px solid var(--line); background: color-mix(in srgb, var(--bg) 85%, transparent); backdrop-filter: blur(10px); }
+.sh-play .sh-foot.ok, .sh-play .sh-foot.bad { background: transparent; border-top-color: transparent; }
+.sh-play .sh-foot.ok .sh-foot-in, .sh-play .sh-foot.bad .sh-foot-in { margin: 0 auto 14px; width: calc(100% - 28px); border-radius: 22px; background: var(--card); border: 1px solid var(--line); box-shadow: 0 24px 50px -28px rgba(20, 16, 60, .45); position: relative; overflow: hidden; }
+.sh-play .sh-foot.ok .sh-foot-in::before, .sh-play .sh-foot.bad .sh-foot-in::before { content: ''; position: absolute; inset: 0; pointer-events: none; }
+.sh-play .sh-foot.ok .sh-foot-in::before { background: linear-gradient(100deg, color-mix(in srgb, var(--ok) 14%, transparent), transparent 60%); box-shadow: inset 5px 0 0 var(--ok); }
+.sh-play .sh-foot.bad .sh-foot-in::before { background: linear-gradient(100deg, color-mix(in srgb, var(--bad) 14%, transparent), transparent 60%); box-shadow: inset 5px 0 0 var(--bad); }
+.sh-play .sh-foot .fb, .sh-play .sh-foot .sh-btn { position: relative; }
+.sh-play .sh-foot .fb .ic { width: 50px; height: 50px; border-radius: 16px; }
+.sh-play .sh-foot.ok .fb .ic { background: var(--ok); color: #fff; }
+.sh-play .sh-foot.bad .fb .ic { background: var(--bad); color: #fff; }
+.sh-play .sh-foot .fb h3 { font-size: 1.15rem; }
+
+/* finish: aurora title, clean stat tiles */
+.sh-play .sh-finish h1 { background: linear-gradient(90deg, var(--aur-a), var(--aur-b)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.sh-play .sh-stat { border: 1px solid var(--line); border-radius: 18px; padding: 14px 8px 12px; box-shadow: 0 14px 30px -24px rgba(20, 16, 60, .5); position: relative; }
+.sh-play .sh-stat::before { content: ''; position: absolute; inset: 0 0 auto; height: 3px; background: var(--c); }
+.sh-play .sh-stat b { padding: 0; background: none; color: var(--ink-3); display: inline-flex; align-items: center; gap: 5px; justify-content: center; }
+.sh-play .sh-stat b .shi { color: var(--c); }
+.sh-play .sh-stat span { padding: 6px 4px 0; font-size: 1.7rem; color: var(--ink); }
+@media (prefers-reduced-motion: reduce) { .sh-play .sh-opt, .sh-play .sh-btn { transition: none; } }

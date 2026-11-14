@@ -332,7 +332,7 @@
   function signedOut() {
     try { sessionStorage.setItem('ra10_after_auth', location.pathname + location.search); } catch (e) {}
     document.body.classList.add('sh-out');
-    const shot = (name, w, h, alt) => `<img src="/refresh/home/${name}.webp" width="${w}" height="${h}" alt="${esc(alt)}" loading="lazy" decoding="async">`;
+    const shot = (name, w, h, alt) => `<img src="/refresh/home/${name}.webp?v=2" width="${w}" height="${h}" alt="${esc(alt)}" loading="lazy" decoding="async">`;
     const frame = (name, w, h, alt, url) => `<figure class="sh-ov-shot"><div class="bar" aria-hidden="true"><i></i><i></i><i></i><span>${esc(url || 'ra10.co.uk/study-hub')}</span></div>${shot(name, w, h, alt)}</figure>`;
     const units = UNITS();
     const signIn = (label, cls) => `<a class="sh-btn ${cls || 'pri lg'}" href="/auth">${label}</a>`;
