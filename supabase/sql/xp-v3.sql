@@ -782,28 +782,28 @@ $$;
 revoke all on function public.claim_xp_boost(text) from public, anon;
 grant execute on function public.claim_xp_boost(text) to authenticated;
 
--- ─── 11. Weekly leaderboard: closes at the end of Saturday (UK), no credits ─
-create or replace function public.settle_previous_leaderboard()
+-- ─── 11. Weekly leaderboard: closes at the end of Saturday (UK) ────────────
+create or replace function public.settle_leaderboard_week(p_week_start date default null)
 returns json
 language plpgsql
 security definer
 set search_path = public
 as $$
 declare
-  -- the week runs Sunday 00:00 → Saturday 23:59 UK time (the site's countdown)
-  v_this_week date := ((now() at time zone 'Europe/London')::date
-                       - extract(dow from (now() at time zone 'Europe/London'))::integer);
-  v_week_start date := v_this_week - 7;
+  v_week_start date := coalesce(
+    p_week_start,
+    ((now() at time zone 'Europe/London')::date - extract(dow from (now() at time zone 'Europe/London'))::integer - 7)
+  );
   v_count integer := 0;
 begin
-  if auth.uid() is null then raise exception 'Not authenticated'; end if;
   perform pg_advisory_xact_lock(hashtext('ra10-leaderboard-settlement'));
-  if exists (select 1 from public.leaderboard_weekly_results where week_start = v_week_start)
-     or exists (select 1 from public.leaderboard_weekly_results where settled_at > now() - interval '5 days') then
-    return json_build_object('ok', true, 'settled', false, 'week_start', v_week_start);
+
+  if exists (select 1 from public.leaderboard_weekly_results where week_start = v_week_start) then
+    return json_build_object('ok', true, 'settled', false, 'week_start', v_week_start, 'reason', 'already_settled');
   end if;
 
   perform set_config('app.skip_profile_priv_check', 'true', true);
+
   with ranked as (
     select p.id,
            row_number() over (order by coalesce(p.xp_this_week, 0) desc, coalesce(p.xp_total, 0) desc, p.id)::integer as rank
@@ -812,31 +812,67 @@ begin
   ),
   podium as (
     select id, rank,
+           case rank when 1 then 30 when 2 then 20 when 3 then 10 else 0 end as credits_awarded,
            case rank when 1 then '🥇 1st' when 2 then '🥈 2nd' when 3 then '🥉 3rd' end as badge
       from ranked where rank <= 3
   ),
   inserted as (
-    insert into public.leaderboard_weekly_results (week_start, profile_id, rank, credits_awarded, badge)
-    select v_week_start, id, rank, 0, badge from podium
+    insert into public.leaderboard_weekly_results (week_start, profile_id, rank, credits_awarded, badge, settled_at)
+    select v_week_start, id, rank, credits_awarded, badge, now()
+      from podium
     on conflict (week_start, profile_id) do nothing
-    returning profile_id, rank, badge
+    returning profile_id, rank, credits_awarded, badge
   )
   update public.profiles p
-     set leaderboard_badge = i.badge || ' · Last week',
+     set credits = coalesce(p.credits, 0) + i.credits_awarded,
+         leaderboard_badge = i.badge || ' · Last week',
          leaderboard_badge_week = v_week_start,
          leaderboard_last_rank = i.rank,
-         leaderboard_award_credits = 0
+         leaderboard_award_credits = i.credits_awarded,
+         xp_week_reset_at = now()
     from inserted i
    where p.id = i.profile_id;
+
   get diagnostics v_count = row_count;
 
-  update public.profiles set xp_this_week = 0 where coalesce(xp_this_week, 0) > 0;
+  update public.profiles
+     set xp_this_week = 0,
+         xp_week_reset_at = now()
+   where coalesce(xp_this_week, 0) > 0;
+
   perform set_config('app.skip_profile_priv_check', '', true);
+
   return json_build_object('ok', true, 'settled', true, 'week_start', v_week_start, 'winners', v_count);
 end;
 $$;
+revoke all on function public.settle_leaderboard_week(date) from public;
+grant execute on function public.settle_leaderboard_week(date) to anon, authenticated, service_role;
+
+create or replace function public.settle_previous_leaderboard()
+returns json
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  return public.settle_leaderboard_week(null);
+end;
+$$;
 revoke all on function public.settle_previous_leaderboard() from public;
-grant execute on function public.settle_previous_leaderboard() to authenticated;
+grant execute on function public.settle_previous_leaderboard() to anon, authenticated, service_role;
+
+create or replace function public.reset_weekly_xp()
+returns void
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  perform public.settle_leaderboard_week(null);
+end;
+$$;
+revoke all on function public.reset_weekly_xp() from public;
+grant execute on function public.reset_weekly_xp() to anon, authenticated, service_role;
 
 -- ─── 12. Owner tools ────────────────────────────────────────────────────────
 -- Accounts whose weekly XP is far above what the ledger can explain (XP from

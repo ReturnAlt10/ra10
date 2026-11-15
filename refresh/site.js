@@ -1744,15 +1744,8 @@ async function checkWeeklyXpReset() {
   if (!window.supabase || !RA10.isLoggedIn()) return;
   try {
     const sb = RA10.getClient();
-    const session = RA10.getSession();
-    const { data } = await sb.from('profiles')
-      .select('xp_week_reset_at')
-      .eq('id', session.user.id)
-      .single();
-    if (!data) return;
-    const daysSince = (Date.now() - new Date(data.xp_week_reset_at)) / 86400000;
-    if (daysSince >= 7) await sb.rpc('reset_weekly_xp');
-  } catch(e) { console.warn('XP reset check failed', e); }
+    await sb.rpc('settle_previous_leaderboard');
+  } catch(e) { console.warn('Weekly leaderboard settlement check failed', e); }
 }
 
 // Render leaderboard when navigating to it
