@@ -91,6 +91,51 @@
     done() { [523, 659, 784, 1047].forEach((f, i) => this.tone(f, i * .12, .3, 'triangle', .16)); }
   };
 
+  /* ───────────── the "building your lesson" orb ─────────────
+     The same live prism orb as the AI Helper / AI Assigner (refresh/vendor/prism-orb), in its "thinking" motion,
+     drifting smoothly through the AI palettes (helper sky-violet → hints mint-teal → examiner amber-red → pink →
+     assigner lilac). Without WebGL, or with reduced motion, a CSS glow orb stands in. Stops itself once removed. */
+  const BUILD_ORB_PALETTES = [
+    [{ l: .86, c: .11, h: 215 }, { l: .66, c: .19, h: 255 }, { l: .52, c: .24, h: 292 }],
+    [{ l: .90, c: .13, h: 160 }, { l: .74, c: .17, h: 182 }, { l: .56, c: .15, h: 222 }],
+    [{ l: .86, c: .14, h: 70 }, { l: .64, c: .23, h: 32 }, { l: .48, c: .21, h: 14 }],
+    [{ l: .86, c: .12, h: 352 }, { l: .66, c: .22, h: 340 }, { l: .50, c: .21, h: 318 }],
+    [{ l: .84, c: .12, h: 305 }, { l: .62, c: .22, h: 292 }, { l: .47, c: .21, h: 268 }],
+  ];
+  const BUILD_ORB_HOLD = 2600, BUILD_ORB_FADE = 1400; // ms on each palette, ms blending to the next (CSS glow uses the same 20s cycle)
+  const buildOrbHtml = () => `<div class="sh-aiorb" aria-hidden="true"><span class="sh-aiorb-fb"></span></div>`;
+  function mixPalette(a, b, f) {
+    return a.map((s, i) => {
+      const t = b[i] || s; let dh = ((t.h - s.h + 540) % 360) - 180; // shortest way round the colour wheel
+      return { l: s.l + (t.l - s.l) * f, c: s.c + (t.c - s.c) * f, h: (s.h + dh * f + 360) % 360 };
+    });
+  }
+  function mountBuildOrb(host) {
+    if (!host) return;
+    try { if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return; } catch (e) {}
+    import('/refresh/vendor/prism-orb/vanilla.js').then((m) => {
+      if (!host.isConnected || !m.orbRenderer || !m.orbRenderer.isSupported()) return;
+      const N = BUILD_ORB_PALETTES.length, per = BUILD_ORB_HOLD + BUILD_ORB_FADE;
+      const h = m.createOrb(host, { state: 'thinking', palette: BUILD_ORB_PALETTES[0], params: { dispersion: .55, rim: .6, whiteSpread: .35, grain: .12, softness: .6, toneMap: .7 },
+        audio: 'simulated', field: 'noise', noise: 'simplex', motion: { thinking: 'orbit', speaking: 'bloom', listening: 'inflow' }, seed: 7 });
+      h.canvas.className = 'sh-aiorb-canvas'; h.canvas.setAttribute('aria-hidden', 'true');
+      host.classList.add('live');
+      const t0 = performance.now(); let last = 0, idle = false;
+      const tick = (now) => {
+        if (!host.isConnected) { try { h.destroy(); } catch (e) {} return; }
+        if (now - last >= 60) {
+          last = now;
+          // a frame's timestamp can be a little earlier than t0, so never let the time go negative
+          const t = Math.max(0, now - t0) % (per * N), i = Math.floor(t / per) % N, f = Math.max(0, ((t % per) - BUILD_ORB_HOLD) / BUILD_ORB_FADE);
+          if (f > 0 || !idle) { const e = f * f * (3 - 2 * f); h.set({ palette: mixPalette(BUILD_ORB_PALETTES[i], BUILD_ORB_PALETTES[(i + 1) % N], e) }); }
+          idle = f === 0;
+        }
+        requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    }).catch(() => {});
+  }
+
   /* ───────────── the examiner's highlights on a written answer ─────────────
      credit = earned a mark; weak = technically a mark, but the wording needs work; wrong = not credited;
      develop = a correct point that needs a reason or link to earn more. Quotes are found in the student's own text. */
@@ -638,10 +683,11 @@
     const u = unitOf(it.unit);
     const ov = document.createElement('div');
     ov.className = 'sh-gen';
-    ov.innerHTML = `<div class="sh-gen-in"><div class="sh-orbit"><div class="ring"><span class="dot"></span></div><div class="core">${I(it.mode === 'class' ? 'clipboard' : 'brain', { size: 54 })}</div></div>
+    ov.innerHTML = `<div class="sh-gen-in">${buildOrbHtml()}
       <h2>${it.mode === 'class' ? 'Opening your teacher\'s lesson' : 'Building your lesson'}</h2><p class="sh-muted">${esc(a.title)}${u ? ' · ' + esc(u.short) : ''}</p>
       ${it.mode === 'class' ? '' : '<p class="sh-muted sh-small">Your teacher set this lesson to be built from your own progress — it takes about half a minute.</p>'}</div>`;
     document.body.appendChild(ov);
+    mountBuildOrb($('.sh-aiorb', ov));
     try {
       let extra = {};
       if (it.mode !== 'class' && u) {
@@ -1104,10 +1150,11 @@
     const ov = document.createElement('div');
     ov.className = 'sh-gen';
     const steps = ['Reading your progress', 'Pulling real exam questions from ' + (u ? u.short : 'the unit'), 'Writing your lesson', 'Checking every answer'];
-    ov.innerHTML = `<div class="sh-gen-in"><div class="sh-orbit"><div class="ring"><span class="dot"></span></div><div class="core">${I('brain', { size: 54 })}</div></div>
+    ov.innerHTML = `<div class="sh-gen-in">${buildOrbHtml()}
       <h2>Building your lesson</h2><p class="sh-muted">${esc(o.topic || o.request || (u ? u.name : ''))}</p>
       <ul class="sh-gen-steps">${steps.map((s, i) => `<li class="${i === 0 ? 'on' : ''}"><i></i>${esc(s)}</li>`).join('')}</ul></div>`;
     document.body.appendChild(ov);
+    mountBuildOrb($('.sh-aiorb', ov));
     const lis = $$('li', ov);
     const setStep = (n) => lis.forEach((li, i) => { li.className = i < n ? 'ok' : i === n ? 'on' : ''; li.querySelector('i').innerHTML = i < n ? I('check', { size: 14, stroke: 2.6 }) : ''; });
     let writing = false; const tick = setTimeout(() => { if (writing) setStep(3); }, 22000);
