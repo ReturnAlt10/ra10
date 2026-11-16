@@ -4,10 +4,22 @@
   const $ = (s) => document.querySelector(s);
   const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const TASKS = window.PY_TASKS || [];
+  // A course file (eg tasks-gcse.js) sets window.PY_COURSE; without one this is the BTEC Computing course.
+  const COURSE = window.PY_COURSE || null;
   const LEVEL = { 1: 'Starter', 2: 'Core', 3: 'Challenge' };
-  const GROUPS = [['A1', 'A1 Number systems'], ['A2', 'A2 Data and logic'], ['A3', 'A3 Program structure'], ['B1', 'B1 Data structures'], ['B2', 'B2 Built-in functions'], ['C1', 'C1 Problem solving'], ['C2', 'C2 High-quality programs'], ['Unit 4', 'Unit 4 Projects']];
-  const UNIT = '/revision/btec/level-3/computing-aaq/unit-1';
-  const KEY = 'ra10_pylab_v1';
+  const GROUPS = COURSE ? COURSE.groups : [['A1', 'A1 Number systems'], ['A2', 'A2 Data and logic'], ['A3', 'A3 Program structure'], ['B1', 'B1 Data structures'], ['B2', 'B2 Built-in functions'], ['C1', 'C1 Problem solving'], ['C2', 'C2 High-quality programs'], ['Unit 4', 'Unit 4 Projects']];
+  const UNIT = COURSE ? COURSE.unit : '/revision/btec/level-3/computing-aaq/unit-1';
+  const KEY = COURSE ? COURSE.key : 'ra10_pylab_v1';
+  const inGroup = (t, g) => COURSE ? t.group === g : (t.spec.split('.')[0] === g || (g === 'Unit 4' && t.spec === 'Unit 4'));
+  const chipOf = (t) => COURSE ? COURSE.chipPrefix + t.spec : (t.spec === 'Unit 4' ? 'Unit 4' : 'Unit 1 · ' + t.spec);
+  const courseQs = (() => { const c = new URLSearchParams(location.search).get('course'); return c ? 'course=' + encodeURIComponent(c) + '&' : ''; })();
+  if (COURSE) {
+    try { document.title = COURSE.title || document.title; } catch (e) {}
+    const back = document.querySelector('[data-course-back]');
+    if (back && COURSE.back) { back.href = COURSE.back.href; back.textContent = COURSE.back.label; }
+    const sw = document.querySelector('[data-course-switch]');
+    if (sw) { sw.href = '/tools/python-lab/'; sw.textContent = 'BTEC course'; }
+  }
   const TIMEOUT_MS = 6000;
 
   let state = { solved: {}, code: {}, attempts: {} };
@@ -58,7 +70,7 @@
   function renderList() {
     const nav = $('#list'); nav.innerHTML = '';
     GROUPS.forEach(([g, label]) => {
-      const ts = TASKS.filter(t => (t.spec.split('.')[0] === g || (g === 'Unit 4' && t.spec === 'Unit 4')) && (!levelFilter || t.level === levelFilter));
+      const ts = TASKS.filter(t => inGroup(t, g) && (!levelFilter || t.level === levelFilter));
       if (!ts.length) return;
       nav.insertAdjacentHTML('beforeend', `<div class="pl-group">${esc(label)}</div>`);
       ts.forEach(t => {
@@ -82,7 +94,7 @@
     const t = TASKS.find(x => x.id === id) || TASKS[0];
     cur = t; sandbox = false; hintIx = 0; opened = Date.now(); solutionSeen = false;
     $('#title').textContent = t.title;
-    $('#chips').innerHTML = `<span class="pl-chip">${esc(t.spec === 'Unit 4' ? 'Unit 4' : 'Unit 1 · ' + t.spec)}</span><span class="pl-chip">${esc(t.topic)}</span><span class="pl-chip">${LEVEL[t.level]}</span>${state.solved[t.id] ? '<span class="pl-chip" style="color:var(--pl-ok)">Solved ✓</span>' : ''}`;
+    $('#chips').innerHTML = `<span class="pl-chip">${esc(chipOf(t))}</span><span class="pl-chip">${esc(t.topic)}</span><span class="pl-chip">${LEVEL[t.level]}</span>${state.solved[t.id] ? '<span class="pl-chip" style="color:var(--pl-ok)">Solved ✓</span>' : ''}`;
     $('#brief').innerHTML = t.brief + (t.setup ? '<p><small>The test creates the file(s) your program needs before it runs.</small></p>' : '');
     const predict = t.tests.some(x => x.type === 'predict');
     $('#predictWrap').hidden = !predict;
@@ -95,7 +107,7 @@
     $('#stdin').value = firstIo ? (firstIo.stdin || []).join('\n') : '';
     $('#out').textContent = ''; $('#results').innerHTML = ''; $('#hints').innerHTML = ''; $('#solution').hidden = true;
     $('#hintBtn').hidden = !(t.hints && t.hints.length);
-    history.replaceState(null, '', '?task=' + encodeURIComponent(t.id));
+    history.replaceState(null, '', '?' + courseQs + 'task=' + encodeURIComponent(t.id));
     renderList();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
@@ -106,9 +118,9 @@
     $('#brief').innerHTML = 'Write and run any Python 3 program. Type the values your program will <code>input()</code> in the Program input box, one per line.';
     $('#predictWrap').hidden = true; document.querySelector('.pl-editor-wrap').hidden = false; document.querySelector('.pl-io').hidden = false;
     $('#runBtn').hidden = false; $('#resetBtn').hidden = false; $('#checkBtn').hidden = true; $('#hintBtn').hidden = true; $('#solBtn').hidden = true;
-    setCode(state.code.__sandbox || 'name = input("What is your name? ")\nprint(f"Hello, {name}!")\n');
+    setCode(state.code.__sandbox || (COURSE && COURSE.sandbox) || 'name = input("What is your name? ")\nprint(f"Hello, {name}!")\n');
     $('#stdin').value = 'Ada'; $('#out').textContent = ''; $('#results').innerHTML = ''; $('#hints').innerHTML = ''; $('#solution').hidden = true;
-    history.replaceState(null, '', '?sandbox=1'); renderList();
+    history.replaceState(null, '', '?' + courseQs + 'sandbox=1'); renderList();
   }
   $('#sandboxBtn').onclick = openSandbox;
   $('#prev').onclick = () => { const i = cur ? TASKS.indexOf(cur) : 0; open(TASKS[(i - 1 + TASKS.length) % TASKS.length].id); };
@@ -164,7 +176,7 @@
         unit: UNIT, ref: 'pylab:' + t.id, title: t.title, view: 'python-lab',
         answer: t.tests.some(x => x.type === 'predict') ? $('#predict').value : getCode(),
         score: passed, max_score: total, duration_s: (Date.now() - opened) / 1000,
-        meta: { spec: t.spec, topic: t.topic, level: t.level, attempts: state.attempts[t.id], hints: hintIx, solution_seen: solutionSeen, solved: all, ms: Date.now() - tStart }
+        meta: { course: COURSE ? 'gcse' : 'btec', spec: t.spec, topic: t.topic, level: t.level, attempts: state.attempts[t.id], hints: hintIx, solution_seen: solutionSeen, solved: all, ms: Date.now() - tStart }
       });
     } catch (e) {}
   }

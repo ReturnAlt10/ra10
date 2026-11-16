@@ -422,7 +422,7 @@
   // A-Level units number their spec areas as chapters (1, 2, 3…); BTEC units use learning aims (A, B, C…)
   function aimTag(cat, a, short) {
     const keys = Object.keys((cat && cat.spec) || {}).sort((x, y) => String(x).localeCompare(String(y), undefined, { numeric: true }));
-    const alevel = (cat && cat.aimWord) || /\/revision\/a-level\//.test(String((cat && cat.unit) || ''));
+    const alevel = (cat && cat.aimWord) || /\/revision\/(a-level|gcse)\//.test(String((cat && cat.unit) || ''));
     if (!alevel) return short ? String(a) : 'Learning aim ' + a;
     const lbl = (cat.aimLabels && cat.aimLabels[a]) || (keys.indexOf(a) >= 0 ? String(keys.indexOf(a) + 1) : String(a));
     return short ? lbl : (cat.aimWord || 'Chapter') + ' ' + lbl;

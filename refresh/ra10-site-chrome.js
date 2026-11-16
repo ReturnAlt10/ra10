@@ -16,7 +16,7 @@
   function toPublic(p) {
     p = String(p || '/');
     if (!/^\//.test(p)) p = '/' + p;
-    return p === '/revision' ? '/subjects' : p.replace(/^\/revision\/(btec|a-level)(?=\/|$)/, '/$1');
+    return p === '/revision' ? '/subjects' : p.replace(/^\/revision\/(btec|a-level|gcse)(?=\/|$)/, '/$1');
   }
   // the shell's inline handlers call these
   window.go = function (path) { location.href = toPublic(path); };

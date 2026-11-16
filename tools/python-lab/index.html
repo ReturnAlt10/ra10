@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Python Lab · RA10</title>
-<meta name="description" content="Practise Python 3 in your browser: 58 auto-marked tasks for BTEC Level 3 Computing Unit 1 Programming Fundamentals and Unit 4 Practical Programming, with hints, model solutions and trace-table practice.">
+<meta name="description" content="Practise Python 3 in your browser: auto-marked tasks for OCR GCSE Computer Science (J277) and BTEC Level 3 Computing (Units 1 and 4), with hints, model solutions and trace-table practice.">
 <link rel="icon" href="/logo.png" type="image/png">
 <script>(function () { try { var t = localStorage.getItem('ra10-theme'); if (!t) t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'; document.documentElement.setAttribute('data-theme', t === 'dark' ? 'dark' : 'light'); } catch (e) {} })();</script>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -20,7 +20,8 @@
 <header class="sc-top">
   <a class="sc-brand" href="/"><img src="/logo.png" alt="" width="30" height="30"><span>RA10 <b>Python Lab</b></span></a>
   <div class="sc-top-actions">
-    <a class="sc-btn ghost sm" href="/btec/level-3/computing-aaq/unit-1">Computing Unit 1</a>
+    <a class="sc-btn ghost sm" href="/btec/level-3/computing-aaq/unit-1" data-course-back>Computing Unit 1</a>
+    <a class="sc-btn ghost sm" href="/tools/python-lab/?course=gcse" data-course-switch>GCSE course</a>
     <a class="sc-btn ghost sm" href="/tools/bug-hunt/">🐞 Bug Hunt</a>
     <a class="sc-btn ghost sm" href="/study-hub">Study Hub</a>
   </div>
@@ -67,7 +68,8 @@
     </div>
   </main>
 </div>
-<script src="tasks.js?v=20261211"></script>
-<script src="lab.js?v=20261211"></script>
+<script>/* ?course=gcse loads the OCR GCSE Computer Science task bank; otherwise the BTEC Computing one */
+(function () { var c = new URLSearchParams(location.search).get('course'); document.write('<script src="' + (c === 'gcse' ? 'tasks-gcse.js?v=20261116' : 'tasks.js?v=20261211') + '"><\/script>'); })();</script>
+<script src="lab.js?v=20261116"></script>
 </body>
 </html>

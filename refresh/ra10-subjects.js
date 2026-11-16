@@ -40,21 +40,21 @@
     if (/psycholog/.test(n)) return 'psychology';
     return 'book';
   };
-  const FAMILIES = [['all', 'All'], ['btec3', 'BTEC Level 3'], ['btec2', 'BTEC Level 2'], ['alevel', 'A-Level']];
-  const familyOf = (u) => /^BTEC Level 3/i.test(u.qual) ? 'btec3' : /^BTEC Level 2/i.test(u.qual) ? 'btec2' : /A-?Level/i.test(u.qual) ? 'alevel' : 'other';
+  const FAMILIES = [['all', 'All'], ['btec3', 'BTEC Level 3'], ['btec2', 'BTEC Level 2'], ['alevel', 'A-Level'], ['gcse', 'GCSE']];
+  const familyOf = (u) => /^BTEC Level 3/i.test(u.qual) ? 'btec3' : /^BTEC Level 2/i.test(u.qual) ? 'btec2' : /A-?Level/i.test(u.qual) ? 'alevel' : /\bGCSE\b/i.test(u.qual) ? 'gcse' : 'other';
   function go(path) {
     if (typeof window.go === 'function') window.go(path);
-    else location.href = String(path).replace(/^\/revision\/(btec|a-level)(?=\/|$)/, '/$1').replace(/^\/revision$/, '/subjects');
+    else location.href = String(path).replace(/^\/revision\/(btec|a-level|gcse)(?=\/|$)/, '/$1').replace(/^\/revision$/, '/subjects');
   }
-  const publicPath = (p) => String(p).replace(/^\/revision\/(btec|a-level)(?=\/|$)/, '/$1');
+  const publicPath = (p) => String(p).replace(/^\/revision\/(btec|a-level|gcse)(?=\/|$)/, '/$1');
 
   function groups() {
     const U = (window.RA10Units && RA10Units.all()) || [];
     const map = new Map();
     U.forEach(u => {
-      const key = u.group || String(u.qual).replace(/\s*\(\d{4}.*\)$/, '').replace(/\s*\((?:7\d{3}|9[A-Z]{2}\d)\)$/, '');
+      const key = u.group || String(u.qual).replace(/\s*\(\d{4}.*\)$/, '').replace(/\s*\((?:7\d{3}|9[A-Z]{2}\d|J\d{3})\)$/, '');
       if (!map.has(key)) {
-        const parent = u.subjectPath || (/^\/revision\/btec\//.test(u.path) ? u.path.replace(/\/[^/]+$/, '') : '/revision/a-level');
+        const parent = u.subjectPath || (/^\/revision\/btec\//.test(u.path) ? u.path.replace(/\/[^/]+$/, '') : /^\/revision\/gcse\//.test(u.path) ? '/revision/gcse' : '/revision/a-level');
         map.set(key, { key, name: u.subjectName || u.subject, qual: key, family: familyOf(u), color: u.color, icon: iconFor(u.subjectName || u.subject || key), path: parent, isNew: !!u.isNew, units: [], keywords: [] });
       }
       const g = map.get(key);
@@ -64,13 +64,13 @@
     });
     const out = Array.from(map.values());
     out.forEach(g => g.units.sort((a, b) => unitNum(a) - unitNum(b)));
-    const order = { btec3: 0, btec2: 1, alevel: 2, other: 3 };
+    const order = { btec3: 0, btec2: 1, alevel: 2, gcse: 3, other: 4 };
     out.sort((a, b) => (order[a.family] - order[b.family]) || a.name.localeCompare(b.name));
     return out;
   }
   const unitNum = (u) => { const m = String(u.name).match(/Unit (\d+)/); return m ? Number(m[1]) : (/(7\d{3})/.exec(u.name) || [0, 99])[1] * 1; };
-  const unitBadge = (u) => { const m = String(u.name).match(/Unit (\d+)/); if (m) return 'Unit ' + m[1]; const y = String(u.name).match(/\((7\d{3}|9[A-Z]{2}\d)\)/); return y ? y[1] : 'Course'; };
-  const unitTitle = (u) => String(u.name).replace(/^(Level 2 IT )?Unit \d+:\s*/, '').replace(/^AQA A-Level /, '');
+  const unitBadge = (u) => { const m = String(u.name).match(/Unit (\d+)/); if (m) return 'Unit ' + m[1]; const y = String(u.name).match(/\((7\d{3}|9[A-Z]{2}\d|J\d{3})\)/); return y ? y[1] : 'Course'; };
+  const unitTitle = (u) => String(u.name).replace(/^(Level 2 IT )?Unit \d+:\s*/, '').replace(/^AQA A-Level /, '').replace(/^OCR GCSE /, 'GCSE ');
   const kindClass = (k) => /exam/i.test(k) ? 'exam' : /set task/i.test(k) ? 'task' : 'cw';
   const kindLabel = (k) => /exam/i.test(k) ? 'Exam' : /set task/i.test(k) ? 'Set task' : 'Assignment';
   function matches(g, u, q) {
@@ -231,7 +231,7 @@
     return out;
   };
   const unitRow = (u, g, q, tag) => `<${tag || 'button'} ${tag === 'a' ? `href="${esc(publicPath(u.path))}"` : 'type="button"'} class="rs-unit" data-rs-go="${esc(u.path)}" style="--sc:${esc(u.color || g.color)}"><span class="n">${esc(unitBadge(u))}</span><span class="t">${hl(unitTitle(u), q)}</span><span class="rs-kind ${kindClass(u.kind)}">${kindLabel(u.kind)}</span></${tag || 'button'}>`;
-  const qualShort = (g) => (/A-?Level/i.test(g.qual) ? ((String(g.qual).match(/^(.+?)\s+A-?Level/) || [0, 'AQA'])[1].replace(/^Pearson\s+/, '') + ' A-Level') : (FAMILIES.find(f => f[0] === g.family) || [0, g.qual])[1] + (/\bAAQ\b/.test(g.qual) ? ' · AAQ' : ''));
+  const qualShort = (g) => (/\bGCSE\b/i.test(g.qual) ? ((String(g.qual).match(/^(\w+)\s+GCSE/) || [0, 'OCR'])[1] + ' GCSE') : /A-?Level/i.test(g.qual) ? ((String(g.qual).match(/^(.+?)\s+A-?Level/) || [0, 'AQA'])[1].replace(/^Pearson\s+/, '') + ' A-Level') : (FAMILIES.find(f => f[0] === g.family) || [0, g.qual])[1] + (/\bAAQ\b/.test(g.qual) ? ' · AAQ' : ''));
   const subHead = (g, q) => `<span class="rs-ico" style="--sc:${esc(g.color)}">${ICONS[g.icon]}</span><span class="rs-txt"><span class="rs-ttl"><b>${hl(g.name, q)}</b>${g.isNew ? '<span class="rs-new">New</span>' : ''}</span><small>${esc(qualShort(g))} · ${g.units.length} unit${g.units.length === 1 ? '' : 's'}</small></span>`;
   function filtered(fam, q) {
     return groups().filter(g => fam === 'all' || g.family === fam).map(g => {

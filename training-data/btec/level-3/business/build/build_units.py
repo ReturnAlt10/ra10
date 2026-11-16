@@ -202,7 +202,7 @@ def build_index(u, m):
     s, ncss = re.subn(r'<link rel="stylesheet" href="css/style\.css\?v=[^"]*">', lambda mo: CSS_LINKS.format(calc=CALC_LINK if m['calc'] else ''), s, count=1)
     if not ncss:
         raise SystemExit('css link not found')
-    scripts = re.search(r'<script src="js/u2-spec.js.*?<script src="js/app.js\?v=\d+"></script>', s, re.S)
+    scripts = re.search(r'<script src="js/u2-spec.js.*?<script src="js/app.js\?v=[^"]+"></script>', s, re.S)
     if not scripts:
         raise SystemExit('script block not found')
     new = SCRIPTS.replace('{calc}', CALC_SCRIPT if m['calc'] else '')

@@ -46,8 +46,8 @@
   const META = {
     dashboard: { t: 'Dashboard', d: 'Your study hub', i: 'home', g: 'Start', p: 'dashboard' },
     home: { t: 'Home', d: 'Your study hub', i: 'home', g: 'Start', p: 'dashboard' },
-    papers: { t: 'Past Papers', d: 'Past papers and RA10 Papers: answer online, AI marking, PDF', long: 'Real exam papers in the exam layout. Answer online and the AI Examiner marks you like Pearson would.', cta: 'Open past papers', i: 'papers', g: 'Practise', p: 'papers', lane: 'practise', feat: 1 },
-    pastpapers: { t: 'Past Papers', d: 'Past papers and RA10 Papers: answer online, AI marking, PDF', long: 'Real exam papers in the exam layout. Answer online and the AI Examiner marks you like Pearson would.', cta: 'Open past papers', i: 'papers', g: 'Practise', p: 'questions', lane: 'practise', feat: 1 },
+    papers: { t: 'Past Papers', d: 'Past papers and RA10 Papers: answer online, AI marking, PDF', long: 'Real exam papers in the exam layout. Answer online and the AI Examiner marks you like a real examiner would.', cta: 'Open past papers', i: 'papers', g: 'Practise', p: 'papers', lane: 'practise', feat: 1 },
+    pastpapers: { t: 'Past Papers', d: 'Past papers and RA10 Papers: answer online, AI marking, PDF', long: 'Real exam papers in the exam layout. Answer online and the AI Examiner marks you like a real examiner would.', cta: 'Open past papers', i: 'papers', g: 'Practise', p: 'questions', lane: 'practise', feat: 1 },
     practice: { t: 'Practise by topic', d: 'Filter by topic, marks and type', long: 'Pick a topic and answer exam-style questions one at a time, with instant feedback.', cta: 'Start practising', i: 'practice', g: 'Practise', p: 'questions', lane: 'practise' },
     questions: { t: 'Questions', d: 'Practice, browse and mock papers', long: 'Every exam-style question for this unit.', cta: 'Open questions', i: 'practice', g: 'Practise', p: 'questions', parent: 1, lane: 'practise' },
     browse: { t: 'Question bank', d: 'Every question with its mark scheme', long: 'Search every question and read the full mark scheme.', cta: 'Browse questions', i: 'browse', g: 'Practise', p: 'questions', lane: 'practise' },
@@ -325,7 +325,8 @@
     if (!dest) return null;
     const ra10 = list.filter(p => p.source === 'ra10').length;
     const official = list.length - ra10;
-    const board = /a-level/i.test(location.pathname) ? 'AQA' : 'Pearson';
+    const cfgBoard = window.BIZ_UNIT && window.BIZ_UNIT.board;
+    const board = cfgBoard ? (/edexcel/i.test(cfgBoard) ? 'Edexcel' : cfgBoard) : /a-level/i.test(location.pathname) ? 'AQA' : 'Pearson';
     return { dest, ra10, official, board };
   }
   function openPapers(pp, which) {
@@ -353,7 +354,9 @@
   // practice tools that live outside the unit app (opened in the top window)
   const EXT_TOOLS = [
     { rx: /computing-aaq\/unit-(1|4)/i, k: 'Practice tool', h: 'Python Lab', href: '/tools/python-lab/',
-      p: '58 auto-marked Python 3 tasks covering every Unit 1 topic – operators, selection, loops, functions, recursion, data structures, files, searching and sorting, validation – plus trace-table practice and Unit 4 projects.', btn: 'Open Python Lab' }
+      p: '58 auto-marked Python 3 tasks covering every Unit 1 topic – operators, selection, loops, functions, recursion, data structures, files, searching and sorting, validation – plus trace-table practice and Unit 4 projects.', btn: 'Open Python Lab' },
+    { rx: /gcse\/computer-science/i, k: 'Paper 2 programming', h: 'Python Lab · GCSE', href: '/tools/python-lab/?course=gcse',
+      p: 'Write and run real Python in your browser: auto-marked tasks for every J277 programming skill – variables, selection, loops, strings, arrays, 2D arrays, files, functions, validation, searching and sorting – plus trace-table and “predict the output” practice and Section B exam-style problems.', btn: 'Open the GCSE Python Lab' }
   ];
   function extToolsHtml() {
     const path = location.pathname;

@@ -1,0 +1,58 @@
+  /* ===== C · 1.3 Computer networks, connections and protocols ===== */
+  TITLE.C = 'Computer networks, connections and protocols'; SUB.C = 'Paper 1 · LANs and WANs, network hardware, the internet, DNS, the Cloud, topologies, wired vs wireless, addressing and protocols';
+  T.C = [
+    { code: '1.3.1', name: 'Networks and topologies', html: () => `
+${plain('A <b>network</b> is two or more computers connected together so they can <b>share data and resources</b> — files, printers, an internet connection, storage. Your school network and the internet are both networks.')}
+${h3('LAN and WAN')}
+${table(['', 'LAN — Local Area Network', 'WAN — Wide Area Network'], [['Area', 'A <b>small geographical area</b> — one building or site', 'A <b>large geographical area</b> — towns, countries, the world'], ['Hardware owned by', 'The organisation that uses it', 'Usually rents/leases connections from telecoms companies (cables, satellites)'], ['Examples', 'A school, a home, an office', 'The internet (the biggest WAN); a bank linking all its branches']])}
+${h3('Client–server and peer-to-peer')}
+${two(`<h4>Client–server</h4>${ul(['A central <b>server</b> provides services: it stores files, manages logins and security, backups and updates', '<b>Clients</b> (the users’ computers) request services from the server', '✓ Central control: easier to back up, secure and manage', '✗ Servers are expensive and need specialist staff; if the server fails, clients lose access'])}`, `<h4>Peer-to-peer</h4>${ul(['No central server — every computer (peer) is <b>equal</b>', 'Each peer stores its own files and shares directly with others', '✓ Cheap and easy to set up; no single point of failure', '✗ No central backup or security; files can be hard to find; a peer may be switched off'])}`)}
+${h3('The hardware needed to build a LAN')}
+${table(['Device', 'Job'], [
+  ['<b>NIC</b> (Network Interface Controller/Card)', 'Lets a device connect to a network (wired or wireless). Every NIC has a unique <b>MAC address</b>.'],
+  ['<b>Switch</b>', 'Connects devices <b>on a LAN</b>. It receives data and sends it <b>only to the device it is addressed to</b> (using MAC addresses).'],
+  ['<b>Router</b>', 'Connects <b>different networks</b> together — eg your LAN to the internet. It forwards packets towards their destination using <b>IP addresses</b>.'],
+  ['<b>Wireless access point (WAP)</b>', 'Lets wireless devices connect to a wired network using Wi-Fi.'],
+  ['<b>Transmission media</b>', 'What carries the data: copper cable (eg Ethernet), fibre-optic cable, or radio waves (wireless).']])}
+${tip('A home “router” is really a router, switch and wireless access point in one box — but in the exam describe each job separately.', 'Exam tip')}
+${h3('Factors that affect network performance')}
+${table(['Factor', 'Why it matters'], [['<b>Bandwidth</b>', 'The amount of data that can be sent per second. Low bandwidth → slower transfers.'], ['<b>Number of devices / users</b>', 'More devices share the same bandwidth and cause more data collisions → slower for everyone.'], ['<b>Transmission media</b>', 'Fibre is faster than copper; wireless is affected by distance, walls and interference.'], ['<b>Amount of traffic</b>', 'Streaming video or large downloads use lots of bandwidth.'], ['<b>Errors / interference</b>', 'Data that arrives corrupted has to be re-sent.']])}
+${h3('The internet, DNS, hosting and the Cloud')}
+${p('The <b>internet</b> is a <b>worldwide collection of computer networks</b> — a network of networks. The <b>World Wide Web</b> is the collection of web pages stored on <b>web servers</b> and accessed over the internet by <b>clients</b> (web browsers).')}
+${WG('dns')}
+${table(['Term', 'Meaning'], [['<b>DNS</b> (Domain Name Service)', 'Made up of many <b>Domain Name Servers</b>. Converts a domain name / URL (eg www.example.com) into the <b>IP address</b> of the server that hosts it.'], ['<b>Hosting</b>', 'Storing a website (or files/services) on a server that is permanently connected to the internet, so others can access it. Companies pay a hosting provider.'], ['<b>Web server</b>', 'A server that stores web pages and sends them to clients that request them.'], ['<b>The Cloud</b>', 'Remote servers, accessed over the internet, that provide <b>storage, software or processing</b> as a service (eg online file storage, web-based office apps).']])}
+${two(`<h4>Advantages of the Cloud</h4>${ul(['Access files from any device, anywhere with an internet connection', 'Easy to share and collaborate', 'Storage can be increased easily; no need to buy your own hardware', 'The provider handles backups, security and maintenance'])}`, `<h4>Disadvantages of the Cloud</h4>${ul(['Needs an internet connection — no access when offline', 'You rely on the provider: if it fails or closes, you may lose access', 'Data is stored by a third party — security and privacy concerns', 'Ongoing subscription costs'])}`)}
+${h3('Star and mesh topologies')}
+${p('A <b>topology</b> is the way devices in a network are arranged and connected.')}
+${WG('topology')}
+${two(`<h4>Star</h4>${ul(['Every device has its <b>own cable to a central switch</b>', '✓ If one cable or device fails, only that device is affected', '✓ Fast and reliable: the switch sends data only to the right device, so few data collisions', '✓ Easy to add new devices', '✗ If the <b>central switch fails, the whole network goes down</b>', '✗ Lots of cable — can be expensive in big buildings'])}`, `<h4>Mesh</h4>${ul(['Devices are connected to each other, often with <b>many routes</b> (full mesh: every device to every other)', '✓ If one connection fails, data takes <b>another route</b> — no single point of failure', '✓ Can handle lots of traffic, as data can travel on many routes at once', '✗ A full mesh needs a lot of cable (wired), which is <b>expensive</b>', '✗ Harder to set up and maintain', 'Wireless mesh networks avoid the cabling cost'])}`)}
+${exam('Describe two differences between a LAN and a WAN.', 2, 'A LAN covers a small geographical area (eg one site) whereas a WAN covers a large geographical area (1). The hardware in a LAN is usually owned by the organisation, whereas a WAN usually uses connections leased from telecommunications companies (1).')}
+${exam('Explain one advantage of a star topology compared with a mesh topology.', 2, 'A star uses less cable than a full mesh (1) so it is cheaper / easier to install (1). OR: data is sent only to the destination device via the switch (1) so there are fewer collisions (1).')}` },
+
+    { code: '1.3.2', name: 'Wired and wireless networks, protocols and layers', html: () => `
+${h3('Wired vs wireless')}
+${table(['', 'Wired (Ethernet)', 'Wireless (Wi-Fi, Bluetooth)'], [['Speed', 'Usually <b>faster</b> and more consistent', 'Usually slower; drops with distance and obstacles'], ['Reliability', 'Little interference', 'Affected by walls, other devices and distance'], ['Security', 'More secure — someone needs a physical connection', 'Signals can be intercepted, so <b>encryption</b> is essential'], ['Mobility', 'Devices stay at the end of a cable', 'Users can move around; no cables to trip over'], ['Cost/installation', 'Cables must be bought and installed', 'Easier to add devices; needs wireless access points']])}
+${p('<b>Bluetooth</b> is a short-range wireless connection used for nearby devices (headphones, keyboards). <b>Wi-Fi</b> connects devices to a network over a longer range. You do not need to know how Ethernet, Wi-Fi or Bluetooth work internally.')}
+${h3('Encryption')}
+${p('<b>Encryption</b> scrambles data using a <b>key</b> so that if it is intercepted while it travels across a network, it cannot be understood. Only someone with the correct key can <b>decrypt</b> it back to the original. It is especially important on wireless networks, where anyone in range could pick up the signal.')}
+${WG('cipher')}
+${h3('IP and MAC addresses')}
+${table(['', 'IP address', 'MAC address'], [['Purpose', 'Identifies a device on a network / the internet, so data can be <b>routed</b> to it', '<b>Uniquely</b> identifies the device’s network interface card; used to send data to the right device on a LAN (by switches)'], ['Assigned', 'Given to a device when it joins a network — it can change', 'Assigned by the manufacturer — it is permanent/fixed'], ['Format', '<b>IPv4</b>: 4 numbers from 0 to 255 separated by dots, eg <code>192.168.0.15</code> (32 bits). <b>IPv6</b>: 8 groups of 4 hexadecimal digits separated by colons, eg <code>2001:0db8:85a3:0000:0000:8a2e:0370:7334</code> (128 bits)', '6 pairs of <b>hexadecimal</b> digits (48 bits), separated by colons or hyphens, eg <code>4A:1F:09:C2:7E:30</code>']])}
+${warn('An IPv4 number can only go up to 255 — <code>258.0.0.1</code> is not valid. IPv6 was introduced because the world was running out of IPv4 addresses (IPv6 has vastly more).', 'Common mistake')}
+${h3('Standards and protocols')}
+${p('A <b>standard</b> is an agreed set of rules for an area of computing (eg the size of a USB plug, how Wi-Fi works). Standards let <b>hardware and software from different manufacturers work together</b>.', 'A <b>protocol</b> is a set of <b>rules for how data is transferred</b> between devices — eg how it is formatted, addressed, sent and checked. Different protocols are used for different jobs.')}
+${table(['Protocol', 'Full name', 'Purpose'], [
+  ['<b>TCP/IP</b>', 'Transmission Control Protocol / Internet Protocol', 'TCP splits data into packets, numbers them, checks they all arrive and puts them back in order (asking for missing ones to be re-sent). IP addresses each packet and routes it across networks.'],
+  ['<b>HTTP</b>', 'Hyper Text Transfer Protocol', 'Requesting and sending web pages between a web browser and a web server.'],
+  ['<b>HTTPS</b>', 'Hyper Text Transfer Protocol Secure', 'As HTTP, but the data is <b>encrypted</b> — used for logins, payments and anything private.'],
+  ['<b>FTP</b>', 'File Transfer Protocol', 'Transferring files between computers over a network (eg uploading a website to a host).'],
+  ['<b>POP</b>', 'Post Office Protocol', '<b>Retrieves email</b> from a mail server and downloads it to one device, usually deleting it from the server.'],
+  ['<b>IMAP</b>', 'Internet Message Access Protocol', '<b>Retrieves email</b> but keeps it on the server, so it stays in sync across several devices.'],
+  ['<b>SMTP</b>', 'Simple Mail Transfer Protocol', '<b>Sends email</b> from a client to a mail server, and between mail servers.']])}
+${tip('Email: <b>S</b>MTP <b>S</b>ends; POP and IMAP retrieve. IMAP keeps mail on the server (good for using a phone and a laptop).', 'Memory trick')}
+${h3('Layers')}
+${WG('layers')}
+${key('Why use layers?', 'Each layer deals with one part of communication and only talks to the layers next to it. So: a complex problem is broken into manageable parts; each layer can be <b>changed or improved without affecting the others</b>; developers can focus on one layer; and different manufacturers’ hardware/software can work together because each layer follows standards. You do not need to name the layers.')}
+${exam('Explain why a company might use HTTPS rather than HTTP on its website.', 2, 'HTTPS encrypts the data sent between the browser and the web server (1), so if personal/payment details are intercepted they cannot be understood (1).')}
+${exam('Give one example of a valid IPv4 address and describe the format of a MAC address.', 3, 'IPv4: 192.168.1.20 (four numbers 0–255 separated by full stops) (1). A MAC address is 48 bits / 6 pairs of hexadecimal digits (1) separated by colons or hyphens, eg 0A:1B:2C:3D:4E:5F (1).')}` }
+  ];

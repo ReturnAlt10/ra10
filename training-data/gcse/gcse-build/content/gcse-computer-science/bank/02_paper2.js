@@ -1,0 +1,165 @@
+  /* ===== Paper 2 · Computational thinking, algorithms and programming (2.1 – 2.5) ===== */
+  const G1 = '2.1.1 Computational thinking', G2 = '2.1.2 Designing, creating and refining algorithms', G3 = '2.1.3 Searching and sorting algorithms';
+  K('G', G1, 'Define', 1, 'Define the term abstraction.', ['Removing unnecessary detail from a problem to focus on what is important']);
+  K('G', G1, 'Define', 1, 'Define the term decomposition.', ['Breaking a problem down into smaller, more manageable sub-problems']);
+  K('G', G1, 'Explain', 2, 'A route-planning app shows a map of roads. Explain how abstraction has been used to create the map.', ['Unnecessary details are removed, eg buildings, trees, colours of houses…', '…and only the details needed to plan a route are kept, eg roads, junctions, distances']);
+  K('G', G1, 'Describe', 2, 'Describe one benefit of decomposition when writing a large program.', ['Each sub-problem is smaller and easier to solve/test…', '…and different programmers can work on different parts at the same time // parts can be reused']);
+  K('G', G2, 'Identify', 2, 'A program calculates the cost of cinema tickets from the number of adult and child tickets. Identify one input and one output.', ['Input: number of adult tickets / number of child tickets', 'Output: the total cost']);
+  K('G', G2, 'State', 2, 'State what is meant by a syntax error and give an example.', ['An error that breaks the rules/grammar of the programming language (so the program cannot be translated/run)', 'Example: misspelt keyword (eg prnt), missing bracket or quotation mark']);
+  K('G', G2, 'State', 1, 'State what is meant by a logic error.', ['An error where the program runs but produces an unexpected / incorrect output']);
+  K('G', G2, 'Complete', 4, 'Complete a trace table for this algorithm.\n01 total = 0\n02 for i = 1 to 4\n03     total = total + i\n04 next i\n05 print(total)', ['total = 0 at the start', 'i takes the values 1, 2, 3, 4', 'total takes the values 1, 3, 6, 10', 'Output: 10']);
+  K('G', G2, 'State', 1, 'State the output of this algorithm.\nx = 50\ncount = 0\nwhile x > 5\n    x = x DIV 2\n    count = count + 1\nendwhile\nprint(count)', ['4 (x becomes 25, 12, 6, 3)']);
+  K('G', G2, 'Identify', 2, 'Identify the flowchart symbols used for a decision and for an input/output.', ['Decision: diamond', 'Input/output: parallelogram']);
+  K('G', G2, 'Describe', 2, 'Describe the purpose of a structure diagram.', ['Shows how a problem has been broken down (decomposed) into sub-sections…', '…and how the sub-sections link to each other']);
+  K('G', G3, 'State', 1, 'State one pre-requisite of a binary search.', ['The data must be sorted / in order']);
+  K('G', G3, 'Describe', 4, 'Describe how a binary search would find the number 10 in the list 1, 2, 5, 6, 7, 10, 20.', ['Compare the middle value (6) with 10', '6 is less than 10, so discard 6 and the left half (1, 2, 5, 6)', 'The middle of the remaining items (7, 10, 20) is 10', '10 matches the target, so it is found']);
+  K('G', G3, 'Describe', 3, 'Describe how a linear search works.', ['Start at the first item in the list', 'Compare each item in turn with the target', 'Stop when the item is found or the end of the list is reached (not found)']);
+  K('G', G3, 'Explain', 2, 'Explain one advantage of a linear search compared with a binary search.', ['A linear search works on unsorted data…', '…so the data does not need to be sorted first // it is simpler to program']);
+  K('G', G3, 'Show', 3, 'Show the first pass of a bubble sort on the list 5, 1, 4, 2, 8.', ['5 and 1 swapped: 1, 5, 4, 2, 8', '5 and 4 swapped, then 5 and 2 swapped: 1, 4, 2, 5, 8', '5 and 8 not swapped; end of first pass: 1, 4, 2, 5, 8']);
+  K('G', G3, 'Describe', 3, 'Describe how a merge sort works.', ['The list is repeatedly split in half until each list has one item', 'Pairs of lists are merged, comparing the first item of each and placing the smaller first', 'This repeats until there is one sorted list']);
+  K('G', G3, 'Describe', 3, 'Describe how an insertion sort works.', ['The first item is treated as the sorted part of the list', 'Each next item is taken and compared with the items in the sorted part…', '…and inserted into the correct position; repeated until all items are inserted']);
+
+  M('G', G1, 'Removing unnecessary detail to focus on what matters is called…', 'abstraction', ['decomposition', 'iteration', 'validation'], 'Abstraction hides detail that is not needed.');
+  M('G', G1, 'Breaking a problem into smaller parts is called…', 'decomposition', ['abstraction', 'compilation', 'concatenation'], 'Decomposition makes each part easier to solve.');
+  M('G', G2, 'Which flowchart symbol is used for a decision?', 'Diamond', ['Parallelogram', 'Rectangle', 'Rounded rectangle'], 'A decision has two exits, eg Yes/No.');
+  M('G', G2, 'Which flowchart symbol is used for input and output?', 'Parallelogram', ['Diamond', 'Rectangle', 'Rounded rectangle'], 'Rectangle = process; rounded rectangle = terminal.');
+  TF('G', G2, 'A logic error stops a program from running.', false, 'A syntax error stops it running; a logic error gives the wrong result.');
+  M('G', G3, 'Which search requires the data to be sorted?', 'Binary search', ['Linear search', 'Both searches', 'Neither search'], 'Binary search discards half the data each time, so it must be in order.');
+  M('G', G3, 'Which sort splits a list into single items and then combines them in order?', 'Merge sort', ['Bubble sort', 'Insertion sort', 'Binary sort'], 'Merge sort is divide and conquer.');
+  M('G', G3, 'A bubble sort stops when…', 'a pass makes no swaps', ['the first item is the smallest', 'it has made one pass', 'the list has been split in half'], 'No swaps in a pass means the list is in order.');
+  TF('G', G3, 'A linear search can be used on unsorted data.', true, 'It checks every item in turn.');
+
+  F('G', 'Abstraction', 'Removing unnecessary detail to focus on the important parts of a problem.', G1);
+  F('G', 'Decomposition', 'Breaking a problem into smaller, more manageable sub-problems.', G1);
+  F('G', 'Algorithmic thinking', 'Working out the steps needed to solve a problem, in order.', G1);
+  F('G', 'Trace table', 'A table recording variable values and outputs as an algorithm runs line by line.', G2);
+  F('G', 'Syntax error', 'Breaks the rules of the language; stops the program being translated/run.', G2);
+  F('G', 'Logic error', 'The program runs but produces an unexpected or wrong output.', G2);
+  F('G', 'Linear search', 'Checks each item in turn until found or the end is reached; works on unsorted data.', G3);
+  F('G', 'Binary search', 'Repeatedly checks the middle item and discards half; data must be sorted.', G3);
+  F('G', 'Bubble sort', 'Compares adjacent pairs and swaps them; repeats passes until no swaps.', G3);
+  F('G', 'Insertion sort', 'Takes each item in turn and inserts it into the correct place in the sorted part.', G3);
+  F('G', 'Merge sort', 'Splits the list into single items, then merges pairs in order until one list remains.', G3);
+
+  const H1 = '2.2.1 Programming fundamentals', H2 = '2.2.2 Data types', H3 = '2.2.3 Additional programming techniques';
+  K('H', H1, 'Describe', 2, 'Describe the difference between a variable and a constant.', ['A variable’s value can change while the program is running…', '…a constant’s value cannot change while the program is running (it is set once)']);
+  K('H', H1, 'Explain', 2, 'Explain one reason for using a constant for the VAT rate in a program.', ['The value cannot be changed accidentally while the program runs // it only needs updating in one place…', '…so the program is less likely to have errors / is easier to maintain']);
+  K('H', H1, 'State', 3, 'State the result of: 17 MOD 5, 17 DIV 5 and 2 ^ 4.', ['17 MOD 5 = 2', '17 DIV 5 = 3', '2 ^ 4 = 16']);
+  K('H', H1, 'Describe', 3, 'Describe the three basic programming constructs.', ['Sequence: instructions run one after another in order', 'Selection: a decision determines which code runs (eg if/else)', 'Iteration: code is repeated (eg for/while loops)']);
+  K('H', H1, 'Explain', 2, 'Explain the difference between a count-controlled loop and a condition-controlled loop.', ['A count-controlled loop repeats a fixed/known number of times (eg for)…', '…a condition-controlled loop repeats until/while a condition is met, so the number of repeats is not known in advance (eg while)']);
+  K('H', H1, 'Write', 4, 'Write an algorithm that asks the user to enter a number and outputs "even" if it is even and "odd" if it is odd. Use OCR Exam Reference Language or a high-level language.', ['Takes a number as input (and casts it to an integer)', 'Uses selection (if … else)', 'Uses MOD 2 (or %) to check the remainder is 0', 'Outputs "even" and "odd" correctly']);
+  K('H', H1, 'Write', 4, 'Write an algorithm that outputs the numbers 1 to 10 and then the total of those numbers.', ['Initialises a total to 0', 'Uses a count-controlled loop from 1 to 10', 'Outputs each number and adds it to the total inside the loop', 'Outputs the total (55) after the loop']);
+  K('H', H2, 'State', 4, 'A program stores a product name, the number in stock, the price and whether it is on sale. State the most suitable data type for each.', ['Product name: string', 'Number in stock: integer', 'Price: real / float', 'On sale: Boolean']);
+  K('H', H2, 'Explain', 2, 'Explain why a mobile phone number should be stored as a string rather than an integer.', ['It may start with 0 (which would be lost) / may contain spaces or a + sign…', '…and no calculations are carried out on it']);
+  K('H', H2, 'Define', 1, 'Define the term casting.', ['Changing the data type of a value / variable (eg from string to integer)']);
+  K('H', H2, 'Explain', 2, 'Explain why casting is needed in this code: age = input("Enter your age") followed by age = age + 1.', ['input() returns a string…', '…so it must be cast to an integer (int(age)) before adding 1, otherwise an error/concatenation occurs']);
+  K('H', H3, 'State', 3, 'The variable subject contains "ComputerScience". State the result of subject.length, subject.left(4) and subject.substring(3, 5).', ['15', '"Comp"', '"puter"']);
+  K('H', H3, 'Describe', 2, 'Describe what is meant by concatenation.', ['Joining two or more strings together…', '…end to end into one string, eg "Hello " + name']);
+  K('H', H3, 'Write', 4, 'Write an algorithm that reads every line from a file called names.txt and outputs each line.', ['Opens the file names.txt', 'Uses a loop that continues until the end of the file', 'Reads a line and outputs it inside the loop', 'Closes the file']);
+  K('H', H3, 'Describe', 2, 'Describe what is meant by an array.', ['A data structure that stores multiple values of the same data type…', '…under one identifier, each accessed using an index']);
+  K('H', H3, 'Write', 3, 'An array called scores holds 10 integers. Write an algorithm to output the total of all the scores.', ['Initialises total to 0', 'Loops through every element (index 0 to 9)', 'Adds each element to the total and outputs the total after the loop']);
+  K('H', H3, 'Describe', 2, 'Describe what is meant by a record.', ['A data structure that stores related data items (fields) about one item/person…', '…which can be of different data types']);
+  K('H', H3, 'Write', 3, 'A table called Members has the fields MemberID, Name, Town and Age. Write an SQL statement to display the Name and Age of all members from Leeds.', ['SELECT Name, Age', 'FROM Members', 'WHERE Town = "Leeds"']);
+  K('H', H3, 'Describe', 2, 'Describe the difference between a function and a procedure.', ['A function returns a value to the part of the program that called it…', '…a procedure carries out a task but does not return a value']);
+  K('H', H3, 'Explain', 2, 'Explain one benefit of using local variables in sub programs.', ['A local variable only exists inside its sub program…', '…so it cannot be accidentally changed by other parts of the program / the same name can be used elsewhere / memory is freed when the sub program ends']);
+  K('H', H3, 'Write', 4, 'Write a function called area that takes the width and height of a rectangle as parameters and returns its area.', ['Defines a function named area', 'Has two parameters (width, height)', 'Calculates width * height', 'Returns the result']);
+  K('H', H3, 'Write', 2, 'Write a line of code that stores a random whole number between 1 and 100 (inclusive) in a variable called guess.', ['Uses a random function / random(1, 100) (or random.randint(1, 100))', 'Assigns the result to guess']);
+
+  M('H', H1, 'What is the result of 23 MOD 4?', '3', ['5', '5.75', '4'], '23 ÷ 4 = 5 remainder 3. MOD gives the remainder.');
+  M('H', H1, 'What is the result of 23 DIV 4?', '5', ['3', '5.75', '6'], 'DIV gives the whole-number part of the division.');
+  M('H', H1, 'Which construct repeats a section of code?', 'Iteration', ['Sequence', 'Selection', 'Casting'], 'Loops (for, while, do…until) are iteration.');
+  M('H', H1, 'In OCR Exam Reference Language, how many times does "for i = 0 to 4" repeat?', '5', ['4', '3', '6'], 'It runs for i = 0, 1, 2, 3 and 4.');
+  M('H', H1, 'Which Boolean expression is true when x is 7?', 'x > 5 AND x < 10', ['x > 7 OR x < 0', 'NOT (x == 7)', 'x < 5 AND x > 2'], '7 > 5 is true and 7 < 10 is true.');
+  M('H', H2, 'Which data type is most suitable for a temperature of 21.5 °C?', 'Real', ['Integer', 'Boolean', 'Character'], 'It has a decimal part.');
+  M('H', H2, 'Which data type stores True or False?', 'Boolean', ['String', 'Real', 'Integer'], 'Boolean has exactly two values.');
+  TF('H', H2, 'The input() function returns a string.', true, 'Cast it with int() or float() before doing maths.');
+  M('H', H3, 'If word = "Python", what is word.left(2)?', '"Py"', ['"on"', '"yt"', '"P"'], 'left(2) gives the first two characters.');
+  M('H', H3, 'Which SQL keyword chooses which records to return?', 'WHERE', ['SELECT', 'FROM', 'TABLE'], 'SELECT chooses fields, FROM the table, WHERE the records.');
+  M('H', H3, 'What does a function do that a procedure does not?', 'Returns a value', ['Takes parameters', 'Contains a loop', 'Has a name'], 'Both can take parameters; only a function returns a value.');
+  M('H', H3, 'In the array names = ["Ali", "Eve", "Ling"], what is names[1]?', '"Eve"', ['"Ali"', '"Ling"', 'an error'], 'Arrays are indexed from 0.');
+  TF('H', H3, 'A file should be closed after it has been read or written.', true, 'Closing saves changes and frees the file.');
+
+  F('H', 'Variable', 'A named memory location whose value can change while the program runs.', H1);
+  F('H', 'Constant', 'A named value that cannot change while the program runs.', H1);
+  F('H', 'MOD', 'Remainder after division: 17 MOD 5 = 2. Python: %', H1);
+  F('H', 'DIV', 'Whole-number division: 17 DIV 5 = 3. Python: //', H1);
+  F('H', 'Selection', 'A construct where a condition decides which code runs (if, switch).', H1);
+  F('H', 'Iteration', 'Repeating code: count-controlled (for) or condition-controlled (while, do…until).', H1);
+  F('H', 'Casting', 'Changing the data type of a value, eg int("5").', H2);
+  F('H', 'Data types', 'Integer, real, Boolean, character, string.', H2);
+  F('H', 'Concatenation', 'Joining strings together, eg "Hi " + name.', H3);
+  F('H', 'Array', 'Stores many values of the same type under one name, accessed by index (from 0).', H3);
+  F('H', '2D array', 'An array of arrays — a grid accessed with two indexes, eg board[1,2].', H3);
+  F('H', 'Record', 'A data structure grouping related fields that can have different data types.', H3);
+  F('H', 'SQL', 'SELECT fields FROM table WHERE condition.', H3);
+  F('H', 'Function vs procedure', 'A function returns a value; a procedure does not.', H3);
+  F('H', 'Local variable', 'Exists only inside the sub program where it is declared.', H3);
+  F('H', 'Global variable', 'Can be used anywhere in the program.', H3);
+
+  const I1 = '2.3.1 Defensive design', I2 = '2.3.2 Testing';
+  K('I', I1, 'Define', 1, 'Define the term authentication.', ['Checking/confirming the identity of a user (eg with a username and password)']);
+  K('I', I1, 'Describe', 4, 'Describe two validation checks that could be used on a field for a person’s age.', ['Range check…', '…the age is within sensible limits, eg 0 to 120', 'Type check / presence check…', '…the age is an integer // something has been entered']);
+  K('I', I1, 'Write', 4, 'Write an algorithm that asks the user to enter a number between 1 and 10 and keeps asking until a valid number is entered.', ['Takes input from the user (cast to integer)', 'Uses a loop (eg while)', 'Checks the number is less than 1 or greater than 10 (correct condition)', 'Asks for input again inside the loop']);
+  K('I', I1, 'Describe', 4, 'Describe two ways a programmer can make a program more maintainable.', ['Comments…', '…explain what sections of code do, so other programmers understand it', 'Meaningful identifiers / indentation / sub programs…', '…make the purpose and structure of the code clear']);
+  K('I', I1, 'Explain', 2, 'Explain what is meant by anticipating misuse.', ['Thinking ahead about how users might misuse the program / enter unexpected data…', '…and designing the program to deal with it, eg validation, preventing division by zero']);
+  K('I', I2, 'Describe', 2, 'Describe the difference between iterative testing and final testing.', ['Iterative testing happens during development, testing each part/module as it is written', 'Final (terminal) testing happens at the end, testing the whole program']);
+  K('I', I2, 'Give', 4, 'A program accepts whole numbers from 1 to 100. Give an example of normal, boundary, invalid and erroneous test data.', ['Normal: any whole number between 2 and 99, eg 50', 'Boundary: 1 or 100', 'Invalid: an integer outside the range, eg 150 or 0', 'Erroneous: wrong data type, eg "ten" / 4.5']);
+  K('I', I2, 'Define', 1, 'Define the term erroneous test data.', ['Data of the wrong data type that should be rejected']);
+  K('I', I2, 'Explain', 2, 'Explain why a program should be tested.', ['To find and fix errors (syntax/logic) before users find them…', '…and to check the program meets its requirements / handles invalid data without crashing']);
+
+  M('I', I1, 'Checking that a password is at least 8 characters long is a…', 'length check', ['range check', 'type check', 'presence check'], 'It checks the number of characters.');
+  M('I', I1, 'Which of these improves the maintainability of code?', 'Meaningful variable names', ['Removing all comments', 'Using one long block of code', 'Single-letter identifiers'], 'Clear names, comments, indentation and sub programs help.');
+  TF('I', I1, 'Validation proves that data entered is correct.', false, 'Validation only checks data is sensible/allowed — not that it is true.');
+  M('I', I2, 'A program accepts 1–10. What type of test data is 10?', 'Boundary', ['Normal', 'Invalid', 'Erroneous'], 'It is on the edge of the valid range.');
+  M('I', I2, 'A program accepts whole numbers 1–10. What type of test data is "seven"?', 'Erroneous', ['Invalid', 'Boundary', 'Normal'], 'Wrong data type = erroneous.');
+  M('I', I2, 'Testing each module as it is written is called…', 'iterative testing', ['final testing', 'boundary testing', 'penetration testing'], 'Iterative testing happens during development.');
+
+  F('I', 'Defensive design', 'Designing programs to cope with misuse and invalid input.', I1);
+  F('I', 'Authentication', 'Confirming a user’s identity, eg username and password.', I1);
+  F('I', 'Validation', 'Checking input is sensible/allowed: range, type, presence, length, format, lookup.', I1);
+  F('I', 'Maintainability', 'Comments, meaningful names, indentation and sub programs make code easy to update.', I1);
+  F('I', 'Normal test data', 'Typical data that should be accepted.', I2);
+  F('I', 'Boundary test data', 'Correct type, on the edge of the valid range.', I2);
+  F('I', 'Invalid test data', 'Correct data type but should be rejected (eg out of range).', I2);
+  F('I', 'Erroneous test data', 'Wrong data type — should be rejected.', I2);
+  F('I', 'Iterative vs final testing', 'Iterative: during development, module by module. Final: whole program at the end.', I2);
+
+  const J1 = '2.4.1 Boolean logic';
+  K('J', J1, 'Complete', 4, 'Complete the truth table for P = A AND B.', ['A=0, B=0 → P=0', 'A=0, B=1 → P=0', 'A=1, B=0 → P=0', 'A=1, B=1 → P=1']);
+  K('J', J1, 'Complete', 4, 'Complete the truth table for P = NOT (A OR B).', ['A=0, B=0 → P=1', 'A=0, B=1 → P=0', 'A=1, B=0 → P=0', 'A=1, B=1 → P=0']);
+  K('J', J1, 'State', 1, 'State the output of P = (A AND B) OR NOT C when A = 1, B = 0 and C = 1.', ['0 (A AND B = 0; NOT C = 0; 0 OR 0 = 0)']);
+  K('J', J1, 'Describe', 3, 'Describe how to draw the logic diagram for P = (A OR B) AND C.', ['Inputs A and B go into an OR gate', 'The output of the OR gate and input C go into an AND gate', 'The output of the AND gate is P (gates drawn with the correct symbols)']);
+  K('J', J1, 'Write', 2, 'An alarm (P) sounds if the system is switched on (A) and either a door (B) or a window (C) is opened. Write the Boolean expression for P.', ['P = A AND (B OR C)', 'Brackets placed correctly around B OR C']);
+  K('J', J1, 'State', 1, 'State how many rows a truth table needs for three inputs.', ['8 (2³)']);
+
+  M('J', J1, 'Which gate outputs 1 only when both inputs are 1?', 'AND', ['OR', 'NOT', 'XOR'], 'AND is true only if both inputs are true.');
+  M('J', J1, 'What is NOT 1?', '0', ['1', '2', '10'], 'NOT reverses the input.');
+  M('J', J1, 'What is the output of 0 OR 1?', '1', ['0', 'undefined', '2'], 'OR is true if at least one input is true.');
+  TF('J', J1, 'A truth table with two inputs has four rows.', true, '2² = 4 combinations.');
+  M('J', J1, 'For P = A AND NOT B, which inputs give P = 1?', 'A = 1, B = 0', ['A = 1, B = 1', 'A = 0, B = 0', 'A = 0, B = 1'], 'A must be 1 and B must be 0.');
+
+  F('J', 'AND gate', 'Output is 1 only when both inputs are 1.', J1);
+  F('J', 'OR gate', 'Output is 1 when at least one input is 1.', J1);
+  F('J', 'NOT gate', 'Reverses the input: 1 → 0, 0 → 1.', J1);
+  F('J', 'Truth table', 'Shows the output for every combination of inputs (2ⁿ rows for n inputs).', J1);
+
+  const K1 = '2.5.1 Languages', K2 = '2.5.2 The Integrated Development Environment (IDE)';
+  K('K', K1, 'Describe', 4, 'Describe two differences between high-level and low-level languages.', ['High-level languages use English-like keywords and are easier for humans to read/write…', '…low-level languages (machine code/assembly) are close to the hardware and harder to read', 'High-level code must be translated / is portable across different CPUs…', '…low-level code is specific to one type of processor but gives direct control of the hardware / can be faster and use less memory']);
+  K('K', K1, 'Explain', 2, 'Explain why translators are needed.', ['The CPU can only execute machine code (binary)…', '…so programs written in high-level languages must be converted into machine code']);
+  K('K', K1, 'Describe', 4, 'Describe the differences between a compiler and an interpreter.', ['A compiler translates the whole program at once…', '…producing an executable file that runs without re-translating', 'An interpreter translates and runs the program one line at a time…', '…stopping at the first error; it must translate every time the program is run']);
+  K('K', K1, 'Explain', 2, 'Explain one benefit of using an interpreter while a program is being developed.', ['It stops at the first error and shows the line…', '…so errors are easier to find and fix // code can be tested without compiling the whole program']);
+  K('K', K2, 'Describe', 4, 'Describe two features of an IDE that help a programmer write code.', ['Editor features, eg syntax highlighting / auto-indent / auto-complete…', '…make code easier to read and reduce typing errors', 'Error diagnostics, eg error messages with line numbers / breakpoints / stepping…', '…help locate and fix errors']);
+  K('K', K2, 'Describe', 2, 'Describe the purpose of the run-time environment in an IDE.', ['Lets the program be run/executed within the IDE…', '…so it can be tested and its output seen (and run-time errors caught)']);
+
+  M('K', K1, 'Which language can the CPU execute directly?', 'Machine code', ['Python', 'OCR Exam Reference Language', 'Assembly language'], 'Everything else must be translated into machine code.');
+  M('K', K1, 'Which translator produces an executable file?', 'Compiler', ['Interpreter', 'IDE', 'Editor'], 'A compiler translates the whole program into an executable.');
+  TF('K', K1, 'An interpreter translates the whole program before running any of it.', false, 'An interpreter translates and runs one line at a time.');
+  M('K', K2, 'Which IDE feature pauses a program at a chosen line?', 'Breakpoint', ['Auto-complete', 'Syntax highlighting', 'Translator'], 'Breakpoints are part of error diagnostics/debugging.');
+  M('K', K2, 'Showing keywords in different colours is called…', 'syntax highlighting', ['auto-indentation', 'error diagnostics', 'compilation'], 'It helps spot misspelt keywords.');
+
+  F('K', 'High-level language', 'English-like, portable, easy to read; must be translated (eg Python).', K1);
+  F('K', 'Low-level language', 'Machine code or assembly; close to the hardware, fast, CPU-specific.', K1);
+  F('K', 'Compiler', 'Translates the whole program at once into an executable; fast to run.', K1);
+  F('K', 'Interpreter', 'Translates and runs one line at a time; stops at the first error.', K1);
+  F('K', 'IDE', 'Integrated Development Environment: editor, error diagnostics, run-time environment, translator.', K2);
+  F('K', 'Breakpoint', 'Pauses a running program at a chosen line so variables can be inspected.', K2);

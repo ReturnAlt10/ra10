@@ -1,0 +1,51 @@
+  /* ===== G · 2.1 Algorithms ===== */
+  TITLE.G = 'Algorithms'; SUB.G = 'Paper 2 · computational thinking, designing algorithms, flowcharts, trace tables, searching and sorting';
+  const structure = () => S.org({ t: 'Quiz game', kids: [{ t: 'Set up', kids: [{ t: 'Load questions' }, { t: 'Score = 0' }] }, { t: 'Play a round', kids: [{ t: 'Ask question' }, { t: 'Check answer' }, { t: 'Update score' }] }, { t: 'End game', kids: [{ t: 'Show score' }, { t: 'Save high score' }] }] }, { label: 'A structure diagram' });
+  T.G = [
+    { code: '2.1.1', name: 'Computational thinking', html: () => `
+${plain('<b>Computational thinking</b> is a way of thinking about a problem so that it can be solved — by a person or a computer. There are three principles to learn.')}
+${table(['Principle', 'Meaning', 'Example'], [
+  ['<b>Abstraction</b>', 'Removing (ignoring) unnecessary detail to focus on what matters for solving the problem.', 'A London Underground map ignores real distances and streets — it only shows stations, lines and connections, which is all a passenger needs. A game of football in a computer game ignores the weather unless it matters.'],
+  ['<b>Decomposition</b>', 'Breaking a complex problem down into <b>smaller, more manageable sub-problems</b>, each of which can be solved (and tested) separately.', 'Making a quiz game: split it into “ask a question”, “check the answer”, “keep the score”, “show the results”. Different programmers can work on different parts.'],
+  ['<b>Algorithmic thinking</b>', 'Working out the <b>steps</b> needed to solve a problem, in the right order — producing an algorithm that could be followed.', 'Writing the exact steps to calculate the average score: add every score, count them, divide the total by the count.']])}
+${tip('For abstraction questions, say <b>what is removed</b> and <b>what is kept</b>, and why. For decomposition, name the <b>sub-problems</b>. Generic definitions alone usually earn only 1 mark — apply them to the scenario.', 'Exam tip')}
+${exam('A program is being written to help a cinema sell tickets. Describe how decomposition could be used.', 2, 'The problem is broken down into smaller sub-problems (1), eg choosing a film, selecting seats, calculating the price and taking payment, which can each be written and tested separately (1).')}` },
+
+    { code: '2.1.2', name: 'Designing, creating and refining algorithms', html: () => `
+${plain('An <b>algorithm</b> is a <b>sequence of steps</b> that solves a problem. Before programming, we design the algorithm — then we can check it works, using a <b>trace table</b>.')}
+${h3('Inputs, processes and outputs')}
+${table(['Inputs', 'Processes', 'Outputs'], [['Data that goes <b>into</b> the program (from the user, a sensor or a file)', 'What the program <b>does</b> with the data (calculations, decisions, sorting…)', 'What comes <b>out</b> (on screen, printed, sent, saved)'], ['eg the price of each item, the discount code', 'add up the prices; check the code is valid; take off the discount', 'eg the total to pay; a message if the code is invalid']])}
+${h3('Structure diagrams')}
+${p('A <b>structure diagram</b> shows how a problem is decomposed: the main problem at the top, broken into sub-sections, which are broken down further. It shows the <b>structure</b> of a program, not the order of every step.')}
+${fig(structure(), 'Each box is a sub-problem that could become its own sub program.')}
+${h3('Three ways to write an algorithm')}
+${p('<b>Pseudocode</b> is structured English that looks like code but does not follow a strict syntax. <b>Flowcharts</b> show the steps as shapes joined by arrows. <b>OCR Exam Reference Language</b> (or a real language like Python) is precise code. In Section B, when the question says so, you must use Exam Reference Language or a high-level language.')}
+${table(['Symbol', 'Name', 'Used for'], [['⬭ rounded rectangle', 'Terminal', 'Start and End'], ['▱ parallelogram', 'Input / Output', 'INPUT name, OUTPUT total'], ['▭ rectangle', 'Process', 'a calculation or assignment, eg total = total + price'], ['◇ diamond', 'Decision', 'a question with two exits (Yes/No, True/False)'], ['▭ with double lines at the sides', 'Sub program', 'calling a procedure or function defined elsewhere'], ['→ line/arrow', 'Line', 'shows the direction of flow']])}
+${WG('flow')}
+${erl(['mark = int(input("Enter mark"))', 'if mark >= 50 then', '    print("Pass")', 'else', '    print("Fail")', 'endif'], ['mark = int(input("Enter mark"))', 'if mark >= 50:', '    print("Pass")', 'else:', '    print("Fail")'], 'The same algorithm as the flowchart above.')}
+${h3('Common errors')}
+${two(`<h4>Syntax error</h4>${ul(['Breaks the <b>grammar rules</b> of the language', 'Stops the program from running / being translated', 'eg <code>prnt("Hi")</code>, a missing bracket or quote, a misspelt keyword, <code>endiff</code>'])}`, `<h4>Logic error</h4>${ul(['The program runs but gives the <b>wrong / unexpected output</b>', 'eg using <code>&gt;</code> instead of <code>&gt;=</code>; adding the wrong variable (<code>total = num1 + num1</code>); a loop that runs one time too few'])}`)}
+${h3('Trace tables')}
+${p('A <b>trace table</b> records the value of each variable (and any output) as an algorithm runs, line by line. Use one to find logic errors, or to work out what an algorithm does. Each time a variable changes, write its new value in a new row.')}
+${WG('trace', { p: 'sum' })}
+${tip('Go one line at a time. Read <b>exactly</b> what the code says (eg <code>for i = 1 to 4</code> includes 4; <code>while x &gt; 5</code> stops when x is 5). Write outputs exactly, including spaces and quotation-free text.', 'Trace table tips')}
+${exam('Identify the logic error in this code and correct it: total = num1 + num1 (it should add two numbers).', 2, 'The error is that num1 is added twice / num2 is not used (1). Correction: total = num1 + num2 (1).')}` },
+
+    { code: '2.1.3', name: 'Searching and sorting algorithms', html: () => `
+${plain('Searching finds an item in a list. Sorting puts a list in order. You need to know <b>how each algorithm works</b>, apply it to a given list step by step, know its <b>pre-requisites</b>, and recognise it from code. You do <b>not</b> need to memorise the code.')}
+${h3('Linear search and binary search')}
+${two(`<h4>Linear search</h4>${ol(['Start at the first item.', 'Compare it with the item you are looking for.', 'If it matches, stop — found.', 'If not, move to the next item and repeat.', 'If you reach the end, the item is not in the list.'])}<p>✓ Works on <b>unsorted</b> lists · simple · ✗ slow on large lists (may check every item)</p>`, `<h4>Binary search</h4>${ol(['The list must be <b>sorted</b>.', 'Find the <b>middle</b> item (if there are two middle items, either may be used — OCR accepts both).', 'If it is the target, stop.', 'If the target is smaller, discard the middle and the <b>right</b> half; if bigger, discard the middle and the <b>left</b> half.', 'Repeat with the remaining half until found or no items are left.'])}<p>✓ Much faster on large lists (halves the list each time) · ✗ the list <b>must be sorted first</b></p>`)}
+${WG('search')}
+${erl(['found = false', 'for i = 0 to items.length - 1', '    if items[i] == target then', '        found = true', '    endif', 'next i'], ['found = False', 'for i in range(len(items)):', '    if items[i] == target:', '        found = True'], 'A linear search: it looks at every item in turn.')}
+${erl(['low = 0', 'high = items.length - 1', 'found = false', 'while found == false AND low <= high', '    mid = (low + high) DIV 2', '    if items[mid] == target then', '        found = true', '    elseif items[mid] < target then', '        low = mid + 1', '    else', '        high = mid - 1', '    endif', 'endwhile'], ['low = 0', 'high = len(items) - 1', 'found = False', 'while not found and low <= high:', '    mid = (low + high) // 2', '    if items[mid] == target:', '        found = True', '    elif items[mid] < target:', '        low = mid + 1', '    else:', '        high = mid - 1'], 'A binary search: recognise it by low, high and mid.')}
+${h3('Bubble sort, insertion sort and merge sort')}
+${table(['Algorithm', 'How it works', 'Pros / cons'], [
+  ['<b>Bubble sort</b>', 'Compare the first two items; swap them if they are in the wrong order. Move along one place and repeat, to the end of the list (one <b>pass</b>). Repeat passes until a pass makes <b>no swaps</b>.', '✓ Simple; sorts in place (little extra memory) · ✗ very slow on large lists'],
+  ['<b>Insertion sort</b>', 'Treat the first item as a sorted list. Take the next item and <b>insert it into the correct position</b> in the sorted part, shifting bigger items along. Repeat until every item has been inserted.', '✓ Simple; quick for small or nearly-sorted lists; little memory · ✗ slow on large lists'],
+  ['<b>Merge sort</b>', '<b>Divide</b>: split the list in half repeatedly until every list has one item. <b>Conquer</b>: merge pairs of lists back together in order (compare the first items of each list and take the smaller each time), until one sorted list remains.', '✓ Much faster on large lists; consistent speed · ✗ more complex; uses more memory (creates new lists)']])}
+${WG('sort')}
+${example('Bubble sort — first pass of 5, 1, 4, 2, 8', '<p>Compare 5 and 1 → swap → 1, 5, 4, 2, 8. Compare 5 and 4 → swap → 1, 4, 5, 2, 8. Compare 5 and 2 → swap → 1, 4, 2, 5, 8. Compare 5 and 8 → no swap. End of pass 1: 1, 4, 2, 5, 8 (8 is in its final place). Pass 2 swaps 4 and 2 → 1, 2, 4, 5, 8. Pass 3 makes no swaps, so the list is sorted.</p>')}
+${tip('Show <b>every</b> step in a merge sort answer: the splits, then each level of merging. For bubble sort, show the list after each swap or each pass as the question asks. Marks are lost for jumping straight to the sorted list.', 'Show your working')}
+${exam('State one pre-requisite for a binary search.', 1, 'The data must be sorted / in order.')}
+${exam('Describe how a merge sort would put a list into order.', 3, 'The list is split in half repeatedly until each list contains one item (1). Pairs of lists are merged by comparing the first item of each list and placing the smaller one first (1). This is repeated until there is a single sorted list (1).')}` }
+  ];

@@ -485,7 +485,7 @@ def build(slug):
     BU.CSS_LINKS = AAQ.ORIG_CSS.replace('../shared/', '../shared-alevel/').replace('v=20261101', 'v=' + V)
     scripts = AAQ.ORIG_SCRIPTS.replace('../shared/', '../shared-alevel/').replace('v=20261101', 'v=' + V)
     scripts = scripts.replace('<script src="js/papers-data.js?v=%s"></script>' % V, '<script src="js/papers-data.js?v=%s"></script>\n<script src="js/papers-ra10.js?v=%s"></script>' % (V, V))
-    scripts = scripts.replace('<script src="js/cfg.js', '<script src="/refresh/ra10-units.js?v=20261212"></script>\n<script src="js/cfg.js')
+    scripts = scripts.replace('<script src="js/cfg.js', '<script src="/refresh/ra10-units.js?v=20270112"></script>\n<script src="js/cfg.js')
     BU.SCRIPTS = scripts
     app = chapterise(post(BU.build_app(1, m), S))
     css = BU.build_css(1, m)

@@ -11,7 +11,7 @@
 (function () {
   try {
     var l = window.location;
-    var toPublic = function (p) { return p === '/revision' ? '/subjects' : p.replace(/^\/revision\/(btec|a-level)(?=\/|$)/, '/$1'); };
+    var toPublic = function (p) { return p === '/revision' ? '/subjects' : p.replace(/^\/revision\/(btec|a-level|gcse)(?=\/|$)/, '/$1'); };
     var q = new URLSearchParams(l.search);
     var bounced = q.get('__route');
     if (bounced !== null && bounced.charAt(0) === '/') {
@@ -31,21 +31,21 @@
 })();
 </script>
 <link rel="preload" href="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0/dist/umd/supabase.js" as="script" crossorigin>
-<link rel="preload" href="/refresh/site.js?v=20270117" as="script">
+<link rel="preload" href="/refresh/site.js?v=20270118" as="script">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>RA10 — Advanced Revision Site (BTEC, GCSE, A-LEVEL)</title>
-<meta name="description" content="Free BTEC Level 3 revision for IT, Business, Sport, Computing, Construction, Early Childhood Development, Engineering, Health and Social Care and Medical Science, plus A-Level Business (AQA and Edexcel) and A-Level Psychology. Flashcards, quizzes, predicted papers, study guides, wireframe and code tools, and AI assignment marking — all in one place.">
-<meta name="keywords" content="BTEC IT revision, AQA A-Level Psychology revision, Edexcel A-Level Business revision, 9BS0 past papers, BTEC Level 3 AAQ, BTEC Business revision, BTEC Sport revision, BTEC Computing revision, BTEC Construction revision, BTEC Early Childhood Development revision, BTEC Engineering revision, BTEC Health and Social Care revision, BTEC Medical Science revision, A-Level Business revision, predicted papers, flashcards, quizzes, study guide, RA10">
+<meta name="description" content="Free BTEC Level 3 revision for IT, Business, Sport, Computing, Construction, Early Childhood Development, Engineering, Health and Social Care and Medical Science, plus A-Level Business (AQA and Edexcel), A-Level Psychology and OCR GCSE Computer Science. Flashcards, quizzes, predicted papers, study guides, wireframe and code tools, and AI assignment marking — all in one place.">
+<meta name="keywords" content="BTEC IT revision, OCR GCSE Computer Science revision, J277 past papers, GCSE Python practice, AQA A-Level Psychology revision, Edexcel A-Level Business revision, 9BS0 past papers, BTEC Level 3 AAQ, BTEC Business revision, BTEC Sport revision, BTEC Computing revision, BTEC Construction revision, BTEC Early Childhood Development revision, BTEC Engineering revision, BTEC Health and Social Care revision, BTEC Medical Science revision, A-Level Business revision, predicted papers, flashcards, quizzes, study guide, RA10">
 <link rel="canonical" href="https://ra10.co.uk/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="RA10">
 <meta property="og:title" content="RA10 — Advanced Revision Site (BTEC, GCSE, A-LEVEL)">
-<meta property="og:description" content="Free BTEC Level 3 revision for IT, Business, Sport, Computing, Construction, Early Childhood Development, Engineering, Health and Social Care and Medical Science, plus A-Level Business (AQA and Edexcel) and A-Level Psychology. Flashcards, quizzes, predicted papers, study guides and AI assignment marking.">
+<meta property="og:description" content="Free BTEC Level 3 revision for IT, Business, Sport, Computing, Construction, Early Childhood Development, Engineering, Health and Social Care and Medical Science, plus A-Level Business (AQA and Edexcel), A-Level Psychology and OCR GCSE Computer Science. Flashcards, quizzes, predicted papers, study guides and AI assignment marking.">
 <meta property="og:url" content="https://ra10.co.uk/">
 <meta property="og:image" content="https://ra10.co.uk/logo.png">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RA10 — Advanced Revision Site (BTEC, GCSE, A-LEVEL)">
-<meta name="twitter:description" content="Free BTEC Level 3 revision for IT, Business, Sport, Computing, Construction, Early Childhood Development, Engineering, Health and Social Care and Medical Science, plus A-Level Business (AQA and Edexcel) and A-Level Psychology. Flashcards, quizzes, predicted papers, study guides and AI assignment marking.">
+<meta name="twitter:description" content="Free BTEC Level 3 revision for IT, Business, Sport, Computing, Construction, Early Childhood Development, Engineering, Health and Social Care and Medical Science, plus A-Level Business (AQA and Edexcel), A-Level Psychology and OCR GCSE Computer Science. Flashcards, quizzes, predicted papers, study guides and AI assignment marking.">
 <meta name="twitter:image" content="https://ra10.co.uk/logo.png">
 <script type="application/ld+json">
 {
@@ -54,7 +54,7 @@
   "name": "RA10",
   "alternateName": "RA10 Advanced Revision Site",
   "url": "https://ra10.co.uk/",
-  "description": "Free BTEC Level 3 revision for IT, Business, Sport, Computing, Construction, Early Childhood Development, Engineering, Health and Social Care and Medical Science, plus A-Level Business (AQA and Edexcel) and A-Level Psychology. Flashcards, quizzes, predicted papers, study guides, wireframe and code tools, and AI assignment marking.",
+  "description": "Free BTEC Level 3 revision for IT, Business, Sport, Computing, Construction, Early Childhood Development, Engineering, Health and Social Care and Medical Science, plus A-Level Business (AQA and Edexcel), A-Level Psychology and OCR GCSE Computer Science. Flashcards, quizzes, predicted papers, study guides, wireframe and code tools, and AI assignment marking.",
   "publisher": { "@type": "Organization", "name": "RA10", "url": "https://ra10.co.uk" }
 }
 </script>
@@ -3428,11 +3428,11 @@ body.home-signed-in.show-roadmap #p-home .hx-home > #roadmap{display:block !impo
 ============================================================ -->
 <!-- Supabase loads here (not in <head>) so it no longer blocks the first paint; it still runs before site.js. -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0/dist/umd/supabase.js"></script>
-<script src="/refresh/ra10-units.js?v=20270111"></script>
-<script src="/refresh/ra10-subjects.js?v=20270111"></script>
+<script src="/refresh/ra10-units.js?v=20270112"></script>
+<script src="/refresh/ra10-subjects.js?v=20270112"></script>
 <script>(function(){var el=document.getElementById('hm-subjects');if(el&&window.RA10Subjects&&RA10Subjects.renderHome)RA10Subjects.renderHome(el);})();</script>
 <script src="/refresh/ra10-tasks.js?v=20261113"></script>
-<script src="/refresh/site.js?v=20270117"></script>
+<script src="/refresh/site.js?v=20270118"></script>
 <script src="/refresh/ra10-edu.js?v=20261126" defer></script>
 
 <!-- ============================================================
@@ -3540,6 +3540,8 @@ body.home-signed-in.show-roadmap #p-home .hx-home > #roadmap{display:block !impo
       <aside class="news-sidebar">
         <h3>Contents</h3>
         <ul>
+          <li><a href="#news-gcse-computer-science">NEW: OCR GCSE Computer Science (J277)</a></li>
+          <li><a href="#news-examiner-highlights">AI Examiner: highlights on your answer, and “Rewrite for full marks”</a></li>
           <li><a href="#news-new-alevels">NEW: AQA A-Level Psychology and Pearson Edexcel A-Level Business</a></li>
           <li><a href="#news-aaq-subjects">NEW: six more BTEC Level 3 subjects (31 units)</a></li>
           <li><a href="#news-python-lab">Python Lab: write and run real Python in your browser</a></li>
@@ -3584,11 +3586,35 @@ body.home-signed-in.show-roadmap #p-home .hx-home > #roadmap{display:block !impo
           <div><span>Project</span><strong>RA10</strong></div>
           <div><span>Status</span><strong>Live</strong></div>
           <div><span>Coverage</span><strong>BTEC + A-Level</strong></div>
-          <div><span>Last sync</span><strong>08.11.2026</strong></div>
+          <div><span>Last sync</span><strong>16.11.2026</strong></div>
         </div>
       </aside>
 
       <section class="news-feed">
+        <article class="news-article" id="news-gcse-computer-science" data-category="revision" data-status="live" data-date="2026-11-16">
+          <div class="news-media" style="background:linear-gradient(120deg,#042f2e,#0f766e,#2dd4bf)">
+            <svg viewBox="0 0 1200 300" aria-hidden="true"><rect width="1200" height="300" fill="none"/><circle cx="600" cy="150" r="104" fill="#fff" opacity=".16"/><text x="600" y="190" text-anchor="middle" font-size="120">💻</text></svg>
+          </div>
+          <div class="news-content">
+            <div class="news-meta"><span>16.11.2026</span><span>GCSE</span></div>
+            <h2>NEW: OCR GCSE Computer Science (J277)</h2>
+            <p>Our first GCSE is live. Every OCR J277 paper from June 2022 to June 2025, plus the sample papers, is here with the official mark schemes — Paper 1 (Computer systems) and Paper 2 (Algorithms and programming) kept separate, with tables, trace tables and flowcharts shown exactly as printed. The revision guide explains every topic step by step from the basics, with interactive diagrams you can click through: the fetch–execute cycle, binary and hex converters, a pixel editor, network topologies, SQL injection, searching and sorting, trace tables and a logic gate playground. You also get a question bank, quizzes, flashcards, RA10 practice papers and an AI Examiner that marks the OCR way.</p>
+            <p>To practise the programming for Paper 2, the Python Lab now has a GCSE course: auto-marked tasks on everything from loops and strings to 2D arrays, files, searching and sorting, with hints and model solutions.</p>
+            <div class="news-tags"><span class="news-tag">Live</span><span class="news-tag">GCSE</span><span class="news-tag">Computer Science</span><span class="news-tag">Python Lab</span></div>
+          </div>
+        </article>
+        <article class="news-article" id="news-examiner-highlights" data-category="ai" data-status="live" data-date="2026-11-16">
+          <div class="news-media" style="background:linear-gradient(120deg,#1e1b4b,#4f46e5,#a855f7)">
+            <svg viewBox="0 0 1200 300" aria-hidden="true"><rect width="1200" height="300" fill="none"/><circle cx="600" cy="150" r="104" fill="#fff" opacity=".16"/><text x="600" y="190" text-anchor="middle" font-size="120">🖍️</text></svg>
+          </div>
+          <div class="news-content">
+            <div class="news-meta"><span>16.11.2026</span><span>AI Examiner</span></div>
+            <h2>AI Examiner: highlights on your answer, and “Rewrite for full marks”</h2>
+            <p>When the AI Examiner marks a written answer, it now highlights your own words: what earned a mark, what is technically a mark but worded weakly, what was not credited, and which points need developing. Tap any highlight to see the examiner’s note and a better way to write it. This works in topic practice, past papers and Study Hub.</p>
+            <p>New button: <b>Rewrite for full marks</b>. The examiner rewrites your answer so it would earn every mark, keeping as much of your own wording as possible, highlights exactly what changed and explains why each change earns a mark. It uses one AI use.</p>
+            <div class="news-tags"><span class="news-tag">Live</span><span class="news-tag">AI Examiner</span><span class="news-tag">Study Hub</span></div>
+          </div>
+        </article>
         <article class="news-article" id="news-new-alevels" data-category="revision" data-status="live" data-date="2026-11-08">
           <div class="news-media" style="background:linear-gradient(120deg,#4c1d95,#7c3aed,#ec4899)">
             <svg viewBox="0 0 1200 300" aria-hidden="true"><rect width="1200" height="300" fill="none"/><circle cx="600" cy="150" r="104" fill="#fff" opacity=".16"/><text x="600" y="190" text-anchor="middle" font-size="120">🧠</text></svg>

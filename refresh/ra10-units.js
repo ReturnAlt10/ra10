@@ -53,15 +53,16 @@
     {"path": "/revision/btec/level-3/medical-science-aaq/unit-5", "subject": "Medical Science", "qual": "BTEC Level 3 Medical Science (AAQ)", "short": "Medical Science Unit 5", "name": "Unit 5: Biomedical Science", "kind": "Coursework", "color": "#ea580c", "keywords": ["medical science", "biomedical", "biology", "medicine", "human physiology", "biomedical science"], "isNew": true},
     {"path": "/revision/btec/level-3/medical-science-aaq/unit-6", "subject": "Medical Science", "qual": "BTEC Level 3 Medical Science (AAQ)", "short": "Medical Science Unit 6", "name": "Unit 6: Human Reproduction and Fertility", "kind": "Coursework", "color": "#9333ea", "keywords": ["medical science", "biomedical", "biology", "medicine", "human physiology", "human reproduction and fertility"], "isNew": true},
     /* AAQ:END */
+    { path: '/revision/gcse/computer-science', subject: 'Computer Science', qual: 'OCR GCSE Computer Science (J277)', short: 'GCSE Computer Science', name: 'OCR GCSE Computer Science (J277)', kind: 'Exam', color: '#0f766e', isNew: true, keywords: ['gcse computer science', 'ocr computer science', 'j277', 'computer science', 'gcse computing', 'python', 'binary', 'hexadecimal', 'networks', 'cyber security', 'algorithms', 'logic gates', 'sql', 'programming'] },
     { path: '/revision/btec/level-2/it/unit-2', subject: 'Information Technology', qual: 'BTEC Level 2 IT', short: 'IT L2 Unit 2', name: 'Level 2 IT Unit 2: Technology Systems', kind: 'Exam', color: '#0284c7', keywords: ['btec tech', 'level 2 it', 'ks4 it', 'information technology', 'tech award'] }
   ];
   U.forEach(function (u) {
     u.app = u.path.replace(/^\/revision\//, '/revision/') + '/index.html';
-    u.publicPath = u.path.replace(/^\/revision(?=\/(btec|a-level)\/)/, '');
+    u.publicPath = u.path.replace(/^\/revision(?=\/(btec|a-level|gcse)\/)/, '');
   });
   function byPath(p) {
     var key = String(p || '').replace(/\/index\.html.*$/, '').replace(/\/$/, '');
-    if (!/^\/revision\//.test(key) && /^\/(btec|a-level)\//.test(key)) key = '/revision' + key;
+    if (!/^\/revision\//.test(key) && /^\/(btec|a-level|gcse)\//.test(key)) key = '/revision' + key;
     return U.filter(function (u) { return u.path.toLowerCase() === key.toLowerCase(); })[0] || null;
   }
   // Which unit app a URL belongs to (works for /revision/... iframe URLs and public URLs)

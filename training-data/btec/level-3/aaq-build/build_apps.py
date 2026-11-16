@@ -227,7 +227,7 @@ def build_unit(slug, u):
                               '<script src="js/papers-data.js?v=%s"></script>\n%s' % (V, '<script src="js/papers-ra10.js?v=%s"></script>' % V if exam else '<script src="js/assignment-data.js?v=%s"></script>\n<script src="js/assignment-help.js?v=%s"></script>' % (V, V)))
     if not exam:
         scripts = scripts.replace('<script src="js/app.js?v=%s"></script>' % V, '<script src="js/app.js?v=%s"></script>\n<script src="../../shared-aaq/aaq-assignment.js?v=%s"></script>' % (V, V))
-    scripts = scripts.replace('<script src="js/cfg.js', '<script src="/refresh/ra10-units.js?v=20261212"></script>\n<script src="js/cfg.js')
+    scripts = scripts.replace('<script src="js/cfg.js', '<script src="/refresh/ra10-units.js?v=20270112"></script>\n<script src="js/cfg.js')
     BU.SCRIPTS = scripts.replace('{calc}', '{calc}')
     app = post(BU.build_app(n, m), S, n)
     css = BU.build_css(n, m)

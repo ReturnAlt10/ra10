@@ -7,6 +7,7 @@ import { PSYCHOLOGY_SYSTEM, buildPsychologyPrompt, psychologyPostProcess, isPsyc
 import { EDEXCEL_BUSINESS_SYSTEM, buildEdexcelBusinessPrompt, edexcelBusinessPostProcess, isEdexcelBusiness } from "./edexcel_business_examiner.ts";
 import { IT_U2_SYSTEM, buildItUnit2Prompt, itUnit2PostProcess, isItUnit2 } from "./it_unit2_examiner.ts";
 import { IT_U14_SYSTEM, buildItUnit14Prompt, itUnit14PostProcess, isItUnit14 } from "./it_unit14_examiner.ts";
+import { OCR_CS_SYSTEM, buildOcrCsPrompt, ocrCsPostProcess, isOcrComputerScience } from "./ocr_cs_examiner.ts";
 import { requireTermsAccepted } from "../_shared/legal.ts";
 import { STUDY_HUB_SYSTEM, buildStudyHubPrompt, studyHubPostProcess, isStudyHubQuestion, isLevelledScheme, mergeOpinions, ANNOTATE_SYSTEM, buildAnnotatePrompt, cleanAnnotations, annotationsFromAwarded, REWRITE_SYSTEM, buildRewritePrompt, cleanRewrite } from "../_shared/study_hub_examiner.ts";
 
@@ -560,8 +561,10 @@ export default Deno.serve(async (req: Request) => {
     const it2 = !edx && !psych && !business && !b2026 && !sportU2 && !btec && isItUnit2(question);
     const it14 = !edx && !psych && !business && !b2026 && !sportU2 && !btec && !it2 && isItUnit14(question);
     // Study Hub lesson questions that no subject module claims: point-by-point marking against the lesson's scheme.
-    const studyHub = !edx && !psych && !business && !b2026 && !sportU2 && !btec && !it2 && !it14 && isStudyHubQuestion(question);
-    const basePrompt = edx ? buildEdexcelBusinessPrompt(question, answer) : psych ? buildPsychologyPrompt(question, answer) : b2026 ? buildBusiness2026Prompt(question, answer) : business ? buildBusinessPrompt(question, answer) : sportU2 ? buildSportUnit2Prompt(question, answer) : btec ? buildBusinessBtecPrompt(question, answer) : it2 ? buildItUnit2Prompt(question, answer, !!image) : it14 ? buildItUnit14Prompt(question, answer) : studyHub ? buildStudyHubPrompt(question, answer) : buildPrompt(question, answer, []);
+    // OCR GCSE Computer Science (J277): Paper 1 and Paper 2, including Study Hub questions for that course.
+    const ocrcs = !edx && !psych && !business && !b2026 && !sportU2 && !btec && !it2 && !it14 && isOcrComputerScience(question);
+    const studyHub = !edx && !psych && !business && !b2026 && !sportU2 && !btec && !it2 && !it14 && !ocrcs && isStudyHubQuestion(question);
+    const basePrompt = edx ? buildEdexcelBusinessPrompt(question, answer) : psych ? buildPsychologyPrompt(question, answer) : b2026 ? buildBusiness2026Prompt(question, answer) : business ? buildBusinessPrompt(question, answer) : sportU2 ? buildSportUnit2Prompt(question, answer) : btec ? buildBusinessBtecPrompt(question, answer) : it2 ? buildItUnit2Prompt(question, answer, !!image) : it14 ? buildItUnit14Prompt(question, answer) : ocrcs ? buildOcrCsPrompt(question, answer) : studyHub ? buildStudyHubPrompt(question, answer) : buildPrompt(question, answer, []);
     // The IT module writes its own diagram instructions.
     const prompt = image && !it2 ? basePrompt + "\n" + DIAGRAM_NOTE : basePrompt;
 
@@ -573,6 +576,7 @@ export default Deno.serve(async (req: Request) => {
       : btec ? { system: BUSINESS_BTEC_SYSTEM, timeout: 55000, maxTokens: 2400, image }
       : it2 ? { system: IT_U2_SYSTEM, timeout: 45000, maxTokens: 1800, image }
       : it14 ? { system: IT_U14_SYSTEM, timeout: 55000, maxTokens: 2400, image }
+      : ocrcs ? { system: OCR_CS_SYSTEM, timeout: 45000, maxTokens: 2000, image }
       : studyHub ? { system: STUDY_HUB_SYSTEM, timeout: 45000, maxTokens: 2000, image }
       : null;
     const post = (raw: any) => edx ? edexcelBusinessPostProcess(raw, question, answer)
@@ -583,6 +587,7 @@ export default Deno.serve(async (req: Request) => {
       : btec ? businessBtecPostProcess(raw, question)
       : it2 ? itUnit2PostProcess(raw, question, answer, !!image)
       : it14 ? itUnit14PostProcess(raw, question, answer)
+      : ocrcs ? ocrCsPostProcess(raw, question)
       : studyHub ? studyHubPostProcess(raw, question, answer)
       : raw;
 

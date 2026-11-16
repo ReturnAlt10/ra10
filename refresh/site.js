@@ -55,6 +55,7 @@ const ROUTES = {
   // the qualification / level hubs are the subject finder with a filter applied (see renderSubjectHub)
   '/revision/btec':                       'p-revision',
   '/revision/a-level':                    'p-revision',
+  '/revision/gcse':                       'p-revision',
   '/revision/btec/level-3':              'p-revision',
   '/revision/btec/level-3/business':     'p-btec-business-l3',
   '/revision/btec/level-3/business/unit-2': 'p-bus-u2',
@@ -1761,8 +1762,8 @@ window.addEventListener('ra10:route', () => {
 // the address bar shows the public form ('/btec/level-3/sport/unit-1').
 // /revision -> /subjects, /revision/btec/... -> /btec/..., /revision/a-level/... -> /a-level/...
 // (public paths never collide with real folders on the static host).
-function toPublicPath(p) { p = String(p || '/'); return p === '/revision' ? '/subjects' : p.replace(/^\/revision\/(btec|a-level)(?=\/|$)/, '/$1'); }
-function toInternalPath(p) { p = String(p || '/'); return p === '/subjects' ? '/revision' : p.replace(/^\/(btec|a-level)(?=\/|$)/, '/revision/$1'); }
+function toPublicPath(p) { p = String(p || '/'); return p === '/revision' ? '/subjects' : p.replace(/^\/revision\/(btec|a-level|gcse)(?=\/|$)/, '/$1'); }
+function toInternalPath(p) { p = String(p || '/'); return p === '/subjects' ? '/revision' : p.replace(/^\/(btec|a-level|gcse)(?=\/|$)/, '/revision/$1'); }
 // The current route as '/path?query' (internal form). Still understands old #/ links.
 function ra10Route() {
   const h = location.hash || '';
@@ -4560,6 +4561,7 @@ const SUBJECT_HUBS = {
   '/revision/btec/level-3': { family: 'btec3', title: 'BTEC Level 3 subjects', crumb: 'BTEC Level 3' },
   '/revision/btec/level-2': { family: 'btec2', title: 'BTEC Level 2 subjects', crumb: 'BTEC Level 2' },
   '/revision/a-level': { family: 'alevel', title: 'A-Level subjects', crumb: 'A-Level' },
+  '/revision/gcse': { family: 'gcse', title: 'GCSE subjects', crumb: 'GCSE' },
 };
 let _subjectHubKey = '';
 function renderSubjectHub(path) {
