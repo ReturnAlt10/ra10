@@ -19,7 +19,7 @@ AAQ, BU = BA.AAQ, BA.BU
 
 SLUG = 'gcse-computer-science'
 OUT = os.path.join(REPO, 'revision', 'gcse', 'computer-science')
-V = '20261116'
+V = '20261117'
 SHARED = '/revision/a-level/shared-alevel/'
 
 # Chapters = the J277 specification sections. Internal letters A–K; students see "Chapter 1.1 … 2.5".
@@ -211,6 +211,14 @@ def build():
     idx = re.sub(r'(href="css/style\.css\?v=)[^"]+', r'\g<1>' + V, idx)
     app = app.replace('A-level', 'GCSE')
     idx = idx.replace('A-level', 'GCSE')
+    # Filter dropdowns and chips name each chapter in full ("1.1 Systems architecture"), not just "Chapter 1.1".
+    app = app.replace("const AIM_LBL = (a) =>", "const AIM_FULL = (a) => (window.SPEC && SPEC[a] && SPEC[a].title) || (AIM_WORD + ' ' + AIM_LBL(a));\nconst AIM_LBL = (a) =>", 1)
+    n_opt = app.count("el('option', { value: a }, `${AIM_WORD} ${AIM_LBL(a)}`)")
+    app = app.replace("el('option', { value: a }, `${AIM_WORD} ${AIM_LBL(a)}`)", "el('option', { value: a }, AIM_FULL(a))")
+    old_b = "el('option', {value: a}, `${AIM_WORD} ${AIM_LBL(a)}: ${SPEC[a].short.split(',')[0]}`)"
+    old_c = "el('div', { class: 'chip on' }, AIM_WORD + ' ' + AIM_LBL(a))"
+    assert n_opt == 3 and app.count(old_b) == 1 and app.count(old_c) == 1, 'chapter label patch'
+    app = app.replace(old_b, "el('option', {value: a}, AIM_FULL(a))").replace(old_c, "el('div', { class: 'chip on' }, AIM_FULL(a))")
     loader = post(BU.build_loader(1, m))
     base = OUT
     BA.wr(os.path.join(base, 'js', 'app.js'), app)

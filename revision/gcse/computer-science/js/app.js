@@ -1,4 +1,5 @@
 const AIM_WORD = window.AIM_WORD || 'Aim';
+const AIM_FULL = (a) => (window.SPEC && SPEC[a] && SPEC[a].title) || (AIM_WORD + ' ' + AIM_LBL(a));
 const AIM_LBL = (a) => (window.AIM_LABEL && window.AIM_LABEL[a]) || a;
 // ---------- Config ----------
 // Personalized greeting for dashboard
@@ -1175,7 +1176,7 @@ function renderBrowse() {
   // Populate filter dropdowns
   const aimSel = $('#filter-aim');
   LEARNING_AIMS.forEach(a => {
-    const opt = el('option', {value: a}, `${AIM_WORD} ${AIM_LBL(a)}: ${SPEC[a].short.split(',')[0]}`);
+    const opt = el('option', {value: a}, AIM_FULL(a));
     aimSel.appendChild(opt);
   });
   const marksSel = $('#filter-marks');
@@ -1333,7 +1334,7 @@ function renderMockControls() {
   aimsRow.innerHTML = '';
   const selected = new Set(LEARNING_AIMS);
   LEARNING_AIMS.forEach(a => {
-    const chip = el('div', { class: 'chip on' }, AIM_WORD + ' ' + AIM_LBL(a));
+    const chip = el('div', { class: 'chip on' }, AIM_FULL(a));
     chip.addEventListener('click', () => {
       if (selected.has(a) && selected.size > 1) { selected.delete(a); chip.classList.remove('on'); }
       else { selected.add(a); chip.classList.add('on'); }
@@ -1666,7 +1667,7 @@ let activePracticeCleanup = null;
 function renderPracticeControls() {
   const aimSel = $('#practice-aim');
   if (!aimSel.dataset.ready) {
-    LEARNING_AIMS.forEach(a => aimSel.appendChild(el('option', { value: a }, `${AIM_WORD} ${AIM_LBL(a)}`)));
+    LEARNING_AIMS.forEach(a => aimSel.appendChild(el('option', { value: a }, AIM_FULL(a))));
     aimSel.dataset.ready = '1';
   }
   if (!document.getElementById('practice-origin')) {
@@ -3009,7 +3010,7 @@ let quizState = null; // { items, idx, answers: number[] (selected index per q, 
 function renderQuizControls() {
   const aimSel = $('#quiz-aim');
   if (!aimSel.dataset.ready) {
-    LEARNING_AIMS.forEach(a => aimSel.appendChild(el('option', { value: a }, `${AIM_WORD} ${AIM_LBL(a)}`)));
+    LEARNING_AIMS.forEach(a => aimSel.appendChild(el('option', { value: a }, AIM_FULL(a))));
     aimSel.dataset.ready = '1';
   }
 
@@ -3471,7 +3472,7 @@ function saveFlashProgress(p) {
 function renderFlashControls() {
   const aimSel = $('#flash-aim');
   if (!aimSel.dataset.ready) {
-    LEARNING_AIMS.forEach(a => aimSel.appendChild(el('option', { value: a }, `${AIM_WORD} ${AIM_LBL(a)}`)));
+    LEARNING_AIMS.forEach(a => aimSel.appendChild(el('option', { value: a }, AIM_FULL(a))));
     aimSel.dataset.ready = '1';
   }
 
