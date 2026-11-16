@@ -139,6 +139,24 @@
   let _authSubscription = null;
   let _legalStatus = null;
 
+  // Password-reset / invite links. Supabase's client (detectSessionInUrl) reads the tokens from
+  // the URL and clears them before the page gets a chance to, so note what kind of link this was
+  // now, while the URL still says. Pages call RA10.takeAuthLink() / takeAuthLinkError() once.
+  let _authLinkType = null;
+  let _authLinkError = null;
+  try {
+    const _h = String(window.location.hash || '') + '&' + String(window.location.search || '').replace(/^\?/, '&');
+    const _t = _h.match(/[#&?]type=(recovery|invite)(?=&|#|$)/);
+    if (_t && /access_token=|[#&?]code=/.test(_h)) _authLinkType = _t[1];
+    const _e = _h.match(/[#&?]error_description=([^&#]*)/);
+    if (_e) {
+      const _c = _h.match(/[#&?]error_code=([^&#]*)/);
+      _authLinkError = { code: _c ? decodeURIComponent(_c[1]) : '', message: decodeURIComponent(_e[1].replace(/\+/g, ' ')) };
+    }
+  } catch (e) { /* no window.location */ }
+  function takeAuthLink() { const t = _authLinkType; _authLinkType = null; return t; }
+  function takeAuthLinkError() { const e = _authLinkError; _authLinkError = null; return e; }
+
   function _emit(eventName, payload) {
     const listeners = EVENTS[eventName] || [];
     listeners.forEach((callback) => {
@@ -1039,6 +1057,11 @@
 
     if (typeof client.auth.onAuthStateChange === 'function') {
       const { data: { subscription } } = client.auth.onAuthStateChange((event, updatedSession) => {
+      if (event === 'PASSWORD_RECOVERY') {
+        // a password-reset link was opened: the page must ask for a new password
+        _authLinkType = 'recovery';
+        setTimeout(() => _emit('passwordrecovery', { session: updatedSession || _session }), 0);
+      }
       if (updatedSession) {
         _session = updatedSession;
         _loadProfileFromSession(_session).then(() => {
@@ -2736,6 +2759,8 @@ html[data-theme="dark"] .ra10u-root{--u-bg:#1c1b19;--u-card:#232220;--u-text:#e7
     resetPassword,
     updatePassword,
     handleRecoveryTokens,
+    takeAuthLink,
+    takeAuthLinkError,
     getSession,
     getProfile,
     isLoggedIn,

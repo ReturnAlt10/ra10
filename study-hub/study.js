@@ -889,8 +889,11 @@
   function routePop(btn, info, unit) {
     $$('.sh-pop').forEach(p => p.remove());
     $$('.sh-rrow.popped').forEach(r => r.classList.toggle('popped', false));
+    $$('.sh-raim.pop-open').forEach(a => a.classList.remove('pop-open'));
     if (!info) return;
     const row = btn.closest('.sh-rrow'); row.classList.add('popped');
+    // each aim section is its own stacking layer, so lift this one above the aims below it
+    const aim = row.closest('.sh-raim'); if (aim) aim.classList.add('pop-open');
     const st = S.status || {};
     const pop = document.createElement('div');
     pop.className = 'sh-pop';
@@ -916,7 +919,7 @@
     $$('[data-make-topic]', pop).forEach(b => b.onclick = () => { pop.remove(); createLesson({ unit, topic: b.dataset.makeTopic, reason: b.dataset.reason, length: store.get('sh_len') || 'standard', focus: store.get('sh_focus') || '' }); });
     $$('[data-custom]', pop).forEach(b => b.onclick = () => { pop.remove(); openMaker({ unit, topic: b.dataset.custom, styleOnly: true }); });
     $$('[data-lock]', pop).forEach(b => b.onclick = () => lockedScreen());
-    setTimeout(() => document.addEventListener('click', function off(e) { if (!pop.contains(e.target)) { pop.remove(); row.classList.toggle('popped', false); document.removeEventListener('click', off); } }), 0);
+    setTimeout(() => document.addEventListener('click', function off(e) { if (!pop.contains(e.target)) { pop.remove(); row.classList.toggle('popped', false); if (aim) aim.classList.remove('pop-open'); document.removeEventListener('click', off); } }), 0);
   }
 
   function lockedScreen() {

@@ -4995,6 +4995,45 @@ async function waitForRA10Sdk(timeoutMs) {
     const hashParams = new URLSearchParams(tokenFragment);
     const cbToken = hashParams.get('access_token');
     const cbType = hashParams.get('type');
+    // What the SDK saw in the URL before Supabase's client consumed and cleared it.
+    const linkType = window.RA10 && RA10.takeAuthLink ? RA10.takeAuthLink() : null;
+    const linkError = window.RA10 && RA10.takeAuthLinkError ? RA10.takeAuthLinkError() : null;
+    // The new-password box must sit above every other popup (terms onboarding, profile setup…).
+    const openSetPasswordOverlay = () => {
+      const o = document.getElementById('set-password-overlay');
+      if (!o || o.classList.contains('open')) return;
+      o.removeAttribute('hidden');
+      o.style.position = 'fixed';
+      o.style.inset = '0';
+      o.style.zIndex = '2147483640';
+      o.classList.add('open');
+      setTimeout(() => { const i = document.getElementById('setpw-input'); if (i) i.focus(); }, 60);
+    };
+    window.ra10OpenSetPassword = openSetPasswordOverlay;
+    ra10.on('passwordrecovery', () => setTimeout(openSetPasswordOverlay, 300));
+    if (linkError) {
+      // e.g. #error=access_denied&error_code=otp_expired — the reset link was old or already used
+      history.replaceState(null, '', window.location.pathname);
+      setTimeout(() => {
+        openSignInOverlayFallback();
+        ['signin', 'signup', 'forgot'].forEach((t) => {
+          document.getElementById('tab-' + t)?.classList.toggle('active', t === 'forgot');
+          document.getElementById('panel-' + t)?.classList.toggle('active', t === 'forgot');
+        });
+        const fe = document.getElementById('forgot-error');
+        if (fe) {
+          fe.textContent = /expired|invalid/i.test(linkError.code + ' ' + linkError.message)
+            ? 'That link has expired or has already been used. Enter your email and we\'ll send a new one.'
+            : 'That link didn\'t work (' + linkError.message + '). Enter your email to get a new one.';
+          fe.classList.add('show');
+        }
+      }, 300);
+    }
+    if (!cbToken && (linkType === 'recovery' || linkType === 'invite')) {
+      // Supabase already turned the link into a session; still ask for the new password.
+      if (/access_token=|type=recovery|type=invite|[?&]code=|#$/.test(window.location.href)) history.replaceState(null, '', window.location.pathname);
+      setTimeout(openSetPasswordOverlay, 400);
+    }
     if (cbToken && (cbType === 'invite' || cbType === 'recovery')) {
       // Establish the recovery/invite session from the URL tokens BEFORE
       // clearing the URL, so updateUser has a valid session.
@@ -5007,9 +5046,7 @@ async function waitForRA10Sdk(timeoutMs) {
         console.warn('Recovery session exchange error', e);
       }
       history.replaceState(null, '', window.location.pathname);
-      setTimeout(() => {
-        document.getElementById('set-password-overlay').classList.add('open');
-      }, 400);
+      setTimeout(openSetPasswordOverlay, 400);
     }
 
     _updateNavAuth();

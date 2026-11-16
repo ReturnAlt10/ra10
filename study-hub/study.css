@@ -961,6 +961,8 @@ body.sh-page .sh-ov-cta h2 { margin: 0 0 6px; color: #fff; font-size: clamp(1.5r
 .sh-legend1 { margin: 2px 2px 8px; font-size: .82rem; color: var(--ink-3); }
 .sh-legend1 .ok { color: var(--ok); font-weight: 800; } .sh-legend1 .bad { color: var(--bad); font-weight: 800; }
 .sh-raim { position: relative; z-index: 1; }
+/* the aim holding an open topic popover sits above the aims after it (its popover can overlap them) */
+.sh-raim.pop-open, .sh-raim:has(.sh-rrow.popped) { z-index: 40; }
 .sh-raim > summary { list-style: none; cursor: pointer; }
 .sh-raim > summary::-webkit-details-marker { display: none; }
 .sh-raim > summary::after { content: ""; flex: none; width: 9px; height: 9px; border-right: 2.5px solid var(--ink-3); border-bottom: 2.5px solid var(--ink-3); transform: rotate(45deg); margin: -4px 4px 0 2px; transition: transform .2s; }
