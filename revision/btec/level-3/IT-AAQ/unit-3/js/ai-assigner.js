@@ -67,7 +67,7 @@
     if (!document.getElementById('ra10-ai-js')) {
       var s = document.createElement('script');
       s.id = 'ra10-ai-js';
-      s.src = '/refresh/ra10-ai.js?v=20261021';
+      s.src = '/refresh/ra10-ai.js?v=20261116';
       document.head.appendChild(s);
     }
   }

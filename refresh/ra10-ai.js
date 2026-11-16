@@ -22,7 +22,7 @@
     try { src = (document.currentScript && document.currentScript.src) || ''; } catch (e) {}
     return src ? src.replace(/ra10-ai\.js(\?.*)?$/, '') : '/refresh/';
   })();
-  var VERSION = '20261028';
+  var VERSION = '20261116';
   var RETENTION_DAYS = 30;
   var MAX_MSG = 8000;
   var CONTEXT_BUDGET = 3900; // the ai-assign function keeps the first 4000 chars
@@ -1738,6 +1738,154 @@
     };
   }
 
+  /* ── The examiner's highlights on the student's own answer ──────────────
+     ai-mark returns annotations [{quote, type: credit|weak|wrong|develop, note, better}] whose quotes are
+     the student's exact words. Each sweeps on like a highlighter; tapping (or hovering) one opens a bubble
+     under the answer with the examiner's note and a better way to write it. */
+  var HL_LABEL = { credit: 'Mark', weak: 'Technically a mark — but the wording needs work', wrong: 'Not credited', develop: 'Develop this point' };
+  var HL_KEY = { credit: 'Mark', weak: 'Mark, weak wording', wrong: 'Not credited', develop: 'Develop' };
+  var HL_KINDS = ['credit', 'weak', 'wrong', 'develop'];
+  function annotList(v) {
+    return Array.isArray(v) ? v.filter(function (a) { return a && typeof a.quote === 'string' && a.quote.trim() && HL_LABEL[a.type]; }).slice(0, 10) : [];
+  }
+  function reEsc(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+  function annotatedAnswer(answer, anns) {
+    var spans = [], lower = answer.toLowerCase();
+    anns.forEach(function (a, n) {
+      var q = a.quote.trim(), at = lower.indexOf(q.toLowerCase()), len = q.length;
+      if (at < 0) { // small differences in spacing and punctuation
+        var ws = q.toLowerCase().match(/[a-z0-9']+/g) || [];
+        if (ws.length) { var m = new RegExp(ws.map(reEsc).join("[^a-z0-9']+"), 'i').exec(answer); if (m) { at = m.index; len = m[0].length; } }
+      }
+      if (at >= 0 && !spans.some(function (x) { return at < x.end && at + len > x.start; })) spans.push({ start: at, end: at + len, n: n, type: a.type });
+    });
+    if (!spans.length) return null;
+    spans.sort(function (x, y) { return x.start - y.start; });
+    var html = '', pos = 0;
+    spans.forEach(function (sp, k) {
+      var a = anns[sp.n];
+      html += esc(answer.slice(pos, sp.start)) + '<mark class="rai-hl ' + sp.type + '" data-n="' + sp.n + '" tabindex="0" role="button" aria-label="' + esc(HL_LABEL[sp.type] + (a.note ? ': ' + a.note : '')) + '" style="--d:' + (k * 0.3 + 0.25).toFixed(2) + 's">' + esc(answer.slice(sp.start, sp.end)) + '<sup>' + (sp.n + 1) + '</sup></mark>';
+      pos = sp.end;
+    });
+    html += esc(answer.slice(pos));
+    var used = {}; spans.forEach(function (sp) { used[sp.n] = 1; });
+    var shown = anns.map(function (a, n) { return { a: a, n: n }; }).filter(function (x) { return used[x.n]; });
+    var counts = HL_KINDS.map(function (k) { return [k, shown.filter(function (x) { return x.a.type === k; }).length]; }).filter(function (x) { return x[1]; });
+    var SUM = { credit: function (n) { return n === 1 ? 'mark' : 'marks'; }, weak: function () { return 'weak wording'; }, wrong: function () { return 'not credited'; }, develop: function () { return 'to develop'; } };
+    var box = h('section', { class: 'rai-annot', 'aria-label': 'Your answer, marked' },
+      '<div class="rai-annot-h"><h4>' + icon('edit', 14) + 'Your answer, marked</h4><span class="rai-annot-tip">Tap a highlight</span></div>' +
+      '<div class="rai-annot-sum">' + counts.map(function (c) { return '<span class="' + c[0] + '">' + c[1] + ' ' + SUM[c[0]](c[1]) + '</span>'; }).join('') + '</div>' +
+      '<div class="rai-annot-text">' + html + '</div>' +
+      '<div class="rai-annot-key">' + HL_KINDS.filter(function (k) { return counts.some(function (c) { return c[0] === k; }); }).map(function (k) { return '<span class="' + k + '"><i></i>' + esc(HL_KEY[k]) + '</span>'; }).join('') + '</div>' +
+      '<ol class="rai-annot-notes">' + shown.map(function (x) {
+        var a = x.a;
+        return '<li class="' + a.type + '" data-n="' + x.n + '"><span class="num">' + (x.n + 1) + '</span><div><b>' + esc(HL_LABEL[a.type]) + '</b>' + (a.note ? ' — ' + esc(a.note) : '') +
+          (a.better ? '<span class="better">' + (a.type === 'develop' ? 'Try' : 'Better') + ': ' + esc(a.better) + '</span>' : '') + '</div></li>';
+      }).join('') + '</ol>');
+    wireAnnotated(box);
+    return box;
+  }
+  function wireAnnotated(box) {
+    var text = box.querySelector('.rai-annot-text'), open = null, openVia = '';
+    function close() {
+      var p = box.querySelector('.rai-hl-pop'); if (p) p.remove();
+      if (open) open.classList.remove('on');
+      box.querySelectorAll('.rai-annot-notes li.on').forEach(function (x) { x.classList.remove('on'); });
+      open = null;
+    }
+    function show(m, via) {
+      if (open === m) { if (via === 'click' && openVia === 'hover') { openVia = 'click'; return; } if (via !== 'hover') close(); return; }
+      close(); open = m; openVia = via || 'click'; m.classList.add('on');
+      var li = box.querySelector('.rai-annot-notes li[data-n="' + m.getAttribute('data-n') + '"]');
+      if (li) li.classList.add('on');
+      var pop = document.createElement('div');
+      pop.className = 'rai-hl-pop ' + HL_KINDS.filter(function (k) { return m.classList.contains(k); }).join(' ');
+      pop.setAttribute('role', 'status');
+      pop.innerHTML = li ? li.querySelector('div').innerHTML : '';
+      // under the answer, so it never covers the other highlights; its arrow points up at the words
+      text.after(pop);
+      var tr = text.getBoundingClientRect(), r = m.getClientRects()[0] || m.getBoundingClientRect();
+      var left = Math.max(0, Math.min(r.left - tr.left, tr.width - pop.offsetWidth));
+      pop.style.marginLeft = left + 'px';
+      pop.style.setProperty('--ax', Math.max(14, Math.min(pop.offsetWidth - 14, r.left - tr.left - left + Math.min(r.width, 60) / 2)) + 'px');
+      try { pop.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); } catch (e) {}
+    }
+    var hover = !!(window.matchMedia && matchMedia('(hover: hover)').matches);
+    box.querySelectorAll('.rai-hl').forEach(function (m) {
+      m.addEventListener('click', function (e) { e.stopPropagation(); show(m, 'click'); });
+      m.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); show(m, 'key'); }
+        else if (e.key === 'Escape') close();
+      });
+      if (hover) m.addEventListener('mouseenter', function () { show(m, 'hover'); });
+    });
+    box.querySelectorAll('.rai-annot-notes li').forEach(function (li) {
+      li.addEventListener('click', function () {
+        var m = box.querySelector('.rai-hl[data-n="' + li.getAttribute('data-n') + '"]');
+        if (m) { try { m.scrollIntoView({ behavior: 'smooth', block: 'center' }); } catch (e) {} if (open !== m) show(m, 'click'); }
+      });
+    });
+    box.addEventListener('click', function (e) { if (open && !e.target.closest('.rai-hl, .rai-hl-pop, .rai-annot-notes')) close(); });
+  }
+
+  /* ── "Rewrite my answer for full marks" ─────────────────────────────────
+     ai-mark (question.ra10_rewrite) rewrites the student's own answer to earn every mark, keeping their
+     correct wording. The words it adds are highlighted against the original (a word-level diff). */
+  function wordDiff(a, b) {
+    var A = String(a).match(/\S+\s*/g) || [], B = String(b).match(/\S+\s*/g) || [];
+    if (!A.length || A.length * B.length > 2e6 || A.length > 60000 || B.length > 60000) return null;
+    function key(w) { return w.toLowerCase().replace(/[^a-z0-9%£$]/g, ''); }
+    var ka = A.map(key), kb = B.map(key), n = A.length, m = B.length, i, j;
+    var dp = new Array(n + 1);
+    for (i = 0; i <= n; i++) dp[i] = new Uint16Array(m + 1);
+    for (i = n - 1; i >= 0; i--) for (j = m - 1; j >= 0; j--) dp[i][j] = ka[i] === kb[j] ? dp[i + 1][j + 1] + 1 : Math.max(dp[i + 1][j], dp[i][j + 1]);
+    var out = [];
+    function push(t, ins) { var last = out[out.length - 1]; if (last && last.ins === ins) last.t += t; else out.push({ t: t, ins: ins }); }
+    i = 0; j = 0;
+    while (j < m) {
+      if (i < n && ka[i] === kb[j]) { push(B[j], false); i++; j++; }
+      else if (i < n && dp[i + 1][j] >= dp[i][j + 1]) i++;
+      else { push(B[j], true); j++; }
+    }
+    return out;
+  }
+  function rewriteNode(rw, original, max) {
+    var diff = wordDiff(original, rw.answer);
+    var kept = diff ? diff.filter(function (d) { return !d.ins; }).reduce(function (s, d) { return s + (d.t.match(/\S+/g) || []).length; }, 0) : 0;
+    var total = (rw.answer.match(/\S+/g) || []).length || 1;
+    var body = diff
+      ? diff.map(function (d, k) { return d.ins ? '<ins style="--d:' + Math.min(2.4, k * 0.04).toFixed(2) + 's">' + esc(d.t) + '</ins>' : esc(d.t); }).join('')
+      : esc(rw.answer);
+    var sec = h('section', { class: 'rai-rw', 'aria-label': 'Your answer rewritten for full marks' },
+      '<div class="rai-rw-h"><h4>' + icon('sparkle', 14) + 'Full-mark version</h4>' +
+        (diff ? '<label class="rai-rw-toggle"><input type="checkbox" checked> Show changes</label>' : '') + '</div>' +
+      '<p class="rai-rw-sub">Your answer, rewritten to earn ' + max + '/' + max + '.' + (diff ? ' <ins>Highlighted</ins> words are new — ' + Math.round(100 * kept / total) + '% is still your own wording.' : '') + '</p>' +
+      '<div class="rai-rw-text">' + body + '</div>' +
+      (rw.changes && rw.changes.length ? '<ol class="rai-rw-changes">' + rw.changes.map(function (c) { return '<li><b>' + esc(c.what) + '</b>' + (c.why ? '<span>' + esc(c.why) + '</span>' : '') + '</li>'; }).join('') + '</ol>' : '') +
+      (rw.tip ? '<p class="rai-rw-tip">' + icon('bulb', 14) + '<span>' + esc(rw.tip) + '</span></p>' : '') +
+      '<div class="rai-rw-act"><button type="button" class="rai-btn sm" data-copy>' + icon('copy', 14) + 'Copy</button><span>Now try writing it again in your own words and mark it.</span></div>');
+    var tg = sec.querySelector('.rai-rw-toggle input');
+    if (tg) tg.addEventListener('change', function () { sec.classList.toggle('plain', !tg.checked); });
+    sec.querySelector('[data-copy]').addEventListener('click', function () { try { navigator.clipboard.writeText(rw.answer); } catch (e) {} toast('Full-mark answer copied'); });
+    return sec;
+  }
+  // RA10AI.rewriteAnswer({question, answer, result}) → Promise<{answer, changes[], tip}>. Uses one AI Examiner use.
+  function rewriteAnswer(o) {
+    if (!window.RA10 || typeof RA10.aiMarkAnswer !== 'function') return Promise.reject(new Error('The AI Examiner is not available right now.'));
+    var q = Object.assign({}, typeof o.question === 'string' ? { question: o.question } : (o.question || {}));
+    var r = o.result || {};
+    q.ra10_rewrite = {
+      earned: Number(r.earned) || 0, level: Number(r.level) || 0,
+      feedback: String(r.examiner_comment || r.feedback || '').slice(0, 600),
+      improvements: listOf(r.improvements).slice(0, 6), next_level: listOf(r.next_level).slice(0, 4)
+    };
+    return RA10.aiMarkAnswer({ question: q, answer: String(o.answer || '') }).then(function (res) {
+      var rw = res && res.result && res.result.rewrite;
+      if (!rw || !rw.answer) throw new Error('The rewrite came back empty. Please try again.');
+      return rw;
+    });
+  }
+
   /* opts: { question (object or string), answer, result (raw ai-mark result),
              markScheme: () => Node, allowAdjust (default true), unitKey, topic,
              save (default true), criteria: [{code, met, comment}] } */
@@ -1797,6 +1945,13 @@
     if (r.calc) fb('next', 'Calculation check', 'check', [r.calc], true);
     card.appendChild(grid);
 
+    var answerText = typeof opts.answer === 'string' ? opts.answer.trim() : '';
+    var anns = annotList(opts.result && opts.result.annotations);
+    if (answerText && anns.length && opts.highlights !== false) {
+      var annBox = annotatedAnswer(answerText, anns);
+      if (annBox) card.appendChild(annBox);
+    }
+
     if (Array.isArray(opts.criteria) && opts.criteria.length) {
       var crit = h('div', { class: 'rai-crit' });
       opts.criteria.forEach(function (c) {
@@ -1826,7 +1981,30 @@
       };
       actions.appendChild(msBtn);
     }
+    var rwHolder = null;
+    if (answerText && r.earned < r.max && opts.rewrite !== false && !opts.inChat && answerText.split(/\s+/).length >= 3) {
+      var rwBtn = h('button', { type: 'button', class: 'rai-btn sm rai-rw-btn', title: 'Uses one AI Examiner use' }, icon('sparkle', 14) + '<span>Rewrite for full marks</span>');
+      rwHolder = h('div', { class: 'rai-rw-holder' });
+      rwBtn.onclick = function () {
+        if (rwBtn.disabled) return;
+        if (!loggedIn()) { try { RA10.showPaywall('login', 'ai_examiner'); } catch (e) { toast('Sign in to use the AI Examiner.'); } return; }
+        rwBtn.disabled = true; rwBtn.classList.add('busy');
+        rwBtn.querySelector('span').textContent = 'Rewriting your answer…';
+        rewriteAnswer({ question: q, answer: answerText, result: opts.result }).then(function (rw) {
+          rwHolder.innerHTML = '';
+          rwHolder.appendChild(rewriteNode(rw, answerText, r.max));
+          rwBtn.remove();
+          try { rwHolder.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); } catch (e) {}
+        }).catch(function (e) {
+          rwBtn.disabled = false; rwBtn.classList.remove('busy');
+          rwBtn.querySelector('span').textContent = 'Rewrite for full marks';
+          if (!(e && e.code === 'usage_limit')) toast((e && e.message) || 'Could not rewrite the answer. Please try again.');
+        });
+      };
+      actions.insertBefore(rwBtn, copyBtn);
+    }
     card.appendChild(actions);
+    if (rwHolder) card.appendChild(rwHolder);
     if (msHolder) card.appendChild(msHolder);
 
     var foot = h('div', { class: 'rai-exam-foot' });
@@ -2087,6 +2265,7 @@
     installHelper: installHelper,
     configure: configure,
     renderExamResult: renderExamResult,
+    rewriteAnswer: rewriteAnswer,
     renderAssignmentResult: renderAssignmentResult,
     examMarkdown: function (q, raw) { return examMarkdown(q, normaliseExam(raw)); },
     confirmCredits: confirmCredits,

@@ -200,6 +200,45 @@
     box.addEventListener('click', (e) => { if (open && !e.target.closest('.sh-hl, .sh-hl-pop, .sh-annot-notes')) close(); });
   }
 
+  /* ───────────── "rewrite for full marks" ─────────────
+     The examiner's full-mark version of the student's own answer; words it added are highlighted (word-level diff). */
+  function wordDiff(a, b) {
+    const A = String(a).match(/\S+\s*/g) || [], B = String(b).match(/\S+\s*/g) || [];
+    if (!A.length || A.length * B.length > 2e6 || A.length > 60000 || B.length > 60000) return null;
+    const key = w => w.toLowerCase().replace(/[^a-z0-9%£$]/g, '');
+    const ka = A.map(key), kb = B.map(key), n = A.length, m = B.length;
+    const dp = Array.from({ length: n + 1 }, () => new Uint16Array(m + 1));
+    for (let i = n - 1; i >= 0; i--) for (let j = m - 1; j >= 0; j--) dp[i][j] = ka[i] === kb[j] ? dp[i + 1][j + 1] + 1 : Math.max(dp[i + 1][j], dp[i][j + 1]);
+    const out = [];
+    const push = (t, ins) => { const last = out[out.length - 1]; if (last && last.ins === ins) last.t += t; else out.push({ t, ins }); };
+    let i = 0, j = 0;
+    while (j < m) {
+      if (i < n && ka[i] === kb[j]) { push(B[j], false); i++; j++; }
+      else if (i < n && dp[i + 1][j] >= dp[i][j + 1]) i++;
+      else { push(B[j], true); j++; }
+    }
+    return out;
+  }
+  function rewriteHtml(rw, answer, max) {
+    const diff = wordDiff(answer, rw.answer);
+    const count = s => (String(s).match(/\S+/g) || []).length;
+    const own = diff ? Math.round(100 * diff.filter(d => !d.ins).reduce((s, d) => s + count(d.t), 0) / Math.max(1, count(rw.answer))) : 0;
+    const body = diff ? diff.map((d, k) => d.ins ? `<ins style="--d:${Math.min(2.4, k * .04).toFixed(2)}s">${esc(d.t)}</ins>` : esc(d.t)).join('') : esc(rw.answer);
+    return `<section class="sh-rw"><div class="sh-rw-h"><div class="sh-ins-h">${I('wand', { size: 16 })} Full-mark version</div>${diff ? '<label class="sh-rw-toggle"><input type="checkbox" checked> Show changes</label>' : ''}</div>
+      <p class="sh-rw-sub">Your answer, rewritten to earn ${max}/${max}.${diff ? ` <ins>Highlighted</ins> words are new — ${own}% is still your own wording.` : ''}</p>
+      <div class="sh-rw-text">${body}</div>
+      ${(rw.changes || []).length ? `<ol class="sh-rw-changes">${rw.changes.map(c => `<li><b>${esc(c.what)}</b>${c.why ? `<span>${esc(c.why)}</span>` : ''}</li>`).join('')}</ol>` : ''}
+      ${rw.tip ? `<p class="sh-rw-tip"><b>Remember:</b> ${esc(rw.tip)}</p>` : ''}
+      <div class="sh-rw-act"><button type="button" class="sh-btn ghost sm" data-rw-copy>${I('clipboard', { size: 16 })} Copy</button><span class="sh-muted sh-small">Then try writing it again in your own words.</span></div></section>`;
+  }
+  function wireRewrite(sec, rw) {
+    if (!sec) return;
+    const t = $('.sh-rw-toggle input', sec);
+    if (t) t.onchange = () => sec.classList.toggle('plain', !t.checked);
+    const c = $('[data-rw-copy]', sec);
+    if (c) c.onclick = () => { try { navigator.clipboard.writeText(rw.answer); } catch (e) {} toast('Full-mark answer copied'); };
+  }
+
   /* ───────────── pictures on learn cards ─────────────
      Openly licensed pictures from Wikimedia Commons, chosen when the lesson is written (study-hub: findPictures).
      Only Commons links are shown; a picture that fails to load is removed. */
@@ -1227,8 +1266,7 @@
   const KIND = { learn: ['book', 'New idea'], mcq: ['question', 'Quick check'], truefalse: ['scales', 'True or false?'], fill: ['pencil', 'Fill the gap'], match: ['puzzle', 'Match the pairs'], order: ['steps', 'Put it in order'], code: ['code', 'Write the code'], recap: ['flag', 'Recap'] };
 
   // Mark a written answer with the real RA10 AI Examiner (same backend as the unit apps).
-  async function examine(lesson, step, i, answer, remark) {
-    if (!window.RA10 || typeof RA10.examineAnswer !== 'function') throw new Error('AI Examiner unavailable');
+  function examQuestion(lesson, step, i) {
     const u = unitOf(lesson.unit);
     const q = step.real ? Object.assign({}, step.real) : {
       id: 'sh-' + lesson.id + '-' + i, question: step.q, marks: step.marks, command_verb: step.verb || '', topic: lesson.topic || '',
@@ -1241,6 +1279,11 @@
     const steps = (lesson.content && lesson.content.steps) || [];
     const taught = steps.slice(0, i).filter(x => x && x.type === 'learn').map(x => (x.title ? x.title + ': ' : '') + (x.body || '') + ((x.points || []).length ? ' (' + x.points.join('; ') + ')' : '')).join('\n').slice(0, 2500);
     Object.assign(q, { study_hub: true, study_hub_points: step.points || [], study_hub_model: step.model || '', study_hub_taught: taught, qualification: u ? u.qual : '', unit_name: u ? u.name : '', topic: q.topic || lesson.topic || '' });
+    return q;
+  }
+  async function examine(lesson, step, i, answer, remark) {
+    if (!window.RA10 || typeof RA10.examineAnswer !== 'function') throw new Error('AI Examiner unavailable');
+    const q = examQuestion(lesson, step, i);
     if (remark) q.study_hub_remark = { previous: remark.previous, dispute: String(remark.dispute || '').slice(0, 600) };
     // the lesson's AI uses cover its own exam questions (claimed server-side, once per exam step); a re-mark is an ordinary use
     const paidLesson = !remark && lesson.id && lesson.kind !== 'template' && lesson.status !== 'done' ? String(lesson.id) : undefined;
@@ -1251,6 +1294,16 @@
     const got = Array.isArray(r.got) ? r.got.map(Number).filter(n => n >= 0 && n < (step.points || []).length) : [];
     const annotations = Array.isArray(r.annotations) ? r.annotations.filter(a => a && a.quote && /^(credit|weak|wrong|develop)$/.test(a.type)) : [];
     return { score: Math.max(0, Math.min(max, Math.round(Number(r.earned) || 0))), max, got, annotations, feedback: r.examiner_comment || r.feedback || '', strengths: r.strengths || [], improvements: r.improvements || r.next_level || [], level: r.level, examiner: true };
+  }
+  // "Rewrite for full marks": the AI Examiner rewrites the student's own answer to earn every mark (one AI use).
+  async function rewriteForFull(lesson, step, i, answer, r) {
+    if (!window.RA10 || typeof RA10.aiMarkAnswer !== 'function') throw new Error('AI Examiner unavailable');
+    const q = examQuestion(lesson, step, i);
+    q.ra10_rewrite = { earned: r.score || 0, level: Number(r.level) || 0, feedback: String(r.feedback || '').slice(0, 600), improvements: (r.improvements || []).slice(0, 6).map(String) };
+    const res = await RA10.aiMarkAnswer({ question: q, answer });
+    const rw = res && res.result && res.result.rewrite;
+    if (!rw || !rw.answer) throw new Error('The rewrite came back empty. Please try again.');
+    return rw;
   }
 
   function play(lesson) {
@@ -1263,7 +1316,7 @@
     const doneSet = new Set(replay ? [] : Object.keys(results).map(Number));
     const start = replay ? 0 : Math.max(0, Math.min(steps.length - 1, Number(prog.i) || 0));
     for (let i = 0; i < start; i++) doneSet.add(i);
-    const P = { L: lesson, steps, replay, results, doneSet, queue: [], combo: 0, best: 0, t0: Date.now(), cur: null, retried: new Set(), remarked: new Set(), flagged: new Set() };
+    const P = { L: lesson, steps, replay, results, doneSet, queue: [], combo: 0, best: 0, t0: Date.now(), cur: null, retried: new Set(), remarked: new Set(), flagged: new Set(), rewrites: new Map() };
     // older lessons can ask the same multiple-choice question twice: the repeat is skipped (and not scored)
     const seenQ = new Set();
     steps.forEach((s, i) => { if (s.type !== 'mcq' && s.type !== 'truefalse') return; const k = norm(s.q || s.statement) + '|' + norm(s.type === 'mcq' ? s.choices[s.answer] : s.answer); if (seenQ.has(k)) { s._skip = true; doneSet.add(i); } else seenQ.add(k); });
@@ -1308,7 +1361,7 @@
     const enable = (on) => { if (primary && primary.textContent !== 'Continue') primary.disabled = !on; };
     function onKey(e) {
       // keys inside the re-mark / flag controls and the highlights belong to them, not to Continue
-      if (e.target && e.target.closest && e.target.closest('.sh-mark-form, .sh-mark-acts, .sh-hl')) return;
+      if (e.target && e.target.closest && e.target.closest('.sh-mark-form, .sh-mark-acts, .sh-hl, .sh-rw')) return;
       if (e.target && /textarea|input|select/i.test(e.target.tagName)) { if (e.key === 'Enter' && (e.ctrlKey || e.metaKey) && primary && !primary.disabled) primary.click(); return; }
       if (e.key === 'Enter' && primary && !primary.disabled) { e.preventDefault(); primary.click(); return; }
       if (/^[1-6]$/.test(e.key)) { const b = $$('[data-k]', stage)[Number(e.key) - 1]; if (b && !b.disabled) b.click(); }
@@ -1539,11 +1592,12 @@
       const change = remarked ? (r.previous === score ? `Re-marked by a second examiner — the mark stays at ${score}/${max}.` : `Re-marked by a second examiner: ${r.previous}/${max} → ${score}/${max}.`) : '';
       box.innerHTML = `${marked}${skipped ? '' : `${change ? `<div class="sh-remarked">${I('retry', { size: 16 })} ${esc(change)}</div>` : ''}<div class="sh-markres"><span class="big">${score}/${max}</span><p>${esc(r.feedback || '')}${r.tip ? `<br><b>Tip:</b> ${esc(r.tip)}` : ''}${r.examiner ? `<small class="sh-muted" style="display:block;margin-top:4px">Marked by the RA10 AI Examiner${r.level ? ' · Level ' + esc(r.level) : ''}</small>` : ''}</p></div>
           ${list(r.strengths, 'check', 'good')}${list(r.improvements, 'arrow', 'next')}`}
-        ${canAct ? `<div class="sh-mark-acts">${!P.remarked.has(item.i) && !preview ? `<button type="button" class="sh-btn ghost sm" data-remark>${I('retry', { size: 16 })} Re-mark</button>` : ''}<button type="button" class="sh-btn ghost sm" data-flag ${P.flagged.has(item.i) ? 'disabled' : ''}>${I('flag', { size: 16 })} ${P.flagged.has(item.i) ? 'Flagged — thank you' : 'Flag this marking'}</button></div><div class="sh-mark-form" hidden></div>` : ''}
+        ${canAct ? `<div class="sh-mark-acts">${score < max && !P.rewrites.has(item.i) && answer.trim().split(/\s+/).length >= 3 ? `<button type="button" class="sh-btn sm sh-rw-btn" data-rewrite>${I('wand', { size: 16 })} <span>Rewrite for full marks</span>${limited() ? ' <small class="mk-cost">· 1 AI use</small>' : ''}</button>` : ''}${!P.remarked.has(item.i) && !preview ? `<button type="button" class="sh-btn ghost sm" data-remark>${I('retry', { size: 16 })} Re-mark</button>` : ''}<button type="button" class="sh-btn ghost sm" data-flag ${P.flagged.has(item.i) ? 'disabled' : ''}>${I('flag', { size: 16 })} ${P.flagged.has(item.i) ? 'Flagged — thank you' : 'Flag this marking'}</button></div><div class="sh-mark-form" hidden></div><div class="sh-rw-holder">${P.rewrites.has(item.i) ? rewriteHtml(P.rewrites.get(item.i), answer, max) : ''}</div>` : ''}
         <div class="sh-ins-h">Mark scheme</div><div class="sh-ms">${(s.points || []).map((p, i) => `<div class="${got.includes(i) ? 'got' : ''}"><span class="tk">${got.includes(i) ? I('check', { size: 16 }) : '•'}</span><span>${esc(p)}</span></div>`).join('')}</div>
         ${s.model ? `<details class="sh-model" ${skipped ? 'open' : ''}><summary>Model answer</summary><p>${esc(s.model)}</p></details>` : ''}`;
       wireAnnotations(box);
       if (canAct) wireMarkActions(item, box, answer, r, score, max);
+      if (P.rewrites.has(item.i)) wireRewrite($('.sh-rw', box), P.rewrites.get(item.i));
       box.scrollIntoView({ behavior: 'smooth', block: 'start' });
       if (skipped) { P.combo = 0; setCombo(); record(item.i, { ok: false, score: 0, max }); footResult(false, 'Here\'s how to answer it', 'Read the mark scheme and model answer, then try a similar question next time.', next); return; }
       const ok = score >= Math.ceil(max / 2), full = score === max;
@@ -1576,8 +1630,25 @@
     function wireMarkActions(item, box, answer, r, score, max) {
       const s = steps[item.i];
       const form = $('.sh-mark-form', box);
-      const rb = $('[data-remark]', box), fb = $('[data-flag]', box);
+      const rb = $('[data-remark]', box), fb = $('[data-flag]', box), wb = $('[data-rewrite]', box);
       const closeForm = () => { form.hidden = true; form.innerHTML = ''; };
+      if (wb) wb.onclick = async () => {
+        if (wb.disabled) return;
+        const label = $('span', wb);
+        wb.disabled = true; wb.classList.add('busy'); label.textContent = 'Rewriting your answer…';
+        try {
+          const rw = await rewriteForFull(lesson, s, item.i, answer, r);
+          P.rewrites.set(item.i, rw);
+          const holder = $('.sh-rw-holder', box);
+          holder.innerHTML = rewriteHtml(rw, answer, max);
+          wireRewrite($('.sh-rw', holder), rw);
+          wb.remove();
+          holder.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        } catch (err) {
+          wb.disabled = false; wb.classList.remove('busy'); label.textContent = 'Rewrite for full marks';
+          if (!(err && err.code === 'usage_limit')) toast((err && err.message) || 'Could not rewrite it right now — please try again.');
+        }
+      };
       if (rb) rb.onclick = () => {
         form.hidden = false;
         form.innerHTML = `<label class="sh-mf-l">What do you think the examiner missed or got wrong? <small>optional</small><textarea class="sh-in" rows="2" maxlength="600" placeholder="e.g. My second sentence explains why backups reduce the impact"></textarea></label>

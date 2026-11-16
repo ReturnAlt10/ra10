@@ -8,7 +8,7 @@ import { EDEXCEL_BUSINESS_SYSTEM, buildEdexcelBusinessPrompt, edexcelBusinessPos
 import { IT_U2_SYSTEM, buildItUnit2Prompt, itUnit2PostProcess, isItUnit2 } from "./it_unit2_examiner.ts";
 import { IT_U14_SYSTEM, buildItUnit14Prompt, itUnit14PostProcess, isItUnit14 } from "./it_unit14_examiner.ts";
 import { requireTermsAccepted } from "../_shared/legal.ts";
-import { STUDY_HUB_SYSTEM, buildStudyHubPrompt, studyHubPostProcess, isStudyHubQuestion, isLevelledScheme, mergeOpinions, ANNOTATE_SYSTEM, buildAnnotatePrompt, cleanAnnotations, annotationsFromAwarded } from "../_shared/study_hub_examiner.ts";
+import { STUDY_HUB_SYSTEM, buildStudyHubPrompt, studyHubPostProcess, isStudyHubQuestion, isLevelledScheme, mergeOpinions, ANNOTATE_SYSTEM, buildAnnotatePrompt, cleanAnnotations, annotationsFromAwarded, REWRITE_SYSTEM, buildRewritePrompt, cleanRewrite } from "../_shared/study_hub_examiner.ts";
 
 const ALLOWED_ORIGINS = [
   "https://ra10.co.uk",
@@ -479,6 +479,14 @@ export default Deno.serve(async (req: Request) => {
         headers: corsHeaders,
       });
     }
+    // "Rewrite my answer for full marks": question.ra10_rewrite carries the mark already given ({earned, improvements…}).
+    const rewriteOf = question?.ra10_rewrite && typeof question.ra10_rewrite === "object" ? question.ra10_rewrite : null;
+    if (rewriteOf && (image || !String(body?.answer || "").trim())) {
+      return new Response(JSON.stringify({ error: "Only a written answer can be rewritten." }), {
+        status: 400,
+        headers: corsHeaders,
+      });
+    }
 
     const supabaseUrl = Deno.env.get("SUPABASE_URL") || "";
     const serviceRole = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") || "";
@@ -518,7 +526,7 @@ export default Deno.serve(async (req: Request) => {
 
     // Usage limits: take one use now (server-side, synced per account), unless this is an exam
     // question inside a Study Hub lesson the learner has already paid for.
-    const freeLesson = await claimLessonMark(supabase, userId, body?.study_hub_lesson);
+    const freeLesson = rewriteOf ? null : await claimLessonMark(supabase, userId, body?.study_hub_lesson);
     const usage = freeLesson ? null : await consumeUsage(supabase, userId);
     if (usage && usage.allowed === false) {
       return new Response(JSON.stringify({ error: usageLimitMessage(usage), code: "usage_limit", usage }), {
@@ -529,6 +537,20 @@ export default Deno.serve(async (req: Request) => {
     usageCtx = { supabase, userId, eventId: usage && usage.event_id ? Number(usage.event_id) : null, freeLesson };
 
     const marksMax = clamp(Math.round(safeNum(question?.marks, 1)), 1, 60);
+    const usageOut = usage ? (({ event_id: _e, ...rest }) => rest)(usage) : null;
+
+    if (rewriteOf) {
+      const r = await callAnyProvider(buildRewritePrompt(question, answer, rewriteOf), {
+        system: REWRITE_SYSTEM, timeout: 55000, maxTokens: Math.min(3600, 500 + marksMax * 90), temperature: 0.3,
+      }, true);
+      const rewrite = cleanRewrite(extractJsonObject(r.content));
+      if (!rewrite) throw new Error("The rewritten answer could not be read");
+      return new Response(JSON.stringify({ ok: true, result: { rewrite, max: marksMax }, provider: r.provider, usage: usageOut }), {
+        status: 200,
+        headers: corsHeaders,
+      });
+    }
+
     const edx = isEdexcelBusiness(question);
     const psych = !edx && isPsychology(question);
     const b2026 = !edx && !psych && is2026Business(question);
@@ -597,16 +619,18 @@ export default Deno.serve(async (req: Request) => {
 
     const result = ensureResultShape(parsed, marksMax);
 
-    // Study Hub shows the examiner's highlights on the student's own words. When this marking produced none that
-    // match the answer (a subject module marked it, or its quotes missed), one short extra pass writes them — the
-    // mark itself is not changed. With no AI left, the marks' own evidence is highlighted.
-    if (question?.study_hub === true && !image) {
+    // The examiner's highlights on the student's own words (Study Hub and the unit AI Examiner card). When this
+    // marking produced none that match the answer (a subject module marked it, or its quotes missed), one short
+    // extra pass writes them — the mark itself is not changed. With no AI left, the marks' own evidence is used.
+    // Callers that never show them can send question.ra10_annotate = false.
+    const wantNotes = !image && question?.ra10_annotate !== false && answer.split(/\s+/).filter(Boolean).length >= 4;
+    if (wantNotes) {
       let notes = cleanAnnotations((result as any).annotations, answer);
       if (!notes.length) {
         try {
           const r = await callAnyProvider(buildAnnotatePrompt(question, answer, result), { system: ANNOTATE_SYSTEM, timeout: 25000, maxTokens: 1200, temperature: 0 }, true);
           notes = cleanAnnotations(extractJsonObject(r.content)?.annotations, answer);
-        } catch (e) { console.warn("ai-mark: Study Hub highlights failed:", e instanceof Error ? e.message : e); }
+        } catch (e) { console.warn("ai-mark: highlights failed:", e instanceof Error ? e.message : e); }
       }
       if (!notes.length) notes = annotationsFromAwarded(parsed, answer);
       (result as any).annotations = notes;
@@ -622,7 +646,6 @@ export default Deno.serve(async (req: Request) => {
       });
     } catch (_) { /* XP is a bonus; marking must never fail because of it */ }
 
-    const usageOut = usage ? (({ event_id: _e, ...rest }) => rest)(usage) : null;
     return new Response(JSON.stringify({ ok: true, result, provider: aiResponse.provider, usage: usageOut }), {
       status: 200,
       headers: corsHeaders,
