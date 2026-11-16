@@ -9,6 +9,19 @@
   const $$ = (s, p) => Array.from((p || document).querySelectorAll(s));
   const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const norm = (s) => String(s == null ? '' : s).toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+  // Fill-the-gap answers compare loosely: case, punctuation, a leading article and simple plurals don't matter.
+  // Kept in step with fillKey() in supabase/functions/study-hub/index.ts.
+  const fillKey = (x) => norm(x).replace(/^(a|an|the) /, '').split(' ').map(w => w.length <= 3 ? w
+    : /ies$/.test(w) ? w.slice(0, -3) + 'y'
+    : /(sses|xes|ches|shes|zes)$/.test(w) ? w.slice(0, -2)
+    : /[^s]s$/.test(w) ? w.slice(0, -1) : w).join(' ');
+  // The word tiles for a fill step: one per gap (a word used in two gaps gets two tiles), then the distractors,
+  // leaving out any "distractor" that is only a variant of an answer (it would look right but be marked wrong).
+  const fillTiles = (s) => {
+    const keys = new Set(s.blanks.map(fillKey)), seen = new Set(), out = s.blanks.slice();
+    (s.options || []).forEach(o => { const k = fillKey(o); if (!k || keys.has(k) || seen.has(k)) return; seen.add(k); out.push(o); });
+    return out;
+  };
   const shuffle = (a) => { const b = a.slice(); for (let i = b.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [b[i], b[j]] = [b[j], b[i]]; } return b; };
   const pick = (a) => a[Math.floor(Math.random() * a.length)];
   const I = (name, o) => (window.SHIcons ? SHIcons.svg(name, o) : '');
@@ -341,7 +354,7 @@
       ['puzzle', 'Bite-size and game-like', 'Teaching cards explain one idea at a time with a real example. Then you check it straight away with multiple choice, true or false, fill the gap, matching and ordering. Anything you get wrong comes back once more before the end.', 'sh-learn', 1100, 700, 'A Study Hub teaching card about malware'],
       ['exam', 'Real exam questions, properly marked', 'Lessons finish with an exam-style question, often a real one from a past paper. The RA10 AI Examiner marks it against the mark scheme and tells you what you did well and how to pick up the missing marks.', 'sh-exam', 1100, 900, 'A Study Hub exam question marked by the AI Examiner'],
       ['map', 'A page for every subject', 'Use <b>Full course</b> to work through every topic and subtopic in the specification and tick them off, or <b>My plan</b> for a step-by-step list of what to do next: what to fix, what to lock in and what is new.', 'sh-plan', 1280, 1000, 'My plan in Study Hub, showing what to do next'],
-      ['wand', 'Make as many lessons as you like', 'Pick any unit and topic, choose the length (about 4, 7 or 11 minutes) and the focus (learning, practice or exam skills), and add your own notes if you want something specific.', 'sh-maker', 1280, 860, 'The Make a lesson sheet']
+      ['wand', 'Make as many lessons as you like', 'Pick any unit and topic, choose the length (about 4, 7 or 11 minutes), the focus (learning, practice or exam skills) and the difficulty (easy, medium or hard), and add your own notes if you want something specific.', 'sh-maker', 1280, 860, 'The Make a lesson sheet']
     ];
     main.innerHTML = `<div class="sh-ov">
       <section class="sh-ov-hero">
@@ -856,7 +869,7 @@
         const first = items[0];
         h += `<section class="sh-next"><div class="sh-next-top"><span class="sh-stepn">1</span><span class="sh-eyebrow2">Do this next</span>${tagOf(first)}</div>
           <div class="sh-next-main"><span class="ic">${I(first.kind === 'lesson' ? iconOf(first.l) : first.r.icon, { size: 30 })}</span><div>${codeOf(first) ? `<small>${esc(codeOf(first))}</small>` : ''}<h3>${esc(titleOf(first))}</h3><p>${esc(whyOf(first))}</p></div></div>
-          <div class="sh-next-acts">${goBtn(first, 0, true)}${first.kind === 'rec' && can ? `<button class="sh-btn ghost sm" data-act="custom" data-i="0">Choose length &amp; focus</button>` : ''}</div></section>`;
+          <div class="sh-next-acts">${goBtn(first, 0, true)}${first.kind === 'rec' && can ? `<button class="sh-btn ghost sm" data-act="custom" data-i="0">Difficulty &amp; length</button>` : ''}</div></section>`;
         if (items.length > 1) {
           h += `<h4 class="sh-plan-h">Then</h4><ol class="sh-plan-list">${items.slice(1).map((it, k) => `<li><span class="sh-stepn sm">${k + 2}</span><span class="ic">${I(it.kind === 'lesson' ? iconOf(it.l) : it.r.icon, { size: 20 })}</span>
             <span class="tx"><b>${codeOf(it) ? `<small>${esc(codeOf(it))}</small> ` : ''}${esc(titleOf(it))}</b>${tagOf(it)}<span class="why">${esc(whyOf(it))}</span></span>${goBtn(it, k + 1, false)}</li>`).join('')}</ol>`;
@@ -899,7 +912,7 @@
     pop.className = 'sh-pop';
     const lessonBtn = (l) => `<button class="sh-btn ${l.status === 'done' ? 'gold' : 'pri'} wide" data-open="${esc(l.id)}">${l.status === 'done' ? 'Practise again' : l.status === 'in_progress' ? 'Continue' : 'Start lesson'}</button>`;
     const newBtns = (topic, reason) => st.can_create
-      ? `<button class="sh-btn pri wide" data-make-topic="${esc(topic)}" data-reason="${esc(reason || '')}">${I('sparkles', { size: 16 })} Start a lesson on this</button><button class="sh-btn ghost sm wide" data-custom="${esc(topic)}">Choose length &amp; focus</button>`
+      ? `<button class="sh-btn pri wide" data-make-topic="${esc(topic)}" data-reason="${esc(reason || '')}">${I('sparkles', { size: 16 })} Start a lesson on this</button><button class="sh-btn ghost sm wide" data-custom="${esc(topic)}">Difficulty &amp; length</button>`
       : `<button class="sh-btn gold wide" data-lock>${I('lock', { size: 16 })} Premium</button>`;
     if (info.lesson) {
       const l = info.lesson;
@@ -946,11 +959,13 @@
   }
 
   /* ───────────── make-your-own (sheet) ───────────── */
+  const DIFF_LABEL = { easy: 'Easy', medium: 'Medium', hard: 'Hard' };
+  const savedDiff = () => { const d = store.get('sh_diff'); return DIFF_LABEL[d] ? d : 'medium'; };
   function openMaker(preset) {
     const st = S.status || {};
     if (!st.can_create) return lockedScreen();
     preset = preset || {};
-    const M = { unit: preset.unit || store.get('sh_unit') || (S.plan && S.plan.focus && S.plan.focus.unit) || (UNITS()[0] || {}).path, topic: preset.topic || null, request: '', length: store.get('sh_len') || 'standard', focus: store.get('sh_focus') || '', q: '', reason: preset.reason || '' };
+    const M = { unit: preset.unit || store.get('sh_unit') || (S.plan && S.plan.focus && S.plan.focus.unit) || (UNITS()[0] || {}).path, topic: preset.topic || null, request: '', length: store.get('sh_len') || 'standard', focus: store.get('sh_focus') || '', difficulty: savedDiff(), q: '', reason: preset.reason || '' };
     const recent = ((S.plan && S.plan.units) || []).map(x => x.path);
     const units = UNITS().slice().sort((a, b) => { const ia = recent.indexOf(a.path), ib = recent.indexOf(b.path); return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib); });
     const seg = (key, opts) => `<div class="sh-seg" data-seg="${key}" role="radiogroup">${opts.map(([v, t, sub, ic]) => `<button type="button" role="radio" data-v="${v}" class="${M[key] === v ? 'on' : ''}" aria-checked="${M[key] === v}">${I(ic, { size: 22 })}<b>${t}</b><small>${sub}</small></button>`).join('')}</div>`;
@@ -959,7 +974,7 @@
     const ov = document.createElement('div');
     ov.className = 'sh-modal';
     ov.innerHTML = `<div class="sh-sheet${quick ? ' quick' : ''}" role="dialog" aria-modal="true" aria-label="Make a lesson">
-      <header class="sh-sheet-h"><span class="ic">${I(quick ? 'gear' : 'wand', { size: 26 })}</span><div><h2 id="mk-title">${quick ? 'Choose length &amp; focus' : 'Make a lesson'}</h2><p class="sh-muted">${quick ? 'Set how long the lesson is and what it concentrates on.' + (limited() ? ' ' + costNote() + '.' : '') : st.premium ? (limited() ? costNote() + ', exam marking included.' : 'As many as you like.') : 'This uses your one free lesson.'}</p></div><button class="sh-x" data-close aria-label="Close">${I('close', { size: 22 })}</button></header>
+      <header class="sh-sheet-h"><span class="ic">${I(quick ? 'gear' : 'wand', { size: 26 })}</span><div><h2 id="mk-title">${quick ? 'Difficulty &amp; length' : 'Make a lesson'}</h2><p class="sh-muted">${quick ? 'Set how hard the lesson is, how long it is and what it concentrates on.' + (limited() ? ' ' + costNote() + '.' : '') : st.premium ? (limited() ? costNote() + ', exam marking included.' : 'As many as you like.') : 'This uses your one free lesson.'}</p></div><button class="sh-x" data-close aria-label="Close">${I('close', { size: 22 })}</button></header>
       <div class="sh-sheet-b">
         ${quick ? `<section class="sh-qsum" data-quick><span class="ub" style="--uc:${esc((qu && qu.color) || '#5b4cf5')}">${I(unitIcon(M.unit), { size: 22 })}</span><span class="tx"><small>${esc(qu ? qu.short : '')}</small><b>${esc(String(M.topic))}</b></span><button type="button" class="sh-btn ghost sm" data-editall>${I('pencil', { size: 16 })} Edit everything</button></section>` : ''}
         <section class="sh-msec" data-full${quick ? ' hidden' : ''}><h3><span class="n">1</span>Choose a unit</h3><div class="sh-units">${units.map(u => `<button type="button" class="sh-ucard${u.path === M.unit ? ' on' : ''}" data-u="${esc(u.path)}" style="--uc:${esc(u.color || '#5b4cf5')}"><span class="ub">${I(unitIcon(u.path), { size: 24 })}</span><span class="tx"><b>${esc(u.short)}</b><small>${esc(unitName(u))}</small></span><span class="tk">${I('check', { size: 20 })}</span></button>`).join('')}</div></section>
@@ -967,6 +982,8 @@
         <section class="sh-msec"><h3><span class="n">3</span>Lesson style</h3>
           ${seg('length', [['quick', 'Quick', '≈ 4 min', 'bolt'], ['standard', 'Standard', '≈ 7 min', 'book'], ['deep', 'Deep dive', '≈ 11 min', 'brain']])}
           ${seg('focus', [['', 'Balanced', 'Teach + test', 'scales'], ['learn', 'Learn it', 'More explaining', 'bulb'], ['practise', 'Practise', 'More questions', 'target'], ['exam', 'Exam skills', 'Marks & command words', 'exam']])}
+          <h4 class="sh-seg-h">Difficulty</h4>
+          ${seg('difficulty', [['easy', 'Easy', 'Core facts, short questions', 'book'], ['medium', 'Medium', 'Exam standard', 'target'], ['hard', 'Hard', 'Stretch & evaluate', 'brain']])}
         </section>
         <section class="sh-msec" data-full${quick ? ' hidden' : ''}><h3><span class="n">4</span>Anything specific? <small>optional</small></h3><textarea id="mk-req" class="sh-in" rows="2" maxlength="300" placeholder="e.g. Explain the CIA triad with real examples, I keep mixing it up"></textarea></section>
       </div>
@@ -979,10 +996,10 @@
     ov.addEventListener('click', (e) => { if (e.target === ov || e.target.closest('[data-close]')) close(); });
     const sum = () => {
       const u = unitOf(M.unit);
-      $('#mk-sum', ov).innerHTML = `<b>${esc(u ? u.short : '')}</b> · ${esc(M.topic || (M.request.trim() ? 'Your request' : 'Surprise topic'))} · ${esc({ quick: 'Quick', standard: 'Standard', deep: 'Deep dive' }[M.length])}${M.focus ? ' · ' + esc({ learn: 'Learn it', practise: 'Practise', exam: 'Exam skills' }[M.focus]) : ''}`;
+      $('#mk-sum', ov).innerHTML = `<b>${esc(u ? u.short : '')}</b> · ${esc(M.topic || (M.request.trim() ? 'Your request' : 'Surprise topic'))} · ${esc({ quick: 'Quick', standard: 'Standard', deep: 'Deep dive' }[M.length])}${M.focus ? ' · ' + esc({ learn: 'Learn it', practise: 'Practise', exam: 'Exam skills' }[M.focus]) : ''} · ${esc(DIFF_LABEL[M.difficulty] || 'Medium')}`;
     };
     $$('.sh-ucard', ov).forEach(b => b.onclick = () => { M.unit = b.dataset.u; M.topic = null; store.set('sh_unit', M.unit); $$('.sh-ucard', ov).forEach(x => x.classList.toggle('on', x === b)); Snd.tap(); topics(); sum(); });
-    $$('.sh-seg', ov).forEach(g => $$('button', g).forEach(b => b.onclick = () => { M[g.dataset.seg] = b.dataset.v; store.set(g.dataset.seg === 'length' ? 'sh_len' : 'sh_focus', b.dataset.v); $$('button', g).forEach(x => { x.classList.toggle('on', x === b); x.setAttribute('aria-checked', x === b); }); Snd.tap(); sum(); }));
+    $$('.sh-seg', ov).forEach(g => $$('button', g).forEach(b => b.onclick = () => { M[g.dataset.seg] = b.dataset.v; store.set({ length: 'sh_len', focus: 'sh_focus', difficulty: 'sh_diff' }[g.dataset.seg], b.dataset.v); $$('button', g).forEach(x => { x.classList.toggle('on', x === b); x.setAttribute('aria-checked', x === b); }); Snd.tap(); sum(); }));
     $('#mk-req', ov).oninput = (e) => { M.request = e.target.value; sum(); };
     const editAll = $('[data-editall]', ov);
     if (editAll) editAll.onclick = () => {
@@ -997,7 +1014,7 @@
     $('#mk-q', ov).oninput = (e) => { M.q = e.target.value; topics(true); };
     $('#mk-go', ov).onclick = () => {
       close();
-      createLesson({ unit: M.unit, topic: M.topic, request: M.request.trim(), length: M.length, focus: M.focus, reason: M.reason || (M.topic ? `You chose ${M.topic}.` : M.request.trim() ? 'You asked for this lesson.' : '') });
+      createLesson({ unit: M.unit, topic: M.topic, request: M.request.trim(), length: M.length, focus: M.focus, difficulty: M.difficulty, reason: M.reason || (M.topic ? `You chose ${M.topic}.` : M.request.trim() ? 'You asked for this lesson.' : '') });
     };
     async function topics(filterOnly) {
       const box = $('#mk-topics', ov); if (!box) return;
@@ -1040,7 +1057,7 @@
       const cat = u ? await loadCatalog(o.unit).catch(() => null) : null;
       const g = u ? await fullGrounding(o.unit, cat, o.topic || o.request || '') : {};
       setStep(2); writing = true;
-      const r = await api('create', { mode: 'custom', unit: o.unit, unitName: u ? u.name : o.unit, qual: u ? u.qual : '', topic: o.topic || null, request: o.request || '', reason: o.reason || '', length: o.length || 'standard', focus: o.focus || '', grounding: g });
+      const r = await api('create', { mode: 'custom', unit: o.unit, unitName: u ? u.name : o.unit, qual: u ? u.qual : '', topic: o.topic || null, request: o.request || '', reason: o.reason || '', length: o.length || 'standard', focus: o.focus || '', difficulty: o.difficulty || savedDiff(), grounding: g });
       if (!r.ok) { if (usageBlocked(r)) { ov.remove(); home(); return; } if (r.locked) { st.trial_used = true; st.can_create = false; ov.remove(); return lockedScreen(); } throw new Error(r.error || 'Could not build the lesson.'); }
       usageRefresh();
       setStep(4);
@@ -1085,13 +1102,17 @@
       scenario: step.context || undefined, unit: u ? u.short : '', mark_scheme: { points: step.points || [], model_answer: step.model || '' }
     };
     if (!q.marks) q.marks = step.marks;
+    // Study Hub marking (ai-mark _shared/study_hub_examiner.ts): point-by-point against the scheme shown on this page,
+    // used whenever no subject-specific examiner claims the question; it returns which points were earned.
+    Object.assign(q, { study_hub: true, study_hub_points: step.points || [], study_hub_model: step.model || '', qualification: u ? u.qual : '', unit_name: u ? u.name : '', topic: q.topic || lesson.topic || '' });
     // the lesson's AI uses cover its own exam questions (claimed server-side, once per exam step)
     const paidLesson = lesson.id && lesson.kind !== 'template' && lesson.status !== 'done' ? String(lesson.id) : undefined;
     const res = await RA10.examineAnswer({ question: q, answer, studyHubLesson: paidLesson });
     const r = res && res.result;
     if (!r) throw new Error('No result');
     const max = Math.max(1, Number(r.max) || step.marks);
-    return { score: Math.max(0, Math.min(max, Math.round(Number(r.earned) || 0))), max, feedback: r.examiner_comment || r.feedback || '', strengths: r.strengths || [], improvements: r.improvements || r.next_level || [], level: r.level, examiner: true };
+    const got = Array.isArray(r.got) ? r.got.map(Number).filter(n => n >= 0 && n < (step.points || []).length) : [];
+    return { score: Math.max(0, Math.min(max, Math.round(Number(r.earned) || 0))), max, got, feedback: r.examiner_comment || r.feedback || '', strengths: r.strengths || [], improvements: r.improvements || r.next_level || [], level: r.level, examiner: true };
   }
 
   function play(lesson) {
@@ -1205,17 +1226,27 @@
         });
       } else if (s.type === 'fill') {
         const filled = s.blanks.map(() => null);
-        const parts = s.text.split('___');
-        wrap(`${kindHead('fill')}<h1 class="sh-q sm">Complete the sentence</h1><div class="sh-sentence" id="f-sen"></div><div class="sh-bank" id="f-bank">${shuffle(s.options.map((o, i) => i)).map(i => `<button class="sh-tile" data-o="${i}">${esc(s.options[i])}</button>`).join('')}</div>`);
+        const parts = s.text.split(/_{2,}/);
+        while (parts.length < s.blanks.length + 1) parts.splice(parts.length - 1, 0, ' '); // never leave a gap with nowhere to go
+        const tiles = fillTiles(s);
+        let target = null; // the gap the next tile goes into (tap a gap to choose it)
+        wrap(`${kindHead('fill')}<h1 class="sh-q sm">Complete the sentence</h1><div class="sh-sentence" id="f-sen"></div><div class="sh-bank" id="f-bank">${shuffle(tiles.map((o, i) => i)).map(i => `<button class="sh-tile" data-o="${i}">${esc(tiles[i])}</button>`).join('')}</div>`);
         const paint = () => {
-          $('#f-sen', stage).innerHTML = parts.map((p, i) => esc(p) + (i < s.blanks.length ? `<span class="sh-gap" data-g="${i}">${filled[i] != null ? `<button class="sh-tile" data-back="${i}">${esc(s.options[filled[i]])}</button>` : ''}</span>` : '')).join('');
+          if (target != null && filled[target] != null) target = null;
+          const next = target != null ? target : filled.indexOf(null);
+          $('#f-sen', stage).innerHTML = parts.map((p, i) => esc(p) + (i < s.blanks.length ? `<span class="sh-gap${filled[i] == null && i === next && s.blanks.length > 1 ? ' target' : ''}" data-g="${i}"${filled[i] == null ? ' role="button" tabindex="0" aria-label="Gap ' + (i + 1) + '"' : ''}>${filled[i] != null ? `<button class="sh-tile" data-back="${i}">${esc(tiles[filled[i]])}</button>` : ''}</span>` : '')).join('');
           $$('[data-o]', stage).forEach(b => b.classList.toggle('used', filled.includes(Number(b.dataset.o))));
-          $$('[data-back]', stage).forEach(b => b.onclick = () => { filled[Number(b.dataset.back)] = null; Snd.tap(); paint(); });
+          $$('[data-back]', stage).forEach(b => b.onclick = () => { const g = Number(b.dataset.back); filled[g] = null; target = g; Snd.tap(); paint(); });
+          $$('.sh-gap[role="button"]', stage).forEach(g => g.onclick = () => { target = Number(g.dataset.g); paint(); });
           enable(filled.every(x => x != null));
         };
-        $$('[data-o]', stage).forEach(b => b.onclick = () => { const g = filled.indexOf(null); if (g < 0) return; filled[g] = Number(b.dataset.o); Snd.tap(); paint(); });
+        $$('[data-o]', stage).forEach(b => b.onclick = () => {
+          const o = Number(b.dataset.o); if (filled.includes(o)) return;
+          const g = target != null && filled[target] == null ? target : filled.indexOf(null); if (g < 0) return;
+          filled[g] = o; target = null; Snd.tap(); paint();
+        });
         footIdle('Check', false, () => {
-          const each = s.blanks.map((w, i) => norm(s.options[filled[i]]) === norm(w));
+          const each = s.blanks.map((w, i) => filled[i] != null && fillKey(tiles[filled[i]]) === fillKey(w));
           const ok = each.every(Boolean);
           $$('.sh-gap', stage).forEach((g, i) => g.classList.add(each[i] ? 'ok' : 'bad'));
           $$('.sh-tile', stage).forEach(b => { b.disabled = true; });
@@ -1326,7 +1357,7 @@
           try { res = await examine(lesson, s, item.i, ta.value); }
           catch (e) {
             console.warn('AI Examiner failed, using Study Hub marking', e);
-            try { const r = await api('mark', { lessonId: lesson.id, step: item.i, answer: ta.value }); if (r.ok) res = { score: r.score, max: r.max, feedback: r.feedback, tip: r.tip, got: r.got || [] }; } catch (e2) {}
+            try { const r = await api('mark', { lessonId: lesson.id, step: item.i, answer: ta.value }); if (r.ok) res = { score: r.score, max: r.max, feedback: r.feedback, tip: r.tip, got: r.got || [], strengths: r.strengths || [], improvements: r.improvements || [] }; } catch (e2) {}
           }
           if (res) examReveal(item, res); else selfMark(item);
         }, '<button class="sh-btn ghost skip" id="p-skip">Show me the answer</button>');
@@ -1339,7 +1370,7 @@
       const ta = $('#e-ans', stage); if (ta) ta.readOnly = true;
       const max = Math.max(1, r.max || s.marks), score = Math.max(0, Math.min(max, r.score || 0));
       const got = r.got || [];
-      const list = (arr, ic, cls) => arr && arr.length ? `<ul class="sh-fbl ${cls}">${arr.slice(0, 4).map(x => `<li>${I(ic, { size: 18 })}<span>${esc(x)}</span></li>`).join('')}</ul>` : '';
+      const list = (arr, ic, cls) => arr && arr.length ? `<ul class="sh-fbl ${cls}">${arr.slice(0, 5).map(x => `<li>${I(ic, { size: 18 })}<span>${esc(x)}</span></li>`).join('')}</ul>` : '';
       box.innerHTML = `${skipped ? '' : `<div class="sh-markres"><span class="big">${score}/${max}</span><p>${esc(r.feedback || '')}${r.tip ? `<br><b>Tip:</b> ${esc(r.tip)}` : ''}${r.examiner ? `<small class="sh-muted" style="display:block;margin-top:4px">Marked by the RA10 AI Examiner${r.level ? ' · Level ' + esc(r.level) : ''}</small>` : ''}</p></div>
           ${list(r.strengths, 'check', 'good')}${list(r.improvements, 'arrow', 'next')}`}
         <div class="sh-ins-h">Mark scheme</div><div class="sh-ms">${(s.points || []).map((p, i) => `<div class="${got.includes(i) ? 'got' : ''}"><span class="tk">${got.includes(i) ? I('check', { size: 16 }) : '•'}</span><span>${esc(p)}</span></div>`).join('')}</div>

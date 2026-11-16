@@ -256,6 +256,8 @@ body.sh-page p, body.sh-page li { max-width: none; }
 /* tiles (fill / order) */
 .sh-sentence { font-size: 1.2rem; line-height: 2.3; font-weight: 600; padding: 18px; border-radius: 20px; background: var(--card); border: 2px solid var(--line); margin-bottom: 22px; }
 .sh-gap { display: inline-flex; min-width: 92px; min-height: 42px; vertical-align: middle; align-items: center; justify-content: center; margin: 0 4px; padding: 0 4px; border-bottom: 3px solid var(--line-2); }
+.sh-gap[role="button"] { cursor: pointer; border-radius: 10px 10px 0 0; }
+.sh-gap.target { border-bottom-color: var(--acc); background: color-mix(in srgb, var(--acc) 12%, transparent); }
 .sh-gap.ok .sh-tile { border-color: var(--ok); background: var(--ok-soft); }
 .sh-gap.bad .sh-tile { border-color: var(--bad); background: var(--bad-soft); }
 .sh-bank { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; min-height: 52px; }
@@ -549,6 +551,7 @@ body.sh-page .sh-msec h3 { display: flex; align-items: center; gap: 10px; margin
 .sh-seg button .shi { color: var(--ink-3); }
 .sh-seg button b { font-size: .92rem; }
 .sh-seg button small { font-size: .74rem; color: var(--ink-2); }
+.sh-seg-h { margin: 4px 0 8px; font-size: .82rem; font-weight: 700; color: var(--ink-2); text-transform: uppercase; letter-spacing: .04em; }
 .sh-seg button.on { border-color: var(--acc); background: var(--acc-soft); }
 .sh-seg button.on .shi, .sh-seg button.on b { color: var(--acc); }
 .sh-sheet textarea.sh-in { resize: vertical; min-height: 64px; }

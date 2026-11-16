@@ -8,6 +8,7 @@ import { EDEXCEL_BUSINESS_SYSTEM, buildEdexcelBusinessPrompt, edexcelBusinessPos
 import { IT_U2_SYSTEM, buildItUnit2Prompt, itUnit2PostProcess, isItUnit2 } from "./it_unit2_examiner.ts";
 import { IT_U14_SYSTEM, buildItUnit14Prompt, itUnit14PostProcess, isItUnit14 } from "./it_unit14_examiner.ts";
 import { requireTermsAccepted } from "../_shared/legal.ts";
+import { STUDY_HUB_SYSTEM, buildStudyHubPrompt, studyHubPostProcess, isStudyHubQuestion, isLevelledScheme, mergeOpinions } from "../_shared/study_hub_examiner.ts";
 
 const ALLOWED_ORIGINS = [
   "https://ra10.co.uk",
@@ -175,6 +176,9 @@ function ensureResultShape(raw: any, marksMax: number): MarkResult {
   if (Array.isArray(raw?.next_level)) extra.next_level = raw.next_level.map((x: unknown) => String(x)).slice(0, 4);
   if (raw?.examiner_comment) extra.examiner_comment = String(raw.examiner_comment);
   if (raw?.calculation_check) extra.calculation_check = String(raw.calculation_check);
+  // Study Hub: which of the lesson's mark-scheme points were earned (0-based), so the page can tick them.
+  if (Array.isArray(raw?.got)) extra.got = raw.got.map((x: unknown) => Math.round(Number(x))).filter((x: number) => x >= 0 && x < 40).slice(0, 20);
+  if (Array.isArray(raw?.marks_awarded)) extra.marks_awarded = raw.marks_awarded.map((x: unknown) => String(x)).slice(0, 12);
   return Object.assign(result, extra);
 }
 
@@ -363,6 +367,25 @@ async function markWithEnsemble(prompt: string, opts: CallOptions, post: (raw: a
   return { parsed: reposted, provider: runs.map((r) => r.provider).join(" + ") };
 }
 
+// Study Hub point marking: two raw opinions merged mark-by-mark (see mergeOpinions); falls back to one.
+async function markStudyHubTwice(prompt: string, opts: CallOptions): Promise<{ raw: any; provider: string }> {
+  const STRONG = ["openai", "gemini"];
+  const strong = PROVIDERS.filter((p) => STRONG.includes(p.name)).map((p) => p.name);
+  const rawOf = async (o: CallOptions) => {
+    const r = await callAnyProvider(prompt, o, true);
+    const raw = extractJsonObject(r.content);
+    if (!raw || typeof raw !== "object") throw new Error("AI response could not be parsed as JSON");
+    return { raw, provider: r.provider };
+  };
+  if (!strong.length) return await rawOf(opts);
+  const second: CallOptions = strong.length >= 2 ? { ...opts, rotate: 1, only: STRONG } : { ...opts, temperature: 0.4, only: STRONG };
+  const runs = (await Promise.allSettled([rawOf(opts), rawOf(second)]))
+    .filter((r): r is PromiseFulfilledResult<{ raw: any; provider: string }> => r.status === "fulfilled").map((r) => r.value);
+  if (!runs.length) return await rawOf(opts);
+  if (runs.length === 1) return runs[0];
+  return { raw: mergeOpinions(runs[0].raw, runs[1].raw), provider: runs.map((r) => r.provider).join(" + ") };
+}
+
 // ── AI usage limits (supabase/sql/ai-usage.sql) ──────────────────────────────────────────────
 // One use is taken BEFORE any AI provider is called and refunded if marking fails. Premium and
 // EDU plans are never counted. If the usage SQL has not been applied yet we fail open (allow),
@@ -514,7 +537,9 @@ export default Deno.serve(async (req: Request) => {
     const btec = !edx && !psych && !business && !b2026 && !sportU2 && isBusinessBtec(question);
     const it2 = !edx && !psych && !business && !b2026 && !sportU2 && !btec && isItUnit2(question);
     const it14 = !edx && !psych && !business && !b2026 && !sportU2 && !btec && !it2 && isItUnit14(question);
-    const basePrompt = edx ? buildEdexcelBusinessPrompt(question, answer) : psych ? buildPsychologyPrompt(question, answer) : b2026 ? buildBusiness2026Prompt(question, answer) : business ? buildBusinessPrompt(question, answer) : sportU2 ? buildSportUnit2Prompt(question, answer) : btec ? buildBusinessBtecPrompt(question, answer) : it2 ? buildItUnit2Prompt(question, answer, !!image) : it14 ? buildItUnit14Prompt(question, answer) : buildPrompt(question, answer, []);
+    // Study Hub lesson questions that no subject module claims: point-by-point marking against the lesson's scheme.
+    const studyHub = !edx && !psych && !business && !b2026 && !sportU2 && !btec && !it2 && !it14 && isStudyHubQuestion(question);
+    const basePrompt = edx ? buildEdexcelBusinessPrompt(question, answer) : psych ? buildPsychologyPrompt(question, answer) : b2026 ? buildBusiness2026Prompt(question, answer) : business ? buildBusinessPrompt(question, answer) : sportU2 ? buildSportUnit2Prompt(question, answer) : btec ? buildBusinessBtecPrompt(question, answer) : it2 ? buildItUnit2Prompt(question, answer, !!image) : it14 ? buildItUnit14Prompt(question, answer) : studyHub ? buildStudyHubPrompt(question, answer) : buildPrompt(question, answer, []);
     // The IT module writes its own diagram instructions.
     const prompt = image && !it2 ? basePrompt + "\n" + DIAGRAM_NOTE : basePrompt;
 
@@ -526,6 +551,7 @@ export default Deno.serve(async (req: Request) => {
       : btec ? { system: BUSINESS_BTEC_SYSTEM, timeout: 55000, maxTokens: 2400, image }
       : it2 ? { system: IT_U2_SYSTEM, timeout: 45000, maxTokens: 1800, image }
       : it14 ? { system: IT_U14_SYSTEM, timeout: 55000, maxTokens: 2400, image }
+      : studyHub ? { system: STUDY_HUB_SYSTEM, timeout: 45000, maxTokens: 2000, image }
       : null;
     const post = (raw: any) => edx ? edexcelBusinessPostProcess(raw, question, answer)
       : psych ? psychologyPostProcess(raw, question, answer)
@@ -535,6 +561,7 @@ export default Deno.serve(async (req: Request) => {
       : btec ? businessBtecPostProcess(raw, question)
       : it2 ? itUnit2PostProcess(raw, question, answer, !!image)
       : it14 ? itUnit14PostProcess(raw, question, answer)
+      : studyHub ? studyHubPostProcess(raw, question, answer)
       : raw;
 
     let parsed: any;
@@ -544,7 +571,17 @@ export default Deno.serve(async (req: Request) => {
     // IT Unit 14 set-task activities (8–20 marks) are holistic band judgements, so they get the second opinion too.
     const it14Activity = it14 && Array.isArray(question?.mark_scheme?.afs) && question.mark_scheme.afs.length > 0;
     const ensemble = !!callOpts && !image && ((marksMax >= 9 && (business || b2026 || it2)) || it14Activity) && ENSEMBLE_ON();
-    if (ensemble && callOpts) {
+    if (studyHub && callOpts && !isLevelledScheme(question) && ENSEMBLE_ON() && marksMax >= 2) {
+      // Point-marked Study Hub question: two independent examiners; a mark either one finds and can evidence
+      // in the student's own words is kept, so one model overlooking a point does not cost the student the mark.
+      const r = await markStudyHubTwice(prompt, callOpts);
+      parsed = post(r.raw);
+      aiResponse = { content: "", provider: r.provider };
+    } else if (studyHub && callOpts && isLevelledScheme(question) && marksMax >= 6 && ENSEMBLE_ON()) {
+      const r = await markWithEnsemble(prompt, callOpts, post, marksMax);
+      parsed = r.parsed;
+      aiResponse = { content: "", provider: r.provider };
+    } else if (ensemble && callOpts) {
       const r = await markWithEnsemble(prompt, callOpts, post, marksMax);
       parsed = r.parsed;
       aiResponse = { content: "", provider: r.provider };

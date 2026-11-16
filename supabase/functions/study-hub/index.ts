@@ -1,6 +1,7 @@
 import { serve } from 'https://deno.land/std@0.177.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { askJson, hasProviders } from '../_shared/ai.ts';
+import { STUDY_HUB_SYSTEM, buildStudyHubPrompt, studyHubPostProcess } from '../_shared/study_hub_examiner.ts';
 
 // ────────────────────────────────────────────────────────────────────────────
 // RA10 Study Hub — AI-curated bite-size lessons (open to every signed-in account;
@@ -230,6 +231,15 @@ function diagramPlan(unit: string, unitName: string): { types: string[]; hint: s
   return { types: ['flow', 'concept', 'table'], hint: 'Use a "flow" for processes, a "concept" map for components and a "table" to compare.' };
 }
 
+// Fill-the-gap answers compare loosely: case, punctuation, a leading article and simple plurals don't matter.
+// Kept in step with fillKey() in study-hub/study.js.
+function fillKey(x: unknown): string {
+  return norm(x).replace(/^(a|an|the) /, '').split(' ').map((w) => w.length <= 3 ? w
+    : /ies$/.test(w) ? w.slice(0, -3) + 'y'
+    : /(sses|xes|ches|shes|zes)$/.test(w) ? w.slice(0, -2)
+    : /[^s]s$/.test(w) ? w.slice(0, -1) : w).join(' ');
+}
+
 function sanitiseStep(s: any, keepOrder = false, diagramTypes: string[] = DIAGRAM_TYPES): any | null {
   if (!s || typeof s !== 'object') return null;
   const t = String(s.type || '').toLowerCase();
@@ -257,7 +267,18 @@ function sanitiseStep(s: any, keepOrder = false, diagramTypes: string[] = DIAGRA
     const blanks = (Array.isArray(s.blanks) ? s.blanks : []).map((b: unknown) => str(b, 40)).filter(Boolean);
     const gaps = (text.match(/_{2,}/g) || []).length;
     if (!text || !blanks.length || gaps !== blanks.length || blanks.length > 3) return null;
-    const options = Array.from(new Set([...blanks, ...(Array.isArray(s.options) ? s.options : []).map((o: unknown) => str(o, 40)).filter(Boolean)])).slice(0, 7);
+    // One tile per gap (a word that fills two gaps gets two tiles), then distractors. A "distractor" that is only
+    // a variant of an answer (plural, article, capitals: "firewalls" for "firewall") would be marked wrong while
+    // looking right, so it is removed.
+    const answerKeys = new Set(blanks.map(fillKey));
+    const distractors: string[] = [];
+    const seenD = new Set<string>();
+    for (const o of (Array.isArray(s.options) ? s.options : []).map((o: unknown) => str(o, 40)).filter(Boolean)) {
+      const k = fillKey(o);
+      if (!k || answerKeys.has(k) || seenD.has(k)) continue;
+      seenD.add(k); distractors.push(o);
+    }
+    const options = [...blanks, ...distractors.slice(0, Math.max(2, 7 - blanks.length))];
     return { type: t, text: text.replace(/_{2,}/g, '___'), blanks, options: keepOrder ? options : shuffle(options), explain: str(s.explain, 400) };
   }
   if (t === 'match') {
@@ -342,13 +363,33 @@ const FOCUS: Record<string, string> = {
   exam: 'Focus on EXAM TECHNIQUE: include learn cards on what the command words require and how marks are awarded, and include 2 exam steps instead of 1.',
 };
 
+// Difficulty (chosen in "Make a lesson"; the daily lesson is always medium).
+const DIFFICULTY: Record<string, { label: string; prompt: string; exam: string }> = {
+  easy: {
+    label: 'Easy',
+    prompt: 'DIFFICULTY: EASY. The learner is building confidence: teach the core definitions and the most important facts in plain language with familiar examples. Checks test recall and recognition of key terms; mcq distractors are clearly wrong to someone who read the cards; no multi-step reasoning.',
+    exam: 'exam: marks 2–4, a State / Identify / Describe / short Explain question on core content.',
+  },
+  medium: {
+    label: 'Medium',
+    prompt: 'DIFFICULTY: MEDIUM. Exam-standard: teach the content at the depth of the specification. Checks mix recall with understanding and application to short examples; mcq distractors are plausible misconceptions.',
+    exam: 'exam: marks 3–6, an Explain / Describe / Analyse question, ideally applied to a short context.',
+  },
+  hard: {
+    label: 'Hard',
+    prompt: 'DIFFICULTY: HARD. Stretch towards the top grades: include the finer detail, links between ideas, exceptions, limitations and evaluation, and less common parts of the topic. Checks need application to unfamiliar scenarios and multi-step reasoning; mcq distractors are strong misconceptions that need real understanding to rule out; true/false claims test precise detail.',
+    exam: 'exam: marks 6–9, an Analyse / Discuss / Assess / Evaluate question applied to a short scenario in "context"; "points" are indicative content covering both sides and a judgement, the model answer reaches a supported conclusion.',
+  },
+};
+
 const CODE_PROMPT: Record<string, string> = {
   python: `This is a PROGRAMMING lesson in Python 3 (the language in the specification). Include exactly 2 "code" steps where the learner writes a short program (5–15 lines), placed after the learn cards that teach what they need. Use only the standard library. Programs read input with input() and write with print(). Each code step has 2–3 tests: each test gives the "stdin" lines to feed input() (or [] if none) and, for function tasks, an optional "check" of Python assert statements run after the program (eg "assert total([1,2]) == 3"). Do NOT write expected outputs — they are produced by running your "solution", which must be correct, complete and pass every check.`,
   javascript: `This is a PROGRAMMING lesson in JavaScript for web development. Include exactly 2 "code" steps where the learner writes a short function (5–15 lines). Each test has a "check" of JavaScript statements using assert(condition, message), eg "assert(add(2, 3) === 5, 'add(2,3) should be 5')". Do not use the DOM or network. Your "solution" must pass every check.`,
   sql: `This is a DATABASE lesson in SQL (SQLite dialect). Include exactly 2 "code" steps where the learner writes one SQL query. Each code step has "setup" (CREATE TABLE and INSERT statements for a small table of 5–8 realistic rows), a "starter" (eg "SELECT"), and a correct "solution" query. The learner's result is compared with the result of your solution, so the solution must be exactly right; include ORDER BY when the order matters.`,
 };
 
-async function writeLesson(input: { unit?: string; unitName: string; qual: string; topic: string | null; request: string; focusReason: string; prof: any; grounding: any; length?: string; focus?: string; coding?: string | null }) {
+async function writeLesson(input: { unit?: string; unitName: string; qual: string; topic: string | null; request: string; focusReason: string; prof: any; grounding: any; length?: string; focus?: string; difficulty?: string; coding?: string | null }) {
+  const diff = DIFFICULTY[String(input.difficulty || '')] || DIFFICULTY.medium;
   const g = input.grounding || {};
   const bankQuiz = (Array.isArray(g.quiz) ? g.quiz : []).slice(0, 8);
   const realExam = (Array.isArray(g.exam) ? g.exam : []).map(trimReal).filter((q: any) => q && clean(q.question)).slice(0, 3);
@@ -377,13 +418,14 @@ If one of these real exam questions fits the topic, the exam step MUST be that q
 
 Write a ${len.minutes}-minute lesson of ${len.steps} steps that TEACHES the topic and then checks understanding. Alternate short "learn" cards with practice. Use at least ${len.learn} learn cards, at least 3 mcq, 1 truefalse, 1 fill, 1 match, 1 order (only if the topic has a genuine fixed sequence — otherwise another mcq), exactly 1 exam step near the end, and finish with 1 recap.
 ${focus}
+${diff.prompt}
 ${input.coding ? CODE_PROMPT[input.coding] + '\n' : ''}Answer-key rules (these are checked — be precise):
 - mcq: 4 choices, exactly ONE correct; distractors are plausible but definitely wrong (no "all of the above", no two choices that could both be argued). "answer" is the 0-based index of the correct choice.
 - truefalse: a single clear claim that is unambiguously true or false per the specification — no trick wording.
-- fill: a sentence from the learn cards with 1 (max 2) "___" gaps where the missing word is a specific KEY TERM; "blanks" are the exact words; "options" contain the blanks plus 2–3 distractors that DO NOT make the sentence true (never synonyms or near-synonyms of the answer).
+- fill: a sentence from the learn cards with 1 (max 2) "___" gaps where the missing word is a specific KEY TERM; "blanks" are the exact words in gap order, written exactly as they read in the sentence (same form, singular/plural); with 2 gaps the two answers must be different words that cannot be swapped; "options" contain the blanks plus 2–3 distractors that DO NOT make the sentence true (never synonyms, plurals or near-synonyms of the answer).
 - match: 4 pairs of [term, short definition]; each definition fits only its own term.
 - order: items listed in the CORRECT order of a recognised sequence (process stages, steps of a model), not a matter of opinion.
-- exam: marks 2–6, "points" are mark-scheme points as an examiner would write them, "model" is a full-mark answer.
+- ${diff.exam} "points" are the mark scheme as an examiner writes it: one creditable idea per line with "(1)", a "point (1) + linked expansion (1)" line for Explain marks, and "/" between acceptable alternatives. Give MORE creditable points than the marks available (at least marks + 2) so different correct answers are all covered. "model" is a full-mark answer that uses the command word properly.
 - learn cards: 2–4 short sentences (max 70 words), 2–3 bullet points, and a concrete example where useful. Every check must be answerable from the learn cards.
 - diagrams: give 2–3 learn cards a "diagram" where a picture genuinely helps (otherwise "diagram": null). Allowed types for this unit: ${plan.types.join(', ')}. ${plan.hint} Labels are short and must be accurate for the specification. Shapes: ${plan.types.map((k) => DIAGRAM_SHAPES[k]).join(' | ')}
 Every check has a one-sentence "explain" that teaches.
@@ -511,6 +553,8 @@ async function create(ctx: Ctx, body: any) {
   const qual = clean(body.qual, 80) || 'BTEC / A-Level';
   const topic = clean(body.topic, 100) || null;
   const request = clean(body.request, 300);
+  // the daily lesson is always medium; made lessons use the learner's choice
+  const difficulty = mode === 'daily' ? 'medium' : (DIFFICULTY[clean(body.difficulty, 10)] ? clean(body.difficulty, 10) : 'medium');
   if (!unit && !request) return { ok: false, error: 'Choose a unit or tell us what you want to learn.' };
 
   // take the lesson's AI uses first (server-side, serialised per account) so two tabs can't overspend
@@ -524,7 +568,7 @@ async function create(ctx: Ctx, body: any) {
     const reason = clean(body.reason, 300) || (topic ? `You picked ${topic}.` : '');
     let L: any = null;
     if (hasProviders()) {
-      try { L = await writeLesson({ unitName, qual, topic, request, focusReason: reason, prof, grounding: body.grounding, length: clean(body.length, 12), focus: clean(body.focus, 12), unit, coding: codingLang(unit, unitName, request, topic) }); }
+      try { L = await writeLesson({ unitName, qual, topic, request, focusReason: reason, prof, grounding: body.grounding, length: clean(body.length, 12), focus: clean(body.focus, 12), difficulty, unit, coding: codingLang(unit, unitName, request, topic) }); }
       catch (e) { console.warn('study-hub write failed', e); }
     }
     if (!L) L = bankLesson(unitName, topic, body.grounding);
@@ -532,7 +576,7 @@ async function create(ctx: Ctx, body: any) {
     const row = {
       user_id: ctx.userId, kind: mode, trial, lesson_date: today, unit: unit || null, topic: L.topic || topic,
       title: L.title, emoji: L.icon || null, reason: reason || L.summary || null, minutes: L.minutes,
-      content: { summary: L.summary, steps: L.steps, unitName, qual, icon: L.icon || null, verified: !!L.verified, length: clean(body.length, 12) || 'standard', focus: clean(body.focus, 12) }, provider: L.provider,
+      content: { summary: L.summary, steps: L.steps, unitName, qual, icon: L.icon || null, verified: !!L.verified, length: clean(body.length, 12) || 'standard', focus: clean(body.focus, 12), difficulty }, provider: L.provider,
     };
     let { data: saved, error } = await ctx.admin.from('study_lessons').insert(row).select('*').single();
     if (error && mode === 'daily') {
@@ -570,15 +614,13 @@ async function mark(ctx: Ctx, body: any) {
   if (answer.split(/\s+/).filter(Boolean).length < 3) return { ok: true, score: 0, max: s.marks, got: [], feedback: 'Write a little more so it can be marked — aim for a sentence per mark.' };
   if (hasProviders()) {
     try {
-      const r = await askJson('You are a fair, encouraging UK exam marker. Mark strictly against the mark scheme points. Reply with JSON only.',
-        `Question (${s.marks} marks): ${s.q}
-${s.context ? 'Context: ' + s.context : ''}
-Mark scheme points (one mark each unless stated): ${JSON.stringify(s.points)}
-Student answer: """${answer}"""
-Return JSON: {"score":0,"got":[indices of mark scheme points the answer earns],"feedback":"2 sentences: what was good, the single most useful improvement","tip":"one short exam technique tip"}`, 30000);
-      const sc = Math.max(0, Math.min(s.marks, Math.round(Number(r.json?.score) || 0)));
-      const got = (Array.isArray(r.json?.got) ? r.json.got : []).map(Number).filter((n: number) => n >= 0 && n < s.points.length);
-      return { ok: true, score: sc, max: s.marks, got, feedback: clean(r.json?.feedback, 500), tip: clean(r.json?.tip, 200), ai: true };
+      // the same point-by-point examiner the AI Examiner (ai-mark) uses for Study Hub questions
+      const q = { study_hub: true, study_hub_points: s.points, study_hub_model: s.model || '', question: s.q, marks: s.marks, command_verb: s.verb || '', scenario: s.context || '', topic: L.content?.topic || '', unit: L.content?.unitName || '', qualification: L.content?.qual || '', mark_scheme: s.real?.mark_scheme || {} };
+      const r = await askJson(STUDY_HUB_SYSTEM, buildStudyHubPrompt(q, answer), 40000, { preferStrong: true, temperature: 0, maxTokens: 2000 });
+      if (!r.json) throw new Error('no JSON');
+      const m = studyHubPostProcess(r.json, q, answer);
+      const max = Number(m.max) || s.marks;
+      return { ok: true, score: Math.max(0, Math.min(max, Math.round(Number(m.earned) || 0))), max, got: m.got || [], feedback: clean(m.examiner_comment || m.feedback, 500), strengths: m.strengths || [], improvements: m.improvements || [], ai: true };
     } catch (e) { console.warn('study-hub mark failed', e); }
   }
   const h = heuristicMark(answer, s.points, s.marks);
