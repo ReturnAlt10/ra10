@@ -1,7 +1,7 @@
 import { serve } from 'https://deno.land/std@0.177.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { askJson, hasProviders } from '../_shared/ai.ts';
-import { STUDY_HUB_SYSTEM, buildStudyHubPrompt, studyHubPostProcess } from '../_shared/study_hub_examiner.ts';
+import { STUDY_HUB_SYSTEM, buildStudyHubPrompt, studyHubPostProcess, ANNOTATE_SYSTEM, buildAnnotatePrompt, cleanAnnotations, annotationsFromAwarded } from '../_shared/study_hub_examiner.ts';
 
 // ────────────────────────────────────────────────────────────────────────────
 // RA10 Study Hub — AI-curated bite-size lessons (open to every signed-in account;
@@ -760,6 +760,10 @@ async function mark(ctx: Ctx, body: any) {
       const r = await askJson(STUDY_HUB_SYSTEM, buildStudyHubPrompt(q, answer), 40000, { preferStrong: true, temperature: 0, maxTokens: 2000 });
       if (!r.json) throw new Error('no JSON');
       const m = studyHubPostProcess(r.json, q, answer);
+      if (!(m.annotations || []).length) {
+        try { const a = await askJson(ANNOTATE_SYSTEM, buildAnnotatePrompt(q, answer, m), 25000, { preferStrong: true, temperature: 0, maxTokens: 1200 }); m.annotations = cleanAnnotations(a.json?.annotations, answer); } catch (e) { /* highlights are a bonus */ }
+        if (!(m.annotations || []).length) m.annotations = annotationsFromAwarded(r.json, answer);
+      }
       const max = Number(m.max) || s.marks;
       return { ok: true, score: Math.max(0, Math.min(max, Math.round(Number(m.earned) || 0))), max, got: m.got || [], feedback: clean(m.examiner_comment || m.feedback, 500), strengths: m.strengths || [], improvements: m.improvements || [], annotations: m.annotations || [], ai: true };
     } catch (e) { console.warn('study-hub mark failed', e); }

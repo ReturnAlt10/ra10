@@ -158,19 +158,46 @@
     });
     spans.sort((x, y) => x.start - y.start);
     let html = '', pos = 0;
-    spans.forEach(sp => { html += esc(answer.slice(pos, sp.start)) + `<mark class="sh-hl ${sp.type}" data-n="${sp.n}" tabindex="0">${esc(answer.slice(sp.start, sp.end))}<sup>${sp.n + 1}</sup></mark>`; pos = sp.end; });
+    spans.forEach((sp, k) => { html += esc(answer.slice(pos, sp.start)) + `<mark class="sh-hl ${sp.type}" data-n="${sp.n}" tabindex="0" role="button" aria-label="${esc(HL_LABEL[sp.type] || '')}: ${esc(anns[sp.n].note || '')}" style="--d:${(k * .35 + .2).toFixed(2)}s">${esc(answer.slice(sp.start, sp.end))}<sup>${sp.n + 1}</sup></mark>`; pos = sp.end; });
     html += esc(answer.slice(pos));
     const notes = anns.map((a, n) => `<li class="${esc(a.type)}" data-n="${n}"><span class="num">${n + 1}</span><div><b>${esc(HL_LABEL[a.type] || '')}</b>${a.note ? ' — ' + esc(a.note) : ''}${a.better ? `<span class="better">${a.type === 'develop' ? 'Try' : 'Better'}: ${esc(a.better)}</span>` : ''}</div></li>`).join('');
     const kinds = ['credit', 'weak', 'wrong', 'develop'].filter(k => anns.some(a => a.type === k));
-    return `<div class="sh-annot"><div class="sh-ins-h">Your answer, marked</div><div class="sh-annot-text">${html}</div>
+    const counts = ['credit', 'weak', 'wrong', 'develop'].map(k => [k, anns.filter(a => a.type === k).length]).filter(x => x[1]);
+    return `<div class="sh-annot"><div class="sh-annot-h"><div class="sh-ins-h">Your answer, marked</div><span class="sh-annot-tip">${I('target', { size: 14 })} Tap a highlight</span></div>
+      <div class="sh-annot-sum">${counts.map(([k, n]) => `<span class="${k}">${n} ${esc({ credit: n === 1 ? 'mark' : 'marks', weak: 'weak wording', wrong: 'not credited', develop: 'to develop' }[k])}</span>`).join('')}</div>
+      <div class="sh-annot-text">${html}</div>
       <div class="sh-annot-key">${kinds.map(k => `<span class="${k}"><i></i>${esc({ credit: 'Mark', weak: 'Mark, weak wording', wrong: 'Not credited', develop: 'Develop' }[k])}</span>`).join('')}</div>
       <ol class="sh-annot-notes">${notes}</ol></div>`;
   }
+  // Tapping (or hovering, on a mouse) a highlight opens a bubble right under those words with the examiner's note.
   function wireAnnotations(box) {
+    const text = $('.sh-annot-text', box); if (!text) return;
+    let open = null, openVia = '';
+    const close = () => { const p = $('.sh-hl-pop', box); if (p) p.remove(); if (open) open.classList.remove('on'); $$('.sh-annot-notes li.on', box).forEach(x => x.classList.remove('on')); open = null; };
+    const show = (m, via) => {
+      if (open === m) { if (via === 'click' && openVia === 'hover') { openVia = 'click'; return; } if (via !== 'hover') close(); return; }
+      close(); open = m; openVia = via || 'click'; m.classList.add('on');
+      const li = $(`.sh-annot-notes li[data-n="${m.dataset.n}"]`, box);
+      if (li) li.classList.add('on');
+      const pop = document.createElement('div');
+      pop.className = 'sh-hl-pop ' + [...m.classList].filter(c => /^(credit|weak|wrong|develop)$/.test(c)).join(' ');
+      pop.setAttribute('role', 'status');
+      pop.innerHTML = li ? li.querySelector('div').innerHTML : '';
+      // the bubble sits just under the answer (so it never covers other highlights), its arrow pointing up at the words
+      text.after(pop);
+      const tr = text.getBoundingClientRect(), r = m.getClientRects()[0] || m.getBoundingClientRect();
+      const left = Math.max(0, Math.min(r.left - tr.left, tr.width - pop.offsetWidth));
+      pop.style.marginLeft = left + 'px';
+      pop.style.setProperty('--ax', Math.max(14, Math.min(pop.offsetWidth - 14, r.left - tr.left - left + Math.min(r.width, 60) / 2)) + 'px');
+      pop.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    };
     $$('.sh-hl', box).forEach(m => {
-      const show = () => { const li = $(`.sh-annot-notes li[data-n="${m.dataset.n}"]`, box); if (!li) return; $$('.sh-annot-notes li.on', box).forEach(x => x.classList.remove('on')); li.classList.add('on'); li.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); };
-      m.onclick = show; m.onkeydown = (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); show(); } };
+      m.onclick = (e) => { e.stopPropagation(); show(m, 'click'); };
+      m.onkeydown = (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); show(m, 'key'); } else if (e.key === 'Escape') close(); };
+      if (window.matchMedia && matchMedia('(hover: hover)').matches) { m.onmouseenter = () => show(m, 'hover'); }
     });
+    $$('.sh-annot-notes li', box).forEach(li => { li.onclick = () => { const m = $(`.sh-hl[data-n="${li.dataset.n}"]`, box); if (m) { m.scrollIntoView({ behavior: 'smooth', block: 'center' }); if (open !== m) show(m, 'click'); } }; });
+    box.addEventListener('click', (e) => { if (open && !e.target.closest('.sh-hl, .sh-hl-pop, .sh-annot-notes')) close(); });
   }
 
   /* ───────────── pictures on learn cards ─────────────

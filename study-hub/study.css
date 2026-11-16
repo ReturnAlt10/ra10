@@ -899,8 +899,25 @@ body.sh-page .sh-ov-cta h2 { margin: 0 0 6px; color: #fff; font-size: clamp(1.5r
 /* the examiner's highlights on a written answer */
 .sh-annot { margin: 4px 0 14px; padding: 14px 16px; border-radius: 18px; background: var(--card); border: 2px solid var(--line); }
 .sh-annot .sh-ins-h { margin-top: 0; }
-.sh-annot-text { white-space: pre-wrap; font-size: 1rem; line-height: 1.85; overflow-wrap: anywhere; }
-.sh-hl { --hc: var(--ok); color: inherit; background: color-mix(in srgb, var(--hc) 18%, transparent); border-bottom: 2px solid var(--hc); border-radius: 4px 4px 0 0; padding: 1px 2px; cursor: pointer; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+.sh-annot-text { position: relative; white-space: pre-wrap; font-size: 1.02rem; line-height: 1.9; overflow-wrap: anywhere; }
+.sh-annot-h { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.sh-annot-tip { display: inline-flex; align-items: center; gap: 5px; font-size: .74rem; font-weight: 700; color: var(--acc); background: var(--acc-soft); padding: 3px 9px; border-radius: 999px; animation: shTipPulse 2.4s ease-in-out 1.6s 2; }
+@keyframes shTipPulse { 50% { transform: scale(1.06); } }
+.sh-annot-sum { display: flex; flex-wrap: wrap; gap: 6px; margin: 2px 0 10px; }
+.sh-annot-sum span { --hc: var(--ok); font-size: .76rem; font-weight: 800; padding: 3px 9px; border-radius: 999px; color: var(--hc); background: color-mix(in srgb, var(--hc) 14%, transparent); }
+.sh-annot-sum .weak { --hc: #d98a00; } .sh-annot-sum .wrong { --hc: var(--bad); } .sh-annot-sum .develop { --hc: var(--acc); }
+/* each highlight sweeps on like a highlighter pen, one after another */
+.sh-hl { --hc: var(--ok); color: inherit; background: linear-gradient(color-mix(in srgb, var(--hc) 22%, transparent), color-mix(in srgb, var(--hc) 22%, transparent)) no-repeat 0 0 / 100% 100%; border-bottom: 2px solid var(--hc); border-radius: 4px 4px 0 0; padding: 1px 2px; cursor: pointer; box-decoration-break: clone; -webkit-box-decoration-break: clone; animation: shHlSweep .55s cubic-bezier(.3, .7, .3, 1) var(--d, 0s) both; transition: background-color .15s, box-shadow .15s; }
+@keyframes shHlSweep { from { background-size: 0% 100%; border-bottom-color: transparent; } }
+.sh-hl:hover, .sh-hl.on { box-shadow: 0 0 0 2px color-mix(in srgb, var(--hc) 45%, transparent); background-color: color-mix(in srgb, var(--hc) 14%, transparent); }
+.sh-hl-pop { --hc: var(--ok); position: relative; margin-top: 12px; width: min(340px, 100%); padding: 10px 12px; border-radius: 14px; background: var(--card); border: 2px solid var(--hc); box-shadow: 0 14px 34px -12px rgba(20, 16, 50, .35); font-size: .88rem; line-height: 1.45; white-space: normal; animation: shPopIn .18s ease-out; }
+.sh-hl-pop::before { content: ''; position: absolute; top: -8px; left: calc(var(--ax, 20px) - 7px); width: 12px; height: 12px; background: var(--card); border-left: 2px solid var(--hc); border-top: 2px solid var(--hc); transform: rotate(45deg); }
+.sh-hl-pop b { color: var(--hc); }
+.sh-hl-pop .better { display: block; margin-top: 5px; color: var(--ink-2); font-style: italic; }
+.sh-hl-pop.weak { --hc: #d98a00; } .sh-hl-pop.wrong { --hc: var(--bad); } .sh-hl-pop.develop { --hc: var(--acc); }
+@keyframes shPopIn { from { opacity: 0; transform: translateY(-4px); } }
+.sh-annot-notes li { cursor: pointer; }
+@media (prefers-reduced-motion: reduce) { .sh-hl, .sh-hl-pop, .sh-annot-tip { animation: none; } }
 .sh-hl sup { font-size: .66rem; font-weight: 800; color: var(--hc); margin-left: 2px; }
 .sh-hl.weak, .sh-annot-notes li.weak, .sh-annot-key .weak { --hc: #d98a00; }
 .sh-hl.wrong, .sh-annot-notes li.wrong, .sh-annot-key .wrong { --hc: var(--bad); }

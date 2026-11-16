@@ -8,7 +8,7 @@ import { EDEXCEL_BUSINESS_SYSTEM, buildEdexcelBusinessPrompt, edexcelBusinessPos
 import { IT_U2_SYSTEM, buildItUnit2Prompt, itUnit2PostProcess, isItUnit2 } from "./it_unit2_examiner.ts";
 import { IT_U14_SYSTEM, buildItUnit14Prompt, itUnit14PostProcess, isItUnit14 } from "./it_unit14_examiner.ts";
 import { requireTermsAccepted } from "../_shared/legal.ts";
-import { STUDY_HUB_SYSTEM, buildStudyHubPrompt, studyHubPostProcess, isStudyHubQuestion, isLevelledScheme, mergeOpinions } from "../_shared/study_hub_examiner.ts";
+import { STUDY_HUB_SYSTEM, buildStudyHubPrompt, studyHubPostProcess, isStudyHubQuestion, isLevelledScheme, mergeOpinions, ANNOTATE_SYSTEM, buildAnnotatePrompt, cleanAnnotations, annotationsFromAwarded } from "../_shared/study_hub_examiner.ts";
 
 const ALLOWED_ORIGINS = [
   "https://ra10.co.uk",
@@ -596,6 +596,21 @@ export default Deno.serve(async (req: Request) => {
     }
 
     const result = ensureResultShape(parsed, marksMax);
+
+    // Study Hub shows the examiner's highlights on the student's own words. When this marking produced none that
+    // match the answer (a subject module marked it, or its quotes missed), one short extra pass writes them — the
+    // mark itself is not changed. With no AI left, the marks' own evidence is highlighted.
+    if (question?.study_hub === true && !image) {
+      let notes = cleanAnnotations((result as any).annotations, answer);
+      if (!notes.length) {
+        try {
+          const r = await callAnyProvider(buildAnnotatePrompt(question, answer, result), { system: ANNOTATE_SYSTEM, timeout: 25000, maxTokens: 1200, temperature: 0 }, true);
+          notes = cleanAnnotations(extractJsonObject(r.content)?.annotations, answer);
+        } catch (e) { console.warn("ai-mark: Study Hub highlights failed:", e instanceof Error ? e.message : e); }
+      }
+      if (!notes.length) notes = annotationsFromAwarded(parsed, answer);
+      (result as any).annotations = notes;
+    }
 
     // XP v3 (xp-v3.sql): record the real score so AI Examiner XP is based on what was actually marked.
     try {
