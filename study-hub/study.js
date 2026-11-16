@@ -15,6 +15,16 @@
     : /ies$/.test(w) ? w.slice(0, -3) + 'y'
     : /(sses|xes|ches|shes|zes)$/.test(w) ? w.slice(0, -2)
     : /[^s]s$/.test(w) ? w.slice(0, -1) : w).join(' ');
+  // "a" or "an" before a word, by its sound: an hour, a user, a one-off, an SSD (spelt-out letters), a LAN (said as a word).
+  const aOrAn = (w) => {
+    const t = String(w || '').trim().replace(/^["'(]+/, ''); if (!t) return 'a';
+    if (/^[A-Z]{2,}\b/.test(t) && !/[AEIOU]/.test(t.split(/\b/)[0])) return /^[AEFHILMNORSX]/.test(t) ? 'an' : 'a';
+    if (/^\d/.test(t)) return /^(8|11|18)(\D|$)|^8\d/.test(t) ? 'an' : 'a';
+    const l = t.toLowerCase();
+    if (/^(hour|honest|honour|honor|heir)/.test(l)) return 'an';
+    if (/^(uni|use|usu|uti|ure|eu|ewe|one\b|once|ubiq|uk\b)/.test(l)) return 'a';
+    return /^[aeiou]/.test(l) ? 'an' : 'a';
+  };
   // The word tiles for a fill step: one per gap (a word used in two gaps gets two tiles), then the distractors,
   // leaving out any "distractor" that is only a variant of an answer (it would look right but be marked wrong).
   const fillTiles = (s) => {
@@ -80,6 +90,55 @@
     tap() { this.tone(520, 0, .05, 'sine', .05); },
     done() { [523, 659, 784, 1047].forEach((f, i) => this.tone(f, i * .12, .3, 'triangle', .16)); }
   };
+
+  /* ───────────── the examiner's highlights on a written answer ─────────────
+     credit = earned a mark; weak = technically a mark, but the wording needs work; wrong = not credited;
+     develop = a correct point that needs a reason or link to earn more. Quotes are found in the student's own text. */
+  const HL_LABEL = { credit: 'Mark', weak: 'Technically a mark — but the wording needs work', wrong: 'Not credited', develop: 'Develop this point' };
+  function annotatedHtml(answer, anns) {
+    const spans = [];
+    const lower = answer.toLowerCase();
+    anns.forEach((a, n) => {
+      const q = String(a.quote || '').trim();
+      let at = q ? lower.indexOf(q.toLowerCase()) : -1, len = q.length;
+      if (at < 0) {
+        // allow small differences in spacing and punctuation
+        const ws = q.toLowerCase().match(/[a-z0-9']+/g) || [];
+        if (ws.length) {
+          const re = new RegExp(ws.map(w => w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join("[^a-z0-9']+"), 'i');
+          const m = re.exec(answer); if (m) { at = m.index; len = m[0].length; }
+        }
+      }
+      if (at >= 0 && !spans.some(x => at < x.end && at + len > x.start)) spans.push({ start: at, end: at + len, n, type: a.type });
+    });
+    spans.sort((x, y) => x.start - y.start);
+    let html = '', pos = 0;
+    spans.forEach(sp => { html += esc(answer.slice(pos, sp.start)) + `<mark class="sh-hl ${sp.type}" data-n="${sp.n}" tabindex="0">${esc(answer.slice(sp.start, sp.end))}<sup>${sp.n + 1}</sup></mark>`; pos = sp.end; });
+    html += esc(answer.slice(pos));
+    const notes = anns.map((a, n) => `<li class="${esc(a.type)}" data-n="${n}"><span class="num">${n + 1}</span><div><b>${esc(HL_LABEL[a.type] || '')}</b>${a.note ? ' — ' + esc(a.note) : ''}${a.better ? `<span class="better">${a.type === 'develop' ? 'Try' : 'Better'}: ${esc(a.better)}</span>` : ''}</div></li>`).join('');
+    const kinds = ['credit', 'weak', 'wrong', 'develop'].filter(k => anns.some(a => a.type === k));
+    return `<div class="sh-annot"><div class="sh-ins-h">Your answer, marked</div><div class="sh-annot-text">${html}</div>
+      <div class="sh-annot-key">${kinds.map(k => `<span class="${k}"><i></i>${esc({ credit: 'Mark', weak: 'Mark, weak wording', wrong: 'Not credited', develop: 'Develop' }[k])}</span>`).join('')}</div>
+      <ol class="sh-annot-notes">${notes}</ol></div>`;
+  }
+  function wireAnnotations(box) {
+    $$('.sh-hl', box).forEach(m => {
+      const show = () => { const li = $(`.sh-annot-notes li[data-n="${m.dataset.n}"]`, box); if (!li) return; $$('.sh-annot-notes li.on', box).forEach(x => x.classList.remove('on')); li.classList.add('on'); li.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); };
+      m.onclick = show; m.onkeydown = (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); show(); } };
+    });
+  }
+
+  /* ───────────── pictures on learn cards ─────────────
+     Openly licensed pictures from Wikimedia Commons, chosen when the lesson is written (study-hub: findPictures).
+     Only Commons links are shown; a picture that fails to load is removed. */
+  function pictureHtml(p) {
+    if (!p || !/^https:\/\/(upload|thumb)\.wikimedia\.org\//.test(String(p.src || ''))) return '';
+    const page = /^https:\/\/commons\.wikimedia\.org\//.test(String(p.page || '')) ? p.page : '';
+    const credit = [p.credit, p.license].filter(Boolean).join(' · ');
+    const clear = /\.(png|svg|gif)(\?|$|\/)/i.test(String(p.src).split('?')[0]) || /\.svg\b/i.test(String(p.src));
+    return `<figure class="sh-pic${clear ? ' clear' : ''}"><img src="${esc(p.src)}" alt="${esc(p.caption || 'Picture for this card')}" loading="lazy" decoding="async" referrerpolicy="no-referrer">
+      <figcaption>${p.caption ? `<span>${esc(p.caption)}</span>` : ''}<small>${page ? `<a href="${esc(page)}" target="_blank" rel="noopener">` : ''}Image: ${esc(credit || 'Wikimedia Commons')}${credit ? ' · Wikimedia Commons' : ''}${page ? '</a>' : ''}</small></figcaption></figure>`;
+  }
 
   /* ───────────── diagrams on learn cards ─────────────
      The lesson stores a diagram as data (supabase/functions/study-hub: sanitiseDiagram); it is drawn here so it is
@@ -1094,7 +1153,7 @@
   const KIND = { learn: ['book', 'New idea'], mcq: ['question', 'Quick check'], truefalse: ['scales', 'True or false?'], fill: ['pencil', 'Fill the gap'], match: ['puzzle', 'Match the pairs'], order: ['steps', 'Put it in order'], code: ['code', 'Write the code'], recap: ['flag', 'Recap'] };
 
   // Mark a written answer with the real RA10 AI Examiner (same backend as the unit apps).
-  async function examine(lesson, step, i, answer) {
+  async function examine(lesson, step, i, answer, remark) {
     if (!window.RA10 || typeof RA10.examineAnswer !== 'function') throw new Error('AI Examiner unavailable');
     const u = unitOf(lesson.unit);
     const q = step.real ? Object.assign({}, step.real) : {
@@ -1104,15 +1163,20 @@
     if (!q.marks) q.marks = step.marks;
     // Study Hub marking (ai-mark _shared/study_hub_examiner.ts): point-by-point against the scheme shown on this page,
     // used whenever no subject-specific examiner claims the question; it returns which points were earned.
-    Object.assign(q, { study_hub: true, study_hub_points: step.points || [], study_hub_model: step.model || '', qualification: u ? u.qual : '', unit_name: u ? u.name : '', topic: q.topic || lesson.topic || '' });
-    // the lesson's AI uses cover its own exam questions (claimed server-side, once per exam step)
-    const paidLesson = lesson.id && lesson.kind !== 'template' && lesson.status !== 'done' ? String(lesson.id) : undefined;
+    // what the lesson taught before this question, so the examiner reads the answer in context
+    const steps = (lesson.content && lesson.content.steps) || [];
+    const taught = steps.slice(0, i).filter(x => x && x.type === 'learn').map(x => (x.title ? x.title + ': ' : '') + (x.body || '') + ((x.points || []).length ? ' (' + x.points.join('; ') + ')' : '')).join('\n').slice(0, 2500);
+    Object.assign(q, { study_hub: true, study_hub_points: step.points || [], study_hub_model: step.model || '', study_hub_taught: taught, qualification: u ? u.qual : '', unit_name: u ? u.name : '', topic: q.topic || lesson.topic || '' });
+    if (remark) q.study_hub_remark = { previous: remark.previous, dispute: String(remark.dispute || '').slice(0, 600) };
+    // the lesson's AI uses cover its own exam questions (claimed server-side, once per exam step); a re-mark is an ordinary use
+    const paidLesson = !remark && lesson.id && lesson.kind !== 'template' && lesson.status !== 'done' ? String(lesson.id) : undefined;
     const res = await RA10.examineAnswer({ question: q, answer, studyHubLesson: paidLesson });
     const r = res && res.result;
-    if (!r) throw new Error('No result');
+    if (!r) throw new Error((res && res.error) || 'No result');
     const max = Math.max(1, Number(r.max) || step.marks);
     const got = Array.isArray(r.got) ? r.got.map(Number).filter(n => n >= 0 && n < (step.points || []).length) : [];
-    return { score: Math.max(0, Math.min(max, Math.round(Number(r.earned) || 0))), max, got, feedback: r.examiner_comment || r.feedback || '', strengths: r.strengths || [], improvements: r.improvements || r.next_level || [], level: r.level, examiner: true };
+    const annotations = Array.isArray(r.annotations) ? r.annotations.filter(a => a && a.quote && /^(credit|weak|wrong|develop)$/.test(a.type)) : [];
+    return { score: Math.max(0, Math.min(max, Math.round(Number(r.earned) || 0))), max, got, annotations, feedback: r.examiner_comment || r.feedback || '', strengths: r.strengths || [], improvements: r.improvements || r.next_level || [], level: r.level, examiner: true };
   }
 
   function play(lesson) {
@@ -1125,8 +1189,11 @@
     const doneSet = new Set(replay ? [] : Object.keys(results).map(Number));
     const start = replay ? 0 : Math.max(0, Math.min(steps.length - 1, Number(prog.i) || 0));
     for (let i = 0; i < start; i++) doneSet.add(i);
-    const P = { L: lesson, steps, replay, results, doneSet, queue: [], combo: 0, best: 0, t0: Date.now(), cur: null, retried: new Set() };
-    for (let i = start; i < steps.length; i++) P.queue.push({ i, retry: false });
+    const P = { L: lesson, steps, replay, results, doneSet, queue: [], combo: 0, best: 0, t0: Date.now(), cur: null, retried: new Set(), remarked: new Set(), flagged: new Set() };
+    // older lessons can ask the same multiple-choice question twice: the repeat is skipped (and not scored)
+    const seenQ = new Set();
+    steps.forEach((s, i) => { if (s.type !== 'mcq' && s.type !== 'truefalse') return; const k = norm(s.q || s.statement) + '|' + norm(s.type === 'mcq' ? s.choices[s.answer] : s.answer); if (seenQ.has(k)) { s._skip = true; doneSet.add(i); } else seenQ.add(k); });
+    for (let i = start; i < steps.length; i++) if (!steps[i]._skip) P.queue.push({ i, retry: false });
     const lessonIcon = iconOf(lesson);
 
     document.body.style.overflow = 'hidden';
@@ -1166,6 +1233,8 @@
     }
     const enable = (on) => { if (primary && primary.textContent !== 'Continue') primary.disabled = !on; };
     function onKey(e) {
+      // keys inside the re-mark / flag controls and the highlights belong to them, not to Continue
+      if (e.target && e.target.closest && e.target.closest('.sh-mark-form, .sh-mark-acts, .sh-hl')) return;
       if (e.target && /textarea|input|select/i.test(e.target.tagName)) { if (e.key === 'Enter' && (e.ctrlKey || e.metaKey) && primary && !primary.disabled) primary.click(); return; }
       if (e.key === 'Enter' && primary && !primary.disabled) { e.preventDefault(); primary.click(); return; }
       if (/^[1-6]$/.test(e.key)) { const b = $$('[data-k]', stage)[Number(e.key) - 1]; if (b && !b.disabled) b.click(); }
@@ -1199,19 +1268,27 @@
       const head = item.retry ? `<div class="sh-kind retry">${I('retry', { size: 18 })} Let's try that again</div>` : '';
       const wrap = (html) => { stage.innerHTML = `<div class="sh-step">${head}${html}</div>`; };
       if (s.type === 'learn') {
-        wrap(`${kindHead('learn')}<div class="sh-learn"><div class="emo">${I(lessonIcon, { size: 40 })}</div>${s.title ? `<h2>${esc(s.title)}</h2>` : ''}<p>${esc(s.body)}</p>${diagramHtml(s.diagram)}${(s.points || []).length ? `<ul>${s.points.map(p => `<li>${esc(p)}</li>`).join('')}</ul>` : ''}${s.example ? `<div class="sh-ex"><b>Example</b>${esc(s.example)}</div>` : ''}</div>`);
+        wrap(`${kindHead('learn')}<div class="sh-learn"><div class="emo">${I(lessonIcon, { size: 40 })}</div>${s.title ? `<h2>${esc(s.title)}</h2>` : ''}<p>${esc(s.body)}</p>${s.diagram ? diagramHtml(s.diagram) : pictureHtml(s.image)}${(s.points || []).length ? `<ul>${s.points.map(p => `<li>${esc(p)}</li>`).join('')}</ul>` : ''}${s.example ? `<div class="sh-ex"><b>Example</b>${esc(s.example)}</div>` : ''}</div>`);
+        $$('.sh-pic img', stage).forEach(img => {
+          const gone = () => { const f = img.closest('.sh-pic'); if (f) f.remove(); };
+          img.onerror = gone;
+          if (img.complete && !img.naturalWidth) gone(); // it failed before the handler was attached
+        });
         footIdle('Continue', true, () => { record(item.i, { ok: true, score: 0, max: 0 }); next(); });
       } else if (s.type === 'recap') {
         wrap(`${kindHead('recap')}<h1 class="sh-q">${esc(s.title || 'Key takeaways')}</h1><div class="sh-recap">${s.points.map((p, i) => `<div style="animation-delay:${i * 90}ms">${I('check', { size: 26, stroke: 2.2 })}<span>${esc(p)}</span></div>`).join('')}</div>`);
         footIdle(P.queue.length ? 'Continue' : 'Finish lesson', true, () => { record(item.i, { ok: true, score: 0, max: 0 }); next(); });
       } else if (s.type === 'mcq') {
         let sel = -1;
-        wrap(`${s.bank ? `<div class="sh-kind">${I('target', { size: 18 })} From the RA10 question bank</div>` : kindHead('mcq')}<h1 class="sh-q">${esc(s.q)}</h1><div class="sh-opts">${s.choices.map((c, i) => `<button class="sh-opt" data-k="${i}"><span class="k">${i + 1}</span><span>${esc(c)}</span></button>`).join('')}</div>`);
+        // a retry shows the choices in a new order, so it tests the idea rather than the position
+        let order = s.choices.map((_, i) => i);
+        if (item.retry) { for (let n = 0; n < 4 && order.every((v, i) => v === i); n++) order = shuffle(order); }
+        wrap(`${s.bank ? `<div class="sh-kind">${I('target', { size: 18 })} From the RA10 question bank</div>` : kindHead('mcq')}<h1 class="sh-q">${esc(s.q)}</h1><div class="sh-opts">${order.map((ci, n) => `<button class="sh-opt" data-k="${n}" data-c="${ci}"><span class="k">${n + 1}</span><span>${esc(s.choices[ci])}</span></button>`).join('')}</div>`);
         const opts = $$('.sh-opt', stage);
-        opts.forEach(b => b.onclick = () => { sel = Number(b.dataset.k); opts.forEach(x => x.classList.toggle('sel', x === b)); Snd.tap(); enable(true); });
+        opts.forEach(b => b.onclick = () => { sel = Number(b.dataset.c); opts.forEach(x => x.classList.toggle('sel', x === b)); Snd.tap(); enable(true); });
         footIdle('Check', false, () => {
           const ok = sel === s.answer;
-          opts.forEach((b, i) => { b.disabled = true; b.classList.remove('sel'); if (i === s.answer) b.classList.add('ok'); else if (i === sel) b.classList.add('bad'); });
+          opts.forEach(b => { const i = Number(b.dataset.c); b.disabled = true; b.classList.remove('sel'); if (i === s.answer) b.classList.add('ok'); else if (i === sel) b.classList.add('bad'); });
           judge(item, { ok, score: ok ? 1 : 0, max: 1 }, ok ? '' : '<b>Answer:</b> ' + esc(s.choices[s.answer]), s.explain);
         });
       } else if (s.type === 'truefalse') {
@@ -1228,13 +1305,21 @@
         const filled = s.blanks.map(() => null);
         const parts = s.text.split(/_{2,}/);
         while (parts.length < s.blanks.length + 1) parts.splice(parts.length - 1, 0, ' '); // never leave a gap with nowhere to go
+        // "a ___" / "an ___": the article follows whichever word is in the gap, so grammar never rules a word in or out
+        const art = parts.map((p, i) => {
+          if (i >= s.blanks.length) return null;
+          const m = p.match(/(^|\s)(a|an)\s+$/i); if (!m) return null;
+          parts[i] = p.slice(0, p.length - m[0].length + m[1].length);
+          return { cap: m[2].charAt(0) === 'A' };
+        });
+        const artFor = (i, word) => { const a = art[i]; if (!a) return ''; const t = word == null ? 'a/an' : aOrAn(word); return (a.cap ? t.charAt(0).toUpperCase() + t.slice(1) : t) + ' '; };
         const tiles = fillTiles(s);
         let target = null; // the gap the next tile goes into (tap a gap to choose it)
         wrap(`${kindHead('fill')}<h1 class="sh-q sm">Complete the sentence</h1><div class="sh-sentence" id="f-sen"></div><div class="sh-bank" id="f-bank">${shuffle(tiles.map((o, i) => i)).map(i => `<button class="sh-tile" data-o="${i}">${esc(tiles[i])}</button>`).join('')}</div>`);
         const paint = () => {
           if (target != null && filled[target] != null) target = null;
           const next = target != null ? target : filled.indexOf(null);
-          $('#f-sen', stage).innerHTML = parts.map((p, i) => esc(p) + (i < s.blanks.length ? `<span class="sh-gap${filled[i] == null && i === next && s.blanks.length > 1 ? ' target' : ''}" data-g="${i}"${filled[i] == null ? ' role="button" tabindex="0" aria-label="Gap ' + (i + 1) + '"' : ''}>${filled[i] != null ? `<button class="sh-tile" data-back="${i}">${esc(tiles[filled[i]])}</button>` : ''}</span>` : '')).join('');
+          $('#f-sen', stage).innerHTML = parts.map((p, i) => esc(p) + (i < s.blanks.length && art[i] ? `<span class="sh-art">${esc(artFor(i, filled[i] == null ? null : tiles[filled[i]]))}</span>` : '') + (i < s.blanks.length ? `<span class="sh-gap${filled[i] == null && i === next && s.blanks.length > 1 ? ' target' : ''}" data-g="${i}"${filled[i] == null ? ' role="button" tabindex="0" aria-label="Gap ' + (i + 1) + '"' : ''}>${filled[i] != null ? `<button class="sh-tile" data-back="${i}">${esc(tiles[filled[i]])}</button>` : ''}</span>` : '')).join('');
           $$('[data-o]', stage).forEach(b => b.classList.toggle('used', filled.includes(Number(b.dataset.o))));
           $$('[data-back]', stage).forEach(b => b.onclick = () => { const g = Number(b.dataset.back); filled[g] = null; target = g; Snd.tap(); paint(); });
           $$('.sh-gap[role="button"]', stage).forEach(g => g.onclick = () => { target = Number(g.dataset.g); paint(); });
@@ -1250,7 +1335,7 @@
           const ok = each.every(Boolean);
           $$('.sh-gap', stage).forEach((g, i) => g.classList.add(each[i] ? 'ok' : 'bad'));
           $$('.sh-tile', stage).forEach(b => { b.disabled = true; });
-          judge(item, { ok, score: ok ? 1 : 0, max: 1 }, ok ? '' : '<b>Answer:</b> ' + esc(parts.map((p, i) => p + (i < s.blanks.length ? s.blanks[i] : '')).join('')), s.explain);
+          judge(item, { ok, score: ok ? 1 : 0, max: 1 }, ok ? '' : '<b>Answer:</b> ' + esc(parts.map((p, i) => p + (i < s.blanks.length ? artFor(i, s.blanks[i]) + s.blanks[i] : '')).join('')), s.explain);
         });
         paint();
       } else if (s.type === 'order') {
@@ -1357,31 +1442,48 @@
           try { res = await examine(lesson, s, item.i, ta.value); }
           catch (e) {
             console.warn('AI Examiner failed, using Study Hub marking', e);
-            try { const r = await api('mark', { lessonId: lesson.id, step: item.i, answer: ta.value }); if (r.ok) res = { score: r.score, max: r.max, feedback: r.feedback, tip: r.tip, got: r.got || [], strengths: r.strengths || [], improvements: r.improvements || [] }; } catch (e2) {}
+            try { const r = await api('mark', { lessonId: lesson.id, step: item.i, answer: ta.value }); if (r.ok) res = { score: r.score, max: r.max, feedback: r.feedback, tip: r.tip, got: r.got || [], strengths: r.strengths || [], improvements: r.improvements || [], annotations: r.annotations || [] }; } catch (e2) {}
           }
           if (res) examReveal(item, res); else selfMark(item);
         }, '<button class="sh-btn ghost skip" id="p-skip">Show me the answer</button>');
       }
     }
 
-    function examReveal(item, r, skipped) {
+    function examReveal(item, r, skipped, remarked) {
       const s = steps[item.i];
       const box = $('#e-res', stage);
       const ta = $('#e-ans', stage); if (ta) ta.readOnly = true;
+      const answer = ta ? ta.value : '';
       const max = Math.max(1, r.max || s.marks), score = Math.max(0, Math.min(max, r.score || 0));
       const got = r.got || [];
       const list = (arr, ic, cls) => arr && arr.length ? `<ul class="sh-fbl ${cls}">${arr.slice(0, 5).map(x => `<li>${I(ic, { size: 18 })}<span>${esc(x)}</span></li>`).join('')}</ul>` : '';
-      box.innerHTML = `${skipped ? '' : `<div class="sh-markres"><span class="big">${score}/${max}</span><p>${esc(r.feedback || '')}${r.tip ? `<br><b>Tip:</b> ${esc(r.tip)}` : ''}${r.examiner ? `<small class="sh-muted" style="display:block;margin-top:4px">Marked by the RA10 AI Examiner${r.level ? ' · Level ' + esc(r.level) : ''}</small>` : ''}</p></div>
+      // the student's own answer with the examiner's highlights replaces the text box
+      const marked = !skipped && answer && (r.annotations || []).length ? annotatedHtml(answer, r.annotations) : '';
+      if (ta) ta.hidden = !!marked;
+      const wc = $('#e-wc', stage); if (wc) wc.hidden = !!marked;
+      const canAct = !skipped && !r.self;
+      const change = remarked ? (r.previous === score ? `Re-marked by a second examiner — the mark stays at ${score}/${max}.` : `Re-marked by a second examiner: ${r.previous}/${max} → ${score}/${max}.`) : '';
+      box.innerHTML = `${marked}${skipped ? '' : `${change ? `<div class="sh-remarked">${I('retry', { size: 16 })} ${esc(change)}</div>` : ''}<div class="sh-markres"><span class="big">${score}/${max}</span><p>${esc(r.feedback || '')}${r.tip ? `<br><b>Tip:</b> ${esc(r.tip)}` : ''}${r.examiner ? `<small class="sh-muted" style="display:block;margin-top:4px">Marked by the RA10 AI Examiner${r.level ? ' · Level ' + esc(r.level) : ''}</small>` : ''}</p></div>
           ${list(r.strengths, 'check', 'good')}${list(r.improvements, 'arrow', 'next')}`}
+        ${canAct ? `<div class="sh-mark-acts">${!P.remarked.has(item.i) && !preview ? `<button type="button" class="sh-btn ghost sm" data-remark>${I('retry', { size: 16 })} Re-mark</button>` : ''}<button type="button" class="sh-btn ghost sm" data-flag ${P.flagged.has(item.i) ? 'disabled' : ''}>${I('flag', { size: 16 })} ${P.flagged.has(item.i) ? 'Flagged — thank you' : 'Flag this marking'}</button></div><div class="sh-mark-form" hidden></div>` : ''}
         <div class="sh-ins-h">Mark scheme</div><div class="sh-ms">${(s.points || []).map((p, i) => `<div class="${got.includes(i) ? 'got' : ''}"><span class="tk">${got.includes(i) ? I('check', { size: 16 }) : '•'}</span><span>${esc(p)}</span></div>`).join('')}</div>
         ${s.model ? `<details class="sh-model" ${skipped ? 'open' : ''}><summary>Model answer</summary><p>${esc(s.model)}</p></details>` : ''}`;
+      wireAnnotations(box);
+      if (canAct) wireMarkActions(item, box, answer, r, score, max);
       box.scrollIntoView({ behavior: 'smooth', block: 'start' });
       if (skipped) { P.combo = 0; setCombo(); record(item.i, { ok: false, score: 0, max }); footResult(false, 'Here\'s how to answer it', 'Read the mark scheme and model answer, then try a similar question next time.', next); return; }
       const ok = score >= Math.ceil(max / 2), full = score === max;
       // XP and the lesson score count the question at its lesson weighting
       const scaled = Math.round((score / max) * s.marks);
-      judge(item, { ok, score: scaled, max: s.marks }, '', full ? 'Every mark-scheme point covered.' : ok ? 'Check what the examiner says to pick up full marks.' : 'Look at the improvements and the model answer.',
-        full ? 'Full marks!' : ok ? `Good answer — ${score}/${max}` : score ? `Getting there — ${score}/${max}` : 'Not quite yet');
+      const title = full ? 'Full marks!' : ok ? `Good answer — ${score}/${max}` : score ? `Getting there — ${score}/${max}` : 'Not quite yet';
+      if (remarked) {
+        // the re-mark replaces the first mark for this question
+        P.results[item.i] = { ok, score: scaled, max: s.marks }; save();
+        if (ok) Snd.ok();
+        footResult(ok, title, full ? 'Every mark-scheme point covered.' : 'Check the highlights on your answer to see what to change.', next);
+        return;
+      }
+      judge(item, { ok, score: scaled, max: s.marks }, '', full ? 'Every mark-scheme point covered.' : ok ? 'Check what the examiner says to pick up full marks.' : 'Look at the improvements and the model answer.', title);
       track('study_exam', { unit: lesson.unit || null, view: 'study-hub', ref: 'sh:' + lesson.id + ':' + item.i, title: s.q.slice(0, 300), answer: ta ? ta.value : '', score, max_score: max, meta: { topic: lesson.topic || null, source: 'study_hub', examiner: !!r.examiner } });
     }
     function selfMark(item) {
@@ -1391,8 +1493,70 @@
       box.scrollIntoView({ behavior: 'smooth', block: 'start' });
       footIdle('Save my mark', true, () => {
         const got = $$('[data-pt]:checked', box).map(x => Number(x.dataset.pt));
-        examReveal(item, { score: Math.min(s.marks, got.length), max: s.marks, got, feedback: 'Self-marked against the mark scheme.' });
+        examReveal(item, { score: Math.min(s.marks, got.length), max: s.marks, got, feedback: 'Self-marked against the mark scheme.', self: true });
       });
+    }
+
+    // Re-mark (once per question, a fresh examiner, optional "what was missed" note) and Flag (sent to the owner's
+    // Quality inbox through feedback_submit, so bad marking can be reviewed and the examiner improved).
+    function wireMarkActions(item, box, answer, r, score, max) {
+      const s = steps[item.i];
+      const form = $('.sh-mark-form', box);
+      const rb = $('[data-remark]', box), fb = $('[data-flag]', box);
+      const closeForm = () => { form.hidden = true; form.innerHTML = ''; };
+      if (rb) rb.onclick = () => {
+        form.hidden = false;
+        form.innerHTML = `<label class="sh-mf-l">What do you think the examiner missed or got wrong? <small>optional</small><textarea class="sh-in" rows="2" maxlength="600" placeholder="e.g. My second sentence explains why backups reduce the impact"></textarea></label>
+          <div class="sh-mf-acts"><button type="button" class="sh-btn pri sm" data-go>${I('retry', { size: 16 })} Re-mark my answer${limited() ? ' <small class="mk-cost">· 1 AI use</small>' : ''}</button><button type="button" class="sh-btn ghost sm" data-cancel>Cancel</button></div>
+          <p class="sh-muted sh-small">A different examiner marks it again from scratch. The new mark replaces this one, whether it goes up or down. You can re-mark each question once.</p>`;
+        $('[data-cancel]', form).onclick = closeForm;
+        $('[data-go]', form).onclick = async (e) => {
+          const go = e.currentTarget; go.disabled = true; go.innerHTML = '<span class="sh-spin light"></span> Re-marking…';
+          const dispute = $('textarea', form).value.trim();
+          try {
+            const r2 = await examine(lesson, s, item.i, answer, { previous: score, dispute });
+            P.remarked.add(item.i);
+            examReveal(item, Object.assign({}, r2, { previous: score }), false, true);
+          } catch (err) {
+            go.disabled = false; go.innerHTML = `${I('retry', { size: 16 })} Try again`;
+            const p = $('.sh-small', form); if (p) p.textContent = 'The examiner could not re-mark it right now. ' + (err && err.message && !/no result/i.test(err.message) ? err.message : 'Please try again in a minute.');
+          }
+        };
+        $('textarea', form).focus({ preventScroll: true });
+      };
+      const FLAGS = [['too_low', 'Marked too harshly'], ['too_high', 'Marked too generously'], ['misread', 'Didn\'t understand my answer'], ['feedback', 'Feedback wasn\'t helpful'], ['scheme', 'The mark scheme is wrong']];
+      if (fb) fb.onclick = () => {
+        let reason = '';
+        form.hidden = false;
+        form.innerHTML = `<div class="sh-mf-l">What was wrong with the marking?</div><div class="sh-chips sh-mf-chips">${FLAGS.map(([k, t]) => `<button type="button" class="sh-chip" data-r="${k}">${esc(t)}</button>`).join('')}</div>
+          <textarea class="sh-in" rows="2" maxlength="800" placeholder="Tell us more (optional) — e.g. which point should have got a mark"></textarea>
+          <div class="sh-mf-acts"><button type="button" class="sh-btn pri sm" data-send disabled>${I('flag', { size: 16 })} Send</button><button type="button" class="sh-btn ghost sm" data-cancel>Cancel</button></div>
+          <p class="sh-muted sh-small">Your answer and the mark go to the RA10 team so we can check it and improve the AI Examiner.</p>`;
+        $$('[data-r]', form).forEach(c => c.onclick = () => { reason = c.dataset.r; $$('[data-r]', form).forEach(x => x.classList.toggle('on', x === c)); $('[data-send]', form).disabled = false; });
+        $('[data-cancel]', form).onclick = closeForm;
+        $('[data-send]', form).onclick = async (e) => {
+          const send = e.currentTarget; send.disabled = true;
+          const label = (FLAGS.find(f => f[0] === reason) || [])[1] || reason;
+          const note = $('textarea', form).value.trim();
+          const comment = (`[Study Hub · ${label}${P.remarked.has(item.i) ? ' · after re-mark' : ''}] ${note}\n\nAnswer (${score}/${max}): ${answer}`).slice(0, 1500);
+          try {
+            if (!S.sb || typeof S.sb.rpc !== 'function') throw new Error('Not connected');
+            const { error } = await S.sb.rpc('feedback_submit', {
+              p_unit: lesson.unit || '/study-hub', p_target: 'ai_mark', p_ref: ('sh:' + lesson.id + ':' + item.i).slice(0, 200), p_title: String(s.q || '').slice(0, 400),
+              p_vote: reason === 'too_low' || reason === 'too_high' ? reason : null, p_category: reason === 'scheme' ? 'mark_scheme' : 'ai_mark', p_comment: comment,
+              p_score: score, p_max: max,
+              p_meta: { source: 'study_hub', reason, lesson: lesson.id, step: item.i, topic: lesson.topic || null, remarked: P.remarked.has(item.i), answer: answer.slice(0, 3000), points: s.points || [], got: r.got || [], feedback: r.feedback || '', annotations: (r.annotations || []).slice(0, 8) }
+            });
+            if (error) throw error;
+            P.flagged.add(item.i);
+            form.innerHTML = `<p class="sh-mf-done">${I('check', { size: 18 })} Thanks — this marking has been flagged for review.${!P.remarked.has(item.i) ? ' You can also re-mark it.' : ''}</p>`;
+            fb.disabled = true; fb.innerHTML = `${I('flag', { size: 16 })} Flagged — thank you`;
+          } catch (err) {
+            send.disabled = false;
+            const p = $('.sh-small', form); if (p) p.textContent = 'Could not send that right now — please try again.';
+          }
+        };
+      };
     }
 
     async function finish() {

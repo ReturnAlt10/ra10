@@ -378,7 +378,7 @@ async function markStudyHubTwice(prompt: string, opts: CallOptions): Promise<{ r
     return { raw, provider: r.provider };
   };
   if (!strong.length) return await rawOf(opts);
-  const second: CallOptions = strong.length >= 2 ? { ...opts, rotate: 1, only: STRONG } : { ...opts, temperature: 0.4, only: STRONG };
+  const second: CallOptions = strong.length >= 2 ? { ...opts, rotate: (opts.rotate || 0) + 1, only: STRONG } : { ...opts, temperature: 0.4, only: STRONG };
   const runs = (await Promise.allSettled([rawOf(opts), rawOf(second)]))
     .filter((r): r is PromiseFulfilledResult<{ raw: any; provider: string }> => r.status === "fulfilled").map((r) => r.value);
   if (!runs.length) return await rawOf(opts);
@@ -574,7 +574,8 @@ export default Deno.serve(async (req: Request) => {
     if (studyHub && callOpts && !isLevelledScheme(question) && ENSEMBLE_ON() && marksMax >= 2) {
       // Point-marked Study Hub question: two independent examiners; a mark either one finds and can evidence
       // in the student's own words is kept, so one model overlooking a point does not cost the student the mark.
-      const r = await markStudyHubTwice(prompt, callOpts);
+      // a re-mark leads with the other strong model, so the student gets a genuinely fresh opinion
+      const r = await markStudyHubTwice(prompt, question?.study_hub_remark ? { ...callOpts, rotate: 1, temperature: 0.1 } : callOpts);
       parsed = post(r.raw);
       aiResponse = { content: "", provider: r.provider };
     } else if (studyHub && callOpts && isLevelledScheme(question) && marksMax >= 6 && ENSEMBLE_ON()) {

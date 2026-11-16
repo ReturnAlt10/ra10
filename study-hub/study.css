@@ -883,6 +883,45 @@ body.sh-page .sh-ov-cta h2 { margin: 0 0 6px; color: #fff; font-size: clamp(1.5r
 /* Diagrams on learn cards (study.js diagramHtml) */
 .sh-dg { margin: 4px 0 16px; padding: 14px; border-radius: 18px; background: var(--soft); border: 1px solid var(--line); }
 .sh-dg svg { display: block; width: 100%; height: auto; max-height: 420px; }
+/* fill the gap: "a/an" follows the word in the gap */
+.sh-art { color: var(--ink-2); }
+/* the examiner's highlights on a written answer */
+.sh-annot { margin: 4px 0 14px; padding: 14px 16px; border-radius: 18px; background: var(--card); border: 2px solid var(--line); }
+.sh-annot .sh-ins-h { margin-top: 0; }
+.sh-annot-text { white-space: pre-wrap; font-size: 1rem; line-height: 1.85; overflow-wrap: anywhere; }
+.sh-hl { --hc: var(--ok); color: inherit; background: color-mix(in srgb, var(--hc) 18%, transparent); border-bottom: 2px solid var(--hc); border-radius: 4px 4px 0 0; padding: 1px 2px; cursor: pointer; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+.sh-hl sup { font-size: .66rem; font-weight: 800; color: var(--hc); margin-left: 2px; }
+.sh-hl.weak, .sh-annot-notes li.weak, .sh-annot-key .weak { --hc: #d98a00; }
+.sh-hl.wrong, .sh-annot-notes li.wrong, .sh-annot-key .wrong { --hc: var(--bad); }
+.sh-hl.develop, .sh-annot-notes li.develop, .sh-annot-key .develop { --hc: var(--acc); }
+.sh-hl:focus-visible { outline: 2px solid var(--hc); outline-offset: 2px; }
+.sh-annot-key { display: flex; flex-wrap: wrap; gap: 6px 14px; margin: 10px 0 4px; font-size: .76rem; color: var(--ink-2); }
+.sh-annot-key span { --hc: var(--ok); display: inline-flex; align-items: center; gap: 6px; }
+.sh-annot-key i { width: 12px; height: 12px; border-radius: 3px; background: color-mix(in srgb, var(--hc) 30%, transparent); border-bottom: 2px solid var(--hc); }
+.sh-annot-notes { list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 8px; }
+.sh-annot-notes li { --hc: var(--ok); display: flex; gap: 10px; align-items: flex-start; padding: 8px 10px; border-radius: 12px; border-left: 4px solid var(--hc); background: var(--soft); font-size: .9rem; line-height: 1.45; transition: box-shadow .2s; }
+.sh-annot-notes li.on { box-shadow: 0 0 0 2px var(--hc); }
+.sh-annot-notes .num { flex: none; width: 20px; height: 20px; border-radius: 50%; display: grid; place-items: center; font-size: .72rem; font-weight: 800; color: #fff; background: var(--hc); }
+.sh-annot-notes .better { display: block; margin-top: 4px; color: var(--ink-2); font-style: italic; }
+.sh-remarked { display: flex; align-items: center; gap: 8px; margin: 0 0 10px; padding: 8px 12px; border-radius: 12px; background: var(--acc-soft); color: var(--acc); font-size: .88rem; font-weight: 700; }
+.sh-mark-acts { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 6px; }
+.sh-mark-form { margin: 6px 0 14px; padding: 12px 14px; border-radius: 16px; border: 2px dashed var(--line-2); display: grid; gap: 10px; }
+.sh-mf-l { display: grid; gap: 6px; font-weight: 700; font-size: .92rem; }
+.sh-mf-l small { font-weight: 600; color: var(--ink-3); }
+.sh-mf-acts { display: flex; flex-wrap: wrap; gap: 8px; }
+.sh-mf-chips .sh-chip { cursor: pointer; }
+.sh-mf-chips .sh-chip.on { border-color: var(--acc); background: var(--acc-soft); color: var(--acc); }
+.sh-mf-done { display: flex; align-items: center; gap: 8px; margin: 0; color: var(--ok); font-weight: 700; }
+.sh-mark-form .sh-small { margin: 0; }
+/* pictures on learn cards (Wikimedia Commons) */
+.sh-pic { margin: 4px 0 16px; border-radius: 18px; overflow: hidden; background: var(--soft); border: 1px solid var(--line); }
+.sh-pic img { display: block; width: 100%; height: auto; max-height: 340px; object-fit: contain; background: var(--soft); }
+.sh-pic.clear img { background: #fff; } /* transparent diagrams (PNG / SVG) need a white page behind dark lines */
+.sh-pic figcaption { display: grid; gap: 2px; padding: 10px 14px 12px; }
+.sh-pic figcaption span { font-size: .92rem; font-weight: 600; line-height: 1.4; color: var(--ink); }
+.sh-pic figcaption small { font-size: .72rem; color: var(--ink-3); line-height: 1.35; overflow-wrap: anywhere; }
+.sh-pic figcaption a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+@media (max-width: 520px) { .sh-pic img { max-height: 240px; } }
 .sh-dg figcaption { margin-top: 8px; font-size: .8rem; font-weight: 700; color: var(--ink-3); text-align: center; letter-spacing: .01em; }
 .sh-dg .dg-t { fill: var(--ink); font: 600 13px var(--font); }
 .sh-dg .dg-sub { fill: var(--ink-3); font: 600 11px var(--font); }

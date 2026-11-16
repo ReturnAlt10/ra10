@@ -240,6 +240,115 @@ function fillKey(x: unknown): string {
     : /[^s]s$/.test(w) ? w.slice(0, -1) : w).join(' ');
 }
 
+/* ───────────── multiple choice: giveaways and repeats ─────────────
+   A question is a giveaway when the right answer is clearly the longest choice (students learn to pick it).
+   Two checks are "the same" when their wording overlaps heavily, or they share the correct answer and the
+   key words of the question. */
+function lengthTell(s: any): boolean {
+  if (!s || s.type !== 'mcq' || !Array.isArray(s.choices) || s.choices.length < 3) return false;
+  const L = s.choices.map((c: string) => String(c || '').length);
+  const a = L[s.answer];
+  const other = Math.max(...L.filter((_: number, i: number) => i !== s.answer));
+  return a > other * 1.25 && a - other >= 10;
+}
+type Check = { q: string; a: string };
+const STOP = new Set('the a an of to in and or is are was were which what why how when who for on with by be been this that these those it its as at from does do can could would should will not your their they them than then into about most best main one two following'.split(' '));
+const keyWords = (s: string) => new Set(norm(s).split(' ').filter((w) => w.length > 2 && !STOP.has(w)).map((w) => w.replace(/(ies|es|s)$/, '')));
+function checkOf(s: any): Check {
+  if (s.type === 'mcq') return { q: s.q, a: String(s.choices?.[s.answer] ?? '') };
+  if (s.type === 'truefalse') return { q: s.statement, a: s.answer ? 'true' : 'false' };
+  return { q: String(s.q || s.text || ''), a: '' };
+}
+function sameCheck(x: Check, y: Check): boolean {
+  if (!x.q || !y.q) return false;
+  if (norm(x.q) === norm(y.q)) return true;
+  const A = keyWords(x.q), B = keyWords(y.q);
+  if (!A.size || !B.size) return false;
+  let n = 0; A.forEach((w) => { if (B.has(w)) n++; });
+  const overlap = n / Math.min(A.size, B.size);
+  const sameAnswer = !!x.a && x.a.length > 5 && norm(x.a) === norm(y.a);
+  return (overlap >= 0.75 && n >= 3) || (sameAnswer && n >= 2);
+}
+function dedupeChecks(steps: any[]): any[] {
+  const kept: Check[] = [];
+  return steps.filter((s) => {
+    if (s.type !== 'mcq' && s.type !== 'truefalse') return true;
+    const c = checkOf(s);
+    if (kept.some((k) => sameCheck(c, k))) return false;
+    kept.push(c); return true;
+  });
+}
+// Multiple-choice and true/false checks from the learner's recent lessons in this unit (so they are not asked again).
+async function pastChecks(ctx: Ctx, unit: string): Promise<Check[]> {
+  if (!unit) return [];
+  const { data } = await ctx.admin.from('study_lessons').select('content').eq('user_id', ctx.userId).eq('unit', unit).order('created_at', { ascending: false }).limit(25);
+  const out: Check[] = [];
+  for (const l of data || []) for (const s of (l?.content?.steps || [])) if (s && (s.type === 'mcq' || s.type === 'truefalse')) out.push(checkOf(s));
+  return out.filter((c) => c.q).slice(0, 120);
+}
+
+/* ───────────── pictures on learn cards ─────────────
+   The AI gives a search phrase; openly licensed candidates come from Wikimedia Commons, and a second AI call
+   picks the one that really shows what the card teaches (or none — a wrong picture is worse than no picture).
+   Only the picture's link, caption and credit are stored. */
+function sanitiseImage(x: any): any {
+  if (!x || typeof x !== 'object') return undefined;
+  const src = String(x.src || '');
+  if (/^https:\/\/(upload|thumb)\.wikimedia\.org\/[^\s"'<>]+$/.test(src) && src.length <= 600) {
+    const page = String(x.page || '');
+    return { src, page: /^https:\/\/commons\.wikimedia\.org\/[^\s"'<>]+$/.test(page) && page.length <= 600 ? page : undefined,
+      caption: clean(x.caption, 140) || undefined, credit: clean(x.credit, 120) || undefined, license: clean(x.license, 40) || undefined };
+  }
+  const query = clean(x.query, 80);
+  return query ? { query, caption: clean(x.caption, 140) || undefined } : undefined;
+}
+const stripTags = (s: unknown) => String(s ?? '').replace(/<[^>]*>/g, ' ').replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#0?39;/g, "'").replace(/\s+/g, ' ').trim();
+async function commonsSearch(query: string): Promise<any[]> {
+  const url = 'https://commons.wikimedia.org/w/api.php?action=query&format=json&generator=search&gsrnamespace=6&gsrlimit=8'
+    + '&prop=imageinfo&iiprop=url|mime|size|extmetadata&iiurlwidth=800&iiextmetadatafilter=LicenseShortName|Artist|ImageDescription'
+    + '&gsrsearch=' + encodeURIComponent(query + ' filetype:bitmap|drawing');
+  const ctl = new AbortController(); const t = setTimeout(() => ctl.abort(), 8000);
+  try {
+    const r = await fetch(url, { headers: { 'User-Agent': 'RA10-StudyHub/1.0 (https://ra10.co.uk; revision lesson pictures)' }, signal: ctl.signal });
+    if (!r.ok) return [];
+    const j = await r.json();
+    const pages = Object.values(j?.query?.pages || {}) as any[];
+    return pages.sort((a, b) => (a.index || 0) - (b.index || 0)).map((p) => {
+      const ii = p?.imageinfo?.[0] || {}; const md = ii.extmetadata || {};
+      const license = stripTags(md.LicenseShortName?.value);
+      return { title: String(p.title || '').replace(/^File:/, '').replace(/\.[a-z0-9]+$/i, ''), desc: stripTags(md.ImageDescription?.value).slice(0, 220),
+        src: String(ii.thumburl || ''), page: String(ii.descriptionurl || ''), w: Number(ii.thumbwidth) || 0, h: Number(ii.thumbheight) || 0,
+        mime: String(ii.mime || ''), license, credit: stripTags(md.Artist?.value).slice(0, 100) };
+    }).filter((c) => /^image\/(jpeg|png|svg\+xml|webp)$/.test(c.mime) && c.src && c.w >= 300 && c.h >= 160 && c.w / c.h < 3.2 && c.h / c.w < 2.2
+      && c.license && !/fair use|non-free/i.test(c.license) && !/\b(flag of|coat of arms|signature|logo)\b/i.test(c.title));
+  } catch { return []; } finally { clearTimeout(t); }
+}
+async function findPictures(steps: any[], unitName: string, qual: string): Promise<Map<number, any>> {
+  const out = new Map<number, any>();
+  const cards = steps.filter((s) => s.type === 'learn' && !s.diagram && s.image?.query).slice(0, 3);
+  if (!cards.length || !hasProviders()) return out;
+  const found = await Promise.all(cards.map((s) => commonsSearch(s.image.query)));
+  const ask = cards.map((s, n) => ({ card: s._k, title: s.title, teaches: clean(s.body, 300), wanted: s.image.query,
+    candidates: found[n].slice(0, 6).map((c, j) => ({ id: j, title: c.title, description: c.desc })) })).filter((x) => x.candidates.length);
+  if (!ask.length) return out;
+  const r = await askJson(
+    'You choose pictures for a revision lesson for UK students. A picture must clearly and accurately show what the card teaches. Pick nothing rather than a vague, misleading, off-topic, low-value, mostly-text, unrelated-language, gory or adult picture, or a portrait of someone the card is not about. Reply with JSON only.',
+    `Course: ${qual} — ${unitName}
+For each card, choose the candidate (by id) that best shows what the card teaches, judging from its title and description, or null if none clearly does.
+Cards: ${JSON.stringify(ask)}
+Return {"cards":[{"card":0,"pick":0|null,"caption":"under 12 words: what the picture shows, as it relates to the card"}]}`,
+    20000, { temperature: 0, maxTokens: 900 });
+  for (const v of (Array.isArray(r.json?.cards) ? r.json.cards : [])) {
+    const k = Math.round(Number(v?.card)); const n = cards.findIndex((s) => s._k === k);
+    const pick = v?.pick == null ? -1 : Math.round(Number(v.pick));
+    if (n < 0 || !(pick >= 0)) continue;
+    const c = found[n][pick]; if (!c) continue;
+    const img = sanitiseImage({ src: c.src, page: c.page, caption: clean(v.caption, 140) || cards[n].image.caption, credit: c.credit, license: c.license });
+    if (img?.src) out.set(k, img);
+  }
+  return out;
+}
+
 function sanitiseStep(s: any, keepOrder = false, diagramTypes: string[] = DIAGRAM_TYPES): any | null {
   if (!s || typeof s !== 'object') return null;
   const t = String(s.type || '').toLowerCase();
@@ -247,7 +356,7 @@ function sanitiseStep(s: any, keepOrder = false, diagramTypes: string[] = DIAGRA
   const str = (x: unknown, n = 600) => clean(x, n);
   if (t === 'learn') {
     const body = str(s.body, 900); if (!body) return null;
-    return { type: t, title: str(s.title, 90), body, points: (Array.isArray(s.points) ? s.points : []).map((p: unknown) => str(p, 200)).filter(Boolean).slice(0, 4), example: str(s.example, 400) || undefined, diagram: sanitiseDiagram(s.diagram, diagramTypes) || undefined };
+    return { type: t, title: str(s.title, 90), body, points: (Array.isArray(s.points) ? s.points : []).map((p: unknown) => str(p, 200)).filter(Boolean).slice(0, 4), example: str(s.example, 400) || undefined, diagram: sanitiseDiagram(s.diagram, diagramTypes) || undefined, image: sanitiseImage(s.image) };
   }
   if (t === 'mcq') {
     const choices = (Array.isArray(s.choices) ? s.choices : []).map((c: unknown) => str(c, 200)).filter(Boolean);
@@ -388,10 +497,15 @@ const CODE_PROMPT: Record<string, string> = {
   sql: `This is a DATABASE lesson in SQL (SQLite dialect). Include exactly 2 "code" steps where the learner writes one SQL query. Each code step has "setup" (CREATE TABLE and INSERT statements for a small table of 5–8 realistic rows), a "starter" (eg "SELECT"), and a correct "solution" query. The learner's result is compared with the result of your solution, so the solution must be exactly right; include ORDER BY when the order matters.`,
 };
 
-async function writeLesson(input: { unit?: string; unitName: string; qual: string; topic: string | null; request: string; focusReason: string; prof: any; grounding: any; length?: string; focus?: string; difficulty?: string; coding?: string | null }) {
+async function writeLesson(input: { unit?: string; unitName: string; qual: string; topic: string | null; request: string; focusReason: string; prof: any; grounding: any; length?: string; focus?: string; difficulty?: string; coding?: string | null; seen?: Check[] }) {
   const diff = DIFFICULTY[String(input.difficulty || '')] || DIFFICULTY.medium;
+  const seen: Check[] = Array.isArray(input.seen) ? input.seen : [];
   const g = input.grounding || {};
-  const bankQuiz = (Array.isArray(g.quiz) ? g.quiz : []).slice(0, 8);
+  // bank questions whose right answer is clearly the longest choice, or that the learner has already had, are left out
+  const seenIn: Check[] = Array.isArray(input.seen) ? input.seen : [];
+  const bankQuiz = (Array.isArray(g.quiz) ? g.quiz : []).filter((q: any) => q && Array.isArray(q.choices)
+    && !lengthTell({ type: 'mcq', choices: q.choices.map((c: unknown) => String(c ?? '')), answer: Number(q.correct) })
+    && !seenIn.some((x) => sameCheck({ q: String(q.q || ''), a: String(q.choices[Number(q.correct)] ?? '') }, x))).slice(0, 8);
   const realExam = (Array.isArray(g.exam) ? g.exam : []).map(trimReal).filter((q: any) => q && clean(q.question)).slice(0, 3);
   const bankExam = realExam.length
     ? realExam.map((q: any) => ({ ref: String(q.id), q: clean(q.question, 700), marks: q.marks, verb: q.command_verb || '', context: clean(q.scenario || q.context || '', 500), mark_scheme: schemePoints(q.mark_scheme) }))
@@ -414,6 +528,7 @@ Learner profile: ${JSON.stringify(learner)}
 Specification topics in this unit: ${JSON.stringify(specTopics)}
 Real multiple-choice questions from the RA10 bank on this area (correct answers are reliable; you may reuse them): ${JSON.stringify(bankQuiz)}
 Real exam questions on this area, with their official mark schemes: ${JSON.stringify(bankExam)}
+${seen.length ? `Questions this learner has ALREADY had in recent lessons — do not ask any of these again or test the same fact in the same way: ${JSON.stringify(seen.slice(0, 30).map((x) => x.q))}` : ''}
 If one of these real exam questions fits the topic, the exam step MUST be that question word-for-word with "source":"exam" and "ref" set to its ref, using its mark scheme for "points".
 
 Write a ${len.minutes}-minute lesson of ${len.steps} steps that TEACHES the topic and then checks understanding. Alternate short "learn" cards with practice. Use at least ${len.learn} learn cards, at least 3 mcq, 1 truefalse, 1 fill, 1 match, 1 order (only if the topic has a genuine fixed sequence — otherwise another mcq), exactly 1 exam step near the end, and finish with 1 recap.
@@ -421,19 +536,22 @@ ${focus}
 ${diff.prompt}
 ${input.coding ? CODE_PROMPT[input.coding] + '\n' : ''}Answer-key rules (these are checked — be precise):
 - mcq: 4 choices, exactly ONE correct; distractors are plausible but definitely wrong (no "all of the above", no two choices that could both be argued). "answer" is the 0-based index of the correct choice.
+- mcq must NOT be guessable without knowing the topic: all 4 choices are the same kind of thing, in the same grammatical form, with the SAME length and level of detail (within a few words of each other). The correct choice must NOT be the longest, the most detailed or the only "textbook-sounding" one — write it as briefly as the distractors, or give the distractors equal detail. Distractors are real misconceptions or closely related terms from this unit, never silly or obviously off-topic; no clue words shared only between the question and the answer; no absolute words ("always", "never") used only in distractors.
+- every mcq, truefalse and fill tests a DIFFERENT fact — never ask the same thing twice in one lesson, even in different words.
 - truefalse: a single clear claim that is unambiguously true or false per the specification — no trick wording.
-- fill: a sentence from the learn cards with 1 (max 2) "___" gaps where the missing word is a specific KEY TERM; "blanks" are the exact words in gap order, written exactly as they read in the sentence (same form, singular/plural); with 2 gaps the two answers must be different words that cannot be swapped; "options" contain the blanks plus 2–3 distractors that DO NOT make the sentence true (never synonyms, plurals or near-synonyms of the answer).
+- fill: a sentence from the learn cards with 1 (max 2) "___" gaps where the missing word is a specific KEY TERM; "blanks" are the exact words in gap order, written exactly as they read in the sentence (same form, singular/plural); with 2 gaps the two answers must be different words that cannot be swapped; "options" contain the blanks plus 2–3 distractors that DO NOT make the sentence true (never synonyms, plurals or near-synonyms of the answer). EVERY option must fit the sentence grammatically — the same part of speech, singular/plural and tense as the answer — so grammar never gives the answer away or rules an option out; do not put "a" or "an" directly before a gap (write "the ___" or rephrase).
 - match: 4 pairs of [term, short definition]; each definition fits only its own term.
 - order: items listed in the CORRECT order of a recognised sequence (process stages, steps of a model), not a matter of opinion.
 - ${diff.exam} "points" are the mark scheme as an examiner writes it: one creditable idea per line with "(1)", a "point (1) + linked expansion (1)" line for Explain marks, and "/" between acceptable alternatives. Give MORE creditable points than the marks available (at least marks + 2) so different correct answers are all covered. "model" is a full-mark answer that uses the command word properly.
 - learn cards: 2–4 short sentences (max 70 words), 2–3 bullet points, and a concrete example where useful. Every check must be answerable from the learn cards.
 - diagrams: give 2–3 learn cards a "diagram" where a picture genuinely helps (otherwise "diagram": null). Allowed types for this unit: ${plan.types.join(', ')}. ${plan.hint} Labels are short and must be accurate for the specification. Shapes: ${plan.types.map((k) => DIAGRAM_SHAPES[k]).join(' | ')}
+- pictures: give 1–3 learn cards that have NO diagram an "image" when a real photo or illustration would help the learner picture what the card teaches — a device or piece of equipment, a body part or organ, a place or building, a real product, event or organisation, a named theorist, or a real-world example from the card. "query" is 2–5 plain English words to search Wikimedia Commons for exactly that thing (e.g. "network switch rack", "human heart anatomy", "WannaCry ransom note"); "caption" says in under 12 words what the picture shows. Use "image": null for abstract ideas that a photo cannot show.
 Every check has a one-sentence "explain" that teaches.
 Pick "icon" for the lesson from: ${ICONS.join(', ')}.
 Return JSON exactly like:
 {"title":"short catchy lesson title","icon":"shield","topic":"the specific topic","summary":"one sentence: what you'll be able to do","minutes":${len.minutes},
  "steps":[
-  {"type":"learn","title":"","body":"","points":["",""],"example":"","diagram":null},
+  {"type":"learn","title":"","body":"","points":["",""],"example":"","diagram":null,"image":{"query":"","caption":""}},
   {"type":"mcq","q":"","choices":["","","",""],"answer":0,"explain":""},
   {"type":"truefalse","statement":"","answer":true,"explain":""},
   {"type":"fill","text":"A ___ is ...","blanks":["word"],"options":["word","other","other"],"explain":""},
@@ -463,12 +581,30 @@ Return JSON exactly like:
     }
     steps.push(s);
   });
-  // check every answer key with a second, independent pass
-  const checked = await verifySteps(steps, input.unitName, input.qual).catch((e) => { console.warn('study-hub verify failed', e); return { steps, verified: false }; });
-  steps = checked.steps;
-  // make sure a couple of genuine bank questions appear (before the exam step)
-  const have = new Set(steps.filter((s: any) => s.type === 'mcq').map((s: any) => norm(s.q)));
-  const extra = bankQuiz.map(bankMcq).filter((s: any) => s && !have.has(norm(s.q))).slice(0, 2);
+  // the same fact asked twice in one lesson: keep the first
+  steps = dedupeChecks(steps);
+  steps.forEach((s: any, k: number) => { s._k = k; });
+  // check every answer key with a second, independent pass; find the learn-card pictures at the same time
+  const [checked, pics] = await Promise.all([
+    verifySteps(steps, input.unitName, input.qual).catch((e) => { console.warn('study-hub verify failed', e); return { steps, verified: false }; }),
+    findPictures(steps, input.unitName, input.qual).catch((e) => { console.warn('study-hub pictures failed', e); return new Map<number, any>(); }),
+  ]);
+  steps = checked.steps.map((s: any) => {
+    const pic = s.type === 'learn' && !s.diagram ? pics.get(s._k) : null;
+    const { _k, ...rest } = s;
+    if (rest.type === 'learn') { if (pic) rest.image = pic; else delete rest.image; }
+    return rest;
+  });
+  // a giveaway the checker could not fix (the right answer is clearly the longest): leave it out if enough mcqs remain
+  const mcqs = () => steps.filter((s: any) => s.type === 'mcq').length;
+  for (const s of steps.slice()) if (s.type === 'mcq' && lengthTell(s) && mcqs() > 3) steps = steps.filter((x: any) => x !== s);
+  // questions the learner has already had in recent lessons (keep at least two mcqs)
+  if (seen.length) for (const s of steps.slice()) if (s.type === 'mcq' && mcqs() > 2 && seen.some((x) => sameCheck(checkOf(s), x))) steps = steps.filter((x: any) => x !== s);
+  steps = dedupeChecks(steps);
+  // make sure a couple of genuine bank questions appear (before the exam step) — new to the learner, not a repeat
+  // of a lesson question, and not a giveaway
+  const have = steps.filter((s: any) => s.type === 'mcq' || s.type === 'truefalse').map(checkOf);
+  const extra = bankQuiz.map(bankMcq).filter((s: any) => s && !lengthTell(s) && !have.some((h) => sameCheck(checkOf(s), h)) && !seen.some((h) => sameCheck(checkOf(s), h))).slice(0, 2);
   if (extra.length) {
     const at = steps.findIndex((s: any) => s.type === 'exam');
     steps.splice(at >= 0 ? at : Math.max(0, steps.length - 1), 0, ...extra);
@@ -491,7 +627,7 @@ async function verifySteps(steps: any[], unitName: string, qual: string): Promis
   const items = steps.map((s, i) => ({ s, i })).filter(({ s }) => !s.bank && s.type !== 'recap' && s.type !== 'code' && !(s.type === 'exam' && s.source === 'exam')).map(({ s, i }) => {
     const base: any = { i, type: s.type };
     if (s.type === 'learn') Object.assign(base, { title: s.title, body: s.body, points: s.points, example: s.example, diagram: s.diagram });
-    if (s.type === 'mcq') Object.assign(base, { q: s.q, choices: s.choices, answer: s.answer });
+    if (s.type === 'mcq') Object.assign(base, { q: s.q, choices: s.choices, answer: s.answer, length_giveaway: lengthTell(s) || undefined });
     if (s.type === 'truefalse') Object.assign(base, { statement: s.statement, answer: s.answer });
     if (s.type === 'fill') Object.assign(base, { text: s.text, blanks: s.blanks, options: s.options });
     if (s.type === 'match') Object.assign(base, { pairs: s.pairs });
@@ -506,8 +642,9 @@ async function verifySteps(steps: any[], unitName: string, qual: string): Promis
 Check each item:
 - learn: are all statements accurate for the specification? Fix wrong facts. If it has a "diagram", check every label, step order, connection and number (for "breakeven", that the card's figures match fixed / variable / price); return a corrected "diagram" of the same shape, or "diagram": null to remove one that is wrong or unhelpful.
 - mcq: is "answer" (0-based index into "choices" exactly as given) the ONE correct choice? Could any other choice also be argued correct?
+- mcq giveaways: could a student who has NOT studied this pick the answer — because it is the longest or most detailed choice, the only one that sounds like a textbook definition, repeats a word from the question, or the distractors are silly or off-topic? If so (and always when "length_giveaway" is true), verdict "fix" with rewritten "choices" (and "answer") where all four are the same kind of thing and about the same length, the correct one is NOT the longest, and the distractors are believable misconceptions that are still definitely wrong.
 - truefalse: is the keyed true/false definitely right and unambiguous?
-- fill: put each option into each gap — does ONLY the keyed word make the sentence correct? A distractor that also fits (a synonym, a broader or narrower correct term) makes the item invalid: replace that distractor.
+- fill: put each option into each gap — does ONLY the keyed word make the sentence correct? A distractor that also fits (a synonym, a broader or narrower correct term) makes the item invalid: replace that distractor. Every option must also read as grammatical English in the gap (same part of speech, singular/plural, tense; nothing like "an bus" or "a encryption") so grammar never gives the answer away: fix the "text" (e.g. "the ___" instead of "a ___") or the options.
 - match: is every pair correct and is each definition unique to its term?
 - order: is the order a recognised, correct sequence?
 - exam: are the mark-scheme points correct and is the model answer worth full marks?
@@ -528,6 +665,7 @@ Return {"items":[{"i":0,"verdict":"ok"|"fix"|"drop","reason":"short", ...correct
     const patch: any = {};
     ['answer', 'choices', 'blanks', 'options', 'pairs', 'items', 'statement', 'text', 'body', 'points', 'model', 'q', 'diagram'].forEach((f) => { if (v[f] !== undefined) patch[f] = v[f]; });
     const fixed = sanitiseStep({ ...s, ...patch, type: s.type });
+    if (fixed && s._k != null) fixed._k = s._k;
     if (fixed) out[i] = s.type === 'exam' ? { ...s, ...fixed } : fixed; else drop.add(i);
   }
   return { steps: out.filter((_, i) => !drop.has(i)), verified: true };
@@ -568,7 +706,8 @@ async function create(ctx: Ctx, body: any) {
     const reason = clean(body.reason, 300) || (topic ? `You picked ${topic}.` : '');
     let L: any = null;
     if (hasProviders()) {
-      try { L = await writeLesson({ unitName, qual, topic, request, focusReason: reason, prof, grounding: body.grounding, length: clean(body.length, 12), focus: clean(body.focus, 12), difficulty, unit, coding: codingLang(unit, unitName, request, topic) }); }
+      const seen = await pastChecks(ctx, unit).catch(() => [] as Check[]);
+      try { L = await writeLesson({ unitName, qual, topic, request, focusReason: reason, prof, grounding: body.grounding, length: clean(body.length, 12), focus: clean(body.focus, 12), difficulty, unit, coding: codingLang(unit, unitName, request, topic), seen }); }
       catch (e) { console.warn('study-hub write failed', e); }
     }
     if (!L) L = bankLesson(unitName, topic, body.grounding);
@@ -615,12 +754,14 @@ async function mark(ctx: Ctx, body: any) {
   if (hasProviders()) {
     try {
       // the same point-by-point examiner the AI Examiner (ai-mark) uses for Study Hub questions
-      const q = { study_hub: true, study_hub_points: s.points, study_hub_model: s.model || '', question: s.q, marks: s.marks, command_verb: s.verb || '', scenario: s.context || '', topic: L.content?.topic || '', unit: L.content?.unitName || '', qualification: L.content?.qual || '', mark_scheme: s.real?.mark_scheme || {} };
+      const taught = (L.content?.steps || []).slice(0, i).filter((x: any) => x?.type === 'learn').map((x: any) => `${x.title ? x.title + ': ' : ''}${x.body || ''}`).join('\n').slice(0, 2500);
+      const remark = body.remark && typeof body.remark === 'object' ? { previous: Number(body.remark.previous) || 0, dispute: clean(body.remark.dispute, 600) } : undefined;
+      const q = { study_hub: true, study_hub_points: s.points, study_hub_model: s.model || '', study_hub_taught: taught, study_hub_remark: remark, question: s.q, marks: s.marks, command_verb: s.verb || '', scenario: s.context || '', topic: L.content?.topic || '', unit: L.content?.unitName || '', qualification: L.content?.qual || '', mark_scheme: s.real?.mark_scheme || {} };
       const r = await askJson(STUDY_HUB_SYSTEM, buildStudyHubPrompt(q, answer), 40000, { preferStrong: true, temperature: 0, maxTokens: 2000 });
       if (!r.json) throw new Error('no JSON');
       const m = studyHubPostProcess(r.json, q, answer);
       const max = Number(m.max) || s.marks;
-      return { ok: true, score: Math.max(0, Math.min(max, Math.round(Number(m.earned) || 0))), max, got: m.got || [], feedback: clean(m.examiner_comment || m.feedback, 500), strengths: m.strengths || [], improvements: m.improvements || [], ai: true };
+      return { ok: true, score: Math.max(0, Math.min(max, Math.round(Number(m.earned) || 0))), max, got: m.got || [], feedback: clean(m.examiner_comment || m.feedback, 500), strengths: m.strengths || [], improvements: m.improvements || [], annotations: m.annotations || [], ai: true };
     } catch (e) { console.warn('study-hub mark failed', e); }
   }
   const h = heuristicMark(answer, s.points, s.marks);
