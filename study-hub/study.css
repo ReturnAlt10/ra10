@@ -1096,3 +1096,5 @@ body.sh-page .sh-ov-cta h2 { margin: 0 0 6px; color: #fff; font-size: clamp(1.5r
 .sh-play .sh-stat b .shi { color: var(--c); }
 .sh-play .sh-stat span { padding: 6px 4px 0; font-size: 1.7rem; color: var(--ink); }
 @media (prefers-reduced-motion: reduce) { .sh-play .sh-opt, .sh-play .sh-btn { transition: none; } }
+/* cost of a lesson for accounts with AI usage limits */
+.mk-cost { font-weight: 600; opacity: .85; font-size: .85em; }

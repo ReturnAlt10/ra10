@@ -368,7 +368,20 @@ async function markWithEnsemble(prompt: string, opts: CallOptions, post: (raw: a
 // EDU plans are never counted. If the usage SQL has not been applied yet we fail open (allow),
 // so deploying this function first never blocks marking.
 type UsageJson = Record<string, any>;
-type UsageCtx = { supabase: any; userId: string; eventId: number | null };
+type UsageCtx = { supabase: any; userId: string; eventId: number | null; freeLesson?: string | null };
+
+// Study Hub: a lesson's 5 uses already cover its own exam questions. study_hub_claim_mark()
+// (study-hub.sql) allows one free mark per exam step of the learner's own unfinished, recent lesson.
+async function claimLessonMark(supabase: any, userId: string, lessonId: unknown): Promise<string | null> {
+  const id = typeof lessonId === "string" && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(lessonId) ? lessonId : null;
+  if (!id) return null;
+  const { data, error } = await supabase.rpc("study_hub_claim_mark", { p_user: userId, p_lesson: id });
+  if (error) {
+    console.warn("ai-mark: Study Hub free mark unavailable:", error.message);
+    return null;
+  }
+  return data === true ? id : null;
+}
 
 async function consumeUsage(supabase: any, userId: string): Promise<UsageJson | null> {
   const { data, error } = await supabase.rpc("ai_usage_consume", { p_user: userId, p_feature: "ai_mark" });
@@ -380,6 +393,11 @@ async function consumeUsage(supabase: any, userId: string): Promise<UsageJson | 
 }
 
 async function refundUsage(ctx: UsageCtx | null): Promise<UsageJson | null> {
+  if (ctx && ctx.freeLesson) {
+    const { error } = await ctx.supabase.rpc("study_hub_claim_mark", { p_user: ctx.userId, p_lesson: ctx.freeLesson, p_release: true });
+    if (error) console.warn("ai-mark: Study Hub free mark release failed:", error.message);
+    ctx.freeLesson = null;
+  }
   if (!ctx || !ctx.eventId) return null;
   const { data, error } = await ctx.supabase.rpc("ai_usage_refund", { p_user: ctx.userId, p_event_id: ctx.eventId });
   if (error) console.warn("ai-mark: usage refund failed:", error.message);
@@ -475,15 +493,17 @@ export default Deno.serve(async (req: Request) => {
       });
     }
 
-    // Usage limits: take one use now (server-side, synced per account).
-    const usage = await consumeUsage(supabase, userId);
+    // Usage limits: take one use now (server-side, synced per account), unless this is an exam
+    // question inside a Study Hub lesson the learner has already paid for.
+    const freeLesson = await claimLessonMark(supabase, userId, body?.study_hub_lesson);
+    const usage = freeLesson ? null : await consumeUsage(supabase, userId);
     if (usage && usage.allowed === false) {
       return new Response(JSON.stringify({ error: usageLimitMessage(usage), code: "usage_limit", usage }), {
         status: 429,
         headers: corsHeaders,
       });
     }
-    usageCtx = { supabase, userId, eventId: usage && usage.event_id ? Number(usage.event_id) : null };
+    usageCtx = { supabase, userId, eventId: usage && usage.event_id ? Number(usage.event_id) : null, freeLesson };
 
     const marksMax = clamp(Math.round(safeNum(question?.marks, 1)), 1, 60);
     const edx = isEdexcelBusiness(question);

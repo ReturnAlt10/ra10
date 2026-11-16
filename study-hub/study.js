@@ -1,4 +1,4 @@
-/* RA10 Study Hub — AI daily lessons (Premium; one free trial lesson).
+/* RA10 Study Hub — AI daily lessons (open to every signed-in account; a lesson uses 5 AI uses).
    Home: a Duolingo-style path of your lessons, today's lesson, make-your-own, insights.
    Player: learn cards, multiple choice, true/false, fill the gap, match, put in order, an exam
    question marked by the real RA10 AI Examiner, and a recap; wrong answers come back once.
@@ -350,7 +350,7 @@
           <h1>A lesson made for you, <em>every day.</em></h1>
           <p class="lede">Study Hub looks at what you've been revising on RA10 and builds a short, game-like lesson on exactly what you need next. It takes about seven minutes, and you can make as many more as you like.</p>
           <div class="sh-ov-acts">${signIn('Sign in to start ' + I('arrow', { size: 18 }))}<a class="sh-btn ghost lg" href="#sh-ov-how">See how it works</a></div>
-          <p class="sh-ov-note">${I('gift', { size: 18 })} Every account gets one free lesson. Study Hub is part of RA10 Premium and is included for schools on RA10 EDU.</p>
+          <p class="sh-ov-note">${I('gift', { size: 18 })} Free for everyone right now: each lesson uses 5 of your AI usage. Premium (coming soon) and schools on RA10 EDU have no limits.</p>
         </div>
         <div class="sh-ov-stage" aria-hidden="true">${frame('sh-home', 1280, 860, '')}<figure class="sh-ov-phone">${shot('sh-phone', 390, 844, '')}</figure></div>
       </section>
@@ -396,8 +396,8 @@
       <section class="sh-ov-sec" aria-labelledby="sh-ov-plans-h">
         <h2 id="sh-ov-plans-h">Who can use it</h2>
         <div class="sh-ov-plans">
-          <div><small>Free account</small><b>One free lesson</b><p>Try a full lesson on any topic to see how it works. Flashcards and Scan your work are free, and the other study tools come with free tries.</p></div>
-          <div class="hi"><small>RA10 Premium</small><b>Everything</b><p>A new lesson every day, unlimited lessons on any topic, and your full plan for every subject.</p><span class="sh-badge gold">Coming soon</span></div>
+          <div class="hi"><small>Free account</small><b>Study Hub, free</b><p>Daily lessons, lessons on any topic and your full plan. Each lesson uses 5 of your hourly and daily AI usage, with its exam questions included. Flashcards and Scan your work are free, and the other study tools come with free tries.</p><span class="sh-badge gold">Free right now</span></div>
+          <div><small>RA10 Premium</small><b>No limits</b><p>Everything in Study Hub with no AI usage limits.</p><span class="sh-badge">Coming soon</span></div>
           <div><small>RA10 EDU</small><b>Included for schools</b><p>Students and teachers at RA10 EDU schools get the full Study Hub. <a href="/#schools">Find out about RA10 for schools</a></p></div>
         </div>
       </section>
@@ -405,15 +405,32 @@
       <section class="sh-ov-sec sh-ov-faq" aria-labelledby="sh-ov-faq-h">
         <h2 id="sh-ov-faq-h">Questions</h2>
         <details><summary>Do I need to have used RA10 before?</summary><p>No. If Study Hub doesn't know much about you yet, it starts at the beginning of the course for your unit. The more you revise on RA10, the more personal your lessons become.</p></details>
+        <details><summary>Is it really free?</summary><p>Yes, for now. Every signed-in account can use Study Hub. Each new lesson uses 5 of your AI usage (the same hourly and daily allowance as the AI Examiner), and marking the lesson's exam questions is included. Premium, coming soon, will have no limits.</p></details>
         <details><summary>How long does a lesson take?</summary><p>A standard lesson takes about seven minutes. When you make your own you can choose a quick one (about four minutes) or a deep dive (about eleven).</p></details>
         <details><summary>How are the exam questions marked?</summary><p>By the RA10 AI Examiner, the same one used across the site. Where the lesson uses a real past-paper question, it marks your answer with that question's mark scheme.</p></details>
         <details><summary>What does Study Hub use to choose my lesson?</summary><p>Only your own activity on RA10, such as quiz results, marked answers and the guide sections you've read. It isn't shared with other students.</p></details>
       </section>
 
-      <section class="sh-ov-cta"><div><h2>Your first lesson is free</h2><p>Sign in and Study Hub will have a lesson ready in about half a minute.</p></div>${signIn('Sign in to start ' + I('arrow', { size: 18 }), 'gold lg')}</section>
+      <section class="sh-ov-cta"><div><h2>Study Hub is free for everyone</h2><p>Sign in and Study Hub will have a lesson ready in about half a minute.</p></div>${signIn('Sign in to start ' + I('arrow', { size: 18 }), 'gold lg')}</section>
     </div>`;
     const how = $('a[href="#sh-ov-how"]', main);
     if (how) how.onclick = (e) => { e.preventDefault(); $('#sh-ov-how').scrollIntoView({ behavior: 'smooth', block: 'start' }); };
+  }
+
+  /* ───────────── AI usage (Study Hub is open to everyone; a lesson uses 5 AI uses) ───────────── */
+  // `unlimited` comes from study_hub_status (Premium / EDU are never counted). Older SQL has no
+  // `unlimited` field and keeps the Premium + one-free-lesson rules, so undefined means "not counted".
+  const limited = () => !!(S.status && S.status.premium && S.status.unlimited === false);
+  const lessonCost = () => Number(S.status && S.status.lesson_cost) || 5;
+  const costPill = () => limited() ? `<span class="rtl-pill try">${lessonCost()} AI uses</span>` : '';
+  const costNote = () => limited() ? `Uses ${lessonCost()} of your AI usage` : '';
+  function usageRefresh() { try { if (window.RA10 && RA10.getAiUsage) RA10.getAiUsage({ force: true }); } catch (e) {} }
+  // the server refused a lesson because an hourly / daily AI limit was reached
+  function usageBlocked(r) {
+    if (!r || r.code !== 'usage_limit') return false;
+    try { if (window.RA10 && RA10.showUsageLimit && r.usage) RA10.showUsageLimit(r.usage, { mode: 'limit' }); } catch (e) {}
+    usageRefresh();
+    return true;
   }
 
   /* ───────────── home ───────────── */
@@ -422,7 +439,7 @@
     const st = S.status || {};
     const premium = !!st.premium;
     if (!premium && st.trial_used && !(st.lessons || []).length) return lockedScreen();
-    const banner = premium ? '' : !st.trial_used
+    const banner = premium ? (limited() ? `<div class="sh-banner">${I('gift', { size: 26 })}<span><b>Study Hub is free for everyone right now.</b> Each new lesson uses ${lessonCost()} of your AI usage, and its exam questions are included.</span></div>` : '') : !st.trial_used
       ? `<div class="sh-banner">${I('gift', { size: 26 })}<span><b>Your first lesson is free.</b> The AI tools below have free tries too.</span></div>`
       : `<div class="sh-banner">${I('lock', { size: 24 })}<span>Daily lessons are part of <b>RA10 Premium</b>.</span><button class="sh-btn sm gold" id="sh-why">What's included</button></div>`;
     main.innerHTML = `${banner}
@@ -439,7 +456,8 @@
     const why = $('#sh-why'); if (why) why.onclick = lockedScreen;
     paintSet(); paintToday(); paintMake(); paintWeek(); paintPath();
     if (window.SHCards) SHCards.section($('#sh-cards'));
-    if (premium && !st.daily && !S.building && !S.buildErr && (S.plan && S.plan.focus || store.get('sh_unit'))) buildDaily();
+    // auto-build only when it costs nothing; limited accounts choose when to spend their AI uses
+    if (premium && !limited() && !st.daily && !S.building && !S.buildErr && (S.plan && S.plan.focus || store.get('sh_unit'))) buildDaily();
   }
 
   function paintToday() {
@@ -475,14 +493,15 @@
     const pref = store.get('sh_unit');
     if (!focus && !pref) {
       const opts = UNITS().map(u => `<option value="${esc(u.path)}">${esc(u.short + ' — ' + unitName(u))}</option>`).join('');
-      box.innerHTML = card('', I('sun', { size: 15 }) + ' Today\'s lesson', I('compass', { size: 44 }), 'What are you studying?', 'Pick a subject and we\'ll build your first lesson. As you revise on RA10, lessons get tailored to you.', '',
+      box.innerHTML = card('', I('sun', { size: 15 }) + ' Today\'s lesson', I('compass', { size: 44 }), 'What are you studying?', 'Pick a subject and we\'ll build your first lesson. As you revise on RA10, lessons get tailored to you.' + (limited() ? ' ' + costNote() + '.' : ''), '',
         `<select class="sh-in sh-in-light" id="sh-first-unit">${opts}</select><button class="sh-btn light" id="sh-first-go">${premium ? 'Build my lesson' : 'Build my free lesson'}</button>`);
-      $('#sh-first-go').onclick = () => { store.set('sh_unit', $('#sh-first-unit').value); buildDaily(!premium); };
+      $('#sh-first-go').onclick = () => { store.set('sh_unit', $('#sh-first-unit').value); buildDaily(!premium || limited()); };
       return;
     }
     const fu = unitOf((focus && focus.unit) || pref);
-    box.innerHTML = card('', I('gift', { size: 15 }) + ' Your free lesson', I(unitIcon((focus && focus.unit) || pref), { size: 44 }), esc(focus && focus.topic ? focus.topic : (fu ? fu.short : 'Your lesson')), esc(fu ? fu.name : ''),
-      focus && focus.reason ? `<div class="why"><b>Why this lesson</b>${esc(focus.reason)}</div>` : '', `<button class="sh-btn light lg" id="sh-trial-go">Build my free lesson ${I('arrow', { size: 18 })}</button>`);
+    const paid = premium;   // open to everyone (limited accounts pay with AI uses)
+    box.innerHTML = card('', paid ? I('sun', { size: 15 }) + ' Today\'s lesson' : I('gift', { size: 15 }) + ' Your free lesson', I(unitIcon((focus && focus.unit) || pref), { size: 44 }), esc(focus && focus.topic ? focus.topic : (fu ? fu.short : 'Your lesson')), esc([fu ? fu.name : '', costNote()].filter(Boolean).join(' · ')),
+      focus && focus.reason ? `<div class="why"><b>Why this lesson</b>${esc(focus.reason)}</div>` : '', `<button class="sh-btn light lg" id="sh-trial-go">${paid ? 'Build today\'s lesson' : 'Build my free lesson'} ${I('arrow', { size: 18 })}</button>`);
     $('#sh-trial-go').onclick = () => buildDaily(true);
   }
 
@@ -500,7 +519,8 @@
       const reason = focus.reason || (topic ? `A fresh topic from ${u ? u.short : 'your unit'} to keep your revision moving.` : '');
       const g = u ? await fullGrounding(focus.unit, cat, topic) : {};
       const r = await api('create', { mode: 'daily', unit: focus.unit, unitName: u ? u.name : focus.unit, qual: u ? u.qual : '', topic, reason, grounding: g });
-      if (!r.ok) { if (r.locked) { S.status.trial_used = true; S.status.can_create = false; } throw new Error(r.error || 'Could not build the lesson.'); }
+      if (!r.ok) { if (usageBlocked(r)) { S.building = false; S.buildErr = r.error; paintToday(); paintPath(); return; } if (r.locked) { S.status.trial_used = true; S.status.can_create = false; } throw new Error(r.error || 'Could not build the lesson.'); }
+      usageRefresh();
       S.status.daily = r.lesson;
       if (!S.status.premium) { S.status.trial_used = true; S.status.can_create = false; }
       if (!r.existing) { S.status.lessons = [r.lesson].concat(S.status.lessons || []); toast('Today\'s lesson is ready'); }
@@ -576,7 +596,7 @@
     const st = S.status || {};
     const RT = window.RA10Tools;
     const tools = [
-      { k: 'make', ic: 'wand', t: 'Make a lesson', d: 'Any topic, your length', badge: st.can_create ? (st.premium ? '' : '<span class="rtl-pill try">1 free</span>') : '<span class="rtl-pill prem">Premium</span>' },
+      { k: 'make', ic: 'wand', t: 'Make a lesson', d: 'Any topic, your length', badge: st.can_create ? (st.premium ? costPill() : '<span class="rtl-pill try">1 free</span>') : '<span class="rtl-pill prem">Premium</span>' },
       { k: 'blurt', ic: 'mic', t: 'Blurt & Grill', d: 'Say it all, see the gaps', f: 'blurt' },
       { k: 'pre', ic: 'clipboard', t: 'Part A / B', d: 'Mock pre-release pack', f: 'prerelease', href: '/tools/prerelease/' },
       { k: 'bug', ic: 'code', t: 'Bug Hunt', d: 'Fix the logic', f: 'bughunt', href: '/tools/bug-hunt/' },
@@ -936,7 +956,7 @@
     const ov = document.createElement('div');
     ov.className = 'sh-modal';
     ov.innerHTML = `<div class="sh-sheet${quick ? ' quick' : ''}" role="dialog" aria-modal="true" aria-label="Make a lesson">
-      <header class="sh-sheet-h"><span class="ic">${I(quick ? 'gear' : 'wand', { size: 26 })}</span><div><h2 id="mk-title">${quick ? 'Choose length &amp; focus' : 'Make a lesson'}</h2><p class="sh-muted">${quick ? 'Set how long the lesson is and what it concentrates on.' : st.premium ? 'As many as you like.' : 'This uses your one free lesson.'}</p></div><button class="sh-x" data-close aria-label="Close">${I('close', { size: 22 })}</button></header>
+      <header class="sh-sheet-h"><span class="ic">${I(quick ? 'gear' : 'wand', { size: 26 })}</span><div><h2 id="mk-title">${quick ? 'Choose length &amp; focus' : 'Make a lesson'}</h2><p class="sh-muted">${quick ? 'Set how long the lesson is and what it concentrates on.' + (limited() ? ' ' + costNote() + '.' : '') : st.premium ? (limited() ? costNote() + ', exam marking included.' : 'As many as you like.') : 'This uses your one free lesson.'}</p></div><button class="sh-x" data-close aria-label="Close">${I('close', { size: 22 })}</button></header>
       <div class="sh-sheet-b">
         ${quick ? `<section class="sh-qsum" data-quick><span class="ub" style="--uc:${esc((qu && qu.color) || '#5b4cf5')}">${I(unitIcon(M.unit), { size: 22 })}</span><span class="tx"><small>${esc(qu ? qu.short : '')}</small><b>${esc(String(M.topic))}</b></span><button type="button" class="sh-btn ghost sm" data-editall>${I('pencil', { size: 16 })} Edit everything</button></section>` : ''}
         <section class="sh-msec" data-full${quick ? ' hidden' : ''}><h3><span class="n">1</span>Choose a unit</h3><div class="sh-units">${units.map(u => `<button type="button" class="sh-ucard${u.path === M.unit ? ' on' : ''}" data-u="${esc(u.path)}" style="--uc:${esc(u.color || '#5b4cf5')}"><span class="ub">${I(unitIcon(u.path), { size: 24 })}</span><span class="tx"><b>${esc(u.short)}</b><small>${esc(unitName(u))}</small></span><span class="tk">${I('check', { size: 20 })}</span></button>`).join('')}</div></section>
@@ -947,7 +967,7 @@
         </section>
         <section class="sh-msec" data-full${quick ? ' hidden' : ''}><h3><span class="n">4</span>Anything specific? <small>optional</small></h3><textarea id="mk-req" class="sh-in" rows="2" maxlength="300" placeholder="e.g. Explain the CIA triad with real examples, I keep mixing it up"></textarea></section>
       </div>
-      <footer class="sh-sheet-f"><div class="sum" id="mk-sum"></div><button class="sh-btn pri lg" id="mk-go">${I('sparkles', { size: 20 })} Create lesson</button></footer></div>`;
+      <footer class="sh-sheet-f"><div class="sum" id="mk-sum"></div><button class="sh-btn pri lg" id="mk-go">${I('sparkles', { size: 20 })} Create lesson${limited() ? ` <small class="mk-cost">· ${lessonCost()} AI uses</small>` : ''}</button></footer></div>`;
     document.body.appendChild(ov);
     document.body.style.overflow = 'hidden';
     const close = () => { ov.remove(); document.body.style.overflow = ''; document.removeEventListener('keydown', onKey); };
@@ -967,7 +987,7 @@
       $$('[data-full]', ov).forEach(x => { x.hidden = false; });
       const q = $('[data-quick]', ov); if (q) q.remove();
       $('#mk-title', ov).textContent = 'Make a lesson';
-      const sub = $('.sh-sheet-h p', ov); if (sub) sub.textContent = st.premium ? 'Change the unit, topic, style or add your own notes.' : 'This uses your one free lesson.';
+      const sub = $('.sh-sheet-h p', ov); if (sub) sub.textContent = st.premium ? 'Change the unit, topic, style or add your own notes.' + (limited() ? ' ' + costNote() + '.' : '') : 'This uses your one free lesson.';
       const ic = $('.sh-sheet-h .ic', ov); if (ic) ic.innerHTML = I('wand', { size: 26 });
       const sel = $('.sh-topic.on', ov); if (sel) sel.scrollIntoView({ block: 'nearest' });
     };
@@ -1018,7 +1038,8 @@
       const g = u ? await fullGrounding(o.unit, cat, o.topic || o.request || '') : {};
       setStep(2); writing = true;
       const r = await api('create', { mode: 'custom', unit: o.unit, unitName: u ? u.name : o.unit, qual: u ? u.qual : '', topic: o.topic || null, request: o.request || '', reason: o.reason || '', length: o.length || 'standard', focus: o.focus || '', grounding: g });
-      if (!r.ok) { if (r.locked) { st.trial_used = true; st.can_create = false; ov.remove(); return lockedScreen(); } throw new Error(r.error || 'Could not build the lesson.'); }
+      if (!r.ok) { if (usageBlocked(r)) { ov.remove(); home(); return; } if (r.locked) { st.trial_used = true; st.can_create = false; ov.remove(); return lockedScreen(); } throw new Error(r.error || 'Could not build the lesson.'); }
+      usageRefresh();
       setStep(4);
       if (!st.premium) { st.trial_used = true; st.can_create = false; }
       st.lessons = [r.lesson].concat(st.lessons || []);
@@ -1061,7 +1082,9 @@
       scenario: step.context || undefined, unit: u ? u.short : '', mark_scheme: { points: step.points || [], model_answer: step.model || '' }
     };
     if (!q.marks) q.marks = step.marks;
-    const res = await RA10.examineAnswer({ question: q, answer });
+    // the lesson's AI uses cover its own exam questions (claimed server-side, once per exam step)
+    const paidLesson = lesson.id && lesson.kind !== 'template' && lesson.status !== 'done' ? String(lesson.id) : undefined;
+    const res = await RA10.examineAnswer({ question: q, answer, studyHubLesson: paidLesson });
     const r = res && res.result;
     if (!r) throw new Error('No result');
     const max = Math.max(1, Number(r.max) || step.marks);

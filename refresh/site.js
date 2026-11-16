@@ -8029,3 +8029,153 @@ async function waitForRA10Sdk(timeoutMs) {
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', setup);
   else setup();
 })();
+
+/* Owner tools: look up a learner's AI usage, reset their hourly / daily limit, or top them up.
+   Server: ai_usage_admin_view / _reset / _topup in supabase/sql/ai-usage.sql (owner only). */
+(function initOwnerUsageTools() {
+  function setup() {
+    const btn = document.getElementById('owner-usage-check-btn');
+    if (!btn || btn.dataset.bound === '1') return;
+    btn.dataset.bound = '1';
+    const $ = (id) => document.getElementById(id);
+    const emailEl = $('owner-usage-email'), view = $('owner-usage-view'), acts = $('owner-usage-actions');
+    const errEl = $('owner-usage-error'), okEl = $('owner-usage-success');
+    const esc = (v) => String(v == null ? '' : v).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    const when = (iso) => { const d = new Date(iso); return isNaN(d) ? '' : d.toLocaleString([], { weekday: 'short', hour: 'numeric', minute: '2-digit' }); };
+    let current = '';
+
+    function say(err, ok) { errEl.textContent = err || ''; okEl.textContent = ok || ''; }
+    function busy(on) { ['owner-usage-check-btn', 'owner-usage-reset-hour-btn', 'owner-usage-reset-day-btn', 'owner-usage-topup-btn'].forEach((id) => { const b = $(id); if (b) b.disabled = on; }); }
+    function meter(name, w) {
+      const used = Number(w && w.used) || 0, limit = Math.max(1, Number(w && w.limit) || 1);
+      const pct = Math.min(100, Math.round((used / limit) * 100));
+      return `<div class="ou-meter${used >= limit ? ' full' : ''}"><div class="ou-row"><b>${name}</b><span>${used} / ${limit} used</span></div><div class="ou-bar"><i style="width:${pct}%"></i></div></div>`;
+    }
+    function paint(u) {
+      const plan = u.plan === 'premium' ? 'Premium · no limits' : u.plan === 'edu' ? 'School · no limits' : 'Standard';
+      const recent = (u.recent || []).map((r) => `<li><span>${esc(when(r.created_at))}</span><b>${esc(r.source === 'study_hub' ? 'Study Hub lesson' : r.source === 'ai_mark' || !r.source ? 'AI use' : r.source)}</b><em>−${Number(r.amount) || 1}${r.from_bonus ? ' top-up' : ''}</em></li>`).join('');
+      view.innerHTML = `<div class="ou-head"><div><b>${esc(u.name || u.email)}</b><small>${esc(u.email)}</small></div><span class="ou-pill${u.unlimited ? ' unl' : ''}">${esc(plan)}</span></div>` +
+        (u.unlimited ? '<p class="ou-note">This plan has no AI limits, so resets and top-ups are not needed.</p>' : meter('This hour', u.hour) + meter('Today', u.day)) +
+        `<p class="ou-note">Top-up balance: <b>${Number(u.bonus) || 0}</b> ${Number(u.bonus) === 1 ? 'use' : 'uses'}</p>` +
+        (recent ? `<div class="ou-sub">Recent use</div><ul class="ou-recent">${recent}</ul>` : '');
+      view.hidden = false;
+      acts.hidden = false;
+    }
+    async function call(fn, args, okText) {
+      const email = (current || emailEl.value || '').trim();
+      if (!/^\S+@\S+\.\S+$/.test(email)) { say('Enter the learner\'s email address.'); emailEl.focus(); return; }
+      const sb = window.RA10 && RA10.getClient ? RA10.getClient() : null;
+      if (!sb) { say('Not connected. Refresh and try again.'); return; }
+      busy(true); say('', '');
+      try {
+        const { data, error } = await sb.rpc(fn, Object.assign({ p_email: email }, args || {}));
+        if (error) throw error;
+        current = email;
+        paint(data || {});
+        say('', okText || '');
+      } catch (e) {
+        const m = String((e && e.message) || e);
+        say(/Forbidden/.test(m) ? 'Only the owner account can do this.' : /No account/.test(m) ? 'No account uses that email address.' : /Could not find the function|does not exist/.test(m) ? 'Run supabase/sql/ai-usage.sql first.' : m);
+      } finally { busy(false); }
+    }
+    btn.addEventListener('click', () => { current = ''; call('ai_usage_admin_view', null, ''); });
+    emailEl.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); btn.click(); } });
+    emailEl.addEventListener('input', () => { current = ''; acts.hidden = true; view.hidden = true; });
+    $('owner-usage-reset-hour-btn').addEventListener('click', () => call('ai_usage_admin_reset', { p_scope: 'hour' }, 'Hourly limit reset.'));
+    $('owner-usage-reset-day-btn').addEventListener('click', () => {
+      if (!confirm('Reset this learner\'s daily AI limit (this also resets the hour)?')) return;
+      call('ai_usage_admin_reset', { p_scope: 'day' }, 'Daily limit reset.');
+    });
+    $('owner-usage-topup-btn').addEventListener('click', () => {
+      const n = Math.round(Number($('owner-usage-amount').value));
+      if (!n || Math.abs(n) > 1000) { say('Enter a number between -1000 and 1000.'); return; }
+      call('ai_usage_admin_topup', { p_amount: n }, n > 0 ? `Added ${n} top-up ${n === 1 ? 'use' : 'uses'}.` : `Removed ${-n} top-up ${n === -1 ? 'use' : 'uses'}.`);
+    });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', setup);
+  else setup();
+})();
+
+/* "Study Hub is free for everyone" announcement (2026-11-16).
+   Signed in: "Got it" / "Try Study Hub" stores ra10_studyhub_free_popup_seen_v1, which the SDK
+   mirrors to the account (profiles.seen_flags), so it never shows again on any device.
+   Signed out, or closed with ✕ / Esc / the backdrop: hidden for this browser session only. */
+(function initStudyHubFreePopup() {
+  const KEY = 'ra10_studyhub_free_popup_seen_v1';
+  const SESSION_KEY = 'ra10_shfree_session_closed';
+  let tries = 0;
+  const signedIn = () => !!(window.RA10 && RA10.isLoggedIn && RA10.isLoggedIn());
+  const lsGet = (k) => { try { return localStorage.getItem(k); } catch (e) { return null; } };
+  const ssGet = (k) => { try { return sessionStorage.getItem(k); } catch (e) { return null; } };
+  const ssSet = (k) => { try { sessionStorage.setItem(k, '1'); } catch (e) {} };
+
+  function busy() {
+    return !!document.querySelector('#transition-popup-overlay, #profile-setup-overlay.open, .auth-overlay.open, #cf-ann-pop, .ra10u-overlay, #ra10-profile-card, .unit-menu-hint, #shfree-pop')
+      || document.body.classList.contains('unit-shell-mode');
+  }
+
+  async function maybeShow() {
+    if (window.ra10SeenReady) await window.ra10SeenReady();
+    if (ssGet(SESSION_KEY) || (signedIn() && lsGet(KEY))) return;
+    if (/^\/study-hub/.test(location.pathname)) return;
+    if (busy()) { if (++tries < 20) setTimeout(maybeShow, 4000); return; }
+    show();
+  }
+
+  function show() {
+    const img = (name, cls, alt) => `<img class="${cls}" src="/refresh/home/${name}.webp?v=2" alt="${alt}" loading="eager" decoding="async">`;
+    const ov = document.createElement('div');
+    ov.id = 'shfree-pop';
+    ov.className = 'shfree-ov';
+    ov.setAttribute('role', 'dialog');
+    ov.setAttribute('aria-modal', 'true');
+    ov.setAttribute('aria-labelledby', 'shfree-title');
+    ov.innerHTML = `<div class="shfree-card">
+      <button type="button" class="shfree-x" data-x aria-label="Close">✕</button>
+      <div class="shfree-art" aria-hidden="true">
+        ${img('sh-learn', 'a1', '')}${img('sh-quiz', 'a2', '')}${img('sh-phone', 'a3', '')}
+      </div>
+      <div class="shfree-body">
+        <span class="shfree-tag"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/></svg>New · Free for everyone</span>
+        <h2 id="shfree-title">Study Hub is now free for everyone</h2>
+        <p>Short, game-like lessons built from what you've been revising, with real exam questions marked by the AI Examiner.</p>
+        <ul class="shfree-pts">
+          <li>A fresh lesson every day</li>
+          <li>Lessons on any topic</li>
+          <li>Exam questions, properly marked</li>
+        </ul>
+        <p class="shfree-cost">Each lesson uses 5 of your AI usage. Premium, coming soon, has no limits.</p>
+        <div class="shfree-acts">
+          <a class="shfree-btn pri" href="/study-hub/" data-try>Try Study Hub</a>
+          <button type="button" class="shfree-btn" data-got>Got it</button>
+        </div>
+      </div>
+    </div>`;
+    const opener = document.activeElement;
+    const close = (remember) => {
+      if (remember && signedIn()) { try { localStorage.setItem(KEY, '1'); } catch (e) {} }
+      ssSet(SESSION_KEY);
+      document.removeEventListener('keydown', onKey, true);
+      ov.classList.add('out');
+      setTimeout(() => ov.remove(), 180);
+      if (opener && opener.focus && document.contains(opener)) { try { opener.focus(); } catch (e) {} }
+    };
+    const onKey = (e) => { if (e.key === 'Escape') { e.preventDefault(); close(false); } };
+    ov.addEventListener('click', (e) => {
+      if (e.target === ov || e.target.closest('[data-x]')) close(false);
+      else if (e.target.closest('[data-got]')) close(true);
+      else if (e.target.closest('[data-try]')) {
+        if (signedIn()) { try { localStorage.setItem(KEY, '1'); } catch (er) {} }
+        ssSet(SESSION_KEY);
+        if (!signedIn()) { try { sessionStorage.setItem('ra10_after_auth', '/study-hub/'); } catch (er) {} }
+      }
+    });
+    document.addEventListener('keydown', onKey, true);
+    document.body.appendChild(ov);
+    setTimeout(() => { const b = ov.querySelector('[data-got]'); if (b) b.focus(); }, 60);
+  }
+
+  const start = () => setTimeout(maybeShow, 2500);
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
+  else start();
+})();

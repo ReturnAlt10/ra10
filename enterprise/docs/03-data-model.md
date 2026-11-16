@@ -68,11 +68,14 @@ This replaces credits for the AI Examiner with **usage limits**: a rolling hour 
 | Object | Purpose |
 |---|---|
 | `ai_usage_config` | One row per AI feature (`ai_mark`): `hourly_limit` (10), `daily_limit` (40), `extension_active` (true), `extension_multiplier` (3), `extension_note`. Readable by everyone |
-| `ai_usage_events` | One row per counted use. RLS: users read their own; **no client writes**. Rows older than 2 days are pruned on the next use |
+| `ai_usage_events` | One row per spend: `amount` (1 for an AI Examiner mark, 5 for a Study Hub lesson), `from_bonus` (paid from a top-up, not counted in the windows), `source`. RLS: users read their own; **no client writes**. Rows older than 2 days are pruned on the next use |
+| `ai_usage_overrides` | Per user + feature owner adjustments: `bonus` (top-up uses, spent only once a limit is reached, never expire), `hour_reset_at`, `day_reset_at` (uses before a reset no longer count). Users read their own row |
+| `ai_usage_admin_log` | Every owner reset / top-up (admin, learner, action, amount). No client access |
 | `ai_usage_plan(user)` | `premium` (Pro, Ultra, owner, unlimited accounts: nothing counted), `edu` (school tiers and active school members: no limits), `standard` (limited) |
-| `ai_usage_snapshot(user, feature)` | JSON with plan, `allowed`, `blocked_by`, hour and day `{used, limit, remaining, resets_at, clears_at}`, base limits and extension. Service role only |
+| `ai_usage_snapshot(user, feature, need)` | JSON with plan, `allowed`, `blocked_by`, `need`, `bonus`, `costs`, hour and day `{used, limit, remaining, resets_at, clears_at}` (sums of `amount`), base limits and extension. Service role only |
 | `ai_usage_status(feature)` | The learner's own snapshot (authenticated) |
-| `ai_usage_consume(user, feature)` / `ai_usage_refund(user, event_id)` | **Service role only.** Called by `ai-mark` before the AI call and on failure. Uses an advisory lock, so concurrent tabs can't overspend |
+| `ai_usage_consume(user, feature, amount, source)` / `ai_usage_refund(user, event_id)` | **Service role only.** Called by `ai-mark` (1) and `study-hub` create (5) before the AI call and on failure; a top-up pays once the windows are full, and a refund returns it. Uses an advisory lock, so concurrent tabs can't overspend |
+| `ai_usage_admin_view / _reset / _topup(email, …)` | Owner only (`edu_is_owner()`): look a learner up by email, reset the hour (`'hour'`) or both windows (`'day'`), add or remove top-up uses (±1000). Used by Owner tools on the account page |
 | `ai_usage_set_config(...)` | Owner (`edu_is_owner()`): change limits or end the launch extension |
 
 **Launch extension:** while `extension_active` is true, Standard limits are multiplied (3×, so 30 an hour and 120 a day). When the enterprise migration ends, run:
@@ -86,7 +89,8 @@ update public.ai_usage_config set extension_active = false where feature = 'ai_m
 | Object | Purpose |
 |---|---|
 | `study_lessons` | Generated lessons. `kind` is `daily`, `custom`, `template` (teacher) or `assigned`. Holds steps JSON, results, XP and the `emoji` column (an icon key) |
-| `study_hub_trials` | One free trial per non-Premium user, claimed before generation and released on failure |
+| `study_hub_trials` | Legacy: one free trial per non-Premium user. Only written if `ai-usage.sql` hasn't been run (fallback). Since 2026-11-16 Study Hub is open to everyone and a lesson costs 5 AI uses |
+| `study_lessons.free_marks` / `study_hub_claim_mark(user, lesson, release)` | The lesson's exam questions are marked free (once per exam step, own unfinished lesson ≤ 2 days old). Service role only; the guard trigger stops learners resetting `free_marks` |
 | `study_hub_premium()` | **The single definition of Premium:** tier `all_subjects` / `ultra` / `owner`, `unlimited_credits`, the owner email, school tiers, or an active school member |
 | `study_hub_status()` | Status for the UI |
 | `trg_study_lessons_guard` | Learners cannot edit content, XP or marking |

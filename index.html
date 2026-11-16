@@ -31,7 +31,7 @@
 })();
 </script>
 <link rel="preload" href="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0/dist/umd/supabase.js" as="script" crossorigin>
-<link rel="preload" href="/refresh/site.js?v=20270115" as="script">
+<link rel="preload" href="/refresh/site.js?v=20270116" as="script">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>RA10 — Advanced Revision Site (BTEC, GCSE, A-LEVEL)</title>
 <meta name="description" content="Free BTEC Level 3 revision for IT, Business, Sport, Computing, Construction, Early Childhood Development, Engineering, Health and Social Care and Medical Science, plus A-Level Business (AQA and Edexcel) and A-Level Psychology. Flashcards, quizzes, predicted papers, study guides, wireframe and code tools, and AI assignment marking — all in one place.">
@@ -70,12 +70,12 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/refresh/site.css?v=20270115">
+<link rel="stylesheet" href="/refresh/site.css?v=20270116">
 <script>
 (function(){
   var isFile = location.protocol === 'file:';
   var isLocalHost = location.hostname === '127.0.0.1' || location.hostname === 'localhost';
-  var SDK_V = '?v=20261113';
+  var SDK_V = '?v=20261116';
   var candidates = isFile
     ? ['file:///C:/Users/mistr/Downloads/ra10/ra10-sdk.js' + SDK_V, 'https://ra10.co.uk/ra10-sdk.js' + SDK_V]
     : (isLocalHost
@@ -901,7 +901,7 @@ body.home-signed-in.show-roadmap #p-home .hx-home > #roadmap{display:block !impo
           <div class="sd-main">
             <a class="sd-card sd-studyhub" href="/study-hub/" aria-label="Open Study Hub — your daily AI lesson">
               <span class="sd-sh-emo" aria-hidden="true">✨</span>
-              <span class="sd-sh-copy"><small>Study Hub · Premium</small><b>Your daily lesson is ready</b><span>A short, game-like lesson built from what you've been revising.</span></span>
+              <span class="sd-sh-copy"><small>Study Hub · Free for everyone</small><b>Your daily lesson is ready</b><span>A short, game-like lesson built from what you've been revising.</span></span>
               <span class="sd-sh-go" aria-hidden="true">Start →</span>
             </a>
             <section class="sd-card" aria-labelledby="sd-h-recent">
@@ -1017,9 +1017,9 @@ body.home-signed-in.show-roadmap #p-home .hx-home > #roadmap{display:block !impo
             <p>Study Hub looks at what you've been revising on RA10: the questions you got wrong, the topics you've read and the units you're working on. Every day it builds a short, game-like lesson on exactly what you need next.</p>
             <div class="hm-actions">
               <a class="hm-btn hm-btn-flag" href="/study-hub/">Explore Study Hub <span aria-hidden="true">→</span></a>
-              <button class="hm-btn hm-btn-outline" type="button" onclick="try{sessionStorage.setItem('ra10_after_auth','/study-hub/')}catch(e){}openSignInOverlayFallback()">Try a free lesson</button>
+              <button class="hm-btn hm-btn-outline" type="button" onclick="try{sessionStorage.setItem('ra10_after_auth','/study-hub/')}catch(e){}openSignInOverlayFallback()">Start for free</button>
             </div>
-            <p class="hm-flag-note">Part of RA10 Premium. Every account can try one lesson free.</p>
+            <p class="hm-flag-note">Free for everyone right now. Each lesson uses 5 of your AI usage; Premium (coming soon) has no limits.</p>
           </div>
           <div class="hm-flag-stage" aria-hidden="true">
             <figure class="hm-shot hm-shot-dark"><div class="hm-shot-bar"><i></i><i></i><i></i><span>ra10.co.uk/study-hub</span></div><img src="/refresh/home/sh-home.webp?v=2" width="1280" height="860" alt="" loading="lazy" decoding="async"></figure>
@@ -2485,6 +2485,28 @@ body.home-signed-in.show-roadmap #p-home .hx-home > #roadmap{display:block !impo
           <div class="auth-error" id="owner-announcement-error" style="margin-top:var(--sp2);"></div>
           <div class="auth-success" id="owner-announcement-success" style="margin-top:var(--sp2);"></div>
           <hr style="border:none;border-top:1px solid var(--color-border);margin:var(--sp4) 0;">
+          <h4 class="account-gift-title">AI usage: reset limits or top up</h4>
+          <p class="owner-usage-help">Look a learner up by email. Resetting clears that window now. Top-up uses are spent only after they reach a limit, and never expire (use a negative number to remove them).</p>
+          <div class="account-gift-grid">
+            <div class="account-field-grow">
+              <label class="auth-label" for="owner-usage-email">Learner's email</label>
+              <input id="owner-usage-email" class="auth-input" type="email" placeholder="learner@example.com" autocomplete="off" spellcheck="false">
+            </div>
+            <button class="btn account-btn account-btn-save-user" id="owner-usage-check-btn" type="button">Check usage</button>
+          </div>
+          <div id="owner-usage-view" class="owner-usage-view" aria-live="polite" hidden></div>
+          <div class="owner-usage-actions" id="owner-usage-actions" hidden>
+            <button class="btn account-btn" id="owner-usage-reset-hour-btn" type="button">Reset hourly limit</button>
+            <button class="btn account-btn" id="owner-usage-reset-day-btn" type="button">Reset daily limit</button>
+            <div class="owner-usage-topup">
+              <label class="auth-label" for="owner-usage-amount">Top-up uses</label>
+              <input id="owner-usage-amount" class="auth-input" type="number" min="-1000" max="1000" step="1" value="20">
+              <button class="btn account-btn account-btn-save-user" id="owner-usage-topup-btn" type="button">Add top-up</button>
+            </div>
+          </div>
+          <div class="auth-error" id="owner-usage-error" style="margin-top:var(--sp2);"></div>
+          <div class="auth-success" id="owner-usage-success" style="margin-top:var(--sp2);"></div>
+          <hr style="border:none;border-top:1px solid var(--color-border);margin:var(--sp4) 0;">
 
           <h4 class="account-gift-title">Owner moderation: remove profile picture</h4>
           <div class="account-gift-grid">
@@ -3410,7 +3432,7 @@ body.home-signed-in.show-roadmap #p-home .hx-home > #roadmap{display:block !impo
 <script src="/refresh/ra10-subjects.js?v=20270111"></script>
 <script>(function(){var el=document.getElementById('hm-subjects');if(el&&window.RA10Subjects&&RA10Subjects.renderHome)RA10Subjects.renderHome(el);})();</script>
 <script src="/refresh/ra10-tasks.js?v=20261113"></script>
-<script src="/refresh/site.js?v=20270115"></script>
+<script src="/refresh/site.js?v=20270116"></script>
 <script src="/refresh/ra10-edu.js?v=20261126" defer></script>
 
 <!-- ============================================================

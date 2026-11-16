@@ -1,6 +1,6 @@
 -- ═══════════════════════════════════════════════════════════════════════════
 -- RA10 Study Hub — AI daily lessons (Premium, with one free trial lesson).
--- Run in the Supabase SQL editor AFTER edu-platform.sql (uses activity_events
+-- Run in the Supabase SQL editor AFTER edu-platform.sql AND ai-usage.sql (uses activity_events, ai_usage_plan
 -- and the increment_xp guard). Safe to re-run.
 --
 --  study_lessons      one row per lesson (daily or made by the learner)
@@ -45,6 +45,8 @@ alter table public.study_lessons add column if not exists assignment_id uuid;
 alter table public.study_lessons add column if not exists item_id text;
 alter table public.study_lessons add column if not exists class_id uuid;
 alter table public.study_lessons add column if not exists school_id text;
+-- AI Examiner marks already paid for by the lesson's 5 AI uses (see study_hub_claim_mark)
+alter table public.study_lessons add column if not exists free_marks integer not null default 0;
 alter table public.study_lessons drop constraint if exists study_lessons_kind_check;
 alter table public.study_lessons add constraint study_lessons_kind_check check (kind in ('daily', 'custom', 'assigned', 'template'));
 create unique index if not exists study_lessons_one_per_item on public.study_lessons (user_id, assignment_id, item_id) where assignment_id is not null;
@@ -91,6 +93,7 @@ begin
     if old.status = 'done' then new.status := 'done'; end if;
     if pg_column_size(new.progress) > 60000 then new.progress := old.progress; end if;
     new.assignment_id := old.assignment_id; new.item_id := old.item_id; new.class_id := old.class_id; new.school_id := old.school_id;
+    new.free_marks := old.free_marks;
     if old.kind = 'template' then new.status := old.status; new.progress := old.progress; end if;
   end if;
   return new;
@@ -144,9 +147,12 @@ begin
   end loop;
   return json_build_object(
     'signed_in', true,
-    'premium', v_premium,
+    'premium', true,                 -- Study Hub is open to every signed-in account (2026-11-16)
+    'is_premium', v_premium,
     'trial_used', v_trial,
-    'can_create', v_premium or not v_trial,
+    'can_create', true,
+    'unlimited', public.ai_usage_plan(v_uid) in ('premium', 'edu'),
+    'lesson_cost', 5,
     'today', v_today,
     'streak', v_streak,
     'done_today', exists (select 1 from public.study_lessons where user_id = v_uid and status = 'done'
@@ -170,3 +176,35 @@ begin
 end $$;
 revoke all on function public.study_hub_status() from public, anon;
 grant execute on function public.study_hub_status() to authenticated;
+
+-- ── Open to everyone (2026-11-16) ─────────────────────────────────────────────────────────────
+-- Until subscriptions launch, every signed-in account can use Study Hub. Each new lesson takes
+-- 5 uses of the shared AI allowance (ai-usage.sql, feature 'ai_mark'); Premium and EDU plans are
+-- not counted. study_hub_premium() is still reported as is_premium, and study_hub_trials is no
+-- longer written. The lesson's own exam questions are marked without taking more uses:
+-- ai-mark calls study_hub_claim_mark() with the lesson id, and the claim succeeds at most once per
+-- exam step, only for the learner's own unfinished lesson from the last 2 days.
+create or replace function public.study_hub_claim_mark(p_user uuid, p_lesson uuid, p_release boolean default false)
+returns boolean language plpgsql volatile security definer set search_path = public as $$
+declare
+  v_ok boolean;
+begin
+  if p_user is null or p_lesson is null then return false; end if;
+  if p_release then
+    update public.study_lessons set free_marks = greatest(free_marks - 1, 0)
+     where id = p_lesson and user_id = p_user and free_marks > 0;
+    return found;
+  end if;
+  update public.study_lessons l set free_marks = l.free_marks + 1
+   where l.id = p_lesson and l.user_id = p_user
+     and l.kind in ('daily', 'custom', 'assigned')
+     and l.status <> 'done'
+     and l.created_at > now() - interval '2 days'
+     and l.free_marks < (select count(*) from jsonb_array_elements(case when jsonb_typeof(l.content -> 'steps') = 'array'
+                                                                     then l.content -> 'steps' else '[]'::jsonb end) s
+                          where s ->> 'type' = 'exam')
+  returning true into v_ok;
+  return coalesce(v_ok, false);
+end $$;
+revoke all on function public.study_hub_claim_mark(uuid, uuid, boolean) from public, anon, authenticated;
+grant execute on function public.study_hub_claim_mark(uuid, uuid, boolean) to service_role;

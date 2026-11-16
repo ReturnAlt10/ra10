@@ -2069,9 +2069,9 @@
   }
 
   function _usageLimitText(u) {
-    const label = (u && u.label) || 'AI Examiner';
+    const label = (u && u.label) || 'AI';
     const win = u && u.blocked_by === 'day' ? u.day : (u && u.hour);
-    const when = win && win.resets_at ? ' You can mark again at ' + _usageClock(win.resets_at) + '.' : '';
+    const when = win && win.resets_at ? ' You can use AI again at ' + _usageClock(win.resets_at) + '.' : '';
     return (u && u.blocked_by === 'day' ? "You've reached today's " : "You've reached this hour's ") + label + ' limit.' + when;
   }
 
@@ -2164,11 +2164,22 @@ html[data-theme="dark"] .ra10u-root{--u-bg:#1c1b19;--u-card:#232220;--u-text:#e7
     let note;
     if (full && win.resets_at) note = 'Available again at ' + _usageClock(win.resets_at) + ' (in ' + _usageIn(win.resets_at) + ')';
     else if (used === 0) note = 'Nothing used in the last ' + windowWord;
-    else note = (limit - used) + ' left · each mark comes back ' + (windowWord === 'hour' ? 'an hour' : '24 hours') + ' after you use it';
+    else note = (limit - used) + ' left · each use comes back ' + (windowWord === 'hour' ? 'an hour' : '24 hours') + ' after you spend it';
     return '<div class="ra10u-meter' + (full ? ' full' : low ? ' low' : '') + '">' +
       '<div class="ra10u-mrow"><b>' + name + '</b><span>' + used + ' / ' + limit + ' used</span></div>' +
       '<div class="ra10u-bar" role="progressbar" aria-label="' + _usageEsc(name) + ' usage" aria-valuemin="0" aria-valuemax="' + limit + '" aria-valuenow="' + used + '"><i style="width:' + pct + '%"></i></div>' +
       '<div class="ra10u-note">' + _usageEsc(note) + '</div></div>';
+  }
+
+  // What uses are spent on, plus any top-up the owner has added.
+  function _usageCostsHtml(u) {
+    if (!u || u.unlimited) return '';
+    const c = u.costs || {};
+    const mark = Number(c.ai_mark) || 1;
+    const lesson = Number(c.study_hub_lesson) || 5;
+    const bonus = Math.max(0, Number(u.bonus) || 0);
+    return '<div class="ra10u-note" style="margin-top:10px">An AI Examiner mark uses ' + mark + ' · a Study Hub lesson uses ' + lesson + '.</div>' +
+      (bonus ? '<div class="ra10u-ext">' + USAGE_ICON_SPARK + '<span>' + _usageEsc('Top-up: ' + bonus + ' extra ' + (bonus === 1 ? 'use' : 'uses') + ', spent only after you reach a limit.') + '</span></div>' : '');
   }
 
   function _usageExtensionHtml(u) {
@@ -2193,13 +2204,15 @@ html[data-theme="dark"] .ra10u-root{--u-bg:#1c1b19;--u-card:#232220;--u-text:#e7
     const blocked = u.allowed === false && !!u.blocked_by;
     const mode = (options && options.mode) || (blocked ? 'limit' : 'info');
     const win = u.blocked_by === 'day' ? u.day : u.hour;
-    const label = u.label || 'AI Examiner';
+    const label = u.label || 'AI';
+    const need = Math.max(1, Number(u.need) || 1);
     const title = mode === 'limit'
       ? (u.blocked_by === 'day' ? "You've reached today's " + label + ' limit' : "You've reached this hour's " + label + ' limit')
       : label + ' usage';
+    const again = need > 1 ? 'You\'ll have the ' + need + ' uses you need at ' : 'You can use AI again at ';
     const sub = mode === 'limit'
-      ? (win && win.resets_at ? 'You can mark again at ' + _usageClock(win.resets_at) + ' — in ' + _usageIn(win.resets_at) + '.' : 'You can mark again soon.')
-      : (u.unlimited ? 'Your plan has no ' + label + ' limits.' : 'Limits are rolling: every mark comes back after its window passes.');
+      ? (win && win.resets_at ? again + _usageClock(win.resets_at) + ' — in ' + _usageIn(win.resets_at) + '.' : 'You can use AI again soon.')
+      : (u.unlimited ? 'Your plan has no ' + label + ' limits.' : 'Limits are rolling: every use comes back after its window passes.');
 
     const root = document.createElement('div');
     root.className = 'ra10u-root ra10u-overlay';
@@ -2218,6 +2231,7 @@ html[data-theme="dark"] .ra10u-root{--u-bg:#1c1b19;--u-card:#232220;--u-text:#e7
         '</div>' +
         (u.unlimited ? '' :
           '<div class="ra10u-meters">' + _usageMeterHtml('This hour', u.hour, 'hour') + _usageMeterHtml('Today', u.day, '24 hours') + '</div>') +
+        _usageCostsHtml(u) +
         _usageExtensionHtml(u) +
         (mode === 'limit' ? '<p class="ra10u-keep">While you wait, everything else stays unlimited: mark schemes, practice questions, papers, guides and flashcards.</p>' : '') +
         '<div class="ra10u-actions">' +
@@ -2256,10 +2270,10 @@ html[data-theme="dark"] .ra10u-root{--u-bg:#1c1b19;--u-card:#232220;--u-text:#e7
     _usageNudgeKey = key;
     _ensureUsageStyles();
     document.querySelectorAll('.ra10u-toast').forEach(function (n) { n.remove(); });
-    const label = u.label || 'AI Examiner';
+    const label = u.label || 'AI';
     const text = pick.left === 0
-      ? 'That was your last ' + label + ' mark ' + pick.word + '.'
-      : pick.left + ' ' + label + (pick.left === 1 ? ' mark' : ' marks') + ' left ' + pick.word + '.';
+      ? 'That was your last ' + label + ' use ' + pick.word + '.'
+      : pick.left + ' ' + label + (pick.left === 1 ? ' use' : ' uses') + ' left ' + pick.word + '.';
     const toast = document.createElement('div');
     toast.className = 'ra10u-root ra10u-toast';
     toast.setAttribute('role', 'status');
@@ -2282,11 +2296,11 @@ html[data-theme="dark"] .ra10u-root{--u-bg:#1c1b19;--u-card:#232220;--u-text:#e7
       el.hidden = false;
       el.innerHTML =
         '<div class="ra10u-root ra10u-card">' +
-          '<div class="ra10u-card-head"><h4>' + _usageEsc((u.label || 'AI Examiner') + ' usage') + '</h4>' +
+          '<div class="ra10u-card-head"><h4>' + _usageEsc((u.label || 'AI') + ' usage') + '</h4>' +
           '<span class="ra10u-pill' + (u.unlimited ? ' unl' : '') + '">' + _usageEsc(_usagePlanLabel(u)) + '</span></div>' +
           (u.unlimited
             ? '<p class="ra10u-note" style="margin-top:8px">Your plan has no hourly or daily limits.</p>'
-            : '<div class="ra10u-meters">' + _usageMeterHtml('This hour', u.hour, 'hour') + _usageMeterHtml('Today', u.day, '24 hours') + '</div>' + _usageExtensionHtml(u)) +
+            : '<div class="ra10u-meters">' + _usageMeterHtml('This hour', u.hour, 'hour') + _usageMeterHtml('Today', u.day, '24 hours') + '</div>' + _usageCostsHtml(u) + _usageExtensionHtml(u)) +
         '</div>';
     };
     paint(_usage);
@@ -2336,8 +2350,8 @@ html[data-theme="dark"] .ra10u-root{--u-bg:#1c1b19;--u-card:#232220;--u-text:#e7
         num.textContent = String(b.left);
         num.classList.toggle('sm', b.left >= 100);
       }
-      const label = (u.label || 'AI Examiner') + ': ' + b.left + ' of ' + b.limit +
-        (b.limit === 1 ? ' mark' : ' marks') + ' left ' + (b.key === 'hour' ? 'this hour' : 'today');
+      const label = (u.label || 'AI') + ': ' + b.left + ' of ' + b.limit +
+        (b.limit === 1 ? ' use' : ' uses') + ' left ' + (b.key === 'hour' ? 'this hour' : 'today');
       btn.title = label;
       btn.setAttribute('aria-label', label + '. Show usage details');
     });
@@ -2512,6 +2526,8 @@ html[data-theme="dark"] .ra10u-root{--u-bg:#1c1b19;--u-card:#232220;--u-text:#e7
     };
     // Diagram questions can send a drawn / photographed answer as a data-URL image.
     if (input && typeof input.image === 'string' && /^data:image\/(png|jpeg|webp);base64,/.test(input.image)) payload.image = input.image;
+    // Study Hub: the lesson's AI uses already cover its exam questions (checked server-side).
+    if (input && typeof input.studyHubLesson === 'string' && /^[0-9a-f-]{36}$/i.test(input.studyHubLesson)) payload.study_hub_lesson = input.studyHubLesson;
     if (!payload.question || (!payload.answer.trim() && !payload.image)) {
       throw new Error('Question and answer are required for AI Examiner.');
     }

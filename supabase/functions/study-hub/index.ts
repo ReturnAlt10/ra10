@@ -3,13 +3,16 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { askJson, hasProviders } from '../_shared/ai.ts';
 
 // ────────────────────────────────────────────────────────────────────────────
-// RA10 Study Hub — AI-curated bite-size lessons (Premium; one free trial lesson).
+// RA10 Study Hub — AI-curated bite-size lessons (open to every signed-in account;
+// each new lesson takes LESSON_COST uses of the shared AI allowance, see ai-usage.sql).
 //   plan      read the learner's recent activity → strengths, gaps and today's focus
 //   create    write a lesson (daily or learner-chosen topic) grounded in the unit's
 //             real question bank, store it, return it
 //   mark      AI-mark the written exam-question step of a lesson
 //   complete  finish a lesson once: score + XP (XP goes through the increment_xp guard)
-// Access is decided server-side by public.study_hub_premium() + study_hub_trials.
+// Access: ai_usage_consume(user, 'ai_mark', LESSON_COST, 'study_hub') before a lesson is written
+// (Premium / EDU are not counted), refunded if writing fails. If the usage SQL is missing, the old
+// rule applies (study_hub_premium() or one free study_hub_trials lesson).
 // ────────────────────────────────────────────────────────────────────────────
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL') || '';
@@ -40,6 +43,46 @@ async function access(ctx: Ctx) {
   const { data: premium } = await ctx.admin.rpc('study_hub_premium', { p_user: ctx.userId });
   const { data: trial } = await ctx.admin.from('study_hub_trials').select('user_id').eq('user_id', ctx.userId).maybeSingle();
   return { premium: premium === true, trialUsed: !!trial };
+}
+
+// One new lesson = 5 uses of the shared AI allowance (the lesson's own exam marking is included).
+const LESSON_COST = 5;
+type Spend = { mode: 'usage'; eventId: number | null; usage: any } | { mode: 'trial' } | { mode: 'premium' };
+
+// Takes the lesson's uses. Returns { blocked } with the usage snapshot when a limit is reached.
+async function spendForLesson(ctx: Ctx): Promise<{ spend?: Spend; blocked?: any; error?: string }> {
+  const { data, error } = await ctx.admin.rpc('ai_usage_consume', { p_user: ctx.userId, p_feature: 'ai_mark', p_amount: LESSON_COST, p_source: 'study_hub' });
+  if (!error && data) {
+    if (data.allowed === false) return { blocked: data };
+    return { spend: { mode: 'usage', eventId: data.event_id ? Number(data.event_id) : null, usage: data } };
+  }
+  // usage SQL not applied yet: fall back to the old Premium / one-free-lesson rule
+  console.warn('study-hub: usage check unavailable, using the old access rule:', error?.message);
+  const acc = await access(ctx);
+  if (acc.premium) return { spend: { mode: 'premium' } };
+  if (acc.trialUsed) return { error: 'You have already used your free Study Hub lesson.' };
+  const ins = await ctx.admin.from('study_hub_trials').insert({ user_id: ctx.userId });
+  if (ins.error) return { error: 'You have already used your free Study Hub lesson.' };
+  return { spend: { mode: 'trial' } };
+}
+
+async function refundLesson(ctx: Ctx, spend: Spend | undefined) {
+  if (!spend) return null;
+  if (spend.mode === 'trial') { await ctx.admin.from('study_hub_trials').delete().eq('user_id', ctx.userId); return null; }
+  if (spend.mode === 'usage' && spend.eventId) {
+    const { data, error } = await ctx.admin.rpc('ai_usage_refund', { p_user: ctx.userId, p_event_id: spend.eventId });
+    if (error) console.warn('study-hub: usage refund failed:', error.message);
+    spend.eventId = null;
+    return error ? null : data;
+  }
+  return null;
+}
+
+function limitMessage(u: any) {
+  const need = Number(u?.need) || LESSON_COST;
+  return u?.blocked_by === 'day'
+    ? `A Study Hub lesson uses ${need} AI uses, and you don't have enough left today.`
+    : `A Study Hub lesson uses ${need} AI uses, and you don't have enough left this hour.`;
 }
 
 /* ───────────────────────────── learner profile ───────────────────────────── */
@@ -456,14 +499,12 @@ function bankLesson(unitName: string, topic: string | null, grounding: any) {
 }
 
 async function create(ctx: Ctx, body: any) {
-  const acc = await access(ctx);
   const mode = body.mode === 'daily' ? 'daily' : 'custom';
   const today = londonDate();
   if (mode === 'daily') {
     const { data: existing } = await ctx.admin.from('study_lessons').select('*').eq('user_id', ctx.userId).eq('kind', 'daily').eq('lesson_date', today).maybeSingle();
     if (existing) return { ok: true, lesson: existing, existing: true };
   }
-  if (!acc.premium && acc.trialUsed) return { ok: false, locked: true, error: 'Study Hub is a Premium feature. You have used your free lesson.' };
 
   const unit = clean(body.unit, 120);
   const unitName = clean(body.unitName, 120) || unit;
@@ -472,13 +513,12 @@ async function create(ctx: Ctx, body: any) {
   const request = clean(body.request, 300);
   if (!unit && !request) return { ok: false, error: 'Choose a unit or tell us what you want to learn.' };
 
-  // claim the free trial first so two tabs can't both use it
-  let trial = false;
-  if (!acc.premium) {
-    const { error } = await ctx.admin.from('study_hub_trials').insert({ user_id: ctx.userId });
-    if (error) return { ok: false, locked: true, error: 'You have already used your free Study Hub lesson.' };
-    trial = true;
-  }
+  // take the lesson's AI uses first (server-side, serialised per account) so two tabs can't overspend
+  const paid = await spendForLesson(ctx);
+  if (paid.blocked) return { ok: false, code: 'usage_limit', usage: paid.blocked, error: limitMessage(paid.blocked) };
+  if (paid.error || !paid.spend) return { ok: false, locked: true, error: paid.error || 'Study Hub is unavailable right now.' };
+  const spend = paid.spend;
+  const trial = spend.mode === 'trial';
   try {
     const prof = await profile(ctx).catch(() => null);
     const reason = clean(body.reason, 300) || (topic ? `You picked ${topic}.` : '');
@@ -498,14 +538,14 @@ async function create(ctx: Ctx, body: any) {
     if (error && mode === 'daily') {
       // someone else (another tab) created today's lesson first
       const { data: existing } = await ctx.admin.from('study_lessons').select('*').eq('user_id', ctx.userId).eq('kind', 'daily').eq('lesson_date', today).maybeSingle();
-      if (existing) { if (trial) await ctx.admin.from('study_hub_trials').delete().eq('user_id', ctx.userId); return { ok: true, lesson: existing, existing: true }; }
+      if (existing) { await refundLesson(ctx, spend); return { ok: true, lesson: existing, existing: true }; }
     }
     if (error) throw new Error(error.message);
     if (trial) await ctx.admin.from('study_hub_trials').update({ lesson_id: saved.id }).eq('user_id', ctx.userId);
-    return { ok: true, lesson: saved };
+    return { ok: true, lesson: saved, usage: spend.mode === 'usage' ? spend.usage : null };
   } catch (e) {
-    if (trial) await ctx.admin.from('study_hub_trials').delete().eq('user_id', ctx.userId);
-    return { ok: false, error: e instanceof Error ? e.message : String(e) };
+    const usage = await refundLesson(ctx, spend);
+    return { ok: false, error: e instanceof Error ? e.message : String(e), usage };
   }
 }
 
