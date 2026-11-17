@@ -448,7 +448,20 @@ function schemePoints(ms: any): string[] {
     if (Array.isArray(ms[k]) && ms[k].length) return ms[k].map(toStr).map((s: string) => clean(s, 260)).filter(Boolean).slice(0, 14);
   }
   if (Array.isArray(ms.levels)) return ms.levels.map((l: any) => clean(`${l.level ? 'Level ' + l.level + (l.marks ? ' (' + l.marks + ')' : '') + ': ' : ''}${toStr(l)}`, 260)).filter(Boolean).slice(0, 6);
+  // past-paper schemes are sometimes only stored as the official text
+  if (typeof ms.raw === 'string' && ms.raw.trim()) return ms.raw.split('\n').map((l: string) => clean(l.replace(/^[•\-]\s*/, ''), 260)).filter((l: string) => l && !/^guidance:/i.test(l)).slice(0, 14);
   return [];
+}
+// A real question is only used as the lesson's exam step if it stands on its own: it has a mark scheme we can show,
+// and it does not depend on a table, figure, diagram or code listing that Study Hub cannot display (otherwise the
+// question looks unrelated to its mark scheme).
+function usableReal(q: any): boolean {
+  if (!q || !clean(q.question)) return false;
+  if (!schemePoints(q.mark_scheme).length) return false;
+  const t = String(q.question || '');
+  if (q.fig || q.padFig || q.diagram || String(q.type || '') === 'diagram') return false;
+  if (/\b(the|this|following) (table|figure|diagram|flowchart|flow chart|graph|chart|trace table|truth table|logic (circuit|diagram)|algorithm|code|program|pseudocode)\b|\bfig\.?\s*\d|\btick\b|\bcomplete the\b|\bshown (below|above)\b|\bin the box\b|\bline (number|\d)/i.test(t)) return false;
+  return true;
 }
 // Keep a real question small enough to store with the lesson and send to the AI Examiner.
 function trimReal(q: any) {
@@ -506,7 +519,7 @@ async function writeLesson(input: { unit?: string; unitName: string; qual: strin
   const bankQuiz = (Array.isArray(g.quiz) ? g.quiz : []).filter((q: any) => q && Array.isArray(q.choices)
     && !lengthTell({ type: 'mcq', choices: q.choices.map((c: unknown) => String(c ?? '')), answer: Number(q.correct) })
     && !seenIn.some((x) => sameCheck({ q: String(q.q || ''), a: String(q.choices[Number(q.correct)] ?? '') }, x))).slice(0, 8);
-  const realExam = (Array.isArray(g.exam) ? g.exam : []).map(trimReal).filter((q: any) => q && clean(q.question)).slice(0, 3);
+  const realExam = (Array.isArray(g.exam) ? g.exam : []).filter(usableReal).map(trimReal).filter((q: any) => q && clean(q.question)).slice(0, 3);
   const bankExam = realExam.length
     ? realExam.map((q: any) => ({ ref: String(q.id), q: clean(q.question, 700), marks: q.marks, verb: q.command_verb || '', context: clean(q.scenario || q.context || '', 500), mark_scheme: schemePoints(q.mark_scheme) }))
     : (Array.isArray(g.questions) ? g.questions : []).slice(0, 3);
@@ -572,9 +585,10 @@ Return JSON exactly like:
     if (s.type === 'exam') {
       const ref = clean(raw?.ref, 80);
       const real = realExam.find((q: any) => ref && String(q.id) === ref) || realExam.find((q: any) => norm(q.question).slice(0, 80) === norm(s.q).slice(0, 80));
-      if (real) {
-        const pts = schemePoints(real.mark_scheme);
-        steps.push({ ...s, q: clean(real.question, 900), marks: Math.max(1, Math.min(30, Math.round(Number(real.marks) || s.marks))), verb: clean(real.command_verb, 20) || s.verb, context: clean(real.scenario || real.context || s.context || '', 1500) || undefined, points: pts.length ? pts : s.points, source: 'exam', real });
+      const pts = real ? schemePoints(real.mark_scheme) : [];
+      // the real question is used only together with its own official mark scheme — never with the AI's points
+      if (real && pts.length) {
+        steps.push({ ...s, q: clean(real.question, 900), marks: Math.max(1, Math.min(30, Math.round(Number(real.marks) || s.marks))), verb: clean(real.command_verb, 20) || s.verb, context: clean(real.scenario || real.context || s.context || '', 1500) || undefined, points: pts, model: '', source: 'exam', real });
         return;
       }
       s.source = 'practice';
@@ -647,7 +661,7 @@ Check each item:
 - fill: put each option into each gap — does ONLY the keyed word make the sentence correct? A distractor that also fits (a synonym, a broader or narrower correct term) makes the item invalid: replace that distractor. Every option must also read as grammatical English in the gap (same part of speech, singular/plural, tense; nothing like "an bus" or "a encryption") so grammar never gives the answer away: fix the "text" (e.g. "the ___" instead of "a ___") or the options.
 - match: is every pair correct and is each definition unique to its term?
 - order: is the order a recognised, correct sequence?
-- exam: are the mark-scheme points correct and is the model answer worth full marks?
+- exam: does EVERY mark-scheme point answer THIS exact question (same topic, same command word, same scenario)? Points written for a different question, or that a student answering this question could never write, are the most serious error: verdict "fix" with new "points" (and "model") that match the question exactly. Are the points correct, and is the model answer worth full marks? Never change the question "q" of an exam item — fix its points and model instead.
 Items: ${JSON.stringify(items)}
 Return {"items":[{"i":0,"verdict":"ok"|"fix"|"drop","reason":"short", ...corrected fields when verdict is "fix" (e.g. "answer", "choices", "blanks", "options", "pairs", "items", "statement", "text", "body", "points", "model")}]}`,
     45000, { preferStrong: true, temperature: 0, maxTokens: 5000 });
@@ -664,6 +678,8 @@ Return {"items":[{"i":0,"verdict":"ok"|"fix"|"drop","reason":"short", ...correct
     const s = out[i];
     const patch: any = {};
     ['answer', 'choices', 'blanks', 'options', 'pairs', 'items', 'statement', 'text', 'body', 'points', 'model', 'q', 'diagram'].forEach((f) => { if (v[f] !== undefined) patch[f] = v[f]; });
+    // an exam question keeps its wording: a rewritten question with the old mark scheme is how they drift apart
+    if (s.type === 'exam') delete patch.q;
     const fixed = sanitiseStep({ ...s, ...patch, type: s.type });
     if (fixed && s._k != null) fixed._k = s._k;
     if (fixed) out[i] = s.type === 'exam' ? { ...s, ...fixed } : fixed; else drop.add(i);

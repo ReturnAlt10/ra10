@@ -1306,8 +1306,29 @@
     return rw;
   }
 
+  // The official mark scheme of a real exam question, as plain points.
+  function realPoints(ms) {
+    if (!ms || typeof ms !== 'object') return [];
+    const str = (x) => typeof x === 'string' ? x : x && typeof x === 'object' ? String(x.text || x.point || x.description || x.descriptor || x.content || '') : '';
+    for (const k of ['points', 'indicative_content', 'marking_points', 'answers', 'credit']) {
+      if (Array.isArray(ms[k]) && ms[k].length) return ms[k].map(str).map(s => s.trim()).filter(Boolean).slice(0, 14);
+    }
+    if (typeof ms.raw === 'string') return ms.raw.split('\n').map(l => l.replace(/^[•\-]\s*/, '').trim()).filter(l => l && !/^guidance:/i.test(l)).slice(0, 14);
+    return [];
+  }
+  // Lessons saved before 17 Nov 2026 could pair a real exam question with points written for a different question.
+  // A real question always shows (and is marked against) its own official mark scheme.
+  function repairExamSteps(steps) {
+    steps.forEach(s => {
+      if (!s || s.type !== 'exam' || !s.real || !s.real.question) return;
+      const pts = realPoints(s.real.mark_scheme);
+      if (pts.length) { s.q = String(s.real.question); s.points = pts; s.model = ''; s.source = 'exam'; }
+    });
+    return steps;
+  }
+
   function play(lesson) {
-    const steps = (lesson.content && lesson.content.steps) || [];
+    const steps = repairExamSteps((lesson.content && lesson.content.steps) || []);
     if (!steps.length) return toast('This lesson has no steps.');
     const preview = lesson.kind === 'template';
     const replay = lesson.status === 'done' || preview;
