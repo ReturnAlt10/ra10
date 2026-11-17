@@ -278,6 +278,41 @@ function dedupeChecks(steps: any[]): any[] {
     kept.push(c); return true;
   });
 }
+/* Spaced recall. A check that just asks the learner to repeat what the card in front of it said (its definition,
+   term or a copied sentence) only tests the last 20 seconds of reading. Such checks are moved later in the lesson —
+   into a "quick recall" stretch before the exam step — so they test whether the learner really remembered it.
+   Checks that make the learner apply or reason with the card stay where they are. */
+const RECALL_Q = /^(what is|what are|what does\b.*\b(mean|stand for)|what do we call|what is meant by|define|which (term|word|name)\b|which of these is (the )?(definition|name|term))/i;
+const cardText = (c: any) => [c.title, c.body, ...(Array.isArray(c.points) ? c.points : []), c.example].filter(Boolean).join(' ');
+function recallOfCard(s: any, card: any): boolean {
+  if (!card) return false;
+  if (s.type === 'match') return true;                 // terms and definitions straight after reading them
+  const text = s.type === 'fill' ? String(s.text || '') + ' ' + (Array.isArray(s.blanks) ? s.blanks.join(' ') : '')
+    : s.type === 'truefalse' ? String(s.statement || '')
+    : s.type === 'mcq' ? String(s.q || '') + ' ' + String(s.choices?.[s.answer] ?? '') : '';
+  const W = keyWords(text), C = keyWords(cardText(card));
+  if (!W.size || !C.size) return false;
+  let n = 0; W.forEach((w) => { if (C.has(w)) n++; });
+  const overlap = n / W.size;
+  if (s.type === 'fill' || s.type === 'truefalse') return overlap >= 0.7;   // a sentence lifted from the card
+  return s.type === 'mcq' && (RECALL_Q.test(String(s.q || '').trim()) || overlap >= 0.8);
+}
+function spaceRecall(steps: any[]): any[] {
+  const out: any[] = [], moved: any[] = [];
+  let card: any = null, since = 99;
+  for (const s of steps) {
+    if (s.type === 'learn') { card = s; since = 0; out.push(s); continue; }
+    since++;
+    if (since <= 2 && !s.bank && ['mcq', 'truefalse', 'fill', 'match'].includes(s.type) && recallOfCard(s, card)) { moved.push({ ...s, recall: true }); continue; }
+    out.push(s);
+  }
+  if (!moved.length) return steps;
+  let at = out.findIndex((s) => s.type === 'exam');
+  if (at < 0) at = out.findIndex((s) => s.type === 'recap');
+  if (at < 0) at = out.length;
+  out.splice(at, 0, ...moved);
+  return out;
+}
 // Multiple-choice and true/false checks from the learner's recent lessons in this unit (so they are not asked again).
 async function pastChecks(ctx: Ctx, unit: string): Promise<Check[]> {
   if (!unit) return [];
@@ -544,7 +579,10 @@ Real exam questions on this area, with their official mark schemes: ${JSON.strin
 ${seen.length ? `Questions this learner has ALREADY had in recent lessons — do not ask any of these again or test the same fact in the same way: ${JSON.stringify(seen.slice(0, 30).map((x) => x.q))}` : ''}
 If one of these real exam questions fits the topic, the exam step MUST be that question word-for-word with "source":"exam" and "ref" set to its ref, using its mark scheme for "points".
 
-Write a ${len.minutes}-minute lesson of ${len.steps} steps that TEACHES the topic and then checks understanding. Alternate short "learn" cards with practice. Use at least ${len.learn} learn cards, at least 3 mcq, 1 truefalse, 1 fill, 1 match, 1 order (only if the topic has a genuine fixed sequence — otherwise another mcq), exactly 1 exam step near the end, and finish with 1 recap.
+Write a ${len.minutes}-minute lesson of ${len.steps} steps that TEACHES the topic and then checks understanding. Alternate short "learn" cards with practice.
+How checks are placed (this matters most for learning):
+- The check(s) straight after a learn card must make the learner THINK with what they just read, never just repeat it back: apply it to a short new scenario, pick the example that fits, predict what would happen, explain why, spot the mistake, or compare two ideas. NEVER ask straight after a card for the definition, term or fact that card has just stated (no "What is …?", "Which term means …?", or a fill / true-false that copies a sentence from that card).
+- Straight recall of definitions, key terms and facts (eg "Which term means …?", fill-the-gap, match) goes LATER, as spaced retrieval: at least two steps after the card that taught it — ideally in a mixed "quick recall" stretch near the end, before the exam step, drawing on several earlier cards. Use at least ${len.learn} learn cards, at least 3 mcq, 1 truefalse, 1 fill, 1 match, 1 order (only if the topic has a genuine fixed sequence — otherwise another mcq), exactly 1 exam step near the end, and finish with 1 recap.
 ${focus}
 ${diff.prompt}
 ${input.coding ? CODE_PROMPT[input.coding] + '\n' : ''}Answer-key rules (these are checked — be precise):
@@ -552,7 +590,7 @@ ${input.coding ? CODE_PROMPT[input.coding] + '\n' : ''}Answer-key rules (these a
 - mcq must NOT be guessable without knowing the topic: all 4 choices are the same kind of thing, in the same grammatical form, with the SAME length and level of detail (within a few words of each other). The correct choice must NOT be the longest, the most detailed or the only "textbook-sounding" one — write it as briefly as the distractors, or give the distractors equal detail. Distractors are real misconceptions or closely related terms from this unit, never silly or obviously off-topic; no clue words shared only between the question and the answer; no absolute words ("always", "never") used only in distractors.
 - every mcq, truefalse and fill tests a DIFFERENT fact — never ask the same thing twice in one lesson, even in different words.
 - truefalse: a single clear claim that is unambiguously true or false per the specification — no trick wording.
-- fill: a sentence from the learn cards with 1 (max 2) "___" gaps where the missing word is a specific KEY TERM; "blanks" are the exact words in gap order, written exactly as they read in the sentence (same form, singular/plural); with 2 gaps the two answers must be different words that cannot be swapped; "options" contain the blanks plus 2–3 distractors that DO NOT make the sentence true (never synonyms, plurals or near-synonyms of the answer). EVERY option must fit the sentence grammatically — the same part of speech, singular/plural and tense as the answer — so grammar never gives the answer away or rules an option out; do not put "a" or "an" directly before a gap (write "the ___" or rephrase).
+- fill: a sentence from an EARLIER learn card (not the card just before it) with 1 (max 2) "___" gaps where the missing word is a specific KEY TERM; "blanks" are the exact words in gap order, written exactly as they read in the sentence (same form, singular/plural); with 2 gaps the two answers must be different words that cannot be swapped; "options" contain the blanks plus 2–3 distractors that DO NOT make the sentence true (never synonyms, plurals or near-synonyms of the answer). EVERY option must fit the sentence grammatically — the same part of speech, singular/plural and tense as the answer — so grammar never gives the answer away or rules an option out; do not put "a" or "an" directly before a gap (write "the ___" or rephrase).
 - match: 4 pairs of [term, short definition]; each definition fits only its own term.
 - order: items listed in the CORRECT order of a recognised sequence (process stages, steps of a model), not a matter of opinion.
 - ${diff.exam} "points" are the mark scheme as an examiner writes it: one creditable idea per line with "(1)", a "point (1) + linked expansion (1)" line for Explain marks, and "/" between acceptable alternatives. Give MORE creditable points than the marks available (at least marks + 2) so different correct answers are all covered. "model" is a full-mark answer that uses the command word properly.
@@ -615,6 +653,8 @@ Return JSON exactly like:
   // questions the learner has already had in recent lessons (keep at least two mcqs)
   if (seen.length) for (const s of steps.slice()) if (s.type === 'mcq' && mcqs() > 2 && seen.some((x) => sameCheck(checkOf(s), x))) steps = steps.filter((x: any) => x !== s);
   steps = dedupeChecks(steps);
+  // "what did you just read?" checks move later, as spaced recall
+  steps = spaceRecall(steps);
   // make sure a couple of genuine bank questions appear (before the exam step) — new to the learner, not a repeat
   // of a lesson question, and not a giveaway
   const have = steps.filter((s: any) => s.type === 'mcq' || s.type === 'truefalse').map(checkOf);

@@ -1405,7 +1405,12 @@
       footResult(r.ok, title || (r.ok ? pick(PRAISE) : pick(NOPE)), [correctHtml, explain ? esc(explain) : ''].filter(Boolean).join('<br>'), next);
     }
     function skipCurrent() { const item = P.cur; if (item && steps[item.i].type === 'exam') examReveal(item, { score: 0, max: steps[item.i].marks }, true); }
-    const kindHead = (type, extra) => { const k = KIND[type] || ['sparkles', '']; return `<div class="sh-kind">${I(k[0], { size: 18 })} ${extra || k[1]}</div>`; };
+    const kindHead = (type, extra) => {
+      // checks moved later by the lesson writer test whether you remembered an earlier card (spaced recall)
+      const cur = P.cur ? steps[P.cur.i] : null;
+      if (!extra && cur && cur.recall) return `<div class="sh-kind">${I('brain', { size: 18 })} Quick recall · from earlier in this lesson</div>`;
+      const k = KIND[type] || ['sparkles', '']; return `<div class="sh-kind">${I(k[0], { size: 18 })} ${extra || k[1]}</div>`;
+    };
 
     function next() {
       const item = P.queue.shift();
