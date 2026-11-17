@@ -439,14 +439,25 @@
     }
     return out;
   }
+  // A spec code at the start of a topic: "A1.2 …" (BTEC), "1.1.1 …" (A-Level / GCSE).
+  const codeOf = (s) => (String(s || '').match(/^\s*([A-Z]?\d+(?:\.\d+)+|[A-Z]\d+)\b/i) || [])[1] || '';
+  // Words that appear in topics everywhere, so they say nothing about WHICH topic a question is on.
+  const GENERIC = new Set('research into types type explanations explanation explain theory theories psychology psychological study studies evaluation evaluate including include approach approaches role roles effect effects affecting factors factor influence influences method methods model models behaviour behaviours issues issue debates definitions definition features feature characteristics between other their with from about which what that this these those such using used based ways different including variables variable process processes system systems their there were have been they also make made data information business unit learning describe discuss outline analyse assess compare'.split(' '));
   function topicMatcher(topic) {
-    const t = norm(topic), words = t.split(' ').filter(w => w.length > 3);
-    const code = (String(topic || '').match(/^\s*([A-Z]\d+(?:\.\d+)*)/i) || [])[1];
+    const t = norm(topic);
+    const code = codeOf(topic);
+    // the distinctive words of the topic (its first clause carries the main idea)
+    const words = [...new Set(norm(String(topic || '').replace(/^\s*\S*\d\S*\s*/, '')).split(' ').filter(w => w.length > 3 && !GENERIC.has(w)))].slice(0, 12);
     return (s) => {
       const n = norm(s); if (!n || !t) return false;
-      if (n.indexOf(t) >= 0 || t.indexOf(n) >= 0) return true;
-      if (code && n.indexOf(norm(code)) === 0) return true;
-      return words.length > 0 && words.filter(w => n.indexOf(w) >= 0).length >= Math.min(2, words.length);
+      // (no "contains" test the other way round: a broad area name such as "Social influence" appears inside many
+      // spec descriptions, and would pull in questions from the whole area)
+      if (n === t || (t.length > 12 && n.indexOf(t) >= 0)) return true;
+      const c = codeOf(s);
+      if (code && c) return c === code || c.indexOf(code + '.') === 0 || code.indexOf(c + '.') === 0;   // both carry codes: they decide
+      if (!words.length) return false;
+      const hits = words.filter(w => new RegExp('\\b' + w.replace(/(ies|es|s)$/, '')).test(n)).length;
+      return hits >= Math.min(2, words.length);
     };
   }
   // real questions from the unit that match the topic → sent to the lesson writer
@@ -454,20 +465,23 @@
     if (!cat) return {};
     const topics = specTopics(cat);
     const match = topicMatcher(topic);
-    const code = (String(topic || '').match(/^\s*([A-Z]\d+(?:\.\d+)*)/i) || [])[1];
-    const spec = topics.find(x => match(x.label));
-    const aim = spec ? spec.aim : (code ? code.charAt(0).toUpperCase() : '');
+    const code = codeOf(topic);
+    const spec = topics.find(x => code ? codeOf(x.label) === code : match(x.label));
+    const aim = spec ? spec.aim : (/^[A-Z]/i.test(code) ? code.charAt(0).toUpperCase() : '');
     const byAim = (q) => aim && String(q.aim || '').toUpperCase().charAt(0) === aim.toUpperCase();
     const fill = (list, ok, n) => { const a = shuffle(list.filter(q => ok(q))); if (a.length < n) a.push(...shuffle(list.filter(q => !ok(q) && byAim(q))).slice(0, n - a.length)); return a.slice(0, n); };
     const L = 'ABCDEF';
-    const quiz = fill(cat.quiz || [], q => match(q.topic) || match(q.q), 8).map(q => {
+    const quiz = fill(cat.quiz || [], q => (!aim || !q.aim || byAim(q)) && (match(q.topic) || (!codeOf(q.topic) && match(q.q))), 8).map(q => {
       const choices = q.choices || [];
       let c = q.correct;
       if (typeof c === 'string' && /^[A-F]$/i.test(c.trim())) c = L.indexOf(c.trim().toUpperCase());
       else if (typeof c === 'string') c = choices.findIndex(x => norm(x) === norm(c));
       return { q: q.q, choices, correct: Number(c), topic: q.topic };
     }).filter(q => q.correct >= 0 && q.correct < q.choices.length);
-    const questions = fill((cat.questions || []).filter(q => !q.marks || (q.marks >= 2 && q.marks <= 9)), q => match(q.topic) || match(q.q), 3).map(q => ({ id: q.id, q: q.q, marks: q.marks, verb: q.verb, topic: q.topic }));
+    // exam questions must be ON the topic (never topped up from elsewhere in the area — an off-topic exam question
+    // is worse than none: the lesson then writes its own). A question in a different chapter/aim never counts.
+    const onTopic = (q) => (!aim || !q.aim || byAim(q)) && (match(q.topic) || (!codeOf(q.topic) && match(q.q)));
+    const questions = shuffle((cat.questions || []).filter(q => (!q.marks || (q.marks >= 2 && q.marks <= 9)) && onTopic(q))).slice(0, 3).map(q => ({ id: q.id, q: q.q, marks: q.marks, verb: q.verb, topic: q.topic }));
     return { quiz, questions, topics: topics.map(x => x.label).slice(0, 60) };
   }
   async function fullGrounding(unitPath, cat, topic) {
@@ -1040,7 +1054,7 @@
         const first = items[0];
         h += `<section class="sh-next"><div class="sh-next-top"><span class="sh-stepn">1</span><span class="sh-eyebrow2">Do this next</span>${tagOf(first)}</div>
           <div class="sh-next-main"><span class="ic">${I(first.kind === 'lesson' ? iconOf(first.l) : first.r.icon, { size: 30 })}</span><div>${codeOf(first) ? `<small>${esc(codeOf(first))}</small>` : ''}<h3>${esc(titleOf(first))}</h3><p>${esc(whyOf(first))}</p></div></div>
-          <div class="sh-next-acts">${goBtn(first, 0, true)}${first.kind === 'rec' && can ? `<button class="sh-btn ghost sm" data-act="custom" data-i="0">Difficulty &amp; length</button>` : ''}</div></section>`;
+          <div class="sh-next-acts">${goBtn(first, 0, true)}${first.kind === 'rec' && can ? `<button class="sh-btn ghost sm" data-act="custom" data-i="0">Length &amp; focus</button>` : ''}</div>${items.some(it => it.kind === 'rec') && can ? diffPicker() : ''}</section>`;
         if (items.length > 1) {
           h += `<h4 class="sh-plan-h">Then</h4><ol class="sh-plan-list">${items.slice(1).map((it, k) => `<li><span class="sh-stepn sm">${k + 2}</span><span class="ic">${I(it.kind === 'lesson' ? iconOf(it.l) : it.r.icon, { size: 20 })}</span>
             <span class="tx"><b>${codeOf(it) ? `<small>${esc(codeOf(it))}</small> ` : ''}${esc(titleOf(it))}</b>${tagOf(it)}<span class="why">${esc(whyOf(it))}</span></span>${goBtn(it, k + 1, false)}</li>`).join('')}</ol>`;
@@ -1083,7 +1097,7 @@
     pop.className = 'sh-pop';
     const lessonBtn = (l) => `<button class="sh-btn ${l.status === 'done' ? 'gold' : 'pri'} wide" data-open="${esc(l.id)}">${l.status === 'done' ? 'Practise again' : l.status === 'in_progress' ? 'Continue' : 'Start lesson'}</button>`;
     const newBtns = (topic, reason) => st.can_create
-      ? `<button class="sh-btn pri wide" data-make-topic="${esc(topic)}" data-reason="${esc(reason || '')}">${I('sparkles', { size: 16 })} Start a lesson on this</button><button class="sh-btn ghost sm wide" data-custom="${esc(topic)}">Difficulty &amp; length</button>`
+      ? `<button class="sh-btn pri wide" data-make-topic="${esc(topic)}" data-reason="${esc(reason || '')}">${I('sparkles', { size: 16 })} Start a lesson on this</button>${diffPicker()}<button class="sh-btn ghost sm wide" data-custom="${esc(topic)}">Length &amp; focus</button>`
       : `<button class="sh-btn gold wide" data-lock>${I('lock', { size: 16 })} Premium</button>`;
     if (info.lesson) {
       const l = info.lesson;
@@ -1130,8 +1144,33 @@
   }
 
   /* ───────────── make-your-own (sheet) ───────────── */
-  const DIFF_LABEL = { easy: 'Easy', medium: 'Medium', hard: 'Hard' };
-  const savedDiff = () => { const d = store.get('sh_diff'); return DIFF_LABEL[d] ? d : 'medium'; };
+  const DIFF_LABEL = { auto: 'Auto', easy: 'Easy', medium: 'Medium', hard: 'Hard' };
+  const savedDiff = () => { const d = store.get('sh_diff'); return DIFF_LABEL[d] ? d : 'auto'; };
+  // Auto difficulty: from how this learner has actually done. Their quiz score on this topic decides first; otherwise
+  // their last few finished lessons in the unit. ≥ 85% → Hard, < 55% → Easy, otherwise (or no history) Medium.
+  function autoDiff(unit, topic) {
+    const plan = S.plan || {};
+    const t = norm(topic || '');
+    const hit = (x) => t && x && x.unit === unit && (norm(x.topic) === t || (norm(x.topic).length > 6 && t.indexOf(norm(x.topic)) >= 0) || (t.length > 6 && norm(x.topic).indexOf(t) >= 0));
+    const weak = (plan.weak || []).find(hit), strong = (plan.strong || []).find(hit);
+    if (weak && Number(weak.pct) < 55) return { d: 'easy', why: `you score ${weak.pct}% on this topic` };
+    if (strong && Number(strong.pct) >= 85) return { d: 'hard', why: `you score ${strong.pct}% on this topic` };
+    const done = ((S.status && S.status.lessons) || []).filter(l => l.status === 'done' && l.unit === unit && Number(l.max_score) > 0).slice(0, 5);
+    if (!done.length) return { d: 'medium', why: 'no lessons in this unit yet' };
+    const pct = Math.round(100 * done.reduce((s, l) => s + Number(l.score) / Number(l.max_score), 0) / done.length);
+    return { d: pct >= 85 ? 'hard' : pct < 55 ? 'easy' : 'medium', why: `you average ${pct}% in your last ${done.length} lesson${done.length > 1 ? 's' : ''} here` };
+  }
+  const resolveDiff = (choice, unit, topic) => choice === 'auto' || !DIFF_LABEL[choice] ? autoDiff(unit, topic) : { d: choice, why: '' };
+  // The difficulty row shown under the "Start" buttons, so it can be changed without opening the settings.
+  const diffPicker = () => `<div class="sh-diffpick" role="radiogroup" aria-label="Difficulty"><span>Difficulty</span>${Object.keys(DIFF_LABEL).map(k => `<button type="button" role="radio" data-diff="${k}" class="${savedDiff() === k ? 'on' : ''}" aria-checked="${savedDiff() === k}"${k === 'auto' ? ' title="Chosen from your scores"' : ''}>${k === 'auto' ? I('sparkles', { size: 13 }) + ' ' : ''}${DIFF_LABEL[k]}</button>`).join('')}</div>`;
+  document.addEventListener('click', (e) => {
+    const b = e.target.closest && e.target.closest('.sh-diffpick [data-diff]');
+    if (!b) return;
+    e.stopPropagation();
+    store.set('sh_diff', b.dataset.diff);
+    $$('.sh-diffpick [data-diff]').forEach(x => { const on = x.dataset.diff === b.dataset.diff; x.classList.toggle('on', on); x.setAttribute('aria-checked', on); });
+    Snd.tap();
+  }, true);
   function openMaker(preset) {
     const st = S.status || {};
     if (!st.can_create) return lockedScreen();
@@ -1154,7 +1193,7 @@
           ${seg('length', [['quick', 'Quick', '≈ 4 min', 'bolt'], ['standard', 'Standard', '≈ 7 min', 'book'], ['deep', 'Deep dive', '≈ 11 min', 'brain']])}
           ${seg('focus', [['', 'Balanced', 'Teach + test', 'scales'], ['learn', 'Learn it', 'More explaining', 'bulb'], ['practise', 'Practise', 'More questions', 'target'], ['exam', 'Exam skills', 'Marks & command words', 'exam']])}
           <h4 class="sh-seg-h">Difficulty</h4>
-          ${seg('difficulty', [['easy', 'Easy', 'Core facts, short questions', 'book'], ['medium', 'Medium', 'Exam standard', 'target'], ['hard', 'Hard', 'Stretch & evaluate', 'brain']])}
+          ${seg('difficulty', [['auto', 'Auto', 'From your scores', 'sparkles'], ['easy', 'Easy', 'Core facts', 'book'], ['medium', 'Medium', 'Exam standard', 'target'], ['hard', 'Hard', 'Stretch & evaluate', 'brain']])}
         </section>
         <section class="sh-msec" data-full${quick ? ' hidden' : ''}><h3><span class="n">4</span>Anything specific? <small>optional</small></h3><textarea id="mk-req" class="sh-in" rows="2" maxlength="300" placeholder="e.g. Explain the CIA triad with real examples, I keep mixing it up"></textarea></section>
       </div>
@@ -1213,11 +1252,14 @@
     if (!st.can_create) return lockedScreen();
     if (!st.premium && !confirm('This will use your one free Study Hub lesson. Continue?')) return;
     const u = unitOf(o.unit);
+    const choice = o.difficulty || savedDiff();
+    const diff = resolveDiff(choice, o.unit, o.topic || o.request || '');
     const ov = document.createElement('div');
     ov.className = 'sh-gen';
     const steps = ['Reading your progress', 'Pulling real exam questions from ' + (u ? u.short : 'the unit'), 'Writing your lesson', 'Checking every answer'];
     ov.innerHTML = `<div class="sh-gen-in">${buildOrbHtml()}
       <h2>Building your lesson</h2><p class="sh-muted">${esc(o.topic || o.request || (u ? u.name : ''))}</p>
+      <p class="sh-gen-diff"><span class="sh-badge acc">${esc(DIFF_LABEL[diff.d])}</span>${choice === 'auto' ? ` <small>Auto: ${esc(diff.why)}</small>` : ''}</p>
       <ul class="sh-gen-steps">${steps.map((s, i) => `<li class="${i === 0 ? 'on' : ''}"><i></i>${esc(s)}</li>`).join('')}</ul></div>`;
     document.body.appendChild(ov);
     mountBuildOrb($('.sh-aiorb', ov));
@@ -1229,7 +1271,7 @@
       const cat = u ? await loadCatalog(o.unit).catch(() => null) : null;
       const g = u ? await fullGrounding(o.unit, cat, o.topic || o.request || '') : {};
       setStep(2); writing = true;
-      const r = await api('create', { mode: 'custom', unit: o.unit, unitName: u ? u.name : o.unit, qual: u ? u.qual : '', topic: o.topic || null, request: o.request || '', reason: o.reason || '', length: o.length || 'standard', focus: o.focus || '', difficulty: o.difficulty || savedDiff(), grounding: g });
+      const r = await api('create', { mode: 'custom', unit: o.unit, unitName: u ? u.name : o.unit, qual: u ? u.qual : '', topic: o.topic || null, request: o.request || '', reason: o.reason || '', length: o.length || 'standard', focus: o.focus || '', difficulty: diff.d, grounding: g });
       if (!r.ok) { if (usageBlocked(r)) { ov.remove(); home(); return; } if (r.locked) { st.trial_used = true; st.can_create = false; ov.remove(); return lockedScreen(); } throw new Error(r.error || 'Could not build the lesson.'); }
       usageRefresh();
       setStep(4);
@@ -1304,6 +1346,20 @@
     const rw = res && res.result && res.result.rewrite;
     if (!rw || !rw.answer) throw new Error('The rewrite came back empty. Please try again.');
     return rw;
+  }
+
+  // Learn-card bullets. Cards that evaluate something list "Strength: …" and "Weakness: …" points — shown side by
+  // side so the student always sees both sides (Limitation / Advantage / Disadvantage are read the same way).
+  const STRENGTH_RX = /^\s*(strengths?|advantages?|benefits?|pros?)\s*[:\-–]\s*/i;
+  const WEAKNESS_RX = /^\s*(weakness(es)?|limitations?|disadvantages?|drawbacks?|cons?|criticisms?)\s*[:\-–]\s*/i;
+  function learnPointsHtml(points) {
+    const pts = (points || []).filter(Boolean);
+    if (!pts.length) return '';
+    const good = pts.filter(p => STRENGTH_RX.test(p)), bad = pts.filter(p => WEAKNESS_RX.test(p));
+    if (!good.length && !bad.length) return `<ul>${pts.map(p => `<li>${esc(p)}</li>`).join('')}</ul>`;
+    const other = pts.filter(p => !STRENGTH_RX.test(p) && !WEAKNESS_RX.test(p));
+    const col = (cls, title, icon, list) => `<div class="sh-eval-col ${cls}"><b>${I(icon, { size: 16 })} ${title}</b><ul>${list.length ? list.map(p => { const t = p.replace(cls === 'good' ? STRENGTH_RX : WEAKNESS_RX, ''); return `<li>${esc(t.charAt(0).toUpperCase() + t.slice(1))}</li>`; }).join('') : '<li class="none">See the next card</li>'}</ul></div>`;
+    return `${other.length ? `<ul>${other.map(p => `<li>${esc(p)}</li>`).join('')}</ul>` : ''}<div class="sh-eval">${col('good', 'Strengths', 'check', good)}${col('bad', 'Weaknesses', 'alert', bad)}</div>`;
   }
 
   // The official mark scheme of a real exam question, as plain points.
@@ -1421,7 +1477,7 @@
       const head = item.retry ? `<div class="sh-kind retry">${I('retry', { size: 18 })} Let's try that again</div>` : '';
       const wrap = (html) => { stage.innerHTML = `<div class="sh-step">${head}${html}</div>`; };
       if (s.type === 'learn') {
-        wrap(`${kindHead('learn')}<div class="sh-learn"><div class="emo">${I(lessonIcon, { size: 40 })}</div>${s.title ? `<h2>${esc(s.title)}</h2>` : ''}<p>${esc(s.body)}</p>${s.diagram ? diagramHtml(s.diagram) : pictureHtml(s.image)}${(s.points || []).length ? `<ul>${s.points.map(p => `<li>${esc(p)}</li>`).join('')}</ul>` : ''}${s.example ? `<div class="sh-ex"><b>Example</b>${esc(s.example)}</div>` : ''}</div>`);
+        wrap(`${kindHead('learn')}<div class="sh-learn"><div class="emo">${I(lessonIcon, { size: 40 })}</div>${s.title ? `<h2>${esc(s.title)}</h2>` : ''}<p>${esc(s.body)}</p>${s.diagram ? diagramHtml(s.diagram) : pictureHtml(s.image)}${learnPointsHtml(s.points)}${s.example ? `<div class="sh-ex"><b>Example</b>${esc(s.example)}</div>` : ''}</div>`);
         $$('.sh-pic img', stage).forEach(img => {
           const gone = () => { const f = img.closest('.sh-pic'); if (f) f.remove(); };
           img.onerror = gone;

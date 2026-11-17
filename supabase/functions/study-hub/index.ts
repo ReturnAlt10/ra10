@@ -391,7 +391,7 @@ function sanitiseStep(s: any, keepOrder = false, diagramTypes: string[] = DIAGRA
   const str = (x: unknown, n = 600) => clean(x, n);
   if (t === 'learn') {
     const body = str(s.body, 900); if (!body) return null;
-    return { type: t, title: str(s.title, 90), body, points: (Array.isArray(s.points) ? s.points : []).map((p: unknown) => str(p, 200)).filter(Boolean).slice(0, 4), example: str(s.example, 400) || undefined, diagram: sanitiseDiagram(s.diagram, diagramTypes) || undefined, image: sanitiseImage(s.image) };
+    return { type: t, title: str(s.title, 90), body, points: (Array.isArray(s.points) ? s.points : []).map((p: unknown) => str(p, 200)).filter(Boolean).slice(0, 6), example: str(s.example, 400) || undefined, diagram: sanitiseDiagram(s.diagram, diagramTypes) || undefined, image: sanitiseImage(s.image) };
   }
   if (t === 'mcq') {
     const choices = (Array.isArray(s.choices) ? s.choices : []).map((c: unknown) => str(c, 200)).filter(Boolean);
@@ -594,7 +594,8 @@ ${input.coding ? CODE_PROMPT[input.coding] + '\n' : ''}Answer-key rules (these a
 - match: 4 pairs of [term, short definition]; each definition fits only its own term.
 - order: items listed in the CORRECT order of a recognised sequence (process stages, steps of a model), not a matter of opinion.
 - ${diff.exam} "points" are the mark scheme as an examiner writes it: one creditable idea per line with "(1)", a "point (1) + linked expansion (1)" line for Explain marks, and "/" between acceptable alternatives. Give MORE creditable points than the marks available (at least marks + 2) so different correct answers are all covered. "model" is a full-mark answer that uses the command word properly.
-- learn cards: 2–4 short sentences (max 70 words), 2–3 bullet points, and a concrete example where useful. Every check must be answerable from the learn cards.
+- learn cards: 2–4 short sentences (max 70 words), 2–3 bullet points, and a concrete example where useful.
+- BALANCE: whenever a card gives the strengths / advantages / benefits of anything (a theory, study, explanation, method, approach, therapy, technology, option, decision), the SAME card must also give its weaknesses / limitations / disadvantages — never strengths on their own. Write those cards' "points" as 2–3 lines starting "Strength: " and 2–3 lines starting "Weakness: " (one developed idea each: the point and why it matters). For Psychology, every theory, study and explanation taught is evaluated this way (AO3), using research evidence where it supports or challenges it. Every check must be answerable from the learn cards.
 - diagrams: give 2–3 learn cards a "diagram" where a picture genuinely helps (otherwise "diagram": null). Allowed types for this unit: ${plan.types.join(', ')}. ${plan.hint} Labels are short and must be accurate for the specification. Shapes: ${plan.types.map((k) => DIAGRAM_SHAPES[k]).join(' | ')}
 - pictures: give 1–3 learn cards that have NO diagram an "image" when a real photo or illustration would help the learner picture what the card teaches — a device or piece of equipment, a body part or organ, a place or building, a real product, event or organisation, a named theorist, or a real-world example from the card. "query" is 2–5 plain English words to search Wikimedia Commons for exactly that thing (e.g. "network switch rack", "human heart anatomy", "WannaCry ransom note"); "caption" says in under 12 words what the picture shows. Use "image": null for abstract ideas that a photo cannot show.
 Every check has a one-sentence "explain" that teaches.
@@ -694,7 +695,7 @@ async function verifySteps(steps: any[], unitName: string, qual: string): Promis
     `You are a meticulous senior ${qual} examiner checking a revision lesson before students see it. You are strict: anything factually wrong, ambiguous, or with more than one defensible answer must be fixed or removed. Reply with JSON only.`,
     `Unit: ${unitName}
 Check each item:
-- learn: are all statements accurate for the specification? Fix wrong facts. If it has a "diagram", check every label, step order, connection and number (for "breakeven", that the card's figures match fixed / variable / price); return a corrected "diagram" of the same shape, or "diagram": null to remove one that is wrong or unhelpful.
+- learn: are all statements accurate for the specification? Fix wrong facts. A card that gives strengths / advantages but no weaknesses / limitations (or the reverse) must be fixed: return "points" with both, as lines starting "Strength: " and "Weakness: ". If it has a "diagram", check every label, step order, connection and number (for "breakeven", that the card's figures match fixed / variable / price); return a corrected "diagram" of the same shape, or "diagram": null to remove one that is wrong or unhelpful.
 - mcq: is "answer" (0-based index into "choices" exactly as given) the ONE correct choice? Could any other choice also be argued correct?
 - mcq giveaways: could a student who has NOT studied this pick the answer — because it is the longest or most detailed choice, the only one that sounds like a textbook definition, repeats a word from the question, or the distractors are silly or off-topic? If so (and always when "length_giveaway" is true), verdict "fix" with rewritten "choices" (and "answer") where all four are the same kind of thing and about the same length, the correct one is NOT the longest, and the distractors are believable misconceptions that are still definitely wrong.
 - truefalse: is the keyed true/false definitely right and unambiguous?

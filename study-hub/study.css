@@ -242,6 +242,27 @@ body.sh-page p, body.sh-page li { max-width: none; }
 .sh-learn ul { margin: 0 0 4px; padding: 0; list-style: none; display: grid; gap: 8px; }
 .sh-learn li { display: flex; gap: 10px; align-items: flex-start; font-size: .98rem; line-height: 1.5; }
 .sh-learn li::before { content: ''; flex: none; width: 10px; height: 10px; margin-top: 7px; border-radius: 3px; background: var(--acc); transform: rotate(45deg); }
+/* difficulty row under the Start buttons */
+.sh-diffpick { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin: 10px 0 2px; }
+.sh-diffpick > span { font-size: .72rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-2); margin-right: 2px; }
+.sh-diffpick button { display: inline-flex; align-items: center; gap: 4px; padding: 5px 11px; min-height: 32px; border-radius: 999px; border: 2px solid var(--line); background: var(--card); color: var(--ink); font: inherit; font-size: .82rem; font-weight: 700; cursor: pointer; }
+.sh-diffpick button.on { border-color: var(--acc); background: var(--acc-soft); color: var(--acc); }
+.sh-diffpick button:focus-visible { outline: 2px solid var(--acc); outline-offset: 2px; }
+.sh-pop .sh-diffpick { justify-content: center; }
+.sh-gen-diff { margin: 6px 0 0; display: flex; justify-content: center; align-items: center; gap: 6px; flex-wrap: wrap; }
+.sh-gen-diff small { color: var(--ink-2); }
+/* strengths vs weaknesses on evaluation cards */
+.sh-eval { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px; margin-top: 10px; }
+.sh-eval-col { padding: 12px 14px; border-radius: 16px; border: 2px solid var(--line); }
+.sh-eval-col.good { background: var(--ok-soft); border-color: color-mix(in srgb, var(--ok) 35%, transparent); }
+.sh-eval-col.bad { background: var(--bad-soft); border-color: color-mix(in srgb, var(--bad) 35%, transparent); }
+.sh-eval-col > b { display: flex; align-items: center; gap: 6px; font-size: .74rem; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 8px; }
+.sh-eval-col.good > b { color: var(--ok-ink); } .sh-eval-col.bad > b { color: var(--bad-ink); }
+.sh-play .sh-learn .sh-eval-col.good li::before, .sh-eval-col.good li::before { background: var(--ok); }
+.sh-play .sh-learn .sh-eval-col.bad li::before, .sh-eval-col.bad li::before { background: var(--bad); }
+.sh-eval-col li { font-size: .93rem; }
+.sh-eval-col li.none { opacity: .7; font-style: italic; }
+@media (max-width: 560px) { .sh-eval { grid-template-columns: minmax(0, 1fr); } }
 .sh-ex { margin-top: 16px; padding: 14px 16px; border-radius: 16px; background: var(--acc-soft); font-size: .95rem; line-height: 1.55; }
 .sh-ex b { display: block; font-size: .7rem; letter-spacing: .08em; text-transform: uppercase; color: var(--acc); margin-bottom: 3px; }
 
