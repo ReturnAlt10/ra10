@@ -251,7 +251,11 @@ body.sh-page p, body.sh-page li { max-width: none; }
 .sh-diff[data-mode="medium"] { --d1: #f59e0b; --d2: #f97316; --dc: #d97706; }
 .sh-diff[data-mode="hard"] { --d1: #ef4444; --d2: #ec4899; --dc: #dc2626; }
 .sh-diff[data-mode="auto"] { --d1: #8b5cf6; --d2: #3b82f6; --dc: #7c3aed; }
-.sh-diff-top { display: flex; align-items: center; gap: 8px; }
+.sh-diff { box-sizing: border-box; width: 100%; min-width: 0; max-width: 100%; overflow: hidden; }
+.sh-diff-top { display: flex; align-items: center; flex-wrap: wrap; gap: 4px 8px; min-width: 0; }
+.sh-diff-top .val { min-width: 0; overflow-wrap: anywhere; }
+.sh-diff .sh-diff-range { box-sizing: border-box; min-width: 0; max-width: 100%; background-image: linear-gradient(90deg, #22c55e, #f59e0b 50%, #ef4444) !important; }
+.sh-diff[data-mode="auto"] .sh-diff-range { background-image: linear-gradient(90deg, #8b5cf6, #3b82f6) !important; }
 .sh-diff-top .lbl { font-size: .7rem; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; color: var(--ink-2); }
 .sh-diff-top .val { font-size: .98rem; font-weight: 800; background: linear-gradient(90deg, var(--d1), var(--d2)); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .sh-diff-auto { margin-left: auto; display: inline-flex; align-items: center; gap: 4px; padding: 4px 11px; min-height: 30px; border-radius: 999px; border: 2px solid var(--line); background: var(--card); color: var(--ink-2); font: inherit; font-size: .78rem; font-weight: 800; cursor: pointer; }
