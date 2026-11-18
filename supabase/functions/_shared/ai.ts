@@ -33,14 +33,16 @@ export function extractJson(text: string): any {
   return null;
 }
 
-export type AskOptions = { preferStrong?: boolean; temperature?: number; maxTokens?: number };
+// avoid: provider names to try LAST (eg the provider that wrote a lesson, so an independent model checks it).
+export type AskOptions = { preferStrong?: boolean; temperature?: number; maxTokens?: number; avoid?: string[] };
 
 // preferStrong: try the paid / larger models (OpenAI, Gemini, DeepSeek) before the small free
 // OpenRouter ones — used where accuracy matters (writing answer keys, checking them).
 export async function askJson(system: string, user: string, timeout = 25000, opts: AskOptions = {}): Promise<{ json: any; provider: string }> {
   const errors: string[] = [];
   const rank: Record<string, number> = { openai: 0, gemini: 1, deepseek: 2, openrouter: 3 };
-  const list = opts.preferStrong ? providers(timeout).sort((a, b) => (rank[a.name] ?? 9) - (rank[b.name] ?? 9)) : providers(timeout);
+  let list = opts.preferStrong ? providers(timeout).sort((a, b) => (rank[a.name] ?? 9) - (rank[b.name] ?? 9)) : providers(timeout);
+  if (opts.avoid && opts.avoid.length) list = list.filter((p) => !opts.avoid!.includes(p.name)).concat(list.filter((p) => opts.avoid!.includes(p.name)));
   for (const p of list) {
     for (const model of p.models) {
       const ctl = new AbortController();

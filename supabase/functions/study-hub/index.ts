@@ -251,17 +251,23 @@ function lengthTell(s: any): boolean {
   const other = Math.max(...L.filter((_: number, i: number) => i !== s.answer));
   return a > other * 1.25 && a - other >= 10;
 }
-type Check = { q: string; a: string };
+type Check = { q: string; a: string; c?: string[]; ref?: string };
 const STOP = new Set('the a an of to in and or is are was were which what why how when who for on with by be been this that these those it its as at from does do can could would should will not your their they them than then into about most best main one two following'.split(' '));
 const keyWords = (s: string) => new Set(norm(s).split(' ').filter((w) => w.length > 2 && !STOP.has(w)).map((w) => w.replace(/(ies|es|s)$/, '')));
 function checkOf(s: any): Check {
-  if (s.type === 'mcq') return { q: s.q, a: String(s.choices?.[s.answer] ?? '') };
+  if (s.type === 'mcq') return { q: s.q, a: String(s.choices?.[s.answer] ?? ''), c: (s.choices || []).map((x: unknown) => norm(x)), ref: s.ref || undefined };
   if (s.type === 'truefalse') return { q: s.statement, a: s.answer ? 'true' : 'false' };
   return { q: String(s.q || s.text || ''), a: '' };
 }
 function sameCheck(x: Check, y: Check): boolean {
+  if (x.ref && y.ref && x.ref === y.ref) return true;          // the same RA10 bank question
   if (!x.q || !y.q) return false;
   if (norm(x.q) === norm(y.q)) return true;
+  // the same answer among (mostly) the same choices is the same question, however it is worded
+  if (x.c && y.c && x.a && norm(x.a) === norm(y.a)) {
+    const shared = x.c.filter((v) => y.c!.includes(v)).length;
+    if (shared >= Math.min(3, x.c.length, y.c.length)) return true;
+  }
   const A = keyWords(x.q), B = keyWords(y.q);
   if (!A.size || !B.size) return false;
   let n = 0; A.forEach((w) => { if (B.has(w)) n++; });
@@ -316,10 +322,10 @@ function spaceRecall(steps: any[]): any[] {
 // Multiple-choice and true/false checks from the learner's recent lessons in this unit (so they are not asked again).
 async function pastChecks(ctx: Ctx, unit: string): Promise<Check[]> {
   if (!unit) return [];
-  const { data } = await ctx.admin.from('study_lessons').select('content').eq('user_id', ctx.userId).eq('unit', unit).order('created_at', { ascending: false }).limit(25);
+  const { data } = await ctx.admin.from('study_lessons').select('content').eq('user_id', ctx.userId).eq('unit', unit).order('created_at', { ascending: false }).limit(40);
   const out: Check[] = [];
   for (const l of data || []) for (const s of (l?.content?.steps || [])) if (s && (s.type === 'mcq' || s.type === 'truefalse')) out.push(checkOf(s));
-  return out.filter((c) => c.q).slice(0, 120);
+  return out.filter((c) => c.q).slice(0, 240);
 }
 
 /* ───────────── pictures on learn cards ─────────────
@@ -338,8 +344,23 @@ function sanitiseImage(x: any): any {
   return query ? { query, caption: clean(x.caption, 140) || undefined } : undefined;
 }
 const stripTags = (s: unknown) => String(s ?? '').replace(/<[^>]*>/g, ' ').replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#0?39;/g, "'").replace(/\s+/g, ' ').trim();
+// Pictures are only useful if any words in them are English: Commons is full of diagrams labelled in other languages.
+const NON_LATIN = /[\u0370-\u03ff\u0400-\u04ff\u0590-\u05ff\u0600-\u06ff\u0900-\u097f\u0e00-\u0e7f\u3040-\u30ff\u3400-\u9fff\uac00-\ud7af]/;
+const FOREIGN_WORDS = /\b(der|die|das|und|mit|von|für|ist|eine?|le|la|les|des|du|et|une|pour|dans|est|avec|el|los|las|del|con|para|por|una|em|não|uma|il|di|che|per|della|het|een|van|voor|och|och|är|och|na|się|jest|oraz)\b/gi;
+const EN_WORDS = /\b(the|and|of|with|for|in|is|a|an|on|to|from|showing|diagram|photo|view)\b/gi;
+const LANG_TAG = /[\s_(\-.](de|fr|es|it|pt|nl|pl|ru|ja|zh|ca|sv|cs|uk|ar|tr|ko|fi|da|no|hu|ro|el|he)[)\s_\-.]|\b(german|deutsch|français|francais|español|espanol|italiano|portugu[eê]s|nederlands|polski|русский)\b/i;
+const LOW_VALUE = /\b(flag of|coat of arms|signature|logo|icon|emblem|stamp|banknote|clip ?art|cartoon|meme|poster|book cover|album cover|map of|locator map|seal of)\b/i;
+function englishPicture(c: any): boolean {
+  const text = c.title + ' ' + c.desc;
+  if (NON_LATIN.test(text) || LANG_TAG.test(' ' + c.title + ' ')) return false;
+  const foreign = (text.match(FOREIGN_WORDS) || []).length, english = (text.match(EN_WORDS) || []).length;
+  if (foreign >= 2 && foreign > english) return false;
+  // drawings (SVG / PNG) usually carry labels: only keep them when their title reads as English
+  if (/svg|png/.test(c.mime) && !(english >= 1 || /\b(en|english)\b/i.test(c.title))) return false;
+  return true;
+}
 async function commonsSearch(query: string): Promise<any[]> {
-  const url = 'https://commons.wikimedia.org/w/api.php?action=query&format=json&generator=search&gsrnamespace=6&gsrlimit=8'
+  const url = 'https://commons.wikimedia.org/w/api.php?action=query&format=json&uselang=en&generator=search&gsrnamespace=6&gsrlimit=12'
     + '&prop=imageinfo&iiprop=url|mime|size|extmetadata&iiurlwidth=800&iiextmetadatafilter=LicenseShortName|Artist|ImageDescription'
     + '&gsrsearch=' + encodeURIComponent(query + ' filetype:bitmap|drawing');
   const ctl = new AbortController(); const t = setTimeout(() => ctl.abort(), 8000);
@@ -354,22 +375,22 @@ async function commonsSearch(query: string): Promise<any[]> {
       return { title: String(p.title || '').replace(/^File:/, '').replace(/\.[a-z0-9]+$/i, ''), desc: stripTags(md.ImageDescription?.value).slice(0, 220),
         src: String(ii.thumburl || ''), page: String(ii.descriptionurl || ''), w: Number(ii.thumbwidth) || 0, h: Number(ii.thumbheight) || 0,
         mime: String(ii.mime || ''), license, credit: stripTags(md.Artist?.value).slice(0, 100) };
-    }).filter((c) => /^image\/(jpeg|png|svg\+xml|webp)$/.test(c.mime) && c.src && c.w >= 300 && c.h >= 160 && c.w / c.h < 3.2 && c.h / c.w < 2.2
-      && c.license && !/fair use|non-free/i.test(c.license) && !/\b(flag of|coat of arms|signature|logo)\b/i.test(c.title));
+    }).filter((c) => /^image\/(jpeg|png|svg\+xml|webp)$/.test(c.mime) && c.src && c.w >= 480 && c.h >= 240 && c.w / c.h < 2.6 && c.h / c.w < 1.9
+      && c.license && !/fair use|non-free/i.test(c.license) && !LOW_VALUE.test(c.title) && englishPicture(c));
   } catch { return []; } finally { clearTimeout(t); }
 }
 async function findPictures(steps: any[], unitName: string, qual: string): Promise<Map<number, any>> {
   const out = new Map<number, any>();
-  const cards = steps.filter((s) => s.type === 'learn' && !s.diagram && s.image?.query).slice(0, 3);
+  const cards = steps.filter((s) => s.type === 'learn' && !s.diagram && s.image?.query).slice(0, 2);
   if (!cards.length || !hasProviders()) return out;
   const found = await Promise.all(cards.map((s) => commonsSearch(s.image.query)));
   const ask = cards.map((s, n) => ({ card: s._k, title: s.title, teaches: clean(s.body, 300), wanted: s.image.query,
     candidates: found[n].slice(0, 6).map((c, j) => ({ id: j, title: c.title, description: c.desc })) })).filter((x) => x.candidates.length);
   if (!ask.length) return out;
   const r = await askJson(
-    'You choose pictures for a revision lesson for UK students. A picture must clearly and accurately show what the card teaches. Pick nothing rather than a vague, misleading, off-topic, low-value, mostly-text, unrelated-language, gory or adult picture, or a portrait of someone the card is not about. Reply with JSON only.',
+    'You choose pictures for a revision lesson for UK students. A picture must clearly and accurately show what the card teaches, so a student learns something from looking at it. Pick nothing (null) unless you are confident: never a vague, generic, misleading, off-topic, low-quality, decorative, mostly-text, gory or adult picture, a portrait of someone the card is not about, or anything whose title or description is not in English (its labels will not be English either). Most cards should get null. Reply with JSON only.',
     `Course: ${qual} — ${unitName}
-For each card, choose the candidate (by id) that best shows what the card teaches, judging from its title and description, or null if none clearly does.
+For each card, choose the candidate (by id) that clearly shows exactly what the card teaches, judging from its title and description, or null if none clearly does. A diagram is only acceptable if its title says it is English or it is obviously an English-labelled diagram of exactly this thing.
 Cards: ${JSON.stringify(ask)}
 Return {"cards":[{"card":0,"pick":0|null,"caption":"under 12 words: what the picture shows, as it relates to the card"}]}`,
     20000, { temperature: 0, maxTokens: 900 });
@@ -400,7 +421,7 @@ function sanitiseStep(s: any, keepOrder = false, diagramTypes: string[] = DIAGRA
     if (new Set(choices.map(norm)).size !== choices.length) return null;
     // re-order so the right answer isn't always in the same place
     const order = keepOrder ? choices.map((_: string, i: number) => i) : shuffle(choices.map((_: string, i: number) => i));
-    return { type: t, q: str(s.q), choices: order.map((i) => choices[i]), answer: order.indexOf(a), explain: str(s.explain, 400), bank: !!s.bank || undefined };
+    return { type: t, q: str(s.q), choices: order.map((i) => choices[i]), answer: order.indexOf(a), explain: str(s.explain, 400), bank: !!s.bank || undefined, ref: s.bank && s.ref ? str(s.ref, 60) : undefined };
   }
   if (t === 'truefalse') {
     if (!str(s.statement) || typeof s.answer !== 'boolean') return null;
@@ -469,7 +490,7 @@ function bankMcq(q: any) {
   const choices = (Array.isArray(q?.choices) ? q.choices : []).map((c: unknown) => clean(c, 200)).filter(Boolean);
   const a = Number(q?.correct);
   if (!clean(q?.q) || choices.length < 2 || !(a >= 0 && a < choices.length)) return null;
-  return sanitiseStep({ type: 'mcq', q: q.q, choices, answer: a, explain: '', bank: true });
+  return sanitiseStep({ type: 'mcq', q: q.q, choices, answer: a, explain: '', bank: true, ref: q.id != null ? String(q.id) : undefined });
 }
 
 // Icon keys the app can draw (custom animated SVGs — no emojis).
@@ -553,7 +574,7 @@ async function writeLesson(input: { unit?: string; unitName: string; qual: strin
   const seenIn: Check[] = Array.isArray(input.seen) ? input.seen : [];
   const bankQuiz = (Array.isArray(g.quiz) ? g.quiz : []).filter((q: any) => q && Array.isArray(q.choices)
     && !lengthTell({ type: 'mcq', choices: q.choices.map((c: unknown) => String(c ?? '')), answer: Number(q.correct) })
-    && !seenIn.some((x) => sameCheck({ q: String(q.q || ''), a: String(q.choices[Number(q.correct)] ?? '') }, x))).slice(0, 8);
+    && !seenIn.some((x) => sameCheck({ q: String(q.q || ''), a: String(q.choices[Number(q.correct)] ?? ''), c: q.choices.map((v: unknown) => norm(v)), ref: q.id != null ? String(q.id) : undefined }, x))).slice(0, 8);
   const realExam = (Array.isArray(g.exam) ? g.exam : []).filter(usableReal).map(trimReal).filter((q: any) => q && clean(q.question)).slice(0, 3);
   const bankExam = realExam.length
     ? realExam.map((q: any) => ({ ref: String(q.id), q: clean(q.question, 700), marks: q.marks, verb: q.command_verb || '', context: clean(q.scenario || q.context || '', 500), mark_scheme: schemePoints(q.mark_scheme) }))
@@ -594,7 +615,7 @@ ${input.coding ? CODE_PROMPT[input.coding] + '\n' : ''}Answer-key rules (these a
 - match: 4 pairs of [term, short definition]; each definition fits only its own term.
 - order: items listed in the CORRECT order of a recognised sequence (process stages, steps of a model), not a matter of opinion.
 - ${diff.exam} "points" are the mark scheme as an examiner writes it: one creditable idea per line with "(1)", a "point (1) + linked expansion (1)" line for Explain marks, and "/" between acceptable alternatives. Give MORE creditable points than the marks available (at least marks + 2) so different correct answers are all covered. "model" is a full-mark answer that uses the command word properly.
-- learn cards: 2–4 short sentences (max 70 words), 2–3 bullet points, and a concrete example where useful.
+- learn cards: 2–4 short sentences (max 70 words), 2–3 bullet points, and a concrete example where useful. Never write a list inside a sentence ("1. … 2. … 3. …"): put list items in "points" (one item each), so each is on its own line.
 - BALANCE: whenever a card gives the strengths / advantages / benefits of anything (a theory, study, explanation, method, approach, therapy, technology, option, decision), the SAME card must also give its weaknesses / limitations / disadvantages — never strengths on their own. Write those cards' "points" as 2–3 lines starting "Strength: " and 2–3 lines starting "Weakness: " (one developed idea each: the point and why it matters). For Psychology, every theory, study and explanation taught is evaluated this way (AO3), using research evidence where it supports or challenges it. Every check must be answerable from the learn cards.
 - diagrams: give 2–3 learn cards a "diagram" where a picture genuinely helps (otherwise "diagram": null). Allowed types for this unit: ${plan.types.join(', ')}. ${plan.hint} Labels are short and must be accurate for the specification. Shapes: ${plan.types.map((k) => DIAGRAM_SHAPES[k]).join(' | ')}
 - pictures: give 1–3 learn cards that have NO diagram an "image" when a real photo or illustration would help the learner picture what the card teaches — a device or piece of equipment, a body part or organ, a place or building, a real product, event or organisation, a named theorist, or a real-world example from the card. "query" is 2–5 plain English words to search Wikimedia Commons for exactly that thing (e.g. "network switch rack", "human heart anatomy", "WannaCry ransom note"); "caption" says in under 12 words what the picture shows. Use "image": null for abstract ideas that a photo cannot show.
@@ -638,11 +659,23 @@ Return JSON exactly like:
   steps = dedupeChecks(steps);
   steps.forEach((s: any, k: number) => { s._k = k; });
   // check every answer key with a second, independent pass; find the learn-card pictures at the same time
-  const [checked, pics] = await Promise.all([
-    verifySteps(steps, input.unitName, input.qual).catch((e) => { console.warn('study-hub verify failed', e); return { steps, verified: false }; }),
+  const verifyOnce = () => verifySteps(steps, input.unitName, input.qual).catch((e) => { console.warn('study-hub verify failed', e); return { steps, verified: false }; });
+  const writer = String(r.provider || '').split(':')[0];
+  const [checked, pics, blind] = await Promise.all([
+    // a lesson must never go out unchecked because one checker call failed: try again once
+    verifyOnce().then((v) => v.verified ? v : verifyOnce()),
     findPictures(steps, input.unitName, input.qual).catch((e) => { console.warn('study-hub pictures failed', e); return new Map<number, any>(); }),
+    blindAnswers(steps, input.unitName, input.qual, writer ? [writer] : []).catch((e) => { console.warn('study-hub blind check failed', e); return null; }),
   ]);
-  steps = checked.steps.map((s: any) => {
+  let blindDropped = 0;
+  const checkedSteps = blind ? checked.steps.filter((s: any) => {
+    if (s.bank || !['mcq', 'truefalse', 'fill'].includes(s.type)) return true;
+    const ok = blindAgrees(s, blind.get(s._k));
+    if (ok === false) { blindDropped++; return false; }
+    return true;
+  }) : checked.steps;
+  if (blindDropped) console.log('study-hub: blind check removed', blindDropped, 'item(s)');
+  steps = checkedSteps.map((s: any) => {
     const pic = s.type === 'learn' && !s.diagram ? pics.get(s._k) : null;
     const { _k, ...rest } = s;
     if (rest.type === 'learn') { if (pic) rest.image = pic; else delete rest.image; }
@@ -659,7 +692,8 @@ Return JSON exactly like:
   // make sure a couple of genuine bank questions appear (before the exam step) — new to the learner, not a repeat
   // of a lesson question, and not a giveaway
   const have = steps.filter((s: any) => s.type === 'mcq' || s.type === 'truefalse').map(checkOf);
-  const extra = bankQuiz.map(bankMcq).filter((s: any) => s && !lengthTell(s) && !have.some((h) => sameCheck(checkOf(s), h)) && !seen.some((h) => sameCheck(checkOf(s), h))).slice(0, 2);
+  const quizChecks = steps.filter((s: any) => ['mcq', 'truefalse', 'fill', 'match', 'order'].includes(s.type)).length;
+  const extra = bankQuiz.map(bankMcq).filter((s: any) => s && !lengthTell(s) && !have.some((h) => sameCheck(checkOf(s), h)) && !seen.some((h) => sameCheck(checkOf(s), h))).slice(0, Math.max(2, 6 - quizChecks));
   if (extra.length) {
     const at = steps.findIndex((s: any) => s.type === 'exam');
     steps.splice(at >= 0 ? at : Math.max(0, steps.length - 1), 0, ...extra);
@@ -673,7 +707,7 @@ Return JSON exactly like:
     topic: clean(L.topic, 90) || input.topic || null,
     summary: clean(L.summary, 200),
     minutes: Math.max(3, Math.min(15, Math.round(Number(L.minutes) || len.minutes))),
-    steps, provider: r.provider, verified: checked.verified,
+    steps, provider: r.provider, verified: checked.verified && !!blind,
   };
 }
 
@@ -726,6 +760,50 @@ Return {"items":[{"i":0,"verdict":"ok"|"fix"|"drop","reason":"short", ...correct
     if (fixed) out[i] = s.type === 'exam' ? { ...s, ...fixed } : fixed; else drop.add(i);
   }
   return { steps: out.filter((_, i) => !drop.has(i)), verified: true };
+}
+
+/* Blind check. The checker above is shown each answer key, and checkers tend to agree with what they are shown.
+   So an independent model (a different provider where one is available) also answers every AI-written quiz item
+   WITHOUT the key. An item it answers differently, or calls ambiguous, is removed: a wrong or arguable answer key
+   teaches the wrong thing. */
+async function blindAnswers(steps: any[], unitName: string, qual: string, avoid: string[]): Promise<Map<number, any>> {
+  const items = steps.filter((s) => !s.bank && s._k != null && ['mcq', 'truefalse', 'fill'].includes(s.type)).map((s) =>
+    s.type === 'mcq' ? { k: s._k, type: 'mcq', q: s.q, choices: s.choices }
+    : s.type === 'truefalse' ? { k: s._k, type: 'truefalse', statement: s.statement }
+    : { k: s._k, type: 'fill', text: s.text, options: s.options, gaps: (s.blanks || []).length });
+  const out = new Map<number, any>();
+  if (!items.length) return out;
+  const r = await askJson(
+    `You are a top-grade ${qual} student answering a quiz. Answer every item yourself, carefully and accurately, using the ${qual} specification. Do not guess from the wording or length of the choices. Reply with JSON only.`,
+    `Unit: ${unitName}
+For each item give your answer. mcq: "answer" = the exact text of the ONE correct choice. truefalse: "answer" = true or false. fill: "answer" = an array of the option(s) that go in the gap(s), in order.
+If an item has more than one defensible answer, no correct answer, or depends on wording that is unclear, set "ambiguous": true.
+Items: ${JSON.stringify(items)}
+Return {"items":[{"k":0,"answer":"…","ambiguous":false}]}`,
+    35000, { preferStrong: true, temperature: 0, maxTokens: 2500, avoid });
+  for (const v of (Array.isArray(r.json?.items) ? r.json.items : [])) out.set(Math.round(Number(v?.k)), v);
+  return out;
+}
+// true = the independent answer matches the key; false = it does not (or the item is ambiguous); null = can't tell.
+function blindAgrees(s: any, v: any): boolean | null {
+  if (!v) return null;
+  if (v.ambiguous === true) return false;
+  if (s.type === 'mcq') {
+    const choices = (s.choices || []).map((c: unknown) => norm(c));
+    if (!choices.includes(norm(v.answer))) return null;      // the checker rewrote the choices since
+    return norm(v.answer) === choices[s.answer];
+  }
+  if (s.type === 'truefalse') {
+    const a = typeof v.answer === 'boolean' ? v.answer : /^\s*(t|true|yes)\b/i.test(String(v.answer)) ? true : /^\s*(f|false|no)\b/i.test(String(v.answer)) ? false : null;
+    return a == null ? null : a === !!s.answer;
+  }
+  if (s.type === 'fill') {
+    const got = (Array.isArray(v.answer) ? v.answer : [v.answer]).map((x: unknown) => norm(x));
+    const opts = (s.options || []).map((x: unknown) => norm(x));
+    if (!got.every((g: string) => opts.includes(g))) return null;
+    return got.join('|') === (s.blanks || []).map((x: unknown) => norm(x)).join('|');
+  }
+  return null;
 }
 
 // No AI available: a practice lesson built only from the real question bank.

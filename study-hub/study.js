@@ -476,7 +476,7 @@
       let c = q.correct;
       if (typeof c === 'string' && /^[A-F]$/i.test(c.trim())) c = L.indexOf(c.trim().toUpperCase());
       else if (typeof c === 'string') c = choices.findIndex(x => norm(x) === norm(c));
-      return { q: q.q, choices, correct: Number(c), topic: q.topic };
+      return { id: q.id, q: q.q, choices, correct: Number(c), topic: q.topic };
     }).filter(q => q.correct >= 0 && q.correct < q.choices.length);
     // exam questions must be ON the topic (never topped up from elsewhere in the area — an off-topic exam question
     // is worse than none: the lesson then writes its own). A question in a different chapter/aim never counts.
@@ -1161,15 +1161,36 @@
     return { d: pct >= 85 ? 'hard' : pct < 55 ? 'easy' : 'medium', why: `you average ${pct}% in your last ${done.length} lesson${done.length > 1 ? 's' : ''} here` };
   }
   const resolveDiff = (choice, unit, topic) => choice === 'auto' || !DIFF_LABEL[choice] ? autoDiff(unit, topic) : { d: choice, why: '' };
-  // The difficulty row shown under the "Start" buttons, so it can be changed without opening the settings.
-  const diffPicker = () => `<div class="sh-diffpick" role="radiogroup" aria-label="Difficulty"><span>Difficulty</span>${Object.keys(DIFF_LABEL).map(k => `<button type="button" role="radio" data-diff="${k}" class="${savedDiff() === k ? 'on' : ''}" aria-checked="${savedDiff() === k}"${k === 'auto' ? ' title="Chosen from your scores"' : ''}>${k === 'auto' ? I('sparkles', { size: 13 }) + ' ' : ''}${DIFF_LABEL[k]}</button>`).join('')}</div>`;
+  // The difficulty slider (Easy → Medium → Hard, with an Auto switch) shown under the "Start" buttons and in the
+  // settings sheet, so it can be changed without opening anything. The whole control takes the mode's colours.
+  const DIFF_STEPS = ['easy', 'medium', 'hard'];
+  const DIFF_NOTE = { auto: 'Auto picks the level from your scores', easy: 'Core facts, building confidence', medium: 'Exam standard', hard: 'Stretch, apply and evaluate' };
+  const diffPicker = () => {
+    const d = savedDiff(), auto = d === 'auto';
+    return `<div class="sh-diff" data-mode="${d}">
+      <div class="sh-diff-top"><span class="lbl">Difficulty</span><b class="val">${auto ? 'Chosen for you' : DIFF_LABEL[d]}</b><button type="button" class="sh-diff-auto" aria-pressed="${auto}">${I('sparkles', { size: 13 })} Auto</button></div>
+      <input type="range" class="sh-diff-range" min="0" max="2" step="1" value="${auto ? 1 : DIFF_STEPS.indexOf(d)}" aria-label="Difficulty" aria-valuetext="${DIFF_LABEL[d]}">
+      <div class="sh-diff-ticks" aria-hidden="true"><span>Easy</span><span>Medium</span><span>Hard</span></div>
+      <small class="sh-diff-note">${DIFF_NOTE[d]}</small></div>`;
+  };
+  function setDiff(d) {
+    store.set('sh_diff', d);
+    $$('.sh-diff').forEach(w => {
+      w.dataset.mode = d;
+      $('.val', w).textContent = d === 'auto' ? 'Chosen for you' : DIFF_LABEL[d];
+      $('.sh-diff-note', w).textContent = DIFF_NOTE[d];
+      $('.sh-diff-auto', w).setAttribute('aria-pressed', d === 'auto');
+      const r = $('.sh-diff-range', w); r.value = d === 'auto' ? 1 : DIFF_STEPS.indexOf(d); r.setAttribute('aria-valuetext', DIFF_LABEL[d]);
+    });
+    window.dispatchEvent(new CustomEvent('sh:diff', { detail: d }));
+  }
+  document.addEventListener('input', (e) => { if (e.target.matches && e.target.matches('.sh-diff-range')) setDiff(DIFF_STEPS[Number(e.target.value)] || 'medium'); });
   document.addEventListener('click', (e) => {
-    const b = e.target.closest && e.target.closest('.sh-diffpick [data-diff]');
-    if (!b) return;
-    e.stopPropagation();
-    store.set('sh_diff', b.dataset.diff);
-    $$('.sh-diffpick [data-diff]').forEach(x => { const on = x.dataset.diff === b.dataset.diff; x.classList.toggle('on', on); x.setAttribute('aria-checked', on); });
-    Snd.tap();
+    const b = e.target.closest && e.target.closest('.sh-diff-auto');
+    if (b) { e.stopPropagation(); const w = b.closest('.sh-diff'); setDiff(savedDiff() === 'auto' ? DIFF_STEPS[Number($('.sh-diff-range', w).value)] : 'auto'); Snd.tap(); return; }
+    // a tap on the slider while on Auto switches to that level (the input event may not fire if the value is unchanged)
+    const r = e.target.closest && e.target.closest('.sh-diff-range');
+    if (r && savedDiff() === 'auto') setDiff(DIFF_STEPS[Number(r.value)]);
   }, true);
   function openMaker(preset) {
     const st = S.status || {};
@@ -1192,15 +1213,16 @@
         <section class="sh-msec"><h3><span class="n">3</span>Lesson style</h3>
           ${seg('length', [['quick', 'Quick', '≈ 4 min', 'bolt'], ['standard', 'Standard', '≈ 7 min', 'book'], ['deep', 'Deep dive', '≈ 11 min', 'brain']])}
           ${seg('focus', [['', 'Balanced', 'Teach + test', 'scales'], ['learn', 'Learn it', 'More explaining', 'bulb'], ['practise', 'Practise', 'More questions', 'target'], ['exam', 'Exam skills', 'Marks & command words', 'exam']])}
-          <h4 class="sh-seg-h">Difficulty</h4>
-          ${seg('difficulty', [['auto', 'Auto', 'From your scores', 'sparkles'], ['easy', 'Easy', 'Core facts', 'book'], ['medium', 'Medium', 'Exam standard', 'target'], ['hard', 'Hard', 'Stretch & evaluate', 'brain']])}
+          ${diffPicker()}
         </section>
         <section class="sh-msec" data-full${quick ? ' hidden' : ''}><h3><span class="n">4</span>Anything specific? <small>optional</small></h3><textarea id="mk-req" class="sh-in" rows="2" maxlength="300" placeholder="e.g. Explain the CIA triad with real examples, I keep mixing it up"></textarea></section>
       </div>
       <footer class="sh-sheet-f"><div class="sum" id="mk-sum"></div><button class="sh-btn pri lg" id="mk-go">${I('sparkles', { size: 20 })} Create lesson${limited() ? ` <small class="mk-cost">· ${lessonCost()} AI uses</small>` : ''}</button></footer></div>`;
     document.body.appendChild(ov);
     document.body.style.overflow = 'hidden';
-    const close = () => { ov.remove(); document.body.style.overflow = ''; document.removeEventListener('keydown', onKey); };
+    const onDiff = (e) => { M.difficulty = e.detail; sum(); };
+    window.addEventListener('sh:diff', onDiff);
+    const close = () => { ov.remove(); document.body.style.overflow = ''; document.removeEventListener('keydown', onKey); window.removeEventListener('sh:diff', onDiff); };
     const onKey = (e) => { if (e.key === 'Escape') close(); };
     document.addEventListener('keydown', onKey);
     ov.addEventListener('click', (e) => { if (e.target === ov || e.target.closest('[data-close]')) close(); });
@@ -1348,6 +1370,27 @@
     return rw;
   }
 
+  // Text that contains a list written inline ("… 1. first 2. second 3. third") or inline bullets ("• a • b") is
+  // shown with each item on its own line. Only a real sequence 1, 2, 3… counts, so decimals like 3.5 are untouched.
+  function richText(text, tag) {
+    const t = String(text == null ? '' : text).trim();
+    const para = (s) => s ? `<${tag || 'p'}>${esc(s).replace(/\n/g, '<br>')}</${tag || 'p'}>` : '';
+    const marks = [];
+    const rx = /(^|[\s:;,.(])(\d{1,2})[.)]\s+(?=\S)/g;
+    let m, want = 1;
+    while ((m = rx.exec(t))) { if (Number(m[2]) === want) { marks.push({ at: m.index + m[1].length, body: m.index + m[0].length }); want++; } }
+    if (marks.length >= 2) {
+      const items = marks.map((k, i) => t.slice(k.body, i + 1 < marks.length ? marks[i + 1].at : t.length).trim().replace(/[;,]\s*(and|or)?$/i, '').trim());
+      return para(t.slice(0, marks[0].at).trim()) + `<ol class="sh-ilist">${items.map(x => `<li>${esc(x)}</li>`).join('')}</ol>`;
+    }
+    const bullets = t.split(/\s+[•▪●]\s+|^[•▪●]\s+/).map(x => x.trim()).filter(Boolean);
+    if ((t.match(/[•▪●]/g) || []).length >= 2 && bullets.length >= 2) {
+      const lead = /^[•▪●]/.test(t) ? '' : bullets.shift();
+      return para(lead) + `<ul class="sh-ilist">${bullets.map(x => `<li>${esc(x)}</li>`).join('')}</ul>`;
+    }
+    return para(t);
+  }
+
   // Learn-card bullets. Cards that evaluate something list "Strength: …" and "Weakness: …" points — shown side by
   // side so the student always sees both sides (Limitation / Advantage / Disadvantage are read the same way).
   const STRENGTH_RX = /^\s*(strengths?|advantages?|benefits?|pros?)\s*[:\-–]\s*/i;
@@ -1458,7 +1501,7 @@
       record(item.i, { ok: !!r.ok, score: r.score, max: r.max });
       if (!r.ok && first && s.type !== 'exam' && !P.retried.has(item.i)) { P.retried.add(item.i); P.queue.push({ i: item.i, retry: true }); }
       if (!preview && CHECKABLE.includes(s.type) && s.type !== 'exam') track('study_step', { unit: lesson.unit || null, view: 'study-hub', ref: 'sh:' + lesson.id + ':' + item.i, title: (s.q || s.statement || s.text || s.prompt || '').slice(0, 300), score: r.ok ? 1 : 0, max_score: 1, meta: { topic: lesson.topic || null, type: s.type, source: 'study_hub' } });
-      footResult(r.ok, title || (r.ok ? pick(PRAISE) : pick(NOPE)), [correctHtml, explain ? esc(explain) : ''].filter(Boolean).join('<br>'), next);
+      footResult(r.ok, title || (r.ok ? pick(PRAISE) : pick(NOPE)), [correctHtml, explain ? richText(explain, 'span') : ''].filter(Boolean).join('<br>'), next);
     }
     function skipCurrent() { const item = P.cur; if (item && steps[item.i].type === 'exam') examReveal(item, { score: 0, max: steps[item.i].marks }, true); }
     const kindHead = (type, extra) => {
@@ -1477,7 +1520,7 @@
       const head = item.retry ? `<div class="sh-kind retry">${I('retry', { size: 18 })} Let's try that again</div>` : '';
       const wrap = (html) => { stage.innerHTML = `<div class="sh-step">${head}${html}</div>`; };
       if (s.type === 'learn') {
-        wrap(`${kindHead('learn')}<div class="sh-learn"><div class="emo">${I(lessonIcon, { size: 40 })}</div>${s.title ? `<h2>${esc(s.title)}</h2>` : ''}<p>${esc(s.body)}</p>${s.diagram ? diagramHtml(s.diagram) : pictureHtml(s.image)}${learnPointsHtml(s.points)}${s.example ? `<div class="sh-ex"><b>Example</b>${esc(s.example)}</div>` : ''}</div>`);
+        wrap(`${kindHead('learn')}<div class="sh-learn"><div class="emo">${I(lessonIcon, { size: 40 })}</div>${s.title ? `<h2>${esc(s.title)}</h2>` : ''}${richText(s.body)}${s.diagram ? diagramHtml(s.diagram) : pictureHtml(s.image)}${learnPointsHtml(s.points)}${s.example ? `<div class="sh-ex"><b>Example</b>${richText(s.example, 'span')}</div>` : ''}</div>`);
         $$('.sh-pic img', stage).forEach(img => {
           const gone = () => { const f = img.closest('.sh-pic'); if (f) f.remove(); };
           img.onerror = gone;
@@ -1639,7 +1682,7 @@
       } else if (s.type === 'exam') {
         wrap(`<div class="sh-kind">${I('exam', { size: 18 })} ${s.source === 'exam' ? 'Real exam question' : 'Exam-style question'}</div>
           <div class="sh-exam-meta"><span class="sh-badge acc">${s.marks} mark${s.marks === 1 ? '' : 's'}</span>${s.verb ? `<span class="sh-badge">${esc(s.verb)}</span>` : ''}<span class="sh-badge ok">${I('check', { size: 13 })} Marked by the RA10 AI Examiner</span></div>
-          ${s.context ? `<div class="sh-context">${esc(s.context)}</div>` : ''}<h1 class="sh-q sm">${esc(s.q)}</h1>
+          ${s.context ? `<div class="sh-context">${richText(s.context, 'span')}</div>` : ''}<h1 class="sh-q sm">${esc(s.q)}</h1>
           <textarea class="sh-write" id="e-ans" placeholder="Write your answer like you would in the exam…"></textarea><div class="sh-wc" id="e-wc">0 words · aim for about ${Math.min(400, s.marks * 20)} words</div><div id="e-res"></div>`);
         const ta = $('#e-ans', stage);
         ta.oninput = () => { const n = ta.value.trim().split(/\s+/).filter(Boolean).length; $('#e-wc', stage).textContent = n + ' word' + (n === 1 ? '' : 's') + ' · aim for about ' + Math.min(400, s.marks * 20) + ' words'; enable(n >= 3); };
@@ -1676,7 +1719,7 @@
           ${list(r.strengths, 'check', 'good')}${list(r.improvements, 'arrow', 'next')}`}
         ${canAct ? `<div class="sh-mark-acts">${score < max && !P.rewrites.has(item.i) && answer.trim().split(/\s+/).length >= 3 ? `<button type="button" class="sh-btn sm sh-rw-btn" data-rewrite>${I('wand', { size: 16 })} <span>Rewrite for full marks</span>${limited() ? ' <small class="mk-cost">· 1 AI use</small>' : ''}</button>` : ''}${!P.remarked.has(item.i) && !preview ? `<button type="button" class="sh-btn ghost sm" data-remark>${I('retry', { size: 16 })} Re-mark</button>` : ''}<button type="button" class="sh-btn ghost sm" data-flag ${P.flagged.has(item.i) ? 'disabled' : ''}>${I('flag', { size: 16 })} ${P.flagged.has(item.i) ? 'Flagged — thank you' : 'Flag this marking'}</button></div><div class="sh-mark-form" hidden></div><div class="sh-rw-holder">${P.rewrites.has(item.i) ? rewriteHtml(P.rewrites.get(item.i), answer, max) : ''}</div>` : ''}
         <div class="sh-ins-h">Mark scheme</div><div class="sh-ms">${(s.points || []).map((p, i) => `<div class="${got.includes(i) ? 'got' : ''}"><span class="tk">${got.includes(i) ? I('check', { size: 16 }) : '•'}</span><span>${esc(p)}</span></div>`).join('')}</div>
-        ${s.model ? `<details class="sh-model" ${skipped ? 'open' : ''}><summary>Model answer</summary><p>${esc(s.model)}</p></details>` : ''}`;
+        ${s.model ? `<details class="sh-model" ${skipped ? 'open' : ''}><summary>Model answer</summary>${richText(s.model)}</details>` : ''}`;
       wireAnnotations(box);
       if (canAct) wireMarkActions(item, box, answer, r, score, max);
       if (P.rewrites.has(item.i)) wireRewrite($('.sh-rw', box), P.rewrites.get(item.i));
@@ -1699,7 +1742,7 @@
     function selfMark(item) {
       const s = steps[item.i];
       const box = $('#e-res', stage);
-      box.innerHTML = `<div class="sh-ins-h">The examiner is busy — mark it yourself: tick each point you made</div><div class="sh-ms">${s.points.map((p, i) => `<label><input type="checkbox" data-pt="${i}"><span>${esc(p)}</span></label>`).join('')}</div>${s.model ? `<details class="sh-model"><summary>Model answer</summary><p>${esc(s.model)}</p></details>` : ''}`;
+      box.innerHTML = `<div class="sh-ins-h">The examiner is busy — mark it yourself: tick each point you made</div><div class="sh-ms">${s.points.map((p, i) => `<label><input type="checkbox" data-pt="${i}"><span>${esc(p)}</span></label>`).join('')}</div>${s.model ? `<details class="sh-model"><summary>Model answer</summary>${richText(s.model)}</details>` : ''}`;
       box.scrollIntoView({ behavior: 'smooth', block: 'start' });
       footIdle('Save my mark', true, () => {
         const got = $$('[data-pt]:checked', box).map(x => Number(x.dataset.pt));

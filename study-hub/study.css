@@ -242,13 +242,34 @@ body.sh-page p, body.sh-page li { max-width: none; }
 .sh-learn ul { margin: 0 0 4px; padding: 0; list-style: none; display: grid; gap: 8px; }
 .sh-learn li { display: flex; gap: 10px; align-items: flex-start; font-size: .98rem; line-height: 1.5; }
 .sh-learn li::before { content: ''; flex: none; width: 10px; height: 10px; margin-top: 7px; border-radius: 3px; background: var(--acc); transform: rotate(45deg); }
-/* difficulty row under the Start buttons */
-.sh-diffpick { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin: 10px 0 2px; }
-.sh-diffpick > span { font-size: .72rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-2); margin-right: 2px; }
-.sh-diffpick button { display: inline-flex; align-items: center; gap: 4px; padding: 5px 11px; min-height: 32px; border-radius: 999px; border: 2px solid var(--line); background: var(--card); color: var(--ink); font: inherit; font-size: .82rem; font-weight: 700; cursor: pointer; }
-.sh-diffpick button.on { border-color: var(--acc); background: var(--acc-soft); color: var(--acc); }
-.sh-diffpick button:focus-visible { outline: 2px solid var(--acc); outline-offset: 2px; }
-.sh-pop .sh-diffpick { justify-content: center; }
+/* difficulty slider (under the Start buttons and in the settings sheet): the control takes the mode's gradient */
+.sh-diff { --d1: #f59e0b; --d2: #f97316; --dc: #d97706; margin: 12px 0 4px; padding: 10px 14px 10px; border-radius: 18px; text-align: left;
+  border: 2px solid color-mix(in srgb, var(--dc) 40%, transparent);
+  background: linear-gradient(120deg, color-mix(in srgb, var(--d1) 16%, var(--card)), color-mix(in srgb, var(--d2) 12%, var(--card)));
+  transition: background .35s, border-color .35s; }
+.sh-diff[data-mode="easy"] { --d1: #22c55e; --d2: #14b8a6; --dc: #16a34a; }
+.sh-diff[data-mode="medium"] { --d1: #f59e0b; --d2: #f97316; --dc: #d97706; }
+.sh-diff[data-mode="hard"] { --d1: #ef4444; --d2: #ec4899; --dc: #dc2626; }
+.sh-diff[data-mode="auto"] { --d1: #8b5cf6; --d2: #3b82f6; --dc: #7c3aed; }
+.sh-diff-top { display: flex; align-items: center; gap: 8px; }
+.sh-diff-top .lbl { font-size: .7rem; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; color: var(--ink-2); }
+.sh-diff-top .val { font-size: .98rem; font-weight: 800; background: linear-gradient(90deg, var(--d1), var(--d2)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.sh-diff-auto { margin-left: auto; display: inline-flex; align-items: center; gap: 4px; padding: 4px 11px; min-height: 30px; border-radius: 999px; border: 2px solid var(--line); background: var(--card); color: var(--ink-2); font: inherit; font-size: .78rem; font-weight: 800; cursor: pointer; }
+.sh-diff-auto[aria-pressed="true"] { color: #fff; border-color: transparent; background: linear-gradient(120deg, #8b5cf6, #3b82f6); }
+.sh-diff-range { -webkit-appearance: none; appearance: none; display: block; width: 100%; height: 10px; margin: 12px 0 4px; border-radius: 999px; cursor: pointer;
+  background: linear-gradient(90deg, #22c55e, #f59e0b 50%, #ef4444); outline: none; transition: opacity .2s, filter .2s; }
+.sh-diff[data-mode="auto"] .sh-diff-range { background: linear-gradient(90deg, #8b5cf6, #3b82f6); opacity: .55; }
+.sh-diff-range::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 24px; height: 24px; border-radius: 50%; background: #fff; border: 4px solid var(--dc); box-shadow: 0 3px 10px -2px color-mix(in srgb, var(--dc) 60%, transparent); transition: border-color .3s; }
+.sh-diff-range::-moz-range-thumb { width: 18px; height: 18px; border-radius: 50%; background: #fff; border: 4px solid var(--dc); box-shadow: 0 3px 10px -2px color-mix(in srgb, var(--dc) 60%, transparent); }
+.sh-diff-range:focus-visible { box-shadow: 0 0 0 3px color-mix(in srgb, var(--dc) 40%, transparent); }
+.sh-diff-ticks { display: flex; justify-content: space-between; font-size: .72rem; font-weight: 700; color: var(--ink-2); }
+.sh-diff-note { display: block; margin-top: 4px; font-size: .76rem; color: var(--ink-2); }
+@media (prefers-reduced-motion: reduce) { .sh-diff, .sh-diff-range { transition: none; } }
+/* lists that were written inline in a sentence */
+.sh-ilist { margin: 6px 0 4px; padding-left: 22px; display: grid; gap: 4px; }
+.sh-ilist li { display: list-item; }
+.sh-learn .sh-ilist li::before, .sh-play .sh-learn .sh-ilist li::before { display: none; }
+ol.sh-ilist li::marker { font-weight: 800; color: var(--acc); }
 .sh-gen-diff { margin: 6px 0 0; display: flex; justify-content: center; align-items: center; gap: 6px; flex-wrap: wrap; }
 .sh-gen-diff small { color: var(--ink-2); }
 /* strengths vs weaknesses on evaluation cards */
