@@ -490,6 +490,19 @@
     if (ids.length) g.exam = await loadFullQuestions(unitPath, ids);
     return g;
   }
+  // A lesson on several topics gets real questions from each of them (no duplicates).
+  async function multiGrounding(unitPath, cat, topics) {
+    if (topics.length <= 1) return fullGrounding(unitPath, cat, topics[0] || '');
+    const gs = topics.map(t => grounding(cat, t));
+    const per = Math.max(2, Math.ceil(10 / topics.length));
+    const seenQz = new Set(), seenEx = new Set(), quiz = [], questions = [];
+    gs.forEach(g => (g.quiz || []).slice(0, per).forEach(q => { const k = q.id || q.q; if (!seenQz.has(k)) { seenQz.add(k); quiz.push(q); } }));
+    gs.forEach(g => (g.questions || []).slice(0, 2).forEach(q => { if (!seenEx.has(q.id)) { seenEx.add(q.id); questions.push(q); } }));
+    const out = { quiz, questions: questions.slice(0, 4), topics: (gs[0] && gs[0].topics) || [] };
+    const ids = out.questions.map(q => q.id).filter(x => x != null).map(String);
+    if (ids.length) out.exam = await loadFullQuestions(unitPath, ids);
+    return out;
+  }
   function pickTopic(cat) {
     const strong = new Set(((S.plan && S.plan.strong) || []).map(t => norm(t.topic)));
     const recent = new Set(((S.plan && S.plan.recentLessonTopics) || []).map(norm));
@@ -1192,30 +1205,57 @@
     const r = e.target.closest && e.target.closest('.sh-diff-range');
     if (r && savedDiff() === 'auto') setDiff(DIFF_STEPS[Number(r.value)]);
   }, true);
+  // Make a lesson: one compact sheet — the unit (one row, change it if you need to), the topics (pick up to 4 for a
+  // bigger lesson, or let us surprise you), then length and difficulty. Focus and notes sit under "More options".
+  const MK_MAX = 4;
+  const LEN_INFO = { quick: ['Quick', '≈ 4 min', 'bolt'], standard: ['Standard', '≈ 7 min', 'book'], deep: ['Deep dive', '≈ 11 min', 'brain'] };
+  const FOCUS_INFO = { '': ['Balanced', 'scales'], learn: ['Learn it', 'bulb'], practise: ['Practise', 'target'], exam: ['Exam skills', 'exam'] };
   function openMaker(preset) {
     const st = S.status || {};
     if (!st.can_create) return lockedScreen();
     preset = preset || {};
-    const M = { unit: preset.unit || store.get('sh_unit') || (S.plan && S.plan.focus && S.plan.focus.unit) || (UNITS()[0] || {}).path, topic: preset.topic || null, request: '', length: store.get('sh_len') || 'standard', focus: store.get('sh_focus') || '', difficulty: savedDiff(), q: '', reason: preset.reason || '' };
+    const M = {
+      unit: preset.unit || store.get('sh_unit') || (S.plan && S.plan.focus && S.plan.focus.unit) || (UNITS()[0] || {}).path,
+      topics: preset.topic ? [String(preset.topic)] : [], request: '', length: store.get('sh_len') || 'standard', focus: store.get('sh_focus') || '',
+      difficulty: savedDiff(), q: '', reason: preset.reason || '', lenTouched: false, cat: null
+    };
     const recent = ((S.plan && S.plan.units) || []).map(x => x.path);
     const units = UNITS().slice().sort((a, b) => { const ia = recent.indexOf(a.path), ib = recent.indexOf(b.path); return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib); });
-    const seg = (key, opts) => `<div class="sh-seg" data-seg="${key}" role="radiogroup">${opts.map(([v, t, sub, ic]) => `<button type="button" role="radio" data-v="${v}" class="${M[key] === v ? 'on' : ''}" aria-checked="${M[key] === v}">${I(ic, { size: 22 })}<b>${t}</b><small>${sub}</small></button>`).join('')}</div>`;
     const quick = !!preset.styleOnly && !!preset.topic;
-    const qu = unitOf(M.unit);
+    const pills = (key, info) => `<div class="mk-pills" data-pill="${key}" role="radiogroup">${Object.keys(info).map(v => `<button type="button" role="radio" data-v="${v}" class="${M[key] === v ? 'on' : ''}" aria-checked="${M[key] === v}">${I(info[v][info[v].length - 1], { size: 16 })}<b>${info[v][0]}</b>${info[v].length > 2 ? `<small>${info[v][1]}</small>` : ''}</button>`).join('')}</div>`;
     const ov = document.createElement('div');
     ov.className = 'sh-modal';
-    ov.innerHTML = `<div class="sh-sheet${quick ? ' quick' : ''}" role="dialog" aria-modal="true" aria-label="Make a lesson">
-      <header class="sh-sheet-h"><span class="ic">${I(quick ? 'gear' : 'wand', { size: 26 })}</span><div><h2 id="mk-title">${quick ? 'Difficulty &amp; length' : 'Make a lesson'}</h2><p class="sh-muted">${quick ? 'Set how hard the lesson is, how long it is and what it concentrates on.' + (limited() ? ' ' + costNote() + '.' : '') : st.premium ? (limited() ? costNote() + ', exam marking included.' : 'As many as you like.') : 'This uses your one free lesson.'}</p></div><button class="sh-x" data-close aria-label="Close">${I('close', { size: 22 })}</button></header>
+    ov.innerHTML = `<div class="sh-sheet mk" role="dialog" aria-modal="true" aria-label="Make a lesson">
+      <header class="sh-sheet-h"><span class="ic">${I('wand', { size: 26 })}</span><div><h2>Make a lesson</h2><p class="sh-muted">${st.premium ? (limited() ? costNote() + ', exam marking included.' : 'Pick what to learn — we build it in about 30 seconds.') : 'This uses your one free lesson.'}</p></div><button class="sh-x" data-close aria-label="Close">${I('close', { size: 22 })}</button></header>
       <div class="sh-sheet-b">
-        ${quick ? `<section class="sh-qsum" data-quick><span class="ub" style="--uc:${esc((qu && qu.color) || '#5b4cf5')}">${I(unitIcon(M.unit), { size: 22 })}</span><span class="tx"><small>${esc(qu ? qu.short : '')}</small><b>${esc(String(M.topic))}</b></span><button type="button" class="sh-btn ghost sm" data-editall>${I('pencil', { size: 16 })} Edit everything</button></section>` : ''}
-        <section class="sh-msec" data-full${quick ? ' hidden' : ''}><h3><span class="n">1</span>Choose a unit</h3><div class="sh-units">${units.map(u => `<button type="button" class="sh-ucard${u.path === M.unit ? ' on' : ''}" data-u="${esc(u.path)}" style="--uc:${esc(u.color || '#5b4cf5')}"><span class="ub">${I(unitIcon(u.path), { size: 24 })}</span><span class="tx"><b>${esc(u.short)}</b><small>${esc(unitName(u))}</small></span><span class="tk">${I('check', { size: 20 })}</span></button>`).join('')}</div></section>
-        <section class="sh-msec" data-full${quick ? ' hidden' : ''}><h3><span class="n">2</span>Choose a topic</h3><label class="sh-search">${I('search', { size: 18 })}<input id="mk-q" type="search" placeholder="Search topics…" autocomplete="off"></label><div class="sh-topics" id="mk-topics"></div></section>
-        <section class="sh-msec"><h3><span class="n">3</span>Lesson style</h3>
-          ${seg('length', [['quick', 'Quick', '≈ 4 min', 'bolt'], ['standard', 'Standard', '≈ 7 min', 'book'], ['deep', 'Deep dive', '≈ 11 min', 'brain']])}
-          ${seg('focus', [['', 'Balanced', 'Teach + test', 'scales'], ['learn', 'Learn it', 'More explaining', 'bulb'], ['practise', 'Practise', 'More questions', 'target'], ['exam', 'Exam skills', 'Marks & command words', 'exam']])}
-          ${diffPicker()}
+        <section class="mk-sec">
+          <div class="mk-label">Unit</div>
+          <div id="mk-unit"></div>
+          <div class="mk-units" id="mk-units" hidden></div>
         </section>
-        <section class="sh-msec" data-full${quick ? ' hidden' : ''}><h3><span class="n">4</span>Anything specific? <small>optional</small></h3><textarea id="mk-req" class="sh-in" rows="2" maxlength="300" placeholder="e.g. Explain the CIA triad with real examples, I keep mixing it up"></textarea></section>
+        <section class="mk-sec">
+          <div class="mk-label">Topics <small id="mk-count"></small></div>
+          <div class="mk-tray" id="mk-tray" aria-live="polite"></div>
+          <button type="button" class="mk-addbtn" id="mk-add"${quick ? '' : ' hidden'}>${I('plus', { size: 16 })} Add more topics</button>
+          <div id="mk-browse"${quick ? ' hidden' : ''}>
+            <label class="sh-search">${I('search', { size: 18 })}<input id="mk-q" type="search" placeholder="Search topics…" autocomplete="off" aria-label="Search topics"></label>
+            <div id="mk-sugg"></div>
+            <div class="mk-groups" id="mk-topics"></div>
+          </div>
+        </section>
+        <section class="mk-sec">
+          <div class="mk-label">Length</div>
+          ${pills('length', LEN_INFO)}
+          <p class="mk-hint" id="mk-lenhint" hidden></p>
+          ${diffPicker()}
+          <details class="mk-more">
+            <summary>${I('gear', { size: 16 })} More options <small>focus · your own notes</small></summary>
+            <div class="mk-label sm">Focus</div>
+            ${pills('focus', FOCUS_INFO)}
+            <div class="mk-label sm">Anything specific? <small>optional</small></div>
+            <textarea id="mk-req" class="sh-in" rows="2" maxlength="300" placeholder="e.g. Explain the CIA triad with real examples, I keep mixing it up"></textarea>
+          </details>
+        </section>
       </div>
       <footer class="sh-sheet-f"><div class="sum" id="mk-sum"></div><button class="sh-btn pri lg" id="mk-go">${I('sparkles', { size: 20 })} Create lesson${limited() ? ` <small class="mk-cost">· ${lessonCost()} AI uses</small>` : ''}</button></footer></div>`;
     document.body.appendChild(ov);
@@ -1226,46 +1266,100 @@
     const onKey = (e) => { if (e.key === 'Escape') close(); };
     document.addEventListener('keydown', onKey);
     ov.addEventListener('click', (e) => { if (e.target === ov || e.target.closest('[data-close]')) close(); });
-    const sum = () => {
+
+    const topicCode = (t) => (String(t).match(/^\s*([A-Z]?\d+(?:\.\d+)+|[A-Z]\d+)\b/i) || [])[1] || '';
+    const topicShort = (t) => shortName(String(t).replace(/^\s*([A-Z]?\d+(?:\.\d+)+|[A-Z]\d+)\s*/i, '')) || String(t);
+    function sum() {
+      const u = unitOf(M.unit), n = M.topics.length;
+      const what = !n ? (M.request.trim() ? 'Your request' : 'Surprise topic') : n === 1 ? topicShort(M.topics[0]) : `${topicShort(M.topics[0])} + ${n - 1} more`;
+      $('#mk-sum', ov).innerHTML = `<b>${esc(u ? u.short : '')}</b> · ${esc(what)} · ${esc(LEN_INFO[M.length][0])} · ${esc(DIFF_LABEL[M.difficulty] || 'Medium')}`;
+    }
+    function renderUnit() {
       const u = unitOf(M.unit);
-      $('#mk-sum', ov).innerHTML = `<b>${esc(u ? u.short : '')}</b> · ${esc(M.topic || (M.request.trim() ? 'Your request' : 'Surprise topic'))} · ${esc({ quick: 'Quick', standard: 'Standard', deep: 'Deep dive' }[M.length])}${M.focus ? ' · ' + esc({ learn: 'Learn it', practise: 'Practise', exam: 'Exam skills' }[M.focus]) : ''} · ${esc(DIFF_LABEL[M.difficulty] || 'Medium')}`;
-    };
-    $$('.sh-ucard', ov).forEach(b => b.onclick = () => { M.unit = b.dataset.u; M.topic = null; store.set('sh_unit', M.unit); $$('.sh-ucard', ov).forEach(x => x.classList.toggle('on', x === b)); Snd.tap(); topics(); sum(); });
-    $$('.sh-seg', ov).forEach(g => $$('button', g).forEach(b => b.onclick = () => { M[g.dataset.seg] = b.dataset.v; store.set({ length: 'sh_len', focus: 'sh_focus', difficulty: 'sh_diff' }[g.dataset.seg], b.dataset.v); $$('button', g).forEach(x => { x.classList.toggle('on', x === b); x.setAttribute('aria-checked', x === b); }); Snd.tap(); sum(); }));
+      $('#mk-unit', ov).innerHTML = `<div class="mk-unit" style="--uc:${esc((u && u.color) || '#5b4cf5')}"><span class="ub">${I(unitIcon(M.unit), { size: 22 })}</span><span class="tx"><b>${esc(u ? u.short : 'Choose a unit')}</b><small>${esc(unitName(u))}</small></span><button type="button" class="sh-btn ghost sm" data-unit-change aria-expanded="false">Change</button></div>`;
+      $('[data-unit-change]', ov).onclick = (e) => {
+        const box = $('#mk-units', ov), open = box.hidden;
+        box.hidden = !open; e.currentTarget.setAttribute('aria-expanded', open); e.currentTarget.textContent = open ? 'Done' : 'Change';
+        if (open) box.innerHTML = units.map(x => `<button type="button" class="mk-uchip${x.path === M.unit ? ' on' : ''}" data-u="${esc(x.path)}" style="--uc:${esc(x.color || '#5b4cf5')}">${I(unitIcon(x.path), { size: 18 })}<span><b>${esc(x.short)}</b><small>${esc(unitName(x))}</small></span></button>`).join('');
+        $$('[data-u]', box).forEach(b => b.onclick = () => {
+          if (b.dataset.u !== M.unit) { M.unit = b.dataset.u; M.topics = []; M.q = ''; const qi = $('#mk-q', ov); if (qi) qi.value = ''; store.set('sh_unit', M.unit); topics(); }
+          box.hidden = true; renderUnit(); renderTray(); sum(); Snd.tap();
+        });
+      };
+    }
+    function renderTray() {
+      const n = M.topics.length;
+      $('#mk-count', ov).textContent = n ? `${n} of ${MK_MAX}${n > 1 ? ' · a bigger lesson' : ''}` : `up to ${MK_MAX}`;
+      $('#mk-tray', ov).innerHTML = n
+        ? M.topics.map((t, i) => `<span class="mk-chip">${topicCode(t) ? `<em>${esc(topicCode(t))}</em>` : ''}<span>${esc(topicShort(t))}</span><button type="button" data-rm="${i}" aria-label="Remove ${esc(topicShort(t))}">${I('close', { size: 14 })}</button></span>`).join('')
+        : `<span class="mk-empty">${I('sparkles', { size: 16 })} Surprise me — we'll pick a topic you need. Or choose up to ${MK_MAX} topics below.</span>`;
+      $$('[data-rm]', ov).forEach(b => b.onclick = () => { M.topics.splice(Number(b.dataset.rm), 1); afterTopics(); });
+      const add = $('#mk-add', ov); if (add && !$('#mk-browse', ov).hidden) add.hidden = true;
+    }
+    function lenHint() {
+      const n = M.topics.length, h = $('#mk-lenhint', ov);
+      h.hidden = n < 2;
+      if (n >= 2) h.innerHTML = `${I('book', { size: 14 })} ${n} topics: about ${Math.min(20, ({ quick: 4, standard: 7, deep: 11 }[M.length]) + 3 * (n - 1))} minutes, with cards and questions on every topic${n >= 3 ? ' and two exam questions' : ''}.`;
+    }
+    function setPill(key, v) {
+      M[key] = v; store.set({ length: 'sh_len', focus: 'sh_focus' }[key], v);
+      $$(`[data-pill="${key}"] button`, ov).forEach(x => { const on = x.dataset.v === v; x.classList.toggle('on', on); x.setAttribute('aria-checked', on); });
+    }
+    function afterTopics() {
+      // more topics → a longer lesson, unless the student chose the length themselves
+      if (!M.lenTouched) { const n = M.topics.length; if (n >= 3 && M.length !== 'deep') setPill('length', 'deep'); else if (n === 2 && M.length === 'quick') setPill('length', 'standard'); }
+      renderTray(); lenHint(); sum();
+      $$('[data-t]', ov).forEach(b => { const on = M.topics.includes(b.dataset.t); b.classList.toggle('on', on); b.setAttribute('aria-pressed', on); b.disabled = !on && M.topics.length >= MK_MAX; });
+      $$('.mk-grp', ov).forEach(g => { const c = $('.mk-gn', g); if (c) { const k = $$('[data-t].on', g).length; c.textContent = k ? k + ' chosen' : ''; } });
+    }
+    function toggleTopic(label) {
+      const i = M.topics.indexOf(label);
+      if (i >= 0) M.topics.splice(i, 1);
+      else if (M.topics.length >= MK_MAX) { toast(`You can combine up to ${MK_MAX} topics in one lesson.`); return; }
+      else M.topics.push(label);
+      Snd.tap(); afterTopics();
+    }
+    async function topics() {
+      const box = $('#mk-topics', ov), sugg = $('#mk-sugg', ov); if (!box) return;
+      const unit = M.unit;
+      if (!M.cat || M.cat.unit !== unit) {
+        box.innerHTML = '<span class="sh-muted sh-small sh-loadline"><span class="sh-spin"></span> Loading topics…</span>'; sugg.innerHTML = '';
+        let cat = null; try { cat = await loadCatalog(unit); } catch (e) {}
+        if (M.unit !== unit || !document.body.contains(box)) return;
+        M.cat = { unit, list: specTopics(cat) };
+      }
+      const all = M.cat.list;
+      const weak = ((S.plan && S.plan.weak) || []).filter(t => t.unit === unit);
+      // weak topics are stored as short names ("A2.1 Vulnerabilities of systems"); spec labels are longer
+      const isWeak = (t) => weak.some(w => { const c = topicCode(w.topic), n = norm(w.topic); return (c && t.code && c === t.code) || n === norm(t.label) || n === norm(t.name) || (n.length > 6 && norm(t.label).indexOf(n) === 0); });
+      const q = norm(M.q);
+      const list = all.filter(t => !q || norm(t.label).indexOf(q) >= 0 || norm(t.aimTitle).indexOf(q) >= 0);
+      // "you find these tricky" — one tap to add
+      const tricky = !q ? all.filter(isWeak).slice(0, 3) : [];
+      sugg.innerHTML = tricky.length ? `<div class="mk-sugg"><span>${I('target', { size: 14 })} You find these tricky</span>${tricky.map(t => `<button type="button" class="mk-schip" data-t="${esc(t.label)}">${I('plus', { size: 13 })} ${esc(topicShort(t.label))}</button>`).join('')}</div>` : '';
+      if (!list.length) { box.innerHTML = `<p class="sh-muted sh-small">${q ? 'No topics match that search.' : 'No topic list for this unit — describe what you want under More options.'}</p>`; afterTopics(); return; }
+      const groups = [];
+      list.forEach(t => { let g = groups[groups.length - 1]; if (!g || g.aim !== t.aim) groups.push(g = { aim: t.aim, title: t.aimTitle, items: [] }); g.items.push(t); });
+      const firstWeak = groups.findIndex(g => g.items.some(isWeak));
+      box.innerHTML = groups.map((g, gi) => {
+        const open = q || g.items.some(t => M.topics.includes(t.label)) || (!M.topics.length && gi === (firstWeak >= 0 ? firstWeak : 0)) || groups.length === 1;
+        return `<details class="mk-grp"${open ? ' open' : ''}><summary><span class="mk-gt">${esc(g.title)}</span><span class="mk-gn"></span><span class="mk-gc">${g.items.length}</span></summary><div class="mk-tlist">${g.items.map(t => `<button type="button" class="mk-t${isWeak(t) ? ' weak' : ''}" data-t="${esc(t.label)}" aria-pressed="false">${t.code ? `<em>${esc(t.code)}</em>` : ''}<span>${esc(t.name)}</span><i class="ck" aria-hidden="true">${I('check', { size: 14 })}</i><i class="pl" aria-hidden="true">${I('plus', { size: 14 })}</i></button>`).join('')}</div></details>`;
+      }).join('');
+      afterTopics();
+    }
+    // one handler for every topic button (list and suggestions)
+    ov.addEventListener('click', (e) => { const b = e.target.closest('[data-t]'); if (b && ov.contains(b) && !b.disabled) toggleTopic(b.dataset.t); });
+    $$('[data-pill]', ov).forEach(g => $$('button', g).forEach(b => b.onclick = () => { if (g.dataset.pill === 'length') M.lenTouched = true; setPill(g.dataset.pill, b.dataset.v); Snd.tap(); lenHint(); sum(); }));
     $('#mk-req', ov).oninput = (e) => { M.request = e.target.value; sum(); };
-    const editAll = $('[data-editall]', ov);
-    if (editAll) editAll.onclick = () => {
-      $('.sh-sheet', ov).classList.remove('quick');
-      $$('[data-full]', ov).forEach(x => { x.hidden = false; });
-      const q = $('[data-quick]', ov); if (q) q.remove();
-      $('#mk-title', ov).textContent = 'Make a lesson';
-      const sub = $('.sh-sheet-h p', ov); if (sub) sub.textContent = st.premium ? 'Change the unit, topic, style or add your own notes.' + (limited() ? ' ' + costNote() + '.' : '') : 'This uses your one free lesson.';
-      const ic = $('.sh-sheet-h .ic', ov); if (ic) ic.innerHTML = I('wand', { size: 26 });
-      const sel = $('.sh-topic.on', ov); if (sel) sel.scrollIntoView({ block: 'nearest' });
-    };
-    $('#mk-q', ov).oninput = (e) => { M.q = e.target.value; topics(true); };
+    $('#mk-q', ov).oninput = (e) => { M.q = e.target.value; topics(); };
+    $('#mk-add', ov).onclick = (e) => { e.currentTarget.hidden = true; $('#mk-browse', ov).hidden = false; $('#mk-q', ov).focus({ preventScroll: true }); };
     $('#mk-go', ov).onclick = () => {
       close();
-      createLesson({ unit: M.unit, topic: M.topic, request: M.request.trim(), length: M.length, focus: M.focus, difficulty: M.difficulty, reason: M.reason || (M.topic ? `You chose ${M.topic}.` : M.request.trim() ? 'You asked for this lesson.' : '') });
+      const n = M.topics.length;
+      createLesson({ unit: M.unit, topic: M.topics[0] || null, topics: n > 1 ? M.topics.slice() : undefined, request: M.request.trim(), length: M.length, focus: M.focus, difficulty: M.difficulty,
+        reason: M.reason || (n > 1 ? `You chose ${n} topics.` : n ? `You chose ${M.topics[0]}.` : M.request.trim() ? 'You asked for this lesson.' : '') });
     };
-    async function topics(filterOnly) {
-      const box = $('#mk-topics', ov); if (!box) return;
-      const unit = M.unit;
-      if (!filterOnly) box.innerHTML = '<span class="sh-muted sh-small sh-loadline"><span class="sh-spin"></span> Loading topics…</span>';
-      let cat = null;
-      try { cat = await loadCatalog(unit); } catch (e) {}
-      if (M.unit !== unit || !document.body.contains(box)) return;
-      const weak = new Set(((S.plan && S.plan.weak) || []).filter(t => t.unit === unit).map(t => norm(t.topic)));
-      const q = norm(M.q);
-      const list = specTopics(cat).filter(t => !q || norm(t.label).indexOf(q) >= 0 || norm(t.aimTitle).indexOf(q) >= 0);
-      let lastAim = null;
-      box.innerHTML = `<button type="button" class="sh-topic surprise${!M.topic ? ' on' : ''}" data-t="">${I('sparkles', { size: 16 })} Surprise me</button>` +
-        (list.length ? list.map(t => { const head = t.aim !== lastAim ? `<div class="sh-aim">${esc(t.aimTitle)}</div>` : ''; lastAim = t.aim; const w = weak.has(norm(t.label)) || weak.has(norm(t.name)); return head + `<button type="button" class="sh-topic${M.topic === t.label ? ' on' : ''}${w ? ' weak' : ''}" data-t="${esc(t.label)}" title="${w ? 'You\'ve been finding this tricky' : ''}">${t.code ? `<small>${esc(t.code)}</small>` : ''}${esc(t.name)}</button>`; }).join('')
-          : `<p class="sh-muted sh-small" style="width:100%">${q ? 'No topics match that search.' : 'No topic list for this unit — describe what you want below.'}</p>`);
-      $$('[data-t]', box).forEach(b => b.onclick = () => { M.topic = b.dataset.t || null; $$('[data-t]', box).forEach(x => x.classList.toggle('on', x === b)); Snd.tap(); sum(); });
-    }
-    topics(); sum();
-    if (preset.topic) setTimeout(() => { const b = $('.sh-topic.on', ov); if (b) b.scrollIntoView({ block: 'nearest' }); }, 700);
+    renderUnit(); renderTray(); lenHint(); topics(); sum();
   }
 
   /* ───────────── creating a lesson (full-screen builder) ───────────── */
@@ -1280,7 +1374,7 @@
     ov.className = 'sh-gen';
     const steps = ['Reading your progress', 'Pulling real exam questions from ' + (u ? u.short : 'the unit'), 'Writing your lesson', 'Checking every answer'];
     ov.innerHTML = `<div class="sh-gen-in">${buildOrbHtml()}
-      <h2>Building your lesson</h2><p class="sh-muted">${esc(o.topic || o.request || (u ? u.name : ''))}</p>
+      <h2>Building your lesson</h2><p class="sh-muted">${esc(o.topics && o.topics.length > 1 ? o.topics.map(t => shortName(String(t).replace(/^\s*([A-Z]?\d+(?:\.\d+)+|[A-Z]\d+)\s*/i, ''))).join(' · ') : o.topic || o.request || (u ? u.name : ''))}</p>
       <p class="sh-gen-diff"><span class="sh-badge acc">${esc(DIFF_LABEL[diff.d])}</span>${choice === 'auto' ? ` <small>Auto: ${esc(diff.why)}</small>` : ''}</p>
       <ul class="sh-gen-steps">${steps.map((s, i) => `<li class="${i === 0 ? 'on' : ''}"><i></i>${esc(s)}</li>`).join('')}</ul></div>`;
     document.body.appendChild(ov);
@@ -1291,9 +1385,9 @@
     try {
       await new Promise(r => setTimeout(r, 400)); setStep(1);
       const cat = u ? await loadCatalog(o.unit).catch(() => null) : null;
-      const g = u ? await fullGrounding(o.unit, cat, o.topic || o.request || '') : {};
+      const g = u ? (o.topics && o.topics.length > 1 ? await multiGrounding(o.unit, cat, o.topics) : await fullGrounding(o.unit, cat, o.topic || o.request || '')) : {};
       setStep(2); writing = true;
-      const r = await api('create', { mode: 'custom', unit: o.unit, unitName: u ? u.name : o.unit, qual: u ? u.qual : '', topic: o.topic || null, request: o.request || '', reason: o.reason || '', length: o.length || 'standard', focus: o.focus || '', difficulty: diff.d, grounding: g });
+      const r = await api('create', { mode: 'custom', unit: o.unit, unitName: u ? u.name : o.unit, qual: u ? u.qual : '', topic: o.topic || null, topics: o.topics && o.topics.length > 1 ? o.topics : undefined, request: o.request || '', reason: o.reason || '', length: o.length || 'standard', focus: o.focus || '', difficulty: diff.d, grounding: g });
       if (!r.ok) { if (usageBlocked(r)) { ov.remove(); home(); return; } if (r.locked) { st.trial_used = true; st.can_create = false; ov.remove(); return lockedScreen(); } throw new Error(r.error || 'Could not build the lesson.'); }
       usageRefresh();
       setStep(4);

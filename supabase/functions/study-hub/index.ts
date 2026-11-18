@@ -566,7 +566,7 @@ const CODE_PROMPT: Record<string, string> = {
   sql: `This is a DATABASE lesson in SQL (SQLite dialect). Include exactly 2 "code" steps where the learner writes one SQL query. Each code step has "setup" (CREATE TABLE and INSERT statements for a small table of 5–8 realistic rows), a "starter" (eg "SELECT"), and a correct "solution" query. The learner's result is compared with the result of your solution, so the solution must be exactly right; include ORDER BY when the order matters.`,
 };
 
-async function writeLesson(input: { unit?: string; unitName: string; qual: string; topic: string | null; request: string; focusReason: string; prof: any; grounding: any; length?: string; focus?: string; difficulty?: string; coding?: string | null; seen?: Check[] }) {
+async function writeLesson(input: { unit?: string; unitName: string; qual: string; topic: string | null; topics?: string[]; request: string; focusReason: string; prof: any; grounding: any; length?: string; focus?: string; difficulty?: string; coding?: string | null; seen?: Check[] }) {
   const diff = DIFFICULTY[String(input.difficulty || '')] || DIFFICULTY.medium;
   const seen: Check[] = Array.isArray(input.seen) ? input.seen : [];
   const g = input.grounding || {};
@@ -581,6 +581,11 @@ async function writeLesson(input: { unit?: string; unitName: string; qual: strin
     : (Array.isArray(g.questions) ? g.questions : []).slice(0, 3);
   const specTopics = (Array.isArray(g.topics) ? g.topics : []).slice(0, 60).map((t: unknown) => clean(t, 90));
   const len = LENGTHS[String(input.length || '')] || LENGTHS.standard;
+  // several topics make a bigger lesson: about 2 cards and 4–5 checks per topic on top of the chosen length
+  const multi = Array.isArray(input.topics) && input.topics.length > 1 ? input.topics.length : 0;
+  const size = multi
+    ? { steps: `${Math.max(14, 7 * multi + 4)}–${Math.min(30, 9 * multi + 6)}`, learn: Math.max(len.learn, 2 * multi), minutes: Math.min(20, len.minutes + 3 * (multi - 1)), exams: multi >= 3 ? 2 : 1 }
+    : { steps: len.steps, learn: len.learn, minutes: len.minutes, exams: 1 };
   const focus = FOCUS[String(input.focus || '')] || '';
   const plan = diagramPlan(String(input.unit || ''), input.unitName);
   const sys = `You are an expert ${input.qual} teacher and examiner who writes bite-size, game-like revision lessons (like Duolingo). Accuracy is the top priority: every fact and every answer key must be correct for the ${input.qual} specification, and every question must have exactly one defensible correct answer. British English. Reply with JSON only.`;
@@ -590,7 +595,7 @@ async function writeLesson(input: { unit?: string; unitName: string; qual: strin
     recently_read: (input.prof?.reading || []).map((r: any) => r.topic),
   };
   const user = `Unit: ${input.unitName}
-${input.topic ? `Topic for this lesson: ${input.topic}` : `No topic chosen — pick ONE specific topic from the unit's specification that is NOT one of the learner's strong topics${input.prof?.recentLessonTopics?.length ? ' and not one of these recent lessons: ' + input.prof.recentLessonTopics.join('; ') : ''}.`}
+${multi ? `Topics for this lesson — teach AND test ALL ${multi} of them, in this order: ${(input.topics || []).map((t, i) => (i + 1) + ') ' + t).join('; ')}. Give each topic at least 2 learn cards and its own checks, spread the checks across every topic, and add one check near the end that links the topics together.` : input.topic ? `Topic for this lesson: ${input.topic}` : `No topic chosen — pick ONE specific topic from the unit's specification that is NOT one of the learner's strong topics${input.prof?.recentLessonTopics?.length ? ' and not one of these recent lessons: ' + input.prof.recentLessonTopics.join('; ') : ''}.`}
 ${input.request ? `The learner asked: "${clean(input.request, 300)}"` : ''}
 Why this lesson: ${input.focusReason || 'learner chose it'}
 Learner profile: ${JSON.stringify(learner)}
@@ -600,10 +605,10 @@ Real exam questions on this area, with their official mark schemes: ${JSON.strin
 ${seen.length ? `Questions this learner has ALREADY had in recent lessons — do not ask any of these again or test the same fact in the same way: ${JSON.stringify(seen.slice(0, 30).map((x) => x.q))}` : ''}
 If one of these real exam questions fits the topic, the exam step MUST be that question word-for-word with "source":"exam" and "ref" set to its ref, using its mark scheme for "points".
 
-Write a ${len.minutes}-minute lesson of ${len.steps} steps that TEACHES the topic and then checks understanding. Alternate short "learn" cards with practice.
+Write a ${size.minutes}-minute lesson of ${size.steps} steps that TEACHES the topic and then checks understanding. Alternate short "learn" cards with practice.
 How checks are placed (this matters most for learning):
 - The check(s) straight after a learn card must make the learner THINK with what they just read, never just repeat it back: apply it to a short new scenario, pick the example that fits, predict what would happen, explain why, spot the mistake, or compare two ideas. NEVER ask straight after a card for the definition, term or fact that card has just stated (no "What is …?", "Which term means …?", or a fill / true-false that copies a sentence from that card).
-- Straight recall of definitions, key terms and facts (eg "Which term means …?", fill-the-gap, match) goes LATER, as spaced retrieval: at least two steps after the card that taught it — ideally in a mixed "quick recall" stretch near the end, before the exam step, drawing on several earlier cards. Use at least ${len.learn} learn cards, at least 3 mcq, 1 truefalse, 1 fill, 1 match, 1 order (only if the topic has a genuine fixed sequence — otherwise another mcq), exactly 1 exam step near the end, and finish with 1 recap.
+- Straight recall of definitions, key terms and facts (eg "Which term means …?", fill-the-gap, match) goes LATER, as spaced retrieval: at least two steps after the card that taught it — ideally in a mixed "quick recall" stretch near the end, before the exam step, drawing on several earlier cards. Use at least ${size.learn} learn cards, at least 3 mcq, 1 truefalse, 1 fill, 1 match, 1 order (only if the topic has a genuine fixed sequence — otherwise another mcq), exactly ${size.exams} exam step${size.exams > 1 ? 's (on different topics)' : ''} near the end, and finish with 1 recap.
 ${focus}
 ${diff.prompt}
 ${input.coding ? CODE_PROMPT[input.coding] + '\n' : ''}Answer-key rules (these are checked — be precise):
@@ -634,7 +639,7 @@ Return JSON exactly like:
   {"type":"code","lang":"${input.coding}","title":"","brief":"what to write, with an example","starter":"","solution":"",${input.coding === 'sql' ? '"setup":"CREATE TABLE ...; INSERT INTO ...;",' : '"tests":[{"stdin":[],"check":""}],'}"hints":["",""],"explain":"what the solution shows"},` : ''}
   {"type":"recap","title":"Key takeaways","points":["",""]}
  ]}`;
-  const r = await askJson(sys, user, 70000, { preferStrong: true, temperature: 0.25, maxTokens: 6000 });
+  const r = await askJson(sys, user, multi ? 95000 : 70000, { preferStrong: true, temperature: 0.25, maxTokens: multi ? 9000 : 6000 });
   const L = r.json || {};
   const rawSteps = Array.isArray(L.steps) ? L.steps : [];
   // keep the AI's ref next to each sanitised step
@@ -698,7 +703,7 @@ Return JSON exactly like:
     const at = steps.findIndex((s: any) => s.type === 'exam');
     steps.splice(at >= 0 ? at : Math.max(0, steps.length - 1), 0, ...extra);
   }
-  steps = steps.slice(0, 22);
+  steps = steps.slice(0, multi ? 30 : 22);
   const checks = steps.filter((s: any) => !['learn', 'recap'].includes(s.type)).length;
   if (steps.length < 6 || checks < 4) throw new Error('The lesson came back incomplete.');
   return {
@@ -706,7 +711,7 @@ Return JSON exactly like:
     icon: ICONS.includes(String(L.icon)) ? String(L.icon) : null,
     topic: clean(L.topic, 90) || input.topic || null,
     summary: clean(L.summary, 200),
-    minutes: Math.max(3, Math.min(15, Math.round(Number(L.minutes) || len.minutes))),
+    minutes: Math.max(3, Math.min(multi ? 22 : 15, Math.round(Number(L.minutes) || size.minutes))),
     steps, provider: r.provider, verified: checked.verified && !!blind,
   };
 }
@@ -824,7 +829,9 @@ async function create(ctx: Ctx, body: any) {
   const unit = clean(body.unit, 120);
   const unitName = clean(body.unitName, 120) || unit;
   const qual = clean(body.qual, 80) || 'BTEC / A-Level';
-  const topic = clean(body.topic, 100) || null;
+  // a made lesson can cover up to 4 topics (the first one is the lesson's main topic for the course path)
+  const topics = (Array.isArray(body.topics) ? body.topics : []).map((t: unknown) => clean(t, 160)).filter(Boolean).slice(0, 4);
+  const topic = clean(topics[0] || body.topic, 100) || null;
   const request = clean(body.request, 300);
   // the daily lesson is always medium; made lessons use the learner's choice
   const difficulty = mode === 'daily' ? 'medium' : (DIFFICULTY[clean(body.difficulty, 10)] ? clean(body.difficulty, 10) : 'medium');
@@ -838,11 +845,11 @@ async function create(ctx: Ctx, body: any) {
   const trial = spend.mode === 'trial';
   try {
     const prof = await profile(ctx).catch(() => null);
-    const reason = clean(body.reason, 300) || (topic ? `You picked ${topic}.` : '');
+    const reason = clean(body.reason, 300) || (topics.length > 1 ? `You picked ${topics.length} topics.` : topic ? `You picked ${topic}.` : '');
     let L: any = null;
     if (hasProviders()) {
       const seen = await pastChecks(ctx, unit).catch(() => [] as Check[]);
-      try { L = await writeLesson({ unitName, qual, topic, request, focusReason: reason, prof, grounding: body.grounding, length: clean(body.length, 12), focus: clean(body.focus, 12), difficulty, unit, coding: codingLang(unit, unitName, request, topic), seen }); }
+      try { L = await writeLesson({ unitName, qual, topic, topics: topics.length > 1 ? topics : undefined, request, focusReason: reason, prof, grounding: body.grounding, length: clean(body.length, 12), focus: clean(body.focus, 12), difficulty, unit, coding: codingLang(unit, unitName, request, topic), seen }); }
       catch (e) { console.warn('study-hub write failed', e); }
     }
     if (!L) L = bankLesson(unitName, topic, body.grounding);
@@ -850,7 +857,7 @@ async function create(ctx: Ctx, body: any) {
     const row = {
       user_id: ctx.userId, kind: mode, trial, lesson_date: today, unit: unit || null, topic: L.topic || topic,
       title: L.title, emoji: L.icon || null, reason: reason || L.summary || null, minutes: L.minutes,
-      content: { summary: L.summary, steps: L.steps, unitName, qual, icon: L.icon || null, verified: !!L.verified, length: clean(body.length, 12) || 'standard', focus: clean(body.focus, 12), difficulty }, provider: L.provider,
+      content: { summary: L.summary, steps: L.steps, unitName, qual, icon: L.icon || null, verified: !!L.verified, length: clean(body.length, 12) || 'standard', focus: clean(body.focus, 12), difficulty, topics: topics.length > 1 ? topics : undefined }, provider: L.provider,
     };
     let { data: saved, error } = await ctx.admin.from('study_lessons').insert(row).select('*').single();
     if (error && mode === 'daily') {
